@@ -84,6 +84,7 @@
         <pathelement location="${build.classes.dir}"/>
         <pathelement location="${build.test.dir}"/>
         <pathelement location="${jsf.test.jar}"/>
+        <pathelement location="${jsf-tools.jar}"/>
         <pathelement location="${tools.dir}/build/classes"/>
         <path refid="apache.commons.classpath"/>
         <path refid="compile.classpath"/>
@@ -201,6 +202,7 @@
                  classname="com.sun.faces.ant.ComponentGenTask">
             <classpath>
                 <path refid="apache.commons.classpath"/>
+                <pathelement location="${jsf-tools.jar}"/>
                 <pathelement location="${tools.dir}/build/classes"/>
             </classpath>
         </taskdef>
@@ -216,6 +218,7 @@
                 <pathelement location="${commons-collections.jar}" />
                 <pathelement location="${commons-logging.jar}" />
                 <pathelement location="${jsf-api.jar}"/>
+                <pathelement location="${jsf-tools.jar}"/>
                 <pathelement location="${tools.dir}/build/classes"/>
             </classpath>
             <assertions>
@@ -233,12 +236,11 @@
 
     <target name="facesdoc" 
             description="Create the Standard HTML Renderkit Documentation">
-        <antcall target="tools.javac"/>
         <taskdef name="generateRenderkitDocs"
                  classname="com.sun.faces.ant.RenderkitDocGenTask">
             <classpath>
                 <path refid="apache.commons.classpath"/>
-                <pathelement location="${tools.dir}/build/classes"/>
+                <pathelement location="${jsf-tools.jar}"/>
             </classpath>
         </taskdef>
         <copy todir="${build.generate.dir}/facesdoc/">
@@ -256,7 +258,7 @@
                 <path refid="apache.commons.classpath"/>
                 <path refid="compile.classpath"/>
                 <pathelement location="${jsf-api.jar}"/>
-                <pathelement location="${tools.dir}/build/classes"/>
+                <pathelement location="${jsf-tools.jar}"/>
             </classpath>
             <sysproperty key="java.endorsed.dirs" value="${endorsed.dirs}"/>
             <sysproperty key="tools.src.dir" value="${tools.dir}/src/main/java"/>
@@ -273,18 +275,6 @@
         </path>
 
         <mkdir dir="${tools.dir}/build/classes"/>
-        <jsf.javac srcdir="${tools.dir}/src/main/java"
-                   destdir="${tools.dir}/build/classes">
-            <classpath>
-                <path refid="compile.classpath"/>
-                <path refid="apache.commons.classpath"/>
-                <path refid="ant.classpath"/>
-            </classpath>
-        </jsf.javac>
-        <copy todir="${tools.dir}/build/classes">
-            <fileset dir="${tools.dir}/src/main/resources"
-                     includes="**/*.properties"/>
-        </copy>
         <copy todir="${tools.dir}/build/classes" >
             <fileset dir="${impl.dir}/src/main/resources"
                      includes="**/LogStrings.properties"/>
@@ -294,12 +284,7 @@
             <fileset dir="${api.dir}/doc"
                      includes="*.dtd,*.xsd"/>
         </copy>
-        <copy todir="${tools.dir}/build/classes">
-            <fileset dir="${tools.dir}/src/main/resources"
-                     includes="**/*.html,**/*.top,**/*.bottom,**/*.css"/>            
-        </copy>
     </target>
-
 
     <target name="copy.template.sources"
             description="Copy template sources from ${tools.dir}/template-source">
@@ -577,19 +562,10 @@ javax.faces.level=ALL
         </replace>
         <delete file="${basedir}/doc/standard-html-renderkit-impl.xml"/>
 
-        <mkdir dir="${tools.dir}/build/classes"/>
-        <antcall target="tools.javac"/>
-        <javac srcdir="${tools.dir}/src/main/java"
-               destdir="${tools.dir}/build/classes">
-            <classpath>
-                <path refid="compile.classpath"/>
-            </classpath>
-        </javac>
-
         <!-- validate the generated standard-html-renderkit.xml -->
         <taskdef name="validate" classname="com.sun.faces.ant.ValidateTask">
             <classpath>
-                <pathelement location="${tools.dir}/build/classes"/>
+                <pathelement location="${jsf-tools.jar}"/>
             </classpath>
         </taskdef>
         <validate schemaDir="${basedir}/doc"/>
@@ -653,7 +629,6 @@ javax.faces.level=ALL
         <!-- delete this file since it's copied from another file based on JSP level -->
         <delete file="${basedir}/test/javax/faces/mock/MockPageContext.java"/>
         <delete dir="${dist.dir}"/>
-        <delete dir="${tools.dir}/build"/>
         <!-- delete extraneous generated doc files, if necessary -->
         <delete>
             <fileset dir="doc" includes="*-attrs.xml"/>
@@ -900,6 +875,5 @@ javax.faces.level=ALL
             </tests>
         </jsf.junit>
     </target>
-
 
 </project>

@@ -94,6 +94,7 @@
         <pathelement location="${jsf-api.jar}"/>
         <path refid="apache.commons.classpath"/>
         <path refid="compile.classpath"/>
+        <pathelement location="${jsf-tools.jar}"/>
         <pathelement location="${tools.dir}/build/classes"/>
     </path>
 
@@ -202,17 +203,6 @@
         </copy>
 
         <mkdir dir="${tools.dir}/build/classes"/>
-        <jsf.javac srcdir="${tools.dir}/src/main/java"
-               destdir="${tools.dir}/build/classes">
-            <classpath>
-                <path refid="impl.compile.classpath"/>
-                <path refid="ant.classpath"/>
-            </classpath>
-        </jsf.javac>
-        <copy todir="${tools.dir}/build/classes">
-            <fileset dir="${tools.dir}/src/main/java"
-                     includes="**/*.properties"/>
-        </copy>
         <copy todir="${tools.dir}/build/classes">
             <fileset dir="${impl.dir}/src/main/resources"
                      includes="**/LogStrings.properties"/>
@@ -225,12 +215,14 @@
         <taskdef name="generateTaglib"
                  classname="com.sun.faces.ant.TaglibGenTask">
             <classpath>
+                <pathelement location="${jsf-tools.jar}"/>
                 <pathelement location="${tools.dir}/build/classes"/>
             </classpath>
         </taskdef>
         <taskdef name="generateAttrManager"
                  classname="com.sun.faces.ant.AttributeManagerGenTask">
             <classpath>
+                <pathelement location="${jsf-tools.jar}"/>
                 <pathelement location="${tools.dir}/build/classes"/>
             </classpath>
         </taskdef>
@@ -240,7 +232,6 @@
               fork="true">
             <classpath>
                 <path refid="impl.compile.classpath"/>
-                <pathelement location="${tools.dir}/build/classes"/>
             </classpath>
             <sysproperty key="java.endorsed.dirs" value="${endorsed.dirs}"/>
             <jvmarg line="${debug.jvm.args}"/>
@@ -254,7 +245,6 @@
               fork="true">
             <classpath>
                 <path refid="impl.compile.classpath"/>
-                <pathelement location="${tools.dir}/build/classes"/>
             </classpath>
             <sysproperty key="java.endorsed.dirs" value="${endorsed.dirs}"/>
             <jvmarg line="${debug.jvm.args}"/>
@@ -472,6 +462,7 @@
         <taskdef name="generateFaceletsTld"
                  classname="com.sun.faces.ant.FaceletsTLDGenTask">
             <classpath>
+                <pathelement location="${jsf-tools.jar}"/>
                 <pathelement location="${tools.dir}/build/classes"/>
             </classpath>
         </taskdef>
@@ -482,7 +473,6 @@
               fork="true">
             <classpath>
                 <path refid="impl.compile.classpath"/>
-                <pathelement location="${tools.dir}/build/classes"/>
             </classpath>
             <sysproperty key="java.endorsed.dirs" value="${endorsed.dirs}"/>
             <jvmarg line="${debug.jvm.args}"/>

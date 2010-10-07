@@ -66,6 +66,18 @@
     <macrodef name="call.modules">
         <attribute name="target"/>
         <sequential>
+            <if>
+                <equals arg1="clean" arg2="@{target}" />
+                <then>
+                    <jsf.mvn dir="${basedir}/jsf-tools" goals="@{target}" />
+                </then>
+            </if>
+            <if>
+                <equals arg1="main" arg2="@{target}" />
+                <then>
+                    <jsf.mvn dir="${basedir}/jsf-tools" goals="install" />
+                </then>
+            </if>
             <subant target="@{target}" inheritAll="false">
                 <filelist dir="${api.dir}">
                     <file name="build.xml"/>
