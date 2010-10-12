@@ -220,13 +220,6 @@ public class RestoreViewPhase extends Phase {
                 if (LOGGER.isLoggable(Level.FINE)) {
                     LOGGER.fine("Postback: restored view for " + viewId);
                 }
-                /*
-                if (isCSRFOptionEnabled(facesContext)) {
-                    if (!TokenHelper.verifyToken(facesContext)) {
-                        throw new FacesException("Token verification failed.");
-                    }
-                }
-                */
             } else {
                 if (LOGGER.isLoggable(Level.FINE)) {
                     LOGGER.fine("New request: creating a view for " + viewId);

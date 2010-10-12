@@ -186,4 +186,33 @@ public class CSRFTestCase extends AbstractTestCase {
             assertTrue(response.indexOf("Token verification failed") != -1);
         }
     }
+
+    public void testBadTokenAjax() throws Exception {
+        HtmlPage page1 = getPage("/faces/csrf/goodPage.xhtml");
+        HtmlForm form1 = getFormById(page1, "form");
+        HtmlHiddenInput vs= (HtmlHiddenInput)
+            form1.getInputByName("javax.faces.ViewState");
+        System.out.println("VIEWSTATE:"+vs.getValueAttribute());
+
+        // User executes the "bad" page ..
+
+        HtmlPage page = getPage("/faces/csrf/badPage2.html");
+        HtmlForm form = getFormById(page, "form");
+
+        HtmlHiddenInput badamount = (HtmlHiddenInput)
+            form.getInputByName("amount");
+        badamount.setValueAttribute("100");
+        HtmlHiddenInput badaccount = (HtmlHiddenInput)
+            form.getInputByName("account");
+        badaccount.setValueAttribute("37665");
+        HtmlSubmitInput submit = (HtmlSubmitInput)
+            form.getInputByName("order");
+        try {
+            page = (HtmlPage) submit.click();
+        } catch (FailingHttpStatusCodeException fhsce) {
+            String response = fhsce.getResponse().getContentAsString();
+            assertTrue(response.indexOf("Token verification failed") != -1);
+        }
+    }
+
 }

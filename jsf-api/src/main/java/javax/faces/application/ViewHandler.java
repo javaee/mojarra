@@ -324,15 +324,15 @@ public abstract class ViewHandler {
      * <code>viewId</code> for traversing the JSF lifecycle.  Please see
      * section JSF.7.5.2 for the complete specification.</p>
      *
-     * <p class="changed_added_2_1">If the value of the configuration option
+     * <p class="changed_modified_2_1">If the value of the configuration option
      * <code>javax.faces.CSRF_ALGORITHM</code> is set to <code>url</code>
      * or <code>all</code>, the returned URL must contain the
      * parameter with a name minimally consisting of the value of the
      * constant {@link javax.faces.render.ResponseStateManager#VIEW_TOKEN_PARAM}.
-     * If the current form is available, the name must consist of the form's fully
-     * qualified client identifier (<code>getClientId()</code>),
-     * the value returned fron {@link javax.faces.component.UINamingContainer#getSeparatorChar}
-     * and the constant {@link javax.faces.render.ResponseStateManager#VIEW_TOKEN_PARAM}.
+     * Implementations may choose to prefix this name with the current form's qualified 
+     * client identifier (<code>getClientId()</code>) (if the form is available) using 
+     * the value returned from {@link javax.faces.component.UINamingContainer#getSeparatorChar}
+     * as the separator character.
      * The value of this parameter, known as the "token value" must be a
      * cryptographically produced random generated value (known as the "secret key")
      * retrieved from the session.  If the "secret key" does not already exist in the session,

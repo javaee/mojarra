@@ -110,6 +110,10 @@ public class AjaxExceptionHandlerImpl extends ExceptionHandlerWrapper {
      */
     public void handle() throws FacesException {
 
+        // The implemention of this method may need to throw standard exceptions in the cases
+        // that a view root (and response writer) is not available to write the 
+        // error response.
+        
         for (Iterator<ExceptionQueuedEvent> i = getUnhandledExceptionQueuedEvents().iterator(); i.hasNext(); ) {
             ExceptionQueuedEvent event = i.next();
             ExceptionQueuedEventContext context = (ExceptionQueuedEventContext) event.getSource();
@@ -119,12 +123,22 @@ public class AjaxExceptionHandlerImpl extends ExceptionHandlerWrapper {
                     handled = event;
                     t.printStackTrace();
                     Throwable unwrapped = getRootCause(t);
+
                     if (unwrapped != null) {
-                        handlePartialResponseError(context.getContext(), unwrapped); 
+                        if (throwStandardException(context.getContext())) {
+                            throw (new FacesException(unwrapped.getMessage(), unwrapped));
+                        }
+                        handlePartialResponseError(context.getContext(), unwrapped);
                     } else {
                         if (t instanceof FacesException) {
-                            handlePartialResponseError(context.getContext(), t); 
+                            if (throwStandardException(context.getContext())) {
+                                throw (FacesException)t;
+                            }
+                            handlePartialResponseError(context.getContext(), t);
                         } else {
+                            if (throwStandardException(context.getContext())) {
+                                throw (new FacesException(t.getMessage(), t));
+                            }
                             handlePartialResponseError(context.getContext(), 
                                     new FacesException(t.getMessage(), t));
                         }
@@ -251,6 +265,15 @@ public class AjaxExceptionHandlerImpl extends ExceptionHandlerWrapper {
         } else {
             return LOG_KEY;
         }
+    }
+
+    private boolean throwStandardException(FacesContext context) {
+        if (null == context.getViewRoot()) {
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
 }
