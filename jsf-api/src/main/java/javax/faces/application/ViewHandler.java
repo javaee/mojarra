@@ -128,8 +128,8 @@ public abstract class ViewHandler {
 
 
     /**
-     * <p>The value to use for the default extension if the webapp is using
-     * url extension mapping.</p>
+     * <p class="changed_modified_2_1">The value to use for the default
+     * extension if the webapp is using url extension mapping.</p>
      */
     public static final String DEFAULT_SUFFIX = ".xhtml .view.xml .jsp";
     
