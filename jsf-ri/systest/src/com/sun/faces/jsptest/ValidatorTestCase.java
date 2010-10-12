@@ -124,8 +124,8 @@ public class ValidatorTestCase extends AbstractTestCase {
         String text = page.asXml();
         assertTrue(text.contains("Validation Error: Specified attribute is not between the expected values of 2 and 5."));
         assertTrue(text.contains("DoubleRange2: Validation Error: Specified attribute is not between the expected values of 2 and 5."));
-        assertTrue(text.contains("Validation Error: Length is less than allowable minimum of '2'"));
-        assertTrue(text.contains("Length2: Validation Error: Length is less than allowable minimum of '2'"));
+        assertTrue(text.contains("Validation Error: Value is less than allowable minimum of '2'"));
+        assertTrue(text.contains("Length2: Validation Error: Value is less than allowable minimum of '2'"));
         assertTrue(text.contains("Validation Error: Specified attribute is not between the expected values of 2 and 5."));
         assertTrue(text.contains("LongRange2: Validation Error: Specified attribute is not between the expected values of 2 and 5."));
     }

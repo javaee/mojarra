@@ -88,7 +88,6 @@
         <call.modules target="clean"/>        
         <ant dir="jsf-demo" target="clean" />
         <ant dir="updatecenter2" target="updatecenter2.clean" />
-        <antcall target="remove.netbeans.186761.hack" />
     </target>  
 
     <target name="modules.clean">
@@ -363,16 +362,6 @@
     <target name="updatecenter2" depends="main">
       <copy file="jsf-api/build/lib/jsf-api.jar" todir="updatecenter2/lib"/>
       <copy file="jsf-ri/build/lib/jsf-impl.jar" todir="updatecenter2/lib"/>
-    </target>
-
-    <target name="apply.netbeans.186761.hack">
-      <ant dir="jsf-api" target="apply.netbeans.186761.hack" />
-      <ant dir="jsf-ri" target="apply.netbeans.186761.hack" />
-    </target>
-
-    <target name="remove.netbeans.186761.hack">
-      <ant dir="jsf-api" target="remove.netbeans.186761.hack" />
-      <ant dir="jsf-ri" target="remove.netbeans.186761.hack" />
     </target>
 
 

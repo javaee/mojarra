@@ -218,7 +218,7 @@ public class ResourceManager {
                                   FacesContext ctx) {
         
         LibraryInfo library = null;
-        if (libraryName != null && !libraryName.contains("../")) {
+        if (libraryName != null && !libraryNameContainsForbiddenSequence(libraryName)) {
             library = findLibrary(libraryName, localePrefix, ctx);
             if (library == null && localePrefix != null) {
                 // no localized library found.  Try to find
@@ -276,6 +276,29 @@ public class ResourceManager {
         }
         return info;
 
+    }
+
+    private static boolean libraryNameContainsForbiddenSequence(String libraryName) {
+        boolean result = false;
+        libraryName = libraryName.toLowerCase();
+
+        result = libraryName.contains("../") ||
+                 libraryName.contains("..\\") ||
+                 libraryName.startsWith("/") ||
+                 libraryName.startsWith("\\") ||
+
+                 libraryName.contains("..%2f") ||
+                 libraryName.contains("..%5c") ||
+                 libraryName.startsWith("%2f") ||
+                 libraryName.startsWith("%5c") ||
+
+                 libraryName.contains("..\\u002f") ||
+                 libraryName.contains("..\\u005c") ||
+                 libraryName.startsWith("\\u002f") ||
+                 libraryName.startsWith("\\u005c")
+                 ;
+
+        return result;
     }
 
 

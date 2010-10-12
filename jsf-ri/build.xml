@@ -3,7 +3,7 @@
 <!--
  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  
- Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ Copyright 1997-2010 Sun Microsystems, Inc. All rights reserved.
  
  The contents of this file are subject to the terms of either the GNU
  General Public License Version 2 only ("GPL") or the Common Development
@@ -291,7 +291,9 @@
             </classpath>
         </jsf.javac>
 
-        <copy todir="${build.classes.dir}">
+        <echo message="copying properties files" />
+
+        <copy todir="${build.classes.dir}" overwrite="true">
             <fileset dir="${resource.dir}" includes="**/*.properties,**/*.js,**/*.xsd"/>
             <!--<fileset dir="${tools.dir}/src/main/java" includes="**/*.properties"/>-->
         </copy>
@@ -488,12 +490,12 @@
             <arg line="-d ${build.dir}/vdldocs/facelets"/>
             <arg line="-windowtitle 'JSF ${spec.version} View Declaration Language: Facelets Variant'"/>
             <arg line="-xslt ${conf.share.dir}/tlddoc-resources"/>
+            <arg value="${conf.share.dir}/composite.tld"/>
             <arg value="${conf.share.dir}/facelets_jsf_core.tld"/>
             <arg value="${build.generate.tld.dir}/facelets_html_basic.tld"/>
-            <arg value="${conf.share.dir}/composite.tld"/>
-            <arg value="${conf.share.dir}/ui.tld"/>
             <arg value="${conf.share.dir}/jstl-core.tld"/>
             <arg value="${conf.share.dir}/jstl-fn.tld"/>
+            <arg value="${conf.share.dir}/ui.tld"/>
         </java>
         <copy todir="${build.dir}/vdldocs/facelets">
            <fileset dir="${basedir}/../jsf-api/doc/">
@@ -518,8 +520,11 @@
     </target>
 
     <target name="test"
-             depends="update,init.test,run.junit.test,run.cactus.test,run.systest,run.systest-per-webapp"
+             depends="update,init.test,run.systest,run.junit.test,run.cactus.test,run.systest-per-webapp"
             description="Run all unit and system tests"/>
+
+    <target name="test.generate.reports"
+            depends="test,generate.reports" />
 
     <target name="init.test">
         <mkdir dir="${impl.test.results.dir}"/>
@@ -549,6 +554,10 @@
             description="Run unit tests requiring cactus">
         <ant antfile="build-tests.xml" target="execute.cactus.tests"/>
     </target>
+
+   <target name="generate.reports">
+        <ant antfile="build-tests.xml" target="generate.reports"/>
+   </target>
 
     <target name="force.run.cactus.test" depends="init.test,compile.test"
             description="Run unit tests requiring cactus, forcing reinstall">
@@ -691,46 +700,6 @@
         <mvn.deploy.release type="impl"/>
     </target>
 
-    <target name="apply.netbeans.186761.hack">
-
-      <copy todir="${source.dir}">
-
-        <fileset dir="${build.generate.dir}">
-          <include name="**/*.java" />
-        </fileset>
-
-      </copy>
-
-    </target>
-
-    <target name="remove.netbeans.186761.hack">
-
-      <delete failonerror="false">
-
-        <fileset dir="${source.dir}">
-          <include name="**/TypedCollections.java" />
-          <include name="**/MessageFactory.java" />
-          <include name="**/AttributeManager.java" />
-          <include name="**/MethodBindingMethodExpressionAdapter.java" />
-          <include name="**/ValueBindingValueExpressionAdapter.java" />
-          <include name="**/MethodExpressionMethodBindingAdapter.java" />
-          <include name="**/ValueExpressionValueBindingAdapter.java" />
-          <include name="**/StateHolderSaver.java" />
-        </fileset>
-
-      </delete>
-
-      <delete failonerror="false">
-        <fileset dir="${source.dir}/com/sun/faces/taglib/html_basic">
-          <include name="*.java" />
-          <exclude name="ColumnTag.java" />
-          <exclude name="CommandTagParserImpl.java" />
-          <exclude name="HtmlBasicValidator.java" />
-        </fileset>
-      </delete>
-
-    </target>
-
     <target name="javadoc_check">
         <uptodate property="javadoc.notrequired"
                   targetfile="${build.javadocs.dir}/packages.html">
@@ -756,7 +725,7 @@
                  windowtitle="${DocName} (${spec.version})"
                  source="1.5"
                  doctitle="${DocName} (${spec.version})"
-                 bottom="Copyright &#169; 2002-2010 Sun Microsystems, Inc. All Rights Reserved.">
+                 bottom="Copyright &#169; 2002-2010 Oracle America, Inc. All Rights Reserved.">
             <fileset dir="${source.dir}">
                 <include name="com/sun/faces/spi/**/*.java"/>
             </fileset>
