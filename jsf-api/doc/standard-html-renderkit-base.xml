@@ -1692,8 +1692,9 @@
 
         <renderer>
 
-            <description><![CDATA[<span class="changed_modified_2_0 change_modified_2_1">
-            Renders</span> an HTML "form" element.
+            <description><![CDATA[
+
+<p><span class="changed_modified_2_0 changed_modified_2_1">Renders</span> an HTML "form" element.</p>
 
       <p>Decode Behavior</p>
 
@@ -1736,7 +1737,7 @@
       render a hidden field with the name <code>javax.faces.encodedURL</code> and the value
       of this hidden field as the value from <code>ExternalContext.encodePartialActionURL</code>.</p>
       Call <code>ViewHandler.writeState()</code>
-      before the the close of the "form" element.  <p class=changed_added_2_1">Render a hidden field named
+      before the the close of the "form" element.  <p class="changed_added_2_1">Render a hidden field named
       <code>javax.faces.Token</code> using the <code>ResponseStateManager.VIEW_TOKEN_PARAM</code>
       constant if the configuration option <code>javax.faces.CSRF_ALGORITHM</code> is set to either of the key words 
       <code>form</code> or <code>all</code>.  The name must be namespaced with the enclosing form's
@@ -1762,7 +1763,7 @@
       </div>
       </p>
       </ul>
-      </div>]]>
+      ]]>
             </description>
             <component-family>javax.faces.Form</component-family>
             <renderer-type>javax.faces.Form</renderer-type>
@@ -2331,7 +2332,11 @@ attributes on the "span".</p>
 
         <renderer>
             <description><![CDATA[
-<div class="changed_added_2_0"><div class="changed_added_2_1">
+
+<p><span class="changed_modified_2_1">Render a button that does not
+cause an HTTP POST.</span></p>
+
+<div class="changed_added_2_0"><div class="changed_modified_2_1">
  
       <p>Encode Behavior</p>
 

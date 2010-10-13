@@ -243,7 +243,7 @@ public class GeneratorUtil {
 
     } // END getComponentFamilyRendererMap
     
-    public static String getFirstDivFromString(String toParse) {
+    public static String getFirstDivFromString(String toParse, int [] out) {
         String result = null;
         
         if (null == toParse) {
@@ -256,22 +256,28 @@ public class GeneratorUtil {
                 result = toParse.substring(divStart, divEnd + 1);
             }
         }
+        if (null != out && 0 < out.length) {
+            out[0] = divStart;
+        }
         
         return result;
     }
 
-    public static String getFirstSpanFromString(String toParse) {
+    public static String getFirstSpanFromString(String toParse, int [] out) {
         String result = null;
         
         if (null == toParse) {
             return result;
         }
         
-        int divStart, divEnd;
-        if (-1 != (divStart = toParse.indexOf("<span"))) {
-            if (-1 != (divEnd = toParse.indexOf(">", divStart))) {
-                result = toParse.substring(divStart, divEnd + 1);
+        int spanStart, spanEnd;
+        if (-1 != (spanStart = toParse.indexOf("<span"))) {
+            if (-1 != (spanEnd = toParse.indexOf(">", spanStart))) {
+                result = toParse.substring(spanStart, spanEnd + 1);
             }
+        }
+        if (null != out && 0 < out.length) {
+            out[0] = spanStart;
         }
         
         return result;

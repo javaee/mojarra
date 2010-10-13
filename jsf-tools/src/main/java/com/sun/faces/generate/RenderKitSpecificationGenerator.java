@@ -227,6 +227,8 @@ public class RenderKitSpecificationGenerator implements Generator {
                 String 
                         enclosingDiv = null,
                         enclosingSpan = null;
+                int [] divStart = new int[1];
+                int [] spanStart = new int[1];
                 if (null != descriptions) {
                     // Get the current operating locale
                     String localeStr = Locale.getDefault().getCountry().toLowerCase();
@@ -236,10 +238,9 @@ public class RenderKitSpecificationGenerator implements Generator {
                         if (null != cur.getLang() && 
                             (-1 != localeStr.indexOf(cur.getLang().toLowerCase()))) {
                             
-                            if (null == (enclosingDiv = 
-                                   GeneratorUtil.getFirstDivFromString(renderer.getDescription(cur.getLang()).getDescription()))) {
-                                enclosingSpan = GeneratorUtil.getFirstSpanFromString(renderer.getDescription(cur.getLang()).getDescription());
-                            }
+                            enclosingDiv = 
+                                   GeneratorUtil.getFirstDivFromString(renderer.getDescription(cur.getLang()).getDescription(), divStart);
+                            enclosingSpan = GeneratorUtil.getFirstSpanFromString(renderer.getDescription(cur.getLang()).getDescription(), spanStart);
                             
                             break;
                         }
@@ -247,8 +248,12 @@ public class RenderKitSpecificationGenerator implements Generator {
                     
                 }
                 if (null != enclosingDiv || null != enclosingSpan) {
-                    sb.append("  <DD>" + 
-                         (null != enclosingDiv ? enclosingDiv : enclosingSpan));
+                    String divOrSpan = (null != enclosingDiv ? enclosingDiv : enclosingSpan);
+                    // If there is a div and a span, take which ever comes first
+                    if (null != enclosingDiv && null != enclosingSpan) {
+                        divOrSpan = (spanStart[0] < divStart[0] ? enclosingSpan : enclosingDiv);
+                    }
+                    sb.append("  <DD>" + divOrSpan);
                     sb.append("<A HREF=\"" + renderKitId + "/" +
                     curFamily + curType +
                     ".html\" TARGET=\"rendererFrame\">" + curType +

@@ -241,6 +241,7 @@
             <classpath>
                 <path refid="apache.commons.classpath"/>
                 <pathelement location="${jsf-tools.jar}"/>
+                <pathelement location="${tools.dir}/build/classes"/>
             </classpath>
         </taskdef>
         <copy todir="${build.generate.dir}/facesdoc/">
@@ -259,9 +260,11 @@
                 <path refid="compile.classpath"/>
                 <pathelement location="${jsf-api.jar}"/>
                 <pathelement location="${jsf-tools.jar}"/>
+                <pathelement location="${tools.dir}/build/classes"/>
             </classpath>
             <sysproperty key="java.endorsed.dirs" value="${endorsed.dirs}"/>
             <sysproperty key="tools.src.dir" value="${tools.dir}/src/main/java"/>
+            <jvmarg line="${debug.jvm.args}"/>
             <assertions>
                 <enable/>
             </assertions>
@@ -566,6 +569,7 @@ javax.faces.level=ALL
         <taskdef name="validate" classname="com.sun.faces.ant.ValidateTask">
             <classpath>
                 <pathelement location="${jsf-tools.jar}"/>
+                <pathelement location="${tools.dir}/build/classes"/>
             </classpath>
         </taskdef>
         <validate schemaDir="${basedir}/doc"/>
