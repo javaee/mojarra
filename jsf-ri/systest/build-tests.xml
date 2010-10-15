@@ -178,7 +178,8 @@
                 test.valueBindingGet,
                 test.misc,
                 test.regressions,
-                test.view.xml"
+                test.view.xml,
+                test.http.method.protection"
             />
             <!--
                 test.groovy"
@@ -488,6 +489,19 @@
         <jsf.tester
               request="${context.path}/faces/mEtA-InF/MANIFEST.MF"
               status="404"/>
+    </target>
+
+    <target name="test.http.method.protection">
+
+        <jsf.junit context-path="${context.path}"
+                   classpath-refid="html.classpath"
+                   test-results-dir="${impl.test.results.dir}">
+            <tests>
+                <fileset dir="${basedir}/build/classes"
+                         includes="com/sun/faces/systest/http/*TestCase.class"/> 
+            </tests>
+        </jsf.junit>
+
     </target>
 
     <target name="test.valueBindingGet"
@@ -1362,7 +1376,9 @@
     </target>
 
     <target name="passthru">
-      <antcall target="test.subview" />
+
+      <antcall target="test.http.method.protection" />
+
     </target>
 
 
