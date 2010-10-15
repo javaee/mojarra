@@ -53,6 +53,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import java.util.logging.Level;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -446,16 +447,18 @@ public abstract class AbstractTestCase extends TestCase {
     @Override
     protected void runTest() throws Throwable {
         String currentContainer = System.getProperty("container");
+        boolean doRunTest = true;
         if(currentContainer == null) {
             log.warning("Test exclusions not taken into account since no container property could be found");
-            super.runTest();
         } else if(exclusions != null) {
             Vector<String> excludedTests = this.exclusions.get(Container.valueOf(currentContainer.toUpperCase().replaceAll("\\.", "_")));
             if(null != excludedTests && !excludedTests.isEmpty() && excludedTests.contains(testName)) {
-                log.info("Skipping execution of test '" + testName + "' for container " + currentContainer);
-            } else {
-                super.runTest();
-            }
+                log.log(Level.INFO, "Skipping execution of test ''{0}'' for container {1}", new Object[]{testName, currentContainer});
+                doRunTest = false;
+            } 
+        }
+        if (doRunTest) {
+            super.runTest();
         }
     }
 
