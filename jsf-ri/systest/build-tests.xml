@@ -178,10 +178,10 @@
                 test.valueBindingGet,
                 test.misc,
                 test.regressions,
-                test.view.xml,
-                test.http.method.protection"
+                test.view.xml"
             />
             <!--
+                test.http.method.protection,
                 test.groovy"
             -->
 

@@ -42,13 +42,9 @@ package javax.faces.webapp;
 
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.Set;
-import java.util.Collections;
-import java.util.concurrent.ConcurrentHashMap;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -143,22 +139,6 @@ public final class FacesServlet implements Servlet {
      */
     private ServletConfig servletConfig = null;
 
-    /*
-     * A white space separated list of case sensitive HTTP method names
-     * that are allowed to be processed by this servlet. * means allow all
-     */
-    private static final String ALLOWED_HTTP_METHODS_ATTR =
-            "com.sun.faces.allowedHttpMethods";
-    
-    private static final String DEFAULT_ALLOWED_HTTP_METHODS = 
-            "GET POST";
-
-    /*
-     * context param
-     */
-    private Set<String> allowedHttpMethods;
-
-    private boolean allowAllMethods;
 
     /**
      * <p>Release all resources acquired at startup time.</p>
@@ -168,9 +148,6 @@ public final class FacesServlet implements Servlet {
         facesContextFactory = null;
         lifecycle = null;
         servletConfig = null;
-        allowedHttpMethods.clear();
-        allowedHttpMethods = null;
-        allowAllMethods = false;
 
     }
 
@@ -245,27 +222,6 @@ public final class FacesServlet implements Servlet {
             } else {
                 throw new ServletException(e.getMessage(), rootCause);
             }
-        }
-
-        // Configure our permitted HTTP methods
-        String[] methods = {};
-        try {
-            String allowedHttpMethodsString = servletConfig.getServletContext().getInitParameter(ALLOWED_HTTP_METHODS_ATTR);
-            if (null != allowedHttpMethodsString) {
-                methods = allowedHttpMethodsString.split("\\s");
-                assert(null != methods); // assuming split always returns a non-null array result
-                if (0 == methods.length) {
-                    // Yes, a manual array assignment would be quicker,
-                    // but less readable and maintainable.
-                    methods = DEFAULT_ALLOWED_HTTP_METHODS.split("\\s");
-                }
-
-            }
-
-        } finally {
-            allowedHttpMethods = Collections.newSetFromMap(new ConcurrentHashMap<String,Boolean>());
-            allowedHttpMethods.addAll(Arrays.asList(methods));
-            allowAllMethods = allowedHttpMethods.contains("*");
         }
 
     }
@@ -347,29 +303,23 @@ public final class FacesServlet implements Servlet {
      * @throws ServletException if a servlet error occurs during processing
 
      */
-    public void service(ServletRequest req,
-                        ServletResponse resp)
+    public void service(ServletRequest request,
+                        ServletResponse response)
         throws IOException, ServletException {
-        HttpServletRequest request = (HttpServletRequest) req;
-        HttpServletResponse response = (HttpServletResponse) resp;
 
-        requestStart(request.getRequestURI()); // V3 Probe hook
-        
-        if (!requestIsValid(request)) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-            return;
-        }
+        requestStart(((HttpServletRequest) request).getRequestURI()); // V3 Probe hook
 
         // If prefix mapped, then ensure requests for /WEB-INF are
         // not processed.
-        String pathInfo = request.getPathInfo();
+        String pathInfo = ((HttpServletRequest) request).getPathInfo();
         if (pathInfo != null) {
             pathInfo = pathInfo.toUpperCase();
             if (pathInfo.startsWith("/WEB-INF/")
                 || pathInfo.equals("/WEB-INF")
                 || pathInfo.startsWith("/META-INF/")
                 || pathInfo.equals("/META-INF")) {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                ((HttpServletResponse) response).
+                      sendError(HttpServletResponse.SC_NOT_FOUND);
                 return;
             }
         }    
@@ -408,12 +358,6 @@ public final class FacesServlet implements Servlet {
         }
 
         requestEnd(); // V3 Probe hook
-    }
-
-    private boolean requestIsValid(HttpServletRequest request) {
-        boolean result = allowAllMethods || allowedHttpMethods.contains(request.getMethod());
-
-        return result;
     }
 
 
