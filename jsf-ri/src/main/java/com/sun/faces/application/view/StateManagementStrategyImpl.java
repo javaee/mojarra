@@ -143,43 +143,40 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
                                new HashSet<String>(viewRoot.getChildCount() << 1));
         final Map<String,Object> stateMap = new HashMap<String,Object>();
 
-// -----------------------------------------------------------------------------
-//        COMMENTED OUT DUE TO ISSUE 1310 UNTIL NEW VISIT HINTS CAN BE
-//        ADDED TO THE API
-// -----------------------------------------------------------------------------
-//        Set<VisitHint> hints = EnumSet.of(VisitHint.EXECUTE_STATE_SAVING);
-//        VisitContext visitContext = VisitContext.createVisitContext(context, null, hints);
-//        final FacesContext finalContext = context;
-//        viewRoot.visitTree(visitContext, new VisitCallback() {
-//
-//            public VisitResult visit(VisitContext context, UIComponent target) {
-//                VisitResult result = VisitResult.ACCEPT;
-//                Object stateObj;
-//                if (!target.isTransient()) {
-//                    if (target.getAttributes().containsKey(DYNAMIC_COMPONENT)) {
-//                        stateObj = new StateHolderSaver(finalContext, target);
-//                    } else {
-//                        stateObj = target.saveState(context.getFacesContext());
-//                    }
-//                    if (null != stateObj) {
-//                        stateMap.put(target.getClientId(context.getFacesContext()),
-//                                                        stateObj);
-//                    }
-//                } else {
-//                    return result;
-//                }
-//
-//                return result;
-//            }
-//
-//        });
-// -----------------------------------------------------------------------------
+        final StateContext stateContext = StateContext.getStateContext(context);
 
-        StateContext stateContext = StateContext.getStateContext(context);
+        Set<VisitHint> hints = EnumSet.of(VisitHint.EXECUTE_STATE_SAVING);
+        VisitContext visitContext = VisitContext.createVisitContext(context, null, hints);
+        final FacesContext finalContext = context;
+        viewRoot.visitTree(visitContext, new VisitCallback() {
+            public VisitResult visit(VisitContext context, UIComponent target) {
+                VisitResult result = VisitResult.ACCEPT;
+                Object stateObj;
+                if (!target.isTransient()) {
+                    if (stateContext.componentAddedDynamically(target)) {
+                        stateObj = new StateHolderSaver(finalContext, target);
+                        Map<String, ComponentStruct> dynamicAdds = stateContext.getDynamicAdds();
+                        assert(null != dynamicAdds);
+                        String clientId = target.getClientId(finalContext);
+                        if (!dynamicAdds.containsKey(clientId)) {
+                            ComponentStruct toAdd = new ComponentStruct();
+                            toAdd.absorbComponent(finalContext, target);
+                            dynamicAdds.put(clientId, toAdd);
+                        }
 
-        // ADDED FOR ISSUE 1310 - REMOVE ONCE NEW VISIT HINTS ARE ADDED TO THE
-        // API
-        saveComponentState(viewRoot, context, stateContext, stateMap);
+                    } else {
+                        stateObj = target.saveState(context.getFacesContext());
+                    }
+                    if (null != stateObj) {
+                        stateMap.put(target.getClientId(context.getFacesContext()), stateObj);
+                    }
+                }    else {
+                    return result;
+                }
+                return result;
+            }
+        });
+
 
         // handle dynamic adds/removes
         List<String> removeList = stateContext.getDynamicRemoves();
@@ -352,48 +349,5 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
 
 
     // --------------------------------------------------------- Private Methods
-
-
-    /**
-     * Temporary method added for issue 1310 to perform state saving as it
-     * was done in 1.2 as calling VisitTree in its current incarnation may
-     * have unintended side effects.
-     *
-     * @param c the component to process
-     * @param ctx the <code>FacesContext</code> for the current request
-     * @param stateMap a <code>Map</code> to push saved state keyed by
-     *  client ID
-     */
-    private void saveComponentState(UIComponent c,
-                                    FacesContext ctx,
-                                    StateContext stateContext,
-                                    Map<String, Object> stateMap) {
-
-        if (!c.isTransient()) {
-            Object stateObj;
-            if (stateContext.componentAddedDynamically(c)) {
-                stateObj = new StateHolderSaver(ctx, c);
-                // ensure it's in the addList.
-                Map<String, ComponentStruct> dynamicAdds = stateContext.getDynamicAdds();
-                assert(null != dynamicAdds);
-                String clientId = c.getClientId(ctx);
-                if (!dynamicAdds.containsKey(clientId)) {
-                    ComponentStruct toAdd = new ComponentStruct();
-                    toAdd.absorbComponent(ctx, c);
-                    dynamicAdds.put(clientId, toAdd);
-                }
-            } else {
-                stateObj = c.saveState(ctx);
-            }
-            if (null != stateObj) {
-                stateMap.put(c.getClientId(ctx), stateObj);
-            }
-            for (Iterator<UIComponent> i = c.getFacetsAndChildren(); i.hasNext();) {
-                saveComponentState(i.next(), ctx, stateContext, stateMap);
-            }
-        }
-
-
-    }
 
 }
