@@ -996,11 +996,15 @@ public class UIData extends UIComponentBase
         boolean found = false;
         if (clientId.equals(myId)) {
             try {
+                this.pushComponentToEL(context, compositeParent);
                 callback.invokeContextCallback(context, this);
                 return true;
             }
             catch (Exception e) {
                 throw new FacesException(e);
+            }
+            finally {
+                this.popComponentFromEL(context);
             }
         }
 

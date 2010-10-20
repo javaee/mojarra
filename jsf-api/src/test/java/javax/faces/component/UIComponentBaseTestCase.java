@@ -1195,15 +1195,20 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         foundComponent = null;
         boolean result = false;
 
+        assertNull(UIComponent.getCurrentComponent(facesContext));
+
         result = root.invokeOnComponent(facesContext,
                 input1.getClientId(facesContext),
                 new ContextCallback() {
                     public void invokeContextCallback(FacesContext context, UIComponent component) {
+                        assertEquals("getCurrentComponent does not return the current component during"
+                                + "invokeOnComponent", UIComponent.getCurrentComponent(context), component);
                         foundComponent = component;
                     }
                 });
         assertEquals(input1, foundComponent);
         assertTrue(result);
+        assertNull(UIComponent.getCurrentComponent(facesContext));
 
     }
 

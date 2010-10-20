@@ -1283,9 +1283,10 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
     public abstract UIComponent findComponent(String expr);
 
     /**
-     * <p>Starting at this component in the View hierarchy, search for a
-     * component with a <code>clientId</code> equal to the argument
-     * <code>clientId</code> and, if found, call the {@link
+     * <p><span class="changed_modified_2_1">Starting</span> at this
+     * component in the View hierarchy, search for a component with a
+     * <code>clientId</code> equal to the argument <code>clientId</code>
+     * and, if found, call the {@link
      * ContextCallback#invokeContextCallback} method on the argument
      * <code>callback</code>, passing the current {@link FacesContext}
      * and the found component as arguments. This method is similar to
@@ -1295,12 +1296,15 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      *
      * <p>The default implementation will first check if
      * <code>this.getClientId()</code> is equal to the argument
-     * <code>clientId</code>.  If so, call the {@link
-     * ContextCallback#invokeContextCallback} method on the argument callback,
-     * passing through the <code>FacesContext</code> argument and
-     * passing this as the component argument.  If an
-     * <code>Exception</code> is thrown by the callback, wrap it in a
-     * {@link FacesException} and re-throw it.  Otherwise, return
+     * <code>clientId</code>.  If so, <span
+     * class="changed_added_2_1">first call {@link #pushComponentToEL},
+     * then</span> call the {@link
+     * ContextCallback#invokeContextCallback} method on the argument
+     * callback, passing through the <code>FacesContext</code> argument
+     * and passing this as the component argument.  <span
+     * class="changed_added_2_1">Then call {@link #popComponentFromEL}.
+     * If an <code>Exception</code> is thrown by the callback, wrap it
+     * in a {@link FacesException} and re-throw it.  Otherwise, return
      * <code>true</code>.</p>
      *
      * <p>Otherwise, for each component returned by {@link
@@ -1377,10 +1381,13 @@ private void doFind(FacesContext context, String clientId) {
         boolean found = false;
         if (clientId.equals(this.getClientId(context))) {
             try {
+                this.pushComponentToEL(context, this);
                 callback.invokeContextCallback(context, this);
                 return true;
             } catch (Exception e) {
                 throw new FacesException(e);
+            } finally {
+                this.popComponentFromEL(context);
             }
         } else {
             Iterator<UIComponent> itr = this.getFacetsAndChildren();

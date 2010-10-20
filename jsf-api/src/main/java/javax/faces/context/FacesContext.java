@@ -502,13 +502,15 @@ public abstract class FacesContext {
      * <p><span class="changed_modified_2_0">Set</span> the root
      * component that is associated with this request.  
 
-     * <p class="changed_modified_2_1">This method can
-     * be called by the application handler (or a class that the
-     * handler calls), during the <em>Invoke Application</em>
-     * phase of the request processing lifecycle and during the 
-     * <em>Restore View</em> phase of the request processing 
-     * lifecycle (especially when a new root component is 
-     * created).</p>
+     * <p class="changed_modified_2_1">This method can be called by the
+     * application handler (or a class that the handler calls), during
+     * the <em>Invoke Application</em> phase of the request processing
+     * lifecycle and during the <em>Restore View</em> phase of the
+     * request processing lifecycle (especially when a new root
+     * component is created).  In the present version of the
+     * specification, implementations are not required to enforce this
+     * restriction, though a future version of the specification may
+     * require enforcement.</p>
 
      * <p class="changed_added_2_0">If the current
      * <code>UIViewRoot</code> is non-<code>null</code>, and calling

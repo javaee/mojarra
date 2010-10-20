@@ -598,6 +598,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         // Case 1, positive invoke on form1:data:commandHeader component of the 4th row
         found = false;
         data1.setRowIndex(3);
+        assertNull(UIComponent.getCurrentComponent(facesContext));
         assertEquals(3, data1.getRowIndex());
         found = viewRoot.invokeOnComponent(facesContext, "form1:data:4:commandHeader",
                 new ContextCallback() {
@@ -606,16 +607,20 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
                                                       UIComponent component) {
                         UIData data = (UIData) getNamingContainer(component);
                         UIForm form = (UIForm) getNamingContainer(data);
+                        assertEquals("getCurrentComponent does not return the current component during"
+                                + "invokeOnComponent", UIComponent.getCurrentComponent(context), component);
                         assertEquals(4, data.getRowIndex());
                         assertEquals("form1", form.getId());
                         assertEquals("commandHeader", component.getId());
                     }
                 });
         assertEquals(3, data1.getRowIndex());
+        assertNull(UIComponent.getCurrentComponent(facesContext));
         assertTrue(found);
 
         // Case 2, positive invoke on form2:data:commandHeader component of the 5th row
         data2.setRowIndex(4);
+        assertNull(UIComponent.getCurrentComponent(facesContext));
         found = false;
         assertEquals(4, data2.getRowIndex());
         found = viewRoot.invokeOnComponent(facesContext, "form2:data:5:commandHeader",
@@ -625,16 +630,20 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
                                                       UIComponent component) {
                         UIData data = (UIData) getNamingContainer(component);
                         UIForm form = (UIForm) getNamingContainer(data);
+                        assertEquals("getCurrentComponent does not return the current component during"
+                                + "invokeOnComponent", UIComponent.getCurrentComponent(context), component);
                         assertEquals(5, data.getRowIndex());
                         assertEquals("form2", form.getId());
                         assertEquals("commandHeader", component.getId());
                     }
                 });
         assertEquals(4, data2.getRowIndex());
+        assertNull(UIComponent.getCurrentComponent(facesContext));
         assertTrue(found);
 
         // Case 3, not found invoke on form2:data:5:yoyodyne
         data2.setRowIndex(4);
+        assertNull(UIComponent.getCurrentComponent(facesContext));
         found = false;
         assertEquals(4, data2.getRowIndex());
         found = viewRoot.invokeOnComponent(facesContext, "form2:data:5:yoyodyne",
@@ -646,11 +655,13 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
                     }
                 });
         assertEquals(4, data2.getRowIndex());
+        assertNull(UIComponent.getCurrentComponent(facesContext));
         assertTrue(!found);
 
         // Case 4, not found due to invalid rowIndex
         data1.setRowIndex(3);
         found = false;
+        assertNull(UIComponent.getCurrentComponent(facesContext));
         assertEquals(3, data1.getRowIndex());
         found = viewRoot.invokeOnComponent(facesContext, "form1:data:999:commandHeader",
                 new ContextCallback() {
@@ -661,12 +672,14 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
                     }
                 });
         assertEquals(3, data1.getRowIndex());
+        assertNull(UIComponent.getCurrentComponent(facesContext));
         assertTrue(!found);
 
         // Case 5, not found due to invalid clientId (too many ':')
         data2.setRowIndex(6);
         found = false;
         exceptionThrown = false;
+        assertNull(UIComponent.getCurrentComponent(facesContext));
         assertEquals(6, data2.getRowIndex());
         try {
             found = viewRoot.invokeOnComponent(facesContext, "form2:data::7:commandHeader",
@@ -683,6 +696,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
             exceptionThrown = true;
         }
         assertEquals(6, data2.getRowIndex());
+        assertNull(UIComponent.getCurrentComponent(facesContext));
         assertTrue(!found);
         assertTrue(exceptionThrown);
 
@@ -690,6 +704,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         found = false;
         exceptionThrown = true;
         data1.setRowIndex(3);
+        assertNull(UIComponent.getCurrentComponent(facesContext));
         assertEquals(3, data1.getRowIndex());
         try {
             found = viewRoot.invokeOnComponent(facesContext, "form1:data:4:commandHeader",
@@ -705,12 +720,14 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
             exceptionThrown = true;
         }
         assertEquals(3, data1.getRowIndex());
+        assertNull(UIComponent.getCurrentComponent(facesContext));
         assertTrue(!found);
         assertTrue(exceptionThrown);
 
         // Case 7, positive: ensure UIData-level facets are considered
         found = false;
         data1.setRowIndex(3);
+        assertNull(UIComponent.getCurrentComponent(facesContext));
         assertEquals(3, data1.getRowIndex());
         found = viewRoot.invokeOnComponent(facesContext, "form1:data:uidataHeader",
                 new ContextCallback() {
@@ -719,15 +736,19 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
                                                       UIComponent component) {
                         UIData data = (UIData) getNamingContainer(component);
                         UIForm form = (UIForm) getNamingContainer(data);
+                        assertEquals("getCurrentComponent does not return the current component during"
+                                + "invokeOnComponent", UIComponent.getCurrentComponent(context), component);
                         assertEquals("form1", form.getId());
                         assertEquals("uidataHeader", component.getId());
                     }
                 });
         assertEquals(3, data1.getRowIndex());
+        assertNull(UIComponent.getCurrentComponent(facesContext));
         assertTrue(found);
 
         found = false;
         data1.setRowIndex(3);
+        assertNull(UIComponent.getCurrentComponent(facesContext));
         assertEquals(3, data1.getRowIndex());
         found = viewRoot.invokeOnComponent(facesContext, "form1:data:uidataFooter",
                 new ContextCallback() {
@@ -736,11 +757,14 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
                                                       UIComponent component) {
                         UIData data = (UIData) getNamingContainer(component);
                         UIForm form = (UIForm) getNamingContainer(data);
+                        assertEquals("getCurrentComponent does not return the current component during"
+                                + "invokeOnComponent", UIComponent.getCurrentComponent(context), component);
                         assertEquals("form1", form.getId());
                         assertEquals("uidataFooter", component.getId());
                     }
                 });
         assertEquals(3, data1.getRowIndex());
+        assertNull(UIComponent.getCurrentComponent(facesContext));
         assertTrue(found);
 
 

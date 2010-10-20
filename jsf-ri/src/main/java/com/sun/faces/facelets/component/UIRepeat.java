@@ -544,7 +544,13 @@ public class UIRepeat extends UINamingContainer {
             ContextCallback callback) throws FacesException {
         String id = super.getClientId(faces);
         if (clientId.equals(id)) {
-            callback.invokeContextCallback(faces, this);
+            this.pushComponentToEL(faces, this);
+            try {
+                callback.invokeContextCallback(faces, this);
+            }
+            finally {
+                this.popComponentFromEL(faces);
+            }
             return true;
         } else if (clientId.startsWith(id)) {
             int prevIndex = this.index;
