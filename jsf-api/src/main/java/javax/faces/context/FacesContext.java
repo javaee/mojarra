@@ -499,8 +499,9 @@ public abstract class FacesContext {
 
 
     /**
-     * <p><span class="changed_modified_2_0">Set</span> the root
-     * component that is associated with this request.  
+     * <p><span class="changed_modified_2_0
+     * changed_modified_2_1">Set</span> the root component that is
+     * associated with this request.
 
      * <p class="changed_modified_2_1">This method can be called by the
      * application handler (or a class that the handler calls), during

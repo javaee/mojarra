@@ -54,11 +54,12 @@ import javax.faces.application.ProjectStage;
 import javax.el.ELContext;
 
 /**
- * <p>Provides a simple implementation of {@link FacesContext} that can
- * be subclassed by developers wishing to provide specialized behavior
- * to an existing {@link FacesContext} instance.  The default
- * implementation of all methods is to call through to the wrapped
- * {@link FacesContext} instance.</p>
+ * <p><span class="changed_modified_2_1">Provides</span> a simple
+ * implementation of {@link FacesContext} that can be subclassed by
+ * developers wishing to provide specialized behavior to an existing
+ * {@link FacesContext} instance.  The default implementation of all
+ * methods is to call through to the wrapped {@link FacesContext}
+ * instance.</p>
  *
  * <p>Usage: extend this class and override {@link #getWrapped} to
  * return the instance being wrapping.</p>
@@ -256,6 +257,20 @@ public abstract class FacesContextWrapper extends FacesContext implements FacesW
     public void addMessage(String clientId, FacesMessage message) {
         getWrapped().addMessage(clientId, message);
     }
+
+    /**
+     * <p class="changed_added_2_1">The default behavior of this method
+     * is to call {@link FacesContext#isReleased} on the wrapped {@link
+     * FacesContext} object.</p>
+     *
+     * @see javax.faces.context.FacesContext#isReleased
+
+     * @since 2.1
+     */
+    public boolean isReleased() {
+	return getWrapped().isReleased();
+    }
+
 
     /**
      * <p>The default behavior of this method is to
