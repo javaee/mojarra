@@ -448,7 +448,7 @@ a[href^="composite/tld-frame"], a[href^="f/tld-frame"], a[href^="h/tld-frame"], 
                  border-left-width:thin; border-right:none;
                  border-top:none; border-bottom:none; border-color:orange }
 
-a[href^="head"], a[href^="title"] { cursor: url(changed_added_2_1_cursor.cur), pointer;
+a[href^="head"], a[href^="title"], a[href^="clientBehavior"] { cursor: url(changed_added_2_1_cursor.cur), pointer;
                  background: url(changed_added_2_1.png); 
                  padding-left:0.2em; border-left:solid;
                  border-left-width:thin; border-right:none;
@@ -484,7 +484,6 @@ a[href^="ui/"] { cursor: url(changed_modified_2_0_rev_a_cursor.cur), pointer;
                  border-left-width:thin; border-right:none;
                  border-top:none; border-bottom:none; border-color:orange }
 
-***/
    .changed_added_2_0_rev_a { cursor: url(changed_added_2_0_rev_a_cursor.cur), pointer;
                  background: url(changed_added_2_0_rev_a.png); 
                  padding-left:0.2em; border-left:solid;
