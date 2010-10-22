@@ -54,14 +54,7 @@
 <composite:interface name="composite"
                      displayName="BehaviorHandler composite component test">
     <composite:attribute name="commandAction"
-                         method-signature="String f1()" targets="command">
-    </composite:attribute>
-    <composite:attribute name="defferedAction">
-        <composite:deferred-method>
-            <composite:method-signature>
-                java.lang.Object action()
-            </composite:method-signature>
-        </composite:deferred-method>
+                         method-signature="String f1()">
     </composite:attribute>
     <composite:attribute name="value" targets="input"/>
     <composite:editableValueHolder name="input"/>
@@ -76,7 +69,7 @@
         <h:commandButton id="cancel" value="Cancel"/>
         <f:subview id="sub">
             <h:panelGroup id="group">
-                <h:commandButton id="command" value="Ok"
+                <h:commandButton id="commandAction" value="Ok"
                                  action="#{cc.attrs.commandAction}">
                 </h:commandButton>
             </h:panelGroup>

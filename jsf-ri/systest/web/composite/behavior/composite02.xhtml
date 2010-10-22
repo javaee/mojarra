@@ -42,16 +42,14 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ezb="http://java.sun.com/jsf/composite/ezbehaviors"
-      xmlns:b="http://mojarra.dev.java.net/composite-behavior">
-      <h:form id="form">
-        <ezb:compositeTest id="composite" commandAction="#{compositeBehaviorTestBean.doAction}">
-              	<b:behavior event="ok"/>        
-                <f:validateLength for="input" minimum="3" />
-        </ezb:compositeTest>
-        <h:commandButton action="refresh" value="refresh" id="refresh" />
-        <h:messages />
-      </h:form>
+      xmlns:h="http://java.sun.com/jsf/html">
+
+<h:form prependId="false">
+
+  <p>Reaching this page indicates that the method expression retargeting
+  was successful.</p>
+
+  <h:commandButton id="button" action="composite" value="back" />
+</h:form>
+
 </html>

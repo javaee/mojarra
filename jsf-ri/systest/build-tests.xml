@@ -1036,6 +1036,8 @@
             <tests>
                 <fileset dir="${basedir}/build/classes"
                          includes="com/sun/faces/composite/*TestCase.class"/>
+                <fileset dir="${basedir}/build/classes"
+                         includes="com/sun/faces/systest/composite/behavior/*TestCase.class"/>
             </tests>
         </jsf.junit>
 
@@ -1377,7 +1379,7 @@
 
     <target name="passthru">
 
-      <antcall target="test.http.method.protection" />
+      <antcall target="test.composite" />
 
     </target>
 
