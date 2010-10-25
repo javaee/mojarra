@@ -114,6 +114,7 @@ final class DefaultFaceletCache extends FaceletCache<DefaultFacelet> {
 
     @Override
     public DefaultFacelet getFacelet(URL url) throws IOException {
+        com.sun.faces.util.Util.notNull("url", url);
         DefaultFacelet f = null;
         
         try {
@@ -126,12 +127,16 @@ final class DefaultFaceletCache extends FaceletCache<DefaultFacelet> {
 
     @Override
     public boolean isFaceletCached(URL url) {
+        com.sun.faces.util.Util.notNull("url", url);
+
         return _faceletCache.containsKey(url);
     }
 
 
     @Override
     public DefaultFacelet getViewMetadataFacelet(URL url) throws IOException {
+        com.sun.faces.util.Util.notNull("url", url);
+
         DefaultFacelet f = null;
         
         try {
@@ -144,6 +149,8 @@ final class DefaultFaceletCache extends FaceletCache<DefaultFacelet> {
 
     @Override
     public boolean isViewMetadataFaceletCached(URL url) {
+        com.sun.faces.util.Util.notNull("url", url);
+
         return _metadataFaceletCache.containsKey(url);
     }
 

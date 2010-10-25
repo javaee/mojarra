@@ -66,20 +66,19 @@ import com.sun.faces.util.Cache;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 
-import javax.faces.view.facelets.FaceletException;
 import javax.faces.view.facelets.FaceletHandler;
 import javax.faces.view.facelets.ResourceResolver;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
+import java.lang.reflect.Method;
 import java.net.URL;
-import java.net.URLConnection;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import javax.faces.FacesException;
 
 
 /**
@@ -165,8 +164,18 @@ public class DefaultFaceletFactory extends FaceletFactory {
                     return createMetadataFacelet(key);
                 }
             };
+        try {
+            // We must call this method using reflection because it is protected.
+            Method m = FaceletCache.class.getDeclaredMethod("setMemberFactories", FaceletCache.MemberFactory.class, FaceletCache.MemberFactory.class);
+            m.setAccessible(true);
+            m.invoke(this.cache, faceletFactory, metadataFaceletFactory);
+        } catch (Exception ex) {
+            if (log.isLoggable(Level.SEVERE)) {
+                log.log(Level.SEVERE, null, ex);
+            }
+            throw new FacesException(ex);
+        } 
         
-        this.cache.setMemberFactories(faceletFactory, metadataFaceletFactory);
     }
 
 
