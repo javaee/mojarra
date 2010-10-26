@@ -51,10 +51,11 @@ import javax.faces.component.UIComponent;
  * instance is the {@link UIComponent} instance that is about to be
  * validated.</p>
 
- * <p class="changed_added_2_1">Note that iterating components such as
- * <code>UIData</code>, and form components such as <code>UIForm</code>
- * must publish this event before processing their children nodes in
- * {@link UIComponent#processValidators}.</p>
+ * <p class="changed_added_2_1">Components with children
+ * must publish this event before processing their child nodes in
+ * {@link UIComponent#processValidators}.  This is especially important for
+ * iterating components such as
+ * <code>UIData</code>, and form components, such as <code>UIForm</code>.</p>
 
  *
  * @since 2.0
