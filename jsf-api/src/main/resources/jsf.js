@@ -112,7 +112,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
          * @returns {boolean} does including a script in the dom execute it?
          * @ignore
          */
-        var isAutoExecCache;
         var isAutoExec = function isAutoExec() {
             try {
                 if (typeof isAutoExecCache !== "undefined") {
@@ -139,6 +138,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 return isAutoExecCache;
             }
         };
+        var isAutoExecCache;
 
         /**
          * @ignore
@@ -637,6 +637,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
          * Replace one node with another.  Necessary for handling IE memory leak.
          * @param node
          * @param newNode
+         * @ignore
          */
         var replaceNode = function replaceNode(newNode, node) {
                if(isIE()){
