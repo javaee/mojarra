@@ -41,6 +41,7 @@
 package com.sun.faces.application;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.application.ApplicationStateInfo;
 import com.sun.faces.scripting.groovy.GroovyHelper;
 import com.sun.faces.application.resource.ResourceCache;
 import com.sun.faces.application.resource.ResourceManager;
@@ -79,7 +80,6 @@ import com.sun.faces.el.ELUtils;
 import com.sun.faces.el.FacesCompositeELResolver;
 import com.sun.faces.el.VariableResolverChainWrapper;
 import com.sun.faces.facelets.PrivateApiFaceletCacheAdapter;
-import com.sun.faces.facelets.tag.xml.XmlLibrary;
 import com.sun.faces.lifecycle.ELResolverInitPhaseListener;
 
 import javax.el.CompositeELResolver;
@@ -740,7 +740,6 @@ public class ApplicationAssociate {
             c.addTagLibrary(new FunctionLibrary(DevTools.class, "http://java.sun.com/mojarra/private/functions"));
         }
         c.addTagLibrary(new CompositeLibrary());
-        c.addTagLibrary(new XmlLibrary());
 
         return c;
 

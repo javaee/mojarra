@@ -41,8 +41,9 @@
 
 -->
 
-<faces-view xmlns="http://www.w3.org/1999/xhtml"
-            xmlns:h="http://java.sun.com/jsf/html">
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html">
 
     <h:html>
 
@@ -105,6 +106,6 @@
 
     </h:html>
 
-</faces-view>
+</f:view>
 
 

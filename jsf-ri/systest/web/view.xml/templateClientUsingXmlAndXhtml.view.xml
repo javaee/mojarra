@@ -41,10 +41,7 @@
 
 -->
 
-<faces-view xmlns="http://java.sun.com/xml/ns/javaee"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesview_2_1.xsd"
-    version="2.1"
+<f:view 
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:ui="http://java.sun.com/jsf/facelets">
@@ -94,6 +91,6 @@
 
     </h:html>
 
-</faces-view>
+</f:view>
 
 

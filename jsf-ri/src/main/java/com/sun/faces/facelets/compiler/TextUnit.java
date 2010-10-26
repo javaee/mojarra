@@ -58,16 +58,13 @@
 
 package com.sun.faces.facelets.compiler;
 
-import com.sun.faces.config.FaceletsConfiguration;
 import com.sun.faces.facelets.el.ELText;
 
 import javax.el.ELException;
 import javax.faces.view.facelets.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Stack;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 
@@ -91,14 +88,6 @@ final class TextUnit extends CompilationUnit {
     private final String alias;
 
     private final String id;
-
-    private final static Map<String, Boolean> qNamesToSwallow;
-
-
-    static {
-        qNamesToSwallow = new ConcurrentHashMap<String, Boolean>(1);
-        qNamesToSwallow.put("faces-view", Boolean.TRUE);
-    }
 
     public TextUnit(String alias, String id) {
         this.alias = alias;
@@ -183,15 +172,15 @@ final class TextUnit extends CompilationUnit {
     public void writeComment(String text) {
         this.finishStartTag();
 
-            ELText el = ELText.parse(text);
-            if (el.isLiteral()) {
-                this.addInstruction(new LiteralCommentInstruction(text));
-            } else {
-                this.addInstruction(new CommentInstruction(el));
-            }
-
-            this.buffer.append("<!--" + text + "-->");
+        ELText el = ELText.parse(text);
+        if (el.isLiteral()) {
+            this.addInstruction(new LiteralCommentInstruction(text));
+        } else {
+            this.addInstruction(new CommentInstruction(el));
         }
+
+        this.buffer.append("<!--" + text + "-->");
+    }
 
     public void startTag(Tag tag) {
 
@@ -200,39 +189,36 @@ final class TextUnit extends CompilationUnit {
 
         // push this tag onto the stack
         this.tags.push(tag);
-        String qName = tag.getQName();
 
-        if (!qNamesToSwallow.containsKey(qName)) {
-            // write it out
-            this.buffer.append('<');
-            this.buffer.append(qName);
+        // write it out
+        this.buffer.append('<');
+        this.buffer.append(tag.getQName());
 
-            this.addInstruction(new StartElementInstruction(tag.getQName()));
+        this.addInstruction(new StartElementInstruction(tag.getQName()));
 
-            TagAttribute[] attrs = tag.getAttributes().getAll();
-            if (attrs.length > 0) {
-                for (int i = 0; i < attrs.length; i++) {
-                    String qname = attrs[i].getQName();
-                    String value = attrs[i].getValue();
-                    this.buffer.append(' ').append(qname).append("=\"").append(
+        TagAttribute[] attrs = tag.getAttributes().getAll();
+        if (attrs.length > 0) {
+            for (int i = 0; i < attrs.length; i++) {
+                String qname = attrs[i].getQName();
+                String value = attrs[i].getValue();
+                this.buffer.append(' ').append(qname).append("=\"").append(
                         value).append("\"");
 
-                    ELText txt = ELText.parse(value);
-                    if (txt != null) {
-                        if (txt.isLiteral()) {
-                            this.addInstruction(new LiteralAttributeInstruction(
-                                    qname, txt.toString()));
-                        } else {
-                            this.addInstruction(new AttributeInstruction(
-                                    this.alias, qname, txt));
-                        }
+                ELText txt = ELText.parse(value);
+                if (txt != null) {
+                    if (txt.isLiteral()) {
+                        this.addInstruction(new LiteralAttributeInstruction(
+                                qname, txt.toString()));
+                    } else {
+                        this.addInstruction(new AttributeInstruction(
+                                this.alias, qname, txt));
                     }
                 }
             }
-            // notify that we have an open tag
-            this.startTagOpen = true;
         }
 
+        // notify that we have an open tag
+        this.startTagOpen = true;
     }
 
     private void finishStartTag() {
@@ -245,17 +231,13 @@ final class TextUnit extends CompilationUnit {
     public void endTag() {
         Tag tag = (Tag) this.tags.pop();
 
-        String qName = tag.getQName();
+        this.addInstruction(new EndElementInstruction(tag.getQName()));
 
-        if (!qNamesToSwallow.containsKey(qName)) {
-            this.addInstruction(new EndElementInstruction(qName));
-
-            if (this.startTagOpen) {
-                this.buffer.append("/>");
-                this.startTagOpen = false;
-            } else {
-                this.buffer.append("</").append(tag.getQName()).append('>');
-            }
+        if (this.startTagOpen) {
+            this.buffer.append("/>");
+            this.startTagOpen = false;
+        } else {
+            this.buffer.append("</").append(tag.getQName()).append('>');
         }
     }
 
