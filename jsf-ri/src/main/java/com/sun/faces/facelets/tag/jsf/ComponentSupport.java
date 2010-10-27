@@ -60,7 +60,6 @@ package com.sun.faces.facelets.tag.jsf;
 
 import com.sun.faces.context.StateContext;
 import com.sun.faces.facelets.tag.jsf.core.FacetHandler;
-import com.sun.faces.util.MessageUtils;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
@@ -68,11 +67,6 @@ import javax.faces.component.UIPanel;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.html.HtmlForm;
 import javax.faces.component.UINamingContainer;
-import javax.faces.component.ActionSource;
-import javax.faces.component.ActionSource2;
-import javax.faces.component.EditableValueHolder;
-import javax.faces.application.FacesMessage;
-import javax.faces.application.ProjectStage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagAttribute;
@@ -413,39 +407,6 @@ public final class ComponentSupport {
             }
         }
     }
-
-    /**
-     * method to inspect what interfaces the component implements.
-     * if one of the interfaces is ActionSource, ActionSource2 or EditableValueHolder
-     * then that component needs to be wrapped inside a UIlForm.
-     * return true if even one of the interfaces is one of the above.
-     * @param child
-     * @return boolean
-     */
-
-    private static boolean inspectInterfacesToCheckIfFormOmitted(UIComponent child) {
-        return (child instanceof ActionSource || child instanceof ActionSource2 || child instanceof EditableValueHolder);
-    }
-
-    /**
-     * method to inspect of the the parent ancestry of the component
-     * contains HtmlForm as one of the ancestors.
-     * @param component
-     * @return true of HtmlForm is one of the ancestors
-     */
-
-    private static boolean inspectParentAncestryToCheckIfFormOmitted(UIComponent component) {
-        if (component != null) {
-            while (!(component instanceof UIViewRoot) && component != null) {
-                if (component instanceof HtmlForm ||
-                    component instanceof UINamingContainer) {
-                    return true;
-                }
-                component = component.getParent();
-            }
-        }
-        return false;
-    }
     
     /**
      * <p class="changed_added_2_0">Add the child component to the parent. If the parent is a facet,
@@ -455,35 +416,6 @@ public final class ComponentSupport {
      */
     public static void addComponent(FaceletContext ctx, UIComponent parent, UIComponent child) {
 
-        //fix for issue 1663. to be executed only if in dev mode
-        if (ctx.getFacesContext().isProjectStage(ProjectStage.Development)) {
-            if (!(child instanceof HtmlForm)) {
-                if (inspectInterfacesToCheckIfFormOmitted(child)) {
-                    //child component implements ActionSource/ActionSource2
-                    //or EditableValueHolder
-                    //now make sure that there is a HtmlForm in the ancestry
-                    if (!inspectParentAncestryToCheckIfFormOmitted(parent)) {
-                        //no HtmlForm in the ancestry of the child
-                        String key = MessageUtils.MISSING_FORM_ERROR;
-                        Object[] params = new Object[]{};
-                        boolean missingFormReported = false;
-
-                        FacesMessage m = MessageUtils.getExceptionMessage(key, params);
-                        List<FacesMessage> messageList = ctx.getFacesContext().getMessageList();
-                        for (FacesMessage fm : messageList) {
-                            if (fm.getDetail().equals(m.getDetail())) {
-                                missingFormReported = true;
-                                break;
-                            }
-                        }
-                        if (!missingFormReported) {
-                            m.setSeverity(FacesMessage.SEVERITY_WARN);
-                            ctx.getFacesContext().addMessage(null, m);
-                        }
-                    }
-                }
-            }
-        }
         String facetName = getFacetName(parent);
         if (facetName == null) {
             parent.getChildren().add(child);

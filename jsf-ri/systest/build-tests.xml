@@ -178,7 +178,8 @@
                 test.valueBindingGet,
                 test.misc,
                 test.regressions,
-                test.view.xml"
+                test.view.xml,
+                test.projectstage"
             />
             <!--
                 test.http.method.protection,
@@ -1377,15 +1378,23 @@
 
     </target>
 
-    <target name="passthru">
+    <target name="test.projectstage">
 
-      <antcall target="test.composite" />
-
+        <jsf.junit context-path="${context.path}"
+                   classpath-refid="html.classpath"
+                   test-results-dir="${impl.test.results.dir}">
+            <tests>
+                <fileset dir="${basedir}/build/classes"
+                         includes="com/sun/faces/systest/projectstage/*TestCase.class"/> 
+            </tests>
+        </jsf.junit>
     </target>
 
 
-    <target name="scratch">
-      <antcall target="test.methodRef" />
+    <target name="passthru">
+
+      <antcall target="test.projectstage" />
+
     </target>
 
 </project>
