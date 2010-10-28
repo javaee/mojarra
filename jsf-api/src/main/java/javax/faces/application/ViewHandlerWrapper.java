@@ -126,6 +126,21 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
 
     }
 
+    /**
+     *
+     * <p class="changed_added_2_1">The default behavior of this method is to
+     * call {@link ViewHandler#deriveLogicalViewId(javax.faces.context.FacesContext, String)}
+     * on the wrapped {@link ViewHandler} object.</p>
+     *
+     * @see ViewHandler#deriveLogicalViewId(javax.faces.context.FacesContext, String)
+     * @since 2.1
+     */
+    @Override
+    public String deriveLogicalViewId(FacesContext context, String input) {
+
+        return getWrapped().deriveLogicalViewId(context, input);
+
+    }
     
     /**
      * <p>The default behavior of this method is to

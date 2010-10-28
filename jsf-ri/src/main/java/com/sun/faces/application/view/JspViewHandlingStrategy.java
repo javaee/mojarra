@@ -290,9 +290,10 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
 
     }
 
-
-
-
+    @Override 
+    public String getId() {
+        return JSP_VIEW_DECLARATION_LANGUAGE_ID;
+    }
 
     // --------------------------------------------------------- Private Methods
 

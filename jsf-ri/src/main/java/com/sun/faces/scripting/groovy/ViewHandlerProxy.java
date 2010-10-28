@@ -115,6 +115,12 @@ public class ViewHandlerProxy extends ViewHandler {
     }
 
     @Override
+    public String deriveLogicalViewId(FacesContext context, String input) {
+        return getGroovyDelegate().deriveLogicalViewId(context, input);
+    }
+
+
+    @Override
     public String getRedirectURL(FacesContext context,
                                  String viewId,
                                  Map<String,List<String>> parameters,

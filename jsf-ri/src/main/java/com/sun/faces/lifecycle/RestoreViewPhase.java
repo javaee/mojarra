@@ -225,7 +225,8 @@ public class RestoreViewPhase extends Phase {
                     LOGGER.fine("New request: creating a view for " + viewId);
                 }
 
-                ViewDeclarationLanguage vdl = facesContext.getApplication().getViewHandler().getViewDeclarationLanguage(facesContext, viewId);
+                String derivedViewId = viewHandler.deriveLogicalViewId(facesContext, viewId);
+                ViewDeclarationLanguage vdl = viewHandler.getViewDeclarationLanguage(facesContext, derivedViewId);
 
                 if (vdl != null) {
                     // If we have one, get the ViewMetadata...

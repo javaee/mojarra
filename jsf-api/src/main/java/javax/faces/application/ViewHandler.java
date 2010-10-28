@@ -312,6 +312,28 @@ public abstract class ViewHandler {
         return rawViewId;
 
     }
+
+    /**
+     * <p class="changed_added_2_1">Derive and return the viewId from
+     * the current request, or the argument input by following the
+     * algorithm defined in specification section JSF.7.5.2.  Note that
+     * unlike <code>deriveViewId()</code>, this method does not require that
+     * a physical view be present.</p>
+     *
+     * <p>The default implementation of this method simply returns
+     * rawViewId unchanged.</p>
+     *
+     * @param context the <code>FacesContext</code> for this request
+     *
+     * @param rawViewId the <code>viewId</code> to derive,
+     *
+     * @since 2.1
+     */
+    public String deriveLogicalViewId(FacesContext context, String rawViewId) {
+
+        return rawViewId;
+
+    }
     
 
     /**
@@ -429,8 +451,8 @@ public abstract class ViewHandler {
 
 
     /**
-     * <p class="changed_added_2_0">Return the {@link
-     * ViewDeclarationLanguage} instance used for this <code>ViewHandler</code>
+     * <p class="changed_added_2_0"><span class="changed_modified_2_1">Return</span>
+     * the {@link ViewDeclarationLanguage} instance used for this <code>ViewHandler</code>
      * instance.</p>
      * 
      * <div class="changed_added_2_0">
@@ -445,6 +467,12 @@ public abstract class ViewHandler {
      * <p>The default implementation of this method returns null.</p>
      * 
      * </div>
+     *
+     * @param context the <code>FacesContext</code> for this request.
+     *
+     * @param viewId <span class="changed_modified_2_1">the logical view
+     * id, as returned from {@link #deriveLogicalViewId} for which the
+     * <code>ViewDeclarationLanguage</code> should be returned.</span>
 
      * @since 2.0
      */

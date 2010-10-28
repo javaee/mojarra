@@ -771,6 +771,27 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
     }
 
+    @Override
+    public boolean viewExists(FacesContext context, 
+                              String viewId) {
+        if (handlesViewId(viewId)) {
+            if (faceletFactory == null) {
+                ApplicationAssociate associate = ApplicationAssociate.getInstance(context.getExternalContext());
+                faceletFactory = associate.getFaceletFactory();
+                assert (faceletFactory != null);
+            }
+           
+            return faceletFactory.getResourceResolver().resolveUrl(viewId) != null;
+        }
+
+        return false;
+    }
+
+    @Override 
+    public String getId() {
+        return FACELETS_VIEW_DECLARATION_LANGUAGE_ID;
+    }
+
 
     // ------------------------------------------------------- Protected Methods
 

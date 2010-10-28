@@ -430,16 +430,20 @@ public class MultiViewHandler extends ViewHandler {
     @Override
     public ViewDeclarationLanguage getViewDeclarationLanguage(FacesContext context,
                                                               String viewId) {
-
-        String actualViewId = derivePhysicalViewId(context, viewId, false);
-        return vdlFactory.getViewDeclarationLanguage(actualViewId);
-
+        return vdlFactory.getViewDeclarationLanguage(viewId);
     }
 
     @Override
     public String deriveViewId(FacesContext context, String rawViewId) {
 
         return derivePhysicalViewId(context, rawViewId, true);
+
+    }
+
+    @Override
+    public String deriveLogicalViewId(FacesContext context, String rawViewId) {
+
+        return derivePhysicalViewId(context, rawViewId, false);
 
     }
 
@@ -505,17 +509,12 @@ public class MultiViewHandler extends ViewHandler {
             appendOrReplaceExtension(viewId, ext, length, extIdx, buffer);
 
             String convertedViewId = buffer.toString();
-            try {
-                if (context.getExternalContext().getResource(convertedViewId) != null) {
-                    // RELEASE_PENDING (rlubke,driscoll) cache the lookup
-                    return convertedViewId;
-                }
-            } catch (MalformedURLException e) {
-                if (logger.isLoggable(Level.SEVERE)) {
-                    logger.log(Level.SEVERE,
-                               e.toString(),
-                               e);
-                }
+
+            ViewDeclarationLanguage vdl = getViewDeclarationLanguage(context, convertedViewId);
+            
+            if (vdl.viewExists(context, convertedViewId)) {
+                // RELEASE_PENDING (rlubke,driscoll) cache the lookup
+                return convertedViewId;
             }
         }
 
@@ -546,22 +545,15 @@ public class MultiViewHandler extends ViewHandler {
                     }
 
                 }
-                try {
-                    if (checkPhysical) {
-                        return ((ctx.getExternalContext().getResource(viewId) != null) ? viewId : null);
-                    } else {
-                        return viewId;
-                    }
-                } catch (MalformedURLException mue) {
-                    if (logger.isLoggable(Level.SEVERE)) {
-                        logger.log(Level.SEVERE,
-                                   mue.toString(),
-                                   mue);
-                    }
-                    return null;
+
+                if (checkPhysical) {
+                    ViewDeclarationLanguage vdl = getViewDeclarationLanguage(ctx, viewId);
+                                                                                
+                    return (vdl.viewExists(ctx, viewId) ? viewId : null);
+                } else {
+                    return viewId;
                 }
             }
-
         }
         return rawViewId;
     }

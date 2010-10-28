@@ -42,7 +42,10 @@ package javax.faces.view;
 
 import java.beans.BeanInfo;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.application.Resource;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
@@ -79,6 +82,24 @@ public abstract class ViewDeclarationLanguage {
      */
     public final static String IS_BUILDING_INITIAL_STATE =
             ViewDeclarationLanguage.class.getName() + ".IS_BUILDING_INITIAL_STATE";
+
+    /**
+     * <p class="changed_added_2_0">Identifier for the JSP view declaration 
+     * language.</p>
+     *
+     * @since 2.1
+     */
+    public final static String JSP_VIEW_DECLARATION_LANGUAGE_ID =
+        "java.faces.JSP";
+
+    /**
+     * <p class="changed_added_2_0">Identifier for the Facelets view 
+     * declaration language.</p>
+     *
+     * @since 2.1
+     */
+    public final static String FACELETS_VIEW_DECLARATION_LANGUAGE_ID =
+        "java.faces.Facelets";
 
     /**
      * <p class="changed_added_2_0">Return a reference to the component
@@ -531,6 +552,50 @@ public abstract class ViewDeclarationLanguage {
 
     public abstract StateManagementStrategy getStateManagementStrategy(FacesContext context,
             String viewId);
-    
 
+
+    /**
+     * <p class="changed_added_2_1">Tests whether a physical resource
+     * corresponding to the specified viewId exists.</p>
+     *
+     * <p>The default implementation uses 
+     * <code>ExternalContext.getResource()</code> to locate the physical
+     * resource.</p>
+     *
+     * @param context The <code>FacesContext</code> for this request.
+     * @param viewId the view id to test
+     *
+     * @since 2.1
+     */    
+    public boolean viewExists(FacesContext context, 
+                              String viewId) {
+       try {
+           return context.getExternalContext().getResource(viewId) != null;
+       } catch (MalformedURLException e) {
+           if (LOGGER.isLoggable(Level.SEVERE)) {
+               LOGGER.log(Level.SEVERE,
+                          e.toString(),
+                          e);
+           }
+       }
+
+       return false;
+    }
+
+    /**
+     * <p class="changed_added_2_1">Returns a non-null String that can be 
+     * used to identify this view declaration language.</p>
+     *
+     * <p>The default implementation returns the fully qualified class name
+     * of the view declaration language implementation.  Subclasses may
+     * override to provide a more meaningful id.</p>
+     *
+     * @since 2.1
+     */
+    public String getId() {
+        return getClass().getName();
+    }
+
+    private static final Logger LOGGER =
+          Logger.getLogger("javax.faces.view", "javax.faces.LogStrings");
 }
