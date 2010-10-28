@@ -42,7 +42,7 @@
 -->
 <!-- =========== FULL CONFIGURATION FILE ================================== -->
 <faces-config xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xi="http://www.w3.org/2001/XInclude" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd" version="2.0">
-  <!-- Generic User Interface Components -->
+<!-- Generic User Interface Components -->
   <component>
     <component-type>javax.faces.Column</component-type>
     <component-class>javax.faces.component.UIColumn</component-class>
@@ -379,7 +379,7 @@
         <method-signature>
                 void actionListener(javax.faces.event.ActionEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -1342,7 +1342,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -2791,7 +2791,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -3467,7 +3467,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -4187,7 +4187,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -4548,7 +4548,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -4774,7 +4774,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <component-family>javax.faces.ViewRoot</component-family>
     </component-extension>
   </component>
-  <!-- Concrete HTML Components -->
+<!-- Concrete HTML Components -->
   <component>
     <description><![CDATA[<p>Represents a column that will be rendered 
       in an HTML <code>table</code> element.</p>]]></description>
@@ -5145,7 +5145,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void actionListener(javax.faces.event.ActionEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -5784,7 +5784,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void actionListener(javax.faces.event.ActionEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -8159,7 +8159,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -8514,7 +8514,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -9276,7 +9276,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -10022,7 +10022,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -15233,7 +15233,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -15943,7 +15943,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -16719,7 +16719,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -17457,7 +17457,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -18185,7 +18185,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -18910,7 +18910,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -19627,7 +19627,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -20061,7 +20061,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <renderer-type>javax.faces.Radio</renderer-type>
     </component-extension>
   </component>
-  <!--
+<!--
          the following components are here merely for AttributeManager
          generation.
     -->
@@ -20424,7 +20424,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <renderer-type>javax.faces.Body</renderer-type>
     </component-extension>
   </component>
-  <!-- Standard HTML Renderkit -->
+<!-- Standard HTML Renderkit -->
   <render-kit>
     <description><![CDATA[
      The standard HTML RenderKit.  Please see the spec for additional
@@ -22221,7 +22221,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     <renderer>
       <description><![CDATA[
 
-<p><span class="changed_modified_2_0 changed_modified_2_1">Renders</span> an HTML "form" element.</p>
+<p><span class="changed_modified_2_0">Renders</span> an HTML "form" element.</p>
 
       <p>Decode Behavior</p>
 
@@ -22264,16 +22264,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       render a hidden field with the name <code>javax.faces.encodedURL</code> and the value
       of this hidden field as the value from <code>ExternalContext.encodePartialActionURL</code>.</p>
       Call <code>ViewHandler.writeState()</code>
-      before the the close of the "form" element.  <p class="changed_added_2_1">Render a hidden field named
-      <code>javax.faces.Token</code> using the <code>ResponseStateManager.VIEW_TOKEN_PARAM</code>
-      constant if the configuration option <code>javax.faces.CSRF_ALGORITHM</code> is set to either of the key words 
-      <code>form</code> or <code>all</code>.  The name must be namespaced with the enclosing form's
-      client identifier.  Render the value of this hidden field, known as the "token value", as a 
-      cryptographically produced random generated value (known as the "secret key") retrieved from the 
-      session.  If the "secret key" does not already exist in the session, create the random value and 
-      store it in the session. Implementations may choose to produce a more complex token value by 
-      combining the random "secret key" with other values. The default value for the 
-      <code>javax.faces.CSRF_ALGORITHM</code> configuration option is <code>none</code>.</p>  
+      before the the close of the "form" element. 
       Render all the necessary hidden fields 
       for all commandLink instances in the page just before the close of the "form" element.  
       <div class="changed_modified_2_0">

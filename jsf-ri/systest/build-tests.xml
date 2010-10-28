@@ -127,7 +127,6 @@
             depends="test.annotations,
                 test.ajax,
                 test.composite,
-                test.csrf,
                 test.facelets,
                 test.init,                
                 test.render,
@@ -548,17 +547,14 @@
     <target name="test.config"
             description="Test config loading facility">
 
-        <jsf.tester
-              request="${context.path}/faces/config01.jsp"
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              outContent="/config01.jsp PASSED"/>
-
-        <jsf.tester
-              request="${context.path}/faces/factoryFinder.jsp"
-              golden="${golden.path}/factoryFinder.txt"
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              recordGolden="${local.golden.path}/factoryFinder.txt"
-              />
+        <jsf.junit context-path="${context.path}"
+                   classpath-refid="html.classpath"
+                   test-results-dir="${impl.test.results.dir}">
+            <tests>
+                <fileset dir="${basedir}/build/classes"
+                         includes="com/sun/faces/systest/jsp/config/*TestCase.class"/>
+            </tests>
+        </jsf.junit>
     </target>
 
     <target name="test.listener"
@@ -590,12 +586,14 @@
               request="${context.path}/faces/managed03.jsp"
               status="500"/>
 
-        <jsf.tester
-              request="${context.path}/faces/managed04.jsp"
-              golden="${golden.path}/managed04.txt"
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              recordGolden="${local.golden.path}/managed04.txt"
-              />
+        <jsf.junit context-path="${context.path}"
+                   classpath-refid="html.classpath"
+                   test-results-dir="${impl.test.results.dir}">
+            <tests>
+                <fileset dir="${basedir}/build/classes"
+                         includes="com/sun/faces/systest/jsp/managed/*TestCase.class"/>
+            </tests>
+        </jsf.junit>
 
         <jsf.tester
               ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
@@ -954,19 +952,6 @@
         </jsf.junit>
     </target>
 
-    <target name="test.csrf"
-            description="Test CSRF Functionality">
-
-            <jsf.junit context-path="${context.path}"
-                   classpath-refid="html.classpath"
-                   test-results-dir="${impl.test.results.dir}">
-            <tests>
-                <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/systest/CSRFTestCase.class"                         />
-            </tests>
-        </jsf.junit>
-    </target>
-
     <target name="test.render"
             description="Test Rendering Functionality">
 
@@ -1110,34 +1095,14 @@
             description="Test the HTML JSP Tags">
         <echo message="Testing commandButton..."/>
 
-        <jsf.tester
-              request="${context.path}/faces/taglib/commandButton_test.jsp"
-              golden="${golden.path}/taglib/commandButton_test.txt"
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              recordGolden="${local.golden.path}/taglib/commandButton_test.txt"/>
-
-        <jsf.tester
-              request="${context.path}/faces/taglib/commandButton_param_test.jsp"
-              golden="${golden.path}/taglib/commandButton_param_test.txt"
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              recordGolden="${local.golden.path}/taglib/commandButton_param_test.txt"/>
-
-        <echo message="Testing commandLink..."/>
-        <jsf.tester
-              request="${context.path}/faces/taglib/commandLink_test.jsp"
-              golden="${golden.path}/taglib/commandLink_test.txt"
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              recordGolden="${local.golden.path}/taglib/commandLink_test.txt"/>
-        <jsf.tester
-              request="${context.path}/faces/taglib/commandLink_multiform_test.jsp"
-              golden="${golden.path}/taglib/commandLink_multiform_test.txt"
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              recordGolden="${local.golden.path}/taglib/commandLink_multiform_test.txt"/>
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/taglib/attributeTest.jsp"
-              recordGolden="${local.golden.path}/taglib/attributeTest.txt"
-              golden="${golden.path}/taglib/attributeTest.txt"/>
+        <jsf.junit context-path="${context.path}"
+                   classpath-refid="html.classpath"
+                   test-results-dir="${impl.test.results.dir}">
+            <tests>
+                <fileset dir="${basedir}/build/classes"
+                         includes="com/sun/faces/systest/jsp/htmltaglib/*TestCase.class"/>
+            </tests>
+        </jsf.junit>
 
         <jsf.tester
               ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
@@ -1261,84 +1226,6 @@
             </tests>
         </jsf.junit>
 
-        <!-- Make multiple requests to the same page and ensure
-             the response is 200 -->
-        <jsf.tester
-            ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-            request="${context.path}/faces/interweaving08.jsp"
-            recordGolden="${local.golden.path}/interweaving08.txt"
-            golden="${golden.path}/interweaving08.txt"
-            joinSession="true"/>
-        <jsf.tester
-            ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-            request="${context.path}/faces/interweaving08.jsp"
-            golden="${golden.path}/interweaving08.txt"
-            joinSession="true"/>
-        <jsf.tester
-            ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-            request="${context.path}/faces/interweaving08.jsp"
-            golden="${golden.path}/interweaving08.txt"
-            joinSession="true"/>
-        <!-- Make multiple requests to the same page and ensure
-             the response is 200 -->
-        <jsf.tester
-            ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-            request="${context.path}/faces/interweaving09.jsp"
-            recordGolden="${local.golden.path}/interweaving09.txt"
-            golden="${golden.path}/interweaving09.txt"
-            joinSession="true"/>
-        <jsf.tester
-            ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-            request="${context.path}/faces/interweaving09.jsp"
-            recordGolden="${local.golden.path}/interweaving09.txt"
-            golden="${golden.path}/interweaving09.txt"
-            joinSession="true"/>
-        <jsf.tester
-            ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-            request="${context.path}/faces/interweaving09.jsp"
-            recordGolden="${local.golden.path}/interweaving09.txt"
-            golden="${golden.path}/interweaving09.txt"
-            joinSession="true"/>
-        
-        <!-- Make multiple requests to the same page and ensure
-             the response is 200 -->
-        <jsf.tester
-            ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-            request="${context.path}/faces/interweaving10.jsp"
-            recordGolden="${local.golden.path}/interweaving10.txt"
-            golden="${golden.path}/interweaving10.txt"
-            joinSession="true"/>
-        <jsf.tester
-            ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-            request="${context.path}/faces/interweaving10.jsp"              
-            recordGolden="${local.golden.path}/interweaving10.txt"
-            golden="${golden.path}/interweaving10.txt"
-            joinSession="true"/>
-        <jsf.tester
-            ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-            request="${context.path}/faces/interweaving10.jsp"
-            recordGolden="${local.golden.path}/interweaving10.txt"
-            golden="${golden.path}/interweaving10.txt"
-            joinSession="true"/>
-        
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/interweaving11.jsp"              
-              recordGolden="${local.golden.path}/interweaving11.txt"
-              golden="${golden.path}/interweaving11.txt"/>
-
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/interweaving12.jsp"
-              recordGolden="${local.golden.path}/interweaving12.txt"
-              golden="${golden.path}/interweaving12.txt"/>
-        
-        <jsf.tester
-              request="${context.path}/faces/include-import-interweaving.jsp"
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              golden="${golden.path}/include-import-interweaving.txt"
-              recordGolden="${local.golden.path}/include-import-interweaving.txt"/>
-
     </target>
     
     <target name="test.regressions">
@@ -1350,17 +1237,12 @@
             request="${context.path}/faces/regression/SelectOneManySizeAttrTest.jsp"
             golden="${golden.path}/regression/SelectOneManySizeAttrTest.txt"
             recordGolden="${local.golden.path}/regression/SelectOneManySizeAttrTest.txt"/>
-        <jsf.tester
-            ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-            request="${context.path}/faces/regression/InjectUserDefJS.jsp"
-            golden="${golden.path}/regression/InjectUserDefJS.txt"
-            recordGolden="${local.golden.path}/regression/InjectUserDefJS.txt"/>
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
                    test-results-dir="${impl.test.results.dir}">
             <tests>
                 <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/event/*TestCase.class"/> 
+                         includes="com/sun/faces/systest/jsp/regressions/*TestCase.class"/> 
             </tests>
         </jsf.junit>
 

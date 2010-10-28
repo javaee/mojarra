@@ -746,10 +746,6 @@ public class WebConfiguration {
               "com.sun.faces.managedBeanFactoryDecoratorClass",
               ""
         ),
-        CSRFMethod(
-              "javax.faces.CSRF_ALGORITHM",
-              "none"
-        ),
         StateSavingMethod(
               "javax.faces.STATE_SAVING_METHOD",
               "server"

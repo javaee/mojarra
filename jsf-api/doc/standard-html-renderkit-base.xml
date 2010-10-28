@@ -1694,7 +1694,7 @@
 
             <description><![CDATA[
 
-<p><span class="changed_modified_2_0 changed_modified_2_1">Renders</span> an HTML "form" element.</p>
+<p><span class="changed_modified_2_0">Renders</span> an HTML "form" element.</p>
 
       <p>Decode Behavior</p>
 
@@ -1737,16 +1737,7 @@
       render a hidden field with the name <code>javax.faces.encodedURL</code> and the value
       of this hidden field as the value from <code>ExternalContext.encodePartialActionURL</code>.</p>
       Call <code>ViewHandler.writeState()</code>
-      before the the close of the "form" element.  <p class="changed_added_2_1">Render a hidden field named
-      <code>javax.faces.Token</code> using the <code>ResponseStateManager.VIEW_TOKEN_PARAM</code>
-      constant if the configuration option <code>javax.faces.CSRF_ALGORITHM</code> is set to either of the key words 
-      <code>form</code> or <code>all</code>.  The name must be namespaced with the enclosing form's
-      client identifier.  Render the value of this hidden field, known as the "token value", as a 
-      cryptographically produced random generated value (known as the "secret key") retrieved from the 
-      session.  If the "secret key" does not already exist in the session, create the random value and 
-      store it in the session. Implementations may choose to produce a more complex token value by 
-      combining the random "secret key" with other values. The default value for the 
-      <code>javax.faces.CSRF_ALGORITHM</code> configuration option is <code>none</code>.</p>  
+      before the the close of the "form" element. 
       Render all the necessary hidden fields 
       for all commandLink instances in the page just before the close of the "form" element.  
       <div class="changed_modified_2_0">

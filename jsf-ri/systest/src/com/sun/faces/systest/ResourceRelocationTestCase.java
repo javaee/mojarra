@@ -128,7 +128,7 @@ public class ResourceRelocationTestCase extends AbstractTestCase {
         assertTrue(formList.size() == 1);
         HtmlForm form = formList.get(0);
         List<HtmlElement> formChildren = getChildren(form);
-        assertTrue(formChildren.size() == 3);
+        assertTrue(formChildren.size() == 2);
         assertTrue(formChildren.get(0) instanceof HtmlInput);
         assertTrue(formChildren.get(1) instanceof HtmlInput);
 
@@ -156,7 +156,7 @@ public class ResourceRelocationTestCase extends AbstractTestCase {
         assertTrue(formList.size() == 1);
         form = formList.get(0);
         formChildren = getChildren(form);
-        assertTrue(formChildren.size() == 3);
+        assertTrue(formChildren.size() == 2);
         assertTrue(formChildren.get(0) instanceof HtmlInput);
         assertTrue(formChildren.get(1) instanceof HtmlInput);
 
@@ -183,10 +183,10 @@ public class ResourceRelocationTestCase extends AbstractTestCase {
         assertTrue(formList.size() == 1);
         form = formList.get(0);
         formChildren = getChildren(form);
-        assertTrue(formChildren.size() == 4);
+        assertTrue(formChildren.size() == 3);
         assertTrue(formChildren.get(0) instanceof HtmlInput);
         assertTrue(formChildren.get(1) instanceof HtmlInput);
-        assertTrue(formChildren.get(3) instanceof HtmlScript);
+        assertTrue(formChildren.get(2) instanceof HtmlScript);
 
     }
 

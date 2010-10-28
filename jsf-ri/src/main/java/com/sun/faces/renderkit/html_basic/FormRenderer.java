@@ -47,23 +47,18 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.logging.Level;
 
-import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
-import javax.faces.component.UINamingContainer;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.faces.render.ResponseStateManager;
 
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
-import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.CSRFMethod;
 import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
-import com.sun.faces.renderkit.TokenHelper;
 import javax.faces.render.Renderer;
 
 /** <B>FormRenderer</B> is a class that renders a <code>UIForm<code> as a Form. */
@@ -75,8 +70,6 @@ public class FormRenderer extends HtmlBasicRenderer {
 
     private boolean writeStateAtEnd;
 
-    private boolean writeTokenField;
-
     // ------------------------------------------------------------ Constructors
 
 
@@ -85,13 +78,6 @@ public class FormRenderer extends HtmlBasicRenderer {
         writeStateAtEnd =
              webConfig.isOptionEnabled(
                   BooleanWebContextInitParameter.WriteStateAtFormEnd);
-
-        String CSRFOption = webConfig.getOptionValue(CSRFMethod);
-        if (CSRFOption.equals("form") || CSRFOption.equals("all")) {
-            writeTokenField = true;
-        } else {
-            writeTokenField = false;
-        }
     }
 
     // ---------------------------------------------------------- Public Methods
@@ -136,7 +122,6 @@ public class FormRenderer extends HtmlBasicRenderer {
             return;
         }
 
-        context.getAttributes().put(TokenHelper.FORM_CLIENT_ID_ATTRIBUTE_NAME, component.getClientId());
         ResponseWriter writer = context.getResponseWriter();
         assert(writer != null);
         String clientId = component.getClientId(context);
@@ -194,18 +179,6 @@ public class FormRenderer extends HtmlBasicRenderer {
             }
         }
 
-        if (writeTokenField) {
-            // Write out token hidden field
-            writer.startElement("input", component);
-            writer.writeAttribute("type", "hidden", "type");
-            writer.writeAttribute("name",
-                component.getClientId() + UINamingContainer.getSeparatorChar(context) +
-                ResponseStateManager.VIEW_TOKEN_PARAM, null);
-            writer.writeAttribute("value", getToken(context), "value");
-            writer.endElement("input");
-            writer.write('\n');
-        }
-
         if (!writeStateAtEnd) {
             context.getApplication().getViewHandler().writeState(context);
             writer.write('\n');
@@ -261,22 +234,6 @@ public class FormRenderer extends HtmlBasicRenderer {
                     getActionURL(context, viewId);
         return (context.getExternalContext().encodeActionURL(actionURL));
 
-    }
-
-    private String getToken(FacesContext context) {
-        ExternalContext eContext = context.getExternalContext();
-        Map sessionMap = eContext.getSessionMap();
-        Long secretKey = TokenHelper.getSecretKey(sessionMap);
-        if (null == secretKey) {
-            try {
-                TokenHelper.setSecretKey(sessionMap);
-                secretKey = TokenHelper.getSecretKey(sessionMap);
-            } catch (Exception e) {
-                throw new FacesException("Could not generate secret key fr token");
-            }
-        }
-        String viewId = context.getViewRoot().getViewId();
-        return TokenHelper.generateToken(viewId, secretKey);
     }
 
 } // end of class FormRenderer

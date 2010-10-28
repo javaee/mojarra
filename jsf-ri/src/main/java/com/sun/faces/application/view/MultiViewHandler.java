@@ -46,7 +46,6 @@ import java.util.logging.Logger;
 
 import javax.faces.FacesException;
 import javax.faces.application.ViewHandler;
-import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.CSRFMethod;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKitFactory;
@@ -55,7 +54,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.renderkit.TokenHelper;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
@@ -80,8 +78,6 @@ public class MultiViewHandler extends ViewHandler {
     
     private ViewDeclarationLanguageFactory vdlFactory;
 
-    private boolean writeTokenUrl;
-
 
     // ------------------------------------------------------------ Constructors
 
@@ -94,14 +90,6 @@ public class MultiViewHandler extends ViewHandler {
         extensionsSet = config.isSet(WebConfiguration.WebContextInitParameter.DefaultSuffix);
         vdlFactory = (ViewDeclarationLanguageFactory)
                 FactoryFinder.getFactory(FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY);
-
-        String CSRFOption = config.getOptionValue(CSRFMethod);
-        if (CSRFOption.equals("url") || CSRFOption.equals("all")) {
-            writeTokenUrl = true;
-        } else {
-            writeTokenUrl = false;
-        }
-
 
     }
 
@@ -307,64 +295,34 @@ public class MultiViewHandler extends ViewHandler {
 
         // If no mapping can be identified, just return a server-relative path
         if (mapping == null) {
-            if (writeTokenUrl) {
-                return (TokenHelper.appendToken(context, viewId, (contextPath + viewId)));
-            } else {
-                return (contextPath + viewId);
-            }
+            return (contextPath + viewId);
         }
 
         // Deal with prefix mapping
         if (Util.isPrefixMapped(mapping)) {
             if (mapping.equals("/*")) {
-                if (writeTokenUrl) {
-                    return (TokenHelper.appendToken(context, viewId, (contextPath + viewId)));
-                } else {
-                    return (contextPath + viewId);
-                }
+                return (contextPath + viewId);
             } else {
-                if (writeTokenUrl) {
-                    return (TokenHelper.appendToken(context, viewId, (contextPath + mapping + viewId)));
-                } else {
-                    return (contextPath + mapping + viewId);
-                }
+                return (contextPath + mapping + viewId);
             }
         }
 
         // Deal with extension mapping
         int period = viewId.lastIndexOf('.');
         if (period < 0) {
-            if (writeTokenUrl) {
-                return (TokenHelper.appendToken(context, viewId, (contextPath + viewId + mapping)));
-            } else {
-                return (contextPath + viewId + mapping);
-            }
+            return (contextPath + viewId + mapping);
         } else if (!viewId.endsWith(mapping)) {
 
             for (String ext : configuredExtensions) {
                 if (viewId.endsWith(ext)) {
-                    if (writeTokenUrl) {
-                        return (TokenHelper.appendToken(context, viewId, 
-                            (contextPath + viewId.substring(0, viewId.indexOf(ext)) + mapping)));
-                    } else {
-                        return (contextPath + viewId.substring(0, viewId.indexOf(ext)) + mapping);
-                    }
+                    return (contextPath + viewId.substring(0, viewId.indexOf(ext)) + mapping);
                 }
             }
 
-            if (writeTokenUrl) {
-                return (TokenHelper.appendToken(context, viewId, 
-                    (contextPath + viewId.substring(0, period) + mapping)));
-            } else {
-                return (contextPath + viewId.substring(0, period) + mapping);
-            }
+            return (contextPath + viewId.substring(0, period) + mapping);
          
         } else {
-            if (writeTokenUrl) {
-                return (TokenHelper.appendToken(context, viewId, (contextPath + viewId)));
-            } else {
-                return (contextPath + viewId);
-            }
+            return (contextPath + viewId);
         }
 
     }

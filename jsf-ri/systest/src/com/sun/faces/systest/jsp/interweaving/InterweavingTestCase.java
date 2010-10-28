@@ -102,4 +102,63 @@ public class InterweavingTestCase extends AbstractTestCase {
         assertTrue(page.asXml().matches("(?s).*\\s*<body>\\s*<p>\\s*Begin\\s*test\\s*&lt;c:import&gt;\\s*with\\s*iterator\\s*tag\\s*in\\s*imported\\s*page\\s*</p>\\s*<br/>\\s*<p>\\s*<br/>\\s*Array\\[0\\]:\\s*This\\s*component\\s*has\\s*no\\s*ID\\s*<br/>\\s*<input\\s*type=\"text\"\\s*name=\"j_id_id15pc2\"\\s*value=\"This\\s*component\\s*has\\s*no\\s*ID\\s*\"/>\\s*<br/>\\s*Array\\[1\\]:\\s*This\\s*component\\s*has\\s*no\\s*ID\\s*<br/>\\s*<input\\s*type=\"text\"\\s*name=\"j_id_id15pc2j_id_1\"\\s*value=\"This\\s*component\\s*has\\s*no\\s*ID\\s*\"/>\\s*<br/>\\s*Array\\[2\\]:\\s*This\\s*component\\s*has\\s*no\\s*ID\\s*<br/>\\s*<input\\s*type=\"text\"\\s*name=\"j_id_id15pc2j_id_2\"\\s*value=\"This\\s*component\\s*has\\s*no\\s*ID\\s*\"/>\\s*<br/>\\s*Array\\[3\\]:\\s*This\\s*component\\s*has\\s*no\\s*ID\\s*<br/>\\s*<input\\s*type=\"text\"\\s*name=\"j_id_id15pc2j_id_3\"\\s*value=\"This\\s*component\\s*has\\s*no\\s*ID\\s*\"/>\\s*<br/>\\s*</p>\\s*<p>\\s*Text\\s*from\\s*interweaving07.jsp\\s*</p>\\s*<p>\\s*End\\s*test\\s*&lt;c:import&gt;\\s*with\\s*iterator\\s*tag\\s*in\\s*imported\\s*page\\s*</p>\\s*</body>.*"));
     }
 
+    public void test08() throws Exception {
+
+        // Make multiple requests to the same page and ensure the response is 200
+
+        HtmlPage page1 = getPage("/faces/interweaving08.jsp");
+        assertTrue(page1.asXml().matches("(?s).*\\s*<body>\\s*<form\\s*id=\"form\".*<input\\s*type=\"hidden\"\\s*name=\"form\".*<input\\s*type=\"hidden\"\\s*name=\"javax.faces.ViewState\".*<table>\\s*<tbody>\\s*<tr>\\s*<td>\\s*ciao\\s*Value\\s*</td>\\s*</tr>\\s*</tbody>\\s*</table>\\s*</form>\\s*</body>.*"));
+
+        HtmlPage page2 = getPage("/faces/interweaving08.jsp");
+        assertTrue(page2.asXml().matches("(?s).*\\s*<body>\\s*<form\\s*id=\"form\".*<input\\s*type=\"hidden\"\\s*name=\"form\".*<input\\s*type=\"hidden\"\\s*name=\"javax.faces.ViewState\".*<table>\\s*<tbody>\\s*<tr>\\s*<td>\\s*ciao\\s*Value\\s*</td>\\s*</tr>\\s*</tbody>\\s*</table>\\s*</form>\\s*</body>.*"));
+
+        HtmlPage page3 = getPage("/faces/interweaving08.jsp");
+        assertTrue(page3.asXml().matches("(?s).*\\s*<body>\\s*<form\\s*id=\"form\".*<input\\s*type=\"hidden\"\\s*name=\"form\".*<input\\s*type=\"hidden\"\\s*name=\"javax.faces.ViewState\".*<table>\\s*<tbody>\\s*<tr>\\s*<td>\\s*ciao\\s*Value\\s*</td>\\s*</tr>\\s*</tbody>\\s*</table>\\s*</form>\\s*</body>.*"));
+    }
+
+    public void test09() throws Exception {
+
+        // Make multiple requests to the same page and ensure the response is 200
+
+        HtmlPage page1 = getPage("/faces/interweaving09.jsp");
+        assertTrue(page1.asXml().matches("(?s).*\\s*<body>\\s*<form\\s*id=\"form\".*<input\\s*type=\"hidden\"\\s*name=\"form\".*<input\\s*type=\"hidden\"\\s*name=\"javax.faces.ViewState\".*<table>\\s*<tbody>\\s*<tr>\\s*<td>\\s*Value\\s*ciao\\s*Value\\s*</td>\\s*</tr>\\s*</tbody>\\s*</table>\\s*</form>\\s*</body>.*"));
+
+        HtmlPage page2 = getPage("/faces/interweaving09.jsp");
+        assertTrue(page2.asXml().matches("(?s).*\\s*<body>\\s*<form\\s*id=\"form\".*<input\\s*type=\"hidden\"\\s*name=\"form\".*<input\\s*type=\"hidden\"\\s*name=\"javax.faces.ViewState\".*<table>\\s*<tbody>\\s*<tr>\\s*<td>\\s*Value\\s*ciao\\s*Value\\s*</td>\\s*</tr>\\s*</tbody>\\s*</table>\\s*</form>\\s*</body>.*"));
+
+        HtmlPage page3 = getPage("/faces/interweaving09.jsp");
+        assertTrue(page3.asXml().matches("(?s).*\\s*<body>\\s*<form\\s*id=\"form\".*<input\\s*type=\"hidden\"\\s*name=\"form\".*<input\\s*type=\"hidden\"\\s*name=\"javax.faces.ViewState\".*<table>\\s*<tbody>\\s*<tr>\\s*<td>\\s*Value\\s*ciao\\s*Value\\s*</td>\\s*</tr>\\s*</tbody>\\s*</table>\\s*</form>\\s*</body>.*"));
+    }
+
+    public void test10() throws Exception {
+
+        // Make multiple requests to the same page and ensure the response is 200
+
+        HtmlPage page1 = getPage("/faces/interweaving10.jsp");
+        assertTrue(page1.asXml().matches("(?s).*\\s*<body>\\s*<form\\s*id=\"form\".*<input\\s*type=\"hidden\"\\s*name=\"form\".*<input\\s*type=\"hidden\"\\s*name=\"javax.faces.ViewState\".*<table>\\s*<tbody>\\s*<tr>\\s*<td>\\s*Value\\s*ciao\\s*</td>\\s*</tr>\\s*</tbody>\\s*</table>\\s*</form>\\s*</body>.*"));
+
+        HtmlPage page2 = getPage("/faces/interweaving10.jsp");
+        assertTrue(page2.asXml().matches("(?s).*\\s*<body>\\s*<form\\s*id=\"form\".*<input\\s*type=\"hidden\"\\s*name=\"form\".*<input\\s*type=\"hidden\"\\s*name=\"javax.faces.ViewState\".*<table>\\s*<tbody>\\s*<tr>\\s*<td>\\s*Value\\s*ciao\\s*</td>\\s*</tr>\\s*</tbody>\\s*</table>\\s*</form>\\s*</body>.*"));
+
+        HtmlPage page3 = getPage("/faces/interweaving10.jsp");
+        assertTrue(page3.asXml().matches("(?s).*\\s*<body>\\s*<form\\s*id=\"form\".*<input\\s*type=\"hidden\"\\s*name=\"form\".*<input\\s*type=\"hidden\"\\s*name=\"javax.faces.ViewState\".*<table>\\s*<tbody>\\s*<tr>\\s*<td>\\s*Value\\s*ciao\\s*</td>\\s*</tr>\\s*</tbody>\\s*</table>\\s*</form>\\s*</body>.*"));
+    }
+
+    public void test11() throws Exception {
+
+        HtmlPage page = getPage("/faces/interweaving11.jsp");
+        assertTrue(page.asXml().matches("(?s).*\\s*<body>\\s*<form.*<input\\s*type=\"hidden\".*<input\\s*type=\"hidden\"\\s*name=\"javax.faces.ViewState\".*<script.*jsf.js.*<a\\s*href.*>\\s*one\\s*</a>\\s*<a\\s*href.*>\\s*two\\s*</a>\\s*<a\\s*href.*>\\s*three\\s*</a>\\s*</form>\\s*</body>.*"));
+    }
+
+    public void test12() throws Exception {
+
+        HtmlPage page = getPage("/faces/interweaving12.jsp");
+        assertTrue(page.asXml().matches("(?s).*\\s*<body>\\s*<form.*<input\\s*type=\"hidden\".*<input\\s*type=\"hidden\"\\s*name=\"javax.faces.ViewState\".*this should be before the button\\s*<input.*type=\"submit\".*value=\"commandButton 1\"\\s*/>\\s*</form>\\s*</body>.*"));
+    }
+
+    public void test13() throws Exception {
+
+        HtmlPage page = getPage("/faces/include-import-interweaving.jsp");
+        assertTrue(page.asXml().matches("(?s).*\\s*<body.*<form.*<input\\s*type=\"hidden\".*<input\\s*type=\"hidden\"\\s*name=\"javax.faces.ViewState\".*Outer Template Text followed by\\s*<span\\s*id=\"form:outerComponent\">\\s*outer component\\s*</span>.*Subview on the outside only with jsp:include:.*Subview 1: Inner template text followed by\\s*<span\\s*id=\"form:subview01:innerComponent1\">\\s*inner component 1\\s*</span>.*Subview 1: Inner template 2 text followed by\\s*<span\\s*id=\"form:subview01:innerComponent2\">\\s*inner component 2\\s*</span>.*Subview on the inside only with jsp:include:.*Subview 2: Inner template text followed by\\s*<span\\s*id=\"form:innerSubView:innerComponent3\">\\s*inner component 3\\s*</span>.*Subview on the outside and inside with jsp:include:.*Template Text before the include.*Subview 2: Inner template text followed by\\s*<span\\s*id=\"form:subview03:innerSubView2:innerComponent4\">\\s*inner component 4\\s*</span>.*Subview on the outside only with c:import:.*Subview 4: Inner template text followed by\\s*<span\\s*id=\"form:outerSubview3:innerComponent5\">\\s*inner component 5\\s*</span>.*Subview 4: Inner template 2 text followed by\\s*<span\\s*id=\"form:outerSubview3:innerComponent6\">\\s*inner component 6\\s*</span>.*Subview on the inside only with c:import:.*Subview 5: Inner template text followed by\\s*<span\\s*id=\"form:innerSubView4:innerComponent7\">\\s*inner component 7\\s*</span>.*Subview on the outside and inside with c:import:.*Template Text on the outside.*Subview 6: Inner template text followed by\\s*<span\\s*id=\"form:subview05:innerSubView5:innerComponent8\">\\s*inner component 8\\s*</span>.*</form>\\s*</body>.*"));
+    }
 }
