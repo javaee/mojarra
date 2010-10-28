@@ -75,6 +75,7 @@ class PropertyHandlerManager {
           new HashMap<String,PropertyHandler>(12, 1.0f);
     static {
         ALL_HANDLERS.put("targets", new StringValueExpressionPropertyHandler());
+        ALL_HANDLERS.put("targetAttributeName", new StringValueExpressionPropertyHandler());
         ALL_HANDLERS.put("method-signature", new StringValueExpressionPropertyHandler());
         ALL_HANDLERS.put("type", new StringValueExpressionPropertyHandler());
         ALL_HANDLERS.put("default", new StringValueExpressionPropertyHandler());

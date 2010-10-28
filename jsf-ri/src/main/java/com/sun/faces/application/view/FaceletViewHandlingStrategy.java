@@ -567,7 +567,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
         PropertyDescriptor attributes[] = componentBeanInfo.getPropertyDescriptors();
 
-        MethodMetadataIterator allMetadata = new MethodMetadataIterator(attributes);
+        MethodMetadataIterator allMetadata = new MethodMetadataIterator(context, attributes);
         for (CompCompInterfaceMethodMetadata metadata : allMetadata) {
 
             String attrName = metadata.getName();
@@ -603,12 +603,16 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                 }
             }
 
+            String targetAttributeName = metadata.getTargetAttributeName(context);
+            UIComponent targetComp = null;
+            if (null != targetAttributeName) {
+                attrName = targetAttributeName;
+            }
             if (targets != null) {
                 MethodRetargetHandler handler = retargetHandlerManager.getRetargetHandler(attrName);
                 if (handler != null) {
                     for (String curTarget : targets) {
-                        UIComponent targetComp = topLevelComponent
-                              .findComponent(curTarget);
+                        targetComp = topLevelComponent.findComponent(curTarget);
                         if (null == targetComp) {
                             throw new FacesException(attrValue.toString()
                                                      + " : Unable to re-target MethodExpression as inner component referenced by target id '"
@@ -635,8 +639,16 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                     handler.retarget(context, metadata, attrValue, topLevelComponent);
                 }
             } else {
-                MethodRetargetHandler handler = retargetHandlerManager.getDefaultHandler();
-                handler.retarget(context, metadata, attrValue, topLevelComponent);
+                MethodRetargetHandler handler = null;
+                if (null != targetAttributeName) {
+                    targetComp = topLevelComponent.findComponent(metadata.getName());
+                    handler = retargetHandlerManager.getRetargetHandler(attrName);
+                }
+                if (null == handler) {
+                    targetComp = topLevelComponent;
+                    handler = retargetHandlerManager.getDefaultHandler();
+                }
+                handler.retarget(context, metadata, attrValue, targetComp);
             }
 
             // clear out the ValueExpression that we've retargeted as a
@@ -1145,13 +1157,15 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     private static final class MethodMetadataIterator implements Iterable<CompCompInterfaceMethodMetadata>, Iterator<CompCompInterfaceMethodMetadata> {
 
         private final PropertyDescriptor[] descriptors;
+        private FacesContext context;
         private int curIndex = -1;
 
         // -------------------------------------------------------- Constructors
 
 
-        MethodMetadataIterator(PropertyDescriptor[] descriptors) {
+        MethodMetadataIterator(FacesContext context, PropertyDescriptor[] descriptors) {
 
+            this.context = context;
             this.descriptors = descriptors;
             if (descriptors != null && descriptors.length > 0) {
                 curIndex = 0;
@@ -1213,9 +1227,14 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         private boolean shouldSkip(PropertyDescriptor pd) {
             boolean result;
             String name = pd.getName();
+            ValueExpression ve = (ValueExpression) pd.getValue("targetAttributeName");
+            String targetAttributeName = ((ve != null) ? (String) ve.getValue(context.getELContext()) : "");
+
             boolean isSpecialAttributeName = name.equals("action") ||
                             name.equals("actionListener") || name.equals("validator")
-                            || name.equals("valueChangeListener");
+                            || name.equals("valueChangeListener") || targetAttributeName.equals("action") ||
+                            targetAttributeName.equals("actionListener") || targetAttributeName.equals("validator")
+                            || targetAttributeName.equals("valueChangeListener");
             result = (!isSpecialAttributeName &&
                      (pd.getValue("type") != null ||
                       pd.getValue("method-signature") == null));
@@ -1279,6 +1298,12 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             }
 
             return null;
+
+        }
+
+        public String getTargetAttributeName(FacesContext ctx) {
+            ValueExpression ve = (ValueExpression) pd.getValue("targetAttributeName");
+            return ((ve != null) ? (String) ve.getValue(ctx.getELContext()) : null);
 
         }
 

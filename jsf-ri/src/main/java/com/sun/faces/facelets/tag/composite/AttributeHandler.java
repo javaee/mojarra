@@ -75,6 +75,7 @@ public class AttributeHandler extends TagHandlerImpl {
     private static final String[] COMPOSITE_ATTRIBUTE_ATTRIBUTES = {
           "required",
           "targets",
+          "targetAttributeName",
           "default",
           "displayName",
           "preferred",
