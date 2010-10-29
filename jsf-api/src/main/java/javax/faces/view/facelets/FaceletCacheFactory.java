@@ -43,19 +43,8 @@ package javax.faces.view.facelets;
 import javax.faces.FacesWrapper;
 
 /**
- * <p class="changed_added_2_1">This API defines the facility by which
- * the Facelets {@link javax.faces.view.ViewDeclarationLanguage}
- * creates and caches instances of Facelets.</p>
-
- * <p class="changed_added_2_1">The cache handles two different kinds of
- * Facelets: View Facelets and View Metadata Facelets.  The former is
- * the usual Facelet that provides for the construction of a
- * <code>UIComponent</code> tree.  This kind of Facelet is accessed via
- * the {@link #getFacelet} and {@link #isFaceletCached} methods. The
- * latter is a special kind of Facelet that corresponds to {@link
- * javax.faces.view.ViewDeclarationLanguage#getViewMetadata}.  This kind
- * of Facelet is accessed via the {@link #getViewMetadataFacelet} and
- * {@link #isViewMetadataFaceletCached} methods. </p>
+ * <p class="changed_added_2_1">Allows customization of the
+ * implementation of {@link FaceletCache}.</p>
 
  * @since 2.1
  */
