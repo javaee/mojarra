@@ -71,25 +71,82 @@ import javax.servlet.http.HttpServletResponse;
  *
  * <div class="changed_added_2_1">
  *
- * <p>The runtime must support the following additional behavior when
- * running in a Servlet 3.0 (and beyond) container.  The runtime must
- * provide an implementation of {@link
- * javax.servlet.ServletContainerInitializer} whose
- * <code>onStartup()</code> method takes following actions.</p>
+ * <p>If the application is running in a Servlet 3.0 (and beyond)
+ * container, the runtime must provide an implementation of the {@link
+ * javax.servlet.ServletContainerInitializer} interface that declares
+ * the following classes in its {@link
+ * javax.servlet.annotation.HandlesTypes} annotation.</p>
 
- * <p>Adds mappings <em>/faces</em>, <em>*.jsf</em>, and
- * <em>*.faces</em> for the <code>FacesServlet</code> (if it hasn't
- * already been mapped) if the following conditions are met:</p>
- *
  * <ul>
- *    <li>
- *       The <code>Set</code> of classes passed to this initializer is not
- *       empty, or
- *    </li>
- *    <li>
- *       /WEB-INF/faces-config.xml exists.
- *    </li>
+ 
+ * <li>{@link javax.faces.application.ResourceDependencies}</li>
+
+ * <li>{@link javax.faces.application.ResourceDependency}</li>
+
+ * <li>javax.faces.bean.ManagedBean</li>
+
+ * <li>{@link javax.faces.component.FacesComponent}</li>
+
+ * <li>{@link javax.faces.component.UIComponent}</li>
+
+ * <li>{@link javax.faces.convert.Converter}</li>
+
+ * <li>{@link javax.faces.convert.FacesConverter}</li>
+
+ * <li>{@link javax.faces.event.ListenerFor}</li>
+
+ * <li>{@link javax.faces.event.ListenersFor}</li>
+
+ * <li>{@link javax.faces.render.FacesBehaviorRenderer}</li>
+
+ * <li>{@link javax.faces.render.Renderer}</li>
+
+ * <li>{@link javax.faces.validator.FacesValidator}</li>
+
+ * <li>{@link javax.faces.validator.Validator}</li>
+
  * </ul>
+
+ * <p>This servlet must automatically be mapped if it is
+ * <strong>not</strong> explicitly mapped in <code>web.xml</code> or
+ * <code>web-fragment.xml</code> and one or more of the following
+ * conditions are true.</p>
+
+ * <ul>
+
+ * 	  <li><p>A <code>faces-config.xml</code> file is found in
+ * 	  <code>WEB-INF</code> </p></li>
+
+ * 	  <li><p>A <code>faces-config.xml</code> file is found in the
+ * 	  <code>META-INF</code> directory of a jar in the application's
+ * 	  classpath.</p></li>
+
+ * 	  <li><p>A filename ending in <code>.faces-config.xml</code> is
+ * 	  found in the <code>META-INF</code> directory of a jar in the
+ * 	  application's classpath.</p></li>
+
+ * 	  <li><p>The <code>javax.faces.CONFIG_FILES</code> context param
+ * 	  is declared in <code>web.xml</code> or
+ * 	  <code>web-fragment.xml</code>.</p></li>
+
+ *        <li><p>The <code>Set</code> of classes passed to the
+ *        <code>onStartup()</code> method of the
+ *        <code>ServletContainerInitializer</code> implementation is not
+ *        empty.</p></li>
+	
+ * </ul>
+
+ * <p>If the runtime determines that the servlet must be automatically
+ * mapped, it must be mapped to the following
+ * &lt;<code>url-pattern</code>&gt; entries.</p>
+
+ * 	<ul>
+
+ *         <li>/faces</li>
+ *         <li>*.jsf</li>
+ *         <li>*.faces</li>
+
+ *	</ul>
 
  * </div>
  */
