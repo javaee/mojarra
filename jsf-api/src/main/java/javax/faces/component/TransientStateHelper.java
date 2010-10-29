@@ -61,7 +61,7 @@ import java.io.Serializable;
  * @since 2.1
  * 
  */
-public interface TransientStateHelper extends StateHelper, TransientStateHolder
+public interface TransientStateHelper extends TransientStateHolder
 {
     /**
      * <p class="changed_added_2_1">Return the value currently
@@ -69,7 +69,7 @@ public interface TransientStateHelper extends StateHelper, TransientStateHolder
      * @param key the key for which the value should be returned.
      * @since 2.1
      */
-    public Object getTransient(Serializable key);
+    public Object getTransient(Object key);
     
     /**
      * <p class="changed_added_2_1">Performs the same logic as {@link
@@ -81,7 +81,7 @@ public interface TransientStateHelper extends StateHelper, TransientStateHolder
      * the call to <code>get()</code>.
      * @since 2.1
      */
-    public Object getTransient(Serializable key, Object defaultValue);
+    public Object getTransient(Object key, Object defaultValue);
 
     /**
      * <p class="changed_added_2_1">Return the previously stored value
@@ -93,5 +93,5 @@ public interface TransientStateHelper extends StateHelper, TransientStateHolder
      * @param value the value
      * @since 2.1
      */
-    public Object putTransient(Serializable key, Object value);
+    public Object putTransient(Object key, Object value);
 }

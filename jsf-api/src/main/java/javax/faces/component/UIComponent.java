@@ -251,7 +251,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * on what has been set.
      */
     List<String> attributesThatAreSet;
-    TransientStateHelper stateHelper = null;
+    ComponentStateHelper stateHelper = null;
     UIComponent compositeParent;
 
 
@@ -547,7 +547,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * @since 2.1
      */
     
-    protected TransientStateHelper getTransientStateHelper()
+    public final TransientStateHelper getTransientStateHelper()
     {
         return getTransientStateHelper(true);
     }
@@ -565,7 +565,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * @since 2.1
      */
     
-    protected TransientStateHelper getTransientStateHelper(boolean create) {
+    public TransientStateHelper getTransientStateHelper(boolean create) {
         
         if (create && stateHelper == null) {
             stateHelper = new ComponentStateHelper(this);
@@ -584,7 +584,12 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
     
     public void restoreTransientState(FacesContext context, Object state)
     {
-        getTransientStateHelper().restoreTransientState(context, state);
+        boolean forceCreate = (state != null);
+        TransientStateHelper helper = getTransientStateHelper(forceCreate);
+
+        if (helper != null) {
+            helper.restoreTransientState(context, state);
+        }
     }
 
     /**
@@ -597,7 +602,9 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
     
     public Object saveTransientState(FacesContext context)
     {
-        return getTransientStateHelper().saveTransientState(context);
+        TransientStateHelper helper = getTransientStateHelper(false);
+
+        return (helper == null) ? null : helper.saveTransientState(context);
     }
 
     private boolean isInView;

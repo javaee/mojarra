@@ -56,13 +56,13 @@ import java.io.Serializable;
  * of the StateHolder interface.
  */
 @SuppressWarnings({"unchecked"})
-class ComponentStateHelper implements StateHelper , TransientStateHelper, TransientStateHolder {
+class ComponentStateHelper implements StateHelper , TransientStateHelper {
 
     private UIComponent component;
     private boolean isTransient;
     private Map<Serializable, Object> deltaMap;
     private Map<Serializable, Object> defaultMap;
-    private Map<Serializable, Object> transientState;
+    private Map<Object, Object> transientState;
     
     // ------------------------------------------------------------ Constructors
 
@@ -444,12 +444,12 @@ class ComponentStateHelper implements StateHelper , TransientStateHelper, Transi
     }
 
 
-    public Object getTransient(Serializable key)
+    public Object getTransient(Object key)
     {
         return (transientState == null) ? null : transientState.get(key);
     }
 
-    public Object getTransient(Serializable key, Object defaultValue)
+    public Object getTransient(Object key, Object defaultValue)
     {
         Object returnValue = (transientState == null) ? null : transientState.get(key);
         if (returnValue != null)
@@ -459,11 +459,11 @@ class ComponentStateHelper implements StateHelper , TransientStateHelper, Transi
         return defaultValue;
     }
 
-    public Object putTransient(Serializable key, Object value)
+    public Object putTransient(Object key, Object value)
     {
         if (transientState == null)
         {
-            transientState = new HashMap<Serializable, Object>();
+            transientState = new HashMap<Object, Object>();
         }
         return transientState.put(key, value);
     }
@@ -471,7 +471,7 @@ class ComponentStateHelper implements StateHelper , TransientStateHelper, Transi
     @SuppressWarnings("unchecked")
     public void restoreTransientState(FacesContext context, Object state)
     {
-        transientState = (Map<Serializable, Object>) state;
+        transientState = (Map<Object, Object>) state;
     }
     
     public Object saveTransientState(FacesContext context)
