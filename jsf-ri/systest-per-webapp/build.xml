@@ -111,7 +111,8 @@
                    jsp-flash,
                    suppress-xml-decl,
                    replace-vdl,
-                   process-as-jspx"/>
+                   process-as-jspx,
+                   request-char-encoding-no-session"/>
     <!--
 
        EXCLUDED APPLICATIONS:
