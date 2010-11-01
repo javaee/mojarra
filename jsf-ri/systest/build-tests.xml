@@ -161,7 +161,6 @@
                 test.component,
                 test.component01,
                 test.navigation,
-                test.formomitted,
                 test.implicitnav,
                 test.state,
                 test.resourceBundleELResolver,

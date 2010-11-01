@@ -102,11 +102,19 @@ public class FormOmittedTestCase extends AbstractTestCase {
     public void testFormOmitted() throws Exception {
         HtmlPage page = getPage("/faces/standard/formomitted.xhtml");
 
-        String pageAsText = page.asText();
-        System.out.println("This test is temporarily disabled until"
-                + "a proper solution to issue 1663 can be found."
-                + "https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=1663");
-        //assertTrue (pageAsText.contains("The form component needs to have a UIForm in its ancestry. Suggestion: enclose the necessary components within <h:form>"));
+        String pageAsText = page.asText();       
+        assertTrue (pageAsText.contains("The form component needs to have a UIForm in its ancestry. Suggestion: enclose the necessary components within <h:form>"));
+
+        page = getPage("/faces/standard/formnotomitted.xhtml");
+
+        pageAsText = page.asText();
+        assertFalse (pageAsText.contains("The form component needs to have a UIForm in its ancestry. Suggestion: enclose the necessary components within <h:form>"));
+
+        page = getPage("/faces/standard/formomittedforcc.xhtml");
+
+        pageAsText = page.asText();
+        assertTrue (pageAsText.contains("The form component needs to have a UIForm in its ancestry. Suggestion: enclose the necessary components within <h:form>"));
+
 
     }
 }
