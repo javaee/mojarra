@@ -1006,6 +1006,7 @@
         <component-class>javax.faces.component.html.Html</component-class>
 
         <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="document-props.xml" xpointer="xpointer(/root/*)"/>
 
         <component-extension>
             <base-component-type>javax.faces.Output</base-component-type>
@@ -1020,6 +1021,7 @@
         <component-class>javax.faces.component.html.HtmlHead</component-class>
 
         <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="document-props.xml" xpointer="xpointer(/root/*)"/>
 
         <component-extension>
             <base-component-type>javax.faces.Output</base-component-type>
@@ -1034,6 +1036,7 @@
         <component-class>javax.faces.component.html.HtmlTitle</component-class>
 
         <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="document-props.xml" xpointer="xpointer(/root/*)"/>
 
         <component-extension>
             <base-component-type>javax.faces.Output</base-component-type>
@@ -1048,6 +1051,7 @@
         <component-class>javax.faces.component.html.HtmlBody</component-class>
 
         <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="document-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="core-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="events-props.xml" xpointer="xpointer(/root/*)"/>
         <property>
@@ -3576,6 +3580,7 @@ unmodified to the rendered output.</p>
             </renderer-class>
 
             <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="document-attrs.xml" xpointer="xpointer(/root/*)"/>
 
             <renderer-extension>
                 <jsp-ignore>true</jsp-ignore>
@@ -3584,10 +3589,13 @@ unmodified to the rendered output.</p>
         </renderer>
 
         <renderer>
-            <description><![CDATA[<div class="changed_added_2_0">
+            <description><![CDATA[
 
-<p><span class="changed_modified_2_0_rev_a">Render</span> the markup for
-a <code>&lt;head&gt;</code> element.</p>
+<p><span class="changed_modified_2_0_rev_a
+changed_modified_2_1">Render</span> the markup for a
+<code>&lt;head&gt;</code> element.</p>
+
+<div class="changed_added_2_0">
 
       <p>Decode Behavior</p>
 
@@ -3644,6 +3652,7 @@ unmodified to the rendered output.</p>
             </renderer-class>
 
             <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="document-attrs.xml" xpointer="xpointer(/root/*)"/>
 
             <renderer-extension>
                 <jsp-ignore>true</jsp-ignore>
@@ -3685,6 +3694,7 @@ the rendered output.</p>
             </renderer-class>
 
             <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="document-attrs.xml" xpointer="xpointer(/root/*)"/>
 
             <renderer-extension>
                 <jsp-ignore>true</jsp-ignore>
@@ -3693,9 +3703,12 @@ the rendered output.</p>
         </renderer>
 
         <renderer>
-            <description><![CDATA[<div class="changed_added_2_0">
+            <description><![CDATA[
 
-<p>Render the markup for a <code>&lt;body&gt;</code> element.</p>
+<p><span class="changed_modified_2_1 changed_added_2_0">Render</span> the markup for a
+<code>&lt;body&gt;</code> element.</p>
+
+<div class="changed_added_2_0">
 
       <p>Decode Behavior</p>
 
@@ -3736,6 +3749,7 @@ unmodified to the rendered output.</p>
             </renderer-class>
  
             <xi:include href="core-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="document-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="events-attrs.xml" xpointer="xpointer(/root/*)"/>
 

@@ -123,6 +123,14 @@ public class ProcessAsJspxTestCase extends AbstractTestCase {
         assertFalse(Comment.matcher(xml).matches());
     }
 
+    public void testProcessAsXmlWithDifferentXmlnsCases() throws Exception {
+
+        String xml = getRawMarkup("/faces/xmlviewWithHtmlRoot.view.xml");
+        assertTrue(xml.matches("(?s).*<html.*xmlns=\"http://www.w3.org/1999/xhtml\">.*"));
+        xml = getRawMarkup("/faces/xmlviewWithHtmlRootAndXmlnsOnHeadAndBody.view.xml");
+        assertTrue(xml.matches("(?s).*<html>.*<head.*xmlns=\"http://www.w3.org/1999/xhtml\">.*<body.*xmlns=\"http://www.w3.org/1999/xhtml\">.*"));
+    }
+
     public void testProcessAsJspx() throws Exception {
 
         String xml = getRawMarkup("/faces/jspxview.jspx");

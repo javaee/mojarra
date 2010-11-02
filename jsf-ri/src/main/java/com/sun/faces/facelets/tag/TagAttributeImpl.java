@@ -106,7 +106,7 @@ public final class TagAttributeImpl extends TagAttribute {
             String qName, String value) {
         this.location = location;
         this.namespace = ns;
-        this.localName = localName;
+        this.localName = (null == localName || 0 == localName.length()) ? qName : localName;
         this.qName = qName;
         this.value = value;
         try {

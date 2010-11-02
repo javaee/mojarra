@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 2010 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -41,70 +41,35 @@
 
 -->
 
-<f:view xmlns:f="http://java.sun.com/jsf/core"
-        xmlns:h="http://java.sun.com/jsf/html">
-
-    <h:html xmlns="http://www.w3.org/1999/xhtml">
-
-        <h:head><h:title>Raw XML View</h:title></h:head>
-
-        <h:body>
-
-<h2>XML declaration: consumed</h2>
-
-<h2>Processing instruction: consumed</h2>
-
-<?xml-stylesheet href="funky.xsl" type="text/xml" alternate="yes"?>
-
-<h2>CDATA section: consumed</h2>
-
-<![CDATA[ <p>This is CDATA</p> ]]>
-
-<h2>Inline text escaping: escaped</h2>
-
-                  <code>
-                    <br/>
-                    &amp;lt;context-param&amp;gt;
-                    <br/>
-                     
-&amp;nbsp;&amp;nbsp;&amp;lt;param-name&amp;gt;javax.faces.PARTIAL_STATE_SAVING 
-
-&amp;lt;/param-name&amp;gt;
-                    <br/>
-                     
-&amp;nbsp;&amp;nbsp;&amp;lt;param-value&amp;gt;true&amp;lt;/param-value&amp;gt 
-
-;
-                    <br/>
-                    &amp;lt;/context-param&amp;gt;
-                  </code>
-
-<h2>Comments: consumed</h2>
-
-<!-- comments consumed -->
-
-            <h:form prependId="false" id="form">
-
-                <h:panelGrid id="grid" column="2">
-
-                    <h:outputText id="text" value="hello"></h:outputText>
-
-                    <h:commandButton id="button" value="reload"></h:commandButton>
+<!-- ========== HTML Document Properties ============================================ -->
 
 
-                </h:panelGrid>
+<!-- template
 
-   #{processAsJspxBean.prop}
+      <property>
+        <description>
+        </description>
+        <display-name></display-name>
+        <icon></icon>
+        <property-name></property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
 
-<p>html template text</p>
+-->
+<root>
+    <property>
+        <description>
+          <![CDATA[<div class="changed_added_2_1">
+           An XML Namespace to be passed through to the rendered element
+           </div>]]>
+        </description>
+        <display-name>XML Namespace</display-name>
+        <icon></icon>
+        <property-name>xmlns</property-name>
+        <property-class>java.lang.String</property-class>
+        <property-extension>
+            <pass-through>true</pass-through>
+        </property-extension>
+    </property>
 
-
-            </h:form>
-
-        </h:body>
-
-    </h:html>
-
-</f:view>
-
-
+</root>
