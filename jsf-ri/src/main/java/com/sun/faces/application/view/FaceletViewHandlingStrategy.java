@@ -1000,12 +1000,28 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
         String encoding = orig;
 
+
+        // 1. get it from request
+        encoding = context.getExternalContext().getRequestCharacterEncoding();
+
+        // 2. get it from the session
+        if (encoding == null) {
+            if (null != context.getExternalContext().getSession(false)) {
+                Map<String, Object> sessionMap = context.getExternalContext().getSessionMap();
+                encoding = (String) sessionMap.get(ViewHandler.CHARACTER_ENCODING_KEY);
+                if (LOGGER.isLoggable(Level.FINEST)) {
+                    LOGGER.log(Level.FINEST,
+                            "Session specified alternate encoding {0}",
+                            encoding);
+                }
+            }
+        }
+
         // see if we need to override the encoding
         Map<Object,Object> ctxAttributes = context.getAttributes();
-        Map<String,Object> sessionMap =
-              context.getExternalContext().getSessionMap();
 
-        // 1. check the request attribute
+
+        // 3. check the request attribute
         if (ctxAttributes.containsKey("facelets.Encoding")) {
             encoding = (String) ctxAttributes.get("facelets.Encoding");
             if (LOGGER.isLoggable(Level.FINEST)) {
@@ -1013,29 +1029,21 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                            "Facelet specified alternate encoding {0}",
                            encoding);
             }
-            sessionMap.put(ViewHandler.CHARACTER_ENCODING_KEY, encoding);
-        }
-
-        // 2. get it from request
-        if (encoding == null) {
-            encoding = context.getExternalContext().getRequestCharacterEncoding();
-        }
-
-        // 3. get it from the session
-        if (encoding == null) {
-            encoding = (String) sessionMap.get(ViewHandler.CHARACTER_ENCODING_KEY);
-            if (LOGGER.isLoggable(Level.FINEST)) {
-                LOGGER.log(Level.FINEST,
-                           "Session specified alternate encoding {0}",
-                           encoding);
+            if (null != context.getExternalContext().getSession(false)) {
+                Map<String, Object> sessionMap = context.getExternalContext().getSessionMap();
+                sessionMap.put(ViewHandler.CHARACTER_ENCODING_KEY, encoding);
             }
         }
 
         // 4. default it
         if (encoding == null) {
-            encoding = "UTF-8";
+            if (null != orig && 0 < orig.length()) {
+                encoding = orig;
+            } else {
+                encoding = "UTF-8";
+            }
             if (LOGGER.isLoggable(Level.FINEST)) {
-                LOGGER.finest("ResponseWriter created had a null CharacterEncoding, defaulting to UTF-8");
+                LOGGER.log(Level.FINEST, "ResponseWriter created had a null CharacterEncoding, defaulting to {0}", orig);
             }
         }
 

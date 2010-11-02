@@ -62,6 +62,8 @@ import javax.faces.component.UIComponent;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.FaceletHandler;
 import java.io.IOException;
+import java.util.Map;
+import javax.faces.context.FacesContext;
 
 public class EncodingHandler implements FaceletHandler {
 
@@ -78,11 +80,15 @@ public class EncodingHandler implements FaceletHandler {
 
     public void apply(FaceletContext ctx, UIComponent parent)
             throws IOException {
-        ctx.getFacesContext().getAttributes().put("facelets.compilationMessages", this.messageHolder);
+        FacesContext context = ctx.getFacesContext();
+        Map<Object,Object> ctxAttributes = context.getAttributes();
+        ctxAttributes.put("facelets.compilationMessages", this.messageHolder);
         this.next.apply(ctx, parent);
-        ctx.getFacesContext().getAttributes().remove("facelets.compilationMessages");
+        ctxAttributes.remove("facelets.compilationMessages");
         this.messageHolder.processCompilationMessages(ctx.getFacesContext());
-        ctx.getFacesContext().getAttributes().put("facelets.Encoding", this.encoding);
+        if (!ctxAttributes.containsKey("facelets.Encoding")) {
+            ctx.getFacesContext().getAttributes().put("facelets.Encoding", this.encoding);
+        }
     }
     
     public static CompilationMessageHolder getCompilationMessageHolder(FaceletContext ctx) {
