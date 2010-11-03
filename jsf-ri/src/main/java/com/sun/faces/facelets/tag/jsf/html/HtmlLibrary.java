@@ -99,6 +99,9 @@ public final class HtmlLibrary extends AbstractHtmlLibrary {
         this.addHtmlComponent("html", "javax.faces.Output",
                 "javax.faces.Html");
 
+        this.addHtmlComponent("doctype", "javax.faces.Output",
+                "javax.faces.Doctype");
+
         this.addHtmlComponent("inputHidden", "javax.faces.HtmlInputHidden",
                 "javax.faces.Hidden");
 

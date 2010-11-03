@@ -20067,6 +20067,57 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     -->
   <component>
     <description>NONE</description>
+    <display-name>doctype</display-name>
+    <component-type>javax.faces.OutputDoctype</component-type>
+    <component-class>javax.faces.component.html.HtmlDoctype</component-class>
+
+    <property>
+      <description><![CDATA[<div class="changed_added_2_1">
+           The root XML element
+           </div>]]></description>
+      <display-name>Root XML element</display-name>
+      <icon/>
+      <property-name>rootElement</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <required>true</required>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[<div class="changed_added_2_1">
+           Will be output as the public part of the DOCTYPE
+           </div>]]></description>
+      <display-name>The public part of the DOCTYPE</display-name>
+      <icon/>
+      <property-name>public</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <required>false</required>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[<div class="changed_added_2_1">
+           Will be output as the system part of the DOCTYPE
+           </div>]]></description>
+      <display-name>The system part of the DOCTYPE</display-name>
+      <icon/>
+      <property-name>system</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <required>false</required>
+      </property-extension>
+    </property>
+
+    <component-extension>
+      <base-component-type>javax.faces.Output</base-component-type>
+      <renderer-type>javax.faces.Doctype</renderer-type>
+    </component-extension>
+  </component>
+  <component>
+    <description>NONE</description>
     <display-name>html</display-name>
     <component-type>javax.faces.OutputHtml</component-type>
     <component-class>javax.faces.component.html.Html</component-class>
@@ -31237,6 +31288,83 @@ unmodified to the rendered output.</p>
       <renderer-extension>
         <jsp-ignore>true</jsp-ignore>
         <tag-name>html</tag-name>
+      </renderer-extension>
+    </renderer>
+    <renderer>
+      <description><![CDATA[<div class="changed_added_2_1">
+
+<p><span class="changed_added_2_1">Render</span> the markup for
+a <code>&lt;!DOCTYPE&gt;</code> declaration.</p>
+
+      <p>Decode Behavior</p>
+
+      <ul>
+
+<p>No action is required during decode for this renderer.</p>
+
+</ul>
+
+      <p>Encode Behavior</p>
+
+<p>Output an XML Doctype using the provided attributes.  Output the
+literal text <code>&lt;!DOCTYPE</code>. The "rootElement" attribute is
+required and must be rendered next.  If the "public" attribute is
+defined, render the literal text <code>PUBLIC</code> then render the
+value of the attribute inside double quotes.  If the "system" attribute
+is defined, render it next, inside double quotes.  Close the doctype
+declaration with the literal text <code>&gt;</code>.</p>
+
+
+</div>]]></description>
+      <component-family>javax.faces.Output</component-family>
+      <renderer-type>javax.faces.Doctype</renderer-type>
+      <renderer-class>
+        com.sun.faces.renderkit.html_basic.DoctypeRenderer
+    </renderer-class>
+
+      <attribute>
+        <description><![CDATA[<div class="changed_added_2_1">
+           The root XML element
+           </div>]]></description>
+        <display-name>Root XML element</display-name>
+        <icon/>
+        <attribute-name>rootElement</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <required>true</required>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description><![CDATA[<div class="changed_added_2_1">
+           Will be output as the public part of the DOCTYPE
+           </div>]]></description>
+        <display-name>The public part of the DOCTYPE</display-name>
+        <icon/>
+        <attribute-name>public</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <required>false</required>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description><![CDATA[<div class="changed_added_2_1">
+           Will be output as the system part of the DOCTYPE
+           </div>]]></description>
+        <display-name>The system part of the DOCTYPE</display-name>
+        <icon/>
+        <attribute-name>system</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <required>false</required>
+        </attribute-extension>
+      </attribute>
+
+      <renderer-extension>
+        <jsp-ignore>true</jsp-ignore>
+        <tag-name>doctype</tag-name>
       </renderer-extension>
     </renderer>
     <renderer>

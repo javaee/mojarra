@@ -326,6 +326,9 @@ public class HtmlComponentGenerator extends AbstractGenerator {
             if ("for".equals(pb.getPropertyName())) {
                 writer.fwrite(pb.getPropertyName());
                 writer.write("Val(\"for\")");
+            } else if ("public".equals(pb.getPropertyName())) {
+                writer.fwrite(pb.getPropertyName());
+                writer.write("Val(\"public\")");
             } else {
                 writer.fwrite(pb.getPropertyName());
             }
@@ -395,7 +398,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
             writer.fwrite("return (");
             writer.write(primitive(type) ? GeneratorUtil.convertToObject(type) : type);
             writer.write(") getStateHelper().eval(PropertyKeys.");
-            writer.write((pb.getPropertyName().equals("for")) ? pb
+            writer.write((pb.getPropertyName().equals("for") || pb.getPropertyName().equals("public")) ? pb
                   .getPropertyName() + "Val" : pb.getPropertyName());
              if (primitive(type) || (pb.getDefaultValue() != null)) {
                 writer.write(", ");
@@ -462,7 +465,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
             //writer.write(" = ");
             //writer.write(var);
             writer.fwrite("getStateHelper().put(PropertyKeys.");
-            writer.write((pb.getPropertyName().equals("for")) ? pb
+            writer.write((pb.getPropertyName().equals("for") || pb.getPropertyName().equals("public")) ? pb
                   .getPropertyName() + "Val" : pb.getPropertyName());
             writer.write(", ");
             writer.write(var);

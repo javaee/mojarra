@@ -95,6 +95,9 @@
     <output-body-renderer-class>
         com.sun.faces.renderkit.html_basic.BodyRenderer
     </output-body-renderer-class>
+    <output-doctype-renderer-class>
+        com.sun.faces.renderkit.html_basic.DoctypeRenderer
+    </output-doctype-renderer-class>
     <output-html-renderer-class>
         com.sun.faces.renderkit.html_basic.HtmlRenderer
     </output-html-renderer-class>

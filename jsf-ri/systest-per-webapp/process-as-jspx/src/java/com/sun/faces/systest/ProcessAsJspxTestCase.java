@@ -134,6 +134,12 @@ public class ProcessAsJspxTestCase extends AbstractTestCase {
         assertTrue(xml.matches("(?s).*<html>.*<head.*xmlns=\"http://www.w3.org/1999/xhtml\">.*<body.*xmlns=\"http://www.w3.org/1999/xhtml\">.*"));
     }
 
+    public void testProcessAsXmlWithDoctype() throws Exception {
+
+        String xml = getRawMarkup("/faces/xmlviewWithDoctype.view.xml");
+        assertTrue(xml.matches("(?s).*<!DOCTYPE.*html.*PUBLIC.*\"-//W3C//DTD.*XHTML.*1.0.*Transitional//EN\".*\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"><html.*xmlns=\"http://www.w3.org/1999/xhtml\".*"));
+    }
+
     public void testProcessAsJspx() throws Exception {
 
         String xml = getRawMarkup("/faces/jspxview.jspx");

@@ -1001,6 +1001,20 @@
 
     <component>
         <description>NONE</description>
+        <display-name>doctype</display-name>
+        <component-type>javax.faces.OutputDoctype</component-type>
+        <component-class>javax.faces.component.html.HtmlDoctype</component-class>
+
+        <xi:include href="doctype-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <base-component-type>javax.faces.Output</base-component-type>
+            <renderer-type>javax.faces.Doctype</renderer-type>
+        </component-extension>
+    </component>
+
+    <component>
+        <description>NONE</description>
         <display-name>html</display-name>
         <component-type>javax.faces.OutputHtml</component-type>
         <component-class>javax.faces.component.html.Html</component-class>
@@ -3585,6 +3599,46 @@ unmodified to the rendered output.</p>
             <renderer-extension>
                 <jsp-ignore>true</jsp-ignore>
                 <tag-name>html</tag-name>
+            </renderer-extension>
+        </renderer>
+
+<renderer>
+            <description><![CDATA[<div class="changed_added_2_1">
+
+<p><span class="changed_added_2_1">Render</span> the markup for
+a <code>&lt;!DOCTYPE&gt;</code> declaration.</p>
+
+      <p>Decode Behavior</p>
+
+      <ul>
+
+<p>No action is required during decode for this renderer.</p>
+
+</ul>
+
+      <p>Encode Behavior</p>
+
+<p>Output an XML Doctype using the provided attributes.  Output the
+literal text <code>&lt;!DOCTYPE</code>. The "rootElement" attribute is
+required and must be rendered next.  If the "public" attribute is
+defined, render the literal text <code>PUBLIC</code> then render the
+value of the attribute inside double quotes.  If the "system" attribute
+is defined, render it next, inside double quotes.  Close the doctype
+declaration with the literal text <code>&gt;</code>.</p>
+
+
+</div>]]></description>
+            <component-family>javax.faces.Output</component-family>
+            <renderer-type>javax.faces.Doctype</renderer-type>
+            <renderer-class>
+               <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/output-doctype-renderer-class/text())"/>
+            </renderer-class>
+
+            <xi:include href="doctype-attrs.xml" xpointer="xpointer(/root/*)"/>
+
+            <renderer-extension>
+                <jsp-ignore>true</jsp-ignore>
+                <tag-name>doctype</tag-name>
             </renderer-extension>
         </renderer>
 
