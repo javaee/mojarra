@@ -86,6 +86,10 @@ public class CompositeBean {
 
     }
 
+    private String text = "DEFAULT VALUE";
+    public String getText() {
+        return text;
+    }
 
     public Validator getValidator() {
 

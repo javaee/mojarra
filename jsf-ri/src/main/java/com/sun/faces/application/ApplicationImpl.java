@@ -1042,7 +1042,7 @@ public class ApplicationImpl extends Application {
             if (null != defaultValue) {
                 key = cur.getName();
                 if (defaultValue instanceof ValueExpression) {
-                    if (((ValueExpression)defaultValue).isLiteralText()) {
+                    if (!((ValueExpression)defaultValue).isLiteralText()) {
                         defaultValue = ((ValueExpression)defaultValue).getValue(context.getELContext());
                     }
                 }
