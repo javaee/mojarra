@@ -180,7 +180,7 @@ public class UIData extends UIComponentBase
         /**
          * 
          */
-        preserveRowComponentState
+        rowStatePreserved
     }
 
 
@@ -398,9 +398,9 @@ public class UIData extends UIComponentBase
 
      * <p class="changed_added_2_1">To support transient state among
      * descendents, please consult the specification for {@link
-     * #setPreserveRowComponentState}, which details the requirements
+     * #setRowStatePreserved}, which details the requirements
      * for <code>setRowIndex()</code> when the
-     * <code>preserveRowComponentState</code> JavaBeans property is set
+     * <code>rowStatePreserved</code> JavaBeans property is set
      * to <code>true</code>.</p>
 
      * <ul>
@@ -463,17 +463,17 @@ public class UIData extends UIComponentBase
      */
     public void setRowIndex(int rowIndex)
     {
-        if (isPreserveRowComponentState())
+        if (isRowStatePreserved())
         {
-            setRowIndexPreserveRowComponentState(rowIndex);
+            setRowIndexRowStatePreserved(rowIndex);
         }
         else
         {
-            setRowIndexWithoutPreserveRowComponentState(rowIndex);
+            setRowIndexWithoutRowStatePreserved(rowIndex);
         }
     }
 
-    private void setRowIndexWithoutPreserveRowComponentState(int rowIndex){
+    private void setRowIndexWithoutRowStatePreserved(int rowIndex){
         // Save current state for the previous row index
         saveDescendantState();
 
@@ -511,7 +511,7 @@ public class UIData extends UIComponentBase
 
     }
     
-    private void setRowIndexPreserveRowComponentState(int rowIndex)
+    private void setRowIndexRowStatePreserved(int rowIndex)
     {
         if (rowIndex < -1)
         {
@@ -656,15 +656,15 @@ public class UIData extends UIComponentBase
     
     /**
      * <p class="changed_added_2_1">Return the value of the
-     * <code>preserveRowComponentState</code> JavaBeans property. See
-     * {@link #setPreserveRowComponentState}.</p>
+     * <code>rowStatePreserved</code> JavaBeans property. See
+     * {@link #setRowStatePreserved}.</p>
      *
      * @since 2.1
      */
 
-    public boolean isPreserveRowComponentState()
+    public boolean isRowStatePreserved()
     {
-        Boolean b = (Boolean) getStateHelper().get(PropertyKeys.preserveRowComponentState);
+        Boolean b = (Boolean) getStateHelper().get(PropertyKeys.rowStatePreserved);
         return b == null ? false : b.booleanValue(); 
     }
 
@@ -675,21 +675,22 @@ public class UIData extends UIComponentBase
      * <div class="changed_added_2_1">
 
      * 	<p>When the {@link #markInitialState} method is called, save the
-     * 	state of the direct children of this instance by traversing them
-     * 	as if this component was a normal <code>UIComponent</code>
-     * 	instance, not a <code>UIData</code>, and calling {@link
-     * 	#saveState} on each, collecting the state as the traversal
-     * 	proceeds.  State collected in this manner will be referred to as
-     * 	"rolled up" state.  Store the resultant rolled up state in a
-     * 	data structure with a scope equivalent to that of an instance
-     * 	variable.  This is necessary so that state can be restored
-     * 	without a dependency on any particular row value.  For
-     * 	discussion, this rolled up state is called the "initial rolled
-     * 	up state".</p>
+     * 	state of the children and descendents of this instance by
+     * 	traversing them as if this component was a normal
+     * 	<code>UIComponent</code> instance, not a <code>UIData</code>,
+     * 	and calling {@link #saveState} on each, collecting the state as
+     * 	the traversal proceeds.  Note that non-iterated facets of the
+     * 	<code>UIData</code> are not included in this traversal.  State
+     * 	collected in this manner will be referred to as "rolled up"
+     * 	state.  Store the resultant rolled up state in a data structure
+     * 	with a scope equivalent to that of an instance variable.  This
+     * 	is necessary so that state can be restored without a dependency
+     * 	on any particular row value.  For discussion, this rolled up
+     * 	state is called the "initial rolled up state".</p>
 
      * <p>When {@link #setRowIndex} is called, the following additional
-     * actions must be taken <em>before</em> the usual call to {@link
-     * #setRowIndex}.</p>
+     * actions must be taken <em>before</em> any other work as performed
+     * to set the row index.</p>
 
      * 	<ol type="a">
 
@@ -698,21 +699,20 @@ public class UIData extends UIComponentBase
 	  the {@link #saveState} calls during this pass happen
 	  <em>after</em> the call to {@link #markInitialState}, the
 	  state saved is the so called "delta" state of each component.
-	  Because this traversal happens during a per-row operation (in
-	  this case, {@link #setRowIndex}) the rolled up state must be
-	  saved in a row-aware data structure.  One implementation
-	  choice would be to save the state from this pass in a
-	  <code>Map</code> keyed by the return from {@link
-	  javax.faces.component.UIComponent#getContainerClientId}.  It
-	  is permissible for the rolled up state to be <code>null</code>
-	  or empty.</p></li>
+	  Note that this delta state is saved regardless of whether or
+	  not partial state saving has been enabled or disabled for this
+	  application.  Because this traversal happens during a per-row
+	  operation (in this case, {@link #setRowIndex}) the rolled up
+	  state must be saved in a row-aware data structure.  It is
+	  permissible for the rolled up state to be <code>null</code> or
+	  empty.</p></li>
 
 	  <li><p>If the current row index is not -1, traverse the
 	  children as in the previous step, but, instead of calling
 	  {@link #saveState}, call {@link
 	  javax.faces.component.UIComponent#saveTransientState}.  Save
 	  the rolled up state in a separate row-aware data structure
-	  from the one used in the preciding step.</p></li>
+	  from the one used in the preceding step.</p></li>
 
 	</ol>
 
@@ -729,15 +729,17 @@ public class UIData extends UIComponentBase
 
      * 	<ul>
 
-	  <li><p>If the per-row state saved in step a. above is
-	  <code>null</code>, traverse the children and restore the child
-	  state using the initial rolled up state.</p></li>
+	  <li><p>If the per-row state saved in step a. above (before we
+	  adjusted the row index) is <code>null</code>, traverse the
+	  children and restore the child state using the initial rolled
+	  up state.</p></li>
 
-	  <li><p>If the per-row state saved in step a. above is not
-	  <code>null</code>, traverse the children and restore the child
-	  state using the state saved during step a., using the initial
-	  rolled up state only as a backup in the case that per-row
-	  state is not available.</p></li>
+	  <li><p>If the per-row state saved in step a. above (before we
+	  adjusted the row index) is not <code>null</code>, traverse the
+	  children and restore the child state using the state saved
+	  during step a., using the initial rolled up state only as a
+	  backup in the case that per-row state is not
+	  available.</p></li>
 
 	  <li><p>If the current row index is -1, traverse the children
 	  and pass <code>null</code> to {@link
@@ -771,9 +773,9 @@ public class UIData extends UIComponentBase
      * @since 2.1
      */
     
-    public void setPreserveRowComponentState(boolean preserveComponentState)
+    public void setRowStatePreserved(boolean preserveComponentState)
     {
-        getStateHelper().put(PropertyKeys.preserveRowComponentState, preserveComponentState);
+        getStateHelper().put(PropertyKeys.rowStatePreserved, preserveComponentState);
     }
 
 
@@ -1524,7 +1526,7 @@ public class UIData extends UIComponentBase
      * <p class="changed_added_2_1">Override the base class method to
      * take special action if the method is being invoked when {@link
      * ViewDeclarationLanguage#IS_BUILDING_INITIAL_STATE} is true
-     * <strong>and</strong> the <code>preserveRowComponentState</code>
+     * <strong>and</strong> the <code>rowStatePreserved</code>
      * JavaBeans property for this instance is <code>true</code>.</p>
      *
      * <p class="changed_modified_2_1">The additional action taken is to
@@ -1538,7 +1540,7 @@ public class UIData extends UIComponentBase
     @Override
     public void markInitialState()
     {
-        if (isPreserveRowComponentState())
+        if (isRowStatePreserved())
         {
             if (getFacesContext().getAttributes().containsKey(ViewDeclarationLanguage.IS_BUILDING_INITIAL_STATE))
             {

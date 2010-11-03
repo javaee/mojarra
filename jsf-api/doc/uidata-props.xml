@@ -94,7 +94,7 @@
         </description>
         <display-name>Preserve Row Component State</display-name>
         <icon></icon>
-        <property-name>preserveRowComponentState</property-name>
+        <property-name>rowStatePreserved</property-name>
         <property-class>boolean</property-class>
         <property-extension>
             <tag-attribute>false</tag-attribute>

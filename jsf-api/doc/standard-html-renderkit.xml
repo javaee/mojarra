@@ -594,7 +594,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <description><![CDATA[<span class="changed_added_2_1">Boolean flag directing how the per-row component state should be handled.</span>]]></description>
       <display-name>Preserve Row Component State</display-name>
       <icon/>
-      <property-name>preserveRowComponentState</property-name>
+      <property-name>rowStatePreserved</property-name>
       <property-class>boolean</property-class>
       <property-extension>
         <tag-attribute>false</tag-attribute>
@@ -6397,7 +6397,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <description><![CDATA[<span class="changed_added_2_1">Boolean flag directing how the per-row component state should be handled.</span>]]></description>
       <display-name>Preserve Row Component State</display-name>
       <icon/>
-      <property-name>preserveRowComponentState</property-name>
+      <property-name>rowStatePreserved</property-name>
       <property-class>boolean</property-class>
       <property-extension>
         <tag-attribute>false</tag-attribute>
@@ -6698,16 +6698,6 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
 
 
     <property>
-      <description><![CDATA[<span class="changed_added_2_1">Boolean flag directing how the per-row component state should be handled.</span>]]></description>
-      <display-name>Preserve Row Component State</display-name>
-      <icon/>
-      <property-name>preserveRowComponentState</property-name>
-      <property-class>boolean</property-class>
-      <property-extension>
-        <tag-attribute>false</tag-attribute>
-      </property-extension>
-    </property>
-    <property>
       <description>
           Name or code of the background color for this table.
         </description>
@@ -6908,6 +6898,16 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
     </property>
 
+    <property>
+      <description><![CDATA[<span class="changed_added_2_1">Boolean flag directing how the per-row component state should be handled.</span>]]></description>
+      <display-name>Preserve Row Component State</display-name>
+      <icon/>
+      <property-name>rowStatePreserved</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+      </property-extension>
+    </property>
     <component-extension>
       <base-component-type>javax.faces.Data</base-component-type>
       <renderer-type>javax.faces.Table</renderer-type>
@@ -14500,16 +14500,6 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     </property>
 
 
-    <property>
-      <description><![CDATA[<span class="changed_added_2_1">Boolean flag directing how the per-row component state should be handled.</span>]]></description>
-      <display-name>Preserve Row Component State</display-name>
-      <icon/>
-      <property-name>preserveRowComponentState</property-name>
-      <property-class>boolean</property-class>
-      <property-extension>
-        <tag-attribute>false</tag-attribute>
-      </property-extension>
-    </property>
     <property>
       <description>
           Name or code of the background color for this table.
@@ -22111,16 +22101,6 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
 
 
       <attribute>
-        <description><![CDATA[<span class="changed_added_2_1">Boolean flag directing how the per-row component state should be handled.</span>]]></description>
-        <display-name>Preserve Row Component State</display-name>
-        <icon/>
-        <attribute-name>preserveRowComponentState</attribute-name>
-        <attribute-class>boolean</attribute-class>
-        <attribute-extension>
-          <tag-attribute>false</tag-attribute>
-        </attribute-extension>
-      </attribute>
-      <attribute>
         <description>
           Name or code of the background color for this table.
         </description>
@@ -22321,6 +22301,16 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
+      <attribute>
+        <description><![CDATA[<span class="changed_added_2_1">Boolean flag directing how the per-row component state should be handled.</span>]]></description>
+        <display-name>Preserve Row Component State</display-name>
+        <icon/>
+        <attribute-name>rowStatePreserved</attribute-name>
+        <attribute-class>boolean</attribute-class>
+        <attribute-extension>
+          <tag-attribute>false</tag-attribute>
+        </attribute-extension>
+      </attribute>
       <renderer-extension>
         <renders-children>true</renders-children>
       </renderer-extension>
@@ -27208,16 +27198,6 @@ this application, and passing the result through the
       </attribute>
 
 
-      <attribute>
-        <description><![CDATA[<span class="changed_added_2_1">Boolean flag directing how the per-row component state should be handled.</span>]]></description>
-        <display-name>Preserve Row Component State</display-name>
-        <icon/>
-        <attribute-name>preserveRowComponentState</attribute-name>
-        <attribute-class>boolean</attribute-class>
-        <attribute-extension>
-          <tag-attribute>false</tag-attribute>
-        </attribute-extension>
-      </attribute>
       <attribute>
         <description>
           Name or code of the background color for this table.

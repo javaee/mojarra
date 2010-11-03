@@ -419,6 +419,18 @@
         <xi:include href="events-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="table-props.xml" xpointer="xpointer(/root/*)"/>
+        <property>
+            <description>
+              <![CDATA[<span class="changed_added_2_1">Boolean flag directing how the per-row component state should be handled.</span>]]>
+            </description>
+            <display-name>Preserve Row Component State</display-name>
+            <icon></icon>
+            <property-name>rowStatePreserved</property-name>
+            <property-class>boolean</property-class>
+            <property-extension>
+                <tag-attribute>false</tag-attribute>
+            </property-extension>
+        </property>
 
         <component-extension>
             <base-component-type>javax.faces.Data</base-component-type>
@@ -1701,6 +1713,18 @@
             <xi:include href="events-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="table-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <attribute>
+                <description>
+                  <![CDATA[<span class="changed_added_2_1">Boolean flag directing how the per-row component state should be handled.</span>]]>
+                </description>
+                <display-name>Preserve Row Component State</display-name>
+                <icon></icon>
+                <attribute-name>rowStatePreserved</attribute-name>
+                <attribute-class>boolean</attribute-class>
+                <attribute-extension>
+                    <tag-attribute>false</tag-attribute>
+                </attribute-extension>
+            </attribute>
 
             <renderer-extension>
                 <renders-children>true</renders-children>

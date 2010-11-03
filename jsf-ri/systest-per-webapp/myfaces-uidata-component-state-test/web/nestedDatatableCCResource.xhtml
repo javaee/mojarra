@@ -85,7 +85,7 @@
             headerClass="standardTable_Header" footerClass="standardTable_Header"
             rowClasses="standardTable_Row1,standardTable_Row2"
             columnClasses="standardTable_Column,standardTable_ColumnCentered,standardTable_Column"
-            var="country" value="#{countryList.countries}" preserveRowComponentState="true">
+            var="country" value="#{countryList.countries}" rowStatePreserved="true">
             <h:column headerClass="customTable_header"
                 footerClass="customTable_footer">
                 <f:facet name="header">
@@ -109,7 +109,7 @@
                     <h:outputText value="#{bundle['label_country_cities']}" />
                 </f:facet>
                 <h:dataTable id="cities" styleClass="standardTable_Column"
-                    var="city" value="#{country.cities}" preserveRowComponentState="true">
+                    var="city" value="#{country.cities}" rowStatePreserved="true">
                     <h:column>
                         <test:inputText id="city" value="#{city}" style="font-size: 11px"/>
                     </h:column>
