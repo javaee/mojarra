@@ -54,6 +54,7 @@ import junit.framework.TestSuite;
 public class ProcessAsJspxTestCase extends AbstractTestCase {
 
     private final static Pattern XmlDeclaration = Pattern.compile("(?s)^<\\?xml(\\s)*version=.*\\?>.*");
+    private final static Pattern XmlDoctype = Pattern.compile("(?s).*<!DOCTYPE.*>.*");
     private final static Pattern XmlPI = Pattern.compile("(?s).*<\\?xml-stylesheet.*\\?>.*");
     private final static Pattern CDATASection = Pattern.compile("(?s).*<!\\[CDATA\\[ .*\\]\\]>.*");
     private final static Pattern Comment = Pattern.compile("(?s).*<!--.*-->.*");
@@ -106,6 +107,7 @@ public class ProcessAsJspxTestCase extends AbstractTestCase {
     public void testProcessAsXhtml() throws Exception {
 
         String xml = getRawMarkup("/faces/xhtmlview.xhtml");
+        assertTrue(XmlDoctype.matcher(xml).matches());
         assertTrue(XmlDeclaration.matcher(xml).matches());
         assertTrue(XmlPI.matcher(xml).matches());
         assertTrue(CDATASection.matcher(xml).matches());
@@ -116,6 +118,7 @@ public class ProcessAsJspxTestCase extends AbstractTestCase {
     public void testProcessAsXml() throws Exception {
 
         String xml = getRawMarkup("/faces/xmlview.view.xml");
+        assertFalse(XmlDoctype.matcher(xml).matches());
         assertFalse(XmlDeclaration.matcher(xml).matches());
         assertFalse(XmlPI.matcher(xml).matches());
         assertFalse(CDATASection.matcher(xml).matches());
@@ -134,6 +137,7 @@ public class ProcessAsJspxTestCase extends AbstractTestCase {
     public void testProcessAsJspx() throws Exception {
 
         String xml = getRawMarkup("/faces/jspxview.jspx");
+        assertFalse(XmlDoctype.matcher(xml).matches());
         assertFalse(XmlDeclaration.matcher(xml).matches());
         assertFalse(XmlPI.matcher(xml).matches());
         assertFalse(CDATASection.matcher(xml).matches());

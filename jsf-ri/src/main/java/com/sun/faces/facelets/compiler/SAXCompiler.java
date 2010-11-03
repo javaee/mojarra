@@ -222,7 +222,13 @@ public final class SAXCompiler extends Compiler {
 
         public void startDTD(String name, String publicId, String systemId)
                 throws SAXException {
-            if (this.inDocument) {
+            // If there is a process-as value for the extension, only allow
+            // the PI to be written if its value is xhtml
+            boolean processAsXhtml =
+                    this.unit.getWebConfiguration().getFaceletsConfiguration().isProcessCurrentDocumentAsFaceletsXhtml(alias);
+
+
+            if (this.inDocument && processAsXhtml) {
                 // If we're in an ajax request, this is unnecessary and bugged
                 // RELEASE_PENDING - this is a hack, and should probably not be here -
                 // but the alternative is to somehow figure out how *not* to escape the "<!"

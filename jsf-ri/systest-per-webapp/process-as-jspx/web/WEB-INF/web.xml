@@ -57,6 +57,11 @@
     </context-param>
 
     <context-param>
+        <param-name>javax.faces.FACELETS_LIBRARIES</param-name>
+        <param-value>/WEB-INF/jspx.taglib.xml</param-value>
+    </context-param>
+
+    <context-param>
         <param-name>javax.faces.DEFAULT_SUFFIX</param-name>
         <param-value>.xhtml .view.xml .jsp .jspx</param-value>
     </context-param>
