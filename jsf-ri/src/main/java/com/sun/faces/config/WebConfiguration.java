@@ -1191,13 +1191,10 @@ public class WebConfiguration {
               "com.sun.faces.cacheResourceModificationTimestamp",
               false
         ),
-        SuppressXmlDeclaration(
-              ViewHandler.FACELETS_SUPPRESS_XML_DECLARATION,
-              false
-        ),
         EnableAgressiveSessionDirtying(
-                "com.sun.faces.enableAgressiveSessionDirtying",
-                false);
+              "com.sun.faces.enableAgressiveSessionDirtying",
+              false
+        );
 
         private BooleanWebContextInitParameter alternate;
 

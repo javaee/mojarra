@@ -454,14 +454,12 @@ public final class SAXCompiler extends Compiler {
                 if (m.find()) {
                     WebConfiguration config = mngr.getWebConfiguration();
                     FaceletsConfiguration faceletsConfig = config.getFaceletsConfiguration();
-                    boolean suppressXmlDeclIsEnabled = config.isOptionEnabled(WebConfiguration.BooleanWebContextInitParameter.SuppressXmlDeclaration);
                     boolean currentModeIsXhtml = faceletsConfig.isProcessCurrentDocumentAsFaceletsXhtml(mngr.getAlias());
 
                     // We want to write the XML declaration if and only if
-                    // The SuppressXmlDeclaration context-param is NOT enabled
-                    // and the file extension for the current file has a mapping
+                    // the file extension for the current file has a mapping
                     // with the value of XHTML
-                    if (!suppressXmlDeclIsEnabled && currentModeIsXhtml) {
+                    if (currentModeIsXhtml) {
                         mngr.writeInstruction(m.group(0) + "\n");
                         if (m.group(3) != null) {
                             encoding = m.group(3);

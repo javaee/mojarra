@@ -46,11 +46,6 @@
        test suppress xml config param
     </description>
     <display-name>test suppress xml config param</display-name>
-    <!-- Validate the Application Configuration Resources -->
-    <context-param>
-        <param-name>javax.faces.FACELETS_SUPPRESS_XML_DECLARATION</param-name>
-        <param-value>true</param-value>
-    </context-param>
     <!-- Faces Servlet -->
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>

@@ -175,18 +175,6 @@ public abstract class ViewHandler {
     public static final String FACELETS_VIEW_MAPPINGS_PARAM_NAME = 
             "javax.faces.FACELETS_VIEW_MAPPINGS";
 
-    /**
-     * <p class="changed_added_2_1">If this param is set to true, the
-     * XML declaration that appears at the start of a Facelet page (if
-     * present) is suppressed and not passed through to the user agent.</p>
-     *
-     * @since 2.1
-     */
-
-    public static final String FACELETS_SUPPRESS_XML_DECLARATION =
-            "javax.faces.FACELETS_SUPPRESS_XML_DECLARATION";
-
-
     // ---------------------------------------------------------- Public Methods
 
 
