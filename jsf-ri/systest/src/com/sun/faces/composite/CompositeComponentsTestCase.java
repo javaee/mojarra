@@ -979,6 +979,14 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
         assertTrue(text.matches("(?s).*collapsable\\s=\\strue.*"));
     }
 
+    public void testCCPreRenderViewEvent() throws Exception {
+        HtmlPage page = getPage("/faces/composite/1462-using.xhtml");
+        String text = page.asText();
+        System.out.println(text);
+        assertTrue(text.matches("(?s).*Message:.*Received.*event:.*javax.faces.event.PreRenderViewEvent.*for.*component:.*javax.faces.component.UIViewRoot.*"));
+
+    }
+
     //issue 1696
     public void testForNoNPE() throws Exception {
         HtmlPage page = getPage("/faces/composite/simpleCompositeComponentUsingPage.xhtml");

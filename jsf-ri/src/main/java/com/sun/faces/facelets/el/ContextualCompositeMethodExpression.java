@@ -129,6 +129,7 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
     private final MethodExpression delegate;
     private final ValueExpression source;
     private final Location location;
+    private final UIComponent cc;
 
 
     // -------------------------------------------------------- Constructors
@@ -140,6 +141,8 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
         this.delegate = delegate;
         this.source = source;
         this.location = null;
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        this.cc = UIComponent.getCurrentCompositeComponent(ctx);
 
     }
 
@@ -147,9 +150,12 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
     public ContextualCompositeMethodExpression(Location location,
                                                MethodExpression delegate) {
 
+
         this.delegate = delegate;
         this.location = location;
         this.source = null;
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        this.cc = UIComponent.getCurrentCompositeComponent(ctx);
     }
 
 
@@ -233,10 +239,10 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
 
         CompositeComponentStackManager manager =
               CompositeComponentStackManager.getManager(ctx);
-        UIComponent cc = null;
+        UIComponent foundCc = null;
 
         if (location != null) {
-            cc = manager.findCompositeComponentUsingLocation(ctx, location);
+            foundCc = manager.findCompositeComponentUsingLocation(ctx, location);
         } else {
             // We need to obtain the Location of the source expression in order
             // to find the composite component that needs to be available within
@@ -244,12 +250,16 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
             if (source instanceof TagValueExpression) {
                 ValueExpression orig = ((TagValueExpression) source).getWrapped();
                 if (orig instanceof ContextualCompositeValueExpression) {
-                    cc = manager.findCompositeComponentUsingLocation(ctx, ((ContextualCompositeValueExpression) orig).getLocation());
+                    foundCc = manager.findCompositeComponentUsingLocation(ctx, ((ContextualCompositeValueExpression) orig).getLocation());
                 }
             }
         }
+        if (null == foundCc) {
+            foundCc = this.cc;
+        }
 
-        return manager.push(cc);
+
+        return manager.push(foundCc);
 
     }
 

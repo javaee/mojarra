@@ -40,10 +40,11 @@
 
 package com.sun.faces.composite;
 
-import javax.el.ValueExpression;
+import java.util.Map;
 import javax.faces.component.UINamingContainer;
 import javax.faces.component.FacesComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ComponentSystemEvent;
 
 @FacesComponent(value = "javaTopLevelComponent")
 public class JavaTopLevelComponent extends UINamingContainer {
@@ -73,6 +74,14 @@ public class JavaTopLevelComponent extends UINamingContainer {
 
     public int getInt() {
         return intv;
+    }
+
+    public void forwardIfNotInRole(ComponentSystemEvent cse) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
+        String message = "Received event: " + cse.getClass().getName() + " for component: " +
+                cse.getComponent().getClass().getName();
+        requestMap.put("message", message);
     }
 
 }

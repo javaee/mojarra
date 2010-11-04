@@ -275,7 +275,7 @@ public class MultiViewHandler extends ViewHandler {
         Util.notNull("context", context);
         Util.notNull("viewId", viewId);
 
-        if (viewId.charAt(0) != '/') {
+        if (0 == viewId.length() || viewId.charAt(0) != '/') {
             String message =
                   MessageUtils.getExceptionMessageString(
                         MessageUtils.ILLEGAL_VIEW_ID_ID,
