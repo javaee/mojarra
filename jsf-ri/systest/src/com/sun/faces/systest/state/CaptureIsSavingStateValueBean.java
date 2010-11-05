@@ -1,3 +1,4 @@
+
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
@@ -38,45 +39,50 @@
  * holder.
  */
 
-package javax.faces.component.visit;
+package com.sun.faces.systest.state;
 
-/**
- * <p class="changed_added_2_0"><span class="changed_modified_2_1">An</span>
- * enum that specifies hints that impact
- * the behavior of a component tree visit.</p>
+import java.util.Map;
+import javax.faces.application.StateManager;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.event.PhaseEvent;
+import javax.faces.event.PhaseId;
+import static javax.faces.application.StateManager.IS_SAVING_STATE;
 
- * @since 2.0
- */
-public enum VisitHint {
+@ManagedBean
+@RequestScoped
+public class CaptureIsSavingStateValueBean {
 
-  /** 
-   * <p class="changed_added_2_0">Hint that indicates that only the
-   * rendered subtrees should be visited.</p>
-   * @since 2.0
-   */
-  SKIP_UNRENDERED,
+    public String getRemoveMessagesFromSession() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        Map<String, Object> sessionMap = context.getExternalContext().getSessionMap();
+        sessionMap.remove(StateManager.IS_SAVING_STATE);
+        sessionMap.remove("beforeMessage");
+        sessionMap.remove("afterMessage");
+        return "";
+    }
 
-  /** 
-   * <p class="changed_added_2_0">Hint that indicates that only
-   * non-transient subtrees should be visited.</p>
-   * @since 2.0
-   */
-  SKIP_TRANSIENT,
+    public void afterPhase(PhaseEvent pe) {
+        if (pe.getPhaseId() == PhaseId.RENDER_RESPONSE) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            Map<Object, Object> contextAttrs = context.getAttributes();
+            Map<String, Object> sessionMap = context.getExternalContext().getSessionMap();
+            sessionMap.put("afterMessage",
+                    null == contextAttrs.get(IS_SAVING_STATE) ? "no value" :
+                        contextAttrs.get(IS_SAVING_STATE));
+        }
+    }
 
-  /** 
-   * <p class="changed_added_2_1">Hint that indicates that components
-   * that normally visit children multiple times (eg. <code>UIData</code>)
-   * in an iterative fashion should instead visit each child only one time.</p>
-   * @since 2.1
-   */
-  SKIP_ITERATION,
-
-  /**
-   * <p class="changed_added_2_0">Hint that indicates that the visit is
-   * being performed as part of lifecycle phase execution and as such
-   * phase-specific actions (initialization) may be taken.</p>
-   * @since 2.0
-   */
-  EXECUTE_LIFECYCLE,
+    public void beforePhase(PhaseEvent pe) {
+        if (pe.getPhaseId() == PhaseId.RENDER_RESPONSE) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            Map<Object, Object> contextAttrs = context.getAttributes();
+            Map<String, Object> sessionMap = context.getExternalContext().getSessionMap();
+            sessionMap.put("beforeMessage",
+                    null == contextAttrs.get(IS_SAVING_STATE) ? "no value" :
+                        contextAttrs.get(IS_SAVING_STATE));
+        }
+    }
 
 }

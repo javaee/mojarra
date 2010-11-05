@@ -55,6 +55,7 @@ import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
+import javax.faces.application.StateManager;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
 import javax.faces.component.visit.VisitHint;
@@ -670,102 +671,29 @@ public class UIData extends UIComponentBase
 
     /**
      * <p class="changed_added_2_1">If this property is set to
-     * <code>true</code>, the following actions must be taken.</p>
-     *
+     * <code>true</code>, the <code>UIData</code> must take steps to
+     * ensure that modifications to its iterated children will be
+     * preserved on a per-row basis.  This allows applications to modify
+     * component properties, such as the style-class, for a specific
+     * row, rather than having such modifications apply to all rows.</p>
+
      * <div class="changed_added_2_1">
 
-     * 	<p>When the {@link #markInitialState} method is called, save the
-     * 	state of the children and descendents of this instance by
-     * 	traversing them as if this component was a normal
-     * 	<code>UIComponent</code> instance, not a <code>UIData</code>,
-     * 	and calling {@link #saveState} on each, collecting the state as
-     * 	the traversal proceeds.  Note that non-iterated facets of the
-     * 	<code>UIData</code> are not included in this traversal.  State
-     * 	collected in this manner will be referred to as "rolled up"
-     * 	state.  Store the resultant rolled up state in a data structure
-     * 	with a scope equivalent to that of an instance variable.  This
-     * 	is necessary so that state can be restored without a dependency
-     * 	on any particular row value.  For discussion, this rolled up
-     * 	state is called the "initial rolled up state".</p>
+     * <p>To accomplish this, <code>UIData</code> must call {@link
+     * StateHolder#saveState} and {@link
+     * TransientStateHolder#saveTransientState} on its children to
+     * capture their state on exiting each row.  When re-entering the
+     * row, {@link StateHolder#resotreState} and {@link
+     * TransientStateHolder#restoreTransientState} must be called in
+     * order to reinitialize the children to the correct state for the
+     * new row.  All of this action must take place during the
+     * processing of {@link #setRowIndex}.</p>
 
-     * <p>When {@link #setRowIndex} is called, the following additional
-     * actions must be taken <em>before</em> any other work as performed
-     * to set the row index.</p>
-
-     * 	<ol type="a">
-
-	  <li><p>Traverse the children as done with {@link
-	  #markInitialState}, saving the state of each child.  Because
-	  the {@link #saveState} calls during this pass happen
-	  <em>after</em> the call to {@link #markInitialState}, the
-	  state saved is the so called "delta" state of each component.
-	  Note that this delta state is saved regardless of whether or
-	  not partial state saving has been enabled or disabled for this
-	  application.  Because this traversal happens during a per-row
-	  operation (in this case, {@link #setRowIndex}) the rolled up
-	  state must be saved in a row-aware data structure.  It is
-	  permissible for the rolled up state to be <code>null</code> or
-	  empty.</p></li>
-
-	  <li><p>If the current row index is not -1, traverse the
-	  children as in the previous step, but, instead of calling
-	  {@link #saveState}, call {@link
-	  javax.faces.component.UIComponent#saveTransientState}.  Save
-	  the rolled up state in a separate row-aware data structure
-	  from the one used in the preceding step.</p></li>
-
-	</ol>
-
-     * <p>Call {@link javax.faces.model.DataModel#setRowIndex} on the
-     * model, as normal.  Store the row data as request scope
-     * attributes, as normal.</p>
-
-     * <p>If the rolled up state saved during the call to {@link
-     * #markInitialState} is not <code>null</code> or empty, perform the
-     * reverse of the two save operations, as described next.  This is
-     * necessary to indicate that transient state from the previous row
-     * must be discarded, in order to not pollute the state of the
-     * current row.</p>
-
-     * 	<ul>
-
-	  <li><p>If the per-row state saved in step a. above (before we
-	  adjusted the row index) is <code>null</code>, traverse the
-	  children and restore the child state using the initial rolled
-	  up state.</p></li>
-
-	  <li><p>If the per-row state saved in step a. above (before we
-	  adjusted the row index) is not <code>null</code>, traverse the
-	  children and restore the child state using the state saved
-	  during step a., using the initial rolled up state only as a
-	  backup in the case that per-row state is not
-	  available.</p></li>
-
-	  <li><p>If the current row index is -1, traverse the children
-	  and pass <code>null</code> to {@link
-	  UIComponent#restoreTransientState}.</p></li>
-
-	  <li><p>If the current row index is not -1, take the following
-	  actions.</p>
-
-	  <ul>
-
-	  <li><p>If the per-row state saved in step b. above is
-	  <code>null</code>, traverse the children and restore the
-	  transient state by passing <code>null</code> to each child's
-	  {@link javax.faces.component.UIComponent#restoreTransientState} method</p></li>
-
-	  <li><p>If the per-row state saved in step b. above is not
-	  <code>null</code>, traverse the children and restore the
-	  transient state from the state saved in step b. above, calling
-	  {@link javax.faces.component.UIComponent#restoreTransientState} on each child, and
-	  passing the appropriate state.</p></li>
-
-	  </ul>
-
-          </li>
-
-	</ul>
+     * <p>Users should consider enabling this feature for cases where
+     * it is necessary to modify properties of <code>UIData</code>'s
+     * children in a row-specific way.  Note, however, that row-level
+     * state saving/restoring does add overhead.  As such, this feature
+     * should be used judiciously.</p>
 
      * </div>
      *
@@ -1525,7 +1453,7 @@ public class UIData extends UIComponentBase
     /**
      * <p class="changed_added_2_1">Override the base class method to
      * take special action if the method is being invoked when {@link
-     * ViewDeclarationLanguage#IS_BUILDING_INITIAL_STATE} is true
+     * StateManager#IS_BUILDING_INITIAL_STATE} is true
      * <strong>and</strong> the <code>rowStatePreserved</code>
      * JavaBeans property for this instance is <code>true</code>.</p>
      *
@@ -1542,7 +1470,7 @@ public class UIData extends UIComponentBase
     {
         if (isRowStatePreserved())
         {
-            if (getFacesContext().getAttributes().containsKey(ViewDeclarationLanguage.IS_BUILDING_INITIAL_STATE))
+            if (getFacesContext().getAttributes().containsKey(StateManager.IS_BUILDING_INITIAL_STATE))
             {
                 _initialDescendantFullComponentState = saveDescendantInitialComponentStates(getFacesContext(), getChildren().iterator(), false);
             }

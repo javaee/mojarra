@@ -51,8 +51,8 @@ import java.io.IOException;
 
 
 /**
- * <p><strong class="changed_modified_2_0">StateManager</strong> directs the 
- * process of saving and
+ * <p><strong class="changed_modified_2_0 changed_modified_2_1">StateManager</strong>
+ * directs the process of saving and
  * restoring the view between requests.  <span class="changed_added_2_0">An
  * implementation
  * of this class must be thread-safe.</span>  The {@link StateManager}
@@ -130,6 +130,30 @@ public abstract class StateManager {
     public static final String FULL_STATE_SAVING_VIEW_IDS_PARAM_NAME =
           "javax.faces.FULL_STATE_SAVING_VIEW_IDS";
 
+    /**
+     * <p class="changed_added_2_1">Marker within the
+     * <code>FacesContext</code> attributes map to indicate we are
+     * saving state.  The implementation must set this marker into the
+     * map <b>before</b> starting the state saving traversal and the marker
+     * must be cleared, in a finally block, <b>after</b> the traversal is
+     * complete.</p>
+     */
+    public static final String IS_SAVING_STATE =
+          "javax.faces.IS_SAVING_STATE";
+
+    /**
+     * <p class="changed_added_2_1">Marker within the
+     * <code>FacesContext</code> attributes map to indicate we are
+     * marking initial state, so the <code>markInitialState()</code>
+     * method of iterating components such as {@link
+     * javax.faces.component.UIData} could recognize this fact and save
+     * the initial state of descendents.</p>
+
+     * @since 2.1
+
+     */
+    public final static String IS_BUILDING_INITIAL_STATE =
+            "javax.faces.IS_BUILDING_INITIAL_STATE";
 
     /**
      * <p>Constant value for the initialization parameter named by

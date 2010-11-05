@@ -42,7 +42,6 @@ package com.sun.faces.application.view;
 
 import java.util.EnumSet;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
@@ -66,6 +65,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.io.IOException;
+import java.util.Collections;
 import javax.faces.application.StateManager;
 import javax.faces.component.ContextCallback;
 import javax.faces.component.visit.VisitCallback;
@@ -74,7 +74,6 @@ import javax.faces.component.visit.VisitHint;
 import javax.faces.view.StateManagementStrategy;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
-import javax.faces.event.PostRestoreStateEvent;
 import javax.faces.view.ViewDeclarationLanguage;
 import javax.faces.view.ViewDeclarationLanguageFactory;
 
@@ -145,8 +144,7 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
 
         final StateContext stateContext = StateContext.getStateContext(context);
 
-        Set<VisitHint> hints = EnumSet.of(VisitHint.EXECUTE_STATE_SAVING);
-        VisitContext visitContext = VisitContext.createVisitContext(context, null, hints);
+        VisitContext visitContext = VisitContext.createVisitContext(context, null, Collections.EMPTY_SET);
         final FacesContext finalContext = context;
         viewRoot.visitTree(visitContext, new VisitCallback() {
             public VisitResult visit(VisitContext context, UIComponent target) {

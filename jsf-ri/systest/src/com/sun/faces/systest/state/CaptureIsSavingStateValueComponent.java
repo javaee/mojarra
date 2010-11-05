@@ -1,3 +1,4 @@
+
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
@@ -38,45 +39,29 @@
  * holder.
  */
 
-package javax.faces.component.visit;
+package com.sun.faces.systest.state;
 
-/**
- * <p class="changed_added_2_0"><span class="changed_modified_2_1">An</span>
- * enum that specifies hints that impact
- * the behavior of a component tree visit.</p>
+import java.util.Map;
+import javax.faces.component.FacesComponent;
+import javax.faces.component.UINamingContainer;
+import javax.faces.context.FacesContext;
+import static javax.faces.application.StateManager.IS_SAVING_STATE;
 
- * @since 2.0
- */
-public enum VisitHint {
 
-  /** 
-   * <p class="changed_added_2_0">Hint that indicates that only the
-   * rendered subtrees should be visited.</p>
-   * @since 2.0
-   */
-  SKIP_UNRENDERED,
+@FacesComponent("captureIsSavingStateValueComponent")
+public class CaptureIsSavingStateValueComponent extends UINamingContainer {
 
-  /** 
-   * <p class="changed_added_2_0">Hint that indicates that only
-   * non-transient subtrees should be visited.</p>
-   * @since 2.0
-   */
-  SKIP_TRANSIENT,
+    @Override
+    public Object saveState(FacesContext context) {
+        Object result = super.saveState(context);
 
-  /** 
-   * <p class="changed_added_2_1">Hint that indicates that components
-   * that normally visit children multiple times (eg. <code>UIData</code>)
-   * in an iterative fashion should instead visit each child only one time.</p>
-   * @since 2.1
-   */
-  SKIP_ITERATION,
+        Map<Object, Object> contextAttrs = context.getAttributes();
+        Map<String, Object> sessionMap = context.getExternalContext().getSessionMap();
+        sessionMap.put(IS_SAVING_STATE, contextAttrs.get(IS_SAVING_STATE));
+        
+        return result;
+    }
 
-  /**
-   * <p class="changed_added_2_0">Hint that indicates that the visit is
-   * being performed as part of lifecycle phase execution and as such
-   * phase-specific actions (initialization) may be taken.</p>
-   * @since 2.0
-   */
-  EXECUTE_LIFECYCLE,
+    
 
 }

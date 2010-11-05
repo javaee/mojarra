@@ -125,21 +125,28 @@ public class StateManagerImpl extends StateManager {
         if (vdl != null) {
             strategy = vdl.getStateManagementStrategy(context, viewId);
         }
+        Map<Object, Object> contextAttributes = context.getAttributes();
+        try {
+            contextAttributes.put(StateManager.IS_SAVING_STATE, Boolean.TRUE);
 
-        if (null != strategy) {
-            result = strategy.saveView(context);
-        } else {
-            // honor the requirement to check for id uniqueness
-            Util.checkIdUniqueness(context,
-                                   viewRoot,
-                                   new HashSet<String>(viewRoot.getChildCount() << 1));
+            if (null != strategy) {
+                result = strategy.saveView(context);
+            } else {
+                // honor the requirement to check for id uniqueness
+                Util.checkIdUniqueness(context,
+                        viewRoot,
+                        new HashSet<String>(viewRoot.getChildCount() << 1));
 
-            List<TreeNode> treeList = new ArrayList<TreeNode>(32);
-            Object state = viewRoot.processSaveState(context);
-            captureChild(treeList, 0, viewRoot);
-            Object[] tree = treeList.toArray();
+                List<TreeNode> treeList = new ArrayList<TreeNode>(32);
+                Object state = viewRoot.processSaveState(context);
+                captureChild(treeList, 0, viewRoot);
+                Object[] tree = treeList.toArray();
 
-            result = new Object[]{tree, state};
+                result = new Object[]{tree, state};
+            }
+        }
+        finally {
+            contextAttributes.remove(StateManager.IS_SAVING_STATE);
         }
         
         return result;

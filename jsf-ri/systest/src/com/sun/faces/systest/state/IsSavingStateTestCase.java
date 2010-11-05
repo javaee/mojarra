@@ -1,3 +1,4 @@
+
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
@@ -38,45 +39,37 @@
  * holder.
  */
 
-package javax.faces.component.visit;
+package com.sun.faces.systest.state;
 
-/**
- * <p class="changed_added_2_0"><span class="changed_modified_2_1">An</span>
- * enum that specifies hints that impact
- * the behavior of a component tree visit.</p>
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.sun.faces.htmlunit.AbstractTestCase;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
- * @since 2.0
- */
-public enum VisitHint {
 
-  /** 
-   * <p class="changed_added_2_0">Hint that indicates that only the
-   * rendered subtrees should be visited.</p>
-   * @since 2.0
-   */
-  SKIP_UNRENDERED,
 
-  /** 
-   * <p class="changed_added_2_0">Hint that indicates that only
-   * non-transient subtrees should be visited.</p>
-   * @since 2.0
-   */
-  SKIP_TRANSIENT,
+public class IsSavingStateTestCase extends AbstractTestCase {
 
-  /** 
-   * <p class="changed_added_2_1">Hint that indicates that components
-   * that normally visit children multiple times (eg. <code>UIData</code>)
-   * in an iterative fashion should instead visit each child only one time.</p>
-   * @since 2.1
-   */
-  SKIP_ITERATION,
 
-  /**
-   * <p class="changed_added_2_0">Hint that indicates that the visit is
-   * being performed as part of lifecycle phase execution and as such
-   * phase-specific actions (initialization) may be taken.</p>
-   * @since 2.0
-   */
-  EXECUTE_LIFECYCLE,
+    public IsSavingStateTestCase(String name) {
+        super(name);
+    }
 
+    public static Test suite() {
+        return (new TestSuite(IsSavingStateTestCase.class));
+    }
+
+    public void test01() throws Exception {
+
+        HtmlPage page = getPage("/faces/state/isSavingState.xhtml");
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("next");
+        page = button.click();
+        assertTrue(page.asText().matches("(?s).*beforeMessage:.*no.*value.*duringMessage:.*true.*afterMessage:.*no.*value.*"));
+        page = getPage("/faces/state/isSavingState2.xhtml");
+        String text = page.asText();
+        assertFalse(page.asText().matches("(?s).*beforeMessage:.*no.*value.*duringMessage:.*true.*afterMessage:.*no.*value.*"));
+        assertTrue(page.asText().matches("(?s).*beforeMessage:.*duringMessage:.*afterMessage:.*"));
+
+    }
 }
