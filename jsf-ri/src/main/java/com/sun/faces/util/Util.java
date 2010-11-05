@@ -750,6 +750,13 @@ public class Util {
         return (mapping.charAt(0) == '/');
     }
 
+    public static boolean isSpecialAttributeName(String name) {
+        boolean isSpecialAttributeName = name.equals("action")  ||
+                            name.equals("actionListener") || name.equals("validator")
+                            || name.equals("valueChangeListener");
+        return isSpecialAttributeName;
+    }
+
 
     /**
      * @param ctx the {@link FacesContext} for the current request

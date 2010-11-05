@@ -1041,8 +1041,10 @@ public class ApplicationImpl extends Application {
             defaultValue = cur.getValue("default");
             if (null != defaultValue) {
                 key = cur.getName();
+                boolean isLiteralText = false;
                 if (defaultValue instanceof ValueExpression) {
-                    if (!((ValueExpression)defaultValue).isLiteralText()) {
+                    isLiteralText = ((ValueExpression)defaultValue).isLiteralText();
+                    if (isLiteralText) {
                         defaultValue = ((ValueExpression)defaultValue).getValue(context.getELContext());
                     }
                 }
@@ -1062,7 +1064,14 @@ public class ApplicationImpl extends Application {
                     }
                     attributesWithDeclaredDefaultValues.add(key);
 
-                    attrs.put(key, defaultValue);
+                    // Only store the attribute if it is literal text.  If it
+                    // is a ValueExpression, it will be handled explicitly in
+                    // CompositeComponentAttributesELResolver.ExpressionEvalMap.get().
+                    // If it is a MethodExpression, it will be dealt with in
+                    // retargetMethodExpressions.
+                    if (isLiteralText) {
+                        attrs.put(key, defaultValue);
+                    }
                 }
             }
         }

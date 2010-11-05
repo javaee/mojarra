@@ -1238,11 +1238,8 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             ValueExpression ve = (ValueExpression) pd.getValue("targetAttributeName");
             String targetAttributeName = ((ve != null) ? (String) ve.getValue(context.getELContext()) : "");
 
-            boolean isSpecialAttributeName = name.equals("action") ||
-                            name.equals("actionListener") || name.equals("validator")
-                            || name.equals("valueChangeListener") || targetAttributeName.equals("action") ||
-                            targetAttributeName.equals("actionListener") || targetAttributeName.equals("validator")
-                            || targetAttributeName.equals("valueChangeListener");
+            boolean isSpecialAttributeName = Util.isSpecialAttributeName(name) ||
+                    Util.isSpecialAttributeName(targetAttributeName);
             result = (!isSpecialAttributeName &&
                      (pd.getValue("type") != null ||
                       pd.getValue("method-signature") == null));
