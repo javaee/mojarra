@@ -592,6 +592,9 @@ javax.faces.level=ALL
         <replace file="tmp.bnd"
                  token="@impl.version@"
                  value="${impl.version}"/>
+        <replace file="tmp.bnd"
+                 token="@full.impl.version@"
+                 value="${full.impl.version}"/>
         <if>
             <equals arg1="${build.type}" arg2=""/>
             <then>
