@@ -101,11 +101,11 @@ public class StylesheetRenderer extends ScriptStyleBaseRenderer {
         writer.startElement("link", component);
         writer.writeAttribute("type", "text/css", "type");
         writer.writeAttribute("rel", "stylesheet", "rel");
-        writer.writeURIAttribute("href",
-                              ((resource != null)
-                                  ? resource.getRequestPath()
-                                  : "RES_NOT_FOUND"),
-                              "href");
+        String resourceUrl = "RES_NOT_FOUND";
+        if (resource != null) {
+        	resourceUrl = context.getExternalContext().encodeResourceURL(resource.getRequestPath());
+        }
+        writer.writeURIAttribute("href", resourceUrl, "href");
         if (media != null) {
             writer.writeAttribute("media", media, "media");
         }
