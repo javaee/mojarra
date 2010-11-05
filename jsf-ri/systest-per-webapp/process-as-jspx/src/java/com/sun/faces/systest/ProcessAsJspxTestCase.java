@@ -41,7 +41,8 @@
 package com.sun.faces.systest;
 
 
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.Page;
+import com.gargoylesoftware.htmlunit.WebResponse;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -138,6 +139,17 @@ public class ProcessAsJspxTestCase extends AbstractTestCase {
 
         String xml = getRawMarkup("/faces/xmlviewWithDoctype.view.xml");
         assertTrue(xml.matches("(?s).*<!DOCTYPE.*html.*PUBLIC.*\"-//W3C//DTD.*XHTML.*1.0.*Transitional//EN\".*\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"><html.*xmlns=\"http://www.w3.org/1999/xhtml\".*"));
+    }
+
+    public void testProcessAsXmlMathML() throws Exception {
+
+        String xml = getRawMarkup("/faces/mathmlview.view.xml");
+        assertTrue(xml.matches("(?s).*<html.*xmlns=\"http://www.w3.org/1999/xhtml\">.*<head>.*<title>.*Raw.*XML.*View.*with.*MathML</title>.*</head>.*<body>.*<p>.*<math.*xmlns=\"http://www.w3.org/1998/Math/MathML\">.*<msup>.*<msqrt>.*<mrow>.*<mi>.*a</mi>.*<mo>.*\\+</mo>.*<mi>.*b</mi>.*</mrow>.*</msqrt>.*<mn>.*27</mn>.*</msup>.*</math>.*</p>.*</body>.*</html>.*"));
+
+        Page page = client.getPage(getURL("/faces/mathmlview.view.xml"));
+        WebResponse response = page.getWebResponse();
+        assertEquals("Content-type should be text/xml", "text/xml", response.getContentType());
+
     }
 
     public void testProcessAsJspx() throws Exception {
