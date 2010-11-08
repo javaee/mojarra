@@ -52,8 +52,8 @@ import java.io.Serializable;
  * <div class="changed_added_2_1">
  * 
  * <p>The values retrieved or saved through {@link
- * #getTransient(java.io.Serializable)} or {@link
- * #putTransient(java.io.Serializable, Object value)} will not be
+ * #getTransient} or {@link
+ * #putTransient)} will not be
  * preserved between requests.</p>
  * 
  * </div>

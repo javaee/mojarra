@@ -683,7 +683,7 @@ public class UIData extends UIComponentBase
      * StateHolder#saveState} and {@link
      * TransientStateHolder#saveTransientState} on its children to
      * capture their state on exiting each row.  When re-entering the
-     * row, {@link StateHolder#resotreState} and {@link
+     * row, {@link StateHolder#restoreState} and {@link
      * TransientStateHolder#restoreTransientState} must be called in
      * order to reinitialize the children to the correct state for the
      * new row.  All of this action must take place during the

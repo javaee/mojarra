@@ -95,12 +95,6 @@ public abstract class StateManagementStrategy {
      * and all of the elements within the data structure must also be
      * <code>Serializable</code>.</p>
 
-     * <p class="changed_added_2_1">The 
-     * {@link javax.faces.component.visit.VisitContext} used during
-     * the state saving tree visit must specify the
-     * {@link javax.faces.component.visit.VisitHint#EXECUTE_STATE_SAVING}
-     * visit hint.</p>
-
      * </div>
 
      * @param context the <code>FacesContext</code> for this request.
