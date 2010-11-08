@@ -107,6 +107,7 @@
     <property name="impl.version" value="${impl.version.number}-${build.type}"/>
     <property name="full.impl.version" value="${impl.version.number} (${build.number}-${build.type})"/>
     <property name="snapshot.version" value="${impl.version.number}-SNAPSHOT"/>
+    <property name="groupId" value="com.sun.faces"/>
 
     <!-- Environment -->
     <property environment="myenv" />

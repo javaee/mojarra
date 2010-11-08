@@ -85,7 +85,7 @@
 
     <macrodef name="mvn.deploy.release.local">
         <attribute name="type"/>
-        <attribute name="groupId" default="com.sun.faces"/>
+        <attribute name="groupId" default="${groupId}"/>
         <attribute name="version" default="${impl.version.number}"/>
         <sequential>
             <do.mvn type="@{type}" groupId="@{groupId}" goal="install" version="@{version}"/>
@@ -94,7 +94,7 @@
 
     <macrodef name="mvn.deploy.release">
         <attribute name="type"/>
-        <attribute name="groupId" default="com.sun.faces"/>
+        <attribute name="groupId" default="${groupId}"/>
         <attribute name="version" default="${impl.version.number}"/>
         <sequential>
             <do.mvn type="@{type}" groupId="@{groupId}" goal="deploy" version="@{version}"/>
@@ -107,7 +107,7 @@
         <attribute name="template.file"/>
         <attribute name="output.file"/>
         <attribute name="version"/>
-        <attribute name="groupId" default="com.sun.faces"/>
+        <attribute name="groupId" default="${groupId}"/>
         <sequential>
             <copy file="@{template.file}" tofile="@{output.file}"/>
             <replace file="@{output.file}"
@@ -123,7 +123,7 @@
         <attribute name="type"/>
         <attribute name="version"/>
         <attribute name="goal"/>
-        <attribute name="groupId" default="com.sun.faces"/>
+        <attribute name="groupId" default="${groupId}"/>
         <sequential>
             <if>
                 <equals arg1="@{type}" arg2="api"/>
