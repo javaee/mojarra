@@ -43,15 +43,15 @@
 
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.sun.faces</groupId>
+    <groupId>@groupId@</groupId>
     <artifactId>jsf-impl</artifactId>
     <version>@version@</version>
     <packaging>jar</packaging>
     <name>
-        Sun's implementation of the JSF 2.1 specification.
+        Oracle's implementation of the JSF 2.1 specification.
     </name>
     <description>
-        This is the master POM file for Sun's Implementation of the JSF 2.1 Specification.
+        This is the master POM file for Oracle's Implementation of the JSF 2.1 Specification.
     </description>
     <url>http://java.sun.com/javaee/javaserverfaces/</url>
     <licenses>
@@ -172,7 +172,7 @@
     </issueManagement>
     <mailingLists>
         <mailingList>
-            <name>Sun's JavaServer Faces Implementation Dev List</name>
+            <name>Oracle's JavaServer Faces Implementation Dev List</name>
             <post>dev@javaserverfaces.dev.java.net</post>
             <archive>
                 https://javaserverfaces.dev.java.net/servlets/SummarizeList?listName=dev
