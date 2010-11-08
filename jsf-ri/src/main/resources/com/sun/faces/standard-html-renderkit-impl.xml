@@ -98,15 +98,9 @@
     <output-doctype-renderer-class>
         com.sun.faces.renderkit.html_basic.DoctypeRenderer
     </output-doctype-renderer-class>
-    <output-html-renderer-class>
-        com.sun.faces.renderkit.html_basic.HtmlRenderer
-    </output-html-renderer-class>
     <output-head-renderer-class>
         com.sun.faces.renderkit.html_basic.HeadRenderer
     </output-head-renderer-class>
-    <output-title-renderer-class>
-        com.sun.faces.renderkit.html_basic.TitleRenderer
-    </output-title-renderer-class>
     <output-script-renderer-class>
         com.sun.faces.renderkit.html_basic.ScriptRenderer
     </output-script-renderer-class>

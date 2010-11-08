@@ -1027,21 +1027,6 @@
 
     <component>
         <description>NONE</description>
-        <display-name>html</display-name>
-        <component-type>javax.faces.OutputHtml</component-type>
-        <component-class>javax.faces.component.html.Html</component-class>
-
-        <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
-        <xi:include href="document-props.xml" xpointer="xpointer(/root/*)"/>
-
-        <component-extension>
-            <base-component-type>javax.faces.Output</base-component-type>
-            <renderer-type>javax.faces.Html</renderer-type>
-        </component-extension>
-    </component>
-
-    <component>
-        <description>NONE</description>
         <display-name>head</display-name>
         <component-type>javax.faces.OutputHead</component-type>
         <component-class>javax.faces.component.html.HtmlHead</component-class>
@@ -1052,21 +1037,6 @@
         <component-extension>
             <base-component-type>javax.faces.Output</base-component-type>
             <renderer-type>javax.faces.Head</renderer-type>
-        </component-extension>
-    </component>
-
-    <component>
-        <description>NONE</description>
-        <display-name>title</display-name>
-        <component-type>javax.faces.OutputTitle</component-type>
-        <component-class>javax.faces.component.html.HtmlTitle</component-class>
-
-        <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
-        <xi:include href="document-props.xml" xpointer="xpointer(/root/*)"/>
-
-        <component-extension>
-            <base-component-type>javax.faces.Output</base-component-type>
-            <renderer-type>javax.faces.Title</renderer-type>
         </component-extension>
     </component>
 
@@ -3561,70 +3531,6 @@ the literal string "<code>head</code>" as the last argument.</p>
             </renderer-extension>
         </renderer>
 
-<renderer>
-            <description><![CDATA[<div class="changed_added_2_1">
-
-<p><span class="changed_added_2_1">Render</span> the markup for
-a <code>&lt;html&gt;</code> element.</p>
-
-      <p>Decode Behavior</p>
-
-      <ul>
-
-<p>No action is required during decode for this renderer.</p>
-
-</ul>
-
-      <p>Encode Behavior</p>
-
-      <ul>
-
-<p>Render the starting <code>&lt;html&gt;</code> element tag.  Any
-attributes declared on the element must be passed through unmodified to
-the rendered output.  As close as possible rendering the closing
-<code>&lt;/html&gt;</code> element tag, render any resources that have
-been targeted for this "html" element:
-
-      <ul>
-      <li>Obtain a <code>UIViewRoot</code> instance.</li>
-      <li>Obtain a <code>List</code> of component resources targeted for
-      this "html" element with a call to <code>UIViewRoot.getComponentResources()</code>
-      with the <code>String "html"</code> as the argument.</li>
-      <li>Iterate over the returned <code>List</code> of <code>UIComponent</code> instances
-      and call <code>encodeAll</code> on each <code>UIComponent</code> instance. 
-
-<p>Any attributes declared on the element must be passed through
-unmodified to the rendered output.</p>
-
-      </ul>
-
-      <p>Note that due to the cascading nature of CSS files, the order
-      in which these files have been added to the view must be preserved
-      when rendering the references to the files within the
-      <code>&lt;html&gt;</code> element.  Also, the end result of the
-      rendered <code>&lt;html&gt;</code> section must be that any CSS
-      files referenced due to previous calls to
-      <code>addComponentResource()</code> do not adversely interfere
-      with any CSS files manually placed in this section by the page
-      author.</p>
-
-      <p>Render the ending <code>&lt;/html&gt;</code> element tag.</p>
-
-</div>]]></description>
-            <component-family>javax.faces.Output</component-family>
-            <renderer-type>javax.faces.Html</renderer-type>
-            <renderer-class>
-               <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/output-html-renderer-class/text())"/>
-            </renderer-class>
-
-            <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
-            <xi:include href="document-attrs.xml" xpointer="xpointer(/root/*)"/>
-
-            <renderer-extension>
-                <jsp-ignore>true</jsp-ignore>
-                <tag-name>html</tag-name>
-            </renderer-extension>
-        </renderer>
 
 <renderer>
             <description><![CDATA[<div class="changed_added_2_1">
@@ -3735,48 +3641,6 @@ unmodified to the rendered output.</p>
             <renderer-extension>
                 <jsp-ignore>true</jsp-ignore>
                 <tag-name>head</tag-name>
-            </renderer-extension>
-        </renderer>
-
-        <renderer>
-            <description><![CDATA[<div class="changed_added_2_1">
-
-<p><span class="changed_added_2_1">Render</span> the markup for
-a <code>&lt;title&gt;</code> element.</p>
-
-      <p>Decode Behavior</p>
-
-      <ul>
-
-<p>No action is required during decode for this renderer.</p>
-
-</ul>
-
-      <p>Encode Behavior</p>
-
-      <ul>
-
-<p>Render the starting <code>&lt;title&gt;</code> element tag.  Any
-attributes declared on the element must be passed through unmodified to
-the rendered output.</p>
-
-      <p>Render the ending <code>&lt;/title&gt;</code> element tag.</p>
-
-</div>
-
-</div>]]></description>
-            <component-family>javax.faces.Output</component-family>
-            <renderer-type>javax.faces.Title</renderer-type>
-            <renderer-class>
-               <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/output-title-renderer-class/text())"/>
-            </renderer-class>
-
-            <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
-            <xi:include href="document-attrs.xml" xpointer="xpointer(/root/*)"/>
-
-            <renderer-extension>
-                <jsp-ignore>true</jsp-ignore>
-                <tag-name>title</tag-name>
             </renderer-extension>
         </renderer>
 

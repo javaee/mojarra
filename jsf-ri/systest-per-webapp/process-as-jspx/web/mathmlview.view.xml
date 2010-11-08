@@ -45,11 +45,11 @@
 <f:view xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
         contentType="text/xml">
-    <h:html xmlns="http://www.w3.org/1999/xhtml">
+    <html xmlns="http://www.w3.org/1999/xhtml">
 
         <h:head>
 
-          <h:title>Raw XML View with MathML</h:title>
+          <title>Raw XML View with MathML</title>
 
         </h:head>
 
@@ -73,7 +73,7 @@
 
         </h:body>
 
-    </h:html>
+    </html>
 
 </f:view>
 

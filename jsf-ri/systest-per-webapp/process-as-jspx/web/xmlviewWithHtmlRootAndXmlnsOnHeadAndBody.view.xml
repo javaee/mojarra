@@ -41,7 +41,7 @@
 
 -->
 
-<h:html xmlns:f="http://java.sun.com/jsf/core"
+<html xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html">
 
         <h:head xmlns="http://www.w3.org/1999/xhtml"><title>XML View with HTML root element</title></h:head>
@@ -52,7 +52,7 @@
 
         </h:body>
 
-</h:html>
+</html>
 
 
 
