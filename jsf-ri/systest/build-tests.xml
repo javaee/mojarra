@@ -409,7 +409,8 @@
                                    com/sun/faces/jsptest/ConverterTestCase.class,
                                    com/sun/faces/jsptest/IdRefTestCase.class,
                                    com/sun/faces/jsptest/ForEachTestCase.class,
-                                   com/sun/faces/jsptest/SetPropertyTestCase.class"/>
+                                   com/sun/faces/jsptest/SetPropertyTestCase.class,
+                                   com/sun/faces/jsptest/JspIntegrationTestCase2.class"/>
                                <!--
                                    com/sun/faces/jsptest/PrependIdTestCase.class,
                                -->
@@ -1277,7 +1278,7 @@
 
     <target name="passthru">
 
-      <antcall target="test.composite" />
+      <antcall target="test.jsp" />
 
     </target>
 
