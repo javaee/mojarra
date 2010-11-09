@@ -40,8 +40,6 @@
 
 package javax.faces.component;
 
-import java.io.Serializable;
-
 /**
  * <p class="changed_added_2_1">Define a <code>Map</code>-like contract
  * that makes it easier for components to implement {@link
@@ -53,7 +51,7 @@ import java.io.Serializable;
  * 
  * <p>The values retrieved or saved through {@link
  * #getTransient} or {@link
- * #putTransient)} will not be
+ * #putTransient} will not be
  * preserved between requests.</p>
  * 
  * </div>
@@ -73,7 +71,7 @@ public interface TransientStateHelper extends TransientStateHolder
     
     /**
      * <p class="changed_added_2_1">Performs the same logic as {@link
-     * #getTransient(java.io.Serializable)} } but if no value is found, this
+     * #getTransient} } but if no value is found, this
      * will return the specified <code>defaultValue</code></p>
 
      * @param key the key for which the value should be returned.
