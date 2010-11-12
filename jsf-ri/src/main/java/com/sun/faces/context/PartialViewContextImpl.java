@@ -105,6 +105,7 @@ import com.sun.faces.util.Util;
     public boolean isAjaxRequest() {
 
         assertNotReleased();
+        ctx = getFacesContext();
         if (ajaxRequest == null) {
             ajaxRequest = "partial/ajax".equals(ctx.
                 getExternalContext().getRequestHeaderMap().get("Faces-Request"));
@@ -120,6 +121,7 @@ import com.sun.faces.util.Util;
     public boolean isPartialRequest() {
 
         assertNotReleased();
+        ctx = getFacesContext();
         if (partialRequest == null) {
             partialRequest = isAjaxRequest() ||
                     "partial/process".equals(ctx.
@@ -137,6 +139,7 @@ import com.sun.faces.util.Util;
     public boolean isExecuteAll() {
 
         assertNotReleased();
+        ctx = getFacesContext();
         String execute = ctx.
             getExternalContext().getRequestParameterMap()
                 .get(PARTIAL_EXECUTE_PARAM_NAME);
@@ -151,6 +154,7 @@ import com.sun.faces.util.Util;
     public boolean isRenderAll() {
 
         assertNotReleased();
+        ctx = getFacesContext();
         if (renderAll == null) {
             String render = ctx.
                 getExternalContext().getRequestParameterMap()
@@ -186,6 +190,7 @@ import com.sun.faces.util.Util;
     public Collection<String> getExecuteIds() {
 
         assertNotReleased();
+        ctx = getFacesContext();
         if (executeIds != null) {
             return executeIds;
         }
@@ -225,6 +230,7 @@ import com.sun.faces.util.Util;
      */
     @Override
     public void processPartial(PhaseId phaseId) {
+        ctx = getFacesContext();
         PartialViewContext pvc = ctx.getPartialViewContext();
         Collection <String> executeIds = pvc.getExecuteIds();
         Collection <String> renderIds = pvc.getRenderIds();
@@ -455,6 +461,14 @@ import com.sun.faces.util.Util;
             throw new IllegalStateException();
         }
     }
+
+    private FacesContext getFacesContext() {
+        if (ctx == null || ctx.isReleased()) {
+            ctx = FacesContext.getCurrentInstance();
+        }
+        return ctx;
+    }
+
 
 
     // ----------------------------------------------------------- Inner Classes
