@@ -155,11 +155,13 @@ import java.util.ResourceBundle;
         String bundleName;
 
         // see if we have a user-provided bundle
-        if (null != (bundleName = getApplication().getMessageBundle())) {
+        Application app = getApplication();
+	Class appClass = app.getClass();
+        if (null != (bundleName = app.getMessageBundle())) {
             if (null != 
                 (bundle = 
                     ResourceBundle.getBundle(bundleName, locale,
-                      getCurrentLoader(bundleName)))) {
+				     getCurrentLoader(appClass)))) {
                 // see if we have a hit
                 try {
                     summary = bundle.getString(messageId);
@@ -176,7 +178,7 @@ import java.util.ResourceBundle;
             // see if we have a summary in the app provided bundle
             bundle = ResourceBundle.getBundle(FacesMessage.FACES_MESSAGES, 
                                               locale,
-                                              getCurrentLoader(bundleName));
+                                              getCurrentLoader(appClass));
             if (null == bundle) {
                 throw new NullPointerException();
             }
@@ -195,7 +197,7 @@ import java.util.ResourceBundle;
             // see if we have a summary in the app provided bundle
             bundle = ResourceBundle.getBundle(MOJARRA_RESOURCE_BASENAME,
                                               locale,
-                                              getCurrentLoader(bundleName));
+                                              getCurrentLoader(appClass));
             if (null == bundle) {
                 throw new NullPointerException();
             }
@@ -288,11 +290,11 @@ import java.util.ResourceBundle;
         return (afactory.getApplication());
     }
 
-    protected static ClassLoader getCurrentLoader(Object fallbackClass) {
+    protected static ClassLoader getCurrentLoader(Class fallbackClass) {
         ClassLoader loader =
             Thread.currentThread().getContextClassLoader();
         if (loader == null) {
-            loader = fallbackClass.getClass().getClassLoader();
+            loader = fallbackClass.getClassLoader();
         }
         return loader;
     }
