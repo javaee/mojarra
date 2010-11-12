@@ -132,6 +132,10 @@
                value="com/sun/faces/systest/ProcessAsJspxTestCase.class" />
     <property  name="request-char-encoding-no-session"
                value="com/sun/faces/systest/NoSessionCharEncTestCase.class" />
+    <property  name="request-char-encoding-no-session"
+               value="com/sun/faces/systest/NoSessionCharEncTestCase.class" />
+    <property  name="bogus-render-kit-id"
+               value="com/sun/faces/systest/render/BogusRenderKitIdTestCase.class" />
 
     <!--
         EXCLUDED APPLICATIONS:

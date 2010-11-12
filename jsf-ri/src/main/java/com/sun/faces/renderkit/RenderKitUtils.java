@@ -209,13 +209,30 @@ public class RenderKitUtils {
                       FactoryFinder
                             .getFactory(FactoryFinder.RENDER_KIT_FACTORY);
                 if (factory == null) {
-                    throw new IllegalStateException();
+                    throw new FacesException("Unable to locate RenderKitFactory for " + FactoryFinder.RENDER_KIT_FACTORY);
                 } else {
                     RequestStateManager.set(context,
                                             RequestStateManager.RENDER_KIT_IMPL_REQ,
                                             factory);
                 }
                 renderKit = factory.getRenderKit(context, renderKitId);
+                if (renderKit == null) {
+                    if (LOGGER.isLoggable(Level.SEVERE)) {
+                        LOGGER.log(Level.SEVERE, "Unable to locate renderkit "
+                                + "instance for render-kit-id {0}.  Using {1} instead.",
+                                new String [] { renderKitId,
+                                  RenderKitFactory.HTML_BASIC_RENDER_KIT} );
+                    }
+                    renderKitId = RenderKitFactory.HTML_BASIC_RENDER_KIT;
+                    UIViewRoot root = context.getViewRoot();
+                    if (null != root) {
+                        root.setRenderKitId(renderKitId);
+                    }
+                }
+                renderKit = factory.getRenderKit(context, renderKitId);
+                if (renderKit == null) {
+                    throw new FacesException("Unable to locate renderkit instance for render-kit-id " + renderKitId);
+                }
             }
         }
         return renderKit.getResponseStateManager();

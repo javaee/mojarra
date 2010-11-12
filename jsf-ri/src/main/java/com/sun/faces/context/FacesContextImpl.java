@@ -74,6 +74,7 @@ import com.sun.faces.el.ELContextImpl;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import com.sun.faces.renderkit.RenderKitUtils;
+import javax.faces.FacesException;
 
 public class FacesContextImpl extends FacesContext {
 
@@ -405,6 +406,14 @@ public class FacesContextImpl extends FacesContext {
             return lastRk;
         } else {
             lastRk = rkFactory.getRenderKit(this, renderKitId);
+            if (lastRk == null) {
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    LOGGER.log(Level.SEVERE, "Unable to locate renderkit "
+                            + "instance for render-kit-id {0}.  Using {1} instead.",
+                            new String[]{renderKitId,
+                                RenderKitFactory.HTML_BASIC_RENDER_KIT});
+                }
+            }
             lastRkId = renderKitId;
             return lastRk;
         }

@@ -112,7 +112,8 @@
                    suppress-xml-decl,
                    replace-vdl,
                    process-as-jspx,
-                   request-char-encoding-no-session"/>
+                   request-char-encoding-no-session,
+                   bogus-render-kit-id"/>
     <!--
 
        EXCLUDED APPLICATIONS:

@@ -3,10 +3,34 @@
     <type>org.netbeans.modules.ant.freeform</type>
     <configuration>
         <general-data xmlns="http://www.netbeans.org/ns/freeform-project/1">
+            <name>JSF-RI-Systest</name>
+        </general-data>
+        <general-data xmlns="http://www.netbeans.org/ns/freeform-project/2">
             <!-- Do not use Project Properties customizer when editing this file manually. -->
             <name>JSF-RI-Systest</name>
             <properties/>
             <folders>
+                <source-folder>
+                    <label>src</label>
+                    <type>java</type>
+                    <location>src</location>
+                    <encoding>MacRoman</encoding>
+                </source-folder>
+                <source-folder>
+                    <label>bogus-render-kit-id</label>
+                    <type>java</type>
+                    <location>/Users/edburns/Documents/chaff/netbeans-hack-links/bogus-render-kit-id</location>
+                    <encoding>MacRoman</encoding>
+                </source-folder>
+                <source-folder>
+                    <label>bogus-render-kit-id</label>
+                    <location>/Users/edburns/Documents/chaff/netbeans-hack-links/bogus-render-kit-id</location>
+                </source-folder>
+                <source-folder>
+                    <label>JSF-RI-Systest</label>
+                    <location>.</location>
+                    <encoding>MacRoman</encoding>
+                </source-folder>
                 <source-folder>
                     <label>web</label>
                     <type>doc_root</type>
@@ -16,11 +40,6 @@
                     <label>WEB-INF</label>
                     <type>web_inf</type>
                     <location>web/WEB-INF</location>
-                </source-folder>
-                <source-folder>
-                    <label>src</label>
-                    <type>java</type>
-                    <location>src</location>
                 </source-folder>
             </folders>
             <ide-actions>
@@ -58,6 +77,10 @@
                         <label>src</label>
                         <location>src</location>
                     </source-folder>
+                    <source-folder style="packages">
+                        <label>bogus-render-kit-id</label>
+                        <location>/Users/edburns/Documents/chaff/netbeans-hack-links/bogus-render-kit-id</location>
+                    </source-folder>
                     <source-file>
                         <location>build.xml</location>
                     </source-file>
@@ -76,6 +99,7 @@
         <java-data xmlns="http://www.netbeans.org/ns/freeform-project-java/1">
             <compilation-unit>
                 <package-root>src</package-root>
+                <package-root>/Users/edburns/Documents/chaff/netbeans-hack-links/bogus-render-kit-id</package-root>
                 <classpath mode="compile">../../dependencies/jars/junit-3.8.1.jar:../build/classes:../../jsf-api/build/classes:../../dependencies/htmlunit-2.4/lib/htmlunit-2.4.jar:../../lib/jsf-extensions-test-time.jar:../../dependencies/jars/el-api-2.1.2-b05.jar:../../dependencies/jars/jsp-api-2.1.jar:/Users/edburns/Downloads/mvnrepo/org/apache/ant/ant/1.7.1/ant-1.7.1.jar:../../dependencies/jars/servlet-api-2.5.jar</classpath>
                 <source-level>1.5</source-level>
             </compilation-unit>
@@ -92,7 +116,7 @@
         <web-data xmlns="http://www.netbeans.org/ns/freeform-project-web/1">
             <web-module>
                 <doc-root>web</doc-root>
-                <classpath/>
+                <context-path/>
                 <j2ee-spec-level>1.5</j2ee-spec-level>
             </web-module>
         </web-data>

@@ -66,7 +66,6 @@ import javax.el.ELResolver;
 import javax.el.ExpressionFactory;
 import javax.el.MethodExpression;
 import javax.faces.FacesException;
-import javax.faces.render.Renderer;
 import javax.faces.application.Application;
 import javax.faces.application.NavigationHandler;
 import javax.faces.application.ResourceHandler;
@@ -121,6 +120,8 @@ import java.util.LinkedHashMap;
 
 import javax.el.ValueExpression;
 import javax.faces.application.Resource;
+import javax.faces.render.RenderKit;
+import javax.faces.render.Renderer;
 import javax.faces.view.ViewDeclarationLanguage;
 
 
@@ -1940,19 +1941,23 @@ public class ApplicationImpl extends Application {
             associate.getAnnotationManager()
                   .applyComponentAnnotations(ctx, c);
             if (rendererType != null) {
-                Renderer r =
-                      ctx.getRenderKit()
-                            .getRenderer(c.getFamily(), rendererType);
-                if (r != null) {
-                    c.setRendererType(rendererType);
-                    associate.getAnnotationManager()
-                          .applyRendererAnnotations(ctx, r, c);
-                } else {
+                RenderKit rk = ctx.getRenderKit();
+                Renderer r = null;
+                if (rk != null) {
+                    r = rk.getRenderer(c.getFamily(), rendererType);
+                    if (r != null) {
+                        c.setRendererType(rendererType);
+                        associate.getAnnotationManager()
+                           .applyRendererAnnotations(ctx, r, c);
+                    }
+                }
+                if (rk == null || r == null) {
                     if (LOGGER.isLoggable(Level.FINE)) {
                         LOGGER.log(Level.FINE,
                                    "Unable to create Renderer with rendererType {0} for component with component type of {1}",
                                    new Object[] { rendererType, c.getFamily() });
                     }
+
                 }
             }
 
