@@ -39,14 +39,14 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_0.xsd"
               version="2.0">
-    <description>
+    <description><![CDATA[
 
 
-        &lt;/pre&gt;
+        </pre>
 
-        &lt;div class="changed_added_2_0"&gt;
+        <div class="changed_added_2_0">
 
-        &lt;p&gt;Describes the Facelets2 tag library used for declaring and
+        <p>Describes the Facelets2 tag library used for declaring and
         defining
         the usage contract for composite UI Components. When authoring a
         composite component, use of this tag library is largely optional,
@@ -58,915 +58,915 @@
         PENDING: the limit of what one can do without declaring and defining a
         usage contract must be cleary specified and documented. PENDING: The
         implementation team must help discover these limits.
-        &lt;/p&gt;
+        </p>
 
-        &lt;h2&gt;Creating a Composite Component&lt;/h2&gt;
+        <h2>Creating a Composite Component</h2>
 
-        &lt;p&gt;The default implementation must support authoring A composite
+        <p>The default implementation must support authoring A composite
         component is declared by creating a Facelets2 file inside of a resource
         library. (See section JSF.2.6 of the specification prose document for
         more information about resource libraries.) A composite component
         must reside within a resource library. It is not possible to create a
         composite component without putting it inside of a resource
-        library.&lt;/p&gt;
+        library.</p>
 
-        &lt;p&gt;The default XML namespace URI of the taglib that contains the
-        composite component, for use in &lt;em&gt;the using page&lt;/em&gt;, is
-        &lt;code&gt;http://java.sun.com/jsf/composite/&amp;lt;composite-library-name&amp;gt;&lt;/code&gt;,
-        where &lt;code&gt;&amp;lt;composite-library-name&amp;gt;&lt;/code&gt; is
+        <p>The default XML namespace URI of the taglib that contains the
+        composite component, for use in <em>the using page</em>, is
+        <code>http://java.sun.com/jsf/composite/&amp;lt;composite-library-name&amp;gt;</code>,
+        where <code>&amp;lt;composite-library-name&amp;gt;</code> is
         the name of the
-        resource library. For example:&lt;/p&gt;
+        resource library. For example:</p>
 
-        &lt;pre&gt;&lt;code&gt;
+        <pre><code>
         &amp;lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        &lt;br /&gt;
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&amp;gt;&lt;br
-        /&gt;
-        &amp;lt;html xmlns="http://www.w3.org/1999/xhtml"&lt;br /&gt;
-        xmlns:h="http://java.sun.com/jsf/html"&lt;br /&gt;
-        xmlns:f="http://java.sun.com/jsf/core"&lt;br /&gt;
-        xmlns:ui="http://java.sun.com/jsf/facelets"&lt;br /&gt;
-        xmlns:ez="&lt;i&gt;http://java.sun.com/jsf/composite/&lt;b&gt;ezcomp&lt;/b&gt;&lt;/i&gt;"&amp;gt;&lt;br
-        /&gt;
-        ...&lt;br /&gt;
-        &lt;/code&gt;&lt;/pre&gt;
+        <br />
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&amp;gt;<br
+        />
+        &amp;lt;html xmlns="http://www.w3.org/1999/xhtml"<br />
+        xmlns:h="http://java.sun.com/jsf/html"<br />
+        xmlns:f="http://java.sun.com/jsf/core"<br />
+        xmlns:ui="http://java.sun.com/jsf/facelets"<br />
+        xmlns:ez="<i>http://java.sun.com/jsf/composite/<b>ezcomp</b></i>"&amp;gt;<br
+        />
+        ...<br />
+        </code></pre>
 
-        &lt;p&gt;This declares that any Facelets2 file in the resource
-        library called &lt;code&gt;ezcomp&lt;/code&gt; can be used as a regular
+        <p>This declares that any Facelets2 file in the resource
+        library called <code>ezcomp</code> can be used as a regular
         JSF UI
         component in a view with the above namespace declaration by using the
-        "&lt;code&gt;ez&lt;/code&gt;" prefix. For example, placing a file called
-        &lt;code&gt;foo.xhtml&lt;/code&gt; in a resource library called &lt;code&gt;ezcomp&lt;/code&gt;
-        would make that file accessible like this.&lt;/p&gt;
+        "<code>ez</code>" prefix. For example, placing a file called
+        <code>foo.xhtml</code> in a resource library called <code>ezcomp</code>
+        would make that file accessible like this.</p>
 
-        &lt;pre&gt;&lt;code&gt;
+        <pre><code>
         &amp;lt;ez:foo /&amp;gt;
-        &lt;/code&gt;&lt;/pre&gt;
+        </code></pre>
 
 
-        &lt;p&gt;The implementation must also support declaring the
+        <p>The implementation must also support declaring the
         namespace of the tag library in a JSF VDL tag library descriptor.
         This descriptor file is optional and is useful for component vendors
         that do not want to use the default XML namespace. This version of
         the proposal currently uses the facelet taglib descriptor syntax. For
-        example: &lt;/p&gt;
+        example: </p>
 
-        &lt;pre&gt;&lt;code&gt;
-        &amp;lt;facelet-taglib&amp;gt;&lt;br /&gt;
+        <pre><code>
+        &amp;lt;facelet-taglib&amp;gt;<br />
         &amp;lt;namespace&amp;gt;http://domain.com/path&amp;lt;/namespace&amp;gt;
-        &lt;br /&gt;
+        <br />
         &amp;lt;composite-library-name&amp;gt;compositeTest&amp;lt;/composite-library-name&amp;gt;
-        &lt;br /&gt;
-        &amp;lt;/facelet-taglib&amp;gt; &lt;br /&gt;
-        &lt;/code&gt;&lt;/pre&gt;
+        <br />
+        &amp;lt;/facelet-taglib&amp;gt; <br />
+        </code></pre>
 
-        &lt;p&gt;Components from that taglibrary may be used in a using page by
-        declaring them in the XML namespace for that view:&lt;/p&gt;
+        <p>Components from that taglibrary may be used in a using page by
+        declaring them in the XML namespace for that view:</p>
 
-        &lt;pre&gt;&lt;code&gt;
+        <pre><code>
         &amp;lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        &lt;br /&gt;
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&amp;gt;&lt;br
-        /&gt;
-        &amp;lt;html xmlns="http://www.w3.org/1999/xhtml"&lt;br /&gt;
-        xmlns:h="http://java.sun.com/jsf/html"&lt;br /&gt;
-        xmlns:f="http://java.sun.com/jsf/core"&lt;br /&gt;
-        xmlns:ui="http://java.sun.com/jsf/facelets"&lt;br /&gt;
-        xmlns:ez="&lt;i&gt;&lt;b&gt;http://domain.com/path/namespace&lt;/b&gt;&lt;/i&gt;"&amp;gt;&lt;br
-        /&gt;
-        ...&lt;br /&gt;
-        &lt;/code&gt;&lt;/pre&gt;
+        <br />
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&amp;gt;<br
+        />
+        &amp;lt;html xmlns="http://www.w3.org/1999/xhtml"<br />
+        xmlns:h="http://java.sun.com/jsf/html"<br />
+        xmlns:f="http://java.sun.com/jsf/core"<br />
+        xmlns:ui="http://java.sun.com/jsf/facelets"<br />
+        xmlns:ez="<i><b>http://domain.com/path/namespace</b></i>"&amp;gt;<br
+        />
+        ...<br />
+        </code></pre>
 
 
-        &lt;p&gt;&lt;a name="composite_example"&gt;Below is an example of a
+        <p><a name="composite_example">Below is an example of a
         fairly
         involved composite component declaration. Such a declaration might
-        appear in &lt;code&gt;foo.xhtml&lt;/code&gt;.&lt;/a&gt;&lt;/p&gt;
+        appear in <code>foo.xhtml</code>.</a></p>
 
-        &lt;div class="syntax"&gt;&lt;div class="html4strict"
-        style="font-family: monospace;"&gt;&lt;ol&gt;&lt;li class="li1"&gt;&lt;div
-        class="de1"&gt;&lt;span class="sc2"&gt;&amp;lt;&lt;a
-        href="interface.html"&gt;composite:interface&lt;/a&gt; &lt;span
-        class="kw3"&gt;name&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;foo&amp;quot;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        <div class="syntax"><div class="html4strict"
+        style="font-family: monospace;"><ol><li class="li1"><div
+        class="de1"><span class="sc2">&amp;lt;<a
+        href="interface.html">composite:interface</a> <span
+        class="kw3">name</span>=<span class="st0">&amp;quot;foo&amp;quot;</span></div></li>
+        <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp; &amp;nbsp;
         &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &amp;nbsp;displayName=&lt;span class="st0"&gt;&amp;quot;Very Simple
-        Login Panel&amp;quot;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        &amp;nbsp;displayName=<span class="st0">&amp;quot;Very Simple
+        Login Panel&amp;quot;</span></div></li>
+        <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp; &amp;nbsp;
         &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &amp;nbsp;preferred=&lt;span class="st0"&gt;&amp;quot;true&amp;quot;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        &amp;nbsp;preferred=<span class="st0">&amp;quot;true&amp;quot;</span></div></li>
+        <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp; &amp;nbsp;
         &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &amp;nbsp;expert=&lt;span class="st0"&gt;&amp;quot;false&amp;quot;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        &amp;nbsp;expert=<span class="st0">&amp;quot;false&amp;quot;</span></div></li>
+        <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp; &amp;nbsp;
         &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &amp;nbsp;shortDescription=&lt;span class="st0"&gt;&amp;quot;An
-        illustration of the composite component feature&amp;quot;&lt;/span&gt;&lt;span
-        class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &lt;span
-        class="sc2"&gt;&amp;lt;&lt;a href="attribute.html"&gt;composite:attribute&lt;/a&gt;
-        &lt;span class="kw3"&gt;name&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;model&amp;quot;&lt;/span&gt;
-        required=&lt;span class="st0"&gt;&amp;quot;true&amp;quot;&lt;/span&gt;&lt;span
-        class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp; &lt;span
-        class="sc2"&gt;&amp;lt;composite:attribute &lt;span class="kw3"&gt;name&lt;/span&gt;=&lt;span
-        class="st0"&gt;&amp;quot;loginAction&amp;quot;&lt;/span&gt; required=&lt;span
-        class="st0"&gt;&amp;quot;true&amp;quot;&lt;/span&gt; method-signature=&lt;span
-        class="st0"&gt;&amp;quot;java.lang.Object action()&amp;quot;&lt;/span&gt;/
-        &lt;span class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &lt;span
-        class="sc2"&gt;&lt;span class="kw2"&gt;&amp;lt;&lt;/span&gt;/composite:attribute&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &lt;span
-        class="sc2"&gt;&amp;lt;composite:attribute &lt;span class="kw3"&gt;name&lt;/span&gt;=&lt;span
-        class="st0"&gt;&amp;quot;valueChangeListener&amp;quot;&lt;/span&gt;
-        targets=&lt;span class="st0"&gt;&amp;quot;username&amp;quot;&lt;/span&gt;
-        /&lt;span class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &lt;span
-        class="sc2"&gt;&amp;lt;composite:attribute &lt;span class="kw3"&gt;name&lt;/span&gt;=&lt;span
-        class="st0"&gt;&amp;quot;specialMethodExpression&amp;quot;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        &amp;nbsp;shortDescription=<span class="st0">&amp;quot;An
+        illustration of the composite component feature&amp;quot;</span><span
+        class="kw2">&amp;gt;</span></span></div></li>
+        <li class="li2"><div class="de2">&amp;nbsp; <span
+        class="sc2">&amp;lt;<a href="attribute.html">composite:attribute</a>
+        <span class="kw3">name</span>=<span class="st0">&amp;quot;model&amp;quot;</span>
+        required=<span class="st0">&amp;quot;true&amp;quot;</span><span
+        class="kw2">&amp;gt;</span></span></div></li>
+        <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp; <span
+        class="sc2">&amp;lt;composite:attribute <span class="kw3">name</span>=<span
+        class="st0">&amp;quot;loginAction&amp;quot;</span> required=<span
+        class="st0">&amp;quot;true&amp;quot;</span> method-signature=<span
+        class="st0">&amp;quot;java.lang.Object action()&amp;quot;</span>/
+        <span class="kw2">&amp;gt;</span></span></div></li>
+        <li class="li2"><div class="de2">&amp;nbsp; <span
+        class="sc2"><span class="kw2">&amp;lt;</span>/composite:attribute&amp;gt;</span></div></li>
+        <li class="li1"><div class="de1">&amp;nbsp; <span
+        class="sc2">&amp;lt;composite:attribute <span class="kw3">name</span>=<span
+        class="st0">&amp;quot;valueChangeListener&amp;quot;</span>
+        targets=<span class="st0">&amp;quot;username&amp;quot;</span>
+        /<span class="kw2">&amp;gt;</span></span></div></li>
+        <li class="li2"><div class="de2">&amp;nbsp; <span
+        class="sc2">&amp;lt;composite:attribute <span class="kw3">name</span>=<span
+        class="st0">&amp;quot;specialMethodExpression&amp;quot;</span></div></li>
+        <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp; &amp;nbsp;
         &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &amp;nbsp; &amp;nbsp;method-signature=&lt;span class="st0"&gt;&amp;quot;com.foo.User
-        validateCurrentUser()&amp;quot;&lt;/span&gt; /&lt;span class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &lt;span
-        class="sc2"&gt;&amp;lt;composite:attribute &lt;span class="kw3"&gt;name&lt;/span&gt;=&lt;span
-        class="st0"&gt;&amp;quot;loginButtonLabel&amp;quot;&lt;/span&gt;
-        default=&lt;span class="st0"&gt;&amp;quot;Login&amp;quot;&lt;/span&gt; /&lt;span
-        class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &lt;span
-        class="sc2"&gt;&amp;lt;&lt;a href="editableValueHolder.html"&gt;composite:editableValueHolder&lt;/a&gt;
-        &lt;span class="kw3"&gt;name&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;username&amp;quot;&lt;/span&gt;
-        /&lt;span class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &lt;span
-        class="sc2"&gt;&amp;lt;composite:actionSource &lt;span class="kw3"&gt;name&lt;/span&gt;=&lt;span
-        class="st0"&gt;&amp;quot;loginEvent&amp;quot;&lt;/span&gt; /&lt;span
-        class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &lt;span
-        class="sc2"&gt;&amp;lt;composite:actionSource &lt;span class="kw3"&gt;name&lt;/span&gt;=&lt;span
-        class="st0"&gt;&amp;quot;cancelEvent&amp;quot;&lt;/span&gt; /&lt;span
-        class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &lt;span
-        class="sc2"&gt;&amp;lt;composite:actionSource &lt;span class="kw3"&gt;name&lt;/span&gt;=&lt;span
-        class="st0"&gt;&amp;quot;allEvents&amp;quot;&lt;/span&gt; targets=&lt;span
-        class="st0"&gt;&amp;quot;loginEvent cancelEvent&amp;quot;&lt;/span&gt; /&lt;span
-        class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&lt;span class="sc2"&gt;&lt;span
-        class="kw2"&gt;&amp;lt;&lt;/span&gt;/composite:interface&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&lt;span class="sc2"&gt;&amp;lt;&lt;a
-        href="implementation.html"&gt;composite:implementation&lt;/a&gt; &lt;span
-        class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &lt;span
-        class="sc2"&gt;&amp;lt;ui:decorate template=&lt;span class="st0"&gt;&amp;quot;fooTemplate.xhtml&amp;quot;&lt;/span&gt;&lt;span
-        class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp; &lt;span
-        class="sc2"&gt;&amp;lt;ui:define &lt;span class="kw3"&gt;name&lt;/span&gt;=&lt;span
-        class="st0"&gt;&amp;quot;header&amp;quot;&lt;/span&gt;&lt;span
-        class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &lt;span class="sc2"&gt;&lt;span class="kw2"&gt;&amp;lt;p&amp;gt;&lt;/span&gt;&lt;/span&gt;This
-        is the login panel header&lt;span class="sc2"&gt;&lt;span class="kw2"&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp; &lt;span
-        class="sc2"&gt;&lt;span class="kw2"&gt;&amp;lt;&lt;/span&gt;/ui:define&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp; &lt;span
-        class="sc2"&gt;&amp;lt;ui:define &lt;span class="kw3"&gt;name&lt;/span&gt;=&lt;span
-        class="st0"&gt;&amp;quot;body&amp;quot;&lt;/span&gt;&lt;span class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &lt;span class="sc2"&gt;&lt;span class="kw2"&gt;&amp;lt;p&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &amp;nbsp; &amp;nbsp;&lt;span class="sc2"&gt;&amp;lt;h:inputText &lt;span
-        class="kw3"&gt;id&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;username&amp;quot;&lt;/span&gt;
-        /&lt;span class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &lt;span class="sc2"&gt;&lt;span class="kw2"&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &lt;span class="sc2"&gt;&lt;span class="kw2"&gt;&amp;lt;p&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &amp;nbsp; &lt;span class="sc2"&gt;&amp;lt;h:commandButton &lt;span
-        class="kw3"&gt;id&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;loginEvent&amp;quot;&lt;/span&gt;
-        &lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        &amp;nbsp; &amp;nbsp;method-signature=<span class="st0">&amp;quot;com.foo.User
+        validateCurrentUser()&amp;quot;</span> /<span class="kw2">&amp;gt;</span></span></div></li>
+        <li class="li2"><div class="de2">&amp;nbsp; <span
+        class="sc2">&amp;lt;composite:attribute <span class="kw3">name</span>=<span
+        class="st0">&amp;quot;loginButtonLabel&amp;quot;</span>
+        default=<span class="st0">&amp;quot;Login&amp;quot;</span> /<span
+        class="kw2">&amp;gt;</span></span></div></li>
+        <li class="li1"><div class="de1">&amp;nbsp; <span
+        class="sc2">&amp;lt;<a href="editableValueHolder.html">composite:editableValueHolder</a>
+        <span class="kw3">name</span>=<span class="st0">&amp;quot;username&amp;quot;</span>
+        /<span class="kw2">&amp;gt;</span></span></div></li>
+        <li class="li2"><div class="de2">&amp;nbsp; <span
+        class="sc2">&amp;lt;composite:actionSource <span class="kw3">name</span>=<span
+        class="st0">&amp;quot;loginEvent&amp;quot;</span> /<span
+        class="kw2">&amp;gt;</span></span></div></li>
+        <li class="li1"><div class="de1">&amp;nbsp; <span
+        class="sc2">&amp;lt;composite:actionSource <span class="kw3">name</span>=<span
+        class="st0">&amp;quot;cancelEvent&amp;quot;</span> /<span
+        class="kw2">&amp;gt;</span></span></div></li>
+        <li class="li2"><div class="de2">&amp;nbsp; <span
+        class="sc2">&amp;lt;composite:actionSource <span class="kw3">name</span>=<span
+        class="st0">&amp;quot;allEvents&amp;quot;</span> targets=<span
+        class="st0">&amp;quot;loginEvent cancelEvent&amp;quot;</span> /<span
+        class="kw2">&amp;gt;</span></span></div></li>
+        <li class="li1"><div class="de1"><span class="sc2"><span
+        class="kw2">&amp;lt;</span>/composite:interface&amp;gt;</span></div></li>
+        <li class="li2"><div class="de2"><span class="sc2">&amp;lt;<a
+        href="implementation.html">composite:implementation</a> <span
+        class="kw2">&amp;gt;</span></span></div></li>
+        <li class="li1"><div class="de1">&amp;nbsp;</div></li>
+        <li class="li2"><div class="de2">&amp;nbsp; <span
+        class="sc2">&amp;lt;ui:decorate template=<span class="st0">&amp;quot;fooTemplate.xhtml&amp;quot;</span><span
+        class="kw2">&amp;gt;</span></span></div></li>
+        <li class="li1"><div class="de1">&amp;nbsp;</div></li>
+        <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp; <span
+        class="sc2">&amp;lt;ui:define <span class="kw3">name</span>=<span
+        class="st0">&amp;quot;header&amp;quot;</span><span
+        class="kw2">&amp;gt;</span></span></div></li>
+        <li class="li1"><div class="de1">&amp;nbsp;</div></li>
+        <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        <span class="sc2"><span class="kw2">&amp;lt;p&amp;gt;</span></span>This
+        is the login panel header<span class="sc2"><span class="kw2">&amp;lt;/p&amp;gt;</span></span></div></li>
+        <li class="li1"><div class="de1">&amp;nbsp;</div></li>
+        <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp; <span
+        class="sc2"><span class="kw2">&amp;lt;</span>/ui:define&amp;gt;</span></div></li>
+        <li class="li1"><div class="de1">&amp;nbsp;</div></li>
+        <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp; <span
+        class="sc2">&amp;lt;ui:define <span class="kw3">name</span>=<span
+        class="st0">&amp;quot;body&amp;quot;</span><span class="kw2">&amp;gt;</span></span></div></li>
+        <li class="li1"><div class="de1">&amp;nbsp;</div></li>
+        <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        <span class="sc2"><span class="kw2">&amp;lt;p&amp;gt;</span></span></div></li>
+        <li class="li1"><div class="de1">&amp;nbsp;</div></li>
+        <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        &amp;nbsp; &amp;nbsp;<span class="sc2">&amp;lt;h:inputText <span
+        class="kw3">id</span>=<span class="st0">&amp;quot;username&amp;quot;</span>
+        /<span class="kw2">&amp;gt;</span></span></div></li>
+        <li class="li1"><div class="de1">&amp;nbsp;</div></li>
+        <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        <span class="sc2"><span class="kw2">&amp;lt;/p&amp;gt;</span></span></div></li>
+        <li class="li1"><div class="de1">&amp;nbsp;</div></li>
+        <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        <span class="sc2"><span class="kw2">&amp;lt;p&amp;gt;</span></span></div></li>
+        <li class="li1"><div class="de1">&amp;nbsp;</div></li>
+        <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        &amp;nbsp; <span class="sc2">&amp;lt;h:commandButton <span
+        class="kw3">id</span>=<span class="st0">&amp;quot;loginEvent&amp;quot;</span>
+        </div></li>
+        <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp; &amp;nbsp;
         &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &amp;nbsp; &amp;nbsp; &amp;nbsp;&lt;span class="kw3"&gt;value&lt;/span&gt;=&lt;span
-        class="st0"&gt;&amp;quot;#{cc.attrs.loginButtonLabel}&amp;quot;&lt;/span&gt;&lt;span
-        class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &amp;nbsp; &lt;span class="sc2"&gt;&lt;span class="kw2"&gt;&amp;lt;&lt;/span&gt;/h:commandButton&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &amp;nbsp; &lt;span class="sc2"&gt;&amp;lt;h:commandButton &lt;span
-        class="kw3"&gt;id&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;cancelEvent&amp;quot;&lt;/span&gt;
-        &lt;span class="kw3"&gt;value&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;Cancel&amp;quot;&lt;/span&gt;
-        &lt;span class="kw3"&gt;action&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;cancel&amp;quot;&lt;/span&gt;&lt;span
-        class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &amp;nbsp; &lt;span class="sc2"&gt;&lt;span class="kw2"&gt;&amp;lt;&lt;/span&gt;/h:commandButton&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &amp;nbsp; &lt;span class="sc2"&gt;&amp;lt;special:validateUserButton
-        &lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &amp;nbsp; &amp;nbsp; validateUser=&lt;span class="st0"&gt;&amp;quot;#{cc.attrs.specialMethodExpression}&amp;quot;&lt;/span&gt;
-        /&lt;span class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &lt;span class="sc2"&gt;&lt;span class="kw2"&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp; &lt;span
-        class="sc2"&gt;&lt;span class="kw2"&gt;&amp;lt;&lt;/span&gt;/ui:define&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp; &lt;span
-        class="sc2"&gt;&amp;lt;ui:define &lt;span class="kw3"&gt;name&lt;/span&gt;=&lt;span
-        class="st0"&gt;&amp;quot;footer&amp;quot;&lt;/span&gt;&lt;span
-        class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;&lt;span
-        class="sc2"&gt;&lt;span class="kw2"&gt;&amp;lt;p&amp;gt;&lt;/span&gt;&lt;/span&gt;This
-        is the login panel footer&lt;span class="sc2"&gt;&lt;span class="kw2"&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp; &lt;span
-        class="sc2"&gt;&lt;span class="kw2"&gt;&amp;lt;&lt;/span&gt;/ui:define&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &lt;span
-        class="sc2"&gt;&lt;span class="kw2"&gt;&amp;lt;&lt;/span&gt;/ui:decorate&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&lt;span class="sc2"&gt;&lt;span
-        class="kw2"&gt;&amp;lt;&lt;/span&gt;/composite:implementation&amp;gt;&lt;/span&gt;
-        &lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/div&gt;&lt;/div&gt;
+        &amp;nbsp; &amp;nbsp; &amp;nbsp;<span class="kw3">value</span>=<span
+        class="st0">&amp;quot;#{cc.attrs.loginButtonLabel}&amp;quot;</span><span
+        class="kw2">&amp;gt;</span></span></div></li>
+        <li class="li2"><div class="de2">&amp;nbsp;</div></li>
+        <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        &amp;nbsp; <span class="sc2"><span class="kw2">&amp;lt;</span>/h:commandButton&amp;gt;</span></div></li>
+        <li class="li2"><div class="de2">&amp;nbsp;</div></li>
+        <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        &amp;nbsp; <span class="sc2">&amp;lt;h:commandButton <span
+        class="kw3">id</span>=<span class="st0">&amp;quot;cancelEvent&amp;quot;</span>
+        <span class="kw3">value</span>=<span class="st0">&amp;quot;Cancel&amp;quot;</span>
+        <span class="kw3">action</span>=<span class="st0">&amp;quot;cancel&amp;quot;</span><span
+        class="kw2">&amp;gt;</span></span></div></li>
+        <li class="li2"><div class="de2">&amp;nbsp;</div></li>
+        <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        &amp;nbsp; <span class="sc2"><span class="kw2">&amp;lt;</span>/h:commandButton&amp;gt;</span></div></li>
+        <li class="li2"><div class="de2">&amp;nbsp;</div></li>
+        <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        &amp;nbsp; <span class="sc2">&amp;lt;special:validateUserButton
+        </div></li>
+        <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        &amp;nbsp; &amp;nbsp; validateUser=<span class="st0">&amp;quot;#{cc.attrs.specialMethodExpression}&amp;quot;</span>
+        /<span class="kw2">&amp;gt;</span></span></div></li>
+        <li class="li1"><div class="de1">&amp;nbsp;</div></li>
+        <li class="li2"><div class="de2">&amp;nbsp;</div></li>
+        <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        <span class="sc2"><span class="kw2">&amp;lt;/p&amp;gt;</span></span></div></li>
+        <li class="li2"><div class="de2">&amp;nbsp;</div></li>
+        <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp; <span
+        class="sc2"><span class="kw2">&amp;lt;</span>/ui:define&amp;gt;</span></div></li>
+        <li class="li2"><div class="de2">&amp;nbsp;</div></li>
+        <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp; <span
+        class="sc2">&amp;lt;ui:define <span class="kw3">name</span>=<span
+        class="st0">&amp;quot;footer&amp;quot;</span><span
+        class="kw2">&amp;gt;</span></span></div></li>
+        <li class="li2"><div class="de2">&amp;nbsp;</div></li>
+        <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp; &amp;nbsp;<span
+        class="sc2"><span class="kw2">&amp;lt;p&amp;gt;</span></span>This
+        is the login panel footer<span class="sc2"><span class="kw2">&amp;lt;/p&amp;gt;</span></span></div></li>
+        <li class="li2"><div class="de2">&amp;nbsp;</div></li>
+        <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp; <span
+        class="sc2"><span class="kw2">&amp;lt;</span>/ui:define&amp;gt;</span></div></li>
+        <li class="li2"><div class="de2">&amp;nbsp;</div></li>
+        <li class="li1"><div class="de1">&amp;nbsp; <span
+        class="sc2"><span class="kw2">&amp;lt;</span>/ui:decorate&amp;gt;</span></div></li>
+        <li class="li2"><div class="de2">&amp;nbsp;</div></li>
+        <li class="li1"><div class="de1"><span class="sc2"><span
+        class="kw2">&amp;lt;</span>/composite:implementation&amp;gt;</span>
+        </div></li></ol></div></div>
 
-        &lt;p&gt;The values for attributes in a composite component VDL file can
+        <p>The values for attributes in a composite component VDL file can
         be
         fully localized by putting them inside a ResourceBundle in the same
         directory as the VDL view and accessing them with the per-component
-        resource bundle syntax. Consider the file &lt;code&gt;foo.xhtml&lt;/code&gt;,
+        resource bundle syntax. Consider the file <code>foo.xhtml</code>,
         in
-        the resource library &lt;code&gt;ezcomp&lt;/code&gt;. The
-        &lt;code&gt;shortDescription&lt;/code&gt; element could be changed to
-        be:&lt;/p&gt;
+        the resource library <code>ezcomp</code>. The
+        <code>shortDescription</code> element could be changed to
+        be:</p>
 
-        &lt;pre&gt;&lt;code&gt;
+        <pre><code>
         &amp;lt;composite:interface
         shortDescription="#{cc.resourceBundleMap.shortDescription}" &amp;gt;
-        &lt;/code&gt;&lt;/pre&gt;
+        </code></pre>
 
-        &lt;p&gt;In this case, In the same &lt;code&gt;ezcomp&lt;/code&gt;
+        <p>In this case, In the same <code>ezcomp</code>
         directory as
-        &lt;code&gt;foo.xhtml&lt;/code&gt;, there would be a &lt;code&gt;foo.properties&lt;/code&gt;
-        file that would contain this entry:&lt;/p&gt;
+        <code>foo.xhtml</code>, there would be a <code>foo.properties</code>
+        file that would contain this entry:</p>
 
-        &lt;pre&gt;&lt;code&gt;
+        <pre><code>
         shortDescription=A really nifty login panel.
-        &lt;/code&gt;&lt;/pre&gt;
+        </code></pre>
 
-        &lt;p&gt;The normal localization rules for &lt;code&gt;ResourceBundle&lt;/code&gt;
+        <p>The normal localization rules for <code>ResourceBundle</code>
         would
-        apply.&lt;/p&gt;
+        apply.</p>
 
-        &lt;/div&gt;
-
-
-        &lt;pre&gt;
+        </div>
 
 
-    </description>
+        <pre>
+
+
+    ]]></description>
     <namespace>http://java.sun.com/jsf/composite</namespace>
     <tag>
-        <description>
+        <description><![CDATA[
 
 
-            &lt;div class="changed_added_2_0"&gt;
+            <div class="changed_added_2_0">
 
-            &lt;p&gt;This element declares the usage contract for a composite
+            <p>This element declares the usage contract for a composite
             component. Optionally, and at the component author's
             discretion, this contract exposes the features of one or
             more inner components to the page author. The page author
             can work with the composite component as a single component
             whose feature set is the union of the features declared in
-            the usage contract.&lt;/p&gt;
+            the usage contract.</p>
 
-            &lt;p&gt;For example, consider a composite component that
+            <p>For example, consider a composite component that
             implements the functionality of a "login panel". Such a
             component would likely have two text fields and one button.
             The user of such a component might like to do one or more of
-            the following.&lt;/p&gt;
+            the following.</p>
 
-            &lt;ul&gt;
+            <ul>
 
-            &lt;li&gt;&lt;p&gt;Be able to listen for the &lt;code&gt;ActionEvent&lt;/code&gt;
-            on the button.&lt;/p&gt;
+            <li><p>Be able to listen for the <code>ActionEvent</code>
+            on the button.</p>
 
-            &lt;p&gt;In this case, a
-            &lt;code&gt;&amp;lt;composite:actionSource&amp;gt;&lt;/code&gt;
+            <p>In this case, a
+            <code>&amp;lt;composite:actionSource&amp;gt;</code>
             element is
             included in the usage contract that refers to the inner
-            button in the &lt;code&gt;&amp;lt;composite:implementation&amp;gt;&lt;/code&gt;
-            section.&lt;/p&gt;
+            button in the <code>&amp;lt;composite:implementation&amp;gt;</code>
+            section.</p>
 
-            &lt;/li&gt;
+            </li>
 
-            &lt;li&gt;&lt;p&gt;Provide an "action" to invoke when the button is
+            <li><p>Provide an "action" to invoke when the button is
             pressed.
-            &lt;/p&gt;
+            </p>
 
-            &lt;p&gt;In this case, a
-            &lt;code&gt;&amp;lt;composite:attribute&amp;gt;&lt;/code&gt; element
+            <p>In this case, a
+            <code>&amp;lt;composite:attribute&amp;gt;</code> element
             is included
             in the usage contract that refers to the inner button in the
-            &lt;code&gt;&amp;lt;composite:implementation&amp;gt;&lt;/code&gt;
+            <code>&amp;lt;composite:implementation&amp;gt;</code>
             section and
-            declares the proper method signature for an "action".&lt;/p&gt;
+            declares the proper method signature for an "action".</p>
 
-            &lt;/li&gt;
+            </li>
 
-            &lt;li&gt;&lt;p&gt;Provide parameters to the composite component for
+            <li><p>Provide parameters to the composite component for
             labels and other rendering specific aspects of the composite
-            component.&lt;/p&gt;
+            component.</p>
 
-            &lt;p&gt;In this case, one or more
-            &lt;code&gt;&amp;lt;composite:attribute&amp;gt;&lt;/code&gt;
+            <p>In this case, one or more
+            <code>&amp;lt;composite:attribute&amp;gt;</code>
             elements are included
             in the usage contract and those parameters are referred to in
-            the &lt;code&gt;&amp;lt;composite:implementation&amp;gt;&lt;/code&gt;
+            the <code>&amp;lt;composite:implementation&amp;gt;</code>
             section
             using EL expressions like
-            &lt;code&gt;#{cc.attrs.usernameLabel}&lt;/code&gt;,
-            assuming &lt;code&gt;usernameLabel&lt;/code&gt; is the &lt;code&gt;name&lt;/code&gt;
-            of one of the &lt;code&gt;&amp;lt;composite:attribute&amp;gt;&lt;/code&gt;
-            elements in the usage contract.&lt;/p&gt;
+            <code>#{cc.attrs.usernameLabel}</code>,
+            assuming <code>usernameLabel</code> is the <code>name</code>
+            of one of the <code>&amp;lt;composite:attribute&amp;gt;</code>
+            elements in the usage contract.</p>
 
-            &lt;/li&gt;
+            </li>
 
 
-            &lt;li&gt;&lt;p&gt;Add &lt;code&gt;ValueChangeListener&lt;/code&gt;s,
-            &lt;code&gt;Converter&lt;/code&gt;s, or &lt;code&gt;Validator&lt;/code&gt;s
+            <li><p>Add <code>ValueChangeListener</code>s,
+            <code>Converter</code>s, or <code>Validator</code>s
             to either
             or both text fields.
-            &lt;/p&gt;
+            </p>
 
-            &lt;p&gt;In this case, a
-            &lt;code&gt;&amp;lt;composite:editableValueHolder&amp;gt;&lt;/code&gt;
+            <p>In this case, a
+            <code>&amp;lt;composite:editableValueHolder&amp;gt;</code>
             element is
             included in the usage contract that refers to the inner text
-            field in the &lt;code&gt;&amp;lt;composite:implementation&amp;gt;&lt;/code&gt;
+            field in the <code>&amp;lt;composite:implementation&amp;gt;</code>
             section. In the case of wanting to enable only adding a
-            &lt;code&gt;Converter&lt;/code&gt; (and not a
-            &lt;code&gt;ValueChangeListener&lt;/code&gt; or &lt;code&gt;Validator&lt;/code&gt;,
+            <code>Converter</code> (and not a
+            <code>ValueChangeListener</code> or <code>Validator</code>,
             a
-            &lt;code&gt;&amp;lt;composite:valueHolder&amp;gt;&lt;/code&gt;
+            <code>&amp;lt;composite:valueHolder&amp;gt;</code>
             element would be
-            used.&lt;/p&gt;
+            used.</p>
 
-            &lt;/li&gt;
+            </li>
 
-            &lt;li&gt;&lt;p&gt;Add facet children to the login panel.&lt;/p&gt;
+            <li><p>Add facet children to the login panel.</p>
 
-            &lt;p&gt;In this case, a &lt;code&gt;&amp;lt;composite:facet&amp;gt;&lt;/code&gt;
+            <p>In this case, a <code>&amp;lt;composite:facet&amp;gt;</code>
             element is included in the usage contract that refers to the
-            inner &lt;code&gt;&amp;lt;composite:renderFacet&amp;gt;&lt;/code&gt;
+            inner <code>&amp;lt;composite:renderFacet&amp;gt;</code>
             element in
-            the &lt;code&gt;&amp;lt;composite:implementation&amp;gt;&lt;/code&gt;
+            the <code>&amp;lt;composite:implementation&amp;gt;</code>
             section.
-            &lt;/p&gt;
+            </p>
 
-            &lt;/li&gt;
+            </li>
 
 
-            &lt;/ul&gt;
+            </ul>
 
-            &lt;p&gt;For each of the behaviorial interfaces in Section JSF.3.2
+            <p>For each of the behaviorial interfaces in Section JSF.3.2
             of
             the specification, there is a tag in the
-            &lt;code&gt;composite:&lt;/code&gt; library to nest inside of the
-            &lt;code&gt;&amp;lt;composite:interface&amp;gt;&lt;/code&gt;
+            <code>composite:</code> library to nest inside of the
+            <code>&amp;lt;composite:interface&amp;gt;</code>
             section.
-            &lt;/p&gt;
+            </p>
 
 
-            &lt;p&gt;If the &lt;code&gt;&amp;lt;composite:interface&amp;gt;&lt;/code&gt;
+            <p>If the <code>&amp;lt;composite:interface&amp;gt;</code>
             section
-            is not present in a &lt;em&gt;VDL view&lt;/em&gt;, the contract will
+            is not present in a <em>VDL view</em>, the contract will
             be
             inferred as described in the specification. There must be
             zero or one of these elements in a composite component VDL
-            file. If a &lt;code&gt;&amp;lt;composite:interface&amp;gt;&lt;/code&gt;
+            file. If a <code>&amp;lt;composite:interface&amp;gt;</code>
             element
             does appear, there must be an accompanying
-            &lt;code&gt;&amp;lt;composite:implementation&amp;gt;&lt;/code&gt;
+            <code>&amp;lt;composite:implementation&amp;gt;</code>
             element in the
-            same VDL file. &lt;/p&gt;
+            same VDL file. </p>
 
-            &lt;p&gt;&lt;b&gt;Nesting of composite components&lt;/b&gt;&lt;/p&gt;
+            <p><b>Nesting of composite components</b></p>
 
-            &lt;p&gt;The implementation must support nesting of composite
+            <p>The implementation must support nesting of composite
             components. Specifically, it must be possible for the
-            &lt;code&gt;&amp;lt;composite:implementation&amp;gt;&lt;/code&gt;
+            <code>&amp;lt;composite:implementation&amp;gt;</code>
             section of a
-            composite component to act as the &lt;em&gt;using page&lt;/em&gt;
+            composite component to act as the <em>using page</em>
             for
             another composite component. When a composite component
-            exposes a behavioral interface to the &lt;em&gt;using page&lt;/em&gt;,
-            such as a &lt;code&gt;&amp;lt;composite:actionSource&amp;gt;&lt;/code&gt;,
-            &lt;code&gt;&amp;lt;composite:editableValueHolder&amp;gt;&lt;/code&gt;,
-            &lt;code&gt;&amp;lt;composite:valueHolder&amp;gt;&lt;/code&gt; or
+            exposes a behavioral interface to the <em>using page</em>,
+            such as a <code>&amp;lt;composite:actionSource&amp;gt;</code>,
+            <code>&amp;lt;composite:editableValueHolder&amp;gt;</code>,
+            <code>&amp;lt;composite:valueHolder&amp;gt;</code> or
             other
             behavioral interface, it must be possible to
             &amp;#8220;propogate&amp;#8221; the exposure of such an interface in
             the case of a nested composite component. The composite
             component author must ensure that the value of the
-            &lt;code&gt;name&lt;/code&gt; attributes exactly match at all levels
+            <code>name</code> attributes exactly match at all levels
             of
             the nesting to enable this exposure to work. The
             implementation is not required to support
             &amp;#8220;re-mapping&amp;#8221; of names in a nested composite
-            component.&lt;/p&gt;
+            component.</p>
 
-            &lt;p&gt;For example, consider this nested composite component.&lt;/p&gt;
+            <p>For example, consider this nested composite component.</p>
 
-            &lt;p&gt;Using page&lt;/p&gt;
+            <p>Using page</p>
 
-            &lt;div class="syntax"&gt;&lt;div class="html4strict"
-            style="font-family: monospace;"&gt;&lt;ol&gt;&lt;li class="li1"&gt;&lt;div
-            class="de1"&gt;&lt;span class="sc2"&gt;&amp;lt;ez:actionSourceOuter&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &lt;span
-            class="sc2"&gt;&amp;lt;f:actionListener &lt;span class="kw3"&gt;for&lt;/span&gt;=&lt;span
-            class="st0"&gt;&amp;quot;button1&amp;quot;&lt;/span&gt; /&lt;span
-            class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&lt;span class="sc2"&gt;&lt;span
-            class="kw2"&gt;&amp;lt;&lt;/span&gt;/ez:actionSourceOuter&amp;gt;&lt;/span&gt;
-            &lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/div&gt;&lt;/div&gt;
+            <div class="syntax"><div class="html4strict"
+            style="font-family: monospace;"><ol><li class="li1"><div
+            class="de1"><span class="sc2">&amp;lt;ez:actionSourceOuter&amp;gt;</span></div></li>
+            <li class="li2"><div class="de2">&amp;nbsp; <span
+            class="sc2">&amp;lt;f:actionListener <span class="kw3">for</span>=<span
+            class="st0">&amp;quot;button1&amp;quot;</span> /<span
+            class="kw2">&amp;gt;</span></span></div></li>
+            <li class="li1"><div class="de1"><span class="sc2"><span
+            class="kw2">&amp;lt;</span>/ez:actionSourceOuter&amp;gt;</span>
+            </div></li></ol></div></div>
 
-            &lt;p&gt;actionSourceOuter.xhtml: Outer composite component&lt;/p&gt;
+            <p>actionSourceOuter.xhtml: Outer composite component</p>
 
-            &lt;div class="syntax"&gt;&lt;div class="html4strict"
-            style="font-family: monospace;"&gt;&lt;ol&gt;&lt;li class="li1"&gt;&lt;div
-            class="de1"&gt;&lt;span class="sc2"&gt;&amp;lt;composite:interface&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &lt;span
-            class="sc2"&gt;&amp;lt;composite:actionSource &lt;span class="kw3"&gt;name&lt;/span&gt;=&lt;span
-            class="st0"&gt;&amp;quot;button1&amp;quot;&lt;/span&gt; /&lt;span
-            class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&lt;span class="sc2"&gt;&lt;span
-            class="kw2"&gt;&amp;lt;&lt;/span&gt;/composite:interface&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&lt;span class="sc2"&gt;&amp;lt;composite:implementation&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &lt;span
-            class="sc2"&gt;&amp;lt;ez:actionSourceInner /&lt;span class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&lt;span class="sc2"&gt;&lt;span
-            class="kw2"&gt;&amp;lt;&lt;/span&gt;/composite:implementation&amp;gt;&lt;/span&gt;
-            &lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/div&gt;&lt;/div&gt;
+            <div class="syntax"><div class="html4strict"
+            style="font-family: monospace;"><ol><li class="li1"><div
+            class="de1"><span class="sc2">&amp;lt;composite:interface&amp;gt;</span></div></li>
+            <li class="li2"><div class="de2">&amp;nbsp; <span
+            class="sc2">&amp;lt;composite:actionSource <span class="kw3">name</span>=<span
+            class="st0">&amp;quot;button1&amp;quot;</span> /<span
+            class="kw2">&amp;gt;</span></span></div></li>
+            <li class="li1"><div class="de1"><span class="sc2"><span
+            class="kw2">&amp;lt;</span>/composite:interface&amp;gt;</span></div></li>
+            <li class="li2"><div class="de2">&amp;nbsp;</div></li>
+            <li class="li1"><div class="de1"><span class="sc2">&amp;lt;composite:implementation&amp;gt;</span></div></li>
+            <li class="li2"><div class="de2">&amp;nbsp; <span
+            class="sc2">&amp;lt;ez:actionSourceInner /<span class="kw2">&amp;gt;</span></span></div></li>
+            <li class="li1"><div class="de1"><span class="sc2"><span
+            class="kw2">&amp;lt;</span>/composite:implementation&amp;gt;</span>
+            </div></li></ol></div></div>
 
-            &lt;p&gt;actionSourceInner.xhtml: the composite component used
+            <p>actionSourceInner.xhtml: the composite component used
             within a
-            composite component.&lt;/p&gt;
+            composite component.</p>
 
-            &lt;div class="syntax"&gt;&lt;div class="html4strict"
-            style="font-family: monospace;"&gt;&lt;ol&gt;&lt;li class="li1"&gt;&lt;div
-            class="de1"&gt;&lt;span class="sc2"&gt;&amp;lt;composite:interface&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &lt;span
-            class="sc2"&gt;&amp;lt;composite:actionSource &lt;span class="kw3"&gt;name&lt;/span&gt;=&lt;span
-            class="st0"&gt;&amp;quot;button1&amp;quot;&lt;/span&gt; /&lt;span
-            class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&lt;span class="sc2"&gt;&lt;span
-            class="kw2"&gt;&amp;lt;&lt;/span&gt;/composite:interface&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&lt;span class="sc2"&gt;&amp;lt;composite:implementation&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &lt;span
-            class="sc2"&gt;&amp;lt;h:commandButton &lt;span class="kw3"&gt;id&lt;/span&gt;=&lt;span
-            class="st0"&gt;&amp;quot;button1&amp;quot;&lt;/span&gt; &lt;span
-            class="kw3"&gt;value&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;the
-            real button&amp;quot;&lt;/span&gt; /&lt;span class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&lt;span class="sc2"&gt;&lt;span
-            class="kw2"&gt;&amp;lt;&lt;/span&gt;/composite:implementation&amp;gt;&lt;/span&gt;
-            &lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/div&gt;&lt;/div&gt;
+            <div class="syntax"><div class="html4strict"
+            style="font-family: monospace;"><ol><li class="li1"><div
+            class="de1"><span class="sc2">&amp;lt;composite:interface&amp;gt;</span></div></li>
+            <li class="li2"><div class="de2">&amp;nbsp; <span
+            class="sc2">&amp;lt;composite:actionSource <span class="kw3">name</span>=<span
+            class="st0">&amp;quot;button1&amp;quot;</span> /<span
+            class="kw2">&amp;gt;</span></span></div></li>
+            <li class="li1"><div class="de1"><span class="sc2"><span
+            class="kw2">&amp;lt;</span>/composite:interface&amp;gt;</span></div></li>
+            <li class="li2"><div class="de2">&amp;nbsp;</div></li>
+            <li class="li1"><div class="de1"><span class="sc2">&amp;lt;composite:implementation&amp;gt;</span></div></li>
+            <li class="li2"><div class="de2">&amp;nbsp; <span
+            class="sc2">&amp;lt;h:commandButton <span class="kw3">id</span>=<span
+            class="st0">&amp;quot;button1&amp;quot;</span> <span
+            class="kw3">value</span>=<span class="st0">&amp;quot;the
+            real button&amp;quot;</span> /<span class="kw2">&amp;gt;</span></span></div></li>
+            <li class="li1"><div class="de1"><span class="sc2"><span
+            class="kw2">&amp;lt;</span>/composite:implementation&amp;gt;</span>
+            </div></li></ol></div></div>
 
-            &lt;p&gt;The &lt;code&gt;id&lt;/code&gt; of the &lt;code&gt;&amp;lt;h:commandButton&amp;gt;&lt;/code&gt;
+            <p>The <code>id</code> of the <code>&amp;lt;h:commandButton&amp;gt;</code>
             on
-            line 6 of actionSourceInner.xhtml must match the &lt;code&gt;name&lt;/code&gt;
+            line 6 of actionSourceInner.xhtml must match the <code>name</code>
             on
             line 2 of that file (this is a standard requirement for all
             composite
-            components, nested or not). That &lt;code&gt;id&lt;/code&gt; must
+            components, nested or not). That <code>id</code> must
             also match the
-            &lt;code&gt;name&lt;/code&gt; on line 2 of actionSourceOuter.xhtml,
+            <code>name</code> on line 2 of actionSourceOuter.xhtml,
             and the
-            &lt;code&gt;for&lt;/code&gt; on line 2 of the using page.&lt;/p&gt;
+            <code>for</code> on line 2 of the using page.</p>
 
-            &lt;p&gt;The implementation must support any level of nesting as
+            <p>The implementation must support any level of nesting as
             long as the
-            &lt;code&gt;for&lt;/code&gt;, &lt;code&gt;name&lt;/code&gt;, and
-            &lt;code&gt;id&lt;/code&gt; values match
-            up. Furthermore, the &lt;code&gt;targets&lt;/code&gt; attribute is
+            <code>for</code>, <code>name</code>, and
+            <code>id</code> values match
+            up. Furthermore, the <code>targets</code> attribute is
             also valid for
-            use in this nested fashion.&lt;/p&gt;
+            use in this nested fashion.</p>
 
-            &lt;p&gt;&lt;b&gt;Naming containers within composite components&lt;/b&gt;&lt;/p&gt;
+            <p><b>Naming containers within composite components</b></p>
 
-            &lt;p&gt;Composite components are themselves naming containers so
+            <p>Composite components are themselves naming containers so
             that any
             possible id conflicts between inner components and components in the
             using page are avoided. However, special care must be taken when
             using
-            naming containers in the &lt;code&gt;&amp;lt;composite:implementation&amp;gt;&lt;/code&gt;
+            naming containers in the <code>&amp;lt;composite:implementation&amp;gt;</code>
             section. In such cases the value of the &amp;#8220;name&amp;#8221;
             attribute,
             or the values of the &amp;#8220;targets&amp;#8221; attribute must be
             used with a
-            clientId relative to the &lt;em&gt;top level component&lt;/em&gt; to
+            clientId relative to the <em>top level component</em> to
             expose any
-            attached object targets to the using page. For example:&lt;/p&gt;
+            attached object targets to the using page. For example:</p>
 
-            &lt;p&gt;Using page&lt;/p&gt;
+            <p>Using page</p>
 
-            &lt;div class="syntax"&gt;&lt;div class="html4strict"
-            style="font-family: monospace;"&gt;&lt;ol&gt;&lt;li class="li1"&gt;&lt;div
-            class="de1"&gt;&lt;span class="sc2"&gt;&amp;lt;ez:loginButton&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &lt;span
-            class="sc2"&gt;&amp;lt;f:actionListener &lt;span class="kw3"&gt;for&lt;/span&gt;=&lt;span
-            class="st0"&gt;&amp;quot;button&amp;quot;&lt;/span&gt; &lt;span
-            class="kw3"&gt;binding&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;#{foo.actionListener}&amp;quot;&lt;/span&gt;
-            /&lt;span class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&lt;span class="sc2"&gt;&lt;span
-            class="kw2"&gt;&amp;lt;&lt;/span&gt;/ez:loginButton&amp;gt;&lt;/span&gt;
-            &lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/div&gt;&lt;/div&gt;
+            <div class="syntax"><div class="html4strict"
+            style="font-family: monospace;"><ol><li class="li1"><div
+            class="de1"><span class="sc2">&amp;lt;ez:loginButton&amp;gt;</span></div></li>
+            <li class="li2"><div class="de2">&amp;nbsp; <span
+            class="sc2">&amp;lt;f:actionListener <span class="kw3">for</span>=<span
+            class="st0">&amp;quot;button&amp;quot;</span> <span
+            class="kw3">binding</span>=<span class="st0">&amp;quot;#{foo.actionListener}&amp;quot;</span>
+            /<span class="kw2">&amp;gt;</span></span></div></li>
+            <li class="li1"><div class="de1"><span class="sc2"><span
+            class="kw2">&amp;lt;</span>/ez:loginButton&amp;gt;</span>
+            </div></li></ol></div></div>
 
 
-            &lt;p&gt;loginButton.xhtml&lt;/p&gt;
+            <p>loginButton.xhtml</p>
 
-            &lt;div class="syntax"&gt;&lt;div class="html4strict"
-            style="font-family: monospace;"&gt;&lt;ol&gt;&lt;li class="li1"&gt;&lt;div
-            class="de1"&gt;&lt;span class="sc2"&gt;&amp;lt;composite:interface&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &lt;span
-            class="sc2"&gt;&amp;lt;composite:actionSource &lt;span class="kw3"&gt;name&lt;/span&gt;=&lt;span
-            class="st0"&gt;&amp;quot;button&amp;quot;&lt;/span&gt; targets=&lt;span
-            class="st0"&gt;&amp;quot;form:button&amp;quot;&lt;/span&gt; /&lt;span
-            class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&lt;span class="sc2"&gt;&lt;span
-            class="kw2"&gt;&amp;lt;&lt;/span&gt;/composite:interface&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&lt;span class="sc2"&gt;&amp;lt;composite:implementation&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &lt;span
-            class="sc2"&gt;&amp;lt;h:form &lt;span class="kw3"&gt;id&lt;/span&gt;=&lt;span
-            class="st0"&gt;&amp;quot;form&amp;quot;&lt;/span&gt;&lt;span
-            class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp;
-            &lt;span class="sc2"&gt;&amp;lt;h:commandButton &lt;span class="kw3"&gt;id&lt;/span&gt;=&lt;span
-            class="st0"&gt;&amp;quot;button&amp;quot;&lt;/span&gt; &lt;span
-            class="kw3"&gt;value&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;Submit&amp;quot;&lt;/span&gt;
-            /&lt;span class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &lt;span
-            class="sc2"&gt;&lt;span class="kw2"&gt;&amp;lt;&lt;/span&gt;/h:form&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&lt;span class="sc2"&gt;&lt;span
-            class="kw2"&gt;&amp;lt;&lt;/span&gt;/composite:implementation&amp;gt;&lt;/span&gt;
-            &lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/div&gt;&lt;/div&gt;
+            <div class="syntax"><div class="html4strict"
+            style="font-family: monospace;"><ol><li class="li1"><div
+            class="de1"><span class="sc2">&amp;lt;composite:interface&amp;gt;</span></div></li>
+            <li class="li2"><div class="de2">&amp;nbsp; <span
+            class="sc2">&amp;lt;composite:actionSource <span class="kw3">name</span>=<span
+            class="st0">&amp;quot;button&amp;quot;</span> targets=<span
+            class="st0">&amp;quot;form:button&amp;quot;</span> /<span
+            class="kw2">&amp;gt;</span></span></div></li>
+            <li class="li1"><div class="de1"><span class="sc2"><span
+            class="kw2">&amp;lt;</span>/composite:interface&amp;gt;</span></div></li>
+            <li class="li2"><div class="de2">&amp;nbsp;</div></li>
+            <li class="li1"><div class="de1"><span class="sc2">&amp;lt;composite:implementation&amp;gt;</span></div></li>
+            <li class="li2"><div class="de2">&amp;nbsp;</div></li>
+            <li class="li1"><div class="de1">&amp;nbsp; <span
+            class="sc2">&amp;lt;h:form <span class="kw3">id</span>=<span
+            class="st0">&amp;quot;form&amp;quot;</span><span
+            class="kw2">&amp;gt;</span></span></div></li>
+            <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp;
+            <span class="sc2">&amp;lt;h:commandButton <span class="kw3">id</span>=<span
+            class="st0">&amp;quot;button&amp;quot;</span> <span
+            class="kw3">value</span>=<span class="st0">&amp;quot;Submit&amp;quot;</span>
+            /<span class="kw2">&amp;gt;</span></span></div></li>
+            <li class="li1"><div class="de1">&amp;nbsp; <span
+            class="sc2"><span class="kw2">&amp;lt;</span>/h:form&amp;gt;</span></div></li>
+            <li class="li2"><div class="de2"><span class="sc2"><span
+            class="kw2">&amp;lt;</span>/composite:implementation&amp;gt;</span>
+            </div></li></ol></div></div>
 
-            &lt;p&gt;Because the button on line 8 resides within a form, it must
+            <p>Because the button on line 8 resides within a form, it must
             be
-            referred to using a client id, relative to the &lt;em&gt;top level
-            component&lt;/em&gt;, in the "targets" attribute on line 2. Using a
+            referred to using a client id, relative to the <em>top level
+            component</em>, in the "targets" attribute on line 2. Using a
             relative
             clientId is required due to the semantics of
-            &lt;code&gt;UIComponent.findComponent()&lt;/code&gt;.&lt;/p&gt;
+            <code>UIComponent.findComponent()</code>.</p>
 
-            &lt;/div&gt;
+            </div>
 
-        </description>
+        ]]></description>
         <tag-name>interface</tag-name>
         <handler-class>com.sun.faces.facelets.tag.composite.InterfaceHandler</handler-class>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
-                &lt;p&gt;The name of this composite component.
+                <div class="changed_added_2_0">
+                <p>The name of this composite component.
                 Advisory only. The real name is taken from the
                 filename. The value of this attribute will be set as
-                the value for this property on the &lt;em&gt;composite
-                component bean descriptor&lt;/em&gt;.&lt;/p&gt;&lt;/div&gt;
+                the value for this property on the <em>composite
+                component bean descriptor</em>.</p></div>
 
-            </description>
+            ]]></description>
             <name>name</name>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
-                &lt;p&gt;The &lt;code&gt;component-type&lt;/code&gt; of the &lt;code&gt;UIComponent&lt;/code&gt;
+                <div class="changed_added_2_0">
+                <p>The <code>component-type</code> of the <code>UIComponent</code>
                 that
-                will serve as the &lt;em&gt;composite component root&lt;/em&gt;
+                will serve as the <em>composite component root</em>
                 for this composite
-                component. The declared &lt;code&gt;component-family&lt;/code&gt;
+                component. The declared <code>component-family</code>
                 for this
-                component must be &lt;code&gt;javax.faces.NamingContainer&lt;/code&gt;.&lt;/p&gt;&lt;/div&gt;
+                component must be <code>javax.faces.NamingContainer</code>.</p></div>
 
-            </description>
+            ]]></description>
             <name>componentType</name>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
-                &lt;p&gt;The name to display in a tool palette
+                <div class="changed_added_2_0">
+                <p>The name to display in a tool palette
                 containing this component. The value of this attribute will be
                 set as
-                the value for this property on the &lt;em&gt;composite
-                component bean descriptor&lt;/em&gt;.&lt;/p&gt;&lt;/div&gt;
+                the value for this property on the <em>composite
+                component bean descriptor</em>.</p></div>
 
-            </description>
+            ]]></description>
             <name>displayName</name>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
-                &lt;p&gt;Is this a "preferred" component. The value
+                <div class="changed_added_2_0">
+                <p>Is this a "preferred" component. The value
                 of this attribute will be set as the value for this
-                property on the &lt;em&gt;composite component bean
-                descriptor&lt;/em&gt;.&lt;/p&gt;&lt;/div&gt;
+                property on the <em>composite component bean
+                descriptor</em>.</p></div>
 
-            </description>
+            ]]></description>
             <name>preferred</name>
             <required>false</required>
             <type>boolean</type>
         </attribute>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
-                &lt;p&gt;Is this component only for expert users?
+                <div class="changed_added_2_0">
+                <p>Is this component only for expert users?
                 The value of this attribute will be set as the value for
-                this property on the &lt;em&gt;composite component bean
-                descriptor&lt;/em&gt;.&lt;/p&gt;&lt;/div&gt;
+                this property on the <em>composite component bean
+                descriptor</em>.</p></div>
 
-            </description>
+            ]]></description>
             <name>expert</name>
             <required>false</required>
             <type>boolean</type>
         </attribute>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
-                &lt;p&gt;A short description of the purpose of this
+                <div class="changed_added_2_0">
+                <p>A short description of the purpose of this
                 component. The value of this attribute will be set as
-                the value for this property on the &lt;em&gt;composite
-                component bean descriptor&lt;/em&gt;.&lt;/p&gt;&lt;/div&gt;
+                the value for this property on the <em>composite
+                component bean descriptor</em>.</p></div>
 
-            </description>
+            ]]></description>
             <name>shortDescription</name>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
     </tag>
     <tag>
-        <description>
+        <description><![CDATA[
 
-            &lt;div class="changed_added_2_0"&gt;
-            &lt;p&gt;Defines the implementation of the composite
+            <div class="changed_added_2_0">
+            <p>Defines the implementation of the composite
             component. There must be zero or one of these in a
             composite component markup file. If a
-            &lt;code&gt;&amp;lt;composite:interface&amp;gt;&lt;/code&gt; element
+            <code>&amp;lt;composite:interface&amp;gt;</code> element
             appears,
             there must be a corresponding
-            &lt;code&gt;&amp;lt;composite-implementation&amp;gt;&lt;/code&gt;
+            <code>&amp;lt;composite-implementation&amp;gt;</code>
             element. If no
-            &lt;code&gt;&amp;lt;composite:interface&amp;gt;&lt;/code&gt; element
+            <code>&amp;lt;composite:interface&amp;gt;</code> element
             appears,
-            the &lt;code&gt;&amp;lt;composite-implementation&amp;gt;&lt;/code&gt;
+            the <code>&amp;lt;composite-implementation&amp;gt;</code>
             element is
-            optional. &lt;/p&gt; &lt;/div&gt;
-        </description>
+            optional. </p> </div>
+        ]]></description>
         <tag-name>implementation</tag-name>
         <handler-class>com.sun.faces.facelets.tag.composite.ImplementationHandler</handler-class>
     </tag>
     <tag>
-        <description>
+        <description><![CDATA[
 
 
-            &lt;div class="changed_added_2_0"&gt;
-            &lt;p&gt;Declares an attribute that may be given to an instance of
+            <div class="changed_added_2_0">
+            <p>Declares an attribute that may be given to an instance of
             the
-            &lt;em&gt;composite component&lt;/em&gt; tag for this composite
+            <em>composite component</em> tag for this composite
             component. There
             may be zero or many of these inside of the
-            &lt;code&gt;&amp;lt;composite:interface&lt;/code&gt;&amp;gt;
+            <code>&amp;lt;composite:interface</code>&amp;gt;
             section. This element may be
-            nested within other &lt;code&gt;&amp;lt;composite:attribute&amp;gt;&lt;/code&gt;
+            nested within other <code>&amp;lt;composite:attribute&amp;gt;</code>
             elements to
-            convey a usage contract that includes nested properties.&lt;/p&gt;
+            convey a usage contract that includes nested properties.</p>
 
-            &lt;p&gt;Please see &lt;a href="tld-summary.html#composite_example"&gt;summary
-            page&lt;/a&gt; for a usage example.&lt;/p&gt;
+            <p>Please see <a href="tld-summary.html#composite_example">summary
+            page</a> for a usage example.</p>
 
-            &lt;p&gt;The &lt;em&gt;top level component&lt;/em&gt; in which this
+            <p>The <em>top level component</em> in which this
             element is
-            ultimately nested must be a &lt;code&gt;NamingContainer&lt;/code&gt;.
+            ultimately nested must be a <code>NamingContainer</code>.
             There are certain component properties that must not be
             exposed using this element. The motivation for this
             restriction is that the mapping of markup attributes to
             component properties/attributes does not allow for these
             attributes to be set. The following properties must not be
-            exposed using this element.&lt;/p&gt;
+            exposed using this element.</p>
 
-            &lt;ul&gt;
-            &lt;li&gt;&lt;p&gt;binding&lt;/p&gt;&lt;/li&gt;
-            &lt;li&gt;&lt;p&gt;id&lt;/p&gt;&lt;/li&gt;
-            &lt;li&gt;&lt;p&gt;inView&lt;/p&gt;&lt;/li&gt;
-            &lt;li&gt;&lt;p&gt;parent&lt;/p&gt;&lt;/li&gt;
-            &lt;li&gt;&lt;p&gt;rendered&lt;/p&gt;&lt;/li&gt;
-            &lt;li&gt;&lt;p&gt;rendererType&lt;/p&gt;&lt;/li&gt;
-            &lt;li&gt;&lt;p&gt;transient&lt;/p&gt;&lt;/li&gt;
-            &lt;/ul&gt;
+            <ul>
+            <li><p>binding</p></li>
+            <li><p>id</p></li>
+            <li><p>inView</p></li>
+            <li><p>parent</p></li>
+            <li><p>rendered</p></li>
+            <li><p>rendererType</p></li>
+            <li><p>transient</p></li>
+            </ul>
 
-            &lt;/div&gt;
-        </description>
+            </div>
+        ]]></description>
         <tag-name>attribute</tag-name>
         <handler-class>com.sun.faces.facelets.tag.composite.AttributeHandler</handler-class>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
-                &lt;p&gt;The name of the attribute as it must appear on the &lt;em&gt;composite
-                component tag&lt;/em&gt; in the &lt;em&gt;using page&lt;/em&gt;.
+                <div class="changed_added_2_0">
+                <p>The name of the attribute as it must appear on the <em>composite
+                component tag</em> in the <em>using page</em>.
                 If the value of the
-                &lt;em&gt;name&lt;/em&gt; attribute is equal to (without the
+                <em>name</em> attribute is equal to (without the
                 quotes)
                 &amp;#8220;action&amp;#8221;, &amp;#8221;actionListener&amp;#8221;,
                 &amp;#8220;validator&amp;#8221;, or &amp;#8220;valueChangeListener&amp;#8221;,
                 the
-                action described in &lt;a target="_"
-                href="../../../javadocs/javax/faces/application/ViewHandler.html#retargetMethodExpressions(javax.faces.context.FacesContext,%20javax.faces.component.UIComponent)"&gt;ViewHandler.retargetMethodExpressions()&lt;/a&gt;
+                action described in <a target="_"
+                href="../../../javadocs/javax/faces/application/ViewHandler.html#retargetMethodExpressions(javax.faces.context.FacesContext,%20javax.faces.component.UIComponent)">ViewHandler.retargetMethodExpressions()</a>
                 must be taken to handle the attribute. In these cases, the
-                &lt;code&gt;method-signature&lt;/code&gt; attribute, if present,
+                <code>method-signature</code> attribute, if present,
                 must be ignored as
                 its value is derived as described in
-                &lt;code&gt;retargetMethodExpressions()&lt;/code&gt;.&lt;/div&gt;
+                <code>retargetMethodExpressions()</code>.</div>
 
-            </description>
+            ]]></description>
             <name>name</name>
             <required>true</required>
             <type>java.lang.String</type>
         </attribute>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
+                <div class="changed_added_2_0">
 
-                &lt;p&gt;If this element has a &lt;code&gt;method-signature&lt;/code&gt;
+                <p>If this element has a <code>method-signature</code>
                 attribute, the
-                value of the &lt;code&gt;targets&lt;/code&gt; attribute must be
+                value of the <code>targets</code> attribute must be
                 interpreted as a
                 space (not tab) separated list of client ids (relative to the
-                &lt;em&gt;top
-                level component&lt;/em&gt;) of components within the
-                &lt;code&gt;&amp;lt;composite:implementation&amp;gt;&lt;/code&gt;
+                <em>top
+                level component</em>) of components within the
+                <code>&amp;lt;composite:implementation&amp;gt;</code>
                 section. Space is used as
                 the delimiter for compatibility with the IDREFS and NMTOKENS
                 data types
                 from the XML Schema. Each entry in the list must be interpreted
                 as the
-                id of an inner component to which the &lt;code&gt;MethodExpression&lt;/code&gt;
+                id of an inner component to which the <code>MethodExpression</code>
                 from
-                the &lt;em&gt;composite component tag&lt;/em&gt; in the &lt;em&gt;using
-                page&lt;/em&gt; must be
-                applied. If this element has a &lt;code&gt;method-signature&lt;/code&gt;
+                the <em>composite component tag</em> in the <em>using
+                page</em> must be
+                applied. If this element has a <code>method-signature</code>
                 attribute,
-                but no &lt;code&gt;targets&lt;/code&gt; attribute, the value of
+                but no <code>targets</code> attribute, the value of
                 the
-                &lt;code&gt;name&lt;/code&gt; attribute is used as the single
+                <code>name</code> attribute is used as the single
                 entry in the list. If
-                the value of the &lt;code&gt;name&lt;/code&gt; attribute is &lt;strong&gt;not&lt;/strong&gt;
+                the value of the <code>name</code> attribute is <strong>not</strong>
                 one
-                of the special values listed in the description of the &lt;code&gt;name
-                attribute&lt;/code&gt;, &lt;code&gt;targets&lt;/code&gt; (or its
+                of the special values listed in the description of the <code>name
+                attribute</code>, <code>targets</code> (or its
                 derived value) need not
-                correspond to the id of an inner component.&lt;/p&gt;
+                correspond to the id of an inner component.</p>
 
-                &lt;/div&gt;
+                </div>
 
-            </description>
+            ]]></description>
             <name>targets</name>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
-                &lt;p&gt;If this attribute is not required, and a
+                <div class="changed_added_2_0">
+                <p>If this attribute is not required, and a
                 value is not supplied by the page author, use this as
-                the default value.&lt;/p&gt;&lt;/div&gt;
+                the default value.</p></div>
 
-            </description>
+            ]]></description>
             <name>default</name>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
-                &lt;p&gt;The name to display in a tool palette
+                <div class="changed_added_2_0">
+                <p>The name to display in a tool palette
                 containing this component. The value of this attribute will be
                 set as
-                the value for this property on the &lt;em&gt;composite
-                component bean descriptor&lt;/em&gt;.&lt;/p&gt;&lt;/div&gt;
+                the value for this property on the <em>composite
+                component bean descriptor</em>.</p></div>
 
-            </description>
+            ]]></description>
             <name>displayName</name>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
-                &lt;p&gt;True if the page author must supply a value
-                for this attribute.&lt;/p&gt;&lt;/div&gt;
+                <div class="changed_added_2_0">
+                <p>True if the page author must supply a value
+                for this attribute.</p></div>
 
-            </description>
+            ]]></description>
             <name>required</name>
             <required>false</required>
             <type>boolean</type>
         </attribute>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
-                &lt;p&gt;Is this a "preferred" component. The value
+                <div class="changed_added_2_0">
+                <p>Is this a "preferred" component. The value
                 of this attribute will be set as the value for this
-                property on the &lt;em&gt;composite component bean
-                descriptor&lt;/em&gt;.&lt;/p&gt;&lt;/div&gt;
+                property on the <em>composite component bean
+                descriptor</em>.</p></div>
 
-            </description>
+            ]]></description>
             <name>preferred</name>
             <required>false</required>
             <type>boolean</type>
         </attribute>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
-                &lt;p&gt;Is this component only for expert users?
+                <div class="changed_added_2_0">
+                <p>Is this component only for expert users?
                 The value of this attribute will be set as the value for
-                this property on the &lt;em&gt;composite component bean
-                descriptor&lt;/em&gt;.&lt;/p&gt;&lt;/div&gt;
+                this property on the <em>composite component bean
+                descriptor</em>.</p></div>
 
-            </description>
+            ]]></description>
             <name>expert</name>
             <required>false</required>
             <type>boolean</type>
         </attribute>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
-                &lt;p&gt;A short description of the purpose of this
+                <div class="changed_added_2_0">
+                <p>A short description of the purpose of this
                 component. The value of this attribute will be set as
-                the value for this property on the &lt;em&gt;composite
-                component bean descriptor&lt;/em&gt;.&lt;/p&gt;&lt;/div&gt;
+                the value for this property on the <em>composite
+                component bean descriptor</em>.</p></div>
 
-            </description>
+            ]]></description>
             <name>shortDescription</name>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
-                &lt;p&gt;Declares that this attribute must be a &lt;code&gt;MethodExpression&lt;/code&gt;
+                <div class="changed_added_2_0">
+                <p>Declares that this attribute must be a <code>MethodExpression</code>
                 whose method signature is described by the value of this
                 attribute. The
                 signature must be described using fully qualified class names
@@ -975,733 +975,733 @@
                 "type"
                 attribute. If both attributes are present, the
                 "method-signature"
-                attribute is ignored.&lt;/p&gt;
+                attribute is ignored.</p>
 
-                &lt;p&gt;PENDING: when this file is generated from the
+                <p>PENDING: when this file is generated from the
                 web-facesuicomponent_2_0.xsd, we will not need to copy the
                 content here
-                manually.&lt;/p&gt;
+                manually.</p>
 
-                &lt;p&gt;Provides the signature of the Java method. The syntax
+                <p>Provides the signature of the Java method. The syntax
                 of
                 the method-signature element is as follows (taken from
-                function-signature in web-jsptaglibrary_2_1.xsd):&lt;/p&gt;
+                function-signature in web-jsptaglibrary_2_1.xsd):</p>
 
-                &lt;p&gt;MethodSignature ::= ReturnType S MethodName S?
-                '(' S? Parameters? S? ')'&lt;/p&gt;
+                <p>MethodSignature ::= ReturnType S MethodName S?
+                '(' S? Parameters? S? ')'</p>
 
-                &lt;p&gt;ReturnType ::= Type&lt;/p&gt;
+                <p>ReturnType ::= Type</p>
 
-                &lt;p&gt;MethodName ::= Identifier&lt;/p&gt;
+                <p>MethodName ::= Identifier</p>
 
-                &lt;p&gt;Parameters ::= Parameter
-                | ( Parameter S? ',' S? Parameters )&lt;/p&gt;
+                <p>Parameters ::= Parameter
+                | ( Parameter S? ',' S? Parameters )</p>
 
-                &lt;p&gt;Parameter ::= Type&lt;/p&gt;
+                <p>Parameter ::= Type</p>
 
-                &lt;p&gt;Where:&lt;/p&gt;
+                <p>Where:</p>
 
-                &lt;ul&gt;
+                <ul>
 
-                &lt;li&gt;&lt;p&gt;Type is a basic type or a fully qualified
+                <li><p>Type is a basic type or a fully qualified
                 Java class name (including package name),
                 as per the 'Type' production in the Java
                 Language Specification, Second Edition,
-                Chapter 18.&lt;/p&gt;&lt;/li&gt;
+                Chapter 18.</p></li>
 
-                &lt;li&gt;&lt;p&gt;Identifier is a Java identifier, as per
+                <li><p>Identifier is a Java identifier, as per
                 the 'Identifier' production in the Java
                 Language Specification, Second
-                Edition, Chapter 18.&lt;/p&gt;&lt;/li&gt;
+                Edition, Chapter 18.</p></li>
 
-                &lt;/ul&gt;
+                </ul>
 
-                &lt;p&gt;Example:&lt;/p&gt;
+                <p>Example:</p>
 
-                &lt;p&gt;&lt;code&gt;java.lang.String nickName(
-                java.lang.String, int )&lt;/code&gt;&lt;/p&gt;
+                <p><code>java.lang.String nickName(
+                java.lang.String, int )</code></p>
 
 
-                &lt;/div&gt;
+                </div>
 
-            </description>
+            ]]></description>
             <name>method-signature</name>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
-                &lt;p&gt;Declares that this attribute must be a &lt;code&gt;ValueExpression&lt;/code&gt;
+                <div class="changed_added_2_0">
+                <p>Declares that this attribute must be a <code>ValueExpression</code>
                 whose expected type is given by the value of this attribute. If
                 not
                 specified, and no "method-signature" attribute is present,
-                &lt;code&gt;java.lang.Object&lt;/code&gt; is assumed. This
+                <code>java.lang.Object</code> is assumed. This
                 attribute is mutually
                 exclusive with the "method-signature" attribute. If both attributes are
                 present, the
-                "method-signature" attribute is ignored. &lt;/p&gt; &lt;/div&gt;
+                "method-signature" attribute is ignored. </p> </div>
 
-            </description>
+            ]]></description>
             <name>type</name>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
     </tag>
     <tag>
-        <description>
+        <description><![CDATA[
 
 
-            &lt;div class="changed_added_2_0"&gt;
+            <div class="changed_added_2_0">
 
-            &lt;p&gt;Declares that this composite component supports a facet
+            <p>Declares that this composite component supports a facet
             with the
-            name given by the value of the "name" attribute. &lt;/p&gt;
+            name given by the value of the "name" attribute. </p>
 
-            &lt;p&gt;Please see &lt;code&gt;&amp;lt;&lt;a
-            href="interface.html"&gt;composite:interface&lt;/a&gt;&amp;gt;&lt;/code&gt;
+            <p>Please see <code>&amp;lt;<a
+            href="interface.html">composite:interface</a>&amp;gt;</code>
             for a usage
-            example.&lt;/p&gt;
+            example.</p>
 
 
-            &lt;/div&gt;
-        </description>
+            </div>
+        ]]></description>
         <tag-name>facet</tag-name>
         <handler-class>com.sun.faces.facelets.tag.composite.DeclareFacetHandler</handler-class>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
-                &lt;p&gt;The name of the attribute as it must appear
-                on the &lt;em&gt;composite component tag&lt;/em&gt; in the
-                &lt;em&gt;using page&lt;/em&gt;.&lt;/p&gt;&lt;/div&gt;
+                <div class="changed_added_2_0">
+                <p>The name of the attribute as it must appear
+                on the <em>composite component tag</em> in the
+                <em>using page</em>.</p></div>
 
-            </description>
+            ]]></description>
             <name>name</name>
             <required>true</required>
             <type>java.lang.String</type>
         </attribute>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
-                &lt;p&gt;The name to display in a tool palette
+                <div class="changed_added_2_0">
+                <p>The name to display in a tool palette
                 containing this component. The value of this attribute will be
                 set as
-                the value for this property on the &lt;em&gt;composite
-                component bean descriptor&lt;/em&gt;.&lt;/p&gt;&lt;/div&gt;
+                the value for this property on the <em>composite
+                component bean descriptor</em>.</p></div>
 
-            </description>
+            ]]></description>
             <name>displayName</name>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
-                &lt;p&gt;True if the page author must supply a facet with this
-                name.&lt;/p&gt;&lt;/div&gt;
+                <div class="changed_added_2_0">
+                <p>True if the page author must supply a facet with this
+                name.</p></div>
 
-            </description>
+            ]]></description>
             <name>required</name>
             <required>false</required>
             <type>boolean</type>
         </attribute>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
-                &lt;p&gt;Is this a "preferred" facet. The value
+                <div class="changed_added_2_0">
+                <p>Is this a "preferred" facet. The value
                 of this attribute will be set as the value for this
-                property on the &lt;em&gt;composite component bean
-                descriptor&lt;/em&gt;.&lt;/p&gt;&lt;/div&gt;
+                property on the <em>composite component bean
+                descriptor</em>.</p></div>
 
-            </description>
+            ]]></description>
             <name>preferred</name>
             <required>false</required>
             <type>boolean</type>
         </attribute>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
-                &lt;p&gt;Is this facet only for expert users?
+                <div class="changed_added_2_0">
+                <p>Is this facet only for expert users?
                 The value of this attribute will be set as the value for
-                this property on the &lt;em&gt;composite component bean
-                descriptor&lt;/em&gt;.&lt;/p&gt;&lt;/div&gt;
+                this property on the <em>composite component bean
+                descriptor</em>.</p></div>
 
-            </description>
+            ]]></description>
             <name>expert</name>
             <required>false</required>
             <type>boolean</type>
         </attribute>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
-                &lt;p&gt;A short description of the purpose of this
+                <div class="changed_added_2_0">
+                <p>A short description of the purpose of this
                 facet. The value of this attribute will be set as
-                the value for this property on the &lt;em&gt;composite
-                component bean descriptor&lt;/em&gt;.&lt;/p&gt;&lt;/div&gt;
+                the value for this property on the <em>composite
+                component bean descriptor</em>.</p></div>
 
-            </description>
+            ]]></description>
             <name>shortDescription</name>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
     </tag>
     <tag>
-        <description>
+        <description><![CDATA[
 
 
-            &lt;div class="changed_added_2_0"&gt;
+            <div class="changed_added_2_0">
 
-            &lt;p&gt;This element is used in the
-            &lt;code&gt;&amp;lt;composite:implementation&amp;gt;&lt;/code&gt;
+            <p>This element is used in the
+            <code>&amp;lt;composite:implementation&amp;gt;</code>
             section. The facet with
             the name equal to the value of the name attribute, given by the page
             author in the using page, will be rendered at this point in the
-            composite component VDL view. &lt;/p&gt;
+            composite component VDL view. </p>
 
 
-            &lt;p&gt;The implementation of this tag handler must insert a
-            component with &lt;code&gt;component-type&lt;/code&gt;
-            &lt;code&gt;javax.faces.Output&lt;/code&gt; and &lt;code&gt;renderer-type&lt;/code&gt;
-            &lt;code&gt;javax.faces.CompositeFacet&lt;/code&gt; as a
-            child at this point in the component tree.&lt;/p&gt;
+            <p>The implementation of this tag handler must insert a
+            component with <code>component-type</code>
+            <code>javax.faces.Output</code> and <code>renderer-type</code>
+            <code>javax.faces.CompositeFacet</code> as a
+            child at this point in the component tree.</p>
 
-            &lt;p&gt;The implementation of this tag handler must store an
+            <p>The implementation of this tag handler must store an
             attribute into
             the created component's attribute map under the key given by the
             value
-            of the symbolic constant &lt;code&gt;UIComponent.FACETS_KEY&lt;/code&gt;.
+            of the symbolic constant <code>UIComponent.FACETS_KEY</code>.
             The value
-            for this key must be the evaluated value of the "name" attribute.&lt;/p&gt;
+            for this key must be the evaluated value of the "name" attribute.</p>
 
-            &lt;/div&gt;
-        </description>
+            </div>
+        ]]></description>
         <tag-name>renderFacet</tag-name>
         <handler-class>com.sun.faces.facelets.tag.composite.RenderFacetHandler</handler-class>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
-                &lt;p&gt;The value of the name attribute as it must appear on an
-                &lt;code&gt;&amp;lt;f:facet&amp;gt;&lt;/code&gt; tag nested
-                within the &lt;em&gt;composite
-                component tag&lt;/em&gt; in the &lt;em&gt;using page&lt;/em&gt;.&lt;/p&gt;&lt;/div&gt;
+                <div class="changed_added_2_0">
+                <p>The value of the name attribute as it must appear on an
+                <code>&amp;lt;f:facet&amp;gt;</code> tag nested
+                within the <em>composite
+                component tag</em> in the <em>using page</em>.</p></div>
 
-            </description>
+            ]]></description>
             <name>name</name>
             <required>true</required>
             <type>java.lang.String</type>
         </attribute>
         <attribute>
-            <description>
+            <description><![CDATA[
 
-                &lt;div class="changed_added_2_0"&gt;
+                <div class="changed_added_2_0">
 
-                &lt;p&gt;If &lt;code&gt;true&lt;/code&gt;, and there is no such
+                <p>If <code>true</code>, and there is no such
                 facet present on the top
-                level component, a &lt;code&gt;TagException&lt;/code&gt; must be
+                level component, a <code>TagException</code> must be
                 thrown, containing
-                the &lt;code&gt;Location&lt;/code&gt;, the facet name, and a
+                the <code>Location</code>, the facet name, and a
                 localized descriptive
-                error message.&lt;/p&gt;
+                error message.</p>
 
-                &lt;/div&gt;
+                </div>
 
-            </description>
+            ]]></description>
             <name>required</name>
             <required>false</required>
             <type>boolean</type>
         </attribute>
     </tag>
     <tag>
-        <description>
+        <description><![CDATA[
 
 
-            &lt;div class="changed_added_2_0"&gt;
+            <div class="changed_added_2_0">
 
-            &lt;p&gt;This element is used in the
-            &lt;code&gt;&amp;lt;composite:implementation&amp;gt;&lt;/code&gt;
+            <p>This element is used in the
+            <code>&amp;lt;composite:implementation&amp;gt;</code>
             section. Any child
             components or template text within the composite component tag in
             the
             using page will be re-parented into the composite component at the
             point
             indicated by this tag's placement within the
-            &lt;code&gt;&amp;lt;composite:implementation&amp;gt;&lt;/code&gt;
+            <code>&amp;lt;composite:implementation&amp;gt;</code>
             section. The normal
             use-case for this element is to have only one occurrence within the
-            &lt;code&gt;&amp;lt;composite:implementation&amp;gt;&lt;/code&gt;
+            <code>&amp;lt;composite:implementation&amp;gt;</code>
             section. Inserting
             multiple occurrences may cause duplicate id errors. The results are
             undefined if there are multiple occurrences of this element in the
-            &lt;code&gt;&amp;lt;composite:implementation&amp;gt;&lt;/code&gt;
-            section.&lt;/p&gt;
+            <code>&amp;lt;composite:implementation&amp;gt;</code>
+            section.</p>
 
-            &lt;/div&gt;
-        </description>
+            </div>
+        ]]></description>
         <tag-name>insertChildren</tag-name>
         <handler-class>com.sun.faces.facelets.tag.composite.InsertChildrenHandler</handler-class>
     </tag>
     <tag>
-        <description>
+        <description><![CDATA[
 
 
-            &lt;div class="changed_added_2_0"&gt;
-            &lt;p&gt;Declares that the composite component whose
+            <div class="changed_added_2_0">
+            <p>Declares that the composite component whose
             contract is declared by the
-            &lt;code&gt;&amp;lt;composite:interface&amp;gt;&lt;/code&gt; in
+            <code>&amp;lt;composite:interface&amp;gt;</code> in
             which this
             element is nested exposes an implementation of
-            &lt;code&gt;ValueHolder&lt;/code&gt; suitable for use as the target
+            <code>ValueHolder</code> suitable for use as the target
             of
-            &lt;em&gt;attached objects&lt;/em&gt; in &lt;em&gt;the using page&lt;/em&gt;.
+            <em>attached objects</em> in <em>the using page</em>.
             Any attached objects suitable for implementations of
-            &lt;code&gt;ValueHolder&lt;/code&gt; may be attached to the
+            <code>ValueHolder</code> may be attached to the
             composite
-            component. Consider this excerpt from &lt;em&gt;the using
-            page&lt;/em&gt;:
-            &lt;/p&gt;
+            component. Consider this excerpt from <em>the using
+            page</em>:
+            </p>
 
-            &lt;div class="syntax"&gt;&lt;div class="html4strict"
-            style="font-family: monospace;"&gt;&lt;ol&gt;&lt;li class="li1"&gt;&lt;div
-            class="de1"&gt;&lt;span class="sc2"&gt;&amp;lt;ez:foo&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &lt;span
-            class="sc2"&gt;&amp;lt;f:converter &lt;span class="kw3"&gt;for&lt;/span&gt;=&lt;span
-            class="st0"&gt;&amp;quot;userid&amp;quot;&lt;/span&gt; binding=&lt;span
-            class="st0"&gt;&amp;quot;#{bean.converter}&amp;quot;&lt;/span&gt; /&lt;span
-            class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&lt;span class="sc2"&gt;&lt;span
-            class="kw2"&gt;&amp;lt;&lt;/span&gt;/ez:foo&amp;gt;&lt;/span&gt;
-            &lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/div&gt;&lt;/div&gt;
+            <div class="syntax"><div class="html4strict"
+            style="font-family: monospace;"><ol><li class="li1"><div
+            class="de1"><span class="sc2">&amp;lt;ez:foo&amp;gt;</span></div></li>
+            <li class="li2"><div class="de2">&amp;nbsp; <span
+            class="sc2">&amp;lt;f:converter <span class="kw3">for</span>=<span
+            class="st0">&amp;quot;userid&amp;quot;</span> binding=<span
+            class="st0">&amp;quot;#{bean.converter}&amp;quot;</span> /<span
+            class="kw2">&amp;gt;</span></span></div></li>
+            <li class="li1"><div class="de1"><span class="sc2"><span
+            class="kw2">&amp;lt;</span>/ez:foo&amp;gt;</span>
+            </div></li></ol></div></div>
 
-            &lt;p&gt;Line 2 refers to the
-            &lt;code&gt;&amp;lt;composite:valueHolder&amp;gt;&lt;/code&gt;
+            <p>Line 2 refers to the
+            <code>&amp;lt;composite:valueHolder&amp;gt;</code>
             declaration on
-            line 2 of &lt;code&gt;foo.xhtml&lt;/code&gt;:&lt;/p&gt;
+            line 2 of <code>foo.xhtml</code>:</p>
 
-            &lt;div class="syntax"&gt;&lt;div class="html4strict"
-            style="font-family: monospace;"&gt;&lt;ol&gt;&lt;li class="li1"&gt;&lt;div
-            class="de1"&gt;&lt;span class="sc2"&gt;&amp;lt;composite:interface&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &lt;span
-            class="sc2"&gt;&amp;lt;composite:valueHolder &lt;span class="kw3"&gt;name&lt;/span&gt;=&lt;span
-            class="st0"&gt;&amp;quot;userid&amp;quot;&lt;/span&gt; /&lt;span
-            class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&lt;span class="sc2"&gt;&lt;span
-            class="kw2"&gt;&amp;lt;&lt;/span&gt;/composite:interface&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&lt;span class="sc2"&gt;&amp;lt;composite:implementation&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &lt;span
-            class="sc2"&gt;&amp;lt;h:inputText &lt;span class="kw3"&gt;id&lt;/span&gt;=&lt;span
-            class="st0"&gt;&amp;quot;userid&amp;quot;&lt;/span&gt; /&lt;span
-            class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&lt;span class="sc2"&gt;&lt;span
-            class="kw2"&gt;&amp;lt;&lt;/span&gt;/composite:implementation&amp;gt;&lt;/span&gt;
-            &lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/div&gt;&lt;/div&gt;
+            <div class="syntax"><div class="html4strict"
+            style="font-family: monospace;"><ol><li class="li1"><div
+            class="de1"><span class="sc2">&amp;lt;composite:interface&amp;gt;</span></div></li>
+            <li class="li2"><div class="de2">&amp;nbsp; <span
+            class="sc2">&amp;lt;composite:valueHolder <span class="kw3">name</span>=<span
+            class="st0">&amp;quot;userid&amp;quot;</span> /<span
+            class="kw2">&amp;gt;</span></span></div></li>
+            <li class="li1"><div class="de1"><span class="sc2"><span
+            class="kw2">&amp;lt;</span>/composite:interface&amp;gt;</span></div></li>
+            <li class="li2"><div class="de2">&amp;nbsp;</div></li>
+            <li class="li1"><div class="de1"><span class="sc2">&amp;lt;composite:implementation&amp;gt;</span></div></li>
+            <li class="li2"><div class="de2">&amp;nbsp; <span
+            class="sc2">&amp;lt;h:inputText <span class="kw3">id</span>=<span
+            class="st0">&amp;quot;userid&amp;quot;</span> /<span
+            class="kw2">&amp;gt;</span></span></div></li>
+            <li class="li1"><div class="de1"><span class="sc2"><span
+            class="kw2">&amp;lt;</span>/composite:implementation&amp;gt;</span>
+            </div></li></ol></div></div>
 
-            &lt;p&gt;&lt;/p&gt;
+            <p></p>
 
-            &lt;p&gt;It is possible to declare that a single
-            &lt;code&gt;&amp;lt;composite:valueHolder&amp;gt;&lt;/code&gt;
+            <p>It is possible to declare that a single
+            <code>&amp;lt;composite:valueHolder&amp;gt;</code>
             element should cause multiple
-            components within the &lt;code&gt;&amp;lt;composite:implementation&amp;gt;&lt;/code&gt;
-            section to be the targets of an &lt;em&gt;attached object&lt;/em&gt;
+            components within the <code>&amp;lt;composite:implementation&amp;gt;</code>
+            section to be the targets of an <em>attached object</em>
             in the
-            using page. Assuming the same &lt;em&gt;using page&lt;/em&gt;
+            using page. Assuming the same <em>using page</em>
             excerpt as
-            above, the revised &lt;em&gt;VDL view&lt;/em&gt; is:&lt;/p&gt;
+            above, the revised <em>VDL view</em> is:</p>
 
-            &lt;div class="syntax"&gt;&lt;div class="html4strict"
-            style="font-family: monospace;"&gt;&lt;ol&gt;&lt;li class="li1"&gt;&lt;div
-            class="de1"&gt;&lt;span class="sc2"&gt;&amp;lt;composite:interface&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &lt;span
-            class="sc2"&gt;&amp;lt;composite:valueHolder targets=&lt;span
-            class="st0"&gt;&amp;quot;userid,password&amp;quot;&lt;/span&gt; /&lt;span
-            class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&lt;span class="sc2"&gt;&lt;span
-            class="kw2"&gt;&amp;lt;&lt;/span&gt;/composite:interface&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&lt;span class="sc2"&gt;&amp;lt;composite:implementation&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &lt;span
-            class="sc2"&gt;&amp;lt;h:inputText &lt;span class="kw3"&gt;id&lt;/span&gt;=&lt;span
-            class="st0"&gt;&amp;quot;userid&amp;quot;&lt;/span&gt; /&lt;span
-            class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &lt;span
-            class="sc2"&gt;&amp;lt;h:inputText &lt;span class="kw3"&gt;id&lt;/span&gt;=&lt;span
-            class="st0"&gt;&amp;quot;password&amp;quot;&lt;/span&gt; /&lt;span
-            class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&lt;span class="sc2"&gt;&lt;span
-            class="kw2"&gt;&amp;lt;&lt;/span&gt;/composite:implementation&amp;gt;&lt;/span&gt;
-            &lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/div&gt;&lt;/div&gt;
+            <div class="syntax"><div class="html4strict"
+            style="font-family: monospace;"><ol><li class="li1"><div
+            class="de1"><span class="sc2">&amp;lt;composite:interface&amp;gt;</span></div></li>
+            <li class="li2"><div class="de2">&amp;nbsp; <span
+            class="sc2">&amp;lt;composite:valueHolder targets=<span
+            class="st0">&amp;quot;userid,password&amp;quot;</span> /<span
+            class="kw2">&amp;gt;</span></span></div></li>
+            <li class="li1"><div class="de1"><span class="sc2"><span
+            class="kw2">&amp;lt;</span>/composite:interface&amp;gt;</span></div></li>
+            <li class="li2"><div class="de2">&amp;nbsp;</div></li>
+            <li class="li1"><div class="de1"><span class="sc2">&amp;lt;composite:implementation&amp;gt;</span></div></li>
+            <li class="li2"><div class="de2">&amp;nbsp; <span
+            class="sc2">&amp;lt;h:inputText <span class="kw3">id</span>=<span
+            class="st0">&amp;quot;userid&amp;quot;</span> /<span
+            class="kw2">&amp;gt;</span></span></div></li>
+            <li class="li1"><div class="de1">&amp;nbsp; <span
+            class="sc2">&amp;lt;h:inputText <span class="kw3">id</span>=<span
+            class="st0">&amp;quot;password&amp;quot;</span> /<span
+            class="kw2">&amp;gt;</span></span></div></li>
+            <li class="li2"><div class="de2"><span class="sc2"><span
+            class="kw2">&amp;lt;</span>/composite:implementation&amp;gt;</span>
+            </div></li></ol></div></div>
 
-            &lt;p&gt;In this case, the "targets" attribute on the
-            &lt;code&gt;&amp;lt;composite:valueHolder&amp;gt;&lt;/code&gt;
+            <p>In this case, the "targets" attribute on the
+            <code>&amp;lt;composite:valueHolder&amp;gt;</code>
             element, on line 2 above,
             replaces the "name" attribute in the previous example. "targets" is
             a
-            list of ids of client ids (relative to the &lt;em&gt;top level
-            component&lt;/em&gt;)
-            within the &lt;code&gt;&amp;lt;composite:implementation&amp;gt;&lt;/code&gt;
+            list of ids of client ids (relative to the <em>top level
+            component</em>)
+            within the <code>&amp;lt;composite:implementation&amp;gt;</code>
             section. In
-            this case, "targets" refers to the &lt;code&gt;&amp;lt;h:inputText&amp;gt;&lt;/code&gt;
-            components on lines 6 and 7 above.&lt;/p&gt;
+            this case, "targets" refers to the <code>&amp;lt;h:inputText&amp;gt;</code>
+            components on lines 6 and 7 above.</p>
 
-            &lt;p&gt;Please see &lt;code&gt;&amp;lt;&lt;a
-            href="interface.html"&gt;composite:interface&lt;/a&gt;&amp;gt;&lt;/code&gt;
+            <p>Please see <code>&amp;lt;<a
+            href="interface.html">composite:interface</a>&amp;gt;</code>
             for a usage
-            example.&lt;/p&gt;
+            example.</p>
 
-            &lt;/div&gt;
-        </description>
+            </div>
+        ]]></description>
         <tag-name>valueHolder</tag-name>
         <handler-class>com.sun.faces.facelets.tag.composite.ValueHolderAttachedObjectTargetHandler</handler-class>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
-                &lt;p&gt;
+                <div class="changed_added_2_0">
+                <p>
                 The value of this attribute maps back to the "for" attribute on
                 an attachable object
                 nested within a composite component. If the "targets" attribute
                 is not specified,
                 this value also represents the component ID of the target
                 component within the
-                that the &lt;code&gt;&amp;lt;composite:implementation&amp;gt;&lt;/code&gt;
+                that the <code>&amp;lt;composite:implementation&amp;gt;</code>
                 ActionListener should be mapped to.
-                &lt;/p&gt;
-                &lt;/div&gt;
+                </p>
+                </div>
 
-            </description>
+            ]]></description>
             <name>name</name>
             <required>true</required>
             <type>java.lang.String</type>
         </attribute>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
-                &lt;p&gt;If present, this must be a space (not tab) separated
+                <div class="changed_added_2_0">
+                <p>If present, this must be a space (not tab) separated
                 list of client
-                ids (relative to the &lt;em&gt;top level component&lt;/em&gt;)
+                ids (relative to the <em>top level component</em>)
                 of components within
-                the &lt;code&gt;&amp;lt;composite:implementation&amp;gt;&lt;/code&gt;
+                the <code>&amp;lt;composite:implementation&amp;gt;</code>
                 section. Space is
                 used as the delimiter for compatibility with the IDREFS and
                 NMTOKENS
-                data types from the XML Schema. &lt;/p&gt;&lt;/div&gt;
+                data types from the XML Schema. </p></div>
 
-            </description>
+            ]]></description>
             <name>targets</name>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
     </tag>
     <tag>
-        <description>
+        <description><![CDATA[
 
 
-            &lt;div class="changed_added_2_0"&gt;
-            &lt;p&gt;Declares that the composite component whose
+            <div class="changed_added_2_0">
+            <p>Declares that the composite component whose
             contract is declared by the
-            &lt;code&gt;&amp;lt;composite:interface&amp;gt;&lt;/code&gt; in
+            <code>&amp;lt;composite:interface&amp;gt;</code> in
             which this
             element is nested exposes an implementation of
-            &lt;code&gt;EditableValueHolder&lt;/code&gt; suitable for use as the
-            target of &lt;em&gt;attached objects&lt;/em&gt; in &lt;em&gt;the
+            <code>EditableValueHolder</code> suitable for use as the
+            target of <em>attached objects</em> in <em>the
             using
-            page&lt;/em&gt;. Any attached objects suitable for
-            implementations of &lt;code&gt;EditableValueHolder&lt;/code&gt; may
+            page</em>. Any attached objects suitable for
+            implementations of <code>EditableValueHolder</code> may
             be
-            attached to the composite component.The example from &lt;a
-            href="valueHolder.html"&gt;&lt;code&gt;&amp;lt;composite:valueHolder&amp;gt;&lt;/code&gt;&lt;/a&gt;
+            attached to the composite component.The example from <a
+            href="valueHolder.html"><code>&amp;lt;composite:valueHolder&amp;gt;</code></a>
             still applies.
-            &lt;/p&gt;
+            </p>
 
-            &lt;p&gt;Please see &lt;code&gt;&amp;lt;&lt;a
-            href="interface.html"&gt;composite:interface&lt;/a&gt;&amp;gt;&lt;/code&gt;
+            <p>Please see <code>&amp;lt;<a
+            href="interface.html">composite:interface</a>&amp;gt;</code>
             for a usage
-            example.&lt;/p&gt;
+            example.</p>
 
-            &lt;/div&gt;
-        </description>
+            </div>
+        ]]></description>
         <tag-name>editableValueHolder</tag-name>
         <handler-class>com.sun.faces.facelets.tag.composite.EditableValueHolderAttachedObjectTargetHandler</handler-class>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
-                &lt;p&gt;
+                <div class="changed_added_2_0">
+                <p>
                 The value of this attribute maps back to the "for" attribute on
                 an attachable object
                 nested within a composite component. If the "targets" attribute
                 is not specified,
                 this value also represents the component ID of the target
                 component within the
-                that the &lt;code&gt;&amp;lt;composite:implementation&amp;gt;&lt;/code&gt;
+                that the <code>&amp;lt;composite:implementation&amp;gt;</code>
                 ActionListener should be mapped to.
-                &lt;/p&gt;
-                &lt;/div&gt;
+                </p>
+                </div>
 
-            </description>
+            ]]></description>
             <name>name</name>
             <required>true</required>
             <type>java.lang.String</type>
         </attribute>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
-                &lt;p&gt;If present, this must be a space (not tab) separated
+                <div class="changed_added_2_0">
+                <p>If present, this must be a space (not tab) separated
                 list of client
-                ids (relative to the &lt;em&gt;top level component&lt;/em&gt;)
+                ids (relative to the <em>top level component</em>)
                 of components within
-                the &lt;code&gt;&amp;lt;composite:implementation&amp;gt;&lt;/code&gt;
+                the <code>&amp;lt;composite:implementation&amp;gt;</code>
                 section. Space is
                 used as the delimiter for compatibility with the IDREFS and
                 NMTOKENS
-                data types from the XML Schema.&lt;/p&gt;&lt;/div&gt;
+                data types from the XML Schema.</p></div>
 
-            </description>
+            ]]></description>
             <name>targets</name>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
     </tag>
     <tag>
-        <description>
+        <description><![CDATA[
 
 
-            &lt;div class="changed_added_2_0"&gt;
-            &lt;p&gt;Declares that the composite component whose
+            <div class="changed_added_2_0">
+            <p>Declares that the composite component whose
             contract is declared by the
-            &lt;code&gt;&amp;lt;composite:interface&amp;gt;&lt;/code&gt; in
+            <code>&amp;lt;composite:interface&amp;gt;</code> in
             which this
             element is nested exposes an implementation of
-            &lt;code&gt;ActionSource2&lt;/code&gt; suitable for use as the
+            <code>ActionSource2</code> suitable for use as the
             target of
-            &lt;em&gt;attached objects&lt;/em&gt; in &lt;em&gt;the using page&lt;/em&gt;.
+            <em>attached objects</em> in <em>the using page</em>.
             Any attached objects suitable for implementations of
-            &lt;code&gt;ActionSource2&lt;/code&gt; may be attached to the
+            <code>ActionSource2</code> may be attached to the
             composite
-            component. Consider this excerpt from &lt;em&gt;the using
-            page&lt;/em&gt;:
-            &lt;/p&gt;
+            component. Consider this excerpt from <em>the using
+            page</em>:
+            </p>
 
-            &lt;div class="syntax"&gt;&lt;div class="html4strict"
-            style="font-family: monospace;"&gt;&lt;ol&gt;&lt;li class="li1"&gt;&lt;div
-            class="de1"&gt;&lt;span class="sc2"&gt;&amp;lt;ez:loginPanel &lt;span
-            class="kw3"&gt;id&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;loginPanel&amp;quot;&lt;/span&gt;
-            model=&lt;span class="st0"&gt;&amp;quot;#{bean}&amp;quot;&lt;/span&gt;&lt;span
-            class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &lt;span
-            class="sc2"&gt;&amp;lt;f:valueChangeListener &lt;span class="kw3"&gt;for&lt;/span&gt;=&lt;span
-            class="st0"&gt;&amp;quot;username&amp;quot;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp;
+            <div class="syntax"><div class="html4strict"
+            style="font-family: monospace;"><ol><li class="li1"><div
+            class="de1"><span class="sc2">&amp;lt;ez:loginPanel <span
+            class="kw3">id</span>=<span class="st0">&amp;quot;loginPanel&amp;quot;</span>
+            model=<span class="st0">&amp;quot;#{bean}&amp;quot;</span><span
+            class="kw2">&amp;gt;</span></span></div></li>
+            <li class="li2"><div class="de2">&amp;nbsp; <span
+            class="sc2">&amp;lt;f:valueChangeListener <span class="kw3">for</span>=<span
+            class="st0">&amp;quot;username&amp;quot;</span></div></li>
+            <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp;
             &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;
             &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;&amp;nbsp; &amp;nbsp;
-            &amp;nbsp; binding=&lt;span class="st0"&gt;&amp;quot;#{bean.useridValueChangeListener}&amp;quot;&lt;/span&gt;
-            /&lt;span class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &lt;span
-            class="sc2"&gt;&amp;lt;f:actionListener &lt;span class="kw3"&gt;for&lt;/span&gt;=&lt;span
-            class="st0"&gt;&amp;quot;loginEvent&amp;quot;&lt;/span&gt; &lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp;
+            &amp;nbsp; binding=<span class="st0">&amp;quot;#{bean.useridValueChangeListener}&amp;quot;</span>
+            /<span class="kw2">&amp;gt;</span></span></div></li>
+            <li class="li2"><div class="de2">&amp;nbsp; <span
+            class="sc2">&amp;lt;f:actionListener <span class="kw3">for</span>=<span
+            class="st0">&amp;quot;loginEvent&amp;quot;</span> </div></li>
+            <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp;
             &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;
-            &amp;nbsp; &amp;nbsp; binding=&lt;span class="st0"&gt;&amp;quot;#{bean.loginEventListener}&amp;quot;&lt;/span&gt;
-            /&lt;span class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &lt;span
-            class="sc2"&gt;&amp;lt;f:actionListener &lt;span class="kw3"&gt;for&lt;/span&gt;=&lt;span
-            class="st0"&gt;&amp;quot;cancelEvent&amp;quot;&lt;/span&gt; &lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp;
+            &amp;nbsp; &amp;nbsp; binding=<span class="st0">&amp;quot;#{bean.loginEventListener}&amp;quot;</span>
+            /<span class="kw2">&amp;gt;</span></span></div></li>
+            <li class="li2"><div class="de2">&amp;nbsp;</div></li>
+            <li class="li1"><div class="de1">&amp;nbsp; <span
+            class="sc2">&amp;lt;f:actionListener <span class="kw3">for</span>=<span
+            class="st0">&amp;quot;cancelEvent&amp;quot;</span> </div></li>
+            <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp;
             &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;
-            &amp;nbsp; &amp;nbsp; binding=&lt;span class="st0"&gt;&amp;quot;#{bean.cancelEventListener}&amp;quot;&lt;/span&gt;
-            /&lt;span class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &lt;span
-            class="sc2"&gt;&amp;lt;f:actionListener &lt;span class="kw3"&gt;for&lt;/span&gt;=&lt;span
-            class="st0"&gt;&amp;quot;allEvents&amp;quot;&lt;/span&gt; &lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp;
+            &amp;nbsp; &amp;nbsp; binding=<span class="st0">&amp;quot;#{bean.cancelEventListener}&amp;quot;</span>
+            /<span class="kw2">&amp;gt;</span></span></div></li>
+            <li class="li1"><div class="de1">&amp;nbsp;</div></li>
+            <li class="li2"><div class="de2">&amp;nbsp; <span
+            class="sc2">&amp;lt;f:actionListener <span class="kw3">for</span>=<span
+            class="st0">&amp;quot;allEvents&amp;quot;</span> </div></li>
+            <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp;
             &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;
-            &amp;nbsp; &amp;nbsp; binding=&lt;span class="st0"&gt;&amp;quot;#{bean.allEventsListener}&amp;quot;&lt;/span&gt;
-            /&lt;span class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&lt;span class="sc2"&gt;&lt;span
-            class="kw2"&gt;&amp;lt;&lt;/span&gt;/ez:loginPanel&amp;gt;&lt;/span&gt;
-            &lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/div&gt;&lt;/div&gt;
+            &amp;nbsp; &amp;nbsp; binding=<span class="st0">&amp;quot;#{bean.allEventsListener}&amp;quot;</span>
+            /<span class="kw2">&amp;gt;</span></span></div></li>
+            <li class="li2"><div class="de2">&amp;nbsp;</div></li>
+            <li class="li1"><div class="de1"><span class="sc2"><span
+            class="kw2">&amp;lt;</span>/ez:loginPanel&amp;gt;</span>
+            </div></li></ol></div></div>
 
-            &lt;p&gt;The &lt;code&gt;&amp;lt;f:actionListener&amp;gt;&lt;/code&gt;
+            <p>The <code>&amp;lt;f:actionListener&amp;gt;</code>
             elements on lines 4, 7, and 10
-            refer to the &lt;em&gt;attached objects&lt;/em&gt; declared on lines
-            2, 3 and 4 below.&lt;/p&gt;
+            refer to the <em>attached objects</em> declared on lines
+            2, 3 and 4 below.</p>
 
-            &lt;div class="syntax"&gt;&lt;div class="html4strict"
-            style="font-family: monospace;"&gt;&lt;ol&gt;&lt;li class="li1"&gt;&lt;div
-            class="de1"&gt;&lt;span class="sc2"&gt;&amp;lt;composite:interface
-            &lt;span class="kw3"&gt;name&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;loginPanel&amp;quot;&lt;/span&gt;&lt;span
-            class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &lt;span
-            class="sc2"&gt;&amp;lt;composite:actionSource &lt;span class="kw3"&gt;name&lt;/span&gt;=&lt;span
-            class="st0"&gt;&amp;quot;loginEvent&amp;quot;&lt;/span&gt; /&lt;span
-            class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &lt;span
-            class="sc2"&gt;&amp;lt;composite:actionSource &lt;span class="kw3"&gt;name&lt;/span&gt;=&lt;span
-            class="st0"&gt;&amp;quot;cancelEvent&amp;quot;&lt;/span&gt; /&lt;span
-            class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &lt;span
-            class="sc2"&gt;&amp;lt;composite:actionSource &lt;span class="kw3"&gt;name&lt;/span&gt;=&lt;span
-            class="st0"&gt;&amp;quot;allEvents&amp;quot;&lt;/span&gt; targets=&lt;span
-            class="st0"&gt;&amp;quot;loginEvent cancelEvent&amp;quot;&lt;/span&gt;
-            /&lt;span class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&lt;span class="sc2"&gt;&lt;span
-            class="kw2"&gt;&amp;lt;&lt;/span&gt;/composite:interface&amp;gt;&lt;/span&gt;
-            &lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/div&gt;&lt;/div&gt;
+            <div class="syntax"><div class="html4strict"
+            style="font-family: monospace;"><ol><li class="li1"><div
+            class="de1"><span class="sc2">&amp;lt;composite:interface
+            <span class="kw3">name</span>=<span class="st0">&amp;quot;loginPanel&amp;quot;</span><span
+            class="kw2">&amp;gt;</span></span></div></li>
+            <li class="li2"><div class="de2">&amp;nbsp; <span
+            class="sc2">&amp;lt;composite:actionSource <span class="kw3">name</span>=<span
+            class="st0">&amp;quot;loginEvent&amp;quot;</span> /<span
+            class="kw2">&amp;gt;</span></span></div></li>
+            <li class="li1"><div class="de1">&amp;nbsp; <span
+            class="sc2">&amp;lt;composite:actionSource <span class="kw3">name</span>=<span
+            class="st0">&amp;quot;cancelEvent&amp;quot;</span> /<span
+            class="kw2">&amp;gt;</span></span></div></li>
+            <li class="li2"><div class="de2">&amp;nbsp; <span
+            class="sc2">&amp;lt;composite:actionSource <span class="kw3">name</span>=<span
+            class="st0">&amp;quot;allEvents&amp;quot;</span> targets=<span
+            class="st0">&amp;quot;loginEvent cancelEvent&amp;quot;</span>
+            /<span class="kw2">&amp;gt;</span></span></div></li>
+            <li class="li1"><div class="de1"><span class="sc2"><span
+            class="kw2">&amp;lt;</span>/composite:interface&amp;gt;</span>
+            </div></li></ol></div></div>
 
-            &lt;p&gt;Most of the concepts from example content from &lt;a
-            href="valueHolder.html"&gt;&lt;code&gt;&amp;lt;composite:valueHolder&amp;gt;&lt;/code&gt;&lt;/a&gt;
+            <p>Most of the concepts from example content from <a
+            href="valueHolder.html"><code>&amp;lt;composite:valueHolder&amp;gt;</code></a>
             also applies in the case of
-            &lt;code&gt;&amp;lt;composite:actionSource&amp;gt;&lt;/code&gt;.&lt;/p&gt;
+            <code>&amp;lt;composite:actionSource&amp;gt;</code>.</p>
 
-            &lt;p&gt;Please see &lt;code&gt;&amp;lt;&lt;a
-            href="interface.html"&gt;composite:interface&lt;/a&gt;&amp;gt;&lt;/code&gt;
+            <p>Please see <code>&amp;lt;<a
+            href="interface.html">composite:interface</a>&amp;gt;</code>
             for a usage
-            example.&lt;/p&gt;
+            example.</p>
 
 
-            &lt;/div&gt;
-        </description>
+            </div>
+        ]]></description>
         <tag-name>actionSource</tag-name>
         <handler-class>com.sun.faces.facelets.tag.composite.ActionSource2AttachedObjectTargetHandler</handler-class>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
-                &lt;p&gt;
+                <div class="changed_added_2_0">
+                <p>
                 The value of this attribute maps back to the "for" attribute on
                 an attachable object
                 nested within a composite component. If the "targets" attribute
                 is not specified,
                 this value also represents the component ID of the target
                 component within the
-                that the &lt;code&gt;&amp;lt;composite:implementation&amp;gt;&lt;/code&gt;
+                that the <code>&amp;lt;composite:implementation&amp;gt;</code>
                 ActionListener should be mapped to.
-                &lt;/p&gt;
-                &lt;/div&gt;
+                </p>
+                </div>
 
-            </description>
+            ]]></description>
             <name>name</name>
             <required>true</required>
             <type>java.lang.String</type>
         </attribute>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
-                &lt;p&gt;If present, this must be a space (not tab) separated
+                <div class="changed_added_2_0">
+                <p>If present, this must be a space (not tab) separated
                 list of client
-                ids (relative to the &lt;em&gt;top level component&lt;/em&gt;)
+                ids (relative to the <em>top level component</em>)
                 of components within
-                the &lt;code&gt;&amp;lt;composite:implementation&amp;gt;&lt;/code&gt;
+                the <code>&amp;lt;composite:implementation&amp;gt;</code>
                 section. Space is
                 used as the delimiter for compatibility with the IDREFS and
                 NMTOKENS
-                data types from the XML Schema.&lt;/p&gt;&lt;/div&gt;
+                data types from the XML Schema.</p></div>
 
-            </description>
+            ]]></description>
             <name>targets</name>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
     </tag>
     <tag>
-        <description>
+        <description><![CDATA[
 
 
-            &lt;div class="changed_added_2_0"&gt;
-            &lt;p&gt;Used within a &lt;code&gt;&amp;lt;composite:interface&amp;gt;&lt;/code&gt;
+            <div class="changed_added_2_0">
+            <p>Used within a <code>&amp;lt;composite:interface&amp;gt;</code>
             section,
             within any sub-element of that section, to include XML content not
             defined by this specification. This element can be used to
             incorporate
-            &lt;a target="_" href="http://jcp.org/en/jsr/detail?id=276"&gt;JSR-276&lt;/a&gt;
-            metadata into a composite component.&lt;/p&gt;
+            <a target="_" href="http://jcp.org/en/jsr/detail?id=276">JSR-276</a>
+            metadata into a composite component.</p>
 
-            &lt;/div&gt;
-        </description>
+            </div>
+        ]]></description>
         <tag-name>extension</tag-name>
         <handler-class>com.sun.faces.facelets.tag.composite.ExtensionHandler</handler-class>
     </tag>
     <tag>
-        <description>
+        <description><![CDATA[
 
-            &lt;div class="changed_added_2_0"&gt;
+            <div class="changed_added_2_0">
 
-            &lt;p&gt;The presence of this tag in a
-            &lt;code&gt;&amp;lt;composite:implementation&amp;gt;&lt;/code&gt;
+            <p>The presence of this tag in a
+            <code>&amp;lt;composite:implementation&amp;gt;</code>
             section must cause the
-            named facet to be taken from the facet map of the &lt;em&gt;top
+            named facet to be taken from the facet map of the <em>top
             level
-            component&lt;/em&gt; and inserted as a facet child of the component
+            component</em> and inserted as a facet child of the component
             in which
-            this element is nested.&lt;/p&gt;
+            this element is nested.</p>
 
-            &lt;/div&gt;
+            </div>
 
-        </description>
+        ]]></description>
         <tag-name>insertFacet</tag-name>
         <handler-class>com.sun.faces.facelets.tag.composite.InsertFacetHandler</handler-class>
         <attribute>
-            <description>
+            <description><![CDATA[
 
-                &lt;div class="changed_added_2_0"&gt;
+                <div class="changed_added_2_0">
 
-                &lt;p&gt;The name of the facet child on the &lt;em&gt;top level
-                component&lt;/em&gt; which
+                <p>The name of the facet child on the <em>top level
+                component</em> which
                 must be inserted as a facet child of the component in which this
                 element
-                is nested.&lt;/p&gt;
+                is nested.</p>
 
-                &lt;/div&gt;
+                </div>
 
-            </description>
+            ]]></description>
             <name>name</name>
             <required>true</required>
             <type>java.lang.String</type>
         </attribute>
         <attribute>
-            <description>
+            <description><![CDATA[
 
-                &lt;div class="changed_added_2_0"&gt;
+                <div class="changed_added_2_0">
 
-                &lt;p&gt;If &lt;code&gt;true&lt;/code&gt;, and there is no such
+                <p>If <code>true</code>, and there is no such
                 facet present on the top
-                level component, a &lt;code&gt;TagException&lt;/code&gt; must be
+                level component, a <code>TagException</code> must be
                 thrown, containing
-                the &lt;code&gt;Location&lt;/code&gt;, the facet name, and a
+                the <code>Location</code>, the facet name, and a
                 localized descriptive
-                error message.&lt;/p&gt;
+                error message.</p>
 
-                &lt;/div&gt;
+                </div>
 
-            </description>
+            ]]></description>
             <name>required</name>
             <required>false</required>
             <type>boolean</type>

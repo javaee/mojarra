@@ -39,368 +39,368 @@
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_0.xsd"
                 version="2.0">
-    <description>
+    <description><![CDATA[
 
-        &lt;/pre&gt;
+        </pre>
 
-        &lt;div class="changed_added_2_0"&gt;
+        <div class="changed_added_2_0">
 
-        &lt;p&gt;The tags in this library add templating&amp;#8212;a powerful
+        <p>The tags in this library add templating&amp;#8212;a powerful
         view composition technique&amp;#8212;to JSF.
         Templating is so useful that there are entire frameworks, such as Tiles
         and SiteMesh, that are built
         around the concept of templating. So what is templating, how can you
         benefit from it, and how does
         this tag library implement it?
-        &lt;/p&gt;
+        </p>
 
-        &lt;p&gt;If you've used JSP before, you've probably used &lt;code&gt;jsp:include&lt;/code&gt;.
+        <p>If you've used JSP before, you've probably used <code>jsp:include</code>.
         The prototypical example for
-        &lt;code&gt;jsp:include&lt;/code&gt; is a header on each page in a web
+        <code>jsp:include</code> is a header on each page in a web
         application. One JSP page, say header.jsp,
         encapsulates the header content, and the header is included by each
-        page. You &lt;em&gt;encapsulate and reuse
-        content&lt;/em&gt;, so that changes to one file, header.jsp, affect the
+        page. You <em>encapsulate and reuse
+        content</em>, so that changes to one file, header.jsp, affect the
         header on every page.
-        &lt;/p&gt;
+        </p>
 
-        &lt;p&gt;This tab library contains a tag&amp;#8212&lt;code&gt;ui:include&lt;/code&gt;&amp;#8212
-        that's analagous to &lt;code&gt;jsp:include&lt;/code&gt;,
+        <p>This tab library contains a tag&amp;#8212<code>ui:include</code>&amp;#8212
+        that's analagous to <code>jsp:include</code>,
         but encapsulating and reusing content is only half the templating story,
         because templating also lets you
-        &lt;em&gt;encapsulate and reuse &lt;b&gt;layout&lt;/b&gt;&lt;/em&gt;.
-        You define a single &lt;em&gt;template&lt;/em&gt; (meaning layout), and
+        <em>encapsulate and reuse <b>layout</b></em>.
+        You define a single <em>template</em> (meaning layout), and
         you reuse
-        that template with multiple &lt;em&gt;compositions&lt;/em&gt;. So now
+        that template with multiple <em>compositions</em>. So now
         you can control the layout of many pages with a single
         template (layout). Let's take a look at an example.
-        &lt;/p&gt;
+        </p>
 
-        &lt;h3&gt;A Templating Example&lt;/h3&gt;
+        <h3>A Templating Example</h3>
 
-        &lt;p&gt;
+        <p>
         First, we define a template:
-        &lt;/p&gt;
-        &lt;div class="syntax"&gt;&lt;div class="html4strict"
-        style="font-family: monospace;"&gt;&lt;ol&gt;&lt;li class="li1"&gt;&lt;div
-        class="de1"&gt;&lt;span class="sc0"&gt;&amp;lt;!DOCTYPE html PUBLIC
-        &amp;quot;-//W3C//DTD XHTML 1.0 Transitional//EN&amp;quot;&lt;/div&gt;&lt;/li&gt;
+        </p>
+        <div class="syntax"><div class="html4strict"
+        style="font-family: monospace;"><ol><li class="li1"><div
+        class="de1"><span class="sc0">&amp;lt;!DOCTYPE html PUBLIC
+        &amp;quot;-//W3C//DTD XHTML 1.0 Transitional//EN&amp;quot;</div></li>
 
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&amp;quot;&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&lt;span class="sc3"&gt;&lt;span
-        class="re1"&gt;&amp;lt;html&lt;/span&gt; &lt;span class="re0"&gt;xmlns&lt;/span&gt;=&lt;span
-        class="st0"&gt;&amp;quot;http://www.w3.org/1999/xhtml&amp;quot;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &amp;nbsp; &amp;nbsp; &amp;nbsp; xmlns:&lt;span class="re0"&gt;ui&lt;/span&gt;=&lt;span
-        class="st0"&gt;&amp;quot;http://java.sun.com/jsf/facelets&amp;quot;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+        <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&amp;quot;&amp;gt;</span></div></li>
+        <li class="li1"><div class="de1">&amp;nbsp;</div></li>
+        <li class="li2"><div class="de2"><span class="sc3"><span
+        class="re1">&amp;lt;html</span> <span class="re0">xmlns</span>=<span
+        class="st0">&amp;quot;http://www.w3.org/1999/xhtml&amp;quot;</span></div></li>
+        <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        &amp;nbsp; &amp;nbsp; &amp;nbsp; xmlns:<span class="re0">ui</span>=<span
+        class="st0">&amp;quot;http://java.sun.com/jsf/facelets&amp;quot;</span></div></li>
 
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp; &lt;span
-        class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;head&lt;span class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &lt;span class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;link&lt;/span&gt;
-        &lt;span class="re0"&gt;href&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;styles.css&amp;quot;&lt;/span&gt;
-        &lt;span class="re0"&gt;rel&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;stylesheet&amp;quot;&lt;/span&gt;
-        &lt;span class="re0"&gt;type&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;text/css&amp;quot;&lt;/span&gt;&lt;span
-        class="re2"&gt;/&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+        <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp; <span
+        class="sc3"><span class="re1">&amp;lt;head<span class="re2">&amp;gt;</span></span></span></div></li>
+        <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        <span class="sc3"><span class="re1">&amp;lt;link</span>
+        <span class="re0">href</span>=<span class="st0">&amp;quot;styles.css&amp;quot;</span>
+        <span class="re0">rel</span>=<span class="st0">&amp;quot;stylesheet&amp;quot;</span>
+        <span class="re0">type</span>=<span class="st0">&amp;quot;text/css&amp;quot;</span><span
+        class="re2">/&amp;gt;</span></span></div></li>
 
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &lt;span class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;title&lt;span
-        class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span
-        class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;ui&lt;/span&gt;:insert
-        &lt;span class="re0"&gt;name&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;title&amp;quot;&lt;/span&gt;&lt;span
-        class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;Default Title&lt;span
-        class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;/ui&lt;/span&gt;:insert&lt;span
-        class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="sc3"&gt;&lt;span
-        class="re1"&gt;&amp;lt;/title&lt;span class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp; &lt;span
-        class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;/head&lt;span class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+        <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        <span class="sc3"><span class="re1">&amp;lt;title<span
+        class="re2">&amp;gt;</span></span></span><span
+        class="sc3"><span class="re1">&amp;lt;ui</span>:insert
+        <span class="re0">name</span>=<span class="st0">&amp;quot;title&amp;quot;</span><span
+        class="re2">&amp;gt;</span></span>Default Title<span
+        class="sc3"><span class="re1">&amp;lt;/ui</span>:insert<span
+        class="re2">&amp;gt;</span></span><span class="sc3"><span
+        class="re1">&amp;lt;/title<span class="re2">&amp;gt;</span></span></span></div></li>
+        <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp; <span
+        class="sc3"><span class="re1">&amp;lt;/head<span class="re2">&amp;gt;</span></span></span></div></li>
 
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp; &lt;span
-        class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;body&lt;span class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &lt;span class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;ui&lt;/span&gt;:debug&lt;span
-        class="re2"&gt;/&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &lt;span class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;div&lt;/span&gt;
-        &lt;span class="re0"&gt;class&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;heading&amp;quot;&lt;/span&gt;&lt;span
-        class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+        <li class="li1"><div class="de1">&amp;nbsp;</div></li>
+        <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp; <span
+        class="sc3"><span class="re1">&amp;lt;body<span class="re2">&amp;gt;</span></span></span></div></li>
+        <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        <span class="sc3"><span class="re1">&amp;lt;ui</span>:debug<span
+        class="re2">/&amp;gt;</span></span></div></li>
+        <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        <span class="sc3"><span class="re1">&amp;lt;div</span>
+        <span class="re0">class</span>=<span class="st0">&amp;quot;heading&amp;quot;</span><span
+        class="re2">&amp;gt;</span></span></div></li>
 
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &amp;nbsp; &lt;span class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;ui&lt;/span&gt;:insert
-        &lt;span class="re0"&gt;name&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;heading&amp;quot;&lt;/span&gt;&lt;span
-        class="re2"&gt;/&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &lt;span class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;/div&lt;span
-        class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
+        <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        &amp;nbsp; <span class="sc3"><span class="re1">&amp;lt;ui</span>:insert
+        <span class="re0">name</span>=<span class="st0">&amp;quot;heading&amp;quot;</span><span
+        class="re2">/&amp;gt;</span></span></div></li>
+        <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        <span class="sc3"><span class="re1">&amp;lt;/div<span
+        class="re2">&amp;gt;</span></span></span></div></li>
+        <li class="li1"><div class="de1">&amp;nbsp;</div></li>
 
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &lt;span class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;div&lt;/span&gt;
-        &lt;span class="re0"&gt;class&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;content&amp;quot;&lt;/span&gt;&lt;span
-        class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &amp;nbsp; &lt;span class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;ui&lt;/span&gt;:insert
-        &lt;span class="re0"&gt;name&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;content&amp;quot;&lt;/span&gt;&lt;span
-        class="re2"&gt;/&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+        <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        <span class="sc3"><span class="re1">&amp;lt;div</span>
+        <span class="re0">class</span>=<span class="st0">&amp;quot;content&amp;quot;</span><span
+        class="re2">&amp;gt;</span></span></div></li>
+        <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        &amp;nbsp; <span class="sc3"><span class="re1">&amp;lt;ui</span>:insert
+        <span class="re0">name</span>=<span class="st0">&amp;quot;content&amp;quot;</span><span
+        class="re2">/&amp;gt;</span></span></div></li>
 
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &lt;span class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;/div&lt;span
-        class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp; &lt;span
-        class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;/body&lt;span class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&lt;span class="sc3"&gt;&lt;span
-        class="re1"&gt;&amp;lt;/html&lt;span class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
-        &lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/div&gt;&lt;/div&gt;
+        <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        <span class="sc3"><span class="re1">&amp;lt;/div<span
+        class="re2">&amp;gt;</span></span></span></div></li>
+        <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp; <span
+        class="sc3"><span class="re1">&amp;lt;/body<span class="re2">&amp;gt;</span></span></span></div></li>
+        <li class="li2"><div class="de2"><span class="sc3"><span
+        class="re1">&amp;lt;/html<span class="re2">&amp;gt;</span></span></span>
+        </div></li></ol></div></div>
 
-        &lt;p&gt;
+        <p>
         In the preceeding listing, we've defined a layout, also known as a
         template. That template uses the
-        &lt;code&gt;ui:insert&lt;/code&gt; tag to insert pieces of a page &amp;#8212namely,
+        <code>ui:insert</code> tag to insert pieces of a page &amp;#8212namely,
         title, heading, and content&amp;#8212
-        defined in a &lt;em&gt;composition&lt;/em&gt;. Notice that on line 8, we
+        defined in a <em>composition</em>. Notice that on line 8, we
         define a default title, in case one isn't provided
-        by the composition. Also note that on line 12 we have the &lt;code&gt;ui:debug&lt;/code&gt;
+        by the composition. Also note that on line 12 we have the <code>ui:debug</code>
         tag, which lets the user activate
         a popup window with debugging information by typing CTRL + Shift + d.
-        &lt;/p&gt;
+        </p>
 
-        &lt;p&gt;
+        <p>
         The title, heading, and content pieces of the page referenced in the
         template are defined in a separate XHTML
         file in a composition, like this:
-        &lt;/p&gt;
+        </p>
 
-        &lt;div class="syntax"&gt;&lt;div class="html4strict"
-        style="font-family: monospace;"&gt;&lt;ol&gt;&lt;li class="li1"&gt;&lt;div
-        class="de1"&gt;&lt;span class="sc0"&gt;&amp;lt;!DOCTYPE html PUBLIC
-        &amp;quot;-//W3C//DTD XHTML 1.0 Transitional//EN&amp;quot;&lt;/div&gt;&lt;/li&gt;
+        <div class="syntax"><div class="html4strict"
+        style="font-family: monospace;"><ol><li class="li1"><div
+        class="de1"><span class="sc0">&amp;lt;!DOCTYPE html PUBLIC
+        &amp;quot;-//W3C//DTD XHTML 1.0 Transitional//EN&amp;quot;</div></li>
 
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &amp;nbsp; &amp;quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&amp;quot;&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&lt;span class="sc3"&gt;&lt;span
-        class="re1"&gt;&amp;lt;html&lt;/span&gt; &lt;span class="re0"&gt;xmlns&lt;/span&gt;=&lt;span
-        class="st0"&gt;&amp;quot;http://www.w3.org/1999/xhtml&amp;quot;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp;xmlns:&lt;span
-        class="re0"&gt;ui&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;http://java.sun.com/jsf/facelets&amp;quot;&lt;/span&gt;&lt;span
-        class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+        <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        &amp;nbsp; &amp;quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&amp;quot;&amp;gt;</span></div></li>
+        <li class="li1"><div class="de1">&amp;nbsp;</div></li>
+        <li class="li2"><div class="de2"><span class="sc3"><span
+        class="re1">&amp;lt;html</span> <span class="re0">xmlns</span>=<span
+        class="st0">&amp;quot;http://www.w3.org/1999/xhtml&amp;quot;</span></div></li>
+        <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp;xmlns:<span
+        class="re0">ui</span>=<span class="st0">&amp;quot;http://java.sun.com/jsf/facelets&amp;quot;</span><span
+        class="re2">&amp;gt;</span></span></div></li>
 
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &lt;span
-        class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;body&lt;span class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp; &lt;span
-        class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;ui&lt;/span&gt;:composition
-        &lt;span class="re0"&gt;template&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;/layout.xhtml&amp;quot;&lt;/span&gt;&lt;span
-        class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &lt;span class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;ui&lt;/span&gt;:define
-        &lt;span class="re0"&gt;name&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;title&amp;quot;&lt;/span&gt;&lt;span
-        class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;A List of Contacts&lt;span
-        class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;/ui&lt;/span&gt;:define&lt;span
-        class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+        <li class="li2"><div class="de2">&amp;nbsp;</div></li>
+        <li class="li1"><div class="de1">&amp;nbsp; <span
+        class="sc3"><span class="re1">&amp;lt;body<span class="re2">&amp;gt;</span></span></span></div></li>
+        <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp; <span
+        class="sc3"><span class="re1">&amp;lt;ui</span>:composition
+        <span class="re0">template</span>=<span class="st0">&amp;quot;/layout.xhtml&amp;quot;</span><span
+        class="re2">&amp;gt;</span></span></div></li>
+        <li class="li1"><div class="de1">&amp;nbsp;</div></li>
+        <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        <span class="sc3"><span class="re1">&amp;lt;ui</span>:define
+        <span class="re0">name</span>=<span class="st0">&amp;quot;title&amp;quot;</span><span
+        class="re2">&amp;gt;</span></span>A List of Contacts<span
+        class="sc3"><span class="re1">&amp;lt;/ui</span>:define<span
+        class="re2">&amp;gt;</span></span></div></li>
 
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &lt;span class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;ui&lt;/span&gt;:define
-        &lt;span class="re0"&gt;name&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;heading&amp;quot;&lt;/span&gt;&lt;span
-        class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;Contacts&lt;span
-        class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;/ui&lt;/span&gt;:define&lt;span
-        class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &lt;span class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;ui&lt;/span&gt;:define
-        &lt;span class="re0"&gt;name&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;content&amp;quot;&lt;/span&gt;&lt;span
-        class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+        <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        <span class="sc3"><span class="re1">&amp;lt;ui</span>:define
+        <span class="re0">name</span>=<span class="st0">&amp;quot;heading&amp;quot;</span><span
+        class="re2">&amp;gt;</span></span>Contacts<span
+        class="sc3"><span class="re1">&amp;lt;/ui</span>:define<span
+        class="re2">&amp;gt;</span></span></div></li>
+        <li class="li2"><div class="de2">&amp;nbsp;</div></li>
+        <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        <span class="sc3"><span class="re1">&amp;lt;ui</span>:define
+        <span class="re0">name</span>=<span class="st0">&amp;quot;content&amp;quot;</span><span
+        class="re2">&amp;gt;</span></span></div></li>
 
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &amp;nbsp; &lt;span class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;ui&lt;/span&gt;:include
-        &lt;span class="re0"&gt;src&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;contactsTable.xhtml&amp;quot;&lt;/span&gt;
-        &lt;span class="re2"&gt;/&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &lt;span class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;/ui&lt;/span&gt;:define&lt;span
-        class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+        <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        &amp;nbsp; <span class="sc3"><span class="re1">&amp;lt;ui</span>:include
+        <span class="re0">src</span>=<span class="st0">&amp;quot;contactsTable.xhtml&amp;quot;</span>
+        <span class="re2">/&amp;gt;</span></span></div></li>
+        <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        <span class="sc3"><span class="re1">&amp;lt;/ui</span>:define<span
+        class="re2">&amp;gt;</span></span></div></li>
 
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &amp;nbsp; &amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp; &lt;span
-        class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;/ui&lt;/span&gt;:composition&lt;span
-        class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &lt;span
-        class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;/body&lt;span class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&lt;span class="sc3"&gt;&lt;span
-        class="re1"&gt;&amp;lt;/html&lt;span class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
-        &lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/div&gt;&lt;/div&gt;
+        <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        &amp;nbsp; &amp;nbsp;</div></li>
+        <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp; <span
+        class="sc3"><span class="re1">&amp;lt;/ui</span>:composition<span
+        class="re2">&amp;gt;</span></span></div></li>
+        <li class="li2"><div class="de2">&amp;nbsp; <span
+        class="sc3"><span class="re1">&amp;lt;/body<span class="re2">&amp;gt;</span></span></span></div></li>
+        <li class="li1"><div class="de1"><span class="sc3"><span
+        class="re1">&amp;lt;/html<span class="re2">&amp;gt;</span></span></span>
+        </div></li></ol></div></div>
 
-        &lt;p&gt;
+        <p>
         At runtime, JSF synthesizes the two previous XHTML pages to create a
         single JSF view by inserting the
         pieces defined in the composition into the template (that template is
         layout.xhtml, which is the first
-        listing above). JSF also disregards everything outside of the &lt;code&gt;composition&lt;/code&gt;
+        listing above). JSF also disregards everything outside of the <code>composition</code>
         tag so that we don't
-        wind up with two &lt;code&gt;body&lt;/code&gt; elements in the view.
-        Also, note that we use the &lt;code&gt;ui:include&lt;/code&gt;
+        wind up with two <code>body</code> elements in the view.
+        Also, note that we use the <code>ui:include</code>
         tag on line 14 to include content (which happens to be a table) from
         another XHTML page, so that we can reuse
         that table in other views.
-        &lt;/p&gt;
+        </p>
 
-        &lt;p&gt;
+        <p>
         So why do we have two XHTML pages to define a single view? Why not
         simply take the pieces and manually insert
         them into the layout so that we have only a single XHTML page? The
         answer is simple: we have separated layout
-        from the content so that we can &lt;em&gt;reuse that layout&lt;/em&gt;
+        from the content so that we can <em>reuse that layout</em>
         among multiple compositions. For example, now we can
         define another composition that uses the same layout:
-        &lt;/p&gt;
+        </p>
 
-        &lt;div class="syntax"&gt;&lt;div class="html4strict"
-        style="font-family: monospace;"&gt;&lt;ol&gt;&lt;li class="li1"&gt;&lt;div
-        class="de1"&gt;&lt;span class="sc0"&gt;&amp;lt;!DOCTYPE html PUBLIC
-        &amp;quot;-//W3C//DTD XHTML 1.0 Transitional//EN&amp;quot;&lt;/div&gt;&lt;/li&gt;
+        <div class="syntax"><div class="html4strict"
+        style="font-family: monospace;"><ol><li class="li1"><div
+        class="de1"><span class="sc0">&amp;lt;!DOCTYPE html PUBLIC
+        &amp;quot;-//W3C//DTD XHTML 1.0 Transitional//EN&amp;quot;</div></li>
 
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &amp;nbsp; &amp;quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&amp;quot;&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&lt;span class="sc3"&gt;&lt;span
-        class="re1"&gt;&amp;lt;html&lt;/span&gt; &lt;span class="re0"&gt;xmlns&lt;/span&gt;=&lt;span
-        class="st0"&gt;&amp;quot;http://www.w3.org/1999/xhtml&amp;quot;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
-        xmlns:&lt;span class="re0"&gt;ui&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;http://java.sun.com/jsf/facelets&amp;quot;&lt;/span&gt;&lt;span
-        class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+        <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        &amp;nbsp; &amp;quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&amp;quot;&amp;gt;</span></div></li>
+        <li class="li1"><div class="de1">&amp;nbsp;</div></li>
+        <li class="li2"><div class="de2"><span class="sc3"><span
+        class="re1">&amp;lt;html</span> <span class="re0">xmlns</span>=<span
+        class="st0">&amp;quot;http://www.w3.org/1999/xhtml&amp;quot;</span></div></li>
+        <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        xmlns:<span class="re0">ui</span>=<span class="st0">&amp;quot;http://java.sun.com/jsf/facelets&amp;quot;</span><span
+        class="re2">&amp;gt;</span></span></div></li>
 
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &lt;span
-        class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;body&lt;span class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp; &lt;span
-        class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;ui&lt;/span&gt;:composition
-        &lt;span class="re0"&gt;template&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;/layout.xhtml&amp;quot;&lt;/span&gt;&lt;span
-        class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+        <li class="li2"><div class="de2">&amp;nbsp;</div></li>
+        <li class="li1"><div class="de1">&amp;nbsp; <span
+        class="sc3"><span class="re1">&amp;lt;body<span class="re2">&amp;gt;</span></span></span></div></li>
+        <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp; <span
+        class="sc3"><span class="re1">&amp;lt;ui</span>:composition
+        <span class="re0">template</span>=<span class="st0">&amp;quot;/layout.xhtml&amp;quot;</span><span
+        class="re2">&amp;gt;</span></span></div></li>
 
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
+        <li class="li2"><div class="de2">&amp;nbsp;</div></li>
 
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &lt;span class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;ui&lt;/span&gt;:define
-        &lt;span class="re0"&gt;name&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;title&amp;quot;&lt;/span&gt;&lt;span
-        class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;Create a Contact&lt;span
-        class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;/ui&lt;/span&gt;:define&lt;span
-        class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+        <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        <span class="sc3"><span class="re1">&amp;lt;ui</span>:define
+        <span class="re0">name</span>=<span class="st0">&amp;quot;title&amp;quot;</span><span
+        class="re2">&amp;gt;</span></span>Create a Contact<span
+        class="sc3"><span class="re1">&amp;lt;/ui</span>:define<span
+        class="re2">&amp;gt;</span></span></div></li>
 
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &lt;span class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;ui&lt;/span&gt;:define
-        &lt;span class="re0"&gt;name&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;heading&amp;quot;&lt;/span&gt;&lt;span
-        class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;Create Contact&amp;lt;/ui&lt;/span&gt;:define&lt;span
-        class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+        <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        <span class="sc3"><span class="re1">&amp;lt;ui</span>:define
+        <span class="re0">name</span>=<span class="st0">&amp;quot;heading&amp;quot;</span><span
+        class="re2">&amp;gt;</span></span>Create Contact&amp;lt;/ui</span>:define<span
+        class="re2">&amp;gt;</span></span></div></li>
 
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &lt;span class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;ui&lt;/span&gt;:define
-        &lt;span class="re0"&gt;name&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;content&amp;quot;&lt;/span&gt;&lt;span
-        class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &amp;nbsp; &lt;span class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;ui&lt;/span&gt;:include
-        &lt;span class="re0"&gt;src&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;createContactForm.xhtml&amp;quot;&lt;/span&gt;&lt;span
-        class="re2"&gt;/&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+        <li class="li2"><div class="de2">&amp;nbsp;</div></li>
+        <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        <span class="sc3"><span class="re1">&amp;lt;ui</span>:define
+        <span class="re0">name</span>=<span class="st0">&amp;quot;content&amp;quot;</span><span
+        class="re2">&amp;gt;</span></span></div></li>
+        <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        &amp;nbsp; <span class="sc3"><span class="re1">&amp;lt;ui</span>:include
+        <span class="re0">src</span>=<span class="st0">&amp;quot;createContactForm.xhtml&amp;quot;</span><span
+        class="re2">/&amp;gt;</span></span></div></li>
 
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;
-        &lt;span class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;/ui&lt;/span&gt;:define&lt;span
-        class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+        <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp; &amp;nbsp;
+        <span class="sc3"><span class="re1">&amp;lt;/ui</span>:define<span
+        class="re2">&amp;gt;</span></span></div></li>
 
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
+        <li class="li2"><div class="de2">&amp;nbsp;</div></li>
 
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp; &lt;span
-        class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;/ui&lt;/span&gt;:composition&lt;span
-        class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &lt;span
-        class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;/body&lt;span class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-        &lt;li class="li2"&gt;&lt;div class="de2"&gt;&lt;span class="sc3"&gt;&lt;span
-        class="re1"&gt;&amp;lt;/html&lt;span class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
-        &lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/div&gt;&lt;/div&gt;
+        <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp; <span
+        class="sc3"><span class="re1">&amp;lt;/ui</span>:composition<span
+        class="re2">&amp;gt;</span></span></div></li>
+        <li class="li1"><div class="de1">&amp;nbsp; <span
+        class="sc3"><span class="re1">&amp;lt;/body<span class="re2">&amp;gt;</span></span></span></div></li>
+        <li class="li2"><div class="de2"><span class="sc3"><span
+        class="re1">&amp;lt;/html<span class="re2">&amp;gt;</span></span></span>
+        </div></li></ol></div></div>
 
-        &lt;p&gt;
+        <p>
         By encapsulating the layout, we can reuse that layout among multiple
         compositions. Just like
-        &lt;code&gt;ui:include&lt;/code&gt; lets us encapsulate and reuse
+        <code>ui:include</code> lets us encapsulate and reuse
         conent, JSF compositions let us encapsulate and reuse
         layout, so that changes to a single layout can affect multiple views.
         Fundamentally, that's what this
         tag library is all about.
-        &lt;/p&gt;
+        </p>
 
-        &lt;/div&gt;
-        &lt;pre&gt;
+        </div>
+        <pre>
 
-    </description>
+    ]]></description>
     <namespace>http://java.sun.com/jsf/facelets</namespace>
     <tag>
-        <description>
+        <description><![CDATA[
 
 
-            &lt;div class="changed_added_2_0"&gt;
-            &lt;p&gt;
-            This tag is the same as the &lt;code&gt;ui:composition&lt;/code&gt;,
+            <div class="changed_added_2_0">
+            <p>
+            This tag is the same as the <code>ui:composition</code>,
             except for two things:
             JSF creates a component and adds it directly to the tree, and
             there's no associated
             template.
-            &lt;/p&gt;
+            </p>
 
-            &lt;p&gt;
+            <p>
             Use this tag to create a component and specify a filename for the
-            component as either the source of a &lt;code&gt;ui:include&lt;/code&gt;,
+            component as either the source of a <code>ui:include</code>,
             or the source of a Facelets tag.
-            &lt;/p&gt;
-            &lt;/div&gt;
+            </p>
+            </div>
 
-        </description>
+        ]]></description>
         <tag-name>component</tag-name>
         <handler-class>com.sun.faces.facelets.tag.ui.ComponentRefHandler</handler-class>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
-                &lt;p&gt;
+                <div class="changed_added_2_0">
+                <p>
                 The identifier of the component that JSF inserts into the
                 component tree. If an identifier is
                 not explicitly specified by the page author, JSF will assign an
                 identifier based on the algorithm
                 that it uses for all components.
-                &lt;/p&gt;
-                &lt;/div&gt;
+                </p>
+                </div>
 
-            </description>
+            ]]></description>
             <name>id</name>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
-                &lt;p&gt;
+                <div class="changed_added_2_0">
+                <p>
                 Binds the component to a backing bean property, as specified in
                 the JSF specification.
-                &lt;/p&gt;
-                &lt;/div&gt;
+                </p>
+                </div>
 
-            </description>
+            ]]></description>
             <name>binding</name>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
     </tag>
     <tag>
-        <description>
+        <description><![CDATA[
 
 
-            &lt;div class="changed_added_2_0"&gt;
-            &lt;p&gt;
+            <div class="changed_added_2_0">
+            <p>
             Defines a composition that optionally uses a template, as outlined
             in the description of the ui tag library. Multiple
             compositions can use the same template, thus encapsulating and
@@ -408,107 +408,107 @@
             composition, which lets developers embed compositions in well-formed
             XHTML pages that can be viewed in an XHTML viewer,
             such as Dreamweaver or a browser, without including extraneous
-            elements such as &lt;code&gt;head&lt;/code&gt; and &lt;code&gt;body&lt;/code&gt;.
-            &lt;/p&gt;
-            &lt;div class="syntax"&gt;&lt;div class="html4strict"
-            style="font-family: monospace;"&gt;&lt;ol&gt;&lt;li class="li1"&gt;&lt;div
-            class="de1"&gt;&lt;span class="sc0"&gt;&amp;lt;!DOCTYPE html PUBLIC
-            &amp;quot;-//W3C//DTD XHTML 1.0 Transitional//EN&amp;quot;&lt;/div&gt;&lt;/li&gt;
+            elements such as <code>head</code> and <code>body</code>.
+            </p>
+            <div class="syntax"><div class="html4strict"
+            style="font-family: monospace;"><ol><li class="li1"><div
+            class="de1"><span class="sc0">&amp;lt;!DOCTYPE html PUBLIC
+            &amp;quot;-//W3C//DTD XHTML 1.0 Transitional//EN&amp;quot;</div></li>
 
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp;
-            &amp;nbsp; &amp;nbsp; &amp;quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&amp;quot;&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&lt;span class="sc3"&gt;&lt;span
-            class="re1"&gt;&amp;lt;html&lt;/span&gt; &lt;span class="re0"&gt;xmlns&lt;/span&gt;=&lt;span
-            class="st0"&gt;&amp;quot;http://www.w3.org/1999/xhtml&amp;quot;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp;xmlns:&lt;span
-            class="re0"&gt;ui&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;http://java.sun.com/jsf/facelets&amp;quot;&lt;/span&gt;&lt;span
-            class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+            <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp;
+            &amp;nbsp; &amp;nbsp; &amp;quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&amp;quot;&amp;gt;</span></div></li>
+            <li class="li1"><div class="de1">&amp;nbsp;</div></li>
+            <li class="li2"><div class="de2"><span class="sc3"><span
+            class="re1">&amp;lt;html</span> <span class="re0">xmlns</span>=<span
+            class="st0">&amp;quot;http://www.w3.org/1999/xhtml&amp;quot;</span></div></li>
+            <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp;xmlns:<span
+            class="re0">ui</span>=<span class="st0">&amp;quot;http://java.sun.com/jsf/facelets&amp;quot;</span><span
+            class="re2">&amp;gt;</span></span></div></li>
 
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &lt;span
-            class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;body&lt;span
-            class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp;
-            THIS LINE, AND EVERYTHING ABOVE IT IS DISREGARDED BY JSF&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp;
-            &lt;span class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;ui&lt;/span&gt;:composition
-            &lt;span class="re0"&gt;template&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;/layout.xhtml&amp;quot;&lt;/span&gt;&lt;span
-            class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+            <li class="li2"><div class="de2">&amp;nbsp;</div></li>
+            <li class="li1"><div class="de1">&amp;nbsp; <span
+            class="sc3"><span class="re1">&amp;lt;body<span
+            class="re2">&amp;gt;</span></span></span></div></li>
+            <li class="li2"><div class="de2">&amp;nbsp;</div></li>
+            <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp;
+            THIS LINE, AND EVERYTHING ABOVE IT IS DISREGARDED BY JSF</div></li>
+            <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp;
+            <span class="sc3"><span class="re1">&amp;lt;ui</span>:composition
+            <span class="re0">template</span>=<span class="st0">&amp;quot;/layout.xhtml&amp;quot;</span><span
+            class="re2">&amp;gt;</span></span></div></li>
 
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp;
-            &amp;nbsp; &lt;span class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;ui&lt;/span&gt;:define
-            &lt;span class="re0"&gt;name&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;title&amp;quot;&lt;/span&gt;&lt;span
-            class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;#{msgs.contactsWindowTitle}&lt;span
-            class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;/ui&lt;/span&gt;:define&lt;span
-            class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp;
-            &amp;nbsp; &lt;span class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;ui&lt;/span&gt;:define
-            &lt;span class="re0"&gt;name&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;heading&amp;quot;&lt;/span&gt;&lt;span
-            class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;#{msgs.contactsHeading}&lt;span
-            class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;/ui&lt;/span&gt;:define&lt;span
-            class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+            <li class="li1"><div class="de1">&amp;nbsp;</div></li>
+            <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp;
+            &amp;nbsp; <span class="sc3"><span class="re1">&amp;lt;ui</span>:define
+            <span class="re0">name</span>=<span class="st0">&amp;quot;title&amp;quot;</span><span
+            class="re2">&amp;gt;</span></span>#{msgs.contactsWindowTitle}<span
+            class="sc3"><span class="re1">&amp;lt;/ui</span>:define<span
+            class="re2">&amp;gt;</span></span></div></li>
+            <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp;
+            &amp;nbsp; <span class="sc3"><span class="re1">&amp;lt;ui</span>:define
+            <span class="re0">name</span>=<span class="st0">&amp;quot;heading&amp;quot;</span><span
+            class="re2">&amp;gt;</span></span>#{msgs.contactsHeading}<span
+            class="sc3"><span class="re1">&amp;lt;/ui</span>:define<span
+            class="re2">&amp;gt;</span></span></div></li>
 
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp;
-            &amp;nbsp; &lt;span class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;ui&lt;/span&gt;:define
-            &lt;span class="re0"&gt;name&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;content&amp;quot;&lt;/span&gt;&lt;span
-            class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp;
-            &amp;nbsp; &amp;nbsp; &lt;span class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;ui&lt;/span&gt;:include
-            &lt;span class="re0"&gt;src&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;contactsTable.xhtml&amp;quot;&lt;/span&gt;
-            &lt;span class="re2"&gt;/&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+            <li class="li2"><div class="de2">&amp;nbsp;</div></li>
+            <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp;
+            &amp;nbsp; <span class="sc3"><span class="re1">&amp;lt;ui</span>:define
+            <span class="re0">name</span>=<span class="st0">&amp;quot;content&amp;quot;</span><span
+            class="re2">&amp;gt;</span></span></div></li>
+            <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp;
+            &amp;nbsp; &amp;nbsp; <span class="sc3"><span class="re1">&amp;lt;ui</span>:include
+            <span class="re0">src</span>=<span class="st0">&amp;quot;contactsTable.xhtml&amp;quot;</span>
+            <span class="re2">/&amp;gt;</span></span></div></li>
 
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp;
-            &amp;nbsp; &lt;span class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;/ui&lt;/span&gt;:define&lt;span
-            class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp;
-            &amp;nbsp; &amp;nbsp; &amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp;
-            &lt;span class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;/ui&lt;/span&gt;:composition&lt;span
-            class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp;
-            THIS LINE, AND EVERYTHING BELOW IT IS DISREGARDED BY JSF&lt;/div&gt;&lt;/li&gt;
+            <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp;
+            &amp;nbsp; <span class="sc3"><span class="re1">&amp;lt;/ui</span>:define<span
+            class="re2">&amp;gt;</span></span></div></li>
+            <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp;
+            &amp;nbsp; &amp;nbsp; &amp;nbsp;</div></li>
+            <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp;
+            <span class="sc3"><span class="re1">&amp;lt;/ui</span>:composition<span
+            class="re2">&amp;gt;</span></span></div></li>
+            <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp;
+            THIS LINE, AND EVERYTHING BELOW IT IS DISREGARDED BY JSF</div></li>
 
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &lt;span
-            class="sc3"&gt;&lt;span class="re1"&gt;&amp;lt;/body&lt;span
-            class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&lt;span class="sc3"&gt;&lt;span
-            class="re1"&gt;&amp;lt;/html&lt;span class="re2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
-            &lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/div&gt;&lt;/div&gt;
+            <li class="li1"><div class="de1">&amp;nbsp;</div></li>
+            <li class="li2"><div class="de2">&amp;nbsp; <span
+            class="sc3"><span class="re1">&amp;lt;/body<span
+            class="re2">&amp;gt;</span></span></span></div></li>
+            <li class="li1"><div class="de1"><span class="sc3"><span
+            class="re1">&amp;lt;/html<span class="re2">&amp;gt;</span></span></span>
+            </div></li></ol></div></div>
 
-            &lt;/div&gt;
+            </div>
 
-        </description>
+        ]]></description>
         <tag-name>composition</tag-name>
         <handler-class>com.sun.faces.facelets.tag.ui.CompositionHandler</handler-class>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
-                &lt;p&gt;
+                <div class="changed_added_2_0">
+                <p>
                 A URI that points to a template, also known as a layout, that
                 inserts pieces of the page defined in the composition.
-                &lt;/p&gt;
-                &lt;/div&gt;
+                </p>
+                </div>
 
-            </description>
+            ]]></description>
             <name>template</name>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
     </tag>
     <tag>
-        <description>
+        <description><![CDATA[
 
 
-            &lt;div class="changed_added_2_0"&gt;
-            &lt;p&gt;
-            When the &lt;code&gt;ui:debug&lt;/code&gt; tag is placed in an XHTML
+            <div class="changed_added_2_0">
+            <p>
+            When the <code>ui:debug</code> tag is placed in an XHTML
             page, it creates a component and adds it to the
             component tree. That debug component captures debugging information,
             namely the current state of the component
@@ -516,509 +516,509 @@
             is rendered. If the user presses CTRL + SHIFT + d,
             JSF opens a window that shows the debugging information captured by
             the debug component.
-            &lt;/p&gt;
+            </p>
 
-            &lt;p&gt;
-            Typically, the best place to put the &lt;code&gt;ui:debug&lt;/code&gt;
+            <p>
+            Typically, the best place to put the <code>ui:debug</code>
             tag is in an application's main template, which
             lets developers enable or disable viewing of debugging information
             in one central location. Additionally, page
             authors can change the hotkey (which by default is CTRL + SHIFT + d,
             where the d stands for debug) to CTRL + SHIFT + ?,
-            where ? represents the key specified as the value of the &lt;code&gt;hotkey&lt;/code&gt;
+            where ? represents the key specified as the value of the <code>hotkey</code>
             attribute.
-            &lt;/p&gt;
+            </p>
 
-            &lt;p&gt;
-            You can use the &lt;code&gt;rendered&lt;/code&gt; attribute to
+            <p>
+            You can use the <code>rendered</code> attribute to
             control whether the debug component is rendered.
-            Using an EL expression as the value for the &lt;code&gt;rendered&lt;/code&gt;
+            Using an EL expression as the value for the <code>rendered</code>
             attribute lets you control whether
             debug output is enabled for multiple views based on a single bean
             property.
-            &lt;/p&gt;
-            &lt;/div&gt;
+            </p>
+            </div>
 
-        </description>
+        ]]></description>
         <tag-name>debug</tag-name>
         <handler-class>com.sun.faces.facelets.tag.ui.UIDebug</handler-class>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
-                &lt;p&gt;
+                <div class="changed_added_2_0">
+                <p>
                 Defines a single character, that, pressed in conjunction with
                 CTRL and SHIFT, will display the JSF debug window.
-                By default, the hotkey is 'd'. &lt;em&gt;The value for the
-                hotkey attribute cannot be an EL expression.&lt;/em&gt;
-                &lt;/p&gt;
+                By default, the hotkey is 'd'. <em>The value for the
+                hotkey attribute cannot be an EL expression.</em>
+                </p>
 
-                &lt;/div&gt;
+                </div>
 
-            </description>
+            ]]></description>
             <name>hotkey</name>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
-                &lt;p&gt;
+                <div class="changed_added_2_0">
+                <p>
                 Controls whether the debug component is rendered. Valid values
                 for this attribute are either the strings "true" or "false" or
-                an EL expression that evaluates to either "true" or "false".&lt;p&gt;If
+                an EL expression that evaluates to either "true" or "false".<p>If
                 this attribute's value is "false" or the value is an EL
                 expression that evaluates to "false", the debug component is not
                 rendered in the page, the hotkey attribute is disregarded, and
                 users cannot open the debugging information window with a
-                hotkey.&lt;/p&gt;
-                &lt;/p&gt;
+                hotkey.</p>
+                </p>
 
-                &lt;/div&gt;
+                </div>
 
-            </description>
+            ]]></description>
             <name>rendered</name>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
     </tag>
     <tag>
-        <description>
+        <description><![CDATA[
 
 
-            &lt;div class="changed_added_2_0"&gt;
+            <div class="changed_added_2_0">
 
-            &lt;p&gt;The &lt;code&gt;define&lt;/code&gt; tag defines content
-            that is inserted into a page by a template. The &lt;code&gt;define&lt;/code&gt;
-            tag can be used inside &lt;code&gt;ui:composition&lt;/code&gt;, &lt;code&gt;ui:component&lt;/code&gt;,
-            &lt;code&gt;ui:decorate&lt;/code&gt;, and &lt;code&gt;ui:fragment&lt;/code&gt;
-            tags.&lt;/p&gt;
+            <p>The <code>define</code> tag defines content
+            that is inserted into a page by a template. The <code>define</code>
+            tag can be used inside <code>ui:composition</code>, <code>ui:component</code>,
+            <code>ui:decorate</code>, and <code>ui:fragment</code>
+            tags.</p>
 
-            &lt;p&gt;Content defined by the &lt;code&gt;define&lt;/code&gt; tag
-            can be inserted into a page by using &lt;code&gt;ui:insert&lt;/code&gt;.
-            &lt;/p&gt;
+            <p>Content defined by the <code>define</code> tag
+            can be inserted into a page by using <code>ui:insert</code>.
+            </p>
 
-            &lt;/div&gt;
+            </div>
 
-        </description>
+        ]]></description>
         <tag-name>define</tag-name>
         <handler-class>com.sun.faces.facelets.tag.ui.DefineHandler</handler-class>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
+                <div class="changed_added_2_0">
 
-                &lt;p&gt;Assigns a name to the content inside a &lt;code&gt;define&lt;/code&gt;
-                tag. That name is used by corresponding &lt;code&gt;ui:insert&lt;/code&gt;
-                tags in a template that insert the named content into a page.&lt;/p&gt;
-                &lt;/div&gt;
+                <p>Assigns a name to the content inside a <code>define</code>
+                tag. That name is used by corresponding <code>ui:insert</code>
+                tags in a template that insert the named content into a page.</p>
+                </div>
 
-            </description>
+            ]]></description>
             <name>name</name>
             <required>true</required>
             <type>java.lang.String</type>
         </attribute>
     </tag>
     <tag>
-        <description>
+        <description><![CDATA[
 
 
-            &lt;div class="changed_added_2_0"&gt;
+            <div class="changed_added_2_0">
 
-            &lt;p&gt;
-            The &lt;code&gt;decorate&lt;/code&gt; tag is identical to the &lt;code&gt;composition&lt;/code&gt;
-            tag, except that &lt;code&gt;ui:decorate&lt;/code&gt;, unlike &lt;code&gt;ui:composition&lt;/code&gt;,
-            does not disregard all content outside of the tag. The &lt;code&gt;decorate&lt;/code&gt;
+            <p>
+            The <code>decorate</code> tag is identical to the <code>composition</code>
+            tag, except that <code>ui:decorate</code>, unlike <code>ui:composition</code>,
+            does not disregard all content outside of the tag. The <code>decorate</code>
             is useful when you want to decorate some content in a page, for
             example, you might want to decorate a list of items, like this:
 
-            &lt;div class="syntax"&gt;&lt;div class="html4strict"
-            style="font-family: monospace;"&gt;&lt;ol&gt;&lt;li class="li1"&gt;&lt;div
-            class="de1"&gt;
+            <div class="syntax"><div class="html4strict"
+            style="font-family: monospace;"><ol><li class="li1"><div
+            class="de1">
 
-            &lt;span class="sc2"&gt;&amp;lt;ui:decorate template=&lt;span
-            class="st0"&gt;&amp;quot;/layout.xhtml&amp;quot;&lt;/span&gt;&lt;span
-            class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &lt;span
-            class="sc2"&gt;&amp;lt;ui:define &lt;span class="kw3"&gt;name&lt;/span&gt;=&lt;span
-            class="st0"&gt;&amp;quot;listHeading&amp;quot;&lt;/span&gt;&lt;span
-            class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+            <span class="sc2">&amp;lt;ui:decorate template=<span
+            class="st0">&amp;quot;/layout.xhtml&amp;quot;</span><span
+            class="kw2">&amp;gt;</span></span></div></li>
+            <li class="li2"><div class="de2">&amp;nbsp; <span
+            class="sc2">&amp;lt;ui:define <span class="kw3">name</span>=<span
+            class="st0">&amp;quot;listHeading&amp;quot;</span><span
+            class="kw2">&amp;gt;</span></span></div></li>
 
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp;
-            &lt;span class="sc2"&gt;&amp;lt;ui:include &lt;span class="kw3"&gt;src&lt;/span&gt;="shared/listHeading.xhtml"/&lt;span
-            class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &lt;span
-            class="sc2"&gt;&lt;span class="kw2"&gt;&amp;lt;&lt;/span&gt;/ui:define&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp;
-            &amp;nbsp; &amp;nbsp; &lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &lt;span
-            class="sc2"&gt;&amp;lt;c:forEach items="#&lt;span class="br0"&gt;&amp;#123;&lt;/span&gt;items&lt;span
-            class="br0"&gt;&amp;#125;"&lt;/span&gt; var="item"&lt;span
-            class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+            <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp;
+            <span class="sc2">&amp;lt;ui:include <span class="kw3">src</span>="shared/listHeading.xhtml"/<span
+            class="kw2">&amp;gt;</span></span></div></li>
+            <li class="li2"><div class="de2">&amp;nbsp; <span
+            class="sc2"><span class="kw2">&amp;lt;</span>/ui:define&amp;gt;</span></div></li>
+            <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp;
+            &amp;nbsp; &amp;nbsp; </div></li>
+            <li class="li2"><div class="de2">&amp;nbsp; <span
+            class="sc2">&amp;lt;c:forEach items="#<span class="br0">&amp;#123;</span>items<span
+            class="br0">&amp;#125;"</span> var="item"<span
+            class="kw2">&amp;gt;</span></span></div></li>
 
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp;
-            ...&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &lt;span
-            class="sc2"&gt;&lt;span class="kw2"&gt;&amp;lt;&lt;/span&gt;/c:forEach&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; ...&lt;/div&gt;&lt;/li&gt;
-            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&lt;span class="sc2"&gt;&lt;span
-            class="kw2"&gt;&amp;lt;&lt;/span&gt;/ui:decorate&amp;gt;&lt;/span&gt;
-            &lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/div&gt;&lt;/div&gt;
-            &lt;/p&gt;
+            <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp;
+            ...</div></li>
+            <li class="li2"><div class="de2">&amp;nbsp; <span
+            class="sc2"><span class="kw2">&amp;lt;</span>/c:forEach&amp;gt;</span></div></li>
+            <li class="li1"><div class="de1">&amp;nbsp; ...</div></li>
+            <li class="li2"><div class="de2"><span class="sc2"><span
+            class="kw2">&amp;lt;</span>/ui:decorate&amp;gt;</span>
+            </div></li></ol></div></div>
+            </p>
 
-            Because JSF does not disregard everything outside of the &lt;code&gt;ui:decorate&lt;/code&gt;
-            tag, &lt;code&gt;ui:decorate&lt;/code&gt; can
+            Because JSF does not disregard everything outside of the <code>ui:decorate</code>
+            tag, <code>ui:decorate</code> can
             be used to decorate pieces of a page.
 
-            &lt;/div&gt;
+            </div>
 
-        </description>
+        ]]></description>
         <tag-name>decorate</tag-name>
         <handler-class>com.sun.faces.facelets.tag.ui.DecorateHandler</handler-class>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
+                <div class="changed_added_2_0">
                 A URI that points to a template, also known as a layout, that
                 inserts pieces of the page defined in the decorator.
 
-                &lt;/div&gt;
+                </div>
 
-            </description>
+            ]]></description>
             <name>template</name>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
     </tag>
     <tag>
-        <description>
+        <description><![CDATA[
 
 
-            &lt;div class="changed_added_2_0"&gt;
-            &lt;p&gt;The &lt;code&gt;fragment&lt;/code&gt; tag is identical to
-            the &lt;code&gt;component&lt;/code&gt; tag, except that &lt;code&gt;ui:fragment&lt;/code&gt;,
-            unlike &lt;code&gt;ui:component&lt;/code&gt;, JSF does not disregard
-            all content outside of the tag.&lt;/p&gt;
-            &lt;/div&gt;
+            <div class="changed_added_2_0">
+            <p>The <code>fragment</code> tag is identical to
+            the <code>component</code> tag, except that <code>ui:fragment</code>,
+            unlike <code>ui:component</code>, JSF does not disregard
+            all content outside of the tag.</p>
+            </div>
 
-        </description>
+        ]]></description>
         <tag-name>fragment</tag-name>
         <handler-class>com.sun.faces.facelets.tag.ui.ComponentRefHandler</handler-class>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
+                <div class="changed_added_2_0">
                 The identifier of the component that JSF inserts into the
                 component tree. If an identifier is
                 not explicitly specified by the page author, JSF will assign an
                 identifier based on the algorithm
                 that it uses for all components.
-                &lt;/div&gt;
+                </div>
 
-            </description>
+            ]]></description>
             <name>id</name>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
+                <div class="changed_added_2_0">
                 Binds the component to a backing bean property, as specified in
                 the JSF specification.
-                &lt;/div&gt;
+                </div>
 
-            </description>
+            ]]></description>
             <name>binding</name>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
     </tag>
     <tag>
-        <description>
+        <description><![CDATA[
 
 
-            &lt;div class="changed_added_2_0"&gt;
-            &lt;p&gt;Use this tag&amp;#8212which is very similar to JSP's &lt;code&gt;jsp:include&lt;/code&gt;&amp;#8212to
+            <div class="changed_added_2_0">
+            <p>Use this tag&amp;#8212which is very similar to JSP's <code>jsp:include</code>&amp;#8212to
             encapsulate and reuse content among
             multiple XHTML pages. There are three things this tag can include:
-            plain XHTML, and XHTML pages that have either a &lt;code&gt;composition&lt;/code&gt;
-            tag or a &lt;code&gt;component&lt;/code&gt; tag.
-            &lt;/p&gt;
-            &lt;p&gt;You supply a filename, through &lt;code&gt;ui:include&lt;/code&gt;'s
-            &lt;code&gt;src&lt;/code&gt; attribute for JSF to include. That
+            plain XHTML, and XHTML pages that have either a <code>composition</code>
+            tag or a <code>component</code> tag.
+            </p>
+            <p>You supply a filename, through <code>ui:include</code>'s
+            <code>src</code> attribute for JSF to include. That
             filename is relative to the XHTML file that was rendered as a result
             of the last request. So, for example, if JSF loaded
-            the view &lt;code&gt;login.xhtml&lt;/code&gt;, and that file
-            included &lt;code&gt;pageDecorations/header.xhtml&lt;/code&gt;, and
-            &lt;code&gt;
-            pageDecorations/header.xhtml&lt;/code&gt; included &lt;code&gt;companyLogo.xhtml&lt;/code&gt;,
-            then &lt;code&gt;companyLogo.xhtml&lt;/code&gt; will
-            not be found if it's in the &lt;code&gt;pageDecorations&lt;/code&gt;
-            directory, because &lt;code&gt;companyLogo.xhtml&lt;/code&gt; has to
+            the view <code>login.xhtml</code>, and that file
+            included <code>pageDecorations/header.xhtml</code>, and
+            <code>
+            pageDecorations/header.xhtml</code> included <code>companyLogo.xhtml</code>,
+            then <code>companyLogo.xhtml</code> will
+            not be found if it's in the <code>pageDecorations</code>
+            directory, because <code>companyLogo.xhtml</code> has to
             be
-            in the same directory as &lt;code&gt;login.xhtml&lt;/code&gt;.
-            &lt;/p&gt;
+            in the same directory as <code>login.xhtml</code>.
+            </p>
 
-            &lt;/div&gt;
+            </div>
 
-        </description>
+        ]]></description>
         <tag-name>include</tag-name>
         <handler-class>com.sun.faces.facelets.tag.ui.IncludeHandler</handler-class>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
+                <div class="changed_added_2_0">
                 The filename of an XHTML page to include. The filename is
                 relative to the XHTML page that was originally loaded.
-                &lt;/div&gt;
+                </div>
 
-            </description>
+            ]]></description>
             <name>src</name>
             <required>true</required>
             <type>java.lang.String</type>
         </attribute>
     </tag>
     <tag>
-        <description>
+        <description><![CDATA[
 
 
-            &lt;div class="changed_added_2_0"&gt;
-            &lt;p&gt;Inserts content into a template. That content is defined&amp;#8212with
-            the &lt;code&gt;ui:define&lt;/code&gt; tag&amp;#8212 in either a
-            &lt;code&gt;ui:composition&lt;/code&gt;, &lt;code&gt;ui:component&lt;/code&gt;,
-            &lt;code&gt;ui:decorate&lt;/code&gt;, or &lt;code&gt;ui:fragment&lt;/code&gt;.&lt;/p&gt;
-            &lt;/div&gt;
+            <div class="changed_added_2_0">
+            <p>Inserts content into a template. That content is defined&amp;#8212with
+            the <code>ui:define</code> tag&amp;#8212 in either a
+            <code>ui:composition</code>, <code>ui:component</code>,
+            <code>ui:decorate</code>, or <code>ui:fragment</code>.</p>
+            </div>
 
-        </description>
+        ]]></description>
         <tag-name>insert</tag-name>
         <handler-class>com.sun.faces.facelets.tag.ui.IncludeHandler</handler-class>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
+                <div class="changed_added_2_0">
 
                 The optional name attribute matches the associated &amp;lt;ui:define/&amp;gt;
                 tag in this template's client. If no name is specified, it's
                 expected
                 that the whole template client will be inserted.
 
-                &lt;/div&gt;
+                </div>
 
-            </description>
+            ]]></description>
             <name>name</name>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
     </tag>
     <tag>
-        <description>
+        <description><![CDATA[
 
 
-            &lt;div class="changed_added_2_0"&gt;
-            &lt;p&gt;Use this tag to pass parameters to an included file (using
-            &lt;code&gt;ui:include&lt;/code&gt;), or a template
-            (linked to either a composition or decorator). Embed &lt;code&gt;ui:param&lt;/code&gt;
-            tags in either &lt;code&gt;ui:include&lt;/code&gt;,
-            &lt;code&gt;ui:composition&lt;/code&gt;, or &lt;code&gt;ui:decorate&lt;/code&gt;
+            <div class="changed_added_2_0">
+            <p>Use this tag to pass parameters to an included file (using
+            <code>ui:include</code>), or a template
+            (linked to either a composition or decorator). Embed <code>ui:param</code>
+            tags in either <code>ui:include</code>,
+            <code>ui:composition</code>, or <code>ui:decorate</code>
             to pass the parameters.
-            &lt;/div&gt;
+            </div>
 
-        </description>
+        ]]></description>
         <tag-name>param</tag-name>
         <handler-class>com.sun.faces.facelets.tag.ui.ParamHandler</handler-class>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
+                <div class="changed_added_2_0">
                 The name of the parameter.
-                &lt;/div&gt;
+                </div>
 
-            </description>
+            ]]></description>
             <name>name</name>
             <required>true</required>
             <type>java.lang.String</type>
         </attribute>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
+                <div class="changed_added_2_0">
                 The value of the parameter. Notice that this attribute's value
                 can be an EL expression, which
                 means that you can pass objects to either an included file or a
                 template.
-                &lt;/div&gt;
-            </description>
+                </div>
+            ]]></description>
             <name>value</name>
             <required>true</required>
             <type>java.lang.String</type>
         </attribute>
     </tag>
     <tag>
-        <description>
+        <description><![CDATA[
 
 
-            &lt;div class="changed_added_2_0"&gt;
+            <div class="changed_added_2_0">
 
-            &lt;p&gt;Use this tag as an alternative to &lt;code&gt;h:dataTable&lt;/code&gt;
+            <p>Use this tag as an alternative to <code>h:dataTable</code>
             or
-            &lt;code&gt;c:forEach&lt;/code&gt;, especially when you are using
+            <code>c:forEach</code>, especially when you are using
             the
-            &lt;code&gt;jsfc&lt;/code&gt; feature of Facelets. You can specify
+            <code>jsfc</code> feature of Facelets. You can specify
             this component as
-            the value of the &lt;code&gt;jsfc&lt;/code&gt; attribute, like this:
+            the value of the <code>jsfc</code> attribute, like this:
             &amp;lt;div... jsfc="ui:repeat" value="#{contacts}" var="contact"&amp;gt;...
-            &lt;/p&gt;
-            &lt;/div&gt;
+            </p>
+            </div>
 
-        </description>
+        ]]></description>
         <tag-name>repeat</tag-name>
         <handler-class>com.sun.faces.facelets.tag.ui.RepeatHandler</handler-class>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
+                <div class="changed_added_2_0">
 
-                &lt;p&gt;Read-write property setting the offset from the
+                <p>Read-write property setting the offset from the
                 beginning of the
                 collection from which to start the iteration. If not set, this
                 offset
                 is not considered and iteration will start at the beginning of
                 the
-                collection.&lt;/p&gt;
+                collection.</p>
 
-                &lt;/div&gt;
+                </div>
 
-            </description>
+            ]]></description>
             <name>offset</name>
             <required>false</required>
             <type>int</type>
         </attribute>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
+                <div class="changed_added_2_0">
 
-                &lt;p&gt;Read-write property setting the size of the collection
+                <p>Read-write property setting the size of the collection
                 to iterate.
                 If this value is less than the actual size of the collection, a
-                &lt;code&gt;FacesException&lt;/code&gt; must be thrown.&lt;/p&gt;
+                <code>FacesException</code> must be thrown.</p>
 
-                &lt;/div&gt;
+                </div>
 
-            </description>
+            ]]></description>
             <name>size</name>
             <required>false</required>
             <type>int</type>
         </attribute>
         <attribute>
-            <description>
+            <description><![CDATA[
 
-                &lt;div class="changed_added_2_0"&gt;&lt;p&gt;Iteration
+                <div class="changed_added_2_0"><p>Iteration
                 will only process every step items of the collection,
-                starting with the first one.&lt;/p&gt;&lt;/div&gt;
+                starting with the first one.</p></div>
 
-            </description>
+            ]]></description>
             <name>step</name>
             <required>false</required>
             <type>int</type>
         </attribute>
         <attribute>
-            <description>
+            <description><![CDATA[
 
 
-                &lt;div class="changed_added_2_0"&gt;
+                <div class="changed_added_2_0">
 
-                &lt;p&gt;The name of a collection of items that this tag
+                <p>The name of a collection of items that this tag
                 iterates over. The
-                collection may be a &lt;code&gt;List&lt;/code&gt;, &lt;code&gt;array&lt;/code&gt;,
-                &lt;code&gt;java.sql.ResultSet&lt;/code&gt;, or an individual
+                collection may be a <code>List</code>, <code>array</code>,
+                <code>java.sql.ResultSet</code>, or an individual
                 java Object. If the
-                collection is null, this tag does nothing.&lt;/p&gt;
+                collection is null, this tag does nothing.</p>
 
-                &lt;/div&gt;
+                </div>
 
-            </description>
+            ]]></description>
             <name>value</name>
             <required>true</required>
             <type>java.lang.Object</type>
         </attribute>
         <attribute>
-            <description>
+            <description><![CDATA[
 
-                &lt;div class="changed_added_2_0"&gt;&lt;p&gt;Name of the
+                <div class="changed_added_2_0"><p>Name of the
                 exported scoped variable for the current item of the
                 iteration. This scoped variable has nested
                 visibility. Its type depends on the object of the
-                underlying collection&lt;/p&gt;&lt;/div&gt;
+                underlying collection</p></div>
 
-            </description>
+            ]]></description>
             <name>var</name>
             <required>true</required>
             <type>java.lang.Object</type>
         </attribute>
         <attribute>
-            <description>
+            <description><![CDATA[
 
-                &lt;div class="changed_added_2_0"&gt;&lt;p&gt;Name of the
+                <div class="changed_added_2_0"><p>Name of the
                 exported request scoped variable for the status of the
                 iteration. Object is a POJO with the following read-only
                 JavaBeans properties. This scoped variable has nested
-                visibility.&lt;/p&gt;
+                visibility.</p>
 
-                &lt;p&gt;&lt;code&gt;begin&lt;/code&gt; of type Integer&lt;/p&gt;
+                <p><code>begin</code> of type Integer</p>
 
-                &lt;p&gt;&lt;code&gt;end&lt;/code&gt; of type Integer&lt;/p&gt;
+                <p><code>end</code> of type Integer</p>
 
-                &lt;p&gt;&lt;code&gt;index&lt;/code&gt; of type int&lt;/p&gt;
+                <p><code>index</code> of type int</p>
 
-                &lt;p&gt;&lt;code&gt;step&lt;/code&gt; of type Integer&lt;/p&gt;
+                <p><code>step</code> of type Integer</p>
 
-                &lt;p&gt;&lt;code&gt;even&lt;/code&gt; of type boolean&lt;/p&gt;
+                <p><code>even</code> of type boolean</p>
 
-                &lt;p&gt;&lt;code&gt;odd&lt;/code&gt; of type boolean&lt;/p&gt;
+                <p><code>odd</code> of type boolean</p>
 
-                &lt;p&gt;&lt;code&gt;first&lt;/code&gt; of type boolean&lt;/p&gt;
+                <p><code>first</code> of type boolean</p>
 
-                &lt;p&gt;&lt;code&gt;last&lt;/code&gt; of type boolean&lt;/p&gt;
+                <p><code>last</code> of type boolean</p>
 
-                &lt;/div&gt;
+                </div>
 
-            </description>
+            ]]></description>
             <name>varStatus</name>
             <required>false</required>
             <type>java.lang.Object</type>
         </attribute>
     </tag>
     <tag>
-        <description>
+        <description><![CDATA[
 
 
-            &lt;div class="changed_added_2_0"&gt;
-            &lt;p&gt;Remove content from a page. This tag is often used in
-            conjunction with the &lt;code&gt;jsfc&lt;/code&gt; feature of
+            <div class="changed_added_2_0">
+            <p>Remove content from a page. This tag is often used in
+            conjunction with the <code>jsfc</code> feature of
             Facelets,
             to wrap additional markup. When Facelets removes markup from a page
             by substituting markup items that have
-            a &lt;code&gt;jsfc&lt;/code&gt; attribute with the specified
+            a <code>jsfc</code> attribute with the specified
             component, Facelets also removes anything in the page that
-            is contained in a &lt;code&gt;ui:remove&lt;/code&gt; tag.&lt;/p&gt;
-            &lt;/div&gt;
+            is contained in a <code>ui:remove</code> tag.</p>
+            </div>
 
-        </description>
+        ]]></description>
         <tag-name>remove</tag-name>
         <handler-class>com.sun.faces.facelets.tag.ui.SchemaCompliantRemoveHandler</handler-class>
 
