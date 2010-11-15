@@ -66,7 +66,6 @@ import java.util.logging.Logger;
 
 import com.sun.faces.component.visit.PartialVisitContext;
 import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 
  public class PartialViewContextImpl extends PartialViewContext {
@@ -84,6 +83,7 @@ import com.sun.faces.util.Util;
     private Boolean partialRequest;
     private Boolean renderAll;
     private FacesContext ctx;
+    private boolean processingPhases = false;
 
     private static final String ORIGINAL_WRITER = "com.sun.faces.ORIGINAL_WRITER";
 
@@ -105,7 +105,7 @@ import com.sun.faces.util.Util;
     public boolean isAjaxRequest() {
 
         assertNotReleased();
-        ctx = getFacesContext();
+        updateFacesContext();
         if (ajaxRequest == null) {
             ajaxRequest = "partial/ajax".equals(ctx.
                 getExternalContext().getRequestHeaderMap().get("Faces-Request"));
@@ -121,7 +121,6 @@ import com.sun.faces.util.Util;
     public boolean isPartialRequest() {
 
         assertNotReleased();
-        ctx = getFacesContext();
         if (partialRequest == null) {
             partialRequest = isAjaxRequest() ||
                     "partial/process".equals(ctx.
@@ -139,7 +138,6 @@ import com.sun.faces.util.Util;
     public boolean isExecuteAll() {
 
         assertNotReleased();
-        ctx = getFacesContext();
         String execute = ctx.
             getExternalContext().getRequestParameterMap()
                 .get(PARTIAL_EXECUTE_PARAM_NAME);
@@ -154,7 +152,7 @@ import com.sun.faces.util.Util;
     public boolean isRenderAll() {
 
         assertNotReleased();
-        ctx = getFacesContext();
+        updateFacesContext();
         if (renderAll == null) {
             String render = ctx.
                 getExternalContext().getRequestParameterMap()
@@ -190,7 +188,6 @@ import com.sun.faces.util.Util;
     public Collection<String> getExecuteIds() {
 
         assertNotReleased();
-        ctx = getFacesContext();
         if (executeIds != null) {
             return executeIds;
         }
@@ -230,7 +227,7 @@ import com.sun.faces.util.Util;
      */
     @Override
     public void processPartial(PhaseId phaseId) {
-        ctx = getFacesContext();
+        updateFacesContext();
         PartialViewContext pvc = ctx.getPartialViewContext();
         Collection <String> executeIds = pvc.getExecuteIds();
         Collection <String> renderIds = pvc.getRenderIds();
@@ -462,11 +459,16 @@ import com.sun.faces.util.Util;
         }
     }
 
-    private FacesContext getFacesContext() {
-        if (ctx == null || ctx.isReleased()) {
+    /**
+     * While setting up PartialViewContextImpl the RI's FacesContextImpl is passed in, but while
+     * processing phases also FacesContextWrapper must be supported. Therefore ctx is updated 
+     * until processing phases has started. Released FacesContext is updated too.
+     */
+    private void updateFacesContext() {
+    	  if (!processingPhases || ctx.isReleased()) {
             ctx = FacesContext.getCurrentInstance();
-        }
-        return ctx;
+    	  	  processingPhases = ctx.getCurrentPhaseId() != null;
+    	  }
     }
 
 
