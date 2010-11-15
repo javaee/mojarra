@@ -45,11 +45,11 @@
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_0.xsd"
                 version="2.0">
-    <description>
+    <description><![CDATA[
         This tag library contains JavaServer Faces component tags for all
         UIComponent + HTML RenderKit Renderer combinations defined in the
         JavaServer Faces Specification.
-    </description>
+    ]]></description>
     <namespace>http://java.sun.com/jsf/html</namespace>
     <tag>
         <description>
