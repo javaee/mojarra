@@ -68,8 +68,8 @@ if (typeof OpenAjax !== "undefined" &&
 }
 
 // Detect if this is already loaded, and if loaded, if it's a higher version
-if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
-      (jsf.implversion && jsf.implversion > 2))) {
+if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
+      (jsf.implversion && jsf.implversion >= 3))) {
 
     /**
      * The top level global namespace for JavaServer Faces functionality.
