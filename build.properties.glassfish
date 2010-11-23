@@ -53,7 +53,8 @@ jsf.build.home=<SET CURRENT DIRECTORY>
 # http.proxy.port if the build environment is
 # behind a firewall.  This is necessary in order
 # for the build system to download the required
-# dependencies.
+# dependencies.  This is necessary for building
+# inside Oracle.
 # --------------------------------------------------
 http.proxy.host=
 http.proxy.port=
