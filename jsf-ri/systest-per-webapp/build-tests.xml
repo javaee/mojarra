@@ -136,6 +136,8 @@
                value="com/sun/faces/systest/NoSessionCharEncTestCase.class" />
     <property  name="bogus-render-kit-id"
                value="com/sun/faces/systest/render/BogusRenderKitIdTestCase.class" />
+    <property  name="characterCombat"
+               value="characterCombat/CharacterCombatTestCase.class" />
 
     <!--
         EXCLUDED APPLICATIONS:

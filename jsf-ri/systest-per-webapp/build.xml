@@ -113,7 +113,8 @@
                    replace-vdl,
                    process-as-jspx,
                    request-char-encoding-no-session,
-                   bogus-render-kit-id"/>
+                   bogus-render-kit-id,
+                   characterCombat"/>
     <!--
 
        EXCLUDED APPLICATIONS:

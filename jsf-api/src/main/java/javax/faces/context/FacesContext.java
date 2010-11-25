@@ -41,6 +41,7 @@
 package javax.faces.context;
 
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -49,11 +50,11 @@ import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.ProjectStage;
 import javax.faces.application.FacesMessage.Severity;
-import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.render.RenderKit;
 
 import javax.el.ELContext;
+import javax.faces.FactoryFinder;
 import javax.faces.event.PhaseId;
 
 
@@ -82,6 +83,27 @@ public abstract class FacesContext {
     @SuppressWarnings({"UnusedDeclaration"})
     private FacesContext defaultFacesContext;
     private boolean processingEvents = true;
+    private boolean isCreatedFromValidFactory = true;
+
+    public FacesContext() {
+        Thread curThread = Thread.currentThread();
+        StackTraceElement[] callstack = curThread.getStackTrace();
+        if (null != callstack) {
+            String declaringClassName = callstack[3].getClassName();
+            try {
+                ClassLoader curLoader = curThread.getContextClassLoader();
+                Class declaringClass = curLoader.loadClass(declaringClassName);
+                if (!FacesContextFactory.class.isAssignableFrom(declaringClass)) {
+                    isCreatedFromValidFactory = false;
+                }
+            } catch (ClassNotFoundException cnfe) {
+
+            }
+        }
+
+    }
+
+
 
     // -------------------------------------------------------------- Properties
 
@@ -138,9 +160,18 @@ public abstract class FacesContext {
         if (defaultFacesContext != null) {
             return defaultFacesContext.getAttributes();
         }
+        if (!isCreatedFromValidFactory) {
+            if (attributesForInvalidFactoryConstruction == null) {
+                attributesForInvalidFactoryConstruction = new HashMap<Object, Object>();
+            }
+            return attributesForInvalidFactoryConstruction;
+        }
         throw new UnsupportedOperationException();
  
     }
+
+    private Map<Object, Object> attributesForInvalidFactoryConstruction;
+
 
     /**
      * <p class="changed_added_2_0">Return the {@link PartialViewContext}
@@ -162,9 +193,20 @@ public abstract class FacesContext {
         if (defaultFacesContext != null) {
             return defaultFacesContext.getPartialViewContext();
         }
+        if (!isCreatedFromValidFactory) {
+            if (partialViewContextForInvalidFactoryConstruction == null) {
+                PartialViewContextFactory f = (PartialViewContextFactory)
+                      FactoryFinder.getFactory(FactoryFinder.PARTIAL_VIEW_CONTEXT_FACTORY);
+                partialViewContextForInvalidFactoryConstruction = f.getPartialViewContext(this);
+            }
+            return partialViewContextForInvalidFactoryConstruction;
+        }
         throw new UnsupportedOperationException();
 
     }
+
+    private PartialViewContext partialViewContextForInvalidFactoryConstruction = null;
+
 
 
     /**
@@ -679,7 +721,9 @@ public abstract class FacesContext {
         if (defaultFacesContext != null) {
             return defaultFacesContext.getCurrentPhaseId();
         }
-
+        if (!isCreatedFromValidFactory) {
+            return this.currentPhaseIdForInvalidFactoryConstruction;
+        }
         throw new UnsupportedOperationException();
 
     }
@@ -701,11 +745,16 @@ public abstract class FacesContext {
 
         if (defaultFacesContext != null) {
             defaultFacesContext.setCurrentPhaseId(currentPhaseId);
+        } else if (!isCreatedFromValidFactory) {
+            this.currentPhaseIdForInvalidFactoryConstruction = currentPhaseId;
         } else {
             throw new UnsupportedOperationException();
         }
 
     }
+
+    private PhaseId currentPhaseIdForInvalidFactoryConstruction;
+
 
 
     /**

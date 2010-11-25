@@ -1,3 +1,4 @@
+
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
@@ -40,67 +41,49 @@
 
 package characterCombat;
 
-/** <p>SpeciesBean represents the data associated with a species type</p> */
-public class SpeciesBean {
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.sun.faces.htmlunit.AbstractTestCase;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
-    String type = null;
 
-    /**
-     * <p>Get the species type</p>
-     *
-     * @return species type String
-     */
-    public String getType() {
-        return type;
+
+public class CharacterCombatTestCase extends AbstractTestCase {
+
+
+    public CharacterCombatTestCase(String name) {
+        super(name);
     }
 
-    /**
-     * <p>Set the species type</p>
-     *
-     * @param type - species type
-     */
-    public void setType(String type) {
-        this.type = type;
+    public static Test suite() {
+        return (new TestSuite(CharacterCombatTestCase.class));
     }
 
-    String language = null;
+    public void test01() throws Exception {
 
-    /**
-     * <p>Get the language associated with the species</p>
-     *
-     * @return species language String
-     */
-    public String getLanguage() {
-        return language;
+       HtmlPage page = getPage("/main.faces");
+       HtmlSubmitInput nextButton = (HtmlSubmitInput) page.getElementById("wizard-buttons:next");
+       page = nextButton.click();
+       String text = page.asText();
+       assertTrue(text.contains("Gandalf"));
+       assertTrue(text.contains("Frodo"));
+       assertTrue(text.contains("Legolas"));
+
+       nextButton = (HtmlSubmitInput) page.getElementById("wizard-buttons:next");
+       page = nextButton.click();
+
+       text = page.asXml();
+       assertFalse(text.contains("value=\"Gandalf\""));
+       assertTrue(text.contains("Frodo"));
+       assertTrue(text.contains("Legolas"));
+
+       nextButton = (HtmlSubmitInput) page.getElementById("wizard-buttons:next");
+       page = nextButton.click();
+
+       text = page.asText();
+       assertTrue(text.matches("(?s).*If\\s*[a-zA-Z]*\\s*and\\s*[a-zA-Z].*winner\\swould be.*[a-zA-Z]*.*"));
+
+
     }
-
-    /**
-     * <p>Set the language associated with the species</p>
-     *
-     * @param language - species language
-     */
-    public void setLanguage(String language) {
-        this.language = language;
-    }
-
-    boolean immortal = false;
-
-    /**
-     * <p>Get the immortal state associated with the species</p>
-     *
-     * @return species immortal boolean
-     */
-    public boolean isImmortal() {
-        return immortal;
-    }
-
-    /**
-     * <p>Set the immortal state associated with the species</p>
-     *
-     * @param immortal - is the species immortal
-     */
-    public void setImmortal(boolean immortal) {
-        this.immortal = immortal;
-    }
-
 }
