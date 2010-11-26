@@ -152,7 +152,7 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         boolean componentFound = false;
         if (c != null) {
            componentFound = true;
-           doExistingComponentActions(id, c);
+           doExistingComponentActions(ctx, id, c);
         } else {
             c = this.createComponent(ctx);
             
@@ -415,7 +415,7 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
     }
 
 
-    protected void doExistingComponentActions(String id, UIComponent c) {
+    protected void doExistingComponentActions(FaceletContext ctx, String id, UIComponent c) {
 
         // mark all children for cleaning
         if (log.isLoggable(Level.FINE)) {
@@ -425,7 +425,12 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
                      + "] Found, marking children for cleanup");
         }
         ComponentSupport.markForDeletion(c);
-
+        /*
+         * Repply the id, for the case when the component tree was changed, and the id's are set explicitly.
+         */
+        if (this.id != null) {
+     	   c.setId(this.id.getValue(ctx));
+        }
     }
 
 

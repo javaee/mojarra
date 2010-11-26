@@ -93,6 +93,7 @@ public enum Color { Red, Blue, Green, Orange }
     private ArrayList newList1= new ArrayList();
     private ArrayList newList2= new ArrayList();
     private ArrayList oneElementList;
+    private List newList3 = new ArrayList();
 
     ServletContext servletContext = null;
     
@@ -978,5 +979,29 @@ public enum Color { Red, Blue, Green, Orange }
     public String getCurrentTimeMillis() {
         return "" + System.currentTimeMillis();
     }
+
+    private Integer idcounter = new Integer(0);
+ 
+    public List getNewList3() {
+        return newList3;
+    }
+
+    public void setNewList3(List newList3) {
+        this.newList3 = newList3;
+    }
+
+    public String addNewLineBeginning() {
+        newList3.add(0, "ID" + idcounter.toString());
+        idcounter++;
+        return null;
+    }
+
+    public String addNewLineEnd() {
+        newList3.add("ID" + idcounter.toString());
+        idcounter++;
+        return null;
+    }
+
+
 
 }
