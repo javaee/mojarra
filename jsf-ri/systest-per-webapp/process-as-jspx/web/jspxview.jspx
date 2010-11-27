@@ -13,6 +13,19 @@
       
         <f:attribute name="mode" value="index"/>
 
+<jsp:declaration>
+  int i = 0;
+</jsp:declaration>
+
+<jsp:expression>
+  numguess.getHint()
+</jsp:expression>
+
+<jsp:scriptlet>
+   String name = null;	
+   if (request.getParameter("name") == null) {	  
+</jsp:scriptlet>
+
 <h2>XML declaration: consumed</h2>
 
 <h2>Processing instruction: consumed</h2>
@@ -45,9 +58,13 @@
 
 <h2>Comments: consumed</h2>
 
-
+<jsp:text>
 <p>HTML Template Text</p>
+</jsp:text>
 
+<jsp:directive.include file="includedjspxfile.jspx" />
+
+<jsp:include page="includedjspxfile2.jspx" />
 
 
 <p><h:outputText value="#{processAsJspxBean.prop}" /></p>
@@ -62,6 +79,18 @@
 <!-- comments consumed -->
 
       
+<jsp:plugin type="applet" code="Molecule.class" codebase="/html">	
+   <jsp:params>	
+      <jsp:param name="molecule" value="molecules/benzene.mol" />	
+   </jsp:params>	
+   <jsp:fallback>	
+      <p>Unable to load applet</p>	
+   </jsp:fallback>	
+</jsp:plugin>
+
+<jsp:setProperty name="mybean" property="username" value="Steve" />
+
+<jsp:useBean id="cart" scope="session" class="session.Carts" />	
 
 </body>
 </html>    

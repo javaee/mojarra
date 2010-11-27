@@ -71,6 +71,7 @@ import javax.faces.view.facelets.TagConfig;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.view.facelets.TagException;
 
 /**
  * @author Jacob Hookom
@@ -86,7 +87,18 @@ public final class IncludeHandler extends TagHandlerImpl {
      */
     public IncludeHandler(TagConfig config) {
         super(config);
-        this.src = this.getRequiredAttribute("src");
+        TagAttribute attr = null;
+        attr = this.getAttribute("src");
+        if (null == attr) {
+            attr = this.getAttribute("file");
+        }
+        if (null == attr) {
+            attr = this.getAttribute("page");
+        }
+        if (null == attr) {
+            throw new TagException(this.tag, "Attribute 'src', 'file' or 'page' is required");
+        }
+        this.src = attr;
     }
 
     /*
