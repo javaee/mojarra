@@ -166,10 +166,10 @@
                           output.file="${mvn.impl.dir}/jsf-impl-pom.xml"
                           version="@{version}"/>
                     <mkdir dir="${mvn.impl.dir}/target/classes"/>
-                    <mkdir dir="${mvn.api.dir}/src/main/java"/>
+                    <mkdir dir="${mvn.impl.dir}/src/main/java"/>
                     <copy overwrite="true" 
                           todir="${mvn.impl.dir}/src/main/java">
-                      <fileset dir="${impl.dir}/src" includes="**/*" />
+                      <fileset dir="${impl.dir}/src/main/java" includes="**/*" />
                       <fileset dir="${impl.dir}/build/generate/" 
                                includes="**/*" excludes="last-generation,conf/**,**/*.xsd" />
                     </copy>
