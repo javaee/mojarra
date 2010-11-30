@@ -763,6 +763,16 @@ attribute</th>
 
 <tr>
 
+<td>preRenderView
+</td>
+
+<td>javax.faces.event.PreRenderViewEvent
+</td>
+
+</tr>
+
+<tr>
+
 <td><span class="changed_modified_2_0_rev_a">postAddToView</span>
 </td>
 
