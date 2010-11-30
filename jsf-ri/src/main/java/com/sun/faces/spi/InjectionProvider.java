@@ -40,6 +40,10 @@
 
 package com.sun.faces.spi;
 
+import java.lang.annotation.Annotation;
+import java.util.Map;
+import java.util.Set;
+
 /**
  * <p>This interface defines an integration point for Java EE vendors.
  * Each vendor will need to provide an implementation of this interface
@@ -90,5 +94,8 @@ public interface InjectionProvider {
      *  the method annotated by the <code>@PostConstruct</code> annotation
      */
     public void invokePostConstruct(Object managedBean) 
+    throws InjectionProviderException;
+    
+    public abstract Map<Class<? extends Annotation>, Set<Class<?>>> getAnnotatedClassesInCurrentModule()
     throws InjectionProviderException;
 }

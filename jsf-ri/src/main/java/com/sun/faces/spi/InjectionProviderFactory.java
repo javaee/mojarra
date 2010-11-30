@@ -44,11 +44,14 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Enumeration;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.net.URL;
@@ -63,6 +66,7 @@ import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import com.sun.faces.vendor.WebContainerInjectionProvider;
+import java.util.Collections;
 
 
 /**
@@ -432,6 +436,12 @@ public class InjectionProviderFactory {
          * @param managedBean target ManagedBean
          */
         public void inject(Object managedBean) { }
+
+        public Map<Class<? extends Annotation>, Set<Class<?>>> getAnnotatedClassesInCurrentModule() throws InjectionProviderException {
+            return Collections.emptyMap();
+        }
+
+
 
 
         /**

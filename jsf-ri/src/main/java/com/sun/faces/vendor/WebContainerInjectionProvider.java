@@ -42,14 +42,16 @@ package com.sun.faces.vendor;
 
 import com.sun.faces.spi.InjectionProvider;
 import com.sun.faces.spi.InjectionProviderException;
-import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
+import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.PreDestroy;
 import javax.annotation.PostConstruct;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.annotation.Annotation;
+import java.util.Collections;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
@@ -75,6 +77,12 @@ public class WebContainerInjectionProvider implements InjectionProvider {
         // no-op
 
     }
+
+    public Map<Class<? extends Annotation>, Set<Class<?>>> getAnnotatedClassesInCurrentModule() throws InjectionProviderException {
+        return Collections.emptyMap();
+    }
+
+
 
     public void invokePreDestroy(Object managedBean)
     throws InjectionProviderException {

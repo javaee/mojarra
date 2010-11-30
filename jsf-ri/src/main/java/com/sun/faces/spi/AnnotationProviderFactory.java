@@ -40,7 +40,7 @@
 
 package com.sun.faces.spi;
 
-import com.sun.faces.config.AnnotationScanner;
+import com.sun.faces.config.JavaClassScanningAnnotationScanner;
 
 import javax.servlet.ServletContext;
 import javax.faces.FacesException;
@@ -52,7 +52,7 @@ import java.lang.reflect.Constructor;
 public class AnnotationProviderFactory {
 
     private static final Class<? extends AnnotationProvider> DEFAULT_ANNOTATION_PROVIDER =
-       AnnotationScanner.class;
+       JavaClassScanningAnnotationScanner.class;
 
     private static final String ANNOTATION_PROVIDER_SERVICE_KEY =
          "com.sun.faces.spi.annotationprovider";
