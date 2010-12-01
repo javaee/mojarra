@@ -347,16 +347,16 @@ public class ViewTag extends UIComponentELTag {
                         viewLocale = getLocaleFromString((String) result);
                     }
         }
-
-        assert(null != viewLocale);
-
-        ((UIViewRoot) component).setLocale(viewLocale);
-        // update the JSTL locale attribute in request scope so that
-        // JSTL picks up the locale from viewRoot. This attribute
-        // must be updated before the JSTL setBundle tag is called
-        // because that is when the new LocalizationContext object
-        // is created based on the locale.
-        Config.set(pageContext.getRequest(),Config.FMT_LOCALE, viewLocale);
+        }
+        // BUGDB 10235218
+        if (null != viewLocale) {
+            ((UIViewRoot) component).setLocale(viewLocale);
+            // update the JSTL locale attribute in request scope so that
+            // JSTL picks up the locale from viewRoot. This attribute
+            // must be updated before the JSTL setBundle tag is called
+            // because that is when the new LocalizationContext object
+            // is created based on the locale.
+            Config.set(pageContext.getRequest(), Config.FMT_LOCALE, viewLocale);
         }
 
         if (null != beforePhase) {
