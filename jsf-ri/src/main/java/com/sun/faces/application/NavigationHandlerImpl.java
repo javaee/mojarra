@@ -40,6 +40,8 @@
 
 package com.sun.faces.application;
 
+import com.sun.faces.facelets.FaceletFactory;
+import com.sun.faces.facelets.impl.DefaultResourceResolver;
 import javax.faces.FacesException;
 import javax.faces.application.NavigationCase;
 import javax.faces.application.ViewHandler;
@@ -57,8 +59,10 @@ import java.util.logging.Logger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
+import java.net.URL;
 import javax.faces.application.ConfigurableNavigationHandler;
 import javax.faces.application.FacesMessage;
+import javax.faces.view.facelets.ResourceResolver;
 
 /**
  * <p><strong>NavigationHandlerImpl</strong> is the class that implements
@@ -541,8 +545,34 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             }
         }
 
-        ViewHandler viewHandler = Util.getViewHandler(context);
-        viewIdToTest = viewHandler.deriveViewId(context, viewIdToTest);
+        ApplicationAssociate ass = ApplicationAssociate.getCurrentInstance();
+        FaceletFactory faceletFactory = ass.getFaceletFactory();
+        boolean consultViewHandler = true;
+        if (null != faceletFactory) {
+            ResourceResolver resolver = faceletFactory.getResourceResolver();
+            if (null != resolver && !(resolver instanceof DefaultResourceResolver)) {
+                URL url = resolver.resolveUrl(viewIdToTest);
+                if (null != url) {
+                    if (logger.isLoggable(Level.FINE)) {
+                        logger.log(Level.FINE, "ResourceResolver.resolveUrl({0}) returned {1}",
+                                new Object[]{viewIdToTest, url.toExternalForm()});
+                    }
+                    // derive the viewId from the URL
+                    String contextPath = context.getExternalContext().getRequestContextPath();
+                    int contextPathLen = contextPath.length();
+                    viewIdToTest = url.toExternalForm();
+                    // remove the url up to and including the context path.
+                    int i = viewIdToTest.indexOf(contextPath);
+                    viewIdToTest = viewIdToTest.substring(i + contextPathLen);
+                    consultViewHandler = false;
+                }
+            }
+        }
+
+        if (consultViewHandler) {
+            ViewHandler viewHandler = Util.getViewHandler(context);
+            viewIdToTest = viewHandler.deriveViewId(context, viewIdToTest);
+        }
 
         if (null != viewIdToTest) {
             CaseStruct caseStruct = new CaseStruct();
