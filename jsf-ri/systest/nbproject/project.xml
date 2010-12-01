@@ -31,16 +31,6 @@
                     <location>src</location>
                     <encoding>MacRoman</encoding>
                 </source-folder>
-                <source-folder>
-                    <label>replace-application</label>
-                    <type>java</type>
-                    <location>/Users/edburns/Documents/chaff/netbeans-hack-links/replace-application</location>
-                    <encoding>MacRoman</encoding>
-                </source-folder>
-                <source-folder>
-                    <label>replace-application</label>
-                    <location>/Users/edburns/Documents/chaff/netbeans-hack-links/replace-application</location>
-                </source-folder>
             </folders>
             <ide-actions>
                 <action name="build">
@@ -77,10 +67,6 @@
                         <label>src</label>
                         <location>src</location>
                     </source-folder>
-                    <source-folder style="packages">
-                        <label>replace-application</label>
-                        <location>/Users/edburns/Documents/chaff/netbeans-hack-links/replace-application</location>
-                    </source-folder>
                     <source-file>
                         <location>build.xml</location>
                     </source-file>
@@ -99,7 +85,6 @@
         <java-data xmlns="http://www.netbeans.org/ns/freeform-project-java/1">
             <compilation-unit>
                 <package-root>src</package-root>
-                <package-root>/Users/edburns/Documents/chaff/netbeans-hack-links/replace-application</package-root>
                 <classpath mode="compile">../../dependencies/jars/junit-3.8.1.jar:../build/classes:../../jsf-api/build/classes:../../dependencies/htmlunit-2.4/lib/htmlunit-2.4.jar:../../lib/jsf-extensions-test-time.jar:../../dependencies/jars/el-api-2.1.2-b05.jar:../../dependencies/jars/jsp-api-2.1.jar:/Users/edburns/Downloads/mvnrepo/org/apache/ant/ant/1.7.1/ant-1.7.1.jar:../../dependencies/jars/servlet-api-2.5.jar</classpath>
                 <source-level>1.5</source-level>
             </compilation-unit>
