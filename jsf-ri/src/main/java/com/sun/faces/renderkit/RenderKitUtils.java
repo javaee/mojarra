@@ -1296,7 +1296,8 @@ public class RenderKitUtils {
                 }
                 return "RES_NOT_FOUND";
             } else {
-                return res.getRequestPath();
+            	String requestPath = res.getRequestPath();
+            	return context.getExternalContext().encodeResourceURL(requestPath);
             }
         } else {
             
