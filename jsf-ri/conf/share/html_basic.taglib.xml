@@ -45,7 +45,7 @@
     ]]></description>
     <namespace>http://java.sun.com/jsf/html</namespace>
     <tag>
-        <description><![CDATA[
+        <description>
             <![CDATA[<div class="changed_added_2_0">Render an HTML "input" element of type "button".
             The value of the component is rendered as the button text and the outcome of the
             component is used to determine the target URL which is activated by onclick.  If
@@ -78,7 +78,7 @@
             <renderer-type>javax.faces.Button</renderer-type>
         </component>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[The component identifier for this component.  This value must be
                 unique within the closest parent component that is a naming
                 container.
@@ -94,7 +94,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Whether to include page parameters in the target URI.
             ]]></description>
             <name>
@@ -108,7 +108,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[The logical outcome used to resolve a navigation case.
             ]]></description>
             <name>
@@ -122,7 +122,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Flag indicating whether or not this component should be rendered
                 (during Render Response Phase), or processed on any subsequent
                 form submit.  The default value for this property is true.
@@ -138,7 +138,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[The current value of this component.
             ]]></description>
             <name>
@@ -152,7 +152,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Access key that, when pressed, transfers focus
                 to this element.
             ]]></description>
@@ -167,7 +167,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Alternate textual description of the
                 element rendered by this component.
             ]]></description>
@@ -182,7 +182,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Direction indication for text that does not inherit directionality.
                 Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
             ]]></description>
@@ -197,7 +197,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[The identifier of the page fragment which should
                 be brought into focus when the target page is
                 rendered. The value of this attribute is appended
@@ -215,7 +215,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[<p>
                 Absolute or relative URL of the
                 image to be displayed for this
@@ -246,7 +246,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Code describing the language used in the generated markup
                 for this component.
             ]]></description>
@@ -261,7 +261,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Javascript code executed when this element loses focus.
             ]]></description>
             <name>
@@ -275,7 +275,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Javascript code executed when a pointer button is
                 clicked over this element.
             ]]></description>
@@ -290,7 +290,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Javascript code executed when a pointer button is
                 double clicked over this element.
             ]]></description>
@@ -305,7 +305,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Javascript code executed when this element receives focus.
             ]]></description>
             <name>
@@ -319,7 +319,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Javascript code executed when a key is
                 pressed down over this element.
             ]]></description>
@@ -334,7 +334,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Javascript code executed when a key is
                 pressed and released over this element.
             ]]></description>
@@ -349,7 +349,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Javascript code executed when a key is
                 released over this element.
             ]]></description>
@@ -364,7 +364,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Javascript code executed when a pointer button is
                 pressed down over this element.
             ]]></description>
@@ -379,7 +379,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Javascript code executed when a pointer button is
                 moved within this element
             ]]></description>
@@ -394,7 +394,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Javascript code executed when a pointer button is
                 moved away from this element
             ]]></description>
@@ -409,7 +409,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Javascript code executed when a pointer button is
                 moved onto this element
             ]]></description>
@@ -424,7 +424,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Javascript code executed when a pointer button is
                 released over this element
             ]]></description>
@@ -439,7 +439,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[CSS style(s) to be applied when this component is rendered
             ]]></description>
             <name>
@@ -453,7 +453,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Space-separated list of CSS style class(es) to be applied when
                 this element is rendered.  This value must be passed through
                 as the "class" attribute on generated markup
@@ -469,7 +469,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Position of this element in the tabbing order
                 for the current document.  This value must be
                 an integer between 0 and 32767
@@ -485,7 +485,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Advisory title information about markup elements generated
                 for this component
             ]]></description>
@@ -516,7 +516,7 @@
         </attribute>
     </tag>
     <tag>
-        <description><![CDATA[
+        <description>
             <![CDATA[<div class="changed_added_2_0">Render an HTML "a" anchor element.  The value of the
             component is rendered as the anchor text and the outcome of the component is used
             to determine the target URL rendered in the "href" attribute.  Any
@@ -549,7 +549,7 @@
             <renderer-type>javax.faces.Link</renderer-type>
         </component>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[The component identifier for this component.  This value must be
                 unique within the closest parent component that is a naming
                 container
@@ -565,7 +565,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Whether to include page parameters in the target URI
             ]]></description>
             <name>
@@ -579,7 +579,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[The logical outcome used to resolve a navigation case
             ]]></description>
             <name>
@@ -593,7 +593,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Flag indicating whether or not this component should be rendered
                 (during Render Response Phase), or processed on any subsequent
                 form submit.  The default value for this property is true
@@ -609,7 +609,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[The current value of this component
             ]]></description>
             <name>
@@ -623,7 +623,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Access key that, when pressed, transfers focus
                 to this element
             ]]></description>
@@ -638,7 +638,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[The character encoding of the resource designated
                 by this hyperlink
             ]]></description>
@@ -653,7 +653,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[The position and shape of the hot spot on the screen
                 (for use in client-side image maps)
             ]]></description>
@@ -668,7 +668,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Direction indication for text that does not inherit directionality.
                 Valid values are "LTR" (left-to-right) and "RTL" (right-to-left)
             ]]></description>
@@ -683,7 +683,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Flag indicating that this element must never
                 receive focus or be included in a subsequent
                 submit
@@ -699,7 +699,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[The identifier of the page fragment which should
                 be brought into focus when the target page is
                 rendered. The value of this attribute is appended
@@ -717,7 +717,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[The language code of the resource designated
                 by this hyperlink
             ]]></description>
@@ -732,7 +732,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Code describing the language used in the generated markup
                 for this component
             ]]></description>
@@ -747,7 +747,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Javascript code executed when this element loses focus
             ]]></description>
             <name>
@@ -761,7 +761,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Javascript code executed when a pointer button is
                 clicked over this element
             ]]></description>
@@ -776,7 +776,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Javascript code executed when a pointer button is
                 double clicked over this element
             ]]></description>
@@ -791,7 +791,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Javascript code executed when this element receives focus
             ]]></description>
             <name>
@@ -805,7 +805,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Javascript code executed when a key is
                 pressed down over this element
             ]]></description>
@@ -820,7 +820,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Javascript code executed when a key is
                 pressed and released over this element
             ]]></description>
@@ -835,7 +835,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Javascript code executed when a key is
                 released over this element
             ]]></description>
@@ -850,7 +850,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Javascript code executed when a pointer button is
                 pressed down over this element
             ]]></description>
@@ -865,7 +865,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Javascript code executed when a pointer button is
                 moved within this element
             ]]></description>
@@ -880,7 +880,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Javascript code executed when a pointer button is
                 moved away from this element
             ]]></description>
@@ -895,7 +895,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Javascript code executed when a pointer button is
                 moved onto this element
             ]]></description>
@@ -910,7 +910,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Javascript code executed when a pointer button is
                 released over this element
             ]]></description>
@@ -925,7 +925,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[The relationship from the current document
                 to the anchor specified by this hyperlink.
                 The value of this attribute is a space-separated
@@ -942,7 +942,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[A reverse link from the anchor specified
                 by this hyperlink to the current document.
                 The value of this attribute is a space-separated
@@ -959,7 +959,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[The shape of the hot spot on the screen
                 (for use in client-side image maps).  Valid
                 values are:  default (entire region); rect
@@ -977,7 +977,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[CSS style(s) to be applied when this component is rendered
             ]]></description>
             <name>
@@ -991,7 +991,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Space-separated list of CSS style class(es) to be applied when
                 this element is rendered.  This value must be passed through
                 as the "class" attribute on generated markup
@@ -1007,7 +1007,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Position of this element in the tabbing order
                 for the current document.  This value must be
                 an integer between 0 and 32767
@@ -1023,7 +1023,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Name of a frame where the resource
                 retrieved via this hyperlink is to
                 be displayed
@@ -1039,7 +1039,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Advisory title information about markup elements generated
                 for this component
             ]]></description>
@@ -1054,7 +1054,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[The content type of the resource designated
                 by this hyperlink
             ]]></description>
@@ -1085,7 +1085,7 @@
         </attribute>
     </tag>
     <tag>
-        <description><![CDATA[
+        <description>
             <![CDATA[
 
           <p>Render the markup for a <code><head></code> element.</p>
@@ -1130,7 +1130,7 @@
             <renderer-type>javax.faces.Head</renderer-type>
         </component>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Direction indication for text that does not inherit directionality.
               Valid values are "LTR" (left-to-right) and "RTL" (right-to-left)
             ]]></description>
@@ -1145,7 +1145,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Code describing the language used in the generated markup
               for this component
             ]]></description>
@@ -1176,7 +1176,7 @@
         </attribute>
     </tag>
     <tag>
-        <description><![CDATA[
+        <description>
             <![CDATA[
 
           <p>Render the markup for a <code><body></code> element.</p>
@@ -1221,7 +1221,7 @@
             <renderer-type>javax.faces.Body</renderer-type>
         </component>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Direction indication for text that does not inherit directionality.
               Valid values are "LTR" (left-to-right) and "RTL" (right-to-left)
             ]]></description>
@@ -1236,7 +1236,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Code describing the language used in the generated markup
               for this component
             ]]></description>
@@ -1251,7 +1251,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Javascript code executed when a pointer button is
               clicked over this element
             ]]></description>
@@ -1266,7 +1266,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Javascript code executed when a pointer button is
               double clicked over this element
             ]]></description>
@@ -1281,7 +1281,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Javascript code executed when a key is
               pressed down over this element
             ]]></description>
@@ -1296,7 +1296,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Javascript code executed when a key is
               pressed and released over this element
             ]]></description>
@@ -1311,7 +1311,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Javascript code executed when a key is
               released over this element
             ]]></description>
@@ -1326,7 +1326,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Javascript code executed when the user agent finishes loading
               a window or all frames within a frameset
             ]]></description>
@@ -1341,7 +1341,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Javascript code executed when a pointer button is
               pressed down over this element
             ]]></description>
@@ -1356,7 +1356,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Javascript code executed when a pointer button is
               moved within this element
             ]]></description>
@@ -1371,7 +1371,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Javascript code executed when a pointer button is
               moved away from this element
             ]]></description>
@@ -1386,7 +1386,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Javascript code executed when a pointer button is
               moved onto this element
             ]]></description>
@@ -1401,7 +1401,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Javascript code executed when a pointer button is
               released over this element
             ]]></description>
@@ -1416,7 +1416,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Javascript code executed when the user agent removes
               a document from a window or frame
             ]]></description>
@@ -1431,7 +1431,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[CSS style(s) to be applied when this component is rendered
             ]]></description>
             <name>
@@ -1445,7 +1445,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Space-separated list of CSS style class(es) to be applied when
               this element is rendered.  This value must be passed through
               as the "class" attribute on generated markup
@@ -1461,7 +1461,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Advisory title information about markup elements generated
               for this component
             ]]></description>
@@ -6275,7 +6275,7 @@
         </attribute>
     </tag>
     <tag>
-        <description><![CDATA[
+        <description>
             <![CDATA[<div class="changed_added_2_0">
             
             <p>Render the markup for a <code><script></code> element that
@@ -6423,7 +6423,7 @@
             <renderer-type>javax.faces.resource.Script</renderer-type>
         </component>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Converter instance registered with this component
             ]]></description>
             <name>
@@ -6437,7 +6437,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[The component identifier for this component.  This value must be
                 unique within the closest parent component that is a naming
                 container
@@ -6453,7 +6453,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Flag indicating whether or not this component should be rendered
                 (during Render Response Phase), or processed on any subsequent
                 form submit.  The default value for this property is true
@@ -6469,7 +6469,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[The current value of this component
             ]]></description>
             <name>
@@ -6483,7 +6483,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[<div class="changed_added_2_0"><p>The <em>libraryName</em> for this resource.</p></div>
             ]]></description>
             <name>
@@ -6497,7 +6497,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[<div class="changed_added_2_0"><p>The <em>resourceName</em> for this resource.</p></div>
                 <div class="changed_modified_2_0_rev_a"><p>This attribute is required.</p></div>
             ]]></description>
@@ -6512,7 +6512,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[<div class="changed_added_2_0"><p>The <em>target</em> area for which this resource will be rendered.  For example, <em>target="head"</em> would cause the resource to be rendered within the <em>head</em> element.</p></div>
             ]]></description>
             <name>
@@ -6542,7 +6542,7 @@
         </attribute>
     </tag>
     <tag>
-        <description><![CDATA[
+        <description>
             <![CDATA[<div class="changed_added_2_0">
             
             <p>Render the markup for a <code><link></code> element that
@@ -6604,7 +6604,7 @@
             <renderer-type>javax.faces.resource.Stylesheet</renderer-type>
         </component>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Converter instance registered with this component
             ]]></description>
             <name>
@@ -6618,7 +6618,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[The component identifier for this component.  This value must be
                 unique within the closest parent component that is a naming
                 container
@@ -6634,7 +6634,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[Flag indicating whether or not this component should be rendered
                 (during Render Response Phase), or processed on any subsequent
                 form submit.  The default value for this property is true
@@ -6650,7 +6650,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[The current value of this component
             ]]></description>
             <name>
@@ -6664,7 +6664,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[<div class="changed_added_2_0"><p>The <em>libraryName</em> for this resource.</p></div>
             ]]></description>
             <name>
@@ -6678,7 +6678,7 @@
             </type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+            <description>
                 <![CDATA[<div class="changed_added_2_0"><p>The <em>resourceName</em> for this resource.</p></div>
                 <div class="changed_modified_2_0_rev_a"><p>This attribute is required.</p></div>
             ]]></description>
