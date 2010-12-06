@@ -634,7 +634,7 @@
             <type>java.lang.String</type>
         </attribute>
         <attribute>
-             <description><![CDATA[<![CDATA[
+             <description><![CDATA[
 
               <p class="changed_modified_2_0_rev_a">The expression must
               evaluate to a public method that takes a
@@ -874,7 +874,7 @@
             <type>java.lang.String</type>
         </attribute>
         <attribute>
-             <description><![CDATA[<![CDATA[
+             <description><![CDATA[
 
                 <p>Flag enabling or disabling the inclusion of the
                 parameter.  <span
