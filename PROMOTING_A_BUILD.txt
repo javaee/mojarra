@@ -25,9 +25,14 @@ Tag build.
 Currently, we're using a tag format of
 2.0.1-bXX - where "XX" is a monotonically increasing number, incremented with every build.
 sample tagging command:
-svn copy https://mojarra.dev.java.net/svn/mojarra/trunk \
+[svn copy https://mojarra.dev.java.net/svn/mojarra/trunk \
          https://mojarra.dev.java.net/svn/mojarra/tags/2.0.4-b06 \
-         -m "Tag 2.0.4 Build 06"
+         -m "Tag 2.0.4 Build 06"] ...this is now obsolete
+
+This is the correct command...
+svn copy https://svn.java.net/svn/mojarra~svn/branches/MOJARRA_2_0X_ROLLING \
+		https://svn.java.net/svn/mojarra~svn/tags/2.0.4-b07 \
+		-m "Tag 2.0.4 Build 07"
 
 Change variables found in common.xml (build.type, etc) 
     build.type will be set to a value such as BETA, RC, FCS, etc.
