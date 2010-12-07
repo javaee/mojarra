@@ -44,10 +44,15 @@ import com.sun.faces.util.Util;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.facelets.util.Classpath;
 import com.sun.faces.spi.ConfigurationResourceProvider;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.faces.FacesException;
 import javax.servlet.ServletContext;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -99,14 +104,14 @@ public class MetaInfFacesConfigResourceProvider implements
         if (duplicateJarPattern != null) {
             duplicatePattern = Pattern.compile(duplicateJarPattern);
         }
-        SortedMap<String, Set<URL>> sortedJarMap = new TreeMap<String, Set<URL>>();
+        SortedMap<String, Set<URI>> sortedJarMap = new TreeMap<String, Set<URI>>();
         //noinspection CollectionWithoutInitialCapacity
-        List<URL> unsortedResourceList = new ArrayList<URL>();
+        List<URI> unsortedResourceList = new ArrayList<URI>();
 
         try {
-            for (URL url : loadURLs(context)) {
+            for (URI uri : loadURLs(context)) {
 
-                String jarUrl = url.toString();
+                String jarUrl = uri.toString();
                 String jarName = null;
                 Matcher m = JAR_PATTERN.matcher(jarUrl);
                 if (m.matches()) {
@@ -120,29 +125,39 @@ public class MetaInfFacesConfigResourceProvider implements
                         }
                     }
 
-                    Set<URL> urls = sortedJarMap.get(jarName);
-                    if (urls == null) {
-                        urls = new HashSet<URL>();
-                        sortedJarMap.put(jarName, urls);
+                    Set<URI> uris = sortedJarMap.get(jarName);
+                    if (uris == null) {
+                        uris = new HashSet<URI>();
+                        sortedJarMap.put(jarName, uris);
                     }
-                    urls.add(url);
+                    uris.add(uri);
                 } else {
-                    unsortedResourceList.add(0, url);
+                    unsortedResourceList.add(0, uri);
                 }
             }
         } catch (IOException e) {
             throw new FacesException(e);
         }
         // Load the sorted resources first:
-        List<URL> result =
-              new ArrayList<URL>(sortedJarMap.size() + unsortedResourceList
+        List<URI> result =
+              new ArrayList<URI>(sortedJarMap.size() + unsortedResourceList
                     .size());
-        for (Map.Entry<String, Set<URL>> entry : sortedJarMap.entrySet()) {
+        for (Map.Entry<String, Set<URI>> entry : sortedJarMap.entrySet()) {
             result.addAll(entry.getValue());
         }
         // Then load the unsorted resources
         result.addAll(unsortedResourceList);
-        return result;
+
+        List<URL> urlResult = new ArrayList<URL>(sortedJarMap.size() + unsortedResourceList
+                    .size());
+        for (URI uri : result) {
+            try {
+                urlResult.add(uri.toURL());
+            } catch (MalformedURLException ex) {
+                throw new FacesException(ex);
+            }
+        }
+        return urlResult;
         
     }
 
@@ -150,22 +165,29 @@ public class MetaInfFacesConfigResourceProvider implements
     // --------------------------------------------------------- Private Methods
 
 
-    private Collection<URL> loadURLs(ServletContext context) throws IOException {
+    private Collection<URI> loadURLs(ServletContext context) throws IOException {
 
-        Set<URL> urls = new HashSet<URL>();
-        for (Enumeration<URL> e = Util.getCurrentLoader(this).getResources(META_INF_RESOURCES); e.hasMoreElements();) {
-            urls.add(e.nextElement());            
-        }
-        urls.addAll(Arrays.asList(Classpath.search("META-INF/", ".faces-config.xml")));
-        // special case for finding taglib files in WEB-INF/classes/META-INF
-        Set paths = context.getResourcePaths(WEB_INF_CLASSES);
-        if (paths != null) {
-            for (Object path : paths) {
-                String p = path.toString();
-                if (p.endsWith(".taglib.xml")) {
-                    urls.add(context.getResource(p));
+        Set<URI> urls = new HashSet<URI>();
+        try {
+            for (Enumeration<URL> e = Util.getCurrentLoader(this).getResources(META_INF_RESOURCES); e.hasMoreElements();) {
+                    urls.add(new URI(e.nextElement().toExternalForm()));
+            }
+            URL [] urlArray = Classpath.search("META-INF/", ".faces-config.xml");
+            for (URL cur : urlArray) {
+                urls.add(new URI(cur.toExternalForm()));
+            }
+            // special case for finding taglib files in WEB-INF/classes/META-INF
+            Set paths = context.getResourcePaths(WEB_INF_CLASSES);
+            if (paths != null) {
+                for (Object path : paths) {
+                    String p = path.toString();
+                    if (p.endsWith(".taglib.xml")) {
+                        urls.add(new URI(context.getResource(p).toExternalForm()));
+                    }
                 }
             }
+        } catch (URISyntaxException ex) {
+            throw new IOException(ex);
         }
         return urls;
         
