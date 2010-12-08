@@ -44,10 +44,7 @@ import com.sun.faces.util.Util;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.facelets.util.Classpath;
 import com.sun.faces.spi.ConfigurationResourceProvider;
-import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.faces.FacesException;
 import javax.servlet.ServletContext;
@@ -63,7 +60,6 @@ import java.util.TreeMap;
 import java.util.Collection;
 import java.util.Set;
 import java.util.HashSet;
-import java.util.Arrays;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
@@ -96,7 +92,7 @@ public class MetaInfFacesConfigResourceProvider implements
     /**
      * @see com.sun.faces.spi.ConfigurationResourceProvider#getResources(javax.servlet.ServletContext)
      */
-    public Collection<URL> getResources(ServletContext context) {
+    public Collection<URI> getResources(ServletContext context) {
 
         WebConfiguration webConfig = WebConfiguration.getInstance(context);
         String duplicateJarPattern = webConfig.getOptionValue(WebConfiguration.WebContextInitParameter.DuplicateJARPattern);
@@ -148,16 +144,7 @@ public class MetaInfFacesConfigResourceProvider implements
         // Then load the unsorted resources
         result.addAll(unsortedResourceList);
 
-        List<URL> urlResult = new ArrayList<URL>(sortedJarMap.size() + unsortedResourceList
-                    .size());
-        for (URI uri : result) {
-            try {
-                urlResult.add(uri.toURL());
-            } catch (MalformedURLException ex) {
-                throw new FacesException(ex);
-            }
-        }
-        return urlResult;
+        return result;
         
     }
 

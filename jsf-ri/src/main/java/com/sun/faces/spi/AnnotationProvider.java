@@ -42,9 +42,9 @@ package com.sun.faces.spi;
 
 import javax.servlet.ServletContext;
 import java.lang.annotation.Annotation;
+import java.net.URI;
 import java.util.Set;
 import java.util.Map;
-import java.net.URL;
 
 /**
  * <p>
@@ -128,6 +128,6 @@ public abstract class AnnotationProvider {
      * @return a <code>Map</code> of classes mapped to a specific annotation type.
      *  If no annotations are present, this method returns an empty <code>Map</code>.
      */
-    public abstract Map<Class<? extends Annotation>,Set<Class<?>>> getAnnotatedClasses(Set<URL> urls);
+    public abstract Map<Class<? extends Annotation>,Set<Class<?>>> getAnnotatedClasses(Set<URI> urls);
 
 } // END AnnotationProvider

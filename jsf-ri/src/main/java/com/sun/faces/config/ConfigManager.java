@@ -111,6 +111,8 @@ import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.lang.annotation.Annotation;
+import java.net.URI;
+import java.util.Iterator;
 
 import org.w3c.dom.*;
 import org.xml.sax.SAXParseException;
@@ -607,11 +609,11 @@ public class ConfigManager {
                                                  ExecutorService executor,
                                                  boolean validating) {
 
-        List<FutureTask<Collection<URL>>> urlTasks =
-             new ArrayList<FutureTask<Collection<URL>>>(providers.size());
+        List<FutureTask<Collection<URI>>> urlTasks =
+             new ArrayList<FutureTask<Collection<URI>>>(providers.size());
         for (ConfigurationResourceProvider p : providers) {
-            FutureTask<Collection<URL>> t =
-                 new FutureTask<Collection<URL>>(new URLTask(p, sc));
+            FutureTask<Collection<URI>> t =
+                 new FutureTask<Collection<URI>>(new URITask(p, sc));
             urlTasks.add(t);
             if (executor != null) {
                 executor.execute(t);
@@ -623,10 +625,11 @@ public class ConfigManager {
         List<FutureTask<DocumentInfo>> docTasks =
              new ArrayList<FutureTask<DocumentInfo>>(providers.size() << 1);
 
-        for (FutureTask<Collection<URL>> t : urlTasks) {
+        int i = 0, j = 0;
+        for (FutureTask<Collection<URI>> t : urlTasks) {
             try {
-                Collection<URL> l = t.get();
-                for (URL u : l) {
+                Collection<URI> l = t.get();
+                for (URI u : l) {
                     FutureTask<DocumentInfo> d =
                          new FutureTask<DocumentInfo>(new ParseTask(validating, u));
                     docTasks.add(d);
@@ -635,11 +638,13 @@ public class ConfigManager {
                     } else {
                         d.run();
                     }
+                    j++;
                 }
             } catch (InterruptedException ignored) {
             } catch (Exception e) {
                 throw new ConfigurationException(e);
             }
+            i++;
         }
 
         List<DocumentInfo> docs = new ArrayList<DocumentInfo>(docTasks.size());
@@ -714,17 +719,17 @@ public class ConfigManager {
             this.documentInfos = documentInfos;
         }
 
-        private Set<URL> getAnnotationScanURLs() {
-            Set<URL> urls = new HashSet<URL>(documentInfos.length);
+        private Set<URI> getAnnotationScanURLs() {
+            Set<URI> urls = new HashSet<URI>(documentInfos.length);
             Set<String> jarNames = new HashSet<String>(documentInfos.length);
             for (DocumentInfo docInfo : documentInfos) {
-                Matcher m = JAR_PATTERN.matcher(docInfo.getSourceURL().toString());
+                Matcher m = JAR_PATTERN.matcher(docInfo.getSourceURI().toString());
                 if (m.matches()) {
                     String jarName = m.group(2);
                     if (!jarNames.contains(jarName)) {
                         FacesConfigInfo configInfo = new FacesConfigInfo(docInfo);
                         if (!configInfo.isMetadataComplete()) {
-                            urls.add(docInfo.getSourceURL());
+                            urls.add(docInfo.getSourceURI());
                             jarNames.add(jarName);
                         }
                     }
@@ -768,11 +773,11 @@ public class ConfigManager {
             if (t != null) {
                 t.startTiming();
             }
-            Set<URL> scanUrls = urlGetter.getAnnotationScanURLs();
+            Set<URI> scanUris = urlGetter.getAnnotationScanURLs();
 
             //AnnotationScanner scanner = new AnnotationScanner(sc);
             Map<Class<? extends Annotation>,Set<Class<?>>> annotatedClasses =
-                  provider.getAnnotatedClasses(scanUrls);
+                  provider.getAnnotatedClasses(scanUris);
 
             if (t != null) {
                 t.stopTiming();
@@ -798,7 +803,7 @@ public class ConfigManager {
             "http://java.sun.com/xml/ns/javaee";
         private static final String EMPTY_FACES_CONFIG =
                 "com/sun/faces/empty-faces-config.xml";
-        private URL documentURL;
+        private URI documentURI;
         private DocumentBuilderFactory factory;
         private boolean validating;
 
@@ -811,13 +816,13 @@ public class ConfigManager {
          * </p>
          *
          * @param validating whether or not we're validating
-         * @param documentURL a URL to the configuration resource to be parsed
+         * @param documentURI a URL to the configuration resource to be parsed
          * @throws Exception general error
          */
-        public ParseTask(boolean validating, URL documentURL)
+        public ParseTask(boolean validating, URI documentURI)
         throws Exception {
 
-            this.documentURL = documentURL;
+            this.documentURI = documentURI;
             this.factory = DbfFactory.getFactory();
             this.validating = validating;
 
@@ -843,14 +848,14 @@ public class ConfigManager {
 
                 if (timer != null) {
                     timer.stopTiming();
-                    timer.logResult("Parse " + documentURL.toExternalForm());
+                    timer.logResult("Parse " + documentURI.toURL().toExternalForm());
                 }
 
-                return new DocumentInfo(d, documentURL);
+                return new DocumentInfo(d, documentURI);
             } catch (Exception e) {
                 throw new ConfigurationException(MessageFormat.format(
                      "Unable to parse document ''{0}'': {1}",
-                     documentURL.toExternalForm(),
+                     documentURI.toURL().toExternalForm(),
                      e.getMessage()), e);
             }
         }
@@ -860,7 +865,7 @@ public class ConfigManager {
 
 
         /**
-         * @return <code>Document</code> based on <code>documentURL</code>.
+         * @return <code>Document</code> based on <code>documentURI</code>.
          * @throws Exception if an error occurs during the process of building a
          *  <code>Document</code>
          */
@@ -868,8 +873,9 @@ public class ConfigManager {
 
             Document returnDoc;
             DocumentBuilder db = getNonValidatingBuilder();
+            URL documentURL = documentURI.toURL();
             InputSource is = new InputSource(getInputStream(documentURL));
-                is.setSystemId(documentURL.toExternalForm());
+                is.setSystemId(documentURI.toURL().toExternalForm());
             Document doc = null;
 
             try {
@@ -1073,7 +1079,7 @@ public class ConfigManager {
      *  processing.
      * </p>
      */
-    private static class URLTask implements Callable<Collection<URL>> {
+    private static class URITask implements Callable<Collection<URI>> {
 
         private ConfigurationResourceProvider provider;
         private ServletContext sc;
@@ -1083,12 +1089,12 @@ public class ConfigManager {
 
 
         /**
-         * Constructs a new <code>URLTask</code> instance.
+         * Constructs a new <code>URITask</code> instance.
          * @param provider the <code>ConfigurationResourceProvider</code> from
          *  which zero or more <code>URL</code>s will be returned
          * @param sc the <code>ServletContext</code> of the current application
          */
-        public URLTask(ConfigurationResourceProvider provider,
+        public URITask(ConfigurationResourceProvider provider,
                        ServletContext sc) {
             this.provider = provider;
             this.sc = sc;
@@ -1103,11 +1109,29 @@ public class ConfigManager {
          * @throws Exception if an Exception is thrown by the underlying
          *  <code>ConfigurationResourceProvider</code> 
          */
-        public Collection<URL> call() throws Exception {
-            return provider.getResources(sc);
+        public Collection<URI> call() throws Exception {
+            Collection untypedCollection = provider.getResources(sc);
+            Iterator untypedCollectionIterator = untypedCollection.iterator();
+            Collection<URI> result = Collections.emptyList();
+            if (untypedCollectionIterator.hasNext()) {
+                Object cur = untypedCollectionIterator.next();
+                // account for older versions of the provider that return Collection<URL>.
+                if (cur instanceof URL) {
+                    result = new ArrayList<URI>(untypedCollection.size());
+                    result.add(new URI(((URL)cur).toExternalForm()));
+                    while (untypedCollectionIterator.hasNext()) {
+                        cur = untypedCollectionIterator.next();
+                        result.add(new URI(((URL)cur).toExternalForm()));
+                    }
+                } else {
+                    result = (Collection<URI>) untypedCollection;
+                }
+            }
+
+            return result;
         }
 
-    } // END URLTask
+    } // END URITask
 
 
 }

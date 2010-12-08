@@ -250,7 +250,7 @@ public class ManagedBeanConfigProcessor extends AbstractConfigProcessor {
                 LOGGER.log(Level.FINE,
                            MessageFormat.format(
                                 "Processing managed-bean elements for document: ''{0}''",
-                                documentInfos[i].getSourceURL()));
+                                documentInfos[i].getSourceURI()));
             }
             Document document = documentInfos[i].getDocument();
             String namespace = document.getDocumentElement().getNamespaceURI();

@@ -42,10 +42,12 @@ package com.sun.faces.config.configprovider;
 
 import com.sun.faces.spi.ConfigurationResourceProvider;
 
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import javax.faces.FacesException;
 
 import javax.servlet.ServletContext;
 
@@ -65,14 +67,18 @@ public class MojarraFacesConfigResourceProvider implements
     /**
      * @see ConfigurationResourceProvider#getResources(javax.servlet.ServletContext)
      */
-    public Collection<URL> getResources(ServletContext context) {
+    public Collection<URI> getResources(ServletContext context) {
 
-        List<URL> list = new ArrayList<URL>(1);
+        List<URI> list = new ArrayList<URI>(1);
         // Don't use Util.getCurrentLoader().  This config resource should
         // be available from the same classloader that loaded this instance.
         // Doing so allows us to be more OSGi friendly.
         ClassLoader loader = this.getClass().getClassLoader();
-        list.add(loader.getResource(JSF_RI_CONFIG));
+        try {
+            list.add(new URI(loader.getResource(JSF_RI_CONFIG).toExternalForm()));
+        } catch (URISyntaxException ex) {
+            throw new FacesException(ex);
+        }
         return list;
 
     }

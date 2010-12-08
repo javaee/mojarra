@@ -259,7 +259,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
                            MessageFormat.format("Processing application elements for document: ''{0}''",
-                                                documentInfos[i].getSourceURL()));
+                                                documentInfos[i].getSourceURI()));
             }
             Document document = documentInfos[i].getDocument();
             String namespace =

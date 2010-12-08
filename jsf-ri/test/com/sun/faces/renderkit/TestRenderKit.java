@@ -74,6 +74,7 @@ import javax.xml.parsers.DocumentBuilder;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.net.URI;
 import java.util.Iterator;
 import java.net.URL;
 
@@ -493,8 +494,8 @@ public class TestRenderKit extends ServletFacesTestCase {
         }
 
         configProcessors[0].process(servletContext, new DocumentInfo[] {
-                                           new DocumentInfo(defaultDoc, runtime),
-                                           new DocumentInfo(renderKitDoc, renderkit) });
+                                           new DocumentInfo(defaultDoc, new URI(runtime.toExternalForm())),
+                                           new DocumentInfo(renderKitDoc, new URI(renderkit.toExternalForm())) });
 
         RenderKitFactory rkf = (RenderKitFactory) FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         RenderKit rk = rkf.getRenderKit(getFacesContext(), RenderKitFactory.HTML_BASIC_RENDER_KIT);

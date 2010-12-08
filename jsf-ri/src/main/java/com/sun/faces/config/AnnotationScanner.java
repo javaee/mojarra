@@ -58,7 +58,7 @@ import javax.faces.render.FacesRenderer;
 import javax.faces.validator.FacesValidator;
 import javax.servlet.ServletContext;
 import java.lang.annotation.Annotation;
-import java.net.URL;
+import java.net.URI;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -144,7 +144,7 @@ public class AnnotationScanner extends AnnotationProvider {
      *  If no annotations are present, or the application is considered
      * <code>metadata-complete</code> <code>null</code> will be returned.
      */
-    public Map<Class<? extends Annotation>,Set<Class<?>>> getAnnotatedClasses(Set<URL> urls) {
+    public Map<Class<? extends Annotation>,Set<Class<?>>> getAnnotatedClasses(Set<URI> uris) {
 
         Set<String> classList = new HashSet<String>();
 

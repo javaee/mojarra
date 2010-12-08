@@ -106,7 +106,7 @@ public class FacesConfigExtensionProcessor extends AbstractConfigProcessor {
                 LOGGER.log(Level.FINE,
                            MessageFormat.format(
                                 "Processing faces-config-extension elements for document: ''{0}''",
-                                documentInfos[i].getSourceURL()));
+                                documentInfos[i].getSourceURI()));
             }
             Document document = documentInfos[i].getDocument();
             String namespace = document.getDocumentElement()
@@ -155,7 +155,7 @@ public class FacesConfigExtensionProcessor extends AbstractConfigProcessor {
                                 LOGGER.log(Level.WARNING,
                                         MessageFormat.format(
                                         "Processing faces-config-extension elements for document: ''{0}'', encountered unexpected configuration ''{1}'', ignoring and continuing",
-                                        info.getSourceURL(), getNodeText(childOfInterset)));
+                                        info.getSourceURI(), getNodeText(childOfInterset)));
                             }
                         }
 
@@ -174,7 +174,7 @@ public class FacesConfigExtensionProcessor extends AbstractConfigProcessor {
                             LOGGER.log(Level.WARNING,
                                     MessageFormat.format(
                                     "Processing faces-config-extension elements for document: ''{0}'', encountered <facelets-processing> elemnet without expected children",
-                                    info.getSourceURL()));
+                                    info.getSourceURI()));
                         }
                     }
                 }

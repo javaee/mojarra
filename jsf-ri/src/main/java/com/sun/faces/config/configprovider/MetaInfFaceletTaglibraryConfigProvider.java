@@ -40,6 +40,7 @@
 
 package com.sun.faces.config.configprovider;
 
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.List;
@@ -47,6 +48,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Set;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletContext;
 import javax.faces.FacesException;
@@ -54,6 +57,7 @@ import javax.faces.FacesException;
 import com.sun.faces.facelets.util.Classpath;
 import com.sun.faces.util.Util;
 import com.sun.faces.spi.ConfigurationResourceProvider;
+import java.net.URI;
 
 /**
  *
@@ -81,7 +85,7 @@ public class MetaInfFaceletTaglibraryConfigProvider implements
     // -------------------------------------------- Methods from ConfigProcessor
 
 
-    public Collection<URL> getResources(ServletContext context) {
+    public Collection<URI> getResources(ServletContext context) {
 
         try {
             URL[] urls = Classpath.search(Util.getCurrentLoader(this),
@@ -92,7 +96,7 @@ public class MetaInfFaceletTaglibraryConfigProvider implements
             // but has left the jsf-facelets.jar in the classpath, we
             // need to ignore the default configuration resouces from
             // that JAR.
-            List<URL> urlsList = pruneURLs(urls);
+            List<URI> urlsList = pruneURLs(urls);
 
             // special case for finding taglib files in WEB-INF/classes/META-INF
             Set paths = context.getResourcePaths(WEB_INF_CLASSES);
@@ -100,7 +104,11 @@ public class MetaInfFaceletTaglibraryConfigProvider implements
                 for (Object path : paths) {
                     String p = path.toString();
                     if (p.endsWith(".taglib.xml")) {
-                        urlsList.add(context.getResource(p));
+                        try {
+                            urlsList.add(new URI(context.getResource(p).toExternalForm()));
+                        } catch (URISyntaxException ex) {
+                            throw new FacesException(ex);
+                        }
                     }
                 }
             }
@@ -115,9 +123,9 @@ public class MetaInfFaceletTaglibraryConfigProvider implements
     // --------------------------------------------------------- Private Methods
 
 
-    private List<URL> pruneURLs(URL[] urls) {
+    private List<URI> pruneURLs(URL[] urls) {
 
-        List<URL> ret = null;
+        List<URI> ret = null;
         if (urls != null && urls.length > 0) {
             for (URL url : urls) {
                 String u = url.toString();
@@ -130,9 +138,13 @@ public class MetaInfFaceletTaglibraryConfigProvider implements
                 }
                 if (!found) {
                     if (ret == null) {
-                        ret = new ArrayList<URL>();
+                        ret = new ArrayList<URI>();
                     }
-                    ret.add(url);
+                    try {
+                        ret.add(new URI(url.toExternalForm()));
+                    } catch (URISyntaxException ex) {
+                        throw new FacesException(ex);
+                    }
                 }
             }
         }

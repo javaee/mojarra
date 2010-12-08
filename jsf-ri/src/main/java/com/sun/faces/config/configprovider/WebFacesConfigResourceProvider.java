@@ -40,6 +40,7 @@
 
 package com.sun.faces.config.configprovider;
 
+import java.net.URI;
 import java.net.URL;
 import java.util.Collection;
 
@@ -71,12 +72,12 @@ public class WebFacesConfigResourceProvider extends BaseWebConfigResourceProvide
     /**
      * @see com.sun.faces.spi.ConfigurationResourceProvider#getResources(javax.servlet.ServletContext)
      */
-    public Collection<URL> getResources(ServletContext context) {
+    public Collection<URI> getResources(ServletContext context) {
 
-        Collection<URL> urls = super.getResources(context);
+        Collection<URI> urls = super.getResources(context);
 
         // Step 5, parse "/WEB-INF/faces-config.xml" if it exists
-        URL webFacesConfig = getContextURLForPath(context, WEB_INF_RESOURCE);
+        URI webFacesConfig = getContextURLForPath(context, WEB_INF_RESOURCE);
         if (webFacesConfig != null) {
             urls.add(webFacesConfig);
         }

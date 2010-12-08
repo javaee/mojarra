@@ -40,6 +40,7 @@
 
 package com.sun.faces.config;
 
+import java.net.URI;
 import org.w3c.dom.Document;
 
 import java.net.URL;
@@ -51,16 +52,16 @@ import java.net.URL;
 public class DocumentInfo {
 
     private Document document;
-    private URL sourceURL;
+    private URI sourceURI;
 
 
     // ------------------------------------------------------------ Constructors
 
 
-    public DocumentInfo(Document document, URL sourceURL) {
+    public DocumentInfo(Document document, URI sourceURL) {
 
         this.document = document;
-        this.sourceURL = sourceURL;
+        this.sourceURI = sourceURL;
 
     }
 
@@ -75,9 +76,9 @@ public class DocumentInfo {
     }
 
 
-    public URL getSourceURL() {
+    public URI getSourceURI() {
 
-        return sourceURL;
+        return sourceURI;
 
     }
     

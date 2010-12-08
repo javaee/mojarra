@@ -40,6 +40,7 @@
 
 package com.sun.faces.config;
 
+import java.net.URI;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 
@@ -167,12 +168,12 @@ public class JavaClassScanningAnnotationScanner extends AnnotationScanner {
      * <code>metadata-complete</code> <code>null</code> will be returned.
      */
     @Override
-    public Map<Class<? extends Annotation>,Set<Class<?>>> getAnnotatedClasses(Set<URL> urls) {
+    public Map<Class<? extends Annotation>,Set<Class<?>>> getAnnotatedClasses(Set<URI> uris) {
 
         Set<String> classList = new HashSet<String>();
 
         processWebInfClasses(sc, classList);
-        processClasspath(urls, classList);
+        processClasspath(uris, classList);
         processScripts(classList);
 
         return processClassList(classList);
@@ -184,16 +185,16 @@ public class JavaClassScanningAnnotationScanner extends AnnotationScanner {
     /**
      * Scans for annotations on classes within JAR files on the classpath.
      *
-     * @param urls to a faces-config documents that allow us to refer to
+     * @param uris to a faces-config documents that allow us to refer to
      *  unique jar files on the classpath
      * @param classList the <code>Set</code> to which annotated classes
      *  will be added
      */
-    private void processClasspath(Set<URL> urls, Set<String> classList) {
+    private void processClasspath(Set<URI> uris, Set<String> classList) {
 
-        for (URL url : urls) {
+        for (URI uri : uris) {
             try {
-                Matcher m = JAR_PATTERN.matcher(url.toString());
+                Matcher m = JAR_PATTERN.matcher(uri.toString());
                 if (m.matches()) {
                     String jarName = m.group(2);
                     if (!processJar(jarName)) {
@@ -222,7 +223,7 @@ public class JavaClassScanningAnnotationScanner extends AnnotationScanner {
                                       classList);
                 } else {
                     if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.fine("Unable to match URL to a jar file: " + url
+                        LOGGER.fine("Unable to match URL to a jar file: " + uri
                               .toString());
                     }
                 }
@@ -231,7 +232,7 @@ public class JavaClassScanningAnnotationScanner extends AnnotationScanner {
                     LOGGER.log(Level.SEVERE,
                                "Unable to process annotations for url, {0}.  Reason: "
                                + e.toString(),
-                               new Object[]{url});
+                               new Object[]{uri});
                     LOGGER.log(Level.SEVERE, "", e);
                 }
             }

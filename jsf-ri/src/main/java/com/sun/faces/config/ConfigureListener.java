@@ -73,7 +73,6 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import javax.el.CompositeELResolver;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.faces.FactoryFinder;
@@ -106,6 +105,7 @@ import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.MessageFormat;
@@ -471,11 +471,11 @@ public class ConfigureListener implements ServletRequestListener,
     private void initConfigMonitoring(ServletContext context) {
 
         //noinspection unchecked
-        Collection<URL> webURLs =
-                (Collection<URL>) context.getAttribute("com.sun.faces.webresources");
-        if (isDevModeEnabled() && webURLs != null && !webURLs.isEmpty()) {
+        Collection<URI> webURIs =
+                (Collection<URI>) context.getAttribute("com.sun.faces.webresources");
+        if (isDevModeEnabled() && webURIs != null && !webURIs.isEmpty()) {
             webResourcePool = new ScheduledThreadPoolExecutor(1, new MojarraThreadFactory("WebResourceMonitor"));
-            webResourcePool.scheduleAtFixedRate(new WebConfigResourceMonitor(context, webURLs),
+            webResourcePool.scheduleAtFixedRate(new WebConfigResourceMonitor(context, webURIs),
                     2000,
                     2000,
                     TimeUnit.MILLISECONDS);
@@ -972,21 +972,21 @@ public class ConfigureListener implements ServletRequestListener,
         // -------------------------------------------------------- Constructors
 
 
-        public WebConfigResourceMonitor(ServletContext sc, Collection<URL> urls) {
+        public WebConfigResourceMonitor(ServletContext sc, Collection<URI> uris) {
 
-            assert (urls != null);
+            assert (uris != null);
             this.sc = sc;
-            for (URL url : urls) {
+            for (URI uri : uris) {
                 if (monitors == null) {
-                    monitors = new ArrayList<Monitor>(urls.size());
+                    monitors = new ArrayList<Monitor>(uris.size());
                 }
                 try {
-                    Monitor m = new Monitor(url);
+                    Monitor m = new Monitor(uri);
                     monitors.add(m);
                 } catch (IOException ioe) {
                     if (LOGGER.isLoggable(Level.SEVERE)) {
                         LOGGER.severe("Unable to setup resource monitor for "
-                                      + url.toExternalForm()
+                                      + uri.toString()
                                       + ".  Resource will not be monitored for changes.");
                     }
                     if (LOGGER.isLoggable(Level.FINE)) {
@@ -1020,7 +1020,7 @@ public class ConfigureListener implements ServletRequestListener,
                 } catch (IOException ioe) {
                     if (LOGGER.isLoggable(Level.SEVERE)) {
                         LOGGER.severe("Unable to access url "
-                                      + m.url.toExternalForm()
+                                      + m.uri.toString()
                                       + ".  Monitoring for this resource will no longer occur.");
                     }
                     if (LOGGER.isLoggable(Level.FINE)) {
@@ -1043,20 +1043,20 @@ public class ConfigureListener implements ServletRequestListener,
 
         private class Monitor {
 
-            private URL url;
+            private URI uri;
             private long timestamp = -1;
 
             // ---------------------------------------------------- Constructors
 
 
-            Monitor(URL url) throws IOException {
+            Monitor(URI uri) throws IOException {
 
-                this.url = url;
+                this.uri = uri;
                 this.timestamp = getLastModified();
                 if (LOGGER.isLoggable(Level.INFO)) {
                     LOGGER.log(Level.INFO,
                             "Monitoring {0} for modifications",
-                            url.toExternalForm());
+                            uri.toURL().toExternalForm());
                 }
 
             }
@@ -1072,7 +1072,7 @@ public class ConfigureListener implements ServletRequestListener,
                     if (LOGGER.isLoggable(Level.INFO)) {
                         LOGGER.log(Level.INFO,
                                 "{0} changed!",
-                                url.toExternalForm());
+                                uri.toURL().toExternalForm());
                     }
                     return true;
                 }
@@ -1088,7 +1088,7 @@ public class ConfigureListener implements ServletRequestListener,
 
                 InputStream in = null;
                 try {
-                    URLConnection conn = url.openConnection();
+                    URLConnection conn = uri.toURL().openConnection();
                     conn.connect();
                     in = conn.getInputStream();
                     return conn.getLastModified();

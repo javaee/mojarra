@@ -58,6 +58,8 @@ import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.Java
 import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.spi.ConfigurationResourceProvider;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  * 
@@ -72,16 +74,16 @@ public abstract class BaseWebConfigResourceProvider implements
     // ------------------------------ Methods from ConfigurationResourceProvider
 
 
-    public Collection<URL> getResources(ServletContext context) {
+    public Collection<URI> getResources(ServletContext context) {
 
         WebConfiguration webConfig = WebConfiguration.getInstance(context);
         String paths = webConfig.getOptionValue(getParameter());
-        Set<URL> urls = new LinkedHashSet<URL>(6);
+        Set<URI> urls = new LinkedHashSet<URI>(6);
         if (paths != null) {
             for (String token : Util.split(context, paths.trim(), getSeparatorRegex())) {
                 String path = token.trim();
                 if (!isExcluded(path) && path.length() != 0) {
-                    URL u = getContextURLForPath(context, path);
+                    URI u = getContextURLForPath(context, path);
                     if (u != null) {
                         urls.add(u);
                     } else {
@@ -111,13 +113,20 @@ public abstract class BaseWebConfigResourceProvider implements
     protected abstract String getSeparatorRegex();
 
 
-    protected URL getContextURLForPath(ServletContext context, String path) {
+    protected URI getContextURLForPath(ServletContext context, String path) {
 
+        URI result = null;
         try {
-            return context.getResource(path);
+            URL url = context.getResource(path);
+            if (null != url) {
+                result = new URI(url.toExternalForm());
+            }
         } catch (MalformedURLException mue) {
             throw new FacesException(mue);
+        } catch (URISyntaxException use) {
+            throw new FacesException(use);
         }
+        return result;
 
     }
 

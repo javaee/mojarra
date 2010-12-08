@@ -248,7 +248,7 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
                 LOGGER.log(Level.FINE,
                            MessageFormat.format(
                                  "Processing facelet-taglibrary document: ''{0}''",
-                                 documentInfos[i].getSourceURL()));
+                                 documentInfos[i].getSourceURI()));
             }
             Document document = documentInfos[i].getDocument();
             String namespace =

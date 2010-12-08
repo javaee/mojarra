@@ -40,9 +40,9 @@
 
 package com.sun.faces.spi;
 
+import java.net.URI;
 import javax.servlet.ServletContext;
 
-import java.net.URL;
 import java.util.Collection;
 
 /**
@@ -61,6 +61,6 @@ public interface ConfigurationResourceProvider {
      * @return a List zero or more <code>URL</code> instances representing
      *         application configuration resources
      */
-    public Collection<URL> getResources(ServletContext context);
+    public Collection<URI> getResources(ServletContext context);
 
 }

@@ -101,7 +101,7 @@ public class BehaviorConfigProcessor extends AbstractConfigProcessor {
                 LOGGER.log(Level.FINE,
                            MessageFormat.format(
                                 "Processing behavior elements for document: ''{0}''",
-                                documentInfos[i].getSourceURL()));
+                                documentInfos[i].getSourceURI()));
             }
             Document document = documentInfos[i].getDocument();
             String namespace = document.getDocumentElement()

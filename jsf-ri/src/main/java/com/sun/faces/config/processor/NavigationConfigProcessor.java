@@ -152,7 +152,7 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
                 LOGGER.log(Level.FINE,
                         MessageFormat.format(
                                 "Processing navigation-rule elements for document: ''{0}''",
-                                documentInfo.getSourceURL()));
+                                documentInfo.getSourceURI()));
             }
             Document document = documentInfo.getDocument();
             String namespace = document.getDocumentElement()
