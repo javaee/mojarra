@@ -79,6 +79,12 @@
         <h:commandButton id="reset" value="reset" actionListener="#{ajaxrequest.resetCount}">
             <f:ajax execute="countForm:reset" render="countForm:out1" onevent="statusUpdate" onerror="statusUpdate"/>
         </h:commandButton>
+        <!-- Test all events (begin, complete, success) if applicaton event (generated on server) occurs -->
+        <h:commandButton id="error" value="error" listener="#{ajaxrequest.generateError}">
+            <f:ajax execute="countForm:error" onevent="statusUpdate" onerror="statusUpdate"/>
+        </h:commandButton>
+        
+    
     </h:form>
     <!-- Contained outside the form - shouldn't update except for full page load -->
     <h:outputText id="out2" value="#{ajaxrequest.count}"/>

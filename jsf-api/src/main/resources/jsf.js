@@ -2011,6 +2011,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                     var errorName = responseType.firstChild.firstChild.nodeValue;
                     var errorMessage = responseType.firstChild.nextSibling.firstChild.nodeValue;
                     sendError(request, context, "serverError", null, errorName, errorMessage);
+                    sendEvent(request, context, "success");
                     return;
                 }
 

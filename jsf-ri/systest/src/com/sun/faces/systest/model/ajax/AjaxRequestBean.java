@@ -40,9 +40,11 @@
 
 package com.sun.faces.systest.model.ajax;
 
+import javax.faces.FacesException;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.ValueChangeEvent;
 
 @ManagedBean(name="ajaxrequest")
@@ -115,6 +117,10 @@ public class AjaxRequestBean {
 
     public void resetCount(ActionEvent ae) {
         count = 0;
+    }
+
+    public void generateError(AjaxBehaviorEvent event) {
+        throw new FacesException("Ajax request error");
     }
 
 }

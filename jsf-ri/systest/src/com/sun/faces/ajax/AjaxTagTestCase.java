@@ -551,10 +551,16 @@ public class AjaxTagTestCase extends AbstractTestCase {
         // Check that the request did NOT update the rest of the page.
         checkTrue("out2","1");
 
+        HtmlSubmitInput error = (HtmlSubmitInput) lastpage.getHtmlElementById("countForm:error");
+        lastpage = (HtmlPage) error.click();
+
         // Check that events were written to the page.
         String statusArea = "Name: countForm:button1 Event: begin ";
         statusArea = statusArea + "Name: countForm:button1 Event: complete " ;
         statusArea = statusArea + "Name: countForm:button1 Event: success " ;
+        statusArea = statusArea + "Name: countForm:error Event: begin " ;
+        statusArea = statusArea + "Name: countForm:error Event: complete " ;
+        statusArea = statusArea + "Name: countForm:error Event: success " ;
         //System.out.println(statusArea);
         //System.out.println(getText("statusArea");
         checkTrue("statusArea",statusArea);
