@@ -244,16 +244,22 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
                         String cid = target.getClientId(context.getFacesContext());
                         Object stateObj = state.get(cid);
                         if (stateObj != null && !stateContext.componentAddedDynamically(target)) {
-                            try {
-                                target.restoreState(context.getFacesContext(),
-                                        stateObj);
-                            } catch (Exception e) {
-                                String msg =
-                                        MessageUtils.getExceptionMessageString(
-                                        MessageUtils.PARTIAL_STATE_ERROR_RESTORING_ID,
-                                        cid,
-                                        e.toString());
-                                throw new FacesException(msg, e);
+                            boolean restoreStateNow = true;
+                            if (stateObj instanceof StateHolderSaver) {
+                                restoreStateNow = !((StateHolderSaver)stateObj).componentAddedDynamically();
+                            }
+                            if (restoreStateNow) {
+                                try {
+                                    target.restoreState(context.getFacesContext(),
+                                            stateObj);
+                                } catch (Exception e) {
+                                    String msg =
+                                            MessageUtils.getExceptionMessageString(
+                                            MessageUtils.PARTIAL_STATE_ERROR_RESTORING_ID,
+                                            cid,
+                                            e.toString());
+                                    throw new FacesException(msg, e);
+                                }
                             }
                         }
 

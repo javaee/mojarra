@@ -60,6 +60,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.sun.faces.context.StateHolderSaver.DYNAMIC_COMPONENT;
 
 /**
  * Context for dealing with partial state saving mechanics.
@@ -68,8 +69,7 @@ public class StateContext {
 
 
     private static final String KEY = StateContext.class.getName() + "_KEY";
-    private static final String DYNAMIC_COMPONENT =
-            StateContext.class.getName() + "_DYNAMIC_COMPONENT";
+    
     private static final String HAS_ONE_OR_MORE_DYNAMIC_CHILD =
             StateContext.class.getName() + "_HAS_ONE_OR_MORE_DYNAMIC_CHILD";
 

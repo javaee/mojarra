@@ -144,6 +144,10 @@
         <copy file="${tools.dir}/template-src/StateHolderSaver.java"
               todir="${build.generate.dir}/com/sun/faces/application/view"
               filtering="true"/>
+        <filter token="package" value="com.sun.faces.context"/>
+        <copy file="${tools.dir}/template-src/StateHolderSaver.java"
+              todir="${build.generate.dir}/com/sun/faces/context"
+              filtering="true"/>
 
         <filter token="protection" value="public"/>
 
@@ -178,6 +182,11 @@
               file="${build.generate.dir}/com/sun/faces/application/view/StateHolderSaver.java"
               token="@serialVersionUID@"
               value="4866548262845392093L"/>
+
+        <replace
+              file="${build.generate.dir}/com/sun/faces/context/StateHolderSaver.java"
+              token="@serialVersionUID@"
+              value="146780782953074472L"/>
     </target>
 
     <target name="check.taglib.generation.necessity">
