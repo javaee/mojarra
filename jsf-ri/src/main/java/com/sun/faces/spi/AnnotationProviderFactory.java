@@ -40,8 +40,7 @@
 
 package com.sun.faces.spi;
 
-import com.sun.faces.config.DelegateToGlassFishAnnotationScanner;
-import com.sun.faces.config.JavaClassScanningAnnotationScanner;
+import com.sun.faces.config.DelegatingAnnotationProvider;
 
 import javax.servlet.ServletContext;
 import javax.faces.FacesException;
@@ -53,9 +52,7 @@ import java.lang.reflect.Constructor;
 public class AnnotationProviderFactory {
 
     private static final Class<? extends AnnotationProvider> DEFAULT_ANNOTATION_PROVIDER =
-       JavaClassScanningAnnotationScanner.class;
-    private static final Class<? extends AnnotationProvider> GLASSFISH31_ANNOTATION_PROVIDER =
-       DelegateToGlassFishAnnotationScanner.class;
+       DelegatingAnnotationProvider.class;
 
     private static final String ANNOTATION_PROVIDER_SERVICE_KEY =
          "com.sun.faces.spi.annotationprovider";
@@ -96,15 +93,10 @@ public class AnnotationProviderFactory {
         Constructor c;
 
         try {
-            c = GLASSFISH31_ANNOTATION_PROVIDER.getDeclaredConstructor(new Class<?>[] { ServletContext.class });
+            c = DEFAULT_ANNOTATION_PROVIDER.getDeclaredConstructor(new Class<?>[] { ServletContext.class });
             result = (AnnotationProvider) c.newInstance(sc);
-        } catch (Exception e) {
-            try {
-                c = DEFAULT_ANNOTATION_PROVIDER.getDeclaredConstructor(new Class<?>[] { ServletContext.class });
-                result = (AnnotationProvider) c.newInstance(sc);
-            } catch (Exception e2) {
-                throw new FacesException(e2);
-            }
+        } catch (Exception e2) {
+            throw new FacesException(e2);
         }
         return result;
     }

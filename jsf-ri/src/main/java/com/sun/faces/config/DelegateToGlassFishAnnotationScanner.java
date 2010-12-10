@@ -58,7 +58,7 @@ import javax.servlet.ServletContext;
 
 
 
-public class DelegateToGlassFishAnnotationScanner extends AnnotationScanner {
+class DelegateToGlassFishAnnotationScanner extends AnnotationScanner {
 
     private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
 

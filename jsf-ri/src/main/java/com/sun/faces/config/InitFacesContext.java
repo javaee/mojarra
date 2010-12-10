@@ -96,6 +96,10 @@ public class InitFacesContext extends FacesContext {
         setCurrentInstance(this);
     }
 
+    void callSetCurrentInstance() {
+        setCurrentInstance(this);
+    }
+
     @Override
     public Map<Object, Object> getAttributes() {
         if (attributes == null) {

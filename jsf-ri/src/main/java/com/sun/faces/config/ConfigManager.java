@@ -328,7 +328,7 @@ public class ConfigManager {
                       new FacesConfigInfo(facesDocuments[facesDocuments.length - 1]);
 
                 facesDocuments = sortDocuments(facesDocuments, webInfFacesConfigInfo);
-                FacesContext context = FacesContext.getCurrentInstance();
+                InitFacesContext context = (InitFacesContext) FacesContext.getCurrentInstance();
 
                 InjectionProvider containerConnector =
                         InjectionProviderFactory.createInstance(context.getExternalContext());
@@ -341,11 +341,11 @@ public class ConfigManager {
                     ProvideMetadataToAnnotationScanTask taskMetadata = new ProvideMetadataToAnnotationScanTask(facesDocuments, containerConnector);
                     Future<Map<Class<? extends Annotation>,Set<Class<?>>>> annotationScan;
                     if (executor != null) {
-                        annotationScan = executor.submit(new AnnotationScanTask(sc, taskMetadata));
+                        annotationScan = executor.submit(new AnnotationScanTask(sc, context, taskMetadata));
                         pushTaskToContext(sc, annotationScan);
                     } else {
                         annotationScan =
-                              new FutureTask<Map<Class<? extends Annotation>,Set<Class<?>>>>(new AnnotationScanTask(sc, taskMetadata));
+                              new FutureTask<Map<Class<? extends Annotation>,Set<Class<?>>>>(new AnnotationScanTask(sc, context, taskMetadata));
                         ((FutureTask) annotationScan).run();
                     }
                     pushTaskToContext(sc, annotationScan);
@@ -793,15 +793,15 @@ public class ConfigManager {
     private static class AnnotationScanTask implements Callable<Map<Class<? extends Annotation>,Set<Class<?>>>> {
 
         private ServletContext sc;
-        AnnotationProvider provider;
-        ProvideMetadataToAnnotationScanTask metadataGetter;
+        private InitFacesContext facesContext;
+        private AnnotationProvider provider;
+        private ProvideMetadataToAnnotationScanTask metadataGetter;
 
         // -------------------------------------------------------- Constructors
 
 
-        public AnnotationScanTask(ServletContext sc, ProvideMetadataToAnnotationScanTask metadataGetter) {
-
-            this.sc = sc;
+        public AnnotationScanTask(ServletContext sc, InitFacesContext facesContext, ProvideMetadataToAnnotationScanTask metadataGetter) {
+            this.facesContext = facesContext;
             this.provider = AnnotationProviderFactory.createAnnotationProvider(sc);
             this.metadataGetter = metadataGetter;
 
@@ -818,16 +818,23 @@ public class ConfigManager {
                 t.startTiming();
             }
 
+            // We are executing on a different thread.
+            facesContext.callSetCurrentInstance();
             Set<URI> scanUris = null;
             com.sun.faces.spi.AnnotationScanner annotationScanner =
                     metadataGetter.getAnnotationScanner();
 
-            if (provider instanceof DelegateToGlassFishAnnotationScanner &&
+            // This is where we discover what kind of InjectionProvider
+            // we have.
+            if (provider instanceof DelegatingAnnotationProvider &&
                 null != annotationScanner) {
-                ((DelegateToGlassFishAnnotationScanner)provider).setAnnotationScanner(annotationScanner,
+                // This InjectionProvider is capable of annotation scanning *and*
+                // injection.
+                ((DelegatingAnnotationProvider)provider).setAnnotationScanner(annotationScanner,
                         metadataGetter.getJarNames());
                 scanUris = Collections.emptySet();
             } else {
+                // This InjectionProvider is capable of annotation scanning only
                 scanUris = metadataGetter.getAnnotationScanURIs();
             }
             //AnnotationScanner scanner = new AnnotationScanner(sc);
