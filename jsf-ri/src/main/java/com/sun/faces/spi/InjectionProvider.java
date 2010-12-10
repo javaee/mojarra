@@ -96,6 +96,4 @@ public interface InjectionProvider {
     public void invokePostConstruct(Object managedBean) 
     throws InjectionProviderException;
     
-    public abstract Map<Class<? extends Annotation>, Set<Class<?>>> getAnnotatedClassesInCurrentModule()
-    throws InjectionProviderException;
 }

@@ -67,6 +67,8 @@ import com.sun.faces.config.processor.RenderKitConfigProcessor;
 import com.sun.faces.config.processor.ValidatorConfigProcessor;
 import com.sun.faces.config.processor.FaceletTaglibConfigProcessor;
 import com.sun.faces.config.processor.FacesConfigExtensionProcessor;
+import com.sun.faces.spi.InjectionProvider;
+import com.sun.faces.spi.InjectionProviderFactory;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Timer;
 import org.xml.sax.InputSource;
@@ -171,6 +173,14 @@ public class ConfigManager {
      */
     private static final String ANNOTATIONS_SCAN_TASK_KEY =
           ConfigManager.class.getName() + "_ANNOTATION_SCAN_TASK";
+
+
+    /**
+     * The initialization time FacesContext scoped key under which the
+     * InjectionProvider is stored.
+     */
+    public static final String INJECTION_PROVIDER_KEY =
+          ConfigManager.class.getName() + "_INJECTION_PROVIDER_TASK";
 
 
     /**
@@ -318,19 +328,24 @@ public class ConfigManager {
                       new FacesConfigInfo(facesDocuments[facesDocuments.length - 1]);
 
                 facesDocuments = sortDocuments(facesDocuments, webInfFacesConfigInfo);
+                FacesContext context = FacesContext.getCurrentInstance();
+
+                InjectionProvider containerConnector =
+                        InjectionProviderFactory.createInstance(context.getExternalContext());
+                context.getAttributes().put(INJECTION_PROVIDER_KEY, containerConnector);
 
                 boolean isFaceletsDisabled =
                       isFaceletsDisabled(webConfig, webInfFacesConfigInfo);
                 if (!webInfFacesConfigInfo.isWebInfFacesConfig() || !webInfFacesConfigInfo.isMetadataComplete()) {
                     // execute the Task responsible for finding annotation classes
-                    FacesConfigDocumentUrlGetter urlGetter = new FacesConfigDocumentUrlGetter(facesDocuments);
+                    ProvideMetadataToAnnotationScanTask taskMetadata = new ProvideMetadataToAnnotationScanTask(facesDocuments, containerConnector);
                     Future<Map<Class<? extends Annotation>,Set<Class<?>>>> annotationScan;
                     if (executor != null) {
-                        annotationScan = executor.submit(new AnnotationScanTask(sc, urlGetter));
+                        annotationScan = executor.submit(new AnnotationScanTask(sc, taskMetadata));
                         pushTaskToContext(sc, annotationScan);
                     } else {
                         annotationScan =
-                              new FutureTask<Map<Class<? extends Annotation>,Set<Class<?>>>>(new AnnotationScanTask(sc, urlGetter));
+                              new FutureTask<Map<Class<? extends Annotation>,Set<Class<?>>>>(new AnnotationScanTask(sc, taskMetadata));
                         ((FutureTask) annotationScan).run();
                     }
                     pushTaskToContext(sc, annotationScan);
@@ -713,31 +728,60 @@ public class ConfigManager {
 
     // ----------------------------------------------------------- Inner Classes
 
-    private static final class FacesConfigDocumentUrlGetter {
+    private static final class ProvideMetadataToAnnotationScanTask {
         DocumentInfo [] documentInfos;
-        public FacesConfigDocumentUrlGetter(DocumentInfo [] documentInfos) {
+        InjectionProvider containerConnector;
+        Set<URI> uris = null;
+        Set<String> jarNames = null;
+
+        private ProvideMetadataToAnnotationScanTask(DocumentInfo [] documentInfos,
+                InjectionProvider containerConnector) {
             this.documentInfos = documentInfos;
+            this.containerConnector = containerConnector;
         }
 
-        private Set<URI> getAnnotationScanURLs() {
-            Set<URI> urls = new HashSet<URI>(documentInfos.length);
-            Set<String> jarNames = new HashSet<String>(documentInfos.length);
+        private void initializeIvars() {
+            if (null != uris || null != jarNames) {
+                assert(null != uris && null != jarNames);
+                return;
+            }
+            uris = new HashSet<URI>(documentInfos.length);
+            jarNames = new HashSet<String>(documentInfos.length);
             for (DocumentInfo docInfo : documentInfos) {
-                Matcher m = JAR_PATTERN.matcher(docInfo.getSourceURI().toString());
+                URI sourceURI = docInfo.getSourceURI();
+                Matcher m = JAR_PATTERN.matcher(sourceURI.toString());
                 if (m.matches()) {
                     String jarName = m.group(2);
                     if (!jarNames.contains(jarName)) {
                         FacesConfigInfo configInfo = new FacesConfigInfo(docInfo);
                         if (!configInfo.isMetadataComplete()) {
-                            urls.add(docInfo.getSourceURI());
+                            uris.add(sourceURI);
                             jarNames.add(jarName);
                         }
                     }
                 }
-             }
+            }
+        }
 
-            return urls;
+        private Set<URI> getAnnotationScanURIs() {
+            initializeIvars();
 
+            return uris;
+
+        }
+
+        private Set<String> getJarNames() {
+            initializeIvars();
+
+            return jarNames;
+        }
+
+        private com.sun.faces.spi.AnnotationScanner getAnnotationScanner() {
+            com.sun.faces.spi.AnnotationScanner result = null;
+            if (this.containerConnector instanceof com.sun.faces.spi.AnnotationScanner) {
+                result = (com.sun.faces.spi.AnnotationScanner) this.containerConnector;
+            }
+            return result;
         }
     }
 
@@ -750,16 +794,16 @@ public class ConfigManager {
 
         private ServletContext sc;
         AnnotationProvider provider;
-        FacesConfigDocumentUrlGetter urlGetter;
+        ProvideMetadataToAnnotationScanTask metadataGetter;
 
         // -------------------------------------------------------- Constructors
 
 
-        public AnnotationScanTask(ServletContext sc, FacesConfigDocumentUrlGetter urlGetter) {
+        public AnnotationScanTask(ServletContext sc, ProvideMetadataToAnnotationScanTask metadataGetter) {
 
             this.sc = sc;
             this.provider = AnnotationProviderFactory.createAnnotationProvider(sc);
-            this.urlGetter = urlGetter;
+            this.metadataGetter = metadataGetter;
 
         }
 
@@ -773,8 +817,19 @@ public class ConfigManager {
             if (t != null) {
                 t.startTiming();
             }
-            Set<URI> scanUris = urlGetter.getAnnotationScanURLs();
 
+            Set<URI> scanUris = null;
+            com.sun.faces.spi.AnnotationScanner annotationScanner =
+                    metadataGetter.getAnnotationScanner();
+
+            if (provider instanceof DelegateToGlassFishAnnotationScanner &&
+                null != annotationScanner) {
+                ((DelegateToGlassFishAnnotationScanner)provider).setAnnotationScanner(annotationScanner,
+                        metadataGetter.getJarNames());
+                scanUris = Collections.emptySet();
+            } else {
+                scanUris = metadataGetter.getAnnotationScanURIs();
+            }
             //AnnotationScanner scanner = new AnnotationScanner(sc);
             Map<Class<? extends Annotation>,Set<Class<?>>> annotatedClasses =
                   provider.getAnnotatedClasses(scanUris);

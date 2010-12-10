@@ -40,11 +40,11 @@
 
 package com.sun.faces.vendor;
 
+import com.sun.faces.spi.AnnotationScanner;
 import com.sun.faces.spi.InjectionProvider;
 import com.sun.faces.spi.InjectionProviderException;
 import com.sun.faces.util.FacesLogger;
 import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.PreDestroy;
 import javax.annotation.PostConstruct;
@@ -52,8 +52,10 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.annotation.Annotation;
 import java.util.Collections;
+import java.util.List;
 import java.util.logging.Logger;
 import java.util.logging.Level;
+import javax.servlet.ServletContext;
 
 /**
  * <p>This <code>InjectionProvider</code> will be used if the
@@ -63,7 +65,7 @@ import java.util.logging.Level;
  *
  * <p>It's important to note that this will not provide resource injection.</p>
  */
-public class WebContainerInjectionProvider implements InjectionProvider {
+public class WebContainerInjectionProvider implements InjectionProvider, AnnotationScanner {
 
 
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
@@ -78,7 +80,7 @@ public class WebContainerInjectionProvider implements InjectionProvider {
 
     }
 
-    public Map<Class<? extends Annotation>, Set<Class<?>>> getAnnotatedClassesInCurrentModule() throws InjectionProviderException {
+    public Map<String, List<AnnotationScanner.ScannedAnnotation>> getAnnotatedClassesInCurrentModule(ServletContext sc) throws InjectionProviderException {
         return Collections.emptyMap();
     }
 

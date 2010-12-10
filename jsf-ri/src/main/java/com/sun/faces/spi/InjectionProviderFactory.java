@@ -44,14 +44,12 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Enumeration;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.net.URL;
@@ -429,7 +427,7 @@ public class InjectionProviderFactory {
      * be used when the #INJECTION_PROVIDER_PROPERTY is not specified or
      * is invalid.</p>
      */
-    private static final class NoopInjectionProvider implements InjectionProvider {
+    private static final class NoopInjectionProvider implements InjectionProvider, AnnotationScanner {
 
         /**
          * <p>This is a no-op.</p>
@@ -437,7 +435,7 @@ public class InjectionProviderFactory {
          */
         public void inject(Object managedBean) { }
 
-        public Map<Class<? extends Annotation>, Set<Class<?>>> getAnnotatedClassesInCurrentModule() throws InjectionProviderException {
+        public Map<String, List<AnnotationScanner.ScannedAnnotation>> getAnnotatedClassesInCurrentModule(ServletContext extContext) throws InjectionProviderException {
             return Collections.emptyMap();
         }
 

@@ -40,6 +40,13 @@
 
 package com.sun.faces.config;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import com.sun.faces.scripting.ScriptManager;
 import com.sun.faces.scripting.groovy.GroovyHelper;
 import com.sun.faces.scripting.groovy.GroovyScriptManager;
@@ -58,10 +65,9 @@ import javax.faces.render.FacesRenderer;
 import javax.faces.validator.FacesValidator;
 import javax.servlet.ServletContext;
 import java.lang.annotation.Annotation;
-import java.net.URI;
-import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.AnnotationScanPackages;
 
 
 /**
@@ -79,16 +85,29 @@ import java.util.logging.Logger;
  *  <li>javax.faces.event.NamedEvent</li>
  * </ul>
  */
-public class AnnotationScanner extends AnnotationProvider {
+public abstract class AnnotationScanner extends AnnotationProvider {
+
+
+    // <editor-fold defaultstate="collapsed" desc="data">
+
+    // <editor-fold defaultstate="collapsed" desc="private class vars">
 
     private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
+    private static final String WILDCARD = "*";
+    
+    // </editor-fold>
 
+    // <editor-fold defaultstate="collapsed" desc="protected class vars">
 
     protected static final Set<String> FACES_ANNOTATIONS;
     protected static final Set<Class<? extends Annotation>> FACES_ANNOTATION_TYPE;
 
+    // </editor-fold>
+
     static {
         HashSet<String> annotations = new HashSet<String>(8, 1.0f);
+        // JAVASERVERFACES-1835 this collection has the same information twice.
+        // Once in javap -s format, and once as fully qualified Java class names.
         Collections.addAll(annotations,
                            "Ljavax/faces/component/FacesComponent;",
                            "Ljavax/faces/convert/FacesConverter;",
@@ -97,7 +116,15 @@ public class AnnotationScanner extends AnnotationProvider {
                            "Ljavax/faces/bean/ManagedBean;",
                            "Ljavax/faces/event/NamedEvent;",
                            "Ljavax/faces/component/behavior/FacesBehavior;",
-                           "Ljavax/faces/render/FacesBehaviorRenderer;");
+                           "Ljavax/faces/render/FacesBehaviorRenderer;",
+                           "javax.faces.component.FacesComponent",
+                           "javax.faces.convert.FacesConverter",
+                           "javax.faces.validator.FacesValidator",
+                           "javax.faces.render.FacesRenderer",
+                           "javax.faces.bean.ManagedBean",
+                           "javax.faces.event.NamedEvent",
+                           "javax.faces.component.behavior.FacesBehavior",
+                           "javax.faces.render.FacesBehaviorRenderer");
         FACES_ANNOTATIONS = Collections.unmodifiableSet(annotations);
         HashSet<Class<? extends Annotation>> annotationInstances =
               new HashSet<Class<? extends Annotation>>(8, 1.0f);
@@ -114,9 +141,14 @@ public class AnnotationScanner extends AnnotationProvider {
     }
 
     private List<ScriptManager> scriptManagers = new ArrayList<ScriptManager>();
+    private boolean isAnnotationScanPackagesSet = false;
+    private String[] webInfClassesPackages;
+    private Map<String,String[]> classpathPackages;
 
-    // ------------------------------------------------------------ Constructors
 
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="constructors">
 
     /**
      * Creates a new <code>AnnotationScanner</code> instance.
@@ -132,32 +164,138 @@ public class AnnotationScanner extends AnnotationProvider {
         }
 
         WebConfiguration webConfig = WebConfiguration.getInstance(sc);
+	initializeAnnotationScanPackages(webConfig);
 
     }
 
+    // </editor-fold>
 
-    // ---------------------------------------------------------- Public Methods
+    // <editor-fold defaultstate="collapsed" desc="implementation details">
 
+    private void initializeAnnotationScanPackages(WebConfiguration webConfig) {
+        if (!webConfig.isSet(AnnotationScanPackages)) {
+            return;
+        }
+        isAnnotationScanPackagesSet = true;
+        classpathPackages = new HashMap<String,String[]>(4);
+        webInfClassesPackages = new String[0];
+        String[] options = webConfig.getOptionValue(AnnotationScanPackages, "\\s+");
+        List<String> packages = new ArrayList<String>(4);
+        for (String option : options) {
+            if (option.length() == 0) {
+                continue;
+            }
+            if (option.startsWith("jar:")) {
+                String[] parts = Util.split(option, ":");
+                if (parts.length != 3) {
+                    if (LOGGER.isLoggable(Level.WARNING)) {
+                        LOGGER.log(Level.WARNING,
+                                   "jsf.annotation.scanner.configuration.invalid",
+                                   new String[] { AnnotationScanPackages.getQualifiedName(), option });
+                    }
+                } else {
+                    if (WILDCARD.equals(parts[1]) && !classpathPackages.containsKey(WILDCARD)) {
+                        classpathPackages.clear();
+                        classpathPackages.put(WILDCARD, normalizeJarPackages(Util.split(parts[2], ",")));
+                    } else if (WILDCARD.equals(parts[1]) && classpathPackages.containsKey(WILDCARD)) {
+                        if (LOGGER.isLoggable(Level.WARNING)) {
+                            LOGGER.log(Level.WARNING,
+                                       "jsf.annotation.scanner.configuration.duplicate.wildcard",
+                                       new String[] { AnnotationScanPackages.getQualifiedName(), option });
+                        }
+                    } else {
+                        if (!classpathPackages.containsKey(WILDCARD)) {
+                            classpathPackages.put(parts[1], normalizeJarPackages(Util.split(parts[2], ",")));
+                        }
+                    }
+                }
+            } else {
+                if (WILDCARD.equals(option) && !packages.contains(WILDCARD)) {
+                    packages.clear();
+                    packages.add(WILDCARD);
+                } else {
+                    if (!packages.contains(WILDCARD)) {
+                        packages.add(option);
+                    }
+                }
+            }
+        }
+        webInfClassesPackages = packages.toArray(new String[packages.size()]);
+   }
 
-    /**
-     * @return a <code>Map</code> of classes mapped to a specific annotation type.
-     *  If no annotations are present, or the application is considered
-     * <code>metadata-complete</code> <code>null</code> will be returned.
-     */
-    public Map<Class<? extends Annotation>,Set<Class<?>>> getAnnotatedClasses(Set<URI> uris) {
+    private String[] normalizeJarPackages(String[] packages) {
 
-        Set<String> classList = new HashSet<String>();
-
-        processScripts(classList);
-
-        return processClassList(classList);
+        if (packages.length == 0) {
+            return packages;
+        }
+        List<String> normalizedPackages = new ArrayList<String>(packages.length);
+        for (String pkg : packages) {
+            if (WILDCARD.equals(pkg)) {
+                normalizedPackages.clear();
+                normalizedPackages.add(WILDCARD);
+                break;
+            } else {
+                normalizedPackages.add(pkg);
+            }
+        }
+        return normalizedPackages.toArray(new String[normalizedPackages.size()]);
 
     }
+
+    // </editor-fold>
 
 
     // --------------------------------------------------------- Protected Methods
 
+    protected boolean processJar(String entry) {
+
+	// <editor-fold defaultstate="collapsed">
+
+        return (classpathPackages == null
+                  || (classpathPackages.containsKey(entry)
+                         || classpathPackages.containsKey(WILDCARD)));
+
+	// </editor-fold>
+
+    }
+
+    /**
+     * @param candidate the class that should be processed
+     * @return <code>true</code> if the class should be processed further,
+     *  otherwise, <code>false</code>
+     */
+    protected boolean processClass(String candidate) {
+
+	// <editor-fold defaultstate="collapsed">
+
+        return processClass(candidate, webInfClassesPackages);
+
+	// </editor-fold>
+    }
+
+    protected boolean processClass(String candidate, String [] packages) {
+
+	// <editor-fold defaultstate="collapsed">
+
+        if (packages == null) {
+            return true;
+        }
+
+        for (String packageName : packages) {
+            if (candidate.startsWith(packageName) || WILDCARD.equals(packageName)) {
+                return true;
+            }
+        }
+        return false;
+
+	// </editor-fold>
+    }
+
+
     protected Map<Class<? extends Annotation>,Set<Class<?>>> processClassList(Set<String> classList) {
+
+	// <editor-fold defaultstate="collapsed">
+
         Map<Class<? extends Annotation>,Set<Class<?>>> annotatedClasses = null;
         if (classList.size() > 0) {
             annotatedClasses = new HashMap<Class<? extends Annotation>,Set<Class<?>>>(6, 1.0f);
@@ -199,12 +337,33 @@ public class AnnotationScanner extends AnnotationProvider {
         return ((annotatedClasses != null)
                 ? annotatedClasses
                 : Collections.<Class<? extends Annotation>, Set<Class<?>>>emptyMap());
+
+	// </editor-fold>
+
     }
 
     protected void processScripts(Set<String> classList) {
+
+	// <editor-fold defaultstate="collapsed">
+
         for (ScriptManager sm : scriptManagers) {
             classList.addAll(sm.getScripts());
         }
+
+	// </editor-fold>
+
+    }
+
+    protected boolean isAnnotationScanPackagesSet() {
+        return isAnnotationScanPackagesSet;
+    }
+
+    protected Map<String,String[]> getClasspathPackages() {
+        return classpathPackages;
+    }
+
+    protected String [] getWebInfClassesPackages() {
+        return webInfClassesPackages;
     }
 
 }

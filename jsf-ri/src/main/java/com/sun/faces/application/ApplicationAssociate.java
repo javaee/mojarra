@@ -41,11 +41,11 @@
 package com.sun.faces.application;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.application.ApplicationStateInfo;
 import com.sun.faces.scripting.groovy.GroovyHelper;
 import com.sun.faces.application.resource.ResourceCache;
 import com.sun.faces.application.resource.ResourceManager;
 import com.sun.faces.application.annotation.AnnotationManager;
+import com.sun.faces.config.ConfigManager;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.facelets.compiler.Compiler;
 import com.sun.faces.facelets.compiler.SAXCompiler;
@@ -62,12 +62,10 @@ import com.sun.faces.facelets.util.FunctionLibrary;
 import com.sun.faces.facelets.util.DevTools;
 import javax.faces.view.facelets.ResourceResolver;
 import javax.faces.view.facelets.FaceletCache;
-import javax.faces.view.facelets.FaceletCacheFactory;
 import com.sun.faces.facelets.impl.DefaultResourceResolver;
 import com.sun.faces.facelets.impl.DefaultFaceletFactory;
 import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.spi.InjectionProvider;
-import com.sun.faces.spi.InjectionProviderFactory;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
@@ -210,7 +208,7 @@ public class ApplicationAssociate {
         externalContext.getApplicationMap().put(ASSOCIATE_KEY, this);
         //noinspection CollectionWithoutInitialCapacity
         navigationMap = new ConcurrentHashMap<String, Set<NavigationCase>>();
-        injectionProvider = InjectionProviderFactory.createInstance(externalContext);
+        injectionProvider = (InjectionProvider) ctx.getAttributes().get(ConfigManager.INJECTION_PROVIDER_KEY);
         WebConfiguration webConfig = WebConfiguration.getInstance(externalContext);
         beanManager = new BeanManager(injectionProvider,
                                       webConfig.isOptionEnabled(

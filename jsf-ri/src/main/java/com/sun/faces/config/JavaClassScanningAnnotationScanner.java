@@ -42,7 +42,6 @@ package com.sun.faces.config;
 
 import java.net.URI;
 import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.Util;
 
 import javax.servlet.ServletContext;
 import java.io.IOException;
@@ -61,7 +60,6 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.AnnotationScanPackages;
 
 /**
  * This class is responsible for scanning the class file bytes of
@@ -87,11 +85,8 @@ public class JavaClassScanningAnnotationScanner extends AnnotationScanner {
     private static final Pattern JAR_PATTERN = Pattern.compile("(.*/(\\S*\\.jar)).*");
 
     private static final String WEB_INF_CLASSES = "/WEB-INF/classes/";
-    private static final String WILDCARD = "*";
 
     private ClassFile classFileScanner;
-    private String[] webInfClassesPackages;
-    private Map<String,String[]> classpathPackages;
 
     // ------------------------------------------------------------ Constructors
 
@@ -107,53 +102,6 @@ public class JavaClassScanningAnnotationScanner extends AnnotationScanner {
 
         classFileScanner = new ClassFile();
         
-        WebConfiguration webConfig = WebConfiguration.getInstance(sc);
-        if (webConfig.isSet(AnnotationScanPackages)) {
-            classpathPackages = new HashMap<String,String[]>(4);
-            webInfClassesPackages = new String[0];
-            String[] options = webConfig.getOptionValue(AnnotationScanPackages, "\\s+");
-            List<String> packages = new ArrayList<String>(4);
-            for (String option : options) {
-                if (option.length() == 0) {
-                    continue;
-                }
-                if (option.startsWith("jar:")) {
-                    String[] parts = Util.split(option, ":");
-                    if (parts.length != 3) {
-                        if (LOGGER.isLoggable(Level.WARNING)) {
-                            LOGGER.log(Level.WARNING,
-                                       "jsf.annotation.scanner.configuration.invalid",
-                                       new String[] { AnnotationScanPackages.getQualifiedName(), option });
-                        }
-                    } else {
-                        if (WILDCARD.equals(parts[1]) && !classpathPackages.containsKey(WILDCARD)) {
-                            classpathPackages.clear();
-                            classpathPackages.put(WILDCARD, normalizeJarPackages(Util.split(parts[2], ",")));
-                        } else if (WILDCARD.equals(parts[1]) && classpathPackages.containsKey(WILDCARD)) {
-                            if (LOGGER.isLoggable(Level.WARNING)) {
-                                LOGGER.log(Level.WARNING,
-                                           "jsf.annotation.scanner.configuration.duplicate.wildcard",
-                                           new String[] { AnnotationScanPackages.getQualifiedName(), option });
-                            }
-                        } else {
-                            if (!classpathPackages.containsKey(WILDCARD)) {
-                                classpathPackages.put(parts[1], normalizeJarPackages(Util.split(parts[2], ",")));
-                            }
-                        }
-                    }
-                } else {
-                    if (WILDCARD.equals(option) && !packages.contains(WILDCARD)) {
-                        packages.clear();
-                        packages.add(WILDCARD);
-                    } else {
-                        if (!packages.contains(WILDCARD)) {
-                            packages.add(option);
-                        }
-                    }
-                }
-            }
-            webInfClassesPackages = packages.toArray(new String[packages.size()]);
-        }
 
 
     }
@@ -217,8 +165,8 @@ public class JavaClassScanningAnnotationScanner extends AnnotationScanner {
                     JarFile jarFile =
                           ((JarURLConnection) u.openConnection()).getJarFile();
                     processJarEntries(jarFile,
-                                      ((classpathPackages != null)
-                                       ? classpathPackages.get(jarName)
+                                      ((getClasspathPackages() != null)
+                                       ? getClasspathPackages().get(jarName)
                                        : null),
                                       classList);
                 } else {
@@ -388,7 +336,7 @@ public class JavaClassScanningAnnotationScanner extends AnnotationScanner {
                     if (pathElement.endsWith(".class")) {
                         String cname = convertToClassName(WEB_INF_CLASSES,
                                                               pathElement);
-                        if (!processClass(cname, webInfClassesPackages)) {
+                        if (!processClass(cname)) {
                             continue;
                         }
                         if (containsAnnotation(sc, pathElement)) {
@@ -403,26 +351,6 @@ public class JavaClassScanningAnnotationScanner extends AnnotationScanner {
                 }
             }
         }
-
-    }
-
-
-    private String[] normalizeJarPackages(String[] packages) {
-
-        if (packages.length == 0) {
-            return packages;
-        }
-        List<String> normalizedPackages = new ArrayList<String>(packages.length);
-        for (String pkg : packages) {
-            if (WILDCARD.equals(pkg)) {
-                normalizedPackages.clear();
-                normalizedPackages.add(WILDCARD);
-                break;
-            } else {
-                normalizedPackages.add(pkg);
-            }
-        }
-        return normalizedPackages.toArray(new String[normalizedPackages.size()]);
 
     }
 
@@ -510,35 +438,6 @@ public class JavaClassScanningAnnotationScanner extends AnnotationScanner {
     }
 
 
-    private boolean processJar(String entry) {
-
-        return (classpathPackages == null
-                  || (classpathPackages.containsKey(entry)
-                         || classpathPackages.containsKey(WILDCARD)));
-
-    }
-
-
-    /**
-     * @param candidate the class that should be processed
-     * @param packages the packages of classes that are allowed to be processed
-     * @return <code>true</code> if the class should be processed further,
-     *  otherwise, <code>false</code>
-     */
-    private boolean processClass(String candidate, String[] packages) {
-
-        if (packages == null) {
-            return true;
-        }
-
-        for (String packageName : packages) {
-            if (candidate.startsWith(packageName) || WILDCARD.equals(packageName)) {
-                return true;
-            }
-        }
-        return false;
-        
-    }
 
 
     // ----------------------------------------------------------- Inner Classes
