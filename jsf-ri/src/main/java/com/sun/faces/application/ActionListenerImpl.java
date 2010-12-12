@@ -104,16 +104,16 @@ public class ActionListenerImpl implements ActionListener {
                 }
                 // else, default to null, as assigned above.
             } catch (MethodNotFoundException e) {
-                if (LOGGER.isLoggable(Level.SEVERE)) {
-                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.log(Level.FINE, e.getMessage(), e);
                 }
                 throw new FacesException
                       (binding.getExpressionString() + ": " + e.getMessage(),
                        e);
             }
             catch (EvaluationException e) {
-                if (LOGGER.isLoggable(Level.SEVERE)) {
-                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.log(Level.FINE, e.getMessage(), e);
                 }
                 throw new FacesException
                       (binding.getExpressionString() + ": " + e.getMessage(),

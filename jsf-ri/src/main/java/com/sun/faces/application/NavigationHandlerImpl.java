@@ -185,8 +185,8 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                     extContext.getFlash().setRedirect(true);
                     extContext.redirect(redirectUrl);
                 } catch (java.io.IOException ioe) {
-                    if (logger.isLoggable(Level.SEVERE)) {
-                        logger.log(Level.SEVERE,"jsf.redirect_failed_error",
+                    if (logger.isLoggable(Level.FINE)) {
+                        logger.log(Level.FINE,"jsf.redirect_failed_error",
                                    redirectUrl);
                     }
                     throw new FacesException(ioe.getMessage(), ioe);
