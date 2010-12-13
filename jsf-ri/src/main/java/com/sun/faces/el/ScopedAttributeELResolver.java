@@ -165,7 +165,7 @@ public class ScopedAttributeELResolver extends ELResolver {
         ExternalContext ec = facesContext.getExternalContext();
         if ((ec.getRequestMap().get(attribute)) != null) {
             ec.getRequestMap().put(attribute, val);
-        } else if ((facesContext.getViewRoot().getViewMap().get(attribute)) != null) {
+        } else if ((facesContext.getViewRoot()) != null && (facesContext.getViewRoot().getViewMap().get(attribute)) != null) {
             facesContext.getViewRoot().getViewMap().put(attribute, val);
         } else if ((ec.getSessionMap().get(attribute)) != null) {
             ec.getSessionMap().put(attribute, val);
