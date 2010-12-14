@@ -70,7 +70,7 @@ public final class HtmlLibrary extends AbstractHtmlLibrary {
     public HtmlLibrary() {
         super(Namespace);
 
-        this.addHtmlComponent("body", "javax.faces.Output",
+        this.addHtmlComponent("body", "javax.faces.HtmlOutputBody",
                 "javax.faces.Body");
 
         this.addHtmlComponent("button", "javax.faces.HtmlOutcomeTargetButton",
@@ -93,7 +93,7 @@ public final class HtmlLibrary extends AbstractHtmlLibrary {
         this.addHtmlComponent("graphicImage", "javax.faces.HtmlGraphicImage",
                 "javax.faces.Image");
 
-        this.addHtmlComponent("head", "javax.faces.Output",
+        this.addHtmlComponent("head", "javax.faces.HtmlOutputHead",
                 "javax.faces.Head");
 
         this.addHtmlComponent("html", "javax.faces.Output",
