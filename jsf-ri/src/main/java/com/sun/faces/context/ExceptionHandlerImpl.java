@@ -60,6 +60,7 @@ import javax.el.ELException;
 
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.renderkit.RenderKitUtils;
+import javax.faces.context.ExternalContext;
 
 
 /**
@@ -245,6 +246,15 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
     private void throwIt(FacesContext ctx, FacesException fe) {
 
         boolean isDevelopment = ctx.isProjectStage(ProjectStage.Development);
+        ExternalContext extContext = ctx.getExternalContext();
+        Throwable wrapped = fe.getCause();
+        extContext.responseReset();
+        if (null != wrapped && wrapped instanceof FacesFileNotFoundException) {
+            extContext.setResponseStatus(404);
+         } else {
+            extContext.setResponseStatus(500);
+         }
+
         if (isDevelopment && !errorPagePresent) {
             // RELEASE_PENDING_2_1
             // thThe error page here will be text/html which means not all device

@@ -69,6 +69,7 @@ import com.sun.faces.facelets.util.DevTools;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.RequestStateManager;
+import com.sun.faces.context.FacesFileNotFoundException;
 
 import javax.faces.component.*;
 import javax.faces.component.html.HtmlMessages;
@@ -1152,9 +1153,7 @@ public class RenderKitUtils {
 
         ExternalContext extContext = ctx.getExternalContext();
         if (!extContext.isResponseCommitted()) {
-            extContext.responseReset();
             extContext.setResponseContentType("text/html; charset=UTF-8");
-            extContext.setResponseStatus(500);
             try {
                 Writer w = extContext.getResponseOutputWriter();
                 DevTools.debugHtml(w, ctx, fe.getCause());

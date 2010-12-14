@@ -134,4 +134,22 @@ public class FaceletsTargetNotFoundTestCase extends AbstractTestCase {
 
     }
 
+    public void testNotFoundCode() throws Exception {
+        WebClient client = new WebClient();
+        client.setThrowExceptionOnFailingStatusCode(true);
+        HtmlPage page;
+        int code;
+
+        try {
+            page = getPage("/faces/missing-top-level-page.xhtml", client) ;
+            fail("A Failing status code was not received");
+        } catch (FailingHttpStatusCodeException fail) {
+            code = fail.getStatusCode();
+            assertTrue("Expected 404, got: "+code, code==404);
+        }
+
+        
+
+    }
+
 }

@@ -58,6 +58,7 @@
 
 package com.sun.faces.facelets.impl;
 
+import com.sun.faces.context.FacesFileNotFoundException;
 import com.sun.faces.facelets.Facelet;
 import javax.faces.view.facelets.FaceletCache;
 import com.sun.faces.facelets.FaceletFactory;
@@ -78,6 +79,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import javax.el.ELException;
 import javax.faces.FacesException;
 
 
@@ -227,7 +229,7 @@ public class DefaultFaceletFactory extends FaceletFactory {
         if (path.startsWith("/")) {
             URL url = this.resolver.resolveUrl(path);
             if (url == null) {
-                throw new FileNotFoundException(path
+                throw new FacesFileNotFoundException(path
                                                 + " Not Found in ExternalContext as a Resource");
             }
             return url;
