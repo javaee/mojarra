@@ -20109,7 +20109,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
   <component>
     <description>NONE</description>
     <display-name>head</display-name>
-    <component-type>javax.faces.HtmlOutputHead</component-type>
+    <component-type>javax.faces.OutputHead</component-type>
     <component-class>javax.faces.component.html.HtmlHead</component-class>
 
     <property>
@@ -20161,7 +20161,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
   <component>
     <description>NONE</description>
     <display-name>body</display-name>
-    <component-type>javax.faces.HtmlOutputBody</component-type>
+    <component-type>javax.faces.OutputBody</component-type>
     <component-class>javax.faces.component.html.HtmlBody</component-class>
 
     <property>
