@@ -41,13 +41,25 @@
 package com.sun.faces.systest;
 
 
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlBody;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.gargoylesoftware.htmlunit.html.HtmlRadioButtonInput;
+import com.gargoylesoftware.htmlunit.html.HtmlSelect;
+import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
+import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import java.util.List;
+import java.util.Random;
+import java.util.ResourceBundle;
 
+import javax.faces.component.NamingContainer;
 
 
 /**
@@ -120,13 +132,5 @@ public class ReplaceApplicationTestCase extends AbstractTestCase {
 	assertTrue(-1 != page.asText().indexOf("com.sun.faces.systest.NewViewHandler"));
 	assertTrue(-1 != page.asText().indexOf("com.sun.faces.systest.NewApplication"));
     }
-
-    public void testResourceResolverImplicitNavigation() throws Exception {
-	HtmlPage page = getPage("/faces/page1.xhtml");
-        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("next");
-        page = button.click();
-        assertTrue(page.asText().contains("Using ResourceResolver for implicit navigation"));
-    }
-
 
 }
