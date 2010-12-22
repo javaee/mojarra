@@ -3,15 +3,18 @@
  * and open the template in the editor.
  */
 
-package com.sun.faces.systest;
+package com.sun.faces.xml;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.InputSource;
-import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -20,16 +23,20 @@ import java.util.List;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.StringReader;
+import java.util.Locale;
+import java.util.ResourceBundle;
+import junit.framework.TestCase;
 
 /**
  *
  * @author sheetalv
  */
-public class ParseXMLTestCase extends AbstractTestCase {
+public class ParseXMLTestCase extends TestCase {
 
     List list = new ArrayList();
     private final static String xmlDir = "/conf/share";
-    private final static String systest = "/systest";
+    private final static String jsfri = "/jsf-ri";
 
     /**
      * Construct a new instance of this test case.
@@ -57,14 +64,6 @@ public class ParseXMLTestCase extends AbstractTestCase {
     }
 
 
-    /**
-     * Tear down instance variables required by this test case.
-     */
-    public void tearDown() {
-        super.tearDown();
-    }
-
-
     // ------------------------------------------------------------ Test Methods
 
 
@@ -74,12 +73,10 @@ public class ParseXMLTestCase extends AbstractTestCase {
     public void testParseXML() throws Exception {
 
          String curDir = System.getProperty("user.dir");
+         File baseDir = new File(curDir);
          System.out.println("current dir = " + curDir);
-         String dir = "";
-         if (curDir.indexOf(systest) != -1) {
-            dir = curDir.substring(0, curDir.indexOf(systest));
-        }
-        visitAllDirsAndFiles(new File(dir + xmlDir));
+         System.out.flush();
+         visitAllDirsAndFiles(new File(baseDir, xmlDir));
         //printAllXMLFiles();
         for (Object file : list) {
             try {
@@ -87,11 +84,16 @@ public class ParseXMLTestCase extends AbstractTestCase {
                 factory.setNamespaceAware(true);
                 factory.setValidating(true);
                 SAXParser saxParser = factory.newSAXParser();
+
                 System.out.println("XML file to be parsed : file://" + file.toString());
-                saxParser.parse(new InputSource(new FileInputStream(file.toString())), new DefaultHandler());
+                System.out.flush();
+                saxParser.parse(new InputSource(new FileInputStream(file.toString())), new XHTMLResolvingHandler());
                 System.out.println("parsing complete.");
+                System.out.flush();
             } catch (Exception e) {
                 System.out.println("Parse error for " + file.toString() + " " + e.toString());
+                System.out.flush();
+                fail();
             }
         }
 

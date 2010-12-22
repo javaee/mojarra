@@ -177,8 +177,7 @@
                 test.misc,
                 test.regressions,
                 test.view.xml,
-                test.projectstage,
-                test.parseXML"
+                test.projectstage"
             />
             <!--
                 test.http.method.protection,
@@ -1273,18 +1272,6 @@
             <tests>
                 <fileset dir="${basedir}/build/classes"
                          includes="com/sun/faces/systest/projectstage/*TestCase.class"/> 
-            </tests>
-        </jsf.junit>
-    </target>
-
-    <target name="test.parseXML">
-
-        <jsf.junit context-path="${context.path}"
-                   classpath-refid="html.classpath"
-                   test-results-dir="${impl.test.results.dir}">
-            <tests>
-                <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/systest/ParseXMLTestCase.class"/>
             </tests>
         </jsf.junit>
     </target>
