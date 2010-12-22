@@ -344,6 +344,7 @@ public class ConfigureListener implements ServletRequestListener,
         } finally {
             ApplicationAssociate.clearInstance(context);
             ApplicationAssociate.setCurrentInstance(null);
+            com.sun.faces.application.ApplicationImpl.clearInstance(context);
             // Release the initialization mark on this web application
             ConfigManager.getInstance().destory(context);
             if (initContext != null) {

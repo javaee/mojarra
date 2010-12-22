@@ -40,6 +40,7 @@
 
 package com.sun.faces.application;
 
+import javax.servlet.ServletContext;
 import java.beans.PropertyEditor;
 import java.beans.PropertyEditorManager;
 import java.lang.reflect.Constructor;
@@ -76,6 +77,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.behavior.Behavior;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ExternalContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.DateTimeConverter;
 import javax.faces.el.MethodBinding;
@@ -232,6 +234,22 @@ public class ApplicationImpl extends Application {
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.log(Level.FINE, "Created Application instance ");
         }
+    }
+
+    /**
+     * method to return the ApplicationAssociate instance
+     * @return associate
+     */
+    public ApplicationAssociate getApplicationAssociate() {
+        return associate;
+    }
+
+    public static void clearInstance(ServletContext sc) {
+        sc.removeAttribute(ApplicationImpl.class.getName());
+    }
+
+    public static void clearInstance(ExternalContext sc) {
+        sc.getApplicationMap().remove(ApplicationImpl.class.getName());
     }
 
 

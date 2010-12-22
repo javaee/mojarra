@@ -470,6 +470,7 @@ public class TestRenderKit extends ServletFacesTestCase {
         ServletContext servletContext = (ServletContext) ctx.getExternalContext().getContext();
         FactoryFinder.releaseFactories();
         servletContext.removeAttribute("com.sun.faces.ApplicationAssociate");
+        servletContext.removeAttribute("com.sun.faces.application.ApplicationImpl");
         ConfigManager config = ConfigManager.getInstance();
 
         DocumentBuilderFactory factory = DbfFactory.getFactory();
