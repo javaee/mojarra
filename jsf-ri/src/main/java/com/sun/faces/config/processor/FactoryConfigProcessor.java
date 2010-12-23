@@ -40,10 +40,6 @@
 
 package com.sun.faces.config.processor;
 
-import com.sun.faces.application.ApplicationAssociate;
-import javax.faces.application.Application;
-import javax.faces.application.ApplicationFactory;
-import javax.faces.context.FacesContext;
 import com.sun.faces.config.ConfigurationException;
 import com.sun.faces.config.DocumentInfo;
 import com.sun.faces.util.FacesLogger;
@@ -206,7 +202,7 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
                                  applicationFactoryCount);
             }
         }
-     
+
         // If there are more than one ApplicationFactory, FacesContextFactory,
         // or ExternalContextFactory defined, we will push our Injection
         // factories onto the factory list so that they are the top-level
@@ -221,17 +217,6 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
         
         // validate that we actually have factories at this point.
         verifyFactoriesExist();
-        if (FacesContext.getCurrentInstance() != null &&
-                FacesContext.getCurrentInstance().getExternalContext() != null) {
-            ApplicationAssociate associate =
-                    ApplicationAssociate.getInstance(
-                    FacesContext.getCurrentInstance().getExternalContext());
-            ApplicationFactory afactory = (ApplicationFactory) FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-            Application app = afactory.getApplication();
-            if (app != null && associate == null) {
-                afactory.setApplication(null);
-            }
-        }
 
         // invoke the next config processor
         invokeNext(sc, documentInfos);
@@ -256,8 +241,6 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
                     appCount.incrementAndGet();
                     setFactory(FactoryFinder.APPLICATION_FACTORY,
                                getNodeText(n));
-        
-
                 } else if (EXCEPTION_HANDLER_FACTORY.equals(n.getLocalName())) {
                     setFactory(FactoryFinder.EXCEPTION_HANDLER_FACTORY,
                                getNodeText(n));

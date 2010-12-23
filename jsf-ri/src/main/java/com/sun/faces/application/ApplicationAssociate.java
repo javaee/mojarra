@@ -91,9 +91,6 @@ import javax.faces.el.VariableResolver;
 import javax.faces.application.ProjectStage;
 import javax.faces.event.PreDestroyCustomScopeEvent;
 import javax.faces.event.ScopeContext;
-import javax.faces.application.ApplicationWrapper;
-import javax.faces.application.ApplicationFactory;
-import javax.faces.application.Application;
 import javax.servlet.ServletContext;
 
 import java.util.Collections;
@@ -141,7 +138,7 @@ public class ApplicationAssociate {
     // Flag indicating that a response has been rendered.
     private boolean responseRendered = false;
 
-    public static final String ASSOCIATE_KEY = RIConstants.FACES_PREFIX +
+    private static final String ASSOCIATE_KEY = RIConstants.FACES_PREFIX +
          "ApplicationAssociate";
 
     private static ThreadLocal<ApplicationAssociate> instance =

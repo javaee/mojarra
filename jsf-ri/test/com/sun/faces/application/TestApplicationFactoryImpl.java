@@ -136,7 +136,7 @@ public class TestApplicationFactoryImpl extends JspFacesTestCase {
         } catch (NullPointerException e) {
             thrown = true;
         }
-        assertFalse(thrown);
+        assertTrue(thrown);
     }
 
 

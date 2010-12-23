@@ -65,7 +65,11 @@ public class InjectionApplicationFactory extends ApplicationFactory implements F
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
 
     private ApplicationFactory delegate;
-    
+    private Application defaultApplication;
+    private Field defaultApplicationField;
+    private volatile Application application;
+
+
     // ------------------------------------------------------------ Constructors
 
 
@@ -81,18 +85,18 @@ public class InjectionApplicationFactory extends ApplicationFactory implements F
 
 
     public Application getApplication() {
-        
-        Application application = delegate.getApplication();
+
         if (application == null) {
-            // No i18n here
+            application = delegate.getApplication();
+            if (application == null) {
+                // No i18n here
                 String message = MessageFormat
                       .format("Delegate ApplicationContextFactory, {0}, returned null when calling getApplication().",
-                    delegate.getClass().getName());
-            throw new IllegalStateException(message);
+                              delegate.getClass().getName());
+                throw new IllegalStateException(message);
+            }
+            injectDefaultApplication();
         }
-        
-        injectDefaultApplication(application);
-
         return application;
 
     }
@@ -100,10 +104,9 @@ public class InjectionApplicationFactory extends ApplicationFactory implements F
     
     public synchronized void setApplication(Application application) {
 
-        if (application != null) {
-            delegate.setApplication(application);
-            injectDefaultApplication(application);
-        }
+        this.application = application;
+        delegate.setApplication(application);
+        injectDefaultApplication();
         
     }
 
@@ -122,19 +125,25 @@ public class InjectionApplicationFactory extends ApplicationFactory implements F
     // --------------------------------------------------------- Private Methods
 
 
-    private void injectDefaultApplication(Application application) {
+    private void injectDefaultApplication() {
 
-        Application defaultApplication;
-        Field defaultApplicationField;
-        FacesContext ctx = FacesContext.getCurrentInstance();
-        String attrName = ApplicationImpl.class.getName();
-        defaultApplication = (Application) ctx.getExternalContext().getApplicationMap().get(attrName);
 
+        if (defaultApplication == null) {
+            FacesContext ctx = FacesContext.getCurrentInstance();
+            String attrName = ApplicationImpl.class.getName();
+            defaultApplication = (Application) ctx.getExternalContext()
+                  .getApplicationMap().get(attrName);
+            ctx.getExternalContext().getApplicationMap()
+                  .remove(attrName);
+        }
         if (defaultApplication != null) {
             try {
-                defaultApplicationField =
-                        Application.class.getDeclaredField("defaultApplication");
-                defaultApplicationField.setAccessible(true);
+                if (defaultApplicationField == null) {
+                    defaultApplicationField =
+                          Application.class
+                                .getDeclaredField("defaultApplication");
+                    defaultApplicationField.setAccessible(true);
+                }
                 defaultApplicationField.set(application, defaultApplication);
 
             } catch (NoSuchFieldException nsfe) {
