@@ -190,7 +190,10 @@
     
     <target name="test.misc">
         <!-- validates fix for issue IMPL-262 - should be 404 not 500 -->
-        <jsf.tester request="${context.path}/faces/thispagedoesnexist.jsp"
+        <jsf.tester2 request="/faces/thispagedoesnexist.jsp"
+            context-path="${context.path}"
+            classpath-refid="html.classpath"
+            test-results-dir="${impl.test.results.dir}"
             status="404"/>
     </target>
 
@@ -209,22 +212,35 @@
     <target name="test.duplicateIds"
             description="Test duplicate ID detection">
 
-        <jsf.tester request="${context.path}/faces/duplicateIds01.jsp"
-                    status="500"/> 
+        <jsf.tester2 request="/faces/duplicateIds01.jsp"
+                     context-path="${context.path}"
+                     classpath-refid="html.classpath"
+                     test-results-dir="${impl.test.results.dir}"
+                     status="500"/> 
 
-        <jsf.tester request="${context.path}/faces/duplicateIds02.jsp"
-                status="200"/>
+        <jsf.tester2 request="/faces/duplicateIds02.jsp"
+                     context-path="${context.path}"
+                     classpath-refid="html.classpath"
+                     test-results-dir="${impl.test.results.dir}"
+                     status="200"/>
 
-        <jsf.tester request="${context.path}/faces/duplicateIds03.jsp"
-                status="500"/>
+        <jsf.tester2 request="/faces/duplicateIds03.jsp"
+                     context-path="${context.path}"
+                     classpath-refid="html.classpath"
+                     test-results-dir="${impl.test.results.dir}"
+                     status="500"/>
 
-        <jsf.tester
-              request="${context.path}/faces/duplicateIds05.jsp"
-              status="200"/>
+        <jsf.tester2 request="/faces/duplicateIds05.jsp"
+                     context-path="${context.path}"
+                     classpath-refid="html.classpath"
+                     test-results-dir="${impl.test.results.dir}"
+                     status="200"/>
 
-        <jsf.tester
-              request="${context.path}/faces/forEach02.jsp"
-              status="200"/>
+        <jsf.tester2 request="/faces/forEach02.jsp"
+                     context-path="${context.path}"
+                     classpath-refid="html.classpath"
+                     test-results-dir="${impl.test.results.dir}"
+                     status="200"/>
 
         <!-- PENDING: return to running
         <jsf.junit context-path="${context.path}"
@@ -243,38 +259,56 @@
     
     <target name="test.viewIdNormalization">
         <!-- request for any page will do -->
-        <jsf.tester request="${context.path}/faces/faces/faces/faces/duplicateIds02.jsp"
-                status="200"/>
+        <jsf.tester2 request="/faces/faces/faces/faces/duplicateIds02.jsp"
+                     context-path="${context.path}"
+                     classpath-refid="html.classpath"
+                     test-results-dir="${impl.test.results.dir}"
+                     status="200"/>
     </target>
 
     <target name="test.external"
             description="Test ExternalContext implementation issues">
 
         <!-- Request scope attribute transparency -->
-        <jsf.tester
-              request="${context.path}/faces/external01.jsp"
-              outContent="/external01.jsp PASSED"/>
+        <jsf.tester2 request="/faces/external01.jsp"
+                     context-path="${context.path}"
+                     classpath-refid="html.classpath"
+                     test-results-dir="${impl.test.results.dir}"
+                     regexp="(?s).*/external01.jsp PASSED.*"/>
 
         <!-- Session scope attribute transparency -->
-        <jsf.tester
-              request="${context.path}/faces/external02.jsp"
-              outContent="/external02.jsp PASSED"/>
+        <jsf.tester2 request="/faces/external02.jsp"
+                     context-path="${context.path}"
+                     classpath-refid="html.classpath"
+                     test-results-dir="${impl.test.results.dir}"
+                     regexp="(?s).*/external02.jsp PASSED.*"/>
 
         <!-- Application scope attribute transparency -->
-        <jsf.tester
-              request="${context.path}/faces/external03.jsp"
-              outContent="/external03.jsp PASSED"/>
+        <jsf.tester2 request="/faces/external03.jsp"
+                     context-path="${context.path}"
+                     classpath-refid="html.classpath"
+                     test-results-dir="${impl.test.results.dir}"
+                     regexp="(?s).*/external03.jsp PASSED.*"/>
 
     </target>
 
     <target name="test.facelets">
         <!-- Tests to verify 955, return a 500, rather than a 404 -->
-        <jsf.tester request="${context.path}/faces/facelets/compositionnotfound.xhtml"
-            status="500"/>
-        <jsf.tester request="${context.path}/faces/facelets/decoratenotfound.xhtml"
-            status="500"/>
-        <jsf.tester request="${context.path}/faces/facelets/includenotfound.xhtml"
-            status="500"/>        
+        <jsf.tester2 request="/faces/facelets/compositionnotfound.xhtml"
+                     context-path="${context.path}"
+                     classpath-refid="html.classpath"
+                     test-results-dir="${impl.test.results.dir}"
+                     status="500"/>
+        <jsf.tester2 request="/faces/facelets/decoratenotfound.xhtml"
+                     context-path="${context.path}"
+                     classpath-refid="html.classpath"
+                     test-results-dir="${impl.test.results.dir}"
+                     status="500"/>
+        <jsf.tester2 request="/faces/facelets/includenotfound.xhtml"
+                     context-path="${context.path}"
+                     classpath-refid="html.classpath"
+                     test-results-dir="${impl.test.results.dir}"
+                     status="500"/>        
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
                    test-results-dir="${impl.test.results.dir}">
@@ -367,26 +401,24 @@
             description="Basic Hello, World Tests">
 
         <!-- Simple Non-Faces Response -->
-        <jsf.tester
-              request="${context.path}/hello.jsp" status="200"
-              outContent="/hello.jsp PASSED"/>
+        <jsf.tester2 request="/hello.jsp" status="200"
+                     context-path="${context.path}"
+                     classpath-refid="html.classpath"
+                     test-results-dir="${impl.test.results.dir}"
+                     regexp="(?s).*/hello.jsp PASSED.*"/>
 
         <!-- Simple Faces Response (Direct) -->
-        <jsf.tester
-              request="${context.path}/faces/hello.jsp"
-              outContent="/hello.jsp PASSED"/>
+        <jsf.tester2 request="/faces/hello.jsp"
+                     context-path="${context.path}"
+                     classpath-refid="html.classpath"
+                     test-results-dir="${impl.test.results.dir}"
+                     regexp="(?s).*/hello.jsp PASSED.*"/>
 
-        <!-- Simple Golden File Test -->
-        <jsf.tester
-              request="${context.path}/hello.jsp"
-              golden="${golden.path}/hello.txt"/>
-
-        <!-- Simple Golden File Plus Ignore File Test -->
-        <jsf.tester
-              request="${context.path}/hello.jsp"
-              golden="${golden.path}/hello-mismatch.txt"
-              ignore="${ignore.path}/hello-mismatch.txt"/>
-
+        <jsf.tester2 request="/hello.jsp"
+                     context-path="${context.path}"
+                     classpath-refid="html.classpath"
+                     test-results-dir="${impl.test.results.dir}"
+                     regexp="(?s).*/hello.jsp PASSED.*"/>
     </target>
 
 
@@ -1278,7 +1310,7 @@
 
     <target name="passthru">
 
-      <antcall target="test.jsp" />
+      <antcall target="test.hello" />
 
     </target>
 
