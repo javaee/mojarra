@@ -1,1 +1,0 @@
-      <form id="form01" method="post" action="/jsf-systest/faces/taglib/command_button_test.jsp;jsessionid=F7DE89B48158F37AED9E48FA5D2E93F5">

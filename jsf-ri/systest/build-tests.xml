@@ -60,56 +60,6 @@
     <property name="protocol" value="HTTP/1.0"/>
 
     <property name="regexp.path" value="${basedir}/web/regexp"/>
-    <property name="ignore.path" value="${context.path}/ignore"/>
-
-
-    <!-- SystestClient taskdef classpath -->
-    <path id="test.classpath">
-        <pathelement location="${jsf-api.jar}"/>
-        <pathelement location="${jsf-impl.jar}"/>
-        <pathelement location="${basedir}/build/classes"/>
-        <path refid="compile.classpath"/>
-    </path>
-
-
-    <!-- SystestClient taskdef declaration -->
-    <taskdef name="tester"
-             classname="com.sun.faces.systest.ant.SystestClient">
-        <classpath refid="test.classpath"/>
-    </taskdef>
-
-    <macrodef name="jsf.tester">
-        <attribute name="request"/>
-        <attribute name="outContent"
-                   default=""/>
-        <attribute name="golden"
-                   default=""/>
-        <attribute name="status"
-                   default="200"/>
-        <attribute name="ignoreIfContains"
-                   default=""/>
-        <attribute name="recordGolden"
-                   default=""/>
-        <attribute name="ignore"
-                   default=""/>
-        <attribute name="joinSession"
-                   default="false"/>
-        <sequential>
-            <tester request="@{request}"
-                    host="${container.host}"
-                    port="${container.port}"
-                    protocol="${protocol}"
-                    failonerror="${failonerror}"
-                    outContent="@{outContent}"
-                    golden="@{golden}"
-                    recordGolden="@{recordGolden}"
-                    status="@{status}"
-                    ignoreIfContains="@{ignoreIfContains}"
-                    ignore="@{ignore}"
-                    joinSession="@{joinSession}"/>
-        </sequential>
-    </macrodef>
-
 
     <!-- HtmlUnit client classpath -->
     <path id="html.classpath">  
