@@ -315,6 +315,7 @@
         <attribute name="explodedWarDir" default=""/>
         <attribute name="request" />
         <attribute name="regexp" default=""/>
+        <attribute name="regexpFile" default=""/>
         <attribute name="status" default=""/>
         <element name="custom-sysproperties" optional="true"/>
         <sequential>
@@ -336,6 +337,7 @@
                 <formatter type="xml" usefile="true"/>
                 <sysproperty key="request" value="@{request}"/>
                 <sysproperty key="regexp" value="@{regexp}"/>
+                <sysproperty key="regexpFile" value="@{regexpFile}"/>
                 <sysproperty key="status" value="@{status}"/>
                 <sysproperty key="host" value="${container.host}"/>
                 <sysproperty key="port" value="${container.port}"/>

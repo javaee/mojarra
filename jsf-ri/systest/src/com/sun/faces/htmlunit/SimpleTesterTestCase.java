@@ -42,7 +42,9 @@
 package com.sun.faces.htmlunit;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.sun.faces.facelets.FaceletsTestCase;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -54,8 +56,43 @@ public class SimpleTesterTestCase extends AbstractTestCase {
         super(name);
     }
 
+    private String regexp = null;
+
     public static Test suite() {
         return (new TestSuite(SimpleTesterTestCase.class));
+    }
+
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+
+        String regexpFilename = System.getProperty("regexpFile");
+        if (null != regexpFilename && 0 < regexpFilename.length()) {
+            File regexpFile = new File(regexpFilename);
+            regexp = readLineFromFile(regexpFile);
+        } else {
+            regexp = System.getProperty("regexp");
+        }
+
+
+    }
+
+    private String readLineFromFile(File file) throws Exception {
+        String result = null;
+
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        result = reader.readLine();
+        reader.close();
+
+        return result;
+    }
+
+
+    private void doRegexp(String text) throws Exception {
+        if (null != regexp && 0 < regexp.length()) {
+            assertTrue(text.matches(regexp));
+        }
+
     }
 
 
@@ -65,15 +102,11 @@ public class SimpleTesterTestCase extends AbstractTestCase {
         assertNotNull(request);
         assertTrue("invalid request attribute", 0 < request.length());
 
-        String regexp = System.getProperty("regexp");
         String status = System.getProperty("status");
 
         HtmlPage page = getPage(request);
 
-        if (null != regexp && 0 < regexp.length()) {
-            String text = page.asText();
-            assertTrue(text.matches(regexp));
-        }
+        doRegexp(page.asXml());
 
         if (null != status && 0 < status.length()) {
             int expected = Integer.parseInt(status);

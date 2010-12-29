@@ -59,9 +59,8 @@
     <!-- Set 'protocol' to a zero length string to use HttpURLConnection -->
     <property name="protocol" value="HTTP/1.0"/>
 
-    <property name="golden.path" value="${context.path}/golden"/>
+    <property name="regexp.path" value="${basedir}/web/regexp"/>
     <property name="ignore.path" value="${context.path}/ignore"/>
-    <property name="local.golden.path" value="${basedir}/web/golden"/>
 
 
     <!-- SystestClient taskdef classpath -->
@@ -425,10 +424,12 @@
     <target name="test.jsp"
             description="Test JSP Integration">
         
-        <jsf.tester
-              request="${context.path}/faces/positiveTagFile.jsp"
-              status="200"/>
-        
+        <jsf.tester2 request="/faces/positiveTagFile.jsp"
+                     context-path="${context.path}"
+                     classpath-refid="html.classpath"
+                     test-results-dir="${impl.test.results.dir}"
+                     status="200"/>
+
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
                    test-results-dir="${impl.test.results.dir}">
@@ -489,37 +490,39 @@
         </jsf.junit> 
        
         <!-- MethodBinding Test #2 (Superclass Method Calls) -->
-        <jsf.tester
-              request="${context.path}/faces/methodref02.jsp"
-              outContent="/methodref02.jsp PASSED"/>
+        <jsf.tester2 request="/faces/methodref02.jsp"
+                     context-path="${context.path}"
+                     classpath-refid="html.classpath"
+                     test-results-dir="${impl.test.results.dir}"
+                     regexp="(?s).*/methodref02.jsp PASSED.*"/>
 
     </target>
 
     <target name="test.prefix.security"
             description="Ensure a prefix mapped FacesServlet doesn't allow access to WEB-INF">
-        <jsf.tester
-              request="${context.path}/faces/WEB-INF/test.jsp"
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/WEB-INF/test.jsp"
               status="404"/>
-        <jsf.tester
-              request="${context.path}/faces/WEB-INF"
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/WEB-INF"
               status="404"/>
-        <jsf.tester
-              request="${context.path}/faces/WEB-INF/"
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/WEB-INF/"
               status="404"/>
-        <jsf.tester
-              request="${context.path}/faces/META-INF/MANIFEST.MF"
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/META-INF/MANIFEST.MF"
               status="404"/>
-        <jsf.tester
-              request="${context.path}/faces/META-INF"
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/META-INF"
               status="404"/>
-        <jsf.tester
-              request="${context.path}/faces/META-INF/"
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/META-INF/"
               status="404"/>
-        <jsf.tester
-              request="${context.path}/faces/web-Inf/test.jsp"
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/web-Inf/test.jsp"
               status="404"/>
-        <jsf.tester
-              request="${context.path}/faces/mEtA-InF/MANIFEST.MF"
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/mEtA-InF/MANIFEST.MF"
               status="404"/>
     </target>
 
@@ -540,39 +543,39 @@
             description="Test ValueBinding.getValue() implementation">
 
         <!-- ValueBinding Test #1 (Simple Bean Getter) -->
-        <jsf.tester
-              request="${context.path}/faces/valueBinding01.jsp"
-              outContent="/valueBinding01.jsp PASSED"/>
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/valueBinding01.jsp"
+              regexp="(?s).*/valueBinding01.jsp PASSED.*"/>
 
         <!-- ValueBinding Test #2 (Simple String Property Getter) -->
-        <jsf.tester
-              request="${context.path}/faces/valueBinding02.jsp"
-              outContent="/valueBinding02.jsp PASSED"/>
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/valueBinding02.jsp"
+              regexp="(?s).*/valueBinding02.jsp PASSED.*"/>
 
         <!-- ValueBinding Test #3 (Simple Integer Property Getter) -->
-        <jsf.tester
-              request="${context.path}/faces/valueBinding03.jsp"
-              outContent="/valueBinding03.jsp PASSED"/>
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/valueBinding03.jsp"
+              regexp="(?s).*/valueBinding03.jsp PASSED.*"/>
 
         <!-- ValueBinding Test #4 (Simple Boolean Property Getter) -->
-        <jsf.tester
-              request="${context.path}/faces/valueBinding04.jsp"
-              outContent="/valueBinding04.jsp PASSED"/>
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/valueBinding04.jsp"
+              regexp="(?s).*/valueBinding04.jsp PASSED.*"/>
 
         <!-- ValueBinding Test #5 (Simple Integer Expression Getter) -->
-        <jsf.tester
-              request="${context.path}/faces/valueBinding05.jsp"
-              outContent="/valueBinding05.jsp PASSED"/>
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/valueBinding05.jsp"
+              regexp="(?s).*/valueBinding05.jsp PASSED.*"/>
 
         <!-- ValueBinding Test #6 (Simple Boolean Expression Getter) -->
-        <jsf.tester
-              request="${context.path}/faces/valueBinding06.jsp"
-              outContent="/valueBinding06.jsp PASSED"/>
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/valueBinding06.jsp"
+              regexp="(?s).*/valueBinding06.jsp PASSED.*"/>
 
         <!-- ValueBinding Test #7 (Mixed Literal and Expression Getter) -->
-        <jsf.tester
-              request="${context.path}/faces/valueBinding07.jsp"
-              outContent="/valueBinding07.jsp PASSED"/>
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/valueBinding07.jsp"
+              regexp="(?s).*/valueBinding07.jsp PASSED.*"/>
 
     </target>
 
@@ -592,9 +595,8 @@
     <target name="test.listener"
             description="Test listener">
 
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/listener.jsp"
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/listener.jsp"
               status="200"/>
     </target>
 
@@ -602,20 +604,17 @@
             description="Test managed bean creation facility">
 
         <!-- Managed Bean Create #1 (No Property Setters) -->
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/managed01.jsp"
-              outContent="/managed01.jsp PASSED"/>
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/managed01.jsp"
+              regexp="(?s).*/managed01.jsp PASSED.*"/>
 
         <!-- Managed Bean Create #2 (Primitive Property Setters) -->
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/managed02.jsp"
-              outContent="/managed02.jsp PASSED"/>
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/managed02.jsp"
+              regexp="(?s).*/managed02.jsp PASSED.*"/>
 
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/managed03.jsp"
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/managed03.jsp"
               status="500"/>
 
         <jsf.junit context-path="${context.path}"
@@ -627,21 +626,16 @@
             </tests>
         </jsf.junit>
 
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/managed07.jsp"
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/managed07.jsp"
               status="500"/>
 
-        <jsf.tester
-              request="${context.path}/faces/resourceInjection01.jsp"
-              golden="${golden.path}/resourceInjection01.txt"
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              recordGolden="${local.golden.path}/resourceInjection01.txt"
-              />
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/resourceInjection01.jsp"
+              regexp="(?s).*Hello World from env-entry!Hello World from env-entry!.*"/>
 
-         <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/eagerbean.jsp"
+         <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/eagerbean.jsp"
               status="200"/>
         
         <jsf.junit context-path="${context.path}"
@@ -667,26 +661,26 @@
         <!--
         <jsf.tester
               ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/message01.jsp"
+              context-path="${context.path}" request="/faces/message01.jsp"
               outContent="/message01.jsp PASSED"/>-->
 
         <!-- Standard IMPL Message Resources -->
         <!--
         <jsf.tester
               ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/message02.jsp"
+              context-path="${context.path}" request="/faces/message02.jsp"
               outContent="/message02.jsp PASSED"/>-->
 
         <!-- Single Message Resources Element -->
         <!--<jsf.tester
               ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/message03.jsp"
+              context-path="${context.path}" request="/faces/message03.jsp"
                outContent="/message03.jsp PASSED"/>-->
 
         <!-- Double Message Resources Element -->
         <!--<jsf.tester
               ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/message04.jsp"
+              context-path="${context.path}" request="/faces/message04.jsp"
               outContent="/message04.jsp PASSED"/>-->
 
     </target>
@@ -738,98 +732,81 @@
     <target name="test.tlvalidator"
             description="Test the RI Tag Library Validator">
 
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/TestHtmlBasicValidatorFail.jsp"
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/TestHtmlBasicValidatorFail.jsp"
               status="500"/>
 
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/TestHtmlBasicValidatorFail.jsp"
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/TestHtmlBasicValidatorFail.jsp"
               status="500"/>
 
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/TestHtmlBasicValidatorSucceed.jsp"
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/TestHtmlBasicValidatorSucceed.jsp"
               status="200"/>
 
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/TestCoreValidatorFail.jsp"
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/TestCoreValidatorFail.jsp"
               status="500"/>
 
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/TestCoreValidatorFail.jsp"
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/TestCoreValidatorFail.jsp"
               status="500"/>
 
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/TestCoreValidatorSucceed.jsp"
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/TestCoreValidatorSucceed.jsp"
               status="200"/>
 
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/TestCoreValidatorIfFail.jsp"
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/TestCoreValidatorIfFail.jsp"
               status="200"/>
 
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/TestCoreValidatorIfSucceed.jsp"
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/TestCoreValidatorIfSucceed.jsp"
               status="200"/>
         <!-- JSTL forEach integration indefinately inoperable.
             <jsf.tester 
-                 request="${context.path}/faces/TestCoreValidatorIteratorFail.jsp"
+                 context-path="${context.path}" request="/faces/TestCoreValidatorIteratorFail.jsp"
               status="500"/>
         
             <jsf.tester 
-                 request="${context.path}/faces/TestCoreValidatorIteratorSucceed.jsp"
+                 context-path="${context.path}" request="/faces/TestCoreValidatorIteratorSucceed.jsp"
               status="200"/>
         -->
 
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/TestElValidatorActionRefFail.jsp"
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/TestElValidatorActionRefFail.jsp"
               status="500"/>
 
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/TestElValidatorActionRefSucceed.jsp"
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/TestElValidatorActionRefSucceed.jsp"
               status="200"/>
 
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/TestElValidatorComponentFail.jsp"
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/TestElValidatorComponentFail.jsp"
               status="500"/>
 
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/TestElValidatorComponentSucceed.jsp"
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/TestElValidatorComponentSucceed.jsp"
               status="200"/>
 
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/TestElValidatorIdFail.jsp"
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/TestElValidatorIdFail.jsp"
               status="500"/>
 
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/TestElValidatorIdSucceed.jsp"
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/TestElValidatorIdSucceed.jsp"
               status="200"/>
 
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/TestElValidatorValueRefFail.jsp"
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/TestElValidatorValueRefFail.jsp"
               status="500"/>
 
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/TestElValidatorValueRefSucceed.jsp"
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/TestElValidatorValueRefSucceed.jsp"
               status="200"/>
 
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/jsp/tlvTest01.jsp"
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/jsp/tlvTest01.jsp"
               status="200"/>
 
     </target>
@@ -851,46 +828,40 @@
             description="Test Converter creation facility">
 
         <!-- Test Converter creation -->
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/converter.jsp"
-              outContent="/converter.jsp PASSED"/>
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/converter.jsp"
+              regexp="(?s).*/converter.jsp PASSED.*"/>
     </target>
 
     <target name="test.converter01"
             description="Test standard Converter replacement">
 
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/converter01.jsp"
-              outContent="/converter01.jsp PASSED"/>
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/converter01.jsp"
+              regexp="(?s).*/converter01.jsp PASSED.*"/>
     </target>
 
     <target name="test.converter02"
             description="Test passing Converter instances to component tag">
 
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/converter02.jsp"
-              recordGolden="${local.golden.path}/standard/converter02.txt"
-              golden="${golden.path}/standard/converter02.txt"/>
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/converter02.jsp"
+              regexpFile="${regexp.path}/converter02.txt"/>
     </target>
 
     <target name="test.converter03"
             description="Test converter">
 
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/converter03.jsp"
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/converter03.jsp"
               status="200"/>
     </target>
 
     <target name="test.converter04"
             description="Test converter">
 
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/converter04.jsp"
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/converter04.jsp"
               status="200"/>
     </target>
 
@@ -907,30 +878,26 @@
     </target>
 
     <target name="test.converter06">
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/converter06.jsp"
-              recordGolden="${local.golden.path}/standard/converter06.txt"
-              golden="${golden.path}/standard/converter06.txt"/>
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/converter06.jsp"
+              regexpFile="${regexp.path}/converter06.txt"/>
     </target>
 
     <target name="test.enum-converter-1"
             description="Test Enum Converter ">
                                                                                                                           
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/enum-converter-1.jsp"
-              outContent="/enum-converter-1.jsp PASSED"/>
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/enum-converter-1.jsp"
+              regexp="(?s).*/enum-converter-1.jsp PASSED.*"/>
     </target>
 
     <target name="test.validator"
             description="Test Validator creation facility">
 
         <!-- Test validator creation -->
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/validator.jsp"
-              outContent="/validator.jsp PASSED"/>
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/validator.jsp"
+              regexp="(?s).*/validator.jsp PASSED.*"/>
 
             <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
@@ -946,18 +913,16 @@
     <target name="test.validator01"
             description="Test standard Validator replacement">
 
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/validator01.jsp"
-              outContent="/validator01.jsp PASSED"/>
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/validator01.jsp"
+              regexp="(?s).*/validator01.jsp PASSED.*"/>
     </target>
 
     <target name="test.validator02"
             description="Test validator">
 
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/validator02.jsp"
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/validator02.jsp"
               status="200"/>
     </target>
 
@@ -965,9 +930,8 @@
             description="Test validator">
 
 
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/validator03.jsp"
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/validator03.jsp"
               status="200"/>
     </target>
 
@@ -1004,13 +968,12 @@
 
         <!-- Test Component creation -->
 
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/component.jsp"
-              outContent="/component.jsp PASSED"/>
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/component.jsp"
+              regexp="(?s).*/component.jsp PASSED.*"/>
         
-        <jsf.tester             
-              request="${context.path}/faces/ProcessSaveRestoreStateTest.jsp"
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"             
+              context-path="${context.path}" request="/faces/ProcessSaveRestoreStateTest.jsp"
               status="200"/>
         
         <jsf.junit context-path="${context.path}"
@@ -1039,10 +1002,9 @@
     <target name="test.component01"
             description="Test standard Component replacement">
 
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/component01.jsp"
-              outContent="/component01.jsp PASSED"/>
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/component01.jsp"
+              regexp="(?s).*/component01.jsp PASSED.*"/>
     </target>
 
     <target name="test.composite"
@@ -1082,38 +1044,30 @@
 
     <target name="test.standard"
             description="Test the Standard RenderKit">
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/standard/messages01.jsp"
-              recordGolden="${local.golden.path}/standard/messages01.txt"
-              golden="${golden.path}/standard/messages01.txt"/>
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" 
+              request="/faces/standard/messages01.jsp"
+              regexpFile="${regexp.path}/standard/messages01.txt"/>
 
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/standard/messages02.jsp"
-              golden="${golden.path}/standard/messages02.txt"
-              recordGolden="${local.golden.path}/standard/messages02.txt"/>
-
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/standard/component01.jsp"
-              recordGolden="${local.golden.path}/standard/component01.txt"
-              golden="${golden.path}/standard/component01.txt"/>
-        <jsf.tester
-              request="${context.path}/faces/standard/autocomplete.jsp"
-              golden="${golden.path}/standard/autocomplete.txt"/>
-        <jsf.tester
-            request="${context.path}/faces/standard/dtablecolumnclasses.jsp"
-            golden="${golden.path}/standard/dtablecolumnclasses.txt"/>
-        <jsf.tester
-            request="${context.path}/faces/standard/pgridcolumnclasses.jsp"
-            golden="${golden.path}/standard/pgridcolumnclasses.txt"/>
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/standard/messages02.jsp"
+              regexpFile="${regexp.path}/standard/messages02.txt"/>
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              regexpFile="${regexp.path}/standard/component01.txt"
+              context-path="${context.path}" request="/faces/standard/component01.jsp"/>
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              regexpFile="${regexp.path}/standard/autocomplete.txt"
+              context-path="${context.path}" request="/faces/standard/autocomplete.jsp"/>
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+            regexpFile="${regexp.path}/standard/dtablecolumnclasses.txt"
+            context-path="${context.path}" request="/faces/standard/dtablecolumnclasses.jsp"/>
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
                    test-results-dir="${impl.test.results.dir}">
             <tests>
                 <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/systest/SelectOneManyEnumTestCase.class,
+                         includes="com/sun/faces/systest/PGridColumnClassesTestCase.class,
+                                   com/sun/faces/systest/SelectOneManyEnumTestCase.class,
                                    com/sun/faces/systest/SelectManyCollectionTestCase.class,
                                    com/sun/faces/systest/DataTableTestCase.class,
                                    com/sun/faces/systest/TestOutputTargets.class,
@@ -1140,57 +1094,50 @@
             </tests>
         </jsf.junit>
 
-        <jsf.tester
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" 
+              request="/faces/standard/selectmany02.jsp"
+              regexpFile="${regexp.path}/standard/selectmany02.txt"/>
+
+<!--  
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/standard/selectmany02.jsp"
-              recordGolden="${local.golden.path}/standard/selectmany02.txt"
-              golden="${golden.path}/standard/selectmany02.txt"/>
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/standard/selectmany03.jsp"
+              context-path="${context.path}" request="/faces/standard/selectmany03.jsp"
               recordGolden="${local.golden.path}/standard/selectmany03.txt"
               golden="${golden.path}/standard/selectmany03.txt"/>              
-        <jsf.tester
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/standard/selectmany04.jsp"
+              context-path="${context.path}" request="/faces/standard/selectmany04.jsp"
               recordGolden="${local.golden.path}/standard/selectmany04.txt"
               golden="${golden.path}/standard/selectmany04.txt"/>
+-->
     </target>
 
     <target name="test.verbatim"
             description="Test the Verbatim tag">
         <echo message="Testing verbatim..."/>
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/verbatim_test.jsp"
-              golden="${golden.path}/verbatim_test.txt"
-              />
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/escape_test.jsp"
-              golden="${golden.path}/escape_test.txt"
-              />
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" 
+              request="/faces/verbatim_test.jsp"
+              regexpFile="${regexp.path}/verbatim_test.txt"/>
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" 
+              request="/faces/escape_test.jsp"
+              regexpFile="${regexp.path}/escape_test.txt" />
     </target>
 
 
     <target name="test.renderkit"
             description="Test renderkit processing">
-
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/renderkit01.jsp"
-              outContent="/renderkit01.jsp PASSED"/>
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/renderkit02.jsp"
-              golden="${golden.path}/renderkit02A.txt"
-              recordGolden="${local.golden.path}/renderkit02A.txt"
-              />
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/renderkit03.jsp"
-              recordGolden="${local.golden.path}/renderkit03A.txt"
-              golden="${golden.path}/renderkit03A.txt"/>
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/renderkit01.jsp"
+              regexp="(?s).*/renderkit01.jsp PASSED.*"/>
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/renderkit02.jsp"
+              regexp="(?s).*/renderkit02.jsp PASSED.*"/>
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/renderkit03.jsp"
+              regexp="(?s).*This IS A SIMPLE LABEL FROM THE CUSTOM RENDERER.*/renderkit03.jsp PASSED.*"/>
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
                    test-results-dir="${impl.test.results.dir}">
@@ -1203,21 +1150,21 @@
 
     <target name="test.resourceBundleELResolver"
             description="Test ResourceBundleELResolver ">
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/resourceBundle01.jsp"
+              regexp="(?s).*Expression\s*in\s*raw\s*JSP\s*page\s*is\s*Value\s*From\s*ResourceBundle\..*"/>
 
-        <jsf.tester
-              request="${context.path}/faces/resourceBundle01.jsp"
-              outContent="Expression in raw JSP page is Value From ResourceBundle."/>
-        <jsf.tester
-              request="${context.path}/faces/resourceBundle02.jsp"
-              recordGolden="${local.golden.path}/resourceBundle02.txt"
-              golden="${golden.path}/resourceBundle02.txt"/>
-        <jsf.tester
-              request="${context.path}/faces/resourceBundle03.jsp"
-              recordGolden="${local.golden.path}/resourceBundle03.txt"
-              golden="${golden.path}/resourceBundle03.txt"/>
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" 
+              request="/faces/resourceBundle02.jsp"
+              regexp="(?s).*Value\s*from\s*Faces\s*component\s*is\s*Value\s*From\s*ResourceBundle\..*"/>
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" 
+              request="/faces/resourceBundle03.jsp"
+              regexp="(?s).*Values\s*from\s*Components:.*resourceBundle01:.*Value\s*From\s*ResourceBundle.*non\s*existing\s*resourceBundle:\s*.br/.\s*resourceBundle03:\s*Value\s*from\s*ResourceBundle03.*"/>
         <!-- RETURN TO RUNNING
             <jsf.tester 
-                 request="${context.path}/faces/resourceBundle04.jsp"
+                 context-path="${context.path}" request="/faces/resourceBundle04.jsp"
                  recordGolden="${local.golden.path}/resourceBundle04.txt"
                  golden="${golden.path}/resourceBundle04.txt"/>
         -->
@@ -1226,13 +1173,12 @@
 
     <target name="test.phases"
             description="Test Phase processing with Phase Listener">
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/phaseListener01.jsp"
-              outContent="/phaseListener01.jsp PASSED"/>
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/phaseListener01.jsp"
+              regexp="(?s).*/phaseListener01.jsp PASSED.*"/>
         <!-- PENDING investigate the need for this
-  <jsf.tester 
-        request="${context.path}/faces/phaseListener01.jsp?param=foo"
+  <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}" 
+        context-path="${context.path}" request="/faces/phaseListener01.jsp?param=foo"
         outContent="/phaseListener01.jsp FAILED"/>
         -->
     </target>
@@ -1265,14 +1211,12 @@
     </target>
     
     <target name="test.regressions">
-        <jsf.tester
-            request="${context.path}/faces/regression/AreaTextRowsAttrTest.jsp"
-            golden="${golden.path}/regression/AreaTextRowsAttrTest.txt"
-            recordGolden="${local.golden.path}/regression/AreaTextRowsAttrTest.txt"/>
-        <jsf.tester
-            request="${context.path}/faces/regression/SelectOneManySizeAttrTest.jsp"
-            golden="${golden.path}/regression/SelectOneManySizeAttrTest.txt"
-            recordGolden="${local.golden.path}/regression/SelectOneManySizeAttrTest.txt"/>
+        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+            context-path="${context.path}" request="/faces/regression/AreaTextRowsAttrTest.jsp"
+            regexpFile="${regexp.path}/regression/AreaTextRowsAttrTest.txt"/>
+       <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+            context-path="${context.path}" request="/faces/regression/SelectOneManySizeAttrTest.jsp"
+            regexpFile="${regexp.path}/regression/SelectOneManySizeAttrTest.txt" />
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
                    test-results-dir="${impl.test.results.dir}">
@@ -1310,7 +1254,7 @@
 
     <target name="passthru">
 
-      <antcall target="test.hello" />
+      <antcall target="test.standard" />
 
     </target>
 
