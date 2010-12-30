@@ -67,6 +67,60 @@
         <path refid="htmlunit.runtime.classpath"/>
     </path>
 
+    <macrodef name="jsf.tester">
+        <attribute name="classpath-refid"/>
+        <attribute name="context-path" default=""/>
+        <attribute name="test-results-dir"/>
+        <attribute name="assert.classes" default=""/>
+        <attribute name="logging.config.file" default=""/>
+        <attribute name="explodedWarDir" default=""/>
+        <attribute name="request" />
+        <attribute name="regexp" default=""/>
+        <attribute name="regexpFile" default=""/>
+        <attribute name="status" default=""/>
+        <element name="custom-sysproperties" optional="true"/>
+        <sequential>
+            <var name="testname" unset="true" />
+            <propertyregex property="testname"
+                           input="@{request}"
+                           global="true"
+                           regexp="/"
+                           replace="_" />
+            <echo message="writing TEST-${testname}" />
+            <junit printsummary="yes"
+                   fork="yes"
+                   haltonfailure="${halt.on.failure}"
+                   haltonerror="${halt.on.failure}">
+                <jvmarg line="${debug.jvm.args}"/>
+                <jvmarg line="@{assert.classes}"/>
+                <classpath refid="@{classpath-refid}"/>
+                <formatter type="plain" usefile="false"/>
+                <formatter type="xml" usefile="true"/>
+                <sysproperty key="request" value="@{request}"/>
+                <sysproperty key="regexp" value="@{regexp}"/>
+                <sysproperty key="regexpFile" value="@{regexpFile}"/>
+                <sysproperty key="status" value="@{status}"/>
+                <sysproperty key="host" value="${container.host}"/>
+                <sysproperty key="port" value="${container.port}"/>
+                <sysproperty key="context.path" value="@{context-path}"/>
+                <sysproperty key="explodedWarDir" value="@{explodedWarDir}"/>
+                <sysproperty key="java.util.logging.config.file" 
+                             value="@{logging.config.file}"/>
+                <sysproperty key="container" value="${container.name}" />
+                <custom-sysproperties/>
+                <test name="com.sun.faces.htmlunit.SimpleTesterTestCase" 
+                      haltonfailure="yes" 
+                      todir="@{test-results-dir}"
+                      outfile="TEST-${testname}">
+                    <formatter type="xml"/>
+                </test>
+            </junit>
+        </sequential>
+    </macrodef>
+
+
+
+
 
     <!-- ======================== Test Execution ============================== -->
     <!-- converter06 impl logic deferred to 2.0 -->
@@ -139,7 +193,7 @@
     
     <target name="test.misc">
         <!-- validates fix for issue IMPL-262 - should be 404 not 500 -->
-        <jsf.tester2 request="/faces/thispagedoesnexist.jsp"
+        <jsf.tester request="/faces/thispagedoesnexist.jsp"
             context-path="${context.path}"
             classpath-refid="html.classpath"
             test-results-dir="${impl.test.results.dir}"
@@ -161,31 +215,31 @@
     <target name="test.duplicateIds"
             description="Test duplicate ID detection">
 
-        <jsf.tester2 request="/faces/duplicateIds01.jsp"
+        <jsf.tester request="/faces/duplicateIds01.jsp"
                      context-path="${context.path}"
                      classpath-refid="html.classpath"
                      test-results-dir="${impl.test.results.dir}"
                      status="500"/> 
 
-        <jsf.tester2 request="/faces/duplicateIds02.jsp"
+        <jsf.tester request="/faces/duplicateIds02.jsp"
                      context-path="${context.path}"
                      classpath-refid="html.classpath"
                      test-results-dir="${impl.test.results.dir}"
                      status="200"/>
 
-        <jsf.tester2 request="/faces/duplicateIds03.jsp"
+        <jsf.tester request="/faces/duplicateIds03.jsp"
                      context-path="${context.path}"
                      classpath-refid="html.classpath"
                      test-results-dir="${impl.test.results.dir}"
                      status="500"/>
 
-        <jsf.tester2 request="/faces/duplicateIds05.jsp"
+        <jsf.tester request="/faces/duplicateIds05.jsp"
                      context-path="${context.path}"
                      classpath-refid="html.classpath"
                      test-results-dir="${impl.test.results.dir}"
                      status="200"/>
 
-        <jsf.tester2 request="/faces/forEach02.jsp"
+        <jsf.tester request="/faces/forEach02.jsp"
                      context-path="${context.path}"
                      classpath-refid="html.classpath"
                      test-results-dir="${impl.test.results.dir}"
@@ -208,7 +262,7 @@
     
     <target name="test.viewIdNormalization">
         <!-- request for any page will do -->
-        <jsf.tester2 request="/faces/faces/faces/faces/duplicateIds02.jsp"
+        <jsf.tester request="/faces/faces/faces/faces/duplicateIds02.jsp"
                      context-path="${context.path}"
                      classpath-refid="html.classpath"
                      test-results-dir="${impl.test.results.dir}"
@@ -219,21 +273,21 @@
             description="Test ExternalContext implementation issues">
 
         <!-- Request scope attribute transparency -->
-        <jsf.tester2 request="/faces/external01.jsp"
+        <jsf.tester request="/faces/external01.jsp"
                      context-path="${context.path}"
                      classpath-refid="html.classpath"
                      test-results-dir="${impl.test.results.dir}"
                      regexp="(?s).*/external01.jsp PASSED.*"/>
 
         <!-- Session scope attribute transparency -->
-        <jsf.tester2 request="/faces/external02.jsp"
+        <jsf.tester request="/faces/external02.jsp"
                      context-path="${context.path}"
                      classpath-refid="html.classpath"
                      test-results-dir="${impl.test.results.dir}"
                      regexp="(?s).*/external02.jsp PASSED.*"/>
 
         <!-- Application scope attribute transparency -->
-        <jsf.tester2 request="/faces/external03.jsp"
+        <jsf.tester request="/faces/external03.jsp"
                      context-path="${context.path}"
                      classpath-refid="html.classpath"
                      test-results-dir="${impl.test.results.dir}"
@@ -243,17 +297,17 @@
 
     <target name="test.facelets">
         <!-- Tests to verify 955, return a 500, rather than a 404 -->
-        <jsf.tester2 request="/faces/facelets/compositionnotfound.xhtml"
+        <jsf.tester request="/faces/facelets/compositionnotfound.xhtml"
                      context-path="${context.path}"
                      classpath-refid="html.classpath"
                      test-results-dir="${impl.test.results.dir}"
                      status="500"/>
-        <jsf.tester2 request="/faces/facelets/decoratenotfound.xhtml"
+        <jsf.tester request="/faces/facelets/decoratenotfound.xhtml"
                      context-path="${context.path}"
                      classpath-refid="html.classpath"
                      test-results-dir="${impl.test.results.dir}"
                      status="500"/>
-        <jsf.tester2 request="/faces/facelets/includenotfound.xhtml"
+        <jsf.tester request="/faces/facelets/includenotfound.xhtml"
                      context-path="${context.path}"
                      classpath-refid="html.classpath"
                      test-results-dir="${impl.test.results.dir}"
@@ -350,20 +404,20 @@
             description="Basic Hello, World Tests">
 
         <!-- Simple Non-Faces Response -->
-        <jsf.tester2 request="/hello.jsp" status="200"
+        <jsf.tester request="/hello.jsp" status="200"
                      context-path="${context.path}"
                      classpath-refid="html.classpath"
                      test-results-dir="${impl.test.results.dir}"
                      regexp="(?s).*/hello.jsp PASSED.*"/>
 
         <!-- Simple Faces Response (Direct) -->
-        <jsf.tester2 request="/faces/hello.jsp"
+        <jsf.tester request="/faces/hello.jsp"
                      context-path="${context.path}"
                      classpath-refid="html.classpath"
                      test-results-dir="${impl.test.results.dir}"
                      regexp="(?s).*/hello.jsp PASSED.*"/>
 
-        <jsf.tester2 request="/hello.jsp"
+        <jsf.tester request="/hello.jsp"
                      context-path="${context.path}"
                      classpath-refid="html.classpath"
                      test-results-dir="${impl.test.results.dir}"
@@ -374,7 +428,7 @@
     <target name="test.jsp"
             description="Test JSP Integration">
         
-        <jsf.tester2 request="/faces/positiveTagFile.jsp"
+        <jsf.tester request="/faces/positiveTagFile.jsp"
                      context-path="${context.path}"
                      classpath-refid="html.classpath"
                      test-results-dir="${impl.test.results.dir}"
@@ -440,7 +494,7 @@
         </jsf.junit> 
        
         <!-- MethodBinding Test #2 (Superclass Method Calls) -->
-        <jsf.tester2 request="/faces/methodref02.jsp"
+        <jsf.tester request="/faces/methodref02.jsp"
                      context-path="${context.path}"
                      classpath-refid="html.classpath"
                      test-results-dir="${impl.test.results.dir}"
@@ -450,28 +504,28 @@
 
     <target name="test.prefix.security"
             description="Ensure a prefix mapped FacesServlet doesn't allow access to WEB-INF">
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/WEB-INF/test.jsp"
               status="404"/>
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/WEB-INF"
               status="404"/>
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/WEB-INF/"
               status="404"/>
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/META-INF/MANIFEST.MF"
               status="404"/>
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/META-INF"
               status="404"/>
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/META-INF/"
               status="404"/>
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/web-Inf/test.jsp"
               status="404"/>
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/mEtA-InF/MANIFEST.MF"
               status="404"/>
     </target>
@@ -493,37 +547,37 @@
             description="Test ValueBinding.getValue() implementation">
 
         <!-- ValueBinding Test #1 (Simple Bean Getter) -->
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/valueBinding01.jsp"
               regexp="(?s).*/valueBinding01.jsp PASSED.*"/>
 
         <!-- ValueBinding Test #2 (Simple String Property Getter) -->
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/valueBinding02.jsp"
               regexp="(?s).*/valueBinding02.jsp PASSED.*"/>
 
         <!-- ValueBinding Test #3 (Simple Integer Property Getter) -->
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/valueBinding03.jsp"
               regexp="(?s).*/valueBinding03.jsp PASSED.*"/>
 
         <!-- ValueBinding Test #4 (Simple Boolean Property Getter) -->
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/valueBinding04.jsp"
               regexp="(?s).*/valueBinding04.jsp PASSED.*"/>
 
         <!-- ValueBinding Test #5 (Simple Integer Expression Getter) -->
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/valueBinding05.jsp"
               regexp="(?s).*/valueBinding05.jsp PASSED.*"/>
 
         <!-- ValueBinding Test #6 (Simple Boolean Expression Getter) -->
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/valueBinding06.jsp"
               regexp="(?s).*/valueBinding06.jsp PASSED.*"/>
 
         <!-- ValueBinding Test #7 (Mixed Literal and Expression Getter) -->
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/valueBinding07.jsp"
               regexp="(?s).*/valueBinding07.jsp PASSED.*"/>
 
@@ -545,7 +599,7 @@
     <target name="test.listener"
             description="Test listener">
 
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/listener.jsp"
               status="200"/>
     </target>
@@ -554,16 +608,16 @@
             description="Test managed bean creation facility">
 
         <!-- Managed Bean Create #1 (No Property Setters) -->
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/managed01.jsp"
               regexp="(?s).*/managed01.jsp PASSED.*"/>
 
         <!-- Managed Bean Create #2 (Primitive Property Setters) -->
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/managed02.jsp"
               regexp="(?s).*/managed02.jsp PASSED.*"/>
 
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/managed03.jsp"
               status="500"/>
 
@@ -576,15 +630,15 @@
             </tests>
         </jsf.junit>
 
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/managed07.jsp"
               status="500"/>
 
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/resourceInjection01.jsp"
               regexp="(?s).*Hello World from env-entry!Hello World from env-entry!.*"/>
 
-         <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+         <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/eagerbean.jsp"
               status="200"/>
         
@@ -682,35 +736,35 @@
     <target name="test.tlvalidator"
             description="Test the RI Tag Library Validator">
 
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/TestHtmlBasicValidatorFail.jsp"
               status="500"/>
 
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/TestHtmlBasicValidatorFail.jsp"
               status="500"/>
 
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/TestHtmlBasicValidatorSucceed.jsp"
               status="200"/>
 
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/TestCoreValidatorFail.jsp"
               status="500"/>
 
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/TestCoreValidatorFail.jsp"
               status="500"/>
 
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/TestCoreValidatorSucceed.jsp"
               status="200"/>
 
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/TestCoreValidatorIfFail.jsp"
               status="200"/>
 
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/TestCoreValidatorIfSucceed.jsp"
               status="200"/>
         <!-- JSTL forEach integration indefinately inoperable.
@@ -723,39 +777,39 @@
               status="200"/>
         -->
 
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/TestElValidatorActionRefFail.jsp"
               status="500"/>
 
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/TestElValidatorActionRefSucceed.jsp"
               status="200"/>
 
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/TestElValidatorComponentFail.jsp"
               status="500"/>
 
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/TestElValidatorComponentSucceed.jsp"
               status="200"/>
 
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/TestElValidatorIdFail.jsp"
               status="500"/>
 
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/TestElValidatorIdSucceed.jsp"
               status="200"/>
 
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/TestElValidatorValueRefFail.jsp"
               status="500"/>
 
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/TestElValidatorValueRefSucceed.jsp"
               status="200"/>
 
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/jsp/tlvTest01.jsp"
               status="200"/>
 
@@ -778,7 +832,7 @@
             description="Test Converter creation facility">
 
         <!-- Test Converter creation -->
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/converter.jsp"
               regexp="(?s).*/converter.jsp PASSED.*"/>
     </target>
@@ -786,7 +840,7 @@
     <target name="test.converter01"
             description="Test standard Converter replacement">
 
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/converter01.jsp"
               regexp="(?s).*/converter01.jsp PASSED.*"/>
     </target>
@@ -794,7 +848,7 @@
     <target name="test.converter02"
             description="Test passing Converter instances to component tag">
 
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/converter02.jsp"
               regexpFile="${regexp.path}/converter02.txt"/>
     </target>
@@ -802,7 +856,7 @@
     <target name="test.converter03"
             description="Test converter">
 
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/converter03.jsp"
               status="200"/>
     </target>
@@ -810,7 +864,7 @@
     <target name="test.converter04"
             description="Test converter">
 
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/converter04.jsp"
               status="200"/>
     </target>
@@ -828,7 +882,7 @@
     </target>
 
     <target name="test.converter06">
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/converter06.jsp"
               regexpFile="${regexp.path}/converter06.txt"/>
     </target>
@@ -836,7 +890,7 @@
     <target name="test.enum-converter-1"
             description="Test Enum Converter ">
                                                                                                                           
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/enum-converter-1.jsp"
               regexp="(?s).*/enum-converter-1.jsp PASSED.*"/>
     </target>
@@ -845,7 +899,7 @@
             description="Test Validator creation facility">
 
         <!-- Test validator creation -->
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/validator.jsp"
               regexp="(?s).*/validator.jsp PASSED.*"/>
 
@@ -863,7 +917,7 @@
     <target name="test.validator01"
             description="Test standard Validator replacement">
 
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/validator01.jsp"
               regexp="(?s).*/validator01.jsp PASSED.*"/>
     </target>
@@ -871,7 +925,7 @@
     <target name="test.validator02"
             description="Test validator">
 
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/validator02.jsp"
               status="200"/>
     </target>
@@ -880,7 +934,7 @@
             description="Test validator">
 
 
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/validator03.jsp"
               status="200"/>
     </target>
@@ -918,11 +972,11 @@
 
         <!-- Test Component creation -->
 
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/component.jsp"
               regexp="(?s).*/component.jsp PASSED.*"/>
         
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"             
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"             
               context-path="${context.path}" request="/faces/ProcessSaveRestoreStateTest.jsp"
               status="200"/>
         
@@ -952,7 +1006,7 @@
     <target name="test.component01"
             description="Test standard Component replacement">
 
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/component01.jsp"
               regexp="(?s).*/component01.jsp PASSED.*"/>
     </target>
@@ -994,21 +1048,21 @@
 
     <target name="test.standard"
             description="Test the Standard RenderKit">
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" 
               request="/faces/standard/messages01.jsp"
               regexpFile="${regexp.path}/standard/messages01.txt"/>
 
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/standard/messages02.jsp"
               regexpFile="${regexp.path}/standard/messages02.txt"/>
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               regexpFile="${regexp.path}/standard/component01.txt"
               context-path="${context.path}" request="/faces/standard/component01.jsp"/>
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               regexpFile="${regexp.path}/standard/autocomplete.txt"
               context-path="${context.path}" request="/faces/standard/autocomplete.jsp"/>
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
             regexpFile="${regexp.path}/standard/dtablecolumnclasses.txt"
             context-path="${context.path}" request="/faces/standard/dtablecolumnclasses.jsp"/>
         <jsf.junit context-path="${context.path}"
@@ -1044,18 +1098,18 @@
             </tests>
         </jsf.junit>
 
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" 
               request="/faces/standard/selectmany02.jsp"
               regexpFile="${regexp.path}/standard/selectmany02.txt"/>
 
 <!--  
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
               context-path="${context.path}" request="/faces/standard/selectmany03.jsp"
               recordGolden="${local.golden.path}/standard/selectmany03.txt"
               golden="${golden.path}/standard/selectmany03.txt"/>              
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
               context-path="${context.path}" request="/faces/standard/selectmany04.jsp"
               recordGolden="${local.golden.path}/standard/selectmany04.txt"
@@ -1066,11 +1120,11 @@
     <target name="test.verbatim"
             description="Test the Verbatim tag">
         <echo message="Testing verbatim..."/>
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" 
               request="/faces/verbatim_test.jsp"
               regexpFile="${regexp.path}/verbatim_test.txt"/>
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" 
               request="/faces/escape_test.jsp"
               regexpFile="${regexp.path}/escape_test.txt" />
@@ -1079,13 +1133,13 @@
 
     <target name="test.renderkit"
             description="Test renderkit processing">
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/renderkit01.jsp"
               regexp="(?s).*/renderkit01.jsp PASSED.*"/>
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/renderkit02.jsp"
               regexp="(?s).*/renderkit02.jsp PASSED.*"/>
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/renderkit03.jsp"
               regexp="(?s).*This IS A SIMPLE LABEL FROM THE CUSTOM RENDERER.*/renderkit03.jsp PASSED.*"/>
         <jsf.junit context-path="${context.path}"
@@ -1100,15 +1154,15 @@
 
     <target name="test.resourceBundleELResolver"
             description="Test ResourceBundleELResolver ">
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/resourceBundle01.jsp"
               regexp="(?s).*Expression\s*in\s*raw\s*JSP\s*page\s*is\s*Value\s*From\s*ResourceBundle\..*"/>
 
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" 
               request="/faces/resourceBundle02.jsp"
               regexp="(?s).*Value\s*from\s*Faces\s*component\s*is\s*Value\s*From\s*ResourceBundle\..*"/>
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" 
               request="/faces/resourceBundle03.jsp"
               regexp="(?s).*Values\s*from\s*Components:.*resourceBundle01:.*Value\s*From\s*ResourceBundle.*non\s*existing\s*resourceBundle:\s*.br/.\s*resourceBundle03:\s*Value\s*from\s*ResourceBundle03.*"/>
@@ -1123,11 +1177,11 @@
 
     <target name="test.phases"
             description="Test Phase processing with Phase Listener">
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/phaseListener01.jsp"
               regexp="(?s).*/phaseListener01.jsp PASSED.*"/>
         <!-- PENDING investigate the need for this
-  <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}" 
+  <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}" 
         context-path="${context.path}" request="/faces/phaseListener01.jsp?param=foo"
         outContent="/phaseListener01.jsp FAILED"/>
         -->
@@ -1161,10 +1215,10 @@
     </target>
     
     <target name="test.regressions">
-        <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
             context-path="${context.path}" request="/faces/regression/AreaTextRowsAttrTest.jsp"
             regexpFile="${regexp.path}/regression/AreaTextRowsAttrTest.txt"/>
-       <jsf.tester2 classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+       <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
             context-path="${context.path}" request="/faces/regression/SelectOneManySizeAttrTest.jsp"
             regexpFile="${regexp.path}/regression/SelectOneManySizeAttrTest.txt" />
         <jsf.junit context-path="${context.path}"
