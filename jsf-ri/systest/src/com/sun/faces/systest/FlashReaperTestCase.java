@@ -91,7 +91,7 @@ public class FlashReaperTestCase extends AbstractTestCase {
 
     public void testFlashesAreReaped() throws Exception {
 
-        URL makeZombie = getURL("/faces/flashReaper.xhtml");
+        URL makeZombie = getURLSticky("/faces/flashReaper.xhtml");
         URLConnection zombieConnection;
         HtmlPage page;
         int numberOfReaps = 0, numberEntriesInInnerMap = 0;
@@ -102,7 +102,7 @@ public class FlashReaperTestCase extends AbstractTestCase {
             zombieConnection = makeZombie.openConnection();
             zombieConnection.getContent();
             zombieConnection.getInputStream().close();
-            page = getPage("/faces/flashReaper.xhtml");
+            page = getPageSticky("/faces/flashReaper.xhtml");
 
             numberEntriesInInnerMap = Integer.parseInt(page.asText().trim());
             if (numberEntriesInInnerMap <= FlashReaperBean.NUMBER_OF_ZOMBIES) {

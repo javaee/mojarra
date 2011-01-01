@@ -279,6 +279,10 @@ grant {
         </sequential>
     </macrodef>
 
+    <target name="define.cluster.aware.port">
+      <property name="cluster.aware.port" value="${container.port}" />
+    </target>
+
 
     <!-- 'PRIVATE' targets -->
     <macrodef name="start.domain">

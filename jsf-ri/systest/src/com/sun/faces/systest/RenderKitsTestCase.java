@@ -161,11 +161,11 @@ public class RenderKitsTestCase extends AbstractTestCase {
     // Test when default-render-kit-id is set for application;
     public void testDefaultRenderKitId() throws Exception {
         // sets default-render-kit-id in application
-        HtmlPage page = getPage("/faces/renderkit-default.jsp");
+        HtmlPage page = getPageSticky("/faces/renderkit-default.jsp");
 
         // Load a page with renderKitId="CUSTOM"; 
         // Assert hidden field is not written because renderKitId == defaultRenderKitId;
-        page = getPage("/faces/renderkit06.jsp");
+        page = getPageSticky("/faces/renderkit06.jsp");
         HtmlForm form = getFormById(page, "form");
         assertNotNull("form exists", form);
         HtmlHiddenInput hidden = null;
@@ -180,13 +180,13 @@ public class RenderKitsTestCase extends AbstractTestCase {
 
         // Load a page with renderKitId="HTML_BASIC";
         // Assert hidden field is written because renderKitId != defaultRenderKitId;
-        page = getPage("/faces/renderkit04.jsp");
+        page = getPageSticky("/faces/renderkit04.jsp");
         form = getFormById(page, "form");
         assertNotNull("form exists", form);
         hidden = (HtmlHiddenInput)form.getInputByName("javax.faces.RenderKitId");
         assertNotNull("hidden exists", hidden);
         assertTrue(-1 != page.asText().indexOf("HTML_BASIC"));
         assertTrue(-1 != page.asText().indexOf("com.sun.faces.renderkit.html_basic.HtmlResponseWriter"));
-        page = getPage("/faces/renderkit-default-clear.jsp");
+        page = getPageSticky("/faces/renderkit-default-clear.jsp");
     }
 }

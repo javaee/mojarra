@@ -67,67 +67,13 @@
         <path refid="htmlunit.runtime.classpath"/>
     </path>
 
-    <macrodef name="jsf.tester">
-        <attribute name="classpath-refid"/>
-        <attribute name="context-path" default=""/>
-        <attribute name="test-results-dir"/>
-        <attribute name="assert.classes" default=""/>
-        <attribute name="logging.config.file" default=""/>
-        <attribute name="explodedWarDir" default=""/>
-        <attribute name="request" />
-        <attribute name="regexp" default=""/>
-        <attribute name="regexpFile" default=""/>
-        <attribute name="status" default=""/>
-        <element name="custom-sysproperties" optional="true"/>
-        <sequential>
-            <var name="testname" unset="true" />
-            <propertyregex property="testname"
-                           input="@{request}"
-                           global="true"
-                           regexp="/"
-                           replace="_" />
-            <echo message="writing TEST-${testname}" />
-            <junit printsummary="yes"
-                   fork="yes"
-                   haltonfailure="${halt.on.failure}"
-                   haltonerror="${halt.on.failure}">
-                <jvmarg line="${debug.jvm.args}"/>
-                <jvmarg line="@{assert.classes}"/>
-                <classpath refid="@{classpath-refid}"/>
-                <formatter type="plain" usefile="false"/>
-                <formatter type="xml" usefile="true"/>
-                <sysproperty key="request" value="@{request}"/>
-                <sysproperty key="regexp" value="@{regexp}"/>
-                <sysproperty key="regexpFile" value="@{regexpFile}"/>
-                <sysproperty key="status" value="@{status}"/>
-                <sysproperty key="host" value="${container.host}"/>
-                <sysproperty key="port" value="${container.port}"/>
-                <sysproperty key="context.path" value="@{context-path}"/>
-                <sysproperty key="explodedWarDir" value="@{explodedWarDir}"/>
-                <sysproperty key="java.util.logging.config.file" 
-                             value="@{logging.config.file}"/>
-                <sysproperty key="container" value="${container.name}" />
-                <custom-sysproperties/>
-                <test name="com.sun.faces.htmlunit.SimpleTesterTestCase" 
-                      haltonfailure="yes" 
-                      todir="@{test-results-dir}"
-                      outfile="TEST-${testname}">
-                    <formatter type="xml"/>
-                </test>
-            </junit>
-        </sequential>
-    </macrodef>
-
-
-
-
-
     <!-- ======================== Test Execution ============================== -->
     <!-- converter06 impl logic deferred to 2.0 -->
     <!-- DO NOT REORDER test.annotations -->
     <target name="test"
             description="Execute all tests against installed application"
-            depends="test.annotations,
+            depends="define.cluster.aware.port,
+                test.annotations,
                 test.ajax,
                 test.composite,
                 test.facelets,
@@ -1256,9 +1202,9 @@
         </jsf.junit>
     </target>
 
-    <target name="passthru">
+    <target name="passthru" depends="define.cluster.aware.port">
 
-      <antcall target="test.standard" />
+      <antcall target="test.renderkit" />
 
     </target>
 

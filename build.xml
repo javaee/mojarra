@@ -79,6 +79,7 @@
                 </then>
             </if>
             <subant target="@{target}" inheritAll="false">
+                <property name="force.no.cluster" value="${force.no.cluster}" />
                 <filelist dir="${api.dir}">
                     <file name="build.xml"/>
                 </filelist>    
@@ -131,11 +132,18 @@
     </target>
 
     <target name="test" description="Run API, Impl, and Demo automated tests">
+        <echo>
+GlassFish 3.1 should show 2108 successfully passing tests.
+GlassFish 3.0.1 should show 2536 successfully passing tests.
+        </echo>
         <call.modules target="test"/>
     </target>
 
     <target name="test.with.container.refresh"
             description="Stop the target container, deploy the build artifacts, restart the container and test">
+        <echo>
+GlassFish 3.1 should show 2108 successfully passing tests.
+        </echo>
         <trycatch>
             <try>
                 <container.stop/>
@@ -390,6 +398,14 @@
     <target name="updatecenter2" depends="main">
       <copy file="jsf-api/build/lib/jsf-api.jar" todir="updatecenter2/lib"/>
       <copy file="jsf-ri/build/lib/jsf-impl.jar" todir="updatecenter2/lib"/>
+    </target>
+
+    <target name="container.start">
+      <container.start />
+    </target>
+
+    <target name="container.stop">
+      <container.stop />
     </target>
 
 </project>

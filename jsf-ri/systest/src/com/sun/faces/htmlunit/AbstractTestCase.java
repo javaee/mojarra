@@ -60,10 +60,12 @@ import junit.framework.TestSuite;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -124,6 +126,13 @@ public abstract class AbstractTestCase extends TestCase {
     // Per-container exclusions
     protected Map<Container, Vector<String>> exclusions = null;
 
+    // Instance numbers for clustering
+    protected List<Integer> instanceNumbers = Collections.emptyList();
+
+    protected boolean forceNoCluster = false;
+
+    private Random rand = new Random();
+
 
     // ---------------------------------------------------- Overall Test Methods
 
@@ -134,6 +143,21 @@ public abstract class AbstractTestCase extends TestCase {
     public void setUp() throws Exception {
 
         BrowserVersion browserVersion;
+
+        String instanceNumbersStr = System.getProperty("instance.numbers");
+        if (null != instanceNumbersStr && 0 < instanceNumbersStr.length()) {
+            String [] strs = instanceNumbersStr.split(",");
+            instanceNumbers = new ArrayList<Integer>();
+            for (String cur : strs) {
+                try {
+                    instanceNumbers.add(Integer.parseInt(cur));
+                } catch (NumberFormatException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        }
+        String forceNoClusterStr = System.getProperty("force.no.cluster");
+        forceNoCluster = (null != forceNoClusterStr && 0 < forceNoClusterStr.length());
 
         contextPath = System.getProperty("context.path");
         host = System.getProperty("host");
@@ -243,6 +267,53 @@ public abstract class AbstractTestCase extends TestCase {
 
     }
 
+    protected HtmlPage getPageSticky(String path) throws Exception {
+
+        /* Cookies seem to be maintained automatically now
+        if (sessionId != null) {
+            //            System.err.println("Joining   session " + sessionId);
+            client.addRequestHeader("Cookie", "JSESSIONID=" + sessionId);
+        }
+        */
+        lastpage  = (HtmlPage) client.getPage(getURLSticky(path));
+        if (sessionId == null) {
+            parseSession(lastpage);
+        }
+        return lastpage;
+
+    }
+
+    protected int getPort() {
+        int result = port;
+        if (!instanceNumbers.isEmpty() && !forceNoCluster) {
+            int instanceNumberIndex = rand.nextInt(instanceNumbers.size());
+            try {
+                String num = instanceNumbers.get(instanceNumberIndex).toString() + port;
+                result = Integer.parseInt(num);
+
+            } catch (NumberFormatException e) {
+                System.out.println(e.getMessage());
+                throw e;
+            }
+        }
+        return result;
+    }
+
+    protected int getFirstPort() {
+        int result = port;
+        if (!instanceNumbers.isEmpty() && !forceNoCluster) {
+            int instanceNumberIndex = 0;
+            try {
+                String num = instanceNumbers.get(instanceNumberIndex).toString() + port;
+                result = Integer.parseInt(num);
+
+            } catch (NumberFormatException e) {
+                System.out.println(e.getMessage());
+                throw e;
+            }
+        }
+        return result;
+    }
 
     /**
      * The same as {@link #getPage(String)} except this uses the specified
@@ -272,12 +343,34 @@ public abstract class AbstractTestCase extends TestCase {
 
         StringBuffer sb = new StringBuffer("http://");
         sb.append(host);
-        if (port != 80) {
+        int myPort = getPort();
+        if (myPort != 80) {
             sb.append(":");
-            sb.append("" + port);
+            sb.append("" + myPort);
         }
         sb.append(contextPath);
         sb.append(path);
+        if (log.isLoggable(Level.INFO)) {
+           log.info(sb.toString());
+        }
+        return (new URL(sb.toString()));
+
+    }
+
+    protected URL getURLSticky(String path) throws Exception {
+
+        StringBuffer sb = new StringBuffer("http://");
+        sb.append(host);
+        int myPort = getFirstPort();
+        if (myPort != 80) {
+            sb.append(":");
+            sb.append("" + myPort);
+        }
+        sb.append(contextPath);
+        sb.append(path);
+        if (log.isLoggable(Level.INFO)) {
+           log.info(sb.toString());
+        }
         return (new URL(sb.toString()));
 
     }

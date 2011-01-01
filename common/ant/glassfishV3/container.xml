@@ -226,6 +226,10 @@
         <container.start/>
     </target>
 
+    <target name="define.cluster.aware.port">
+      <property name="cluster.aware.port" value="${container.port}" />
+    </target>
+
     <macrodef name="container.start"
             description="Start the GlassFish container">
         <sequential>

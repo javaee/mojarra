@@ -152,7 +152,7 @@
     <!-- ======================== Test Execution ============================== -->
 
 
-    <target name="test"
+    <target name="test" depends="define.cluster.aware.port"
             description="Execute all tests against installed applications">
 
         <for list="${applications}" param="app" trim="true">
@@ -180,7 +180,9 @@
             </path>
             <jsf.junit classpath-refid="test.classpath"
                        context-path="/jsf-@{app-name}"
-                       test-results-dir="${impl.test.results.dir}">
+                       instance.numbers="${instance.numbers}"
+                       test-results-dir="${impl.test.results.dir}"
+                       custom.port="${cluster.aware.port}">
                 <tests>
                     <fileset dir="@{app-base-dir}/build/classes"
                              includes="@{test-case}"/>

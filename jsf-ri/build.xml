@@ -523,7 +523,7 @@
     </target>
 
     <target name="test"
-             depends="update,init.test,run.systest,run.junit.test,run.cactus.test,run.systest-per-webapp"
+             depends="update,init.test,compile.test,run.systest,run.junit.test,run.systest-per-webapp,run.cactus.test"
             description="Run all unit and system tests"/>
 
     <target name="test.generate.reports"
@@ -533,29 +533,42 @@
         <mkdir dir="${impl.test.results.dir}"/>
     </target>
 
-    <target name="run.systest" description="Run system tests"
-            depends="init.test">              
-        <ant dir="${basedir}/systest" inheritall="false" target="test"/>        
+    <target name="run.systest" description="Run system tests">              
+        <ant dir="${basedir}/systest" inheritall="false" target="test">
+          <property name="force.no.cluster" value="${force.no.cluster}" />
+        </ant>
+
     </target>
 
     <target name="run.systest-per-webapp"
-            description="Run per-webapp system tests"
-            depends="init.test,compile.test">
+            description="Run per-webapp system tests">
         <ant dir="${basedir}/systest-per-webapp" inheritall="false"
-             target="test"/>
+             target="test">
+          <property name="force.no.cluster" value="${force.no.cluster}" />
+        </ant>
+
         <ant dir="${basedir}/systest-per-webapp" inheritall="false"
-             target="remove"/>
+             target="remove">
+          <property name="force.no.cluster" value="${force.no.cluster}" />
+        </ant>
+
     </target>
 
 
-    <target name="run.junit.test" depends="init.test,compile.test"
+    <target name="run.junit.test"
             description="Run unit tests not requiring cactus">
         <ant antfile="build-tests.xml" target="run.test"/>
     </target>
 
-    <target name="run.cactus.test" depends="init.test,compile.test"
+    <target name="run.cactus.test"
             description="Run unit tests requiring cactus">
-        <ant antfile="build-tests.xml" target="execute.cactus.tests"/>
+        <container.stop />
+        <var name="force.no.cluster" value="true" />
+        <container.start />
+
+        <ant antfile="build-tests.xml" target="execute.cactus.tests" inheritAll="true">
+          <property name="force.no.cluster" value="true" />
+        </ant>
     </target>
 
    <target name="generate.reports">
@@ -661,7 +674,7 @@
 
 
     <target name="passthru">
-        <ant antfile="build-tests.xml" target="passthru"/>
+        <ant antfile="build-tests.xml" target="undeploy"/>
     </target>
 
     <target name="prepare.cactus.webapp">

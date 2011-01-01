@@ -158,6 +158,10 @@
         <container.start/>
     </target>
     
+    <target name="define.cluster.aware.port">
+      <property name="cluster.aware.port" value="${container.port}" />
+    </target>
+
     <!-- 
         OPTIONAL
           Start the container

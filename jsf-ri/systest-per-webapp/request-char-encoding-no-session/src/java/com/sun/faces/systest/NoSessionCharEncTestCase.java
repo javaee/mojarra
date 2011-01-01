@@ -81,28 +81,28 @@ public class NoSessionCharEncTestCase extends AbstractTestCase {
 
     public void testCharEnc() throws Exception {
 
-        HtmlPage page = getPage("/faces/utf8.xhtml");
+        HtmlPage page = getPageSticky("/faces/utf8.xhtml");
         assertTrue("Incorrect encoding.  Expected extContextCharEnc: UTF-8 hasSession: false ",
                 page.asText().matches("(?s).*extContextCharEnc:.*UTF-8.*hasSession:.*false.*"));
-        page = getPage("/faces/ascii.xhtml");
+        page = getPageSticky("/faces/ascii.xhtml");
         assertTrue("Incorrect encoding.  Expected extContextCharEnc: US-ASCII hasSession: false ",
                 page.asText().matches("(?s).*extContextCharEnc:.*US-ASCII.*hasSession:.*false.*"));
 
         // force creation of the session
-        getPage("/faces/utf8.xhtml?makeSession=true");
+        getPageSticky("/faces/utf8.xhtml?makeSession=true");
 
         // try again, this time make sure the session shows the encoding
-        page = getPage("/faces/utf8.xhtml");
+        page = getPageSticky("/faces/utf8.xhtml");
         assertTrue("Incorrect encoding.  extContextCharEnc: UTF-8 hasSession: true sessionCharEnc: UTF-8\n"
                 + "\nactual: " + page.asText(),
                 page.asText().matches("(?s).*extContextCharEnc:.*UTF-8.*hasSession:.*true.*sessionCharEnc:.*UTF-8.*"));
 
-        page = getPage("/faces/ascii.xhtml");
+        page = getPageSticky("/faces/ascii.xhtml");
         assertTrue("Incorrect encoding.  extContextCharEnc: UTF-8 hasSession: true sessionCharEnc: US-ASCII",
                 page.asText().matches("(?s).*extContextCharEnc:.*US-ASCII.*hasSession:.*true.*sessionCharEnc:.*US-ASCII.*"));
 
         // force invalidation of the session
-        getPage("/faces/utf8.xhtml?invalidateSession=true");
+        getPageSticky("/faces/utf8.xhtml?invalidateSession=true");
 
 
     }
