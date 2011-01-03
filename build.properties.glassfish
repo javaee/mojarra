@@ -64,10 +64,12 @@ http.proxy.port=
 #      to the container.xml file in 
 #      ${jsf.build.home}/common/ant/${container.name}
 #
-#  For Glassfish V1/V2, use:      glassfish
-#  For GlassFish V3 Prelude, use: glassfishV3prelude
-#  For GlassFish V3, use:         glassfishV3
-#  For GlassFish V3.1, use:       glassfishV3.1
+#  For Glassfish V1/V2, use:                   glassfish
+#  For GlassFish V3 Prelude, use:              glassfishV3prelude
+#  For GlassFish V3, use:                      glassfishV3
+#  For GlassFish V3.1, use:                    glassfishV3.1
+#  For GlassFish V3.1 with no clustering, use: glassfishV3.1_no_cluster
+
 # --------------------------------------------------
 container.name=glassfish
 

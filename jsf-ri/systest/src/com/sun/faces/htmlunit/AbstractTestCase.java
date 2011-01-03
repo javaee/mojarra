@@ -121,7 +121,7 @@ public abstract class AbstractTestCase extends TestCase {
     protected HtmlPage lastpage = null;
 
     // Possible containers - these should be the uppercase values of the possible container values in build.properties
-    protected enum Container { GLASSFISH, GLASSFISHV3PRELUDE, GLASSFISHV3, GLASSFISHV3_1, TOMCAT6 }
+    protected enum Container { GLASSFISH, GLASSFISHV3PRELUDE, GLASSFISHV3, GLASSFISHV3_1, GLASSFISHV3_1_NO_CLUSTER, TOMCAT6 }
 
     // Per-container exclusions
     protected Map<Container, Vector<String>> exclusions = null;
@@ -145,7 +145,8 @@ public abstract class AbstractTestCase extends TestCase {
         BrowserVersion browserVersion;
 
         String instanceNumbersStr = System.getProperty("instance.numbers");
-        if (null != instanceNumbersStr && 0 < instanceNumbersStr.length()) {
+        if (null != instanceNumbersStr && 0 < instanceNumbersStr.length() &&
+	    !("${instance.numbers}".equals(instanceNumbersStr))) {
             String [] strs = instanceNumbersStr.split(",");
             instanceNumbers = new ArrayList<Integer>();
             for (String cur : strs) {
