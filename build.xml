@@ -400,14 +400,6 @@ GlassFish 3.1 should show 2108 successfully passing tests.
       <copy file="jsf-ri/build/lib/jsf-impl.jar" todir="updatecenter2/lib"/>
     </target>
 
-    <target name="container.start">
-      <container.start />
-    </target>
-
-    <target name="container.stop">
-      <container.stop />
-    </target>
-
 </project>
 
 
