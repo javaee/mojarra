@@ -138,7 +138,7 @@ public class ApplicationAssociate {
     // Flag indicating that a response has been rendered.
     private boolean responseRendered = false;
 
-    private static final String ASSOCIATE_KEY = RIConstants.FACES_PREFIX +
+    public static final String ASSOCIATE_KEY = RIConstants.FACES_PREFIX +
          "ApplicationAssociate";
 
     private static ThreadLocal<ApplicationAssociate> instance =

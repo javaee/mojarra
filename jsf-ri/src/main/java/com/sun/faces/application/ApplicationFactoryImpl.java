@@ -49,6 +49,7 @@ import java.text.MessageFormat;
 
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
+import javax.faces.context.FacesContext;
 
 /**
  * <p><strong>ApplicationFactory</strong> is a factory object that creates
@@ -66,31 +67,12 @@ public class ApplicationFactoryImpl extends ApplicationFactory {
 
    // Log instance for this class
     private static final Logger logger = FacesLogger.APPLICATION.getLogger();
-    //
-    // Protected Constants
-    //
-
-    //
-    // Class Variables
-    //
-
-    // Attribute Instance Variables
-
-    private volatile Application application;
-
-    // Relationship Instance Variables
-
-    //
-    // Constructors and Initializers
-    //
-
 
     /*
      * Constructor
      */
     public ApplicationFactoryImpl() {
         super();
-        application = null;
         if (logger.isLoggable(Level.FINE)) {
             logger.log(Level.FINE, "Created ApplicationFactory ");
         }
@@ -102,7 +84,8 @@ public class ApplicationFactoryImpl extends ApplicationFactory {
      * for this web application.</p>
      */
     public Application getApplication() {
-
+        Application application =
+                (Application)FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().get(ApplicationImpl.class.getName());
         if (application == null) {
             application = new ApplicationImpl();
             if (logger.isLoggable(Level.FINE)) {
@@ -113,7 +96,7 @@ public class ApplicationFactoryImpl extends ApplicationFactory {
         return application;
     }
 
-
+    
     /**
      * <p>Replace the {@link Application} instance that will be
      * returned for this web application.</p>
@@ -127,10 +110,14 @@ public class ApplicationFactoryImpl extends ApplicationFactory {
             throw new NullPointerException(message);
         }
 
-        this.application = application;
+        FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().put(ApplicationImpl.class.getName(), application);
+        if (application instanceof ApplicationImpl) {
+            FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().put(ApplicationAssociate.ASSOCIATE_KEY,
+                    ((com.sun.faces.application.ApplicationImpl) application).getApplicationAssociate());
+        }
         if (logger.isLoggable(Level.FINE)) {
-            logger.fine(MessageFormat.format("set Application Instance to ''{0}''", 
-                                             application.getClass().getName()));
+            logger.fine(MessageFormat.format("set Application Instance to ''{0}''",
+                    application.getClass().getName()));
         }
     }
 }
