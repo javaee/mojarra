@@ -47,6 +47,7 @@ import com.sun.faces.spi.ConfigurationResourceProvider;
 import com.sun.faces.spi.ConfigurationResourceProviderFactory;
 import com.sun.faces.spi.AnnotationProvider;
 import com.sun.faces.spi.AnnotationProviderFactory;
+import com.sun.faces.spi.HighAvailabilityEnabler;
 import static com.sun.faces.spi.ConfigurationResourceProviderFactory.ProviderType.*;
 import static com.sun.faces.spi.ConfigurationResourceProviderFactory.ProviderType.FaceletConfig;
 import com.sun.faces.config.configprovider.MetaInfFacesConfigResourceProvider;
@@ -351,6 +352,10 @@ public class ConfigManager {
                     pushTaskToContext(sc, annotationScan);
                 }
 
+                //see if the app is running in a HA enabled env               
+                if (containerConnector instanceof HighAvailabilityEnabler) {                   
+                    ((HighAvailabilityEnabler)containerConnector).enableHighAvailability(sc);
+                }
                 // process the ordered documents
                 FACES_CONFIG_PROCESSOR_CHAIN.process(sc, facesDocuments);
                 if (!isFaceletsDisabled) {
