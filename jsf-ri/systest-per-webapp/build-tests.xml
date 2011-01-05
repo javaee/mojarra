@@ -138,6 +138,9 @@
                value="com/sun/faces/systest/render/BogusRenderKitIdTestCase.class" />
     <property  name="characterCombat"
                value="characterCombat/CharacterCombatTestCase.class" />
+    <property  name="cluster-no-agressive-session-dirtying"
+               value="com/sun/faces/systest/ClusterNoAgressiveSessionDirtyingTestCase.class" />
+
 
     <!--
         EXCLUDED APPLICATIONS:

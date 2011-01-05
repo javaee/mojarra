@@ -127,7 +127,7 @@ public abstract class AbstractTestCase extends TestCase {
     protected Map<Container, Vector<String>> exclusions = null;
 
     // Instance numbers for clustering
-    protected List<Integer> instanceNumbers = Collections.emptyList();
+    private List<Integer> instanceNumbers;
 
     protected boolean forceNoCluster = false;
 
@@ -148,10 +148,10 @@ public abstract class AbstractTestCase extends TestCase {
         if (null != instanceNumbersStr && 0 < instanceNumbersStr.length() &&
 	    !("${instance.numbers}".equals(instanceNumbersStr))) {
             String [] strs = instanceNumbersStr.split(",");
-            instanceNumbers = new ArrayList<Integer>();
+            List<Integer> instNums = getInstanceNumbers();
             for (String cur : strs) {
                 try {
-                    instanceNumbers.add(Integer.parseInt(cur));
+                    instNums.add(Integer.parseInt(cur));
                 } catch (NumberFormatException e) {
                     System.out.println(e.getMessage());
                 }
@@ -194,6 +194,13 @@ public abstract class AbstractTestCase extends TestCase {
         }
 
         WebResponse response = client.getWebConnection().getResponse(settings);
+    }
+
+    protected List<Integer> getInstanceNumbers() {
+        if (null == instanceNumbers) {
+            instanceNumbers = new ArrayList<Integer>();
+        }
+        return instanceNumbers;
     }
 
 
@@ -284,12 +291,29 @@ public abstract class AbstractTestCase extends TestCase {
 
     }
 
+    protected HtmlPage getPageFromInstanceN(String path, int instanceNumber) throws Exception {
+
+        /* Cookies seem to be maintained automatically now
+        if (sessionId != null) {
+            //            System.err.println("Joining   session " + sessionId);
+            client.addRequestHeader("Cookie", "JSESSIONID=" + sessionId);
+        }
+        */
+        lastpage  = (HtmlPage) client.getPage(getURLFromInstanceN(path, instanceNumber));
+        if (sessionId == null) {
+            parseSession(lastpage);
+        }
+        return lastpage;
+
+    }
+
     protected int getPort() {
         int result = port;
-        if (!instanceNumbers.isEmpty() && !forceNoCluster) {
-            int instanceNumberIndex = rand.nextInt(instanceNumbers.size());
+        List<Integer> instNums = getInstanceNumbers();
+        if (!instNums.isEmpty() && !forceNoCluster) {
+            int instanceNumberIndex = rand.nextInt(instNums.size());
             try {
-                String num = instanceNumbers.get(instanceNumberIndex).toString() + port;
+                String num = instNums.get(instanceNumberIndex).toString() + port;
                 result = Integer.parseInt(num);
 
             } catch (NumberFormatException e) {
@@ -302,10 +326,11 @@ public abstract class AbstractTestCase extends TestCase {
 
     protected int getFirstPort() {
         int result = port;
-        if (!instanceNumbers.isEmpty() && !forceNoCluster) {
+        List<Integer> instNums = getInstanceNumbers();
+        if (!instNums.isEmpty() && !forceNoCluster) {
             int instanceNumberIndex = 0;
             try {
-                String num = instanceNumbers.get(instanceNumberIndex).toString() + port;
+                String num = instNums.get(instanceNumberIndex).toString() + port;
                 result = Integer.parseInt(num);
 
             } catch (NumberFormatException e) {
@@ -316,6 +341,20 @@ public abstract class AbstractTestCase extends TestCase {
         return result;
     }
 
+    protected int getNthPort(int instanceNumber) {
+        int result = port;
+        if (!forceNoCluster) {
+            try {
+                String num = instanceNumber + "" + port;
+                result = Integer.parseInt(num);
+
+            } catch (NumberFormatException e) {
+                System.out.println(e.getMessage());
+                throw e;
+            }
+        }
+        return result;
+    }
     /**
      * The same as {@link #getPage(String)} except this uses the specified
      * WebClient.
@@ -366,6 +405,24 @@ public abstract class AbstractTestCase extends TestCase {
         if (myPort != 80) {
             sb.append(":");
             sb.append("" + myPort);
+        }
+        sb.append(contextPath);
+        sb.append(path);
+        if (log.isLoggable(Level.INFO)) {
+           log.info(sb.toString());
+        }
+        return (new URL(sb.toString()));
+
+    }
+
+    protected URL getURLFromInstanceN(String path, int instanceNumber) throws Exception {
+
+        StringBuilder sb = new StringBuilder("http://");
+        sb.append(host);
+        int myPort = getNthPort(instanceNumber);
+        if (myPort != 80) {
+            sb.append(":");
+            sb.append("").append(myPort);
         }
         sb.append(contextPath);
         sb.append(path);

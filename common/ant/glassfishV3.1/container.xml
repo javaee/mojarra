@@ -99,11 +99,20 @@
                           arg2="true" />
                 </not>
             </condition>
+            <condition property="availabilityenabled"
+                       value="--availabilityenabled true">
+                <not>
+                  <equals arg1="${force.no.cluster}" casesensitive="false" trim="true"
+                          arg2="true" />
+                </not>
+            </condition>
             <property name="target" value="" />
+            <property name="availabilityenabled" value="" />
             <exec executable="${exec.name}" failonerror="true">
                 <arg line="${exec.arg.1}"/>
                 <arg line="--port ${glassfish.custom.admin.port}"/>
                 <arg line="deploy"/>
+                <arg line="${availabilityenabled}"/>
                 <arg line="${target}"/>
                 <arg line="@{artifact}"/>
             </exec>
@@ -132,7 +141,15 @@
                           arg2="true" />
                 </not>
             </condition>
+            <condition property="availabilityenabled"
+                       value="--availabilityenabled true">
+                <not>
+                  <equals arg1="${force.no.cluster}" casesensitive="false" trim="true"
+                          arg2="true" />
+                </not>
+            </condition>
             <property name="target" value="" />
+            <property name="availabilityenabled" value="" />
             <echo>
 
 ---------------- Glassfish - Deploying @{appName} ---------------- 
@@ -142,6 +159,7 @@
                 <arg line="${exec.arg.1}"/>
                 <arg line="--port ${glassfish.custom.admin.port}"/>
                 <arg line="deploydir"/>
+                <arg line="${availabilityenabled}"/>
                 <arg line="${target}"/>
                 <arg line="--contextroot @{appName} @{explodedWarDir}"/>
             </exec>
