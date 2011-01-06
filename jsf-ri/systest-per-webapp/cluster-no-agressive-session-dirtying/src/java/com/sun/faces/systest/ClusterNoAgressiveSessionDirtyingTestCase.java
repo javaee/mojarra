@@ -86,12 +86,45 @@ public class ClusterNoAgressiveSessionDirtyingTestCase extends AbstractTestCase 
 
     }
 
+    public void testComplexObject() throws Exception {
+        List<Integer> instNums = getInstanceNumbers();
+
+        // Get the page from the first instance in the cluster
+        // and store a simple string into the session.
+        HtmlPage page = getPageFromInstanceN("/faces/sessionComplex.xhtml", instNums.get(0));
+        HtmlTextInput input = (HtmlTextInput) page.getElementById("input");
+        String inputValue = "complex session value";
+        input.setValueAttribute(inputValue);
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button");
+        button.click();
+
+        // Get the same page from each of the subsequent intstances
+        // in the cluster and assert that the session value is the same.
+	for (int i = 0; i < instNums.size(); i++) {
+	    assertComplexObjectOutput(instNums.get(i), inputValue);
+	}
+
+    }
+
+
     private void assertSimpleObjectOutput(int instanceNumber, 
 					  final String inputValue) throws Exception {
 	HtmlPage page = getPageFromInstanceN("/faces/session.xhtml", 
 					     instanceNumber);
 	String text = page.asText();
 	assertTrue(text.contains(inputValue));
+	Thread.sleep(1000);
+    }
+
+    private void assertComplexObjectOutput(int instanceNumber, 
+					  final String inputValue) throws Exception {
+	HtmlPage page = getPageFromInstanceN("/faces/sessionComplex.xhtml", 
+					     instanceNumber);
+        HtmlTextInput input = (HtmlTextInput) page.getElementById("input");
+	String value = input.getValueAttribute();
+	assertTrue(value.contains(inputValue));
+	assertTrue(inputValue.length() < value.length());
+
 	Thread.sleep(1000);
     }
 }

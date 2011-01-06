@@ -60,6 +60,9 @@
     <path id="test.compile.classpath">
         <pathelement location="${jsf-api.jar}"/>
         <pathelement location="${jsf-impl.jar}"/>
+        <pathelement location="${javax-enterprise.jar}"/>
+        <pathelement location="${javax-inject.jar}"/>
+        <pathelement location="${jsf.test.jar}"/>
         <pathelement location="${jsf.test.jar}"/>
         <path refid="compile.classpath"/>
         <pathelement location="${basedir}/build/classes"/>       
