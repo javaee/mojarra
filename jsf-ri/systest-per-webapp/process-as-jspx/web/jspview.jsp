@@ -81,6 +81,28 @@
                   </code>      
 
 
+<jsp:text>
+  some text
+</jsp:text>
+
+<jsp:plugin 
+   type="applet" 
+   code="Blink.class" 
+   codebase="."
+   name="Arthur van Hoff"
+   align="baseline"
+   width="300"
+   height="200"
+   hspace="20"
+   vspace="20"
+   jreversion="1.6">
+  <jsp:params>
+    <jsp:param name="lbl" value="This is the next best thing to sliced bread! Toast, toast, toast, butter, jam, toast, marmite, toast." /> 
+  </jsp:params>
+  <jsp:fallback>
+No JDK 1.3 support for APPLET!!
+  </jsp:fallback>
+</jsp:plugin>
 
 </f:view>
 

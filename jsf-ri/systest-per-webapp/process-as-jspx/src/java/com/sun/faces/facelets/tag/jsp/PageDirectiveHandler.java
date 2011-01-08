@@ -39,25 +39,41 @@
  * holder.
  */
 
-package com.sun.faces.systest;
+package com.sun.faces.facelets.tag.jsp;
 
 import java.io.IOException;
 import javax.faces.component.UIComponent;
 import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagConfig;
 import javax.faces.view.facelets.TagHandler;
 
 
 
 
-public class DummyTagHandler extends TagHandler {
+public class PageDirectiveHandler extends TagHandler {
 
-    public DummyTagHandler(TagConfig config) {
+    private final TagAttribute contentType;
+
+    private final TagAttribute encoding;
+
+
+    public PageDirectiveHandler(TagConfig config) {
         super(config);
+        this.contentType = this.getAttribute("contentType");
+        this.encoding = this.getAttribute("pageEncoding");
     }
 
-    public void apply(FaceletContext fc, UIComponent uic) throws IOException {
-        nextHandler.apply(fc, uic);
+    public void apply(FaceletContext ctx, UIComponent uic) throws IOException {
+        if (this.contentType != null) {
+            String v = this.contentType.getValue(ctx);
+            ctx.getFacesContext().getAttributes().put("facelets.ContentType", v);
+        }
+        if (this.encoding != null) {
+            String v = this.encoding.getValue(ctx);
+            ctx.getFacesContext().getAttributes().put("facelets.Encoding", v);
+        }
+        nextHandler.apply(ctx, uic);
     }
 
 

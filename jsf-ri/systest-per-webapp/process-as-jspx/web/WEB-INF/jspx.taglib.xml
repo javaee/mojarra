@@ -50,11 +50,11 @@
     <!-- http://java.sun.com/products/jsp/syntax/1.2/syntaxref12.html -->  
     <tag>
         <tag-name>root</tag-name>
-        <handler-class>com.sun.faces.systest.DummyTagHandler</handler-class>
+        <handler-class>com.sun.faces.facelets.tag.jsp.DummyTagHandler</handler-class>
     </tag>
     <tag>
         <tag-name>directive.page</tag-name>
-        <handler-class>com.sun.faces.systest.DummyTagHandler</handler-class>
+        <handler-class>com.sun.faces.facelets.tag.jsp.PageDirectiveHandler</handler-class>
     </tag>
     <tag>
         <tag-name>directive.include</tag-name>
@@ -66,46 +66,53 @@
     </tag>
     <tag>
         <tag-name>declaration</tag-name>
-        <handler-class>com.sun.faces.systest.DummyTagHandler</handler-class>
+        <handler-class>com.sun.faces.facelets.tag.jsp.DummyTagHandler</handler-class>
     </tag>
     <tag>
         <tag-name>expression</tag-name>
-        <handler-class>com.sun.faces.systest.DummyTagHandler</handler-class>
+        <handler-class>com.sun.faces.facelets.tag.jsp.DummyTagHandler</handler-class>
     </tag>
     <tag>
         <tag-name>scriptlet</tag-name>
-        <handler-class>com.sun.faces.systest.DummyTagHandler</handler-class>
+        <handler-class>com.sun.faces.facelets.tag.jsp.DummyTagHandler</handler-class>
     </tag>
     <tag>
         <tag-name>text</tag-name>
-        <handler-class>com.sun.faces.systest.DummyTagHandler</handler-class>
+        <handler-class>com.sun.faces.facelets.tag.jsp.DummyTagHandler</handler-class>
     </tag>
     <tag>
         <tag-name>forward</tag-name>
-        <handler-class>com.sun.faces.systest.DummyTagHandler</handler-class>
+        <handler-class>com.sun.faces.facelets.tag.jsp.DummyTagHandler</handler-class>
     </tag>
     <tag>
         <tag-name>param</tag-name>
-        <handler-class>com.sun.faces.facelets.tag.ui.ParamHandler</handler-class>
-    </tag>
-    <tag>
-        <tag-name>plugin</tag-name>
-        <handler-class>com.sun.faces.systest.DummyTagHandler</handler-class>
+        <handler-class>com.sun.faces.facelets.tag.jsp.ParamHandler</handler-class>
     </tag>
     <tag>
         <tag-name>params</tag-name>
-        <handler-class>com.sun.faces.systest.DummyTagHandler</handler-class>
+        <handler-class>com.sun.faces.facelets.tag.jsp.DummyTagHandler</handler-class>
+    </tag>
+    <tag>
+        <tag-name>plugin</tag-name>
+        <component>
+            <component-type>javax.faces.Output</component-type>
+            <renderer-type>jsp.Plugin</renderer-type>
+        </component>
+    </tag>
+    <tag>
+        <tag-name>params</tag-name>
+        <handler-class>com.sun.faces.facelets.tag.jsp.DummyTagHandler</handler-class>
     </tag>
     <tag>
         <tag-name>fallback</tag-name>
-        <handler-class>com.sun.faces.systest.DummyTagHandler</handler-class>
+        <handler-class>com.sun.faces.facelets.tag.jsp.DummyTagHandler</handler-class>
     </tag>
     <tag>
         <tag-name>setProperty</tag-name>
-        <handler-class>com.sun.faces.systest.DummyTagHandler</handler-class>
+        <handler-class>com.sun.faces.facelets.tag.jsp.DummyTagHandler</handler-class>
     </tag>
     <tag>
         <tag-name>useBean</tag-name>
-        <handler-class>com.sun.faces.systest.DummyTagHandler</handler-class>
+        <handler-class>com.sun.faces.facelets.tag.jsp.DummyTagHandler</handler-class>
     </tag>
 </facelet-taglib>

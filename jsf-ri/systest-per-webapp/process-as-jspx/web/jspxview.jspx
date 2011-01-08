@@ -79,18 +79,29 @@
 <!-- comments consumed -->
 
       
-<jsp:plugin type="applet" code="Molecule.class" codebase="/html">	
-   <jsp:params>	
-      <jsp:param name="molecule" value="molecules/benzene.mol" />	
-   </jsp:params>	
-   <jsp:fallback>	
-      <p>Unable to load applet</p>	
-   </jsp:fallback>	
-</jsp:plugin>
-
 <jsp:setProperty name="mybean" property="username" value="Steve" />
 
 <jsp:useBean id="cart" scope="session" class="session.Carts" />	
+
+<jsp:plugin 
+   type="applet" 
+   code="Blink.class" 
+   codebase="."
+   name="Arthur van Hoff"
+   align="baseline"
+   width="300"
+   height="200"
+   hspace="20"
+   vspace="20"
+   jreversion="1.6">
+  <jsp:params>
+    <jsp:param name="lbl" value="This is the next best thing to sliced bread! Toast, toast, toast, butter, jam, toast, marmite, toast." /> 
+  </jsp:params>
+  <jsp:fallback>
+No JDK 1.3 support for APPLET!!
+  </jsp:fallback>
+</jsp:plugin>
+
 
 </body>
 </html>    
