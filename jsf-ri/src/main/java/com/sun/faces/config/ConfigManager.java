@@ -110,6 +110,8 @@ import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.lang.annotation.Annotation;
+import java.net.URI;
+import java.util.Iterator;
 
 import org.w3c.dom.*;
 import org.xml.sax.SAXParseException;
@@ -1090,7 +1092,28 @@ public class ConfigManager {
          *  <code>ConfigurationResourceProvider</code> 
          */
         public Collection<URL> call() throws Exception {
-            return provider.getResources(sc);
+            Collection<URL> result = Collections.emptyList();
+            Collection collection = provider.getResources(sc);
+            if (!collection.isEmpty()) {
+                result = new ArrayList<URL>();
+                Iterator iter = collection.iterator();
+                Object cur = iter.next();
+                if (cur instanceof URL) {
+                    do {
+                        result.add((URL)cur);
+                        cur = (iter.hasNext()) ? iter.next() : null;
+                    } while (null != cur);
+                } else if (cur instanceof URI) {
+                    do {
+                        result.add(((URI)cur).toURL());
+                        cur = (iter.hasNext()) ? iter.next() : null;
+                    } while (null != cur);
+                } else {
+                    throw new IllegalArgumentException("Expected argument of type URI or URL, instead type is " +
+                            cur.getClass().getName());
+                }
+            }
+            return result;
         }
 
     } // END URLTask
