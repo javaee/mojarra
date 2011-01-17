@@ -82,7 +82,7 @@
     </tag>
     <tag>
         <tag-name>forward</tag-name>
-        <handler-class>com.sun.faces.facelets.tag.jsp.DummyTagHandler</handler-class>
+        <handler-class>com.sun.faces.facelets.tag.jsp.ForwardHandler</handler-class>
     </tag>
     <tag>
         <tag-name>param</tag-name>
@@ -109,10 +109,10 @@
     </tag>
     <tag>
         <tag-name>setProperty</tag-name>
-        <handler-class>com.sun.faces.facelets.tag.jsp.DummyTagHandler</handler-class>
+        <handler-class>com.sun.faces.facelets.tag.jsp.SetPropertyHandler</handler-class>
     </tag>
     <tag>
         <tag-name>useBean</tag-name>
-        <handler-class>com.sun.faces.facelets.tag.jsp.DummyTagHandler</handler-class>
+        <handler-class>com.sun.faces.facelets.tag.jsp.UseBeanHandler</handler-class>
     </tag>
 </facelet-taglib>

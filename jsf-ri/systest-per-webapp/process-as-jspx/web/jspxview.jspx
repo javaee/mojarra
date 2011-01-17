@@ -71,17 +71,18 @@
 
 <h:form prependId="false">
 
-<h:commandButton value="reload" />
+<h:commandButton value="reload" /> <br />
+
+<h:commandButton value="test jsp:forward" action="toForward" />
 
 </h:form>
 
 
 <!-- comments consumed -->
 
+<jsp:useBean id="useBeanBean" class="com.sun.faces.systest.UseBeanBean" />	
       
-<jsp:setProperty name="mybean" property="username" value="Steve" />
-
-<jsp:useBean id="cart" scope="session" class="session.Carts" />	
+<jsp:setProperty name="useBeanBean" property="username" value="Steve" />
 
 <jsp:plugin 
    type="applet" 
