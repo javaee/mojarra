@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+    Copyright (c) 2009-2010 Oracle and/or its affiliates. All rights reserved.
+
+    The contents of this file are subject to the terms of either the GNU
+    General Public License Version 2 only ("GPL") or the Common Development
+    and Distribution License("CDDL") (collectively, the "License").  You
+    may not use this file except in compliance with the License.  You can
+    obtain a copy of the License at
+    https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+    or packager/legal/LICENSE.txt.  See the License for the specific
+    language governing permissions and limitations under the License.
+
+    When distributing the software, include this License Header Notice in each
+    file and include the License file at packager/legal/LICENSE.txt.
+
+    GPL Classpath Exception:
+    Oracle designates this particular file as subject to the "Classpath"
+    exception as provided by Oracle in the GPL Version 2 section of the License
+    file that accompanied this code.
+
+    Modifications:
+    If applicable, add the following below the License Header, with the fields
+    enclosed by brackets [] replaced by your own identifying information:
+    "Portions Copyright [year] [name of copyright owner]"
+
+    Contributor(s):
+    If you wish your version of this file to be governed by only the CDDL or
+    only the GPL Version 2, indicate your decision by adding "[Contributor]
+    elects to include this software in this distribution under the [CDDL or GPL
+    Version 2] license."  If you don't indicate a single choice of license, a
+    recipient has the option to distribute your version of this file under
+    either the CDDL, the GPL Version 2 or to extend the choice of license to
+    its licensees as provided above.  However, if you add GPL Version 2 code
+    and therefore, elected the GPL Version 2 license, then the option applies
+    only if the new code is made subject to such option by the copyright
+    holder.
+
+-->
+
+<!DOCTYPE html
+      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+<f:view contentType="text/html; charset=iso-8859-1"/>
+<head>
+    <title>Custom Scope Example</title>
+</head>
+<body>
+    <p>
+        Result of expression evaluation referencing the custom scoped bean (\#{bean.value}): <span id="create" style="color:red">#{bean.value}</span>
+    </p>
+    
+    <p>
+        Result of expression evaluation with the custom scope explicity referenced (\#{customScope.bean.value}): <span id="scopeReference" style="color:red">#{customScope.bean.value}</span>
+    </p>
+
+    <p>
+        Show that \#{bean.value} is still referencable after the bean has been created: <span id="nonCreate" style="color:red">#{bean.value}</span>
+    </p>
+
+    <p>
+        <h:form id="form">
+            <h:commandButton id="reload" value="Reload" />
+            <h:commandButton id="destroy" value="Destroy Custom Scope" action="#{bean.destroyScope}"/>
+        </h:form>
+    </p>
+    <h:panelGrid id="grid" columns="2" style="border-style:solid">
+        <f:facet name="header">
+            <h:outputText value="PostConstruct/PreDestory Invocation Status" />
+        </f:facet>
+        <h:outputText value="PostConstruct" />
+        <h:outputText value="#{requestScope.postConstructStatus}"/>
+        <h:outputText value="PreDestroy" />
+        <h:outputText value="#{requestScope.preDestroyStatus}"/>
+    </h:panelGrid>
+
+<hr />
+<p>
+    Demo Notes
+</p>
+    <ul>
+        <li>In all cases, the three expressions above should show the expression
+            as <span style="Color:red">Resolved</span></li>
+        <li>On the initial render, the <em>PostConstruct</em> status show show a
+            value. However, since this scope is tied to the session, clicking
+            the reload button should clear that status
+        </li>
+        <li>If the destroy button pushed, both the <em>PostConstruct</em> and
+            <em>PreDestroy</em> status should have a value. This is because the
+            scope is destroyed, and then recreated when the view is re-rendered.
+        </li>
+    </ul>
+
+</body>
+</html>

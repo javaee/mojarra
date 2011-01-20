@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module relativePaths="true" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/build/generate" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/test" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/build/classes" />
+      <excludeFolder url="file://$MODULE_DIR$/build/javadocs" />
+      <excludeFolder url="file://$MODULE_DIR$/build/javascript" />
+      <excludeFolder url="file://$MODULE_DIR$/build/lib" />
+      <excludeFolder url="file://$MODULE_DIR$/build/test" />
+      <excludeFolder url="file://$MODULE_DIR$/testresults" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="mojarra-build" level="project" />
+    <orderEntry type="module" module-name="tools" exported="" />
+  </component>
+</module>
+

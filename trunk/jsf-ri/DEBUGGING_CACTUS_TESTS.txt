@@ -1,0 +1,21 @@
+If a cactus goldenfile test fails, you can find information by:
+
+1) Looking in the jsf-ri/web directory for the goldenfile that corresponds to the vaule returned
+by the tests's getExpectedOutputFilename() method.  For instance, here:
+
+
+    public String getExpectedOutputFilename() {
+        return "RenderResponse_correct";
+    }
+
+
+2) Now that you know what the test *should* look like, check what it actually looks like by
+looking in the server logs.  You'll see an error like this:
+
+File Comparison failed: diff -u /Users/netdance/Work/sources/mojarra/jsf-ri/build/test/FacesResponse.txt /Users/netdance/Work/sources/mojarra/jsf-ri/build/test/RenderResponse_correct|#]
+
+3) Run the diff, you'll see the differences in the file.
+
+4) Update the file, replacing the parts that have changed because of your fix/mod.
+
+

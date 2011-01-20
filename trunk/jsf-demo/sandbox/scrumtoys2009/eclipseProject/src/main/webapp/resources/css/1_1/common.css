@@ -1,0 +1,227 @@
+/*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+ *
+ * Copyright (c) 2010 Oracle and/or its affiliates. All rights reserved.
+ *
+ * The contents of this file are subject to the terms of either the GNU
+ * General Public License Version 2 only ("GPL") or the Common Development
+ * and Distribution License("CDDL") (collectively, the "License").  You
+ * may not use this file except in compliance with the License.  You can
+ * obtain a copy of the License at
+ * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+ * or packager/legal/LICENSE.txt.  See the License for the specific
+ * language governing permissions and limitations under the License.
+ *
+ * When distributing the software, include this License Header Notice in each
+ * file and include the License file at packager/legal/LICENSE.txt.
+ *
+ * GPL Classpath Exception:
+ * Oracle designates this particular file as subject to the "Classpath"
+ * exception as provided by Oracle in the GPL Version 2 section of the License
+ * file that accompanied this code.
+ *
+ * Modifications:
+ * If applicable, add the following below the License Header, with the fields
+ * enclosed by brackets [] replaced by your own identifying information:
+ * "Portions Copyright [year] [name of copyright owner]"
+ *
+ * Contributor(s):
+ * If you wish your version of this file to be governed by only the CDDL or
+ * only the GPL Version 2, indicate your decision by adding "[Contributor]
+ * elects to include this software in this distribution under the [CDDL or GPL
+ * Version 2] license."  If you don't indicate a single choice of license, a
+ * recipient has the option to distribute your version of this file under
+ * either the CDDL, the GPL Version 2 or to extend the choice of license to
+ * its licensees as provided above.  However, if you add GPL Version 2 code
+ * and therefore, elected the GPL Version 2 license, then the option applies
+ * only if the new code is made subject to such option by the copyright
+ * holder.
+ */
+
+div.navBarClass a{
+    background-color: white;
+    vertical-align: middle;
+    padding:10px;
+    color:gray;
+    text-decoration:none;
+}
+
+/* Whiteboard */
+
+.tableHeader{
+    background-image:url("../resources/images/lousaNova/quadroNegro_top_990x80.png");
+    background-repeat:no-repeat;
+    height:80px;
+    width:100%;
+    margin: 0px;
+    padding: 0px;
+
+}
+
+table.tableBody{
+  width:990px;
+  background-image:url("../resources/images/lousaNova/quadroNegro_meio_990x10.png;");
+  margin: 0px;
+  padding: 0px;
+  border-collapse:collapse;
+  border-spacing:0pt;    
+  background-repeat:repeat-y;
+}
+
+
+table.tableBody tr td{
+    /* important to make content aligned inside the table*/
+  vertical-align:top;    
+  
+}
+
+td.tableFooter{
+    width:990px;
+    height:120px;
+    background-image:url("../resources/images/lousaNova/quadroNegro_top_990x80");
+    background-repeat:no-repeat;
+    margin:0px;
+    padding:0px;
+
+}
+
+
+td.footerForm{
+    text-align:center;
+
+}
+
+.errorMessage{
+  color: red;
+  font-size: 12px;
+}
+
+td.formLabel, label{
+    margin-left:15pt;
+
+}
+
+.formLabel {
+    width:30%;
+    text-align: right;
+    background-position: left;
+    background-repeat:no-repeat;
+
+}
+.formInput{
+    font-size: 12px;
+}
+
+td{
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.datatable {
+    border-collapse:collapse;
+}
+.datatable tr td{
+    padding:5px;
+    margin:5px;
+}
+
+.dataTableFirstColumn{
+    font-weight:bold;
+}
+
+
+.postitComponentYellow{
+        background-image:url("../resources/images/postits/novos/postit_amar_150x145.png");
+        width:150px;
+        height:145px;
+        font-size: 14px;
+        text-align:center;
+        color:black;
+}
+
+
+.postItComponentYellow a {
+    color:black;
+    text-decoration:none;
+}
+
+.postitComponentYellow tr td{
+    padding: 5pt;
+    padding-top: 15pt;
+    vertical-align:top;
+}
+
+
+.postitComponentRed{
+        background-image:url("../resources/images/postits/novos/postit_verm_150x145.png");
+        width:150px;
+        height:145px;
+        font-size: 14px;
+        text-align:center;
+        color:white;
+}
+
+
+.postitComponentRed tr td{
+    padding: 5pt;
+    padding-top: 15pt;
+    vertical-align:top;
+}
+
+.postItComponentRed a {
+    color:white;
+    text-decoration:none;
+}
+
+.postitComponentBlue{
+        background-image:url("../resources/images/postits/novos/postit_azul_150x145.png");
+        width:150px;
+        height:145px;
+        font-size: 14px;
+        text-align:center;
+        color:white;
+}
+
+.postitComponentBlue tr td{
+    padding: 5pt;
+    padding-top: 15pt;
+    vertical-align:top;
+}
+
+.postItComponentBlue a {
+    color:white;
+    text-decoration:none;
+}
+.postitComponentOrange{
+        background-image:url("../resources/images/postits/novos/postit_lara_150x145.png");
+        width:150px;
+        height:145px;
+        font-size: 14px;
+        text-align:center;
+        color:black;
+}
+
+
+.postitComponentOrange tr td{
+    padding: 5pt;
+    padding-top: 15pt;
+    vertical-align:top;
+}
+
+.postItComponentOrange a {
+    color:black;
+    text-decoration:none;
+}
+
+
+.postitLabel{
+    font-weight:bold;
+    font-size:16px;
+    text-align:right;
+    width:30%
+}
+
+.postItInfo{
+    width:70%;
+    text-align:left;
+}
+

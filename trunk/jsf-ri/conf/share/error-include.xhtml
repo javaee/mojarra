@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+    Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+
+    The contents of this file are subject to the terms of either the GNU
+    General Public License Version 2 only ("GPL") or the Common Development
+    and Distribution License("CDDL") (collectively, the "License").  You
+    may not use this file except in compliance with the License.  You can
+    obtain a copy of the License at
+    https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+    or packager/legal/LICENSE.txt.  See the License for the specific
+    language governing permissions and limitations under the License.
+
+    When distributing the software, include this License Header Notice in each
+    file and include the License file at packager/legal/LICENSE.txt.
+
+    GPL Classpath Exception:
+    Oracle designates this particular file as subject to the "Classpath"
+    exception as provided by Oracle in the GPL Version 2 section of the License
+    file that accompanied this code.
+
+    Modifications:
+    If applicable, add the following below the License Header, with the fields
+    enclosed by brackets [] replaced by your own identifying information:
+    "Portions Copyright [year] [name of copyright owner]"
+
+    Contributor(s):
+    If you wish your version of this file to be governed by only the CDDL or
+    only the GPL Version 2, indicate your decision by adding "[Contributor]
+    elects to include this software in this distribution under the [CDDL or GPL
+    Version 2] license."  If you don't indicate a single choice of license, a
+    recipient has the option to distribute your version of this file under
+    either the CDDL, the GPL Version 2 or to extend the choice of license to
+    its licensees as provided above.  However, if you add GPL Version 2 code
+    and therefore, elected the GPL Version 2 license, then the option applies
+    only if the new code is made subject to such option by the copyright
+    holder.
+
+-->
+
+<!DOCTYPE html
+      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:mp="http://java.sun.com/mojarra/private/functions">
+<head>
+    <title>not rendered</title>
+</head>
+<body>
+<!--
+    NOTE: Content here is duplicated in facelet-dev-error.xml.
+          If content is changed here, please see if the change
+          is also applicable to facelet-dev-error.xml as well.
+-->
+    <ui:composition>
+        <div id="javax.faces.error.xhtml" style="padding: 8px; margin: 10px 0; border: 1px solid #CCC; background-color: #f9f9f9;" >
+        <h:outputScript>
+        function faceletstoggle(id) {
+            var style = document.getElementById(id).style;
+            if ("block" == style.display) {
+                style.display = "none";
+                document.getElementById(id+"Off").style.display = "inline";
+                document.getElementById(id+"On").style.display = "none";
+            } else {
+                style.display = "block";
+                document.getElementById(id+"Off").style.display = "none";
+                document.getElementById(id+"On").style.display = "inline";
+            }
+        }
+        </h:outputScript>
+        <c:set var="e" value="#{requestScope['javax.servlet.error.exception']}" scope="request" />
+        <c:set var="uri" value="#{requestScope['javax.servlet.error.request_uri']}" scope="request" />
+        <c:set var="errorView" value="#{requestScope['com.sun.faces.error.view']}" scope="request" />
+            <div id="error" style="border: 1px solid #900;">
+                <span style="text-decoration: none; color: #339;">URI: #{uri}</span>
+                <br/>
+                <span style="text-decoration: none; color: #339;">#{mp:writeMessage(facesContext.responseWriter, e)}</span>
+            </div>
+            <h2 style="font-size: large; color: #339;">
+                <a style="text-decoration: none; color: #339;" href="#" onclick="faceletstoggle('trace'); return false;">
+                    <span id="traceOff">+</span><span id="traceOn" style="display: none;">-</span> Stack Trace
+                </a>
+             </h2>
+             <div style="padding: 8px; margin: 10px 0; border: 1px solid #CCC; background-color: #f9f9f9; display:none" id="trace"><pre><code>#{mp:writeException(facesContext.responseWriter, e)}</code></pre></div>
+            <h2 style="font-size: large; color: #339;">
+                <a style="text-decoration: none; color: #339;" href="#" onclick="faceletstoggle('tree'); return false;">
+                    <span id="treeOff">+</span><span id="treeOn" style="display: none;">-</span> Component Tree
+                </a>
+            </h2>
+            <div style="padding: 8px; margin: 10px 0; border: 1px solid #CCC; background-color: #f9f9f9; display:none" id="tree"><code>#{mp:writeComponent(facesContext.responseWriter, errorView)}</code></div>
+
+            <h2 style="font-size: large; color: #339;">
+                <a style="text-decoration: none; color: #339;" href="#" onclick="faceletstoggle('vars'); return false;">
+                    <span id="varsOff">+</span><span id="varsOn" style="display: none;">-</span> Scoped Variables
+                </a>
+            </h2>
+            <div style="padding: 8px; margin: 10px 0; border: 1px solid #CCC; background-color: #f9f9f9; display:none;" id="vars">#{mp:writeVariables(facesContext.responseWriter, facesContext)}</div>
+
+            <div style="padding: 8px; margin: 10px 0; border: 1px solid #CCC; background-color: #f9f9f9; text-align: right; color: #666;">Generated by Mojarra/Facelets</div>
+
+    </div>
+    </ui:composition>
+</body>
+</html>

@@ -1,0 +1,686 @@
+/*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+ *
+ * Copyright (c) 2010 Oracle and/or its affiliates. All rights reserved.
+ *
+ * The contents of this file are subject to the terms of either the GNU
+ * General Public License Version 2 only ("GPL") or the Common Development
+ * and Distribution License("CDDL") (collectively, the "License").  You
+ * may not use this file except in compliance with the License.  You can
+ * obtain a copy of the License at
+ * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+ * or packager/legal/LICENSE.txt.  See the License for the specific
+ * language governing permissions and limitations under the License.
+ *
+ * When distributing the software, include this License Header Notice in each
+ * file and include the License file at packager/legal/LICENSE.txt.
+ *
+ * GPL Classpath Exception:
+ * Oracle designates this particular file as subject to the "Classpath"
+ * exception as provided by Oracle in the GPL Version 2 section of the License
+ * file that accompanied this code.
+ *
+ * Modifications:
+ * If applicable, add the following below the License Header, with the fields
+ * enclosed by brackets [] replaced by your own identifying information:
+ * "Portions Copyright [year] [name of copyright owner]"
+ *
+ * Contributor(s):
+ * If you wish your version of this file to be governed by only the CDDL or
+ * only the GPL Version 2, indicate your decision by adding "[Contributor]
+ * elects to include this software in this distribution under the [CDDL or GPL
+ * Version 2] license."  If you don't indicate a single choice of license, a
+ * recipient has the option to distribute your version of this file under
+ * either the CDDL, the GPL Version 2 or to extend the choice of license to
+ * its licensees as provided above.  However, if you add GPL Version 2 code
+ * and therefore, elected the GPL Version 2 license, then the option applies
+ * only if the new code is made subject to such option by the copyright
+ * holder.
+ */
+
+body {
+	font-family : arial, verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size : 12px;
+}
+
+.standard {
+	font-family : verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #000000;
+}
+
+.standard_bold {
+	font-family : verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #000000;
+    font-weight: bold;
+}
+
+.scrollerTable {
+	font-family : verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #000000;
+    padding: 2;
+    border-style: solid;
+    border-width: 1px;
+    width: 400px;
+}
+
+.scroller {
+    padding-left:20px;
+}
+
+.paginator {
+	font-family : verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+
+
+.standardTable {
+	font-family : verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #000000;
+    padding: 2;
+    border-style: solid;
+    border-width: 1px;
+}
+
+.standardTable_Header {
+	color: #000000;
+    background-color: #FFDD00;
+    padding: 3;
+    text-align: center;
+    border: none;
+}
+
+.standardTable_SortHeader {
+    background-color: #FFDD00;
+    color: #000000;
+    padding: 3;
+    text-align: center;
+    border: none;
+    font-weight: bold;
+}
+
+.standardTable_Footer {
+    background-color: #FFFFE0;
+}
+
+.standardTable_Row1 {
+    background-color: #FFFFE0;
+}
+
+.standardTable_Row2 {
+    background-color: #FFFFE0;
+}
+
+.standardTable_Column {
+}
+
+.standardTable_ColumnCentered {
+    text-align: center
+}
+
+a
+{
+	color: #333366;
+    text-decoration: underline;
+    font-size: 12px;
+}
+
+a:hover
+{
+	color: #333366;
+    text-decoration: underline;
+}
+
+.error {
+	font-family : verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #FF0000;
+}
+
+.sortLink {
+	color: #333366;
+    text-decoration: none;
+}
+
+
+.pageLayout {
+    width:760px;
+    height:100%;
+}
+
+.pageHeader {
+    background-color: #6392C6;
+    text-align: center;
+    vertical-align: middle;
+    height:1px;
+    overflow:visible;
+    color: #FFFFFF;
+    padding: 0px;
+    margin: 0px;
+}
+
+.pageHeader1 {
+}
+.pageHeader2 {
+    width:100%;
+}
+.pageHeader2col1 {
+    background-color: #FFFFFF;
+}
+
+.pageNavigation {
+    text-align: left;
+    vertical-align: top;
+    width: 200px;
+    background-color: #E7EFF7;
+    border: 1px solid #6392C6;
+    padding: 10px;
+}
+
+.pageBody {
+    text-align: left;
+    vertical-align: top;
+    width: 560px;
+    padding: 20px;
+    background-color: #FFFFFF;
+}
+
+.pageFooter {
+    text-align: right;
+    font-size: xx-small;
+    height:1px;
+    overflow:visible;
+    background-color: #6392C6;
+    color: #FFFFFF;
+}
+
+
+
+.navigation {
+	font-family : verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+    width: 100%;
+}
+
+.navitem {
+	white-space : nowrap;
+    text-decoration : none;
+}
+
+a.navitem:hover,active {
+	white-space : nowrap;
+	text-decoration: none;
+    color: #6392C6;
+}
+
+.navitem_open {
+	white-space : nowrap;
+	text-decoration: none;
+	font-weight : bold;
+}
+
+a.navitem_open:hover,active {
+	white-space : nowrap;
+	text-decoration: none;
+	font-weight : bold;
+    color: #6392C6;
+}
+
+.navitem_active {
+	white-space : nowrap;
+	text-decoration: none;
+	font-weight : bold;
+    background-color: #6392C6;
+	width: 100%;
+    color: #FFFFFF;
+}
+
+a.navitem_active:hover,active {
+	white-space : nowrap;
+	text-decoration: none;
+	font-weight : bold;
+    background-color: #6392C6;
+	width: 100%;
+    color: #FFFFFF;
+}
+
+
+.navseparator {
+    line-height: 12px;
+    border-bottom: 1px solid #A2B7C5;
+}
+
+
+
+.fileUploadInput {
+	font-family : verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #000000;
+    width: 250px;
+}
+
+
+
+
+.emptyHeader {
+    background-color: #FFFFFF;
+    border-top: 0px none;
+    border-right: 0px none;
+    border-bottom: 0px none;
+    border-left: 0px none;
+}
+
+
+
+div.titlebar {
+  background: #C7D0D9;
+  color: black;
+  border: 1px solid #8CACBB;
+  padding-left: 1px;
+  padding-right: 1px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  margin: 1px 1px;
+  clear: both;
+}
+
+/*
+   ------------------------------------------------------------
+   Calendar component
+   ------------------------------------------------------------
+*/
+
+.yearMonthHeader {
+    background-color: #DDDDDD;
+    color: #000000;
+    text-align: center;
+    border: none;
+    font-weight: bold;
+}
+
+.weekHeader {
+    background-color: #E7E7E7;
+    color: #000000;
+    text-align: center;
+    border: none;
+}
+
+.currentDayCell {
+    background-color: #DDDDDD;
+    color: #000000;
+    border: none;
+}
+
+
+/*
+   ------------------------------------------------------------
+   End Calendar component
+   ------------------------------------------------------------
+*/
+
+/*
+   ------------------------------------------------------------
+   Popup component
+   ------------------------------------------------------------
+*/
+
+.popup {
+    background-color:rgb(255,255,255);
+    color: #000000;
+    border: 1px solid #CCCCCC;
+    font-size:smaller;
+    padding: 5px;
+}
+
+.popup table {
+    font-size:smaller;
+}
+
+
+/*
+   ------------------------------------------------------------
+   End popup component
+   ------------------------------------------------------------
+*/
+
+
+.countryFormTable {
+	font-family : verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #000000;
+    padding: 2;
+    border-style: solid;
+    border-width: 1px;
+}
+
+.countryFormHeader {
+	font-family : verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #000000;
+    padding: 2;
+    border-style: none;
+    background-color: #FFDD00;
+    text-align: center;
+	font-weight : normal;
+}
+
+.countryFormFooter {
+	font-family : verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #000000;
+    padding: 2;
+    border-style: none;
+    background-color: #FFDD00;
+    text-align: center;
+	font-weight : normal;
+}
+
+.countryFormLabels {
+	font-family : verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #000000;
+    padding: 2;
+    border-style: none;
+    text-align: right;
+	font-weight : bold;
+}
+
+.countryFormInputs {
+	font-family : verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #000000;
+    padding: 2;
+    border-style: none;
+}
+
+/*
+   ------------------------------------------------------------
+   Tree component
+   ------------------------------------------------------------
+*/
+
+.nodeFolder
+{
+    font-size: 10px;
+    font-family: Verdana, Geneva, sans-serif;
+    text-decoration: none
+}
+.document
+{
+    color: blue;
+    font-size: 10px;
+    font-family: Verdana, Geneva, sans-serif;
+    text-decoration: none
+}
+.documentSelected
+{
+    color: blue;
+    font-size: 10px;
+    font-family: Verdana, Geneva, sans-serif;
+    text-decoration: none;
+    font-weight: bold
+}
+
+.childCount
+{
+    color: blue;
+    font-size: 10px;
+    font-family: Verdana, Geneva, sans-serif;
+    text-decoration: none
+}
+
+/*
+   ------------------------------------------------------------
+   Panelnavigation
+   ------------------------------------------------------------
+*/
+#subnavigation {
+margin-left: 0px;
+margin-right: 20px;
+padding: 0px 0px 20px 0px;
+border: 1px solid #546359;
+background-color: #EAF4F4;
+}
+
+#subnavigation_outer {
+float: left;
+width: 220px;
+padding: 0px;
+margin: 0px 0px 0px 0px;
+}
+#subnavigation_outer h1  {
+font-size: 1.5em;
+margin: 0px;
+padding: 0px 0px 15px 0px;
+}
+
+/*
+   --------------------------------------------------------------
+    Horizontal Panelnavigation
+   --------------------------------------------------------------
+*/
+#hNav_outer {
+    margin: 0;
+    padding: 0;   
+    height: 60px;
+    width: 800px;
+}
+#hNav_outer ul {    
+    padding: 0;
+    margin: 0;    
+}
+#hNav_outer ul li ul {
+    margin: 0;
+    padding: 0;
+}
+#hNav_outer ul a {
+    text-decoration: none;
+}
+#hNav_outer ul li { /*float the main list items*/
+    margin: 0;
+    float: left;
+    display: block;
+    padding: 5px;
+}
+#hNav_outer ul li ul {
+    display: none;
+}
+#hNav_outer ul li.off ul, #hNav_outer ul li.on ul { /*put the subnav below*/
+    position: absolute;
+    top: 36px;
+    *top: 44px;/*reposition for IE*/    
+    background: #224d6f;    
+    left: 13px;
+    *left: 15px;
+    width: 740px;    
+}
+#hNav_outer ul li.on ul {    
+    display: block;
+    background: #f90;
+}
+#hNav_outer ul li.on:hover ul, #hNav_outer ul li.over ul { /*for ie*/
+    background: #224d6f;
+}
+#hNav_outer ul li a {
+    color: #224d6f;
+    font-weight: bold;
+    display: block;
+    padding: 5;
+}
+#hNav_outer ul li.on a {   
+    color: #fff;
+    background: #f90;
+}
+#hNav_outer ul li.on ul a, #hNav_outer ul li.off ul a {
+    float: left; /*ie doesn't inherit the float*/
+    border: 0;
+    color: #f90;
+    width: auto;    
+}
+#hNav_outer ul li.on:hover ul a, #hNav_outer ul li.over ul li a { /*for ie - the specificity is necessary*/
+    background: #224d6f;
+}
+#hNav_outer ul li.off:hover ul, #hNav_outer ul li.over ul {
+    display: block;
+    z-index: 6000;
+}		
+#hNav_outer ul li.off a:hover, #hNav_outer ul li:hover a, #hNav_outer ul li.over a {
+    background: #29497b;
+    color: #f90;
+}
+#hNav_outer ul li.off a:hover, #hNav_outer ul li.on a:hover { 
+    color: #f90;
+}		
+/*subnav formatting*/
+#hNav_outer ul li.off ul a {
+    display: block;
+    background: #224d6f;
+    color: #fff;    
+}		
+#hNav_outer ul li.on ul a {       
+    display: block;
+    background: #f90;
+    color: #fff;    
+}
+
+/**************************************************
+ * css layers and classes for list navigation list
+ **************************************************/
+#subnavigation ul li  a {
+display:block;
+background-color: #D1E4E4;
+color: #294747;
+text-decoration: none;
+border-bottom: 1px solid #87A8A8;
+padding: 2px 20px;
+margin: 0px;
+}
+
+#subnavigation ul li a:visited {color:#294747;}
+#subnavigation ul li a:hover {color: #FFFFFF;  background-color: #87A8A8;}
+#subnavigation ul li a:active { color:#294747;}
+
+#subnavigation ul li a.selected {
+font-weight: bold;
+color:#294747;
+background-color: #FFFFFF;
+}
+
+#subnavigation ul ul li a {
+padding: 2px 20px 2px 25px;
+margin: 0px;
+background-color: #FFFFFF;}
+
+#subnavigation ul ul li ul li a {
+padding: 2px 20px 2px 30px;
+margin: 0px;
+}
+
+#subnavigation ul {
+list-style-type: none;
+padding: 0px;
+margin: 0px;
+}
+
+#subnavigation li{
+margin: 0px;
+padding: 0px;
+display:inline;
+}
+
+#subnavigation ul.mypage li a {
+padding: 2px 20px 2px 20px;
+margin: 0px;
+background-color: #EAF4F4;
+}
+
+#subnavigation ul.mypage ul li a:hover {color: #FFFFFF;  background-color: #87A8A8;}
+/*
+    body, th, td, input, select {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+    }
+
+    table, th, td {
+        font-size: small;
+        border: none;
+    }
+
+    .treeHeader {
+        background-color: #bbb;
+        border: 0.75px solid #fff;
+        padding: 2px 3px;
+        text-align: left;
+    }
+
+    .treeFooter {
+        padding: 5px;
+        margin: .67em 2px;
+        margin-top: 0;
+        background-color: #ddd;
+        background-image: url(../images/sw_med_rond.gif);
+        background-repeat: no-repeat;
+        background-position: bottom left;
+    }
+
+    input, .treeFooter {
+        font-size: xx-small;
+        font-size: x-small;
+    }
+
+    .a td {
+        background: #ddd;
+        border-bottom: 1px solid #fff;
+    }
+
+    .b td {
+        background: #efefef;
+        border-bottom: 1px solid #fff;
+    }
+
+    .col1 {
+        border-right: 1px solid #fff;
+        padding: 2px 15px 2px 5px;
+    }
+
+    .col2 {
+        border-left: 1px solid #fff;
+        padding: 2px 15px 2px 5px;
+    }
+
+    .tree {
+       lineheight: 18px;
+       font-family: arial, sans-serif;
+    }
+
+    .treenode {
+       padding: 2px 15px 2px 5px;
+    }
+
+    .treenode a {
+       text-decoration: none;
+    }
+
+    .treenodeSelected {
+       padding: 2px 15px 2px 5px;
+    }
+
+    .treenodeSelected a {
+       text-decoration: none;
+       font-weight: bold;
+    }
+
+    table .selectOneRadio {
+        font-weight: bold;
+    }
+
+
+    .standardList {
+        font-family : verdana, Geneva, Arial, Helvetica, sans-serif;
+        font-size: 12px;
+        color: #000000;
+    }
+
+    */
