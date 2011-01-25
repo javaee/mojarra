@@ -607,6 +607,11 @@
                                 casesensitive="false" trim="true"
                                 arg2="true" />
                         <then>
+                            <echo>
+
+"------------ Creating ${glassfish.cluster} ------------"
+
+                            </echo>
 			    <exec executable="${container.home}/bin/asadmin"
 				  failonerror="true">
 				<arg line="--port ${glassfish.custom.admin.port}"/>
@@ -617,6 +622,11 @@
 
 			    <for list="${instance.numbers}" param="num" trim="true">
 			      <sequential>
+                                <echo>
+
+"------------ Creating local instance ${glassfish.cluster}@{num} ------------"
+
+                                </echo>
 				<exec executable="${container.home}/bin/asadmin"
 				      failonerror="true">
 				    <arg line="--port ${glassfish.custom.admin.port}"/>
@@ -629,14 +639,22 @@
 			    </for>
                         </then>
                     </if>
-                    <exec executable="${container.home}/bin/asadmin"
-                          failonerror="true">
-                        <arg line="--port ${glassfish.custom.admin.port}"/>
-                        <arg line="start-cluster"/>
-                        <arg line="${glassfish.cluster}"/>
-                    </exec>
                     <for list="${instance.numbers}" param="num" trim="true">
                       <sequential>
+                       <echo>
+
+"------------ Starting local instance ${glassfish.cluster}@{num} with debug enabled ------------"
+
+                       </echo>
+                       <exec executable="${container.home}/bin/asadmin"
+       			           failonerror="true">
+				   <arg line="start-instance"/>
+				   <arg line="--user ${glassfish.admin.user}"/>
+				   <arg line="--passwordfile ${glassfish.password.file}"/>
+			           <arg line="--port ${glassfish.custom.admin.port}"/>
+                                   <arg line="--debug=true"/>
+			           <arg line="${glassfish.cluster}@{num}"/>
+                        </exec>
 			<waitfor>
 			    <http url="http://${container.host}:@{num}${container.port}"/>
 			</waitfor>
@@ -667,16 +685,19 @@
 				    <arg line="--systemproperties ASADMIN_LISTENER_PORT=@{num}${glassfish.admin.port}:HTTP_LISTENER_PORT=@{num}${container.port}:HTTP_SSL_LISTENER_PORT=@{num}${container.ssl.port}:JMS_PROVIDER_PORT=@{num}${container.jms.port}:IIOP_LISTENER_PORT=@{num}${container.iiop.port}:IIOP_SSL_LISTENER_PORT=@{num}${container.iiop.ssl.port}:IIOP_SSL_MUTUALAUTH_PORT=@{num}${container.iiop.ssl.mutualauth.port}:JMX_SYSTEM_CONNECTOR_PORT=@{num}${container.jmx.port}:GMS_BIND_INTERFACE_ADDRESS-${glassfish.cluster}=${container.host}:GMS_LISTENER_PORT-${glassfish.cluster}=@{num}${container.gms.port}"/>
 				    <arg line="${glassfish.cluster}@{num}"/>
 				</exec>
+                                <exec executable="${container.home}/bin/asadmin.bat"
+       			           failonerror="true">
+	  			     <arg line="start-instance"/>
+				     <arg line="--user ${glassfish.admin.user}"/>
+				     <arg line="--passwordfile ${glassfish.password.file}"/>
+			             <arg line="--port ${glassfish.custom.admin.port}"/>
+                                     <arg line="--debug=true"/>
+			             <arg line="${glassfish.cluster}@{num}"/>
+                                </exec>
 			      </sequential>
 			    </for>
                         </then>
                     </if>
-                    <exec executable="${container.home}/bin/asadmin.bat"
-                          failonerror="true">
-                        <arg line="--port ${glassfish.custom.admin.port}"/>
-                        <arg line="start-cluster"/>
-                        <arg line="${glassfish.cluster}"/>
-                    </exec>
                     <for list="${instance.numbers}" param="num" trim="true">
                       <sequential>
 			<waitfor>
