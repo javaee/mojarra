@@ -674,7 +674,10 @@
 
 
     <target name="passthru">
-        <ant antfile="build-tests.xml" target="undeploy"/>
+        <ant antfile="build-tests.xml" target="undeploy" 
+             inheritAll="true">
+          <property name="force.no.cluster" value="true" />
+        </ant>
     </target>
 
     <target name="prepare.cactus.webapp">
