@@ -80,8 +80,12 @@
     <property name="applications-for-V3.1-only"
               value="disable-bean-validator,
                      injection,
-                     no-web-xml,
-                     cluster-no-agressive-session-dirtying" />
+                     no-web-xml" />
+
+<!-- PENDING(edburns): return to running with fix for GLASSFISH-11984
+,
+                     cluster-no-agressive-session-dirtying
+-->
 
     <property name="container-agnostic-applications"
               value="

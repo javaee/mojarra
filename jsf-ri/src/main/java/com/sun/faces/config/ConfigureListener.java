@@ -223,9 +223,7 @@ public class ConfigureListener implements ServletRequestListener,
                 Verifier.setCurrentInstance(new Verifier());
             }
             initScripting();
-       
             configManager.initialize(context);
-   
             if (shouldInitConfigMonitoring()) {
                 initConfigMonitoring(context);
             }
@@ -344,10 +342,8 @@ public class ConfigureListener implements ServletRequestListener,
                         e);
             }
         } finally {
-            ApplicationAssociate.clearInstance(initContext.getExternalContext());
+            ApplicationAssociate.clearInstance(context);
             ApplicationAssociate.setCurrentInstance(null);
-            com.sun.faces.application.ApplicationImpl.clearInstance(initContext.getExternalContext());
-            com.sun.faces.application.InjectionApplicationFactory.clearInstance(initContext.getExternalContext());
             // Release the initialization mark on this web application
             ConfigManager.getInstance().destory(context);
             if (initContext != null) {

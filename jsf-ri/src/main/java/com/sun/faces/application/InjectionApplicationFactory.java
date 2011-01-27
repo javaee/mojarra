@@ -41,14 +41,9 @@
 package com.sun.faces.application;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.ClassLoader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.text.MessageFormat;
-
-import java.util.Map;
 
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.Application;
@@ -57,9 +52,6 @@ import javax.faces.context.FacesContext;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import javax.faces.FacesWrapper;
-
-import com.sun.faces.RIConstants;
-import javax.faces.context.ExternalContext;
 
 /**
  * This {@link javax.faces.application.ApplicationFactory} is responsible for injecting the
@@ -71,88 +63,40 @@ import javax.faces.context.ExternalContext;
 public class InjectionApplicationFactory extends ApplicationFactory implements FacesWrapper<ApplicationFactory> {
 
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
-    private static final String APPLICATION_FACTORY = RIConstants.FACES_PREFIX + "APPLICATION_FACTORY";
-    private static String APPLICATION_FACTORY_CLASS = RIConstants.FACES_PREFIX + "APPLICATION_FACTORY_CLASS";
-    
+
+    private ApplicationFactory delegate;
+    private Application defaultApplication;
+    private Field defaultApplicationField;
+    private volatile Application application;
+
+
     // ------------------------------------------------------------ Constructors
 
 
     public InjectionApplicationFactory(ApplicationFactory delegate) {
 
         Util.notNull("applicationFactory", delegate);
-        APPLICATION_FACTORY_CLASS = delegate.getClass().getName();
-        FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().put(APPLICATION_FACTORY, delegate);
+        this.delegate = delegate;
 
     }
 
 
     // ----------------------------------------- Methods from ApplicationFactory
 
-    private ApplicationFactory getDelegate() {
-
-        //delegate is retrieved from externalContext's applicationMap
-        //if null, make use of the variable APPLICATION_FACTORY_CLASS to
-        //reflectively create a new delegate.
-        ApplicationFactory delegate = (ApplicationFactory)FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().get(APPLICATION_FACTORY);
-        if (delegate == null) {
-            //this code gets executed when there are multiple virtual servers
-            //the assumption is that the delegate class has public constructors
-            String className = APPLICATION_FACTORY_CLASS;
-            ClassLoader loader = Thread.currentThread().getContextClassLoader();
-            try {
-                Class cl = loader.loadClass(className);
-                Constructor constructor = cl.getConstructor(new Class[] {ApplicationFactory.class});
-                if (constructor != null) {
-                    Object arglist[] = new Object[1];
-                    arglist[0] = new ApplicationFactoryImpl();
-                    delegate = (ApplicationFactory) constructor.newInstance(arglist);
-                } else {
-                    //llok for default constructor
-                   constructor = cl.getConstructor(new Class[] {});
-                   delegate = (ApplicationFactory) constructor.newInstance();
-                }
-                
-                FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().put(APPLICATION_FACTORY, delegate);
-            } catch (ClassNotFoundException ce) {
-                String message = "ClassNotFoundException occurred : " + ce.getMessage();
-                throw new IllegalStateException(message);
-            } catch (InstantiationException ie) {
-                String message = "InstantiationException occurred : " + ie.getMessage();
-                throw new IllegalStateException(message);
-            } catch (InvocationTargetException le) {
-                String message = "InvocationTargetException occurred : " + le.getMessage();
-                throw new IllegalStateException(message);
-            } catch (IllegalAccessException e) {
-                String message = "IllegalAccessException occurred : " + e.getMessage();
-                throw new IllegalStateException(message);
-            } catch (NoSuchMethodException se) {
-                String message = "IllegalAccessException occurred : " + se.getMessage();
-                throw new IllegalStateException(message);
-            }
-        }
-        return delegate;
-    }
-
-     public static void clearInstance(ExternalContext
-         externalContext) {
-        Map applicationMap = externalContext.getApplicationMap();
-
-        applicationMap.remove(APPLICATION_FACTORY);
-    }
 
     public Application getApplication() {
-        
-        Application application = getDelegate().getApplication();
+
         if (application == null) {
-            // No i18n here
+            application = delegate.getApplication();
+            if (application == null) {
+                // No i18n here
                 String message = MessageFormat
                       .format("Delegate ApplicationContextFactory, {0}, returned null when calling getApplication().",
-                    getDelegate().getClass().getName());
-            throw new IllegalStateException(message);
+                              delegate.getClass().getName());
+                throw new IllegalStateException(message);
+            }
+            injectDefaultApplication();
         }
-        
-        injectDefaultApplication(application);
-
         return application;
 
     }
@@ -160,9 +104,10 @@ public class InjectionApplicationFactory extends ApplicationFactory implements F
     
     public synchronized void setApplication(Application application) {
 
-        getDelegate().setApplication(application);
-        injectDefaultApplication(application);
-
+        this.application = application;
+        delegate.setApplication(application);
+        injectDefaultApplication();
+        
     }
 
 
@@ -172,7 +117,7 @@ public class InjectionApplicationFactory extends ApplicationFactory implements F
     @Override
     public ApplicationFactory getWrapped() {
 
-        return getDelegate();
+        return delegate;
         
     }
 
@@ -180,19 +125,25 @@ public class InjectionApplicationFactory extends ApplicationFactory implements F
     // --------------------------------------------------------- Private Methods
 
 
-    private void injectDefaultApplication(Application application) {
+    private void injectDefaultApplication() {
 
-        Application defaultApplication;
-        Field defaultApplicationField;
-        FacesContext ctx = FacesContext.getCurrentInstance();
-        String attrName = ApplicationImpl.class.getName();
-        defaultApplication = (Application) ctx.getExternalContext().getApplicationMap().get(attrName);
 
+        if (defaultApplication == null) {
+            FacesContext ctx = FacesContext.getCurrentInstance();
+            String attrName = ApplicationImpl.class.getName();
+            defaultApplication = (Application) ctx.getExternalContext()
+                  .getApplicationMap().get(attrName);
+            ctx.getExternalContext().getApplicationMap()
+                  .remove(attrName);
+        }
         if (defaultApplication != null) {
             try {
-                defaultApplicationField =
-                        Application.class.getDeclaredField("defaultApplication");
-                defaultApplicationField.setAccessible(true);
+                if (defaultApplicationField == null) {
+                    defaultApplicationField =
+                          Application.class
+                                .getDeclaredField("defaultApplication");
+                    defaultApplicationField.setAccessible(true);
+                }
                 defaultApplicationField.set(application, defaultApplication);
 
             } catch (NoSuchFieldException nsfe) {
