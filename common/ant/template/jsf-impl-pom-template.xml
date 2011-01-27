@@ -110,11 +110,11 @@
         </developer>
     </developers>
     <distributionManagement>
-        <repository>
-            <uniqueVersion>false</uniqueVersion>
-            <id>java.net-maven2-repository</id>
-            <url>java-net:/maven2-repository/trunk/repository/</url>
-        </repository>
+      <repository>
+        <uniqueVersion>false</uniqueVersion>
+        <id>java.net-maven2-repository</id>
+        <url>svn:https://svn.java.net/svn/maven2-repository~svn/trunk/repository</url> 
+      </repository>
     </distributionManagement>
     <build>
         <defaultGoal>install</defaultGoal>
