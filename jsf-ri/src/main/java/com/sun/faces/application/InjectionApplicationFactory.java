@@ -40,6 +40,7 @@
 
 package com.sun.faces.application;
 
+import com.sun.faces.config.InitFacesContext;
 import java.lang.reflect.Field;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -47,11 +48,12 @@ import java.text.MessageFormat;
 
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.Application;
-import javax.faces.context.FacesContext;
 
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import javax.faces.FacesWrapper;
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
 
 /**
  * This {@link javax.faces.application.ApplicationFactory} is responsible for injecting the
@@ -64,11 +66,15 @@ public class InjectionApplicationFactory extends ApplicationFactory implements F
 
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
 
-    private ApplicationFactory delegate;
-    private Application defaultApplication;
-    private Field defaultApplicationField;
-    private volatile Application application;
+    private static final String APPLICATION_KEY = InjectionApplicationFactory.class.getName();
+    private static final String DEFAULT_APPLICATION_KEY =
+            InjectionApplicationFactory.class.getPackage().getName() + ".DefaultApplication";
 
+    private ApplicationFactory delegate;
+    private Field defaultApplicationField;
+    // This is saved as an ivar only for the case when
+    // FacesContext.getCurrentInstance() return null.
+    private ServletContext backupServletContext;
 
     // ------------------------------------------------------------ Constructors
 
@@ -85,9 +91,24 @@ public class InjectionApplicationFactory extends ApplicationFactory implements F
 
 
     public Application getApplication() {
+        FacesContext initFacesContext = null;
+
+        if (null == FacesContext.getCurrentInstance() && null != backupServletContext) {
+            // This will cause
+            initFacesContext = new InitFacesContext(backupServletContext);
+        } else if (null == backupServletContext) {
+            backupServletContext = (ServletContext) FacesContext.getCurrentInstance().
+                    getExternalContext().getContext();
+        }
+        ServletContextSensitiveSingletonStore<Application> appStore = 
+                new ServletContextSensitiveSingletonStore<Application>(APPLICATION_KEY);
+
+        Application application = appStore.getReferenceToSingleton();
 
         if (application == null) {
+            appStore.removeSingletonOnContextDestroyed();
             application = delegate.getApplication();
+            appStore.putSingletonReference(application);
             if (application == null) {
                 // No i18n here
                 String message = MessageFormat
@@ -95,7 +116,10 @@ public class InjectionApplicationFactory extends ApplicationFactory implements F
                               delegate.getClass().getName());
                 throw new IllegalStateException(message);
             }
-            injectDefaultApplication();
+            injectDefaultApplication(application);
+        }
+        if (null != initFacesContext) {
+            initFacesContext.release();
         }
         return application;
 
@@ -104,9 +128,13 @@ public class InjectionApplicationFactory extends ApplicationFactory implements F
     
     public synchronized void setApplication(Application application) {
 
-        this.application = application;
+        ServletContextSensitiveSingletonStore<Application> appStore =
+                new ServletContextSensitiveSingletonStore<Application>(APPLICATION_KEY);
+
         delegate.setApplication(application);
-        injectDefaultApplication();
+        appStore.removeSingletonReference();
+        appStore.putSingletonReference(application);
+        injectDefaultApplication(application);
         
     }
 
@@ -125,16 +153,22 @@ public class InjectionApplicationFactory extends ApplicationFactory implements F
     // --------------------------------------------------------- Private Methods
 
 
-    private void injectDefaultApplication() {
+    private void injectDefaultApplication(Application toInject) {
+        if (!isInjectionNecessary(toInject)) {
+            return;
+        }
+        ServletContextSensitiveSingletonStore<Application> defaultApplicationAppStore =
+                new ServletContextSensitiveSingletonStore<Application>(DEFAULT_APPLICATION_KEY);
 
+
+        Application defaultApplication = defaultApplicationAppStore.getReferenceToSingleton();
 
         if (defaultApplication == null) {
-            FacesContext ctx = FacesContext.getCurrentInstance();
-            String attrName = ApplicationImpl.class.getName();
-            defaultApplication = (Application) ctx.getExternalContext()
-                  .getApplicationMap().get(attrName);
-            ctx.getExternalContext().getApplicationMap()
-                  .remove(attrName);
+            defaultApplicationAppStore.removeSingletonOnContextDestroyed();
+            ApplicationFactory defaultAppFactory = new ApplicationFactoryImpl();
+            defaultApplication = defaultAppFactory.getApplication();
+            defaultApplicationAppStore.putSingletonReference(toInject);
+            defaultAppFactory = null;
         }
         if (defaultApplication != null) {
             try {
@@ -144,7 +178,7 @@ public class InjectionApplicationFactory extends ApplicationFactory implements F
                                 .getDeclaredField("defaultApplication");
                     defaultApplicationField.setAccessible(true);
                 }
-                defaultApplicationField.set(application, defaultApplication);
+                defaultApplicationField.set(toInject, defaultApplication);
 
             } catch (NoSuchFieldException nsfe) {
                 if (LOGGER.isLoggable(Level.FINE)) {
@@ -158,4 +192,16 @@ public class InjectionApplicationFactory extends ApplicationFactory implements F
         }
     }
 
+    private boolean isInjectionNecessary(Application toInject) {
+        boolean result = false;
+        ApplicationFactoryImpl defaultFactory;
+        if (delegate instanceof ApplicationFactoryImpl) {
+            defaultFactory = (ApplicationFactoryImpl)delegate;
+        } else {
+            defaultFactory = new ApplicationFactoryImpl();
+        }
+        result = !defaultFactory.getApplicationInstanceClass().equals(toInject.getClass());
+        return result;
+    }
+    
 }

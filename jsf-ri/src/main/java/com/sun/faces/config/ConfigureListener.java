@@ -151,7 +151,7 @@ public class ConfigureListener implements ServletRequestListener,
         if (timer != null) {
             timer.startTiming();
         }
-
+        InitFacesContext initContext = new InitFacesContext(context);
 
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.log(Level.FINE,
@@ -198,7 +198,6 @@ public class ConfigureListener implements ServletRequestListener,
         // bootstrap of faces required
         webAppListener = new WebappLifecycleListener(context);
         webAppListener.contextInitialized(sce);
-        InitFacesContext initContext = new InitFacesContext(context);
         ReflectionUtils.initCache(Thread.currentThread().getContextClassLoader());
         Throwable caughtThrowable = null;
 
@@ -280,7 +279,6 @@ public class ConfigureListener implements ServletRequestListener,
 
         } finally {
             Verifier.setCurrentInstance(null);
-            initContext.release();
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
                         "jsf.config.listener.version.complete");
@@ -302,6 +300,10 @@ public class ConfigureListener implements ServletRequestListener,
         InitFacesContext initContext = null;
         try {
             initContext = new InitFacesContext(context);
+
+            if (null == webAppListener) {
+                webAppListener = WebappLifecycleListener.getInstance(context);
+            }
 
             if (webAppListener != null) {
                 webAppListener.contextDestroyed(sce);

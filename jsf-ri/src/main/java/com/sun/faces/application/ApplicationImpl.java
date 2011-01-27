@@ -221,8 +221,6 @@ public class ApplicationImpl extends Application {
         elResolvers = new CompositeELResolver();
 
         FacesContext ctx = FacesContext.getCurrentInstance();
-        ctx.getExternalContext().getApplicationMap().put(this.getClass().getName(),
-                                                         this);
         WebConfiguration webConfig = WebConfiguration.getInstance(ctx.getExternalContext());
         passDefaultTimeZone = webConfig.isOptionEnabled(DateTimeConverterUsesSystemTimezone);
         registerPropertyEditors = webConfig.isOptionEnabled(RegisterConverterPropertyEditors);
