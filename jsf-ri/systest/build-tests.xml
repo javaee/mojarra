@@ -975,7 +975,13 @@
         </jsf.junit>
 
         <if>
-            <equals arg1="${container.name}" arg2="glassfishV3"/>
+            <bool>
+                <or>
+                    <equals arg1="${container.name}" arg2="glassfishV3"/>
+                    <equals arg1="${container.name}" arg2="glassfishV3.1"/>
+                    <equals arg1="${container.name}" arg2="glassfishV3.1_no_cluster"/>
+                </or>
+            </bool>
             <then>
 		<jsf.junit context-path="${context.path}"
 			   classpath-refid="html.classpath"
@@ -987,7 +993,6 @@
 		</jsf.junit>  
             </then>
         </if>
-
 
     </target>
 

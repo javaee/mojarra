@@ -248,7 +248,13 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
         boolean isDevelopment = ctx.isProjectStage(ProjectStage.Development);
         ExternalContext extContext = ctx.getExternalContext();
         Throwable wrapped = fe.getCause();
-        extContext.responseReset();
+        try {
+            extContext.responseReset();
+        } catch (Exception e) {
+            if (LOGGER.isLoggable(Level.INFO)) {
+                LOGGER.log(Level.INFO, "Exception when handling error trying to reset the response.", wrapped);
+            }
+        }
         if (null != wrapped && wrapped instanceof FacesFileNotFoundException) {
             extContext.setResponseStatus(404);
          } else {

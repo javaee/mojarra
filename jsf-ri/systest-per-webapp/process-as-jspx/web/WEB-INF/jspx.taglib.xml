@@ -115,4 +115,11 @@
         <tag-name>useBean</tag-name>
         <handler-class>com.sun.faces.facelets.tag.jsp.UseBeanHandler</handler-class>
     </tag>
+    <tag>
+        <tag-name>getProperty</tag-name>
+        <component>
+            <component-type>javax.faces.Output</component-type>
+            <renderer-type>jsp.GetProperty</renderer-type>
+        </component>
+    </tag>
 </facelet-taglib>

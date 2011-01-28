@@ -151,7 +151,7 @@ public class ConfigureListener implements ServletRequestListener,
         if (timer != null) {
             timer.startTiming();
         }
-
+        InitFacesContext initContext = new InitFacesContext(context);
 
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.log(Level.FINE,
@@ -198,7 +198,6 @@ public class ConfigureListener implements ServletRequestListener,
         // bootstrap of faces required
         webAppListener = new WebappLifecycleListener(context);
         webAppListener.contextInitialized(sce);
-        InitFacesContext initContext = new InitFacesContext(context);
         ReflectionUtils.initCache(Thread.currentThread().getContextClassLoader());
         Throwable caughtThrowable = null;
 
@@ -223,9 +222,7 @@ public class ConfigureListener implements ServletRequestListener,
                 Verifier.setCurrentInstance(new Verifier());
             }
             initScripting();
-       
             configManager.initialize(context);
-   
             if (shouldInitConfigMonitoring()) {
                 initConfigMonitoring(context);
             }
@@ -282,7 +279,6 @@ public class ConfigureListener implements ServletRequestListener,
 
         } finally {
             Verifier.setCurrentInstance(null);
-            initContext.release();
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
                         "jsf.config.listener.version.complete");
@@ -304,6 +300,10 @@ public class ConfigureListener implements ServletRequestListener,
         InitFacesContext initContext = null;
         try {
             initContext = new InitFacesContext(context);
+
+            if (null == webAppListener) {
+                webAppListener = WebappLifecycleListener.getInstance(context);
+            }
 
             if (webAppListener != null) {
                 webAppListener.contextDestroyed(sce);
@@ -344,10 +344,8 @@ public class ConfigureListener implements ServletRequestListener,
                         e);
             }
         } finally {
-            ApplicationAssociate.clearInstance(initContext.getExternalContext());
+            ApplicationAssociate.clearInstance(context);
             ApplicationAssociate.setCurrentInstance(null);
-            com.sun.faces.application.ApplicationImpl.clearInstance(initContext.getExternalContext());
-            com.sun.faces.application.InjectionApplicationFactory.clearInstance(initContext.getExternalContext());
             // Release the initialization mark on this web application
             ConfigManager.getInstance().destory(context);
             if (initContext != null) {

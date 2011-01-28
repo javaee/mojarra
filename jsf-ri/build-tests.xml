@@ -485,8 +485,6 @@
             <suite>
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.util.TestUtil_local"/>  
-                <test todir="${impl.test.results.dir}"
-                      name="com.sun.faces.el.TestNestedELResolver"/>  
                  <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.util.TestLRUMap_local"/>
                  <test todir="${impl.test.results.dir}"
@@ -498,6 +496,16 @@
 
             </suite>    
         </jsf.junit>
+
+<!-- PENDING(sheetalv): return to running
+
+  This test needs rework.  Filed issue
+  http://java.net/jira/browse/JAVASERVERFACES-1928.
+
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.el.TestNestedELResolver"/>  
+-->
+
     </target>
     
      <target name="config.compile"            
@@ -544,7 +552,8 @@
 
     <target name="passthru" depends="define.cluster.aware.port">
 
-<!--    <antcall target="deploy"/>  -->
+       <antcall target="undeploy"/>
+       <antcall target="deploy"/>
 
         <jsf.junit classpath-refid="test.runtime.classpath"
                    test-results-dir="${impl.test.results.dir}"
@@ -555,13 +564,12 @@
                              value="http://${container.host}:${cluster.aware.port}/test"/>
             </custom-sysproperties>
             <suite>
-                 <test todir="${impl.test.results.dir}"
-                      name="com.sun.faces.xml.ParseXMLTestCase"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.config.ConfigureListenerTestCase"/>
             </suite>
 
         </jsf.junit>       
 
-<!--     <antcall target="undeploy"/> -->
        
     </target>
 

@@ -248,15 +248,22 @@ public class ConfigureListenerTestCase extends ServletFacesTestCase {
 
     }
 
+    private void resetSystem() {
+        ServletContext sc = this.getConfig().getServletContext();
+        ServletContextEvent sce = new ServletContextEvent(sc);
+        ConfigureListener cl = new ConfigureListener();
+        cl.contextDestroyed(sce);
+    }
+
 
     // Test a webapp with a default and extra and embedded resources
     public void testEmbed() throws Exception {
 
         ServletContext ctx = (ServletContext)
               getFacesContext().getExternalContext().getContext();
-        ApplicationAssociate.clearInstance(getFacesContext().getExternalContext());
-        ApplicationImpl.clearInstance(getFacesContext().getExternalContext());
-        ctx.removeAttribute("com.sun.faces.config.WebConfiguration");  
+
+        ctx.removeAttribute("com.sun.faces.config.WebConfiguration");
+        resetSystem();
         ServletContextWrapper w = new ServletContextWrapper(ctx);
         ServletContextEvent sce = new ServletContextEvent(w);
         w.addInitParameter(FacesServlet.CONFIG_FILES_ATTR,
@@ -298,8 +305,7 @@ public class ConfigureListenerTestCase extends ServletFacesTestCase {
 
         ServletContext ctx = (ServletContext)
               getFacesContext().getExternalContext().getContext();
-        ApplicationAssociate.clearInstance(getFacesContext().getExternalContext());
-        ApplicationImpl.clearInstance(getFacesContext().getExternalContext());
+        resetSystem();
         ctx.removeAttribute("com.sun.faces.config.WebConfiguration");
         ServletContextWrapper w = new ServletContextWrapper(ctx);
         ServletContextEvent sce = new ServletContextEvent(w);

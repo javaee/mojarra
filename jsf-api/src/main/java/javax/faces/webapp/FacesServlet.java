@@ -196,6 +196,12 @@ public final class FacesServlet implements Servlet {
      */
     private ServletConfig servletConfig = null;
 
+    /**
+     * From GLASSFISH-15632.  If true, the FacesContext instance
+     * left over from startup time has been released.  
+     */
+    private boolean initFacesContextReleased = false;
+
 
     /**
      * <p>Release all resources acquired at startup time.</p>
@@ -379,7 +385,15 @@ public final class FacesServlet implements Servlet {
                       sendError(HttpServletResponse.SC_NOT_FOUND);
                 return;
             }
-        }    
+        }
+
+        if (!initFacesContextReleased) {
+            FacesContext initFacesContext = FacesContext.getCurrentInstance();
+            if (null != initFacesContext) {
+                initFacesContext.release();
+            }
+            initFacesContextReleased = true;
+        }
         
         // Acquire the FacesContext instance for this request
         FacesContext context = facesContextFactory.getFacesContext

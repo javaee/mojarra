@@ -767,14 +767,15 @@ public class TestApplicationImpl extends JspFacesTestCase {
     public void testDecoratedFaceletFactory() {
 
         FacesContext ctx = getFacesContext();
-        WebConfiguration webConfig = WebConfiguration.getInstance(ctx.getExternalContext());
+        ExternalContext extContext = ctx.getExternalContext();
+        WebConfiguration webConfig = WebConfiguration.getInstance(extContext);
         webConfig.overrideContextInitParameter(FaceletFactory,
                                                "com.sun.faces.application.TestApplicationImpl$CustomFaceletFactory");
-        ctx.getExternalContext().getApplicationMap().remove("com.sun.faces.ApplicationAssociate");
+        ApplicationAssociate.clearInstance(extContext);
         webConfig.overrideContextInitParameter(DisableFaceletJSFViewHandler,
                                                false);
         ApplicationImpl impl = new ApplicationImpl();
-        ApplicationAssociate associate = ApplicationAssociate.getInstance(ctx.getExternalContext());
+        ApplicationAssociate associate = ApplicationAssociate.getInstance(extContext);
         assertEquals(CustomFaceletFactory.class.getName(),
                      CustomFaceletFactory.class.getName(),
                      associate.getFaceletFactory().getClass().getName());
@@ -787,14 +788,16 @@ public class TestApplicationImpl extends JspFacesTestCase {
     public void testOverrideFaceletFactory() {
 
         FacesContext ctx = getFacesContext();
-        WebConfiguration webConfig = WebConfiguration.getInstance(ctx.getExternalContext());
+        ExternalContext extContext = ctx.getExternalContext();
+        WebConfiguration webConfig = WebConfiguration.getInstance(extContext);
         webConfig.overrideContextInitParameter(FaceletFactory,
                                                "com.sun.faces.application.TestApplicationImpl$CustomFaceletFactory2");
-        ctx.getExternalContext().getApplicationMap().remove("com.sun.faces.ApplicationAssociate");
+        ApplicationAssociate.clearInstance(extContext);
         webConfig.overrideContextInitParameter(DisableFaceletJSFViewHandler,
                                                false);
+        ApplicationAssociate.clearInstance(extContext);
         ApplicationImpl impl = new ApplicationImpl();
-        ApplicationAssociate associate = ApplicationAssociate.getInstance(ctx.getExternalContext());
+        ApplicationAssociate associate = ApplicationAssociate.getInstance(extContext);
         assertEquals(CustomFaceletFactory2.class.getName(),
                      CustomFaceletFactory2.class.getName(),
                      associate.getFaceletFactory().getClass().getName());

@@ -49,7 +49,6 @@ import java.text.MessageFormat;
 
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
-import javax.faces.context.FacesContext;
 
 /**
  * <p><strong>ApplicationFactory</strong> is a factory object that creates
@@ -68,6 +67,8 @@ public class ApplicationFactoryImpl extends ApplicationFactory {
    // Log instance for this class
     private static final Logger logger = FacesLogger.APPLICATION.getLogger();
 
+    private static final String APPLICATION_KEY = ApplicationFactoryImpl.class.getName();
+
     /*
      * Constructor
      */
@@ -78,25 +79,34 @@ public class ApplicationFactoryImpl extends ApplicationFactory {
         }
     }
 
+    Class getApplicationInstanceClass() {
+        return ApplicationImpl.class;
+    }
+
 
     /**
      * <p>Create (if needed) and return an {@link Application} instance
      * for this web application.</p>
      */
     public Application getApplication() {
-        Application application =
-                (Application)FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().get(ApplicationImpl.class.getName());
+        ServletContextSensitiveSingletonStore<Application> appStore =
+             new ServletContextSensitiveSingletonStore<Application>(APPLICATION_KEY);
+
+        Application application = appStore.getReferenceToSingleton();
+
         if (application == null) {
             application = new ApplicationImpl();
+            appStore.removeSingletonOnContextDestroyed();
             if (logger.isLoggable(Level.FINE)) {
                 logger.fine(MessageFormat.format("Created Application instance ''{0}''",
                                                  application));
             }
+            appStore.putSingletonReference(application);
         }
         return application;
     }
 
-    
+
     /**
      * <p>Replace the {@link Application} instance that will be
      * returned for this web application.</p>
@@ -109,15 +119,14 @@ public class ApplicationFactoryImpl extends ApplicationFactory {
                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "application");
             throw new NullPointerException(message);
         }
+        ServletContextSensitiveSingletonStore<Application> appStore =
+             new ServletContextSensitiveSingletonStore<Application>(APPLICATION_KEY);
 
-        FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().put(ApplicationImpl.class.getName(), application);
-        if (application instanceof ApplicationImpl) {
-            FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().put(ApplicationAssociate.ASSOCIATE_KEY,
-                    ((com.sun.faces.application.ApplicationImpl) application).getApplicationAssociate());
-        }
+        appStore.removeSingletonReference();
+        appStore.putSingletonReference(application);
         if (logger.isLoggable(Level.FINE)) {
-            logger.fine(MessageFormat.format("set Application Instance to ''{0}''",
-                    application.getClass().getName()));
+            logger.fine(MessageFormat.format("set Application Instance to ''{0}''", 
+                                             application.getClass().getName()));
         }
     }
 }

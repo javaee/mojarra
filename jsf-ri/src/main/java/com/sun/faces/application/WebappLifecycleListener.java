@@ -66,6 +66,7 @@ import com.sun.faces.io.FastStringWriter;
 import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.util.FacesLogger;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ExceptionQueuedEvent;
@@ -73,6 +74,7 @@ import javax.faces.event.ExceptionQueuedEventContext;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.PreDestroyViewMapEvent;
 import javax.faces.event.ViewMapListener;
+import javax.servlet.ServletContextListener;
 
 /**
  * <p>Central location for web application lifecycle events.<p>  
@@ -85,10 +87,13 @@ public class WebappLifecycleListener implements ViewMapListener {
     // Log instance for this class
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
     
+    private static final String KEY = WebappLifecycleListener.class.getName();
+
     private ServletContext servletContext;
     private ApplicationAssociate applicationAssociate;
     private List<HttpSession> activeSessions;
-
+    private List<ServletContextListener> additionalListeners;
+    private ServletContextSensitiveSingletonStore<WebappLifecycleListener> appStore;
 
     // ------------------------------------------------------------ Constructors
 
@@ -98,7 +103,21 @@ public class WebappLifecycleListener implements ViewMapListener {
     public WebappLifecycleListener(ServletContext servletContext) {
 
         this.servletContext = servletContext;
+        additionalListeners = new CopyOnWriteArrayList<ServletContextListener>();
+        appStore = new ServletContextSensitiveSingletonStore<WebappLifecycleListener>(KEY);
+        appStore.putSingletonReference(this);
+    }
 
+    public static WebappLifecycleListener getInstance(ServletContext sc) {
+        ServletContextSensitiveSingletonStore<WebappLifecycleListener> store =
+                new ServletContextSensitiveSingletonStore<WebappLifecycleListener>(KEY);
+        WebappLifecycleListener result = store.getReferenceToSingleton();
+
+        return result;
+    }
+
+    List<ServletContextListener> getAdditionalListeners() {
+        return additionalListeners;
     }
 
 
@@ -368,6 +387,9 @@ public class WebappLifecycleListener implements ViewMapListener {
             handleAttributeEvent(beanName, 
                                  servletContext.getAttribute(beanName), 
                                  ELUtils.Scope.APPLICATION);
+        }
+        for (ServletContextListener cur : getAdditionalListeners()) {
+            cur.contextDestroyed(event);
         }
         this.applicationAssociate = null;
 
