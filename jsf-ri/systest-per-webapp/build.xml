@@ -83,6 +83,11 @@
                      no-web-xml,
                      cluster-no-agressive-session-dirtying" />
 
+    <property name="applications-for-V3.1_no_cluster-only"
+              value="disable-bean-validator,
+                     injection,
+                     no-web-xml" />
+
     <property name="container-agnostic-applications"
               value="
                    annotation-restrictions,
@@ -217,10 +222,10 @@
         </jsf.javac>
     </target>
 
-    <target name="define.applications" depends="discover.container.version,define.V2.applications,define.V3.applications,define.V3.1.applications" />
+    <target name="define.applications" depends="discover.container.version,define.V2.applications,define.V3.applications,define.V3.1.applications,define.V3.1_no_cluster.applications" />
 
     <target name="discover.container.version" 
-            depends="query.is.V2,query.is.V3,query.is.V3.1"/>
+            depends="query.is.V2,query.is.V3,query.is.V3.1,query.is.V3.1_no_cluster"/>
 
     <target name="query.is.V2">
         <condition property="container.is.V2">
@@ -240,6 +245,12 @@
         </condition>
     </target>
 
+    <target name="query.is.V3.1_no_cluster">
+        <condition property="container.is.V3.1_no_cluster">
+          <equals arg1="glassfishV3.1_no_cluster" arg2="${container.name}" />
+        </condition>
+    </target>
+
     <target name="define.V2.applications" if="container.is.V2">
        <property name="applications" value="${container-agnostic-applications}" />
     </target>
@@ -252,6 +263,11 @@
     <target name="define.V3.1.applications" if="container.is.V3.1">
        <property name="applications" 
                  value="${container-agnostic-applications},${applications-for-V3.1-only}" />
+    </target>
+
+    <target name="define.V3.1_no_cluster.applications" if="container.is.V3.1_no_cluster">
+       <property name="applications" 
+                 value="${container-agnostic-applications},${applications-for-V3.1_no_cluster-only}" />
     </target>
 
     <target name="install" depends="compile.base.sources,define.applications">
