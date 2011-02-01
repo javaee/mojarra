@@ -176,9 +176,8 @@ public class InterfaceHandler extends TagHandlerImpl {
                     found = attrs.containsKey(key);
                     // Special case: nested composite components
                     if (!found) {
-                        Object obj = context.getApplication().evaluateExpressionGet(context,
-                                "#{cc.attrs." + key + "}", Object.class);
-                        found = null != obj;
+                        // Check if an EL expression was given.
+                        found = (null!=cc.getValueExpression(key));
                     }
                 }
                 if (!found) {
