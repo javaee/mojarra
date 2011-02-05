@@ -280,14 +280,14 @@
     <!--
             Start the Cactus test using JUnit test runner.
     -->
-    <target name="run.cactus.test" depends="define.cluster.aware.port">
+    <target name="run.cactus.test" depends="define.scenario.aware.port">
         <jsf.junit classpath-refid="test.runtime.classpath"
                    test-results-dir="${impl.test.results.dir}"
                    explodedWarDir="${basedir}/build/target/test"
-                   custom.port="${cluster.aware.port}">
+                   custom.port="${scenario.aware.port}">
             <custom-sysproperties>
                 <sysproperty key="cactus.contextURL"
-                             value="http://${container.host}:${cluster.aware.port}/test"/>
+                             value="http://${container.host}:${scenario.aware.port}/test"/>
             </custom-sysproperties>
             <suite>
                 <test todir="${impl.test.results.dir}"
@@ -460,14 +460,14 @@
         </jsf.junit>       
     </target>
 
-    <target name="run.cactus.test.single" depends="define.cluster.aware.port">
+    <target name="run.cactus.test.single" depends="define.scenario.aware.port">
         <jsf.junit classpath-refid="test.runtime.classpath"
                    test-results-dir="${impl.test.results.dir}"
                    explodedWarDir="${basedir}/build/target/test"
-                   custom.port="${cluster.aware.port}">
+                   custom.port="${scenario.aware.port}">
             <custom-sysproperties>
                 <sysproperty key="cactus.contextURL"
-                             value="http://${container.host}:${cluster.aware.port}/test"/>
+                             value="http://${container.host}:${scenario.aware.port}/test"/>
             </custom-sysproperties>
             <suite>
                 <test todir="${impl.test.results.dir}"
@@ -481,7 +481,7 @@
     <target name="run.test" depends="compile.test,config.compile">
         <jsf.junit classpath-refid="test.runtime.classpath"
                    test-results-dir="${impl.test.results.dir}" assert.classes="-ea:com.sun.faces.el.ChainAwareVariableResolver"
-                   custom.port="${cluster.aware.port}">
+                   custom.port="${scenario.aware.port}">
             <suite>
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.util.TestUtil_local"/>  
@@ -550,7 +550,7 @@
       </junitreport>
    </target>
 
-    <target name="passthru" depends="define.cluster.aware.port">
+    <target name="passthru" depends="define.scenario.aware.port">
 
        <antcall target="undeploy"/>
        <antcall target="deploy"/>
@@ -558,10 +558,10 @@
         <jsf.junit classpath-refid="test.runtime.classpath"
                    test-results-dir="${impl.test.results.dir}"
                    explodedWarDir="${basedir}/build/target/test"
-                   custom.port="${cluster.aware.port}">
+                   custom.port="${scenario.aware.port}">
             <custom-sysproperties>
                 <sysproperty key="cactus.contextURL"
-                             value="http://${container.host}:${cluster.aware.port}/test"/>
+                             value="http://${container.host}:${scenario.aware.port}/test"/>
             </custom-sysproperties>
             <suite>
                 <test todir="${impl.test.results.dir}"

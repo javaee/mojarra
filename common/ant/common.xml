@@ -280,7 +280,7 @@
         <attribute name="explodedWarDir" default=""/>
         <attribute name="force.no.cluster" default="${force.no.cluster}"/>
         <attribute name="instance.numbers" default="${instance.numbers}" />
-        <attribute name="custom.port" default="${cluster.aware.port}" />
+        <attribute name="custom.port" default="${scenario.aware.port}" />
         <element name="tests" optional="true"/>
         <element name="custom-sysproperties" optional="true"/>
         <element name="suite" optional="true"/>
@@ -452,7 +452,7 @@
         <attribute name="status" default=""/>
         <attribute name="force.no.cluster" default="${force.no.cluster}"/>
         <attribute name="instance.numbers" default="${instance.numbers}" />
-        <attribute name="custom.port" default="${cluster.aware.port}" />
+        <attribute name="custom.port" default="${scenario.aware.port}" />
         <element name="custom-sysproperties" optional="true"/>
         <sequential>
             <var name="testname" unset="true" />

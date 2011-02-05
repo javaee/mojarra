@@ -155,7 +155,7 @@
     <!-- ======================== Test Execution ============================== -->
 
 
-    <target name="test" depends="define.cluster.aware.port"
+    <target name="test" depends="define.scenario.aware.port"
             description="Execute all tests against installed applications">
 
         <for list="${applications}" param="app" trim="true">
@@ -185,7 +185,7 @@
                        context-path="/jsf-@{app-name}"
                        instance.numbers="${instance.numbers}"
                        test-results-dir="${impl.test.results.dir}"
-                       custom.port="${cluster.aware.port}">
+                       custom.port="${scenario.aware.port}">
                 <tests>
                     <fileset dir="@{app-base-dir}/build/classes"
                              includes="@{test-case}"/>

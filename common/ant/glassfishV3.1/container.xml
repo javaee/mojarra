@@ -351,8 +351,8 @@
         <container.start/>
     </target>
 
-    <target name="define.cluster.aware.port">
-        <condition property="cluster.aware.port" value="${glassfish.portbase.tenthousandsplace}0080">
+    <target name="define.scenario.aware.port">
+        <condition property="scenario.aware.port" value="${glassfish.portbase.tenthousandsplace}0080">
           <equals arg1="${force.no.cluster}" casesensitive="false" trim="true"
                   arg2="true" />
         </condition>
@@ -362,11 +362,11 @@
                     arg2="true" />
           </not>
           <then>
-            <property name="cluster.aware.port" 
+            <property name="scenario.aware.port" 
                       value="${container.port}" />
           </then>
         </if>
-        <echo message="cluster.aware.port = ${cluster.aware.port}" />
+        <echo message="scenario.aware.port = ${scenario.aware.port}" />
     </target>
 
     <macrodef name="container.start"

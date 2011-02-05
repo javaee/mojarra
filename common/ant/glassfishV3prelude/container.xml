@@ -225,8 +225,8 @@
         <container.start/>
     </target>
 
-    <target name="define.cluster.aware.port">
-      <property name="cluster.aware.port" value="${container.port}" />
+    <target name="define.scenario.aware.port">
+      <property name="scenario.aware.port" value="${container.port}" />
     </target>
 
     <macrodef name="container.start"
