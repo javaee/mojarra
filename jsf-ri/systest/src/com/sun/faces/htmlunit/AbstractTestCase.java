@@ -60,7 +60,6 @@ import junit.framework.TestSuite;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -103,6 +102,7 @@ public abstract class AbstractTestCase extends TestCase {
     protected String contextPath = null;
     protected String host = null;
     protected int port = 0;
+    protected Integer virtualServerPort = null;
 
     // The current session identifier
     protected String sessionId = null;
@@ -133,6 +133,8 @@ public abstract class AbstractTestCase extends TestCase {
 
     private Random rand = new Random();
 
+    protected boolean isVirtualServer = false;
+
 
     // ---------------------------------------------------- Overall Test Methods
 
@@ -140,9 +142,12 @@ public abstract class AbstractTestCase extends TestCase {
     /**
      * Set up instance variables required by this test case.
      */
+    @Override
     public void setUp() throws Exception {
 
         BrowserVersion browserVersion;
+
+        isVirtualServer = Boolean.parseBoolean(System.getProperty("virtual-server"));
 
         String instanceNumbersStr = System.getProperty("instance.numbers");
         if (null != instanceNumbersStr && 0 < instanceNumbersStr.length() &&
@@ -308,9 +313,15 @@ public abstract class AbstractTestCase extends TestCase {
     }
 
     protected int getPort() {
+
+        if (null != virtualServerPort) {
+            return virtualServerPort.intValue();
+        }
+
         int result = port;
         List<Integer> instNums = getInstanceNumbers();
-        if (!instNums.isEmpty() && !forceNoCluster) {
+        if (!instNums.isEmpty() && 
+            (!forceNoCluster || isVirtualServer)) {
             int instanceNumberIndex = rand.nextInt(instNums.size());
             try {
                 String num = instNums.get(instanceNumberIndex).toString() + port;
@@ -321,6 +332,11 @@ public abstract class AbstractTestCase extends TestCase {
                 throw e;
             }
         }
+
+        if (isVirtualServer) {
+            virtualServerPort = (Integer) result;
+        }
+
         return result;
     }
 

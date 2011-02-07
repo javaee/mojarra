@@ -247,6 +247,35 @@
 
     <!-- Common Targets -->
 
+    <target name="discover.container.version" 
+            depends="query.is.V2,query.is.V3,query.is.V3.1,query.is.V3.1_no_cluster"/>
+
+    <target name="query.is.V2">
+        <condition property="container.is.V2">
+          <equals arg1="glassfish" arg2="${container.name}" />
+        </condition>
+    </target>
+
+    <target name="query.is.V3">
+        <condition property="container.is.V3">
+          <equals arg1="glassfishV3" arg2="${container.name}" />
+        </condition>
+    </target>
+
+    <target name="query.is.V3.1">
+        <condition property="container.is.V3.1">
+          <equals arg1="glassfishV3.1" arg2="${container.name}" />
+        </condition>
+    </target>
+
+    <target name="query.is.V3.1_no_cluster">
+        <condition property="container.is.V3.1_no_cluster">
+          <equals arg1="glassfishV3.1_no_cluster" arg2="${container.name}" />
+        </condition>
+    </target>
+
+
+
     <!-- Convenience macro for javac -->
     <macrodef name="jsf.javac">        
         <attribute name="srcdir"/>
@@ -281,6 +310,7 @@
         <attribute name="force.no.cluster" default="${force.no.cluster}"/>
         <attribute name="instance.numbers" default="${instance.numbers}" />
         <attribute name="custom.port" default="${scenario.aware.port}" />
+        <attribute name="virtual-server" default="" />
         <element name="tests" optional="true"/>
         <element name="custom-sysproperties" optional="true"/>
         <element name="suite" optional="true"/>
@@ -304,6 +334,7 @@
                              value="@{force.no.cluster}"/>
                 <sysproperty key="container" value="${container.name}" />
                 <sysproperty key="instance.numbers" value="@{instance.numbers}" />
+                <sysproperty key="virtual-server" value="@{virtual-server}" />
                 <custom-sysproperties/>
                 <batchtest todir="@{test-results-dir}">
                     <tests/>
