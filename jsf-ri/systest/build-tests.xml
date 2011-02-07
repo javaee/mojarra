@@ -72,7 +72,7 @@
     <!-- DO NOT REORDER test.annotations -->
     <target name="test"
             description="Execute all tests against installed application"
-            depends="define.cluster.aware.port,
+            depends="define.scenario.aware.port,
                 test.annotations,
                 test.ajax,
                 test.composite,
@@ -1207,7 +1207,7 @@
         </jsf.junit>
     </target>
 
-    <target name="passthru" depends="define.cluster.aware.port">
+    <target name="passthru" depends="define.scenario.aware.port">
 
       <antcall target="test.renderkit" />
 

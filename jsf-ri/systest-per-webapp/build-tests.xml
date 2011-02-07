@@ -155,8 +155,12 @@
     <!-- ======================== Test Execution ============================== -->
 
 
-    <target name="test" depends="define.cluster.aware.port"
+    <target name="test" depends="define.scenario.aware.port"
             description="Execute all tests against installed applications">
+        <property name="systest-per-webapp.results.dir" 
+                  value="${impl.test.results.dir}/systest-per-webapp" />
+
+        <mkdir dir="${systest-per-webapp.results.dir}" />
 
         <for list="${applications}" param="app" trim="true">
             <sequential>
@@ -165,16 +169,65 @@
                             override="true"/>
               <test-webapp app-name="@{app}"
                            app-base-dir="${basedir}/@{app}"
-                           test-case="${test.name}"/>
+                           test-case="${test.name}"
+                           test-results-dir="${systest-per-webapp.results.dir}" />
             </sequential>
         </for>
 
+        <rename.test-results prefix="non-virtual-server" 
+                             destdir="${impl.test.results.dir}"
+                             srcdir="${systest-per-webapp.results.dir}" />
+        <delete failonerror="false" dir="${systest-per-webapp.results.dir}" />
+
     </target>
+
+    <target name="test-virtual-server" depends="define.virtual-server.aware.port"
+            description="Execute all tests against installed applications">
+        <property name="systest-per-webapp.results.dir" 
+                  value="${impl.test.results.dir}/systest-per-webapp-virtual-server" />
+
+        <mkdir dir="${systest-per-webapp.results.dir}" />
+
+        <for list="${applications}" param="app" trim="true">
+            <sequential>
+              <propertycopy name="test.name"
+                            from="@{app}"
+                            override="true"/>
+              <test-webapp app-name="@{app}"
+                           app-base-dir="${basedir}/@{app}"
+                           test-case="${test.name}" virtual-server="true"
+                           test-results-dir="${systest-per-webapp.results.dir}"/>
+            </sequential>
+        </for>
+        <rename.test-results prefix="virtual-server" 
+                             destdir="${impl.test.results.dir}"
+                             srcdir="${systest-per-webapp.results.dir}" />
+        <delete failonerror="false" dir="${systest-per-webapp.results.dir}" />
+
+
+    </target>
+
+    <macrodef name="rename.test-results">
+      <attribute name="prefix" />
+      <attribute name="srcdir" />
+      <attribute name="destdir" />
+      <sequential>
+        <move todir="@{destdir}" 
+              includeemptydirs="false" overwrite="true">
+                <fileset dir="@{srcdir}">
+                  <exclude name="**/TEST-@{prefix}-*.xml"/>
+                </fileset>
+                <mapper type="glob" from="TEST-*.xml" to="TEST-@{prefix}-*.xml"/>
+        </move>
+      </sequential>
+    </macrodef>
 
     <macrodef name="test-webapp">
         <attribute name="app-name"/>
         <attribute name="app-base-dir"/>
         <attribute name="test-case"/>
+        <attribute name="virtual-server" default=""/>
+        <attribute name="test-results-dir" default="${impl.test.results.dir}"/>
         <sequential>
             <path id="test.classpath">
                 <pathelement location="@{app-base-dir}/build/classes"/>
@@ -184,8 +237,9 @@
             <jsf.junit classpath-refid="test.classpath"
                        context-path="/jsf-@{app-name}"
                        instance.numbers="${instance.numbers}"
-                       test-results-dir="${impl.test.results.dir}"
-                       custom.port="${cluster.aware.port}">
+                       test-results-dir="@{test-results-dir}"
+                       custom.port="${scenario.aware.port}"
+                       virtual-server="@{virtual-server}">
                 <tests>
                     <fileset dir="@{app-base-dir}/build/classes"
                              includes="@{test-case}"/>

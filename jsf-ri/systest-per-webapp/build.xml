@@ -83,6 +83,11 @@
                      no-web-xml,
                      cluster-no-agressive-session-dirtying" />
 
+    <property name="applications-for-V3.1_no_cluster-only"
+              value="disable-bean-validator,
+                     injection,
+                     no-web-xml" />
+
     <property name="container-agnostic-applications"
               value="
                    annotation-restrictions,
@@ -129,6 +134,35 @@
                    flash,
                    jsp-flash
     -->
+
+   <property name="applications-for-V3.1_no_cluster-virtual-server"
+             value="
+                   annotation-restrictions,
+                   clientside-statesaving,
+                   empty-string-as-null,
+                   resource-locale-prefix,
+                   nested-loadbundles,
+                   replace-application,
+                   replace-statemanager,  
+                   invalid-mapping,
+                   nested-datatables,
+                   jar-ordering,                  
+                   replace-lifecycle,
+                   string-converter,
+                   replace-variableresolver,
+                   converter-property-editor,
+                   late-bindings,
+                   property-resolver-jsp,
+                   never-unwrap-exceptions,
+                   write-attribute-script-disabled,
+                   write-attribute-script-enabled,
+                   wcag-datatable,
+                   suppress-xml-decl,
+                   replace-vdl,
+                   process-as-jspx,
+                   bogus-render-kit-id,
+                   characterCombat"/>
+
 
     <!-- ************ Executable Targets ************************************** -->
 
@@ -182,6 +216,7 @@
     <macrodef name="deploy.app">
         <attribute name="base-app-dir"/>
         <attribute name="appname"/>
+        <attribute name="use-virtual-servers" default="false"/>
         <sequential>
           <if>
             <contains string="${deploy-exploded-applications}" substring="@{appname}" />
@@ -193,7 +228,8 @@
             <else>
               <deploy.artifact
                     artifact="@{base-app-dir}/build/jsf-@{appname}.war"
-                    appName="jsf-@{appname}"/>
+                    appName="jsf-@{appname}" 
+                    use-virtual-servers="@{use-virtual-servers}"/>
             </else>
           </if>
         </sequential>
@@ -217,27 +253,11 @@
         </jsf.javac>
     </target>
 
-    <target name="define.applications" depends="discover.container.version,define.V2.applications,define.V3.applications,define.V3.1.applications" />
+    <target name="define.applications" depends="discover.container.version,define.V2.applications,define.V3.applications,define.V3.1.applications,define.V3.1_no_cluster.applications" />
 
-    <target name="discover.container.version" 
-            depends="query.is.V2,query.is.V3,query.is.V3.1"/>
-
-    <target name="query.is.V2">
-        <condition property="container.is.V2">
-          <equals arg1="glassfish" arg2="${container.name}" />
-        </condition>
-    </target>
-
-    <target name="query.is.V3">
-        <condition property="container.is.V3">
-          <equals arg1="glassfishV3" arg2="${container.name}" />
-        </condition>
-    </target>
-
-    <target name="query.is.V3.1">
-        <condition property="container.is.V3.1">
-          <equals arg1="glassfishV3.1" arg2="${container.name}" />
-        </condition>
+    <target name="define.applications.virtual-server" depends="discover.container.version,define.V3.1_no_cluster.applications.virtual.server">
+      <property name="applications" value="" />
+      <property name="instance.numbers" value="1,2" />
     </target>
 
     <target name="define.V2.applications" if="container.is.V2">
@@ -254,6 +274,19 @@
                  value="${container-agnostic-applications},${applications-for-V3.1-only}" />
     </target>
 
+    <target name="define.V3.1_no_cluster.applications.virtual.server" 
+            if="container.is.V3.1_no_cluster">
+       <property name="applications"
+                 value="${applications-for-V3.1_no_cluster-virtual-server}" />
+    </target>
+
+
+
+    <target name="define.V3.1_no_cluster.applications" if="container.is.V3.1_no_cluster">
+       <property name="applications" 
+                 value="${container-agnostic-applications},${applications-for-V3.1_no_cluster-only}" />
+    </target>
+
     <target name="install" depends="compile.base.sources,define.applications">
         
         <for list="${applications}" param="app" trim="true">
@@ -266,6 +299,21 @@
             </sequential>
         </for>
 
+    </target>
+    <target name="install-virtual-server" depends="compile.base.sources,define.applications.virtual-server">
+        <delete.virtual.servers/>
+        <create.virtual.servers/>
+       
+        <for list="${applications}" param="app" trim="true">
+            <sequential>
+                <undeploy.app appname="@{app}"/>
+                <build.app appname="@{app}"
+                           base-app-dir="${basedir}/@{app}"/>
+                <deploy.app appname="@{app}" use-virtual-servers="true"
+                            base-app-dir="${basedir}/@{app}"/>
+            </sequential>
+        </for>
+        
     </target>
 
     <target name="build" depends="define.applications,compile.base.sources">
@@ -286,6 +334,19 @@
               <undeploy.app appname="@{app}"/>              
             </sequential>
         </for>
+        
+    </target>
+
+    <target name="remove-virtual-server" depends="define.applications.virtual-server">
+        
+        <for list="${applications}" param="app" trim="true">
+            <sequential>
+              <undeploy.app appname="@{app}"/>              
+            </sequential>
+        </for>
+
+        <delete.virtual.servers/>
+
         
     </target>
 
@@ -322,6 +383,15 @@
           <property name="applications" value="${applications}" />
         </ant>
 
-    </target>    
+    </target>
+
+    <target name="test-virtual-server" depends="define.applications.virtual-server"
+            description="Execute all tests against installed /jsf-* applications">
+
+        <ant antfile="build-tests.xml" target="test-virtual-server">        
+          <property name="glassfishV3.1-virtual-server" value="true" />
+        </ant>
+    </target>
+
         
 </project>

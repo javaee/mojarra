@@ -523,7 +523,7 @@
     </target>
 
     <target name="test"
-             depends="update,init.test,compile.test,run.systest,run.junit.test,run.systest-per-webapp,run.cactus.test"
+             depends="update,init.test,compile.test,run.systest,run.junit.test,run.systest-per-webapp,run.systest-per-webapp-on-virtual-server,run.cactus.test"
             description="Run all unit and system tests"/>
 
     <target name="test.generate.reports"
@@ -545,19 +545,45 @@
         <ant dir="${basedir}/systest-per-webapp" inheritall="false"
              target="test">
           <property name="force.no.cluster" value="${force.no.cluster}" />
-        </ant>
+        </ant>       
 
+        <ant dir="${basedir}/systest-per-webapp" inheritall="false"
+             target="remove">
+        <property name="force.no.cluster" value="${force.no.cluster}" />
+        </ant>
+    </target>
+
+   <target name="run.systest-per-webapp-on-virtual-server"
+           depends="discover.container.version" 
+           if="container.is.V3.1_no_cluster"
+           description="Run per-webapp system tests on 3 virtual servers">
         <ant dir="${basedir}/systest-per-webapp" inheritall="false"
              target="remove">
           <property name="force.no.cluster" value="${force.no.cluster}" />
         </ant>
-
+        <container.stop />
+        <var name="force.no.cluster" value="true" />
+        <container.start />
+        <ant dir="${basedir}/systest-per-webapp" inheritall="true"
+             target="install-virtual-server">
+          <property name="force.no.cluster" value="true" />
+        </ant>
+        <ant dir="${basedir}/systest-per-webapp" inheritall="false"
+             target="test-virtual-server">
+          <property name="force.no.cluster" value="true" />
+          <property name="instance.numbers" value="1,2" />
+        </ant>
+        <ant dir="${basedir}/systest-per-webapp" inheritall="false"
+             target="remove-virtual-server">
+          <property name="force.no.cluster" value="${force.no.cluster}" />
+        </ant>
     </target>
 
 
     <target name="run.junit.test"
             description="Run unit tests not requiring cactus">
-        <ant antfile="build-tests.xml" target="run.test"/>
+        <ant antfile="build-tests.xml" target="run.test">
+        </ant>
     </target>
 
     <target name="run.cactus.test"
