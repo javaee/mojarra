@@ -307,9 +307,19 @@
 
     </target>
     <target name="install-virtual-server" depends="compile.base.sources,define.applications.virtual-server">
-        <delete.virtual.servers/>
-        <create.virtual.servers/>
-       
+      <if>
+        <or>
+           <equals arg1="${create-virtual-servers}" arg2="true"
+                   casesensitive="false" trim="true" />
+           <contains string="${create-virtual-servers}" substring="create-virtual-servers"
+                   />
+        </or>
+        <then>
+          <delete.virtual.servers/>
+          <create.virtual.servers/>
+        </then>
+      </if>
+         
         <for list="${applications}" param="app" trim="true">
             <sequential>
                 <undeploy.app appname="@{app}"/>
@@ -344,15 +354,24 @@
     </target>
 
     <target name="remove-virtual-server" depends="define.applications.virtual-server">
-        
+
         <for list="${applications}" param="app" trim="true">
             <sequential>
               <undeploy.app appname="@{app}"/>              
             </sequential>
         </for>
 
-        <delete.virtual.servers/>
-
+      <if>
+        <or>
+           <equals arg1="${create-virtual-servers}" arg2="true"
+                   casesensitive="false" trim="true" />
+           <contains string="${create-virtual-servers}" substring="create-virtual-servers"
+                   />
+        </or>
+        <then>
+          <delete.virtual.servers/>
+        </then>
+      </if>
         
     </target>
 
