@@ -45,8 +45,9 @@ package com.sun.faces.component.visit;
 import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.facelets.component.UIRepeat;
 import com.sun.faces.util.Util;
-import java.util.ArrayList;
-import java.util.HashSet;
+
+import java.util.*;
+import java.util.logging.Logger;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UINamingContainer;
 import javax.faces.component.UIViewRoot;
@@ -57,6 +58,7 @@ import javax.faces.component.html.HtmlInputText;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
+import javax.faces.component.visit.VisitHint;
 import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
@@ -195,6 +197,67 @@ public class TestTreeWithUIRepeatVisit extends ServletFacesTestCase {
         System.out.println(builder);
         String result = builder.toString().trim();
         assertEquals(result, "form:panel0:data:3:output0 form:panel1:data:0:output0");
+
+    }
+
+    // Tests UIRepeat visiting with VisitHint.SKIP_ITERATION set.
+    // Each child of UIRepeat should be visited once.
+    public void testUIRepeatSkipIterationVisit() throws Exception {
+        UIRepeat data;
+        UIComponent column0;
+        HtmlOutputText output0;
+        ArrayList<String> hobbits = new ArrayList<String>();
+        hobbits.add("bilbo");
+        hobbits.add("frodo");
+        hobbits.add("merry");
+        hobbits.add("pippin");
+        hobbits.add("lumpy");
+        ListDataModel dataModel = new ListDataModel(hobbits);
+
+        data = new UIRepeat();
+        data.setId("data");
+        data.setValue(dataModel);
+        data.setVar("hobbitName");
+        String dataId = data.getClientId();
+
+        column0 = new HtmlColumn();
+        column0.setId("column0");
+        data.getChildren().add(column0);
+
+        output0 = new HtmlOutputText();
+        output0.setId("output0");
+        output0.setValue(getFacesContext().getApplication().getExpressionFactory().createValueExpression(getFacesContext().getELContext(), "#{hobbitName}", String.class));
+        column0.getChildren().add(output0);
+
+        final List<String> visitedIds = new ArrayList<String>();
+        Set<VisitHint> hints = EnumSet.of(VisitHint.SKIP_ITERATION);
+        data.visitTree(VisitContext.createVisitContext(getFacesContext(),
+                                                       null,
+                                                       hints),
+                       new VisitCallback() {
+                           public VisitResult visit(VisitContext context,
+                                                    UIComponent target) {
+                               visitedIds
+                                     .add(target.getClientId(context.getFacesContext()));
+                               return VisitResult.ACCEPT;
+                           }
+                       });
+
+        String[] expectedIds = { "data",
+                                 "data:column0",
+                                 "data:output0" };
+
+
+        Logger.getAnonymousLogger().info("VISITED IDS:"+visitedIds);
+
+        assertEquals("Expected number of vists: " + expectedIds.length + ", actual number of visits: " + visitedIds.size(),
+                     expectedIds.length,
+                     visitedIds.size());
+
+        for (String id : expectedIds) {
+            assertTrue("ID: " + id + " not visited.", visitedIds.contains(id));
+        }
+
 
     }
 

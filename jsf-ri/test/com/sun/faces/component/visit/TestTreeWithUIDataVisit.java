@@ -45,9 +45,11 @@ package com.sun.faces.component.visit;
 import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.util.Util;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.Set;
 import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIData;
@@ -266,7 +268,60 @@ public class TestTreeWithUIDataVisit extends ServletFacesTestCase {
 
     }
 
+    // Tests UIData visiting with VisitHint.SKIP_ITERATION set.
+    // Each child of UIData should be visited once.    
+    public void testUIDataSkipIterationVisit() throws Exception {
 
-    // PENDING make sure UIData and UIRepeat are tested.
+        UIData data = new UIData();
+        DataModel m = new ArrayDataModel<String>(new String[] {"a", "b"});
+        data.setValue(m);
+        data.setId("table");
+        UIOutput tableFacet = new UIOutput();
+        tableFacet.setId("tableFacet");
+        data.getFacets().put("header", tableFacet);
+        UIColumn c1 = new UIColumn();
+        c1.setId("column1");
+        UIOutput column1Facet = new UIOutput();
+        column1Facet.setId("column1Facet");
+        c1.getFacets().put("header", column1Facet);
+        UIOutput column1Data = new UIOutput();
+        column1Data.setId("column1Data");
+        c1.getChildren().add(column1Data);
+        data.getChildren().add(c1);
+
+        final List<String> visitedIds = new ArrayList<String>();
+        Set<VisitHint> hints = EnumSet.of(VisitHint.SKIP_ITERATION);
+        data.visitTree(VisitContext.createVisitContext(getFacesContext(),
+                                                       null,
+                                                       hints),
+                       new VisitCallback() {
+                           public VisitResult visit(VisitContext context,
+                                                    UIComponent target) {
+                               visitedIds
+                                     .add(target.getClientId(context.getFacesContext()));
+                               return VisitResult.ACCEPT;
+                           }
+                       });
+
+        String[] expectedIds = { "table",
+                                 "table:tableFacet",
+                                 "table:column1",
+                                 "table:column1Facet",
+                                 "table:column1Data" };
+
+
+        Logger.getAnonymousLogger().info("VISITED IDS:"+visitedIds);
+
+        assertEquals("Expected number of vists: " + expectedIds.length + ", actual number of visits: " + visitedIds.size(),
+                     expectedIds.length,
+                     visitedIds.size());
+
+        for (String id : expectedIds) {
+            assertTrue("ID: " + id + " not visited.", visitedIds.contains(id));
+        }
+    }
+
+
+// PENDING make sure UIData and UIRepeat are tested.
 
 } // end of class TestTreeVisit

@@ -71,6 +71,7 @@ import javax.faces.component.UIData;
 import javax.faces.component.UINamingContainer;
 import javax.faces.component.visit.VisitContext;
 import javax.faces.component.visit.VisitCallback;
+import javax.faces.component.visit.VisitHint;
 import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
@@ -594,7 +595,8 @@ public class UIRepeat extends UINamingContainer {
         }
 
         FacesContext facesContext = context.getFacesContext();
-        boolean visitRows = requiresRowIteration(facesContext);
+        boolean visitRows = requiresRowIteration(context);
+
         int oldRowIndex = -1;
         if (visitRows) {
             oldRowIndex = getDataModel().getRowIndex();
@@ -645,9 +647,9 @@ public class UIRepeat extends UINamingContainer {
         return false;
     }
 
-    private boolean requiresRowIteration(FacesContext ctx) {
+    private boolean requiresRowIteration(VisitContext ctx) {
 
-        return (!PhaseId.RESTORE_VIEW.equals(ctx.getCurrentPhaseId()));
+        return !ctx.getHints().contains(VisitHint.SKIP_ITERATION);
 
     }
 
