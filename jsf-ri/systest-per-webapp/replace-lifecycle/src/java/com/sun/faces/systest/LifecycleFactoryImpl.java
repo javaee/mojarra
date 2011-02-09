@@ -40,8 +40,12 @@
 
 package com.sun.faces.systest;
 
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 
-import java.util.Collections;
+import javax.faces.FactoryFinder;
 import javax.faces.FacesException;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
@@ -50,17 +54,18 @@ import java.util.Iterator;
 
 public class LifecycleFactoryImpl extends LifecycleFactory {
 
-    private static final String KEY = LifecycleFactoryImpl.class.getName();
+    private LifecycleFactory previous = null;
+
+    private Lifecycle newLifecycle = null;
 
     public LifecycleFactoryImpl(LifecycleFactory previous) {
+	this.previous = previous;
 	try {
-            SingletonStore<LifecycleFactory> store = new SingletonStore<LifecycleFactory>(KEY);
-            store.putSingletonReference(previous);
-	    Lifecycle newLifecycle = new NewLifecycle("com.sun.faces.systest.NewLifecycle");
-	    previous.addLifecycle("com.sun.faces.systest.NewLifecycle",
+	    newLifecycle = new NewLifecycle("com.sun.faces.systest.NewLifecycle");
+	    this.previous.addLifecycle("com.sun.faces.systest.NewLifecycle",
 				       newLifecycle);
             newLifecycle = new NewLifecycle("com.sun.faces.systest.AlternateLifecycle");
-            previous.addLifecycle("com.sun.faces.systest.AlternateLifecycle",
+            this.previous.addLifecycle("com.sun.faces.systest.AlternateLifecycle",
 				       newLifecycle);
 	}
 	catch (Throwable e) {
@@ -70,36 +75,15 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
 
     public void addLifecycle(String lifecycleId,
 			     Lifecycle lifecycle) {
-        SingletonStore<LifecycleFactory> store = new SingletonStore<LifecycleFactory>(KEY);
-        LifecycleFactory previous = store.getReferenceToSingleton();
-        if (null != previous) {
-            previous.addLifecycle(lifecycleId, lifecycle);
-        }
+	previous.addLifecycle(lifecycleId, lifecycle);
     }
 
     public Lifecycle getLifecycle(String lifecycleId) {
-        SingletonStore<LifecycleFactory> store = new SingletonStore<LifecycleFactory>(KEY);
-        LifecycleFactory previous = store.getReferenceToSingleton();
-        Lifecycle result = null;
-        if (null != previous) {
-            result = previous.getLifecycle(lifecycleId);
-        } else {
-            System.out.println("getLifecycle(): How is this happening?");
-        }
-        return result;
+	return previous.getLifecycle(lifecycleId);
     }
 
 
     public Iterator getLifecycleIds() {
-        Iterator result = Collections.EMPTY_LIST.iterator();
-        SingletonStore<LifecycleFactory> store = new SingletonStore<LifecycleFactory>(KEY);
-        LifecycleFactory previous = store.getReferenceToSingleton();
-        if (null != previous) {
-            result = previous.getLifecycleIds();
-        } else {
-            System.out.println("getLifecycleIds(): How is this happening?");
-        }
-        return result;
+	return previous.getLifecycleIds();
     }
 }
-
