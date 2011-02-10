@@ -132,6 +132,13 @@
                 test.http.method.protection,
                 test.groovy"
             -->
+    <!-- Special double converter test that addresses java jre issue outlined here:
+         http://www.exploringbinary.com/java-hangs-when-converting-2-2250738585072012e-308/
+         Java hangs when converting 2.2250738585072012e-308
+         This test should be enabled once the Java jre is patched.
+
+                test.converter07,
+    -->
 
     <target name="test.init">
         <mkdir dir="${impl.test.results.dir}"/>
@@ -832,6 +839,18 @@
               context-path="${context.path}" request="/faces/converter06.jsp"
               regexpFile="${regexp.path}/converter06.txt"/>
     </target>
+
+    <!-- Special double converter test that addresses java jre issue outlined here:
+         http://www.exploringbinary.com/java-hangs-when-converting-2-2250738585072012e-308/
+         Java hangs when converting 2.2250738585072012e-308
+         This test should be enabled once the Java jre is patched.
+      
+    <target name="test.converter07">
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/converter07.jsp"
+              regexpFile="${regexp.path}/converter07.txt"/>
+    </target>
+    -->
 
     <target name="test.enum-converter-1"
             description="Test Enum Converter ">
