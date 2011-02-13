@@ -48,10 +48,10 @@
     <version>@version@</version>
     <packaging>jar</packaging>
     <name>
-        Oracle's implementation of the JSF 2.1 specification.
+        Oracle's implementation of the JSF 2.2 specification.
     </name>
     <description>
-        This is the master POM file for Oracle's Implementation of the JSF 2.1 Specification.
+        This is the master POM file for Oracle's Implementation of the JSF 2.2 Specification.
     </description>
     <url>http://java.sun.com/javaee/javaserverfaces/</url>
     <licenses>
