@@ -1391,7 +1391,7 @@ public class UIData extends UIComponentBase
         FacesContext facesContext = context.getFacesContext();
         // NOTE: that the visitRows local will be obsolete once the
         //       appropriate visit hints have been added to the API
-        boolean visitRows = requiresRowIteration(facesContext);
+        boolean visitRows = requiresRowIteration(context);;
 
         // Clear out the row index is one is set so that
         // we start from a clean slate.
@@ -1853,9 +1853,9 @@ public class UIData extends UIComponentBase
      * @return true if row index manipulation is required by the visit to this
      *  UIData instance
      */
-    private boolean requiresRowIteration(FacesContext ctx) {
+    private boolean requiresRowIteration(VisitContext ctx) {
 
-        return (!PhaseId.RESTORE_VIEW.equals(ctx.getCurrentPhaseId()));
+        return !ctx.getHints().contains(VisitHint.SKIP_ITERATION); 
 
     }
 
