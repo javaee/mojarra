@@ -450,7 +450,7 @@ public final class ComponentSupport {
     private static boolean inspectParentAncestryToCheckIfFormOmitted(UIComponent component) {
         if (component != null) {
             while (!(component instanceof UIViewRoot) && component != null) {
-                if (component instanceof UIForm) {
+                if (component instanceof UIForm || component.getFamily().endsWith("Form")) {
                     return true;
                 }
                 component = component.getParent();
