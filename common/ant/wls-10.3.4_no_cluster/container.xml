@@ -58,6 +58,14 @@
         </classpath>
       
     </taskdef>
+    <taskdef name="wldeploy" 
+             classname="weblogic.ant.taskdefs.management.WLDeploy">
+        <classpath>
+            <pathelement
+                  location="${wl.home}/server/lib/weblogic.jar"/>
+        </classpath>
+      
+    </taskdef>
 
     <!-- JARs that may be packaged in WEB-INF/lib
   in order for the implementation to run
@@ -240,25 +248,50 @@
 
     <target name="container.deploy"
             description="Deploy the JSF Implementation artifacts to the target container.">
-        <if>
-            <os family="windows"/>
-            <then>
-                <container.stop/>
-            </then>
-        </if>
+     
+      <property name="wls.jsf.di.groupId" value="com/bea/faces" />
+      <property name="wls.jsf.di.artifactId" value="wls.jsf.di" />
+      <property name="wls.jsf.di.version" value="2.0.4" />
+      <property name="wls.jsf.di.path" value="${wls.jsf.di.groupId}/${wls.jsf.di.artifactId}/${wls.jsf.di.version}" />
+      <property name="wls.jsf.di.jar" value="${wls.jsf.di.path}/${wls.jsf.di.artifactId}-${wls.jsf.di.version}.jar" />
+      <property name="wls.jsf.di.url" value="http://hg.us.oracle.com/jsf/website/raw-file/43f22fe82eca/downloads/wls.jsf.di-2.0.4.jar"/>
 
-        <copy overwrite="true" file="${api.dir}/build/lib/jsf-api.jar" toFile="${container.home}/modules/jsf-api.jar"/>
-        <copy overwrite="true" file="${impl.dir}/build/lib/jsf-impl.jar" toFile="${container.home}/modules/jsf-impl.jar"/>
+      <propertyregex override="true"
+                   property="groupPath" input="${groupId}"
+                   regexp="\." replace="/" global="true" />
+      <mkdir dir="${maven.repo.local}/${groupPath}/jsf-api/${impl.version}" />
+      <copy file="${basedir}/jsf-api/build/lib/jsf-api.jar"
+            tofile="${maven.repo.local}/${groupPath}/jsf-api/${impl.version}/jsf-api-${impl.version}.jar" />
+      <copy file="${basedir}/jsf-ri/build/lib/jsf-impl.jar"
+            tofile="${maven.repo.local}/${groupPath}/jsf-impl/${impl.version}/jsf-impl-${impl.version}.jar" />
 
-        <if>
-            <os family="windows"/>
-            <then>
-                <!-- container.start/ -->
-                <echo>The container may have been stopped. Please restart it, if
-                    needed.
-                </echo>
-            </then>
-        </if>       
+      <if>
+        <not>
+          <available file="${maven.repo.local}/${wls.jsf.di.jar}" property="ignored"/>
+        </not>
+        <then>
+          <sequential>
+            <mkdir dir="${maven.repo.local}/${wls.jsf.di.path}" />
+            <get src="${wls.jsf.di.url}" verbose="true"
+                 usetimestamp="true"
+                 dest="${maven.repo.local}/${wls.jsf.di.jar}" />
+          </sequential>
+        </then>
+      </if>
+      <jsf.mvn mvnargs="-Dimpl.version=${impl.version}" dir="${jsf.build.home}/common/ant/${container.name}/wls-jsf" goals="clean install" />
+      <container.start />
+      <wldeploy action="deploy"
+                appversion="${spec.version}.${patch.version}"
+                libImplVer="${spec.version}.${patch.version}"
+                libSpecVer="${spec.version}"
+                library="true"
+                name="jsf"
+                password="${wl.password}"
+                user="${wl.username}"
+                source="${jsf.build.home}/common/ant/${container.name}/wls-jsf/target/mojarra-${impl.version}.war"
+                verbose="true" />
+      <container.stop />
+
     </target>
 
     <target name="container.deploy.test.dependencies"
@@ -1012,11 +1045,11 @@
     </target>
 
     <target name="edburns">
-      <antcall target="container.start" />
-      <delete failonerror="false" file="/scratch/ejburns/Documents/chaff/guess.html" />
-      <get src="http://${container.host}:${container.port}/jsf-guessNumber2.0/"
-           dest="/scratch/ejburns/Documents/chaff/guess.html" />
-      <antcall target="container.stop" />
+
+    <propertyregex override="true"
+                   property="groupPath" input="${groupId}"
+                   regexp="\." replace="/" global="true" />
+<echo>${groupId} ${groupPath}</echo>
     </target>
 
 </project>
