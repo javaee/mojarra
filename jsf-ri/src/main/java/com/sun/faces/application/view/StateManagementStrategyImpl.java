@@ -100,6 +100,10 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
     private static final String CLIENTIDS_TO_ADD_NAME =
             "com.sun.faces.application.view.CLIENTIDS_TO_ADD";
 
+    private static String SKIP_ITERATION_HINT =
+        "javax.faces.visit.SKIP_ITERATION";
+
+
 
     // ------------------------------------------------------------ Constructors
 
@@ -144,37 +148,49 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
 
         final StateContext stateContext = StateContext.getStateContext(context);
 
-        VisitContext visitContext = VisitContext.createVisitContext(context, null, Collections.EMPTY_SET);
-        final FacesContext finalContext = context;
-        viewRoot.visitTree(visitContext, new VisitCallback() {
-            public VisitResult visit(VisitContext context, UIComponent target) {
-                VisitResult result = VisitResult.ACCEPT;
-                Object stateObj;
-                if (!target.isTransient()) {
-                    if (stateContext.componentAddedDynamically(target)) {
-                        stateObj = new StateHolderSaver(finalContext, target);
-                        Map<String, ComponentStruct> dynamicAdds = stateContext.getDynamicAdds();
-                        assert(null != dynamicAdds);
-                        String clientId = target.getClientId(finalContext);
-                        if (!dynamicAdds.containsKey(clientId)) {
-                            ComponentStruct toAdd = new ComponentStruct();
-                            toAdd.absorbComponent(finalContext, target);
-                            dynamicAdds.put(clientId, toAdd);
-                        }
+        // PENDING: This is included for those component frameworks that don't utilize the
+        // new VisitHint(s) yet - but still wish to know that they should be non-iterating
+        // during state saving.  It should be removed at some point.
+        context.getAttributes().put(SKIP_ITERATION_HINT, true);
 
-                    } else {
-                        stateObj = target.saveState(context.getFacesContext());
+        Set<VisitHint> hints = EnumSet.of(VisitHint.SKIP_ITERATION);
+        VisitContext visitContext = VisitContext.createVisitContext(context, null, hints);
+        final FacesContext finalContext = context;
+        try {
+            viewRoot.visitTree(visitContext, new VisitCallback() {
+                public VisitResult visit(VisitContext context, UIComponent target) {
+                    VisitResult result = VisitResult.ACCEPT;
+                    Object stateObj;
+                    if (!target.isTransient()) {
+                        if (stateContext.componentAddedDynamically(target)) {
+                            stateObj = new StateHolderSaver(finalContext, target);
+                            Map<String, ComponentStruct> dynamicAdds = stateContext.getDynamicAdds();
+                            assert(null != dynamicAdds);
+                            String clientId = target.getClientId(finalContext);
+                            if (!dynamicAdds.containsKey(clientId)) {
+                                ComponentStruct toAdd = new ComponentStruct();
+                                toAdd.absorbComponent(finalContext, target);
+                                dynamicAdds.put(clientId, toAdd);
+                            }
+
+                        } else {
+                            stateObj = target.saveState(context.getFacesContext());
+                        }
+                        if (null != stateObj) {
+                            stateMap.put(target.getClientId(context.getFacesContext()), stateObj);
+                        }
+                    }    else {
+                        return result;
                     }
-                    if (null != stateObj) {
-                        stateMap.put(target.getClientId(context.getFacesContext()), stateObj);
-                    }
-                }    else {
                     return result;
                 }
-                return result;
-            }
-        });
-
+            });
+        } finally {
+            // PENDING: This is included for those component frameworks that don't utilize the
+            // new VisitHint(s) yet - but still wish to know that they should be non-iterating
+            // during state saving.  It should be removed at some point.
+            context.getAttributes().remove(SKIP_ITERATION_HINT);
+        }
 
         // handle dynamic adds/removes
         List<String> removeList = stateContext.getDynamicRemoves();
@@ -235,7 +251,14 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
                 // of the TreeNode instances.  This is a problem
                 // for servers that persist session data since
                 // UIComponent instances are not serializable.
-                Set<VisitHint> hints = EnumSet.of(VisitHint.SKIP_ITERATION);
+
+    
+                // PENDING: This is included for those component frameworks that don't utilize the
+                // new VisitHint(s) yet - but still wish to know that they should be non-iterating
+                // during state saving.  It should be removed at some point.
+                context.getAttributes().put(SKIP_ITERATION_HINT, true);
+
+                Set<VisitHint> hints = EnumSet.of(VisitHint.SKIP_ITERATION, VisitHint.EXECUTE_LIFECYCLE);
                 VisitContext visitContext = VisitContext.createVisitContext(context, null, hints);
                 viewRoot.visitTree(visitContext, new VisitCallback() {
 
@@ -267,6 +290,8 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
                     }
 
                 });
+
+
 
                 // Handle dynamic add/removes
                 //noinspection unchecked
@@ -339,7 +364,11 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
                     }
                 }
             } finally {
-               stateContext.setTrackViewModifications(true); 
+                stateContext.setTrackViewModifications(true); 
+                // PENDING: This is included for those component frameworks that don't utilize the
+                // new VisitHint(s) yet - but still wish to know that they should be non-iterating
+                // during state saving.  It should be removed at some point.
+                context.getAttributes().remove(SKIP_ITERATION_HINT);
             }
         } else {
             viewRoot = null;

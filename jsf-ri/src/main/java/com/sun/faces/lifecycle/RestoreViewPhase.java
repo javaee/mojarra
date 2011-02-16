@@ -94,6 +94,9 @@ public class RestoreViewPhase extends Phase {
 
     private WebConfiguration webConfig;
 
+    private static String SKIP_ITERATION_HINT =
+        "javax.faces.visit.SKIP_ITERATION";
+
 
     // ---------------------------------------------------------- Public Methods
 
@@ -267,6 +270,11 @@ public class RestoreViewPhase extends Phase {
         UIViewRoot root = facesContext.getViewRoot();
         final PostRestoreStateEvent postRestoreStateEvent = new PostRestoreStateEvent(root);
         try {
+            // PENDING: This is included for those component frameworks that don't utilize the
+            // new VisitHint(s) yet - but still wish to know that they should be non-iterating
+            // during state saving.  It should be removed at some point.
+            facesContext.getAttributes().put(SKIP_ITERATION_HINT, true);
+
             Set<VisitHint> hints = EnumSet.of(VisitHint.SKIP_ITERATION);
             VisitContext visitContext = VisitContext.createVisitContext(facesContext, null, hints);
             root.visitTree(visitContext, new VisitCallback() {
@@ -285,8 +293,12 @@ public class RestoreViewPhase extends Phase {
                     e,
                     null,
                     PhaseId.RESTORE_VIEW));
+        } finally {
+            // PENDING: This is included for those component frameworks that don't utilize the
+            // new VisitHint(s) yet - but still wish to know that they should be non-iterating
+            // during state saving.  It should be removed at some point.
+            facesContext.getAttributes().remove(SKIP_ITERATION_HINT);
         }
-
     }
 
     // --------------------------------------------------------- Private Methods
