@@ -220,9 +220,7 @@
         <echo message="PENDING - Please implement"/>
     </target>
 
-    <target name="container.deploy"
-            description="Deploy the JSF Implementation artifacts to the target container.">
-     
+    <target name="define.wls.properties">
       <property name="wls.jsf.di.groupId" value="com/bea/faces" />
       <property name="wls.jsf.di.artifactId" value="wls.jsf.di" />
       <property name="wls.jsf.di.version" value="2.0.4" />
@@ -233,6 +231,11 @@
       <propertyregex override="true"
                    property="groupPath" input="${groupId}"
                    regexp="\." replace="/" global="true" />
+    </target>
+
+    <target name="container.deploy" depends="define.wls.properties"
+            description="Deploy the JSF Implementation artifacts to the target container.">
+     
       <mkdir dir="${maven.repo.local}/${groupPath}/jsf-api/${impl.version}" />
       <copy file="${basedir}/jsf-api/build/lib/jsf-api.jar"
             tofile="${maven.repo.local}/${groupPath}/jsf-api/${impl.version}/jsf-api-${impl.version}.jar" />
@@ -264,6 +267,24 @@
                 password="${wl.password}"
                 user="${wl.username}"
                 source="${jsf.build.home}/common/ant/${container.name}/wls-jsf/target/mojarra-${impl.version}.war"
+                verbose="true" />
+      <container.stop />
+
+    </target>
+
+    <target name="container.undeploy" depends="define.wls.properties"
+            description="Undeploy the JSF Implementation artifacts from the target container.">
+     
+      <container.stop />
+      <container.start />
+      <wldeploy action="undeploy"
+                appversion="${spec.version}.${patch.version}"
+                libImplVer="${spec.version}.${patch.version}"
+                libSpecVer="${spec.version}"
+                library="true"
+                name="jsf"
+                password="${wl.password}"
+                user="${wl.username}"
                 verbose="true" />
       <container.stop />
 
