@@ -42,14 +42,12 @@
 
 package com.sun.faces.component.visit;
 
+import com.sun.faces.application.view.StateManagementStrategyImpl;
 import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.util.Util;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.List;
+
+import java.util.*;
 import java.util.logging.Logger;
-import java.util.Set;
 import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIData;
@@ -67,11 +65,12 @@ import javax.faces.component.visit.VisitContext;
 import javax.faces.component.visit.VisitHint;
 import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
-import javax.faces.event.PhaseId;
+import javax.faces.event.*;
 import javax.faces.model.ArrayDataModel;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.ScalarDataModel;
+import javax.faces.view.StateManagementStrategy;
 
 
 public class TestTreeWithUIDataVisit extends ServletFacesTestCase {
@@ -319,6 +318,250 @@ public class TestTreeWithUIDataVisit extends ServletFacesTestCase {
         for (String id : expectedIds) {
             assertTrue("ID: " + id + " not visited.", visitedIds.contains(id));
         }
+    }
+
+    public void testUIDataSkipIterationSaveRestoreStateVisit() throws Exception {
+        FacesContext context = getFacesContext();
+        List<String> visitedIds = new ArrayList<String>();
+        UIViewRoot root = Util.getViewHandler(context).createView(context, null);
+        root.setViewId("/root.xhtml");
+        context.setViewRoot(root);
+
+        HtmlForm form = new HtmlForm();
+        form.setId("form");
+        root.getChildren().add(form);
+
+        UIDataState data = new UIDataState(visitedIds);
+        DataModel m = new ArrayDataModel<String>(new String[] {"a", "b"});
+        data.setValue(m);
+        data.setId("table");
+        UIOutputState tableFacet = new UIOutputState(visitedIds);
+        tableFacet.setId("tableFacet");
+        data.getFacets().put("header", tableFacet);
+        UIColumnState c1 = new UIColumnState(visitedIds);
+        c1.setId("column1");
+        UIOutputState column1Facet = new UIOutputState(visitedIds);
+        column1Facet.setId("column1Facet");
+        c1.getFacets().put("header", column1Facet);
+        UIOutputState column1Data = new UIOutputState(visitedIds);
+        column1Data.setId("column1Data");
+        c1.getChildren().add(column1Data);
+        data.getChildren().add(c1);
+        form.getChildren().add(data);
+        StateManagementStrategyImpl strategy = new StateManagementStrategyImpl();
+
+        String[] expectedIds = { "SAVE:form:table",
+                                 "SAVE:form:table:tableFacet",
+                                 "SAVE:form:table:column1",
+                                 "SAVE:form:table:column1Facet",
+                                 "SAVE:form:table:column1Data" };
+
+        Object[] state = (Object[])strategy.saveView(context);
+
+        Logger.getAnonymousLogger().info("VISITED IDS:"+visitedIds);
+
+        assertEquals("Expected number of vists: " + expectedIds.length + ", actual number of visits: " + visitedIds.size(),
+                     expectedIds.length,
+                     visitedIds.size());
+
+        for (String id : expectedIds) {
+            assertTrue("ID: " + id + " not visited.", visitedIds.contains(id));
+        }
+
+        expectedIds = new String[]{"RESTORE:form:table",
+                "RESTORE:form:table:tableFacet",
+                "RESTORE:form:table:column1",
+                "RESTORE:form:table:column1Facet",
+                "RESTORE:form:table:column1Data"};
+
+        visitedIds = new ArrayList<String>();
+        data.setVisitedIds(visitedIds);
+        tableFacet.setVisitedIds(visitedIds);
+        c1.setVisitedIds(visitedIds);
+        column1Facet.setVisitedIds(visitedIds);
+        column1Data.setVisitedIds(visitedIds);
+
+        final Map<String, Object> stateMap = (Map<String,Object>) state[1];
+
+        Set<VisitHint> hints = EnumSet.of(VisitHint.SKIP_ITERATION);
+        root.visitTree(VisitContext.createVisitContext(context, null,hints),
+            new VisitCallback() {
+                public VisitResult visit(VisitContext context, UIComponent target) {
+                    String cid = target.getClientId(context.getFacesContext());
+                    Object stateObj = stateMap.get(cid);
+                    target.restoreState(context.getFacesContext(), stateObj);
+                    return VisitResult.ACCEPT;
+                }
+        });
+
+
+
+        Logger.getAnonymousLogger().info("VISITED IDS:"+visitedIds);
+
+        assertEquals("Expected number of vists: " + expectedIds.length + ", actual number of visits: " + visitedIds.size(),
+                     expectedIds.length,
+                     visitedIds.size());
+
+        for (String id : expectedIds) {
+            assertTrue("ID: " + id + " not visited.", visitedIds.contains(id));
+        }
+
+    }
+
+    public void testUIDataSkipIterationPostRestoreEventVisit() throws Exception {
+        FacesContext context = getFacesContext();
+        List<String> visitedIds = new ArrayList<String>();
+        UIViewRoot root = Util.getViewHandler(context).createView(context, null);
+        root.setViewId("/root.xhtml");
+        context.setViewRoot(root);
+
+        HtmlForm form = new HtmlForm();
+        form.setId("form");
+        root.getChildren().add(form);
+
+        UIDataState data = new UIDataState(visitedIds);
+        DataModel m = new ArrayDataModel<String>(new String[] {"a", "b"});
+        data.setValue(m);
+        data.setId("table");
+        UIOutputState tableFacet = new UIOutputState(visitedIds);
+        tableFacet.setId("tableFacet");
+        data.getFacets().put("header", tableFacet);
+        UIColumnState c1 = new UIColumnState(visitedIds);
+        c1.setId("column1");
+        UIOutputState column1Facet = new UIOutputState(visitedIds);
+        column1Facet.setId("column1Facet");
+        c1.getFacets().put("header", column1Facet);
+        UIOutputState column1Data = new UIOutputState(visitedIds);
+        column1Data.setId("column1Data");
+        c1.getChildren().add(column1Data);
+        data.getChildren().add(c1);
+        form.getChildren().add(data);
+
+        final PostRestoreStateEvent postRestoreStateEvent = new PostRestoreStateEvent(root);
+
+        String[] expectedIds = {"EVENT:form:table",
+                "EVENT:form:table:tableFacet",
+                "EVENT:form:table:column1",
+                "EVENT:form:table:column1Facet",
+                "EVENT:form:table:column1Data"};
+
+
+        Set<VisitHint> hints = EnumSet.of(VisitHint.SKIP_ITERATION);
+        VisitContext visitContext = VisitContext.createVisitContext(context, null, hints);
+        root.visitTree(visitContext, new VisitCallback() {
+            public VisitResult visit(VisitContext context, UIComponent target) {
+                postRestoreStateEvent.setComponent(target);
+                target.processEvent(postRestoreStateEvent);
+                return VisitResult.ACCEPT;
+            }
+        });
+
+        Logger.getAnonymousLogger().info("VISITED IDS:"+visitedIds);
+
+        assertEquals("Expected number of vists: " + expectedIds.length + ", actual number of visits: " + visitedIds.size(),
+                     expectedIds.length,
+                     visitedIds.size());
+
+        for (String id : expectedIds) {
+            assertTrue("ID: " + id + " not visited.", visitedIds.contains(id));
+        }
+        
+    }
+
+    private class UIDataState extends UIData
+        implements ComponentSystemEventListener {
+        private List visitedIds = null;
+        public UIDataState(List visitedIds) {
+            this.visitedIds = visitedIds;
+        }
+        public Object saveState(FacesContext context) {
+            visitedIds.add("SAVE:"+getClientId(context));
+            return super.saveState(context);
+        }
+        public void restoreState(FacesContext context, Object state) {
+            visitedIds.add("RESTORE:"+getClientId(context));
+            super.restoreState(context, state);
+        }
+        public void setVisitedIds(List<String>visitedIds) {
+            this.visitedIds = visitedIds;
+        }
+        public List<String> getVisitedIds() {
+            return visitedIds;
+        }
+        public void processEvent( ComponentSystemEvent event )
+            throws AbortProcessingException {
+            FacesContext context = FacesContext.getCurrentInstance();
+            visitedIds.add("EVENT:"+getClientId(context));
+        }
+        public boolean isListenerForSource( Object source ) {
+            return ( source instanceof UIViewRoot );
+	    }
+
+    }
+
+    private class UIOutputState extends UIOutput
+        implements ComponentSystemEventListener {
+        private List<String> visitedIds = null;
+        public UIOutputState(List visitedIds) {
+            this.visitedIds = visitedIds;
+        }
+        public Object saveState(FacesContext context) {
+            visitedIds.add("SAVE:"+getClientId(context));
+            return super.saveState(context);
+        }
+        public void restoreState(FacesContext context, Object state) {
+            visitedIds.add("RESTORE:"+getClientId(context));
+            super.restoreState(context, state);
+        }
+        public void setVisitedIds(List<String>visitedIds) {
+            this.visitedIds = visitedIds;
+        }
+        public List<String> getVisitedIds() {
+            return visitedIds;
+        }
+        public void processEvent( ComponentSystemEvent event )
+            throws AbortProcessingException {
+            FacesContext context = FacesContext.getCurrentInstance();
+            visitedIds.add("EVENT:"+getClientId(context));
+        }
+        public boolean isListenerForSource( Object source ) {
+            return ( source instanceof UIViewRoot );
+	    }
+
+    }
+
+    private class UIColumnState extends UIColumn
+        implements ComponentSystemEventListener {
+        private List visitedIds = null;
+        private ComponentSystemEvent event;
+
+        public UIColumnState(List visitedIds) {
+            this.visitedIds = visitedIds;
+        }
+        public Object saveState(FacesContext context) {
+            visitedIds.add("SAVE:"+getClientId(context));
+            return super.saveState(context);
+        }
+        public void restoreState(FacesContext context, Object state) {
+            visitedIds.add("RESTORE:"+getClientId(context));
+            super.restoreState(context, state);
+        }
+        public void setVisitedIds(List<String>visitedIds) {
+            this.visitedIds = visitedIds;
+        }
+        public List<String> getVisitedIds() {
+            return visitedIds;
+        }
+        @Override
+        public void processEvent( ComponentSystemEvent event )
+            throws AbortProcessingException {
+            FacesContext context = FacesContext.getCurrentInstance();
+            visitedIds.add("EVENT:"+getClientId(context));
+        }
+        public boolean isListenerForSource( Object source ) {
+            return ( source instanceof UIViewRoot );
+	    }
+
     }
 
 
