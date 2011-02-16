@@ -105,44 +105,36 @@
                    description="If true, deploy to the virtual servers."
                    default="false"/>
         <sequential>
-            <condition property="exec.name" value="cmd.exe">
-                <os family="windows"/>
-            </condition>
-            <condition property="exec.arg.1"
-                       value="/c ${container.home}/bin/asadmin">
-                <os family="windows"/>
-            </condition>
-            <property name="exec.name" value="${container.home}/bin/asadmin"/>
-            <property name="exec.arg.1" value=""/>
+            <echo>Instrumenting @{artifact} with weblogic.xml</echo>
+            <property name="local.wls-jsf"
+                  value="${jsf.build.home}/common/ant/${container.name}/wls-jsf" />
+            <property name="local.wls-jsf.deploy.artifact"
+                  value="${local.wls-jsf}/target/deploy.artifact" />
+            <mkdir dir="${local.wls-jsf.deploy.artifact}/WEB-INF/" />
+            <copy file="${local.wls-jsf}/src/main/templates/weblogic.xml"
+                  tofile="${local.wls-jsf.deploy.artifact}/WEB-INF/weblogic.xml"
+                  filtering="true">
+                <filterset>
+                  <filter token="spec.version" value="${spec.version}"/>
+                </filterset>
+            </copy>
+            <jar update="true" destfile="@{artifact}">
+                <fileset dir="${local.wls-jsf.deploy.artifact}"
+                         includes="**/*.*" />
+            </jar>
+
             <echo>
 
 ---------------- Glassfish - Deploying @{appName} ---------------- 
 
             </echo>
-            <condition property="target"
-                       value="--target ${glassfish.cluster}">
-                <not>
-                  <equals arg1="${force.no.cluster}" casesensitive="false" trim="true"
-                          arg2="true" />
-                </not>
-            </condition>
-            <condition property="availabilityenabled"
-                       value="--availabilityenabled true">
-                <not>
-                  <equals arg1="${force.no.cluster}" casesensitive="false" trim="true"
-                          arg2="true" />
-                </not>
-            </condition>
-            <property name="target" value="" />
-            <property name="availabilityenabled" value="" />
-            <exec executable="${exec.name}" failonerror="true">
-                <arg line="${exec.arg.1}"/>
-                <arg line="--port ${glassfish.custom.admin.port}"/>
-                <arg line="deploy"/>
-                <arg line="${availabilityenabled}"/>
-                <arg line="${target}"/>
-                <arg line="@{artifact}"/>
-            </exec>
+            <wldeploy action="deploy"
+                appversion="${spec.version}.${patch.version}"
+                name="@{appName}"
+                password="${wl.password}"
+                user="${wl.username}"
+                source="@{artifact}"
+                verbose="true" />
         </sequential>
     </macrodef>
 
@@ -200,35 +192,17 @@
         <attribute name="appName"
                    description="The name of the application"/>
         <sequential>
-            <condition property="exec.name" value="cmd.exe">
-                <os family="windows"/>
-            </condition>
-            <condition property="exec.arg.1"
-                       value="/c ${container.home}/bin/asadmin">
-                <os family="windows"/>
-            </condition>
-            <property name="exec.name" value="${container.home}/bin/asadmin"/>
-            <property name="exec.arg.1" value=""/>
-            <condition property="target"
-                       value="--target ${glassfish.cluster}">
-                <not>
-                  <equals arg1="${force.no.cluster}" casesensitive="false" trim="true"
-                          arg2="true" />
-                </not>
-            </condition>
-            <property name="target" value="" />
             <echo>
 
 ---------------- Glassfish - Undeploying @{appName} ---------------- 
 
             </echo>
-            <exec executable="${exec.name}">
-                <arg line="${exec.arg.1}"/>
-                <arg line="--port ${glassfish.custom.admin.port}"/>
-                <arg line="undeploy"/>
-                <arg line="${target}"/>
-                <arg line="@{appName}"/>
-            </exec>
+            <wldeploy action="undeploy"
+                name="@{appName}"
+                password="${wl.password}"
+                user="${wl.username}"
+                verbose="true" debug="true" failonerror="false"/>
+
         </sequential>
     </macrodef>
 
@@ -279,6 +253,7 @@
         </then>
       </if>
       <jsf.mvn mvnargs="-Dimpl.version=${impl.version}" dir="${jsf.build.home}/common/ant/${container.name}/wls-jsf" goals="clean install" />
+      <container.stop />
       <container.start />
       <wldeploy action="deploy"
                 appversion="${spec.version}.${patch.version}"
@@ -440,7 +415,7 @@
                     username="${wl.username}" password="${wl.password}"
                     beahome="${container.home}" 
                     weblogichome="${wl.home}" verbose="true" 
-                    noexit="true"
+                    noExit="true"
                     protocol="t3" 
                     classpath="${wl.home}/server/lib/weblogic.jar" >
                        <jvmarg value="-server"/>
