@@ -110,12 +110,15 @@
                   value="${jsf.build.home}/common/ant/${container.name}/wls-jsf" />
             <property name="local.wls-jsf.deploy.artifact"
                   value="${local.wls-jsf}/target/deploy.artifact" />
+            <delete dir="${local.wls-jsf.deploy.artifact}" 
+                    failonerror="false" />
             <mkdir dir="${local.wls-jsf.deploy.artifact}/WEB-INF/" />
             <copy file="${local.wls-jsf}/src/main/templates/weblogic.xml"
                   tofile="${local.wls-jsf.deploy.artifact}/WEB-INF/weblogic.xml"
                   filtering="true">
                 <filterset>
-                  <filter token="spec.version" value="${spec.version}"/>
+                  <filter token="spec.version" value="${impl.version.number}"/>
+                  <filter token="impl.name" value="${impl.name}"/>
                 </filterset>
             </copy>
             <jar update="true" destfile="@{artifact}">
@@ -129,7 +132,7 @@
 
             </echo>
             <wldeploy action="deploy"
-                appversion="${spec.version}.${patch.version}"
+                appversion="${impl.version.number}"
                 name="@{appName}"
                 password="${wl.password}"
                 user="${wl.username}"
@@ -237,9 +240,9 @@
             description="Deploy the JSF Implementation artifacts to the target container.">
      
       <mkdir dir="${maven.repo.local}/${groupPath}/jsf-api/${impl.version}" />
-      <copy file="${basedir}/jsf-api/build/lib/jsf-api.jar"
+      <copy file="${jsf.build.home}/jsf-api/build/lib/jsf-api.jar" overwrite="true"
             tofile="${maven.repo.local}/${groupPath}/jsf-api/${impl.version}/jsf-api-${impl.version}.jar" />
-      <copy file="${basedir}/jsf-ri/build/lib/jsf-impl.jar"
+      <copy file="${jsf.build.home}/jsf-ri/build/lib/jsf-impl.jar" overwrite="true"
             tofile="${maven.repo.local}/${groupPath}/jsf-impl/${impl.version}/jsf-impl-${impl.version}.jar" />
 
       <if>
@@ -255,18 +258,24 @@
           </sequential>
         </then>
       </if>
-      <jsf.mvn mvnargs="-Dimpl.version=${impl.version}" dir="${jsf.build.home}/common/ant/${container.name}/wls-jsf" goals="clean install" />
+      <jsf.mvn mvnargs="-Dimpl.version=${impl.version} -Dimpl.name=${impl.name}" 
+               dir="${jsf.build.home}/common/ant/${container.name}/wls-jsf" goals="clean install" />
       <container.stop />
+
+      <copy file="${jsf.build.home}/jsf-api/build/lib/jsf-api.jar" overwrite="true"
+            todir="${wl.home}/server/lib/consoleapp/webapp/WEB-INF/lib" />
+      <copy file="${jsf.build.home}/jsf-ri/build/lib/jsf-impl.jar" overwrite="true"
+            todir="${wl.home}/server/lib/consoleapp/webapp/WEB-INF/lib" />
       <container.start />
       <wldeploy action="deploy"
-                appversion="${spec.version}.${patch.version}"
-                libImplVer="${spec.version}.${patch.version}"
-                libSpecVer="${spec.version}"
+                appversion="${impl.version.number}"
+                libImplVer="${impl.version.number}"
+                libSpecVer="${impl.version.number}"
                 library="true"
-                name="jsf"
+                name="${impl.name}"
                 password="${wl.password}"
                 user="${wl.username}"
-                source="${jsf.build.home}/common/ant/${container.name}/wls-jsf/target/mojarra-${impl.version}.war"
+                source="${jsf.build.home}/common/ant/${container.name}/wls-jsf/target/${impl.name}-${impl.version}.war"
                 verbose="true" />
       <container.stop />
 
@@ -278,11 +287,11 @@
       <container.stop />
       <container.start />
       <wldeploy action="undeploy"
-                appversion="${spec.version}.${patch.version}"
-                libImplVer="${spec.version}.${patch.version}"
-                libSpecVer="${spec.version}"
+                appversion="${impl.version.number}"
+                libImplVer="${impl.version.number}"
+                libSpecVer="${impl.version.number}"
                 library="true"
-                name="jsf"
+                name="${impl.name}"
                 password="${wl.password}"
                 user="${wl.username}"
                 verbose="true" />
