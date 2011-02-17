@@ -72,6 +72,7 @@
     <property name="annotation.api.version" value="1.0"/>
     <property name="portlet.api.version" value="1.0"/>
     <property name="groovy.version" value="1.6.9"/>
+    <property name="trinidad.version" value="2.0.0-beta-1"/>
     <property name="el.version" value="1.0"/>
     <property name="validation.version" value="1.0.0.GA" />
     <property name="bean-validator.version" value="3.0-JBoss-4.0.0.Beta3"/>
@@ -128,6 +129,9 @@
     <property name="annotation.jar" value="${dependency.jar.dir}/jsr250-api-${annotation.api.version}.jar"/>
     <property name="portlet.jar" value="${dependency.jar.dir}/portlet-api-${portlet.api.version}.jar"/>
     <property name="groovy.jar" value="${dependency.jar.dir}/groovy-all-${groovy.version}.jar"/>
+    <property name="trinidad-dist" value="${dependency.jar.dir}/trinidad-dist"/>
+    <property name="trinidad-api.jar" value="${trinidad-dist}/trinidad-assembly-${trinidad.version}/lib/trinidad-api-${trinidad.version}.jar"/>
+    <property name="trinidad-impl.jar" value="${trinidad-dist}/trinidad-assembly-${trinidad.version}/lib/trinidad-impl-${trinidad.version}.jar"/>
     <property name="validation-api.jar" value="${dependency.jar.dir}/validation-api-${validation.version}.jar"/>
     <property name="javax-inject.jar" value="${dependency.jar.dir}/javax.inject-${javax-inject.version}.jar"/>
     <property name="javax-enterprise.jar" value="${dependency.jar.dir}/cdi-api-${javax-enterprise.version}.jar"/>
@@ -431,6 +435,22 @@
             </then>
         </if>
         -->
+
+        <!-- Trinidad -->
+
+        <if>
+            <not>
+                <available file="${trinidad-dist}/trinidad-${trinidad.version}-dist.zip" property="ignored"/>
+            </not>
+            <then>
+                <mkdir dir="${trinidad-dist}"/>
+                <get src="http://myfaces.apache.org/dist/binaries/trinidad-${trinidad.version}-dist.zip"
+                     dest="${trinidad-dist}"
+                     usetimestamp="true"/>
+                <unzip src="${trinidad-dist}/trinidad-${trinidad.version}-dist.zip" dest="${trinidad-dist}"/>
+            </then>
+        </if>
+
         <!-- JSR 330 -->
         <if>
             <not>
