@@ -98,10 +98,10 @@
                    resource-locale-prefix,
                    nested-loadbundles,
                    replace-application,
-                   replace-statemanager,  
+                   replace-statemanager,
                    invalid-mapping,
                    nested-datatables,
-                   jar-ordering,                  
+                   jar-ordering,
                    replace-lifecycle,
                    string-converter,
                    replace-variableresolver,
@@ -143,10 +143,10 @@
                    resource-locale-prefix,
                    nested-loadbundles,
                    replace-application,
-                   replace-statemanager,  
+                   replace-statemanager,
                    invalid-mapping,
                    nested-datatables,
-                   jar-ordering,                  
+                   jar-ordering,
                    replace-lifecycle,
                    string-converter,
                    replace-variableresolver,
@@ -163,6 +163,8 @@
                    bogus-render-kit-id,
                    characterCombat"/>
 
+    <property name="applications-with-custom-dependencies"
+              value="formOmittedTrinidad"/>
 
     <!-- ************ Executable Targets ************************************** -->
 
@@ -277,20 +279,20 @@
 
     <target name="define.V3.1.applications" if="container.is.V3.1">
        <property name="applications" 
-                 value="${container-agnostic-applications},${applications-for-V3.1-only}" />
+                 value="${container-agnostic-applications},${applications-for-V3.1-only}, ${applications-with-custom-dependencies}" />
     </target>
 
     <target name="define.V3.1_no_cluster.applications.virtual.server" 
             if="container.is.V3.1_no_cluster">
        <property name="applications"
-                 value="${applications-for-V3.1_no_cluster-virtual-server}" />
+                 value="${applications-for-V3.1_no_cluster-virtual-server}, ${applications-with-custom-dependencies}" />
     </target>
 
 
 
     <target name="define.V3.1_no_cluster.applications" if="container.is.V3.1_no_cluster">
        <property name="applications" 
-                 value="${container-agnostic-applications},${applications-for-V3.1_no_cluster-only}" />
+                 value="${container-agnostic-applications},${applications-for-V3.1_no_cluster-only},${applications-with-custom-dependencies}" />
     </target>
 
     <target name="install" depends="compile.base.sources,define.applications">
@@ -298,6 +300,13 @@
         <for list="${applications}" param="app" trim="true">
             <sequential>
                 <undeploy.app appname="@{app}"/>
+                <if>
+                    <contains string="@{app}" substring="Trinidad"/>
+                    <then>
+                        <antcall target="populate-dependency-properties-@{app}"/>
+                    </then>
+                </if>
+
                 <build.app appname="@{app}"
                             base-app-dir="${basedir}/@{app}"/>
                 <deploy.app appname="@{app}"
@@ -306,12 +315,18 @@
         </for>
 
     </target>
-    <target name="install-virtual-server" depends="compile.base.sources,define.applications.virtual-server">
-      <if>
+
+    <target name="populate-dependency-properties-formOmittedTrinidad">
+        <copy file="${trinidad-api.jar}" todir="formOmittedTrinidad/web/WEB-INF/lib"/>
+        <copy file="${trinidad-impl.jar}" todir="formOmittedTrinidad/web/WEB-INF/lib"/>       
+    </target>
+
+<target name="install-virtual-server" depends="compile.base.sources,define.applications.virtual-server">
+    <if>
         <or>
-           <equals arg1="${create-virtual-servers}" arg2="true"
+            <equals arg1="${create-virtual-servers}" arg2="true"
                    casesensitive="false" trim="true" />
-           <contains string="${create-virtual-servers}" substring="create-virtual-servers"
+            <contains string="${create-virtual-servers}" substring="create-virtual-servers"
                    />
         </or>
         <then>
@@ -323,8 +338,14 @@
         <for list="${applications}" param="app" trim="true">
             <sequential>
                 <undeploy.app appname="@{app}"/>
+                <if>
+                    <contains string="@{app}" substring="Trinidad"/>
+                    <then>
+                        <antcall target="populate-dependency-properties-@{app}"/>
+                    </then>
+                </if>
                 <build.app appname="@{app}"
-                           base-app-dir="${basedir}/@{app}"/>
+                           base-app-dir="${basedir}/@{app}"/>               
                 <deploy.app appname="@{app}" use-virtual-servers="true"
                             base-app-dir="${basedir}/@{app}"/>
             </sequential>
@@ -336,8 +357,14 @@
         
         <for list="${applications}" param="app" trim="true">
             <sequential>
+                <if>
+                    <contains string="@{app}" substring="Trinidad"/>
+                    <then>
+                        <antcall target="populate-dependency-properties-@{app}"/>
+                    </then>
+                </if>
                 <build.app appname="@{app}"
-                            base-app-dir="${basedir}/@{app}"/>
+                            base-app-dir="${basedir}/@{app}"/>               
             </sequential>
         </for>
 
