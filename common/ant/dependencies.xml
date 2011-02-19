@@ -109,6 +109,7 @@
     <property name="annotation.home" value="${dependency.base.dir}/annotation-${annotation.api.version}"/>
     <property name="yuicompressor.home" value="${dependency.base.dir}/yuicompressor-${yuicompressor.version}"/>
     <property name="trinidad.home" value="${dependency.base.dir}/trinidad-assembly-${trinidad.version}"/>
+    <property name="trinidad.zip" value="${dependency.base.dir}/downloads/trinidad-${trinidad.version}-dist.zip"/>
 
     <property name="junit.jar" value="${dependency.jar.dir}/junit-${junit.version}.jar"/>
     <property name="htmlunit.jar" value="${dependency.jar.dir}/htmlunit-${htmlunit.version}.jar"/>
@@ -437,14 +438,15 @@
         -->
 
         <!-- Trinidad -->
+        <echo>${trinidad.zip}</echo>
 
         <if>
             <not>
-                <available file="${dependency.base.dir}/downloads/trinidad-${trinidad.version}-dist.zip}" property="ignored"/>
+                <available file="${trinidad.zip}" property="ignored"/>
             </not>
             <then>
                 <get src="http://myfaces.apache.org/dist/binaries/trinidad-${trinidad.version}-dist.zip"
-                     dest="${dependency.base.dir}/downloads/trinidad-${trinidad.version}-dist.zip"
+                     dest="${trinidad.zip}"
                      usetimestamp="true"/>
 
                 <unzip
