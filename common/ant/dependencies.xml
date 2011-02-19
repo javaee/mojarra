@@ -440,7 +440,7 @@
 
         <if>
             <not>
-                <available file="${trinidad-dist.zip}" property="ignored"/>
+                <available file="${dependency.base.dir}/downloads/trinidad-${trinidad.version}-dist.zip}" property="ignored"/>
             </not>
             <then>
                 <get src="http://myfaces.apache.org/dist/binaries/trinidad-${trinidad.version}-dist.zip"
