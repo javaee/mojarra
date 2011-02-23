@@ -67,6 +67,8 @@ import java.util.logging.Level;
 import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Set;
+import javax.faces.context.FacesContext;
 
 
 /**
@@ -680,8 +682,8 @@ public final class FactoryFinder {
      */
     private static final class FactoryManagerCache {
 
-        private ConcurrentMap<ClassLoader,Future<FactoryManager>> applicationMap =
-              new ConcurrentHashMap<ClassLoader, Future<FactoryManager>>();
+        private ConcurrentMap<FactoryManagerCacheKey,Future<FactoryManager>> applicationMap =
+              new ConcurrentHashMap<FactoryManagerCacheKey, Future<FactoryManager>>();
 
 
         // ------------------------------------------------------ Public Methods
@@ -689,8 +691,10 @@ public final class FactoryFinder {
 
         private FactoryManager getApplicationFactoryManager(ClassLoader cl) {
 
+            FactoryManagerCacheKey key = new FactoryManagerCacheKey(cl, applicationMap);
+
             while (true) {
-                Future<FactoryManager> factories = applicationMap.get(cl);
+                Future<FactoryManager> factories = applicationMap.get(key);
                 if (factories == null) {
                     Callable<FactoryManager> callable =
                           new Callable<FactoryManager>() {
@@ -702,7 +706,7 @@ public final class FactoryFinder {
 
                     FutureTask<FactoryManager> ft =
                           new FutureTask<FactoryManager>(callable);
-                    factories = applicationMap.putIfAbsent(cl, ft);
+                    factories = applicationMap.putIfAbsent(key, ft);
                     if (factories == null) {
                         factories = ft;
                         ft.run();
@@ -717,14 +721,14 @@ public final class FactoryFinder {
                                    ce.toString(),
                                    ce);
                     }
-                    applicationMap.remove(cl);
+                    applicationMap.remove(key);
                 } catch (InterruptedException ie) {
                     if (LOGGER.isLoggable(Level.FINEST)) {
                         LOGGER.log(Level.FINEST,
                                    ie.toString(),
                                    ie);
                     }
-                    applicationMap.remove(cl);
+                    applicationMap.remove(key);
                 } catch (ExecutionException ee) {
                     throw new FacesException(ee);
                 }
@@ -735,12 +739,87 @@ public final class FactoryFinder {
 
 
         public void removeApplicationFactoryManager(ClassLoader cl) {
+            FactoryManagerCacheKey key = new FactoryManagerCacheKey(cl, applicationMap);
 
-            applicationMap.remove(cl);
+            applicationMap.remove(key);
 
         }
 
     } // END FactoryCache
+
+    private static final class FactoryManagerCacheKey {
+        private ClassLoader cl;
+        private Object context;
+
+        private static final String KEY = FactoryFinder.class.getName() + "." +
+                FactoryManagerCacheKey.class.getSimpleName();
+
+        public FactoryManagerCacheKey(ClassLoader cl,
+                Map<FactoryManagerCacheKey,Future<FactoryManager>> factoryMap) {
+            this.cl = cl;
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            if (null != facesContext) {
+                Map<String, Object> appMap = facesContext.getExternalContext().getApplicationMap();
+                Object val = appMap.get(KEY);
+                if (null == val) {
+                    context = new Long(System.currentTimeMillis());
+                    appMap.put(KEY, context);
+                } else {
+                    context = val;
+                }
+            } else {
+                // We don't have a FacesContext.
+                // Our only recourse is to inspect the keys of the
+                // factoryMap and see if any of them has a classloader
+                // equal to our argument cl.
+                Set<FactoryManagerCacheKey> keys = factoryMap.keySet();
+                FactoryManagerCacheKey match = null;
+                for (FactoryManagerCacheKey cur : keys) {
+                    if (this.cl.equals(cur.cl)) {
+                        match = cur;
+                        if (null != match) {
+                            LOGGER.log(Level.WARNING, "Multiple JSF Applications found on same ClassLoader.  Unable to safely determine which FactoryManager instance to use. Defaulting to first match.");
+                        }
+                    }
+                }
+                if (null != match) {
+                    this.context = match.context;
+                }
+            }
+        }
+        
+        private FactoryManagerCacheKey() {}
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final FactoryManagerCacheKey other = (FactoryManagerCacheKey) obj;
+            if (this.cl != other.cl && (this.cl == null || !this.cl.equals(other.cl))) {
+                return false;
+            }
+            if (this.context != other.context && (this.context == null || !this.context.equals(other.context))) {
+                return false;
+            }
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 7;
+            hash = 97 * hash + (this.cl != null ? this.cl.hashCode() : 0);
+            hash = 97 * hash + (this.context != null ? this.context.hashCode() : 0);
+            return hash;
+        }
+
+
+        
+
+    }
 
 
     /**
