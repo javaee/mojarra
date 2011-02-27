@@ -373,6 +373,20 @@
                     <waitfor>
                         <http url="http://${container.host}:${container.port}"/>
                     </waitfor>
+
+                    <exec executable="${container.home}/bin/asadmin"
+                          failonerror="true">
+                        <arg line="delete-jvm-options"/>
+                        <arg line="--target server-config"/>
+                        <arg line="-Dorg.glassfish.additionalOSGiBundlesToStart='org.apache.felix.shell,org.apache.felix.gogo.runtime,org.apache.felix.gogo.shell,org.apache.felix.gogo.command'"/>
+                    </exec>
+                    <exec executable="${container.home}/bin/asadmin"
+                          failonerror="true">
+                        <arg line="create-jvm-options"/>
+                        <arg line="--target server-config"/>
+                        <arg line="-Dorg.glassfish.additionalOSGiBundlesToStart='org.apache.felix.shell,org.apache.felix.gogo.runtime,org.apache.felix.gogo.shell,org.apache.felix.shell.remote,org.apache.felix.fileinstall'"/>
+                    </exec>
+
                 </then>
                 <else>
                     <exec executable="${container.home}/bin/asadmin.bat"
@@ -384,6 +398,18 @@
                     <waitfor>
                         <http url="http://${container.host}:${container.port}"/>
                     </waitfor>
+                    <exec executable="${container.home}/bin/asadmin.bat"
+                          failonerror="true">
+                        <arg line="delete-jvm-options"/>
+                        <arg line="--target server-config"/>
+                        <arg line="-Dorg.glassfish.additionalOSGiBundlesToStart='org.apache.felix.shell,org.apache.felix.gogo.runtime,org.apache.felix.gogo.shell,org.apache.felix.gogo.command'"/>
+                    </exec>
+                    <exec executable="${container.home}/bin/asadmin.bat"
+                          failonerror="true">
+                        <arg line="create-jvm-options"/>
+                        <arg line="--target server-config"/>
+                        <arg line="-Dorg.glassfish.additionalOSGiBundlesToStart='org.apache.felix.shell,org.apache.felix.gogo.runtime,org.apache.felix.gogo.shell,org.apache.felix.shell.remote,org.apache.felix.fileinstall'"/>
+                    </exec>
                 </else>
             </if>
             <if>
