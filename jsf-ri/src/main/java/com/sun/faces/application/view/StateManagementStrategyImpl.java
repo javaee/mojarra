@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -331,22 +331,23 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
                     for (ComponentStruct cur : addList) {
                         final ComponentStruct finalCur = cur;
                         // Find the parent
-                        viewRoot.invokeOnComponent(context, finalCur.parentClientId,
-                                new ContextCallback() {
-                                    public void invokeContextCallback(FacesContext context, UIComponent parent) {
-                                        // Create the child
-                                        StateHolderSaver saver = (StateHolderSaver) state.get(finalCur.clientId);
-                                        UIComponent toAdd = (UIComponent) saver.restore(context);
-                                        int idx = finalCur.indexOfChildInParent;
-                                        if (idx == -1) {
-                                            // add facet to the parent
-                                            parent.getFacets().put(finalCur.facetName, toAdd);
-                                        } else {
-                                            // add the child to the parent at correct index
-                                            try {
-                                                parent.getChildren().add(finalCur.indexOfChildInParent, toAdd);
-                                            } catch (IndexOutOfBoundsException ioobe) {
-                                                // the indexing within the parent list is off during the restore.
+
+                        viewRoot.visitTree(visitContext, new VisitCallback() {
+                            public VisitResult visit(VisitContext context, UIComponent target) {
+                                VisitResult result = VisitResult.ACCEPT;
+                                if (finalCur.parentClientId.equals(target.getClientId(context.getFacesContext()))) {
+                                    StateHolderSaver saver = (StateHolderSaver) state.get(finalCur.clientId);
+                                    UIComponent toAdd = (UIComponent) saver.restore(context.getFacesContext());
+                                    int idx = finalCur.indexOfChildInParent;
+                                    if (idx == -1) {
+                                        // add facet to the parent
+                                        target.getFacets().put(finalCur.facetName, toAdd);
+                                    } else {
+                                        // add the child to the parent at correct index
+                                        try {
+                                            target.getChildren().add(finalCur.indexOfChildInParent, toAdd);
+                                        } catch (IndexOutOfBoundsException ioobe) {
+                                            // the indexing within the parent list is off during the restore.
                                                 // This is most likely due to a transient component added during
                                                 // RENDER_REPONSE phase.
                                                 if (LOGGER.isLoggable(Level.FINE)) {
@@ -356,11 +357,17 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
                                                                 finalCur.parentClientId,
                                                                 finalCur.indexOfChildInParent});
                                                 }
-                                                parent.getChildren().add(toAdd);
-                                            }
+                                                target.getChildren().add(toAdd);
                                         }
+
+
                                     }
-                                });
+
+                                }
+
+                                return result;
+                            }
+                        });
                     }
                 }
             } finally {
