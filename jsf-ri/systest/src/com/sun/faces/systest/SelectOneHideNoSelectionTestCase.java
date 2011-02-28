@@ -45,10 +45,10 @@ import junit.framework.TestSuite;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSelect;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 
 
-public class SelectOneHideNoSelectionTestCase extends AbstractTestCase {
+public class SelectOneHideNoSelectionTestCase extends HtmlUnitFacesTestCase {
 
 
     private HtmlPage page;

@@ -42,7 +42,7 @@ package com.sun.faces.composite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import com.gargoylesoftware.htmlunit.html.*;
 
 import java.util.List;
@@ -51,7 +51,7 @@ import java.util.ArrayList;
 /**
  * Unit tests for Composite Components.
  */
-public class CompositeComponentsTestCase extends AbstractTestCase {
+public class CompositeComponentsTestCase extends HtmlUnitFacesTestCase {
 
 
     @SuppressWarnings({"UnusedDeclaration"})

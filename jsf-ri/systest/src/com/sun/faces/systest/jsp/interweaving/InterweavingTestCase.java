@@ -42,13 +42,13 @@
 package com.sun.faces.systest.jsp.interweaving;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
 
 
-public class InterweavingTestCase extends AbstractTestCase {
+public class InterweavingTestCase extends HtmlUnitFacesTestCase {
 
 
     public InterweavingTestCase(String name) {

@@ -46,7 +46,7 @@ import java.util.List;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import java.net.URL;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -54,7 +54,7 @@ import junit.framework.TestSuite;
 /**
  * Test cases for Facelets functionality
  */
-public class ViewParametersTestCase extends AbstractTestCase {
+public class ViewParametersTestCase extends HtmlUnitFacesTestCase {
 
 
     // --------------------------------------------------------------- Test Init

@@ -40,14 +40,14 @@
 
 package com.sun.faces.systest.state;
 
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-public class DynamicStateTestCase extends AbstractTestCase {
+public class DynamicStateTestCase extends HtmlUnitFacesTestCase {
 
     public DynamicStateTestCase(String name) {
         super(name);

@@ -40,13 +40,13 @@
 
 package com.sun.faces.component;
 
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-public class ComponentTestCase extends AbstractTestCase {
+public class ComponentTestCase extends HtmlUnitFacesTestCase {
 
     public ComponentTestCase(String name) {
         super(name);

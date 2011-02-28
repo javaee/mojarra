@@ -40,12 +40,12 @@
 
 package com.sun.faces.render;
 
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
 
-public class MessageRenderTestCase extends AbstractTestCase {
+public class MessageRenderTestCase extends HtmlUnitFacesTestCase {
 
     public MessageRenderTestCase(String name) {
         super(name);

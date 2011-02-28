@@ -41,11 +41,11 @@
 package com.sun.faces.ajax;
 
 import com.gargoylesoftware.htmlunit.html.*;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-public class AjaxEchoTestCase  extends AbstractTestCase {
+public class AjaxEchoTestCase  extends HtmlUnitFacesTestCase {
 
     public AjaxEchoTestCase(String name) {
         super(name);

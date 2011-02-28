@@ -42,7 +42,7 @@ package com.sun.faces.ajax;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlSpan;
@@ -50,7 +50,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AjaxRedirectTestCase extends AbstractTestCase {
+public class AjaxRedirectTestCase extends HtmlUnitFacesTestCase {
 
     public AjaxRedirectTestCase(String name) {
         super(name);

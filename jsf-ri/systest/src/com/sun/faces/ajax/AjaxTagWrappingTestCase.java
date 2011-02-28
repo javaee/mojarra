@@ -40,12 +40,12 @@
 
 package com.sun.faces.ajax;
 
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import com.gargoylesoftware.htmlunit.html.*;
 
-public class AjaxTagWrappingTestCase extends AbstractTestCase {
+public class AjaxTagWrappingTestCase extends HtmlUnitFacesTestCase {
 
     public AjaxTagWrappingTestCase(String name) {
         super(name);

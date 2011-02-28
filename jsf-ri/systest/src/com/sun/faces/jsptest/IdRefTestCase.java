@@ -41,7 +41,7 @@
 package com.sun.faces.jsptest;
 
 import com.gargoylesoftware.htmlunit.html.*;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -54,7 +54,7 @@ import java.util.*;
  * </p>
  */
 
-public class IdRefTestCase extends AbstractTestCase {
+public class IdRefTestCase extends HtmlUnitFacesTestCase {
 
     // ------------------------------------------------------------
     // Constructors

@@ -42,7 +42,7 @@ package com.sun.faces.jsptest;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSpan;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -52,7 +52,7 @@ import java.util.List;
  * <p>Verify expected behavior when command link is not enclosed by a form</p>
  */
 
-public class CommandLinkNoFormTestCase extends AbstractTestCase {
+public class CommandLinkNoFormTestCase extends HtmlUnitFacesTestCase {
 
     // ------------------------------------------------------------ Constructors
 

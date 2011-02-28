@@ -41,11 +41,11 @@
 package com.sun.faces.systest.myfaces_uidata_component_state_test;
 
 import com.gargoylesoftware.htmlunit.html.*;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-public class MyFacesUIDataTestCase extends AbstractTestCase {
+public class MyFacesUIDataTestCase extends HtmlUnitFacesTestCase {
 
     // ------------------------------------------------------------ Constructors
 

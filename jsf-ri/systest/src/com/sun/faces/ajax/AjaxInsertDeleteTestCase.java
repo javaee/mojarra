@@ -40,7 +40,7 @@
 
 package com.sun.faces.ajax;
 
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlHorizontalRule;
@@ -48,7 +48,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlHeading2;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-public class AjaxInsertDeleteTestCase extends AbstractTestCase {
+public class AjaxInsertDeleteTestCase extends HtmlUnitFacesTestCase {
 
     public AjaxInsertDeleteTestCase(String name) {
         super(name);

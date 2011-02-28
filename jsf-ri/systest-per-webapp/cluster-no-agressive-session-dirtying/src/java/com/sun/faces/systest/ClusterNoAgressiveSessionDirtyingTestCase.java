@@ -44,13 +44,13 @@ package com.sun.faces.systest;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import java.util.List;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
 
-public class ClusterNoAgressiveSessionDirtyingTestCase extends AbstractTestCase {
+public class ClusterNoAgressiveSessionDirtyingTestCase extends HtmlUnitFacesTestCase {
 
     public ClusterNoAgressiveSessionDirtyingTestCase(String name) {
         super(name);

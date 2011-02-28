@@ -42,7 +42,7 @@ package com.sun.faces.jsptest;
 
 import com.gargoylesoftware.htmlunit.ElementNotFoundException;
 import com.gargoylesoftware.htmlunit.html.*;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -50,7 +50,7 @@ import junit.framework.TestSuite;
  * <p>Test Case for Multiple RenderKits.</p>
  */
 
-public class CommandLinkOnClickTestCase extends AbstractTestCase {
+public class CommandLinkOnClickTestCase extends HtmlUnitFacesTestCase {
 
     // ------------------------------------------------------------ Constructors
 

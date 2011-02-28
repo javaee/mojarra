@@ -43,7 +43,7 @@ package com.sun.faces.systest.replacevdl;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -56,7 +56,7 @@ import junit.framework.TestSuite;
  * to do the bulk of the requests works.</p>
  */
 
-public class ReplaceViewDeclarationLanguageTestCase extends AbstractTestCase {
+public class ReplaceViewDeclarationLanguageTestCase extends HtmlUnitFacesTestCase {
 
 
     // ------------------------------------------------------------ Constructors

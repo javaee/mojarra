@@ -40,13 +40,13 @@
 
 package com.sun.faces.ajax;
 
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-public class AjaxAllKeywordTestCase extends AbstractTestCase {
+public class AjaxAllKeywordTestCase extends HtmlUnitFacesTestCase {
 
     public AjaxAllKeywordTestCase(String name) {
         super(name);

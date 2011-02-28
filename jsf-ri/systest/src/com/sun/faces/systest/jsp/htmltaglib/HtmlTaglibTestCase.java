@@ -42,13 +42,13 @@
 package com.sun.faces.systest.jsp.htmltaglib;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
 
 
-public class HtmlTaglibTestCase extends AbstractTestCase {
+public class HtmlTaglibTestCase extends HtmlUnitFacesTestCase {
 
 
     public HtmlTaglibTestCase(String name) {

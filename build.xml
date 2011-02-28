@@ -86,6 +86,9 @@
                 <filelist dir="${impl.dir}">
                     <file name="build.xml"/>
                 </filelist>
+                <filelist dir="${regression.test.dir}">
+                    <file name="build.xml"/>
+                </filelist>
                 <!-- taking jsf-demo out of the standard build/test loop
                      as one can't build the current source bundle as jsf-demo
                      isn't included

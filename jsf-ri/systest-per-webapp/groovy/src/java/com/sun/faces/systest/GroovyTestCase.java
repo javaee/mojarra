@@ -46,13 +46,13 @@ import com.gargoylesoftware.htmlunit.html.HtmlHiddenInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import java.util.List;
 
-public class GroovyTestCase extends AbstractTestCase {
+public class GroovyTestCase extends HtmlUnitFacesTestCase {
 
     public GroovyTestCase(String name) {
         super(name);

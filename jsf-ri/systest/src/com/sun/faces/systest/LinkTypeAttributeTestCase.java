@@ -42,7 +42,7 @@ package com.sun.faces.systest;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 
@@ -50,7 +50,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlElement;
 /**
  * Test case for issue 1098.
  */
-public class LinkTypeAttributeTestCase extends AbstractTestCase {
+public class LinkTypeAttributeTestCase extends HtmlUnitFacesTestCase {
 
     // ------------------------------------------------------------ Constructors
 

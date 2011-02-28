@@ -234,6 +234,7 @@
                 <pathelement location="@{app-base-dir}/build/classes"/>
                 <pathelement location="${basedir}/build/classes"/>
                 <path refid="htmlunit.runtime.classpath"/>
+                <path refid="html.classpath"/>
             </path>
             <jsf.junit classpath-refid="test.classpath"
                        context-path="/jsf-@{app-name}"

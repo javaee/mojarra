@@ -43,13 +43,13 @@ package com.sun.faces.systest.state;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
 
 
-public class IsSavingStateTestCase extends AbstractTestCase {
+public class IsSavingStateTestCase extends HtmlUnitFacesTestCase {
 
 
     public IsSavingStateTestCase(String name) {

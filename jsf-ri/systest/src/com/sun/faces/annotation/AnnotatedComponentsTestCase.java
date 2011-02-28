@@ -59,14 +59,14 @@ import com.sun.faces.application.NamedEventManager;
 import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.mgbean.ManagedBeanInfo;
 import com.sun.faces.mgbean.BeanBuilder;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
 
-public class AnnotatedComponentsTestCase extends AbstractTestCase {
+public class AnnotatedComponentsTestCase extends HtmlUnitFacesTestCase {
 
 
     // ------------------------------------------------------------ Constructors

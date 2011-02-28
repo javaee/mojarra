@@ -45,7 +45,7 @@ import javax.faces.component.NamingContainer;
 import java.util.List;
 import java.util.ArrayList;
 
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
@@ -54,7 +54,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlOption;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-public class SelectOneManyEnumTestCase extends AbstractTestCase {
+public class SelectOneManyEnumTestCase extends HtmlUnitFacesTestCase {
 
     /**
      * Construct a new instance of this test case.

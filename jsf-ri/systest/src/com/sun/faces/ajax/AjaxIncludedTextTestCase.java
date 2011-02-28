@@ -40,7 +40,7 @@
 
 package com.sun.faces.ajax;
 
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -48,7 +48,7 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 
-public class AjaxIncludedTextTestCase  extends AbstractTestCase {
+public class AjaxIncludedTextTestCase  extends HtmlUnitFacesTestCase {
 
     public AjaxIncludedTextTestCase(String name) {
         super(name);

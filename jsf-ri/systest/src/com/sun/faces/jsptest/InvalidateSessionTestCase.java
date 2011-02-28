@@ -42,7 +42,7 @@ package com.sun.faces.jsptest;
 
 
 import com.gargoylesoftware.htmlunit.html.*;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -53,7 +53,7 @@ import javax.faces.component.NamingContainer;
  * <p>Test Case for JSP Interoperability.</p>
  */
 
-public class InvalidateSessionTestCase extends AbstractTestCase {
+public class InvalidateSessionTestCase extends HtmlUnitFacesTestCase {
 
     // ------------------------------------------------------------ Constructors
 

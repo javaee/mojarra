@@ -45,10 +45,10 @@ import java.util.ArrayList;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import com.gargoylesoftware.htmlunit.html.*;
 
-public class DataTableTestCase extends AbstractTestCase {
+public class DataTableTestCase extends HtmlUnitFacesTestCase {
 
     /**
      * Construct a new instance of this test case.

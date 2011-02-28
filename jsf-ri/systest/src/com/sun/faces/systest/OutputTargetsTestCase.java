@@ -42,7 +42,7 @@ package com.sun.faces.systest;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
@@ -53,7 +53,7 @@ import java.util.List;
 /**
  * Test h:link and h:button.
  */
-public class OutputTargetsTestCase extends AbstractTestCase {
+public class OutputTargetsTestCase extends HtmlUnitFacesTestCase {
 
     /**
      * Construct a new instance of this test case.

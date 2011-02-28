@@ -43,7 +43,7 @@ package com.sun.faces.systest;
 import java.util.List;
 import java.util.ArrayList;
 
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSelect;
 import com.gargoylesoftware.htmlunit.html.HtmlOption;
@@ -52,7 +52,7 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 
-public class SelectManyCollectionTestCase extends AbstractTestCase {
+public class SelectManyCollectionTestCase extends HtmlUnitFacesTestCase {
 
 
     /**

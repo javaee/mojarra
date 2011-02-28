@@ -42,13 +42,13 @@
 package com.sun.faces.systest.jsp.config;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
 
 
-public class ConfigTestCase extends AbstractTestCase {
+public class ConfigTestCase extends HtmlUnitFacesTestCase {
 
 
     public ConfigTestCase(String name) {

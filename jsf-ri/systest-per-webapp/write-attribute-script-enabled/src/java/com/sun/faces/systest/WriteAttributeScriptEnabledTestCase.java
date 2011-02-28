@@ -45,13 +45,13 @@ import java.net.URL;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import java.util.List;
 
-public class WriteAttributeScriptEnabledTestCase extends AbstractTestCase {
+public class WriteAttributeScriptEnabledTestCase extends HtmlUnitFacesTestCase {
 
     public WriteAttributeScriptEnabledTestCase(String name) {
         super(name);

@@ -42,13 +42,13 @@
 package com.sun.faces.systest.jsp.subview;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
 
 
-public class SubviewTestCase extends AbstractTestCase {
+public class SubviewTestCase extends HtmlUnitFacesTestCase {
 
 
     public SubviewTestCase(String name) {

@@ -48,7 +48,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
@@ -57,7 +57,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 /**
  * Validate new EL features such as the component implicit object
  */
-public class EventTestCase extends AbstractTestCase {
+public class EventTestCase extends HtmlUnitFacesTestCase {
 
     public EventTestCase(String name) {
         super(name);

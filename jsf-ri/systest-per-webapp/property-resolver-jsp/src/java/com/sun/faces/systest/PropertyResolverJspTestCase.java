@@ -40,7 +40,7 @@
 
 package com.sun.faces.systest;
 
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -51,7 +51,7 @@ import junit.framework.TestSuite;
  * JSP layer still works.</p>
  */
 
-public class PropertyResolverJspTestCase extends AbstractTestCase {
+public class PropertyResolverJspTestCase extends HtmlUnitFacesTestCase {
 
     // ------------------------------------------------------------ Constructors
 

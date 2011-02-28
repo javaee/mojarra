@@ -42,7 +42,7 @@ package com.sun.faces.methodref;
 
 
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
@@ -53,7 +53,7 @@ import junit.framework.TestSuite;
 /**
  * Validate resource re-location of scripts and stylesheets
  */
-public class TagAttributeListenerMethodExpressionNoArgTestCase extends AbstractTestCase {
+public class TagAttributeListenerMethodExpressionNoArgTestCase extends HtmlUnitFacesTestCase {
 
 
     public TagAttributeListenerMethodExpressionNoArgTestCase() {

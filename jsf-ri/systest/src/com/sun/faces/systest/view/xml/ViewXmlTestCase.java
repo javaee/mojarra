@@ -41,7 +41,7 @@
 package com.sun.faces.systest.view.xml;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -50,7 +50,7 @@ import junit.framework.TestSuite;
  * <p>Test Case for JSP Interoperability.</p>
  */
 
-public class ViewXmlTestCase extends AbstractTestCase {
+public class ViewXmlTestCase extends HtmlUnitFacesTestCase {
 
 
     // ------------------------------------------------------------ Constructors

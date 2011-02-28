@@ -42,7 +42,7 @@ package com.sun.faces.jsf2jsp;
 
 
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.sun.faces.jsptest.ValidatorTestCase;
@@ -50,7 +50,7 @@ import junit.framework.Test;
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
 
-public class Jsf2JspTestCase extends AbstractTestCase {
+public class Jsf2JspTestCase extends HtmlUnitFacesTestCase {
 
 
     public Jsf2JspTestCase() {

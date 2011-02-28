@@ -41,7 +41,7 @@
 package com.sun.faces.systest.lifecycle;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import junit.framework.Test;
@@ -52,7 +52,7 @@ import junit.framework.TestSuite;
  * <p>Test Case for JSP Interoperability.</p>
  */
 
-public class ManagedBeanLifecycleAnnotationTestCase extends AbstractTestCase {
+public class ManagedBeanLifecycleAnnotationTestCase extends HtmlUnitFacesTestCase {
 
 
     // ------------------------------------------------------------ Constructors

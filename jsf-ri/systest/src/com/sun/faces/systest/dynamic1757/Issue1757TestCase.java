@@ -43,7 +43,7 @@ package com.sun.faces.systest.dynamic1757;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -51,7 +51,7 @@ import junit.framework.TestSuite;
 /**
  * Test cases for Facelets functionality
  */
-public class Issue1757TestCase extends AbstractTestCase {
+public class Issue1757TestCase extends HtmlUnitFacesTestCase {
 
 
     // --------------------------------------------------------------- Test Init

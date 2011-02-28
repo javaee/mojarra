@@ -42,12 +42,12 @@ package com.sun.faces.systest;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
 
-public class InvalidMappingTestCase extends AbstractTestCase {
+public class InvalidMappingTestCase extends HtmlUnitFacesTestCase {
 
     public InvalidMappingTestCase(String name) {
         super(name);
