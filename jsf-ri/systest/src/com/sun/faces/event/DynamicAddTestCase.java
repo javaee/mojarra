@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -157,4 +157,14 @@ public class DynamicAddTestCase extends AbstractTestCase {
         assertTrue(text.contains("text3: Validation Error: Value is required."));
     }
 
+    public void testTable() throws Exception {
+        HtmlPage page = getPage("/faces/dynamicComponents_table.xhtml");
+        String text = page.asText();
+        assertTrue(text.matches("(?s).*TestComponent::encodeBegin\\s*Foo\\s*Bar\\s*Baz\\s*TestComponent::encodeEnd.*"));
+        HtmlSubmitInput button = (HtmlSubmitInput)
+                this.getInputContainingGivenId(page, "button");
+        page = button.click();
+        text = page.asText();
+        assertTrue(text.matches("(?s).*TestComponent::encodeBegin\\s*Foo\\s*Bar\\s*Baz\\s*TestComponent::encodeEnd.*"));
+    }
 }
