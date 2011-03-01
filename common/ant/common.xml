@@ -80,6 +80,7 @@
     <property name="api.dir" value="${jsf.build.home}/jsf-api"/>
     <property name="mvn.api.dir" value="${api.dir}/build/mvn" />
     <property name="impl.dir" value="${jsf.build.home}/jsf-ri"/>
+    <property name="regression.test.dir" value="${jsf.build.home}/jsf-test"/>
     <property name="mvn.impl.dir" value="${jsf.build.home}/jsf-ri/build/mvn"/>
     <property name="tools.dir" value="${jsf.build.home}/jsf-tools"/>    
     <property name="demo.dir" value="${jsf.build.home}/jsf-demo"/>
@@ -87,6 +88,8 @@
               value="${demo.dir}/dist/spec-snapshot" />
     <property name="impl.test.results.dir" value="${impl.dir}/testresults"/>
     <property name="api.test.results.dir" value="${api.dir}/testresults"/>
+    <property name="regression.test.results.dir" 
+              value="${regression.test.dir}/build/testresults" />
 
     <!-- Artifacts of interest -->
     <property name="jsf-api.jar" value="${api.dir}/build/lib/jsf-api.jar"/>
@@ -243,6 +246,13 @@
 
     <path id="apache.commons.classpath">
         <path refid="commons.path"/>
+    </path>
+
+    <!-- HtmlUnit client classpath -->
+    <path id="html.classpath">  
+        <pathelement location="${basedir}/build/classes"/>
+        <path refid="htmlunit.runtime.classpath"/>
+        <path refid="jsf.test.jar.classpath"/>
     </path>
 
     <!-- Common Targets -->

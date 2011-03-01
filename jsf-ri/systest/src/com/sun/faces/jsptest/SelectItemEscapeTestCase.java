@@ -42,7 +42,7 @@ package com.sun.faces.jsptest;
 
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -51,7 +51,7 @@ import junit.framework.TestSuite;
  * <p>Verify that required validation occurrs for Select* components.</p>
  */
 
-public class SelectItemEscapeTestCase extends AbstractTestCase {
+public class SelectItemEscapeTestCase extends HtmlUnitFacesTestCase {
 
     // ------------------------------------------------------------ Constructors
 

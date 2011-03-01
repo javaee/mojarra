@@ -40,14 +40,14 @@
 
 package com.sun.faces.render;
 
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import com.gargoylesoftware.htmlunit.html.*;
 
 import java.util.List;
 
-public class SelectStarTestCase extends AbstractTestCase {
+public class SelectStarTestCase extends HtmlUnitFacesTestCase {
 
     public SelectStarTestCase(String name) {
         super(name);

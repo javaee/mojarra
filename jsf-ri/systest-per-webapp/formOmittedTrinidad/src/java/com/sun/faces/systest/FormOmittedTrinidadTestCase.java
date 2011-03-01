@@ -40,7 +40,7 @@
 
 package com.sun.faces.systest;
 
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -50,7 +50,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
  * <p>Test Case for checking if form is omitted when there is a button/link in the page.</p>
  */
 
-public class FormOmittedTrinidadTestCase extends AbstractTestCase {
+public class FormOmittedTrinidadTestCase extends HtmlUnitFacesTestCase {
 
 
     // ------------------------------------------------------------ Constructors

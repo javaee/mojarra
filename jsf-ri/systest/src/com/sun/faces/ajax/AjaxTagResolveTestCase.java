@@ -40,7 +40,7 @@
 
 package com.sun.faces.ajax;
 
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import com.gargoylesoftware.htmlunit.html.*;
@@ -48,7 +48,7 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.AjaxController;
 import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 
-public class AjaxTagResolveTestCase extends AbstractTestCase {
+public class AjaxTagResolveTestCase extends HtmlUnitFacesTestCase {
 
     public AjaxTagResolveTestCase(String name) {
         super(name);

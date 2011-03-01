@@ -44,13 +44,13 @@ package com.sun.faces.systest.composite.behavior;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
 
 
-public class CompositeBehaviorTestCase extends AbstractTestCase {
+public class CompositeBehaviorTestCase extends HtmlUnitFacesTestCase {
 
 
     public CompositeBehaviorTestCase(String name) {

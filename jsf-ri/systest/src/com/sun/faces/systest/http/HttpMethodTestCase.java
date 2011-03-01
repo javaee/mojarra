@@ -41,7 +41,7 @@
 
 package com.sun.faces.systest.http;
 
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
@@ -54,7 +54,7 @@ import junit.framework.TestSuite;
 
 
 
- public class HttpMethodTestCase extends AbstractTestCase {
+ public class HttpMethodTestCase extends HtmlUnitFacesTestCase {
 
 
     public HttpMethodTestCase(String name) {

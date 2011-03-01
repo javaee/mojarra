@@ -46,13 +46,13 @@ import junit.framework.TestSuite;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 
 
 /**
  * Unit tests for Composite Components.
  */
-public class DefaultActionTestCase extends AbstractTestCase {
+public class DefaultActionTestCase extends HtmlUnitFacesTestCase {
 
 
     public DefaultActionTestCase() {

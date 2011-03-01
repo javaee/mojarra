@@ -41,7 +41,7 @@
 package com.sun.faces.systest;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -51,7 +51,7 @@ import junit.framework.TestSuite;
  * bulk of the requests works. </p>
  */
 
-public class UnicodeTestCase extends AbstractTestCase {
+public class UnicodeTestCase extends HtmlUnitFacesTestCase {
 
     // ------------------------------------------------------------ Constructors
 

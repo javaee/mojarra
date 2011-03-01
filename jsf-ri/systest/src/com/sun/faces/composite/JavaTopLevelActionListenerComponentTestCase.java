@@ -45,13 +45,13 @@ import junit.framework.TestSuite;
 
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 
 
 /**
  * Unit tests for Composite Components.
  */
-public class JavaTopLevelActionListenerComponentTestCase extends AbstractTestCase {
+public class JavaTopLevelActionListenerComponentTestCase extends HtmlUnitFacesTestCase {
 
 
     public JavaTopLevelActionListenerComponentTestCase() {

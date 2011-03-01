@@ -42,7 +42,7 @@ package com.sun.faces.systest;
 
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -52,7 +52,7 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 
-public class SuppressXmlDeclTestCase extends AbstractTestCase {
+public class SuppressXmlDeclTestCase extends HtmlUnitFacesTestCase {
 
     private final static Pattern XmlDeclaration = Pattern.compile("^<\\?xml.+?version=['\"](.+?)['\"](.+?encoding=['\"]((.+?))['\"])?.*?\\?>");
 

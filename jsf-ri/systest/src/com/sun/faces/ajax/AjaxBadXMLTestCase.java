@@ -41,11 +41,11 @@
 package com.sun.faces.ajax;
 
 import com.gargoylesoftware.htmlunit.html.*;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-public class AjaxBadXMLTestCase extends AbstractTestCase {
+public class AjaxBadXMLTestCase extends HtmlUnitFacesTestCase {
 
     public AjaxBadXMLTestCase(String name) {
         super(name);

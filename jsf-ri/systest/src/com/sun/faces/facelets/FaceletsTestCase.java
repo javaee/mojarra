@@ -51,7 +51,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.gargoylesoftware.htmlunit.html.HtmlUnorderedList;
 import com.gargoylesoftware.htmlunit.html.HtmlDivision;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -59,7 +59,7 @@ import junit.framework.TestSuite;
 /**
  * Test cases for Facelets functionality
  */
-public class FaceletsTestCase extends AbstractTestCase {
+public class FaceletsTestCase extends HtmlUnitFacesTestCase {
 
 
     // --------------------------------------------------------------- Test Init

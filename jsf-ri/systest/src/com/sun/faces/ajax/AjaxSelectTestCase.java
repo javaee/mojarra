@@ -43,12 +43,12 @@ package com.sun.faces.ajax;
 import com.gargoylesoftware.htmlunit.html.ClickableElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSelect;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
 
-public class AjaxSelectTestCase extends AbstractTestCase {
+public class AjaxSelectTestCase extends HtmlUnitFacesTestCase {
 
     public AjaxSelectTestCase(String name) {
         super(name);

@@ -45,14 +45,14 @@ import java.net.URL;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import java.util.List;
 
 
-public class WriteAttributeScriptDisabledTestCase extends AbstractTestCase {
+public class WriteAttributeScriptDisabledTestCase extends HtmlUnitFacesTestCase {
 
     public WriteAttributeScriptDisabledTestCase(String name) {
         super(name);

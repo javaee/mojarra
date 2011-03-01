@@ -40,7 +40,7 @@
 
 package com.sun.faces.systest;
 
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import junit.framework.Test;
@@ -54,7 +54,7 @@ import java.util.List;
  * to do the bulk of the requests works.</p>
  */
 
-public class LateBindingTestCase extends AbstractTestCase {
+public class LateBindingTestCase extends HtmlUnitFacesTestCase {
 
     // ------------------------------------------------------------ Constructors
 

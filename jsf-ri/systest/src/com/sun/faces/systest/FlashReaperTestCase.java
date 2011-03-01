@@ -41,7 +41,7 @@
 package com.sun.faces.systest;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import java.net.URL;
 import java.net.URLConnection;
 import junit.framework.Test;
@@ -50,7 +50,7 @@ import junit.framework.TestSuite;
 /**
   *
  */
-public class FlashReaperTestCase extends AbstractTestCase {
+public class FlashReaperTestCase extends HtmlUnitFacesTestCase {
 
     /**
      * Construct a new instance of this test case.

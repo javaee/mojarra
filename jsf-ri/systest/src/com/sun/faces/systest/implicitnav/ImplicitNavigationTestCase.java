@@ -44,12 +44,12 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.html.HtmlButtonInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 
-public class ImplicitNavigationTestCase extends AbstractTestCase {
+public class ImplicitNavigationTestCase extends HtmlUnitFacesTestCase {
 
 
     public ImplicitNavigationTestCase(String name) {

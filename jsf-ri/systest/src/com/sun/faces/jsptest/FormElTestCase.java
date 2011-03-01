@@ -43,7 +43,7 @@ package com.sun.faces.jsptest;
 
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -55,7 +55,7 @@ import java.util.List;
  * forgets the view tag.</p>
  */
 
-public class FormElTestCase extends AbstractTestCase {
+public class FormElTestCase extends HtmlUnitFacesTestCase {
 
     // ------------------------------------------------------------ Constructors
 

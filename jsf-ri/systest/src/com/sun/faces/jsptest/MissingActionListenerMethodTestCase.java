@@ -43,7 +43,7 @@ package com.sun.faces.jsptest;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Assert;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -53,7 +53,7 @@ import junit.framework.TestSuite;
  * @author Jason Lee
  */
 
-public class MissingActionListenerMethodTestCase extends AbstractTestCase {
+public class MissingActionListenerMethodTestCase extends HtmlUnitFacesTestCase {
     // ------------------------------------------------------------ Constructors
     /**
      * Construct a new instance of this test case.

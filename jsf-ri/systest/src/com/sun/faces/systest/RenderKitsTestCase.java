@@ -45,7 +45,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlHiddenInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -56,7 +56,7 @@ import javax.faces.component.NamingContainer;
  * <p>Test Case for Multiple RenderKits.</p>
  */
 
-public class RenderKitsTestCase extends AbstractTestCase {
+public class RenderKitsTestCase extends HtmlUnitFacesTestCase {
 
 
     // ------------------------------------------------------------ Constructors

@@ -61,12 +61,6 @@
 
     <property name="regexp.path" value="${basedir}/web/regexp"/>
 
-    <!-- HtmlUnit client classpath -->
-    <path id="html.classpath">  
-        <pathelement location="${basedir}/build/classes"/>
-        <path refid="htmlunit.runtime.classpath"/>
-    </path>
-
     <!-- ======================== Test Execution ============================== -->
     <!-- converter06 impl logic deferred to 2.0 -->
     <!-- DO NOT REORDER test.annotations -->

@@ -66,6 +66,9 @@
         <attribute name="use-virtual-servers"
                    description="If true, deploy to the virtual servers."
                    default="false"/>
+        <attribute name="osgi"
+                   description="If true, deploy with --type osgi."
+                   default="false"/>
         <sequential>
             <condition property="exec.name" value="cmd.exe">
                 <os family="windows"/>
@@ -105,10 +108,23 @@
             </if>
             <property name="use-virtual-servers-value" value="" />
             <echo message="use-virtual-servers-value: ${use-virtual-servers-value}" />
+            <if>
+              <equals arg1="@{osgi}"
+                      casesensitive="false" trim="true"
+                      arg2="true" />
+                <then>
+                  <sequential>
+                      <property name="osgi-value" value="--type osgi" />
+                  </sequential>
+                </then>
+            </if>
+            <property name="osgi-value" value="" />
+            <echo message="osgi-value: ${osgi-value}" />
             <exec executable="${exec.name}" failonerror="true">
                 <arg line="${exec.arg.1}"/>
                 <arg line="deploy"/>
                 <arg line="${use-virtual-servers-value}"/>
+                <arg line="${osgi-value}"/>
                 <arg line="--user ${glassfish.admin.user}"/>
                 <arg line="--passwordfile ${glassfish.password.file}"/>
                 <arg line="--host ${glassfish.admin.host}"/>
@@ -264,6 +280,34 @@
       <delete.virtual.servers />
     </target>
 
+    <target name="container.init.osgi"
+            description="Configure GlassFish 3.1 for OSGi WAB deployment">
+        <echo>
+---------  Configuring GlassFish 3.1 for OSGi WAB deployment
+        </echo>
+        <container.start failonerror="false" />
+        <exec executable="${container.home}/bin/asadmin"
+                          failonerror="false">
+           <arg line="delete-jvm-options"/>
+           <arg line="--target server-config"/>
+           <arg line="-Dorg.glassfish.additionalOSGiBundlesToStart='org.apache.felix.shell,org.apache.felix.gogo.runtime,org.apache.felix.gogo.shell,org.apache.felix.gogo.command'"/>
+         </exec>
+         <exec executable="${container.home}/bin/asadmin"
+                          failonerror="false">
+           <arg line="delete-jvm-options"/>
+           <arg line="--target server-config"/>
+           <arg line="-Dorg.glassfish.additionalOSGiBundlesToStart='org.apache.felix.shell,org.apache.felix.gogo.runtime,org.apache.felix.gogo.shell,org.apache.felix.shell.remote,org.apache.felix.fileinstall'"/>
+         </exec>
+         <exec executable="${container.home}/bin/asadmin"
+                          failonerror="true">
+           <arg line="create-jvm-options"/>
+           <arg line="--target server-config"/>
+           <arg line="-Dorg.glassfish.additionalOSGiBundlesToStart='org.apache.felix.shell,org.apache.felix.gogo.runtime,org.apache.felix.gogo.shell,org.apache.felix.shell.remote,org.apache.felix.fileinstall'"/>
+         </exec>
+         <container.stop />
+    </target>
+
+
     <target name="container.start"
             description="Start the GlassFish container">
         <var name="create-virtual-server-value" value="false" />
@@ -330,8 +374,10 @@
     <macrodef name="container.start"
             description="Start the GlassFish container">
         <attribute name="create-virtual-server" default="false"/>
+        <attribute name="failonerror" default="true"/>
         <sequential>
-            <start.domain create-virtual-server="@{create-virtual-server}"/>
+            <start.domain failonerror="@{failonerror}"
+                          create-virtual-server="@{create-virtual-server}"/>
         </sequential>
     </macrodef>
 
@@ -355,6 +401,7 @@
     <!-- 'PRIVATE' targets -->
     <macrodef name="start.domain">
         <attribute name="create-virtual-server" default="false"/>
+        <attribute name="failonerror" default="true"/>
         <sequential>
             <echo>
 
@@ -365,7 +412,7 @@
                 <os family="unix"/>
                 <then>
                     <exec executable="${container.home}/bin/asadmin"
-                          failonerror="true">
+                          failonerror="@{failonerror}">
                         <arg line="start-domain"/>
                         <arg line="--user ${glassfish.admin.user}"/>
                         <arg line="${glassfish.domain}"/>
@@ -376,6 +423,7 @@
                 </then>
                 <else>
                     <exec executable="${container.home}/bin/asadmin.bat"
+                          failonerror="@{failonerror}"
                           spawn="true">
                         <arg line="start-domain"/>
                         <arg line="--user ${glassfish.admin.user}"/>

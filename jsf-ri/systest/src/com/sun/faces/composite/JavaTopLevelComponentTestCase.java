@@ -42,14 +42,14 @@ package com.sun.faces.composite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import com.gargoylesoftware.htmlunit.html.*;
 
 
 /**
  * Unit tests for Composite Components.
  */
-public class JavaTopLevelComponentTestCase extends AbstractTestCase {
+public class JavaTopLevelComponentTestCase extends HtmlUnitFacesTestCase {
 
 
     public JavaTopLevelComponentTestCase() {

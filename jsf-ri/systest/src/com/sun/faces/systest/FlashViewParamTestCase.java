@@ -42,7 +42,7 @@ package com.sun.faces.systest;
 
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlButtonInput;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import junit.framework.Test;
@@ -51,7 +51,7 @@ import junit.framework.TestSuite;
 /**
   *
  */
-public class FlashViewParamTestCase extends AbstractTestCase {
+public class FlashViewParamTestCase extends HtmlUnitFacesTestCase {
 
     /**
      * Construct a new instance of this test case.

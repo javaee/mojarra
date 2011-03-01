@@ -48,12 +48,12 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlImage;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlScript;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
 
-public class ResourceLocalePrefixTestCase extends AbstractTestCase {
+public class ResourceLocalePrefixTestCase extends HtmlUnitFacesTestCase {
 
     // ------------------------------------------------------------ Constructors
 

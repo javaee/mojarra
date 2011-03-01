@@ -42,7 +42,7 @@ package com.sun.faces.event;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import com.gargoylesoftware.htmlunit.html.*;
 import java.util.regex.Pattern;
 
@@ -50,7 +50,7 @@ import java.util.regex.Pattern;
 /**
  * Unit tests for Composite Components.
  */
-public class DynamicAddTestCase extends AbstractTestCase {
+public class DynamicAddTestCase extends HtmlUnitFacesTestCase {
 
 
     public DynamicAddTestCase() {

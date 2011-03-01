@@ -44,7 +44,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlHead;
@@ -60,7 +60,7 @@ import junit.framework.TestSuite;
 /**
  * Validate resource re-location of scripts and stylesheets
  */
-public class ResourceRelocationTestCase extends AbstractTestCase {
+public class ResourceRelocationTestCase extends HtmlUnitFacesTestCase {
 
 
     public ResourceRelocationTestCase() {

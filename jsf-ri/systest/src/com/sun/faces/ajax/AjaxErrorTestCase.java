@@ -40,7 +40,7 @@
 
 package com.sun.faces.ajax;
 
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import com.gargoylesoftware.htmlunit.CollectingAlertHandler;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -52,7 +52,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class AjaxErrorTestCase extends AbstractTestCase {
+public class AjaxErrorTestCase extends HtmlUnitFacesTestCase {
 
 
      public AjaxErrorTestCase(String name) {

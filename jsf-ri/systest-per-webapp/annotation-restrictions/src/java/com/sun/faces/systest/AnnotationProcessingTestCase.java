@@ -43,9 +43,9 @@ package com.sun.faces.systest;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 
-public class AnnotationProcessingTestCase extends AbstractTestCase {
+public class AnnotationProcessingTestCase extends HtmlUnitFacesTestCase {
 
 
     public AnnotationProcessingTestCase(String name) {

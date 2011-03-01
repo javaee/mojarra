@@ -50,14 +50,14 @@ import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
 /**
  * Test cases for Facelets functionality
  */
-public class FaceletsTargetNotFoundTestCase extends AbstractTestCase {
+public class FaceletsTargetNotFoundTestCase extends HtmlUnitFacesTestCase {
 
 
     // --------------------------------------------------------------- Test Init

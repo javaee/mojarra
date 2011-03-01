@@ -80,6 +80,9 @@
         <attribute name="use-virtual-servers"
                    description="If true, deploy to the virtual servers."
                    default="false"/>
+        <attribute name="osgi"
+                   description="If true, deploy with --type osgi."
+                   default="false"/>
         <sequential>
             <condition property="exec.name" value="cmd.exe">
                 <os family="windows"/>
@@ -111,10 +114,23 @@
             </condition>
             <property name="target" value="" />
             <property name="availabilityenabled" value="" />
+            <if>
+              <equals arg1="@{osgi}"
+                      casesensitive="false" trim="true"
+                      arg2="true" />
+                <then>
+                  <sequential>
+                      <property name="osgi-value" value="--type osgi" />
+                  </sequential>
+                </then>
+            </if>
+            <property name="osgi-value" value="" />
+            <echo message="osgi-value: ${osgi-value}" />
             <exec executable="${exec.name}" failonerror="true">
                 <arg line="${exec.arg.1}"/>
                 <arg line="--port ${glassfish.custom.admin.port}"/>
                 <arg line="deploy"/>
+                <arg line="${osgi-value}"/>
                 <arg line="${availabilityenabled}"/>
                 <arg line="${target}"/>
                 <arg line="@{artifact}"/>
@@ -291,7 +307,7 @@
 --------- Starting container, create-domain: ${create-domain-value} create-cluster: ${create-cluster-value}
         </echo>
         <container.start create-domain="${create-domain-value}"
-                         create-cluster="${create-cluster-value}"/>
+                         create-cluster="${create-cluster-value}" failonerror="false"/>
     </target>
 
     <target name="container.debug"
@@ -348,6 +364,36 @@
                         create-cluster="${create-cluster-value}"/>
     </target>
 
+    <target name="container.init.osgi"
+            description="Configure GlassFish 3.1 for OSGi WAB deployment">
+        <echo>
+---------  Configuring GlassFish 3.1 for OSGi WAB deployment
+        </echo>
+        <container.start failonerror="false"/>
+        <exec executable="${container.home}/bin/asadmin"
+                          failonerror="false">
+           <arg line="--port ${glassfish.custom.admin.port}"/>
+           <arg line="delete-jvm-options"/>
+           <arg line="--target mojarra-cluster-config"/>
+           <arg line="-Dorg.glassfish.additionalOSGiBundlesToStart='org.apache.felix.shell,org.apache.felix.gogo.runtime,org.apache.felix.gogo.shell,org.apache.felix.gogo.command'"/>
+         </exec>
+         <exec executable="${container.home}/bin/asadmin"
+                          failonerror="false">
+           <arg line="--port ${glassfish.custom.admin.port}"/>
+           <arg line="delete-jvm-options"/>
+           <arg line="--target mojarra-cluster-config"/>
+           <arg line="-Dorg.glassfish.additionalOSGiBundlesToStart='org.apache.felix.shell,org.apache.felix.gogo.runtime,org.apache.felix.gogo.shell,org.apache.felix.shell.remote,org.apache.felix.fileinstall'"/>
+         </exec>
+         <exec executable="${container.home}/bin/asadmin"
+                          failonerror="true">
+           <arg line="--port ${glassfish.custom.admin.port}"/>
+           <arg line="create-jvm-options"/>
+           <arg line="--target mojarra-cluster-config"/>
+           <arg line="-Dorg.glassfish.additionalOSGiBundlesToStart='org.apache.felix.shell,org.apache.felix.gogo.runtime,org.apache.felix.gogo.shell,org.apache.felix.shell.remote,org.apache.felix.fileinstall'"/>
+         </exec>
+         <container.stop create-domain="false" create-cluster="false"/>
+    </target>
+
     <target name="container.restart"
             description="Stop the GlassFish container">
         <container.stop/>
@@ -381,9 +427,11 @@
             description="Start the GlassFish container">
         <attribute name="create-domain" default="true"/>
         <attribute name="create-cluster" default="true"/>
+        <attribute name="failonerror" default="true"/>
         <sequential>
             <start.domain create-domain="@{create-domain}" 
-                          create-cluster="@{create-cluster}"/>
+                          create-cluster="@{create-cluster}"
+                          failonerror="@{failonerror}"/>
         </sequential>
     </macrodef>
 
@@ -412,6 +460,7 @@
     <macrodef name="start.domain">
         <attribute name="create-domain" default="true"/>
         <attribute name="create-cluster" default="true"/>
+        <attribute name="failonerror" default="true"/>
 
         <sequential>
             <echo>
@@ -428,7 +477,7 @@
                                 arg2="true" />
                         <then>
 			  <exec executable="${container.home}/bin/asadmin"
-				failonerror="true">
+				failonerror="@{failonerror}">
 			      <arg line="create-domain"/>
 			      <arg line="--user ${glassfish.admin.user}"/>
 			      <arg line="--passwordfile ${glassfish.password.file}"/>
@@ -438,7 +487,7 @@
                         </then>
                     </if>
                     <exec executable="${container.home}/bin/asadmin"
-                          failonerror="true">
+				failonerror="@{failonerror}">
                         <arg line="start-domain"/>
                         <arg line="--user ${glassfish.admin.user}"/>
                         <arg line="${glassfish.custom.domain}"/>
@@ -450,7 +499,8 @@
                                 arg2="true" />
                       </not>
                       <then>
-                        <start.cluster create-cluster="@{create-cluster}"/>
+                        <start.cluster create-cluster="@{create-cluster}"
+				failonerror="@{failonerror}"/>
                       </then>
                       <else>
 			<waitfor>
@@ -466,7 +516,7 @@
                                 arg2="true" />
                         <then>
 			  <exec executable="${container.home}/bin/asadmin.bat"
-				failonerror="true">
+				failonerror="@{failonerror}">
 			      <arg line="create-domain"/>
 			      <arg line="--user ${glassfish.admin.user}"/>
 			      <arg line="--passwordfile ${glassfish.password.file}"/>
@@ -476,6 +526,7 @@
                         </then>
                     </if>
                     <exec executable="${container.home}/bin/asadmin.bat"
+				failonerror="@{failonerror}">
                           spawn="true">
                         <arg line="start-domain"/>
                         <arg line="--user ${glassfish.admin.user}"/>
@@ -488,7 +539,8 @@
                                 arg2="true" />
                       </not>
                       <then>
-                        <start.cluster create-cluster="@{create-cluster}"/>
+                        <start.cluster create-cluster="@{create-cluster}"
+				failonerror="@{failonerror}"/>
                       </then>
                       <else>
 			<waitfor>
@@ -503,6 +555,7 @@
 
     <macrodef name="start.cluster">
         <attribute name="create-cluster" default="true"/>
+        <attribute name="failonerror" default="true"/>
         <sequential>
             <echo>
 
@@ -518,7 +571,7 @@
                                 arg2="true" />
                         <then>
 			  <exec executable="${container.home}/bin/asadmin"
-				failonerror="true">
+				failonerror="@{failonerror}">
 			      <arg line="--port ${glassfish.custom.admin.port}"/>
 			      <arg line="create-cluster"/>
 			      <arg line="--systemproperties ASADMIN_LISTENER_PORT=${glassfish.cluster.admin.port}"/>
@@ -528,7 +581,7 @@
 			  <for list="${instance.numbers}" param="num" trim="true">
 			    <sequential>
 			      <exec executable="${container.home}/bin/asadmin"
-				    failonerror="true">
+				failonerror="@{failonerror}">
 				  <arg line="--port ${glassfish.custom.admin.port}"/>
 				  <arg line="create-local-instance"/>
 				  <arg line="--cluster ${glassfish.cluster}"/>
@@ -540,7 +593,7 @@
                       </then>
                     </if>
                     <exec executable="${container.home}/bin/asadmin"
-                          failonerror="true">
+				failonerror="@{failonerror}">
                         <arg line="--port ${glassfish.custom.admin.port}"/>
                         <arg line="start-cluster"/>
                         <arg line="${glassfish.cluster}"/>
@@ -560,7 +613,7 @@
                                 arg2="true" />
                         <then>
 			<exec executable="${container.home}/bin/asadmin.bat"
-			      failonerror="true">
+				failonerror="@{failonerror}">
 			    <arg line="--port ${glassfish.custom.admin.port}"/>
 			    <arg line="create-cluster"/>
 			    <arg line="--systemproperties ASADMIN_LISTENER_PORT=${glassfish.cluster.admin.port}"/>
@@ -570,7 +623,7 @@
 			<for list="${instance.numbers}" param="num" trim="true">
 			  <sequential>
 			    <exec executable="${container.home}/bin/asadmin.bat"
-				  failonerror="true">
+				failonerror="@{failonerror}">
 				<arg line="--port ${glassfish.custom.admin.port}"/>
 				<arg line="create-local-instance"/>
 				<arg line="--cluster ${glassfish.cluster}"/>
@@ -582,7 +635,7 @@
                       </then>
                     </if>
                     <exec executable="${container.home}/bin/asadmin.bat"
-                          failonerror="true">
+				failonerror="@{failonerror}">
                         <arg line="--port ${glassfish.custom.admin.port}"/>
                         <arg line="start-cluster"/>
                         <arg line="${glassfish.cluster}"/>

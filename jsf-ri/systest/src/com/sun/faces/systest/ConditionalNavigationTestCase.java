@@ -45,9 +45,9 @@ import junit.framework.TestSuite;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 
-public class ConditionalNavigationTestCase extends AbstractTestCase {
+public class ConditionalNavigationTestCase extends HtmlUnitFacesTestCase {
 
 
     public ConditionalNavigationTestCase(String name) {

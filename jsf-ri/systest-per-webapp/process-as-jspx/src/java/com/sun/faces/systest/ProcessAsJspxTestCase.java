@@ -43,7 +43,7 @@ package com.sun.faces.systest;
 
 import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.WebResponse;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -52,7 +52,7 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 
-public class ProcessAsJspxTestCase extends AbstractTestCase {
+public class ProcessAsJspxTestCase extends HtmlUnitFacesTestCase {
 
     private final static Pattern XmlDeclaration = Pattern.compile("(?s)^<\\?xml(\\s)*version=.*\\?>.*");
     private final static Pattern XmlDoctype = Pattern.compile("(?s).*<!DOCTYPE.*>.*");

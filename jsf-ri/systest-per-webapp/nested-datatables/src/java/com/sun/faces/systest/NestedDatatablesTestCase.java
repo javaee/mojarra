@@ -50,7 +50,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlRadioButtonInput;
 import com.gargoylesoftware.htmlunit.html.HtmlSelect;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -66,7 +66,7 @@ import javax.faces.component.NamingContainer;
  * <p>Make sure that only unique view ids are saved in the session</p>
  */
 
-public class NestedDatatablesTestCase extends AbstractTestCase {
+public class NestedDatatablesTestCase extends HtmlUnitFacesTestCase {
 
 
     // ------------------------------------------------------------ Constructors

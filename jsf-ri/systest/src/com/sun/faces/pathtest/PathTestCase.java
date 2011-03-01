@@ -43,12 +43,12 @@ package com.sun.faces.pathtest;
 import com.gargoylesoftware.htmlunit.TextPage;
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
 
-public class PathTestCase extends AbstractTestCase {
+public class PathTestCase extends HtmlUnitFacesTestCase {
 
     //
     // Protected Constants

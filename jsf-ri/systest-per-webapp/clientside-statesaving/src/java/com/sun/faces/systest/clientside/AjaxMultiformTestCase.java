@@ -40,13 +40,13 @@
 
 package com.sun.faces.systest.clientside;
 
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import com.sun.faces.ajax.AjaxTagTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import com.gargoylesoftware.htmlunit.html.*;
 
-public class AjaxMultiformTestCase extends AbstractTestCase {
+public class AjaxMultiformTestCase extends HtmlUnitFacesTestCase {
 
     public AjaxMultiformTestCase(String name) {
         super(name);
