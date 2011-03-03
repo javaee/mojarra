@@ -582,7 +582,7 @@ public class NumberConverter implements Converter, PartialStateHolder {
                 ValueExpression ve = component.getValueExpression("value");
                 if (ve != null) {
                     Class<?> expectedType = ve.getType(context.getELContext());
-                    if (expectedType.isAssignableFrom(BigDecimal.class)) {
+                    if (expectedType != null && expectedType.isAssignableFrom(BigDecimal.class)) {
                         dParser.setParseBigDecimal(true);
                     }
                 }
