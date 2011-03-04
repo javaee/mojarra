@@ -348,6 +348,7 @@ public class ConfigureListener implements ServletRequestListener,
             ApplicationAssociate.setCurrentInstance(null);
             // Release the initialization mark on this web application
             ConfigManager.getInstance().destory(context);
+            FactoryFinder.releaseFactories();
             if (initContext != null) {
                 initContext.release();
             }

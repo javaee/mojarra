@@ -164,18 +164,18 @@ public class UIComponentTestCase extends TestCase {
         request.setAttribute("reqScopeName", "reqScopeValue");
         response = new MockHttpServletResponse();
 
-        // Set up Faces API Objects
-        FactoryFinder.setFactory(FactoryFinder.APPLICATION_FACTORY,
-                "com.sun.faces.mock.MockApplicationFactory");
-        FactoryFinder.setFactory(FactoryFinder.RENDER_KIT_FACTORY,
-                "com.sun.faces.mock.MockRenderKitFactory");
-
         externalContext =
                 new MockExternalContext(servletContext, request, response);
         Map map = new HashMap();
         externalContext.setRequestParameterMap(map);
         lifecycle = new MockLifecycle();
         facesContext = new MockFacesContext(externalContext, lifecycle);
+        // Set up Faces API Objects
+        FactoryFinder.setFactory(FactoryFinder.APPLICATION_FACTORY,
+                "com.sun.faces.mock.MockApplicationFactory");
+        FactoryFinder.setFactory(FactoryFinder.RENDER_KIT_FACTORY,
+                "com.sun.faces.mock.MockRenderKitFactory");
+
         ApplicationFactory applicationFactory = (ApplicationFactory)
                 FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
         application = (MockApplication) applicationFactory.getApplication();

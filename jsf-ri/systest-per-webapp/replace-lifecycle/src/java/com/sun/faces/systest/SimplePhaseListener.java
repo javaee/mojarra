@@ -43,6 +43,7 @@ package com.sun.faces.systest;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
+import java.util.Map;
 
 public class SimplePhaseListener implements PhaseListener {
 
@@ -57,8 +58,12 @@ public class SimplePhaseListener implements PhaseListener {
 
 
     public void beforePhase(PhaseEvent event) {
-	event.getFacesContext().getExternalContext().getRequestMap().put("beforePhase",
-									 "beforePhase");
+        Map<String, Object> requestMap = 
+	    event.getFacesContext().getExternalContext().getRequestMap();
+	String message = requestMap.containsKey("beforePhase") ? 
+	    requestMap.get("beforePhase").toString() : "";
+	requestMap.put("beforePhase",
+		       message + " beforePhase");
 	event.getFacesContext().getExternalContext().getRequestMap().put("lifecycleImpl",
 									 event.getSource());
     }

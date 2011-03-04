@@ -128,7 +128,10 @@ public class ReplaceLifecycleTestCase extends HtmlUnitFacesTestCase {
 
     public void testReplaceLifecycle() throws Exception {
 	HtmlPage page = getPage("/faces/test.jsp");
-	assertTrue(-1 != page.asText().indexOf("beforePhase"));
+	String pageText = page.asText();
+	assertTrue(-1 != pageText.indexOf("beforePhase"));
+	// Ensure the phaseListener is only called once.
+	assertTrue(!pageText.matches("(?s).*beforePhase.*beforePhase.*"));
 	
     }
 

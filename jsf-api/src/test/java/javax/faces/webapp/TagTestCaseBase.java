@@ -142,16 +142,16 @@ public class TagTestCaseBase extends TestCase {
         pageContext.initialize(servlet, request, response, null,
                                true, 1024, true);
 
-        // Set up Faces API Objects
-	FactoryFinder.setFactory(FactoryFinder.APPLICATION_FACTORY,
-				 "com.sun.faces.mock.MockApplicationFactory");
-	FactoryFinder.setFactory(FactoryFinder.RENDER_KIT_FACTORY,
-				 "com.sun.faces.mock.MockRenderKitFactory");
         externalContext =
             new MockExternalContext(servletContext, request, response);
         externalContext.setRequestParameterMap(new HashMap());
         lifecycle = new MockLifecycle();
         facesContext = new MockFacesContext(externalContext, lifecycle);
+        // Set up Faces API Objects
+	FactoryFinder.setFactory(FactoryFinder.APPLICATION_FACTORY,
+				 "com.sun.faces.mock.MockApplicationFactory");
+	FactoryFinder.setFactory(FactoryFinder.RENDER_KIT_FACTORY,
+				 "com.sun.faces.mock.MockRenderKitFactory");
         ApplicationFactory applicationFactory = (ApplicationFactory)
             FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
         application = (MockApplication) applicationFactory.getApplication();
