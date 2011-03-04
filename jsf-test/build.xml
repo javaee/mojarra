@@ -55,10 +55,12 @@
     <property name="applications-for-V3-only" value="" />
 
     <property name="applications-for-V3.1-only"
-              value="GLASSFISH-11636" />
+              value="GLASSFISH-11636,
+                     GLASSFISH-15985" />
 
     <property name="applications-for-V3.1_no_cluster-only"
-              value="GLASSFISH-11636" />
+              value="GLASSFISH-11636,
+                     GLASSFISH-15985" />
 
     <property name="container-agnostic-applications" value="" />
 

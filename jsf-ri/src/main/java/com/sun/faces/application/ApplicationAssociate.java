@@ -138,7 +138,8 @@ public class ApplicationAssociate {
     // Flag indicating that a response has been rendered.
     private boolean responseRendered = false;
 
-    private static final String ASSOCIATE_KEY = ApplicationAssociate.class.getName();
+    private static final String ASSOCIATE_KEY = RIConstants.FACES_PREFIX +
+         "ApplicationAssociate";
 
     private static ThreadLocal<ApplicationAssociate> instance =
         new ThreadLocal<ApplicationAssociate>() {
@@ -187,12 +188,8 @@ public class ApplicationAssociate {
 
     private NamedEventManager namedEventManager;
 
-    private ServletContextSensitiveSingletonStore<ApplicationAssociate> appStore;
-
     public ApplicationAssociate(ApplicationImpl appImpl) {
         app = appImpl;
-        appStore = new ServletContextSensitiveSingletonStore<ApplicationAssociate>(ASSOCIATE_KEY);
-        appStore.removeSingletonOnContextDestroyed();
 
         propertyEditorHelper = new PropertyEditorHelper(appImpl);
 
@@ -203,11 +200,12 @@ public class ApplicationAssociate {
                       MessageUtils.APPLICATION_ASSOCIATE_CTOR_WRONG_CALLSTACK_ID));
         }
         ExternalContext externalContext = ctx.getExternalContext();
-        Object existingAssociate = appStore.getReferenceToSingleton();
-        if (null != existingAssociate) {
-            throw new IllegalStateException("ApplicationAssociate already exists for this webapp.");
+        if (null != externalContext.getApplicationMap().get(ASSOCIATE_KEY)) {
+            throw new IllegalStateException(
+                 MessageUtils.getExceptionMessageString(
+                      MessageUtils.APPLICATION_ASSOCIATE_EXISTS_ID));
         }
-        appStore.putSingletonReference(this);
+        externalContext.getApplicationMap().put(ASSOCIATE_KEY, this);
         //noinspection CollectionWithoutInitialCapacity
         navigationMap = new ConcurrentHashMap<String, Set<NavigationCase>>();
         injectionProvider = (InjectionProvider) ctx.getAttributes().get(ConfigManager.INJECTION_PROVIDER_KEY);
@@ -245,18 +243,16 @@ public class ApplicationAssociate {
         if (externalContext == null) {
             return null;
         }
-        ApplicationAssociate result = ((ApplicationAssociate)
-             ServletContextSensitiveSingletonStore.getReferenceToSingleton(externalContext, ASSOCIATE_KEY));
-        return result;
+        Map applicationMap = externalContext.getApplicationMap();
+        return ((ApplicationAssociate)
+             applicationMap.get(ASSOCIATE_KEY));
     }
 
     public static ApplicationAssociate getInstance(ServletContext context) {
         if (context == null) {
             return null;
         }
-        ApplicationAssociate result = (ApplicationAssociate)
-                ServletContextSensitiveSingletonStore.getReferenceToSingleton(context, ASSOCIATE_KEY);
-        return result;
+        return (ApplicationAssociate) context.getAttribute(ASSOCIATE_KEY);
     }
 
     public static void setCurrentInstance(ApplicationAssociate associate) {
@@ -326,25 +322,24 @@ public class ApplicationAssociate {
 
     public static void clearInstance(ExternalContext
          externalContext) {
-        ApplicationAssociate me = (ApplicationAssociate)
-                ServletContextSensitiveSingletonStore.getReferenceToSingleton(externalContext, ASSOCIATE_KEY);
+        Map applicationMap = externalContext.getApplicationMap();
+        ApplicationAssociate me = (ApplicationAssociate) applicationMap.get(ASSOCIATE_KEY);
         if (null != me) {
             if (null != me.resourceBundles) {
                 me.resourceBundles.clear();
             }
-            ServletContextSensitiveSingletonStore.removeSingletonReference(externalContext, ASSOCIATE_KEY);
         }
+        applicationMap.remove(ASSOCIATE_KEY);
     }
 
     public static void clearInstance(ServletContext sc) {
-        ApplicationAssociate me = (ApplicationAssociate)
-                ServletContextSensitiveSingletonStore.getReferenceToSingleton(sc, ASSOCIATE_KEY);
+        ApplicationAssociate me = (ApplicationAssociate) sc.getAttribute(ASSOCIATE_KEY);
         if (null != me) {
             if (null != me.resourceBundles) {
                 me.resourceBundles.clear();
             }
-            ServletContextSensitiveSingletonStore.removeSingletonReference(sc, ASSOCIATE_KEY);
         }
+        sc.removeAttribute(ASSOCIATE_KEY);    
     }
 
 

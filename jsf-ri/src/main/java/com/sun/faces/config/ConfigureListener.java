@@ -301,10 +301,6 @@ public class ConfigureListener implements ServletRequestListener,
         try {
             initContext = new InitFacesContext(context);
 
-            if (null == webAppListener) {
-                webAppListener = WebappLifecycleListener.getInstance(context);
-            }
-
             if (webAppListener != null) {
                 webAppListener.contextDestroyed(sce);
                 webAppListener = null;

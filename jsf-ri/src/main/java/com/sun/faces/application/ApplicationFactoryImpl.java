@@ -66,21 +66,34 @@ public class ApplicationFactoryImpl extends ApplicationFactory {
 
    // Log instance for this class
     private static final Logger logger = FacesLogger.APPLICATION.getLogger();
+    //
+    // Protected Constants
+    //
 
-    private static final String APPLICATION_KEY = ApplicationFactoryImpl.class.getName();
+    //
+    // Class Variables
+    //
+
+    // Attribute Instance Variables
+
+    private volatile Application application;
+
+    // Relationship Instance Variables
+
+    //
+    // Constructors and Initializers
+    //
+
 
     /*
      * Constructor
      */
     public ApplicationFactoryImpl() {
         super();
+        application = null;
         if (logger.isLoggable(Level.FINE)) {
             logger.log(Level.FINE, "Created ApplicationFactory ");
         }
-    }
-
-    Class getApplicationInstanceClass() {
-        return ApplicationImpl.class;
     }
 
 
@@ -89,19 +102,14 @@ public class ApplicationFactoryImpl extends ApplicationFactory {
      * for this web application.</p>
      */
     public Application getApplication() {
-        ServletContextSensitiveSingletonStore<Application> appStore =
-             new ServletContextSensitiveSingletonStore<Application>(APPLICATION_KEY);
-
-        Application application = appStore.getReferenceToSingleton();
 
         if (application == null) {
             application = new ApplicationImpl();
-            appStore.removeSingletonOnContextDestroyed();
+            InjectionApplicationFactory.setApplicationInstance(application);
             if (logger.isLoggable(Level.FINE)) {
                 logger.fine(MessageFormat.format("Created Application instance ''{0}''",
                                                  application));
             }
-            appStore.putSingletonReference(application);
         }
         return application;
     }
@@ -119,11 +127,8 @@ public class ApplicationFactoryImpl extends ApplicationFactory {
                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "application");
             throw new NullPointerException(message);
         }
-        ServletContextSensitiveSingletonStore<Application> appStore =
-             new ServletContextSensitiveSingletonStore<Application>(APPLICATION_KEY);
 
-        appStore.removeSingletonReference();
-        appStore.putSingletonReference(application);
+        this.application = application;
         if (logger.isLoggable(Level.FINE)) {
             logger.fine(MessageFormat.format("set Application Instance to ''{0}''", 
                                              application.getClass().getName()));
