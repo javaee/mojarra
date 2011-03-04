@@ -41,7 +41,31 @@
 
 -->
 
-<project name="GlassFishV3.1" basedir=".">
+<project name="wls-10.3.4" basedir=".">
+
+    <property name="wl.username" value="weblogic"/>
+    <property name="wl.password" value="weblogic1"/>
+    <property name="wl.home" value="${container.home}/wlserver_10.3" />
+    <property name="wl.domain.home" value="${container.home}/user_projects/domains" />
+    <property name="wl.domain.name" value="base_domain" />
+    <property name="wl.admin.server.name" value="AdminServer" />
+
+    <taskdef name="wlserver" 
+             classname="weblogic.ant.taskdefs.management.WLServer">
+        <classpath>
+            <pathelement
+                  location="${wl.home}/server/lib/weblogic.jar"/>
+        </classpath>
+      
+    </taskdef>
+    <taskdef name="wldeploy" 
+             classname="weblogic.ant.taskdefs.management.WLDeploy">
+        <classpath>
+            <pathelement
+                  location="${wl.home}/server/lib/weblogic.jar"/>
+        </classpath>
+      
+    </taskdef>
 
     <!-- JARs that may be packaged in WEB-INF/lib
   in order for the implementation to run
@@ -80,61 +104,40 @@
         <attribute name="use-virtual-servers"
                    description="If true, deploy to the virtual servers."
                    default="false"/>
-        <attribute name="osgi"
-                   description="If true, deploy with --type osgi."
-                   default="false"/>
         <sequential>
-            <condition property="exec.name" value="cmd.exe">
-                <os family="windows"/>
-            </condition>
-            <condition property="exec.arg.1"
-                       value="/c ${container.home}/bin/asadmin">
-                <os family="windows"/>
-            </condition>
-            <property name="exec.name" value="${container.home}/bin/asadmin"/>
-            <property name="exec.arg.1" value=""/>
+            <echo>Instrumenting @{artifact} with weblogic.xml</echo>
+            <property name="local.wls-jsf"
+                  value="${jsf.build.home}/common/ant/${container.name}/wls-jsf" />
+            <property name="local.wls-jsf.deploy.artifact"
+                  value="${local.wls-jsf}/target/deploy.artifact" />
+            <delete dir="${local.wls-jsf.deploy.artifact}" 
+                    failonerror="false" />
+            <mkdir dir="${local.wls-jsf.deploy.artifact}/WEB-INF/" />
+            <copy file="${local.wls-jsf}/src/main/templates/weblogic.xml"
+                  tofile="${local.wls-jsf.deploy.artifact}/WEB-INF/weblogic.xml"
+                  filtering="true">
+                <filterset>
+                  <filter token="spec.version" value="${impl.version.number}"/>
+                  <filter token="impl.name" value="${impl.name}"/>
+                </filterset>
+            </copy>
+            <jar update="true" destfile="@{artifact}">
+                <fileset dir="${local.wls-jsf.deploy.artifact}"
+                         includes="**/*.*" />
+            </jar>
+
             <echo>
 
 ---------------- Glassfish - Deploying @{appName} ---------------- 
 
             </echo>
-            <condition property="target"
-                       value="--target ${glassfish.cluster}">
-                <not>
-                  <equals arg1="${force.no.cluster}" casesensitive="false" trim="true"
-                          arg2="true" />
-                </not>
-            </condition>
-            <condition property="availabilityenabled"
-                       value="--availabilityenabled true">
-                <not>
-                  <equals arg1="${force.no.cluster}" casesensitive="false" trim="true"
-                          arg2="true" />
-                </not>
-            </condition>
-            <property name="target" value="" />
-            <property name="availabilityenabled" value="" />
-            <if>
-              <equals arg1="@{osgi}"
-                      casesensitive="false" trim="true"
-                      arg2="true" />
-                <then>
-                  <sequential>
-                      <property name="osgi-value" value="--type osgi" />
-                  </sequential>
-                </then>
-            </if>
-            <property name="osgi-value" value="" />
-            <echo message="osgi-value: ${osgi-value}" />
-            <exec executable="${exec.name}" failonerror="true">
-                <arg line="${exec.arg.1}"/>
-                <arg line="--port ${glassfish.custom.admin.port}"/>
-                <arg line="deploy"/>
-                <arg line="${osgi-value}"/>
-                <arg line="${availabilityenabled}"/>
-                <arg line="${target}"/>
-                <arg line="@{artifact}"/>
-            </exec>
+            <wldeploy action="deploy"
+                appversion="${impl.version.number}"
+                name="@{appName}"
+                password="${wl.password}"
+                user="${wl.username}"
+                source="@{artifact}"
+                verbose="true" />
         </sequential>
     </macrodef>
 
@@ -192,35 +195,17 @@
         <attribute name="appName"
                    description="The name of the application"/>
         <sequential>
-            <condition property="exec.name" value="cmd.exe">
-                <os family="windows"/>
-            </condition>
-            <condition property="exec.arg.1"
-                       value="/c ${container.home}/bin/asadmin">
-                <os family="windows"/>
-            </condition>
-            <property name="exec.name" value="${container.home}/bin/asadmin"/>
-            <property name="exec.arg.1" value=""/>
-            <condition property="target"
-                       value="--target ${glassfish.cluster}">
-                <not>
-                  <equals arg1="${force.no.cluster}" casesensitive="false" trim="true"
-                          arg2="true" />
-                </not>
-            </condition>
-            <property name="target" value="" />
             <echo>
 
 ---------------- Glassfish - Undeploying @{appName} ---------------- 
 
             </echo>
-            <exec executable="${exec.name}">
-                <arg line="${exec.arg.1}"/>
-                <arg line="--port ${glassfish.custom.admin.port}"/>
-                <arg line="undeploy"/>
-                <arg line="${target}"/>
-                <arg line="@{appName}"/>
-            </exec>
+            <wldeploy action="undeploy"
+                name="@{appName}"
+                password="${wl.password}"
+                user="${wl.username}"
+                verbose="true" debug="true" failonerror="false"/>
+
         </sequential>
     </macrodef>
 
@@ -238,27 +223,80 @@
         <echo message="PENDING - Please implement"/>
     </target>
 
-    <target name="container.deploy"
+    <target name="define.wls.properties">
+      <property name="wls.jsf.di.groupId" value="com/bea/faces" />
+      <property name="wls.jsf.di.artifactId" value="wls.jsf.di" />
+      <property name="wls.jsf.di.version" value="2.0.4" />
+      <property name="wls.jsf.di.path" value="${wls.jsf.di.groupId}/${wls.jsf.di.artifactId}/${wls.jsf.di.version}" />
+      <property name="wls.jsf.di.jar" value="${wls.jsf.di.path}/${wls.jsf.di.artifactId}-${wls.jsf.di.version}.jar" />
+      <property name="wls.jsf.di.url" value="http://hg.us.oracle.com/jsf/website/raw-file/43f22fe82eca/downloads/wls.jsf.di-2.0.4.jar"/>
+
+      <propertyregex override="true"
+                   property="groupPath" input="${groupId}"
+                   regexp="\." replace="/" global="true" />
+    </target>
+
+    <target name="container.deploy" depends="define.wls.properties"
             description="Deploy the JSF Implementation artifacts to the target container.">
-        <if>
-            <os family="windows"/>
-            <then>
-                <container.stop/>
-            </then>
-        </if>
+     
+      <mkdir dir="${maven.repo.local}/${groupPath}/jsf-api/${impl.version}" />
+      <copy file="${jsf.build.home}/jsf-api/build/lib/jsf-api.jar" overwrite="true"
+            tofile="${maven.repo.local}/${groupPath}/jsf-api/${impl.version}/jsf-api-${impl.version}.jar" />
+      <copy file="${jsf.build.home}/jsf-ri/build/lib/jsf-impl.jar" overwrite="true"
+            tofile="${maven.repo.local}/${groupPath}/jsf-impl/${impl.version}/jsf-impl-${impl.version}.jar" />
 
-        <copy overwrite="true" file="${api.dir}/build/lib/jsf-api.jar" toFile="${container.home}/modules/jsf-api.jar"/>
-        <copy overwrite="true" file="${impl.dir}/build/lib/jsf-impl.jar" toFile="${container.home}/modules/jsf-impl.jar"/>
+      <if>
+        <not>
+          <available file="${maven.repo.local}/${wls.jsf.di.jar}" property="ignored"/>
+        </not>
+        <then>
+          <sequential>
+            <mkdir dir="${maven.repo.local}/${wls.jsf.di.path}" />
+            <get src="${wls.jsf.di.url}" verbose="true"
+                 usetimestamp="true"
+                 dest="${maven.repo.local}/${wls.jsf.di.jar}" />
+          </sequential>
+        </then>
+      </if>
+      <jsf.mvn mvnargs="-Dimpl.version=${impl.version} -Dimpl.name=${impl.name}" 
+               dir="${jsf.build.home}/common/ant/${container.name}/wls-jsf" goals="clean install" />
+      <container.stop />
 
-        <if>
-            <os family="windows"/>
-            <then>
-                <!-- container.start/ -->
-                <echo>The container may have been stopped. Please restart it, if
-                    needed.
-                </echo>
-            </then>
-        </if>       
+      <copy file="${jsf.build.home}/jsf-api/build/lib/jsf-api.jar" overwrite="true"
+            todir="${wl.home}/server/lib/consoleapp/webapp/WEB-INF/lib" />
+      <copy file="${jsf.build.home}/jsf-ri/build/lib/jsf-impl.jar" overwrite="true"
+            todir="${wl.home}/server/lib/consoleapp/webapp/WEB-INF/lib" />
+      <container.start />
+      <wldeploy action="deploy"
+                appversion="${impl.version.number}"
+                libImplVer="${impl.version.number}"
+                libSpecVer="${impl.version.number}"
+                library="true"
+                name="${impl.name}"
+                password="${wl.password}"
+                user="${wl.username}"
+                source="${jsf.build.home}/common/ant/${container.name}/wls-jsf/target/${impl.name}-${impl.version}.war"
+                verbose="true" />
+      <container.stop />
+
+    </target>
+
+    <target name="container.undeploy" depends="define.wls.properties"
+            description="Undeploy the JSF Implementation artifacts from the target container.">
+     
+      <container.stop />
+      <container.start />
+      <wldeploy action="undeploy"
+                appversion="${impl.version.number}"
+                libImplVer="${impl.version.number}"
+                libSpecVer="${impl.version.number}"
+                library="true"
+                name="${impl.name}"
+                password="${wl.password}"
+                user="${wl.username}"
+                verbose="true" />
+      <container.stop />
+
     </target>
 
     <target name="container.deploy.test.dependencies"
@@ -307,7 +345,7 @@
 --------- Starting container, create-domain: ${create-domain-value} create-cluster: ${create-cluster-value}
         </echo>
         <container.start create-domain="${create-domain-value}"
-                         create-cluster="${create-cluster-value}" failonerror="false"/>
+                         create-cluster="${create-cluster-value}"/>
     </target>
 
     <target name="container.debug"
@@ -364,36 +402,6 @@
                         create-cluster="${create-cluster-value}"/>
     </target>
 
-    <target name="container.init.osgi"
-            description="Configure GlassFish 3.1 for OSGi WAB deployment">
-        <echo>
----------  Configuring GlassFish 3.1 for OSGi WAB deployment
-        </echo>
-        <container.start failonerror="false"/>
-        <exec executable="${container.home}/bin/asadmin"
-                          failonerror="false">
-           <arg line="--port ${glassfish.custom.admin.port}"/>
-           <arg line="delete-jvm-options"/>
-           <arg line="--target mojarra-cluster-config"/>
-           <arg line="-Dorg.glassfish.additionalOSGiBundlesToStart='org.apache.felix.shell,org.apache.felix.gogo.runtime,org.apache.felix.gogo.shell,org.apache.felix.gogo.command'"/>
-         </exec>
-         <exec executable="${container.home}/bin/asadmin"
-                          failonerror="false">
-           <arg line="--port ${glassfish.custom.admin.port}"/>
-           <arg line="delete-jvm-options"/>
-           <arg line="--target mojarra-cluster-config"/>
-           <arg line="-Dorg.glassfish.additionalOSGiBundlesToStart='org.apache.felix.shell,org.apache.felix.gogo.runtime,org.apache.felix.gogo.shell,org.apache.felix.shell.remote,org.apache.felix.fileinstall'"/>
-         </exec>
-         <exec executable="${container.home}/bin/asadmin"
-                          failonerror="true">
-           <arg line="--port ${glassfish.custom.admin.port}"/>
-           <arg line="create-jvm-options"/>
-           <arg line="--target mojarra-cluster-config"/>
-           <arg line="-Dorg.glassfish.additionalOSGiBundlesToStart='org.apache.felix.shell,org.apache.felix.gogo.runtime,org.apache.felix.gogo.shell,org.apache.felix.shell.remote,org.apache.felix.fileinstall'"/>
-         </exec>
-         <container.stop create-domain="false" create-cluster="false"/>
-    </target>
-
     <target name="container.restart"
             description="Stop the GlassFish container">
         <container.stop/>
@@ -427,11 +435,25 @@
             description="Start the GlassFish container">
         <attribute name="create-domain" default="true"/>
         <attribute name="create-cluster" default="true"/>
-        <attribute name="failonerror" default="true"/>
         <sequential>
-            <start.domain create-domain="@{create-domain}" 
-                          create-cluster="@{create-cluster}"
-                          failonerror="@{failonerror}"/>
+          <echo>Starting ${container.name}</echo>
+          <wlserver dir="${wl.domain.home}/${wl.domain.name}" 
+                    host="${container.host}" port="${container.port}"
+                    domainname="${wl.domain.name}" 
+                    servername="${wl.admin.server.name}"
+                    action="start" 
+                    username="${wl.username}" password="${wl.password}"
+                    beahome="${container.home}" 
+                    weblogichome="${wl.home}" verbose="true" 
+                    noExit="true"
+                    protocol="t3" 
+                    classpath="${wl.home}/server/lib/weblogic.jar" >
+                       <jvmarg value="-server"/>
+                       <jvmarg value="-Xms512m"/>
+                       <jvmarg value="-Xmx786m"/>
+                       <jvmarg value="-XX:PermSize=128m"/>
+                       <jvmarg value="-XX:MaxPermSize=786m"/>
+           </wlserver>
         </sequential>
     </macrodef>
 
@@ -451,8 +473,15 @@
         <attribute name="create-domain" default="true"/>
         <attribute name="create-cluster" default="true"/>
         <sequential>
-            <stop.domain create-domain="@{create-domain}"
-                         create-cluster="@{create-cluster}"/>
+          <echo>Stopping ${container.name}</echo>
+          <wlserver dir="${wl.domain.home}/${wl.domain.name}" 
+                    host="${container.host}" port="${container.port}"
+                    servername="${wl.admin.server.name}" 
+                    username="${wl.username}" password="${wl.password}"
+                    action="shutdown" 
+                    beahome="${container.home}" 
+                    weblogichome="${wl.home}" 
+                    forceshutdown="true"/>
         </sequential>
     </macrodef>
 
@@ -460,7 +489,6 @@
     <macrodef name="start.domain">
         <attribute name="create-domain" default="true"/>
         <attribute name="create-cluster" default="true"/>
-        <attribute name="failonerror" default="true"/>
 
         <sequential>
             <echo>
@@ -471,14 +499,13 @@
             <if>
                 <os family="unix"/>
                 <then>
-                  <sequential>
                     <if>
                         <equals arg1="@{create-domain}" 
                                 casesensitive="false" trim="true"
                                 arg2="true" />
                         <then>
 			  <exec executable="${container.home}/bin/asadmin"
-				failonerror="@{failonerror}">
+				failonerror="true">
 			      <arg line="create-domain"/>
 			      <arg line="--user ${glassfish.admin.user}"/>
 			      <arg line="--passwordfile ${glassfish.password.file}"/>
@@ -488,7 +515,7 @@
                         </then>
                     </if>
                     <exec executable="${container.home}/bin/asadmin"
-				failonerror="@{failonerror}">
+                          failonerror="true">
                         <arg line="start-domain"/>
                         <arg line="--user ${glassfish.admin.user}"/>
                         <arg line="${glassfish.custom.domain}"/>
@@ -500,8 +527,7 @@
                                 arg2="true" />
                       </not>
                       <then>
-                        <start.cluster create-cluster="@{create-cluster}"
-				failonerror="@{failonerror}"/>
+                        <start.cluster create-cluster="@{create-cluster}"/>
                       </then>
                       <else>
 			<waitfor>
@@ -509,17 +535,15 @@
 			</waitfor>
                       </else>
                     </if>
-                  </sequential>
                 </then>
                 <else>
-                  <sequential>
                     <if>
                         <equals arg1="@{create-domain}" 
                                 casesensitive="false" trim="true"
                                 arg2="true" />
                         <then>
 			  <exec executable="${container.home}/bin/asadmin.bat"
-				failonerror="@{failonerror}">
+				failonerror="true">
 			      <arg line="create-domain"/>
 			      <arg line="--user ${glassfish.admin.user}"/>
 			      <arg line="--passwordfile ${glassfish.password.file}"/>
@@ -529,7 +553,6 @@
                         </then>
                     </if>
                     <exec executable="${container.home}/bin/asadmin.bat"
-				failonerror="@{failonerror}">
                           spawn="true">
                         <arg line="start-domain"/>
                         <arg line="--user ${glassfish.admin.user}"/>
@@ -542,8 +565,7 @@
                                 arg2="true" />
                       </not>
                       <then>
-                        <start.cluster create-cluster="@{create-cluster}"
-				failonerror="@{failonerror}"/>
+                        <start.cluster create-cluster="@{create-cluster}"/>
                       </then>
                       <else>
 			<waitfor>
@@ -551,7 +573,6 @@
 			</waitfor>
                       </else>
                     </if>
-                  </sequential>
                 </else>
             </if>
         </sequential>
@@ -559,7 +580,6 @@
 
     <macrodef name="start.cluster">
         <attribute name="create-cluster" default="true"/>
-        <attribute name="failonerror" default="true"/>
         <sequential>
             <echo>
 
@@ -575,7 +595,7 @@
                                 arg2="true" />
                         <then>
 			  <exec executable="${container.home}/bin/asadmin"
-				failonerror="@{failonerror}">
+				failonerror="true">
 			      <arg line="--port ${glassfish.custom.admin.port}"/>
 			      <arg line="create-cluster"/>
 			      <arg line="--systemproperties ASADMIN_LISTENER_PORT=${glassfish.cluster.admin.port}"/>
@@ -585,7 +605,7 @@
 			  <for list="${instance.numbers}" param="num" trim="true">
 			    <sequential>
 			      <exec executable="${container.home}/bin/asadmin"
-				failonerror="@{failonerror}">
+				    failonerror="true">
 				  <arg line="--port ${glassfish.custom.admin.port}"/>
 				  <arg line="create-local-instance"/>
 				  <arg line="--cluster ${glassfish.cluster}"/>
@@ -597,7 +617,7 @@
                       </then>
                     </if>
                     <exec executable="${container.home}/bin/asadmin"
-				failonerror="@{failonerror}">
+                          failonerror="true">
                         <arg line="--port ${glassfish.custom.admin.port}"/>
                         <arg line="start-cluster"/>
                         <arg line="${glassfish.cluster}"/>
@@ -617,7 +637,7 @@
                                 arg2="true" />
                         <then>
 			<exec executable="${container.home}/bin/asadmin.bat"
-				failonerror="@{failonerror}">
+			      failonerror="true">
 			    <arg line="--port ${glassfish.custom.admin.port}"/>
 			    <arg line="create-cluster"/>
 			    <arg line="--systemproperties ASADMIN_LISTENER_PORT=${glassfish.cluster.admin.port}"/>
@@ -627,7 +647,7 @@
 			<for list="${instance.numbers}" param="num" trim="true">
 			  <sequential>
 			    <exec executable="${container.home}/bin/asadmin.bat"
-				failonerror="@{failonerror}">
+				  failonerror="true">
 				<arg line="--port ${glassfish.custom.admin.port}"/>
 				<arg line="create-local-instance"/>
 				<arg line="--cluster ${glassfish.cluster}"/>
@@ -639,7 +659,7 @@
                       </then>
                     </if>
                     <exec executable="${container.home}/bin/asadmin.bat"
-				failonerror="@{failonerror}">
+                          failonerror="true">
                         <arg line="--port ${glassfish.custom.admin.port}"/>
                         <arg line="start-cluster"/>
                         <arg line="${glassfish.cluster}"/>
@@ -1029,6 +1049,13 @@
     <target name="main">
     </target>
 
+    <target name="edburns">
+
+    <propertyregex override="true"
+                   property="groupPath" input="${groupId}"
+                   regexp="\." replace="/" global="true" />
+<echo>${groupId} ${groupPath}</echo>
+    </target>
 
 </project>
 
