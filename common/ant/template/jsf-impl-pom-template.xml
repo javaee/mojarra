@@ -113,7 +113,7 @@
       <repository>
         <uniqueVersion>false</uniqueVersion>
         <id>java.net-maven2-repository</id>
-        <url>java-net:/maven2-repository~svn/trunk/repository/</url> 
+        <url>svn:https://svn.java.net/svn/maven2-repository~svn/trunk/repository</url> 
       </repository>
     </distributionManagement>
     <build>
@@ -159,7 +159,7 @@
             <extension>
                 <groupId>org.jvnet.wagon-svn</groupId>
                 <artifactId>wagon-svn</artifactId>
-                <version>1.12</version>
+                <version>1.8</version>
             </extension>
         </extensions>
 
