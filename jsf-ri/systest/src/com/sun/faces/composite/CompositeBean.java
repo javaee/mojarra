@@ -231,6 +231,12 @@ public class CompositeBean {
         return new String[] { "A", "B", "C" };
     }
 
+    public List<Integer> getTestValues() {
+        List<Integer> values = new ArrayList<Integer>(1);
+        values.add(1);
+        return values;
+    }
+
 
     // ---------------------------------------------------------- Nested Classes
 

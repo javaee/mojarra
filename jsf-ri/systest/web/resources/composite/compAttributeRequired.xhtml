@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:composite="http://java.sun.com/jsf/composite">
+  <h:head />
+  <h:body>
+    <composite:interface>
+      <composite:attribute name="val" required="true" />
+      <composite:attribute name="modded" required="true" type="Integer" />
+    </composite:interface>
+    <composite:implementation>
+    xx#{cc.attrs.val}:#{cc.attrs.modded}xx
+    </composite:implementation>
+  </h:body>
+</html>

@@ -124,6 +124,21 @@ public class CompositeComponentsTestCaseWithEE6Dependencies extends HtmlUnitFace
 
     }
 
+    public void testCompositeComponentAttributeRequired() throws Exception {
+
+        HtmlPage page = getPage("/faces/composite/compAttributeRequired.xhtml");
+        String message = "xx1:0xx";
+        assertTrue(page.asText().contains(message));
+
+        page = getPage("/faces/composite/compAttributeRequiredNullValue.xhtml");
+        message = "xx:0xx";
+        assertTrue(page.asText().contains(message));
+
+        page = getPage("/faces/composite/compAttributeRequiredLiteral.xhtml");
+        message = "xx2:0xx";
+        assertTrue(page.asText().contains(message));
+    }
+
     public void testInvalidArgsToCCExpression() throws Exception {
 
         client.setThrowExceptionOnFailingStatusCode(false);
