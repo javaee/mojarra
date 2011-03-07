@@ -156,7 +156,7 @@
 
     <artifact:localRepository id="local.repository" path="${maven.repo.local}"/>
     
-    <artifact:remoteRepository id="jboss.repo" url="http://repository.jboss.com/maven2/"/>
+    <artifact:remoteRepository id="jboss.repo" url="https://repository.jboss.org/nexus/"/>
     <artifact:remoteRepository id="j.n.repo" url="http://download.java.net/maven/2/"/>
     <artifact:remoteRepository id="gf.repo" url="http://download.java.net/maven/glassfish/"/>
     <artifact:remoteRepository id="gf.nexus.repo" url="http://maven.glassfish.org/content/groups/glassfish/"/>
