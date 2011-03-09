@@ -438,7 +438,6 @@
         -->
 
         <!-- Trinidad -->
-        <echo>${trinidad.zip}</echo>
 
         <if>
             <not>
