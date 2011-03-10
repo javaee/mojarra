@@ -833,7 +833,82 @@ javax.faces.level=ALL
         <mvn.deploy.release.local type="api"/>
     </target>
 
-    <target name="mvn.deploy.api.release.local">
+    <target name="strip.api.jar" 
+            depends="get.faces.java.packages.as.space.separated.string">
+        <!-- path maintenance -->
+        <move file="${build.lib.dir}/${name}.jar" failonerror="true"
+              tofile="${build.lib.dir}/${name}-full.jar" />
+        <delete failonerror="false" dir="${build.lib.dir}/jsf-api-stripped" />
+        <mkdir dir="${build.lib.dir}/jsf-api-stripped" />
+        <!-- windows or unix java exec invocation -->
+        <condition property="exec.name" value="cmd.exe">
+            <os family="windows"/>
+        </condition>
+        <condition property="exec.arg.1"
+                   value="/c ${java.home}/bin/javac">
+            <os family="windows"/>
+        </condition>
+        <property name="exec.name" value="${java.home}/bin/javac"/>
+        <property name="exec.arg.1" value=""/>
+        <!-- invoke the javac processor to produce stripped .class files -->
+        <exec executable="${exec.name}" failonerror="true">
+            <arg line="${exec.arg.1}"/>
+            <arg line="-XDprocess.packages"/>
+            <arg line="-proc:only"/>
+            <arg line="-cp ${build.lib.dir}/${name}-full.jar:${jsf-tools.jar}"/>
+            <arg line="-processor com.sun.faces.tools.StripClassesForApiJar"/>
+            <arg line="-Acom.sun.tools.javac.sym.Jar=${build.lib.dir}/${name}-full.jar"/>
+            <arg line="-Acom.sun.tools.javac.sym.ExtraApiClassPath=${javaee-api.jar}"/>
+            <arg line="-Acom.sun.tools.javac.sym.Dest=${build.lib.dir}/jsf-api-stripped"/>
+            <arg line="${src.paths}"/>
+        </exec>
+        <!-- jar up the stripped files into jsf-api.jar. -->
+        <!-- Extract the original manifest -->
+        <unjar src="${build.lib.dir}/${name}-full.jar"
+               dest="${build.lib.dir}/jsf-api-stripped">
+          <patternset>
+            <include name="META-INF/MANIFEST.MF" />
+          </patternset>
+        </unjar>
+        <jar destfile="${build.lib.dir}/${name}.jar"
+             basedir="${build.lib.dir}/jsf-api-stripped"
+             manifest="${build.lib.dir}/jsf-api-stripped/META-INF/MANIFEST.MF" />
+    </target>
+
+    <target name="get.faces.java.packages.as.space.separated.string"
+            description="Traverse ${src.dir} and extract the directory names into a property ${src.paths} as a space separated list of java packages">
+      <!-- Suck the dirs into a path-like structure. -->
+      <path id="src.dir.path">
+        <dirset dir="${src.dir}" />
+      </path>
+      <!-- Suck the path-like structure into a property. -->
+      <property name="src.dir.paths" refid="src.dir.path" />
+
+      <!-- Massage the property value to make it be as desired. -->
+
+      <!-- Remove the leading fully qualified paths. -->
+      <propertyregex property="src.paths" input="${src.dir.paths}" override="true"
+                     regexp="${src.dir}" replace="" global="true" />
+      <!-- Remove the leading "/" from every path entry. -->
+      <propertyregex property="src.paths" input="${src.paths}" override="true"
+                     regexp="/javax" 
+                     replace="javax" global="true" />
+      <!-- Remove the javax entry.  It is not a java package. -->
+      <propertyregex property="src.paths" input="${src.paths}" override="true"
+                     regexp="${path.separator}javax${path.separator}" 
+                     replace="" global="true" />
+      <!-- Replace ':' with ' ' (or ';' with ' ' on windows). -->
+      <propertyregex property="src.paths" input="${src.paths}" override="true"
+                     regexp="${path.separator}" 
+                     replace=" " global="true" />
+      <!-- Replace '/' with '.'. -->
+      <propertyregex property="src.paths" input="${src.paths}" override="true"
+                     regexp="/" 
+                     replace="." global="true" />
+    </target>
+        
+    <target name="mvn.deploy.api.release.local" depends="strip.api.jar">
+
         <mvn.deploy.release.local groupId="javax.faces" version="${spec.version}" type="api"/>
     </target>
 
@@ -856,7 +931,7 @@ javax.faces.level=ALL
         <mvn.deploy.release type="api"/>
     </target>
 
-    <target name="mvn.deploy.api.release">
+    <target name="mvn.deploy.api.release" depends="strip.api.jar">
         <mvn.deploy.release groupId="javax.faces" version="${spec.version}" type="api"/>
     </target>
 
