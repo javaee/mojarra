@@ -66,6 +66,7 @@
     <property name="taglibdoc.version" value="1.3"/>
     <property name="jsdoc.version" value="2.0.2"/>
     <property name="servlet.api.version" value="2.5"/>
+    <property name="javaee-api.version" value="6.0"/>
     <property name="newer.servlet.api.version" value="3.0"/>
     <property name="jsp.api.version" value="2.1"/>
     <property name="jstl.api.version" value="1.2"/>
@@ -124,6 +125,7 @@
               value="${dependency.jar.dir}/maven-repository-importer-${maven.repository.importer.version}.jar"/>
     <property name="servlet.jar" value="${dependency.jar.dir}/servlet-api-${servlet.api.version}.jar"/>
     <property name="servlet3.jar" value="${dependency.jar.dir}/servlet-api-${newer.servlet.api.version}.jar"/>
+    <property name="javaee-api.jar" value="${dependency.jar.dir}/javaee-api-${javaee-api.version}.jar"/>
     <property name="jsp.jar" value="${dependency.jar.dir}/jsp-api-${jsp.api.version}.jar"/>
     <property name="el-api.jar" value="${dependency.jar.dir}/el-api-${el.version}.jar"/>
     <property name="el-impl.jar" value="${dependency.jar.dir}/el-impl-${el.version}.jar"/>
@@ -319,6 +321,18 @@
             </then>
         </if>
 
+        <!-- JAVAEE API -->
+        <if>
+            <not>
+                <available file="${javaee-api.jar}" property="ignored"/>
+            </not>
+            <then>
+                <get src="${java.net.maven2}/javax/javaee-api/${javaee-api.version}/javaee-api-${javaee-api.version}.jar"
+                     dest="${javaee-api.jar}"
+                     usetimestamp="true"/>
+
+            </then>
+        </if>
         <!-- SERVLET API -->
         <if>
             <not>
