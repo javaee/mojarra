@@ -232,6 +232,16 @@
                 </else>
             </if>
             <if>
+                <!-- If maven.m2.settings set, respect it -->
+                <isset property="maven.m2.settings"/>
+                <then>
+                    <property name="mvn.m2.settings.prop" value="--settings ${maven.m2.settings}"/>
+                </then>
+                <else>
+                    <property name="mvn.m2.settings.prop" value=""/>
+                </else>
+            </if>
+            <if>
                 <equals arg1="@{skipTests}" arg2="false"/>
                 <then>
                     <property name="testSkipProperty" value=""/>
@@ -243,19 +253,19 @@
             </if>
             <exec os="SunOS" dir="@{dir}" failonerror="yes"
                   executable="${mvn.cmd}">
-                <arg line="-f @{pomFile} @{mvnargs} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}"/>
+                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}"/>
             </exec>
             <exec os="Linux" dir="@{dir}" failonerror="yes"
                   executable="${mvn.cmd}">
-                <arg line="-f @{pomFile} @{mvnargs} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}"/>
+                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}"/>
             </exec>
             <exec osfamily="windows" dir="@{dir}" executable="${mvn.cmd}"
                   failonerror="yes">
-                <arg line="-f @{pomFile} @{mvnargs} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}"/>
+                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}"/>
             </exec>
             <exec os="Mac OS X" dir="@{dir}" executable="${mvn.cmd}"
                   failonerror="yes">
-                <arg line="-f @{pomFile} @{mvnargs} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}"/>
+                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}"/>
             </exec>
         </sequential>
     </macrodef>
