@@ -53,6 +53,10 @@ public class HtmlTaglibTestCase extends HtmlUnitFacesTestCase {
 
     public HtmlTaglibTestCase(String name) {
         super(name);
+        addExclusion(Container.TOMCAT6, "test04");
+        addExclusion(Container.TOMCAT7, "test04");
+
+
     }
 
     public static Test suite() {

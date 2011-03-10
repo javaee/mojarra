@@ -92,10 +92,16 @@ this file.  Use the following as an example.
 </echo>
   </target>
 
-    <target name="define.applications" depends="discover.container.version,define.V2.applications,define.V3.applications,define.V3.1.applications,define.V3.1_no_cluster.applications" />
+    <target name="define.applications" depends="discover.container.version,define.tomcat7.applications,define.V2.applications,define.V3.applications,define.V3.1.applications,define.V3.1_no_cluster.applications" />
 
     <target name="discover.container.version" 
-            depends="query.is.V2,query.is.V3,query.is.V3.1,query.is.V3.1_no_cluster"/>
+            depends="query.is.V2,query.is.V3,query.is.V3.1,query.is.V3.1_no_cluster,query.is.tomcat7"/>
+
+    <target name="query.is.tomcat7">
+        <condition property="container.is.tomcat7">
+          <equals arg1="tomcat7" arg2="${container.name}" />
+        </condition>
+    </target>
 
     <target name="query.is.V2">
         <condition property="container.is.V2">
@@ -122,6 +128,10 @@ this file.  Use the following as an example.
     </target>
 
     <target name="define.V2.applications" if="container.is.V2">
+       <property name="applications" value="${container-agnostic-applications}" />
+    </target>
+
+    <target name="define.tomcat7.applications" if="container.is.tomcat7">
        <property name="applications" value="${container-agnostic-applications}" />
     </target>
 

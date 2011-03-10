@@ -65,7 +65,7 @@ import javax.servlet.ServletContext;
  *
  * <p>It's important to note that this will not provide resource injection.</p>
  */
-public class WebContainerInjectionProvider implements InjectionProvider, AnnotationScanner {
+public class WebContainerInjectionProvider implements InjectionProvider {
 
 
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
@@ -79,12 +79,6 @@ public class WebContainerInjectionProvider implements InjectionProvider, Annotat
         // no-op
 
     }
-
-    public Map<String, List<AnnotationScanner.ScannedAnnotation>> getAnnotatedClassesInCurrentModule(ServletContext sc) throws InjectionProviderException {
-        return Collections.emptyMap();
-    }
-
-
 
     public void invokePreDestroy(Object managedBean)
     throws InjectionProviderException {

@@ -45,6 +45,7 @@
 
     <import file="${jsf.build.home}/common/ant/${container.name}/container.xml"/>
     <import file="${jsf.build.home}/common/ant/dependencies.xml"/>
+    <import file="${jsf.build.home}/common/ant/test-app.xml"/>
     <import file="${jsf.build.home}/common/ant/maven.xml"/>
     <taskdef resource="net/sf/antcontrib/antlib.xml">
         <classpath>
@@ -250,36 +251,6 @@
         <path refid="htmlunit.runtime.classpath"/>
         <path refid="jsf.test.jar.classpath"/>
     </path>
-
-    <!-- Common Targets -->
-
-    <target name="discover.container.version" 
-            depends="query.is.V2,query.is.V3,query.is.V3.1,query.is.V3.1_no_cluster"/>
-
-    <target name="query.is.V2">
-        <condition property="container.is.V2">
-          <equals arg1="glassfish" arg2="${container.name}" />
-        </condition>
-    </target>
-
-    <target name="query.is.V3">
-        <condition property="container.is.V3">
-          <equals arg1="glassfishV3" arg2="${container.name}" />
-        </condition>
-    </target>
-
-    <target name="query.is.V3.1">
-        <condition property="container.is.V3.1">
-          <equals arg1="glassfishV3.1" arg2="${container.name}" />
-        </condition>
-    </target>
-
-    <target name="query.is.V3.1_no_cluster">
-        <condition property="container.is.V3.1_no_cluster">
-          <equals arg1="glassfishV3.1_no_cluster" arg2="${container.name}" />
-        </condition>
-    </target>
-
 
 
     <!-- Convenience macro for javac -->

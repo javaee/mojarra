@@ -48,7 +48,6 @@
     <property file="../build.properties"/>
     <!-- Project local     -->
     <import file="${jsf.build.home}/common/ant/common.xml"/>   
-    <import file="${jsf.build.home}/common/ant/test-app.xml"/>   
 
     <property name="deploy-exploded-applications" value="" />
 

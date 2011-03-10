@@ -1222,7 +1222,7 @@
 
     <target name="passthru" depends="define.scenario.aware.port">
 
-      <antcall target="test.renderkit" />
+      <antcall target="test.composite" />
 
     </target>
 
