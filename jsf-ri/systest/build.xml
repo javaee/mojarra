@@ -197,6 +197,31 @@
         </antcall>
 
     </target>  
+
+    <target name="test.partial.true" depends="init"
+            description="Execute all tests against installed /jsf-systest application">
+
+        <antcall target="build.war">
+            <param name="partial.state.saving" value="true" />
+        </antcall>
+        <echo>
+
+**** RUNNING JSF-SYSTEST USING PARTIAL STATE SAVING ****
+
+        </echo>
+        <antcall target="undeploy"/>
+        <antcall target="deploy"/>
+        <ant antfile="build-tests.xml" target="test">
+            <property name="partial.state.saving" value="true" />
+        </ant>
+        <antcall target="undeploy"/>
+        <!--renaming the result xml files to TEST-systest-partial-true-xxx.xml
+        for e.g. TEST-systest-partial-true-com.sun.faces.systest.SuppressXmlDeclTestCase.xml-->
+
+        <antcall  target="rename.test.results">
+            <param name="partial.state.saving" value="true" />
+        </antcall>
+    </target>
     
     <target name="test.with.nodeploy"
             description="The same as 'test', but with no deployment">
