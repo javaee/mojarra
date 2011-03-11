@@ -118,7 +118,7 @@ public class DuplicateIds04TestCase extends HtmlUnitFacesTestCase {
 	HtmlSubmitInput button = (HtmlSubmitInput) list.get(0);
 	client.setThrowExceptionOnFailingStatusCode(false);
 	page = (HtmlPage) button.click();
-	assertTrue(-1 != page.asText().indexOf("j_id0:j_id2"));
+	assertTrue(page.asText().matches("(?s).*j_id.*:j_id.*"));
 	assertTrue(-1 != page.asText().indexOf("Duplicate"));
 	client.setThrowExceptionOnFailingStatusCode(true);
     }

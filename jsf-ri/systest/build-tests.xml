@@ -581,9 +581,22 @@
               context-path="${context.path}" request="/faces/managed07.jsp"
               status="500"/>
 
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/faces/resourceInjection01.jsp"
-              regexp="(?s).*Hello World from env-entry!Hello World from env-entry!.*"/>
+        <if>
+          <bool>
+            <not>
+                <or>
+                    <equals arg1="${container.name}" arg2="tomcat6"/>
+                    <equals arg1="${container.name}" arg2="tomcat7"/>
+                </or>
+            </not>
+          </bool>
+          <then>
+            <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+                context-path="${context.path}" request="/faces/resourceInjection01.jsp"
+                regexp="(?s).*Hello World from env-entry!Hello World from env-entry!.*"/>
+          </then>
+        </if>
+
 
          <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/eagerbean.jsp"
@@ -1221,9 +1234,9 @@
     </target>
 
     <target name="passthru" depends="define.scenario.aware.port">
-
       <antcall target="test.composite" />
-
+ 
     </target>
+
 
 </project>

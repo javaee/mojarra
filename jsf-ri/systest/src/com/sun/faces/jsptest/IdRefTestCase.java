@@ -66,6 +66,10 @@ public class IdRefTestCase extends HtmlUnitFacesTestCase {
      */
     public IdRefTestCase(String name) {
         super(name);
+        addExclusion(Container.TOMCAT6, "testIdRefs");
+        addExclusion(Container.TOMCAT7, "testIdRefs");
+        addExclusion(Container.TOMCAT6, "testIncludedLoopIdRefs");
+        addExclusion(Container.TOMCAT7, "testIncludedLoopIdRefs");
     }
 
     // ----------------------------------------------------
