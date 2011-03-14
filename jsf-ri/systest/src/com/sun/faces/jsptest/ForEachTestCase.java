@@ -154,9 +154,9 @@ public class ForEachTestCase extends HtmlUnitFacesTestCase {
         getAllElementsOfGivenClass(page, spans, HtmlSpan.class);
         assertTrue(spans.size() == 2);
         HtmlSpan span = spans.get(0);
-        assertTrue("j_id_id16:idfrag1:frag1".equals(span.getIdAttribute()));
+        assertTrue(span.getIdAttribute().matches(".*:idfrag1:frag1"));
         span = spans.get(1);
-        assertTrue("j_id_id16:idfrag2:frag2".equals(span.getIdAttribute()));
+        assertTrue(span.getIdAttribute().matches(".*:idfrag2:frag2"));
 
         // submit the form to ensure no duplicate ID exceptions are
         // raised during post-back
@@ -171,9 +171,9 @@ public class ForEachTestCase extends HtmlUnitFacesTestCase {
         getAllElementsOfGivenClass(page, spans, HtmlSpan.class);
         assertTrue(spans.size() == 2);
         span = spans.get(0);
-        assertTrue("j_id_id16:idfrag1:frag1".equals(span.getIdAttribute()));
+        assertTrue(span.getIdAttribute().matches(".*:idfrag1:frag1"));
         span = spans.get(1);
-        assertTrue("j_id_id16:idfrag2:frag2".equals(span.getIdAttribute()));
+        assertTrue(span.getIdAttribute().matches(".*:idfrag2:frag2"));
 
     }
 

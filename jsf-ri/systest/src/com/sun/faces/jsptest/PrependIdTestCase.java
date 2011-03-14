@@ -113,14 +113,14 @@ public class PrependIdTestCase extends HtmlUnitFacesTestCase {
         assertTrue(-1 != pageText.indexOf("span id=\"form6:case2prependIdUnspecified\""));
 
         // Auto-generated ids with prependId literal
-        assertTrue(-1 != pageText.indexOf("input value=\"prependIdFalse\" type=\"text\" name=\"j_id_id54\""));
-        assertTrue(-1 != pageText.indexOf("input value=\"prependIdTrue\" type=\"text\" name=\"j_id_id57:j_id_id59\""));
-        assertTrue(-1 != pageText.indexOf("input value=\"prependIdUnspecified\" type=\"text\" name=\"j_id_id62:j_id_id64\""));
+        assertTrue(-1 != pageText.indexOf("input value=\"prependIdFalse\" type=\"text\" name="));
+        assertTrue(-1 != pageText.indexOf("input value=\"prependIdTrue\" type=\"text\" name="));
+        assertTrue(-1 != pageText.indexOf("input value=\"prependIdUnspecified\" type=\"text\" name="));
 
         // Auto-generated ids with prependId from expression
-        assertTrue(-1 != pageText.indexOf("input value=\"prependIdFalse\" type=\"text\" name=\"j_id_id71\""));
-        assertTrue(-1 != pageText.indexOf("input value=\"prependIdTrue\" type=\"text\" name=\"j_id_id74:j_id_id76\""));
-        assertTrue(-1 != pageText.indexOf("input value=\"prependIdUnspecified\" type=\"text\" name=\"j_id_id79:j_id_id81\""));
+        assertTrue(-1 != pageText.indexOf("input value=\"prependIdFalse\" type=\"text\" name="));
+        assertTrue(-1 != pageText.indexOf("input value=\"prependIdTrue\" type=\"text\" name="));
+        assertTrue(-1 != pageText.indexOf("input value=\"prependIdUnspecified\" type=\"text\" name="));
 
     }
 

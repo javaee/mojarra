@@ -65,6 +65,8 @@ public class CommandLinkMultiFormTestCase extends HtmlUnitFacesTestCase {
      */
     public CommandLinkMultiFormTestCase(String name) {
         super(name);
+        addExclusion(Container.TOMCAT6, "testMultiForm");
+        addExclusion(Container.TOMCAT7, "testMultiForm");
     }
 
     // ------------------------------------------------------ Instance Variables

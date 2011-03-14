@@ -50,6 +50,8 @@ public class GetClientIdELTestCase extends HtmlUnitFacesTestCase {
 
     public GetClientIdELTestCase(String name) {
         super(name);
+        addExclusion(Container.TOMCAT6, "testELClientIdWithOnlyGeneratedIds");
+        addExclusion(Container.TOMCAT7, "testELClientIdWithOnlyGeneratedIds");
     }
 
 
@@ -88,12 +90,20 @@ public class GetClientIdELTestCase extends HtmlUnitFacesTestCase {
 
         HtmlPage page = getPage("/faces/composite/clientId01.xhtml");
         String text = page.asText();
-        assertTrue(-1 != text.indexOf("j_id6:j_id9"));
-        assertTrue(-1 != text.indexOf("j_id6:componentId"));
-        assertTrue(-1 != text.indexOf("j_id18"));
+        assertTrue(text.matches("(?s).*j_id.*:componentId.*"));
         assertTrue(-1 != text.indexOf("componentId01"));
-        assertTrue(-1 != text.indexOf("form2:j_id26"));
+        assertTrue(text.matches("(?s).*form2:j_id.*"));
         assertTrue(-1 != text.indexOf("form2:componentId"));
+        assertTrue(-1 != text.indexOf("componentId02"));
+
+    }
+
+    public void testELClientIdWithOnlyGeneratedIds() throws Exception {
+
+        HtmlPage page = getPage("/faces/composite/clientId01.xhtml");
+        String text = page.asText();
+        assertTrue(-1 != text.indexOf("j_id6:j_id9"));
+        assertTrue(-1 != text.indexOf("j_id18"));
         assertTrue(-1 != text.indexOf("j_id34"));
         assertTrue(-1 != text.indexOf("componentId02"));
 

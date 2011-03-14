@@ -103,7 +103,7 @@ public class ImplicitFacetTestCase extends HtmlUnitFacesTestCase {
         
         String text = page.asText();
         
-        assertTrue(-1 != text.indexOf("Implicit facet 01 id: j_id2. Child 01 of facet 01 id: output01. Child 02 of facet 01 id: output02. Child 03 of facet 01 id: output03."));
+        assertTrue(text.matches("(?s).*Implicit\\s*facet\\s*01\\s*id:.*Child\\s*01\\s*of\\s*facet\\s*01\\s*id:\\s*output01.\\s*Child\\s*02\\s*of\\s*facet\\s*01\\s*id:\\s*output02.\\s*Child\\s*03\\s*of\\s*facet\\s*01\\s*id:\\s*output03.*"));
         assertTrue(-1 != text.indexOf("Implicit facet 01 id: panelGroup01. Child 01 of facet 01 id: output07. Child 02 of facet 01 id: output08. Child 03 of facet 01 id: output09."));
 
         HtmlSubmitInput input = (HtmlSubmitInput) getInputContainingGivenId(page, "command");
@@ -111,7 +111,7 @@ public class ImplicitFacetTestCase extends HtmlUnitFacesTestCase {
 
         text = page.asText();
 
-        assertTrue(-1 != text.indexOf("Implicit facet 01 id: j_id2. Child 01 of facet 01 id: output01. Child 02 of facet 01 id: output02. Child 03 of facet 01 id: output03."));
+        assertTrue(text.matches("(?s).*Implicit\\s*facet\\s*01\\s*id:.*Child\\s*01\\s*of\\s*facet\\s*01\\s*id:\\s*output01.\\s*Child\\s*02\\s*of\\s*facet\\s*01\\s*id:\\s*output02.\\s*Child\\s*03\\s*of\\s*facet\\s*01\\s*id:\\s*output03.*"));
         assertTrue(-1 != text.indexOf("Implicit facet 01 id: panelGroup01. Child 01 of facet 01 id: output07. Child 02 of facet 01 id: output08. Child 03 of facet 01 id: output09."));
 
 
