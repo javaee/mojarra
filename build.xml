@@ -230,7 +230,37 @@ GlassFish 3.1 should show 2108 successfully passing tests.
       <ant dir="jsf-ri" antfile="build.xml" target="generate.reports"/>
     </target>
 
-
+    <target name="assert.expected.passed.test.count" 
+            depends="generate.reports">
+      <if>
+        <isset property="expected.passed.test.count" />
+        <then> 
+<echo>perform the assertion</echo>
+         <sequential>
+           <property name="test.report.dir" 
+                     value="${impl.dir}/build/test-reports" />
+           <loadfile property="report.summary"
+                     srcFile="${test.report.dir}/html/overview-summary.html" />
+           <propertyregex property="actual.passed.test.count"
+                          input="${report.summary}"
+                          regexp="(?s)(.*)(href=.all-tests.html.>)([0-9]{1,6})(.*)"
+                          select="\3"
+           />
+           <math result="passed.test.count.difference" datatype="int"
+                 operation="subtract" 
+                 operand1="${actual.passed.test.count}"
+                 operand2="${expected.passed.test.count}" />
+           <propertyregex property="actual.lessthan.expected"
+                          input="${passed.test.count.difference}"
+                          regexp="^-.*"
+                          replace="actual.lessthan.expected" />
+           <fail if="actual.lessthan.expected" status="-1"
+                 message="
+--JOB FAILED!-- Fewer than expected tests passed.  Expected: ${expected.passed.test.count} Actual: ${actual.passed.test.count}"/>
+          </sequential>
+        </then>
+      </if>
+    </target>
 
     <target name="build.and.debug" depends="clean, main"
             description="Clean, build, and deploy, restarting in debug mode">
