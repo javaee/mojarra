@@ -209,9 +209,6 @@ GlassFish 3.1 should show 2108 successfully passing tests.
 
    <target name="generate.smoketest.reports">
       <property name="test.report.dir" value="${impl.dir}/build/test-reports" />
-      <mkdir dir="${impl.test.results.dir}/systest" />
-      <mkdir dir="${api.test.results.dir}" />
-      <mkdir dir="${regression.test.results.dir}" />
       <mkdir dir="${test.report.dir}" />
       <mkdir dir="${test.report.dir}/html" />
       <junitreport todir="${test.report.dir}">
