@@ -230,8 +230,7 @@ GlassFish 3.1 should show 2108 successfully passing tests.
       <ant dir="jsf-ri" antfile="build.xml" target="generate.reports"/>
     </target>
 
-    <target name="assert.expected.passed.test.count" 
-            depends="generate.reports">
+    <target name="assert.expected.passed.test.count">
       <if>
         <isset property="expected.passed.test.count" />
         <then> 
