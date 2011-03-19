@@ -76,7 +76,7 @@ import java.util.regex.Pattern;
  *  <li>javax.faces.event.NamedEvent</li>
  * </ul>
  */
-class JavaClassScanningAnnotationScanner extends AnnotationScanner {
+public class JavaClassScanningAnnotationScanner extends AnnotationScanner {
 
     private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
 
