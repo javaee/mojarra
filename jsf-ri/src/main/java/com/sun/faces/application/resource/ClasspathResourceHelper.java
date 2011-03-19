@@ -40,6 +40,7 @@
 
 package com.sun.faces.application.resource;
 
+import java.util.Set;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -64,6 +65,7 @@ public class ClasspathResourceHelper extends ResourceHelper {
 
     private static final String BASE_RESOURCE_PATH = "META-INF/resources";
     private boolean cacheTimestamp;
+    private ZipDirectoryEntryScanner libraryScanner;
 
 
     // ------------------------------------------------------------ Constructors
@@ -73,6 +75,7 @@ public class ClasspathResourceHelper extends ResourceHelper {
 
         WebConfiguration webconfig = WebConfiguration.getInstance();
         cacheTimestamp = webconfig.isOptionEnabled(CacheResourceModificationTimestamp);
+        libraryScanner = new ZipDirectoryEntryScanner();
 
     }
 
@@ -149,14 +152,19 @@ public class ClasspathResourceHelper extends ResourceHelper {
             // try using this class' loader (necessary when running in OSGi)
             basePathURL = this.getClass().getClassLoader().getResource(basePath);
             if (basePathURL == null) {
-                return null;
+                // This does not work on GlassFish 3.1 due to GLASSFISH-16229.
+                Set<String> resourcePaths = ctx.getExternalContext().getResourcePaths("/" + libraryName + "/");
+                if (null == resourcePaths || resourcePaths.isEmpty()) {
+                    if (!libraryScanner.libraryExists(libraryName)) {
+                        return null;
+                    }
+                }
             }
         }
 
         return new LibraryInfo(libraryName, null, localePrefix, this);
         
     }
-
 
     /**
      * @see ResourceHelper#findResource(LibraryInfo, String, String, boolean, javax.faces.context.FacesContext)
