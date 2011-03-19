@@ -2182,7 +2182,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                     case 'checkbox':
                     case 'radio':
                         if (el.checked) {
-                            addField(el.name, el.value);
+                            addField(el.name, el.value || 'on');
                         }
                         break;
                 }
