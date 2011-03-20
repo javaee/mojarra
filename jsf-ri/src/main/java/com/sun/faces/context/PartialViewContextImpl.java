@@ -241,14 +241,21 @@ import com.sun.faces.util.Util;
             // or there were no execute phase client ids.
 
             if (executeIds == null || executeIds.isEmpty()) {
-                // RELEASE_PENDING LOG ERROR OR WARNING
+                if (LOGGER.isLoggable(Level.FINER)) {
+                    LOGGER.log(Level.FINER,
+                        "No execute and render identifiers specified.  Skipping component processing.");
+                }
                 return;
             }
 
             try {
                 processComponents(viewRoot, phaseId, executeIds, ctx);
             } catch (Exception e) {
-                // RELEASE_PENDING LOG EXCEPTION
+                if (LOGGER.isLoggable(Level.FINER)) {
+                    LOGGER.log(Level.FINER,
+                           e.toString(),
+                           e);
+                }
             }
 
             // If we have just finished APPLY_REQUEST_VALUES phase, install the
