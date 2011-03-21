@@ -241,8 +241,8 @@ import com.sun.faces.util.Util;
             // or there were no execute phase client ids.
 
             if (executeIds == null || executeIds.isEmpty()) {
-                if (LOGGER.isLoggable(Level.FINER)) {
-                    LOGGER.log(Level.FINER,
+                if (LOGGER.isLoggable(Level.INFO)) {
+                    LOGGER.log(Level.INFO,
                         "No execute and render identifiers specified.  Skipping component processing.");
                 }
                 return;
@@ -251,8 +251,8 @@ import com.sun.faces.util.Util;
             try {
                 processComponents(viewRoot, phaseId, executeIds, ctx);
             } catch (Exception e) {
-                if (LOGGER.isLoggable(Level.FINER)) {
-                    LOGGER.log(Level.FINER,
+                if (LOGGER.isLoggable(Level.INFO)) {
+                    LOGGER.log(Level.INFO,
                            e.toString(),
                            e);
                 }
