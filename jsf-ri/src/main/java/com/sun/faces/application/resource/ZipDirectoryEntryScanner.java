@@ -43,8 +43,7 @@ package com.sun.faces.application.resource;
 
 import com.sun.faces.util.FacesLogger;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -60,7 +59,6 @@ import javax.faces.context.FacesContext;
 class ZipDirectoryEntryScanner {
 
     private static final Logger LOGGER = FacesLogger.RESOURCE.getLogger();
-    private Set<String> webInfLibJars;
     private static final String prefix = "META-INF/resources";
     private static final int prefixLen = prefix.length();
     Map<String, Boolean> resourceLibraries;
@@ -68,7 +66,7 @@ class ZipDirectoryEntryScanner {
 
     ZipDirectoryEntryScanner() {
         ExternalContext extContext = FacesContext.getCurrentInstance().getExternalContext();
-        webInfLibJars = extContext.getResourcePaths("/WEB-INF/lib");
+        Set<String> webInfLibJars = extContext.getResourcePaths("/WEB-INF/lib");
         resourceLibraries = new ConcurrentHashMap<String, Boolean>();
         ZipInputStream zis = null;
         ZipEntry ze = null;
@@ -105,14 +103,13 @@ class ZipDirectoryEntryScanner {
         }
 
         // remove the optional local prefix entries
-        List<String> toRemove = new ArrayList<String>();
-        for (String cur : resourceLibraries.keySet()) {
+        Iterator<String> iter = resourceLibraries.keySet().iterator();
+        String cur;
+        while (iter.hasNext()) {
+            cur = iter.next();
             if (cur.contains("/")) {
-                toRemove.add(cur);
+                iter.remove();
             }
-        }
-        for (String cur : toRemove) {
-            resourceLibraries.remove(cur);
         }
     }
 
