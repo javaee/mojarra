@@ -53,6 +53,9 @@
                    description="The WAR to deploy"/>
         <attribute name="appName"
                    description="The name of the application"/>
+        <attribute name="use-virtual-servers"
+                   description="If true, deploy to the virtual servers."
+                   default="false"/>
         <sequential>
             <condition property="exec.name" value="cmd.exe">
                 <os family="windows"/>
@@ -320,6 +323,13 @@
         </sequential>
     </macrodef>
 
+    <target name="define.scenario.aware.port">
+        <property name="scenario.aware.port" value="${container.port}"/>
+    </target>
+
+    <target name="define.virtual-server.aware.port">
+      <property name="scenario.aware.port" value="${container.port}" />
+    </target>
 
     <!-- ************ Compiler Defaults *************************************** -->
 

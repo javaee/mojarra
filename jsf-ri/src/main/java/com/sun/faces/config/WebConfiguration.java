@@ -1149,8 +1149,13 @@ public class WebConfiguration {
               false
         ),
         EnableAgressiveSessionDirtying(
-                "com.sun.faces.enableAgressiveSessionDirtying",
-                false);
+              "com.sun.faces.enableAgressiveSessionDirtying",
+              false
+        ),
+        EnableEarlyMissingResourceLibraryDetection(
+              "com.sun.faces.enableEarlyMissingResourceLibraryDetection",
+              false
+        );
 
         private BooleanWebContextInitParameter alternate;
 

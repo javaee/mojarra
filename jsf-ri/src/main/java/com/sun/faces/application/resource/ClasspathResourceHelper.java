@@ -43,6 +43,7 @@ package com.sun.faces.application.resource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Set;
 import javax.faces.application.ProjectStage;
 import javax.faces.context.FacesContext;
 
@@ -50,6 +51,8 @@ import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.util.Util;
 
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.CacheResourceModificationTimestamp;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableEarlyMissingResourceLibraryDetection;
+
 
 /**
  * <p>
@@ -64,6 +67,7 @@ public class ClasspathResourceHelper extends ResourceHelper {
 
     private static final String BASE_RESOURCE_PATH = "META-INF/resources";
     private boolean cacheTimestamp;
+    private ZipDirectoryEntryScanner libraryScanner;
 
 
     // ------------------------------------------------------------ Constructors
@@ -73,7 +77,9 @@ public class ClasspathResourceHelper extends ResourceHelper {
 
         WebConfiguration webconfig = WebConfiguration.getInstance();
         cacheTimestamp = webconfig.isOptionEnabled(CacheResourceModificationTimestamp);
-
+        if (webconfig.isOptionEnabled(EnableEarlyMissingResourceLibraryDetection)) {
+            libraryScanner = new ZipDirectoryEntryScanner();
+        }
     }
 
 
@@ -149,7 +155,17 @@ public class ClasspathResourceHelper extends ResourceHelper {
             // try using this class' loader (necessary when running in OSGi)
             basePathURL = this.getClass().getClassLoader().getResource(basePath);
             if (basePathURL == null) {
-                return null;
+                // This does not work on GlassFish 3.1 due to GLASSFISH-16229.
+                Set<String> resourcePaths = ctx.getExternalContext().getResourcePaths("/" + libraryName + "/");
+                if (null == resourcePaths || resourcePaths.isEmpty()) {
+                    // If we get to this point and we are being asked to find a localized "javax.faces"
+                    // library, we must truly try to look for the library, and tell
+                    // the caller the true answer.
+                    if ((null != localePrefix && libraryName.equals("javax.faces")) ||
+                        null != libraryScanner && !libraryScanner.libraryExists(libraryName)) {
+                        return null;
+                    }
+                }
             }
         }
 

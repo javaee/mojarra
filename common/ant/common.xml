@@ -40,6 +40,7 @@
 
     <import file="${jsf.build.home}/common/ant/${container.name}/container.xml"/>
     <import file="${jsf.build.home}/common/ant/dependencies.xml"/>
+    <import file="${jsf.build.home}/common/ant/test-app.xml"/>
     <import file="${jsf.build.home}/common/ant/maven.xml"/>
     <taskdef resource="net/sf/antcontrib/antlib.xml">
         <classpath>
@@ -75,6 +76,7 @@
     <property name="api.dir" value="${jsf.build.home}/jsf-api"/>
     <property name="mvn.api.dir" value="${api.dir}/build/mvn" />
     <property name="impl.dir" value="${jsf.build.home}/jsf-ri"/>
+    <property name="regression.test.dir" value="${jsf.build.home}/jsf-test"/>
     <property name="mvn.impl.dir" value="${jsf.build.home}/jsf-ri/build/mvn"/>
     <property name="tools.dir" value="${jsf.build.home}/jsf-tools"/>    
     <property name="demo.dir" value="${jsf.build.home}/jsf-demo"/>
@@ -82,10 +84,11 @@
               value="${demo.dir}/dist/spec-snapshot" />
     <property name="impl.test.results.dir" value="${impl.dir}/testresults"/>
     <property name="api.test.results.dir" value="${api.dir}/testresults"/>
+    <property name="regression.test.results.dir" 
+              value="${regression.test.dir}/build/testresults" />
 
     <!-- Artifacts of interest -->
     <property name="jsf-api.jar" value="${api.dir}/build/lib/jsf-api.jar"/>
-    <property name="jsf-tools.jar" value="${tools.dir}/build/lib/jsf-tools.jar"/>
     <property name="jsf-impl.jar" value="${impl.dir}/build/lib/jsf-impl.jar"/>   
     <property name="jsf.test.jar" value="${jsf.build.home}/lib/jsf-extensions-test-time.jar"/>    
     <property name="installer.jar" value="${jsf.build.home}/common/lib/installer-builder.jar"/>
@@ -100,14 +103,16 @@
     <property name="build.number" value="b09"/>
     <property name="build.type" value="FCS"/>
     <property name="impl.version.number" value="${spec.version}.${patch.version}" />
-    <property name="impl.version" value="${impl.version.number}-${build.number}"/>
+    <property name="impl.version" value="${impl.version.number}-${build.type}"/>
     <property name="full.impl.version" value="${impl.version.number} (${build.number}-${build.type})"/>
     <property name="snapshot.version" value="${impl.version.number}-SNAPSHOT"/>
+    <property name="groupId" value="com.sun.faces"/>
 
     <!-- Environment -->
     <property environment="myenv" />
     <property name="http.proxy.host" value=""/>
     <property name="http.proxy.port" value=""/>
+    <property name="force.no.cluster" value=""/>
 
     <!-- Change bundle -->
     <property name="change.bundle.dir" value="${jsf.build.home}/common/ant/bin" />
@@ -144,6 +149,7 @@
     <condition property="maven.repo.local" value="${maven.repo.local}" else="${user.home}/.m2/repository">
         <isset property="maven.repo.local"/>
     </condition>
+
     <artifact:localRepository id="local.repository" path="${maven.repo.local}"/>
     
     <artifact:remoteRepository id="jboss.repo" url="https://repository.jboss.org/nexus/"/>
@@ -158,7 +164,7 @@
         <dependency groupId="org.glassfish" artifactId="javax.servlet" version="3.0-SNAPSHOT" scope="provided"/>
         <dependency groupId="javax.servlet.jsp" artifactId="jsp-api" version="2.1" scope="provided"/>
         <dependency groupId="javax.annotation" artifactId="jsr250-api" version="1.0" scope="provided"/>
-        <dependency groupId="org.codehaus.groovy" artifactId="groovy-all" version="1.6.4" scope="provided"/>
+        <dependency groupId="org.codehaus.groovy" artifactId="groovy-all" version="1.6.9" scope="provided"/>
         <dependency groupId="javax.validation" artifactId="validation-api" version="1.0.0.GA" scope="provided"/>
         <dependency groupId="javax.inject" artifactId="javax.inject" version="1.0-PFD-1" scope="provided"/>
         <dependency groupId="jstl" artifactId="jstl" version="1.2" scope="provided" />
@@ -188,6 +194,12 @@
         <localRepository refid="local.repository"/>
         <remoteRepository refid="gf.nexus.repo"/>
     </artifact:dependencies>
+
+
+    <!-- Intra-project dependency property names -->
+
+    <property name="jsf-tools.jar" 
+              value="${maven.repo.local}/com/sun/faces/build/jsf-tools/${snapshot.version}/jsf-tools-${snapshot.version}.jar" />
 
     <!-- Test classpaths that are used in multiple places within the project -->
     <path id="junit.classpath">
@@ -232,7 +244,13 @@
         <path refid="commons.path"/>
     </path>
 
-    <!-- Common Targets -->
+    <!-- HtmlUnit client classpath -->
+    <path id="html.classpath">  
+        <pathelement location="${basedir}/build/classes"/>
+        <path refid="htmlunit.runtime.classpath"/>
+        <path refid="jsf.test.jar.classpath"/>
+    </path>
+
 
     <!-- Convenience macro for javac -->
     <macrodef name="jsf.javac">        
@@ -265,6 +283,10 @@
         <attribute name="assert.classes" default=""/>
         <attribute name="logging.config.file" default=""/>
         <attribute name="explodedWarDir" default=""/>
+        <attribute name="force.no.cluster" default="${force.no.cluster}"/>
+        <attribute name="instance.numbers" default="${instance.numbers}" />
+        <attribute name="custom.port" default="${scenario.aware.port}" />
+        <attribute name="virtual-server" default="" />
         <element name="tests" optional="true"/>
         <element name="custom-sysproperties" optional="true"/>
         <element name="suite" optional="true"/>
@@ -279,11 +301,16 @@
                 <formatter type="plain" usefile="false"/>
                 <formatter type="xml" usefile="true"/>
                 <sysproperty key="host" value="${container.host}"/>
-                <sysproperty key="port" value="${container.port}"/>
+                <sysproperty key="port" value="@{custom.port}"/>
                 <sysproperty key="context.path" value="@{context-path}"/>
                 <sysproperty key="explodedWarDir" value="@{explodedWarDir}"/>
                 <sysproperty key="java.util.logging.config.file" 
                              value="@{logging.config.file}"/>
+                <sysproperty key="force.no.cluster" 
+                             value="@{force.no.cluster}"/>
+                <sysproperty key="container" value="${container.name}" />
+                <sysproperty key="instance.numbers" value="@{instance.numbers}" />
+                <sysproperty key="virtual-server" value="@{virtual-server}" />
                 <custom-sysproperties/>
                 <batchtest todir="@{test-results-dir}">
                     <tests/>
@@ -333,7 +360,7 @@
 
     <!--
        Build a JAR file which includes a manifest including
-       information pertaining to Sun's JavaServer Faces
+       information pertaining to Oracle's JavaServer Faces
        implementation.
     -->
     <macrodef name="jsf.manifested.jar">
@@ -357,7 +384,7 @@
                     <attribute name="Implementation-Version"
                                value="${impl.version}"/>
                     <attribute name="Implementation-Vendor"
-                               value="Sun Microsystems, Inc."/>
+                               value="Oracle America, Inc."/>
                     <attribute name="Implementation-Vendor-Id"
                                value="com.sun"/>
                     <attribute name="Extension-Name"
@@ -416,6 +443,63 @@
                 </classpath>
                 <sysproperty key="java.endorsed.dirs" value="${endorsed.dirs}"/>
             </generateComponents>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="jsf.tester">
+        <attribute name="classpath-refid"/>
+        <attribute name="context-path" default=""/>
+        <attribute name="test-results-dir"/>
+        <attribute name="assert.classes" default=""/>
+        <attribute name="logging.config.file" default=""/>
+        <attribute name="explodedWarDir" default=""/>
+        <attribute name="request" />
+        <attribute name="regexp" default=""/>
+        <attribute name="regexpFile" default=""/>
+        <attribute name="status" default=""/>
+        <attribute name="force.no.cluster" default="${force.no.cluster}"/>
+        <attribute name="instance.numbers" default="${instance.numbers}" />
+        <attribute name="custom.port" default="${scenario.aware.port}" />
+        <element name="custom-sysproperties" optional="true"/>
+        <sequential>
+            <var name="testname" unset="true" />
+            <propertyregex property="testname"
+                           input="@{request}"
+                           global="true"
+                           regexp="/"
+                           replace="_" />
+            <echo message="writing TEST-${testname}" />
+            <junit printsummary="yes"
+                   fork="yes"
+                   haltonfailure="${halt.on.failure}"
+                   haltonerror="${halt.on.failure}">
+                <jvmarg line="${debug.jvm.args}"/>
+                <jvmarg line="@{assert.classes}"/>
+                <classpath refid="@{classpath-refid}"/>
+                <formatter type="plain" usefile="false"/>
+                <formatter type="xml" usefile="true"/>
+                <sysproperty key="request" value="@{request}"/>
+                <sysproperty key="regexp" value="@{regexp}"/>
+                <sysproperty key="regexpFile" value="@{regexpFile}"/>
+                <sysproperty key="status" value="@{status}"/>
+                <sysproperty key="host" value="${container.host}"/>
+                <sysproperty key="port" value="@{custom.port}"/>
+                <sysproperty key="context.path" value="@{context-path}"/>
+                <sysproperty key="explodedWarDir" value="@{explodedWarDir}"/>
+                <sysproperty key="java.util.logging.config.file" 
+                             value="@{logging.config.file}"/>
+                <sysproperty key="force.no.cluster" 
+                             value="@{force.no.cluster}"/>
+                <sysproperty key="container" value="${container.name}" />
+                <sysproperty key="instance.numbers" value="@{instance.numbers}" />
+                <custom-sysproperties/>
+                <test name="com.sun.faces.htmlunit.SimpleTesterTestCase" 
+                      haltonfailure="yes" 
+                      todir="@{test-results-dir}"
+                      outfile="TEST-${testname}">
+                    <formatter type="xml"/>
+                </test>
+            </junit>
         </sequential>
     </macrodef>
 
