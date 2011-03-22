@@ -145,6 +145,14 @@
         </sequential>
     </macrodef>
 
+    <target name="define.scenario.aware.port">
+        <property name="scenario.aware.port" value="${container.port}"/>
+    </target>
+
+    <target name="define.virtual-server.aware.port">
+      <property name="scenario.aware.port" value="${container.port}" />
+    </target>
+
     <target name="config.container">
     </target>
 
