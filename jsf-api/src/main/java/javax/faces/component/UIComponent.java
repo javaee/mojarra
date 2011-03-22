@@ -85,7 +85,7 @@ import javax.faces.render.Renderer;
 
 /**
  * <p><strong class="changed_modified_2_0
- * changed_modified_2_0_rev_a changed_modified_2_1">UIComponent</strong> is
+ * changed_modified_2_0_rev_a changed_modified_2_1 changed_modified_2_2">UIComponent</strong> is
  * the base class for all user interface components in JavaServer Faces.
  * The set of {@link UIComponent} instances associated with a particular request
  * and response are organized into a component tree under a {@link
@@ -131,25 +131,38 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
             "javax.faces.HONOR_CURRENT_COMPONENT_ATTRIBUTES";
     
     /**
-     * <p class="changed_added_2_0">The key to which the
+     * <p class="changed_added_2_0"><span
+     * class="changed_deleted_2_2">The</span> key to which the
      * <code>UIComponent</code> currently being processed will be
-     * associated with within the {@link FacesContext} attributes map.</p>
+     * associated with within the {@link FacesContext} attributes
+     * map. <span class="changed_deleted_2_2">The use of this constant is
+     * deprecated.  Please see {@link
+     * #HONOR_CURRENT_COMPONENT_ATTRIBUTES_PARAM_NAME} to enable its
+     * use.</span></p>
      *
      * @see javax.faces.context.FacesContext#getAttributes()
      *
      * @since 2.0
+     *
+     * @deprecated
      */
     public static final String CURRENT_COMPONENT = "javax.faces.component.CURRENT_COMPONENT";
 
     /**
-     * <p class="changed_added_2_0">The key to which the
+     * <p class="changed_added_2_0"><span
+     * class="changed_deleted_2_2">The</span> key to which the
      * <em>composite</em> <code>UIComponent</code> currently being
      * processed will be associated with within the {@link FacesContext}
-     * attributes map.</p>
+     * attributes map. <span class="changed_deleted_2_2">The use of this
+     * constant is deprecated.  Please see {@link
+     * #HONOR_CURRENT_COMPONENT_ATTRIBUTES_PARAM_NAME} to enable its
+     * use.</span></p>
      *
      * @see javax.faces.context.FacesContext#getAttributes()
      *
      * @since 2.0
+     *
+     * @deprecated
      */
     public static final String CURRENT_COMPOSITE_COMPONENT = "javax.faces.component.CURRENT_COMPOSITE_COMPONENT";
 

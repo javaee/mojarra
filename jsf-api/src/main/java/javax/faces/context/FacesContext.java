@@ -321,7 +321,7 @@ public abstract class FacesContext {
     /**
      * <p>Return the maximum severity level recorded on any
      * {@link javax.faces.application.FacesMessage}s that has been queued, whether or not they are
-     * associated with any specific {@link UIComponent}.  If no such messages
+     * associated with any specific {@link javax.faces.component.UIComponent}.  If no such messages
      * have been queued, return <code>null</code>.</p>
      *
      * @throws IllegalStateException if this method is called after
