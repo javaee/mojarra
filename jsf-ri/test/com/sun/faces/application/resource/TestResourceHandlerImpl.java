@@ -887,6 +887,14 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
 
     }
 
+    public void testLibraryExistsNegative() throws Exception {
+        ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();
+        assertNotNull(handler);
+
+        assertFalse(handler.libraryExists("oeunhtnhtnhhnhh"));
+
+    }
+
 
     //==========================================================================
     // Validate the fix for issue 1162.
