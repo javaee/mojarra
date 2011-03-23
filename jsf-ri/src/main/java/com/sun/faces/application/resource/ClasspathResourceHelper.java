@@ -40,6 +40,9 @@
 
 package com.sun.faces.application.resource;
 
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
+import java.util.Iterator;
 import java.util.Set;
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,7 +54,6 @@ import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.util.Util;
 
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.CacheResourceModificationTimestamp;
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableEarlyMissingResourceLibraryDetection;
 
 
 /**
@@ -67,7 +69,7 @@ public class ClasspathResourceHelper extends ResourceHelper {
 
     private static final String BASE_RESOURCE_PATH = "META-INF/resources";
     private boolean cacheTimestamp;
-    private ZipDirectoryEntryScanner libraryScanner;
+    private Map<Boolean, ZipDirectoryEntryScanner> libraryScannerHolder;
 
 
     // ------------------------------------------------------------ Constructors
@@ -77,9 +79,7 @@ public class ClasspathResourceHelper extends ResourceHelper {
 
         WebConfiguration webconfig = WebConfiguration.getInstance();
         cacheTimestamp = webconfig.isOptionEnabled(CacheResourceModificationTimestamp);
-        if (webconfig.isOptionEnabled(EnableEarlyMissingResourceLibraryDetection)) {
-            libraryScanner = new ZipDirectoryEntryScanner();
-        }
+        libraryScannerHolder = new ConcurrentHashMap<Boolean, ZipDirectoryEntryScanner>(1);
     }
 
 
@@ -157,12 +157,29 @@ public class ClasspathResourceHelper extends ResourceHelper {
             if (basePathURL == null) {
                 // This does not work on GlassFish 3.1 due to GLASSFISH-16229.
                 Set<String> resourcePaths = ctx.getExternalContext().getResourcePaths("/" + libraryName + "/");
-                if (null == resourcePaths || resourcePaths.isEmpty()) {
-                    // If we get to this point and we are being asked to find a localized "javax.faces"
-                    // library, we must truly try to look for the library, and tell
-                    // the caller the true answer.
-                    if ((null != localePrefix && libraryName.equals("javax.faces")) ||
-                        null != libraryScanner && !libraryScanner.libraryExists(libraryName)) {
+                if (null != resourcePaths && !resourcePaths.isEmpty()) {
+                    boolean foundEntryStartingWithMetaInfResources = false;
+                    Iterator<String> iter = resourcePaths.iterator();
+                    // Ensure that at least one entry starts with /META-INF/resources.
+                    while (!foundEntryStartingWithMetaInfResources && iter.hasNext()) {
+                        foundEntryStartingWithMetaInfResources = iter.next().startsWith("/META-INF/resources");
+                    }
+                    if (!foundEntryStartingWithMetaInfResources) {
+                        return null;
+                    }
+                } else {
+                    //
+                    if (null != localePrefix && libraryName.equals("javax.faces")) {
+                        return null;
+                    }
+
+                    // housekeeping for concurrency
+                    ZipDirectoryEntryScanner scanner = libraryScannerHolder.get(Boolean.TRUE);
+                    if (null == scanner) {
+                        scanner = new ZipDirectoryEntryScanner();
+                        libraryScannerHolder.put(Boolean.TRUE, scanner);
+                    }
+                    if (!scanner.libraryExists(libraryName)) {
                         return null;
                     }
                 }
