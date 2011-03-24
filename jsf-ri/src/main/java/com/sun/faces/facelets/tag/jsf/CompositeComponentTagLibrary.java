@@ -58,6 +58,8 @@
 
 package com.sun.faces.facelets.tag.jsf;
 
+import com.sun.faces.config.WebConfiguration;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableEarlyMissingResourceLibraryDetection;
 import com.sun.faces.facelets.tag.TagLibraryImpl;
 import com.sun.faces.util.FacesLogger;
 
@@ -84,6 +86,7 @@ public class CompositeComponentTagLibrary extends TagLibraryImpl {
             throw new NullPointerException();
         }
         this.ns = ns;
+        this.init();
     }
     
     public CompositeComponentTagLibrary(String ns, String compositeLibraryName) {
@@ -96,11 +99,19 @@ public class CompositeComponentTagLibrary extends TagLibraryImpl {
             throw new NullPointerException();
         }
         this.compositeLibraryName = compositeLibraryName;
+        this.init();
         
+    }
+
+    private void init() {
+        WebConfiguration webconfig = WebConfiguration.getInstance();
+        enableEarlyMissingResourceLibraryDetection = 
+                webconfig.isOptionEnabled(EnableEarlyMissingResourceLibraryDetection);
     }
     
     private String ns = null;
     private String compositeLibraryName;
+    private boolean enableEarlyMissingResourceLibraryDetection;
 
     public boolean containsTagHandler(String ns, String localName) {
         boolean result = false;
@@ -162,8 +173,12 @@ public class CompositeComponentTagLibrary extends TagLibraryImpl {
         
         String resourceId = null;
         if (null != (resourceId = getCompositeComponentLibraryName(toTest))) {
-            result = FacesContext.getCurrentInstance().getApplication().
-                    getResourceHandler().libraryExists(resourceId);
+            if (enableEarlyMissingResourceLibraryDetection) {
+                result = FacesContext.getCurrentInstance().getApplication().
+                        getResourceHandler().libraryExists(resourceId);
+            } else {
+                result = true;
+            }
         }
         
         return result;
