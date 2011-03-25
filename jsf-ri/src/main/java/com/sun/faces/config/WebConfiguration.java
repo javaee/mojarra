@@ -1195,8 +1195,8 @@ public class WebConfiguration {
               "com.sun.faces.enableAgressiveSessionDirtying",
               false
         ),
-        EnableEarlyMissingResourceLibraryDetection(
-              "com.sun.faces.enableEarlyMissingResourceLibraryDetection",
+        EnableMissingResourceLibraryDetection(
+              "com.sun.faces.enableMissingResourceLibraryDetection",
               false
         );
 

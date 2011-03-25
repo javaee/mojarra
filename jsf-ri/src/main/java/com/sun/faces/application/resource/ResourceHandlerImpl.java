@@ -166,7 +166,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
             return false;
         }
         FacesContext context = FacesContext.getCurrentInstance();
-        LibraryInfo info = manager.findLibrary(libraryName, null, context);
+        LibraryInfo info = manager.findLibrary(libraryName, null, context, true);
         return (info != null);
 
     }

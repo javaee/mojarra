@@ -40,10 +40,6 @@
 
 package com.sun.faces.application.resource;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.Map;
-import java.util.Iterator;
-import java.util.Set;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -54,6 +50,7 @@ import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.util.Util;
 
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.CacheResourceModificationTimestamp;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableMissingResourceLibraryDetection;
 
 
 /**
@@ -69,7 +66,9 @@ public class ClasspathResourceHelper extends ResourceHelper {
 
     private static final String BASE_RESOURCE_PATH = "META-INF/resources";
     private boolean cacheTimestamp;
-    private Map<Boolean, ZipDirectoryEntryScanner> libraryScannerHolder;
+    private volatile ZipDirectoryEntryScanner libraryScanner;
+    private boolean enableMissingResourceLibraryDetection;
+
 
 
     // ------------------------------------------------------------ Constructors
@@ -79,7 +78,9 @@ public class ClasspathResourceHelper extends ResourceHelper {
 
         WebConfiguration webconfig = WebConfiguration.getInstance();
         cacheTimestamp = webconfig.isOptionEnabled(CacheResourceModificationTimestamp);
-        libraryScannerHolder = new ConcurrentHashMap<Boolean, ZipDirectoryEntryScanner>(1);
+        enableMissingResourceLibraryDetection =
+                webconfig.isOptionEnabled(EnableMissingResourceLibraryDetection);
+
     }
 
 
@@ -129,13 +130,18 @@ public class ClasspathResourceHelper extends ResourceHelper {
 
     }
 
+    public LibraryInfo findLibrary(String libraryName,
+                                   String localePrefix,
+                                   FacesContext ctx) {
+        return this.findLibrary(libraryName, localePrefix, ctx, false);
+    }
 
     /**
      * @see ResourceHelper#findLibrary(String, String, javax.faces.context.FacesContext)
      */
     public LibraryInfo findLibrary(String libraryName,
                                    String localePrefix,
-                                   FacesContext ctx) {
+                                   FacesContext ctx, boolean forceDirectoryScan) {
 
         ClassLoader loader = Util.getCurrentLoader(this);
         String basePath;
@@ -155,31 +161,14 @@ public class ClasspathResourceHelper extends ResourceHelper {
             // try using this class' loader (necessary when running in OSGi)
             basePathURL = this.getClass().getClassLoader().getResource(basePath);
             if (basePathURL == null) {
-                // This does not work on GlassFish 3.1 due to GLASSFISH-16229.
-                Set<String> resourcePaths = ctx.getExternalContext().getResourcePaths("/" + libraryName + "/");
-                if (null != resourcePaths && !resourcePaths.isEmpty()) {
-                    boolean foundEntryStartingWithMetaInfResources = false;
-                    Iterator<String> iter = resourcePaths.iterator();
-                    // Ensure that at least one entry starts with /META-INF/resources.
-                    while (!foundEntryStartingWithMetaInfResources && iter.hasNext()) {
-                        foundEntryStartingWithMetaInfResources = iter.next().startsWith("/META-INF/resources");
+                if (null != localePrefix && libraryName.equals("javax.faces")) {
+                    return null;
+                }
+                if (enableMissingResourceLibraryDetection || forceDirectoryScan) {
+                    if (null == libraryScanner) {
+                        libraryScanner = new ZipDirectoryEntryScanner();
                     }
-                    if (!foundEntryStartingWithMetaInfResources) {
-                        return null;
-                    }
-                } else {
-                    //
-                    if (null != localePrefix && libraryName.equals("javax.faces")) {
-                        return null;
-                    }
-
-                    // housekeeping for concurrency
-                    ZipDirectoryEntryScanner scanner = libraryScannerHolder.get(Boolean.TRUE);
-                    if (null == scanner) {
-                        scanner = new ZipDirectoryEntryScanner();
-                        libraryScannerHolder.put(Boolean.TRUE, scanner);
-                    }
-                    if (!scanner.libraryExists(libraryName)) {
+                    if (!libraryScanner.libraryExists(libraryName, localePrefix)) {
                         return null;
                     }
                 }
