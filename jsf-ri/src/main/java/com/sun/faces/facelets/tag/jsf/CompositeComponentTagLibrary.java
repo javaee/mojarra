@@ -59,7 +59,7 @@
 package com.sun.faces.facelets.tag.jsf;
 
 import com.sun.faces.config.WebConfiguration;
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableEarlyMissingResourceLibraryDetection;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableMissingResourceLibraryDetection;
 import com.sun.faces.facelets.tag.TagLibraryImpl;
 import com.sun.faces.util.FacesLogger;
 
@@ -105,13 +105,13 @@ public class CompositeComponentTagLibrary extends TagLibraryImpl {
 
     private void init() {
         WebConfiguration webconfig = WebConfiguration.getInstance();
-        enableEarlyMissingResourceLibraryDetection = 
-                webconfig.isOptionEnabled(EnableEarlyMissingResourceLibraryDetection);
+        enableMissingResourceLibraryDetection =
+                webconfig.isOptionEnabled(EnableMissingResourceLibraryDetection);
     }
     
     private String ns = null;
     private String compositeLibraryName;
-    private boolean enableEarlyMissingResourceLibraryDetection;
+    private boolean enableMissingResourceLibraryDetection;
 
     public boolean containsTagHandler(String ns, String localName) {
         boolean result = false;
@@ -173,10 +173,13 @@ public class CompositeComponentTagLibrary extends TagLibraryImpl {
         
         String resourceId = null;
         if (null != (resourceId = getCompositeComponentLibraryName(toTest))) {
-            if (enableEarlyMissingResourceLibraryDetection) {
+            if (enableMissingResourceLibraryDetection) {
                 result = FacesContext.getCurrentInstance().getApplication().
                         getResourceHandler().libraryExists(resourceId);
             } else {
+                if (LOGGER.isLoggable(Level.INFO)) {
+                    LOGGER.log(Level.INFO, "Skipping call to libraryExists().  Please set context-param {0} to true to verify if library {1} actually exists", new Object[]{EnableMissingResourceLibraryDetection.getQualifiedName(), toTest});
+                }
                 result = true;
             }
         }
