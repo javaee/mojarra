@@ -90,6 +90,7 @@
 
     <property name="container-agnostic-applications"
               value="
+                   find-resources-in-jar,
                    annotation-restrictions,
                    clientside-statesaving,
                    absolute-ordering,
@@ -137,6 +138,7 @@
 
    <property name="applications-for-V3.1_no_cluster-virtual-server"
              value="
+                   find-resources-in-jar,
                    annotation-restrictions,
                    clientside-statesaving,
                    empty-string-as-null,
