@@ -37,31 +37,31 @@
 #
 pkg = {
     "name"          : "glassfish-jsf",
-    "version"       : "2.0.4,0-7",
+    "version"       : "2.0.5,0-1",
     "depends"       : {
-                       "pkg:/glassfish-jsf@2.1" : {"type" : "incorporate"},
+                       "pkg:/glassfish-jsf@2.0" : {"type" : "incorporate"},
                        "pkg:/glassfish-common" : { "type" : "require" }
                       },
     "attributes"    : { 
-                        "pkg.summary" : "JSF 2.1.0- Project Mojarra 2.1.0 Patch Release",
-                        "pkg.description" : "Updated Mojarra 2.1 implementation.  \
-Current version supports JSF 2.1.  This version replaces the default version \
+                        "pkg.summary" : "JSF 2.0.5- Project Mojarra 2.0.5 Patch Release",
+                        "pkg.description" : "Updated Mojarra 2.0 implementation.  \
+Current version supports JSF 2.0.  This version replaces the default version \
 of Mojarra that ships with Glassfish.",
                         "info.classification" : "Application Servers"
                       },
 
     "files"         : {
-                       "jsf2.1/LICENSE"      : {"mode" : "0644"},
-                       "jsf2.1/README"       : {"mode" : "0644"},
+                       "jsf2.0/LICENSE"      : {"mode" : "0644"},
+                       "jsf2.0/README"       : {"mode" : "0644"},
                        },
 
     "licenses"      : {
-                       "jsf2.1/LICENSE"      : {"license" : "JSF-LICENSE"},
+                       "jsf2.0/LICENSE"      : {"license" : "JSF-LICENSE"},
                        },
 
     "dirtrees"      : [
                         "glassfish",
-                        "jsf2.1",
+                        "jsf2.0",
                       ]
 }
 
