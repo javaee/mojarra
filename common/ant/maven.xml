@@ -225,7 +225,7 @@
                 <!-- If maven.repo.local set, respect it -->
                 <isset property="maven.repo.local"/>
                 <then>
-                    <property name="mvn.repo.local.prop" value="-Dmaven.repo.local=${maven.repo.local}"/>
+                    <property name="mvn.repo.local.prop" value="-D'maven.repo.local=${maven.repo.local}'"/>
                 </then>
                 <else>
                     <property name="mvn.repo.local.prop" value=""/>
