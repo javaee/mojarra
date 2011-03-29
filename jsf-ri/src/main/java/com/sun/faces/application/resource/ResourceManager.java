@@ -84,7 +84,7 @@ public class ResourceManager {
     /**
      * {@link ResourceHelper} used for looking up classpath-based resources.
      */
-    private ResourceHelper classpathHelper = new ClasspathResourceHelper();
+    private ClasspathResourceHelper classpathHelper = new ClasspathResourceHelper();
 
     /**
      * Cache for storing {@link ResourceInfo} instances to reduce the cost
@@ -338,6 +338,11 @@ public class ResourceManager {
 
     }
 
+    LibraryInfo findLibrary(String libraryName,
+                             String localePrefix,
+                             FacesContext ctx) {
+        return this.findLibrary(libraryName, localePrefix, ctx, false);
+    }
 
     /**
      * <p> Attempt to lookup and return a {@link LibraryInfo} based on the
@@ -359,7 +364,7 @@ public class ResourceManager {
      */
      LibraryInfo findLibrary(String libraryName,
                              String localePrefix,
-                             FacesContext ctx) {
+                             FacesContext ctx, boolean forceDirectoryScan) {
 
         LibraryInfo library = webappHelper.findLibrary(libraryName,
                                                        localePrefix,
@@ -367,7 +372,7 @@ public class ResourceManager {
         if (library == null) {
             library = classpathHelper.findLibrary(libraryName,
                                                   localePrefix,
-                                                  ctx);
+                                                  ctx, forceDirectoryScan);
         }
 
         // if not library is found at this point, let the caller deal with it
