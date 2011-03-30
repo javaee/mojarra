@@ -230,7 +230,17 @@ public class ResourceManager {
                 library = findLibrary(libraryName, null, ctx);
             }
             if (library == null) {
-                return null;
+                // If we don't have one by now, perhaps it's time to
+                // consider scanning directories.
+                library = findLibraryOnClasspathWithZipDirectoryEntryScan(libraryName, localePrefix, ctx, false);
+                if (library == null && localePrefix != null) {
+                    // no localized library found.  Try to find
+                    // a library that isn't localized.
+                    library = findLibraryOnClasspathWithZipDirectoryEntryScan(libraryName, null, ctx, false);
+                }
+                if (null == library) {
+                    return null;
+                }
             }
         }
 
@@ -338,12 +348,6 @@ public class ResourceManager {
 
     }
 
-    LibraryInfo findLibrary(String libraryName,
-                             String localePrefix,
-                             FacesContext ctx) {
-        return this.findLibrary(libraryName, localePrefix, ctx, false);
-    }
-
     /**
      * <p> Attempt to lookup and return a {@link LibraryInfo} based on the
      * specified <code>arguments</code>.
@@ -364,7 +368,7 @@ public class ResourceManager {
      */
      LibraryInfo findLibrary(String libraryName,
                              String localePrefix,
-                             FacesContext ctx, boolean forceDirectoryScan) {
+                             FacesContext ctx) {
 
         LibraryInfo library = webappHelper.findLibrary(libraryName,
                                                        localePrefix,
@@ -372,13 +376,18 @@ public class ResourceManager {
         if (library == null) {
             library = classpathHelper.findLibrary(libraryName,
                                                   localePrefix,
-                                                  ctx, forceDirectoryScan);
+                                                  ctx);
         }
 
         // if not library is found at this point, let the caller deal with it
         return library;
     }
 
+     LibraryInfo findLibraryOnClasspathWithZipDirectoryEntryScan(String libraryName,
+                             String localePrefix,
+                             FacesContext ctx, boolean forceScan) {
+         return classpathHelper.findLibraryWithZipDirectoryEntryScan(libraryName, localePrefix, ctx, forceScan);
+     }
 
    /**
      * <p> Attempt to lookup and return a {@link ResourceInfo} based on the
