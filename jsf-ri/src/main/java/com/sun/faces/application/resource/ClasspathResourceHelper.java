@@ -131,18 +131,43 @@ public class ClasspathResourceHelper extends ResourceHelper {
 
     }
 
-    public LibraryInfo findLibrary(String libraryName,
-                                   String localePrefix,
-                                   FacesContext ctx) {
-        return this.findLibrary(libraryName, localePrefix, ctx, false);
-    }
 
     /**
      * @see ResourceHelper#findLibrary(String, String, javax.faces.context.FacesContext)
      */
     public LibraryInfo findLibrary(String libraryName,
                                    String localePrefix,
-                                   FacesContext ctx, boolean forceDirectoryScan) {
+                                   FacesContext ctx) {
+
+        ClassLoader loader = Util.getCurrentLoader(this);
+        String basePath;
+        if (localePrefix == null) {
+            basePath = getBaseResourcePath() + '/' + libraryName + '/';
+        } else {
+            basePath = getBaseResourcePath()
+                       + '/'
+                       + localePrefix
+                       + '/'
+                       + libraryName
+                       + '/';
+        }
+
+        URL basePathURL = loader.getResource(basePath);
+        if (basePathURL == null) {
+            // try using this class' loader (necessary when running in OSGi)
+            basePathURL = this.getClass().getClassLoader().getResource(basePath);
+            if (basePathURL == null) {
+                return null;
+            }
+        }
+
+        return new LibraryInfo(libraryName, null, localePrefix, this);
+        
+    }
+
+    public LibraryInfo findLibraryWithZipDirectoryEntryScan(String libraryName,
+                                   String localePrefix,
+                                   FacesContext ctx, boolean forceScan) {
 
         ClassLoader loader = Util.getCurrentLoader(this);
         String basePath;
@@ -165,7 +190,7 @@ public class ClasspathResourceHelper extends ResourceHelper {
                 if (null != localePrefix && libraryName.equals("javax.faces")) {
                     return null;
                 }
-                if (enableMissingResourceLibraryDetection || forceDirectoryScan) {
+                if (enableMissingResourceLibraryDetection || forceScan) {
                     if (null == libraryScanner) {
                         libraryScanner = new ZipDirectoryEntryScanner();
                     }
@@ -177,9 +202,7 @@ public class ClasspathResourceHelper extends ResourceHelper {
         }
 
         return new LibraryInfo(libraryName, null, localePrefix, this);
-        
     }
-
 
     /**
      * @see ResourceHelper#findResource(LibraryInfo, String, String, boolean, javax.faces.context.FacesContext)
