@@ -113,8 +113,14 @@ class ZipDirectoryEntryScanner {
         }
     }
 
-    boolean libraryExists(String libraryName) {
-        return resourceLibraries.containsKey(libraryName);
+    boolean libraryExists(String libraryName, String localePrefix) {
+        boolean result = false;
+        if (null != localePrefix) {
+            result = resourceLibraries.containsKey(localePrefix + "/" + libraryName);
+        } else {
+            result = resourceLibraries.containsKey(libraryName);
+        }
+        return result;
     }
 
 

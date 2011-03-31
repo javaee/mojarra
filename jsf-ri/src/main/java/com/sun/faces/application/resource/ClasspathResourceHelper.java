@@ -40,10 +40,6 @@
 
 package com.sun.faces.application.resource;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.Map;
-import java.util.Iterator;
-import java.util.Set;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -54,6 +50,7 @@ import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.util.Util;
 
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.CacheResourceModificationTimestamp;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableMissingResourceLibraryDetection;
 
 
 /**
@@ -69,7 +66,9 @@ public class ClasspathResourceHelper extends ResourceHelper {
 
     private static final String BASE_RESOURCE_PATH = "META-INF/resources";
     private boolean cacheTimestamp;
-    private Map<Boolean, ZipDirectoryEntryScanner> libraryScannerHolder;
+    private volatile ZipDirectoryEntryScanner libraryScanner;
+    private boolean enableMissingResourceLibraryDetection;
+
 
 
     // ------------------------------------------------------------ Constructors
@@ -79,7 +78,9 @@ public class ClasspathResourceHelper extends ResourceHelper {
 
         WebConfiguration webconfig = WebConfiguration.getInstance();
         cacheTimestamp = webconfig.isOptionEnabled(CacheResourceModificationTimestamp);
-        libraryScannerHolder = new ConcurrentHashMap<Boolean, ZipDirectoryEntryScanner>(1);
+        enableMissingResourceLibraryDetection =
+                webconfig.isOptionEnabled(EnableMissingResourceLibraryDetection);
+
     }
 
 
@@ -155,31 +156,44 @@ public class ClasspathResourceHelper extends ResourceHelper {
             // try using this class' loader (necessary when running in OSGi)
             basePathURL = this.getClass().getClassLoader().getResource(basePath);
             if (basePathURL == null) {
-                // This does not work on GlassFish 3.1 due to GLASSFISH-16229.
-                Set<String> resourcePaths = ctx.getExternalContext().getResourcePaths("/" + libraryName + "/");
-                if (null != resourcePaths && !resourcePaths.isEmpty()) {
-                    boolean foundEntryStartingWithMetaInfResources = false;
-                    Iterator<String> iter = resourcePaths.iterator();
-                    // Ensure that at least one entry starts with /META-INF/resources.
-                    while (!foundEntryStartingWithMetaInfResources && iter.hasNext()) {
-                        foundEntryStartingWithMetaInfResources = iter.next().startsWith("/META-INF/resources");
-                    }
-                    if (!foundEntryStartingWithMetaInfResources) {
-                        return null;
-                    }
-                } else {
-                    //
-                    if (null != localePrefix && libraryName.equals("javax.faces")) {
-                        return null;
-                    }
+                return null;
+            }
+        }
 
-                    // housekeeping for concurrency
-                    ZipDirectoryEntryScanner scanner = libraryScannerHolder.get(Boolean.TRUE);
-                    if (null == scanner) {
-                        scanner = new ZipDirectoryEntryScanner();
-                        libraryScannerHolder.put(Boolean.TRUE, scanner);
+        return new LibraryInfo(libraryName, null, localePrefix, this);
+        
+    }
+
+    public LibraryInfo findLibraryWithZipDirectoryEntryScan(String libraryName,
+                                   String localePrefix,
+                                   FacesContext ctx, boolean forceScan) {
+
+        ClassLoader loader = Util.getCurrentLoader(this);
+        String basePath;
+        if (localePrefix == null) {
+            basePath = getBaseResourcePath() + '/' + libraryName + '/';
+        } else {
+            basePath = getBaseResourcePath()
+                       + '/'
+                       + localePrefix
+                       + '/'
+                       + libraryName
+                       + '/';
+        }
+
+        URL basePathURL = loader.getResource(basePath);
+        if (basePathURL == null) {
+            // try using this class' loader (necessary when running in OSGi)
+            basePathURL = this.getClass().getClassLoader().getResource(basePath);
+            if (basePathURL == null) {
+                if (null != localePrefix && libraryName.equals("javax.faces")) {
+                    return null;
+                }
+                if (enableMissingResourceLibraryDetection || forceScan) {
+                    if (null == libraryScanner) {
+                        libraryScanner = new ZipDirectoryEntryScanner();
                     }
-                    if (!scanner.libraryExists(libraryName)) {
+                    if (!libraryScanner.libraryExists(libraryName, localePrefix)) {
                         return null;
                     }
                 }
@@ -187,8 +201,9 @@ public class ClasspathResourceHelper extends ResourceHelper {
         }
 
         return new LibraryInfo(libraryName, null, localePrefix, this);
-        
     }
+
+
 
     /**
      * @see ResourceHelper#findResource(LibraryInfo, String, String, boolean, javax.faces.context.FacesContext)

@@ -84,7 +84,7 @@ public class ResourceManager {
     /**
      * {@link ResourceHelper} used for looking up classpath-based resources.
      */
-    private ResourceHelper classpathHelper = new ClasspathResourceHelper();
+    private ClasspathResourceHelper classpathHelper = new ClasspathResourceHelper();
 
     /**
      * Cache for storing {@link ResourceInfo} instances to reduce the cost
@@ -230,7 +230,17 @@ public class ResourceManager {
                 library = findLibrary(libraryName, null, ctx);
             }
             if (library == null) {
-                return null;
+                // If we don't have one by now, perhaps it's time to
+                // consider scanning directories.
+                library = findLibraryOnClasspathWithZipDirectoryEntryScan(libraryName, localePrefix, ctx, false);
+                if (library == null && localePrefix != null) {
+                    // no localized library found.  Try to find
+                    // a library that isn't localized.
+                    library = findLibraryOnClasspathWithZipDirectoryEntryScan(libraryName, null, ctx, false);
+                }
+                if (null == library) {
+                    return null;
+                }
             }
         }
 
@@ -338,7 +348,6 @@ public class ResourceManager {
 
     }
 
-
     /**
      * <p> Attempt to lookup and return a {@link LibraryInfo} based on the
      * specified <code>arguments</code>.
@@ -374,6 +383,11 @@ public class ResourceManager {
         return library;
     }
 
+     LibraryInfo findLibraryOnClasspathWithZipDirectoryEntryScan(String libraryName,
+                             String localePrefix,
+                             FacesContext ctx, boolean forceScan) {
+         return classpathHelper.findLibraryWithZipDirectoryEntryScan(libraryName, localePrefix, ctx, forceScan);
+     }
 
    /**
      * <p> Attempt to lookup and return a {@link ResourceInfo} based on the
