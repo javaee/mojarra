@@ -52,18 +52,20 @@
     <target name="build">
 
       <jsf.mvn dir="${basedir}/i_jsf_1655" goals="install" />
+      <jsf.mvn dir="${basedir}/htmlunit" goals="install" />
 
     </target>    
 
     <target name="clean">
 
       <jsf.mvn dir="${basedir}/i_jsf_1655" goals="clean" />
+      <jsf.mvn dir="${basedir}/htmlunit" goals="clean" />
 
     </target>    
 
     <target name="install">
-      <deploy.artifact
-              artifact="${basedir}/i_jsf_1655/target/i_jsf_1655.war"
+      <deploydir.artifact
+              explodedWarDir="${basedir}/i_jsf_1655/target/i_jsf_1655"
               appName="i_jsf_1655"/>
 
     </target>    
