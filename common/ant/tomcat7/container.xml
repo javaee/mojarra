@@ -145,6 +145,28 @@
         <copy overwrite="true" file="${jstl.jar}" todir="${container.home}/lib"/>
     </target>
 
+    <target name="container.deploy.test.dependencies"
+            description="Deploy any container level dependencies to the container.">
+        <if>
+            <os family="windows"/>
+            <then>
+                <container.stop/>
+            </then>
+        </if>
+
+        <copy overwrite="true" file="${groovy.jar}" todir="${container.home}/lib"/>
+
+        <if>
+            <os family="windows"/>
+            <then>
+                <!-- container.start/ -->
+                <echo>The container may have been stopped. Please restart it, if
+                    needed.
+                </echo>
+            </then>
+        </if>       
+    </target>
+
 
     <target name="container.start"
             description="Start the Tomcat container">
