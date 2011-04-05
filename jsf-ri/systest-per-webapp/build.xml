@@ -71,7 +71,7 @@
     </path>
 
     <property name="deploy-exploded-applications"
-              value="groovy" />
+              value="" />
 
     <property name="applications-for-V3-only"
               value="disable-bean-validator,
