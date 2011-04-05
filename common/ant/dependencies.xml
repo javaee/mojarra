@@ -438,7 +438,6 @@
         </if>
         -->
         <!-- Groovy -->
-        <!--
         <if>
             <not>
                 <available file="${groovy.jar}" property="ignored"/>
@@ -449,7 +448,6 @@
                      usetimestamp="true"/>
             </then>
         </if>
-        -->
 
         <!-- Trinidad -->
 

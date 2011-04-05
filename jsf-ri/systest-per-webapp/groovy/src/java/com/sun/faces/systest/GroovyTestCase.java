@@ -42,11 +42,11 @@ package com.sun.faces.systest;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlHiddenInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
 
 import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
+import java.io.File;
+import java.io.FileWriter;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -84,18 +84,87 @@ public class GroovyTestCase extends HtmlUnitFacesTestCase {
 
     // ------------------------------------------------------------ Test Methods
 
-    public void testGroovy() throws Exception {
+    public void testBasicAppFunctionality() throws Exception {
 
-        HtmlPage page = getPage("/faces/hello.xhtml");
+        HtmlPage page = getPage("/hello.jsf");
+        HtmlTextInput inputText = (HtmlTextInput) page.getElementById("form:name");
+        String val = "" + System.currentTimeMillis();
+        inputText.setValueAttribute(val);
 
         List list = getAllElementsOfGivenClass(page, null,
                 HtmlSubmitInput.class);
         HtmlSubmitInput button = (HtmlSubmitInput) list.get(0);
         page = (HtmlPage) button.click();
         String pageAsText = page.asText();
+        assertTrue(pageAsText.contains("Hello " + val));
         assertTrue(pageAsText.contains("Happy Birthday"));
 
         String pageText = page.asXml();
         assertTrue(pageText.contains("<input type=\"hidden\" name=\"javax.faces.ViewState\" id="));
+    }
+
+    public void testBasicAppFunctionalityNegative() throws Exception {
+
+        HtmlPage page = getPage("/hello.jsf");
+        HtmlTextInput inputText = (HtmlTextInput) page.getElementById("form:name");
+        String val = "" + System.currentTimeMillis();
+        inputText.setValueAttribute(val);
+        inputText = (HtmlTextInput) page.getElementById("form:age");
+        inputText.setValueAttribute("-12");
+
+        List list = getAllElementsOfGivenClass(page, null,
+                HtmlSubmitInput.class);
+        HtmlSubmitInput button = (HtmlSubmitInput) list.get(0);
+        page = (HtmlPage) button.click();
+        String pageAsText = page.asText();
+        assertFalse(pageAsText.contains("Hello " + val));
+        assertFalse(pageAsText.contains("Happy Birthday"));
+        assertTrue(pageAsText.contains("please enter a valid age between 0 and 65"));
+
+        String pageText = page.asXml();
+        assertTrue(pageText.contains("<input type=\"hidden\" name=\"javax.faces.ViewState\" id="));
+    }
+
+    public void testRuntimeModifiedUIComponent() throws Exception {
+        String val = "" + System.currentTimeMillis();
+        HtmlPage page = getPage("/hello.jsf");
+        String pageAsText = page.asText();
+        // Make sure it does not contain the value
+        assertFalse(pageAsText.contains(val));
+
+        // modify the AgeComponent to have an encodeBegin() that outputs the val
+        String script = "package hello import javax.faces.component.UIInput; import javax.faces.context.FacesContext; import javax.faces.context.ExternalContext; import javax.faces.context.ResponseWriter;  public class AgeComponent extends UIInput {   public AgeComponent() {     System.out.println(\"AgeComponent initialized...\");   }       public void encodeBegin(FacesContext context) throws IOException {       super.encodeBegin(context);       ExternalContext extContext = context.getExternalContext();       Map<String, String> requestParamMap = extContext.getRequestParameterMap();       ResponseWriter out = context.getResponseWriter();       out.startElement(\"p\", this);       out.writeText(\"[\" + " +
+                val +
+                "+ this.getClass().getName() + \"]\", this, \"prefix\");       out.endElement(\"p\");           } } ";
+        overwriteGroovyClass("hello.AgeComponent", script);
+        page = getPage("/hello.jsf");
+        pageAsText = page.asText();
+        // Make sure it does contain the value
+        assertTrue(pageAsText.contains(val));
+        
+    }
+
+    private void overwriteGroovyClass(String classNameWithoutFileExtension, String script) throws Exception {
+        // '-DexplodedWarDir=/Users/edburns/Documents/JavaEE/workareas/mojarra-4HEAD/jsf-ri/systest-per-webapp/build/jsf-groovy'
+        String explodedWarDir = System.getProperty("explodedWarDir");
+        classNameWithoutFileExtension = classNameWithoutFileExtension.replace(".", File.separator);
+        FileWriter fw = new FileWriter(explodedWarDir +
+                File.separator +
+                "WEB-INF" +
+                File.separator +
+                "groovy" +
+                File.separator +
+                classNameWithoutFileExtension +
+                ".groovy");
+        fw.write(script);
+        fw.flush();
+        fw.close();
+        fw = new FileWriter(explodedWarDir + 
+                File.separator + 
+                "hello.xhtml", true);
+        fw.append("  ");
+        fw.flush();
+        fw.close();
+
     }
 }

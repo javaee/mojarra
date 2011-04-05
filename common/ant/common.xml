@@ -326,6 +326,36 @@
         </sequential>
     </macrodef>
 
+    <macrodef name="test-webapp">
+        <attribute name="app-name"/>
+        <attribute name="app-base-dir"/>
+        <attribute name="test-case"/>
+        <attribute name="explodedWarDir" default=""/>
+        <attribute name="virtual-server" default=""/>
+        <attribute name="test-results-dir" default="${impl.test.results.dir}"/>
+        <attribute name="test-classpath" default="@{app-base-dir}/build/classes"/>
+        <sequential>
+            <path id="test.classpath">
+                <pathelement location="@{app-base-dir}/build/classes"/>
+                <pathelement location="${basedir}/build/classes"/>
+                <path refid="htmlunit.runtime.classpath"/>
+                <path refid="html.classpath"/>
+            </path>
+            <jsf.junit classpath-refid="test.classpath"
+                       context-path="/jsf-@{app-name}"
+                       instance.numbers="${instance.numbers}"
+                       test-results-dir="@{test-results-dir}"
+                       custom.port="${scenario.aware.port}"
+                       explodedWarDir="@{explodedWarDir}"
+                       virtual-server="@{virtual-server}">
+                <tests>
+                    <fileset dir="@{test-classpath}"
+                             includes="@{test-case}"/>
+                </tests>
+            </jsf.junit>
+        </sequential>
+    </macrodef>
+
     <!-- Conveninece macro for building WARs -->
     <macrodef name="jsf.war">
         <attribute name="basedir"/>
@@ -530,4 +560,7 @@
                 </else>
             </if>
     </target>
+
+    <target name="container.deploy.with.test.dependencies" 
+            depends="container.deploy,container.deploy.test.dependencies" />
 </project>
