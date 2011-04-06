@@ -152,6 +152,11 @@
         <echo message="Provide 'container.deploy.test.dependencies' implementation"/>    
     </target>    
 
+    <target name="container.undeploy.test.dependencies"
+            description="Undeploy any container level dependencies from the container.">
+        <echo message="Provide 'container.undeploy.test.dependencies' implementation"/>    
+    </target>    
+
     
     <!-- 
         OPTIONAL

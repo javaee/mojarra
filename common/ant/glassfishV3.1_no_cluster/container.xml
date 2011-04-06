@@ -268,6 +268,28 @@
         </if>       
     </target>
 
+    <target name="container.undeploy.test.dependencies"
+            description="Undeploy any container level dependencies from the container.">
+        <if>
+            <os family="windows"/>
+            <then>
+                <container.stop/>
+            </then>
+        </if>
+
+        <delete file="${container.home}/modules/${groovy.jarfile}"/>
+
+        <if>
+            <os family="windows"/>
+            <then>
+                <!-- container.start/ -->
+                <echo>The container may have been stopped. Please restart it, if
+                    needed.
+                </echo>
+            </then>
+        </if>       
+    </target>
+
     <target name="create.virtual.servers">
       <property name="instance.numbers" value="1,2" />
 

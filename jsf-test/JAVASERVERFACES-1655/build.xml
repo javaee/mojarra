@@ -80,6 +80,14 @@
 
     <target name="test" depends="define.scenario.aware.port">
 
+      <container.stop />
+      <antcall target="container.deploy.test.dependencies" />
+      <container.start />
+      <!-- do the test -->
+      <container.stop />
+      <antcall target="container.undeploy.test.dependencies" />
+      <container.start />
+
     </target>    
 
 
