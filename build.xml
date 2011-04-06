@@ -150,7 +150,6 @@ GlassFish 3.1 should show 2108 successfully passing tests.
         <trycatch>
             <try>
                 <container.stop/>
-                <antcall target="container.deploy.test.dependencies"/>
                 <echo message="Successfully deployed JSF implementation to container." />
                 <echo message="About to start container." />
                 <container.start/>
@@ -171,7 +170,6 @@ GlassFish 3.1 should show 2108 successfully passing tests.
         <trycatch>
             <try>
                 <container.stop/>
-                <antcall target="container.deploy.test.dependencies"/>
                 <echo message="Successfully deployed JSF implementation to container." />
                 <echo message="About to start container." />
                 <container.start/>
