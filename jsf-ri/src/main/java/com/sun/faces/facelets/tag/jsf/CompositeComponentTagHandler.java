@@ -546,7 +546,12 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
             public void applyMetadata(FaceletContext ctx, Object instance) {
 
                 UIComponent c = (UIComponent) instance;
-                c.getAttributes().put(name, attribute.getObject(ctx, type));
+                Object value = attribute.getObject(ctx,type);
+                // don't set the attributes value in the components attributemap
+                // if it is null, as this will throw a NullPointerException.
+                if(value!=null) {
+                    c.getAttributes().put(name, value);
+                }
 
             }
 

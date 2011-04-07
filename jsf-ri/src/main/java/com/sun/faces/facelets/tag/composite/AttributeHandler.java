@@ -137,13 +137,43 @@ public class AttributeHandler extends TagHandlerImpl {
             throw new  TagException(tag, "Unable to create property descriptor for property " + strValue, ex);
         }
 
+        TagAttribute defaultTagAttribute = null;
+        PropertyHandler defaultHandler = null;
         for (TagAttribute tagAttribute : this.tag.getAttributes().getAll()) {
             String attributeName = tagAttribute.getLocalName();
-            PropertyHandler handler = ATTRIBUTE_MANAGER.getHandler(ctx, attributeName);
-            if (handler != null) {
-                handler.apply(ctx, attributeName, propertyDescriptor, tagAttribute);
+            if("default".equals(attributeName)) {
+                // store the TagAttribute and the PropertyHandler for later
+                // execution, as the handler for the default-attribute requires,
+                // that the PropertyHandler for 'type' - if it exists - has been
+                // applied first.
+                defaultTagAttribute = tagAttribute;
+                defaultHandler = ATTRIBUTE_MANAGER.getHandler(ctx, "default");
+            } else {
+                PropertyHandler handler =
+                        ATTRIBUTE_MANAGER.getHandler(ctx, attributeName);
+                if (handler != null) {
+                    handler.apply(ctx, attributeName, propertyDescriptor,
+                            tagAttribute);
+                }
             }
-
+        }
+        if(defaultHandler!=null) {
+            // If the 'default'-attribute of cc:attribute was set, apply the
+            // previously stored PropertyHandler (see above) now, as now it is
+            // guaranteed that if a 'type'-attribute existed, that its handler
+            // was already applied
+            try {
+                defaultHandler.apply(ctx, "default", propertyDescriptor,
+                        defaultTagAttribute);
+            } catch (IllegalArgumentException ex) {
+                // If the type (according to the type-attribute) can not be
+                // found, the DefaultPropertyHandler will wrapp the
+                // ClassNotFoundException into an IllegalArgumentException,
+                // which is unwrapped into a TagException here.
+                throw new TagException(tag, 
+                        "'type' could not be resolved: " + ex.getCause(),
+                        ex.getCause());
+            }
         }
         
         this.nextHandler.apply(ctx, parent);

@@ -40,9 +40,13 @@
 
 package com.sun.faces.composite;
 
+import java.awt.Color;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.Format;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -90,6 +94,37 @@ public class CompositeBean {
     public String getText() {
         return text;
     }
+
+    // for #1966
+    private List<String> defaultValueList = Arrays.asList("Item 1","Item 2");
+
+    public List<String> getDefaultValueList() {
+        return this.defaultValueList;
+    }
+
+    private List<String> emptyList = Collections.emptyList();
+
+    public List<String> getEmptyList() {
+        return this.emptyList;
+    }
+
+    public Color getColor() {
+        return Color.PINK;
+    }
+    // end #1966
+
+    // for #1986
+    private BigDecimal bigDecimalValue = null;
+
+    public BigDecimal getBigDecimalValue() {
+        return bigDecimalValue;
+    }
+    // end #1986
+
+    public void setBigDecimalValue(BigDecimal bigDecimalValue) {
+        this.bigDecimalValue = bigDecimalValue;
+    }
+
 
     public Validator getValidator() {
 
@@ -220,7 +255,7 @@ public class CompositeBean {
     public String getStringValue() {
 
         return "equalityCheck";
-        
+
     }
 
     public String[] getStringValues() {
