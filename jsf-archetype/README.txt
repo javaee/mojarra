@@ -17,9 +17,9 @@ The JSF archetype is made up of:
 Create a hierarchy as follows :
 jsf-archetype
 |------src
-	 |----main
-		 |----java
-			 |--com
+	|----main
+		|----java
+                        |--com
 				|--sun
 					|--faces
 						|--hello
@@ -35,7 +35,7 @@ jsf-archetype
 
 3> mvn archetype:create-from-project. This generates the directory tree of the archetype in the target/generated-sources/archetype directory. The target dir gets created at the same level as the src dir and pom.xml.
 4> cd target/generated-sources/archetype 
-     mvn  install. This installs the archetype in the local maven repository.
+   mvn  install. This installs the archetype in the local maven repository.
 5> Now,  Now that the archetype has been created and installed, you can try it on your local system by using the following commands. First create a new dir for the new project from this archetype. mkdir create-project-from-archetype.
 6>cd create-project-from-archetype/
 7> mvn archetype:generate -DarchetypeCatalog=local 
@@ -44,11 +44,12 @@ OR
 
 after deploying the archetype to a remote repo via "mvn deploy", run the following.
 In this command, you need to specify the full information about the archetype you want to use (its groupId, its artifactId, its version) and the information about the new project you want to create (artifactId and groupId).
-mvn archetype:create                                    \
- -DarchetypeGroupId=<archetype-groupId>                \
- -DarchetypeArtifactId=<archetype-artifactId>          \
- -DarchetypeVersion=<archetype-version>                \ -DgroupId=<my.groupid>                                \
- -DartifactId=<my-artifactId>
+mvn archetype:create\
+-DarchetypeGroupId=<archetype-groupId> \
+-DarchetypeArtifactId=<archetype-artifactId>\
+-DarchetypeVersion=<archetype-version> \
+-DgroupId=<my.groupid> \
+-DartifactId=<my-artifactId>
 The project that I created off of the archetype could be easily built and deployed to GF.
 8> Next I tried the following to make sure that the war created gets deployed on GF.
 cd create-project-from-archetype/<new-dir-created>
