@@ -57,4 +57,9 @@ mvn clean install .. This creates the jsf-sample-1.0.war
 9> Deploy the war via asadmin deploy jsf-sample-1.0.war
 10> Access http://localhost:8080/jsf-sample-1.0/faces/simpleCompositeComponentUsingPage.xhtml
 
+I have added some ant targets to do what is stated above.
+Please run "ant make-archetype" to perform step 3 and 4.
+
+To deploy the archetype to the maven repo (http://download.java.net/maven/2), run "ant deploy-archetype".
+
 References http://maven.apache.org/guides/mini/guide-creating-archetypes.html
