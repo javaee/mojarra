@@ -123,22 +123,23 @@ public class CompositeAttributeTestCase extends HtmlUnitFacesTestCase {
             assertEquals("---Item " + (i + 1) + "---", content.get(i).toString());
         }
 
+        // @Todo change to a test without awt dependencies
         // Test Colors
-        assertElementContentEquals(page,
-                "ColorWithValueFromBean:Output",
-                "---java.awt.Color[r=255,g=175,b=175]---");
-        assertElementContentEquals(page,
-                "ColorWithValueLiteral:Output",
-                "---java.awt.Color[r=80,g=40,b=20]---");
-        assertElementContentEquals(page,
-                "ColorWithValueNone:Output",
-                "---java.awt.Color[r=200,g=100,b=50]---");
-        assertElementContentEquals(page,
-                "ColorWithValueEmpty:Output",
-                "---java.awt.Color[r=200,g=100,b=50]---");
-        assertElementContentEquals(page,
-                "ColorWithValueNull:Output",
-                "---java.awt.Color[r=200,g=100,b=50]---");
+//        assertElementContentEquals(page,
+//                "ColorWithValueFromBean:Output",
+//                "---java.awt.Color[r=255,g=175,b=175]---");
+//        assertElementContentEquals(page,
+//                "ColorWithValueLiteral:Output",
+//                "---java.awt.Color[r=80,g=40,b=20]---");
+//        assertElementContentEquals(page,
+//                "ColorWithValueNone:Output",
+//                "---java.awt.Color[r=200,g=100,b=50]---");
+//        assertElementContentEquals(page,
+//                "ColorWithValueEmpty:Output",
+//                "---java.awt.Color[r=200,g=100,b=50]---");
+//        assertElementContentEquals(page,
+//                "ColorWithValueNull:Output",
+//                "---java.awt.Color[r=200,g=100,b=50]---");
 
     }
 
