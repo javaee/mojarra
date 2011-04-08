@@ -322,6 +322,25 @@ GlassFish 3.1 should show 2108 successfully passing tests.
         <delete dir="${basedir}/srctemp"/>
     </target>
 
+   <target name="jsf.source.tlda">
+
+     <delete failonerror="false" dir="${dist.dir}/srctemp"/>
+     <mkdir dir="${dist.dir}/srctemp"/>
+     <unzip src="${dist.dir}/mojarra-${impl.version}-source.zip"
+            dest="${dist.dir}/srctemp"/>
+     <get src="http://anybodys.us.oracle.com/java/javaee/Specs/JSF/README_TLDA.txt"
+          dest="${dist.dir}/srctemp/mojarra-${impl.version}-source/legal/README_TLDA.txt" />
+     <zip destfile="${dist.dir}/mojarra-${impl.version}-source-tlda.zip"
+          basedir="${dist.dir}/srctemp"/>
+     <delete failonerror="false" dir="${dist.dir}/srctemp"/>
+
+   </target>
+
+  <target name="edburns">
+     <get src="http://anybodys.us.oracle.com/java/javaee/Specs/JSF/README_TLDA.txt"
+          dest="README_TLDA.txt" />
+  </target>
+
    <target name="dist" description="Build distribution files"
            depends="main">
         
