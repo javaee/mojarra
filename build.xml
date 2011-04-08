@@ -328,11 +328,6 @@ GlassFish 3.1 should show 2108 successfully passing tests.
 
    </target>
 
-  <target name="edburns">
-     <get src="http://anybodys.us.oracle.com/java/javaee/Specs/JSF/README_TLDA.txt"
-          dest="README_TLDA.txt" />
-  </target>
-
    <target name="dist" description="Build distribution files"
            depends="main">
         
