@@ -1234,9 +1234,10 @@ they do, it must be done as shown above, (or with
     <tag>
         <description>
             <![CDATA[<p><span class="changed_modified_2_0
-            changed_modified_2_0_rev_a">Add</span> a child UISelectItems
-            component to the UIComponent associated with the closed
-            parent UIComponent custom action.</p>
+            changed_modified_2_0_rev_a changed_modified_2_2">Add</span>
+            a child UISelectItems component to the UIComponent
+            associated with the closest parent UIComponent custom
+            action.</p>
 
             <p class="changed_modified_2_0">When iterating over the
             select items, <code>toString()</code> must be called on the
@@ -1293,7 +1294,7 @@ itemLabel, itemDescription, itemDisabled, and itemLabelEscaped.</p>
 <div class="syntax"><div class="html4strict" style="font-family: monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;h:selectOneListbox <span class="kw3">size</span>=<span class="st0">&quot;1&quot;</span> <span class="kw3">id</span>=<span class="st0">&quot;escape02&quot;</span> <span class="kw3">value</span>=<span class="st0">&quot;#{select05NoSelection.initialCollectionValues}&quot;</span><span class="kw2">&gt;</span></span></div></li>
 <li class="li2"><div class="de2">&nbsp; <span class="sc2">&lt;f:selectItems <span class="kw3">value</span>=<span class="st0">&quot;#{select05NoSelection.hobbitList}&quot;</span></div></li>
 <li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;var=<span class="st0">&quot;n&quot;</span></div></li>
-<li class="li2"><div class="de2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;itemValue=<span class="st0">&quot;#{n}&quot;</span></div></li>
+<li class="li2"><div class="de2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;itemValue=<span class="st0">&quot;#{n.id}&quot;</span></div></li>
 <li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;itemLabel=<span class="st0">&quot;#{n.bio}&quot;</span></div></li>
 <li class="li2"><div class="de2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;itemDescription=<span class="st0">&quot;#{n.description}&quot;</span></div></li>
 <li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;itemDisabled=<span class="st0">&quot;#{n.disabled}&quot;</span></div></li>
@@ -1343,9 +1344,7 @@ may be referred to in EL for the value of other attributes.</p>
         <attribute>
             <description>
 
-<![CDATA[ <p class="changed_added_2_0">evaluates to a
-<code>Collection</code>, array, or <code>Map</code> from which the items
-to be shown will be rendered.</p> ]]>
+<![CDATA[ <p class="changed_added_2_0"><span class="changed_modified_2_2">This attribute lets you refer to a property of the current member of the collection referenced by the "value" attribute, using the value of the "var" attribute as the base.  For example, #{n.id}.</span></p> ]]>
 
             </description>
             <name>itemValue</name>
