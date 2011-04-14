@@ -1,0 +1,13 @@
+<archetype xmlns="http://maven.apache.org/plugins/maven-archetype-plugin/archetype/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/plugins/maven-archetype-plugin/archetype/1.0.0 http://maven.apache.org/xsd/archetype-1.0.0.xsd">
+  <id>simple-jsf</id>
+  <sources>
+    <source>src/main/java/com/sun/faces/hello/HelloBean.java</source>
+  </sources>
+  <resources>
+    <resource>src/main/webapp/resources/composite/simpleCompositeComponent.xhtml</resource>
+    <resource>src/main/webapp/simpleCompositeComponentUsingPage.xhtml</resource>
+    <resource>src/main/webapp/submit.xhtml</resource>
+    <resource>src/main/webapp/WEB-INF/web.xml</resource>
+  </resources>
+</archetype>

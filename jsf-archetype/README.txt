@@ -18,44 +18,44 @@ Create a hierarchy as follows :
 jsf-archetype
 |------src
 	|----main
-		|----java
-                        |--com
-				|--sun
-					|--faces
-						|--hello
-							|---HelloBean.java
+		
 		|----resources
-		|----webapp
-			|--resources
-				|---composite
-						|---simpleCompositeComponent.xhtml
-				|---simpleCompositeComponentUsingPage.xhml
-				|---submit.xhtml
+                        |----archetype-resources
+                                |---src
+                                     |----main
+                                            |----java
+                                                  |--com
+                                                      |--sun
+                                                          |--faces
+                                                                |--hello
+                                                                    |---HelloBean.java
+                                            |----webapp
+                                                    |--resources
+                                                            |---composite
+                                                                    |---simpleCompositeComponent.xhtml
+                                                    |---simpleCompositeComponentUsingPage.xhml
+                                                    |---submit.xhtml
 |------pom.xml
 
-3> mvn archetype:create-from-project. This generates the directory tree of the archetype in the target/generated-sources/archetype directory. The target dir gets created at the same level as the src dir and pom.xml.
-4> cd target/generated-sources/archetype 
-   mvn  install. This installs the archetype in the local maven repository.
-5> Now,  Now that the archetype has been created and installed, you can try it on your local system by using the following commands. First create a new dir for the new project from this archetype. mkdir create-project-from-archetype.
-6>cd create-project-from-archetype/
-7> mvn archetype:generate -DarchetypeCatalog=local 
+3> Run "mvn  install" from under jsf-archetype/. This installs the archetype in the local maven repository.
+4> Now,  Now that the archetype has been created and installed, you can try it on your local system by using the following commands. First create a new dir for the new project from this archetype. mkdir create-project-from-archetype.
+5> mkdir create-project-from-archetype
+   cd create-project-from-archetype/
+6> mvn archetype:generate -DarchetypeCatalog=local
 
 OR 
 
 after deploying the archetype to a remote repo via "mvn deploy", run the following.
 In this command, you need to specify the full information about the archetype you want to use (its groupId, its artifactId, its version) and the information about the new project you want to create (artifactId and groupId).
-mvn archetype:create\
--DarchetypeGroupId=<archetype-groupId> \
--DarchetypeArtifactId=<archetype-artifactId>\
--DarchetypeVersion=<archetype-version> \
--DgroupId=<my.groupid> \
--DartifactId=<my-artifactId>
+mvn archetype:generate -DarchetypeGroupId=com.sun.faces
+-DarchetypeArtifactId=simple-jsf -DarchetypeVersion=1.0 -DgroupId=simple-jsf
+-DartifactId=simple-jsf -DarchetypeRepository=local
 The project that I created off of the archetype could be easily built and deployed to GF.
-8> Next I tried the following to make sure that the war created gets deployed on GF.
+7> Next I tried the following to make sure that the war created gets deployed on GF.
 cd create-project-from-archetype/<new-dir-created>
-mvn clean install .. This creates the jsf-sample-1.0.war
-9> Deploy the war via asadmin deploy jsf-sample-1.0.war
-10> Access http://localhost:8080/jsf-sample-1.0/faces/simpleCompositeComponentUsingPage.xhtml
+mvn clean install .. This creates the jsf-simple-1.0.war
+8> Deploy the war via asadmin deploy jsf-simple-1.0.war
+9> Access http://localhost:8080/jsf-sample-1.0/faces/simpleCompositeComponentUsingPage.xhtml
 
 I have added some ant targets to do what is stated above.
 Please run "ant make-archetype" to perform step 3 and 4.
