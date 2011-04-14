@@ -776,10 +776,11 @@ public final class FactoryFinder {
                 FactoryManagerCacheKey match = null;
                 for (FactoryManagerCacheKey cur : keys) {
                     if (this.cl.equals(cur.cl)) {
-                        match = cur;
-                        if (null != match) {
+                        if (null != cur && null != match) {
                             LOGGER.log(Level.WARNING, "Multiple JSF Applications found on same ClassLoader.  Unable to safely determine which FactoryManager instance to use. Defaulting to first match.");
+                            break;
                         }
+                        match = cur;
                     }
                 }
                 if (null != match) {
