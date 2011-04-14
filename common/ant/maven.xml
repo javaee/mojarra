@@ -270,48 +270,6 @@
         </sequential>
     </macrodef>
 
-    <macrodef name="mvn.archetype.clean">
-        <sequential>
-            <delete dir="${basedir}/target"/>
-            <delete dir="${basedir}/generated-archetype"/>
-            <delete dir="${basedir}/create-project-from-archetype"/>
-            <jsf.mvn pomFile="${jsf.build.home}/jsf-archetype/pom.xml"
-                             mvnSpecVersion="@{version}"
-                             dir="${jsf.build.home}/jsf-archetype"
-                             goals="clean"/>
-        </sequential>
-    </macrodef>
-
-    <macrodef name="mvn.archetype.create">
-        
-        <sequential>
-            
-            <jsf.mvn pomFile="${jsf.build.home}/jsf-archetype/pom.xml"
-                             mvnSpecVersion="@{version}"
-                             dir="${jsf.build.home}/jsf-archetype"
-                             goals="archetype:create-from-project"/>
- 
-        </sequential>
-    </macrodef>
-
-    <macrodef name="mvn.archetype.install">
-        <sequential>
-
-            <jsf.mvn pomFile="${jsf.build.home}/jsf-archetype/target/generated-sources/archetype/pom.xml"
-                             mvnSpecVersion="@{version}"
-                             dir="${jsf.build.home}/jsf-archetype/target/generated-sources/archetype"
-                             goals="install"/>
-        </sequential>
-
-    </macrodef>
-
-    <macrodef name="mvn.archetype.deploy">
-        <sequential>
-            <jsf.mvn pomFile="${jsf.build.home}/jsf-archetype/pom.xml"
-                             mvnSpecVersion="@{version}"
-                             dir="${jsf.build.home}/jsf-archetype"
-                             goals="deploy"/>
-        </sequential>
-    </macrodef>
+   
 
 </project>
