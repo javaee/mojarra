@@ -5,6 +5,7 @@ update build.properties to point to the correct directory
 container.name=glassfish
 container.home=/glassfish/home/directory
 make sure that password.txt is found in container.home
+set ANT_OPTS to be -Xms512m -Xmx786m -XX:MaxPermSize=786m
 ant test.with.container.refresh
 -or-
 start glassfish (asadmin start-domain)
