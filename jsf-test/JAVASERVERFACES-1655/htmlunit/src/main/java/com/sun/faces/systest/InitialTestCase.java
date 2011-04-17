@@ -52,9 +52,9 @@ import junit.framework.TestSuite;
 
 import java.util.List;
 
-public class GroovyTestCase extends HtmlUnitFacesTestCase {
+public class InitialTestCase extends HtmlUnitFacesTestCase {
 
-    public GroovyTestCase(String name) {
+    public InitialTestCase(String name) {
         super(name);
     }
 
@@ -70,7 +70,7 @@ public class GroovyTestCase extends HtmlUnitFacesTestCase {
      * Return the tests included in this test suite.
      */
     public static Test suite() {
-        return (new TestSuite(GroovyTestCase.class));
+        return (new TestSuite(InitialTestCase.class));
     }
 
 
@@ -123,48 +123,5 @@ public class GroovyTestCase extends HtmlUnitFacesTestCase {
 
         String pageText = page.asXml();
         assertTrue(pageText.contains("<input type=\"hidden\" name=\"javax.faces.ViewState\" id="));
-    }
-
-    public void testRuntimeModifiedUIComponent() throws Exception {
-        String val = "" + System.currentTimeMillis();
-        HtmlPage page = getPage("/hello.jsf");
-        String pageAsText = page.asText();
-        // Make sure it does not contain the value
-        assertFalse(pageAsText.contains(val));
-
-        // modify the AgeComponent to have an encodeBegin() that outputs the val
-        String script = "package hello import javax.faces.component.UIInput; import javax.faces.context.FacesContext; import javax.faces.context.ExternalContext; import javax.faces.context.ResponseWriter;  public class AgeComponent extends UIInput {   public AgeComponent() {     System.out.println(\"AgeComponent initialized...\");   }       public void encodeBegin(FacesContext context) throws IOException {       super.encodeBegin(context);       ExternalContext extContext = context.getExternalContext();       Map<String, String> requestParamMap = extContext.getRequestParameterMap();       ResponseWriter out = context.getResponseWriter();       out.startElement(\"p\", this);       out.writeText(\"[\" + " +
-                val +
-                "+ this.getClass().getName() + \"]\", this, \"prefix\");       out.endElement(\"p\");           } } ";
-        overwriteGroovyClass("hello.AgeComponent", script);
-        page = getPage("/hello.jsf");
-        pageAsText = page.asText();
-        // Make sure it does contain the value
-        assertTrue(pageAsText.contains(val));
-        
-    }
-
-    private void overwriteGroovyClass(String classNameWithoutFileExtension, String script) throws Exception {
-        // '-DexplodedWarDir=/Users/edburns/Documents/JavaEE/workareas/mojarra-4HEAD/jsf-ri/systest-per-webapp/build/jsf-groovy'
-        String explodedWarDir = System.getProperty("explodedWarDir");
-        classNameWithoutFileExtension = classNameWithoutFileExtension.replace(".", File.separator);
-        FileWriter fw = new FileWriter(explodedWarDir +
-                File.separator +
-                "WEB-INF" +
-                File.separator +
-                "groovy" +
-                File.separator +
-                classNameWithoutFileExtension +
-                ".groovy");
-        fw.write(script);
-        fw.flush();
-        fw.close();
-        fw = new FileWriter(explodedWarDir + 
-                File.separator + 
-                "hello.xhtml", true);
-        fw.append("  ");
-        fw.flush();
-        fw.close();
-
     }
 }
