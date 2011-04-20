@@ -64,7 +64,7 @@
                      JAVASERVERFACES-1856,JAVASERVERFACES-1655" />
 
     <property name="container-agnostic-applications" value="
-                    JAVASERVERFACES-1958" />
+                    JAVASERVERFACES-1958,JAVASERVERFACES-2038" />
 
     <target name="main" depends="define.applications"
             description="">

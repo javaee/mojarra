@@ -889,7 +889,7 @@ public class UIRepeat extends UINamingContainer {
                 Integer begin = this.getBegin();
                 Integer end = this.getEnd();
                 Integer step = this.getStep();
-                int b = ((end != null) ? end : 0);
+                int b = ((begin != null) ? begin : 0);
                 int e = ((end != null) ? end : rowCount);
                 int s = ((step != null) ? step : 1);
                 this.updateIterationStatus(ctx,

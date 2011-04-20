@@ -43,116 +43,57 @@
 
 <!-- ************ JSF build file ************************************** -->
 
-<project name="JAVASERVERFACES-1655" default="test" basedir=".">
+<project name="JAVASERVERFACES-2038" default="test" basedir=".">
 
     <property file="../../build.properties"/>
-    <path id="1655.classpath">  
+    <path id="2038.classpath">  
         <path refid="html.classpath" />
         <pathelement location="${basedir}/htmlunit/target/classes"/>
     </path>
-
 
     <import file="${jsf.build.home}/common/ant/common.xml"/>
 
     <target name="build">
 
-      <jsf.mvn dir="${basedir}/i_jsf_1655" goals="install" />
+      <jsf.mvn dir="${basedir}/i_jsf_2038" goals="install" />
       <jsf.mvn dir="${basedir}/htmlunit" goals="install" />
 
     </target>    
 
     <target name="clean">
 
-      <jsf.mvn dir="${basedir}/i_jsf_1655" goals="clean" />
+      <jsf.mvn dir="${basedir}/i_jsf_2038" goals="clean" />
       <jsf.mvn dir="${basedir}/htmlunit" goals="clean" />
 
     </target>    
 
     <target name="install">
-      <if>
-        <not>
-          <isset property="skip.groovy.deploy" />
-        </not>
-        <then>
-          <container.stop />
-	  <antcall target="container.deploy.test.dependencies" />
-	  <container.start />
-        </then>
-      </if>
-
-      <deploydir.artifact
-              explodedWarDir="${basedir}/i_jsf_1655/target/i_jsf_1655"
-              appName="i_jsf_1655"/>
+      <deploy.artifact
+              artifact="${basedir}/i_jsf_2038/target/i_jsf_2038.war"
+              appName="i_jsf_2038"/>
 
     </target>    
 
     <target name="remove">
 
       <undeploy.artifact
-              artifact="${basedir}/i_jsf_1655/target/i_jsf_1655.war"
-              appName="i_jsf_1655"/>
-
-      <if>
-        <not>
-          <isset property="skip.groovy.deploy" />
-        </not>
-        <then>
-	 <container.stop />
-	 <antcall target="container.undeploy.test.dependencies" />
-	 <container.start />
-        </then>
-      </if>
+              artifact="${basedir}/i_jsf_2038/target/i_jsf_2038.war"
+              appName="i_jsf_2038"/>
 
     </target>    
 
     <target name="test" depends="define.scenario.aware.port">
 
-      <jsf.junit context-path="/i_jsf_1655"
-                 classpath-refid="1655.classpath"    
+      <jsf.junit context-path="/i_jsf_2038"
+                 classpath-refid="2038.classpath"    
                  test-results-dir="${regression.test.results.dir}">
           <tests>
             <fileset dir="${basedir}/htmlunit/target/classes"
-                     includes="com/sun/faces/systest/InitialTestCase.class"/> 
+                     includes="com/sun/faces/systest/Issue2038TestCase.class"/> 
           </tests>
       </jsf.junit>
 
-      <antcall inheritAll="true" target="modify.uicomponent" />
-
     </target>    
-
-    <target name="modify.uicomponent">
-      <!-- update the AgeComponent, assert the update was successful -->
-      <tstamp>
-        <format property="tstamp_AgeComponent" 
-                pattern="yyyyMMddHHmmssSSSS" />
-      </tstamp>
-      <updateGroovyFile groovyFile="AgeComponent.groovy"
-                        tokenValue="${tstamp_AgeComponent}" />
-
-      <jsf.tester request="/?modify.uicomponent"
-                     context-path="/i_jsf_1655"
-                     classpath-refid="html.classpath"
-                     test-results-dir="${regression.test.results.dir}"
-                     regexp="(?s).*${tstamp_AgeComponent}.*"/>
-
-
-    </target>
-
-    <macrodef name="updateGroovyFile">
-      <attribute name="groovyFile" />
-      <attribute name="tokenValue" />
-
-      <sequential>
-	<copy file="i_jsf_1655/src/main/resources/runtime_overwrites/groovy/hello/@{groovyFile}"
-	      tofile="i_jsf_1655/target/i_jsf_1655/WEB-INF/groovy/hello/@{groovyFile}" filtering="true" overwrite="true">
-	  <filterset>
-	    <filter token="tstamp" value="@{tokenValue}"/>
-	  </filterset>
-	</copy>
-      </sequential>
-    </macrodef>
-
-    
 
 
         
