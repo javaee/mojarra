@@ -255,7 +255,7 @@
             </then>
         </if>
 
-        <copy overwrite="true" file="${groovy.jar}" todir="${container.home}/modules"/>
+        <copy failonerror="false" overwrite="true" file="${groovy.jar}" todir="${container.home}/modules"/>
 
         <if>
             <os family="windows"/>
@@ -277,7 +277,7 @@
             </then>
         </if>
 
-        <delete file="${container.home}/modules/${groovy.jarfile}"/>
+        <delete failonerror="false" file="${container.home}/modules/${groovy.jarfile}"/>
 
         <if>
             <os family="windows"/>
