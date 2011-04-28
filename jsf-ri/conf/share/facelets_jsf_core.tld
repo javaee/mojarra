@@ -2257,7 +2257,7 @@ will not pass validation.</p> ]]>
         <description><![CDATA[
 
             <p class="changed_added_2_0"><span
-            class="changed_modified_2_0_rev_a">Used</span> inside of the
+            class="changed_modified_2_0_rev_a changed_modified_2_2">Used</span> inside of the
             metada facet of a view, this tag causes a <a target="_"
             href="../../../javadocs/javax/faces/component/UIViewParameter.html">UIViewParameter</a>
             to be attached as metadata for the current view.  Because
@@ -2459,24 +2459,6 @@ will not pass validation.</p> ]]>
                     void valueChange(javax.faces.event.ValueChangeEvent)
                 </method-signature>
             </deferred-method>
-        </attribute>
-
-        <attribute>
-            <description>
-                <![CDATA[The maximum number of characters that may
-                be entered in this field.]]>
-            </description>
-            <name>
-                maxlength
-            </name>
-            <required>
-                false
-            </required>
-            <deferred-value>
-                <type>
-                    int
-                </type>
-            </deferred-value>
         </attribute>
 
         <attribute>
