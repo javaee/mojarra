@@ -217,7 +217,7 @@
             <![CDATA[
 
   <p><span class="changed_modified_2_0_rev_a
-  changed_added_2_0">This</span> <span
+  changed_added_2_0 changed_modified_2_2">This</span> <span
   class="changed_added_2_0">tag is the same as the
   <code>ui:composition</code>, except for two things: JSF creates a
   component and adds it directly to the tree, and there's no associated
@@ -268,7 +268,15 @@
                 <![CDATA[
 <div class="changed_added_2_0">
   <p>
-	Binds the component to a backing bean property, as specified in the JSF specification.
+
+	Binds the component to a backing bean property, as specified in
+	the JSF specification.  <span class="added_modified_2_2">The
+	Java language type of this property must be a class that extends
+	<code>javax.faces.component.UIComponent</code>.  The scope of
+	the bean on which this property resides must be no wider than
+	request scope.  If either of these conditions are not met, the
+	results are undefined.</span>
+
   </p>
 </div>]]>
 
