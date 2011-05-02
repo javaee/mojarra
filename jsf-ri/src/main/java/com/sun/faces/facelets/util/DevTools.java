@@ -58,6 +58,7 @@
 
 package com.sun.faces.facelets.util;
 
+import com.sun.faces.facelets.tag.ui.UIDebug;
 import com.sun.faces.util.Util;
 
 import javax.el.Expression;
@@ -287,6 +288,23 @@ public final class DevTools {
             DEBUG_PARTS = splitTemplate(DEBUG_TEMPLATE);
         }
 
+    }
+
+    public static String interpolateViewState(String input, UIDebug.ViewStateRenderer renderer) throws IOException {
+        StringBuilder builder = new StringBuilder();
+
+        String [] parts = input.split("\\^\\^");
+
+        for (String part : parts) {
+            if ("state".equals(part)) {
+                builder.append(renderer.renderViewState());
+            } else {
+                builder.append(part);
+            }
+        }
+
+
+        return builder.toString();
     }
 
 

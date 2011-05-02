@@ -40,7 +40,9 @@
 
 package com.sun.faces.facelets;
 
+import com.gargoylesoftware.htmlunit.WebWindow;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
@@ -204,6 +206,19 @@ public class UIRepeatTestCase extends HtmlUnitFacesTestCase {
 
         HtmlPage page = getPage("/faces/facelets/forEach.xhtml");
         assertTrue(page.asText().contains("1 2 3"));
+
+    }
+
+    public void testDebugViewState() throws Exception {
+        HtmlPage page = getPage("/faces/facelets/uirepeat5.xhtml");
+        HtmlElement form = page.getElementById("form");
+        page = (HtmlPage) form.type('D', true, true, false);
+        List<WebWindow> windows = client.getWebWindows();
+        WebWindow debugWindow = windows.get(1);
+        page = (HtmlPage) debugWindow.getEnclosedPage();
+        String xml = page.asXml();
+        assertTrue(xml.matches("(?s).*<th>\\s*Total\\s*</th>\\s*<th>\\s*[0-9]*\\s*</th>.*"));
+
 
     }
 

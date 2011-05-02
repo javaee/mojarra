@@ -55,6 +55,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.render.ResponseStateManager;
 
 import com.sun.faces.context.StateContext;
+import com.sun.faces.facelets.tag.ui.UIDebug;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.ComponentStruct;
 import com.sun.faces.util.FacesLogger;
@@ -65,7 +66,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.io.IOException;
-import java.util.Collections;
+import java.io.Serializable;
 import javax.faces.application.StateManager;
 import javax.faces.component.ContextCallback;
 import javax.faces.component.visit.VisitCallback;
@@ -144,7 +145,7 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
         Util.checkIdUniqueness(context,
                                viewRoot,
                                new HashSet<String>(viewRoot.getChildCount() << 1));
-        final Map<String,Object> stateMap = new HashMap<String,Object>();
+        final Map<String,Serializable> stateMap = new HashMap<String,Serializable>();
 
         final StateContext stateContext = StateContext.getStateContext(context);
 
@@ -160,7 +161,7 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
             viewRoot.visitTree(visitContext, new VisitCallback() {
                 public VisitResult visit(VisitContext context, UIComponent target) {
                     VisitResult result = VisitResult.ACCEPT;
-                    Object stateObj;
+                    Serializable stateObj;
                     if (!target.isTransient()) {
                         if (stateContext.componentAddedDynamically(target)) {
                             stateObj = new StateHolderSaver(finalContext, target);
@@ -174,7 +175,7 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
                             }
 
                         } else {
-                            stateObj = target.saveState(context.getFacesContext());
+                            stateObj = (Serializable) target.saveState(context.getFacesContext());
                         }
                         if (null != stateObj) {
                             stateMap.put(target.getClientId(context.getFacesContext()), stateObj);
@@ -195,7 +196,7 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
         // handle dynamic adds/removes
         List<String> removeList = stateContext.getDynamicRemoves();
         if (null != removeList && !removeList.isEmpty()) {
-            stateMap.put(CLIENTIDS_TO_REMOVE_NAME, removeList);
+            stateMap.put(CLIENTIDS_TO_REMOVE_NAME, (Serializable) removeList);
         }
         Map<String, ComponentStruct> addList = stateContext.getDynamicAdds();
         if (null != addList && !addList.isEmpty()) {
@@ -205,8 +206,14 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
             }
             stateMap.put(CLIENTIDS_TO_ADD_NAME, savedAddList.toArray());
         }
-        //return stateMap;
-        return new Object[] { null, stateMap };
+        if (UIDebug.isRecordStateSize(context)) {
+            try {
+                UIDebug.computeViewStateSize(context, stateMap);
+            } catch (IOException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to obtain view state size for UIDebug", ex);
+            }
+        }
+        return new Object[] { null, stateMap }; 
 
     }
 

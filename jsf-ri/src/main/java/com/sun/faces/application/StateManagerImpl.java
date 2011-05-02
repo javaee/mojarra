@@ -40,7 +40,9 @@
 
 package com.sun.faces.application;
 
+import com.sun.faces.facelets.tag.ui.UIDebug;
 import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 
 import javax.faces.FacesException;
@@ -57,12 +59,16 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * <p>
@@ -80,6 +86,8 @@ public class StateManagerImpl extends StateManager {
 
     private boolean isDevelopmentMode;
     private Map<String,Class<?>> classMap;
+    // Log instance for this class
+    private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
 
 
     // ------------------------------------------------------------ Constructors
@@ -143,6 +151,21 @@ public class StateManagerImpl extends StateManager {
                 Object[] tree = treeList.toArray();
 
                 result = new Object[]{tree, state};
+
+                if (UIDebug.isRecordStateSize(context)) {
+                    StringBuilder idList = new StringBuilder();
+                    for (TreeNode cur : treeList) {
+                        idList.append(cur.id).append("<br />");
+                    }
+                    Map<String, Serializable> stateMap = new HashMap<String, Serializable>();
+                    stateMap.put(idList.toString(), (Serializable) state);
+                    try {
+                        UIDebug.computeViewStateSize(context, stateMap);
+                    } catch (IOException ioe) {
+                        LOGGER.log(Level.SEVERE, "Unable to obtain view state size for UIDebug", ioe);
+                    }
+                }
+
             }
         }
         finally {
