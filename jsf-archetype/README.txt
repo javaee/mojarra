@@ -62,4 +62,61 @@ Please run "ant make-archetype" to perform step 3 and 4.
 
 To deploy the archetype to the maven repo (http://download.java.net/maven/2), run "ant deploy-archetype".
 
+Alternatively, you can make modifications similar to the following to
+the generated pom.xml and simply run mvn deploy in the
+target/generated-sources/archetype directory.
+
+bash-2.05b$ diff -u pom.xml ~/Documents/chaff/pom-generated-from-project.xml
+--- pom.xml	Wed May  4 11:51:26 2011
++++ /home/ejburns/Documents/chaff/pom-generated-from-project.xml	Wed May  4 11:49:40 2011
+@@ -16,6 +16,11 @@
+         <artifactId>archetype-packaging</artifactId>
+         <version>2.0</version>
+       </extension>
++            <extension>
++                <groupId>org.jvnet.wagon-svn</groupId>
++                <artifactId>wagon-svn</artifactId>
++                <version>1.8</version>
++            </extension>
+     </extensions>
+ 
+     <pluginManagement>
+@@ -26,5 +31,24 @@
+         </plugin>
+       </plugins>
+     </pluginManagement>
++
+   </build>
++
++    <distributionManagement>
++      <repository>
++        <uniqueVersion>false</uniqueVersion>
++        <id>java.net-maven2-repository</id>
++        <url>svn:https://svn.java.net/svn/maven2-repository~svn/trunk/repository</url> 
++      </repository>
++    </distributionManagement>
++
++    <repositories>
++        <repository>
++            <id>java.net-maven2-repository</id>
++            <name>Java.net Repository for Maven</name>
++            <url>http://download.java.net/maven/2/</url>
++            <layout>default</layout>
++        </repository>
++    </repositories>
++
+ </project>
+
+This assumes that your ~/.m2/settings.xml file has the following
+information.
+
+  <servers>
+    <server>
+        <id>java.net-maven2-repository</id>
+        <username>your userid</username>
+        <password>your password</password>
+    </server>
+  </servers>
+
 References http://maven.apache.org/guides/mini/guide-creating-archetypes.html
+
