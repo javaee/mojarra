@@ -418,6 +418,7 @@
                 test.FactoryFinder,
                 test.FactoryFinder2,
                 test.PhaseId,
+                test.application,
                 test.component,
                 test.validator,
                 test.mock,
@@ -485,6 +486,29 @@ javax.faces.level=ALL
                 <fileset dir="${build.test.dir}"
                          includes="javax/faces/component/*TestCase.class"
                          excludes="javax/faces/component/UIDataTestCase.class,javax/faces/component/UIFormTestCase.class"/>
+            </tests>
+        </jsf.junit>
+    </target>
+
+    <target name="test.application" depends="build.test.dir">
+        <echo message="Running javax.faces.application tests ..."/>
+        <delete file="${api.test.results.dir}/api-test.log"/>
+        <delete file="${api.test.results.dir}/test-logging.properties"/>
+        <echo file="${api.test.results.dir}/test-logging.properties">
+handlers=java.util.logging.FileHandler
+java.util.logging.FileHandler.append=true
+java.util.logging.FileHandler.encoding=UTF-8
+java.util.logging.FileHandler.formatter=java.util.logging.SimpleFormatter
+java.util.logging.FileHandler.pattern=${api.test.results.dir}/api-test.log
+javax.faces.level=ALL
+        </echo>
+        <jsf.junit test-results-dir="${api.test.results.dir}"
+                   classpath-refid="test.classpath"
+                   assert.classes="${assertion.classes}"
+                   logging.config.file="${api.test.results.dir}/test-logging.properties">
+            <tests>
+                <fileset dir="${build.test.dir}"
+                         includes="javax/faces/application/*TestCase.class"/>
             </tests>
         </jsf.junit>
     </target>
