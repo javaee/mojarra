@@ -223,6 +223,18 @@ public class StateContext {
         return parent.getAttributes().containsKey(HAS_ONE_OR_MORE_DYNAMIC_CHILD);
     }
 
+    public void adjustDynamicChildIndexes(UIComponent parent) {
+        List<UIComponent> children = parent.getChildren();
+        int idx=-1;
+        for (UIComponent cur : children) {
+            idx++;
+            if (componentAddedDynamically(cur)) {
+                cur.getAttributes().put(DYNAMIC_COMPONENT, idx);
+            }
+        }
+    }
+
+
     private int incrementDynamicChildCount(UIComponent parent) {
         int result = 0;
         Map<String, Object> attrs = parent.getAttributes();
@@ -375,12 +387,16 @@ public class StateContext {
             toAdd.absorbComponent(context, added);
 
             if (dynamicRemoves != null) {
-                dynamicRemoves.remove(toAdd.clientId);
+//                dynamicRemoves.remove(toAdd.clientId);
             }
             added.getAttributes().put(DYNAMIC_COMPONENT, new Integer(toAdd.indexOfChildInParent));
             getDynamicAdds().put(toAdd.clientId, toAdd);
 
+            adjustDynamicChildIndexes(added.getParent());
+
         }
+
+
 
     } // END AddRemoveListener
 

@@ -2226,6 +2226,7 @@ public abstract class UIComponentBase extends UIComponent {
                                  component);
         component.setInView(false);
         component.compositeParent = null;
+        component.initialState = false;
         if (component.getChildCount() > 0) {
             List<UIComponent> children = component.getChildren();
             for (UIComponent c : children) {
