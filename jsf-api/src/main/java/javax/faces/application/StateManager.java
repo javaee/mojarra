@@ -172,6 +172,9 @@ public abstract class StateManager {
 
     // ---------------------------------------------------- State Saving Methods
 
+    private static final String IS_CALLED_FROM_API_CLASS =
+        "javax.faces.ensureOverriddenInvocation";
+
 
     /**
      * <p>Return the tree structure and component state information for the
@@ -200,11 +203,18 @@ public abstract class StateManager {
      * return.  If the return is an <code>Object []</code>, it casts the
      * result to an <code>Object []</code> wrapping the first and second
      * elements in an instance of {@link SerializedView}, which it then
-     * returns.  Otherwise, it return <code>null</code>
+     * returns.  Otherwise, it returns <code>null</code>
      */
     public SerializedView saveSerializedView(FacesContext context) {
 
-        Object stateObj = saveView(context);
+        context.getAttributes().put(IS_CALLED_FROM_API_CLASS, Boolean.TRUE);
+        Object stateObj = null;
+        try {
+            stateObj = saveView(context);
+        } finally {
+            context.getAttributes().remove(IS_CALLED_FROM_API_CLASS);
+        }
+
         SerializedView result = null;
         if (null != stateObj) {
             if (stateObj instanceof Object[]) {
@@ -251,9 +261,15 @@ public abstract class StateManager {
      * @since 1.2
      */
     public Object saveView(FacesContext context) {
-        SerializedView view = saveSerializedView(context);
-        Object stateArray[] = {view.getStructure(),
-                               view.getState()};
+        Object stateArray[] = null;
+
+        if (!context.getAttributes().containsKey(IS_CALLED_FROM_API_CLASS)) {
+            SerializedView view = saveSerializedView(context);
+            if (null != view) {
+                stateArray = new Object[]{view.getStructure(),
+                            view.getState()};
+            }
+        }
         return stateArray;
     }
 
