@@ -71,33 +71,35 @@ class ZipDirectoryEntryScanner {
         ZipInputStream zis = null;
         ZipEntry ze = null;
         String entryName = null;
-        for (String cur : webInfLibJars) {
-            zis = new ZipInputStream(extContext.getResourceAsStream(cur));
-            try {
-                while (null != (ze = zis.getNextEntry())) {
-                    entryName = ze.getName();
-                    if (entryName.startsWith(prefix)) {
-                        if (prefixLen < entryName.length()) {
-                            entryName = entryName.substring(prefixLen + 1);
-                            if (!entryName.endsWith("/")) {
-                                // Assume this code is only reached if the zip entry
-                                // is NOT a 'directory' entry.
-                                int i = entryName.lastIndexOf("/");
-                                if (-1 != i) {
-                                    entryName = entryName.substring(0, i);
-                                    if (!resourceLibraries.containsKey(entryName)) {
-                                        resourceLibraries.put(entryName, Boolean.TRUE);
+        if (null != webInfLibJars) {
+            for (String cur : webInfLibJars) {
+                zis = new ZipInputStream(extContext.getResourceAsStream(cur));
+                try {
+                    while (null != (ze = zis.getNextEntry())) {
+                        entryName = ze.getName();
+                        if (entryName.startsWith(prefix)) {
+                            if (prefixLen < entryName.length()) {
+                                entryName = entryName.substring(prefixLen + 1);
+                                if (!entryName.endsWith("/")) {
+                                    // Assume this code is only reached if the zip entry
+                                    // is NOT a 'directory' entry.
+                                    int i = entryName.lastIndexOf("/");
+                                    if (-1 != i) {
+                                        entryName = entryName.substring(0, i);
+                                        if (!resourceLibraries.containsKey(entryName)) {
+                                            resourceLibraries.put(entryName, Boolean.TRUE);
+                                        }
                                     }
                                 }
-                            }
                             
+                            }
                         }
                     }
-                }
 
-            } catch (IOException ioe) {
-                if (LOGGER.isLoggable(Level.SEVERE)) {
+                } catch (IOException ioe) {
+                    if (LOGGER.isLoggable(Level.SEVERE)) {
                     LOGGER.log(Level.SEVERE, "Unable to inspect resource library " + cur, ioe);
+                    }
                 }
             }
         }
