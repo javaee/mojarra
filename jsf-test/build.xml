@@ -51,17 +51,17 @@
 
     <property name="deploy-exploded-applications" value="" />
 
-    <property name="applications-for-V3-only" value="JAVASERVERFACES-1856" />
+    <property name="applications-for-V3-only" value="JAVASERVERFACES-1856,JAVASERVERFACES-1542" />
 
     <property name="applications-for-V3.1-only"
               value="GLASSFISH-11636,
                      GLASSFISH-15985,
-                     JAVASERVERFACES-1856" />
+                     JAVASERVERFACES-1856,JAVASERVERFACES-1542" />
 
     <property name="applications-for-V3.1_no_cluster-only"
               value="GLASSFISH-11636,
                      GLASSFISH-15985,
-                     JAVASERVERFACES-1856,JAVASERVERFACES-1655" />
+                     JAVASERVERFACES-1856,JAVASERVERFACES-1655,JAVASERVERFACES-1542" />
 
     <property name="container-agnostic-applications" value="
                     JAVASERVERFACES-1958,JAVASERVERFACES-2038,JAVASERVERFACES-1637" />
