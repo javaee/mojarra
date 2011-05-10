@@ -82,7 +82,7 @@ public abstract class FaceletContext extends ELContext {
     // The key in the FacesContext attribute map
     // for the FaceletContext instance.
     public static final String FACELET_CONTEXT_KEY = 
-            "com.sun.faces.facelets.FACELET_CONTEXT";
+            "javax.faces.FACELET_CONTEXT";
 
     /**
      * <p class="changed_added_2_0">The current FacesContext bound to

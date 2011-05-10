@@ -715,22 +715,25 @@ public final class FactoryFinder {
 
                 try {
                     return factories.get();
-                } catch (CancellationException ce) {
+                } catch (Exception ee) {
+                    Throwable cause = ee.getCause();
+                    boolean doThrow = false;
+
+                    if (cause instanceof CancellationException ||
+                        cause instanceof InterruptedException) {
+                        applicationMap.remove(key);
+                        doThrow = false;
+                    } else {
+                        cause = (null != cause) ? cause : ee;
+                    }
                     if (LOGGER.isLoggable(Level.FINEST)) {
                         LOGGER.log(Level.FINEST,
-                                   ce.toString(),
-                                   ce);
+                                cause.toString(),
+                                cause);
                     }
-                    applicationMap.remove(key);
-                } catch (InterruptedException ie) {
-                    if (LOGGER.isLoggable(Level.FINEST)) {
-                        LOGGER.log(Level.FINEST,
-                                   ie.toString(),
-                                   ie);
+                    if (doThrow) {
+                        throw new FacesException(cause);
                     }
-                    applicationMap.remove(key);
-                } catch (ExecutionException ee) {
-                    throw new FacesException(ee);
                 }
 
             }
@@ -830,17 +833,22 @@ public final class FactoryFinder {
 
         private final Map<String,Object> factories;
         private final ReentrantReadWriteLock lock;
+        private static boolean throwInterruptedException = false;
 
 
         // -------------------------------------------------------- Consturctors
 
 
-        public FactoryManager() {
+        public FactoryManager() throws InterruptedException {
             factories = new HashMap<String,Object>();
             for (String name : FACTORY_NAMES) {
                 factories.put(name, new ArrayList(4));
             }
             lock = new ReentrantReadWriteLock(true);
+            if (throwInterruptedException) {
+                throwInterruptedException = false;
+                throw new InterruptedException("Throwing InterruptedException for testing purposes");
+            }
         }
 
 

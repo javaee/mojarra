@@ -1,10 +1,9 @@
-<html>
-<head>
+<?xml version='1.0' encoding='UTF-8'?>
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 2010 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -42,20 +41,60 @@
 
 -->
 
-<title>Package Description for "javax.faces.event"</title>
-</head>
-<body bgcolor="white">
+<!-- ************ JSF build file ************************************** -->
 
-<p><span class="changed_modified_2_0 changed_modified_2_0_rev_a
-changed_modified_2_1 changed_modified_2_2">Interfaces</span> describing
-events and event listeners, and concrete event implementation classes.
-All events extend from {@link javax.faces.event.FacesEvent} and all
-listeners extend from {@link javax.faces.event.FacesListener}.</p>
+<project name="JAVASERVERFACES-1637" default="test" basedir=".">
 
-<p>For your convenience here is a UML class diagram of the classes in
-this package.</p>
+    <property file="../../build.properties"/>
+    <path id="1637.classpath">  
+        <path refid="html.classpath" />
+        <pathelement location="${basedir}/htmlunit/target/classes"/>
+    </path>
 
-<a href="EventHierarchy.jpg" target="_"><img width="640" height="473" src="EventHierarchy.jpg" /></a>
+    <import file="${jsf.build.home}/common/ant/common.xml"/>
 
-</body>
-</html>
+    <target name="build">
+
+      <jsf.mvn dir="${basedir}/i_jsf_1637" goals="install" />
+      <jsf.mvn dir="${basedir}/htmlunit" goals="install" />
+
+    </target>    
+
+    <target name="clean">
+
+      <jsf.mvn dir="${basedir}/i_jsf_1637" goals="clean" />
+      <jsf.mvn dir="${basedir}/htmlunit" goals="clean" />
+
+    </target>    
+
+    <target name="install">
+      <deploy.artifact
+              artifact="${basedir}/i_jsf_1637/target/i_jsf_1637.war"
+              appName="i_jsf_1637"/>
+
+    </target>    
+
+    <target name="remove">
+
+      <undeploy.artifact
+              artifact="${basedir}/i_jsf_1637/target/i_jsf_1637.war"
+              appName="i_jsf_1637"/>
+
+    </target>    
+
+    <target name="test" depends="define.scenario.aware.port">
+
+      <jsf.junit context-path="/i_jsf_1637"
+                 classpath-refid="1637.classpath"    
+                 test-results-dir="${regression.test.results.dir}">
+          <tests>
+            <fileset dir="${basedir}/htmlunit/target/classes"
+                     includes="com/sun/faces/systest/Issue1637TestCase.class"/> 
+          </tests>
+      </jsf.junit>
+
+    </target>    
+
+
+        
+</project>
