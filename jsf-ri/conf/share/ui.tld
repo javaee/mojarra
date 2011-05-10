@@ -328,10 +328,16 @@
             <![CDATA[
 <div class="changed_added_2_0">
   <p>
-	Defines a composition that optionally uses a template, as outlined in the description of the ui tag library. Multiple
-	compositions can use the same template, thus encapsulating and reusing layout. JSF disregards everything outside of the
-	composition, which lets developers embed compositions in well-formed XHTML pages that can be viewed in an XHTML viewer,
-	such as Dreamweaver or a browser, without including extraneous elements such as <code>head</code> and <code>body</code>.
+
+<span class="changed_modified_2_2">Defines</span> a composition that
+optionally uses a template, as outlined in the description of the ui tag
+library. Multiple compositions can use the same template, thus
+encapsulating and reusing layout. JSF disregards everything outside of
+the composition, which lets developers embed compositions in well-formed
+XHTML pages that can be viewed in an XHTML viewer, such as Dreamweaver
+or a browser, without including extraneous elements such as
+<code>head</code> and <code>body</code>.
+
   </p>
 	<div class="syntax"><div class="html4strict" style="font-family: monospace;"><ol><li class="li1"><div class="de1"><span class="sc0">&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot;</div></li>
 
@@ -378,7 +384,12 @@
                 <![CDATA[
 <div class="changed_added_2_0">
   <p>
-	A URI that points to a template, also known as a layout, that inserts pieces of the page defined in the composition.
+<span class="changed_modified_2_2">A</span> URI that points to a
+template, also known as a layout, that inserts pieces of the page
+defined in the composition. <span class="changed_added_2_2">If the URI
+cannot be resolved a <code>TagAttributeException</code> must be thrown,
+including accurate location information to help the page author resolve
+the problem.</span>
   </p>
 </div>]]>
 
@@ -532,7 +543,12 @@
 <div class="changed_added_2_0">
 
 <p>
-	The <code>decorate</code> tag is identical to the <code>composition</code> tag, except that <code>ui:decorate</code>, unlike <code>ui:composition</code>, does not disregard all content outside of the tag. The <code>decorate</code> is useful when you want to decorate some content in a page, for example, you might want to decorate a list of items, like this:
+<span class="changed_modified_2_2">The</span> <code>decorate</code> tag
+is identical to the <code>composition</code> tag, except that
+<code>ui:decorate</code>, unlike <code>ui:composition</code>, does not
+disregard all content outside of the tag. The <code>decorate</code> is
+useful when you want to decorate some content in a page, for example,
+you might want to decorate a list of items, like this:
 	
 <div class="syntax"><div class="html4strict" style="font-family: monospace;"><ol><li class="li1"><div class="de1">
 	
@@ -567,7 +583,13 @@ be used to decorate pieces of a page.
 
                 <![CDATA[
 <div class="changed_added_2_0">
-A URI that points to a template, also known as a layout, that inserts pieces of the page defined in the decorator.
+
+<span class="changed_modified_2_2">A</span> URI that points to a
+template, also known as a layout, that inserts pieces of the page
+defined in the decorator. <span class="changed_added_2_2">If the URI
+cannot be resolved a <code>TagAttributeException</code> must be thrown,
+including accurate location information to help the page author resolve
+the problem.</span>
 
 </div>]]>
 
@@ -576,7 +598,7 @@ A URI that points to a template, also known as a layout, that inserts pieces of 
 				template
             </name>
             <required>
-				false
+				true
             </required>
             <deferred-value>
                 <type>
