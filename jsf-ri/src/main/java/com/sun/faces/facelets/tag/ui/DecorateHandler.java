@@ -142,6 +142,9 @@ public final class DecorateHandler extends TagHandlerImpl implements TemplateCli
         String path = null;
         try {
             path = this.template.getValue(ctx);
+            if (path.length() == 0) {
+                throw new TagAttributeException(this.tag, this.template, "Invalid path : " + path);
+            }
             ctx.includeFacelet(parent, path);
         } catch (IOException e) {
             if (log.isLoggable(Level.FINE)) {

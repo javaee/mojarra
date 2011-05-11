@@ -159,6 +159,9 @@ final class DefaultFaceletCache extends FaceletCache<DefaultFacelet> {
         if (t instanceof IOException) {
             throw (IOException)t;
         }
+        if (t.getCause() instanceof IOException) {
+            throw (IOException)t.getCause();
+        }
         if (t instanceof RuntimeException) {
             throw (RuntimeException)t;
         }

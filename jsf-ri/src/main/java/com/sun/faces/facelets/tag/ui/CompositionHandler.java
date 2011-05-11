@@ -151,7 +151,10 @@ public final class CompositionHandler extends TagHandlerImpl implements
             ctx.extendClient(this);
             String path = null;
             try {
-                path = this.template.getValue(ctx);                
+                path = this.template.getValue(ctx);
+                if (path.length() == 0) {
+                    throw new TagAttributeException(this.tag, this.template, "Invalid path : " + path);
+                }
                 ctx.includeFacelet(parent, path);
             } catch (IOException e) {
                 if (log.isLoggable(Level.FINE)) {
