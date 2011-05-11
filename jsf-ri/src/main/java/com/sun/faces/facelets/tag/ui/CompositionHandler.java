@@ -152,7 +152,7 @@ public final class CompositionHandler extends TagHandlerImpl implements
             String path = null;
             try {
                 path = this.template.getValue(ctx);
-                if (path.length() == 0) {
+                if (path.trim().length() == 0) {
                     throw new TagAttributeException(this.tag, this.template, "Invalid path : " + path);
                 }
                 ctx.includeFacelet(parent, path);
