@@ -88,13 +88,13 @@ public class Issue2025TestCase extends HtmlUnitFacesTestCase {
         HtmlPage page = null;
 
         try {
-            page = getPage("/index.composite.badpath.xhtml");
+            page = getPage("/index.composition.badpath.xhtml");
         } catch (FailingHttpStatusCodeException e) {
             assertTrue(e.getResponse().getContentAsString().contains("Invalid path : foobar"));
         }
 
         try {
-            page = getPage("/index.composite.emptypath.xhtml");
+            page = getPage("/index.composition.emptypath.xhtml");
         } catch (FailingHttpStatusCodeException e) {
             assertTrue(e.getResponse().getContentAsString().contains("Invalid path :"));
         }
