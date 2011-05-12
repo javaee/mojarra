@@ -2488,7 +2488,7 @@ private void doFind(FacesContext context, String clientId) {
 
 
     static final class ComponentSystemEventListenerAdapter
-       implements SystemEventListener, StateHolder, FacesWrapper<ComponentSystemEventListener> {
+       implements ComponentSystemEventListener, SystemEventListener, StateHolder, FacesWrapper<ComponentSystemEventListener> {
 
         ComponentSystemEventListener wrapped;
         Class<?> instanceClass;
@@ -2522,7 +2522,14 @@ private void doFind(FacesContext context, String clientId) {
 
         }
 
+        // ------------------------------------ Methods from SystemEventListener
 
+
+        public void processEvent(ComponentSystemEvent event) throws AbortProcessingException {
+
+            wrapped.processEvent(event);
+
+        }
         public boolean isListenerForSource(Object component) {
 
             if (wrapped instanceof SystemEventListener) {

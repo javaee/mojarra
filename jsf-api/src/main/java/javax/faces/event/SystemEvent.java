@@ -43,8 +43,8 @@ package javax.faces.event;
 import java.util.EventObject;
 
 /**
- * <p><strong class="changed_added_2_0">SystemEvent</strong> is the base
- * class for non-application specific events that can be fired by
+ * <p><strong class="changed_added_2_0 changed_modified_2_2">SystemEvent</strong> 
+ * is the base class for non-application specific events that can be fired by
  * arbitrary objects.</p>
  *
  * @since 2.0
@@ -76,9 +76,11 @@ public abstract class SystemEvent extends EventObject {
 
 
     /**
-     * <p>Return <code>true</code> if this {@link FacesListener} is an
+     * <p><span class="changed_modified_2_2">Return</span> <code>true</code> 
+     * if this {@link FacesListener} is an
      * instance of a the appropriate listener class that this event
-     * supports.</p>
+     * supports. <span class="changed_added_2_2">The default implementation returns true if the listener
+     * is a {@link ComponentSystemEventListener}.</span></p>
      *
      * @param listener {@link FacesListener} to evaluate
      */
