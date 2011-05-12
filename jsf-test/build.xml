@@ -114,6 +114,8 @@
 
     <target name="test" depends="define.applications"
             description="">
+        <container.stop />
+        <container.start />
         <antcall target="install" />
         <for list="${applications}" param="app" trim="true">
             <sequential>
