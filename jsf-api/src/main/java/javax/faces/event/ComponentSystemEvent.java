@@ -44,7 +44,8 @@ import javax.faces.component.UIComponent;
 
 /**
  *
- * <p><strong class="changed_added_2_0">ComponentSystemEvent</strong> is
+ * <p><strong class="changed_added_2_0 changed_modified_2_2">
+ * ComponentSystemEvent</strong> is
  * the base class for {@link SystemEvent}s that are specific to a {@link
  * UIComponent} instance.</p>
  *
@@ -73,6 +74,24 @@ public abstract class ComponentSystemEvent extends SystemEvent {
         super(component);
     }
 
+    /**
+     * <p class="changed_added_2_2">Return <code>true</code> if the argument
+     * {@link FacesListener} is an instance of the appropriate listener class that this event
+     * supports.  The default implementation returns true if the listener
+     * is a {@link ComponentSystemEventListener} or if <code>super.isAppropriateListener()</code>
+     * returns true.</p>
+     *
+     * @param listener {@link FacesListener} to evaluate
+     * @since 2.2
+     */
+    @Override
+    public boolean isAppropriateListener(FacesListener listener) {
+        boolean result = (listener instanceof ComponentSystemEventListener);
+        if (!result) {
+            result = super.isAppropriateListener(listener);
+        }
+        return result;
+    }
 
     // -------------------------------------------------------------- Properties
 
