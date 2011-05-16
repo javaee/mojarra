@@ -79,6 +79,10 @@ import com.sun.faces.config.DocumentInfo;
 
 import java.util.LinkedHashSet;
 import java.util.Map;
+import javax.faces.validator.BeanValidator;
+import javax.validation.Validation;
+import javax.validation.ValidationException;
+import javax.validation.ValidatorFactory;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler;
 
 import org.w3c.dom.Element;
@@ -352,7 +356,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
             if (isBeanValidatorAvailable()) {
                 WebConfiguration webConfig = WebConfiguration.getInstance();
                 if (!webConfig.isOptionEnabled(WebConfiguration.BooleanWebContextInitParameter.DisableDefaultBeanValidator)) {
-                    defaultValidatorIds.add("javax.faces.Bean");
+                    defaultValidatorIds.add(BeanValidator.VALIDATOR_ID);
                 }
             }
         }
@@ -380,20 +384,31 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
         } else {
             try {
                 Thread.currentThread().getContextClassLoader().loadClass("javax.validation.MessageInterpolator");
-                appMap.put(beansValidationAvailabilityCacheKey, result = true);
-            } catch (ClassNotFoundException cnfe) {
+                // Check if the Implementation is available.
+                Object cachedObject = appMap.get(BeanValidator.VALIDATOR_FACTORY_KEY);
+                if(cachedObject instanceof ValidatorFactory) {
+                    result = true;
+                } else {
+                    try {
+                        ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
+                        appMap.put(BeanValidator.VALIDATOR_FACTORY_KEY, validatorFactory);
+                        result = true;
+                    } catch (ValidationException e) {
+                        if(LOGGER.isLoggable(Level.FINE)) {
+                            String msg = "Could not build a default Bean Validator factory: " 
+                                + e.getMessage();
+                            LOGGER.fine(msg);
+                        }
+                    }
+                }        
+            
+            } catch (Throwable t) { // CNFE or ValidationException or any other
                 if (LOGGER.isLoggable(Level.FINE)) {
                     LOGGER.fine("Unable to load Beans Validation");
                 }
-                appMap.put(beansValidationAvailabilityCacheKey, Boolean.FALSE);
-            } catch (Throwable t) {
-                if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.fine("Unable to load Beans Validation");
-                }
-                appMap.put(beansValidationAvailabilityCacheKey, Boolean.FALSE);
             }
+            appMap.put(beansValidationAvailabilityCacheKey, result);
         }
-
         return result;
     }
 
