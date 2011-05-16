@@ -69,7 +69,7 @@
 
     <target name="install">
       <deploy.artifact
-              artifact="${basedir}/i_jsf_1943/target/i_jsf_2025.war"
+              artifact="${basedir}/i_jsf_1943/target/i_jsf_1943.war"
               appName="i_jsf_1943"/>
 
     </target>    
@@ -77,7 +77,7 @@
     <target name="remove">
 
       <undeploy.artifact
-              artifact="${basedir}/i_jsf_1943/target/i_jsf_2025.war"
+              artifact="${basedir}/i_jsf_1943/target/i_jsf_1943.war"
               appName="i_jsf_1943"/>
 
     </target>    
