@@ -129,7 +129,7 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
     private final MethodExpression delegate;
     private final ValueExpression source;
     private final Location location;
-    private final UIComponent cc;
+    private final transient UIComponent cc;
 
 
     // -------------------------------------------------------- Constructors
