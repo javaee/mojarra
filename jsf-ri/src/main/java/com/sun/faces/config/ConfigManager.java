@@ -370,14 +370,11 @@ public class ConfigManager {
             } catch (Exception e) {
                 // clear out any configured factories
                 releaseFactories();
-                if (LOGGER.isLoggable(Level.INFO)) {
-                    LOGGER.log(Level.INFO,
-                               "Unsanitized stacktrace from failed start...",
-                               e);
+                Throwable t = e;
+                if (!(e instanceof ConfigurationException)) {
+                    t = new ConfigurationException("CONFIGURATION FAILED! " + t.getMessage(), t);
                 }
-                Throwable t = unwind(e);
-                throw new ConfigurationException("CONFIGURATION FAILED! " + t.getMessage(),
-                                                 t);
+                throw (ConfigurationException)t;
             } finally {
                 if (executor != null) {
                     executor.shutdown();
