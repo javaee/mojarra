@@ -56,11 +56,6 @@ import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Callable;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.Future;
-import java.util.concurrent.CancellationException;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -89,7 +84,7 @@ import javax.faces.context.FacesContext;
  * <li><p>If the JavaServer Faces configuration files named by the
  * <code>javax.faces.CONFIG_FILES</code> <code>ServletContext</code> init
  * parameter contain any <code>factory</code> entries of the given
- * factory class name, those factories are used, with the last one taking
+ * factory class name, those result are used, with the last one taking
  * precedence.</p></li> 
 
  * <li><p>If there are any JavaServer Faces configuration files bundled
@@ -109,7 +104,7 @@ import javax.faces.context.FacesContext;
 
  * </ul>
 
- * <p>If any of the factories found on any of the steps above happen to
+ * <p>If any of the result found on any of the steps above happen to
  * have a one-argument constructor, with argument the type being the
  * abstract factory class, that constructor is invoked, and the previous
  * match is passed to the constructor.  For example, say the container
@@ -284,10 +279,10 @@ public final class FactoryFinder {
      * Faces factory class, based on the discovery algorithm described
      * in the class description.</p>
      *
-     * <p class="changed_added_2_0">The standard factories and wrappers
+     * <p class="changed_added_2_0">The standard result and wrappers
      * in JSF all implement the interface {@link FacesWrapper}.  If the
      * returned <code>Object</code> is an implementation of one of the
-     * standard factories, it must be legal to cast it to an instance of
+     * standard result, it must be legal to cast it to an instance of
      * <code>FacesWrapper</code> and call {@link
      * FacesWrapper#getWrapped} on the instance.</p>
      *
@@ -678,12 +673,12 @@ public final class FactoryFinder {
 
     /**
      * Managed the mappings between a web application and its configured
-     * factories.
+     * result.
      */
     private static final class FactoryManagerCache {
 
-        private ConcurrentMap<FactoryManagerCacheKey,Future<FactoryManager>> applicationMap =
-              new ConcurrentHashMap<FactoryManagerCacheKey, Future<FactoryManager>>();
+        private ConcurrentMap<FactoryManagerCacheKey,FactoryManager> applicationMap =
+              new ConcurrentHashMap<FactoryManagerCacheKey, FactoryManager>();
 
 
         // ------------------------------------------------------ Public Methods
@@ -693,48 +688,14 @@ public final class FactoryFinder {
 
             FactoryManagerCacheKey key = new FactoryManagerCacheKey(cl, applicationMap);
 
-            while (true) {
-                Future<FactoryManager> factories = applicationMap.get(key);
-                if (factories == null) {
-                    Callable<FactoryManager> callable =
-                          new Callable<FactoryManager>() {
-                              public FactoryManager call()
-                                    throws Exception {
-                                  return new FactoryManager();
-                              }
-                          };
-
-                    FutureTask<FactoryManager> ft =
-                          new FutureTask<FactoryManager>(callable);
-                    factories = applicationMap.putIfAbsent(key, ft);
-                    if (factories == null) {
-                        factories = ft;
-                        ft.run();
-                    }
-                }
-
-                try {
-                    return factories.get();
-                } catch (CancellationException ce) {
-                    if (LOGGER.isLoggable(Level.FINEST)) {
-                        LOGGER.log(Level.FINEST,
-                                   ce.toString(),
-                                   ce);
-                    }
-                    applicationMap.remove(key);
-                } catch (InterruptedException ie) {
-                    if (LOGGER.isLoggable(Level.FINEST)) {
-                        LOGGER.log(Level.FINEST,
-                                   ie.toString(),
-                                   ie);
-                    }
-                    applicationMap.remove(key);
-                } catch (ExecutionException ee) {
-                    throw new FacesException(ee);
-                }
-
+            FactoryManager result = applicationMap.get(key);
+            if (result == null) {
+                FactoryManager newResult = new FactoryManager();
+                result = applicationMap.putIfAbsent(key, newResult);
+                result = (null != result) ? result : newResult;
+                
             }
-
+            return result;
         }
 
 
@@ -755,7 +716,7 @@ public final class FactoryFinder {
                 FactoryManagerCacheKey.class.getSimpleName();
 
         public FactoryManagerCacheKey(ClassLoader cl,
-                Map<FactoryManagerCacheKey,Future<FactoryManager>> factoryMap) {
+                Map<FactoryManagerCacheKey,FactoryManager> factoryMap) {
             this.cl = cl;
             FacesContext facesContext = FacesContext.getCurrentInstance();
             if (null != facesContext) {
@@ -824,7 +785,7 @@ public final class FactoryFinder {
 
 
     /**
-     * Maintains the factories for a single web application.
+     * Maintains the result for a single web application.
      */
     private static final class FactoryManager {
 
