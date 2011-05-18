@@ -254,6 +254,11 @@ public final class Classpath {
      */
     private static JarFile getAlternativeJarFile(URL url) throws IOException {
         String urlFile = url.getFile();
+        return getAlternativeJarFile(urlFile);
+    }
+    
+    static JarFile getAlternativeJarFile(String urlFile) throws IOException {
+        JarFile result = null;
         // Trim off any suffix - which is prefixed by "!/" on Weblogic
         int separatorIndex = urlFile.indexOf("!/");
 
@@ -269,7 +274,26 @@ public final class Classpath {
                 jarFileUrl = jarFileUrl.substring("file:".length());
                 jarFileUrl = URLDecoder.decode(jarFileUrl, "UTF-8");
             }
-            return new JarFile(jarFileUrl);
+            // discard any urls that begin with war: rar: ear: and sar:
+            // as these should not be looked at for JSF related content.
+            final String [] prefixesToExclude = {
+                "war:",
+                "rar:",
+                "ear:",
+                "sar:"
+            };
+            boolean foundExclusion = false;
+            for (String cur : prefixesToExclude) {
+                if (jarFileUrl.startsWith(cur)) {
+                    foundExclusion = true;
+                    break;
+                }
+            }
+            if (!foundExclusion) {
+                result = new JarFile(jarFileUrl);
+            }
+
+            return result;
         }
         return null;
     }
