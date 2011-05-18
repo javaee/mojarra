@@ -280,7 +280,6 @@ public class ConfigureListener implements ServletRequestListener,
 
         } finally {
             Verifier.setCurrentInstance(null);
-            initContext.release();
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
                         "jsf.config.listener.version.complete");
@@ -339,10 +338,11 @@ public class ConfigureListener implements ServletRequestListener,
                         e);
             }
         } finally {
-            ApplicationAssociate.clearInstance(context);
+            ApplicationAssociate.clearInstance(initContext.getExternalContext());
             ApplicationAssociate.setCurrentInstance(null);
             // Release the initialization mark on this web application
             ConfigManager.getInstance().destory(context);
+            FactoryFinder.releaseFactories();
             if (initContext != null) {
                 initContext.release();
             }

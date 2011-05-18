@@ -10,16 +10,20 @@
  * a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
  * or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- * 
+ *
  * When distributing the software, include this License Header Notice in each
- * file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
- * Sun designates this particular file as subject to the "Classpath" exception
- * as provided by Sun in the GPL Version 2 section of the License file that
- * accompanied this code.  If applicable, add the following below the License
- * Header, with the fields enclosed by brackets [] replaced by your own
- * identifying information: "Portions Copyrighted [year]
- * [name of copyright owner]"
- * 
+ * file and include the License file at packager/legal/LICENSE.txt.
+ *
+ * GPL Classpath Exception:
+ * Oracle designates this particular file as subject to the "Classpath"
+ * exception as provided by Oracle in the GPL Version 2 section of the License
+ * file that accompanied this code.
+ *
+ * Modifications:
+ * If applicable, add the following below the License Header, with the fields
+ * enclosed by brackets [] replaced by your own identifying information:
+ * "Portions Copyright [year] [name of copyright owner]"
+ *
  * Contributor(s):
  * 
  * If you wish your version of this file to be governed by only the CDDL or
@@ -138,16 +142,16 @@ public class TagTestCaseBase extends TestCase {
         pageContext.initialize(servlet, request, response, null,
                                true, 1024, true);
 
-        // Set up Faces API Objects
-	FactoryFinder.setFactory(FactoryFinder.APPLICATION_FACTORY,
-				 "com.sun.faces.mock.MockApplicationFactory");
-	FactoryFinder.setFactory(FactoryFinder.RENDER_KIT_FACTORY,
-				 "com.sun.faces.mock.MockRenderKitFactory");
         externalContext =
             new MockExternalContext(servletContext, request, response);
         externalContext.setRequestParameterMap(new HashMap());
         lifecycle = new MockLifecycle();
         facesContext = new MockFacesContext(externalContext, lifecycle);
+        // Set up Faces API Objects
+	FactoryFinder.setFactory(FactoryFinder.APPLICATION_FACTORY,
+				 "com.sun.faces.mock.MockApplicationFactory");
+	FactoryFinder.setFactory(FactoryFinder.RENDER_KIT_FACTORY,
+				 "com.sun.faces.mock.MockRenderKitFactory");
         ApplicationFactory applicationFactory = (ApplicationFactory)
             FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
         application = (MockApplication) applicationFactory.getApplication();
