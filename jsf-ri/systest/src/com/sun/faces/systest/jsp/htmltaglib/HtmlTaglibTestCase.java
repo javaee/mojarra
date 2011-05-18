@@ -55,6 +55,7 @@ public class HtmlTaglibTestCase extends HtmlUnitFacesTestCase {
         super(name);
         addExclusion(Container.TOMCAT6, "test04");
         addExclusion(Container.TOMCAT7, "test04");
+        addExclusion(Container.WLS_10_3_4_NO_CLUSTER, "test04");
 
 
     }

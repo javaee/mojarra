@@ -395,25 +395,19 @@
     </target>
 
     <target name="define.scenario.aware.port">
-        <condition property="scenario.aware.port" value="${glassfish.portbase.tenthousandsplace}0080">
-          <equals arg1="${force.no.cluster}" casesensitive="false" trim="true"
-                  arg2="true" />
-        </condition>
-        <if>
-          <not>
-            <equals arg1="${force.no.cluster}" casesensitive="false" trim="true"
-                    arg2="true" />
-          </not>
-          <then>
-            <property name="scenario.aware.port" 
-                      value="${container.port}" />
-          </then>
-        </if>
-        <echo message="scenario.aware.port = ${scenario.aware.port}" />
+      <property name="scenario.aware.port" value="${container.port}" />
+      <echo message="scenario.aware.port = ${scenario.aware.port}" />
+
+      <var name="force.no.cluster" value="true" />
+      <echo message="force.no.cluster = ${force.no.cluster}" />
     </target>
 
     <target name="define.virtual-server.aware.port">
       <property name="scenario.aware.port" value="${container.port}" />
+      <echo message="scenario.aware.port = ${scenario.aware.port}" />
+
+      <var name="force.no.cluster" value="true" />
+      <echo message="force.no.cluster = ${force.no.cluster}" />
     </target>
 
 

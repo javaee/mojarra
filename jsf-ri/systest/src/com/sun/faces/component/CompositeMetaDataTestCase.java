@@ -51,8 +51,10 @@ public class CompositeMetaDataTestCase extends HtmlUnitFacesTestCase {
         super(name);
         addExclusion(Container.TOMCAT6, "testPrefixMappedFaceletPage");
         addExclusion(Container.TOMCAT7, "testPrefixMappedFaceletPage");
+        addExclusion(Container.WLS_10_3_4_NO_CLUSTER, "testPrefixMappedFaceletPage");
         addExclusion(Container.TOMCAT6, "testExtensionMappedFaceletPage");
         addExclusion(Container.TOMCAT7, "testExtensionMappedFaceletPage");
+        addExclusion(Container.WLS_10_3_4_NO_CLUSTER, "testExtensionMappedFaceletPage");
 
     }
 

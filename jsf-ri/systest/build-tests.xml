@@ -162,47 +162,59 @@
     <target name="test.duplicateIds"
             description="Test duplicate ID detection">
 
-        <jsf.tester request="/faces/duplicateIds01.jsp"
-                     context-path="${context.path}"
+      <if>
+        <bool>
+          <or>
+            <equals arg1="${container.name}" arg2="tomcat7"/>
+            <equals arg1="${container.name}" arg2="glassfishV3"/>
+            <equals arg1="${container.name}" arg2="glassfishV3.1"/>
+            <equals arg1="${container.name}" arg2="glassfishV3.1_no_cluster"/>
+          </or>
+        </bool>
+        <then>
+
+          <jsf.tester request="/faces/duplicateIds01.jsp"
+                       context-path="${context.path}"
+                       classpath-refid="html.classpath"
+                       test-results-dir="${impl.test.results.dir}"
+                       status="500"/> 
+
+          <jsf.tester request="/faces/duplicateIds02.jsp"
+                       context-path="${context.path}"
+                       classpath-refid="html.classpath"
+                       test-results-dir="${impl.test.results.dir}"
+                       status="200"/>
+
+          <jsf.tester request="/faces/duplicateIds03.jsp"
+                       context-path="${context.path}"
+                       classpath-refid="html.classpath"
+                       test-results-dir="${impl.test.results.dir}"
+                       status="500"/>
+
+          <jsf.tester request="/faces/duplicateIds05.jsp"
+                       context-path="${context.path}"
+                       classpath-refid="html.classpath"
+                       test-results-dir="${impl.test.results.dir}"
+                       status="200"/>
+
+          <jsf.tester request="/faces/forEach02.jsp"
+                       context-path="${context.path}"
+                       classpath-refid="html.classpath"
+                       test-results-dir="${impl.test.results.dir}"
+                       status="200"/>
+
+          <!-- PENDING: return to running
+          <jsf.junit context-path="${context.path}"
                      classpath-refid="html.classpath"
-                     test-results-dir="${impl.test.results.dir}"
-                     status="500"/> 
-
-        <jsf.tester request="/faces/duplicateIds02.jsp"
-                     context-path="${context.path}"
-                     classpath-refid="html.classpath"
-                     test-results-dir="${impl.test.results.dir}"
-                     status="200"/>
-
-        <jsf.tester request="/faces/duplicateIds03.jsp"
-                     context-path="${context.path}"
-                     classpath-refid="html.classpath"
-                     test-results-dir="${impl.test.results.dir}"
-                     status="500"/>
-
-        <jsf.tester request="/faces/duplicateIds05.jsp"
-                     context-path="${context.path}"
-                     classpath-refid="html.classpath"
-                     test-results-dir="${impl.test.results.dir}"
-                     status="200"/>
-
-        <jsf.tester request="/faces/forEach02.jsp"
-                     context-path="${context.path}"
-                     classpath-refid="html.classpath"
-                     test-results-dir="${impl.test.results.dir}"
-                     status="200"/>
-
-        <!-- PENDING: return to running
-        <jsf.junit context-path="${context.path}"
-                   classpath-refid="html.classpath"
-                   test-results-dir="${impl.test.results.dir}">
-            <tests>
-                <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/systest/DuplicateIds04TestCase.class"/>
-            </tests>
-        </jsf.junit>               
-        -->
-
+                     test-results-dir="${impl.test.results.dir}">
+              <tests>
+                  <fileset dir="${basedir}/build/classes"
+                           includes="com/sun/faces/systest/DuplicateIds04TestCase.class"/>
+              </tests>
+          </jsf.junit>               
+          -->
+        </then>
+      </if>
 
     </target>
     
@@ -563,10 +575,26 @@
         <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/managed02.jsp"
               regexp="(?s).*/managed02.jsp PASSED.*"/>
+        <if>
+          <bool>
+            <or>
+              <equals arg1="${container.name}" arg2="tomcat7"/>
+              <equals arg1="${container.name}" arg2="glassfishV3"/>
+              <equals arg1="${container.name}" arg2="glassfishV3.1"/>
+              <equals arg1="${container.name}" arg2="glassfishV3.1_no_cluster"/>
+            </or>
+          </bool>
+          <then>
 
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/faces/managed03.jsp"
-              status="500"/>
+            <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+                  context-path="${context.path}" request="/faces/managed03.jsp"
+                  status="500"/>
+            <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+                  context-path="${context.path}" request="/faces/managed07.jsp"
+                  status="500"/>
+
+          </then>
+        </if>
 
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
@@ -576,10 +604,6 @@
                          includes="com/sun/faces/systest/jsp/managed/*TestCase.class"/>
             </tests>
         </jsf.junit>
-
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/faces/managed07.jsp"
-              status="500"/>
 
         <if>
           <bool>
@@ -736,34 +760,46 @@
                  context-path="${context.path}" request="/faces/TestCoreValidatorIteratorSucceed.jsp"
               status="200"/>
         -->
+        <if>
+          <bool>
+            <or>
+              <equals arg1="${container.name}" arg2="tomcat7"/>
+              <equals arg1="${container.name}" arg2="glassfishV3"/>
+              <equals arg1="${container.name}" arg2="glassfishV3.1"/>
+              <equals arg1="${container.name}" arg2="glassfishV3.1_no_cluster"/>
+            </or>
+          </bool>
+          <then>
 
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/faces/TestElValidatorActionRefFail.jsp"
-              status="500"/>
+            <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+                  context-path="${context.path}" request="/faces/TestElValidatorActionRefFail.jsp"
+                  status="500"/>
+            <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+                  context-path="${context.path}" request="/faces/TestElValidatorComponentFail.jsp"
+                  status="500"/>
+
+            <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+                  context-path="${context.path}" request="/faces/TestElValidatorIdFail.jsp"
+                  status="500"/>
+
+            <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+                  context-path="${context.path}" request="/faces/TestElValidatorValueRefFail.jsp"
+                  status="500"/>
+
+          </then>
+        </if>
 
         <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/TestElValidatorActionRefSucceed.jsp"
               status="200"/>
 
         <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/faces/TestElValidatorComponentFail.jsp"
-              status="500"/>
-
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/TestElValidatorComponentSucceed.jsp"
               status="200"/>
 
         <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/faces/TestElValidatorIdFail.jsp"
-              status="500"/>
-
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/TestElValidatorIdSucceed.jsp"
               status="200"/>
-
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/faces/TestElValidatorValueRefFail.jsp"
-              status="500"/>
 
         <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/TestElValidatorValueRefSucceed.jsp"

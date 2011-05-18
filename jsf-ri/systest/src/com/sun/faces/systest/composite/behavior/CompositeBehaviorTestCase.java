@@ -57,6 +57,7 @@ public class CompositeBehaviorTestCase extends HtmlUnitFacesTestCase {
         super(name);
         addExclusion(Container.TOMCAT6, "test01");
         addExclusion(Container.TOMCAT7, "test01");
+        addExclusion(Container.WLS_10_3_4_NO_CLUSTER, "test01");
 
     }
 
