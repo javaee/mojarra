@@ -282,6 +282,12 @@ public final class FacesServlet implements Servlet {
         throws IOException, ServletException {
 
         requestStart(((HttpServletRequest) request).getRequestURI()); // V3 Probe hook
+        if (Thread.currentThread().isInterrupted()) {
+            if (LOGGER.isLoggable(Level.FINER)) {
+                LOGGER.log(Level.FINE, "Thread {0} given to FacesServlet.service() in interrupted state", 
+                        Thread.currentThread().getName());
+            }
+        }
 
         // If prefix mapped, then ensure requests for /WEB-INF are
         // not processed.
