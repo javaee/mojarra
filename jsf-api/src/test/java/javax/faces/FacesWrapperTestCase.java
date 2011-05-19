@@ -180,7 +180,7 @@ public class FacesWrapperTestCase extends TestCase {
 
         ClassLoader cl = Thread.currentThread().getContextClassLoader();
         try {
-            URL res = cl.getResource("javax/faces/messages.properties");
+            URL res = cl.getResource("javax/faces/Messages.properties");
             File javaxFacesPackage = new File(res.getFile()).getParentFile();
             collectWrapperClasses(cl, JAVAX_FACES_PKG, javaxFacesPackage);
         } catch (Exception e) {
