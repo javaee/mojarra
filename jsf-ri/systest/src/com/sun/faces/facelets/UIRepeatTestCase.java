@@ -44,14 +44,14 @@ import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
 /**
  * Test cases for Facelets functionality
  */
-public class UIRepeatTestCase extends AbstractTestCase {
+public class UIRepeatTestCase extends HtmlUnitFacesTestCase {
 
 
     // --------------------------------------------------------------- Test Init
@@ -59,6 +59,12 @@ public class UIRepeatTestCase extends AbstractTestCase {
 
     public UIRepeatTestCase() {
         this("UIRepeatTestCase");
+
+        // this test is excluded because it won't pass in tomcat due to an issue with NumberConverter
+        addExclusion(Container.TOMCAT6, "testUIRepeatStateNotLostOnNonUIRepeatMessage");
+        addExclusion(Container.TOMCAT7, "testUIRepeatStateNotLostOnNonUIRepeatMessage");
+        addExclusion(Container.WLS_10_3_4_NO_CLUSTER, "testUIRepeatStateNotLostOnNonUIRepeatMessage");
+
     }
 
 

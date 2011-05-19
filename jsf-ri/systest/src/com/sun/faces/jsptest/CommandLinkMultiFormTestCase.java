@@ -38,7 +38,7 @@ package com.sun.faces.jsptest;
 
 
 import com.gargoylesoftware.htmlunit.html.*;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -49,7 +49,7 @@ import java.util.List;
  * <p>Test Case for JSP Interoperability.</p>
  */
 
-public class CommandLinkMultiFormTestCase extends AbstractTestCase {
+public class CommandLinkMultiFormTestCase extends HtmlUnitFacesTestCase {
 
     // ------------------------------------------------------------ Constructors
 
@@ -61,6 +61,7 @@ public class CommandLinkMultiFormTestCase extends AbstractTestCase {
      */
     public CommandLinkMultiFormTestCase(String name) {
         super(name);
+        addExclusion(Container.WLS_10_3_4_NO_CLUSTER, "testMultiForm");
     }
 
     // ------------------------------------------------------ Instance Variables

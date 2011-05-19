@@ -38,7 +38,7 @@ package com.sun.faces.composite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import com.gargoylesoftware.htmlunit.html.*;
 
 import java.util.List;
@@ -47,7 +47,7 @@ import java.util.ArrayList;
 /**
  * Unit tests for Composite Components.
  */
-public class CompositeComponentsTestCase extends AbstractTestCase {
+public class CompositeComponentsTestCase extends HtmlUnitFacesTestCase {
 
 
     @SuppressWarnings({"UnusedDeclaration"})
@@ -57,6 +57,12 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
 
     public CompositeComponentsTestCase(String name) {
         super(name);
+        addExclusion(Container.TOMCAT6, "testForNoNPE");
+        addExclusion(Container.TOMCAT7, "testForNoNPE");
+        addExclusion(Container.WLS_10_3_4_NO_CLUSTER, "testForNoNPE");
+        addExclusion(Container.TOMCAT6, "testMetadataCache");
+        addExclusion(Container.TOMCAT7, "testMetadataCache");
+        addExclusion(Container.WLS_10_3_4_NO_CLUSTER, "testMetadataCache");
     }
 
 

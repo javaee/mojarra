@@ -40,7 +40,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -51,7 +51,7 @@ import java.util.List;
  * <p>Test that invalid values don't cause valueChangeEvents to occur.</p>
  */
 
-public class ForEachTestCase extends AbstractTestCase {
+public class ForEachTestCase extends HtmlUnitFacesTestCase {
 
     // ------------------------------------------------------------ Constructors
 
@@ -63,6 +63,7 @@ public class ForEachTestCase extends AbstractTestCase {
      */
     public ForEachTestCase(String name) {
         super(name);
+        addExclusion(Container.WLS_10_3_4_NO_CLUSTER, "testForEachIssue714");
     }
 
     // ------------------------------------------------------ Instance Variables

@@ -36,15 +36,22 @@
 
 package com.sun.faces.component;
 
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-public class CompositeMetaDataTestCase extends AbstractTestCase {
+public class CompositeMetaDataTestCase extends HtmlUnitFacesTestCase {
 
     public CompositeMetaDataTestCase(String name) {
         super(name);
+        addExclusion(Container.TOMCAT6, "testPrefixMappedFaceletPage");
+        addExclusion(Container.TOMCAT7, "testPrefixMappedFaceletPage");
+        addExclusion(Container.WLS_10_3_4_NO_CLUSTER, "testPrefixMappedFaceletPage");
+        addExclusion(Container.TOMCAT6, "testExtensionMappedFaceletPage");
+        addExclusion(Container.TOMCAT7, "testExtensionMappedFaceletPage");
+        addExclusion(Container.WLS_10_3_4_NO_CLUSTER, "testExtensionMappedFaceletPage");
+
     }
 
 

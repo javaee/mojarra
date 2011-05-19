@@ -37,7 +37,7 @@
 package com.sun.faces.jsptest;
 
 import com.gargoylesoftware.htmlunit.html.*;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -50,7 +50,7 @@ import java.util.*;
  * </p>
  */
 
-public class IdRefTestCase extends AbstractTestCase {
+public class IdRefTestCase extends HtmlUnitFacesTestCase {
 
     // ------------------------------------------------------------
     // Constructors
@@ -62,6 +62,12 @@ public class IdRefTestCase extends AbstractTestCase {
      */
     public IdRefTestCase(String name) {
         super(name);
+        addExclusion(Container.TOMCAT6, "testIdRefs");
+        addExclusion(Container.TOMCAT7, "testIdRefs");
+        addExclusion(Container.WLS_10_3_4_NO_CLUSTER, "testIdRefs");
+        addExclusion(Container.TOMCAT6, "testIncludedLoopIdRefs");
+        addExclusion(Container.TOMCAT7, "testIncludedLoopIdRefs");
+        addExclusion(Container.WLS_10_3_4_NO_CLUSTER, "testIncludedLoopIdRefs");
     }
 
     // ----------------------------------------------------
