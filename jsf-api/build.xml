@@ -417,6 +417,7 @@
                 copy.template.sources,
                 test.FactoryFinder,
                 test.FactoryFinder2,
+                test.FacesWrapper,
                 test.PhaseId,
                 test.application,
                 test.component,
@@ -454,6 +455,18 @@
         </jsf.junit>
     </target>   
 
+    <target name="test.FacesWrapper" depends="build.test.dir">
+        <echo message="Running FacesWrapper tests ..."/>
+        <jsf.junit test-results-dir="${api.test.results.dir}"
+                   classpath-refid="test.classpath"
+                   assert.classes="${assertion.classes}">
+            <tests>
+                <fileset dir="${build.test.dir}"
+                         includes="javax/faces/FacesWrapperTestCase.class"/>
+            </tests>
+        </jsf.junit>
+    </target>   
+            	
     <target name="test.PhaseId" depends="build.test.dir">
         <echo message="Running PhaseId tests ..."/>
         <jsf.junit test-results-dir="${api.test.results.dir}"

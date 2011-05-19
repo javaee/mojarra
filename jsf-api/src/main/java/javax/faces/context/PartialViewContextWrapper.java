@@ -46,7 +46,8 @@ import javax.faces.FacesWrapper;
 import javax.faces.event.PhaseId;
 
 /**
- * <p>Provides a simple implementation of {@link PartialViewContext} that can
+ * <p class="changed_added_2_0"><span class="changed_modified_2_2">Provides</span> 
+ * a simple implementation of {@link PartialViewContext} that can
  * be subclassed by developers wishing to provide specialized behavior
  * to an existing {@link PartialViewContext} instance.  The default
  * implementation of all methods is to call through to the wrapped
@@ -106,6 +107,18 @@ public abstract class PartialViewContextWrapper extends PartialViewContext imple
         return getWrapped().getPartialResponseWriter();
     }
 
+    /**
+     * <p class="changed_added_2_2">The default behavior of this method is to
+     * call {@link PartialViewContext#setPartialRequest(boolean)}
+     * on the wrapped {@link PartialViewContext} object.</p>
+     *
+     * @see PartialViewContext#setPartialRequest(boolean)
+     */
+    @Override
+    public void setPartialRequest(boolean isPartialRequest) {
+        getWrapped().setPartialRequest(isPartialRequest);
+    }
+    
      /**
      * <p>The default behavior of this method is to
      * call {@link PartialViewContext#isAjaxRequest()}

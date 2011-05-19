@@ -53,8 +53,8 @@ import java.security.Principal;
 import javax.faces.FacesWrapper;
 
 /**
- * <p class="changed_added_2_0">Provides a simple implementation of 
- * {@link ExternalContext} that can
+ * <p class="changed_added_2_0"><span class="changed_modified_2_2">Provides</span>
+ * a simple implementation of {@link ExternalContext} that can
  * be subclassed by developers wishing to provide specialized behavior
  * to an existing {@link ExternalContext} instance.  The default
  * implementation of all methods is to call through to the wrapped
@@ -115,6 +115,13 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
         return getWrapped().encodeNamespace(name);
     }
 
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link ExternalContext#encodePartialActionURL(String)}
+     * on the wrapped {@link ExternalContext} object.</p>
+     *
+     * @see javax.faces.context.ExternalContext#encodePartialActionURL(String)
+     */
     @Override
     public String encodePartialActionURL(String url) {
         return getWrapped().encodePartialActionURL(url);
@@ -398,13 +405,37 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
 
     /**
      * <p>The default behavior of this method is to
-     * call {@link ExternalContext#getAuthType}
+     * call {@link ExternalContext#getSessionMap()}
      * on the wrapped {@link ExternalContext} object.</p>
      *
-     * @see javax.faces.context.ExternalContext#getAuthType()
+     * @see javax.faces.context.ExternalContext#getSessionMap()
      */
     public Map<String, Object> getSessionMap() {
         return getWrapped().getSessionMap();
+    }
+    
+    /**
+     * <p class="changed_added_2_2">The default behavior of this method is to
+     * call {@link ExternalContext#getSessionMaxInactiveInterval()}
+     * on the wrapped {@link ExternalContext} object.</p>
+     *
+     * @see javax.faces.context.ExternalContext#getSessionMaxInactiveInterval()
+     */
+    @Override
+    public int getSessionMaxInactiveInterval() {
+        return getWrapped().getSessionMaxInactiveInterval();
+    }
+    
+    /**
+     * <p class="changed_added_2_2">The default behavior of this method is to
+     * call {@link ExternalContext#setSessionMaxInactiveInterval(int)}
+     * on the wrapped {@link ExternalContext} object.</p>
+     *
+     * @see javax.faces.context.ExternalContext#setSessionMaxInactiveInterval(int)
+     */
+    @Override
+    public void setSessionMaxInactiveInterval(int interval) {
+        getWrapped().setSessionMaxInactiveInterval(interval);
     }
 
     /**
@@ -763,6 +794,18 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
     @Override
     public boolean isResponseCommitted() {
         return getWrapped().isResponseCommitted();
+    }
+    
+    /**
+     * <p class="changed_added_2_2">The default behavior of this method is to
+     * call {@link ExternalContext#isSecure()}
+     * on the wrapped {@link ExternalContext} object.</p>
+     *
+     * @see javax.faces.context.ExternalContext#isSecure())
+     */
+    @Override
+    public boolean isSecure() {
+        return getWrapped().isSecure();
     }
 
     /**
