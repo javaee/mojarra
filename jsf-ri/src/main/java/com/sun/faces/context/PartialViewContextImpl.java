@@ -241,8 +241,8 @@ import com.sun.faces.util.Util;
             // or there were no execute phase client ids.
 
             if (executeIds == null || executeIds.isEmpty()) {
-                if (LOGGER.isLoggable(Level.INFO)) {
-                    LOGGER.log(Level.INFO,
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.log(Level.FINE,
                         "No execute and render identifiers specified.  Skipping component processing.");
                 }
                 return;
