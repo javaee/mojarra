@@ -120,6 +120,24 @@ public class DataTableTestCase extends HtmlUnitFacesTestCase {
 
     }
 
+    // For Issue 2066: Assert rowHeader attribute has been rendered correctly.
+
+    public void testRowsWithRowHeader() throws Exception {
+        HtmlPage page = getPage("/faces/standard/dtablerowclasses.jsp");
+        assertNotNull(page);
+        List<HtmlTable> tableList = new ArrayList<HtmlTable>(1);
+        getAllElementsOfGivenClass(page, tableList, HtmlTable.class);
+        assertTrue(tableList.size() == 1);
+        HtmlTable table = tableList.get(0);
+        List<HtmlTableRow> rows = table.getRows();
+        for (int i = 0, len = rows.size(); i < len; i++) {
+            HtmlTableRow row = rows.get(i);
+            for (final HtmlTableCell cell : row.getCells()) {
+                assertEquals("row", cell.getAttribute("scope"));
+            }
+        }
+    }
+
     public void testTablesWithEmptyBody() throws Exception {
 
         HtmlPage page = getPage("/faces/standard/dtablewithemptybody.jsp");

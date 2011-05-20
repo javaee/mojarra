@@ -75,7 +75,7 @@
     <h:dataTable value="#{requestScope.list}"
                  var="row"
                  rowClasses="b1,b2">
-        <h:column>
+        <h:column rowHeader="true">
             <h:outputText value="#{row[0]}"/>
         </h:column>
     </h:dataTable>
