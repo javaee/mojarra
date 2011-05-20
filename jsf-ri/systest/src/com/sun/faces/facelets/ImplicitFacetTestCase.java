@@ -155,4 +155,13 @@ public class ImplicitFacetTestCase extends HtmlUnitFacesTestCase {
 
     }
 
+    /*
+     * Added for Issue 2066
+     * Tests h:column "rowHeader" tag attribute.
+     */
+    public void testColumnRowHeader() throws Exception {
+         HtmlPage page = getPage("/faces/facelets/issue1726.xhtml");
+         String xml = page.asXml();
+         assertTrue(xml.contains("<th scope=\"row\">"));
+    }
 }

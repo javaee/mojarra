@@ -358,7 +358,11 @@ public class TableRenderer extends BaseTableRenderer {
         for (UIColumn column : info.columns) {
 
             // Render the beginning of this cell
-            boolean isRowHeader = Boolean.TRUE.equals(column.getAttributes().get("rowHeader"));
+            boolean isRowHeader = false;
+            Object rowHeaderValue = column.getAttributes().get("rowHeader");
+            if (null != rowHeaderValue ) {
+                isRowHeader = Boolean.valueOf(rowHeaderValue.toString());
+            }
             if (isRowHeader) {
                 writer.startElement("th", column);
                 writer.writeAttribute("scope", "row", null);
