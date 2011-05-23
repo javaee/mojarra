@@ -80,7 +80,7 @@ public class WebConfiguration {
 
     // A Simple regular expression of allowable boolean values
     private static final Pattern ALLOWABLE_BOOLEANS =
-          Pattern.compile("true|false");
+          Pattern.compile("true|false", Pattern.CASE_INSENSITIVE);
 
     // Key under which we store our WebConfiguration instance.
     private static final String WEB_CONFIG_KEY =
