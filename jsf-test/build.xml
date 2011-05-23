@@ -63,7 +63,7 @@
                      GLASSFISH-15985,
                      JAVASERVERFACES-1856" />
 
-    <property name="container-agnostic-applications" value="" />
+    <property name="container-agnostic-applications" value="JAVASERVERFACES-2067" />
 
     <target name="main" depends="define.applications"
             description="">
