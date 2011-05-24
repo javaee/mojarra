@@ -63,7 +63,9 @@
                      GLASSFISH-15985,
                      JAVASERVERFACES-1856" />
 
-    <property name="container-agnostic-applications" value="JAVASERVERFACES-2067" />
+    <property name="container-agnostic-applications" 
+            value= "JAVASERVERFACES-2067,
+                    JAVASERVERFACES-2074" />
 
     <target name="main" depends="define.applications"
             description="">
@@ -71,8 +73,8 @@
         <antcall target="remove" />
         <for list="${applications}" param="app" trim="true">
             <sequential>
-              <echo message="Descending into ${basedir}/@{app} and executing target build" />
-              <ant dir="@{app}" inheritAll="true" inheritRefs="true" target="build" />
+                <echo message="Descending into ${basedir}/@{app} and executing target build" />
+                <ant dir="@{app}" inheritAll="true" inheritRefs="true" target="build" />
             </sequential>
         </for>
     </target>    
@@ -83,8 +85,8 @@
 
         <for list="${applications}" param="app" trim="true">
             <sequential>
-              <echo message="Descending into ${basedir}/@{app} and executing target clean" />
-              <ant dir="@{app}" inheritAll="true" inheritRefs="true" target="clean" />
+                <echo message="Descending into ${basedir}/@{app} and executing target clean" />
+                <ant dir="@{app}" inheritAll="true" inheritRefs="true" target="clean" />
             </sequential>
         </for>
 
@@ -95,8 +97,8 @@
             description="">
         <for list="${applications}" param="app" trim="true">
             <sequential>
-              <echo message="Descending into ${basedir}/@{app} and executing target install" />
-              <ant dir="@{app}" inheritAll="true" inheritRefs="true" target="install" />
+                <echo message="Descending into ${basedir}/@{app} and executing target install" />
+                <ant dir="@{app}" inheritAll="true" inheritRefs="true" target="install" />
             </sequential>
         </for>
     </target>    
@@ -105,8 +107,8 @@
             description="">
         <for list="${applications}" param="app" trim="true">
             <sequential>
-              <echo message="Descending into ${basedir}/@{app} and executing target remove" />
-              <ant dir="@{app}" inheritAll="true" inheritRefs="true" target="remove" />
+                <echo message="Descending into ${basedir}/@{app} and executing target remove" />
+                <ant dir="@{app}" inheritAll="true" inheritRefs="true" target="remove" />
             </sequential>
         </for>
     </target>
@@ -116,8 +118,8 @@
         <antcall target="install" />
         <for list="${applications}" param="app" trim="true">
             <sequential>
-              <echo message="Descending into ${basedir}/@{app} and executing target test" />
-              <ant dir="@{app}" inheritAll="true" inheritRefs="true" target="test" />
+                <echo message="Descending into ${basedir}/@{app} and executing target test" />
+                <ant dir="@{app}" inheritAll="true" inheritRefs="true" target="test" />
             </sequential>
         </for>
         <antcall target="remove" />
