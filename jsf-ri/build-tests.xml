@@ -147,6 +147,9 @@
             Compile unit tests
     -->
     <target name="compile.test" depends="prepare.test">
+      <antcall inheritall="true" target="do.compile.test" />
+    </target>
+    <target name="do.compile.test">
         <mkdir dir="${out.test.dir}/classes/com/sun/faces/application"/>
         <filter token="package" value="com.sun.faces.application"/>
         <filter token="protection" value="public"/>
