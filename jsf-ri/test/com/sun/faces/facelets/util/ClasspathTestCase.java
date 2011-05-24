@@ -57,6 +57,9 @@ public class ClasspathTestCase extends TestCase {
         JarFile output = Classpath.getAlternativeJarFile(input);
         assertNull(output);
         
+        input = "/scratch/ejburns/Documents/JavaEE/workareas/i_mojarra_1869/jsf-test/JAVASERVERFACES-1869/reproducer/FileAdapter.rar!fileAdapter.jar!/META-INF/";
+        output = Classpath.getAlternativeJarFile(input);
+       assertNull(output);
     }
     
     
