@@ -2050,7 +2050,15 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 }
                 sendEvent(request, context, "success");
 
+            },
+
+            /**
+             * Test function for testing private deleteNode function.
+             */
+            testDeleteNode: function testDeleteNode(element) {
+                deleteNode(element);
             }
+
         };
     }();
 
