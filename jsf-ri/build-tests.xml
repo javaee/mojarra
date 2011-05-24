@@ -496,6 +496,8 @@
                       name="com.sun.faces.renderkit.html_basic.HtmlResponseWriterTest"/>
                  <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.xml.ParseXMLTestCase"/>
+                 <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.facelets.util.ClasspathTestCase"/>
 
             </suite>    
         </jsf.junit>
@@ -558,25 +560,14 @@
 
     <target name="passthru" depends="define.scenario.aware.port">
 
-       <antcall target="undeploy"/>
-       <antcall target="deploy"/>
-
-        <jsf.junit classpath-refid="test.runtime.classpath"
-                   test-results-dir="${impl.test.results.dir}"
-                   explodedWarDir="${basedir}/build/target/test"
+      <jsf.junit classpath-refid="test.runtime.classpath"
+                   test-results-dir="${impl.test.results.dir}" assert.classes="-ea:com.sun.faces.el.ChainAwareVariableResolver"
                    custom.port="${scenario.aware.port}">
-            <custom-sysproperties>
-                <sysproperty key="cactus.contextURL"
-                             value="http://${container.host}:${scenario.aware.port}/test"/>
-            </custom-sysproperties>
             <suite>
-                <test todir="${impl.test.results.dir}"
-                      name="com.sun.faces.config.ConfigureListenerTestCase"/>
-            </suite>
-
-        </jsf.junit>       
-
-       
+                 <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.facelets.util.ClasspathTestCase"/>
+            </suite>    
+        </jsf.junit>
     </target>
 
 </project>

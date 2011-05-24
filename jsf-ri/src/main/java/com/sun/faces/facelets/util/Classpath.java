@@ -80,6 +80,18 @@ import java.util.zip.ZipInputStream;
  */
 public final class Classpath {
 
+    // discard any urls that begin with rar: and sar:
+    // or end with their counterparts
+    // as these should not be looked at for JSF related content.
+    private static final String [] PREFIXES_TO_EXCLUDE = {
+        "rar:",
+        "sar:"
+    };
+    private static final String [] EXTENSIONS_TO_EXCLUDE = {
+        ".rar",
+        ".sar"
+    };
+
     /**
      *
      */
@@ -209,7 +221,13 @@ public final class Classpath {
             prefix = join(split, true);
             String end = join(split, false);
             int p = urlString.lastIndexOf(end);
-            url = new URL(urlString.substring(0, p));
+            urlString = urlString.substring(0, p);
+            for (String cur : PREFIXES_TO_EXCLUDE) {
+                if (urlString.startsWith(cur)) {
+                    return;
+                }
+            }
+            url = new URL(urlString);
             searchFromURL(result, prefix, suffix, url);
         }
     }
@@ -254,12 +272,24 @@ public final class Classpath {
      */
     private static JarFile getAlternativeJarFile(URL url) throws IOException {
         String urlFile = url.getFile();
+        return getAlternativeJarFile(urlFile);
+    }
+    
+    static JarFile getAlternativeJarFile(String urlFile) throws IOException {
+        JarFile result = null;
         // Trim off any suffix - which is prefixed by "!/" on Weblogic
-        int separatorIndex = urlFile.indexOf("!/");
-
-        // OK, didn't find that. Try the less safe "!", used on OC4J
-        if (separatorIndex == -1) {
-            separatorIndex = urlFile.indexOf('!');
+        int bangSlash = urlFile.indexOf("!/");
+        // Try the less safe "!", used on OC4J
+        int bang = urlFile.indexOf('!');
+        int separatorIndex = -1;
+        
+        // if either are found, take the first one.
+        if (-1 != bangSlash || -1 != bang) {
+            if (bangSlash < bang) {
+                separatorIndex = bangSlash;
+            } else {
+                separatorIndex = bang;
+            }
         }
 
         if (separatorIndex != -1) {
@@ -269,7 +299,19 @@ public final class Classpath {
                 jarFileUrl = jarFileUrl.substring("file:".length());
                 jarFileUrl = URLDecoder.decode(jarFileUrl, "UTF-8");
             }
-            return new JarFile(jarFileUrl);
+            boolean foundExclusion = false;
+            for (int i = 0; i < PREFIXES_TO_EXCLUDE.length; i++) {
+                if (jarFileUrl.startsWith(PREFIXES_TO_EXCLUDE[i]) ||
+                    jarFileUrl.endsWith(EXTENSIONS_TO_EXCLUDE[i])) {
+                    foundExclusion = true;
+                    break;
+                }
+            }
+            if (!foundExclusion) {
+                result = new JarFile(jarFileUrl);
+            }
+
+            return result;
         }
         return null;
     }
