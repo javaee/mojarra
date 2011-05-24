@@ -59,7 +59,9 @@
     <property name="applications-for-V3.1_no_cluster-only"
               value="" />
 
-    <property name="container-agnostic-applications" value="JAVASERVERFACES-1856" />
+    <property name="container-agnostic-applications" 
+              value="JAVASERVERFACES-1856,
+                     JAVASERVERFACES-2074" />
 
     <target name="main" depends="define.applications"
             description="">
