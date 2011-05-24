@@ -68,8 +68,10 @@ public class IdRefTestCase extends HtmlUnitFacesTestCase {
         super(name);
         addExclusion(Container.TOMCAT6, "testIdRefs");
         addExclusion(Container.TOMCAT7, "testIdRefs");
+        addExclusion(Container.WLS_10_3_4_NO_CLUSTER, "testIdRefs");
         addExclusion(Container.TOMCAT6, "testIncludedLoopIdRefs");
         addExclusion(Container.TOMCAT7, "testIncludedLoopIdRefs");
+        addExclusion(Container.WLS_10_3_4_NO_CLUSTER, "testIncludedLoopIdRefs");
     }
 
     // ----------------------------------------------------

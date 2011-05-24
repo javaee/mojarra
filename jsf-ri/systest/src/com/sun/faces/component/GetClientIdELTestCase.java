@@ -52,6 +52,7 @@ public class GetClientIdELTestCase extends HtmlUnitFacesTestCase {
         super(name);
         addExclusion(Container.TOMCAT6, "testELClientIdWithOnlyGeneratedIds");
         addExclusion(Container.TOMCAT7, "testELClientIdWithOnlyGeneratedIds");
+        addExclusion(Container.WLS_10_3_4_NO_CLUSTER, "testELClientIdWithOnlyGeneratedIds");
     }
 
 

@@ -71,6 +71,7 @@ public class ForEachTestCase extends HtmlUnitFacesTestCase {
         // TODO this test would actually work if the client IDs were adapted for execution on tomcat
         addExclusion(Container.TOMCAT6, "testForEachIssue714");
         addExclusion(Container.TOMCAT7, "testForEachIssue714");
+        addExclusion(Container.WLS_10_3_4_NO_CLUSTER, "testForEachIssue714");
     }
 
     // ------------------------------------------------------ Instance Variables

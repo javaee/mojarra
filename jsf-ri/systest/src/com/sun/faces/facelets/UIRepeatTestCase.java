@@ -67,6 +67,7 @@ public class UIRepeatTestCase extends HtmlUnitFacesTestCase {
         // this test is excluded because it won't pass in tomcat due to an issue with NumberConverter
         addExclusion(Container.TOMCAT6, "testUIRepeatStateNotLostOnNonUIRepeatMessage");
         addExclusion(Container.TOMCAT7, "testUIRepeatStateNotLostOnNonUIRepeatMessage");
+        addExclusion(Container.WLS_10_3_4_NO_CLUSTER, "testUIRepeatStateNotLostOnNonUIRepeatMessage");
 
     }
 
