@@ -83,7 +83,7 @@
     <property name="yuicompressor.version" value="2.4.2"/>
 
     <property name="central.maven2" value="http://repo1.maven.org/maven2" />
-    <property name="redhat.maven2" value="http://repository.jboss.org/maven2"/>
+    <property name="redhat.maven2" value="https://repository.jboss.org/nexus/content/repositories/thirdparty-releases"/>
     <!--<property name="maven2.mirror" value="http://mirrors.ibiblio.org/pub/mirrors/maven2"/>-->
     <property name="maven2.mirror" value="http://repo.exist.com/maven2/"/>
     <property name="java.net.maven" value="http://download.java.net/maven/1"/>
