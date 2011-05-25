@@ -120,10 +120,10 @@
                 test.misc,
                 test.regressions,
                 test.view.xml,
-                test.projectstage"
+                test.projectstage,
+                test.http.method.protection"
             />
             <!--
-                test.http.method.protection,
                 test.groovy"
             -->
     <!-- Special double converter test that addresses java jre issue outlined here:
@@ -1234,7 +1234,7 @@
     </target>
 
     <target name="passthru" depends="define.scenario.aware.port">
-      <antcall target="test.composite" />
+      <antcall target="test.http.method.protection" />
  
     </target>
 

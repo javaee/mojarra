@@ -65,7 +65,8 @@
 
     <property name="container-agnostic-applications" 
             value= "JAVASERVERFACES-2067,
-                    JAVASERVERFACES-2074" />
+                    JAVASERVERFACES-2074,
+                    JAVASERVERFACES_SPEC_PUBLIC-915" />
 
     <target name="main" depends="define.applications"
             description="">
