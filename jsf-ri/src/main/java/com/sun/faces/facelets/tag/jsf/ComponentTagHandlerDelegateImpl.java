@@ -178,10 +178,6 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         if (c instanceof NamingContainer) {
             oldUnique = ComponentSupport.setNeedUniqueIds(ctx, false);
             setUniqueIds = true;
-            if (createCompositeComponentDelegate != null &&
-                UIComponent.isCompositeComponent(c)) {
-                createCompositeComponentDelegate.setCompositeComponent(c);
-	    }
         }
         try {
             // first allow c to get populated
@@ -558,7 +554,6 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
     interface CreateComponentDelegate {
 
         public UIComponent createComponent(FaceletContext ctx);
-        public void setCompositeComponent(UIComponent cc);
         
     }
 
