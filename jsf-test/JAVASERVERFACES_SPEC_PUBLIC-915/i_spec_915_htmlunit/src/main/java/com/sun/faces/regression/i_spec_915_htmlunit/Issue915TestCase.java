@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -38,7 +38,8 @@
  * holder.
  */
 
-package com.sun.faces.systest.http;
+package com.sun.faces.regression.i_spec_915_htmlunit;
+
 
 import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import java.io.BufferedReader;
@@ -52,70 +53,35 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 
+public class Issue915TestCase extends HtmlUnitFacesTestCase {
 
- public class HttpMethodTestCase extends HtmlUnitFacesTestCase {
-
-
-    public HttpMethodTestCase(String name) {
+    public Issue915TestCase(String name) {
         super(name);
     }
 
+
+    /**
+     * Return the tests included in this test suite.
+     */
     public static Test suite() {
-        return (new TestSuite(HttpMethodTestCase.class));
+        return (new TestSuite(Issue915TestCase.class));
     }
-    
-    static final String interweaving = "/faces/interweaving01.jsp";
-    static final String interweavingRegEx = "(?s).*Begin\\s*test\\s*jsp include without verbatim\\s*interweaving\\s*works\\s*well!!\\s*End\\s*test\\s*jsp include without verbatim.*";
-    
-    static final String repeat = "/faces/facelets/uirepeat.xhtml";
-    static final String repeatRegEx = "(?s).*ListFlavor is chocolate.*";
 
-    public void testPositive() throws Exception {
+    static final String requestUri = "/";
+
+    // ------------------------------------------------------------ Test Methods
+
+    public void testOptionsHasBody() throws Exception {
         int [] rc = new int[1];
-        // Ensure the GET request works as expected
-        assertTrue(issueHttpRequest("GET", rc, interweaving).matches(interweavingRegEx));
-        assertEquals(HttpURLConnection.HTTP_OK, rc[0]);
-
-        // Ensure the POST request works as expected
-        assertTrue(issueHttpRequest("POST", rc, interweaving).matches(interweavingRegEx));
-        assertEquals(HttpURLConnection.HTTP_OK, rc[0]);
-
-        // Ensure the PUT request works as expected
-        assertTrue(issueHttpRequest("PUT", rc, repeat).matches(repeatRegEx));
-        assertEquals(HttpURLConnection.HTTP_OK, rc[0]);
-
-        // Ensure the DELETE request works as expected
-        assertTrue(issueHttpRequest("DELETE", rc, repeat).matches(repeatRegEx));
-        assertEquals(HttpURLConnection.HTTP_OK, rc[0]);
-
-        // Ensure the HEAD request works as expected
-        String result = issueHttpRequest("HEAD", rc, repeat);
-        String [] tokens = result.split("\\s\\s");        
-        assertTrue(1 == tokens.length);
-        assertEquals(HttpURLConnection.HTTP_OK, rc[0]);
-
+        
         // Ensure the OPTIONS  request works as expected
-        result = issueHttpRequest("OPTIONS", rc, repeat);
-        tokens = result.split("\\s\\s");        
-        assertTrue(1 == tokens.length);
-        assertEquals(HttpURLConnection.HTTP_OK, rc[0]);
-
-        // Ensure the GETBOGUSALLOWED request *does* work, because
-        // we configured it in web.xml
-        assertTrue(issueHttpRequest("GETBOGUSALLOWED", rc, repeat).matches(repeatRegEx));
+        String result = issueHttpRequest("OPTIONS", rc, requestUri);
+        String [] tokens = result.split("\\s\\s");        
+        assertTrue(1 < tokens.length);
         assertEquals(HttpURLConnection.HTTP_OK, rc[0]);
 
     }
 
-     public void testNegative() throws Exception {
-        int [] rc = new int[1];
-
-        // Ensure the GET22 request does not work
-        assertFalse("Bogus HTTP method was accepted by server.  Fail.",
-                issueHttpRequest("GET22", rc, interweaving).matches(interweavingRegEx));
-        assertFalse("Bogus HTTP method returned HTTP_OK status.  Fail.", HttpURLConnection.HTTP_OK == rc[0]);
-     }
-    
     private String issueHttpRequest(String methodName, int [] rc, String path) throws Exception {
 
         URL url = getURL(path);
@@ -145,6 +111,5 @@ import junit.framework.TestSuite;
         
         return builder.toString();
     }
-
 
 }

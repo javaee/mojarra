@@ -42,9 +42,12 @@ package javax.faces.webapp;
 
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.Set;
+import java.util.HashSet;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -153,6 +156,18 @@ import javax.servlet.http.HttpServletResponse;
 
 public final class FacesServlet implements Servlet {
 
+    /*
+     * A white space separated list of case sensitive HTTP method names
+     * that are allowed to be processed by this servlet. * means allow all
+     */
+    private static final String ALLOWED_HTTP_METHODS_ATTR =
+            "com.sun.faces.allowedHttpMethods";
+    
+    private Set<String> allowedHttpMethods;
+    private Set<String> defaultAllowedHttpMethods;
+    private Set<String> allHttpMethods;
+
+    private boolean allowAllMethods;
 
     /**
      * <p>Context initialization parameter name for a comma delimited list
@@ -211,6 +226,7 @@ public final class FacesServlet implements Servlet {
         facesContextFactory = null;
         lifecycle = null;
         servletConfig = null;
+        uninitHttpMethodValidityVerification();
 
     }
 
@@ -278,6 +294,7 @@ public final class FacesServlet implements Servlet {
                 lifecycleId = LifecycleFactory.DEFAULT_LIFECYCLE;
             }
             lifecycle = lifecycleFactory.getLifecycle(lifecycleId);
+            initHttpMethodValidityVerification();
         } catch (FacesException e) {
             Throwable rootCause = e.getCause();
             if (rootCause == null) {
@@ -286,6 +303,55 @@ public final class FacesServlet implements Servlet {
                 throw new ServletException(e.getMessage(), rootCause);
             }
         }
+
+    }
+
+    private void initHttpMethodValidityVerification() {
+
+        assert (null == allowedHttpMethods);
+        assert (null == defaultAllowedHttpMethods);
+        assert (null == allHttpMethods);
+        // Http method names must be upper case. http://www.w3.org/Protocols/HTTP/NoteMethodCS.html
+        // List of valid methods in Http 1.1 http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9
+        allHttpMethods = new HashSet(Arrays.asList("OPTIONS", "GET", "HEAD", "POST",
+                "PUT", "DELETE", "TRACE", "CONNECT"));
+        defaultAllowedHttpMethods = new HashSet(allHttpMethods);
+        allHttpMethods.add("*");
+
+        // Configure our permitted HTTP methods
+        String[] methods = {};
+        String allowedHttpMethodsString = servletConfig.getServletContext().getInitParameter(ALLOWED_HTTP_METHODS_ATTR);
+        if (null != allowedHttpMethodsString) {
+            methods = allowedHttpMethodsString.split("\\s");
+            assert (null != methods); // assuming split always returns a non-null array result
+            // validate input against allHttpMethods data structure
+            String allMethodsString = allHttpMethods.toString();
+            for (String cur : methods) {
+                if (!allHttpMethods.contains(cur)) {
+                    if (LOGGER.isLoggable(Level.WARNING)) {
+                        LOGGER.log(Level.WARNING,
+                                "warning.webapp.facesservlet.init_invalid_http_method",
+                                new Object[]{cur, allMethodsString});
+                    }
+                }
+            }
+        }
+        allowedHttpMethods = (0 < methods.length) ? new HashSet(Arrays.asList(methods)) : defaultAllowedHttpMethods;
+        allowAllMethods = allowedHttpMethods.contains("*");
+
+    }
+
+    private void uninitHttpMethodValidityVerification() {
+        assert (null != allowedHttpMethods);
+        assert (null != defaultAllowedHttpMethods);
+        assert (null != allHttpMethods);
+
+        allowedHttpMethods.clear();
+        allowedHttpMethods = null;
+        defaultAllowedHttpMethods.clear();
+        defaultAllowedHttpMethods = null;
+        allHttpMethods.clear();
+        allHttpMethods = null;
 
     }
 
@@ -366,11 +432,18 @@ public final class FacesServlet implements Servlet {
      * @throws ServletException if a servlet error occurs during processing
 
      */
-    public void service(ServletRequest request,
-                        ServletResponse response)
+    public void service(ServletRequest req,
+                        ServletResponse resp)
         throws IOException, ServletException {
+        HttpServletRequest request = (HttpServletRequest) req;
+        HttpServletResponse response = (HttpServletResponse) resp;
 
-        requestStart(((HttpServletRequest) request).getRequestURI()); // V3 Probe hook
+        requestStart(request.getRequestURI()); // V3 Probe hook
+        
+        if (!isHttpMethodValid(request)) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
         if (Thread.currentThread().isInterrupted()) {
             if (LOGGER.isLoggable(Level.FINER)) {
                 LOGGER.log(Level.FINE, "Thread {0} given to FacesServlet.service() in interrupted state", 
@@ -380,15 +453,14 @@ public final class FacesServlet implements Servlet {
 
         // If prefix mapped, then ensure requests for /WEB-INF are
         // not processed.
-        String pathInfo = ((HttpServletRequest) request).getPathInfo();
+        String pathInfo = request.getPathInfo();
         if (pathInfo != null) {
             pathInfo = pathInfo.toUpperCase();
             if (pathInfo.startsWith("/WEB-INF/")
                 || pathInfo.equals("/WEB-INF")
                 || pathInfo.startsWith("/META-INF/")
                 || pathInfo.equals("/META-INF")) {
-                ((HttpServletResponse) response).
-                      sendError(HttpServletResponse.SC_NOT_FOUND);
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 return;
             }
         }
@@ -435,6 +507,12 @@ public final class FacesServlet implements Servlet {
         }
 
         requestEnd(); // V3 Probe hook
+    }
+
+    private boolean isHttpMethodValid(HttpServletRequest request) {
+        boolean result = allowAllMethods || allowedHttpMethods.contains(request.getMethod());
+
+        return result;
     }
 
 

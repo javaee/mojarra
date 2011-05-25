@@ -40,6 +40,7 @@
 
 package com.sun.faces.config;
 
+import com.sun.faces.lifecycle.HttpMethodRestrictionsPhaseListener;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Enumeration;
@@ -65,8 +66,13 @@ import com.sun.faces.util.Util;
 import java.util.Collections;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
+import javax.faces.FactoryFinder;
 import javax.faces.component.UIInput;
+import javax.faces.event.PhaseListener;
+import javax.faces.lifecycle.Lifecycle;
+import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.validator.BeanValidator;
 import javax.faces.view.facelets.ResourceResolver;
 
@@ -385,6 +391,33 @@ public class WebConfiguration {
                 loggingAction.log();
             }
         }
+
+        // add the HttpMethodRestrictionPhaseListener if the parameter is enabled.
+        boolean enabled = this.isOptionEnabled(BooleanWebContextInitParameter.EnableHttpMethodRestrictionPhaseListener);
+        if (enabled) {
+            LifecycleFactory factory = (LifecycleFactory) FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
+            Iterator<String> ids = factory.getLifecycleIds();
+            PhaseListener listener = null;
+            Lifecycle cur;
+
+            while (ids.hasNext()) {
+                cur = factory.getLifecycle(ids.next());
+                boolean foundExistingListenerInstance = false;
+                for (PhaseListener curListener : cur.getPhaseListeners()) {
+                    if (curListener instanceof HttpMethodRestrictionsPhaseListener) {
+                        foundExistingListenerInstance = true;
+                        break;
+                    }
+                }
+                if (!foundExistingListenerInstance) {
+                    if (null == listener) {
+                        listener = new HttpMethodRestrictionsPhaseListener();
+                    }
+                    cur.addPhaseListener(listener);
+                }
+            }
+        }
+
 
     }
 
@@ -1154,6 +1187,10 @@ public class WebConfiguration {
                 false),
         DateTimeConverterUsesSystemTimezone(
               "javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE",
+              false
+        ),
+        EnableHttpMethodRestrictionPhaseListener(
+              "com.sun.faces.ENABLE_HTTP_METHOD_RESTRICTION_PHASE_LISTENER",
               false
         ),
         FaceletsSkipComments(
