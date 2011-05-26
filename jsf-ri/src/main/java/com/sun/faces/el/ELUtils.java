@@ -235,23 +235,23 @@ public class ELUtils {
             throw new NullPointerException(message);
         }
 
-        composite.add(IMPLICIT_RESOLVER);
+        composite.addRootELResolver(IMPLICIT_RESOLVER);
         composite.add(FLASH_RESOLVER);
-        composite.add(COMPOSITE_COMPONENT_ATTRIBUTES_EL_RESOLVER);
+        composite.addPropertyELResolver(COMPOSITE_COMPONENT_ATTRIBUTES_EL_RESOLVER);
         addELResolvers(composite, associate.getELResolversFromFacesConfig());
         addVariableResolvers(composite, FacesCompositeELResolver.ELResolverChainType.Faces,
                 associate);
         addPropertyResolvers(composite, associate);
         composite.add(associate.getApplicationELResolvers());
-        composite.add(MANAGED_BEAN_RESOLVER);
-        composite.add(RESOURCE_RESOLVER);
-        composite.add(BUNDLE_RESOLVER);
-        composite.add(FACES_BUNDLE_RESOLVER);
-        composite.add(MAP_RESOLVER);
-        composite.add(LIST_RESOLVER);
-        composite.add(ARRAY_RESOLVER);
-        composite.add(BEAN_RESOLVER);
-        composite.add(SCOPED_RESOLVER);
+        composite.addRootELResolver(MANAGED_BEAN_RESOLVER);
+        composite.addPropertyELResolver(RESOURCE_RESOLVER);
+        composite.addPropertyELResolver(BUNDLE_RESOLVER);
+        composite.addRootELResolver(FACES_BUNDLE_RESOLVER);
+        composite.addPropertyELResolver(MAP_RESOLVER);
+        composite.addPropertyELResolver(LIST_RESOLVER);
+        composite.addPropertyELResolver(ARRAY_RESOLVER);
+        composite.addPropertyELResolver(BEAN_RESOLVER);
+        composite.addRootELResolver(SCOPED_RESOLVER);
 
     }
 
@@ -276,11 +276,11 @@ public class ELUtils {
             throw new NullPointerException(message);
         }
 
-        composite.add(IMPLICIT_JSP_RESOLVER);
+        composite.addRootELResolver(IMPLICIT_JSP_RESOLVER);
         composite.add(FLASH_RESOLVER);
-        composite.add(MANAGED_BEAN_RESOLVER);
-        composite.add(RESOURCE_RESOLVER);
-        composite.add(FACES_BUNDLE_RESOLVER);
+        composite.addRootELResolver(MANAGED_BEAN_RESOLVER);
+        composite.addPropertyELResolver(RESOURCE_RESOLVER);
+        composite.addRootELResolver(FACES_BUNDLE_RESOLVER);
         addELResolvers(composite, associate.getELResolversFromFacesConfig());
         addVariableResolvers(composite, FacesCompositeELResolver.ELResolverChainType.JSP,
 	                associate);
