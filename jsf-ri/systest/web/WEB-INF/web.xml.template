@@ -52,6 +52,11 @@
       <param-value>true</param-value>
     </context-param>
     <context-param>
+      <param-name>com.sun.faces.allowedHttpMethods</param-name>
+      <param-value>OPTIONS GET HEAD POST PUT DELETE TRACE CONNECT GETBOGUSALLOWED</param-value>
+    </context-param>
+
+    <context-param>
         <param-name>com.sun.faces.enableThreading</param-name>
         <param-value>true</param-value>
     </context-param>
@@ -61,6 +66,10 @@
     </context-param>
     <context-param>
         <param-name>com.sun.faces.enableHtmlTagLibValidator</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    <context-param>
+        <param-name>com.sun.faces.ENABLE_HTTP_METHOD_RESTRICTION_PHASE_LISTENER</param-name>
         <param-value>true</param-value>
     </context-param>
     <context-param>

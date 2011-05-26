@@ -62,9 +62,10 @@ public class CommandLinkMultiFormTestCase extends HtmlUnitFacesTestCase {
     public CommandLinkMultiFormTestCase(String name) {
         super(name);
         addExclusion(Container.WLS_10_3_4_NO_CLUSTER, "testMultiForm");
+        addExclusion(Container.WLS_10_3_4_NO_CLUSTER, "testMultiForm");
     }
 
-    // ------------------------------------------------------ Instance Variables
+    // ------------------------------------------------------ InstanceVariables
 
     // ---------------------------------------------------- Overall Test Methods
 

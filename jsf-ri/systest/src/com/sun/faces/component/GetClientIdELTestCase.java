@@ -47,6 +47,7 @@ public class GetClientIdELTestCase extends HtmlUnitFacesTestCase {
     public GetClientIdELTestCase(String name) {
         super(name);
         addExclusion(Container.WLS_10_3_4_NO_CLUSTER, "testELClientIdWithOnlyGeneratedIds");
+        addExclusion(Container.WLS_10_3_4_NO_CLUSTER, "testELClientIdWithOnlyGeneratedIds");
     }
 
 

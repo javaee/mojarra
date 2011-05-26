@@ -64,6 +64,7 @@ public class ForEachTestCase extends HtmlUnitFacesTestCase {
     public ForEachTestCase(String name) {
         super(name);
         addExclusion(Container.WLS_10_3_4_NO_CLUSTER, "testForEachIssue714");
+        addExclusion(Container.WLS_10_3_4_NO_CLUSTER, "testForEachIssue714");
     }
 
     // ------------------------------------------------------ Instance Variables

@@ -227,6 +227,18 @@
             depends="smoketest.with.container.refresh,generate.smoketest.reports" />
 
     <target name="generate.reports">
+<echo>
+
+If the generation fails due to this terrible hudson error: 
+
+[Fatal Error] TEST-_faces_META-INF.xml:313:1: Content is not allowed in trailing section.
+The file /home/ejburns/Documents/JavaEE/workareas/mojarra-MOJARRA_2_0X_ROLLING/jsf-ri/testresults/TEST-_faces_META-INF.xml is not a valid XML document. It is possibly corrupted.
+
+Do this and re-run the generate.reports target.
+
+find . -name "TEST*.xml" -exec perl -pi.bak -e "s/^>/ /g" {} \; -print
+
+</echo>
       <ant dir="jsf-ri" antfile="build.xml" target="generate.reports"/>
     </target>
 

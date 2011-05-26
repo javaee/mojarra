@@ -201,6 +201,10 @@
         <container.start/>
     </target>
 
+    <target name="container.debug">
+       <container.debug />
+    </target>
+
     <macrodef name="container.start"
             description="Start the GlassFish container">
         <sequential>
