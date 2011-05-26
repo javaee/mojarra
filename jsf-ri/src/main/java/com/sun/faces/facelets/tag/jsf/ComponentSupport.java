@@ -476,7 +476,7 @@ public final class ComponentSupport {
                 break;
             }
         }
-        if (!missingFormReported) {
+        if (!missingFormReported && null != m) {
             m.setSeverity(FacesMessage.SEVERITY_WARN);
             ctx.getFacesContext().addMessage(null, m);
         }
