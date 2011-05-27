@@ -67,7 +67,8 @@
             value= "JAVASERVERFACES-2067,
                     JAVASERVERFACES-2074,
                     JAVASERVERFACES_SPEC_PUBLIC-915,
-                    JAVASERVERFACES-2079" />
+                    JAVASERVERFACES-2079,
+                    JAVASERVERFACES-2065" />
 
     <target name="main" depends="define.applications"
             description="">
