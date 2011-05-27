@@ -189,6 +189,13 @@ public class RenderKitImpl extends RenderKit {
             
     }   
 
+    public Iterator<String> getClientBehaviorRendererTypes() {
+        if (null == behaviorRenderers) {
+            Set<String> empty = Collections.emptySet();
+            return empty.iterator();
+        }
+        return behaviorRenderers.keySet().iterator();
+    }
 
 
     public synchronized ResponseStateManager getResponseStateManager() {
