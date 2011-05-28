@@ -990,7 +990,7 @@ javax.faces.level=ALL
                    logging.config.file="${api.test.results.dir}/test-logging.properties">
             <tests>
                 <fileset dir="${build.test.dir}"
-                         includes="javax/faces/component/UIComponentBaseTestCase.class"/>
+                         includes="javax/faces/webapp/FacesServletTestCase.class"/>
             </tests>
         </jsf.junit>
     </target>
