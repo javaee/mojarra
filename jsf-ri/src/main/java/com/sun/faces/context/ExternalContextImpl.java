@@ -249,7 +249,11 @@ public class ExternalContextImpl extends ExternalContext {
         return applicationMap;
     }
 
-
+    @Override
+    public String getApplicationContextPath() {
+        return this.servletContext.getContextPath();
+    }
+    
     /**
      * @see javax.faces.context.ExternalContext#getSessionMap()
      */

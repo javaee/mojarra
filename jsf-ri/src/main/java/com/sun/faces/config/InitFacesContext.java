@@ -253,6 +253,11 @@ public class InitFacesContext extends FacesContext {
             return applicationMap;
         }
 
+        @Override
+        public String getApplicationContextPath() {
+            return servletContext.getContextPath();
+        }
+        
         public String getAuthType() {
             return null;
         }

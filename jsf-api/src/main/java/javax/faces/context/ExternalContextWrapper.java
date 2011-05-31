@@ -151,6 +151,20 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
     }
 
     /**
+     * <p class="changed_added_2_2">The default behavior of this method is to
+     * call {@link ExternalContext#getApplicationContextPath}
+     * on the wrapped {@link ExternalContext} object.</p>
+     *
+     * @see javax.faces.context.ExternalContext#getApplicationContextPath()
+     */
+    @Override
+    public String getApplicationContextPath() {
+        return getWrapped().getApplicationContextPath();
+    }
+    
+    
+
+    /**
      * <p>The default behavior of this method is to
      * call {@link ExternalContext#getAuthType}
      * on the wrapped {@link ExternalContext} object.</p>
