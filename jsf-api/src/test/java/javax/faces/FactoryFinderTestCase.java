@@ -41,10 +41,8 @@
 package javax.faces;
 
 
-import java.io.IOException;
-import java.io.File;
-import java.util.Iterator;
-import java.util.List;
+import javax.faces.context.FacesContext;
+import javax.faces.context.FacesContextFactory;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -172,6 +170,16 @@ public class FactoryFinderTestCase extends TestCase {
         assertTrue(exceptionThrown);
 
     }    
+    
+    
+    public void testNoFacesContext() throws Exception {
+        
+        assertNull(FacesContext.getCurrentInstance());
+        
+        Object result = FactoryFinder.getFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
+        assertNotNull(result);
+        assertTrue(result instanceof FacesContextFactory);
+    }
 
     /**
      * <p>In the absence of webapp faces-config.xml, verify that the
