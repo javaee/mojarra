@@ -42,12 +42,15 @@ package javax.faces.webapp;
 
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.List;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -163,9 +166,39 @@ public final class FacesServlet implements Servlet {
     private static final String ALLOWED_HTTP_METHODS_ATTR =
             "com.sun.faces.allowedHttpMethods";
     
-    private Set<String> allowedHttpMethods;
-    private Set<String> defaultAllowedHttpMethods;
-    private Set<String> allHttpMethods;
+    // Http method names must be upper case. http://www.w3.org/Protocols/HTTP/NoteMethodCS.html
+    // List of valid methods in Http 1.1 http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9
+
+    private enum HttpMethod {
+        
+        OPTIONS("OPTIONS"),
+        GET("GET"),
+        HEAD("HEAD"),
+        POST("POST"),
+        PUT("PUT"),
+        DELETE("DELETE"),
+        TRACE("TRACE"),
+        CONNECT("CONNECT");
+        
+        private String name;
+        
+        HttpMethod(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return name;
+        }
+        
+    }
+
+
+    private Set<String> allowedUnknownHttpMethods;
+    private Set<HttpMethod> allowedKnownHttpMethods;
+    final private Set<HttpMethod> defaultAllowedHttpMethods = 
+            EnumSet.range(HttpMethod.OPTIONS, HttpMethod.CONNECT);
+    private Set<HttpMethod> allHttpMethods;
 
     private boolean allowAllMethods;
 
@@ -216,7 +249,7 @@ public final class FacesServlet implements Servlet {
      * left over from startup time has been released.  
      */
     private boolean initFacesContextReleased = false;
-
+    
 
     /**
      * <p>Release all resources acquired at startup time.</p>
@@ -308,48 +341,121 @@ public final class FacesServlet implements Servlet {
 
     private void initHttpMethodValidityVerification() {
 
-        assert (null == allowedHttpMethods);
-        assert (null == defaultAllowedHttpMethods);
+        assert (null == allowedUnknownHttpMethods);
+        assert (null != defaultAllowedHttpMethods);
         assert (null == allHttpMethods);
-        // Http method names must be upper case. http://www.w3.org/Protocols/HTTP/NoteMethodCS.html
-        // List of valid methods in Http 1.1 http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9
-        allHttpMethods = new HashSet(Arrays.asList("OPTIONS", "GET", "HEAD", "POST",
-                "PUT", "DELETE", "TRACE", "CONNECT"));
-        defaultAllowedHttpMethods = new HashSet(allHttpMethods);
-        allHttpMethods.add("*");
+        allHttpMethods = EnumSet.allOf(HttpMethod.class);
 
         // Configure our permitted HTTP methods
+
+        allowedUnknownHttpMethods = Collections.emptySet();
+        allowedKnownHttpMethods = defaultAllowedHttpMethods;
+        
         String[] methods = {};
         String allowedHttpMethodsString = servletConfig.getServletContext().getInitParameter(ALLOWED_HTTP_METHODS_ATTR);
         if (null != allowedHttpMethodsString) {
-            methods = allowedHttpMethodsString.split("\\s");
+            methods = allowedHttpMethodsString.split("\\s+");
             assert (null != methods); // assuming split always returns a non-null array result
+            allowedUnknownHttpMethods = new HashSet(methods.length);
+            List<String> allowedKnownHttpMethodsStringList = new ArrayList<String>();
             // validate input against allHttpMethods data structure
-            String allMethodsString = allHttpMethods.toString();
             for (String cur : methods) {
-                if (!allHttpMethods.contains(cur)) {
+                if (cur.equals("*")) {
+                    allowAllMethods = true;
+                    allowedUnknownHttpMethods = Collections.emptySet();
+                    return;
+                }
+                boolean isKnownHttpMethod;
+                try {
+                    HttpMethod.valueOf(cur);
+                    isKnownHttpMethod = true;
+                } catch (IllegalArgumentException e) {
+                    isKnownHttpMethod = false;
+                }
+                
+                if (!isKnownHttpMethod) {
                     if (LOGGER.isLoggable(Level.WARNING)) {
+                        HttpMethod [] values = HttpMethod.values();
+                        Object [] arg = new Object[values.length + 1];
+                        arg[0] = cur;
+                        System.arraycopy(values, HttpMethod.OPTIONS.ordinal(), 
+                                         arg, 1, values.length);
                         LOGGER.log(Level.WARNING,
                                 "warning.webapp.facesservlet.init_invalid_http_method",
-                                new Object[]{cur, allMethodsString});
+                                arg);
+                    }
+                    // prevent duplicates
+                    if (!allowedUnknownHttpMethods.contains(cur)) {
+                        allowedUnknownHttpMethods.add(cur);
+                    }
+                } else {
+                    // prevent duplicates
+                    if (!allowedKnownHttpMethodsStringList.contains(cur)) {
+                        allowedKnownHttpMethodsStringList.add(cur);
                     }
                 }
             }
+            // Optimally initialize allowedKnownHttpMethods
+            if (5 == allowedKnownHttpMethodsStringList.size()) {
+                allowedKnownHttpMethods = EnumSet.of(
+                        HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(0)),
+                        HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(1)),
+                        HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(2)),
+                        HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(3)),
+                        HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(4))
+                        );
+            } else if (4 == allowedKnownHttpMethodsStringList.size()) {
+                allowedKnownHttpMethods = EnumSet.of(
+                        HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(0)),
+                        HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(1)),
+                        HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(2)),
+                        HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(3))
+                        );
+                
+            } else if (3 == allowedKnownHttpMethodsStringList.size()) {
+                allowedKnownHttpMethods = EnumSet.of(
+                        HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(0)),
+                        HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(1)),
+                        HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(2))
+                        );
+                
+            } else if (2 == allowedKnownHttpMethodsStringList.size()) {
+                allowedKnownHttpMethods = EnumSet.of(
+                        HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(0)),
+                        HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(1))
+                        );
+                
+            } else if (1 == allowedKnownHttpMethodsStringList.size()) {
+                allowedKnownHttpMethods = EnumSet.of(
+                        HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(0))
+                        );
+                
+            } else {
+                List<HttpMethod> restList = 
+                        new ArrayList<HttpMethod>(allowedKnownHttpMethodsStringList.size() - 1);
+                for (int i = 1; i < allowedKnownHttpMethodsStringList.size() - 1; i++) {
+                    restList.add(HttpMethod.valueOf(
+                            allowedKnownHttpMethodsStringList.get(i)
+                            ));
+                }
+                HttpMethod first = HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(0));
+                HttpMethod [] rest = new HttpMethod[restList.size()];
+                restList.toArray(rest);
+                allowedKnownHttpMethods = EnumSet.of(first, rest);
+                
+            } 
         }
-        allowedHttpMethods = (0 < methods.length) ? new HashSet(Arrays.asList(methods)) : defaultAllowedHttpMethods;
-        allowAllMethods = allowedHttpMethods.contains("*");
-
     }
 
     private void uninitHttpMethodValidityVerification() {
-        assert (null != allowedHttpMethods);
+        assert (null != allowedUnknownHttpMethods);
         assert (null != defaultAllowedHttpMethods);
         assert (null != allHttpMethods);
 
-        allowedHttpMethods.clear();
-        allowedHttpMethods = null;
-        defaultAllowedHttpMethods.clear();
-        defaultAllowedHttpMethods = null;
+        allowedUnknownHttpMethods.clear();
+        allowedUnknownHttpMethods = null;
+        allowedKnownHttpMethods.clear();
+        allowedKnownHttpMethods = null;
         allHttpMethods.clear();
         allHttpMethods = null;
 
@@ -510,7 +616,26 @@ public final class FacesServlet implements Servlet {
     }
 
     private boolean isHttpMethodValid(HttpServletRequest request) {
-        boolean result = allowAllMethods || allowedHttpMethods.contains(request.getMethod());
+        boolean result = false;
+        if (allowAllMethods) {
+            result = true;
+        } else {
+            String requestMethodString = request.getMethod();
+            HttpMethod requestMethod = null;
+            boolean isKnownHttpMethod;
+            try {
+                requestMethod = HttpMethod.valueOf(requestMethodString);
+                isKnownHttpMethod = true;
+            } catch (IllegalArgumentException e) {
+                isKnownHttpMethod = false;
+            }
+            if (isKnownHttpMethod) {
+                result = allowedKnownHttpMethods.contains(requestMethod);
+            } else {
+                result = allowedUnknownHttpMethods.contains(requestMethodString);
+            }
+            
+        }
 
         return result;
     }
@@ -530,5 +655,5 @@ public final class FacesServlet implements Servlet {
      * DO NOT REMOVE. Necessary for V3 probe monitoring.
      */
     private void requestEnd() { }
-
-}
+    
+    }    
