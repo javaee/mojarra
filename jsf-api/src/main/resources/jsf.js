@@ -971,28 +971,40 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
          * @ignore
          */
         var doInsert = function doInsert(element) {
+            var tablePattern = new RegExp("<\\s*(td|th|tr|tbody|thead|tfoot)", "i");
             var scripts = [];
             var target = $(element.firstChild.getAttribute('id'));
             var parent = target.parentNode;
-            var tempElement = document.createElement('span');
             var html = element.firstChild.firstChild.nodeValue;
+            var isInTable = tablePattern.test(html);
 
-            if (isAutoExec()) {
-                // Create html
-                tempElement.innerHTML = html;
-            } else {
+            if (!isAutoExec())  {
                 // Get the scripts from the text
                 scripts = stripScripts(html);
                 // Remove scripts from text
                 html = html.replace(/<script[^>]*>([\S\s]*?)<\/script>/igm,"");
-                tempElement.innerHTML = html;
             }
+            var tempElement = document.createElement('div');
+            var newElement = null;
+            if (isInTable)  {
+                tempElement.innerHTML = '<table>' + html + '</table>';
+                newElement = tempElement.firstChild;
+                //some browsers will also create intermediary elements such as table>tbody>tr>td
+                //test for presence of id on the new element since we do not have it directly
+                while ((null !== newElement) && ("" == newElement.id)) {
+                    newElement = newElement.firstChild;
+                }
+            } else {
+                tempElement.innerHTML = html;
+                newElement = tempElement.firstChild;
+            }
+
             if (element.firstChild.nodeName === 'after') {
                 // Get the next in the list, to insert before
                 target = target.nextSibling;
             }  // otherwise, this is a 'before' element
             if (!!tempElement.innerHTML) { // check if only scripts were inserted - if so, do nothing here
-                parent.insertBefore(tempElement.firstChild, target);
+                parent.insertBefore(newElement, target);
             }
             runScripts(scripts);
             deleteNode(tempElement);

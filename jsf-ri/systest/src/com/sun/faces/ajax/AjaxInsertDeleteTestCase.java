@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -95,6 +95,7 @@ public class AjaxInsertDeleteTestCase extends HtmlUnitFacesTestCase {
         HtmlHeading2 beforeHeading = getBeforeHeading(page);
         assertNotNull(beforeHeading);
         assertTrue(beforeHeading.getNextSibling() instanceof HtmlHorizontalRule);
+        assertNotNull(page.getElementById("trbefore"));
 
         HtmlSubmitInput afterButton = getAfterButton(page);
         assertNotNull(afterButton);
@@ -103,6 +104,7 @@ public class AjaxInsertDeleteTestCase extends HtmlUnitFacesTestCase {
         HtmlHeading2 afterHeading = getAfterHeading(page);
         assertNotNull(afterHeading);
         assertTrue(afterHeading.getPreviousSibling() instanceof HtmlHorizontalRule);
+        assertNotNull(page.getElementById("trafter"));
 
         HtmlSubmitInput removeBefore = getRemoveBeforeButton(page);
         assertNotNull(removeBefore);
@@ -111,9 +113,13 @@ public class AjaxInsertDeleteTestCase extends HtmlUnitFacesTestCase {
         assertNull(getBeforeHeading(page));
         assertNotNull(getAfterHeading(page));
 
+        assertNull(page.getElementById("trbefore"));
+
         HtmlSubmitInput removeAfter = getRemoveAfterButton(page);
         assertNotNull(removeAfter);
         page = removeAfter.click();
+
+        assertNull(page.getElementById("trafter"));
 
         assertNull(getBeforeHeading(page));
         assertNull(getAfterHeading(page));
