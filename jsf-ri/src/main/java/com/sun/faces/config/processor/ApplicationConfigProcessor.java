@@ -393,7 +393,9 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                         ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
                         appMap.put(BeanValidator.VALIDATOR_FACTORY_KEY, validatorFactory);
                         result = true;
-                    } catch (ValidationException e) {
+                        // don't use ValidationException here, as this will try to load this
+                        // class on instantiation of an ApplicationConfigProcessor.
+                    } catch (Throwable e) {
                         if(LOGGER.isLoggable(Level.FINE)) {
                             String msg = "Could not build a default Bean Validator factory: " 
                                 + e.getMessage();
