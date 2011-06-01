@@ -376,7 +376,7 @@ public class ConfigManager {
      * @param sc the <code>ServletContext</code> for the application that
      *  needs to be removed
      */
-    public void destory(ServletContext sc) {
+    public void destroy(ServletContext sc) {
 
         releaseFactories();
         initializedContexts.remove(sc);

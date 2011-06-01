@@ -341,7 +341,7 @@ public class ConfigureListener implements ServletRequestListener,
             ApplicationAssociate.clearInstance(initContext.getExternalContext());
             ApplicationAssociate.setCurrentInstance(null);
             // Release the initialization mark on this web application
-            ConfigManager.getInstance().destory(context);
+            ConfigManager.getInstance().destroy(context);
             FactoryFinder.releaseFactories();
             if (initContext != null) {
                 initContext.release();
@@ -558,7 +558,7 @@ public class ConfigureListener implements ServletRequestListener,
                     .clearInstance(initContext.getExternalContext());
             ApplicationAssociate.setCurrentInstance(null);
             // Release the initialization mark on this web application
-            ConfigManager.getInstance().destory(sc);
+            ConfigManager.getInstance().destroy(sc);
             initContext.release();
             ReflectionUtils.clearCache(Thread.currentThread().getContextClassLoader());
             WebConfiguration.clear(sc);
