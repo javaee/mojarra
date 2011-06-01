@@ -120,7 +120,6 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
 
     private static final Logger LOGGER = FacesLogger.TAGLIB.getLogger();
     private Resource ccResource;
-    private UIComponent cc;
     private TagAttribute binding;
 
 
@@ -142,6 +141,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
     public UIComponent createComponent(FaceletContext ctx) {
         
         FacesContext context = ctx.getFacesContext();
+        UIComponent cc;
         // we have to handle the binding here, as Application doesn't
         // expose a method to do so with Resource.
         if (binding != null) {
@@ -247,6 +247,9 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
     protected MetaRuleset createMetaRuleset(Class type) {
 
         Util.notNull("type", type);
+        FacesContext context = FacesContext.getCurrentInstance();
+        FaceletContext faceletContext = (FaceletContext) context.getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
+        UIComponent cc = createComponent(faceletContext);
         MetaRuleset m = new CompositeComponentMetaRuleset(getTag(), type, (BeanInfo) cc.getAttributes().get(UIComponent.BEANINFO_KEY));
 
         // ignore standard component attributes
