@@ -54,6 +54,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 
 
@@ -87,6 +89,16 @@ class DelegateToGlassFishAnnotationScanner extends AnnotationScanner {
     }
 
     private void processAnnotations(Set<String> classList) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext extContext = context.getExternalContext();
+        Object containerContext = extContext.getContext();
+        String contextPath = null;
+        if (containerContext instanceof ServletContext) {
+            contextPath = ((ServletContext)containerContext).getContextPath();
+        } else {
+            contextPath = extContext.getRequestContextPath();
+        }
+        
         try {
             Map<String, List<ScannedAnnotation>> classesByAnnotation = annotationScanner.getAnnotatedClassesInCurrentModule(this.sc);
 
@@ -101,15 +113,18 @@ class DelegateToGlassFishAnnotationScanner extends AnnotationScanner {
                         while (!doAdd && iter.hasNext()) {
                             uri = iter.next();
                             uriString = uri.toASCIIString();
+                            
+                            if (uriString.contains(contextPath)) {
 
-                            if (uriString.endsWith("WEB-INF/classes") || uriString.endsWith("WEB-INF/classes/")) {
-                                doAdd = true;
-                            } else for (String jarName : jarNamesWithoutMetadataComplete) {
-                                if (uriString.contains(jarName)) {
+                                if (uriString.endsWith("WEB-INF/classes") || uriString.endsWith("WEB-INF/classes/")) {
                                     doAdd = true;
-                                    jarUri = uri;
-                                    nameOfJarInJarUri = jarName;
-                                    break;
+                                } else for (String jarName : jarNamesWithoutMetadataComplete) {
+                                    if (uriString.contains(jarName)) {
+                                        doAdd = true;
+                                        jarUri = uri;
+                                        nameOfJarInJarUri = jarName;
+                                        break;
+                                    }
                                 }
                             }
                         }
