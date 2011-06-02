@@ -82,7 +82,6 @@ import java.util.Map;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler;
 import javax.faces.validator.BeanValidator;
 import javax.validation.Validation;
-import javax.validation.ValidationException;
 import javax.validation.ValidatorFactory;
 
 import org.w3c.dom.Element;
@@ -356,7 +355,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
             if (isBeanValidatorAvailable()) {
                 WebConfiguration webConfig = WebConfiguration.getInstance();
                 if (!webConfig.isOptionEnabled(WebConfiguration.BooleanWebContextInitParameter.DisableDefaultBeanValidator)) {
-                    defaultValidatorIds.add(BeanValidator.VALIDATOR_ID);
+                    defaultValidatorIds.add("javax.faces.Bean");
                 }
             }
         }
@@ -393,7 +392,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                         ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
                         appMap.put(BeanValidator.VALIDATOR_FACTORY_KEY, validatorFactory);
                         result = true;
-                    } catch (ValidationException e) {
+                    } catch (Throwable e) {
                         if(LOGGER.isLoggable(Level.FINE)) {
                             String msg = "Could not build a default Bean Validator factory: " 
                                 + e.getMessage();
