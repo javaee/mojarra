@@ -41,32 +41,11 @@
 package javax.faces.validator;
 
 
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.Map;
+import com.sun.faces.junit.JUnitFacesTestCase;
 import javax.faces.FactoryFinder;
-import javax.faces.application.Application;
-import javax.faces.application.ApplicationFactory;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-import javax.faces.event.FacesEvent;
-import com.sun.faces.mock.MockApplication;
-import com.sun.faces.mock.MockExternalContext;
-import com.sun.faces.mock.MockFacesContext;
-import com.sun.faces.mock.MockHttpServletRequest;
-import com.sun.faces.mock.MockHttpServletResponse;
-import com.sun.faces.mock.MockHttpSession;
-import com.sun.faces.mock.MockLifecycle;
 import com.sun.faces.mock.MockRenderKit;
-import com.sun.faces.mock.MockRenderKitFactory;
-import com.sun.faces.mock.MockServletConfig;
-import com.sun.faces.mock.MockServletContext;
-import com.sun.faces.mock.MockValueBinding;
-import javax.faces.TestUtil;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
-import javax.faces.validator.Validator;
-import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -76,22 +55,7 @@ import javax.faces.component.UIViewRoot;
  * <p>Base unit tests for all {@link Validator} implementations.</p>
  */
 
-public class ValidatorTestCase extends TestCase {
-
-
-    // ------------------------------------------------------ Instance Variables
-
-
-    // Mock object instances for our tests
-    protected MockApplication         application = null;
-    protected MockServletConfig       config = null;
-    protected MockExternalContext     externalContext = null;
-    protected MockFacesContext        facesContext = null;
-    protected MockLifecycle           lifecycle = null;
-    protected MockHttpServletRequest  request = null;
-    protected MockHttpServletResponse response = null;
-    protected MockServletContext      servletContext = null;
-    protected MockHttpSession         session = null;
+public class ValidatorTestCase extends JUnitFacesTestCase {
 
 
     // ------------------------------------------------------------ Constructors
@@ -111,33 +75,9 @@ public class ValidatorTestCase extends TestCase {
 
 
     // Set up instance variables required by this test case.
+    @Override
     public void setUp() throws Exception {
-
-        // Set up Servlet API Objects
-        servletContext = new MockServletContext();
-        servletContext.addInitParameter("appParamName", "appParamValue");
-        servletContext.setAttribute("appScopeName", "appScopeValue");
-        config = new MockServletConfig(servletContext);
-        session = new MockHttpSession();
-        session.setAttribute("sesScopeName", "sesScopeValue");
-        request = new MockHttpServletRequest(session);
-        request.setAttribute("reqScopeName", "reqScopeValue");
-        response = new MockHttpServletResponse();
-
-        externalContext =
-            new MockExternalContext(servletContext, request, response);
-        lifecycle = new MockLifecycle();
-        facesContext = new MockFacesContext(externalContext, lifecycle);
-        // Set up Faces API Objects
-	FactoryFinder.setFactory(FactoryFinder.APPLICATION_FACTORY,
-				 "com.sun.faces.mock.MockApplicationFactory");
-	FactoryFinder.setFactory(FactoryFinder.RENDER_KIT_FACTORY,
-				 "com.sun.faces.mock.MockRenderKitFactory");
-
-        ApplicationFactory applicationFactory = (ApplicationFactory)
-            FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-        application = (MockApplication) applicationFactory.getApplication();
-        facesContext.setApplication(application);
+        super.setUp();
 	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
 	root.setViewId("/viewId");
         facesContext.setViewRoot(root);
@@ -150,7 +90,6 @@ public class ValidatorTestCase extends TestCase {
         } catch (IllegalArgumentException e) {
             ;
         }
-        super.setUp();
 
     }
 
@@ -158,23 +97,6 @@ public class ValidatorTestCase extends TestCase {
     // Return the tests included in this test case.
     public static Test suite() {
         return (new TestSuite(ValidatorTestCase.class));
-    }
-
-
-    // Tear down instance variables required by ths test case
-    public void tearDown() throws Exception {
-
-        super.tearDown();
-        application = null;
-        config = null;
-        externalContext = null;
-        facesContext = null;
-        lifecycle = null;
-        request = null;
-        response = null;
-        servletContext = null;
-        session = null;
-
     }
 
     public void testNoOp() {

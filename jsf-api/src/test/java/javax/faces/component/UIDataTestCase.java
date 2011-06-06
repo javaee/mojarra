@@ -62,8 +62,6 @@ import com.sun.faces.mock.MockExternalContext;
 import com.sun.faces.mock.MockResponseWriter;
 
 import javax.faces.FacesException;
-import javax.faces.TestUtil;
-import javax.faces.component.UIComponentBaseTestCase;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.render.Renderer;
@@ -99,7 +97,8 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
 
     // Set up instance variables required by this test case.
 
-    public void setUp() {
+    @Override
+    public void setUp() throws Exception {
         super.setUp();
         component = new UIData();
         expectedFamily = UIData.COMPONENT_FAMILY;
@@ -128,7 +127,8 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
 
 
     // Tear down instance variables required by ths test case
-    public void tearDown() {
+    @Override
+    public void tearDown() throws Exception {
         super.tearDown();
         beans = null;
         model = null;

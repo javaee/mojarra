@@ -41,38 +41,23 @@
 package javax.faces.application;
 
 
+import com.sun.faces.junit.JUnitFacesTestCase;
 import javax.faces.component.*;
 import com.sun.faces.mock.*;
 import javax.faces.context.FacesContext;
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import javax.faces.FactoryFinder;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
-import java.util.*;
 
 
 /**
  * <p>Base unit tests for all {@link UIComponent} implementation classes.</p>
  */
 
-public class StateManagerTestCase extends TestCase {
-
-
-    // ------------------------------------------------------ Instance Variables
-
-
-    protected MockApplication application = null;
-    protected MockServletConfig config = null;
-    protected MockExternalContext externalContext = null;
-    protected MockFacesContext facesContext = null;
-    protected MockLifecycle lifecycle = null;
-    protected MockHttpServletRequest request = null;
-    protected MockHttpServletResponse response = null;
-    protected MockServletContext servletContext = null;
-    protected MockHttpSession session = null;
+public class StateManagerTestCase extends JUnitFacesTestCase {
 
 
     // ------------------------------------------------------------ Constructors
@@ -91,35 +76,9 @@ public class StateManagerTestCase extends TestCase {
     // Set up instance variables required by this test case.
 
     @Override
-    public void setUp() {
-
-        // Set up Servlet API Objects
-        servletContext = new MockServletContext();
-        servletContext.addInitParameter("appParamName", "appParamValue");
-        servletContext.setAttribute("appScopeName", "appScopeValue");
-        config = new MockServletConfig(servletContext);
-        session = new MockHttpSession();
-        session.setAttribute("sesScopeName", "sesScopeValue");
-        request = new MockHttpServletRequest(session);
-        request.setAttribute("reqScopeName", "reqScopeValue");
-        response = new MockHttpServletResponse();
-
-        externalContext =
-                new MockExternalContext(servletContext, request, response);
-        Map map = new HashMap();
-        externalContext.setRequestParameterMap(map);
-        lifecycle = new MockLifecycle();
-        facesContext = new MockFacesContext(externalContext, lifecycle);
-        // Set up Faces API Objects
-        FactoryFinder.setFactory(FactoryFinder.APPLICATION_FACTORY,
-                "com.sun.faces.mock.MockApplicationFactory");
-        FactoryFinder.setFactory(FactoryFinder.RENDER_KIT_FACTORY,
-                "com.sun.faces.mock.MockRenderKitFactory");
-
-        ApplicationFactory applicationFactory = (ApplicationFactory)
-                FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-        application = (MockApplication) applicationFactory.getApplication();
-        facesContext.setApplication(application);
+    public void setUp() throws Exception {
+        super.setUp();
+        
         UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
         root.setViewId("/viewId");
         facesContext.setViewRoot(root);
@@ -140,14 +99,6 @@ public class StateManagerTestCase extends TestCase {
     public static Test suite() {
 
         return (new TestSuite(StateManagerTestCase.class));
-
-    }
-
-
-    // Tear down instance variables required by this test case.
-    @Override
-    public void tearDown() {
-
 
     }
 

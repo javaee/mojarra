@@ -86,7 +86,7 @@ public class UISelectManyTestCase extends UIInputTestCase {
 
 
     // Set up instance variables required by this test case.
-    public void setUp() {
+    public void setUp() throws Exception {
         super.setUp();
         component = new UISelectMany();
         expectedFamily = UISelectMany.COMPONENT_FAMILY;
@@ -98,13 +98,6 @@ public class UISelectManyTestCase extends UIInputTestCase {
     public static Test suite() {
         return (new TestSuite(UISelectManyTestCase.class));
     }
-
-
-    // Tear down instance variables required by ths test case
-    public void tearDown() {
-        super.tearDown();
-    }
-
 
     // ------------------------------------------------- Individual Test Methods
 

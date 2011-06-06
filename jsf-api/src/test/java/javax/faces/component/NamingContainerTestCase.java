@@ -41,8 +41,8 @@
 package javax.faces.component;
 
 
+import com.sun.faces.junit.JUnitFacesTestCase;
 import com.sun.faces.mock.MockApplication;
-import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -55,10 +55,13 @@ import com.sun.faces.mock.MockLifecycle;
 import com.sun.faces.mock.MockRenderKit;
 import com.sun.faces.mock.MockServletConfig;
 import com.sun.faces.mock.MockServletContext;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import javax.faces.FactoryFinder;
 import javax.faces.application.ApplicationFactory;
+import javax.faces.context.FacesContextFactory;
+import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 
@@ -69,7 +72,7 @@ import javax.faces.render.RenderKitFactory;
  * standard component classes.</p>
  */
 
-public class NamingContainerTestCase extends TestCase {
+public class NamingContainerTestCase extends JUnitFacesTestCase {
 
 
     // ------------------------------------------------------ Instance Variables
@@ -77,18 +80,6 @@ public class NamingContainerTestCase extends TestCase {
 
     // The root of the component tree to be tested
     private UIViewRoot root = null;
-
-    // Mock object instances for our tests
-    protected MockApplication         application = null;
-    protected MockServletConfig       config = null;
-    protected MockExternalContext     externalContext = null;
-    protected MockFacesContext        facesContext = null;
-    protected MockLifecycle           lifecycle = null;
-    protected MockHttpServletRequest  request = null;
-    protected MockHttpServletResponse response = null;
-    protected MockServletContext      servletContext = null;
-    protected MockHttpSession         session = null;
-
 
 
     // ------------------------------------------------------------ Constructors
@@ -104,33 +95,10 @@ public class NamingContainerTestCase extends TestCase {
 
 
     // Set up instance variables required by this test case.
-    public void setUp() {
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
         
-        // Set up Servlet API Objects
-        servletContext = new MockServletContext();
-        servletContext.addInitParameter("appParamName", "appParamValue");
-        servletContext.setAttribute("appScopeName", "appScopeValue");
-        config = new MockServletConfig(servletContext);
-        session = new MockHttpSession();
-        session.setAttribute("sesScopeName", "sesScopeValue");
-        request = new MockHttpServletRequest(session);
-        request.setAttribute("reqScopeName", "reqScopeValue");
-        response = new MockHttpServletResponse();
-
-        externalContext =
-            new MockExternalContext(servletContext, request, response);
-        lifecycle = new MockLifecycle();
-        facesContext = new MockFacesContext(externalContext, lifecycle);
-        // Set up Faces API Objects
-	FactoryFinder.setFactory(FactoryFinder.APPLICATION_FACTORY,
-				 "com.sun.faces.mock.MockApplicationFactory");
-	FactoryFinder.setFactory(FactoryFinder.RENDER_KIT_FACTORY,
-				 "com.sun.faces.mock.MockRenderKitFactory");
-
-        ApplicationFactory applicationFactory = (ApplicationFactory)
-            FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-        application = (MockApplication) applicationFactory.getApplication();
-        facesContext.setApplication(application);
 	root = new UIViewRoot();
 
 	root.setViewId("/viewId");
@@ -163,10 +131,11 @@ public class NamingContainerTestCase extends TestCase {
 
 
     // Tear down instance variables required by this test case.
-    public void tearDown() {
+    @Override
+    public void tearDown() throws Exception {
 
         root = null;
-
+        super.tearDown();
     }
 
 
