@@ -41,6 +41,8 @@
 package javax.faces.validator;
 
 
+import java.util.Locale;
+
 import javax.faces.component.UIInput;
 
 import junit.framework.Test;
@@ -92,6 +94,7 @@ public class RegexValidatorTestCase extends ValidatorTestCase {
 
     public void testPatterMismatch() {
         String patternStr = "t.*";
+        facesContext.getViewRoot().setLocale(Locale.US);
         RegexValidator validator = new RegexValidator();
         validator.setPattern(patternStr);
         UIInput component = new UIInput();
