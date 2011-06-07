@@ -37,44 +37,10 @@
 package javax.faces.webapp;
 
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import javax.faces.FactoryFinder;
-import javax.faces.application.Application;
-import javax.faces.application.ApplicationFactory;
-import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
-import javax.faces.event.FacesEvent;
-import javax.faces.render.RenderKit;
-import javax.faces.render.RenderKitFactory;
-import javax.faces.validator.Validator;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.tagext.Tag;
-import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import com.sun.faces.mock.MockApplication;
-import com.sun.faces.mock.MockExternalContext;
-import com.sun.faces.mock.MockFacesContext;
-import com.sun.faces.mock.MockHttpServletRequest;
-import com.sun.faces.mock.MockHttpServletResponse;
-import com.sun.faces.mock.MockHttpSession;
-import com.sun.faces.mock.MockJspWriter;
-import com.sun.faces.mock.MockLifecycle;
-import com.sun.faces.mock.MockPageContext;
-import com.sun.faces.mock.MockRenderKit;
-import com.sun.faces.mock.MockRenderKitFactory;
-import com.sun.faces.mock.MockServlet;
-import com.sun.faces.mock.MockServletConfig;
-import com.sun.faces.mock.MockServletContext;
 
 
 /**

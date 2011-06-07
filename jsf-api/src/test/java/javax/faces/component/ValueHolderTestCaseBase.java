@@ -78,7 +78,8 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
 
 
     // Set up instance variables required by this test case.
-    public void setUp() {
+    @Override
+    public void setUp() throws Exception {
         super.setUp();
         component = new UIOutput();
         expectedId = null;
@@ -90,13 +91,6 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
     public static Test suite() {
         return (new TestSuite(ValueHolderTestCaseBase.class));
     }
-
-
-    // Tear down instance variables required by ths test case
-    public void tearDown() {
-        super.tearDown();
-    }
-
 
     // ------------------------------------------------- Individual Test Methods
 

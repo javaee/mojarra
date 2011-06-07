@@ -37,6 +37,15 @@
 package javax.faces;
 
 
+import com.sun.faces.mock.MockHttpServletRequest;
+import com.sun.faces.mock.MockHttpServletResponse;
+import com.sun.faces.mock.MockServletContext;
+import javax.faces.application.Application;
+import javax.faces.application.ApplicationFactory;
+import javax.faces.context.FacesContext;
+import javax.faces.context.FacesContextFactory;
+import javax.faces.lifecycle.Lifecycle;
+import javax.faces.lifecycle.LifecycleFactory;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -175,7 +184,7 @@ public class FactoryFinderTestCase extends TestCase {
         assertNotNull(result);
         assertTrue(result instanceof FacesContextFactory);
     }
-
+    
     /**
      * <p>In the absence of webapp faces-config.xml, verify that the
      * overrides specified in the META-INF/services take precedence.</p>
@@ -215,6 +224,34 @@ public class FactoryFinderTestCase extends TestCase {
 	assertTrue(System.getProperty("oldImpl").equals("com.sun.faces.mock.MockFacesContextFactory"));
 
 
+    }
+    
+    public void testNoFacesContextInitially() throws Exception {
+        
+        assertNull(FacesContext.getCurrentInstance());
+
+	FactoryFinder.releaseFactories();
+	FactoryFinder.setFactory(FACTORIES[0][0], FACTORIES[0][1]);
+	FactoryFinder.setFactory(FACTORIES[1][0], FACTORIES[1][1]);
+	FactoryFinder.setFactory(FACTORIES[2][0], FACTORIES[2][1]);
+	FactoryFinder.setFactory(FACTORIES[3][0], FACTORIES[3][1]);
+	FactoryFinder.setFactory(FACTORIES[4][0], FACTORIES[4][1]);
+        
+        FacesContextFactory fcFactory = (FacesContextFactory) 
+                FactoryFinder.getFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
+        LifecycleFactory lFactory = (LifecycleFactory) 
+                FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
+        Object request = new MockHttpServletRequest();
+        Object response = new MockHttpServletResponse();
+        Object containerContext = new MockServletContext();
+        Lifecycle l = lFactory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
+        FacesContext context = fcFactory.getFacesContext(containerContext, request, response, l);
+
+
+        ApplicationFactory aFactory = (ApplicationFactory)
+                FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        Application app = aFactory.getApplication();
+        FactoryFinder.releaseFactories();
     }
 
     // ------------------------------------------- helpers

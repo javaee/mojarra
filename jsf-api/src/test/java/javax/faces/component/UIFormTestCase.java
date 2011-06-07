@@ -37,14 +37,7 @@
 package javax.faces.component;
 
 
-import java.io.IOException;
-import java.util.Iterator;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIForm;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIInput;
 import javax.faces.render.RenderKitFactory;
-import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -73,7 +66,8 @@ public class UIFormTestCase extends UIComponentBaseTestCase {
 
 
     // Set up instance variables required by this test case.
-    public void setUp() {
+    @Override
+    public void setUp() throws Exception {
         super.setUp();
         component = new UIForm();
         expectedFamily = UIForm.COMPONENT_FAMILY;
@@ -85,12 +79,6 @@ public class UIFormTestCase extends UIComponentBaseTestCase {
     // Return the tests included in this test case.
     public static Test suite() {
         return (new TestSuite(UIFormTestCase.class));
-    }
-
-
-    // Tear down instance variables required by ths test case
-    public void tearDown() {
-        super.tearDown();
     }
 
 

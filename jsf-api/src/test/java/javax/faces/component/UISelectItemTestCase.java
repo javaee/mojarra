@@ -37,15 +37,7 @@
 package javax.faces.component;
 
 
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UISelectItem;
-import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
-import javax.faces.TestUtil;
-import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -74,7 +66,8 @@ public class UISelectItemTestCase extends UIComponentBaseTestCase {
 
 
     // Set up instance variables required by this test case.
-    public void setUp() {
+    @Override
+    public void setUp() throws Exception {
         super.setUp();
         component = new UISelectItem();
         expectedFamily = UISelectItem.COMPONENT_FAMILY;
@@ -86,12 +79,6 @@ public class UISelectItemTestCase extends UIComponentBaseTestCase {
     // Return the tests included in this test case.
     public static Test suite() {
         return (new TestSuite(UISelectItemTestCase.class));
-    }
-
-
-    // Tear down instance variables required by ths test case
-    public void tearDown() {
-        super.tearDown();
     }
 
 

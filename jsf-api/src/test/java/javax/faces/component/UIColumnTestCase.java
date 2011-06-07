@@ -66,7 +66,8 @@ public class UIColumnTestCase extends UIComponentBaseTestCase {
 
     // Set up instance variables required by this test case.
 
-    public void setUp() {
+    @Override
+    public void setUp() throws Exception {
         super.setUp();
         component = new UIColumn();
         expectedFamily = UIColumn.COMPONENT_FAMILY;
@@ -82,7 +83,8 @@ public class UIColumnTestCase extends UIComponentBaseTestCase {
 
 
     // Tear down instance variables required by ths test case
-    public void tearDown() {
+    @Override
+    public void tearDown() throws Exception {
         super.tearDown();
     }
 

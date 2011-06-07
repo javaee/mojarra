@@ -151,20 +151,6 @@ public class UIComponentBaseBehaviorTestCase extends UIComponentTestCase {
         super(name);
     }
 
-    /* (non-Javadoc)
-      * @see javax.faces.component.UIComponentTestCase#setUp()
-      */
-    public void setUp() {
-        super.setUp();
-    }
-
-    /* (non-Javadoc)
-      * @see javax.faces.component.UIComponentTestCase#tearDown()
-      */
-    public void tearDown() {
-        super.tearDown();
-    }
-
     /**
      * Test method for {@link javax.faces.component.UIComponentBase#saveState(javax.faces.context.FacesContext)}.
      */

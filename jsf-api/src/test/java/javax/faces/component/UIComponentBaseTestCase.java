@@ -83,7 +83,8 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
     // Set up instance variables required by this test case.
 
-    public void setUp() {
+    @Override
+    public void setUp() throws Exception {
 
         // Set up the component under test
         super.setUp();
@@ -99,19 +100,11 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
 
     // Tear down instance variables required by ths test case
-    public void tearDown() {
+    @Override
+    public void tearDown() throws Exception {
         externalContext.setRequestParameterMap(null);
 
         super.tearDown();
-        application = null;
-        config = null;
-        externalContext = null;
-        facesContext = null;
-        lifecycle = null;
-        request = null;
-        response = null;
-        servletContext = null;
-        session = null;
 
     }
 

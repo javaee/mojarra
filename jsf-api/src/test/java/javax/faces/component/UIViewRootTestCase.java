@@ -113,7 +113,8 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 	}
     };
 
-    public void setUp() {
+    @Override
+    public void setUp() throws Exception {
         FactoryFinder.releaseFactories();
 	super.setUp();
 	for (int i = 0, len = FACTORIES.length; i < len; i++) {
@@ -148,10 +149,11 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
     /**
      * Tear down instance variables required by this test case.
      */
-    public void tearDown() {
+    @Override
+    public void tearDown() throws Exception {
 
         component = null;
-
+        super.tearDown();
     }
 
 

@@ -82,7 +82,8 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
 
     // Set up instance variables required by this test case.
 
-    public void setUp() {
+    @Override
+    public void setUp() throws Exception {
         super.setUp();
         component = new UICommand();
         expectedFamily = UICommand.COMPONENT_FAMILY;
@@ -94,12 +95,6 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
     // Return the tests included in this test case.
     public static Test suite() {
         return (new TestSuite(UICommandTestCase.class));
-    }
-
-
-    // Tear down instance variables required by ths test case
-    public void tearDown() {
-        super.tearDown();
     }
 
 
