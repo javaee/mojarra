@@ -83,7 +83,7 @@ public class UISelectOneTestCase extends UIInputTestCase {
 
 
     // Set up instance variables required by this test case.
-    public void setUp() {
+    public void setUp() throws Exception  {
         super.setUp();
         component = new UISelectOne();
         expectedFamily = UISelectOne.COMPONENT_FAMILY;
@@ -95,13 +95,6 @@ public class UISelectOneTestCase extends UIInputTestCase {
     public static Test suite() {
         return (new TestSuite(UISelectOneTestCase.class));
     }
-
-
-    // Tear down instance variables required by ths test case
-    public void tearDown() {
-        super.tearDown();
-    }
-
 
     // ------------------------------------------------- Individual Test Methods
 

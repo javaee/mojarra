@@ -41,10 +41,7 @@
 package javax.faces.component;
 
 
-import java.io.IOException;
-import java.util.Iterator;
 import javax.faces.el.ValueBinding;
-import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -73,7 +70,8 @@ public class UIGraphicTestCase extends UIComponentBaseTestCase {
 
 
     // Set up instance variables required by this test case.
-    public void setUp() {
+    @Override
+    public void setUp() throws Exception {
         super.setUp();
         component = new UIGraphic();
         expectedFamily = UIGraphic.COMPONENT_FAMILY;
@@ -86,13 +84,6 @@ public class UIGraphicTestCase extends UIComponentBaseTestCase {
     public static Test suite() {
         return (new TestSuite(UIGraphicTestCase.class));
     }
-
-
-    // Tear down instance variables required by ths test case
-    public void tearDown() {
-        super.tearDown();
-    }
-
 
     // ------------------------------------------------- Individual Test Methods
 

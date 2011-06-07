@@ -41,13 +41,12 @@
 package javax.faces.component;
 
 
-import com.sun.faces.mock.*;
+import com.sun.faces.junit.JUnitFacesTestCase;
+import com.sun.faces.mock.MockRenderKit;
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import javax.faces.FactoryFinder;
-import javax.faces.application.ApplicationFactory;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ComponentSystemEvent;
@@ -66,7 +65,7 @@ import java.util.*;
  * <p>Base unit tests for all {@link UIComponent} implementation classes.</p>
  */
 
-public class UIComponentTestCase extends TestCase {
+public class UIComponentTestCase extends JUnitFacesTestCase {
 
 
     // ------------------------------------------------------ Instance Variables
@@ -117,18 +116,6 @@ public class UIComponentTestCase extends TestCase {
 
             };
 
-    // Mock object instances for our tests
-    protected MockApplication application = null;
-    protected MockServletConfig config = null;
-    protected MockExternalContext externalContext = null;
-    protected MockFacesContext facesContext = null;
-    protected MockLifecycle lifecycle = null;
-    protected MockHttpServletRequest request = null;
-    protected MockHttpServletResponse response = null;
-    protected MockServletContext servletContext = null;
-    protected MockHttpSession session = null;
-
-
     // ------------------------------------------------------------ Constructors
 
 
@@ -144,7 +131,9 @@ public class UIComponentTestCase extends TestCase {
 
     // Set up instance variables required by this test case.
 
-    public void setUp() {
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
 
         expectedAttributes = new String[0];
         expectedFamily = "Test";
@@ -153,33 +142,6 @@ public class UIComponentTestCase extends TestCase {
         expectedRendererType = null;
         expectedRendersChildren = false;
 
-        // Set up Servlet API Objects
-        servletContext = new MockServletContext();
-        servletContext.addInitParameter("appParamName", "appParamValue");
-        servletContext.setAttribute("appScopeName", "appScopeValue");
-        config = new MockServletConfig(servletContext);
-        session = new MockHttpSession();
-        session.setAttribute("sesScopeName", "sesScopeValue");
-        request = new MockHttpServletRequest(session);
-        request.setAttribute("reqScopeName", "reqScopeValue");
-        response = new MockHttpServletResponse();
-
-        externalContext =
-                new MockExternalContext(servletContext, request, response);
-        Map map = new HashMap();
-        externalContext.setRequestParameterMap(map);
-        lifecycle = new MockLifecycle();
-        facesContext = new MockFacesContext(externalContext, lifecycle);
-        // Set up Faces API Objects
-        FactoryFinder.setFactory(FactoryFinder.APPLICATION_FACTORY,
-                "com.sun.faces.mock.MockApplicationFactory");
-        FactoryFinder.setFactory(FactoryFinder.RENDER_KIT_FACTORY,
-                "com.sun.faces.mock.MockRenderKitFactory");
-
-        ApplicationFactory applicationFactory = (ApplicationFactory)
-                FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-        application = (MockApplication) applicationFactory.getApplication();
-        facesContext.setApplication(application);
         UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
         root.setViewId("/viewId");
         facesContext.setViewRoot(root);
@@ -207,7 +169,8 @@ public class UIComponentTestCase extends TestCase {
 
 
     // Tear down instance variables required by this test case.
-    public void tearDown() {
+    @Override
+    public void tearDown() throws Exception {
 
         component = null;
         expectedAttributes = null;
@@ -216,6 +179,7 @@ public class UIComponentTestCase extends TestCase {
         expectedRendered = true;
         expectedRendererType = null;
         expectedRendersChildren = false;
+        super.tearDown();
 
     }
 

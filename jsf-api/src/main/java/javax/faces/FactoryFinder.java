@@ -63,6 +63,8 @@ import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 
@@ -666,6 +668,10 @@ public final class FactoryFinder {
         }
 
     }
+    
+    private static void reInitializeFactoryManager() {
+        FACTORIES_CACHE.resetSpecialInitializationCaseFlags();
+    }
 
 
     // ----------------------------------------------------------- Inner Classes
@@ -679,54 +685,133 @@ public final class FactoryFinder {
 
         private ConcurrentMap<FactoryManagerCacheKey,FactoryManager> applicationMap =
               new ConcurrentHashMap<FactoryManagerCacheKey, FactoryManager>();
+        private AtomicBoolean logNullFacesContext = new AtomicBoolean(false);
+        private AtomicBoolean logNonNullFacesContext = new AtomicBoolean(false);
 
 
         // ------------------------------------------------------ Public Methods
 
 
         private FactoryManager getApplicationFactoryManager(ClassLoader cl) {
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            boolean isSpecialInitializationCase = detectSpecialInitializationCase(facesContext);
 
-            FactoryManagerCacheKey key = new FactoryManagerCacheKey(cl, applicationMap);
+            FactoryManagerCacheKey key = new FactoryManagerCacheKey(facesContext,
+                    cl, applicationMap);
 
             FactoryManager result = applicationMap.get(key);
             if (result == null) {
-                FactoryManager newResult = new FactoryManager();
-                result = applicationMap.putIfAbsent(key, newResult);
-                result = (null != result) ? result : newResult;
+                boolean createNewFactoryManagerInstance = false;
+                
+                if (isSpecialInitializationCase) {
+                    // We need to obtain a reference to the correct
+                    // FactoryManager.  Iterate through the data structure 
+                    // containing all FactoryManager instances for this VM.
+                    FactoryManagerCacheKey curKey;
+                    for (Map.Entry<FactoryManagerCacheKey, FactoryManager> cur : applicationMap.entrySet()) {
+                        curKey = cur.getKey();
+                        // If the current FactoryManager is for a
+                        // the same ClassLoader as the current ClassLoader...
+                        if (curKey.getClassLoader().equals(cl)) {
+                            // Check the other descriminator for the
+                            // key: the context.  
+
+                            // If the context objects of the keys are
+                            // both non-null and non-equal, then *do*
+                            // create a new FactoryManager instance.
+
+                            if ((null != key.getContext() && null != curKey.getContext()) &&
+                                (!key.getContext().equals(curKey.getContext()))) {
+                                createNewFactoryManagerInstance = true;
+                            }
+                            else {
+                                // Otherwise, use this FactoryManager
+                                // instance.
+                                result = cur.getValue();
+                            }
+                            break;
+                        }
+                    }
+                } else {
+                    createNewFactoryManagerInstance = true;
+                }
+                
+                if (createNewFactoryManagerInstance) {
+                    FactoryManager newResult = new FactoryManager();
+                    result = applicationMap.putIfAbsent(key, newResult);
+                    result = (null != result) ? result : newResult;
+                }
                 
             }
+            return result;
+        }
+        
+        /**
+         * This method is used to detect the following special initialization case.
+         * IF no FactoryManager can be found for key, 
+         * AND this call to getApplicationFactoryManager() *does* have a current FacesContext
+         * BUT a previous call to getApplicationFactoryManager *did not* have a current FacesContext
+         * 
+         * @param facesContext the current FacesContext for this request
+         * @return true if the current execution falls into the special initialization case.
+         */
+        private boolean detectSpecialInitializationCase(FacesContext facesContext) {
+            boolean result = false;
+            if (null == facesContext) {
+                logNullFacesContext.compareAndSet(false, true);
+            } else {
+                logNonNullFacesContext.compareAndSet(false, true);
+            }
+            result = logNullFacesContext.get() && logNonNullFacesContext.get();
+            
             return result;
         }
 
 
         public void removeApplicationFactoryManager(ClassLoader cl) {
-            FactoryManagerCacheKey key = new FactoryManagerCacheKey(cl, applicationMap);
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            boolean isSpecialInitializationCase = detectSpecialInitializationCase(facesContext);
 
+            FactoryManagerCacheKey key = new FactoryManagerCacheKey(facesContext,
+                    cl, applicationMap);
+            
             applicationMap.remove(key);
+            if (isSpecialInitializationCase) {
+                logNullFacesContext.set(false);
+                logNonNullFacesContext.set(false);
+            }
 
+        }
+        
+        public void resetSpecialInitializationCaseFlags() {
+            logNullFacesContext.set(false);
+            logNonNullFacesContext.set(false);
         }
 
     } // END FactoryCache
 
     private static final class FactoryManagerCacheKey {
         private ClassLoader cl;
+        private Long marker;
         private Object context;
 
         private static final String KEY = FactoryFinder.class.getName() + "." +
                 FactoryManagerCacheKey.class.getSimpleName();
 
-        public FactoryManagerCacheKey(ClassLoader cl,
+        public FactoryManagerCacheKey(FacesContext facesContext, ClassLoader cl,
                 Map<FactoryManagerCacheKey,FactoryManager> factoryMap) {
             this.cl = cl;
-            FacesContext facesContext = FacesContext.getCurrentInstance();
             if (null != facesContext) {
-                Map<String, Object> appMap = facesContext.getExternalContext().getApplicationMap();
-                Object val = appMap.get(KEY);
+                ExternalContext extContext = facesContext.getExternalContext();
+                context = extContext.getContext();
+                Map<String, Object> appMap = extContext.getApplicationMap();
+                
+                Long val = (Long) appMap.get(KEY);
                 if (null == val) {
-                    context = new Long(System.currentTimeMillis());
-                    appMap.put(KEY, context);
+                    marker = new Long(System.currentTimeMillis());
+                    appMap.put(KEY, marker);
                 } else {
-                    context = val;
+                    marker = val;
                 }
             } else {
                 // We don't have a FacesContext.
@@ -745,9 +830,17 @@ public final class FactoryFinder {
                     }
                 }
                 if (null != match) {
-                    this.context = match.context;
+                    this.marker = match.marker;
                 }
             }
+        }
+        
+        public ClassLoader getClassLoader() {
+            return cl;
+        }
+        
+        public Object getContext() {
+            return context;
         }
         
         private FactoryManagerCacheKey() {}
@@ -764,7 +857,7 @@ public final class FactoryFinder {
             if (this.cl != other.cl && (this.cl == null || !this.cl.equals(other.cl))) {
                 return false;
             }
-            if (this.context != other.context && (this.context == null || !this.context.equals(other.context))) {
+            if (this.marker != other.marker && (this.marker == null || !this.marker.equals(other.marker))) {
                 return false;
             }
             return true;
@@ -774,7 +867,7 @@ public final class FactoryFinder {
         public int hashCode() {
             int hash = 7;
             hash = 97 * hash + (this.cl != null ? this.cl.hashCode() : 0);
-            hash = 97 * hash + (this.context != null ? this.context.hashCode() : 0);
+            hash = 97 * hash + (this.marker != null ? this.marker.hashCode() : 0);
             return hash;
         }
 

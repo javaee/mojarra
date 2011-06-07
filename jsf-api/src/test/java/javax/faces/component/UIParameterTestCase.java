@@ -41,11 +41,6 @@
 package javax.faces.component;
 
 
-import java.io.IOException;
-import java.util.Iterator;
-import javax.faces.context.FacesContext;
-import javax.faces.TestUtil;
-import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -74,7 +69,8 @@ public class UIParameterTestCase extends UIComponentBaseTestCase {
 
 
     // Set up instance variables required by this test case.
-    public void setUp() {
+    @Override
+    public void setUp() throws Exception {
         super.setUp();
         component = new UIParameter();
         expectedFamily = UIParameter.COMPONENT_FAMILY;
@@ -87,13 +83,6 @@ public class UIParameterTestCase extends UIComponentBaseTestCase {
     public static Test suite() {
         return (new TestSuite(UIParameterTestCase.class));
     }
-
-
-    // Tear down instance variables required by ths test case
-    public void tearDown() {
-        super.tearDown();
-    }
-
 
     // ------------------------------------------------- Individual Test Methods
 

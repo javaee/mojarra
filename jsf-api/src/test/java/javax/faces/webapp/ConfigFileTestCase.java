@@ -118,16 +118,6 @@ public class ConfigFileTestCase extends TestCase {
 
     }
 
-    /**
-     * Tear down instance variables required by this test case.
-     */
-    public void tearDown() {
-
-        digester = null;
-
-    }
-
-
     // ------------------------------------------------ Individual Test Methods
 
 
