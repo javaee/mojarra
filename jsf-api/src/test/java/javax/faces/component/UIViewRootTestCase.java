@@ -911,15 +911,29 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 
     }
 
-    public void testViewMapSaveRestore() throws Exception {
+    public void testViewMapSaveRestoreClassic() throws Exception {
         UIViewRoot root = new UIViewRoot();
         Map<String, Object> viewMap = root.getViewMap();
         viewMap.put("one", "one");
         Object saved = root.saveState(facesContext);
         root = new UIViewRoot();
+        // restore ViewState as part of full state
         root.restoreState(facesContext, saved);
         viewMap = root.getViewMap();
         assertEquals("one", viewMap.get("one"));
+    }
+    
+    public void testViewMapSaveRestoreBeforeBuildView() throws Exception {
+        UIViewRoot root = new UIViewRoot();
+        Map<String, Object> viewMap = root.getViewMap();
+        viewMap.put("two", "two");
+        Object saved = root.saveState(facesContext);
+        root = new UIViewRoot();
+        // JAVASERVERFACES_SPEC_PUBLIC-787 - restore ViewScope before processing templates 
+        // restore ViewScope state before buildView() and before the rest of the view's state.
+        root.restoreViewScopeState(facesContext, saved);
+        viewMap = root.getViewMap();
+        assertEquals("two", viewMap.get("two"));
     }
     
 

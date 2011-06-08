@@ -40,6 +40,7 @@
 
 package com.sun.faces.application.view;
 
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Map;
@@ -231,21 +232,29 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
         boolean processingEvents = context.isProcessingEvents();
         // Build the tree to initial state
         UIViewRoot viewRoot;
+        
+        Object[] rawState = (Object[]) rsm.getState(context, viewId);
+        //noinspection unchecked
+        final Map<String, Object> state = (rawState == null) ? Collections.EMPTY_MAP : (Map<String,Object>) rawState[1];
+
         try {
             ViewDeclarationLanguage vdl = vdlFactory.getViewDeclarationLanguage(viewId);
             viewRoot = vdl.getViewMetadata(context, viewId).createMetadataView(context);
             context.setViewRoot(viewRoot);
+            
+            // JAVASERVERFACES_SPEC_PUBLIC-787 - restore viewMap before buildView
+            String cid = viewRoot.getClientId(context);
+            Object stateObj = state.get(cid);
+            viewRoot.restoreViewScopeState(context, stateObj);
+
             context.setProcessingEvents(true);
             vdl.buildView(context, viewRoot);
         } catch (IOException ioe) {
             throw new FacesException(ioe);
         }
-        Object[] rawState = (Object[]) rsm.getState(context, viewId);
         if (rawState == null) {
-            return null; // trigger a ViewExpiredException
+          return null; // trigger a ViewExpiredException
         }
-        //noinspection unchecked
-        final Map<String, Object> state = (Map<String,Object>) rawState[1];
         final StateContext stateContext = StateContext.getStateContext(context);
 
         if (null != state) {

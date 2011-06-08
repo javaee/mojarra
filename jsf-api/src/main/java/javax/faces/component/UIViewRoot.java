@@ -45,7 +45,6 @@ import javax.el.MethodExpression;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.ProjectStage;
-import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
@@ -64,8 +63,6 @@ import java.util.ListIterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.faces.component.visit.VisitCallback;
-import javax.faces.component.visit.VisitContext;
 import javax.faces.event.*;
 import javax.faces.view.ViewDeclarationLanguage;
 import javax.faces.view.ViewMetadata;
@@ -1671,6 +1668,30 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
         }
     }
 
+    /**
+     * <p class="changed_added_2_2">Restore ViewScope state before processing the templates. This is
+     * needed with partial state saving to allow use of view scoped beans for EL-expressions in
+     * &lt;ui:include src="#{viewScopedBean.includeFileName}"/&gt;. </p>
+     * 
+     * @param context
+     *            current FacesContext.
+     * @param state
+     *            the state object.
+     */
+    public void restoreViewScopeState(FacesContext context, Object state) {
+        if (context == null) {
+            throw new NullPointerException();
+        }
+        if (state == null) {
+            return;
+        }
+
+        values = (Object[]) state;
+
+        // noinspection unchecked
+        viewScope = (Map<String, Object>) restoreAttachedState(context, values[1]);
+    }
+
     // END TENATIVE
 
     // ----------------------------------------------------- StateHolder Methods
@@ -1707,8 +1728,12 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
         
         values = (Object[]) state;
         super.restoreState(context, values[0]);
-        //noinspection unchecked
-        viewScope = (Map<String,Object>) restoreAttachedState(context, values[1]);
+        
+        // with partial state saving viewScope was restored before buildView 
+        if (viewScope == null) {
+        	//noinspection unchecked
+        	viewScope = (Map<String,Object>) restoreAttachedState(context, values[1]);
+        }
         
     }
 
