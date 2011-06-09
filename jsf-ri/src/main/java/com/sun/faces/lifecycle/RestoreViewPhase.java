@@ -236,7 +236,10 @@ public class RestoreViewPhase extends Phase {
                         Collection<UIViewParameter> params =
                                 ViewMetadata.getViewParameters(viewRoot);
                         if (params.isEmpty()) {
-                            facesContext.renderResponse();
+                            UIComponent metaDataFacet = viewRoot.getFacets().get(UIViewRoot.METADATA_FACET_NAME);
+                            if (null == metaDataFacet || 0 == metaDataFacet.getChildCount()) {
+                                facesContext.renderResponse();
+                            }
                         }
                     }
                 } else {
