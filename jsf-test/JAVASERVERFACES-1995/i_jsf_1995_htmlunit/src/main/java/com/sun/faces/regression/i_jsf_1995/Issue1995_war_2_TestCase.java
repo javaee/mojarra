@@ -69,7 +69,7 @@ public class Issue1995_war_2_TestCase extends HtmlUnitFacesTestCase {
         HtmlPage page = getPage("/");
 
         assertTrue(page.asXml().contains("javax.faces.ViewState"));
-        assertTrue(page.asText().contains("Hello from Facelets"));
+        assertTrue(page.asText().matches("(?s).*.war_1\\s+bean:\\s+war_2\\s+bean:\\s+war2Bean\\s+bean:\\s+bar..*"));
     }
 
 

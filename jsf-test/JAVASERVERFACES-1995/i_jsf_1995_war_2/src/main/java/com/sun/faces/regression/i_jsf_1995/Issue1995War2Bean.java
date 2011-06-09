@@ -1,7 +1,8 @@
+
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,40 +38,24 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
 package com.sun.faces.regression.i_jsf_1995;
 
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Named;
 
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+@Named("war2Bean")
+@RequestScoped
+public class Issue1995War2Bean {
+    
+    protected String name = "war2Bean";
 
-
-public class Issue1995_war_1_TestCase extends HtmlUnitFacesTestCase {
-
-    public Issue1995_war_1_TestCase(String name) {
-        super(name);
+    public String getName() {
+        return name;
     }
 
-
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(Issue1995_war_1_TestCase.class));
+    public void setName(String name) {
+        this.name = name;
     }
 
-
-    // ------------------------------------------------------------ Test Methods
-
-    public void testBasicAppFunctionality() throws Exception {
-
-        HtmlPage page = getPage("/");
-
-        assertTrue(page.asXml().contains("javax.faces.ViewState"));
-        assertTrue(page.asText().matches("(?s).*.war_1\\s+bean:\\s+war1Bean\\s+war_2\\s+bean:\\s+bean:\\s+bar..*"));
-    }
-
-
+    
 }
