@@ -104,17 +104,24 @@ class DelegateToGlassFishAnnotationScanner extends AnnotationScanner {
                             uri = iter.next();
                             uriString = uri.toASCIIString();
                             
-                            if (uriString.contains(contextPath)) {
-
-                                if (uriString.endsWith("WEB-INF/classes") || uriString.endsWith("WEB-INF/classes/")) {
+                            // If the class is in the current web module
+                            boolean currentClassIsInCurrentWebModule =
+                                (uriString.endsWith("WEB-INF/classes") || uriString.endsWith("WEB-INF/classes/")) &&
+                                uriString.contains(contextPath);
+                            // or it is from a jar that is *not* within a web module...
+                            boolean currentClassIsInJarNotInAnyWebModule = 
+                                    uriString.endsWith(".jar") && 
+                                    !uriString.contains(contextPath) &&
+                                    !uriString.contains("WEB-INF/classes");
+                            if (currentClassIsInCurrentWebModule || 
+                                currentClassIsInJarNotInAnyWebModule) {
+                                doAdd = true;
+                            } else for (String jarName : jarNamesWithoutMetadataComplete) {
+                                if (uriString.contains(jarName)) {
                                     doAdd = true;
-                                } else for (String jarName : jarNamesWithoutMetadataComplete) {
-                                    if (uriString.contains(jarName)) {
-                                        doAdd = true;
-                                        jarUri = uri;
-                                        nameOfJarInJarUri = jarName;
-                                        break;
-                                    }
+                                    jarUri = uri;
+                                    nameOfJarInJarUri = jarName;
+                                    break;
                                 }
                             }
                         }
