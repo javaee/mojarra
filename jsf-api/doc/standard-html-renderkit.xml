@@ -23415,8 +23415,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       </renderer-extension>
     </renderer>
     <renderer>
-      <description><![CDATA[<p>Renders an HTML "input"
-      element of "type" "text".</p>
+      <description><![CDATA[<p><span class="changed_modified_2_2">Renders</span>
+            an HTML "input" element of "type" "text".</p>
 
       <p><a name="decode">Decode Behavior</a></p>
 
@@ -23441,6 +23441,11 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       "styleClass" attribute is specified, render its value as the value
       of the "class" attribute.
       </p>
+
+      <p class="changed_added_2_2">If this element has children, they
+      must be ignored by default.  Implementions may provide a
+      configuration option that allows this element to render its
+      children.</p>
 
       </ul>]]></description>
       <component-family>javax.faces.Input</component-family>
@@ -23845,7 +23850,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       </attribute>
 
       <renderer-extension>
-        <renders-children>true</renders-children>
+        <renders-children>false</renders-children>
       </renderer-extension>
     </renderer>
     <renderer>
@@ -26737,17 +26742,23 @@ this application, and passing the result through the
       </renderer-extension>
     </renderer>
     <renderer>
-      <description>If the "styleClass", "style", "dir" or "lang"
-      attributes are present, render a "span" element.  If the
-      "styleClass" attribute is present, render its value as the value
-      of the "class" attribute.  If the "style" attribute is present,
-      pass it thru.  If the "escape" attribute is not present, or it is
-      present and its value is "true" all angle brackets should be
-      converted to the ampersand xx semicolon syntax when rendering the
-      value of the "value" attribute as the value of the component.  If
-      the "escape" attribute is present and is "false" the value of the
-      component should be rendered as text without escaping.
-            </description>
+      <description><![CDATA[
+      <p><span class="changed_modified_2_2">If</span> the
+      "styleClass", "style", "dir" or "lang" attributes are present,
+      render a "span" element.  If the "styleClass" attribute is
+      present, render its value as the value of the "class" attribute.
+      If the "style" attribute is present, pass it thru.  If the
+      "escape" attribute is not present, or it is present and its value
+      is "true" all angle brackets should be converted to the ampersand
+      xx semicolon syntax when rendering the value of the "value"
+      attribute as the value of the component.  If the "escape"
+      attribute is present and is "false" the value of the component
+      should be rendered as text without escaping.</p>
+
+      <p class="changed_added_2_2">If this element has children,
+      they must be ignored by default.  Implementions may provide a
+      configuration option that allows this element to render its
+      children.</p>]]></description>
       <component-family>javax.faces.Output</component-family>
       <renderer-type>javax.faces.Text</renderer-type>
       <renderer-class>
@@ -26839,7 +26850,7 @@ this application, and passing the result through the
       </attribute>
 
       <renderer-extension>
-        <renders-children>true</renders-children>
+        <renders-children>false</renders-children>
       </renderer-extension>
     </renderer>
     <renderer>

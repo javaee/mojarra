@@ -531,8 +531,8 @@ public final class FacesServlet implements Servlet {
 
      * </div>
      *
-     * @param request The servlet request we are processing
-     * @param response The servlet response we are creating
+     * @param req The servlet request we are processing
+     * @param resp The servlet response we are creating
      *
      * @throws IOException if an input/output error occurs during processing
      * @throws ServletException if a servlet error occurs during processing

@@ -812,7 +812,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
     
     /**
      * <p class="changed_added_2_2">The default behavior of this method is to
-     * call {@link ExternalContext#isSecure()}
+     * call {@link ExternalContext#isSecure}
      * on the wrapped {@link ExternalContext} object.</p>
      *
      * @see javax.faces.context.ExternalContext#isSecure())
