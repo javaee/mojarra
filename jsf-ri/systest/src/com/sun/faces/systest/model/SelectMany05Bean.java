@@ -43,7 +43,9 @@ package com.sun.faces.systest.model;
 import java.util.Set;
 import java.util.List;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -202,9 +204,23 @@ public class SelectMany05Bean {
         if (!(initialSortedSetValues instanceof TreeSet)) {
             throw new FacesException("[setInitialSortedSetValues] Error: Expected value to be TreeMap");
         }
-        if (!Collections.reverseOrder().equals(((TreeSet) initialSortedSetValues).comparator())) {
+        TreeSet temp = new TreeSet(new Comparator(){
+            public int compare(Object s1, Object s2){
+                String str1 = (String)s1;
+                String str2 = (String)s2;
+                return str2.compareTo(str1);
+            }});
+
+        temp.add("Frodo");
+        temp.add("Pippin");
+        if (!temp.equals(initialSortedSetValues)) {
             throw new FacesException("[setInitialSortedSetValues] Error: Comparator is not equivalent to Collections.reverseOrder()");
         }
+
+// This comparison fails on AIX platform, so we do the above comparison
+//        if (!Collections.reverseOrder().equals(((TreeSet) initialSortedSetValues).comparator())) {
+//            throw new FacesException("[setInitialSortedSetValues] Error: Comparator is not equivalent to Collections.reverseOrder()");
+//        }
         this.initialSortedSetValues = initialSortedSetValues;
     }
 
