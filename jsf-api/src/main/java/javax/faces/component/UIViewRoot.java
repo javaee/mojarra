@@ -70,8 +70,8 @@ import javax.faces.view.ViewMetadata;
 
 /**
  * <p><strong class="changed_modified_2_0"><span
- * class="changed_modified_2_0_rev_a
- * changed_modified_2_1">UIViewRoot</span></strong> is the UIComponent
+ * class="changed_modified_2_0_rev_a changed_modified_2_1
+ * changed_modified_2_2">UIViewRoot</span></strong> is the UIComponent
  * that represents the root of the UIComponent tree.  This component
  * renders markup as the response to Ajax requests.  It also serves as
  * the root of the component tree, and as a place to hang per-view
@@ -1669,9 +1669,13 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
     }
 
     /**
-     * <p class="changed_added_2_2">Restore ViewScope state before processing the templates. This is
-     * needed with partial state saving to allow use of view scoped beans for EL-expressions in
-     * &lt;ui:include src="#{viewScopedBean.includeFileName}"/&gt;. </p>
+
+     * <p class="changed_added_2_2">Restore ViewScope state. This is
+     * needed to allow the use of view scoped beans for EL-expressions
+     * in the template from which the component tree is built.  For
+     * example: <code>&lt;ui:include
+     * src="#{viewScopedBean.includeFileName}"/&gt;</code>. </p>
+
      * 
      * @param context
      *            current FacesContext.
