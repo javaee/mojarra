@@ -86,16 +86,6 @@
                 <filelist dir="${impl.dir}">
                     <file name="build.xml"/>
                 </filelist>
-                <filelist dir="${regression.test.dir}">
-                    <file name="build.xml"/>
-                </filelist>
-                <!-- taking jsf-demo out of the standard build/test loop
-                     as one can't build the current source bundle as jsf-demo
-                     isn't included
-                <filelist dir="${demo.dir}">
-                    <file name="build.xml"/>
-                </filelist>
-                     -->
             </subant>
         </sequential>
     </macrodef>
@@ -112,6 +102,11 @@
 
     <target name="modules.clean">
       <call.modules target="clean"/>        
+      <subant target="clean" inheritAll="false">
+        <filelist dir="${regression.test.dir}">
+          <file name="build.xml"/>
+        </filelist>
+      </subant>
     </target>
 
     <target name="main" description="Build Mojarra">
@@ -135,31 +130,50 @@
     </target>
 
     <target name="test" description="Run API, Impl, and Demo automated tests">
-        <echo>
-GlassFish 3.1 should show 2108 successfully passing tests.
-GlassFish 3.0.1 should show 2536 successfully passing tests.
-        </echo>
         <call.modules target="test"/>
+
+        <subant target="clean" inheritAll="false">
+          <filelist dir="${regression.test.dir}">
+            <file name="build.xml"/>
+          </filelist>
+        </subant>
+
+        <subant target="main" inheritAll="false">
+          <filelist dir="${regression.test.dir}">
+              <file name="build.xml"/>
+          </filelist>
+        </subant>
+
+        <subant target="test" inheritAll="false">
+          <filelist dir="${regression.test.dir}">
+              <file name="build.xml"/>
+          </filelist>
+        </subant>
+
     </target>
 
     <target name="test.with.container.refresh"
             description="Stop the target container, deploy the build artifacts, restart the container and test">
-        <echo>
-GlassFish 3.1 should show 2108 successfully passing tests.
-        </echo>
         <trycatch>
             <try>
                 <container.stop/>
-                <!-- PENDING(edburns): mojarra 1655
-                <antcall target="container.deploy.test.dependencies"/>
-                -->
                 <antcall target="container.deploy"/>
                 <echo message="Successfully deployed JSF implementation to container." />
                 <echo message="About to start container." />
                 <container.start/>
                 <echo message="Successfully started container." />
                 <echo message="About to invoke tests." />
-                <call.modules target="test"/>
+                <antcall target="test"/>
+
+                <!-- taking jsf-demo out of the standard build/test loop
+                     as one can't build the current source bundle as jsf-demo
+                     isn't included
+                <filelist dir="${demo.dir}">
+                    <file name="build.xml"/>
+                </filelist>
+                     -->
+
+
                 <echo message="Successfully invoked test." />
             </try>
             <finally>
@@ -174,9 +188,6 @@ GlassFish 3.1 should show 2108 successfully passing tests.
         <trycatch>
             <try>
                 <container.stop/>
-                <!-- PENDING(edburns): mojarra 1655
-                <antcall target="container.deploy.test.dependencies"/>
-                -->
                 <antcall target="container.deploy"/>
                 <echo message="Successfully deployed JSF implementation to container." />
                 <echo message="About to start container." />
