@@ -1,0 +1,10 @@
+OpenAjax is a vendor independant standard for, among other things, sending
+events within the client.
+
+See http://openajax.org for more information.
+
+This demo shows that it's trivially easy to bridge between the JSF event and
+error passing mechanism, and OpenAjax.  There's a composite component, under
+web/resources/openajaxbridge, which can be placed in a page (as the first
+component, preferably), which will intercept all JSF events and errors and
+republish them on the OpenAjax hub.

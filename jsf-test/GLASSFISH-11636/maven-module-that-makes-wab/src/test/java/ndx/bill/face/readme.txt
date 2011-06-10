@@ -1,0 +1,1 @@
+Since Archetype "create" can not create empty directories this file was created. It is safe to delete

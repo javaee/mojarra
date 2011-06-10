@@ -1,0 +1,99 @@
+http://jcp.org/aboutJava/communityprocess/speclead/final-questions.txt
+
+Revision 20101108-2313 EST
+
+Before we post your Spec's Final Approval Ballot, we need to have the
+complete answers to the following questions on file here in the PMO:
+
+1. Have you provided the PMO a PDF or ZIP version of the Final Specification?
+
+Yes: https://stbeehive.oracle.com/content/dav/st/Mojarra/Public%20Documents/JSF%202.1%20Release%20Candidate%201/jsf-spec-2.1.zip
+
+2. Have you provided the PMO a PDF or ZIP version of the Final Reference Implementation?
+
+Yes: https://stbeehive.oracle.com/content/dav/st/Mojarra/Public%20Documents/JSF%202.1%20Release%20Candidate%201/mojarra-2.1.0-FCS.zip
+
+3. Have you provided the PMO a PDF or ZIP version of the Final Technology Compatibility Kit?
+
+https://stbeehive.oracle.com/content/dav/st/Mojarra/Public%20Documents/JSF%202.1%20Release%20Candidate%201/jsftck-2.1_08-Nov-2010.zip
+
+4. What is the full text of the final Specification License?
+
+See the PDF in the zip in question 1.
+
+5. What is the full text of the Final Reference Implementation license?
+
+See the LICENSE.TXT file in the zip from question 2.
+
+6. What is the full text of the Final Technology
+    Compatibility Kit license?  
+
+>>>>> On Tue, 01 Jun 2010 17:13:23 -0700, Harold Ogle <harold@jcp.org> said:
+
+HO>     One last question, though: can you confirm that the license terms 
+HO> which will apply to the revised Final Release (Maintenance Release) 
+HO> Specification, RI and TCK are unchanged from the original Final Release?
+
+I confirm that these have not changed from the original Final Release.
+
+7. Where is the Reference Implementation be posted for Final Release?
+
+See question 1.
+
+8. Where is the Technology Compatibility Kit posted for Final Release?
+
+See question 3.
+
+9. What is the first-level TCK appeals process that you have established?
+
+This has not changed from the original Final Release
+
+10. How extensive is the coverage of your TCK? (provide the TCK Coverage Document you have prepared)
+
+Do we need this for a Minor Revision?
+
+11. Who will be the Maintenance Lead? (provide name, postal address, e-mail address, telephone number)
+
+12. What is the version number of the specification, and the full legal name of your company or organization?
+
+2.1
+
+Oracle America, Inc.
+
+13. What is the public location of your change log? 
+
+http://jcp.org/aboutJava/communityprocess/maintenance/jsr314/314ChangeLog.html
+
+14. What are your answers to the following, with regards to the Final Specification?
+
+A. Does the specification include software codes
+in the following format:
+Binary : Yes _______ No ___X______
+Source (compilable) : Yes _______ No _____X____
+Javadocs : Yes __X____ No __________
+B. Do the codes or the spec call on, contain, use
+or demonstrate encryption technology?
+Yes ___X_____ No ________
+If yes, please describe in detail
+
+The only encryption technology called on is what already exists in the Java Platform Standard Edition
+
+15. Does the Expert Group agree that you are ready to go Final?
+
+Yes.
+       
+16. Does the Reference Implementation pass the Technology Compatibility Kit?
+
+Yes.
+   
+17. Can the Specification be implemented independently of the Reference
+       Implementation?
+
+Yes.
+
+Please send the answers to the above questions back to spec-submit@jcp.org.
+
+Thank you very much and congratulations with reaching the Final Approval Ballot stage of the JCP!
+
+The JCP Program Office.
+       

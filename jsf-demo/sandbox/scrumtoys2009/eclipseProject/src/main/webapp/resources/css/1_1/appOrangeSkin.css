@@ -1,0 +1,265 @@
+/*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+ *
+ * Copyright (c) 2010 Oracle and/or its affiliates. All rights reserved.
+ *
+ * The contents of this file are subject to the terms of either the GNU
+ * General Public License Version 2 only ("GPL") or the Common Development
+ * and Distribution License("CDDL") (collectively, the "License").  You
+ * may not use this file except in compliance with the License.  You can
+ * obtain a copy of the License at
+ * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+ * or packager/legal/LICENSE.txt.  See the License for the specific
+ * language governing permissions and limitations under the License.
+ *
+ * When distributing the software, include this License Header Notice in each
+ * file and include the License file at packager/legal/LICENSE.txt.
+ *
+ * GPL Classpath Exception:
+ * Oracle designates this particular file as subject to the "Classpath"
+ * exception as provided by Oracle in the GPL Version 2 section of the License
+ * file that accompanied this code.
+ *
+ * Modifications:
+ * If applicable, add the following below the License Header, with the fields
+ * enclosed by brackets [] replaced by your own identifying information:
+ * "Portions Copyright [year] [name of copyright owner]"
+ *
+ * Contributor(s):
+ * If you wish your version of this file to be governed by only the CDDL or
+ * only the GPL Version 2, indicate your decision by adding "[Contributor]
+ * elects to include this software in this distribution under the [CDDL or GPL
+ * Version 2] license."  If you don't indicate a single choice of license, a
+ * recipient has the option to distribute your version of this file under
+ * either the CDDL, the GPL Version 2 or to extend the choice of license to
+ * its licensees as provided above.  However, if you add GPL Version 2 code
+ * and therefore, elected the GPL Version 2 license, then the option applies
+ * only if the new code is made subject to such option by the copyright
+ * holder.
+ */
+
+div.navBarClass span, div.navBarClass {
+    /* Orange 100%*/
+    color:#F78E1E;
+    padding:10px;
+}
+
+
+.tituloForm {
+    font-size: 10pt;
+    /* Orange 100%*/
+    color: #F78E1E;;
+    font-weight:bold;
+    padding:5px;
+    margin:5px;
+}
+input.botaoPostIt{
+    font-size: 8pt;
+    /* Orange 100%*/
+    color: #F78E1E;
+    font-weight:bold;
+    background-color:white;
+
+}
+
+.inputPattern{
+  /* Orange 20%*/
+  color: #FCDEBC;
+}
+label {
+  font-size: 12px;
+  /* Orange 100%*/
+  color: #F78E1E;
+  text-align: left;
+  border:none;
+
+}
+
+input, select,textarea {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  /* Orange 100% */
+  color: #F78E1E;
+  text-align: left;
+  background-color:white;
+  border-style:ridge;
+  /*lightgray*/
+  border:1px solid #d3d3d3;
+  padding:4px;
+  margin:4px;
+  margin-bottom:4px;
+  font-weight:normal;
+}
+
+.datatableHeader{
+    /* Orange 100% */
+    background-color:#F78E1E;
+    color:white;
+    font-size:12pt;
+    font-weight:normal;
+    padding:10px;
+    margin:10px;
+}
+
+.datatableRow2{
+    /* Orange 20% */
+    background-color:#FCDEBC;
+    font-size:12px;
+    color:black;
+    padding:15px;
+    margin:15px;
+    text-align:center;
+
+}
+
+.navigationLink{
+    text-decoration:none;
+    text-align:right;
+    /* Orange 100% */
+    color:#F78E1E;
+}
+
+/*Diferent datatable lines / oposite*/
+.datatableRow{
+    background-color:white;
+    color:black;
+    font-size:12px;
+    text-align:center;
+}
+
+table.menuTable{
+    /* it seems its not necessary */
+    border-collapse:collapse;
+    vertical-align:middle;
+    text-align: left;
+}
+
+table.menuTable tr td{
+    vertical-align:middle;
+    padding-bottom:0px;
+    /*space between menu itens */
+    width:168px;
+    
+}
+
+.menu a{
+    text-decoration: none;
+    font-family: Arial, Helvetica, sans-serif ;
+    font-size: 12px;
+    padding: 10px;
+    /* Orange 100% */
+    color: #F78E1E;
+}
+
+/* menuItem and menu spacing */
+.menu ul{
+    text-align:left;
+    padding:0pt;
+    margin:0pt;
+    /* sub menu item background */
+    background-color:white;
+
+    /* fundo transparente
+    background-image:url("../resources/images/menu/Transparency.png;");
+    */
+}
+/* submenu div */
+.menu{
+    display:none;
+    position:absolute;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+
+}
+
+/* submenu item*/
+.menu li{
+    /* white background for avoiding transparency on submenu item */
+    /*background-color:white;*/
+
+    list-style-type: none;
+    display: block;
+    padding:10px;
+    /* altura do submenu */
+    width: 142px;
+    /* Orange 100% */
+    border:1px solid #F78E1E;
+    
+    font-weight:bold;
+
+}
+
+
+.menuhandler {
+    /* Orange 100% */
+    border:1px solid #F78E1E;
+    color:white;
+
+    text-decoration:none;
+    display: block;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    width: 141px;
+    vertical-align:middle;
+    text-align: left;
+    font-weight: bold;
+    padding:10px;
+    background-color:#F78E1E;
+    /* fundo transparente
+    background-image:url("../resources/images/menu/Transparency.png;");
+    color:white;
+    */
+}
+.selectProject{
+    vertical-align:bottom;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    text-align:center;
+    
+}
+
+.postitComponent{
+        background-image:url("../resources/images/postits/novos/postit_lara_150x145.png");
+        width:150px;
+        height:145px;
+        font-size: 14px;
+        text-align:center;
+        color:white;
+}
+
+.postitComponent a{
+    text-decoration:none;
+    color:black;
+}
+
+.postitComponent tr td{
+
+    padding: 5pt;
+    padding-top: 15pt;
+    vertical-align:top;
+
+}
+ 
+.bigPostitComponent{
+        background-image:url("../resources/images/postits/novos/postit_lara_315x150.png");
+        background-repeat:no-repeat;
+        width:315px;
+        height:150px;
+        font-size: 14px;
+        text-align:center;
+        color:white;
+}
+
+.bigPostitComponent tr td{
+
+    padding: 5pt;
+    vertical-align:top;
+
+}
+.postitComponent a{
+    text-decoration:none;
+    color:black;
+}
+
