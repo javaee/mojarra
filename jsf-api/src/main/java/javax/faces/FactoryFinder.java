@@ -698,6 +698,7 @@ public final class FactoryFinder {
                     // FactoryManager.  Iterate through the data structure 
                     // containing all FactoryManager instances for this VM.
                     FactoryManagerCacheKey curKey;
+                    boolean foundMatchInApplicationMap = false;
                     for (Map.Entry<FactoryManagerCacheKey, FactoryManager> cur : applicationMap.entrySet()) {
                         curKey = cur.getKey();
                         // If the current FactoryManager is for a
@@ -712,7 +713,7 @@ public final class FactoryFinder {
 
                             if ((null != key.getContext() && null != curKey.getContext()) &&
                                 (!key.getContext().equals(curKey.getContext()))) {
-                                createNewFactoryManagerInstance = true;
+                                foundMatchInApplicationMap = true;
                             }
                             else {
                                 // Otherwise, use this FactoryManager
@@ -722,6 +723,7 @@ public final class FactoryFinder {
                             break;
                         }
                     }
+                    createNewFactoryManagerInstance = (null == result && !foundMatchInApplicationMap);
                 } else {
                     createNewFactoryManagerInstance = true;
                 }
