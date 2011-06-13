@@ -67,12 +67,25 @@ public class VDLImpl extends ViewDeclarationLanguage implements FacesWrapper<Vie
         final String key = "VDLImplMessage";
 
         StackTraceElement stackTrace[] = Thread.currentThread().getStackTrace();
+        String stackTraceElement;
         StringBuilder builder = (StringBuilder) requestMap.get(key);
         if (null == builder) {
             builder = new StringBuilder();
             requestMap.put(key, builder);
         }
-        builder.append(" ").append(stackTrace[2].getMethodName());
+        for (int i = 0; i < stackTrace.length; i++) {
+            StackTraceElement cur = stackTrace[i];
+            stackTraceElement = cur.toString();
+            if (stackTraceElement.contains("getViewMetadata") ||
+                stackTraceElement.contains("createView") ||
+                stackTraceElement.contains("buildView") ||
+                stackTraceElement.contains("renderView") ||
+                stackTraceElement.contains("restoreView") ||
+                stackTraceElement.contains("getStateManagementStrategy")) {
+                builder.append(" ").append(stackTrace[i].getMethodName());
+                break;
+            }
+        }
     }
 
     @Override
