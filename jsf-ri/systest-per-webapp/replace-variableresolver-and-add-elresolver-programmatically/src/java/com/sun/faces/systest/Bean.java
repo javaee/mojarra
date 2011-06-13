@@ -138,7 +138,7 @@ public class Bean {
 
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
         String stackTraceElement;
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 5; i++) {
             StackTraceElement cur = stackTrace[i];
             stackTraceElement = cur.toString();
             if (!(stackTraceElement.contains("Thread") ||
