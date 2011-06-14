@@ -56,6 +56,11 @@
     <graphic-image-renderer-class>
         com.sun.faces.renderkit.html_basic.ImageRenderer
     </graphic-image-renderer-class>
+    <!-- FILE_UPLOAD: BEGIN -->
+    <input-file-renderer-class>
+        com.sun.faces.renderkit.html_basic.FileRenderer
+    </input-file-renderer-class>
+    <!-- FILE_UPLOAD: END -->
     <input-hidden-renderer-class>
         com.sun.faces.renderkit.html_basic.HiddenRenderer
     </input-hidden-renderer-class>

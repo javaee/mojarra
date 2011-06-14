@@ -44,6 +44,7 @@ package com.sun.faces.renderkit.html_basic;
 
 import java.io.IOException;
 
+import javax.faces.component.html.HtmlInputFile; // FILE_UPLOAD
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIOutput;
@@ -102,7 +103,16 @@ public class TextRenderer extends HtmlBasicInputRenderer {
         if (component instanceof UIInput) {
             writer.startElement("input", component);
             writeIdAttributeIfNecessary(context, writer, component);
-            writer.writeAttribute("type", "text", null);
+            
+            // FILE_UPLOAD: BEGIN
+            if (component instanceof HtmlInputFile) {
+                writer.writeAttribute("type", "file", null);
+            }
+            else {
+                writer.writeAttribute("type", "text", null);
+            }
+            // FILE_UPLOAD: END
+            // FILE_UPLOAD: writer.writeAttribute("type", "text", null);
             writer.writeAttribute("name", (component.getClientId(context)),
                                   "clientId");
 

@@ -485,6 +485,34 @@
 
     </component>
 
+    <!-- FILE_UPLOAD: BEGIN -->
+    <component>
+
+        <description>
+            <![CDATA[<p>Represents an HTML <code>input</code> element
+      of type <code>file</code>.</p>]]>
+        </description>
+        <display-name>Input File</display-name>
+        <component-type>javax.faces.HtmlInputFile</component-type>
+        <component-class>javax.faces.component.html.HtmlInputFile</component-class>
+
+        <xi:include href="uiinput-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="core-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="events-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="focus-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="input-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="text-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="file-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <base-component-type>javax.faces.Input</base-component-type>
+            <renderer-type>javax.faces.File</renderer-type>
+        </component-extension>
+
+    </component>
+    <!-- FILE_UPLOAD: END -->
+
     <component>
 
         <description>
@@ -1852,6 +1880,70 @@
                 <renders-children>true</renders-children>
             </renderer-extension>
         </renderer>
+        
+        <!-- FILE_UPLOAD: BEGIN -->
+        <renderer>
+
+            <description><![CDATA[<p><span class="changed_modified_2_2">Renders</span>
+            an HTML "input" element of "type" "file".</p>
+
+      <p><a name="decode">Decode Behavior</a></p>
+
+      <ul>
+
+      <p>Obtain the <code>Map</code> from the "requestParameterMap"
+      property of the <code>ExternalContext</code>.  If the
+      <code>Map</code> contains an entry for the "clientId" of the
+      component, pass the value of the entry to the
+      <code>setSubmittedValue()</code> method of the component, which
+      must be an instance of <code>EditableValueHolder</code>.
+      Also, obtain the <code>Map</code> from the "requestMap" property
+      of the <code>ExternalContext</code>. If the <code>Map</code>
+      contains en entry for the "javax.faces.UPLOADED_FILES" key,
+      get the corresponding value, type type of which is a map of
+      type <code>Map<String, UploadedFile></code>. Finally, obtain
+      the <code>UploadedFile</code> from the map and pass the value
+      to the <code>setUploadedFile</code> method of the component.</p>
+
+      </ul>
+
+      <p>Encode Behavior</p>
+
+      <ul>
+
+      <p>  Render the clientId of the component as
+      the value of the "name" attribute.  Render the current value of
+      the component as the value of the "value" attribute.  If the
+      "styleClass" attribute is specified, render its value as the value
+      of the "class" attribute.
+      </p>
+
+      <p class="changed_added_2_2">If this element has children, they
+      must be ignored by default.  Implementions may provide a
+      configuration option that allows this element to render its
+      children.</p>
+
+      </ul>]]>
+
+            </description>
+            <component-family>javax.faces.Input</component-family>
+            <renderer-type>javax.faces.File</renderer-type>
+            <renderer-class>
+                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/input-file-renderer-class/text())"/>
+            </renderer-class>
+
+            <xi:include href="core-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="events-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="focus-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="input-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="text-attrs.xml" xpointer="xpointer(/root/*)"/>
+
+            <renderer-extension>
+                <renders-children>false</renders-children>
+            </renderer-extension>
+        </renderer>
+        <!-- FILE_UPLOAD: END -->
 
         <renderer>
 

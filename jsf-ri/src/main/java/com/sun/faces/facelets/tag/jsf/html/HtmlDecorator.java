@@ -107,7 +107,7 @@ public final class HtmlDecorator implements TagDecorator {
                         return new Tag(tag.getLocation(),
                                 HtmlLibrary.Namespace, "inputText", tag
                                         .getQName(), na);
-                    }
+                    }                    
                     if ("password".equals(t)) {
                         return new Tag(tag.getLocation(),
                                 HtmlLibrary.Namespace, "inputSecret", tag
@@ -123,6 +123,13 @@ public final class HtmlDecorator implements TagDecorator {
                                 HtmlLibrary.Namespace, "commandButton", tag
                                         .getQName(), na);
                     }
+                    // FILE_UPLOAD: BEGIN
+                    if ("file".equals(t)) {
+                        return new Tag(tag.getLocation(),
+                                HtmlLibrary.Namespace, "inputFile", tag
+                                        .getQName(), na);
+                    }
+                    // FILE_UPLOAD: END
                 }
             }
         }

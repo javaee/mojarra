@@ -104,6 +104,7 @@ public class ExternalContextImpl extends ExternalContext {
     private Map<String,String> initParameterMap = null;
     private Map<String,String> fallbackContentTypeMap = null;
     private ELFlash flash;
+    private RequestParameterMapFactory requestParameterMapFactory = null; // FILE_UPLOAD
 
     private enum ALLOWABLE_COOKIE_PROPERTIES {
         domain,
@@ -142,6 +143,9 @@ public class ExternalContextImpl extends ExternalContext {
         fallbackContentTypeMap.put("groovy", "application/x-groovy");
         fallbackContentTypeMap.put("properties", "text/plain");
         
+        // FILE_UPLOAD: BEGIN
+        this.requestParameterMapFactory = new RequestParameterMapFactory(request);
+        // FILE_UPLOAD: END
     }
 
 
@@ -335,9 +339,14 @@ public class ExternalContextImpl extends ExternalContext {
      */
     public Map<String,String> getRequestParameterMap() {
         if (null == requestParameterMap) {
+// FILE_UPLOAD:            requestParameterMap = 
+// FILE_UPLOAD:               Collections.unmodifiableMap(
+// FILE_UPLOAD:                   new RequestParameterMap(request));
+        	// FILE_UPLOAD: BEGIN
             requestParameterMap = 
                 Collections.unmodifiableMap(
-                    new RequestParameterMap(request));
+                    requestParameterMapFactory.getRequestParameterMap());
+        	// FILE_UPLOAD: END
         }
         return requestParameterMap;
     }
@@ -348,9 +357,14 @@ public class ExternalContextImpl extends ExternalContext {
      */
     public Map<String,String[]> getRequestParameterValuesMap() {
         if (null == requestParameterValuesMap) {
-            requestParameterValuesMap = 
-                Collections.unmodifiableMap(
-                    new RequestParameterValuesMap(request));
+// FILE_UPLOAD:            requestParameterValuesMap = 
+// FILE_UPLOAD:                Collections.unmodifiableMap(
+// FILE_UPLOAD:                    new RequestParameterValuesMap(request));
+        	// FILE_UPLOAD: BEGIN
+        	requestParameterValuesMap = 
+        	    Collections.unmodifiableMap(
+        	    		requestParameterMapFactory.getRequestParameterValuesMap());
+        	// FILE_UPLOAD: END
         }
         return requestParameterValuesMap;
     }
