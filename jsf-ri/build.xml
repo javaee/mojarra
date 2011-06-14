@@ -95,6 +95,10 @@
         <path refid="apache.commons.classpath"/>
         <path refid="compile.classpath"/>
         <pathelement location="${jsf-tools.jar}"/>
+    	<!-- FILE_UPLOAD: BEGIN -->
+    	<pathelement location="${dependency.jar.dir}/commons-fileupload-1.2.2.jar" />
+    	<pathelement location="${dependency.jar.dir}/commons-io-1.3.2.jar" />
+    	<!-- FILE_UPLOAD: END -->
         <pathelement location="${tools.dir}/build/classes"/>
     </path>
 
