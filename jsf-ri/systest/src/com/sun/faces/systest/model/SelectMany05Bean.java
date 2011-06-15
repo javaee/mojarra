@@ -202,9 +202,16 @@ public class SelectMany05Bean {
         if (!(initialSortedSetValues instanceof TreeSet)) {
             throw new FacesException("[setInitialSortedSetValues] Error: Expected value to be TreeMap");
         }
-        if (!Collections.reverseOrder().equals(((TreeSet) initialSortedSetValues).comparator())) {
+
+        TreeSet<String> temp = new TreeSet <String>(Collections.reverseOrder());
+        if (!((TreeSet)temp).comparator().equals(((TreeSet)initialSortedSetValues).comparator())) {
             throw new FacesException("[setInitialSortedSetValues] Error: Comparator is not equivalent to Collections.reverseOrder()");
         }
+
+// This comparison fails on AIX platform, so we do the above comparison
+//        if (!Collections.reverseOrder().equals(((TreeSet) initialSortedSetValues).comparator())) {
+//            throw new FacesException("[setInitialSortedSetValues] Error: Comparator is not equivalent to Collections.reverseOrder()");
+//        }
         this.initialSortedSetValues = initialSortedSetValues;
     }
 
