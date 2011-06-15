@@ -74,10 +74,10 @@
 
     <target name="remove">
         <undeploy.artifact
-              artifact="${basedir}/i_jsf_2052/target/i_jsf_2079_war_0_ProjectStageDevelopment.war"
+              artifact="${basedir}/i_jsf_2079_war_0/target/i_jsf_2079_war_0_ProjectStageDevelopment.war"
               appName="i_jsf_2079_war_0_ProjectStageDevelopment"/>
         <undeploy.artifact
-              artifact="${basedir}/i_jsf_2052/target/i_jsf_2079_war_1_ProjectStageProduction.war"
+              artifact="${basedir}/i_jsf_2079_war_1/target/i_jsf_2079_war_1_ProjectStageProduction.war"
               appName="i_jsf_2079_war_1_ProjectStageProduction"/>
     </target>    
 
