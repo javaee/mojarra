@@ -46,13 +46,12 @@ import javax.faces.FacesWrapper;
 import javax.faces.context.FacesContext;
 
 /**
- * <p class="changed_added_2_0"><span
- * class="changed_modified_2_0_rev_a">Provides</span> a simple
- * implementation of {@link ResourceHandler} that can be subclassed by
- * developers wishing to provide specialized behavior to an existing
- * {@link ResourceHandler} instance.  The default implementation of all
- * methods is to call through to the wrapped {@link
- * ResourceHandler}.</p>
+ * <p class="changed_added_2_0"><span class="changed_modified_2_0_rev_a
+ * changed_modified_2_2">Provides</span> a simple implementation of
+ * {@link ResourceHandler} that can be subclassed by developers wishing
+ * to provide specialized behavior to an existing {@link
+ * ResourceHandler} instance.  The default implementation of all methods
+ * is to call through to the wrapped {@link ResourceHandler}.</p>
  *
  * <div class="changed_added_2_0">
  *
@@ -82,6 +81,19 @@ public abstract class ResourceHandlerWrapper extends ResourceHandler implements 
     public Resource createResource(String resourceName) {
 
         return getWrapped().createResource(resourceName);
+
+    }
+
+    /**
+     * <p class="changed_added_2_2">The default behavior of this method
+     * is to call {@link ResourceHandler#createResourceFromId(String)} on the
+     * wrapped {@link ResourceHandler} object.</p>
+     *
+     * @since 2.2
+     */
+    public Resource createResourceFromId(String resourceId) {
+
+        return getWrapped().createResourceFromId(resourceId);
 
     }
 

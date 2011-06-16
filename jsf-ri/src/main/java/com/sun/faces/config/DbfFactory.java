@@ -126,6 +126,12 @@ public class DbfFactory {
           AS_SCHEMA_DIR + "web-facelettaglibrary_2_0.xsd";
 
     /**
+     * Location of the facelet taglib xsd within GlassFish.
+     */
+    private static final String FACELET_TAGLIB_2_2_XSD_FILE =
+          AS_SCHEMA_DIR + "web-facelettaglibrary_2_2.xsd";
+
+    /**
      * Location of the faces 2.0 xsd within GlassFish.
      */
     private static final String FACES_2_0_XSD_FILE =
@@ -148,6 +154,11 @@ public class DbfFactory {
      * Our cached 2.0 facelet-taglib Schema object for validation
      */
     private static Schema FACELET_TAGLIB_20_SCHEMA;
+
+    /**
+     * Our cached 2.2 facelet-taglib Schema object for validation
+     */
+    private static Schema FACELET_TAGLIB_22_SCHEMA;
 
     /**
      * Our cached 2.0 Schema object for validation
@@ -182,7 +193,8 @@ public class DbfFactory {
         FACES_21(FACES_21_SCHEMA),
         FACES_12(FACES_12_SCHEMA),
         FACES_11(FACES_11_SCHEMA),
-        FACELET_TAGLIB_20(FACELET_TAGLIB_20_SCHEMA);
+        FACELET_TAGLIB_20(FACELET_TAGLIB_20_SCHEMA),
+        FACELET_TAGLIB_22(FACELET_TAGLIB_22_SCHEMA);
 
         private Schema schema;
 

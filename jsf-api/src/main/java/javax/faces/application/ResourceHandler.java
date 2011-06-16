@@ -207,6 +207,37 @@ public abstract class ResourceHandler {
      */
     public abstract Resource createResource(String resourceName);
 
+    /**
+     * <p class="changed_added_2_2">Create an instance of
+     * <code>Resource</code> given the argument
+     * <code>resourceId</code>.  The content-type of the resource is
+     * derived by passing the <em>resourceName</em> to {@link
+     * javax.faces.context.ExternalContext#getMimeType}</p>
+
+     * <div class="changed_added_2_2">
+
+     * <p>The resource must be identified according to the specification in
+     * JSF.2.6.1.3 of the spec prose
+     * document <a
+     * href="../../../overview-summary.html#prose_document">linked in
+     * the overview summary</a>.</p>
+
+     * </div>
+
+     * @param resourceId the resource identifier of the resource.
+     *
+     * @throws NullPointerException if <code>resourceId</code> is
+     *  <code>null</code>.
+     *
+     * @return a newly created <code>Resource</code> instance, suitable
+     * for use in encoding or decoding the named resource.
+     * 
+     * @since 2.2
+     */
+
+    public Resource createResourceFromId(String resourceId) {
+        return null;
+    }
 
     /**
      * <p class="changed_added_2_0">Create an instance of

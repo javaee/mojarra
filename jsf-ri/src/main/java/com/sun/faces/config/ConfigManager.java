@@ -991,6 +991,12 @@ public class ConfigManager {
                             } else {
                                 schema = DbfFactory.FacesSchema.FACES_21;
                             }
+                        } else if ("2.2".equals(versionStr)) {
+                            if ("facelet-taglib".equals(documentElement.getLocalName())) {
+                                schema = DbfFactory.FacesSchema.FACELET_TAGLIB_22;
+                            } else {
+                                schema = DbfFactory.FacesSchema.FACES_21;
+                            }
                         } else if ("1.2".equals(versionStr)) {
                             schema = DbfFactory.FacesSchema.FACES_12;
                         } else {

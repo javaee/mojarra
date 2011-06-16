@@ -128,7 +128,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
     // ------------------------------------------------------------ Constructors
 
 
-    CompositeComponentTagHandler(Resource ccResource, ComponentConfig config) {
+    public CompositeComponentTagHandler(Resource ccResource, ComponentConfig config) {
         super(config);
         this.ccResource = ccResource;
         this.binding = config.getTag().getAttributes().get("binding");

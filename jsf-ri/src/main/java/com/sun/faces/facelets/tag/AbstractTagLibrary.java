@@ -58,6 +58,7 @@
 
 package com.sun.faces.facelets.tag;
 
+import com.sun.faces.facelets.tag.jsf.CompositeComponentTagHandler;
 import javax.el.ELException;
 import javax.faces.FacesException;
 import javax.faces.view.facelets.*;
@@ -67,6 +68,10 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import javax.faces.application.Resource;
+import javax.faces.application.ResourceHandler;
+import javax.faces.context.FacesContext;
+import javax.faces.view.Location;
 
 /**
  * Base class for defining TagLibraries in Java
@@ -249,6 +254,36 @@ public abstract class AbstractTagLibrary implements TagLibrary {
         public TagHandler createHandler(TagConfig cfg) throws FacesException,
                 ELException {
             return new UserTagHandler(cfg, this.location);
+        }
+    }
+
+    private static class CompositeComponentTagFactory implements TagHandlerFactory {
+        protected final String resourceId;
+
+        public CompositeComponentTagFactory(String resourceId) {
+            this.resourceId = resourceId;
+        }
+
+        public TagHandler createHandler(TagConfig cfg) throws FacesException,
+                ELException {
+            ComponentConfig componentConfig = 
+                    new ComponentConfigWrapper(cfg, 
+                    "javax.faces.NamingContainer",
+                    "javax.faces.Composite");
+            ResourceHandler resourceHandler = 
+                    FacesContext.getCurrentInstance().getApplication().getResourceHandler();
+            TagHandler result = null;
+            // Use the naming convention to extract the library name and
+            // component name from the resourceId.
+            Resource resource = resourceHandler.createResourceFromId(resourceId);
+            if (null != resource) {
+                result = new CompositeComponentTagHandler(resource, componentConfig);
+            } else {
+                Location loc = new Location(resourceId, 0, 0);
+                Tag tag = new Tag(loc, "", "", "", null);
+                throw new TagException(tag, "Cannot create composite component tag handler for composite-source element in taglib.xml file");
+            }
+            return result;
         }
     }
 
@@ -624,6 +659,18 @@ public abstract class AbstractTagLibrary implements TagLibrary {
      */
     protected final void addUserTag(String name, URL source) {
         this.factories.put(name, new UserTagFactory(source));
+    }
+    
+    /**
+     * Add a CompositeComponentTagHandler for the specified resource.
+     * 
+     * @see UserTagHandler
+     * @param name
+     *            name to use, "foo" would be &lt;my:foo />
+     * @param resourecId source where the Facelet (Tag) source is
+     */
+    protected final void addCompositeComponentTag(String name, String resourceId) {
+        this.factories.put(name, new CompositeComponentTagFactory(resourceId));
     }
     
     

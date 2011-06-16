@@ -112,6 +112,35 @@ public class ResourceHandlerImpl extends ResourceHandler {
 
     }
 
+    /**
+     * @see ResourceHandler#createResourceFromId(String)
+     */
+    @Override
+    public Resource createResourceFromId(String resourceId) {
+        Util.notNull("resourceId", resourceId);
+        FacesContext ctx = FacesContext.getCurrentInstance();
+
+        boolean development = ctx.isProjectStage(ProjectStage.Development);
+        
+        ResourceInfo info = manager.findResource(resourceId);
+        String ctype = getContentType(ctx, resourceId);
+        if (info == null) {
+            // prevent message from being when we're dealing with
+            // groovy is present and Application.createComponent()
+            // tries to resolve a .groovy file as backing UIComponent.
+            if (!development && "application/x-groovy".equals(ctype)) {
+                return null;
+            }
+            logMissingResource(ctx, resourceId, null);
+            return null;
+        } else {
+            return new ResourceImpl(info, ctype, creationTime, maxAge);
+        }
+        
+    }
+    
+    
+
 
     /**
      * @see ResourceHandler#createResource(String, String)
@@ -430,6 +459,38 @@ public class ResourceHandlerImpl extends ResourceHandler {
                     LOGGER.log(level, "", t);
                 }
             }
+        }
+
+    }
+
+    /**
+     * Log a message indicating a particular resource (reference by name and/or
+     * library) could not be found.  If this was due to an exception, the exception
+     * provided will be logged as well.
+     *
+     * @param ctx the {@link FacesContext} for the current request
+     * @param resourceName the resource name
+     * @param libraryName the resource library
+     * @param t the exception caught when attempting to find the resource
+     */
+    private void logMissingResource(FacesContext ctx,
+                                    String resourceId,
+                                    Throwable t) {
+
+        Level level;
+        if (!ctx.isProjectStage(ProjectStage.Production)) {
+            level = Level.WARNING;
+        } else {
+            level = ((t != null) ? Level.WARNING : Level.FINE);
+        }
+
+        if (LOGGER.isLoggable(level)) {
+                LOGGER.log(level,
+                           "jsf.application.resource.unable_to_serve",
+                           new Object[]{resourceId});
+                if (t != null) {
+                    LOGGER.log(level, "", t);
+                }
         }
 
     }

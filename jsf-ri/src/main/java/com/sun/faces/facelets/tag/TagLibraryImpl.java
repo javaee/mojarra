@@ -122,6 +122,12 @@ public class TagLibraryImpl extends AbstractTagLibrary {
             this.addUserTag(name, source);
         }
 
+        public void putCompositeComponentTag(String name, String resourceId) {
+            Util.notNull("name", name);
+            Util.notNull("resourceId", resourceId);
+            this.addCompositeComponentTag(name, resourceId);
+        }
+
         public void putFunction(String name, Method method) {
             Util.notNull("name", name);
             Util.notNull("method", method);

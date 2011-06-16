@@ -438,6 +438,25 @@ public class ResourceManager {
         }
 
     }
+    
+    ResourceInfo findResource(String resourceId) {
+        String libraryName = null;
+        String resourceName = null;
+        int end = 0, start = 0;
+        if (-1 != (end = resourceId.lastIndexOf("/"))) {
+            resourceName = resourceId.substring(end+1);
+            if (-1 != (start = resourceId.lastIndexOf("/", end - 1))) {
+                libraryName = resourceId.substring(start+1, end);
+            } else {
+                libraryName = resourceId.substring(0, end);
+            }
+        }
+        FacesContext context = FacesContext.getCurrentInstance();
+        LibraryInfo info = this.findLibrary(libraryName, null, context);
+        ResourceInfo resourceInfo = this.findResource(info, resourceName, libraryName, true, context);
+        
+        return resourceInfo;
+    }
 
 
     /**

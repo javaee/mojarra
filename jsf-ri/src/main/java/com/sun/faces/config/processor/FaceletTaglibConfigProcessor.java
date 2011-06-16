@@ -25,7 +25,7 @@
  * enclosed by brackets [] replaced by your own identifying information:
  * "Portions Copyright [year] [name of copyright owner]"
  *
- * Contributor(s):
+ * Contributor(resourceId):
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
  * elects to include this software in this distribution under the [CDDL or GPL
@@ -144,6 +144,13 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
      * </p>
      */
     private static final String SOURCE = "source";
+
+    /**
+     * <p>
+     * /facelet-taglib/tag/resource-id
+     * </p>
+     */
+    private static final String RESOURCE_ID = "resource-id";
 
     /**
      * <p>
@@ -336,6 +343,7 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
                 NodeList validator = null;
                 NodeList behavior = null;
                 Node source = null;
+                Node resourceId = null;
                 Node handlerClass = null;
                 for (int j = 0, jlen = children.getLength(); j < jlen; j++) {
                     Node n = children.item(j);
@@ -353,6 +361,8 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
                         behavior = n.getChildNodes();
                     } else if (SOURCE.equals(n.getLocalName())) {
                         source = n;
+                    } else if (RESOURCE_ID.equals(n.getLocalName())) {
+                        resourceId = n;
                     } else if (HANDLER_CLASS.equals(n.getLocalName())) {
                         handlerClass = n;
                     }
@@ -367,6 +377,8 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
                     processBehavior(behavior, taglibrary, tagName);
                 } else if (source != null) {
                     processSource(documentElement, source, taglibrary, tagName);
+                } else if (resourceId != null) {
+                    processResourceId(documentElement, resourceId, taglibrary, tagName);
                 } else if (handlerClass != null) {
                     processHandlerClass(handlerClass, taglibrary, tagName);
                 }
@@ -455,6 +467,15 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
 
     }
 
+    private void processResourceId(Element documentElement,
+                               Node compositeSource,
+                               TagLibraryImpl taglibrary,
+                               String name) {
+
+        String resourceId = getNodeText(compositeSource);
+        taglibrary.putCompositeComponentTag(name, resourceId);
+
+    }
 
     private void processValidator(NodeList validator,
                                   TagLibraryImpl taglibrary,
