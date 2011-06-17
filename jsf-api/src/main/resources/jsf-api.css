@@ -38,6 +38,11 @@
  * holder.
  */
 
+body { 
+  background-color: #FFFFFF;
+  background: url(expert-draft-bg.png); 
+}
+
 /* Change bars from http://www.geocities.com/hentaihelper/2atimlin.htm */
 
 /* put a red "change" bar in the left margin			*/

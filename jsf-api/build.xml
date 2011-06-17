@@ -247,6 +247,7 @@
         <copy todir="${build.generate.dir}/facesdoc/">
            <fileset dir="${doc.dir}">
              <include name="changed*.png" />
+             <include name="expert*.png" />
              <include name="changed*.cur" />
            </fileset>
         </copy>
@@ -720,6 +721,7 @@ javax.faces.level=ALL
         <copy todir="${build.javadocs.dir}/">
            <fileset dir="${doc.dir}">
              <include name="changed*.png" />
+             <include name="expert*.png" />
              <include name="changed*.cur" />
            </fileset>
         </copy>
@@ -744,7 +746,7 @@ javax.faces.level=ALL
                  windowtitle="${DocName} (${spec.version})"
                  stylesheetfile="${resources.dir}/jsf-api.css"
                  source="1.5"
-                 doctitle="${DocName} (${spec.version})"
+                 doctitle="${DocName} (${spec.version} SNAPSHOT ${build.number})"
                  bottom="Copyright 2002-2010 Oracle America Inc, Inc. All Rights Reserved.">
             <fileset dir="${src.dir}">
                 <include name="**/*.java"/>

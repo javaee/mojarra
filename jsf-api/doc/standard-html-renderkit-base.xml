@@ -239,6 +239,19 @@
 
     <component>
 
+        <component-type>javax.faces.ViewAction</component-type>
+        <component-class>javax.faces.component.UIViewAction</component-class>
+
+    <xi:include href="uiviewaction-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <component-family>javax.faces.ViewAction</component-family>
+        </component-extension>
+
+    </component>
+
+    <component>
+
         <component-type>javax.faces.Parameter</component-type>
         <component-class>javax.faces.component.UIParameter</component-class>
 

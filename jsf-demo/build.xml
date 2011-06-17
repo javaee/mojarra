@@ -304,6 +304,20 @@
 
     <target name="api.jsdocs">
             <!-- Create the jsdocs distribution -->
+        <copy todir="${dist.home}/jsdocs">
+           <fileset dir="${api.dir}/doc">
+             <include name="changed*.png" />
+             <include name="expert*.png" />
+             <include name="changed*.cur" />
+           </fileset>
+        </copy>
+        <!-- Couldn't get the dashdashtemplate option to work.  
+             Just copy the darn .css in.  -->
+        <move file="${jsdoc.home}/jsdoc-toolkit/templates/jsdoc/static/default.css" 
+              tofile="${jsdoc.home}/jsdoc-toolkit/templates/jsdoc/static/default_css.orig" />
+        <copy file="${api.dir}/doc/jsdoc-template/static/default.css"
+              tofile="${jsdoc.home}/jsdoc-toolkit/templates/jsdoc/static/default.css" />
+
         <java fork="true" jar="${jsdoc.home}/jsdoc-toolkit/jsrun.jar">
                     <arg line="${jsdoc.home}/jsdoc-toolkit/app/run.js"/>
                     <arg line="-a"/>
@@ -311,6 +325,10 @@
                     <arg line="-t=${jsdoc.home}/jsdoc-toolkit/templates/jsdoc"/>
                     <arg value="${basedir}/../jsf-api/src/main/resources/jsf.js"/>
         </java>
+        <move file="${jsdoc.home}/jsdoc-toolkit/templates/jsdoc/static/default_css.orig"
+              tofile="${jsdoc.home}/jsdoc-toolkit/templates/jsdoc/static/default.css" />
+              
+
         <zip zipfile="${dist.home}/docs/jsdocs-${impl.version}.zip">
             <fileset dir="${dist.home}" includes="jsdocs/**"/>
         </zip>

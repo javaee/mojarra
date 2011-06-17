@@ -815,7 +815,6 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
      * call {@link ExternalContext#isSecure}
      * on the wrapped {@link ExternalContext} object.</p>
      *
-     * @see javax.faces.context.ExternalContext#isSecure())
      */
     @Override
     public boolean isSecure() {

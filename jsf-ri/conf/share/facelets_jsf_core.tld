@@ -144,8 +144,6 @@
 
     </attribute>
 
-
-
  </tag>
 
 
@@ -829,7 +827,7 @@ for <code>@NamedEvent</code>.</p>
         </attribute>
 
         <attribute>
-            <description>
+            <description><![CDATA[
 
               <p class="changed_modified_2_0_rev_a">The expression must
               evaluate to a public method that takes a
@@ -840,7 +838,7 @@ for <code>@NamedEvent</code>.</p>
               came from, but this can be useful in cases where a
               notification is needed that "an event happened".</p>
 
-            </description>
+            ]]></description>
             <name>listener</name>
             <required>true</required>
             <rtexprvalue>false</rtexprvalue>
@@ -2496,6 +2494,108 @@ will not pass validation.</p> ]]>
 
     </attribute>
 
+    </tag>
+
+    <tag>
+        <description><![CDATA[
+
+            <p class="changed_added_2_2">This action component specifies
+            an application-specific command (or action), using an EL
+            method expression, to be invoked during one of the JSF
+            lifecycle phases, by default <em>Invoke Application</em>.</p>
+
+        ]]></description>
+        <name>viewAction</name>
+        <tag-class>javax.faces.webapp.UIComponentClassicTagBase</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <description><![CDATA[
+
+                <p>MethodExpression representing the application action
+            to invoke when this component is activated by the user. The
+            expression must evaluate to a public method that takes no
+            parameters, and returns an Object (the toString() of which
+            is called to derive the logical outcome) which is passed to
+            the NavigationHandler for this application.</p>
+
+            ]]></description>
+            <name>action</name>
+            <required>true</required>
+            <deferred-method>
+                <method-signature>
+                    java.lang.Object action()
+                </method-signature>
+            </deferred-method>
+
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+
+                <p>View actions are most commonly used on the initial
+            view request.  Therefore, view actions do not operate on
+            postback, by default.  This attribute enables a view action
+            to operate on postback.</p>
+
+            ]]></description>
+            <name>onPostback</name>
+            <required>false</required>
+            <deferred-value>
+             <type>java.lang.Boolean</type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+
+                <p>Like all children of <code>&lt;f:metadata&gt;</code>,
+            a view action has no visual representation in the view.
+            This attribute has exactly the same effect on a view action
+            as the <code>rendered</code> attribute has on a visual
+            component.  Specifically, if the value of this attribute
+            evaluates to <code>false</code> the component has no
+            effect.</p>
+
+
+            ]]></description>
+            <name>if</name>
+            <required>false</required>
+            <deferred-value>
+             <type>java.lang.Boolean</type>
+            </deferred-value>
+
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+
+                <p>Flag indicating that, if this component is activated
+                by the user, notifications should be delivered to
+                interested listeners and actions immediately (that is,
+                during Apply Request Values phase) rather than waiting
+                until Invoke Application phase.</p>
+
+            ]]></description>
+            <name>immediate</name>
+            <required>false</required>
+            <deferred-value>
+             <type>java.lang.Boolean</type>
+            </deferred-value>
+
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+
+                <p>Specifies the phase in which the action invocation
+                should occur using the name of the phase constant in the
+                PhaseId class (the case does not matter). The default is
+                INVOKE_APPLICATION.</p>
+
+            ]]></description>
+            <name>phase</name>
+            <required>false</required>
+            <deferred-value>
+             <type>java.lang.String</type>
+            </deferred-value>
+
+        </attribute>
     </tag>
 
 

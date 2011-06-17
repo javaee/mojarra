@@ -90,6 +90,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import javax.faces.component.UIViewAction;
 
 /**
  * 
@@ -432,7 +433,7 @@ public final class ComponentSupport {
      */
 
     private static boolean inspectInterfacesToCheckIfFormOmitted(UIComponent child) {
-        if (child instanceof UIViewParameter) {
+        if (child instanceof UIViewParameter || child instanceof UIViewAction) {
             return false;
         }
         return (child instanceof ActionSource || 

@@ -63,6 +63,7 @@ import com.sun.faces.facelets.tag.AbstractTagLibrary;
 import javax.faces.component.UIParameter;
 import javax.faces.component.UISelectItem;
 import javax.faces.component.UISelectItems;
+import javax.faces.component.UIViewAction;
 import javax.faces.component.UIViewParameter;
 import javax.faces.convert.DateTimeConverter;
 import javax.faces.convert.NumberConverter;
@@ -106,6 +107,8 @@ public final class CoreLibrary extends AbstractTagLibrary {
         this.addTagHandler("loadBundle", LoadBundleHandler.class);
 
         this.addComponent("viewParam", UIViewParameter.COMPONENT_TYPE, null);
+        
+        this.addComponent("viewAction", UIViewAction.COMPONENT_TYPE, null);
 
         this.addComponent("param", UIParameter.COMPONENT_TYPE, null);
         

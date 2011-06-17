@@ -2080,4 +2080,67 @@
             </method-signature>
         </attribute>
     </tag>
+
+    <tag>
+        <description>
+            This action component specifies an application-specific command (or action), 
+            using an EL method expression, to be invoked during one of the JSF lifecycle
+            phases proceeding Render Response (i.e., view rendering).
+        </description>
+        <tag-name>viewAction</tag-name>
+        <component>
+            <component-type>javax.faces.ViewAction</component-type>
+        </component>
+        <attribute>
+            <description>
+                Method expression referencing the action method to be invoked by the
+                component. View actions support declarative navigation just like 
+                UICommand components.
+            </description>
+            <name>action</name>
+            <required>true</required>
+            <type>javax.el.MethodExpression</type>
+        </attribute>
+        <attribute>
+            <description>
+                By default, a view action is not executed on postback. If your application 
+                is decidedly stateless, you may need the view action to execute on any type 
+                of request. The default value is false.
+            </description>
+            <name>onPostback</name>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description>
+                You may only want the view action to be invoked under certain conditions. 
+                For that, you can use this attribute, which accepts an EL value expression
+                that must evaluate to a boolean value.
+            </description>
+            <name>if</name>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description>
+                Setting the immediate attribute to true moves the invocation to the 
+                Apply Request Values phase instead of the default, the Invoke Application 
+                phase. The default value is false.
+            </description>
+            <name>immediate</name>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description>
+                Specifies the phase in which the action invocation should occur 
+                using the name of the phase constant in the PhaseId class (the case does 
+                not matter). The default is INVOKE_APPLICATION.
+            </description>
+            <name>phase</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
 </facelet-taglib>

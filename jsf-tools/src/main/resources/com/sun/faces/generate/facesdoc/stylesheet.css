@@ -43,7 +43,10 @@
 /* Define colors, fonts and other style attributes here to override the defaults */
 
 /* Page background color */
-body { background-color: #FFFFFF }
+body { 
+  background-color: #FFFFFF;
+  background-image: url(expert-draft-bg.png);
+}
 
 /* Table colors */
 .TableHeadingColor     { background: #CCCCFF } /* Dark mauve */

@@ -44,10 +44,12 @@ package javax.faces.event;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import javax.faces.FacesException;
 
 
 /**
- * <p>Typesafe enumeration of the legal values that may be returned by the
+ * <p><span class="changed_modified_2_2">Typesafe</span> enumeration of
+ * the legal values that may be returned by the
  * <code>getPhaseId()</code> method of the {@link FacesEvent} interface.
  */
 
@@ -116,6 +118,59 @@ public class PhaseId implements Comparable {
         }
 
         return (String.valueOf(this.phaseName) + ' ' + this.ordinal);
+    }
+    
+    /**
+     * <p class="changed_added_2_2">Return the name of this phase.</p>
+     * 
+     * @since 2.2
+     */
+
+    public String getName() {
+        return this.phaseName;
+    }
+
+    /**
+     * <p class="changed_added_2_2">Return a <code>PhaseId</code>
+     * representation of the arcument <code>phase</code>.</p>
+     * 
+     * @param phase the String for which the corresponding
+     * <code>PhaseId</code> should be returned.
+     *
+     * @throws <code>NullPointerException</code> if argument <code>phase</code> is
+     * <code>null</code>.
+     *
+     * @throws <code>FacesException</code> if the <code>PhaseId</code>
+     * corresponding to the argument <code>phase</code> cannot be found.
+     *
+     * @since 2.2
+     */
+    
+    public static PhaseId phaseIdValueOf(String phase) {
+        if (null == phase) {
+            throw new NullPointerException();
+        }
+        PhaseId result = null;
+
+        if (ANY_PHASE_NAME.equals(phase)) {
+            result = PhaseId.ANY_PHASE;
+        } else if (APPLY_REQUEST_VALUES_NAME.equals(phase)) {
+            result = PhaseId.APPLY_REQUEST_VALUES;
+        } else if (INVOKE_APPLICATION_NAME.equals(phase)) {
+            result = PhaseId.INVOKE_APPLICATION;
+        } else if (PROCESS_VALIDATIONS_NAME.equals(phase)) {
+            result = PhaseId.PROCESS_VALIDATIONS;
+        } else if (RENDER_RESPONSE_NAME.equals(phase)) {
+            result = PhaseId.RENDER_RESPONSE;
+        } else if (RESTORE_VIEW_NAME.equals(phase)) {
+            result = PhaseId.RESTORE_VIEW;
+        } else if (UPDATE_MODEL_VALUES_NAME.equals(phase)) {
+            result = PhaseId.UPDATE_MODEL_VALUES;
+        } else {
+            throw new FacesException("Not a valid phase [" + phase + "]");
+        }
+        
+        return result;
     }
 
 
