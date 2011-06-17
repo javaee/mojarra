@@ -48,7 +48,7 @@
       xmlns:xml="http://www.w3.org/XML/1998/namespace"
       elementFormDefault="qualified"
       attributeFormDefault="unqualified"
-      version="2.0">
+      version="2.2">
     <xsd:include schemaLocation="javaee_5.xsd"/>
 
   <xsd:annotation>
