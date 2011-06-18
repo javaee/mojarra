@@ -2233,11 +2233,11 @@
 
             <description><![CDATA[
 
-            <p><span class="changed_modified_2_0_rev_a">Render</span> an
-            HTML "a" anchor element.  The value of the component is
-            rendered as the value of the "href" attribute.  Any child
-            UIParameter components <span
-            class="changed_modified_2_0_rev_a">whose
+            <p><span class="changed_modified_2_0_rev_a
+            changed_modified_2_2">Render</span> an HTML "a" anchor
+            element.  The value of the component is rendered as the
+            value of the "href" attribute.  Any child UIParameter
+            components <span class="changed_modified_2_0_rev_a">whose
             <code>disable</code> property is <code>false</code></span>
             are appended to the String to be output as the value of the
             "href" attribute as query parameters before rendering.  The
@@ -2246,19 +2246,20 @@
             <code>ExternalContext</code>.  The name of the UIParameter
             goes on the left hand side, and the value of the UIParameter
             on the right hand side.  The name and the value must be
-            URLEncoded.  <span class="changed_modified_2_0_rev_a">Note
-            that the required url encoding is handled by
-            <code>ResponseWrter.writeAttribute()</code>.</span> Each
+            URLEncoded.  <span class="changed_modified_2_0_rev_a
+            changed_modified_2_2">Note that the required url encoding is
+            handled by
+            <code>ResponseWrter.writeURIAttribute()</code>.</span> Each
             UIParameter instance is separeted by an ampersand, as
             dictated in the URL spec.  If the "styleClass" attribute is
             specified, render its value as the value of the "class"
             attribute.  If the "id" attribute is specified, follow the
-            same steps as mentioned in the 
-            "<a href="renderkit-summary.html#general_encoding">General
-            Notes on Encoding</a>" regarding the "id" attribute for
-            UIInput components.  If the "disabled" attribute is
-            specified, do not render the HTML "a" anchor element or the
-            "href" element.  Instead, render a "span" element.  If the
+            same steps as mentioned in the "<a
+            href="renderkit-summary.html#general_encoding">General Notes
+            on Encoding</a>" regarding the "id" attribute for UIInput
+            components.  If the "disabled" attribute is specified, do
+            not render the HTML "a" anchor element or the "href"
+            element.  Instead, render a "span" element.  If the
             "styleClass" attribute is specified, render its value as the
             value of the "class" attribute on the "span".  Render any
             pass-through attributes on the "span".

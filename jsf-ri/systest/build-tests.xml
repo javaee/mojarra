@@ -973,6 +973,11 @@
 <!-- 139-StateSaving -->
             </tests>
         </jsf.junit>
+
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/render/outputLinkSpaces.jsp"
+              regexp="(?s).*text%20before%20query%20string.*?text%20after=query%20string.*"/>
+
     </target>
 
     <target name="test.component"
@@ -1273,12 +1278,12 @@
         <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/TestCoreValidatorFail.jsp"
               status="500"/>
-
+ 
         <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/TestCoreValidatorFail.jsp"
               status="500"/>
 
- 
+
     </target>
 
 

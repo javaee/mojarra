@@ -47,11 +47,13 @@ import java.io.Writer;
 
 
 /**
- * <p><strong>ResponseWriter</strong> is an abstract class describing an
- * adapter to an underlying output mechanism for character-based output.
- * In addition to the low-level <code>write()</code> methods inherited from
- * <code>java.io.Writer</code>, this class provides utility methods
- * that are useful in producing elements and attributes for markup languages
+ * <p><span
+ * class="changed_modified_2_2"><strong>ResponseWriter</strong></span>
+ * is an abstract class describing an adapter to an underlying output
+ * mechanism for character-based output.  In addition to the low-level
+ * <code>write()</code> methods inherited from
+ * <code>java.io.Writer</code>, this class provides utility methods that
+ * are useful in producing elements and attributes for markup languages
  * like HTML and XML.</p>
  */
 
@@ -165,12 +167,19 @@ public abstract class ResponseWriter extends Writer {
 
 
     /**
-     * <p>Write a URI attribute name and corresponding value, after converting
-     * that text to a String (if necessary), and after performing any encoding
-     * appropriate to the markup language being rendered.
-     * This method may only be called after a call to
-     * <code>startElement()</code>, and before the opened element has been
-     * closed.</p>
+     * <p><span class="changed_modified_2_2">Write</span> a URI
+     * attribute name and corresponding value, after converting that
+     * text to a String (if necessary), and after performing any
+     * encoding <span class="changed_modified_2_2">or escaping</span>
+     * appropriate to the markup language being rendered.  <span
+     * class="changed_modified_2_2">When rendering in a WWW environment,
+     * the escaping conventions established in the W3C URI spec document
+     * &lt;<a
+     * href="http://www.w3.org/Addressing/URL/uri-spec.html">http://www.w3.org/Addressing/URL/uri-spec.html</a>&gt;
+     * must be followed.  In particular, spaces ' ' must be encoded as
+     * %20 and not the plus character '+'.</span> This method may only
+     * be called after a call to <code>startElement()</code>, and before
+     * the opened element has been closed.</p>
      *
      * @param name     Attribute name to be added
      * @param value    Attribute value to be added

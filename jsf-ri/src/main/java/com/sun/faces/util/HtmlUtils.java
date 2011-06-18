@@ -746,14 +746,7 @@ public class HtmlUtils {
             char ch = textBuff[i];
 
             if ((ch < 33) || (ch > 126)) {
-                if (ch == ' ') {
-                    out.write('+');
-                } else {
-                    // ISO-8859-1.  Blindly assume the character will be < 255.
-                    // Not much we can do if it isn't.
-                    writeURIDoubleHex(out, ch);
-
-                }
+                writeURIDoubleHex(out, ch);
             }
             // DO NOT encode '%'.  If you do, then for starters,
             // we'll double-encode anything that's pre-encoded.
