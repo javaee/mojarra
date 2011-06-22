@@ -45,15 +45,21 @@ import com.sun.faces.spi.InjectionProviderException;
 import com.sun.faces.util.FacesLogger;
 import static com.sun.faces.spi.AnnotationScanner.ScannedAnnotation;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.el.PropertyNotFoundException;
+import javax.faces.FacesException;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 
@@ -86,9 +92,52 @@ class DelegateToGlassFishAnnotationScanner extends AnnotationScanner {
 
         return processClassList(classList);
     }
-
+    
+    private String getCurrentWebModulePrefix(ExternalContext extContext) {
+        String result = null;
+        Object deploymentContext = extContext.getApplicationMap().get("com.sun.enterprise.web.WebModule.DeploymentContext");
+        if (null != deploymentContext) {
+            try {
+                // If this module is a war or an exploded war, then this will give the 
+                // prefix.
+                Method getSource = deploymentContext.getClass().getDeclaredMethod("getSource");
+                Object source = getSource.invoke(deploymentContext, (Object[]) null);
+                if (null != source) {
+                    Method getName = source.getClass().getDeclaredMethod("getName");
+                    if (null != getName) {
+                        result = (String) getName.invoke(source, (Object[]) null);
+                    }
+                
+                }
+                
+            } catch (Exception e) {
+            }
+        }
+        if (null == result) {
+            try {
+                // If this module is an ear, then this will give the prefix.
+                Method getModuleUri = deploymentContext.getClass().getMethod("getModuleUri");
+                if (null != getModuleUri) {
+                    result = (String) getModuleUri.invoke(deploymentContext, (Object[]) null);
+                    if (null != result && result.endsWith(".war")) {
+                        result = result.substring(0, result.length() - 4);
+                    }
+                }
+                
+            } catch (Exception e) {
+                
+            }
+        }
+                
+        if (null == result) {
+            result = extContext.getApplicationContextPath();
+        }
+        
+        return result;
+    }
+    
     private void processAnnotations(Set<String> classList) {
-        String contextPath = FacesContext.getCurrentInstance().getExternalContext().getApplicationContextPath();
+        String archiveName = getCurrentWebModulePrefix(FacesContext.getCurrentInstance().getExternalContext());
         try {
             Map<String, List<ScannedAnnotation>> classesByAnnotation = annotationScanner.getAnnotatedClassesInCurrentModule(this.sc);
 
@@ -107,11 +156,11 @@ class DelegateToGlassFishAnnotationScanner extends AnnotationScanner {
                             // If the class is in the current web module
                             boolean currentClassIsInCurrentWebModule =
                                 (uriString.endsWith("WEB-INF/classes") || uriString.endsWith("WEB-INF/classes/")) &&
-                                uriString.contains(contextPath);
+                                uriString.contains(archiveName);
                             // or it is from a jar that is *not* within a web module...
                             boolean currentClassIsInJarNotInAnyWebModule = 
                                     uriString.endsWith(".jar") && 
-                                    !uriString.contains(contextPath) &&
+                                    !uriString.contains(archiveName) &&
                                     !uriString.contains("WEB-INF/classes");
                             if (currentClassIsInCurrentWebModule || 
                                 currentClassIsInJarNotInAnyWebModule) {

@@ -62,7 +62,8 @@
               value="GLASSFISH-11636,
                      GLASSFISH-15985,
                      JAVASERVERFACES-1856,JAVASERVERFACES-1655,
-                     JAVASERVERFACES-2033" />
+                     JAVASERVERFACES-2033,
+                     GLASSFISH-16847" />
 
     <property name="container-agnostic-applications" value="
                     JAVASERVERFACES-1958,
