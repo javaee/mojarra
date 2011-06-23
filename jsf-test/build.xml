@@ -61,7 +61,8 @@
     <property name="applications-for-V3.1_no_cluster-only"
               value="GLASSFISH-11636,
                      GLASSFISH-15985,
-                     JAVASERVERFACES-1856" />
+                     JAVASERVERFACES-1856,
+                     GLASSFISH-16847" />
 
     <property name="container-agnostic-applications" 
             value= "JAVASERVERFACES-2067,

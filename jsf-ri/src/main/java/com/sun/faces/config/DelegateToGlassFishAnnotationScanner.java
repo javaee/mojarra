@@ -38,13 +38,14 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
 package com.sun.faces.config;
 
 import com.sun.faces.spi.InjectionProviderException;
 import com.sun.faces.util.FacesLogger;
 import static com.sun.faces.spi.AnnotationScanner.ScannedAnnotation;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.Collection;
 import java.util.HashSet;
@@ -58,13 +59,9 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 
-
-
 class DelegateToGlassFishAnnotationScanner extends AnnotationScanner {
 
     private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
-
-
     private com.sun.faces.spi.AnnotationScanner annotationScanner = null;
     Set<String> jarNamesWithoutMetadataComplete = null;
 
@@ -78,7 +75,7 @@ class DelegateToGlassFishAnnotationScanner extends AnnotationScanner {
     }
 
     @Override
-    public Map<Class<? extends Annotation>,Set<Class<?>>> getAnnotatedClasses(Set<URI> uris) {
+    public Map<Class<? extends Annotation>, Set<Class<?>>> getAnnotatedClasses(Set<URI> uris) {
 
         Set<String> classList = new HashSet<String>();
 
@@ -88,19 +85,90 @@ class DelegateToGlassFishAnnotationScanner extends AnnotationScanner {
         return processClassList(classList);
     }
 
-    private void processAnnotations(Set<String> classList) {
-        FacesContext context = FacesContext.getCurrentInstance();
-        ExternalContext extContext = context.getExternalContext();
-        Object containerContext = extContext.getContext();
-        String contextPath = null;
-        if (containerContext instanceof ServletContext) {
-            contextPath = ((ServletContext)containerContext).getContextPath();
-        } else {
-            contextPath = extContext.getRequestContextPath();
-        }
+    private Object getDeploymentContext(ExternalContext extContext) {
+        Object result = null;
+        Map<String, Object> appMap = extContext.getApplicationMap();
+
+        // This will work in GlassFish 3.1.1.
+        result = appMap.get("com.sun.enterprise.web.WebModule.DeploymentContext");
+
+        if (null == result) {
+            // Try the GlassFish 3.1 way.
+            Object defaultHabitat = appMap.get("org.glassfish.servlet.habitat");
+            if (null != defaultHabitat) {
+                try {
+                    Method getComponent = defaultHabitat.getClass().getDeclaredMethod("getComponent", Class.class);
+                    Class serverConfigLookupClass = Thread.currentThread().getContextClassLoader().loadClass("com.sun.enterprise.web.ServerConfigLookup");
+                    Object serverConfigLookup = getComponent.invoke(defaultHabitat, serverConfigLookupClass);
+                    
+                    Method getDeploymentContext = serverConfigLookupClass.getMethod("getDeploymentContext", ServletContext.class);
+                    result = getDeploymentContext.invoke(serverConfigLookup, extContext.getContext());
+                } catch(InvocationTargetException ite) { 
+                    Throwable targetException = ite.getTargetException();
+                    System.out.println(targetException);
+                } catch (Exception e) {
+                }
+            }
         
+        }
+
+
+        return result;
+    }
+
+    private String getCurrentWebModulePrefix(ExternalContext extContext) {
+        String result = null;
+        Object deploymentContext = getDeploymentContext(extContext);
+        if (null != deploymentContext) {
+            try {
+                // If this module is a war or an exploded war, then this will give the 
+                // prefix.
+                Method getSource = deploymentContext.getClass().getDeclaredMethod("getSource");
+                Object source = getSource.invoke(deploymentContext, (Object[]) null);
+                if (null != source) {
+                    Method getName = source.getClass().getDeclaredMethod("getName");
+                    if (null != getName) {
+                        result = (String) getName.invoke(source, (Object[]) null);
+                    }
+
+                }
+
+            } catch (Exception e) {
+            }
+        }
+        if (null == result && null != deploymentContext) {
+            try {
+                // If this module is an ear, then this will give the prefix.
+                Method getModuleUri = deploymentContext.getClass().getMethod("getModuleUri");
+                if (null != getModuleUri) {
+                    result = (String) getModuleUri.invoke(deploymentContext, (Object[]) null);
+                    if (null != result && result.endsWith(".war")) {
+                        result = result.substring(0, result.length() - 4);
+                    }
+                }
+
+            } catch (Exception e) {
+            }
+        }
+
+        if (null == result) {
+            Object containerContext = extContext.getContext();
+            String contextPath = null;
+            if (containerContext instanceof ServletContext) {
+                contextPath = ((ServletContext)containerContext).getContextPath();
+            } else {
+                contextPath = extContext.getRequestContextPath();
+            }
+        }
+
+        return result;
+    }
+
+    private void processAnnotations(Set<String> classList) {
         try {
-            Map<String, List<ScannedAnnotation>> classesByAnnotation = annotationScanner.getAnnotatedClassesInCurrentModule(this.sc);
+            String archiveName = getCurrentWebModulePrefix(FacesContext.getCurrentInstance().getExternalContext());
+            Map<String, List<ScannedAnnotation>> classesByAnnotation =
+                    annotationScanner.getAnnotatedClassesInCurrentModule(this.sc);
 
             for (String curAnnotationName : classesByAnnotation.keySet()) {
                 if (FACES_ANNOTATIONS.contains(curAnnotationName)) {
@@ -113,25 +181,27 @@ class DelegateToGlassFishAnnotationScanner extends AnnotationScanner {
                         while (!doAdd && iter.hasNext()) {
                             uri = iter.next();
                             uriString = uri.toASCIIString();
-                            
+
                             // If the class is in the current web module
                             boolean currentClassIsInCurrentWebModule =
-                                (uriString.endsWith("WEB-INF/classes") || uriString.endsWith("WEB-INF/classes/")) &&
-                                uriString.contains(contextPath);
+                                    (uriString.endsWith("WEB-INF/classes") || uriString.endsWith("WEB-INF/classes/"))
+                                    && uriString.contains(archiveName);
                             // or it is from a jar that is *not* within a web module...
-                            boolean currentClassIsInJarNotInAnyWebModule = 
-                                    uriString.endsWith(".jar") && 
-                                    !uriString.contains(contextPath) &&
-                                    !uriString.contains("WEB-INF/classes");
-                            if (currentClassIsInCurrentWebModule || 
-                                currentClassIsInJarNotInAnyWebModule) {
+                            boolean currentClassIsInJarNotInAnyWebModule =
+                                    uriString.endsWith(".jar")
+                                    && !uriString.contains(archiveName)
+                                    && !uriString.contains("WEB-INF/classes");
+                            if (currentClassIsInCurrentWebModule
+                                    || currentClassIsInJarNotInAnyWebModule) {
                                 doAdd = true;
-                            } else for (String jarName : jarNamesWithoutMetadataComplete) {
-                                if (uriString.contains(jarName)) {
-                                    doAdd = true;
-                                    jarUri = uri;
-                                    nameOfJarInJarUri = jarName;
-                                    break;
+                            } else {
+                                for (String jarName : jarNamesWithoutMetadataComplete) {
+                                    if (uriString.contains(jarName)) {
+                                        doAdd = true;
+                                        jarUri = uri;
+                                        nameOfJarInJarUri = jarName;
+                                        break;
+                                    }
                                 }
                             }
                         }
@@ -144,11 +214,11 @@ class DelegateToGlassFishAnnotationScanner extends AnnotationScanner {
                                 // in a jar file
                                 if (null != jarUri) {
                                     // see if the jar file is in the list of jars to include
-                                    String [] allowedPackages =
-                                            (getClasspathPackages() != null &&
-                                             getClasspathPackages().get(nameOfJarInJarUri) != null)
-                                       ? getClasspathPackages().get(nameOfJarInJarUri)
-                                       : new String [0];
+                                    String[] allowedPackages =
+                                            (getClasspathPackages() != null
+                                            && getClasspathPackages().get(nameOfJarInJarUri) != null)
+                                            ? getClasspathPackages().get(nameOfJarInJarUri)
+                                            : new String[0];
                                     if (0 == allowedPackages.length) {
                                         doAdd = false;
                                     }
@@ -172,7 +242,7 @@ class DelegateToGlassFishAnnotationScanner extends AnnotationScanner {
                 }
 
             }
-            
+
         } catch (InjectionProviderException ex) {
             if (LOGGER.isLoggable(Level.SEVERE)) {
                 LOGGER.log(Level.SEVERE, "Unable to use GlassFish to perform "
@@ -181,8 +251,6 @@ class DelegateToGlassFishAnnotationScanner extends AnnotationScanner {
             }
 
         }
-        
-    }
-    
 
+    }
 }
