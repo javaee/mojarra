@@ -461,7 +461,6 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
         assertTrue(response.containsHeader("last-modified"));
         assertTrue(response.containsHeader("expires"));
         assertTrue(response.containsHeader("etag"));
-        assertTrue(response.containsHeader("content-type"));
         
     }
 
@@ -492,7 +491,6 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
         assertTrue(response.containsHeader("last-modified"));
         assertTrue(response.containsHeader("expires"));
         assertTrue(response.containsHeader("etag"));
-        assertTrue(response.containsHeader("content-type"));
         
     }
 
@@ -607,7 +605,6 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
 	    assertTrue(response.containsHeader("last-modified"));
 	    assertTrue(response.containsHeader("expires"));
 	    assertTrue(response.containsHeader("etag"));
-	    assertTrue(response.containsHeader("content-type"));
 	    assertTrue(response.containsHeader("content-encoding"));
         } finally {
             app.setResourceHandler(oldResourceHandler);
@@ -649,7 +646,6 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
             assertTrue(response.containsHeader("last-modified"));
             assertTrue(response.containsHeader("expires"));
             assertTrue(response.containsHeader("etag"));
-            assertTrue(response.containsHeader("content-type"));
             assertTrue(response.containsHeader("content-encoding"));
         } finally {
             app.setResourceHandler(oldResourceHandler);
@@ -686,7 +682,6 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
 	    assertTrue(response.containsHeader("last-modified"));
 	    assertTrue(response.containsHeader("expires"));
 	    assertTrue(response.containsHeader("etag"));
-	    assertTrue(response.containsHeader("content-type"));
 	    assertTrue(!response.containsHeader("content-encoding"));
 	} finally {
             app.setResourceHandler(oldResourceHandler);
@@ -728,7 +723,6 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
 	    assertTrue(response.containsHeader("last-modified"));
 	    assertTrue(response.containsHeader("expires"));
 	    assertTrue(response.containsHeader("etag"));
-	    assertTrue(response.containsHeader("content-type"));
 	    assertTrue(!response.containsHeader("content-encoding"));
 	} finally {
             app.setResourceHandler(oldResourceHandler);
@@ -768,7 +762,6 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
 	    assertTrue(response.containsHeader("last-modified"));
 	    assertTrue(response.containsHeader("expires"));
 	    assertTrue(response.containsHeader("etag"));
-	    assertTrue(response.containsHeader("content-type"));
 	    assertTrue(!response.containsHeader("content-encoding"));
 	} finally {
             app.setResourceHandler(oldResourceHandler);
@@ -811,7 +804,6 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
 	    assertTrue(response.containsHeader("last-modified"));
 	    assertTrue(response.containsHeader("expires"));
 	    assertTrue(response.containsHeader("etag"));
-	    assertTrue(response.containsHeader("content-type"));
 	    assertTrue(!response.containsHeader("content-encoding"));
 	} finally {
             app.setResourceHandler(oldResourceHandler);
@@ -854,7 +846,6 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
 	    assertTrue(response.containsHeader("last-modified"));
 	    assertTrue(response.containsHeader("expires"));
 	    assertTrue(response.containsHeader("etag"));
-	    assertTrue(response.containsHeader("content-type"));
 	    assertTrue(response.containsHeader("content-encoding"));
 	} finally {
             app.setResourceHandler(oldResourceHandler);
@@ -894,7 +885,6 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
 	    assertTrue(response.containsHeader("last-modified"));
 	    assertTrue(response.containsHeader("expires"));
 	    assertTrue(response.containsHeader("etag"));
-	    assertTrue(response.containsHeader("content-type"));
 	    assertTrue(!response.containsHeader("content-encoding"));
 	} finally {
             app.setResourceHandler(oldResourceHandler);
