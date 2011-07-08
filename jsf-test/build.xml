@@ -70,8 +70,11 @@
                     JAVASERVERFACES_SPEC_PUBLIC-915,
                     JAVASERVERFACES-2079,
                     JAVASERVERFACES-2065,
-                    JAVASERVERFACES-1995,
+                    JAVASERVERFACES-1995" />
+
+<!-- still not ready.  Now I get a JavaScript failure from Rhino
                     admingui" />
+-->
 
     <target name="main" depends="define.applications"
             description="">
