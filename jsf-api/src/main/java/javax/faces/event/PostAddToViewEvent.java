@@ -44,8 +44,9 @@ import javax.faces.component.UIComponent;
 
 /**
  *
- * <p class="changed_added_2_0">When an instance of this event is passed
- * to {@link SystemEventListener#processEvent} or {@link
+ * <p class="changed_added_2_0"><span
+ * class="changed_modified_2_2">When</span> an instance of this event is
+ * passed to {@link SystemEventListener#processEvent} or {@link
  * ComponentSystemEventListener#processEvent}, the listener
  * implementation may assume that the <code>source</code> of this event
  * instance is a {@link UIComponent} instance and that either that
@@ -55,7 +56,7 @@ import javax.faces.component.UIComponent;
  * methods that depend upon the component instance being added into the
  * view.</p>
  *
- * <div class="changed_added_2_0">
+ * <div class="changed_added_2_0 changed_deleted_2_2">
  *
  * <p>The implementation must guarantee that {@link
  * javax.faces.application.Application#publishEvent} is called,
@@ -68,6 +69,35 @@ import javax.faces.component.UIComponent;
  * conditions are met, {@link
  * javax.faces.application.Application#publishEvent} must not be called.</p>
  * 
+ * </div>
+
+ * <div class="changed_added_2_2">
+
+ * <p>The implementation must guarantee that {@link
+ * javax.faces.application.Application#publishEvent} is called in the
+ * following cases.</p>
+
+ * 	<ul>
+
+	  <li><p>Upon the initial construction of the view, when each
+	  instance is added to the view.</p></li>
+
+	  <li><p>On a non-initial rendering of the view, if a component
+	  is added to the view by the View Declaration Language
+	  implememtation as a result of changes in evaluation result of
+	  EL expressions referenced by VDL tags such as
+	  <code>c:if</code>, <code>ui:include</code>, and other tags
+	  that dynamically influence the assembly of the view.</p></li>
+
+	  <li><p>If a component is programmatically added to the view
+	  using the Java API directly.  For example, user code manually
+	  adds children using <code>comp.getChildren().add()</code>,
+	  where <code>comp</code> is a <code>UIComponent</code>.
+	  </p></li>
+
+	</ul>
+
+
  * </div>
  *
  * @since 2.0
