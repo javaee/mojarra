@@ -8,8 +8,10 @@
 	<!-- composite-library-name>myCC</composite-library-name -->
 	
 	<tag>
-		<tag-name>i_jsf_2033</tag-name>
+              <tag-name>i_jsf_2033</tag-name>
+              <component>
 		<resource-id>myCC/layout.xhtml</resource-id>
+              </component>
 	</tag>
 
 </facelet-taglib>

@@ -343,7 +343,6 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
                 NodeList validator = null;
                 NodeList behavior = null;
                 Node source = null;
-                Node resourceId = null;
                 Node handlerClass = null;
                 for (int j = 0, jlen = children.getLength(); j < jlen; j++) {
                     Node n = children.item(j);
@@ -361,14 +360,12 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
                         behavior = n.getChildNodes();
                     } else if (SOURCE.equals(n.getLocalName())) {
                         source = n;
-                    } else if (RESOURCE_ID.equals(n.getLocalName())) {
-                        resourceId = n;
                     } else if (HANDLER_CLASS.equals(n.getLocalName())) {
                         handlerClass = n;
                     }
                 }
                 if (component != null) {
-                    processComponent(component, taglibrary, tagName);
+                    processComponent(documentElement, component, taglibrary, tagName);
                 } else if (converter != null) {
                     processConverter(converter, taglibrary, tagName);
                 } else if (validator != null) {
@@ -377,8 +374,6 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
                     processBehavior(behavior, taglibrary, tagName);
                 } else if (source != null) {
                     processSource(documentElement, source, taglibrary, tagName);
-                } else if (resourceId != null) {
-                    processResourceId(documentElement, resourceId, taglibrary, tagName);
                 } else if (handlerClass != null) {
                     processHandlerClass(handlerClass, taglibrary, tagName);
                 }
@@ -566,7 +561,7 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
     }
 
 
-    private void processComponent(NodeList component,
+    private void processComponent(Element documentElement, NodeList component,
                                   TagLibraryImpl taglibrary,
                                   String name) {
 
@@ -574,6 +569,7 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
             String componentType = null;
             String rendererType = null;
             String handlerClass = null;
+            Node resourceId = null;
             for (int i = 0, ilen = component.getLength(); i < ilen; i++) {
                 Node n = component.item(i);
                 if (COMPONENT_TYPE.equals(n.getLocalName())) {
@@ -582,6 +578,8 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
                     rendererType = getNodeText(n);
                 } else if (HANDLER_CLASS.equals(n.getLocalName())) {
                     handlerClass = getNodeText(n);
+                }  else if (RESOURCE_ID.equals(n.getLocalName())) {
+                    resourceId = n;
                 }
             }
             if (handlerClass != null) {
@@ -606,9 +604,12 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
                 } catch (ClassNotFoundException e) {
                     throw new ConfigurationException(e);
                 }
+            } else if (resourceId != null) {
+                processResourceId(documentElement, resourceId, taglibrary, name);
             } else {
                 taglibrary.putComponent(name, componentType, rendererType);
             }
+            
         }
 
     }
