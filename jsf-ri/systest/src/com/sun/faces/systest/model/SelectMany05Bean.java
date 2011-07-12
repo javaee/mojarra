@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -52,6 +52,7 @@ import java.util.LinkedHashSet;
 import java.util.Vector;
 import java.util.LinkedList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 import javax.faces.model.SelectItem;
@@ -61,6 +62,10 @@ import javax.faces.FacesException;
 
 
 public class SelectMany05Bean {
+
+    // As IBM j9 JRE/JDK does not use a static instance for reverseOrder()
+    // we need to keep a static instance to make equals() work
+    private static final Comparator<String> REVERSE_COMPARATOR = Collections.reverseOrder();
 
     private final Collection<SelectItem> possibleValues;
     private Set<String> setValues;
@@ -90,7 +95,7 @@ public class SelectMany05Bean {
         hobbitCollection = new TreeSet<HobbitBean>();
         hobbitCollection.addAll(Arrays.asList(hobbits));
         possibleValues = Collections.unmodifiableSet(items);
-        initialSortedSetValues = new TreeSet<String>(Collections.reverseOrder());
+        initialSortedSetValues = new TreeSet<String>(REVERSE_COMPARATOR);
         initialSortedSetValues.add("Pippin");
         initialSortedSetValues.add("Frodo");
         initialCollectionValues = new LinkedHashSet<String>(2);
@@ -200,11 +205,10 @@ public class SelectMany05Bean {
 
     public void setInitialSortedSetValues(SortedSet<String> initialSortedSetValues) {
         if (!(initialSortedSetValues instanceof TreeSet)) {
-            throw new FacesException("[setInitialSortedSetValues] Error: Expected value to be TreeMap");
+            throw new FacesException("[setInitialSortedSetValues] Error: Expected value to be TreeSet");
         }
 
-        TreeSet<String> temp = new TreeSet <String>(Collections.reverseOrder());
-        if (!((TreeSet)temp).comparator().equals(((TreeSet)initialSortedSetValues).comparator())) {
+        if (!REVERSE_COMPARATOR.equals(initialSortedSetValues.comparator())) {
             throw new FacesException("[setInitialSortedSetValues] Error: Comparator is not equivalent to Collections.reverseOrder()");
         }
 
