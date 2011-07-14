@@ -95,7 +95,7 @@ public class AdminGuiTestCase extends HtmlUnitFacesTestCase {
         
         // Set the war path
         HtmlTextInput textInput = (HtmlTextInput) page.getElementById("form:sheet1:section1:prop1:dirPath");
-        String dirPathValue = System.getProperty("user.dir") + "/admingui_test_war/target/admingui_test_war.war";
+        String dirPathValue = System.getProperty("user.dir") + "/jsf-test/admingui/admingui_test_war/target/admingui_test_war.war";
         textInput.setValueAttribute(dirPathValue);
         
         // Set the appType
