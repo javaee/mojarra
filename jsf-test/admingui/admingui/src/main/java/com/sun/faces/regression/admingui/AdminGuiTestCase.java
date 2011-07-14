@@ -127,6 +127,7 @@ public class AdminGuiTestCase extends HtmlUnitFacesTestCase {
         this.port = 8080;
         client.setThrowExceptionOnFailingStatusCode(true);
         cm.clearCookies();
+        Thread.currentThread().sleep(20000L);
         page = getPage("/admingui_test_war/faces/main.xhtml");
         assertTrue(page.asXml().contains("javax.faces.ViewState"));
                 
