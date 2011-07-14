@@ -119,7 +119,9 @@ public class AdminGuiTestCase extends HtmlUnitFacesTestCase {
         button = (HtmlSubmitInput) 
                 page.getElementById("form:title:topButtons:uploadButton");
         button.focus();
+        client.setJavaScriptEnabled(false);
         page = button.click();
+        client.setJavaScriptEnabled(true);
         
         // Now we visit the deployed app and verify it is successfully deployed
         this.port = 8080;
