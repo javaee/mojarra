@@ -66,54 +66,42 @@
 
     <target name="remove" />
 
-    <target name="test">
-       <delete failonerror="false"
-               file="${regression.test.results.dir}/admingui-readystate.txt" />
-       <parallel>
-         <ant target="get.login.page" />
-         <sequential>
-           <waitfor checkeveryunit="second" checkevery="10"
-                    maxwaitunit="minute" maxwait="5">
-             <available file="${regression.test.results.dir}/admingui-readystate.txt" />
-           </waitfor>
-           <antcall inheritall="true" target="do.test" />
-         </sequential>
-       </parallel>
-    </target>    
+    <target name="admingui-check">
+       <!-- make sure our helper property is unoccupied: -->
+       <fail if="do.sleep" />
 
-    <target name="get.login.page">
-       <property name="iterations" value="i,i,i,i,i"/>
-       <for list="${iterations}" param="app" trim="true"><sequential>
-         <delete failonerror="false"
-                 file="${regression.test.results.dir}/admingui-index-page.html"/>
-         <get src="http://${container.host}:${glassfish.admin.port}/common/index.jsf?bare=true"
-              dest="${regression.test.results.dir}/admingui-index-page.html"/>
+       <!-- overridable defaults: -->
+       <property name="admingui.retries" value="5" />
+       <property name="sleep.seconds" value="10" />
 
-         <var name="admingui.index.page" unset="true" />
-         <var name="admingui.ready" unset="true" />
-         <loadfile property="admingui.index.page"
-                   srcFile="${regression.test.results.dir}/admingui-index-page.html"/>
+       <retry retrycount="${admingui.retries}">
+           <sequential>
+               <local name=".sleep.seconds" />
+               <condition property=".sleep.seconds" value="${sleep.seconds}" else="0">
+                   <istrue value="${do.sleep}" />
+               </condition>
+               <sleep seconds="${.sleep.seconds}" />
 
-         <propertyregex defaultValue="NOT READY"
-                        select="READY"
-                        property="admingui.ready" 
-                        input="${admingui.index.page}"
-                        regexp="(?s).*loginform.*" />
-         <echo message="poll admingui: ${admingui.ready}" />
-         <if>
-           <equals arg1="${admingui.ready}" arg2="READY" />
-           <then>
-             <echo message="writing poll result file: ${regression.test.results.dir}/admingui-readystate.txt" />
-             <echo file="${regression.test.results.dir}/admingui-readystate.txt" 
-                   message="${admingui.ready}" />
-            </then>
-         </if>
-         <sleep seconds="10" />
-       </sequential></for>
+               <property name="do.sleep" value="true" />
+
+               <fail><condition>
+                   <resourcesmatch astext="true">
+                       <string value="" />
+                        <concat>
+                           <url url="http://${container.host}:${glassfish.admin.port}/common/index.jsf?bare=true" />
+                           <filterchain>
+                               <linecontainsregexp>
+                                   <regexp pattern="(?s).*loginform.*" />
+                               </linecontainsregexp>
+                           </filterchain>
+                       </concat>
+                   </resourcesmatch>
+               </condition></fail>
+           </sequential>
+       </retry>
     </target>
 
-    <target name="do.test" depends="define.scenario.aware.port">
-
+    <target name="test" depends="admingui-check,define.scenario.aware.port">
         <jsf.junit context-path=""
                  custom.port="${glassfish.admin.port}"
                  classpath-refid="admingui.classpath"    
