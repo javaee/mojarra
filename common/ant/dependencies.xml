@@ -276,7 +276,7 @@
                 </not>
             </and>
             <then>
-                <get src="${maven2.mirror}/taglibrarydoc/tlddoc/${taglibdoc.version}/tlddoc-${taglibdoc.version}.jar"
+                <get src="${central.maven2}/taglibrarydoc/tlddoc/${taglibdoc.version}/tlddoc-${taglibdoc.version}.jar"
                      dest="${tlddoc.jar}"
                      usetimestamp="true"/>
 
