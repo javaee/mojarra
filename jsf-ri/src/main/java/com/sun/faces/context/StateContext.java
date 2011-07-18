@@ -333,6 +333,18 @@ public class StateContext {
             if (removed.isTransient()) {
                 return;
             }
+            
+            // this component, while not transient may be a child or facet
+            // of component that is.  We'll have to search the parent hierarchy
+            // to the root to confirm.
+            UIComponent parent = removed.getParent();
+            while (parent != null) {
+                if (parent.isTransient()) {
+                    return;
+                }
+                parent = parent.getParent();
+            }
+            
             if (dynamicRemoves == null) {
                 dynamicRemoves = new ArrayList<String>();
             }
