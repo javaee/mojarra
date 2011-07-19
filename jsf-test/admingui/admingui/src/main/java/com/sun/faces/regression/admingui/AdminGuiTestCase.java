@@ -97,6 +97,8 @@ public class AdminGuiTestCase extends HtmlUnitFacesTestCase {
         HtmlTextInput textInput = (HtmlTextInput) page.getElementById("form:sheet1:section1:prop1:dirPath");
         String dirPathValue = System.getProperty("user.dir") + "/jsf-test/admingui/admingui_test_war/target/admingui_test_war.war";
         textInput.setValueAttribute(dirPathValue);
+        System.out.println("Deploying war from local path " + dirPathValue);
+        System.out.flush();
         
         // Set the appType
         List<HtmlSelect> selects = new ArrayList<HtmlSelect>(1);
@@ -122,6 +124,10 @@ public class AdminGuiTestCase extends HtmlUnitFacesTestCase {
         client.setJavaScriptEnabled(false);
         page = button.click();
         client.setJavaScriptEnabled(true);
+
+        System.out.println("Page resluting from deploy click: " + 
+                           page.asXml());
+        System.out.flush();
         
         // Now we visit the deployed app and verify it is successfully deployed
         this.port = 8080;
