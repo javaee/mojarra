@@ -167,13 +167,25 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
      * @see ELResolver#getType(javax.el.ELContext, Object, Object)
      */
     public Class<?> getType(ELContext context, Object base, Object property) {
-
         Util.notNull("context", context);
-        return null;
+        Class<?> result = null;
+        
+        if (null != base) {
+            if (base instanceof ExpressionEvalMap) {
+                ExpressionEvalMap evalMap = (ExpressionEvalMap) base;
+                if (!evalMap.containsKey((String)property)) {
+                    ValueExpression ve = evalMap.getExpression((String)property);
+                    if (null != ve) {
+                        result = ve.getType(context);
+                        context.setPropertyResolved(true);
+                    }
+                }
+            }
+        }
+        return result;
 
     }
-
-
+    
     /**
      * <p>
      * This is a no-op.
@@ -332,7 +344,11 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
         }
 
         public boolean containsKey(Object key) {
-            throw new UnsupportedOperationException();
+            boolean result = attributesMap.containsKey(key);
+            if (!result) {
+                result = null != getDeclaredDefaultValue(key);
+            }
+            return result;
         }
 
         public boolean containsValue(Object value) {
