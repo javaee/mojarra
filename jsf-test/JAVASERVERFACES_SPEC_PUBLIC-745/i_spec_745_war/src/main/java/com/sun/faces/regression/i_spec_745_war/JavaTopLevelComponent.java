@@ -58,7 +58,7 @@ public class JavaTopLevelComponent  extends UINamingContainer {
         return "javax.faces.NamingContainer";
     }
 
-    public String getTestResult() {
+    public String getTestResult1() {
         String result = "FAILED";
         
         FacesContext context = FacesContext.getCurrentInstance();
@@ -69,4 +69,15 @@ public class JavaTopLevelComponent  extends UINamingContainer {
         return result;
     }
 
+    public String getTestResult2() {
+        String result = "FAILED";
+        
+        FacesContext context = FacesContext.getCurrentInstance();
+        ELContext elc = context.getELContext();
+        ValueExpression ve = context.getApplication().getExpressionFactory().createValueExpression(elc, "#{cc.attrs.integer}", Integer.class);
+        result = ve.getType(elc) == Integer.class ? "PASSED" : "FAILED";
+        
+        return result;
+    }
+    
 }

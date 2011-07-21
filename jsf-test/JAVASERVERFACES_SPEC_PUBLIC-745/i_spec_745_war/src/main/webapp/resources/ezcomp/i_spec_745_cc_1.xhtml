@@ -6,16 +6,13 @@
       xmlns:f="http://java.sun.com/jsf/core">
 
     <cc:interface componentType="javaTopLevelComponent">
-        <cc:attribute name="selected1" required="true"/>
-        <cc:attribute name="items1" required="true"/>
+        <cc:attribute name="selected1" required="true" type="java.util.List" />
+        <cc:attribute name="items1" required="true" type="java.util.Map" />
+        <cc:attribute name="integer" type="java.lang.Integer" />
     </cc:interface>
     <cc:implementation>
 
-        <h:selectManyListbox value="#{cc.attrs.selected1}">
-            <f:selectItems value="#{cc.attrs.items1}"/>
-        </h:selectManyListbox>
-        
-        <p>Test Result: #{cc.testResult}</p>
+        <p>Test Result 1: #{cc.testResult1}</p>
         
     </cc:implementation> 
     

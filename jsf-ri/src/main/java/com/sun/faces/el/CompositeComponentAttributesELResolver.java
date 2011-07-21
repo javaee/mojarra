@@ -46,6 +46,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.el.ELResolver;
 import javax.el.ELContext;
@@ -59,6 +61,7 @@ import com.sun.faces.util.Util;
 import com.sun.faces.component.CompositeComponentStackManager;
 import static com.sun.faces.component.CompositeComponentStackManager.StackType.TreeCreation;
 import static com.sun.faces.component.CompositeComponentStackManager.StackType.Evaluation;
+import com.sun.faces.util.FacesLogger;
 
 import java.beans.BeanInfo;
 import java.beans.PropertyDescriptor;
@@ -70,6 +73,9 @@ import java.beans.PropertyDescriptor;
  * </p>
  */
 public class CompositeComponentAttributesELResolver extends ELResolver {
+    
+    // Log instance for this class
+    private static final Logger LOGGER = FacesLogger.CONTEXT.getLogger();
 
     /**
      * Implicit object related only to the cc implicitObject.
@@ -175,9 +181,37 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
                 ExpressionEvalMap evalMap = (ExpressionEvalMap) base;
                 if (!evalMap.containsKey((String)property)) {
                     ValueExpression ve = evalMap.getExpression((String)property);
+                    boolean consultMetadata = false;
                     if (null != ve) {
                         result = ve.getType(context);
-                        context.setPropertyResolved(true);
+                    }
+                    if (!context.isPropertyResolved() && null != property && 0 < ((String)property).length()) {
+                        FacesContext facesContext = (FacesContext) context.getContext(FacesContext.class);
+                        UIComponent cc = UIComponent.getCurrentCompositeComponent(facesContext);
+                        BeanInfo metadata = (BeanInfo) cc.getAttributes().get(UIComponent.BEANINFO_KEY);
+                        assert(null != metadata);
+                        PropertyDescriptor[] attributes = metadata.getPropertyDescriptors();
+                        if (null != attributes && 0 < attributes.length) {
+                            for (PropertyDescriptor cur : attributes) {
+                                String curName = cur.getName();
+                                if (null != curName && curName.equals(property)) {
+                                    Object type = cur.getValue("type");
+                                    if (null != type) {
+                                        String classStr = (String) ((ValueExpression)type).getValue(context);
+                                        if (null != classStr) {
+                                            try {
+                                                result = Class.forName(classStr);
+                                            } catch (ClassNotFoundException ex) {
+                                                if (LOGGER.isLoggable(Level.INFO)) {
+                                                    LOGGER.log(Level.INFO, "Unable to obtain class for " + classStr, ex);
+                                                }
+                                            }
+                                            context.setPropertyResolved(true);
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

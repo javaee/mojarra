@@ -78,11 +78,17 @@
 
     <target name="test" depends="define.scenario.aware.port">
 
-        <jsf.tester request="/faces/i_spec_745.xhtml"
+        <jsf.tester request="/faces/i_spec_745_1.xhtml"
                      context-path="/i_spec_745_war"
                      classpath-refid="html.classpath"
                      test-results-dir="${regression.test.results.dir}"
-                     regexp="(?s).*Test\s+Result:\s+PASSED.*"/>
+                     regexp="(?s).*Test\s+Result\s+1:\s+PASSED.*"/>
+
+        <jsf.tester request="/faces/i_spec_745_2.xhtml"
+                     context-path="/i_spec_745_war"
+                     classpath-refid="html.classpath"
+                     test-results-dir="${regression.test.results.dir}"
+                     regexp="(?s).*Test\s+Result\s+2:\s+PASSED.*"/>
 
     </target>    
 
