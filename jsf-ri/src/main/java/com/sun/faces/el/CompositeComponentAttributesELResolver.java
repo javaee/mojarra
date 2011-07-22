@@ -179,41 +179,36 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
         if (null != base) {
             if (base instanceof ExpressionEvalMap) {
                 ExpressionEvalMap evalMap = (ExpressionEvalMap) base;
-                boolean consultMetadata = false;
                 if (!evalMap.containsKey((String)property)) {
                     ValueExpression ve = evalMap.getExpression((String)property);
+                    boolean consultMetadata = false;
                     if (null != ve) {
                         result = ve.getType(context);
                     }
                     if (!context.isPropertyResolved() && null != property && 0 < ((String)property).length()) {
-                        consultMetadata = true;
-                        
-                    }
-                } else {
-                    Object objValue = evalMap.get((String)property);
-                    if (objValue instanceof String) {
-                        consultMetadata = true;
-                    } else {
-                        result = objValue.getClass();
-                        context.setPropertyResolved(true);
-                    }
-                }
-                if (consultMetadata) {
-                    FacesContext facesContext = (FacesContext) context.getContext(FacesContext.class);
-                    UIComponent cc = UIComponent.getCurrentCompositeComponent(facesContext);
-                    BeanInfo metadata = (BeanInfo) cc.getAttributes().get(UIComponent.BEANINFO_KEY);
-                    assert(null != metadata);
-                    PropertyDescriptor[] attributes = metadata.getPropertyDescriptors();
-                    if (null != attributes && 0 < attributes.length) {
-                        for (PropertyDescriptor cur : attributes) {
-                            String curName = cur.getName();
-                            if (null != curName && curName.equals(property)) {
-                                Object type = cur.getValue("type");
-                                if (null != type) {
-                                    assert(type instanceof Class);
-                                    result = (Class) type;
-                                    context.setPropertyResolved(true);
-                                    break;
+                        FacesContext facesContext = (FacesContext) context.getContext(FacesContext.class);
+                        UIComponent cc = UIComponent.getCurrentCompositeComponent(facesContext);
+                        BeanInfo metadata = (BeanInfo) cc.getAttributes().get(UIComponent.BEANINFO_KEY);
+                        assert(null != metadata);
+                        PropertyDescriptor[] attributes = metadata.getPropertyDescriptors();
+                        if (null != attributes && 0 < attributes.length) {
+                            for (PropertyDescriptor cur : attributes) {
+                                String curName = cur.getName();
+                                if (null != curName && curName.equals(property)) {
+                                    Object type = cur.getValue("type");
+                                    if (null != type) {
+                                        String classStr = (String) ((ValueExpression)type).getValue(context);
+                                        if (null != classStr) {
+                                            try {
+                                                result = Class.forName(classStr);
+                                            } catch (ClassNotFoundException ex) {
+                                                if (LOGGER.isLoggable(Level.INFO)) {
+                                                    LOGGER.log(Level.INFO, "Unable to obtain class for " + classStr, ex);
+                                                }
+                                            }
+                                            context.setPropertyResolved(true);
+                                        }
+                                    }
                                 }
                             }
                         }

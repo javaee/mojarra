@@ -80,15 +80,4 @@ public class JavaTopLevelComponent  extends UINamingContainer {
         return result;
     }
     
-    public String getTestResult3() {
-        String result = "FAILED";
-        
-        FacesContext context = FacesContext.getCurrentInstance();
-        ELContext elc = context.getELContext();
-        ValueExpression ve = context.getApplication().getExpressionFactory().createValueExpression(elc, "#{cc.attrs.double}", Double.class);
-        Class clazz = ve.getType(elc);
-        result = clazz == Double.class ? "PASSED" : "FAILED";
-        
-        return result;
-    }
 }
