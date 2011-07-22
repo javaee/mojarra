@@ -25,7 +25,15 @@ public class UserBean {
         return items1;    
     }
     
-    
+    private Double doubleValue = Double.MAX_VALUE;
+
+    public Double getDoubleValue() {
+        return doubleValue;
+    }
+
+    public void setDoubleValue(Double doubleValue) {
+        this.doubleValue = doubleValue;
+    }
     
 }
 

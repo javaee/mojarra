@@ -90,6 +90,18 @@
                      test-results-dir="${regression.test.results.dir}"
                      regexp="(?s).*Test\s+Result\s+2:\s+PASSED.*"/>
 
+        <jsf.tester request="/faces/i_spec_745_3.xhtml"
+                     context-path="/i_spec_745_war"
+                     classpath-refid="html.classpath"
+                     test-results-dir="${regression.test.results.dir}"
+                     regexp="(?s).*Test\s+Result\s+3:\s+PASSED.*"/>
+
+        <jsf.tester request="/faces/i_spec_745_4.xhtml"
+                     context-path="/i_spec_745_war"
+                     classpath-refid="html.classpath"
+                     test-results-dir="${regression.test.results.dir}"
+                     regexp="(?s).*bogusType.*There\s+is\s+no\s+chance\s+this\s+is\s+a\s+class.*"/>
+
     </target>    
 
 
