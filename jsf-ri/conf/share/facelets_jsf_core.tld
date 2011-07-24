@@ -219,9 +219,7 @@
          ]]></description>
          <name>event</name>
          <required>false</required>
-         <deferred-value>
-             <type>java.lang.String</type>
-         </deferred-value>
+         <type>java.lang.String</type>
 
      </attribute>
 
