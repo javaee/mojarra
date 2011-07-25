@@ -171,12 +171,10 @@ public class StateContext {
      * Installs a <code>SystemEventListener</code> on the <code>UIViewRoot</code>
      * to track components added to or removed from the view.
      */
-    public void startTrackViewModifications() {
-
+    public void startTrackViewModifications(FacesContext ctx, UIViewRoot root) {
+      
         if (modListener == null) {
-            FacesContext ctx = FacesContext.getCurrentInstance();
             modListener = new AddRemoveListener(ctx);
-            UIViewRoot root = ctx.getViewRoot();
             root.subscribeToViewEvent(PostAddToViewEvent.class, modListener);
             root.subscribeToViewEvent(PreRemoveFromViewEvent.class, modListener);
         }

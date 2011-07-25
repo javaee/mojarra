@@ -449,8 +449,15 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             ctx.getApplication().createComponent(UIViewRoot.COMPONENT_TYPE);
         }
 
-        return super.restoreView(ctx, viewId);
+        UIViewRoot root = super.restoreView(ctx, viewId);
+        StateContext stateCtx = StateContext.getStateContext(ctx);
+        
+        if (stateCtx.partialStateSaving(ctx, viewId))
+        {
+          stateCtx.startTrackViewModifications(ctx, root);
+        }
 
+        return root;
     }
 
 
@@ -1105,7 +1112,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         if (stateCtx.partialStateSaving(ctx, root.getViewId())) {
 	    // lu4242            root.markInitialState();
         }
-        stateCtx.startTrackViewModifications();
+        stateCtx.startTrackViewModifications(ctx, root);
     }
 
      private void markInitialState(FacesContext ctx, UIViewRoot root)
