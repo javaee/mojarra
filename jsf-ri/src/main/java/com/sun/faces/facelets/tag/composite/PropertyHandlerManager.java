@@ -261,9 +261,9 @@ class PropertyHandlerManager {
             // try to get the type from the 'type'-attribute and default to
             // Object.class, if no type-attribute was set.
             Class<?> type = Object.class;
-            TagValueExpression typeVE =
-                    (TagValueExpression) target.getValue("type");
-            if (typeVE != null) {
+            Object obj = target.getValue("type");
+            if ((null != obj) && !(obj instanceof Class)) {
+                TagValueExpression typeVE = (TagValueExpression) obj;
                 Object value = typeVE.getValue(ctx);
                 if (value instanceof Class<?>) {
                     type = (Class<?>) value;
@@ -277,6 +277,8 @@ class PropertyHandlerManager {
                         throw new IllegalArgumentException(ex);
                     }
                 }
+            } else {
+                type = null != obj ? (Class) obj : Object.class;
             }
             target.setValue(propName, attribute.getValueExpression(ctx, type));
         }
