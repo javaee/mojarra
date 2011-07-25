@@ -146,9 +146,11 @@ public class TestStateContext extends ServletFacesTestCase {
     }
 
     public void testAddComponent() {
-        StateContext stateContext = StateContext.getStateContext(getFacesContext());
-        stateContext.startTrackViewModifications();
-        UIViewRoot viewRoot = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
+        FacesContext ctx = getFacesContext();
+        StateContext stateContext = StateContext.getStateContext(ctx);
+        UIViewRoot viewRoot = ctx.getViewRoot();
+        assertTrue(viewRoot != null);
+        stateContext.startTrackViewModifications(ctx, viewRoot);
         UIOutput output = new UIOutput();
         output.setId("foo");
         viewRoot.getChildren().add(output);
