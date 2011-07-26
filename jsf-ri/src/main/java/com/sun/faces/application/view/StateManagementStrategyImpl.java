@@ -165,15 +165,7 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
                     Serializable stateObj;
                     if (!target.isTransient()) {
                         if (stateContext.componentAddedDynamically(target)) {
-                            stateObj = new StateHolderSaver(finalContext, target);
-                            Map<String, ComponentStruct> dynamicAdds = stateContext.getDynamicAdds();
-                            assert(null != dynamicAdds);
-                            String clientId = target.getClientId(finalContext);
-                            if (!dynamicAdds.containsKey(clientId)) {
-                                ComponentStruct toAdd = new ComponentStruct();
-                                toAdd.absorbComponent(finalContext, target);
-                                dynamicAdds.put(clientId, toAdd);
-                            }
+                            stateObj = new StateHolderSaver(finalContext, target);                           
 
                         } else {
                             stateObj = (Serializable) target.saveState(context.getFacesContext());
@@ -378,7 +370,16 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
 
 
                                     }
-
+                                   
+                                   // Add back to dynamic adds list
+                                    Map<String, ComponentStruct> dynamicAdds = stateContext.getDynamicAdds();
+                                    assert(null != dynamicAdds);
+                                    String clientId = toAdd.getClientId(context.getFacesContext());
+                                    if (!dynamicAdds.containsKey(clientId)) {
+                                        ComponentStruct toAddCS = new ComponentStruct();
+                                        toAddCS.absorbComponent(context.getFacesContext(), toAdd);
+                                        dynamicAdds.put(clientId, toAddCS);
+                                    }
                                 }
 
                                 return result;

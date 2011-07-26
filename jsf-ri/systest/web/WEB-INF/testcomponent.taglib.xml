@@ -55,6 +55,13 @@
 	</tag>
 
 	<tag>
+		<tag-name>addcomponent1</tag-name>
+		<component>
+			<component-type>com.sun.faces.event.UIAddComponent1</component-type>
+		</component>
+	</tag>
+
+	<tag>
 		<tag-name>togglecomponent</tag-name>
 		<component>
 			<component-type>com.sun.faces.event.UIToggleComponent</component-type>

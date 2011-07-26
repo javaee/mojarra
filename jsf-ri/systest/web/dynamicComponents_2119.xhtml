@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:test="http://testcomponent">
+
+	<h2>Add Test Instructions</h2>
+	
+	<ol>
+		<li>Just before the page is rendered (pre render view event), a custom component should have created a dynamic component (PanelGrid) and added it as a child.</li>
+ 		<li>Click 'PostBack'. The Action processing for the button will create another dynamic component (OutputText) and add it as a child to the dynamic PanelGrid component.</li>
+        <li>Click 'PostBack' again.  The PanelGrid should still have the OutputText child.</li>
+	</ol>
+		
+	<h:messages/>
+		
+	<h:form prependId="false" id="dynamicForm">
+	
+           <test:addcomponent1/>
+		
+           <br/>
+
+           <h:commandButton id="postback" value="PostBack" action = "#{testManagedBean.save}"/>
+
+	</h:form>			
+	
+</ui:composition>
+
