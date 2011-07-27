@@ -167,4 +167,19 @@ public class DynamicAddTestCase extends HtmlUnitFacesTestCase {
         text = page.asText();
         assertTrue(text.matches("(?s).*TestComponent::encodeBegin\\s*Foo\\s*Bar\\s*Baz\\s*TestComponent::encodeEnd.*"));
     }
+
+    public void testChildren() throws Exception {
+        HtmlPage page = getPage("/faces/dynamicComponents_2119.xhtml");
+        HtmlSubmitInput button = (HtmlSubmitInput)
+            this.getInputContainingGivenId(page, "postback");
+        page = button.click();
+        String text = page.asText();
+        assertTrue(text.matches("(?s).*TestComponent::encodeBegin\\s*NEW-OUTPUT\\s*TestComponent::encodeEnd.*"));
+        button = (HtmlSubmitInput)
+            this.getInputContainingGivenId(page, "postback");
+        page = button.click();
+        text = page.asText();
+        assertTrue(text.matches("(?s).*TestComponent::encodeBegin\\s*NEW-OUTPUT\\s*TestComponent::encodeEnd.*"));
+
+    }
 }
