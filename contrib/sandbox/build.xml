@@ -80,8 +80,7 @@
     <property name="sourceforge.mirror" value="http://superb-east.dl.sourceforge.net/sourceforge"/>
     
     <path id="impl.compile.classpath">
-        <pathelement location="${jsf-api.jar}"/>
-        <pathelement location="${jsf-impl.jar}"/>
+        <pathelement location="${javax.faces.jar}"/>
         <path refid="sun.commons.classpath"/>
         <path refid="compile.classpath"/>
         <pathelement location="${tools.dir}/build/classes"/>
@@ -224,7 +223,7 @@
             <classpath>
                 <path refid="sun.commons.classpath"/>
                 <path refid="compile.classpath"/>
-                <pathelement location="${jsf-api.jar}"/>
+                <pathelement location="${javax.faces-api.jar}"/>
                 <pathelement location="${tools.dir}/build/classes"/>
             </classpath>
             <assertions>

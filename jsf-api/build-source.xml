@@ -74,7 +74,6 @@
     <property name="build.mifdocs.dir" value="${build.dir}/mifdocs"/>
     <property name="javadoc.private" value="false"/>
     <property name="javadoc.protected" value="true"/>
-    <property name="artifact-id" value="jsf-api"/>
 
     <property name="assertion.classes" value="-ea:javax.faces..."/>
     <property name="name" value="jsf-api"/>
@@ -215,7 +214,7 @@
                 <pathelement location="${commons-digester.jar}" />
                 <pathelement location="${commons-collections.jar}" />
                 <pathelement location="${commons-logging.jar}" />
-                <pathelement location="${jsf-api.jar}"/>
+                <pathelement location="${jsf-api-intermediate.jar}"/>
                 <pathelement location="${tools.dir}/build/classes"/>
             </classpath>
             <assertions>
@@ -254,7 +253,7 @@
             <classpath>
                 <path refid="apache.commons.classpath"/>
                 <path refid="compile.classpath"/>
-                <pathelement location="${jsf-api.jar}"/>
+                <pathelement location="${jsf-api-intermediate.jar}"/>
                 <pathelement location="${tools.dir}/build/classes"/>
             </classpath>
             <sysproperty key="java.endorsed.dirs" value="${endorsed.dirs}"/>

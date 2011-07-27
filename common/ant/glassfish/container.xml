@@ -190,10 +190,10 @@ grant {
               description="Deploy the JSF Implementation artifacts to the target container.">
       <mkdir dir="${dist.dir}" />
       <mkdir dir="${dist.dir}/tmp" />
-      <unjar src="${impl.dir}/build/lib/jsf-impl.jar"
+      <unjar src="${impl.dir}/build/lib/javax.faces.jar"
              dest="${dist.dir}/tmp" />
       <delete dir="${dist.dir}/tmp/com/sun/org/apache" />
-      <jar destfile="${dist.dir}/jsf-impl.jar" 
+      <jar destfile="${dist.dir}/javax.faces.jar" 
            basedir="${dist.dir}/tmp" />
 
             <if>
@@ -209,10 +209,10 @@ grant {
                 </fileset>
             </delete>
             <jar jarfile="${container.home}/lib/javaee.jar" update="yes">
-                <zipfileset src="${api.dir}/build/lib/jsf-api.jar"/>
+                <zipfileset src="${api.dir}/build/lib/jsf-api-intermediate.jar"/>
             </jar>
             <copy overwrite="true" todir="${container.home}/lib"
-                  file="${dist.dir}/jsf-impl.jar"/>
+                  file="${dist.dir}/javax.faces.jar"/>
             <!--
             <copy overwrite="true" todir="${container.home}/lib"
                   file="${validation-api.jar}"/>
@@ -224,7 +224,7 @@ grant {
                 </then>
             </if>
             <delete dir="${dist.dir}/tmp" />
-            <delete file="${dist.dir}/jsf-impl.jar" />
+            <delete file="${dist.dir}/javax.faces.jar" />
     </target>
 
     <target name="container.deploy.test.dependencies"

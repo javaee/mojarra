@@ -53,8 +53,8 @@
     <property name="build" value="${basedir}/build"/>   
 
     <path id="classpath">       
-        <pathelement location="${jsf-api.jar}"/>
-        <pathelement location="${jsf-impl.jar}"/>
+        <pathelement location="${javax.faces-api.jar}"/>
+        <pathelement location="${javax.faces.jar}"/>
         <pathelement location="${build}/WEB-INF/classes"/>
         <path refid="compile.classpath"/>
        <fileset dir="${api.dir}" >

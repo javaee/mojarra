@@ -43,8 +43,8 @@
 
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>@groupId@</groupId>
-    <artifactId>jsf-api</artifactId>
+    <groupId>javax.faces</groupId>
+    <artifactId>javax.faces-api</artifactId>
     <version>@version@</version>
     <packaging>jar</packaging>
     <name>
@@ -71,79 +71,31 @@
         <developer>
             <id>edburns</id>
             <name>Ed Burns</name>
-            <email>ed.burns@sun.com</email>
+            <email>edward.burns@oracle.com</email>
             <organization>Oracle America, Inc.</organization>
             <roles>
                 <role>project-owner</role>
             </roles>
             <timezone>-6</timezone>
-        </developer>
-        <developer>
-            <id>rlubke</id>
-            <name>Ryan Lubke</name>
-            <email>Ryan.Lubke@sun.com</email>
-            <organization>Oracle America, Inc.</organization>
-            <roles>
-                <role>project-owner</role>
-            </roles>
-            <timezone>-9</timezone>
         </developer>
         <developer>
             <id>rogerk</id>
             <name>Roger Kitain</name>
-            <email>Roger.Kitain@sun.com</email>
+            <email>roger.kitain@oracle.com</email>
             <organization>Oracle America, Inc.</organization>
             <roles>
                 <role>project-owner</role>
             </roles>
             <timezone>-6</timezone>
-        </developer>
-        <developer>
-            <id>driscoll</id>
-            <name>Jim Driscoll</name>
-            <email>jim.dirscoll@sun.com</email>
-            <organization>Oracle America, Inc.</organization>
-            <roles>
-                <role>project-owner</role>
-            </roles>
-            <timezone>-9</timezone>
         </developer>
     </developers>
 
     <repositories>
         <repository>
-            <snapshots/>
-            <id>ibiblio</id>
-            <url>http://www.ibiblio.org/maven2/</url>
-        </repository>
-        <repository>
-            <id>java.net-maven2-repository</id>
-            <name>Java.net Repository for Maven</name>
-            <url>http://download.java.net/maven/2/</url>
-            <layout>default</layout>
-        </repository>
-        <repository>
-            <snapshots/>
-            <id>codehaus</id>
-            <name>codehaus</name>
-            <url>http://repository.codehaus.org</url>
-        </repository>
-        <repository>
-            <snapshots/>
             <id>java.net</id>
-            <name>Java.net Maven 1.x Repository for external projects</name>
-            <url>http://download.java.net/maven/1/</url>
-            <layout>legacy</layout>
+            <name>The repo from which jars are copied to maven central</name>
+            <url>https://maven.java.net/content/repositories/releases</url>
         </repository>
-        <repository>
-            <snapshots/>
-            <id>java.net.shared</id>
-            <name>Java.net Maven 1.x Repository for glassfish dependencies
-            </name>
-            <url>http://download.java.net/javaee5/external/shared</url>
-            <layout>legacy</layout>
-        </repository>
-
     </repositories>
 
     <distributionManagement>
@@ -204,22 +156,24 @@
     </build>
 
     <issueManagement>
-        <system>issueZilla</system>
-        <url>
-            https://javaserverfaces.dev.java.net/servlets/ProjectIssues
-        </url>
+        <system>jira</system>
+        <url>http://java.net/jira/browse/JAVASERVERFACES_SPEC_PUBLIC</url>
     </issueManagement>
     <mailingLists>
         <mailingList>
             <name>JSF 2.2 Specification Comments</name>
-            <post>jsr-314-comments@jcp.org</post>
+            <post>jsr-344-comments@jcp.org</post>
+            <archive>http://java.net/projects/javaserverfaces-spec-public/lists/users/archive</archive>
+        </mailingList>
+        <mailingList>
+            <name>JSF 2.2 Specification Users</name>
+            <post>users@javaserverfaces-spec-public.java.net</post>
+            <archive>http://java.net/projects/javaserverfaces-spec-public/lists/users/archive</archive>
         </mailingList>
         <mailingList>
             <name>Mojarra Implementation Dev List</name>
-            <post>dev@javaserverfaces.dev.java.net</post>
-            <archive>
-                https://javaserverfaces.dev.java.net/servlets/SummarizeList?listName=dev
-            </archive>
+            <post>dev@javaserverfaces.java.net</post>
+            <archive>http://java.net/projects/javaserverfaces/lists/dev/archive</archive>
         </mailingList>
     </mailingLists>
     <contributors>
@@ -264,25 +218,25 @@
     <dependencies>
         <dependency>
             <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>2.5</version>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.0.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>javax.servlet.jsp</groupId>
-            <artifactId>jsp-api</artifactId>
-            <version>2.1</version>
+            <artifactId>javax.servlet.jsp-api</artifactId>
+            <version>2.2.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>javax.el</groupId>
-            <artifactId>el-api</artifactId>
-            <version>1.0</version>
+            <artifactId>javax.el-api</artifactId>
+            <version>2.2.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>jstl</groupId>
-            <artifactId>jstl</artifactId>
+            <groupId>javax.servlet.jsp.jstl</groupId>
+            <artifactId>jstl-api</artifactId>
             <version>1.2</version>
             <scope>provided</scope>
         </dependency>

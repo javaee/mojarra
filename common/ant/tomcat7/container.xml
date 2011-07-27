@@ -124,7 +124,7 @@
     
     <!--
         OPTIONAL
-          Update the jsf-impl.jar's manfest file
+          Update the javax.faces.jar's manfest file
           with the versions of the compile time
           dependencies.
     -->
@@ -140,8 +140,7 @@
     -->
     <target name="container.deploy" 
             description="Deploy the JSF Implementation artifacts to the target container.">
-        <copy overwrite="true" file="${api.dir}/build/lib/jsf-api.jar" toFile="${container.home}/lib/jsf-api.jar"/>
-        <copy overwrite="true" file="${impl.dir}/build/lib/jsf-impl.jar" toFile="${container.home}/lib/jsf-impl.jar"/>
+        <copy overwrite="true" file="${impl.dir}/build/lib/javax.faces.jar" toFile="${container.home}/lib/javax.faces.jar"/>
         <copy overwrite="true" file="${jstl.jar}" todir="${container.home}/lib"/>
     </target>
 

@@ -92,9 +92,14 @@
     <property name="regression.test.results.dir" 
               value="${regression.test.dir}/build/testresults" />
 
+    <!-- Name -->
+    <property name="api-artifact-id" value="javax.faces-api"/>
+    <property name="impl-artifact-id" value="javax.faces"/>
+
     <!-- Artifacts of interest -->
-    <property name="jsf-api.jar" value="${api.dir}/build/lib/jsf-api.jar"/>
-    <property name="jsf-impl.jar" value="${impl.dir}/build/lib/jsf-impl.jar"/>   
+    <property name="jsf-api-intermediate.jar" value="${api.dir}/build/lib/jsf-api-intermediate.jar"/>
+    <property name="javax.faces-api.jar" value="${api.dir}/build/lib/${api-artifact-id}.jar"/>
+    <property name="javax.faces.jar" value="${impl.dir}/build/lib/${impl-artifact-id}.jar"/>   
     <property name="jsf.test.jar" value="${jsf.build.home}/lib/jsf-extensions-test-time.jar"/>    
     <property name="installer.jar" value="${jsf.build.home}/common/lib/installer-builder.jar"/>
     <property name="javanettasks.jar" value="${jsf.build.home}/common/lib/javanettasks-1.0.5.jar"/>
@@ -111,7 +116,6 @@
     <property name="impl.version" value="${impl.version.number}-${build.type}"/>
     <property name="full.impl.version" value="${impl.version.number} (${build.number}-${build.type})"/>
     <property name="snapshot.version" value="${impl.version.number}-SNAPSHOT"/>
-    <property name="groupId" value="com.sun.faces"/>
 
     <!-- Environment -->
     <property environment="myenv" />
@@ -375,7 +379,7 @@
                 <then>
                     <echo message="Adding dependent libraries..."/>
 
-                    <for list="${jsf-impl.jar},${jsf-api.jar},${webapp.jars}"
+                    <for list="${javax.faces.jar},${jsf-api-intermediate.jar},${webapp.jars}"
                          param="jar">
                         <sequential>
                             <echo message="JAR: @{jar}"/>
@@ -474,7 +478,7 @@
                   fork="true">
                 <classpath>
                     <path refid="compile.classpath"/>
-                    <pathelement location="${jsf-api.jar}"/>
+                    <pathelement location="${jsf-api-intermediate.jar}"/>
                     <pathelement location="${tools.dir}/build/classes"/>
                 </classpath>
                 <sysproperty key="java.endorsed.dirs" value="${endorsed.dirs}"/>

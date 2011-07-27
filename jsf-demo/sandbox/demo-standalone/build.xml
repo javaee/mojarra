@@ -46,8 +46,8 @@
     <taskdef resource="net/sf/antcontrib/antlib.xml"/>
     
     <property file="build.properties"/>
-    <property name="jsf-api.jar" value="../lib/jsf-api.jar"/>
-    <property name="jsf-impl.jar" value="../lib/jsf-impl.jar"/>
+    <property name="javax.faces-api.jar" value="../lib/javax.faces-api.jar"/>
+    <property name="javax.faces.jar" value="../lib/javax.faces.jar"/>
     <property name="ui.jar" value="${basedir}/ui.jar"/>   
         
         
@@ -74,8 +74,8 @@
             <javac srcdir="@{sample-dir}/src"
                    destdir="@{sample-dir}/build/classes">
                 <classpath>
-                    <pathelement location="${jsf-api.jar}"/>
-                    <pathelement location="${jsf-impl.jar}"/>
+                    <pathelement location="${javax.faces-api.jar}"/>
+                    <pathelement location="${javax.faces.jar}"/>
                     <pathelement location="${ui.jar}"/>
                     <pathelement path="${compile.classpath}"/>
                 </classpath>
@@ -93,7 +93,7 @@
                 <isset property="${packaged.libs}"/>
                 <then>
                     <echo message="Packing dependent libraries"/>
-                    <for list="${jsf-impl.jar},${jsf-api.jar},${packaged.libs}"
+                    <for list="${javax.faces.jar},${javax.faces-api.jar},${packaged.libs}"
                          param="jar">
                         <sequential>
                             <jar destfile="${basedir}/@{sample-name}.war"

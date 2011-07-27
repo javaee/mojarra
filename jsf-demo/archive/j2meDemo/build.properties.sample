@@ -71,7 +71,6 @@ commons-beanutils.jar=${base.path}/lib/appserv-rt.jar
 commons-collections.jar=${base.path}/lib/appserv-rt.jar
 commons-digester.jar=${base.path}/lib/appserv-rt.jar
 commons-logging.jar=${base.path}/lib/appserv-rt.jar
-jsf-api.jar=${base.path}/lib/jsf-api.jar
 jsf-impl.jar=${base.path}/lib/jsf-impl.jar
 jstl.jar=${base.path}/lib/appserv-jstl.jar
 servlet.jar=${base.path}/lib/j2ee.jar

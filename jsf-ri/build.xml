@@ -80,7 +80,7 @@
 
     <!-- Misc -->
     <property name="conf.share.dir" value="${basedir}/conf/share"/>
-    <property name="name" value="jsf-impl"/>
+    <property name="name" value="${impl-artifact-id}"/>
 
     <property name="dependency.base.dir" value="${jsf.build.home}/dependencies"/>
     <property name="dependency.jar.dir" value="${dependency.base.dir}/jars"/>
@@ -91,7 +91,7 @@
     <property name="DocName" value="Mojarra Implementation Javadoc"/>
 
     <path id="impl.compile.classpath">
-        <pathelement location="${jsf-api.jar}"/>
+        <pathelement location="${jsf-api-intermediate.jar}"/>
         <path refid="apache.commons.classpath"/>
         <path refid="compile.classpath"/>
         <pathelement location="${jsf-tools.jar}"/>
@@ -283,7 +283,7 @@
     </target>
 
     <target name="compile" depends="prepare,generate,copy.template.sources"
-            description="Just compile the classes">
+            description="Compile the classes and unjar the jsf-api-intermediate jar">
 
         <!-- Run javac through everything -->
         <jsf.javac srcdir="${source.dir}:${build.generate.dir}"
@@ -329,7 +329,7 @@
             args="-o ${build.classes.dir}/META-INF/resources/javax.faces/jsf.js ${build.classes.dir}/META-INF/resources/javax.faces/jsf-uncompressed.js"/>
         <!--
             RELEASE_PENDING (rlubke,driscoll)
-            For now these are copied to the root of the jsf-impl.jar, but
+            For now these are copied to the root of the javax.faces.jar, but
             eventually they should be in com.sun.faces per the copy statement
             above.
         -->
@@ -355,6 +355,12 @@
               toDir="${build.classes.dir}/com/sun/faces"/>
         <unzip src="${jsf.build.home}/lib/injectionproviders.jar"
                dest="${build.classes.dir}"/>
+        <unzip src="${jsf-api-intermediate.jar}"
+               dest="${build.classes.dir}">
+          <patternset>
+            <exclude name="META-INF/MANIFEST.MF" />
+          </patternset>
+        </unzip>
         <copy todir="${build.classes.dir}/META-INF">
             <fileset dir="${conf.share.dir}">
                 <include name="jsf_core.tld"/>

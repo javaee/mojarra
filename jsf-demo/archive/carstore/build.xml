@@ -66,8 +66,8 @@
 
 
     <path id="classpath">        
-        <pathelement location="${jsf-api.jar}"/>
-        <pathelement location="${jsf-impl.jar}"/>
+        <pathelement location="${javax.faces-api.jar}"/>
+        <pathelement location="${javax.faces.jar}"/>
         <pathelement location="${demo-components.jar}"/>     
         <pathelement location="${jsf-demo.lib}/ui.jar"/>     
         <pathelement location="${build}/WEB-INF/classes"/>

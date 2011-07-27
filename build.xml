@@ -461,9 +461,7 @@
                                    fromFile="${dist.dir}/mojarra-${impl.version}-source.zip"
                                    fileDescription="Mojarra ${impl.version.number} nightly source bundle."
                                    overwrite="yes"/>
-                    <echo message="Deploying jsf-api.jar snapshot to the java.net M2 repository..."/>
-                    <ant antfile="${api.dir}/build.xml" target="mvn.deploy.snapshot"/>
-                    <echo message="Deploying jsf-impl.jar snapshot to the java.net M2 repository..."/>
+                    <echo message="Deploying javax.faces.jar snapshot to the java.net M2 repository..."/>
                     <ant antfile="${impl.dir}/build.xml" target="mvn.deploy.snapshot"/>
                 </sequential>
             </then>
@@ -509,8 +507,7 @@
     </target>
 
     <target name="updatecenter2" depends="main">
-      <copy file="jsf-api/build/lib/jsf-api.jar" todir="updatecenter2/lib"/>
-      <copy file="jsf-ri/build/lib/jsf-impl.jar" todir="updatecenter2/lib"/>
+      <copy file="jsf-ri/build/lib/javax.faces.jar" todir="updatecenter2/lib"/>
     </target>
 
 </project>

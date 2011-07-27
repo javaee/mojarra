@@ -239,10 +239,7 @@
     <target name="container.deploy" depends="define.wls.properties"
             description="Deploy the JSF Implementation artifacts to the target container.">
      
-      <mkdir dir="${maven.repo.local}/${groupPath}/jsf-api/${impl.version}" />
-      <copy file="${jsf.build.home}/jsf-api/build/lib/jsf-api.jar" overwrite="true"
-            tofile="${maven.repo.local}/${groupPath}/jsf-api/${impl.version}/jsf-api-${impl.version}.jar" />
-      <copy file="${jsf.build.home}/jsf-ri/build/lib/jsf-impl.jar" overwrite="true"
+      <copy file="${jsf.build.home}/jsf-ri/build/lib/javax.faces.jar" overwrite="true"
             tofile="${maven.repo.local}/${groupPath}/jsf-impl/${impl.version}/jsf-impl-${impl.version}.jar" />
 
       <if>
@@ -262,9 +259,7 @@
                dir="${jsf.build.home}/common/ant/${container.name}/wls-jsf" goals="clean install" />
       <container.stop />
 
-      <copy file="${jsf.build.home}/jsf-api/build/lib/jsf-api.jar" overwrite="true"
-            todir="${wl.home}/server/lib/consoleapp/webapp/WEB-INF/lib" />
-      <copy file="${jsf.build.home}/jsf-ri/build/lib/jsf-impl.jar" overwrite="true"
+      <copy file="${jsf.build.home}/jsf-ri/build/lib/javax.faces.jar" overwrite="true"
             todir="${wl.home}/server/lib/consoleapp/webapp/WEB-INF/lib" />
       <container.start />
       <wldeploy action="deploy"

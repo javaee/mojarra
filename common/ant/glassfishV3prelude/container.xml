@@ -176,8 +176,7 @@
             </then>
         </if>
 
-        <copy file="${api.dir}/build/lib/jsf-api.jar" toFile="${container.home}/modules/jsf-api.jar"/>
-        <copy file="${impl.dir}/build/lib/jsf-impl.jar" toFile="${container.home}/modules/web/jsf-impl.jar"/>
+        <copy file="${impl.dir}/build/lib/javax.faces.jar" toFile="${container.home}/modules/web/javax.faces.jar"/>
 
         <if>
             <os family="windows"/>
