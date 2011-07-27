@@ -247,6 +247,11 @@
             </then>
         </if>
 
+        <delete failonerror="false" 
+                file="${container.home}/modules/jsf-api.jar" />
+        <delete failonerror="false" 
+                file="${container.home}/modules/jsf-impl.jar" />
+
         <copy overwrite="true" file="${impl.dir}/build/lib/javax.faces.jar" toFile="${container.home}/modules/javax.faces.jar"/>
 
         <if>
