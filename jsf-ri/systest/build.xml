@@ -74,8 +74,7 @@
     <property name="context.path" value="/${test.suite.name}"/>
 
     <path id="systest.compile.classpath">
-        <pathelement path="${jsf-api.jar}"/>
-        <pathelement path="${jsf-impl.jar}"/>
+        <pathelement path="${javax.faces.jar}"/>
         <path refid="jsf.test.jar.classpath"/>
         <path refid="compile.classpath"/>
         <path refid="htmlunit.compile.classpath"/> 

@@ -122,7 +122,7 @@
     
     <!--
         OPTIONAL
-          Update the jsf-impl.jar's manfest file
+          Update the javax.faces.jar's manfest file
           with the versions of the compile time
           dependencies.
     -->

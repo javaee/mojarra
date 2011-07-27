@@ -151,7 +151,7 @@
                       <fileset dir="${api.dir}/build/generate/" 
                                includes="**/*" excludes="last-generation" />
                     </copy>
-                    <unjar src="${api.dir}/build/lib/jsf-api.jar"
+                    <unjar src="${jsf-api-intermediate.jar}"
                            overwrite="yes"
                            dest="${mvn.api.dir}/target/classes"/>
                     <jsf.mvn pomFile="${mvn.api.dir}/jsf-api-pom.xml"
@@ -173,7 +173,7 @@
                       <fileset dir="${impl.dir}/build/generate/" 
                                includes="**/*" excludes="last-generation,conf/**,**/*.xsd" />
                     </copy>
-                    <unjar src="${impl.dir}/build/lib/jsf-impl.jar"
+                    <unjar src="${impl.dir}/build/lib/javax.faces.jar"
                            overwrite="yes"
                            dest="${mvn.impl.dir}/target/classes"/>
                     <jsf.mvn pomFile="${mvn.impl.dir}/jsf-impl-pom.xml"

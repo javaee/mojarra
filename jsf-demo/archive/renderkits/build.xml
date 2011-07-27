@@ -56,7 +56,7 @@
     <property name="jsf-demo.lib" value="../lib"/>
 
     <path id="classpath">
-        <pathelement location="${jsf-api.jar}"/>
+        <pathelement location="${javax.faces-api.jar}"/>
         <pathelement location="${build}/WEB-INF/classes"/>
         <path refid="compile.classpath"/>
     </path>

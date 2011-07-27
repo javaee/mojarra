@@ -86,7 +86,7 @@
     <property name="yuicompressor.jar" value="${dependency.jar.dir}/yuicompressor.jar"/>
 
     <path id="impl.compile.classpath">
-        <pathelement location="${jsf-api.jar}"/>
+        <pathelement location="${jsf-api-intermediate.jar}"/>
         <path refid="apache.commons.classpath"/>
         <path refid="compile.classpath"/>
         <pathelement location="${tools.dir}/build/classes"/>
@@ -323,7 +323,7 @@
             args="-o ${build.classes.dir}/META-INF/resources/javax.faces/jsf.js ${build.classes.dir}/META-INF/resources/javax.faces/jsf-uncompressed.js"/>
         <!--
             RELEASE_PENDING (rlubke,driscoll)
-            For now these are copied to the root of the jsf-impl.jar, but
+            For now these are copied to the root of the javax.faces.jar, but
             eventually they should be in com.sun.faces per the copy statement
             above.
         -->

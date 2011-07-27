@@ -74,10 +74,9 @@
     <property name="build.mifdocs.dir" value="${build.dir}/mifdocs"/>
     <property name="javadoc.private" value="false"/>
     <property name="javadoc.protected" value="true"/>
-    <property name="artifact-id" value="jsf-api"/>
 
     <property name="assertion.classes" value="-ea:javax.faces..."/>
-    <property name="name" value="jsf-api"/>
+    <property name="name" value="jsf-api-intermediate"/>
     <property name="DocName" value="JavaServer Faces API"/>
 
     <path id="test.classpath">
@@ -217,7 +216,7 @@
                 <pathelement location="${commons-digester.jar}" />
                 <pathelement location="${commons-collections.jar}" />
                 <pathelement location="${commons-logging.jar}" />
-                <pathelement location="${jsf-api.jar}"/>
+                <pathelement location="${jsf-api-intermediate.jar}"/>
                 <pathelement location="${jsf-tools.jar}"/>
                 <pathelement location="${tools.dir}/build/classes"/>
             </classpath>
@@ -258,7 +257,7 @@
             <classpath>
                 <path refid="apache.commons.classpath"/>
                 <path refid="compile.classpath"/>
-                <pathelement location="${jsf-api.jar}"/>
+                <pathelement location="${jsf-api-intermediate.jar}"/>
                 <pathelement location="${jsf-tools.jar}"/>
                 <pathelement location="${tools.dir}/build/classes"/>
             </classpath>
@@ -844,6 +843,12 @@ javax.faces.level=ALL
         <condition property="exec.name" value="cmd.exe">
             <os family="windows"/>
         </condition>
+        <condition property="exec.name" value="${java.home}/bin/javac">
+            <available file="${java.home}/bin/javac"/>
+        </condition>
+        <condition property="exec.name" value="${java.home}/../bin/javac">
+            <available file="${java.home}/../bin/javac"/>
+        </condition>
         <condition property="exec.arg.1"
                    value="/c ${java.home}/bin/javac">
             <os family="windows"/>
@@ -862,7 +867,7 @@ javax.faces.level=ALL
             <arg line="-Acom.sun.tools.javac.sym.Dest=${build.lib.dir}/jsf-api-stripped"/>
             <arg line="${src.paths}"/>
         </exec>
-        <!-- jar up the stripped files into jsf-api.jar. -->
+        <!-- jar up the stripped files into jsf-api-intermediate.jar. -->
         <!-- Extract the original manifest -->
         <unjar src="${build.lib.dir}/${name}-full.jar"
                dest="${build.lib.dir}/jsf-api-stripped">
@@ -909,7 +914,7 @@ javax.faces.level=ALL
         
     <target name="mvn.deploy.api.release.local" depends="strip.api.jar">
 
-        <mvn.deploy.release.local groupId="javax.faces" version="${spec.version}" type="api"/>
+        <mvn.deploy.release.local version="${spec.version}" type="api"/>
     </target>
 
 

@@ -57,8 +57,8 @@
 
     <path id="compile.classpath">
         <pathelement location="${servlet.jar}"/>
-        <pathelement location="${jsf-api.jar}"/>
-        <pathelement location="${jsf-impl.jar}"/>
+        <pathelement location="${javax.faces-api.jar}"/>
+        <pathelement location="${javax.faces.jar}"/>
         <pathelement location="${glassfish.jar}"/>
         <pathelement location="${tomcat6.jar}"/>
         <pathelement location="${jetty.jar}" />
