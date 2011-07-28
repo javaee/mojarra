@@ -510,6 +510,30 @@
       <copy file="jsf-ri/build/lib/javax.faces.jar" todir="updatecenter2/lib"/>
     </target>
 
+    <target name="mvn.deploy.release.local">
+      <call.modules target="mvn.deploy.release.local" />
+    </target>
+
+    <target name="mvn.deploy.snapshot.local">
+      <call.modules target="mvn.deploy.snapshot.local" />
+    </target>
+
+    <target name="mvn.deploy.promoted.local">
+      <call.modules target="mvn.deploy.promoted.local" />
+    </target>
+
+    <target name="mvn.deploy.release">
+      <call.modules target="mvn.deploy.release" />
+    </target>
+
+    <target name="mvn.deploy.snapshot">
+      <call.modules target="mvn.deploy.snapshot" />
+    </target>
+
+    <target name="mvn.deploy.promoted">
+      <call.modules target="mvn.deploy.promoted" />
+    </target>
+
 </project>
 
 

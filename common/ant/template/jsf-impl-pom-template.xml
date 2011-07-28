@@ -43,8 +43,8 @@
 
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>@groupId@</groupId>
-    <artifactId>jsf-impl</artifactId>
+    <groupId>org.glassfish</groupId>
+    <artifactId>javax.faces</artifactId>
     <version>@version@</version>
     <packaging>jar</packaging>
     <name>
