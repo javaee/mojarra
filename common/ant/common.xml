@@ -532,6 +532,8 @@
                              value="@{force.no.cluster}"/>
                 <sysproperty key="container" value="${container.name}" />
                 <sysproperty key="instance.numbers" value="@{instance.numbers}" />
+                <sysproperty key="SimpleTesterTestCase.dumpText" 
+                             value="${SimpleTesterTestCase.dumpText}" />
                 <custom-sysproperties/>
                 <test name="com.sun.faces.htmlunit.SimpleTesterTestCase" 
                       haltonfailure="yes" 
