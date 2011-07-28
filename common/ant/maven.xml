@@ -293,19 +293,19 @@
             </if>
             <exec os="SunOS" dir="@{dir}" failonerror="yes"
                   executable="${mvn.cmd}">
-                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}"/>
+                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals} -Dspec.snapshot.version=${spec.snapshot.version}"/>
             </exec>
             <exec os="Linux" dir="@{dir}" failonerror="yes"
                   executable="${mvn.cmd}">
-                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}"/>
+                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals} -Dspec.snapshot.version=${spec.snapshot.version}"/>
             </exec>
             <exec osfamily="windows" dir="@{dir}" executable="${mvn.cmd}"
                   failonerror="yes">
-                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}"/>
+                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals} -Dspec.snapshot.version=${spec.snapshot.version}"/>
             </exec>
             <exec os="Mac OS X" dir="@{dir}" executable="${mvn.cmd}"
                   failonerror="yes">
-                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}"/>
+                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals} -Dspec.snapshot.version=${spec.snapshot.version}"/>
             </exec>
         </sequential>
     </macrodef>
