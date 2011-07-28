@@ -450,13 +450,31 @@ public final class ComponentSupport {
     private static boolean inspectParentAncestryToCheckIfFormOmitted(UIComponent component) {
         if (component != null) {
             while (!(component instanceof UIViewRoot) && component != null) {
-                if (component instanceof UIForm || component.getFamily().endsWith("Form")) {
+                if (isForm(component)) {
                     return true;
                 }
                 component = component.getParent();
             }
         }
-        return false;
+
+        // If we haven't reached the UIViewRoot, the component is not
+        // yet connected.  In this case, we cannot determine whether a form
+        // is present, so we return true to avoid a (potentially incorrect)
+        // warning.
+        return (component instanceof UIViewRoot) ? false : true;
+    }
+
+    /**
+     * Tests whether the component should be treated as a form
+     * @param component
+     */
+    private static boolean isForm(UIComponent component)
+    {
+      // Note that we check the component family to avoid warning in
+      // cases where 3rd party form component that does not extend UIForm
+      // (eg. tr:form) is used.  (A better solution would be to expose a
+      // form interface that non-UIComponentBase subclasses could implement.)
+      return (component instanceof UIForm || component.getFamily().endsWith("Form"));
     }
 
     /**
@@ -510,7 +528,7 @@ public final class ComponentSupport {
         //when the UIPanel/UIData/UIColumn/UINamingContainer is a child and has to be added.
        
         if (ctx.getFacesContext().isProjectStage(ProjectStage.Development)) {
-            if (!(child instanceof UIForm)) {
+            if (!(isForm(child))) {
                 if ((child instanceof UIPanel
                         || parent instanceof UIColumn
                         || child instanceof UINamingContainer
