@@ -156,6 +156,16 @@
 
 
     <target name="prepare.dist">
+      <generate.documentation />
+    </target>
+
+    <target name="generate.documentatation.given.documentation.version">
+      <generate.documentation version="${documentation.version}" />
+    </target>
+
+    <macrodef name="generate.documentation">
+      <attribute name="version" default="${impl.version}" />
+      <sequential>
         <mkdir dir="${dist.home}"/>
         <mkdir dir="${dist.home}/docs"/>
         <mkdir dir="${dist.home}/samples"/>
@@ -271,7 +281,7 @@
             </frameset>
             </html>
         </echoxml>
-        <zip basedir="${dist.home}/docs" excludes="*.zip" destfile="${dist.home}/mojarra-${impl.version}-documentation.zip" />
+        <zip basedir="${dist.home}/docs" excludes="*.zip" destfile="${dist.home}/mojarra-@{version}-documentation.zip" />
         <delete dir="${dist.home}/docs/renderkitdocs"/>
         <delete dir="${dist.home}/docs/vdldocs"/>
         <delete dir="${dist.home}/docs/javadocs"/>
@@ -279,8 +289,9 @@
         <delete dir="${dist.home}/docs/jsdocs" />
         <delete file="${dist.home}/docs/index.html" />
         <delete file="${dist.home}/docs/doclist.html" />
-        <move file="${dist.home}/mojarra-${impl.version}-documentation.zip" todir="${dist.home}/docs" />
-    </target>
+        <move file="${dist.home}/mojarra-@{version}-documentation.zip" todir="${dist.home}/docs" />
+      </sequential>
+    </macrodef>
 
     <target name="api.javadocs">
 
