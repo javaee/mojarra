@@ -133,20 +133,28 @@
         <property name="javadoc.jar"
                   value="${mvn.api.dir}/target/${api-artifact-id}-@{version}-javadoc.jar" />
         <if>
-          <not>
-            <resourceexists>
-              <file file="${documentation.zip}" />
-            </resourceexists>
-          </not>
+          <isset property="skip.javadoc.jar" />
           <then>
-            <echo message="Generating documentation for inclusion as ${javadoc.jar}"/>
-            <property name="documentation.version" value="@{version}" />
-            <ant dir="${demo.dir}" 
-              target="generate.documentatation.given.documentation.version" />
+            <touch file="${mvn.api.dir}/target/${api-artifact-id}-@{version}-javadoc.jar" />
           </then>
+          <else>
+            <if>
+              <not>
+                <resourceexists>
+                  <file file="${documentation.zip}" />
+                </resourceexists>
+              </not>
+              <then>
+                <echo message="Generating documentation for inclusion as ${javadoc.jar}"/>
+                <property name="documentation.version" value="@{version}" />
+                <ant dir="${demo.dir}" 
+                  target="generate.documentatation.given.documentation.version" />
+              </then>
+            </if>
+            <copy file="${documentation.zip}" tofile="${javadoc.jar}"
+                  overwrite="true" failonerror="false"/> 
+          </else>
         </if>
-        <copy file="${documentation.zip}" tofile="${javadoc.jar}"
-              overwrite="true" failonerror="false"/>
       </sequential>
     </macrodef>
 
