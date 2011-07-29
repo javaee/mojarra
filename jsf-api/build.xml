@@ -960,7 +960,8 @@ javax.faces.level=ALL
        JAVA.NET M2 REPOSITORY
     -->
      <target name="mvn.deploy.snapshot" depends="strip.api.jar">
-        <mvn.deploy.snapshot type="api"/>
+        <mvn.deploy.snapshot type="api" 
+                             version="${spec.snapshot.version}"/>
     </target>
 
 
@@ -970,11 +971,8 @@ javax.faces.level=ALL
 
 
     <target name="mvn.deploy.release" depends="strip.api.jar">
-        <mvn.deploy.release type="api"/>
-    </target>
-
-    <target name="mvn.deploy.api.release" depends="strip.api.jar">
-        <mvn.deploy.release groupId="javax.faces" version="${spec.version}" type="api"/>
+        <mvn.deploy.release type="api" 
+                            version="${spec.version}"/>
     </target>
 
     <target name="passthru">
