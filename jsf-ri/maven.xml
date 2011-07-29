@@ -90,7 +90,7 @@
     <!-- <attainGoal name="jsf-impl:build" /> -->
     <mkdir dir="target/classes" />
     <unjar dest="target/classes" overwrite="true"
-           src="build/lib/jsf-impl.jar" />
+           src="build/lib/javax.faces.jar" />
   </goal>
 
 </project>

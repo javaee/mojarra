@@ -74,10 +74,9 @@
     <property name="build.mifdocs.dir" value="${build.dir}/mifdocs"/>
     <property name="javadoc.private" value="false"/>
     <property name="javadoc.protected" value="true"/>
-    <property name="artifact-id" value="jsf-api"/>
 
     <property name="assertion.classes" value="-ea:javax.faces..."/>
-    <property name="name" value="jsf-api"/>
+    <property name="name" value="jsf-api-intermediate"/>
     <property name="DocName" value="JavaServer Faces API"/>
 
     <path id="test.classpath">
@@ -217,7 +216,7 @@
                 <pathelement location="${commons-digester.jar}" />
                 <pathelement location="${commons-collections.jar}" />
                 <pathelement location="${commons-logging.jar}" />
-                <pathelement location="${jsf-api.jar}"/>
+                <pathelement location="${jsf-api-intermediate.jar}"/>
                 <pathelement location="${jsf-tools.jar}"/>
                 <pathelement location="${tools.dir}/build/classes"/>
             </classpath>
@@ -258,7 +257,7 @@
             <classpath>
                 <path refid="apache.commons.classpath"/>
                 <path refid="compile.classpath"/>
-                <pathelement location="${jsf-api.jar}"/>
+                <pathelement location="${jsf-api-intermediate.jar}"/>
                 <pathelement location="${jsf-tools.jar}"/>
                 <pathelement location="${tools.dir}/build/classes"/>
             </classpath>
@@ -819,30 +818,34 @@ javax.faces.level=ALL
        M2 REPOSITORY
     -->
 
-    <target name="mvn.deploy.snapshot.local">
-        <mvn.deploy.snapshot.local type="api"/>
+    <target name="mvn.deploy.snapshot.local" depends="strip.api.jar">
+        <mvn.deploy.snapshot.local type="api" 
+                                   version="${spec.snapshot.version}"/>
     </target>
 
-
-    <target name="mvn.deploy.promoted.local">
+    <target name="mvn.deploy.promoted.local" depends="strip.api.jar">
         <mvn.deploy.promoted.local type="api"/>
     </target>
 
-
-    <target name="mvn.deploy.release.local">
-        <mvn.deploy.release.local type="api"/>
+    <target name="mvn.deploy.release.local" depends="strip.api.jar">
+        <mvn.deploy.release.local type="api" 
+                                  version="${spec.version}"/>
     </target>
 
     <target name="strip.api.jar" 
             depends="get.faces.java.packages.as.space.separated.string">
         <!-- path maintenance -->
-        <move file="${build.lib.dir}/${name}.jar" failonerror="true"
-              tofile="${build.lib.dir}/${name}-full.jar" />
         <delete failonerror="false" dir="${build.lib.dir}/jsf-api-stripped" />
         <mkdir dir="${build.lib.dir}/jsf-api-stripped" />
         <!-- windows or unix java exec invocation -->
         <condition property="exec.name" value="cmd.exe">
             <os family="windows"/>
+        </condition>
+        <condition property="exec.name" value="${java.home}/bin/javac">
+            <available file="${java.home}/bin/javac"/>
+        </condition>
+        <condition property="exec.name" value="${java.home}/../bin/javac">
+            <available file="${java.home}/../bin/javac"/>
         </condition>
         <condition property="exec.arg.1"
                    value="/c ${java.home}/bin/javac">
@@ -855,22 +858,22 @@ javax.faces.level=ALL
             <arg line="${exec.arg.1}"/>
             <arg line="-XDprocess.packages"/>
             <arg line="-proc:only"/>
-            <arg line="-cp ${build.lib.dir}/${name}-full.jar:${jsf-tools.jar}"/>
+            <arg line="-cp ${build.lib.dir}/${name}.jar:${jsf-tools.jar}"/>
             <arg line="-processor com.sun.faces.tools.StripClassesForApiJar"/>
-            <arg line="-Acom.sun.tools.javac.sym.Jar=${build.lib.dir}/${name}-full.jar"/>
+            <arg line="-Acom.sun.tools.javac.sym.Jar=${build.lib.dir}/${name}.jar"/>
             <arg line="-Acom.sun.tools.javac.sym.ExtraApiClassPath=${javaee-api.jar}"/>
             <arg line="-Acom.sun.tools.javac.sym.Dest=${build.lib.dir}/jsf-api-stripped"/>
             <arg line="${src.paths}"/>
         </exec>
-        <!-- jar up the stripped files into jsf-api.jar. -->
+        <!-- jar up the stripped files into javax.faces-api.jar. -->
         <!-- Extract the original manifest -->
-        <unjar src="${build.lib.dir}/${name}-full.jar"
+        <unjar src="${build.lib.dir}/${name}.jar"
                dest="${build.lib.dir}/jsf-api-stripped">
           <patternset>
             <include name="META-INF/MANIFEST.MF" />
           </patternset>
         </unjar>
-        <jar destfile="${build.lib.dir}/${name}.jar"
+        <jar destfile="${javax.faces-api.jar}"
              basedir="${build.lib.dir}/jsf-api-stripped"
              manifest="${build.lib.dir}/jsf-api-stripped/META-INF/MANIFEST.MF" />
     </target>
@@ -909,7 +912,7 @@ javax.faces.level=ALL
         
     <target name="mvn.deploy.api.release.local" depends="strip.api.jar">
 
-        <mvn.deploy.release.local groupId="javax.faces" version="${spec.version}" type="api"/>
+        <mvn.deploy.release.local version="${spec.version}" type="api"/>
     </target>
 
 
@@ -917,22 +920,20 @@ javax.faces.level=ALL
        USE THE FOLLOWING TARGETS TO PUSH VARIOUS BUILD TYPES TO THE
        JAVA.NET M2 REPOSITORY
     -->
-     <target name="mvn.deploy.snapshot">
-        <mvn.deploy.snapshot type="api"/>
+     <target name="mvn.deploy.snapshot" depends="strip.api.jar">
+        <mvn.deploy.snapshot type="api" 
+                             version="${spec.snapshot.version}"/>
     </target>
 
 
-    <target name="mvn.deploy.promoted">
+    <target name="mvn.deploy.promoted" depends="strip.api.jar">
         <mvn.deploy.promoted type="api"/>
     </target>
 
 
-    <target name="mvn.deploy.release">
-        <mvn.deploy.release type="api"/>
-    </target>
-
-    <target name="mvn.deploy.api.release" depends="strip.api.jar">
-        <mvn.deploy.release groupId="javax.faces" version="${spec.version}" type="api"/>
+    <target name="mvn.deploy.release" depends="strip.api.jar">
+        <mvn.deploy.release type="api" 
+                            version="${spec.version}"/>
     </target>
 
     <target name="passthru">

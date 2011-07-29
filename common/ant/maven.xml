@@ -50,17 +50,19 @@
     <!-- ======================== SNAPSHOT ============================ -->
 
     <macrodef name="mvn.deploy.snapshot.local">
+        <attribute name="version" default="${snapshot.version}"/>
         <attribute name="type"/>
         <sequential>
-            <do.mvn type="@{type}" goal="install" version="${snapshot.version}"/>
+            <do.mvn type="@{type}" goal="install" version="@{version}"/>
         </sequential>
     </macrodef>
 
     <macrodef name="mvn.deploy.snapshot">
+        <attribute name="version" default="${snapshot.version}"/>
         <attribute name="type"/>
         <sequential>
             <sequential>
-                <do.mvn type="@{type}" goal="deploy" version="${snapshot.version}"/>
+                <do.mvn type="@{type}" goal="deploy" version="@{version}"/>
             </sequential>
         </sequential>
     </macrodef>
@@ -68,16 +70,20 @@
     <!-- ======================== PROMOTED BUILD =========================== -->
 
     <macrodef name="mvn.deploy.promoted.local">
+        <attribute name="version" 
+                   default="${impl.version.number}-${build.number}"/>
         <attribute name="type"/>
         <sequential>
-            <do.mvn type="@{type}" goal="install" version="${impl.version.number}-${build.number}"/>
+            <do.mvn type="@{type}" goal="install" version="@{version}"/>
         </sequential>
     </macrodef>
 
     <macrodef name="mvn.deploy.promoted">
+        <attribute name="version" 
+                   default="${impl.version.number}-${build.number}"/>
         <attribute name="type"/>
         <sequential>
-            <do.mvn type="@{type}" goal="deploy" version="${impl.version.number}-${build.number}"/>
+            <do.mvn type="@{type}" goal="deploy" version="@{version}"/>
         </sequential>
     </macrodef>
 
@@ -119,6 +125,39 @@
         </sequential>
     </macrodef>
 
+    <macrodef name="obtain.api.javadoc.jar">
+      <attribute name="version" />
+      <sequential>
+        <property name="documentation.zip"
+                  value="${jsf.build.home}/jsf-demo/dist/docs/mojarra-@{version}-documentation.zip" />
+        <property name="javadoc.jar"
+                  value="${mvn.api.dir}/target/${api-artifact-id}-@{version}-javadoc.jar" />
+        <if>
+          <isset property="skip.javadoc.jar" />
+          <then>
+            <touch file="${mvn.api.dir}/target/${api-artifact-id}-@{version}-javadoc.jar" />
+          </then>
+          <else>
+            <if>
+              <not>
+                <resourceexists>
+                  <file file="${documentation.zip}" />
+                </resourceexists>
+              </not>
+              <then>
+                <echo message="Generating documentation for inclusion as ${javadoc.jar}"/>
+                <property name="documentation.version" value="@{version}" />
+                <ant dir="${demo.dir}" 
+                  target="generate.documentatation.given.documentation.version" />
+              </then>
+            </if>
+            <copy file="${documentation.zip}" tofile="${javadoc.jar}"
+                  overwrite="true" failonerror="false"/> 
+          </else>
+        </if>
+      </sequential>
+    </macrodef>
+
     <macrodef name="do.mvn">
         <attribute name="type"/>
         <attribute name="version"/>
@@ -151,13 +190,14 @@
                       <fileset dir="${api.dir}/build/generate/" 
                                includes="**/*" excludes="last-generation" />
                     </copy>
-                    <unjar src="${api.dir}/build/lib/jsf-api.jar"
+                    <unjar src="${javax.faces-api.jar}"
                            overwrite="yes"
                            dest="${mvn.api.dir}/target/classes"/>
+                    <obtain.api.javadoc.jar version="@{version}" />
                     <jsf.mvn pomFile="${mvn.api.dir}/jsf-api-pom.xml"
                              mvnSpecVersion="@{version}"
                              dir="${mvn.api.dir}"
-                             goals="@{goal}"/>
+                             goals="@{goal}" />
                     <delete dir="${mvn.api.dir}"/>
                 </then>
                 <else>
@@ -173,7 +213,7 @@
                       <fileset dir="${impl.dir}/build/generate/" 
                                includes="**/*" excludes="last-generation,conf/**,**/*.xsd" />
                     </copy>
-                    <unjar src="${impl.dir}/build/lib/jsf-impl.jar"
+                    <unjar src="${impl.dir}/build/lib/javax.faces.jar"
                            overwrite="yes"
                            dest="${mvn.impl.dir}/target/classes"/>
                     <jsf.mvn pomFile="${mvn.impl.dir}/jsf-impl-pom.xml"
@@ -253,19 +293,19 @@
             </if>
             <exec os="SunOS" dir="@{dir}" failonerror="yes"
                   executable="${mvn.cmd}">
-                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}"/>
+                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals} -Dspec.snapshot.version=${spec.snapshot.version}"/>
             </exec>
             <exec os="Linux" dir="@{dir}" failonerror="yes"
                   executable="${mvn.cmd}">
-                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}"/>
+                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals} -Dspec.snapshot.version=${spec.snapshot.version}"/>
             </exec>
             <exec osfamily="windows" dir="@{dir}" executable="${mvn.cmd}"
                   failonerror="yes">
-                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}"/>
+                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals} -Dspec.snapshot.version=${spec.snapshot.version}"/>
             </exec>
             <exec os="Mac OS X" dir="@{dir}" executable="${mvn.cmd}"
                   failonerror="yes">
-                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}"/>
+                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals} -Dspec.snapshot.version=${spec.snapshot.version}"/>
             </exec>
         </sequential>
     </macrodef>

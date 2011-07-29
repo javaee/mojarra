@@ -53,10 +53,8 @@
     <!-- Create the distributed artifacts -->
     <target name="dist">
       <mkdir dir="dist/glassfish/modules/web"/>
-      <copy file="lib/jsf-api.jar" 
-            tofile="dist/glassfish/modules/jsf-api.jar"/>
-      <copy file="lib/jsf-impl.jar" 
-            tofile="dist/glassfish/modules/web/jsf-impl.jar"/>
+      <copy file="lib/javax.faces.jar" 
+            tofile="dist/glassfish/modules/web/javax.faces.jar"/>
       <mkdir dir="dist/jsf2.1"/>
       <copy file="conf/LICENSE" todir="dist/jsf2.1"/>
       <copy file="conf/README" todir="dist/jsf2.1"/>
@@ -76,8 +74,7 @@
     </target>
 
     <target name="cleanall" depends="clean">
-      <delete file="lib/jsf-api.jar"/>
-      <delete file="lib/jsf-impl.jar"/>
+      <delete file="lib/javax.faces.jar"/>
     </target>
 
 </project>

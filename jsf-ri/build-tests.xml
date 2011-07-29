@@ -81,8 +81,7 @@
     <!-- Compilation Classpath -->
     <path id="test.compile.classpath">
         <pathelement location="${conf.test.dir}"/>
-        <pathelement location="${jsf-api.jar}"/>      
-        <pathelement location="${jsf-impl.jar}"/>
+        <pathelement location="${javax.faces.jar}"/>
         <pathelement location="${jsf.test.jar}"/>
         <path refid="compile.classpath"/>
         <path refid="cactus.compile.classpath"/>        
@@ -92,8 +91,7 @@
     <path id="test.runtime.classpath">
         <pathelement location="${out.test.dir}/classes"/>
         <pathelement location="${conf.test.dir}"/> 
-        <pathelement location="${jsf-api.jar}"/>      
-        <pathelement location="${jsf-impl.jar}"/>
+        <pathelement location="${javax.faces.jar}"/>
         <pathelement location="${jsf.test.jar}"/>
         <!-- Temporary until javax.security is available on maven -->
         <pathelement location="${dependency.base.dir}/glassfish/lib/javaee.jar"/>
@@ -538,6 +536,14 @@
     </target>    
 
    <target name="generate.reports">
+      <!-- Until http://issues.hudson-ci.org/browse/HUDSON-8716 is fixed
+           this find command will need to be run (to enable this to be listed
+           here as an xml comment, the right angle bracket, which is the
+           heart of the darn regexp, has been replaced with &gt;.  You must
+           replace it back with right angle bracket before running the darn
+           find command.):
+find jsf-ri/testresults jsf-ri/testresults/systest jsf-test/build/testresults jsf-api/testresults -name .svn -prune -o -name "*.class" -prune -o -name "*.jar" -prune -o -type f -name "TEST*.xml" -exec perl -pi.bak -e "s/^&gt;//g" {} \; -print
+      -->
       <property name="test.report.dir" value="${basedir}/build/test-reports" />
       <mkdir dir="${test.report.dir}" />
       <mkdir dir="${test.report.dir}/html" />

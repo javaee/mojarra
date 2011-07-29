@@ -185,7 +185,7 @@
                                         <pathelement location="${commons-digester.jar}" />
                                         <pathelement location="${commons-collections.jar}" />
                                         <pathelement location="${commons-logging.jar}" />
-                                        <pathelement location="${jsf-api.jar}"/>
+                                        <pathelement location="${jsf-api-intermediate.jar}"/>
                                         <pathelement location="${tools.dir}/build/classes"/>
                                     </classpath>
                                     <assertions>

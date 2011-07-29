@@ -124,8 +124,8 @@
 
 
     <target name="copyJars" depends="prepare.dist">
-        <copy file="${jsf-api.jar}" todir="${dist.home}/lib"/>
-        <copy file="${jsf-impl.jar}" todir="${dist.home}/lib"/>
+        <copy file="${javax.faces-api.jar}" todir="${dist.home}/lib"/>
+        <copy file="${javax.faces.jar}" todir="${dist.home}/lib"/>
     </target>
 
     <!-- target for building standalone JSF distribution -->
@@ -144,18 +144,28 @@
 
         <echo>Creating Special JAR for GlassFish</echo>
         <mkdir dir="${basedir}/tmp"/>
-        <jsf.manifested.jar jarfile="${basedir}/tmp/jsf-impl.jar"
+        <jsf.manifested.jar jarfile="${basedir}/tmp/javax.faces.jar"
                             basedir="${jsf.build.home}/jsf-ri/build/classes"
                             extension-name="com.sun.faces"/>
         <jar jarfile="glassfish-jsf-${impl.version}.jar">
-            <fileset dir="${basedir}/tmp" includes="jsf-impl.jar"/>
-            <fileset dir="${jsf.build.home}/jsf-api/build/lib" includes="jsf-api.jar"/>
+            <fileset dir="${basedir}/tmp" includes="javax.faces.jar"/>
+            <fileset dir="${jsf.build.home}/jsf-api/build/lib" includes="javax.faces-api.jar"/>
         </jar>             
         <delete dir="${basedir}/tmp"/>
     </target>
 
 
     <target name="prepare.dist">
+      <generate.documentation />
+    </target>
+
+    <target name="generate.documentatation.given.documentation.version">
+      <generate.documentation version="${documentation.version}" />
+    </target>
+
+    <macrodef name="generate.documentation">
+      <attribute name="version" default="${impl.version}" />
+      <sequential>
         <mkdir dir="${dist.home}"/>
         <mkdir dir="${dist.home}/docs"/>
         <mkdir dir="${dist.home}/samples"/>
@@ -271,7 +281,7 @@
             </frameset>
             </html>
         </echoxml>
-        <zip basedir="${dist.home}/docs" excludes="*.zip" destfile="${dist.home}/mojarra-${impl.version}-documentation.zip" />
+        <zip basedir="${dist.home}/docs" excludes="*.zip" destfile="${dist.home}/mojarra-@{version}-documentation.zip" />
         <delete dir="${dist.home}/docs/renderkitdocs"/>
         <delete dir="${dist.home}/docs/vdldocs"/>
         <delete dir="${dist.home}/docs/javadocs"/>
@@ -279,8 +289,9 @@
         <delete dir="${dist.home}/docs/jsdocs" />
         <delete file="${dist.home}/docs/index.html" />
         <delete file="${dist.home}/docs/doclist.html" />
-        <move file="${dist.home}/mojarra-${impl.version}-documentation.zip" todir="${dist.home}/docs" />
-    </target>
+        <move file="${dist.home}/mojarra-@{version}-documentation.zip" todir="${dist.home}/docs" />
+      </sequential>
+    </macrodef>
 
     <target name="api.javadocs">
 

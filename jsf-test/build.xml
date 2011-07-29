@@ -73,6 +73,10 @@
 
     <target name="main" depends="define.applications"
             description="">
+        <!-- ensure the api jar is deployed to the local maven repo -->
+        <ant dir="${api.dir}" target="mvn.deploy.snapshot.local">
+          <property name="skip.javadoc.jar"  value="true" />
+        </ant>
         <mkdir dir="${regression.test.results.dir}" />
         <antcall target="remove" />
         <for list="${applications}" param="app" trim="true">
@@ -85,6 +89,10 @@
 
     <target name="clean" depends="define.applications"
             description="">
+        <!-- ensure the api jar is deployed to the local maven repo -->
+        <ant dir="${api.dir}" target="mvn.deploy.snapshot.local">
+          <property name="skip.javadoc.jar"  value="true" />
+        </ant>
         <delete failonerror="false" dir="${regression.test.results.dir}" />
 
         <for list="${applications}" param="app" trim="true">

@@ -87,7 +87,7 @@
     <property name="appserver.domain" value="domain1"/>
 
     <path id="classpath">
-        <pathelement location="${jsf-api.jar}"/>
+        <pathelement location="${javax.faces-api.jar}"/>
         <pathelement location="${build}/classes"/>
         <path refid="htmlunit.compile.classpath"/>
         <path refid="compile.classpath"/>
