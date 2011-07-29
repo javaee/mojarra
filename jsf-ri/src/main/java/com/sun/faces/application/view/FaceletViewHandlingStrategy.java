@@ -451,11 +451,8 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
         UIViewRoot root = super.restoreView(ctx, viewId);
         StateContext stateCtx = StateContext.getStateContext(ctx);
-        
-        if (stateCtx.partialStateSaving(ctx, viewId))
-        {
-          stateCtx.startTrackViewModifications(ctx, root);
-        }
+
+        stateCtx.startTrackViewModifications(ctx, root);
 
         return root;
     }
@@ -740,10 +737,9 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     @Override
     public void buildView(FacesContext ctx, UIViewRoot view)
     throws IOException {
-
+        StateContext stateCtx = StateContext.getStateContext(ctx);
         if (Util.isViewPopulated(ctx, view)) {
             Facelet f = faceletFactory.getFacelet(view.getViewId());
-            StateContext stateCtx = StateContext.getStateContext(ctx);
             // Disable events from being intercepted by the StateContext by
             // virute of re-applying the handlers. 
             try {
@@ -773,6 +769,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         // populate UIViewRoot
         try {
             ctx.getAttributes().put(IS_BUILDING_INITIAL_STATE, Boolean.TRUE);
+            stateCtx.setTrackViewModifications(false);
             f.apply(ctx, view);
             doPostBuildActions(ctx, view);
         } finally {

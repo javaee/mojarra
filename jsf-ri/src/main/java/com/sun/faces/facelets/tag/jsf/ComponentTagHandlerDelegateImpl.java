@@ -221,10 +221,21 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
                 dynamicChildren.add(cur);
             }
         }
+        
+        // First remove all the dynamic children, this puts the non-dynamic children at
+        // their original position 
         for (UIComponent cur : dynamicChildren) {
             int i = stateContext.getIndexOfDynamicallyAddedChildInParent(cur);
             if (-1 != i) {
                 children.remove(cur);
+            }
+        }
+        
+        // Now that the non-dynamic children are in the correct position add the dynamic children
+        // back in.
+        for (UIComponent cur : dynamicChildren) {
+            int i = stateContext.getIndexOfDynamicallyAddedChildInParent(cur);
+            if (-1 != i) {
                 children.add(i, cur);
             }
         }
