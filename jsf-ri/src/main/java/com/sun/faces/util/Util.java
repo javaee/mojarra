@@ -68,6 +68,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javax.servlet.ServletContext;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.validation.SchemaFactory;
 
 /**
  * <B>Util</B> is a class ...
@@ -255,6 +259,53 @@ public class Util {
                 : result.booleanValue());
     }
 
+    public static TransformerFactory createTransformerFactory() {
+         ClassLoader cl = Thread.currentThread().getContextClassLoader();
+         TransformerFactory factory;
+         try {
+             Thread.currentThread().setContextClassLoader(Util.class.getClassLoader());
+             factory = TransformerFactory.newInstance();
+         } finally {
+             Thread.currentThread().setContextClassLoader(cl);
+         }
+         return factory;
+     }
+
+    public static SAXParserFactory createSAXParserFactory() {
+        ClassLoader cl = Thread.currentThread().getContextClassLoader();
+        SAXParserFactory factory;
+        try {
+            Thread.currentThread().setContextClassLoader(Util.class.getClassLoader());
+            factory = SAXParserFactory.newInstance();
+        } finally {
+            Thread.currentThread().setContextClassLoader(cl);
+        }
+        return factory;
+    }
+
+    public static DocumentBuilderFactory createDocumentBuilderFactory() {
+        ClassLoader cl = Thread.currentThread().getContextClassLoader();
+        DocumentBuilderFactory factory;
+        try {
+            Thread.currentThread().setContextClassLoader(Util.class.getClassLoader());
+            factory = DocumentBuilderFactory.newInstance();
+        } finally {
+            Thread.currentThread().setContextClassLoader(cl);
+        }
+        return factory;
+    }
+
+    public static SchemaFactory createSchemaFactory(String uri) {
+        ClassLoader cl = Thread.currentThread().getContextClassLoader();
+        SchemaFactory factory;
+        try {
+            Thread.currentThread().setContextClassLoader(Util.class.getClassLoader());
+            factory = SchemaFactory.newInstance(uri);
+        } finally {
+            Thread.currentThread().setContextClassLoader(cl);
+        }
+        return factory;
+    }
 
     public static Class loadClass(String name,
                                   Object fallbackClass)

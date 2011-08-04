@@ -63,6 +63,7 @@ import com.sun.faces.config.FaceletsConfiguration;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.facelets.tag.TagAttributeImpl;
 import com.sun.faces.facelets.tag.TagAttributesImpl;
+import com.sun.faces.util.Util;
 import org.xml.sax.*;
 import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.DefaultHandler;
@@ -475,7 +476,7 @@ public final class SAXCompiler extends Compiler {
 
     private SAXParser createSAXParser(CompilationHandler handler)
             throws SAXException, ParserConfigurationException {
-        SAXParserFactory factory = SAXParserFactory.newInstance();
+        SAXParserFactory factory = Util.createSAXParserFactory();
         factory.setNamespaceAware(true);
         factory.setFeature("http://xml.org/sax/features/namespace-prefixes",
                 true);
