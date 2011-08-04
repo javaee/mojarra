@@ -244,9 +244,14 @@ public abstract class StateHelper {
                                          ResponseWriter writer)
     throws IOException {
 
-        String result = context.getApplication().getDefaultRenderKitId();
+        String result = context.getViewRoot().getRenderKitId();
+        String defaultRkit = context.getApplication().getDefaultRenderKitId();
+        if (null == defaultRkit) {
+            defaultRkit = RenderKitFactory.HTML_BASIC_RENDER_KIT;
+        }
+
         if (result != null
-            && !RenderKitFactory.HTML_BASIC_RENDER_KIT.equals(result)) {
+            && !defaultRkit.equals(result)) {
             writer.startElement("input", context.getViewRoot());
             writer.writeAttribute("type", "hidden", "type");
             writer.writeAttribute("name",
