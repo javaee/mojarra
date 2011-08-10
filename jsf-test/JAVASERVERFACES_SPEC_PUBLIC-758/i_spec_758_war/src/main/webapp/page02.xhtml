@@ -58,7 +58,7 @@
                      validatorMessage="Invalid headline. (The id parameter is not a positive number)">
                 <f:validateLongRange minimum="1"/>
             </f:viewParam>
-        <f:viewAction action="#{newsReader.loadStory}" onPostback="true" />
+            <f:viewAction action="#{newsReader.loadStory}" onPostback="true" />
         </f:metadata>
     </ui:define>
     <ui:define name="content">
