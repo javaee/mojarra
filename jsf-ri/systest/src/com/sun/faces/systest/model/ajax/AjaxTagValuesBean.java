@@ -109,4 +109,12 @@ public class AjaxTagValuesBean {
         return render;
     }
 
+    private String ajaxEvent = "valueChange";
+    public void setAjaxEvent(String ajaxEvent) {
+        this.ajaxEvent = ajaxEvent;
+    }
+    public String getAjaxEvent() {
+        return ajaxEvent;
+    }
+
 }

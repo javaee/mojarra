@@ -151,7 +151,7 @@
         <description><![CDATA[
 
         <p class="changed_added_2_0"><span
-        class="changed_modified_2_0_rev_a">Register</span> an
+        class="changed_modified_2_0_rev_a changed_modified_2_2">Register</span> an
         AjaxBehavior instance on one or more UIComponents implementing
         the ClientBehaviorHolder interface.  This tag may be nested
         witin a single component (enabling Ajax for a single component),
@@ -207,7 +207,8 @@
 
      <attribute>
          <description><![CDATA[
-             <p class="changed_added_2_0">A String identifying the type of event 
+             <p class="changed_added_2_0">A String <span class="changed_modified_2_2">or
+             ValueExpression (that evalulates to a String)</span> identifying the type of event 
              the Ajax action will apply to. If specified, it must be one of the 
              events supported by the component the Ajax behavior is being applied to. 
              For HTML components this would be the set of supported DOM events for the
@@ -219,7 +220,9 @@
          ]]></description>
          <name>event</name>
          <required>false</required>
-         <type>java.lang.String</type>
+         <deferred-value>
+             <type>java.lang.String</type>
+         </deferred-value>
 
      </attribute>
 

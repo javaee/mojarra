@@ -90,6 +90,12 @@
         <h:outputText id="checkedvalue2" value="#{ajaxtag.checked}"/>
         <br/>
 
+        <!-- ajax "event" Value Expression -->
+        <h:selectBooleanCheckbox id="checkbox3" value="#{ajaxtag.checked}">
+            <f:ajax event="#{ajaxtag.ajaxEvent}" render="checkedvalue3"/>
+        </h:selectBooleanCheckbox>
+        <h:outputText id="checkedvalue3" value="#{ajaxtag.checked}"/>
+        <br/>
 
         <!-- Resets the counter, doesn't refresh the page -->
         <h:commandButton id="reset" value="reset" actionListener="#{ajaxtag.reset}">

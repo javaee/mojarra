@@ -91,10 +91,14 @@ import java.util.TreeSet;
 
 
 /**
- * <p class="changed_added_2_0">Enable one or more components in the view
+ * <p class="changed_added_2_0"><span class="changed_modified_2_2">Enable</span>
+ * one or more components in the view
  * to perform Ajax operations.  This tag handler must create an instance
  * of {@link javax.faces.component.behavior.AjaxBehavior} using the tag attribute
- * values.  If this tag is nested within a single 
+ * values.  <div class="changed_modified_2_2">The <code>events</code> attribute for
+ * this tag that can be a <code>ValueExpression</code> must be evaluated at tag
+ * execution time since the event name is used in the process of <code>Behavior</code>
+ * creation.</div>  If this tag is nested within a single
  * {@link ClientBehaviorHolder} component:
  * <ul>
  * <li>If the <code>events</code> attribute value is not specified, 
@@ -191,7 +195,9 @@ public final class AjaxHandler extends TagHandlerImpl implements BehaviorHolderA
      * @see javax.faces.view.BehaviorHolderAttachedObjectHandler#getEventName()
      */
     public String getEventName() {
-        return (this.event != null) ? this.event.getValue() : null;
+        FacesContext context = FacesContext.getCurrentInstance();
+        FaceletContext ctx = (FaceletContext) context.getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
+        return (this.event != null) ? this.event.getValue(ctx) : null;
     }
 
     // Tests whether the <f:ajax> is wrapping other tags.

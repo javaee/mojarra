@@ -111,6 +111,11 @@ public class AjaxTagEventAttributeTestCase extends HtmlUnitFacesTestCase {
 
         checkTrue("checkedvalue2","true");
 
+        // Check ajax checkbox
+        checked = ((HtmlCheckBoxInput)lastpage.getHtmlElementById("checkbox3"));
+        lastpage = (HtmlPage)checked.click();
+
+        checkTrue("checkedvalue3","true");
 
 
         // Check that all ajax requests didn't result in a reload
