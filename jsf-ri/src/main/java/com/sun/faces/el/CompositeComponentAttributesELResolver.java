@@ -174,55 +174,45 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
      */
     public Class<?> getType(ELContext context, Object base, Object property) {
         Util.notNull("context", context);
-        Class<?> result = null;
-        
-        if (null != base) {
-            if (base instanceof ExpressionEvalMap) {
-                ExpressionEvalMap evalMap = (ExpressionEvalMap) base;
-                boolean consultMetadata = false;
-                if (!evalMap.containsKey((String)property)) {
-                    ValueExpression ve = evalMap.getExpression((String)property);
-                    if (null != ve) {
-                        result = ve.getType(context);
-                    }
-                    if (!context.isPropertyResolved() && null != property && 0 < ((String)property).length()) {
-                        consultMetadata = true;
-                        
-                    }
-                } else {
-                    Object objValue = evalMap.get((String)property);
-                    if (objValue instanceof String) {
-                        consultMetadata = true;
-                    } else {
-                        result = objValue.getClass();
-                        context.setPropertyResolved(true);
-                    }
-                }
-                if (consultMetadata) {
-                    FacesContext facesContext = (FacesContext) context.getContext(FacesContext.class);
-                    UIComponent cc = UIComponent.getCurrentCompositeComponent(facesContext);
-                    BeanInfo metadata = (BeanInfo) cc.getAttributes().get(UIComponent.BEANINFO_KEY);
-                    assert(null != metadata);
-                    PropertyDescriptor[] attributes = metadata.getPropertyDescriptors();
-                    if (null != attributes && 0 < attributes.length) {
-                        for (PropertyDescriptor cur : attributes) {
-                            String curName = cur.getName();
-                            if (null != curName && curName.equals(property)) {
-                                Object type = cur.getValue("type");
-                                if (null != type) {
-                                    assert(type instanceof Class);
-                                    result = (Class) type;
-                                    context.setPropertyResolved(true);
-                                    break;
-                                }
-                            }
+        if (!(base instanceof ExpressionEvalMap && property instanceof String)) {
+            return null;
+        }
+        Class<?> exprType = null;
+        Class<?> metaType = null;
+
+        ExpressionEvalMap evalMap = (ExpressionEvalMap) base;
+        ValueExpression ve = evalMap.getExpression((String) property);
+        if (ve != null) {
+            exprType = ve.getType(context);
+        }
+
+        if (!"".equals(property)) {
+            FacesContext facesContext = (FacesContext) context.getContext(FacesContext.class);
+            UIComponent cc = UIComponent.getCurrentCompositeComponent(facesContext);
+            BeanInfo metadata = (BeanInfo) cc.getAttributes().get(UIComponent.BEANINFO_KEY);
+            assert(null != metadata);
+            PropertyDescriptor[] attributes = metadata.getPropertyDescriptors();
+            if (null != attributes) {
+                for (PropertyDescriptor cur : attributes) {
+                    if (property.equals(cur.getName())) {
+                        Object type = cur.getValue("type");
+                        if (null != type) {
+                            assert(type instanceof Class);
+                            metaType = (Class) type;
+                            break;
                         }
                     }
                 }
             }
         }
-        return result;
-
+        if (metaType != null) {
+            // override exprType only if metaType is narrower:
+            if (exprType == null || exprType.isAssignableFrom(metaType)) {
+                context.setPropertyResolved(true);
+                return metaType;
+            }
+        }
+        return exprType;
     }
     
     /**

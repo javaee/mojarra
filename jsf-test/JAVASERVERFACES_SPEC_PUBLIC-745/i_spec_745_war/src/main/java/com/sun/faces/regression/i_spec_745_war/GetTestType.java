@@ -1,4 +1,3 @@
-
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
@@ -41,18 +40,31 @@
 package com.sun.faces.regression.i_spec_745_war;
 
 import java.util.Map;
+
 import javax.el.ELContext;
-import javax.el.ValueExpression;
-import javax.faces.component.FacesComponent;
-import javax.faces.component.UINamingContainer;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 
-@FacesComponent(value = "javaTopLevelComponent")
-public class JavaTopLevelComponent extends UINamingContainer {
+@ManagedBean
+@RequestScoped
+public class GetTestType {
+    private String test;
 
-    public JavaTopLevelComponent() {
-        getAttributes().put("untypedXsetByApi", new UserBean.Wienerdoodle());
-        getAttributes().put("typedXsetByApi", new UserBean.Wienerdoodle());
+    public String from(Map<String, Object> attrs) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        ELContext elc = context.getELContext();
+        Class<?> type = elc.getELResolver().getType(elc, attrs, test);
+        return String.format("type of @%s: %s", test, type == null ? null : type.getSimpleName());
+    }
+
+    public String getTest() {
+        return test;
+    }
+
+    public void setTest(String test) {
+        this.test = test;
     }
 
 }

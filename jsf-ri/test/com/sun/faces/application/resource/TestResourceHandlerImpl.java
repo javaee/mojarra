@@ -58,10 +58,12 @@ import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.util.Util;
 import com.sun.faces.application.ApplicationAssociate;
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
+import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import org.apache.cactus.WebRequest;
 import org.apache.cactus.WebResponse;
@@ -102,6 +104,13 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
 
     @Override
     public void setUp() {
+        try {
+            Method reInitializeFactoryManager = FactoryFinder.class.getDeclaredMethod("reInitializeFactoryManager", (Class<?>[]) null);
+            reInitializeFactoryManager.setAccessible(true);
+            reInitializeFactoryManager.invoke(null, (Object[]) null);
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
         super.setUp();
     }
 

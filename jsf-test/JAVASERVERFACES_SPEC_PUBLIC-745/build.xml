@@ -74,36 +74,36 @@
               artifact="${basedir}/i_spec_745/target/i_spec_745_war.war"
               appName="i_spec_745_war"/>
 
-    </target>    
+    </target>
+
+    <macrodef name="testtype">
+        <attribute name="of" />
+        <attribute name="expected" />
+        <sequential>
+            <jsf.tester request="/faces/i_spec_745.xhtml?test=@{of}"
+                        context-path="/i_spec_745_war"
+                        classpath-refid="html.classpath"
+                        test-results-dir="${regression.test.results.dir}"
+                        regexp="(?s)\A.*?type of @@@{of}: @{expected}.*\z" />
+        </sequential>
+    </macrodef>
 
     <target name="test" depends="define.scenario.aware.port">
+        <testtype of="untypedXunset" expected="Object" /> 
+        <testtype of="untypedXsetByApi" expected="Object" />
+        <testtype of="untypedXliteral" expected="Object" />
+        <testtype of="untypedXwideEL" expected="Animal" />
+        <testtype of="untypedXmediumEL" expected="Dog" />
+        <testtype of="untypedXnarrowEL" expected="Wienerdoodle" />
+        <testtype of="untypedXnullEL" expected="Dog" />
 
-        <jsf.tester request="/faces/i_spec_745_1.xhtml"
-                     context-path="/i_spec_745_war"
-                     classpath-refid="html.classpath"
-                     test-results-dir="${regression.test.results.dir}"
-                     regexp="(?s).*Test\s+Result\s+1:\s+PASSED.*"/>
-
-        <jsf.tester request="/faces/i_spec_745_2.xhtml"
-                     context-path="/i_spec_745_war"
-                     classpath-refid="html.classpath"
-                     test-results-dir="${regression.test.results.dir}"
-                     regexp="(?s).*Test\s+Result\s+2:\s+PASSED.*"/>
-
-        <jsf.tester request="/faces/i_spec_745_3.xhtml"
-                     context-path="/i_spec_745_war"
-                     classpath-refid="html.classpath"
-                     test-results-dir="${regression.test.results.dir}"
-                     regexp="(?s).*Test\s+Result\s+3:\s+PASSED.*"/>
-
-        <jsf.tester request="/faces/i_spec_745_4.xhtml"
-                     context-path="/i_spec_745_war"
-                     classpath-refid="html.classpath"
-                     test-results-dir="${regression.test.results.dir}"
-                     regexp="(?s).*bogusType.*There\s+is\s+no\s+chance\s+this\s+is\s+a\s+class.*"/>
-
+        <testtype of="typedXunset" expected="Dog" />
+        <testtype of="typedXliteral" expected="Integer" />
+        <testtype of="typedXwideEL" expected="Dog" />
+        <testtype of="typedXmediumEL" expected="Dog" />
+        <testtype of="typedXnarrowEL" expected="Wienerdoodle" />
+        <testtype of="typedXnullEL" expected="Dog" />
+        <testtype of="typedXsetByApi" expected="Dog" />
     </target>    
 
-
-        
 </project>
