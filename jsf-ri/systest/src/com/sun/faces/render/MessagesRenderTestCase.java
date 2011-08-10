@@ -46,9 +46,9 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 
-public class MessageRenderTestCase extends HtmlUnitFacesTestCase {
+public class MessagesRenderTestCase extends HtmlUnitFacesTestCase {
 
-    public MessageRenderTestCase(String name) {
+    public MessagesRenderTestCase(String name) {
         super(name);
     }
 
@@ -64,7 +64,7 @@ public class MessageRenderTestCase extends HtmlUnitFacesTestCase {
      * Return the tests included in this test suite.
      */
     public static Test suite() {
-        return (new TestSuite(MessageRenderTestCase.class));
+        return (new TestSuite(MessagesRenderTestCase.class));
     }
 
 
@@ -76,59 +76,16 @@ public class MessageRenderTestCase extends HtmlUnitFacesTestCase {
     }
 
 
-    public void testCommandButtonButton() throws Exception {
-        getPage("/faces/render/messageRender.xhtml");
-
-
-        // Check that ids were rendered
-        try {
-            lastpage.getHtmlElementById("testform1:msgs");
-        } catch (Exception e) {
-            fail("testform1:msgs not rendered");
-        }
-        try {
-            lastpage.getHtmlElementById("testform1a:msgs");
-        } catch (Exception e) {
-            fail("testform1a:msgs not rendered");
-        }
-        try {
-            lastpage.getHtmlElementById("testform2:msg");
-        } catch (Exception e) {
-            fail("testform2:msg not rendered");
-        }
-
-        // check that other ids weren't
-
-        try {
-            lastpage.getHtmlElementById("testform3:msgs");
-            fail("testform3:msgs rendered - not correct");
-        } catch (Exception e) {
-            //  Success
-        }
-        try {
-            lastpage.getHtmlElementById("testform3a:msgs");
-            fail("testform3:msgs rendered - not correct");
-        } catch (Exception e) {
-            //  Success
-        }
-        try {
-            lastpage.getHtmlElementById("testform4:msg");
-            fail("testform4:msg rendered - not correct");
-        } catch (Exception e) {
-            //  Success
-        }
-    }
-
     public void testMessagesToolTip() throws Exception {
-        HtmlPage page = getPage("/faces/message05.xhtml");
+        HtmlPage page = getPage("/faces/messages.xhtml");
         String pageXml = page.asXml().replaceAll("\n","");
         pageXml = pageXml.replaceAll("\t","");
-        String case1 = "<!-- Case 1: Expected output: Both summary and detail rendered. -->      This is the summary This is the detail";
-        String case2 = "<!-- Case 2: Expected output: Both summary and detail rendered. Tooltip detail rendered. -->      <span title=" + '"' + "This is the detail" + '"' + ">        This is the summary This is the detail      </span>";
-        String case3 = "<!-- Case 3: Expected output: Detail rendered. Tooltip detail rendered. -->      <span title=" + '"' + "This is the detail" + '"' + ">        This is the detail      </span>";
-        String case4 = "!-- Case 4: Expected output: Detail rendered. Tooltip detail rendered. -->      <span title=" + '"' + "This is the detail" + '"' + ">        This is the detail      </span>";
-        String case5 = "<!-- Case 5: Expected output: Both summary and detail rendered. Tooltip detail rendered. -->      <span title=" + '"' + "This is the detail" + '"' + ">        This is the summary This is the detail      </span>";
-        String case6 = "<!-- Case 6: Expected output: Summary rendered. Tooltip detail rendered. -->      <span title=" + '"' + "This is the detail" + '"' + ">        This is the summary       </span>";
+        String case1 = "<!-- Case 1: Expected output: Both summary and detail rendered. -->      <ul>        <li>          This is the summary This is the detail        </li>        <li>          This is the summary This is the detail        </li>      </ul>";
+        String case2 = "<!-- Case 2: Expected output: Both summary and detail rendered. Tooltip detail rendered. -->      <ul>        <li>          <span title=" + '"' + "This is the detail" + '"' + ">            This is the summary This is the detail          </span>        </li>        <li>          <span title=" + '"' + "This is the detail" + '"' + ">            This is the summary This is the detail          </span>        </li>      </ul>"; 
+        String case3 = "<!-- Case 3: Expected output: Both summary and detail rendered. Tooltip detail rendered. -->      <ul>        <li>          <span title=" + '"' + "This is the detail" + '"' + ">            This is the summary This is the detail          </span>        </li>        <li>          <span title=" + '"' + "This is the detail" + '"' + ">            This is the summary This is the detail          </span>        </li>      </ul>";
+        String case4 = "<!-- Case 4: Expected output: Summary rendered. Tooltip detail rendered. -->      <ul>        <li>          <span title=" + '"' + "This is the detail" + '"' + ">            This is the summary           </span>        </li>        <li>          <span title=" + '"' + "This is the detail" + '"' + ">            This is the summary           </span>        </li>      </ul>";
+        String case5 = "<!-- Case 5: Expected output: Summary rendered. Tooltip detail rendered. -->      <ul>        <li>          <span title=" + '"' + "This is the detail" + '"' + ">            This is the summary           </span>        </li>        <li>          <span title=" + '"' + "This is the detail" + '"' + ">            This is the summary           </span>        </li>      </ul>";
+        String case6 = "<!-- Case 6: Expected output: Summary rendered. Tooltip detail rendered. -->      <ul>        <li>          <span title=" + '"' + "This is the detail" + '"' + ">            This is the summary           </span>        </li>        <li>          <span title=" + '"' + "This is the detail" + '"' + ">            This is the summary           </span>        </li>      </ul>";
         assertTrue(-1 != pageXml.indexOf(case1));
         assertTrue(-1 != pageXml.indexOf(case2));
         assertTrue(-1 != pageXml.indexOf(case3));

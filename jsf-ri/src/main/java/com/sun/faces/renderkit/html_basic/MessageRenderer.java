@@ -255,13 +255,13 @@ public class MessageRenderer extends HtmlBasicRenderer {
         boolean isTooltip = (val != null) && Boolean.valueOf(val.toString());
 
         boolean wroteTooltip = false;
-        if (showSummary && showDetail && isTooltip) {
+        if ((showSummary || showDetail) && isTooltip) {
 
             if (!wroteSpan) {
                 writer.startElement("span", component);
             }            
             if (title == null || title.length() == 0) {
-                writer.writeAttribute("title", summary, "title");
+                writer.writeAttribute("title", detail, "title");
             }
             writer.flush();
             writer.writeText("\t", component, null);
@@ -270,7 +270,7 @@ public class MessageRenderer extends HtmlBasicRenderer {
             writer.flush();
         }
 
-        if (!wroteTooltip && showSummary) {
+        if (showSummary) {
             writer.writeText("\t", component, null);
             writer.writeText(summary, component, null);
             writer.writeText(" ", component, null);

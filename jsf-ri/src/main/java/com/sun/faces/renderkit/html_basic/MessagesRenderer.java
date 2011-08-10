@@ -222,18 +222,18 @@ public class MessagesRenderer extends HtmlBasicRenderer {
             boolean isTooltip = (val != null) && Boolean.valueOf(val.toString());
 
             boolean wroteTooltip = false;
-            if (showSummary && showDetail && isTooltip) {
+            if (isTooltip) {
                 writer.startElement("span", component);
                 String title = (String) component.getAttributes().get("title");
                 if (title == null || title.length() == 0) {
-                    writer.writeAttribute("title", summary, "title");
+                    writer.writeAttribute("title", detail, "title");
                 }
                 writer.flush();
                 writer.writeText("\t", component, null);
                 wroteTooltip = true;
             }
 
-            if (!wroteTooltip && showSummary) {
+            if (showSummary) {
                 writer.writeText("\t", component, null);
                 writer.writeText(summary, component, null);
                 writer.writeText(" ", component, null);

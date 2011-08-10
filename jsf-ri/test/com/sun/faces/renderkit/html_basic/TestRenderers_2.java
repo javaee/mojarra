@@ -765,12 +765,11 @@ public class TestRenderers_2 extends JspFacesTestCase {
 
         //Span should containt class for styleClass, style, 
         //  and title for tooltip attributes
-        //Summary should go in the title attribute and only the 
-        //  detail displayed in the body of the span
+        //Detail should go in the title attribute and both the 
+        //  summary and detail displayed in the body of the span
         assertTrue(
             result.indexOf(
-                "<span id=\"myMessage_4\" style=\"style\" class=\"styleClass\" title=\"global message summary_4\">	global message detail_4</span>") !=
-            -1);
+                "<span id=\"myMessage_4\" style=\"style\" class=\"styleClass\" title=\"global message detail_4\">		global message summary_4 global message detail_4</span>") != -1);
 
         try {
             writer.close();
@@ -818,13 +817,12 @@ public class TestRenderers_2 extends JspFacesTestCase {
         result = writer.toString();
         //Span should containt class for styleClass, style, 
         //  and title for tooltip attributes
-        //Summary should go in the title attribute and only the 
-        //  detail displayed in the body of the span
+        //Detail should go in the title attribute and both the 
+        //  summary and detail displayed in the body of the span
         //Should be wrapped in a table
         assertTrue(
             result.indexOf(
-                "<span id=\"myMessage_5\" style=\"style\" class=\"fatalClass\" title=\"global message summary_5\">	global message detail_5</span>") !=
-            -1);
+                "<span id=\"myMessage_5\" style=\"style\" class=\"fatalClass\" title=\"global message detail_5\">		global message summary_5 global message detail_5</span>") != -1);
 
         try {
             writer.close();
@@ -911,9 +909,7 @@ public class TestRenderers_2 extends JspFacesTestCase {
         messageRenderer.encodeEnd(getFacesContext(), message);
 
         result = writer.toString();
-
-        // should not contain detail.
-        assertEquals(-1, result.indexOf("global message detail_6"));
+        assertTrue(-1 != result.indexOf("global message detail_6"));
         assertTrue(-1 != result.indexOf("global message summary_6"));
 
         try {
@@ -1255,7 +1251,7 @@ public class TestRenderers_2 extends JspFacesTestCase {
         //Verify <ul> with id/style/class
         //Verify <li> with class;span containing tool tip      
         assertTrue(
-            result.indexOf("<ul id=\"myMessage_4\" class=\"styleClass\" style=\"style\"><li class=\"infoClass\"><span title=\"global message summary_0\">") != -1);
+            result.indexOf("<ul id=\"myMessage_4\" class=\"styleClass\" style=\"style\"><li class=\"infoClass\"><span title=\"global message detail_0\">") != -1);
         try {
             writer.close();
         } catch (IOException ioe) {
@@ -1315,7 +1311,7 @@ public class TestRenderers_2 extends JspFacesTestCase {
         assertTrue(
             result.indexOf("<table id=\"myMessage_5\" class=\"styleClass\" style=\"style\">") != -1);
         assertTrue(
-            result.indexOf("<tr><td><span title=\"global message summary_5.0\">") != -1);
+            result.indexOf("<tr><td><span title=\"global message detail_5.0\">") != -1);
 
         try {
             writer.close();

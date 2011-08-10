@@ -2048,7 +2048,7 @@
 
         <renderer>
 
-            <description><![CDATA[<p>Render a single message for a specific component.</p>
+            <description><![CDATA[<p><span class="changed_modified_2_2">Render</span> a single message for a specific component.</p>
 
       <p>Set-up for Rendering</p>
 
@@ -2093,15 +2093,13 @@
       "style" attribute as the the value of the "style" attribute, and
       outputting the value of the "styleClass" attribute as the value of
       the "class" attribute on the "span" element.  Output the "dir" and
-      "lang" attributes as well, if they are present.  If the
+      "lang" attributes as well, if they are present.  <span class="changed_modified_2_2">If the
       <code>UIMessage</code> has a "tooltip" attribute with the value of
-      "true", and the <code>UIMessage</code> has "showSummary" and
-      "showDetail" properties with the value "true", if we haven't
-      already written out the "span", output the "summary" as the value
-      of the "title" attribute on the "span".  If we haven't already
-      written out a "title" attribute, and "showSummary" is true, output
-      the summary.  If "showDetail" is true, output the detail.  Close
-      out the span if necessary.</p>
+      "true",  and we haven't already written out the "span" and the "title" attribute for
+      the "span", output the "detail" as the value of the "title" attribute on the 
+      "span".  If we haven't already written out a "title" attribute, and there is 
+      no detail, output the "summary" as the value of the "title" attribute.</span>  
+      Close out the span if necessary.</p>
 
       </ul>]]>
 
