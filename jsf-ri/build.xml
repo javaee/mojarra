@@ -736,6 +736,9 @@
      <!--
        USE THE FOLLOWING TARGETS TO PUSH VARIOUS BUILD TYPES TO YOUR LOCAL
        M2 REPOSITORY
+
+ant -d -Dgpg.passphrase=PASSPHRASE HERE -DperformRelease=true mvn.deploy.snapshot.local
+
     -->
 
     <target name="mvn.deploy.snapshot.local" description="Deploy a SNAPSHOT build to the local maven repo">
