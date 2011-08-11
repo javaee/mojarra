@@ -887,17 +887,23 @@ javax.faces.level=ALL
             <available file="${java.home}/../bin/javac"/>
         </condition>
         <condition property="exec.arg.1"
-                   value="/c ${java.home}/bin/javac">
+                   value="/c ${java.home}/../bin/javac">
             <os family="windows"/>
         </condition>
         <property name="exec.name" value="${java.home}/bin/javac"/>
         <property name="exec.arg.1" value=""/>
+        <condition property="exec.arg.cp"
+                 value="${build.lib.dir}/${name}.jar;${jsf-tools.jar}">
+          <os family="windows"/>
+        </condition>
+        <property name="exec.arg.cp" value="${build.lib.dir}/${name}.jar:${jsf-tools.jar}"/>
+    	<echo>tools path:  ${build.lib.dir}/${name}.jar:${jsf-tools.jar}</echo>
         <!-- invoke the javac processor to produce stripped .class files -->
         <exec executable="${exec.name}" failonerror="true">
             <arg line="${exec.arg.1}"/>
             <arg line="-XDprocess.packages"/>
             <arg line="-proc:only"/>
-            <arg line="-cp ${build.lib.dir}/${name}.jar:${jsf-tools.jar}"/>
+            <arg line="-cp ${exec.arg.cp}"/>
             <arg line="-processor com.sun.faces.tools.StripClassesForApiJar"/>
             <arg line="-Acom.sun.tools.javac.sym.Jar=${build.lib.dir}/${name}.jar"/>
             <arg line="-Acom.sun.tools.javac.sym.ExtraApiClassPath=${javaee-api.jar}"/>
@@ -929,6 +935,14 @@ javax.faces.level=ALL
       <!-- Massage the property value to make it be as desired. -->
 
       <!-- Remove the leading fully qualified paths. -->
+      <!-- windows: Replace all \ with /  -->
+      <propertyregex property="src.dir.paths" input="${src.dir.paths}" override="true"
+                     regexp="\\" replace="/" global="true" />
+      <!-- windows: Replace all \ with /  -->
+      <propertyregex property="src.dir" input="${src.dir}" override="true"
+                     regexp="\\" replace="/" global="true" />
+    	
+      <!-- Remove the leading source dir path from every path entry. -->
       <propertyregex property="src.paths" input="${src.dir.paths}" override="true"
                      regexp="${src.dir}" replace="" global="true" />
       <!-- Remove the leading "/" from every path entry. -->
