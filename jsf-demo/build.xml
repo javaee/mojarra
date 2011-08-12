@@ -289,7 +289,7 @@
         <delete dir="${dist.home}/docs/jsdocs" />
         <delete file="${dist.home}/docs/index.html" />
         <delete file="${dist.home}/docs/doclist.html" />
-        <move file="${dist.home}/mojarra-@{version}-documentation.zip" todir="${dist.home}/docs" />
+        <copy file="${dist.home}/mojarra-@{version}-documentation.zip" todir="${dist.home}/docs" />
       </sequential>
     </macrodef>
 
