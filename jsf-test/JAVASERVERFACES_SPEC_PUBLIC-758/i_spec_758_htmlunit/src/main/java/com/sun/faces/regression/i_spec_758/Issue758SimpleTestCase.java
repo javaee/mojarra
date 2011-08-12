@@ -40,80 +40,81 @@
 
 package com.sun.faces.regression.i_spec_758;
 
+import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
+
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
+import java.net.URL;
+import junit.framework.Test;
+import junit.framework.TestSuite;
+
+/**
+ * Test cases for Facelets functionality
+ */
+public class Issue758SimpleTestCase extends HtmlUnitFacesTestCase {
 
 
-@RequestScoped @ManagedBean
-public class NewsReader {
+    // --------------------------------------------------------------- Test Init
 
-    private FacesContext facesContext;
 
-    @ManagedProperty("#{newsIndex}")
-    private NewsIndex newsIndex;
-
-    private List<NewsStory> stories;
-
-    private NewsStory selectedStory;
-
-    private Long selectedStoryId;
-
-    @PostConstruct
-    public void postConstruct() {
-        facesContext = FacesContext.getCurrentInstance();
-        stories = new ArrayList<NewsStory>(newsIndex.getEntries().values());
+    public Issue758SimpleTestCase() {
+        this("i_spec_758_simple_war");
     }
 
-    public void loadStory() {
-        if (!facesContext.isValidationFailed()) {
-            NewsStory story = newsIndex.getStory(selectedStoryId);
-            if (story != null) {
-                selectedStory = story;
-                return;
-            }
 
-            facesContext.addMessage(null, new FacesMessage("The headline you requested does not exist."));
-        }
-
+    public Issue758SimpleTestCase(String name) {
+        super(name);
     }
+
+
+    /**
+     * Set up instance variables required by this test case.
+     */
+    public void setUp() throws Exception {
+        super.setUp();
+    }
+
+
+    /**
+     * Return the tests included in this test suite.
+     */
+    public static Test suite() {
+        return (new TestSuite(Issue758SimpleTestCase.class));
+    }
+
+
+    /**
+     * Tear down instance variables required by this test case.
+     */
+    public void tearDown() {
+        super.tearDown();
+    }
+
+
+    // ------------------------------------------------------------ Test Methods
     
-    public String goToPage01IfValidationFailed() {
-        if (facesContext.isValidationFailed()) {
-            return "/page01";
+    public void testSimple() throws Exception {
+        client.setRedirectEnabled(false);
+        HtmlPage page = null;
+        boolean exceptionThrown = false;
+        
+        try {
+            page = getPage("/");
+        } catch (FailingHttpStatusCodeException ex) {
+            assertEquals(302, ex.getStatusCode());
+            exceptionThrown = true;
         }
-        return null;
+        assertTrue(exceptionThrown);
+        
+        client.setRedirectEnabled(true);
+        page = getPage("/");
+        assertTrue(page.asText().contains("Result page"));
+
     }
 
-    public List<NewsStory> getStories() {
-        return stories;
-    }
-
-    public NewsStory getSelectedStory() {
-        return selectedStory;
-    }
-
-    public Long getSelectedStoryId() {
-        return selectedStoryId;
-    }
-
-    public void setSelectedStoryId(Long storyId) {
-        this.selectedStoryId = storyId;
-    }
-    
-    public boolean isMissingStoryId() {
-        return null == selectedStoryId;
-    }
-
-    // Injected Properties
-
-    public void setNewsIndex(NewsIndex newsIndex) {
-        this.newsIndex = newsIndex;
-    }
 
 }

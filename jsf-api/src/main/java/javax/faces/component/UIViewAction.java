@@ -1,4 +1,44 @@
 /*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+ *
+ * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+ *
+ * The contents of this file are subject to the terms of either the GNU
+ * General Public License Version 2 only ("GPL") or the Common Development
+ * and Distribution License("CDDL") (collectively, the "License").  You
+ * may not use this file except in compliance with the License.  You can
+ * obtain a copy of the License at
+ * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+ * or packager/legal/LICENSE.txt.  See the License for the specific
+ * language governing permissions and limitations under the License.
+ *
+ * When distributing the software, include this License Header Notice in each
+ * file and include the License file at packager/legal/LICENSE.txt.
+ *
+ * GPL Classpath Exception:
+ * Oracle designates this particular file as subject to the "Classpath"
+ * exception as provided by Oracle in the GPL Version 2 section of the License
+ * file that accompanied this code.
+ *
+ * Modifications:
+ * If applicable, add the following below the License Header, with the fields
+ * enclosed by brackets [] replaced by your own identifying information:
+ * "Portions Copyright [year] [name of copyright owner]"
+ *
+ * Contributor(s):
+ * If you wish your version of this file to be governed by only the CDDL or
+ * only the GPL Version 2, indicate your decision by adding "[Contributor]
+ * elects to include this software in this distribution under the [CDDL or GPL
+ * Version 2] license."  If you don't indicate a single choice of license, a
+ * recipient has the option to distribute your version of this file under
+ * either the CDDL, the GPL Version 2 or to extend the choice of license to
+ * its licensees as provided above.  However, if you add GPL Version 2 code
+ * and therefore, elected the GPL Version 2 license, then the option applies
+ * only if the new code is made subject to such option by the copyright
+ * holder.
+ */
+
+/*
  * JBoss, Home of Professional Open Source
  * Copyright 2011, Red Hat, Inc., and individual contributors
  * by the @authors tag. See the copyright.txt in the distribution for a
@@ -17,6 +57,7 @@
 
 package javax.faces.component;
 
+import java.util.Map;
 import javax.el.MethodExpression;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -39,7 +80,7 @@ import javax.faces.webapp.FacesServlet;
 
  * <p class="changed_added_2_2"><strong>UIViewAction</strong> represents
  * a method invocation that occurs during the request processing
- * lifecycle, usually in response to an initial request, not a
+ * lifecycle, usually in response to an initial request, as opposed to a
  * postback.</p>
 
  * <div class="changed_added_2_2">
@@ -49,7 +90,7 @@ import javax.faces.webapp.FacesServlet;
  * in the view for each occurrence of an <code>&lt;f:viewAction
  * /&gt;</code> element placed inside of an <code>&lt;f:metadata
  * /&gt;</code> element.  The user must place <code>&lt;f:metadata
- * /&gt;</code> within the <code>UIViewRoot</code>.</p>
+ * /&gt;</code> as a direct child of the <code>UIViewRoot</code>.</p>
 
  * <p>Because this class implements {@link ActionSource2}, any actions
  * that one would normally take on a component that implements
@@ -67,17 +108,20 @@ import javax.faces.webapp.FacesServlet;
  * necessary for a particular view, often with the help of one or more
  * {@link UIViewParameter}s.</p>
 
- * The {@link NavigationHandler} is consulted after the action is invoked to carry out the navigation case that matches the
- * action signature and outcome. If a navigation case is matched, or the response is marked complete by the action, subsequent
- * {@link UIViewAction} components associated with the current view are short-circuited. The lifecycle then advances
- * appropriately.
- * </p>
- * <p/>
- * <p>
- * It's important to note that the full component tree is not built before the UIViewAction components are processed on an
- * non-faces (initial) request. Rather, the component tree only contains the {@link ViewMetadata}, an important part of the
- * optimization of this component and what sets it apart from a {@link PreRenderViewEvent} listener.
- * </p>
+ * <p>The {@link NavigationHandler} is consulted after the action is
+ * invoked to carry out the navigation case that matches the action
+ * signature and outcome. If a navigation case is matched, the runtime
+ * must force a redirect to that matched navigation case, regardless of
+ * whether or not the matched navigation case called for a redirect.  If
+ * the response is marked complete by the action, the lifecycle advances
+ * appropriately.</p>
+
+ * <p>It's important to note that the full component tree is not built
+ * before the UIViewAction components are processed on an non-faces
+ * (initial) request. Rather, the component tree only contains the
+ * {@link ViewMetadata}, an important part of the optimization of this
+ * component and what sets it apart from a {@link PreRenderViewEvent}
+ * listener.</p>
  *
  * </div>
 
@@ -100,13 +144,16 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
      * </p>
      */
     public static final String COMPONENT_FAMILY = "javax.faces.ViewAction";
+    
+    private static final String UIVIEWACTION_BROADCAST = "javax.faces.ViewAction.broadcast";
 
+    private static final String UIVIEWACTION_EVENT_COUNT = "javax.faces.ViewAction.eventCount";
     /**
      * Properties that are tracked by state saving.
      */
     enum PropertyKeys {
 
-        onPostback, actionExpression, immediate, phase, ifAttr("if");
+        onPostback, actionExpression, immediate, phase, renderedAttr("if");
         private String name;
 
         PropertyKeys() {
@@ -138,6 +185,33 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
     @Override
     public String getFamily() {
         return COMPONENT_FAMILY;
+    }
+    
+    private void incrementEventCount(FacesContext context) {
+        Map<Object, Object> attrs = context.getAttributes();
+        Integer count = (Integer) attrs.get(UIVIEWACTION_EVENT_COUNT);
+        if (null == count) {
+            attrs.put(UIVIEWACTION_EVENT_COUNT, (Integer)1);
+        } else {
+            attrs.put(UIVIEWACTION_EVENT_COUNT, (Integer)(count + 1));
+        }
+    }
+    
+    private boolean decrementEventCountAndReturnTrueIfZero(FacesContext context) {
+        boolean result = true;
+        Map<Object, Object> attrs = context.getAttributes();
+        Integer count = (Integer) attrs.get(UIVIEWACTION_EVENT_COUNT);
+        if (null != count) {
+            count = (Integer)(count - 1);
+            if (count < 1) {
+                attrs.remove(UIVIEWACTION_EVENT_COUNT);
+                result = true;
+            } else {
+                attrs.put(UIVIEWACTION_EVENT_COUNT, count);
+            }
+        }
+        
+        return result;
     }
 
     /**
@@ -251,6 +325,34 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
         }
         getStateHelper().put(PropertyKeys.phase, myPhaseId);
     }
+    
+    private void setIsProcessingUIViewActionBroadcast(FacesContext context, boolean value) {
+        Map<Object, Object> attrs = context.getAttributes();
+        
+        if (value) {
+            attrs.put(UIVIEWACTION_BROADCAST, Boolean.TRUE);
+        } else {
+            attrs.remove(UIVIEWACTION_BROADCAST);
+        }
+    }
+
+    /**
+     * <p class="changed_added_2_2">Returns <code>true</code> if the
+     * current request processing lifecycle is in the midst of
+     * processing the broadcast of an event queued during a call to
+     * {@link #decode}.  The implementation of {@link #broadcast} is
+     * responsible for ensuring that calls to this method accurately
+     * reflect this fact.</p>
+     *
+     * @since 2.2
+     * @param context {@link FacesContext} for the current request
+     * 
+     */
+    
+    public static boolean isProcessingBroadcast(FacesContext context) {
+        boolean result = context.getAttributes().containsKey(UIVIEWACTION_BROADCAST);
+        return result;
+    }
 
     private PhaseId getPhaseId() {
         PhaseId myPhaseId = (PhaseId) getStateHelper().eval(PropertyKeys.phase);
@@ -334,8 +436,8 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
      * @since 2.2
      */
 
-    public boolean isIf() {
-        return (Boolean) getStateHelper().eval(PropertyKeys.ifAttr, true);
+    public boolean isRendered() {
+        return (Boolean) getStateHelper().eval(PropertyKeys.renderedAttr, true);
     }
 
     /**
@@ -346,8 +448,8 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
      *
      * @since 2.2
      */
-    public void setIf(final boolean condition) {
-        getStateHelper().put(PropertyKeys.ifAttr, condition);
+    public void setRendered(final boolean condition) {
+        getStateHelper().put(PropertyKeys.renderedAttr, condition);
     }
 
     // ----------------------------------------------------- UIComponent Methods
@@ -368,36 +470,45 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
      * <li><p>The response has already been marked as complete.</p></li>
 
      * <li><p>The current <code>UIViewRoot</code> is different from the
-     * event's source's v<code>UIViewRoot</code>.</p></li>
+     * event's source's <code>UIViewRoot</code>.</p></li>
 
      * </ul>
 
-     * <p>Save a local reference to the current
-     * <code>UIViewRoot</code>.</p>
+     * <p>Save a local reference to the current <code>UIViewRoot</code>.
+     * For discussion, let this reference be
+     * <em>viewRootBeforeAction</em>.</p>
 
      * <p>Obtain the {@link ActionListener} from the {@link
      * javax.faces.application.Application}.  Wrap the current {@link
      * FacesContext} in an implementation of {@link
      * javax.faces.context.FacesContextWrapper} that overrides the
-     * {@link FacesContext#renderResponse} method to take no action.
-     * Set the current <code>FacesContext</code> to be the
-     * <code>FacesContextWrapper</code> instance.  Invoke {@link
-     * ActionListener#processAction}.  The specification requires the
-     * implementation of <code>processAction()</code> to call
-     * <code>renderResponse()</code> but this will have no effect due to
-     * the wrapping.  Restore the original
-     * <code>FacesContext</code>, and discard the wrapper.</p>
+     * {@link FacesContext#renderResponse} method such that it takes no
+     * action.  Set the current <code>FacesContext</code> to be the
+     * <code>FacesContextWrapper</code> instance.  Make it so a call to
+     * {@link #isProcessingBroadcast} on the current FacesContext will
+     * return <code>true</code>.  This is necessary because the {@link
+     * javax.faces.application.NavigationHandler} will call this method
+     * to determine if the navigation is happening as the result of a
+     * <code>UIViewAction</code>.  Invoke {@link
+     * ActionListener#processAction}.  In a <code>finally</code> block,
+     * restore the original <code>FacesContext</code>, make it so a call
+     * to {@link #isProcessingBroadcast} on the current context will
+     * return <code>false</code> and discard the wrapper.</p>
 
      * <p>If the response has been marked as complete during the
      * invocation of <code>processAction()</code>, take no further
-     * action and return.  Otherwise, compare the
-     * <code>UIViewRoot</code> saved before invocation of
-     * <code>processAction()</code> with the one on the
-     * <code>FacesContext</code> after the invocation.  If the two
-     * <code>UIViewRoot</code>s are the same, call {@link
-     * FacesContext#renderResponse} and return.  Otherwise, execute the
-     * lifecycle on the new <code>UIViewRoot</code> PENDING(edburns).
-     * Obviously need more details here.</p>
+     * action and return.  Otherwise, compare
+     * <em>viewRootBeforeAction</em> with the one on the
+     * <code>FacesContext</code> after the invocation of
+     * <code>processAction()</code>.  If the two
+     * <code>UIViewRoot</code>s are the same and no more
+     * <code>UIViewAction</code> events have been queued by a call to
+     * {@link #decode}, call {@link FacesContext#renderResponse} and
+     * return.  It is possible to detect the case where no more
+     * <code>UIViewAction</code> events have been queued because the
+     * number of such events queued has been noted in the specification
+     * for {@link #decode}.  Otherwise, execute the lifecycle on the new
+     * <code>UIViewRoot</code>.</p>
 
      * </div>
      * 
@@ -431,44 +542,29 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
         if (!context.getResponseComplete() && (context.getViewRoot() == getViewRootOf(event))) {
             ActionListener listener = context.getApplication().getActionListener();
             if (listener != null) {
+                boolean hasMoreViewActionEvents = false;
                 UIViewRoot viewRootBefore = context.getViewRoot();
-                InstrumentedFacesContext instrumentedContext = new InstrumentedFacesContext(context);
-                // defer the call to renderResponse() that happens in
-                // ActionListener#processAction(ActionEvent)
-                instrumentedContext.disableRenderResponseControl().set();
-                listener.processAction((ActionEvent) event);
-                instrumentedContext.restore();
+                InstrumentedFacesContext instrumentedContext = null;
+                try {
+                    instrumentedContext = new InstrumentedFacesContext(context);
+                    setIsProcessingUIViewActionBroadcast(context, true);
+                    // defer the call to renderResponse() that happens in
+                    // ActionListener#processAction(ActionEvent)
+                    instrumentedContext.disableRenderResponseControl().set();
+                    listener.processAction((ActionEvent) event);
+                    hasMoreViewActionEvents = decrementEventCountAndReturnTrueIfZero(context);
+                } finally {
+                    setIsProcessingUIViewActionBroadcast(context, false);
+                    if (null != instrumentedContext) {
+                        instrumentedContext.restore();
+                    }
+                }
                 // if the response is marked complete, the story is over
                 if (!context.getResponseComplete()) {
                     UIViewRoot viewRootAfter = context.getViewRoot();
                     // if the view id changed as a result of navigation, then execute
                     // the JSF lifecycle for the new view id
-                    if (viewRootBefore != viewRootAfter) {
-                        /*
-                         * // execute the JSF lifecycle by dispatching a forward request // this approach is problematic because
-                         * it throws a wrench in the event broadcasting try { context.getExternalContext
-                         * ().dispatch(context.getApplication() .getViewHandler().getActionURL(context,
-                         * viewRootAfter.getViewId()) .substring(context.getExternalContext
-                         * ().getRequestContextPath().length())); // kill this lifecycle execution context.responseComplete(); }
-                         * catch (IOException e) { throw new FacesException("Dispatch to viewId failed: " +
-                         * viewRootAfter.getViewId(), e); }
-                         */
-
-                        // manually execute the JSF lifecycle on the new view id
-                        // certain tweaks have to be made to the FacesContext to allow
-                        // us to reset the lifecycle
-                        Lifecycle lifecycle = getLifecycle(context);
-                        instrumentedContext = new InstrumentedFacesContext(context);
-                        instrumentedContext.pushViewIntoRequestMap().clearViewRoot().clearPostback().set();
-                        lifecycle.execute(instrumentedContext);
-                        instrumentedContext.restore();
-
-                        /*
-                         * Another approach would be to register a result listener in the decode() method for the result in which
-                         * the action is set to invoke. The result listener would performs a servlet forward if a non-redirect
-                         * navigation occurs after the result.
-                         */
-                    } else {
+                    if (viewRootBefore == viewRootAfter && !hasMoreViewActionEvents) {
                         // apply the deferred call (relevant when immediate is true)
                         context.renderResponse();
                     }
@@ -516,7 +612,10 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
 
      * </ul>
 
-     * <p>Queue the event with a call to {@link #queueEvent}.</p>
+     * <p>Queue the event with a call to {@link #queueEvent}. Keep track
+     * of the number of events that are queued in this way on this run
+     * through the lifecycle.  This information is necessary during
+     * processing in {@link #broadcast}</code>.</p>
 
      * </div>
      * 
@@ -529,7 +628,7 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
             throw new NullPointerException();
         }
 
-        if ((context.isPostback() && !isOnPostback()) || !isIf()) {
+        if ((context.isPostback() && !isOnPostback()) || !isRendered()) {
             return;
         }
 
@@ -542,7 +641,7 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
         } else {
             e.setPhaseId(PhaseId.INVOKE_APPLICATION);
         }
-
+        incrementEventCount(context);
         queueEvent(e);
     }
 

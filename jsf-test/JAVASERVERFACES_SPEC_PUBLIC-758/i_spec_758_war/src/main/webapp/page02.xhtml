@@ -58,6 +58,8 @@
                      validatorMessage="Invalid headline. (The id parameter is not a positive number)">
                 <f:validateLongRange minimum="1"/>
             </f:viewParam>
+            <f:viewAction action="#{newsReader.goToPage01IfValidationFailed}" 
+                          phase="PROCESS_VALIDATIONS" onPostback="true" />
             <f:viewAction action="#{newsReader.loadStory}" onPostback="true" />
         </f:metadata>
     </ui:define>

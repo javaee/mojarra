@@ -59,6 +59,8 @@ import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
 import javax.faces.application.ConfigurableNavigationHandler;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIViewAction;
+import javax.faces.context.Flash;
 
 /**
  * <p><strong>NavigationHandlerImpl</strong> is the class that implements
@@ -161,7 +163,8 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             ExternalContext extContext = context.getExternalContext();
             ViewHandler viewHandler = Util.getViewHandler(context);
             assert (null != viewHandler);
-            if (caseStruct.navCase.isRedirect()) {
+            boolean isUIViewActionBroadcast = UIViewAction.isProcessingBroadcast(context);
+            if (caseStruct.navCase.isRedirect() || isUIViewActionBroadcast) {
                 // perform a 302 redirect.
                 String redirectUrl =
                       viewHandler.getRedirectURL(context,
@@ -178,7 +181,11 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                     // is maintained
                     clearViewMapIfNecessary(context.getViewRoot(), caseStruct.viewId);
                     updateRenderTargets(context, caseStruct.viewId);
-                    extContext.getFlash().setRedirect(true);
+                    Flash flash = extContext.getFlash();
+                    flash.setRedirect(true);
+                    if (isUIViewActionBroadcast) {
+                        flash.setKeepMessages(true);
+                    }
                     extContext.redirect(redirectUrl);
                 } catch (java.io.IOException ioe) {
                     if (logger.isLoggable(Level.FINE)) {

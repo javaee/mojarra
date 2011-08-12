@@ -52,36 +52,37 @@
     <import file="${jsf.build.home}/common/ant/common.xml"/>
 
     <target name="build">
-        <jsf.mvn dir="${basedir}/i_spec_758_war" goals="install" />
+        <jsf.mvn dir="${basedir}/i_spec_758_simple_war" goals="install" />
         <jsf.mvn dir="${basedir}/i_spec_758_htmlunit" goals="install" />
     </target>    
 
     <target name="clean">
-        <jsf.mvn dir="${basedir}/i_spec_758_war" goals="clean" />
-        <jsf.mvn dir="${basedir}/i_spec_758_htmlunit" goals="clean" />
+        <jsf.mvn dir="${basedir}/i_spec_758_simple_war" goals="clean" />
     </target>    
 
     <target name="install">
         <deploy.artifact
-              artifact="${basedir}/i_spec_758_war/target/i_spec_758_war.war"
-              appName="i_spec_758_war"/>
+              artifact="${basedir}/i_spec_758_simple_war/target/i_spec_758_simple_war.war"
+              appName="i_spec_758_simple_war"/>
     </target>    
 
     <target name="remove">
         <undeploy.artifact
-              artifact="${basedir}/i_spec_758_war/target/i_spec_758_war.war"
-              appName="i_spec_758_war"/>
+              artifact="${basedir}/i_spec_758_simple_war/target/i_spec_758_simple_war.war"
+              appName="i_spec_758_simple_war"/>
     </target>    
 
     <target name="test" depends="define.scenario.aware.port">
-        <jsf.junit context-path="/i_spec_758_war"
+
+        <jsf.junit context-path="/i_spec_758_simple_war"
                  classpath-refid="758.classpath"    
                  test-results-dir="${regression.test.results.dir}">
             <tests>
                 <fileset dir="${basedir}/i_spec_758_htmlunit/target/classes"
-                     includes="com/sun/faces/regression/i_spec_758/Issue758TestCase.class"/> 
+                     includes="com/sun/faces/regression/i_spec_758/Issue758SimpleTestCase.class"/> 
             </tests>
         </jsf.junit>
+
     </target>    
 
 </project>

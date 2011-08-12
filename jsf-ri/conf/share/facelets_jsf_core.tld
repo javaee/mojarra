@@ -2557,7 +2557,7 @@ will not pass validation.</p> ]]>
 
 
             ]]></description>
-            <name>if</name>
+            <name>rendered</name>
             <required>false</required>
             <deferred-value>
              <type>java.lang.Boolean</type>
