@@ -59,13 +59,13 @@
             <name>
                 COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) plus GPL
             </name>
-            <url>https://glassfish.dev.java.net/public/CDDL+GPL.html</url>
+            <url>http://glassfish.java.net/nonav/public/CDDL+GPL.html</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
     <scm>
-        <url>https://mojarra.dev.java.net/svn/mojarra</url>
-        <connection>scm:svn:https://mojarra.dev.java.net/svn/mojarra</connection>
+        <url>http://java.net/projects/mojarra/sources</url>
+        <connection>scm:svn:https://svn.java.net/svn/mojarra~svn/trunk</connection>
     </scm>
     <developers>
         <developer>
@@ -89,23 +89,18 @@
             <timezone>-6</timezone>
         </developer>
     </developers>
-
-    <repositories>
-        <repository>
-            <id>java.net</id>
-            <name>The repo from which jars are copied to maven central</name>
-            <url>https://maven.java.net/content/repositories/releases</url>
-        </repository>
-    </repositories>
-
     <distributionManagement>
+      <snapshotRepository>
+        <id>jvnet-nexus-snapshots</id>
+        <name>Java.net Nexus Snapshots Repository</name>
+        <url>https://maven.java.net/content/repositories/snapshots/</url>
+      </snapshotRepository>
       <repository>
-        <uniqueVersion>false</uniqueVersion>
-        <id>java.net-maven2-repository</id>
-        <url>svn:https://svn.java.net/svn/maven2-repository~svn/trunk/repository</url> 
+        <id>jvnet-nexus-staging</id>
+        <name>Java.net Nexus Staging Repository</name>
+        <url>https://maven.java.net/service/local/staging/deploy/maven2/</url>
       </repository>
     </distributionManagement>
-
     <build>
         <defaultGoal>install</defaultGoal>
         <plugins>
@@ -168,35 +163,25 @@
             </plugin>
         </plugins>
 
-        <extensions>
-            <extension>
-                <groupId>org.jvnet.wagon-svn</groupId>
-                <artifactId>wagon-svn</artifactId>
-                <version>1.8</version>
-            </extension>
-        </extensions>
-
     </build>
 
     <issueManagement>
-        <system>jira</system>
-        <url>http://java.net/jira/browse/JAVASERVERFACES_SPEC_PUBLIC</url>
+        <system>issueZilla</system>
+        <url>
+            https://javaserverfaces.dev.java.net/servlets/ProjectIssues
+        </url>
     </issueManagement>
     <mailingLists>
         <mailingList>
             <name>JSF 2.1 Specification Comments</name>
-            <post>jsr-344-comments@jcp.org</post>
-            <archive>http://java.net/projects/javaserverfaces-spec-public/lists/users/archive</archive>
-        </mailingList>
-        <mailingList>
-            <name>JSF 2.2 Specification Users</name>
-            <post>users@javaserverfaces-spec-public.java.net</post>
-            <archive>http://java.net/projects/javaserverfaces-spec-public/lists/users/archive</archive>
+            <post>jsr-314-comments@jcp.org</post>
         </mailingList>
         <mailingList>
             <name>Mojarra Implementation Dev List</name>
-            <post>dev@javaserverfaces.java.net</post>
-            <archive>http://java.net/projects/javaserverfaces/lists/dev/archive</archive>
+            <post>dev@javaserverfaces.dev.java.net</post>
+            <archive>
+                https://javaserverfaces.dev.java.net/servlets/SummarizeList?listName=dev
+            </archive>
         </mailingList>
     </mailingLists>
     <contributors>
@@ -264,4 +249,90 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
+    <profiles>
+      <profile>
+        <id>release-sign-artifacts</id>
+        <activation>
+          <property>
+            <name>performRelease</name>
+            <value>true</value>
+          </property>
+        </activation>
+        <build>
+          <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                    <excludes>
+                        <exclude>**/*.*</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+              <groupId>org.codehaus.mojo</groupId>
+              <artifactId>build-helper-maven-plugin</artifactId>
+              <version>1.7</version>
+              <executions>
+                <execution>
+                  <id>attach-artifacts</id>
+                  <phase>package</phase>
+                  <goals>
+                    <goal>attach-artifact</goal>
+                  </goals>
+                  <configuration>
+                    <artifacts>
+                      <artifact>
+                        <file>target/javax.faces-api-@version@-javadoc.jar</file>
+                        <type>jar</type>
+                        <classifier>javadoc</classifier>
+                      </artifact>
+                    </artifacts>
+                  </configuration>
+                </execution>
+              </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestFile>target/classes/META-INF/MANIFEST.MF</manifestFile>
+                    </archive>
+                </configuration>
+            </plugin>            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-gpg-plugin</artifactId>
+              <version>1.3</version>
+              <executions>
+                <execution>
+                  <id>sign-artifacts</id>
+                  <phase>verify</phase>
+                  <goals>
+                    <goal>sign</goal>
+                  </goals>
+                </execution>
+              </executions>
+            </plugin>
+          </plugins>
+        </build>
+      </profile>
+    </profiles>
+
 </project>
