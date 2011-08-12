@@ -95,13 +95,11 @@
         <name>Java.net Nexus Snapshots Repository</name>
         <url>https://maven.java.net/content/repositories/snapshots/</url>
       </snapshotRepository>
-<!--
       <repository>
         <id>jvnet-nexus-staging</id>
         <name>Java.net Nexus Staging Repository</name>
         <url>https://maven.java.net/service/local/staging/deploy/maven2/</url>
       </repository>
--->
     </distributionManagement>
     <build>
         <defaultGoal>install</defaultGoal>
