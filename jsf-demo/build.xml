@@ -256,8 +256,8 @@
                 <body>
                 <div class="navbar" align="center">
                     <ul>
-                        <li class="first"><a href="javadocs/index.html" target="loc">JSF 2.1 API Documentation</a></li>
-                        <li><a href="managed-bean-javadocs/index.html" target="loc">JSF 2.1 Managed Bean Documentation</a></li>
+                        <li class="first"><a href="javadocs/index.html" target="loc">JSF API Documentation</a></li>
+                        <li><a href="managed-bean-javadocs/index.html" target="loc">JSF Managed Bean Documentation</a></li>
                         <li><a href="vdldocs/facelets/index.html" target="loc">Facelets Tag Documentation</a></li>
                         <li><a href="vdldocs/jsp/index.html" target="loc">JSP Tag Documentation</a></li>
                         <li><a href="renderkitdocs/index.html" target="loc">Renderkit Documentation</a></li>

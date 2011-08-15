@@ -920,7 +920,7 @@ javax.faces.level=ALL
        USE THE FOLLOWING TARGETS TO PUSH VARIOUS BUILD TYPES TO THE
        JAVA.NET M2 REPOSITORY
 
-ant -d -Dgpg.passphrase=PASSPHRASE HERE -DperformRelease=true mvn.deploy.snapshot.local
+ant -Dgpg.passphrase=PASSPHRASE HERE mvn.deploy.snapshot.local
 
     -->
      <target name="mvn.deploy.snapshot" depends="strip.api.jar">
