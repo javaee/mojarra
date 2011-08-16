@@ -110,11 +110,12 @@ import javax.faces.webapp.FacesServlet;
 
  * <p>The {@link NavigationHandler} is consulted after the action is
  * invoked to carry out the navigation case that matches the action
- * signature and outcome. If a navigation case is matched, the runtime
- * must force a redirect to that matched navigation case, regardless of
- * whether or not the matched navigation case called for a redirect.  If
- * the response is marked complete by the action, the lifecycle advances
- * appropriately.</p>
+ * signature and outcome. If a navigation case is matched that causes
+ * the new viewId to be different from the current viewId, the runtime
+ * must force a redirect to that matched navigation case with different
+ * viewId, regardless of whether or not the matched navigation case with
+ * different viewId called for a redirect.  If the response is marked
+ * complete by the action, the lifecycle advances appropriately.</p>
 
  * <p>It's important to note that the full component tree is not built
  * before the UIViewAction components are processed on an non-faces
