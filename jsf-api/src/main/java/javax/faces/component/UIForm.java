@@ -283,11 +283,38 @@ public class UIForm extends UIComponentBase implements NamingContainer, UniqueId
 
     }
 
+    /**<p class="changed_modified_2_2">Generate an identifier for a component. The identifier
+     * will be prefixed with UNIQUE_ID_PREFIX, and will be unique
+     * within this component-container. Optionally, a unique seed value can
+     * be supplied by component creators which should be
+     * included in the generated unique id.</p>
+     * <p class="changed_added_2_2">
+     * If the <code>prependId</code> property has the value <code>false</code>,
+     * this method must call <code>createUniqueId</code> on the next ancestor
+     * <code>UniqueIdVendor</code>.
+     * </p>
+     *
+     * @param context FacesContext
+     * @param seed an optional seed value - e.g. based on the position of the component in the VDL-template
+     * @return a unique-id in this component-container
+     */
     public String createUniqueId(FacesContext context, String seed) {
-        Integer i = (Integer) getStateHelper().get(PropertyKeys.lastId);
-        int lastId = ((i != null) ? i : 0);
-        getStateHelper().put(PropertyKeys.lastId,  ++lastId);
-        return UIViewRoot.UNIQUE_ID_PREFIX + (seed == null ? lastId : seed);
+        if (isPrependId()) {
+            Integer i = (Integer) getStateHelper().get(PropertyKeys.lastId);
+            int lastId = ((i != null) ? i : 0);
+            getStateHelper().put(PropertyKeys.lastId,  ++lastId);
+            return UIViewRoot.UNIQUE_ID_PREFIX + (seed == null ? lastId : seed);
+        } else {
+            UIComponent ancestorNamingContainer = (getParent() == null) ? null : getParent().getNamingContainer();
+            String uid = null;
+            if (null != ancestorNamingContainer &&
+                    ancestorNamingContainer instanceof UniqueIdVendor) {
+                uid = ((UniqueIdVendor) ancestorNamingContainer).createUniqueId(context, seed);
+            } else {
+                uid = context.getViewRoot().createUniqueId(context, seed);
+            }
+            return uid;
+        }
     }
     
     /**

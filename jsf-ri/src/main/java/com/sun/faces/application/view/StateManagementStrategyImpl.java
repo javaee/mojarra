@@ -237,9 +237,7 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
             // JAVASERVERFACES_SPEC_PUBLIC-787 - restore viewMap before buildView
             String cid = viewRoot.getClientId(context);
             Object stateObj = state.get(cid);
-            if (! (stateObj instanceof StateHolderSaver)) {
-                viewRoot.restoreViewScopeState(context, stateObj);
-            }
+            viewRoot.restoreViewScopeState(context, stateObj);
 
             context.setProcessingEvents(true);
             vdl.buildView(context, viewRoot);
