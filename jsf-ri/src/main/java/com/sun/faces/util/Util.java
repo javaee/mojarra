@@ -90,6 +90,11 @@ public class Util {
     // (ex: Util.CONVERSION_ERROR_MESSAGE_ID) and the number of substitution
     // parameters to test/com/sun/faces/util/TestUtil_messages (see comment there).
 
+    /**
+     * Flag that, when true, enables special behavior in the RI to enable
+     * unit testing.
+     */
+    private static boolean unitTestModeEnabled = false;
 
     /**
      * Flag that enables/disables the core TLV.
@@ -234,6 +239,13 @@ public class Util {
 
     }
 
+    public static void setUnitTestModeEnabled(boolean enabled) {
+        unitTestModeEnabled = enabled;
+    }
+
+    public static boolean isUnitTestModeEnabled() {
+        return unitTestModeEnabled;
+    }
 
     public static void setCoreTLVActive(boolean active) {
         Map<String, Object> appMap = getApplicationMap();

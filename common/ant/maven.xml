@@ -292,7 +292,10 @@
                 </else>
             </if>
             <if>
-                <length string="${http.proxy.host}" when="greater" length="0" />
+                <and>
+                  <isset property="${http.proxy.host}" />
+                  <length string="${http.proxy.host}" when="greater" length="0" />
+                </and>
                 <then>
                     <property name="httpProxyProperty" value="-Dhttp.proxyHost=${http.proxy.host} -Dhttp.proxyPort=${http.proxy.port}"/>
                 </then>
@@ -301,7 +304,22 @@
                 </else>
             </if>
             <if>
-                <length string="${https.proxy.host}" when="greater" length="0" />
+                <and>
+                  <isset property="${gpg.passphrase}" />
+                  <length string="${gpg.passphrase}" when="greater" length="0" />
+                </and>
+                <then>
+                    <property name="gpgPassphraseProperty" value="-Prelease-sign-artifacts -Dgpg.passphrase=${gpg.passphrase}"/>
+                </then>
+                <else>
+                    <property name="gpgPassphraseProperty" value=""/>
+                </else>
+            </if>
+            <if>
+                <and>
+                  <isset property="${https.proxy.host}" />
+                  <length string="${https.proxy.host}" when="greater" length="0" />
+                </and>
                 <then>
                     <property name="httpsProxyProperty" value="-Dhttps.proxyHost=${https.proxy.host} -Dhttps.proxyPort=${https.proxy.port}"/>
                 </then>
@@ -312,19 +330,19 @@
     
             <exec os="SunOS" dir="@{dir}" failonerror="yes"
                   executable="${mvn.cmd}">
-                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals} -Dspec.snapshot.version=${spec.snapshot.version} -Dgpg.passphrase=${gpg.passphrase} -Prelease-sign-artifacts ${httpProxyProperty} ${httpsProxyProperty}"/>
+                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals} -Dspec.snapshot.version=${spec.snapshot.version} ${gpgPassphraseProperty} ${httpProxyProperty} ${httpsProxyProperty}"/>
             </exec>
             <exec os="Linux" dir="@{dir}" failonerror="yes"
                   executable="${mvn.cmd}">
-                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals} -Dspec.snapshot.version=${spec.snapshot.version} -Dgpg.passphrase=${gpg.passphrase} -Prelease-sign-artifacts ${httpProxyProperty} ${httpsProxyProperty}"/>
+                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals} -Dspec.snapshot.version=${spec.snapshot.version} ${gpgPassphraseProperty} ${httpProxyProperty} ${httpsProxyProperty}"/>
             </exec>
             <exec osfamily="windows" dir="@{dir}" executable="${mvn.cmd}"
                   failonerror="yes">
-                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals} -Dspec.snapshot.version=${spec.snapshot.version} -Dgpg.passphrase=${gpg.passphrase} -Prelease-sign-artifacts ${httpProxyProperty} ${httpsProxyProperty}"/>
+                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals} -Dspec.snapshot.version=${spec.snapshot.version} ${gpgPassphraseProperty} ${httpProxyProperty} ${httpsProxyProperty}"/>
             </exec>
             <exec os="Mac OS X" dir="@{dir}" executable="${mvn.cmd}"
                   failonerror="yes">
-                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals} -Dspec.snapshot.version=${spec.snapshot.version} -Dgpg.passphrase=${gpg.passphrase} -Prelease-sign-artifacts ${httpProxyProperty} ${httpsProxyProperty}"/>
+                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals} -Dspec.snapshot.version=${spec.snapshot.version} ${gpgPassphraseProperty} ${httpProxyProperty} ${httpsProxyProperty}"/>
             </exec>
         </sequential>
     </macrodef>

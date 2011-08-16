@@ -66,7 +66,7 @@ import java.net.MalformedURLException;
 
 import com.sun.faces.context.ApplicationMap;
 import com.sun.faces.context.InitParameterMap;
-import javax.faces.event.PhaseId;
+import com.sun.faces.util.Util;
 
 /**
  * A special, minimal implementation of FacesContext used at application initialization time.
@@ -97,6 +97,11 @@ public class InitFacesContext extends FacesContext {
         orig = FacesContext.getCurrentInstance();
         setCurrentInstance(this);
         sc.setAttribute(INIT_FACES_CONTEXT_ATTR_NAME, this);
+    }
+    
+    public void reInitializeExternalContext(ServletContext sc) {
+        assert(Util.isUnitTestModeEnabled());
+        ec = new ServletContextAdapter(sc);
     }
     
     private static final String INIT_FACES_CONTEXT_ATTR_NAME = RIConstants.FACES_PREFIX + "InitFacesContext";
