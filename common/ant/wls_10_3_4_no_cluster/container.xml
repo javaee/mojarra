@@ -43,6 +43,14 @@
 
 <project name="wls-10.3.4" basedir=".">
 
+<!-- 
+
+To start the server manually
+
+The admin console is at http://adc2110030:7001/console weblogic:weblogic1
+
+-->
+
     <property name="wl.username" value="weblogic"/>
     <property name="wl.password" value="weblogic1"/>
     <property name="wl.home" value="${container.home}/wlserver_10.3" />
@@ -238,9 +246,8 @@
 
     <target name="container.deploy" depends="define.wls.properties"
             description="Deploy the JSF Implementation artifacts to the target container.">
-     
-      <copy file="${jsf.build.home}/jsf-ri/build/lib/javax.faces.jar" overwrite="true"
-            tofile="${maven.repo.local}/${groupPath}/jsf-impl/${impl.version}/jsf-impl-${impl.version}.jar" />
+
+      <ant dir="${impl.dir}" target="mvn.deploy.snapshot.local" />     
 
       <if>
         <not>
@@ -255,11 +262,12 @@
           </sequential>
         </then>
       </if>
+
       <jsf.mvn mvnargs="-Dimpl.version=${impl.version} -Dimpl.name=${impl.name}" 
                dir="${jsf.build.home}/common/ant/${container.name}/wls-jsf" goals="clean install" />
       <container.stop />
 
-      <copy file="${jsf.build.home}/jsf-ri/build/lib/javax.faces.jar" overwrite="true"
+      <copy file="${maven.repo.local}/org/glassfish/javax.faces/${impl.version}/javax.faces-${impl.version}.jar" overwrite="true"
             todir="${wl.home}/server/lib/consoleapp/webapp/WEB-INF/lib" />
       <container.start />
       <wldeploy action="deploy"

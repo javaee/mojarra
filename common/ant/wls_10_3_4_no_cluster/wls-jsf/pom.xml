@@ -74,14 +74,8 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.sun.faces</groupId>
-      <artifactId>jsf-api</artifactId>
-      <version>${impl.version}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.sun.faces</groupId>
-      <artifactId>jsf-impl</artifactId>
+      <groupId>org.glassfish</groupId>
+      <artifactId>javax.faces</artifactId>
       <version>${impl.version}</version>
       <scope>compile</scope>
     </dependency>
