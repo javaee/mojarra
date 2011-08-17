@@ -43,6 +43,14 @@
 
 <project name="wls-10.3.4" basedir=".">
 
+<!-- 
+
+To start the server manually
+
+The admin console is at http://adc2110030:7001/console weblogic:weblogic1
+
+-->
+
     <property name="wl.username" value="weblogic"/>
     <property name="wl.password" value="weblogic1"/>
     <property name="wl.home" value="${container.home}/wlserver_10.3" />
@@ -238,9 +246,8 @@
 
     <target name="container.deploy" depends="define.wls.properties"
             description="Deploy the JSF Implementation artifacts to the target container.">
-     
-      <copy file="${jsf.build.home}/jsf-ri/build/lib/javax.faces.jar" overwrite="true"
-            tofile="${maven.repo.local}/${groupPath}/jsf-impl/${impl.version}/jsf-impl-${impl.version}.jar" />
+<!--
+      <ant dir="${impl.dir}" target="mvn.deploy.snapshot.local" />     
 
       <if>
         <not>
@@ -255,13 +262,15 @@
           </sequential>
         </then>
       </if>
+
       <jsf.mvn mvnargs="-Dimpl.version=${impl.version} -Dimpl.name=${impl.name}" 
                dir="${jsf.build.home}/common/ant/${container.name}/wls-jsf" goals="clean install" />
       <container.stop />
 
-      <copy file="${jsf.build.home}/jsf-ri/build/lib/javax.faces.jar" overwrite="true"
+      <copy file="${maven.repo.local}/org/glassfish/javax.faces/${impl.version}/javax.faces-${impl.version}.jar" overwrite="true"
             todir="${wl.home}/server/lib/consoleapp/webapp/WEB-INF/lib" />
       <container.start />
+-->
       <wldeploy action="deploy"
                 appversion="${impl.version.number}"
                 libImplVer="${impl.version.number}"
@@ -272,7 +281,9 @@
                 user="${wl.username}"
                 source="${jsf.build.home}/common/ant/${container.name}/wls-jsf/target/${impl.name}-${impl.version}.war"
                 verbose="true" />
+<!--
       <container.stop />
+-->
 
     </target>
 
@@ -296,24 +307,10 @@
 
     <target name="container.deploy.test.dependencies"
             description="Deploy any container level dependencies to the container.">
-        <if>
-            <os family="windows"/>
-            <then>
-                <container.stop/>
-            </then>
-        </if>
+    </target>
 
-        <copy overwrite="true" file="${groovy.jar}" todir="${container.home}/modules"/>
-
-        <if>
-            <os family="windows"/>
-            <then>
-                <!-- container.start/ -->
-                <echo>The container may have been stopped. Please restart it, if
-                    needed.
-                </echo>
-            </then>
-        </if>       
+    <target name="container.undeploy.test.dependencies"
+            description="Undeploy any container level dependencies from the container.">
     </target>
 
     <target name="container.start"
@@ -404,25 +401,19 @@
     </target>
 
     <target name="define.scenario.aware.port">
-        <condition property="scenario.aware.port" value="${glassfish.portbase.tenthousandsplace}0080">
-          <equals arg1="${force.no.cluster}" casesensitive="false" trim="true"
-                  arg2="true" />
-        </condition>
-        <if>
-          <not>
-            <equals arg1="${force.no.cluster}" casesensitive="false" trim="true"
-                    arg2="true" />
-          </not>
-          <then>
-            <property name="scenario.aware.port" 
-                      value="${container.port}" />
-          </then>
-        </if>
-        <echo message="scenario.aware.port = ${scenario.aware.port}" />
+      <property name="scenario.aware.port" value="${container.port}" />
+      <echo message="scenario.aware.port = ${scenario.aware.port}" />
+
+      <var name="force.no.cluster" value="true" />
+      <echo message="force.no.cluster = ${force.no.cluster}" />
     </target>
 
     <target name="define.virtual-server.aware.port">
       <property name="scenario.aware.port" value="${container.port}" />
+      <echo message="scenario.aware.port = ${scenario.aware.port}" />
+
+      <var name="force.no.cluster" value="true" />
+      <echo message="force.no.cluster = ${force.no.cluster}" />
     </target>
 
 
