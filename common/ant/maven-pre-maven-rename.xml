@@ -290,7 +290,7 @@
             </if>
             <if>
                 <and>
-                  <isset property="${http.proxy.host}" />
+                  <isset property="http.proxy.host" />
                   <length string="${http.proxy.host}" when="greater" length="0" />
                 </and>
 
@@ -304,7 +304,7 @@
 
             <if>
                 <and>
-                  <isset property="${gpg.passphrase}" />
+                  <isset property="gpg.passphrase" />
                   <length string="${gpg.passphrase}" when="greater" length="0" />
                 </and>
 
@@ -317,7 +317,7 @@
             </if>
             <if>
                 <and>
-                  <isset property="${https.proxy.host}" />
+                  <isset property="https.proxy.host" />
                   <length string="${https.proxy.host}" when="greater" length="0" />
                 </and>
                 <then>
