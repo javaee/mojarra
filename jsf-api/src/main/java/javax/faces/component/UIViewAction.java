@@ -475,9 +475,9 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
 
      * </ul>
 
-     * <p>Save a local reference to the current <code>UIViewRoot</code>.
-     * For discussion, let this reference be
-     * <em>viewRootBeforeAction</em>.</p>
+     * <p>Save a local reference to the viewId of the current
+     * <code>UIViewRoot</code>.  For discussion, let this reference be
+     * <em>viewIdBeforeAction</em>.</p>
 
      * <p>Obtain the {@link ActionListener} from the {@link
      * javax.faces.application.Application}.  Wrap the current {@link
@@ -499,17 +499,16 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
      * <p>If the response has been marked as complete during the
      * invocation of <code>processAction()</code>, take no further
      * action and return.  Otherwise, compare
-     * <em>viewRootBeforeAction</em> with the one on the
-     * <code>FacesContext</code> after the invocation of
-     * <code>processAction()</code>.  If the two
-     * <code>UIViewRoot</code>s are the same and no more
-     * <code>UIViewAction</code> events have been queued by a call to
-     * {@link #decode}, call {@link FacesContext#renderResponse} and
-     * return.  It is possible to detect the case where no more
-     * <code>UIViewAction</code> events have been queued because the
-     * number of such events queued has been noted in the specification
-     * for {@link #decode}.  Otherwise, execute the lifecycle on the new
-     * <code>UIViewRoot</code>.</p>
+     * <em>viewIdBeforeAction</em> with the viewId of the
+     * <code>UIViewRoot</code> on the <code>FacesContext</code> after
+     * the invocation of <code>processAction()</code>.  If the two
+     * viewIds are the same and no more <code>UIViewAction</code> events
+     * have been queued by a call to {@link #decode}, call {@link
+     * FacesContext#renderResponse} and return.  It is possible to
+     * detect the case where no more <code>UIViewAction</code> events
+     * have been queued because the number of such events queued has
+     * been noted in the specification for {@link #decode}.  Otherwise,
+     * execute the lifecycle on the new <code>UIViewRoot</code>.</p>
 
      * </div>
      * 
@@ -545,6 +544,7 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
             if (listener != null) {
                 boolean hasMoreViewActionEvents = false;
                 UIViewRoot viewRootBefore = context.getViewRoot();
+                assert(null != viewRootBefore);
                 InstrumentedFacesContext instrumentedContext = null;
                 try {
                     instrumentedContext = new InstrumentedFacesContext(context);
@@ -563,9 +563,17 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
                 // if the response is marked complete, the story is over
                 if (!context.getResponseComplete()) {
                     UIViewRoot viewRootAfter = context.getViewRoot();
-                    // if the view id changed as a result of navigation, then execute
-                    // the JSF lifecycle for the new view id
-                    if (viewRootBefore == viewRootAfter && !hasMoreViewActionEvents) {
+                    assert(null != viewRootAfter);
+
+                    // if the view id changed as a result of navigation,
+                    // then execute the JSF lifecycle for the new view
+                    // id
+                    String viewIdBefore = viewRootBefore.getViewId();
+                    String viewIdAfter = viewRootAfter.getViewId();
+                    assert(null != viewIdBefore && null != viewIdAfter);
+                    boolean viewIdsSame = viewIdBefore.equals(viewIdAfter);
+                    
+                    if (viewIdsSame && !hasMoreViewActionEvents) {
                         // apply the deferred call (relevant when immediate is true)
                         context.renderResponse();
                     }
