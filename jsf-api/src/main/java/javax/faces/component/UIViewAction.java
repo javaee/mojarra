@@ -264,8 +264,15 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
     }
 
     /**
-     * {@inheritDoc}
-     *
+     * <p class="changed_added_2_2">If the value of the component's
+     * <code>immediate</code> attribute is <code>true</code>, the action
+     * will be invoked during the <em>Apply Request Values</em> JSF
+     * lifecycle phase.  Otherwise, the action will be invoked during
+     * the <em>Invoke Application</em> phase, the default behavior. The
+     * phase can be set explicitly in the <code>phase</code> attribute,
+     * which takes precedence over the <code>immediate</code>
+     * attribute.</p>
+
      * @since 2.2
      */
     public boolean isImmediate() {
