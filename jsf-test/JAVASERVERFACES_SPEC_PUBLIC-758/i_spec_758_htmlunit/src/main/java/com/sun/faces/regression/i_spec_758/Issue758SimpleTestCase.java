@@ -116,5 +116,76 @@ public class Issue758SimpleTestCase extends HtmlUnitFacesTestCase {
 
     }
 
+    public void testViewActionPageA() throws Exception {
+        client.setRedirectEnabled(false);
+        HtmlPage page = null;
+        boolean exceptionThrown = false;
+        
+        try {
+            page = getPage("/faces/pageAviewActionPageA.xhtml");
+        } catch (FailingHttpStatusCodeException ex) {
+            assertEquals(302, ex.getStatusCode());
+            exceptionThrown = true;
+        }
+        assertFalse(exceptionThrown);
+        
+        assertTrue(page.asText().contains("pageA action"));
 
+    }
+
+    public void testViewActionEmpty() throws Exception {
+        client.setRedirectEnabled(false);
+        HtmlPage page = null;
+        boolean exceptionThrown = false;
+        
+        try {
+            page = getPage("/faces/pageAviewActionEmpty.xhtml");
+        } catch (FailingHttpStatusCodeException ex) {
+            assertEquals(302, ex.getStatusCode());
+            exceptionThrown = true;
+        }
+        assertFalse(exceptionThrown);
+        
+        assertTrue(page.asText().contains("pageA empty"));
+
+    }
+
+    public void testViewActionNull() throws Exception {
+        client.setRedirectEnabled(false);
+        HtmlPage page = null;
+        boolean exceptionThrown = false;
+        
+        try {
+            page = getPage("/faces/pageAviewActionNull.xhtml");
+        } catch (FailingHttpStatusCodeException ex) {
+            assertEquals(302, ex.getStatusCode());
+            exceptionThrown = true;
+        }
+        assertFalse(exceptionThrown);
+        
+        assertTrue(page.asText().contains("pageA null"));
+
+    }
+    
+    public void testNegativeIntentionalInfiniteRedirect() throws Exception {
+        client.setRedirectEnabled(false);
+        client.setThrowExceptionOnFailingStatusCode(true);
+        HtmlPage page = null;
+        boolean exceptionThrown = false;
+        
+        try {
+            page = getPage("/faces/pageAviewActionPageAExplicitRedirect.xhtml");
+        } catch (FailingHttpStatusCodeException ex) {
+            assertEquals(302, ex.getStatusCode());
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+        
+        client.setRedirectEnabled(true);
+        client.setThrowExceptionOnFailingStatusCode(false);
+        page = getPage("/faces/pageAviewActionPageAExplicitRedirect.xhtml");
+
+    }
+    
+    
 }

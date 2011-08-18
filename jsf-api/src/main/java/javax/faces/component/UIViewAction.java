@@ -209,6 +209,7 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
                 result = true;
             } else {
                 attrs.put(UIVIEWACTION_EVENT_COUNT, count);
+                result = false;
             }
         }
         
@@ -560,7 +561,7 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
                     // ActionListener#processAction(ActionEvent)
                     instrumentedContext.disableRenderResponseControl().set();
                     listener.processAction((ActionEvent) event);
-                    hasMoreViewActionEvents = decrementEventCountAndReturnTrueIfZero(context);
+                    hasMoreViewActionEvents = !decrementEventCountAndReturnTrueIfZero(context);
                 } finally {
                     setIsProcessingUIViewActionBroadcast(context, false);
                     if (null != instrumentedContext) {

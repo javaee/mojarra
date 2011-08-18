@@ -163,8 +163,17 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             ExternalContext extContext = context.getExternalContext();
             ViewHandler viewHandler = Util.getViewHandler(context);
             assert (null != viewHandler);
-            boolean isUIViewActionBroadcast = UIViewAction.isProcessingBroadcast(context);
-            if (caseStruct.navCase.isRedirect() || isUIViewActionBroadcast) {
+            Flash flash = extContext.getFlash();
+            boolean isUIViewActionBroadcastAndViewdsDiffer = false;
+            if (UIViewAction.isProcessingBroadcast(context)) {
+                flash.setKeepMessages(true);
+                String viewIdBefore = context.getViewRoot().getViewId();
+                viewIdBefore = (null == viewIdBefore) ? "" : viewIdBefore;
+                String viewIdAfter = caseStruct.navCase.getToViewId(context);
+                viewIdAfter = (null == viewIdAfter) ? "" : viewIdAfter;
+                isUIViewActionBroadcastAndViewdsDiffer = !viewIdBefore.equals(viewIdAfter);
+            } 
+            if (caseStruct.navCase.isRedirect() || isUIViewActionBroadcastAndViewdsDiffer) {
                 // perform a 302 redirect.
                 String redirectUrl =
                       viewHandler.getRedirectURL(context,
@@ -181,11 +190,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                     // is maintained
                     clearViewMapIfNecessary(context.getViewRoot(), caseStruct.viewId);
                     updateRenderTargets(context, caseStruct.viewId);
-                    Flash flash = extContext.getFlash();
                     flash.setRedirect(true);
-                    if (isUIViewActionBroadcast) {
-                        flash.setKeepMessages(true);
-                    }
                     extContext.redirect(redirectUrl);
                 } catch (java.io.IOException ioe) {
                     if (logger.isLoggable(Level.FINE)) {

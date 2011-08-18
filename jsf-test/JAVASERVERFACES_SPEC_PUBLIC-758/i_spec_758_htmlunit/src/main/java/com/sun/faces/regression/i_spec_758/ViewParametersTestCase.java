@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -54,18 +54,18 @@ import junit.framework.TestSuite;
 /**
  * Test cases for Facelets functionality
  */
-public class Issue758TestCase extends HtmlUnitFacesTestCase {
+public class ViewParametersTestCase extends HtmlUnitFacesTestCase {
 
 
     // --------------------------------------------------------------- Test Init
 
 
-    public Issue758TestCase() {
+    public ViewParametersTestCase() {
         this("FaceletsTestCase");
     }
 
 
-    public Issue758TestCase(String name) {
+    public ViewParametersTestCase(String name) {
         super(name);
     }
 
@@ -82,7 +82,7 @@ public class Issue758TestCase extends HtmlUnitFacesTestCase {
      * Return the tests included in this test suite.
      */
     public static Test suite() {
-        return (new TestSuite(Issue758TestCase.class));
+        return (new TestSuite(ViewParametersTestCase.class));
     }
 
 
