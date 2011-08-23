@@ -43,7 +43,6 @@
 
 <project name="JSF Common" basedir="." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 
-    <import file="${jsf.build.home}/common/ant/${container.name}/container.xml"/>
     <import file="${jsf.build.home}/common/ant/dependencies.xml"/>
     <import file="${jsf.build.home}/common/ant/test-app.xml"/>
     <import file="${jsf.build.home}/common/ant/maven.xml"/>
@@ -533,4 +532,6 @@
                 </else>
             </if>
     </target>
+
+    <import file="${jsf.build.home}/common/ant/${container.name}/container.xml"/>
 </project>
