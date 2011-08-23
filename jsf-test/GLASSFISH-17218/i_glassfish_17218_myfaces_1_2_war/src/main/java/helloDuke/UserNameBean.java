@@ -36,9 +36,12 @@
 
 package helloDuke;
 
+import java.lang.reflect.Method;
+import javax.faces.context.FacesContext;
+
 public class UserNameBean {
 
-    String userName = null;
+    String userName = "";
 
 
     public UserNameBean() {
@@ -55,6 +58,21 @@ public class UserNameBean {
     public String getUserName() {
         System.out.println("get userName " + userName);
         return userName;
+    }
+        
+    public String getVersionMessage() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        String facesContextClassName = context.toString();
+        String assertJsf1_2 = "jsf version >= 2.0";
+        
+        try {
+            Class clazz = context.getClass();
+            Method method = clazz.getDeclaredMethod("getPartialViewContext");
+        } catch (Throwable e) {
+            assertJsf1_2 = "jsf version != 2.0";
+        }
+        
+        return "FacesContext implementation className: " + facesContextClassName + ". " + assertJsf1_2;
     }
 
 }

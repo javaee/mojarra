@@ -68,6 +68,8 @@
     <h:graphicImage id="waveImg" url="/wave.med.gif" />
     <h2>Hi, <h:outputText id="userLabel"
 			   value="#{UserNameBean.userName}" /> </h2>
+    
+    <p><h:outputText id="versionMessage" value="#{UserNameBean.versionMessage}" /></p>
 	 <h:commandButton id="back" value="Back" action="success" 
                            />
          <p>

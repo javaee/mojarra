@@ -46,6 +46,10 @@
 <project name="GLASSFISH-17218" default="test" basedir=".">
 
     <property file="../../build.properties"/>
+    <path id="17218.classpath">  
+        <path refid="html.classpath" />
+        <pathelement location="${basedir}/i_glassfish_17218_htmlunit/target/classes"/>
+    </path>
 
     <import file="${jsf.build.home}/common/ant/common.xml"/>   
     <import file="${jsf.build.home}/common/ant/test-app.xml"/>   
@@ -54,6 +58,7 @@
 
       <jsf.mvn dir="${basedir}/i_glassfish_17218_mojarra_1_2_war" goals="install" />
       <jsf.mvn dir="${basedir}/i_glassfish_17218_myfaces_1_2_war" goals="install" />
+      <jsf.mvn dir="${basedir}/i_glassfish_17218_htmlunit" goals="install" />
 
     </target>    
 
@@ -61,6 +66,7 @@
 
       <jsf.mvn dir="${basedir}/i_glassfish_17218_mojarra_1_2_war" goals="clean" />
       <jsf.mvn dir="${basedir}/i_glassfish_17218_myfaces_1_2_war" goals="clean" />
+      <jsf.mvn dir="${basedir}/i_glassfish_17218_htmlunit" goals="clean" />
 
     </target>    
 
@@ -91,6 +97,25 @@
     </target>    
 
     <target name="test" depends="define.scenario.aware.port">
+
+      <jsf.junit context-path="/i_glassfish_17218_myfaces_1_2_war"
+                 classpath-refid="17218.classpath"    
+                 test-results-dir="${regression.test.results.dir}">
+          <tests>
+            <fileset dir="${basedir}/i_glassfish_17218_htmlunit/target/classes"
+                     includes="com/sun/faces/regression/i_glassfish_17218_htmlunit/IssueGLASSFISH_17218MyFacesTestCase.class"/> 
+          </tests>
+      </jsf.junit>
+<!-- enable when running against a version of GlassFish that has GLASSFISH-17218 fixed.
+      <jsf.junit context-path="/i_glassfish_17218_mojarra_1_2_war"
+                 classpath-refid="17218.classpath"    
+                 test-results-dir="${regression.test.results.dir}">
+          <tests>
+            <fileset dir="${basedir}/i_glassfish_17218_htmlunit/target/classes"
+                     includes="com/sun/faces/regression/i_glassfish_17218_htmlunit/IssueGLASSFISH_17218MojarraTestCase.class"/> 
+          </tests>
+      </jsf.junit>
+-->
 
     </target>    
 
