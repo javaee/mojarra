@@ -289,7 +289,6 @@ The admin console is at http://adc2110030:7001/console weblogic:weblogic1
                   version="${impl.version}"
                   groupId="com.oracle.faces" />
       <jsf.mvn dir="${jsf.build.home}/common/ant/${container.name}/wls-jsf" goals="clean install" />
-      <container.stop />
 
       <copy file="${maven.repo.local}/com/sun/faces/jsf-api/${impl.version}/jsf-api-${impl.version}.jar" overwrite="true"
             todir="${wl.home}/server/lib/consoleapp/webapp/WEB-INF/lib" />
@@ -301,18 +300,10 @@ The admin console is at http://adc2110030:7001/console weblogic:weblogic1
       <copy file="${maven.repo.local}/com/sun/faces/jsf-impl/${impl.version}/jsf-impl-${impl.version}.jar" overwrite="true"
             tofile="${container.home}/modules/${wl.jsf-impl.jar}" />
 
-
       <container.start />
       <sleep seconds="10" />
 
-      <run.wldeploy action="undeploy" failonerror="false" />
-
-      <container.stop />
-
-      <container.start />
-      <sleep seconds="10" />
-
-      <run.wldeploy action="deploy" />
+      <run.wldeploy action="deploy" failonerror="false"/>
 
       <container.stop />
 
@@ -376,7 +367,7 @@ The admin console is at http://adc2110030:7001/console weblogic:weblogic1
       <container.start />
       <sleep seconds="10" />
 
-      <run.wldeploy action="undeploy" failonerror="true" />
+      <run.wldeploy action="undeploy" failonerror="false" />
       <container.stop />
 
     </target>

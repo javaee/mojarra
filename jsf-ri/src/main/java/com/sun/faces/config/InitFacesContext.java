@@ -66,7 +66,6 @@ import java.net.MalformedURLException;
 
 import com.sun.faces.context.ApplicationMap;
 import com.sun.faces.context.InitParameterMap;
-import javax.faces.event.PhaseId;
 
 /**
  * A special, minimal implementation of FacesContext used at application initialization time.
@@ -214,7 +213,11 @@ public class InitFacesContext extends FacesContext {
         if (null != ec) {
             Map<String, Object> appMap = ec.getApplicationMap();
             if (null != appMap) {
-                appMap.remove(INIT_FACES_CONTEXT_ATTR_NAME);
+                if (appMap instanceof ApplicationMap) {
+                    if (null != ((ApplicationMap)appMap).getContext()) {
+                        appMap.remove(INIT_FACES_CONTEXT_ATTR_NAME);
+                    }
+                }
             }
             ec.release();
         }
