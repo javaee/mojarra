@@ -103,14 +103,6 @@ public final class ComponentSupport {
     public final static String MARK_CREATED = "com.sun.faces.facelets.MARK_ID";
     private final static String IMPLICIT_PANEL = "com.sun.faces.facelets.IMPLICIT_PANEL";
 
-    //this boolean is used for issue 1663.
-    //once a child is discovered as requiring Form to be in ancestry
-    //one needs to remember it with this key value
-    //so that when UIPanel/UIColumn/UIData/UINamingContainer is the child,
-    //we can look up the ancestry chain to see if
-    //Form exists.
-    private final static String MAKE_SURE_ANCESTOR_IS_FORM = "com.sun.faces.facelets.MAKE_SURE_ANCESTOR_IS_FORM";
-
     /**
      * Key to a FacesContext scoped Map where the keys are UIComponent instances and the
      * values are Tag instances.
@@ -424,92 +416,6 @@ public final class ComponentSupport {
     }
 
     /**
-     * method to inspect what interfaces the component implements.
-     * if one of the interfaces is ActionSource, ActionSource2 or EditableValueHolder
-     * then that component needs to be wrapped inside a UIForm.
-     * return true if even one of the interfaces is one of the above.
-     * @param child
-     * @return boolean
-     */
-
-    private static boolean inspectInterfacesToCheckIfFormOmitted(UIComponent child) {
-        if (child instanceof UIViewParameter || child instanceof UIViewAction) {
-            return false;
-        }
-        return (child instanceof ActionSource || 
-                child instanceof ActionSource2 ||
-                child instanceof EditableValueHolder);
-    }
-
-    /**
-     * method to inspect of the the parent ancestry of the component
-     * contains UIForm as one of the ancestors.
-     * @param component
-     * @return true of UIForm is one of the ancestors
-     */
-
-    private static boolean inspectParentAncestryToCheckIfFormOmitted(UIComponent component) {
-        if (component != null) {
-            while (!(component instanceof UIViewRoot) && component != null) {
-                if (isForm(component)) {
-                    return true;
-                }
-                component = component.getParent();
-            }
-        }
-
-        // If we haven't reached the UIViewRoot, the component is not
-        // yet connected.  In this case, we cannot determine whether a form
-        // is present, so we return true to avoid a (potentially incorrect)
-        // warning.
-        return (component instanceof UIViewRoot) ? false : true;
-    }
-
-    /**
-     * Tests whether the component should be treated as a form
-     * @param component
-     */
-    private static boolean isForm(UIComponent component)
-    {
-      // Note that we check the component family to avoid warning in
-      // cases where 3rd party form component that does not extend UIForm
-      // (eg. tr:form) is used.  (A better solution would be to expose a
-      // form interface that non-UIComponentBase subclasses could implement.)
-      return (component instanceof UIForm || component.getFamily().endsWith("Form"));
-    }
-
-    /**
-     * method for adding a message regarding missing form to context
-     * @param ctx
-     */
-    private static void addFormOmittedMessage(FaceletContext ctx) {
-        String key = MessageUtils.MISSING_FORM_ERROR;
-        Object[] params = new Object[]{};
-        boolean missingFormReported = false;
-
-        FacesMessage m = MessageUtils.getExceptionMessage(key, params);
-        List<FacesMessage> messageList = ctx.getFacesContext().getMessageList();
-        for (FacesMessage fm : messageList) {
-            if (fm.getDetail().equals(m.getDetail())) {
-                missingFormReported = true;
-                break;
-            }
-        }
-        if (!missingFormReported && null != m) {
-            m.setSeverity(FacesMessage.SEVERITY_WARN);
-            ctx.getFacesContext().addMessage(null, m);
-        }
-    }
-
-    public static boolean getMakeSureAncestorIsForm(FaceletContext ctx) {
-        String s = (String) ctx.getFacesContext().getAttributes().get(MAKE_SURE_ANCESTOR_IS_FORM);
-        if (s != null && s.equals(Boolean.TRUE.toString())) {
-            return true;
-        } else return false;
-
-    }
-    
-    /**
      * <p class="changed_added_2_0">Add the child component to the parent. If the parent is a facet,
      * check to see whether the facet is already defined. If it is, wrap the existing component
      * in a panel group, if it's not already, then add the child to the panel group. If the facet
@@ -517,62 +423,6 @@ public final class ComponentSupport {
      */
     public static void addComponent(FaceletContext ctx, UIComponent parent, UIComponent child) {
 
-        //fix for issue 1663. to be executed only if in dev mode
-        //The problem is that, with facelets,
-        //the facelet.apply() method is *ALWAYS* called from leaf to root.
-        //Therefore, when you try to ascend the hierarchy, you *ALWAYS* get parent == null
-        //For this reason, I have introduced a key value  "MAKE_SURE_ANCESTOR_IS_FORM"
-        //If the child has UIPanel/UIData/UIColumn/UINamingContainer as the parent,
-        //and that parent does not have
-        //a parent yet or has null in the ancestry,
-        //then MAKE_SURE_ANCESTOR_IS_FORM = true. This value will be looked at
-        //when the UIPanel/UIData/UIColumn/UINamingContainer is a child and has to be added.
-       
-        if (ctx.getFacesContext().isProjectStage(ProjectStage.Development)) {
-            if (!(isForm(child))) {
-                if ((child instanceof UIPanel
-                        || parent instanceof UIColumn
-                        || child instanceof UINamingContainer
-                        || child instanceof UIData)
-                        && getMakeSureAncestorIsForm(ctx)) {
-
-                    if (!(parent instanceof UIPanel
-                            || parent instanceof UIColumn
-                            || parent instanceof UINamingContainer
-                            || parent instanceof UIData)) {
-
-                        if (!inspectParentAncestryToCheckIfFormOmitted(parent)) {
-                            //no HtmlForm in the ancestry of the child
-                            addFormOmittedMessage(ctx);
-                        }
-                        ctx.getFacesContext().getAttributes().put(MAKE_SURE_ANCESTOR_IS_FORM,Boolean.FALSE.toString());
-                    } //else don't do anything yet. wait until the parent becomes the child
-                }
-                //child component implements ActionSource/ActionSource2
-                //or EditableValueHolder.
-                //the child needs to have the Form in its ancestry
-                //now make sure that there is a HtmlForm in the ancestry
-                if (inspectInterfacesToCheckIfFormOmitted(child)) {
-
-                    if (parent instanceof UIPanel
-                            || parent instanceof UIColumn
-                            || parent instanceof UINamingContainer
-                            || parent instanceof UIData) {
-                        // in this case, the UIPanel in most cases is still parentless
-                        //so don't dismiss this as an error case.
-                        //remember the fact that we need to come back to this case later
-                        //when the UIPanel is a child and has a parent and needs to be added
-                        //to the view
-                        ctx.getFacesContext().getAttributes().put(MAKE_SURE_ANCESTOR_IS_FORM, Boolean.TRUE.toString());
-                    } else {
-                        if (!inspectParentAncestryToCheckIfFormOmitted(parent)) {
-                            //no HtmlForm in the ancestry of the child
-                            addFormOmittedMessage(ctx);
-                        }
-                    }
-                }
-            }
-        }
         String facetName = getFacetName(parent);
         if (facetName == null) {
             parent.getChildren().add(child);

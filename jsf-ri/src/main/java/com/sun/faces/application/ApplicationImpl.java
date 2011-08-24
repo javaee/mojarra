@@ -109,6 +109,7 @@ import java.beans.PropertyDescriptor;
 import java.util.LinkedHashSet;
 
 import javax.faces.event.ExceptionQueuedEvent;
+import javax.faces.event.PostAddToViewEvent;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 import javax.faces.event.SystemEventListenerHolder;
@@ -523,6 +524,9 @@ public class ApplicationImpl extends Application {
             }
             if (projectStage == null) {
                 projectStage = ProjectStage.Production;
+            }
+            if (projectStage == ProjectStage.Development) {
+                subscribeToEvent(PostAddToViewEvent.class, new ValidateComponentNesting());
             }
            
         }

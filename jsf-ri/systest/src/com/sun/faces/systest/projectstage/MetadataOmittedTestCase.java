@@ -47,10 +47,11 @@ import junit.framework.TestSuite;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 /**
- * <p>Test Case for checking if form is omitted when there is a button/link in the page.</p>
+ * <p>Test Case for checking if metadata is omitted when there is a UIViewAction or UIViewParameter
+ *  in the page.</p>
  */
 
-public class FormOmittedTestCase extends HtmlUnitFacesTestCase {
+public class MetadataOmittedTestCase extends HtmlUnitFacesTestCase {
 
 
     // ------------------------------------------------------------ Constructors
@@ -61,7 +62,7 @@ public class FormOmittedTestCase extends HtmlUnitFacesTestCase {
      *
      * @param name Name of the test case
      */
-    public FormOmittedTestCase(String name) {
+    public MetadataOmittedTestCase(String name) {
         super(name);
     }
 
@@ -84,7 +85,7 @@ public class FormOmittedTestCase extends HtmlUnitFacesTestCase {
      * Return the tests included in this test suite.
      */
     public static Test suite() {
-        return (new TestSuite(FormOmittedTestCase.class));
+        return (new TestSuite(MetadataOmittedTestCase.class));
     }
 
 
@@ -99,31 +100,21 @@ public class FormOmittedTestCase extends HtmlUnitFacesTestCase {
     // ------------------------------------------------- Individual Test Methods
 
 
-    public void testFormOmitted() throws Exception {
-        HtmlPage page = getPage("/faces/standard/formomitted.xhtml");
+    public void testMetadataOmitted() throws Exception {
+        HtmlPage page = getPage("/faces/standard/metadataomitted.xhtml");
 
         String pageAsText = page.asText();       
-        assertTrue (pageAsText.contains("The form component needs to have a UIForm in its ancestry. Suggestion: enclose the necessary components within <h:form>"));
-
-        page = getPage("/faces/standard/formnotomitted.xhtml");
-
-        pageAsText = page.asText();
-        assertFalse (pageAsText.contains("The form component needs to have a UIForm in its ancestry. Suggestion: enclose the necessary components within <h:form>"));
-
-        page = getPage("/faces/standard/formomittedforcc.xhtml");
-
-        pageAsText = page.asText();
-        assertTrue (pageAsText.contains("The form component needs to have a UIForm in its ancestry. Suggestion: enclose the necessary components within <h:form>"));
-
+        assertTrue (pageAsText.contains("The metadata component needs to be nested within a f:metadata tag. Suggestion: enclose the necessary components within <f:metadata>"));
 
     }
 
-    public void testFormOmittedFormlayoutTemplates() throws Exception {
-        HtmlPage page = getPage("/faces/standard/formlayouttemplates.xhtml");
+    public void testMetadataAndFormOmitted() throws Exception {
 
-        String pageAsText = page.asText();
-        assertTrue (pageAsText.contains("Page defined content"));
-        assertFalse (pageAsText.contains("The form component needs to have a UIForm in its ancestry. Suggestion: enclose the necessary components within <h:form>"));
+        HtmlPage page = getPage("/faces/standard/metadataandformomitted.xhtml");
+
+        String pageAsText = page.asText();       
+        assertTrue (pageAsText.contains("The metadata component needs to be nested within a f:metadata tag. Suggestion: enclose the necessary components within <f:metadata>"));
+        assertTrue (pageAsText.contains("The form component needs to have a UIForm in its ancestry. Suggestion: enclose the necessary components within <h:form>"));
 
     }
 }
