@@ -216,13 +216,22 @@ public class InitFacesContext extends FacesContext {
 
     public void release() {
         setCurrentInstance(orig);
-        getExternalContext().getApplicationMap().remove(INIT_FACES_CONTEXT_ATTR_NAME);
+        if (null != ec) {
+            Map<String, Object> appMap = ec.getApplicationMap();
+            if (null != appMap) {
+                if (appMap instanceof ApplicationMap) {
+                    if (null != ((ApplicationMap)appMap).getContext()) {
+                        appMap.remove(INIT_FACES_CONTEXT_ATTR_NAME);
+                    }
+                }
+            }
+            ec.release();
+        }
+        
         if (null != attributes) {
             attributes.clear();
             attributes = null;
         }
-        ec.release();
-        ec = null;
         elContext = null;
         if (null != viewRoot) {
             Map viewMap = viewRoot.getViewMap(false);

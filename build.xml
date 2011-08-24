@@ -70,6 +70,15 @@
                 <equals arg1="clean" arg2="@{target}" />
                 <then>
                     <jsf.mvn dir="${basedir}/jsf-tools" goals="@{target}" />
+                    <subant target="@{target}" inheritAll="false">
+                      <property name="force.no.cluster" value="${force.no.cluster}" />
+                      <filelist dir="${api.dir}">
+                          <file name="build-pre-maven-rename.xml"/>
+                      </filelist>    
+                      <filelist dir="${impl.dir}">
+                          <file name="build-pre-maven-rename.xml"/>
+                      </filelist>
+                  </subant>
                 </then>
             </if>
             <if>

@@ -62,6 +62,10 @@ public class ApplicationMap extends BaseContextMap<Object> {
     public ApplicationMap(ServletContext servletContext) {
         this.servletContext = servletContext;
     }
+    
+    public Object getContext() {
+        return this.servletContext;
+    }
 
 
     // -------------------------------------------------------- Methods from Map
