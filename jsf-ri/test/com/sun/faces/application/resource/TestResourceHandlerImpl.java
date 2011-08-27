@@ -113,16 +113,10 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
             reInitializeFactoryManager.invoke(null, (Object[]) null);
 
             FacesContext oldContext = FacesContext.getCurrentInstance();
-            if (null != oldContext) {
-                ExternalContext externalContext = 
-                    oldContext.getExternalContext();
-                if (null == externalContext) {
-                    // JAVASERVERFACES-2140
-                    if (oldContext instanceof InitFacesContext) {
-                        assert(Util.isUnitTestModeEnabled());
-                        ((InitFacesContext)oldContext).reInitializeExternalContext(getConfig().getServletContext());
-                    }
-                }
+            if (null != oldContext && (oldContext instanceof InitFacesContext)) {
+                // JAVASERVERFACES-2140
+                assert(Util.isUnitTestModeEnabled());
+                ((InitFacesContext)oldContext).reInitializeExternalContext(getConfig().getServletContext());
             }
             
 
