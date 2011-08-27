@@ -58,6 +58,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.event.AbortProcessingException;
 import java.beans.FeatureDescriptor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Locale;
@@ -894,6 +895,34 @@ public class Util {
         } else {
             nonFacesContextApplicationMap.set(instance);
         }
+    }
+
+    static public boolean classHasAnnotations(Class<?> clazz) {
+        if (clazz != null) {
+            while (clazz != Object.class) {
+                Field[] fields = clazz.getDeclaredFields();
+                if (fields != null) {
+                    for (Field field : fields) {
+                        if (field.getAnnotations().length > 0) {
+                            return true;
+                        }
+                    }
+                }
+
+                Method[] methods = clazz.getDeclaredMethods();
+                if (methods != null) {
+                    for (Method method : methods) {
+                        if (method.getDeclaredAnnotations().length > 0) {
+                            return true;
+                        }
+                    }
+                }
+
+                clazz = clazz.getSuperclass();
+            }
+        }
+
+        return false;
     }
 
 

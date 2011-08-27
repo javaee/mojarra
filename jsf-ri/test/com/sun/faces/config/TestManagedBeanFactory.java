@@ -49,6 +49,7 @@ import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.mgbean.BeanBuilder;
 import com.sun.faces.el.ELUtils;
 
+import com.sun.faces.util.Util;
 import javax.el.ValueExpression;
 
 import javax.faces.FacesException;
@@ -870,11 +871,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
              ApplicationAssociate.getCurrentInstance().getBeanManager();
         beanManager.register(bean);
         BeanBuilder builder = beanManager.getBuilder(beanName);
-        Boolean isInjectable = (Boolean) TestingUtil.invokePrivateMethod("scanForAnnotations",
-                                                                         new Class[] { Class.class },
-                                                                         new Object[] { TestBean.class },
-                                                                         BeanBuilder.class,
-                                                                         builder);
+        Boolean isInjectable = (Boolean) Util.classHasAnnotations(TestBean.class);
         assertTrue(!isInjectable);
 
         bean = new ManagedBeanInfo(beanName,
@@ -886,11 +883,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
                                    null);
         beanManager.register(bean);
 
-        isInjectable = (Boolean) TestingUtil.invokePrivateMethod("scanForAnnotations",
-                                                                 new Class[] { Class.class },
-                                                                 new Object[] { InjectionBean.class },
-                                                                 BeanBuilder.class,
-                                                                 builder);
+        isInjectable = (Boolean) Util.classHasAnnotations(InjectionBean.class);
 
         assertTrue(isInjectable);
     }

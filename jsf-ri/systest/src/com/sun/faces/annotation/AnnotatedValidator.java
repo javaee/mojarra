@@ -40,6 +40,7 @@
 
 package com.sun.faces.annotation;
 
+import javax.annotation.Resource;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 import javax.faces.validator.FacesValidator;
@@ -53,4 +54,12 @@ public class AnnotatedValidator implements Validator {
                          Object value) throws ValidatorException {
         return;
     }
+    
+    @Resource(name="welcomeMessage")
+    private String welcomeMessage;
+
+    public String getWelcomeMessage() {
+        return welcomeMessage;
+    }
+    
 }

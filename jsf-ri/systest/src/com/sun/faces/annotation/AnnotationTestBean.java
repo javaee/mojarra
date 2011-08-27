@@ -83,6 +83,8 @@ public class AnnotationTestBean {
     }
 
     private void testAnnotatedComponentsWebInfClasses() throws Exception {
+        
+        String injectedString;
 
         FacesContext ctx = FacesContext.getCurrentInstance();
         Application app = ctx.getApplication();
@@ -94,6 +96,9 @@ public class AnnotationTestBean {
         Converter cv = app.createConverter("AnnotatedConverter");
         assertNotNull(cv);
         assertTrue(cv instanceof AnnotatedConverter);
+        injectedString = ((AnnotatedConverter)cv).getWelcomeMessage();
+        assertTrue(injectedString.equals("Hello World from env-entry!"));
+        
 
         cv = app.createConverter(java.lang.CharSequence.class);
         assertNotNull(cv);
@@ -104,6 +109,8 @@ public class AnnotationTestBean {
         assertTrue(v instanceof AnnotatedValidator);
         Set<String> defaultValidatorIds = app.getDefaultValidatorInfo().keySet();
         assertFalse(defaultValidatorIds.contains("AnnotatedValidator"));
+        injectedString = ((AnnotatedValidator)v).getWelcomeMessage();
+        assertTrue(injectedString.equals("Hello World from env-entry!"));
 
         // AnnotatedValidatorDefault has isDefault set to true.  Make sure
         // it's present in the default validator info obtained above.
@@ -112,6 +119,8 @@ public class AnnotationTestBean {
         Behavior b = app.createBehavior("AnnotatedBehavior");
         assertNotNull(b);
         assertTrue(b instanceof AnnotatedBehavior);
+        injectedString = ((AnnotatedBehavior)b).getWelcomeMessage();
+        assertTrue(injectedString.equals("Hello World from env-entry!"));
 
         RenderKitFactory rkf = (RenderKitFactory) FactoryFinder
               .getFactory(FactoryFinder.RENDER_KIT_FACTORY);

@@ -54,8 +54,6 @@ import javax.el.ValueExpression;
 import javax.faces.context.FacesContext;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -450,7 +448,7 @@ public abstract class BeanBuilder {
 
             if (!hasMessages()) {
                 // class is ok, scan for annotations
-                this.isInjectible = scanForAnnotations(clazz);
+                this.isInjectible = Util.classHasAnnotations(clazz);
             }
             return clazz;
         }
@@ -473,34 +471,6 @@ public abstract class BeanBuilder {
 
     }
 
-
-    private boolean scanForAnnotations(Class<?> clazz) {
-        if (clazz != null) {
-            while (clazz != Object.class) {
-                Field[] fields = clazz.getDeclaredFields();
-                if (fields != null) {
-                    for (Field field : fields) {
-                        if (field.getAnnotations().length > 0) {
-                            return true;
-                        }
-                    }
-                }
-
-                Method[] methods = clazz.getDeclaredMethods();
-                if (methods != null) {
-                    for (Method method : methods) {
-                        if (method.getDeclaredAnnotations().length > 0) {
-                            return true;
-                        }
-                    }
-                }
-
-                clazz = clazz.getSuperclass();
-            }
-        }
-
-        return false;
-    }
 
     // ----------------------------------------------------------- Inner Classes
 

@@ -310,6 +310,14 @@
                          includes="com/sun/faces/annotation/AnnotatedComponentsTestCase.class"/> 
             </tests>
         </jsf.junit>
+
+        <jsf.tester request="/faces/pre31injection/injectedComponent.xhtml"
+                     context-path="${context.path}"
+                     classpath-refid="html.classpath"
+                     test-results-dir="${impl.test.results.dir}"
+                     regexp="(?s).*Hello World from env-entry!.*"/>
+
+
     </target>
 
     <target name="test.el">
