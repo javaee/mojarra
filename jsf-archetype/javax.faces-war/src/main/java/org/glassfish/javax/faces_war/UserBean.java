@@ -1,23 +1,26 @@
-package com.sun.faces.regression;
+package org.glassfish.javax.faces_war;
 
+import java.io.Serializable;
 import java.util.Date;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.validator.ValidatorException;
+import javax.inject.Named;
 
-@ManagedBean
+@Named
 @SessionScoped
-public class UserBean {
+public class UserBean implements Serializable {
     
-    protected String firstName;
-    protected String lastName;
+    protected String firstName = "Duke";
+    protected String lastName = "Java";
     protected Date dob;
-    protected String sex;
+    protected String sex = "Unknown";
     protected String email;
     protected String serviceLevel = "medium";
+    
+    public UserBean() {}
 
     public String getFirstName() {
         return firstName;

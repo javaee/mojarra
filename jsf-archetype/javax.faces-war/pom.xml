@@ -12,6 +12,9 @@
         A simple project with war packaging that depends on JSF 2.2-SNAPSHOT and 
         javaee 6, in that order.
     </description>
+<!--
+find target \( -name UserBean.java -or -name web.xml \) -exec perl -pi.bak -e "s/.[\{]groupId[\}]/javax.faces/g" {} \; -print
+-->
     <url>http://jsf-spec.java.net/</url>
     <build>
         <finalName>${project.artifactId}</finalName>
