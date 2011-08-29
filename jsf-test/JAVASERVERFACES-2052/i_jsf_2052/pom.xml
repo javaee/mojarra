@@ -80,6 +80,9 @@
             </extension>
         </extensions>
     </build>
+    <properties>
+      <spec.snapshot.version>2.2-SNAPSHOT</spec.snapshot.version>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>javax.faces</groupId>
