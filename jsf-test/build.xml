@@ -72,6 +72,7 @@
                     JAVASERVERFACES-2079,
                     JAVASERVERFACES-2065,
                     JAVASERVERFACES-1995,
+                    JAVASERVERFACES-1845,
                     bugdb-12867406" />
 
     <target name="main" depends="define.applications"

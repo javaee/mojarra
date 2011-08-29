@@ -2181,7 +2181,11 @@ public abstract class UIComponentBase extends UIComponent {
             // passing in the current state.  If it's not, just ignore
             // it and move along.
             if (behavior instanceof StateHolder) {
-                ((StateHolder) behavior).restoreState(ctx, state[i]);
+            		if (state[i] instanceof StateHolderSaver) {
+            			((StateHolderSaver)state[i]).restore(ctx);
+            		} else {
+            			((StateHolder) behavior).restoreState(ctx, state[i]);
+            		}
             }
         }
     }
