@@ -809,19 +809,29 @@ public final class FactoryFinder {
         public FactoryManagerCacheKey(FacesContext facesContext, ClassLoader cl,
                 Map<FactoryManagerCacheKey,FactoryManager> factoryMap) {
             this.cl = cl;
-            if (null != facesContext) {
+            boolean resolveValueFromFactoryMap = false;
+            
+            
+            if (null == facesContext) {
+                resolveValueFromFactoryMap = true;
+            } else {
                 ExternalContext extContext = facesContext.getExternalContext();
                 context = extContext.getContext();
-                Map<String, Object> appMap = extContext.getApplicationMap();
-                
-                Long val = (Long) appMap.get(KEY);
-                if (null == val) {
-                    marker = new Long(System.currentTimeMillis());
-                    appMap.put(KEY, marker);
+                if (null == context) {
+                    resolveValueFromFactoryMap = true;
                 } else {
-                    marker = val;
+                    Map<String, Object> appMap = extContext.getApplicationMap();
+                
+                    Long val = (Long) appMap.get(KEY);
+                    if (null == val) {
+                        marker = new Long(System.currentTimeMillis());
+                        appMap.put(KEY, marker);
+                    } else {
+                        marker = val;
+                    }
                 }
-            } else {
+            } 
+            if (resolveValueFromFactoryMap) {
                 // We don't have a FacesContext.
                 // Our only recourse is to inspect the keys of the
                 // factoryMap and see if any of them has a classloader
