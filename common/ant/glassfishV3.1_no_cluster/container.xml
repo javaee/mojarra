@@ -498,28 +498,37 @@
                     </waitfor>
                 </then>
                 <else>
-                    <exec executable="${container.home}/bin/asadmin.bat"
-                          failonerror="@{failonerror}"
-                          spawn="true">
-                        <arg line="start-domain"/>
-                        <arg line="--user ${glassfish.admin.user}"/>
-                        <arg line="${glassfish.domain}"/>
-                    </exec>
+                  <condition property="exec.name" value="cmd.exe">
+                    <os family="windows"/>
+                  </condition>
+                  <condition property="exec.arg.1"
+                     value="${container.home}/bin/asadmin.bat">
+                     <os family="windows"/>
+                  </condition>
+                  <exec spawn="true" executable="${exec.name}">
+                      <arg value="/c" />
+                      <arg line="${exec.arg.1}" />
+                      <arg line="start-domain" />
+                      <arg line="--user ${glassfish.admin.user}" /> 
+                      <arg line="${glassfish.domain}"/>
+                  </exec>                   
                     <waitfor>
                         <http url="http://${container.host}:${container.port}"/>
                     </waitfor>
-                    <exec executable="${container.home}/bin/asadmin.bat"
-                          failonerror="@{failonerror}">
+                  <exec executable="${exec.name}">
+                      <arg value="/c" />
+                        <arg line="${exec.arg.1}"/>
                         <arg line="delete-jvm-options"/>
                         <arg line="--target server-config"/>
                         <arg line="-Dorg.glassfish.additionalOSGiBundlesToStart='org.apache.felix.shell,org.apache.felix.gogo.runtime,org.apache.felix.gogo.shell,org.apache.felix.gogo.command'"/>
-                    </exec>
-                    <exec executable="${container.home}/bin/asadmin.bat"
-                          failonerror="@{failonerror}">
-                        <arg line="create-jvm-options"/>
-                        <arg line="--target server-config"/>
-                        <arg line="-Dorg.glassfish.additionalOSGiBundlesToStart='org.apache.felix.shell,org.apache.felix.gogo.runtime,org.apache.felix.gogo.shell,org.apache.felix.shell.remote,org.apache.felix.fileinstall'"/>
-                    </exec>
+                  </exec>
+                  <exec executable="${exec.name}">
+                      <arg value="/c" />
+                      <arg line="${exec.arg.1}"/>
+                      <arg line="create-jvm-options"/>
+                      <arg line="--target server-config"/>
+                      <arg line="-Dorg.glassfish.additionalOSGiBundlesToStart='org.apache.felix.shell,org.apache.felix.gogo.runtime,org.apache.felix.gogo.shell,org.apache.felix.shell.remote,org.apache.felix.fileinstall'"/>
+                  </exec>
                 </else>
             </if>
             <if>
