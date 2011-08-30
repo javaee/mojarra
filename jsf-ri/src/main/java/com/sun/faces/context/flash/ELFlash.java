@@ -153,7 +153,8 @@ public class ELFlash extends Flash {
 
     /**
      * <p>This constant is used as the name of the cookie sent to the
-     * client.</p>
+     * client.  The cookie is used to allow the flash scope to
+     * be used to support POST REDIRECT GET navigation.</p>
      */
     static final String FLASH_COOKIE_NAME = PREFIX + "c";
 
