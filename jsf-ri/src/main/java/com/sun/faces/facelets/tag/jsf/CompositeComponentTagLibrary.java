@@ -177,8 +177,8 @@ public class CompositeComponentTagLibrary extends TagLibraryImpl {
                 result = FacesContext.getCurrentInstance().getApplication().
                         getResourceHandler().libraryExists(resourceId);
             } else {
-                if (LOGGER.isLoggable(Level.INFO)) {
-                    LOGGER.log(Level.INFO, "Skipping call to libraryExists().  Please set context-param {0} to true to verify if library {1} actually exists", new Object[]{EnableMissingResourceLibraryDetection.getQualifiedName(), toTest});
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.log(Level.FINE, "Skipping call to libraryExists().  Please set context-param {0} to true to verify if library {1} actually exists", new Object[]{EnableMissingResourceLibraryDetection.getQualifiedName(), toTest});
                 }
                 result = true;
             }
