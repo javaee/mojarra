@@ -50,13 +50,22 @@
     <import file="${jsf.build.home}/common/ant/common.xml"/>   
     <import file="${jsf.build.home}/common/ant/test-app.xml"/>   
 
+    <path id="12867406.classpath">  
+        <path refid="html.classpath" />
+        <pathelement location="${basedir}/i_bugdb_12867406_htmlunit/target/classes"/>
+    </path>
+
     <property name="twenty" value="i,i,i,i,i,i,i,i,i,i,i,i,i,i,i,i,i,i,i,i" />
 
     <target name="build">
 
+        <jsf.mvn dir="${basedir}/i_bugdb_12867406_htmlunit" goals="install" />
+
     </target>    
 
     <target name="clean">
+
+        <jsf.mvn dir="${basedir}/i_bugdb_12867406_htmlunit" goals="clean" />
 
     </target>    
 
@@ -69,9 +78,20 @@
               artifact="${basedir}/helloworld.war"
               appName="helloworld"/>
 
+      <undeploy.artifact
+              artifact="${basedir}/custom-bean-scope.war"
+              appName="custom-bean-scope"/>
+
     </target>    
 
     <target name="test" depends="define.scenario.aware.port">
+
+      <antcall target="test.custom-bean-scope" />
+      <antcall target="test.helloworld" />
+
+    </target>
+
+    <target name="test.helloworld">
 
 <!-- From the bug report
 
@@ -109,6 +129,33 @@ case.
                      classpath-refid="html.classpath"
                      test-results-dir="${regression.test.results.dir}"
                      regexp="(?s).*My\s*name\s*is\s*Duke.\s*What\s*is\s*yours.*"/>
+
+    </target>
+
+    <target name="test.custom-bean-scope">
+
+        <for list="${twenty}" param="app" trim="true"><sequential>
+
+          <deploy.artifact
+                artifact="${basedir}/custom-bean-scope.war"
+                appName="custom-bean-scope"/>
+
+          <jsf.junit context-path="/i_jsf_2079_war_0_ProjectStageDevelopment"
+                   classpath-refid="12867406.classpath"    
+                   test-results-dir="${regression.test.results.dir}">
+              <tests>
+                  <fileset dir="${basedir}/i_bugdb_12867406_htmlunit/target/classes"
+                       includes="**/*Test.class"/> 
+              </tests>
+          </jsf.junit>
+
+          <undeploy.artifact
+                artifact="${basedir}/custom-bean-scope.war"
+                appName="custom-bean-scope"/>
+
+        </sequential></for>
+
+
 
     </target>    
 
