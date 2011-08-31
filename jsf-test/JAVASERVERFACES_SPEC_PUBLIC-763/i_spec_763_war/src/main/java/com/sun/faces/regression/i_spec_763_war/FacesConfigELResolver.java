@@ -1,9 +1,8 @@
-
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
- *
+
+ * Copyright (c) 2011 Oracle and/or its affiliates. All rights reserved.
+
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -12,20 +11,20 @@
  * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- *
+
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at packager/legal/LICENSE.txt.
- *
+
  * GPL Classpath Exception:
  * Oracle designates this particular file as subject to the "Classpath"
  * exception as provided by Oracle in the GPL Version 2 section of the License
  * file that accompanied this code.
- *
+
  * Modifications:
  * If applicable, add the following below the License Header, with the fields
  * enclosed by brackets [] replaced by your own identifying information:
  * "Portions Copyright [year] [name of copyright owner]"
- *
+
  * Contributor(s):
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
@@ -38,33 +37,66 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package javax.faces.event;
+package com.sun.faces.regression.i_spec_763_war;
 
-import javax.faces.FacesWrapper;
+import java.beans.FeatureDescriptor;
+import java.util.Iterator;
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+import javax.el.ELContext;
+import javax.el.ELResolver;
 
-/**
- * <p class="changed_added_2_2">Provides a simple implementation of
- * {@link ActionListener} that can be subclassed by developers wishing to
- * provide specialized behavior to an existing {@link ActionListener}
- * instance.  The default implementation of all methods is to call
- * through to the wrapped {@link ActionListener}.</p>
- *
- * <div class="changed_added_2_2">
- *
- * <p>Usage: extend
- * this class and override {@link #getWrapped} to return the instance we
- * are wrapping.</p>
- *
- * </div>
- *
- * @since 2.2
- */
-public abstract class ActionListenerWrapper implements ActionListener, FacesWrapper<ActionListener> {
+public class FacesConfigELResolver extends ELResolver {
     
-    public void processAction(ActionEvent event) throws AbortProcessingException {
-        getWrapped().processAction(event);
+    @Resource(name="injectedMessage")
+    private String injectedMessage;
+
+    public String getInjectedMessage() {
+        return injectedMessage + " " + postConstructCalled;
+    }
+    
+
+    @Override
+    public Class<?> getCommonPropertyType(ELContext context, Object base) {
+        return null;
     }
 
-    public abstract ActionListener getWrapped();
+    @Override
+    public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base) {
+        return null;
+    }
+
+    @Override
+    public Class<?> getType(ELContext context, Object base, Object property) {
+        return Object.class;
+    }
+
+    @Override
+    public Object getValue(ELContext context, Object base, Object property) {
+        if (null == base && null != property && property.equals("FacesConfigELResolverMessage")) {
+            context.setPropertyResolved(true);
+            return getInjectedMessage();
+        }
+        
+        return null;
+    }
+
+    @Override
+    public boolean isReadOnly(ELContext context, Object base, Object property) {
+        return false;
+    }
+
+    @Override
+    public void setValue(ELContext context, Object base, Object property, Object value) {
+    }
+    
+    private String postConstructCalled;
+    @PostConstruct
+    private void doPostConstruct() {
+        postConstructCalled = "@PostConstruct called";
+        
+    }
+    
+    
     
 }
