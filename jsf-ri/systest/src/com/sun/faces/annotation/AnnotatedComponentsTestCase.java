@@ -100,6 +100,7 @@ public class AnnotatedComponentsTestCase extends HtmlUnitFacesTestCase {
         assertTrue(output.size() == 1);
         HtmlSpan span = output.get(0);
         assertTrue(span.asText().contains("true"));
+        assertTrue(page.asText().contains("AnnotatedPhaseListener: Hello World from env-entry!"));
         
     }
 }

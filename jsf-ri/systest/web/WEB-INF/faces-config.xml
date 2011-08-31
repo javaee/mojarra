@@ -63,6 +63,11 @@
         <display-name>resourceBundle03 displayName</display-name>
     </resource-bundle>
   </application>
+  
+  <lifecycle>
+      <phase-listener>com.sun.faces.annotation.AnnotatedPhaseListener</phase-listener>
+  </lifecycle>
+  
   <factory>
     <application-factory>com.sun.faces.systest.lifecycle.ApplicationFactoryWrapper</application-factory>
     <faces-context-factory>com.sun.faces.systest.lifecycle.FacesContextFactoryWrapper</faces-context-factory>

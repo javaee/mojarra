@@ -40,8 +40,9 @@
 
 package com.sun.faces.config.processor;
 
-import com.sun.faces.application.ApplicationResourceBundle;
 import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.application.ApplicationResourceBundle;
+import com.sun.faces.application.ApplicationInstanceFactoryMetadataMap;
 import com.sun.faces.application.annotation.AnnotationManager;
 import com.sun.faces.config.ConfigurationException;
 import com.sun.faces.config.WebConfiguration;
@@ -56,6 +57,9 @@ import com.sun.faces.scripting.groovy.ELResolverProxy;
 import com.sun.faces.scripting.groovy.PhaseListenerProxy;
 import com.sun.faces.scripting.groovy.ViewHandlerProxy;
 import com.sun.faces.scripting.groovy.ActionListenerProxy;
+import com.sun.faces.spi.InjectionProvider;
+import com.sun.faces.spi.InjectionProviderException;
+import com.sun.faces.util.FacesLogger;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
@@ -77,6 +81,11 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.faces.FacesException;
+import javax.faces.application.ProjectStage;
 
 
 /**
@@ -89,9 +98,15 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
 
 
     private ConfigProcessor nextProcessor;  
-
+    private ApplicationInstanceFactoryMetadataMap<String,Object> classMetadataMap = null;
+    private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
+    private ProjectStage projectStage;
 
     // -------------------------------------------- Methods from ConfigProcessor
+    
+    public AbstractConfigProcessor() {
+        classMetadataMap = new ApplicationInstanceFactoryMetadataMap(new ConcurrentHashMap<String, Object>());
+    }
 
 
     /**
@@ -267,6 +282,25 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
                     if (clazz != null && returnObject == null) {
                         returnObject = clazz.newInstance();
                     }
+
+                    if (classMetadataMap.hasAnnotations(className)) {
+                        InjectionProvider injectionProvider = (InjectionProvider) FacesContext.getCurrentInstance().getAttributes().get(ConfigManager.INJECTION_PROVIDER_KEY);
+
+                        try {
+                            injectionProvider.invokePostConstruct(returnObject);
+                        } catch (InjectionProviderException ex) {
+                            LOGGER.log(Level.SEVERE, "Unable to invoke @PostConstruct annotated method on instance " + className, ex);
+                            throw new FacesException(ex);
+                        }
+
+                        try {
+                            injectionProvider.inject(returnObject);
+                        } catch (InjectionProviderException ex) {
+                            LOGGER.log(Level.SEVERE, "Unable to inject instance" + className, ex);
+                            throw new FacesException(ex);
+                        }
+                    }
+                    
                 }
 
             } catch (ClassNotFoundException cnfe) {
@@ -308,7 +342,21 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
                                  Class<?> expectedType)
     throws ClassNotFoundException {
 
-        Class<?> clazz = Util.loadClass(className, fallback);
+        Class<?> clazz = (Class<?>) classMetadataMap.get(className);
+        if (null == clazz) {
+            try {
+                clazz =  Util.loadClass(className, fallback);
+                if (!this.isDevModeEnabled()) {
+                    classMetadataMap.put(className, clazz);    
+                } else {
+                    classMetadataMap.scanForAnnotations(className, clazz);
+                }
+                assert (clazz != null);
+            } catch (Exception e) {
+                throw new FacesException(e.getMessage(), e);
+            }
+            
+        }
         if (expectedType != null && !expectedType.isAssignableFrom(clazz)) {
                 throw new ClassCastException();
         }
@@ -365,10 +413,52 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
 
 
     private boolean isDevModeEnabled() {
-        WebConfiguration webconfig = WebConfiguration.getInstance();
-        return (webconfig != null
-                  && "Development".equals(webconfig.getOptionValue(WebContextInitParameter.JavaxFacesProjectStage)));
+        return getProjectStage().equals(ProjectStage.Development);
     }
+    
+    private ProjectStage getProjectStage() {
+        
+        if (projectStage == null) {
+            WebConfiguration webConfig =
+                  WebConfiguration.getInstance(
+                        FacesContext.getCurrentInstance().getExternalContext());
+            String value = webConfig.getEnvironmentEntry(WebConfiguration.WebEnvironmentEntry.ProjectStage);
+            if (value != null) {
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.log(Level.FINE,
+                               "ProjectStage configured via JNDI: {0}",
+                               value);
+                }
+            } else {
+                value = webConfig.getOptionValue(WebContextInitParameter.JavaxFacesProjectStage);
+                if (value != null) {
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.log(Level.FINE,
+                               "ProjectStage configured via servlet context init parameter: {0}", 
+                               value);
+                    }
+                }
+            }
+            if (value != null) {
+                try {
+                    projectStage = ProjectStage.valueOf(value);
+                } catch (IllegalArgumentException iae) {
+                    if (LOGGER.isLoggable(Level.INFO)) {
+                        LOGGER.log(Level.INFO,
+                                   "Unable to discern ProjectStage for value {0}.",
+                                   value);
+                    }
+                }
+            }
+            if (projectStage == null) {
+                projectStage = ProjectStage.Production;
+            }
+           
+        }
+        return projectStage;
+
+    }
+    
 
 
 }
