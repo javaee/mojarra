@@ -85,7 +85,6 @@
                     JAVASERVERFACES-1995,
                     JAVASERVERFACES_SPEC_PUBLIC-762,
                     JAVASERVERFACES_SPEC_PUBLIC-745,
-                    bugdb-12867406,
                     JAVASERVERFACES_SPEC_PUBLIC-758" />
 
     <target name="main" depends="define.applications"
