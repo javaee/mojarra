@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2011 Sun Microsystems, Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -38,6 +38,8 @@ package com.sun.faces.systest.model.ajax;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 
@@ -112,5 +114,18 @@ public class AjaxRequestBean {
     public void resetCount(ActionEvent ae) {
         count = 0;
     }
+
+    public String contentType = null;
+    public String getContentType() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext eContext = context.getExternalContext();
+        contentType = eContext.getRequestContentType();
+        return contentType;
+    }
+
+    public void setcontentType(String contentType) {
+        this.contentType = contentType;
+    }
+
 
 }

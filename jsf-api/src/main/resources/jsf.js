@@ -1317,10 +1317,14 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                         }
                     }
                     req.xmlReq.open(req.method, req.url, req.async);
+                    // note that we are including the charset=UTF-8 as part of the content type (even
+                    // if encodeURIComponent encodes as UTF-8), because with some
+                    // browsers it will not be set in the request.  Some server implementations need to
+                    // determine the character encoding from the request header content type.
                     if (req.method === "POST") {
                         if (typeof req.xmlReq.setRequestHeader !== 'undefined') {
                             req.xmlReq.setRequestHeader('Faces-Request', 'partial/ajax');
-                            req.xmlReq.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                            req.xmlReq.setRequestHeader('Content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
                         }
                         content = req.queryString;
                     }
