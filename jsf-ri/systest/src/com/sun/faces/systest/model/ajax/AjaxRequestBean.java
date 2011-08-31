@@ -43,6 +43,8 @@ package com.sun.faces.systest.model.ajax;
 import javax.faces.FacesException;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.ValueChangeEvent;
@@ -122,5 +124,20 @@ public class AjaxRequestBean {
     public void generateError(AjaxBehaviorEvent event) {
         throw new FacesException("Ajax request error");
     }
+
+    public String contentType = null;
+    public String getContentType() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext eContext = context.getExternalContext();
+        contentType = eContext.getRequestContentType();
+System.err.println("CONTENT-TYPE:"+contentType);
+        return contentType;
+    }
+
+    public void setcontentType(String contentType) {
+        this.contentType = contentType;
+System.err.println("SETCONTENTTYPE CALLED..");
+    }
+        
 
 }
