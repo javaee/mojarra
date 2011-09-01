@@ -91,7 +91,13 @@ this file.  Use the following as an example.
 </echo>
   </target>
 
-    <target name="define.applications" depends="discover.container.version,define.tomcat7.applications,define.V2.applications,define.V3.applications,define.V3.1.applications,define.V3.1_no_cluster.applications" />
+    <target name="define.applications" depends="discover.container.version,define.tomcat7.applications,define.V2.applications,define.V3.applications,define.V3.1.applications,define.V3.1_no_cluster.applications">
+      <echo>
++++++++++++++++ Executing the following regression tests
+${applications}
++++++++++++++++
+      </echo>
+    </target>
 
     <target name="discover.container.version" 
             depends="query.is.V2,query.is.V3,query.is.V3.1,query.is.V3.1_no_cluster,query.is.tomcat7"/>
