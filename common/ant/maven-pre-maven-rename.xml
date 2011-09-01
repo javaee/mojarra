@@ -132,7 +132,16 @@
         <if>
           <isset property="skip.javadoc.jar" />
           <then>
-            <touch file="${mvn.pre-maven-rename.api.dir}/target/${api-artifact-id}-@{version}-javadoc.jar" />
+            <echo file="${mvn.pre-maven-rename.api.dir}/target/index.html" append="false">
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;javadoc generation skipped&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+javadoc generation skipped
+&lt;/body&gt;
+&lt;/html&gt;
+            </echo>
+            <jar destfile="${mvn.pre-maven-rename.api.dir}/target/${api-artifact-id}-@{version}-javadoc.jar" 
+                 basedir="${mvn.pre-maven-rename.api.dir}/target/" includes="index.html"/>
           </then>
           <else>
             <if>
