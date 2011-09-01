@@ -130,13 +130,11 @@ public class AjaxRequestBean {
         FacesContext context = FacesContext.getCurrentInstance();
         ExternalContext eContext = context.getExternalContext();
         contentType = eContext.getRequestContentType();
-System.err.println("CONTENT-TYPE:"+contentType);
         return contentType;
     }
 
     public void setcontentType(String contentType) {
         this.contentType = contentType;
-System.err.println("SETCONTENTTYPE CALLED..");
     }
         
 
