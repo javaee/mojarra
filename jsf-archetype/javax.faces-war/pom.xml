@@ -26,6 +26,13 @@ find target \( -name UserBean.java -or -name web.xml \) -exec perl -pi.bak -e "s
                     <target>1.6</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                  <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
     <properties>
