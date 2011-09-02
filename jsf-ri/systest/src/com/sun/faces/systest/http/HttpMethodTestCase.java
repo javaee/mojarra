@@ -97,7 +97,7 @@ import junit.framework.TestSuite;
         // Ensure the OPTIONS  request works as expected
         result = issueHttpRequest("OPTIONS", rc, repeat);
         tokens = result.split("\\s\\s");        
-        assertTrue(1 == tokens.length);
+        assertTrue(1 == tokens.length || "0".equals(tokens[1]));
         assertEquals(HttpURLConnection.HTTP_OK, rc[0]);
 
         // Ensure the GETBOGUSALLOWED request *does* work, because
