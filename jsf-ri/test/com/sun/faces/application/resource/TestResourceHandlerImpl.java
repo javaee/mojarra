@@ -116,6 +116,9 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
             if (null != oldContext && (oldContext instanceof InitFacesContext)) {
                 // JAVASERVERFACES-2140
                 assert(Util.isUnitTestModeEnabled());
+                System.out.println("Re-initializing ExternalContext with ServletContext from cactus: " +
+                        getConfig().getServletContext());
+                System.out.flush();
                 ((InitFacesContext)oldContext).reInitializeExternalContext(getConfig().getServletContext());
             }
             
