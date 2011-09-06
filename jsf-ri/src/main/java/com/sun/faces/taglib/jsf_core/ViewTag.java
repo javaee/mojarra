@@ -62,17 +62,16 @@ import javax.servlet.jsp.jstl.core.Config;
 import javax.servlet.jsp.tagext.BodyContent;
 import javax.servlet.jsp.tagext.BodyTag;
 
-import java.io.IOException;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.lang.reflect.Method;
-import java.lang.reflect.InvocationTargetException;
 
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.ReflectionUtils;
 import com.sun.faces.RIConstants;
+import javax.servlet.jsp.JspWriter;
 
 /**
  * All JSF component tags must be nested within a f:view tag.  This tag
@@ -180,7 +179,11 @@ public class ViewTag extends UIComponentELTag {
                                                           RIConstants.EMPTY_CLASS_ARGS);
         if (customFlush != null) {
             try {
-                pageContext.getOut().flush();
+                JspWriter out = pageContext.getOut();
+                boolean isWeblogic = out.getClass().getName().contains("weblogic");
+                if (!isWeblogic) {
+                    out.flush();
+                }
                 customFlush.invoke(response, RIConstants.EMPTY_METH_ARGS);
             } catch (Exception e) {
                 throw new JspException("Exception attemtping to write content above the <f:view> tag.", e);
