@@ -1997,11 +1997,16 @@ public class ApplicationImpl extends Application {
         UIViewRoot root = ctx.getViewRoot();
         try {
             if (root != null) {
+                List<SystemEventListener> listeners = root.getViewListenersForEventClass(systemEventClass);
+                if (null == listeners) {
+                    return null;
+                }
+
                 EventInfo rootEventInfo =
                         systemEventHelper.getEventInfo(systemEventClass,
                         UIViewRoot.class);
                 // process view listeners
-                result = processListenersAccountingForAdds(root.getViewListenersForEventClass(systemEventClass),
+                result = processListenersAccountingForAdds(listeners,
                         event,
                         source,
                         rootEventInfo);
@@ -2071,10 +2076,15 @@ public class ApplicationImpl extends Application {
                                                     Object source) {
 
         if (source instanceof SystemEventListenerHolder) {
+
+            List<SystemEventListener> listeners = ((SystemEventListenerHolder) source).getListenersForEventClass(systemEventClass);
+            if (null == listeners) {
+                return null;
+            }
             EventInfo eventInfo =
                   compSysEventHelper.getEventInfo(systemEventClass,
                                                   source.getClass());
-            return processListeners(((SystemEventListenerHolder) source).getListenersForEventClass(systemEventClass),
+            return processListeners(listeners,
                                     null,
                                     source,
                                     eventInfo);
