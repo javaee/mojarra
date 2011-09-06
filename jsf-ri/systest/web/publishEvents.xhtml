@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8' ?>
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -40,74 +40,22 @@
     holder.
 
 -->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:test="http://testcomponent">
 
-<facelet-taglib xmlns="http://java.sun.com/xml/ns/javaee"
-              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_0.xsd" version="2.0">
+	<h2>This page contains a component that subscribes to PreRenderViewEvent, PostAddToViewEvent events.   When this page is rendered, the event listener for this component should have fired.</h2>
+	
+	<h:messages/>
+		
+	<h:form prependId="false" id="dynamicForm">
+	
+           <test:addcomponent2 id="componentWithListener"/>
+           <test:addcomponent3 id="componentWithNoListener"/>
 
-	<namespace>http://testcomponent</namespace>
+	</h:form>			
+	
+</ui:composition>
 
-	<tag>
-		<tag-name>addcomponent</tag-name>
-		<component>
-			<component-type>com.sun.faces.event.UIAddComponent</component-type>
-		</component>
-	</tag>
-
-	<tag>
-		<tag-name>addcomponent1</tag-name>
-		<component>
-			<component-type>com.sun.faces.event.UIAddComponent1</component-type>
-		</component>
-	</tag>
-
-	<tag>
-		<tag-name>addcomponent2</tag-name>
-		<component>
-			<component-type>com.sun.faces.event.UIAddComponent2</component-type>
-		</component>
-	</tag>
-
-	<tag>
-		<tag-name>addcomponent3</tag-name>
-		<component>
-			<component-type>com.sun.faces.event.UIAddComponent3</component-type>
-		</component>
-	</tag>
-
-	<tag>
-		<tag-name>togglecomponent</tag-name>
-		<component>
-			<component-type>com.sun.faces.event.UIToggleComponent</component-type>
-		</component>
-	</tag>
-
-	<tag>
-		<tag-name>recursivecomponent</tag-name>
-		<component>
-			<component-type>com.sun.faces.event.UIRecursiveComponent</component-type>
-		</component>
-	</tag>
-
-	<tag>
-		<tag-name>stablecomponent</tag-name>
-		<component>
-			<component-type>com.sun.faces.event.UIStableComponent</component-type>
-		</component>
-	</tag>
-
-	<tag>
-		<tag-name>tablecomponent</tag-name>
-		<component>
-			<component-type>com.sun.faces.event.UITableComponent</component-type>
-		</component>
-	</tag>
-
-	<tag>
-		<tag-name>inputcomponent</tag-name>
-		<component>
-			<component-type>com.sun.faces.event.UIInputComponent</component-type>
-		</component>
-	</tag>
-
-</facelet-taglib>

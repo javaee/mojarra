@@ -198,4 +198,13 @@ public class DynamicAddTestCase extends HtmlUnitFacesTestCase {
 
     }
 
+    public void testEventsPublishedAfterAddBeforeRender() throws Exception {
+        HtmlPage page = getPage("/faces/publishEvents.xhtml");
+        String text = page.asText();
+        assertTrue(text.contains("componentWithListener : Event: javax.faces.event.PostAddToViewEvent"));
+        assertTrue(text.contains("componentWithListener : Event: javax.faces.event.PreRenderViewEvent"));
+        assertTrue(!text.contains("componentWithNoListener"));
+    }
+
+
 }
