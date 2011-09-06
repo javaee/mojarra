@@ -81,7 +81,7 @@
                     <td>
                         <h:outputLabel for="prjCombo" value="#{i18n['home.project.combo.label']}" styleClass="formLabel" />
                         <h:selectOneMenu id="prjCombo" value="#{projectManager.currentProject}" styleClass="formInput">
-                            <f:selectItems value="#{projectManager.projectList}" var="project" itemLabel="#{project.name}" itemValue="#{project}"/>
+                            <f:selectItems value="#{projectList.projectItems}" var="project" itemLabel="#{project.name}" itemValue="#{project}"/>
                         </h:selectOneMenu>
                     </td>
                     <td>

@@ -58,10 +58,10 @@
         <ui:define name="content">
             <h:form id="frmListProjects">
                 <h:outputText value="#{i18n['project.show.table.label.empty']}"
-                              rendered="#{projectManager.projects.rowCount eq 0}" />
+                              rendered="#{projectList.projects.rowCount eq 0}" />
 
-                <h:dataTable value="#{projectManager.projects}" var="project"
-                             rendered="#{projectManager.projects.rowCount > 0}"
+                <h:dataTable value="#{projectList.projects}" var="project"
+                             rendered="#{projectList.projects.rowCount > 0}"
                              title="#{i18n['project.show.table.title']}"
                              summary="#{i18n['project.show.table.title']}"
                              border="0"
@@ -73,7 +73,7 @@
 
                     <h:column>
                         <f:facet name="header"><h:outputText value="#" /></f:facet>
-                        <h:outputText value="#{projectManager.projects.rowIndex + 1}" />
+                        <h:outputText value="#{projectList.projects.rowIndex + 1}" />
                     </h:column>
                     <h:column>
                         <f:facet name="header"><h:outputText value="#{i18n['project.show.table.header.name']}" /></f:facet>
@@ -93,9 +93,9 @@
                     </h:column>
                     <h:column>
                         <f:facet name="header"><h:outputText value="#{i18n['project.show.table.header.actions']}"/></f:facet>
-                        <h:commandButton styleClass="botaoPostIt" action="#{projectManager.edit}" value="#{i18n['project.show.button.edit']}"  />
-                        <h:commandButton styleClass="botaoPostIt" action="#{projectManager.remove}" value="#{i18n['project.show.button.delete']}"  />
-                        <h:commandButton styleClass="botaoPostIt" action="#{projectManager.showSprints}" value="#{i18n['project.show.button.showSprints']}"  />
+                        <h:commandButton styleClass="botaoPostIt" action="#{projectList.edit}" value="#{i18n['project.show.button.edit']}"  />
+                        <h:commandButton styleClass="botaoPostIt" action="#{projectList.remove}" value="#{i18n['project.show.button.delete']}"  />
+                        <h:commandButton styleClass="botaoPostIt" action="#{projectList.showSprints}" value="#{i18n['project.show.button.showSprints']}"  />
                     </h:column>
                                         
                     

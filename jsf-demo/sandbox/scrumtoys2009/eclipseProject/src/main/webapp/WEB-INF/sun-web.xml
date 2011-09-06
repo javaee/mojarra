@@ -50,4 +50,10 @@
       <description>Keep a copy of the generated servlet class' java code.</description>
     </property>
   </jsp-config>
+
+  <security-role-mapping>
+    <role-name>user</role-name>
+    <group-name>user</group-name>
+    <group-name>asadmin</group-name>
+  </security-role-mapping>
 </sun-web-app>

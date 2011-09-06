@@ -68,11 +68,32 @@
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
-    <login-config>
-        <auth-method>BASIC</auth-method>
-    </login-config>
     <error-page>
         <exception-type>javax.faces.application.ViewExpiredException</exception-type>
         <location>/index.html</location>
     </error-page>
+
+    <login-config>
+        <auth-method>FORM</auth-method>
+        <realm-name>admin-realm</realm-name>
+        <form-login-config>
+          <form-login-page>/login.jsf</form-login-page>
+          <form-error-page>/loginError.jsf</form-error-page>
+        </form-login-config>
+    </login-config>
+
+
+    <security-constraint>
+        <web-resource-collection>
+          <web-resource-name>User</web-resource-name>
+          <url-pattern>*.jsf</url-pattern>
+          <http-method>GET</http-method>
+          <http-method>POST</http-method>
+        </web-resource-collection>
+    <auth-constraint>
+      <role-name>user</role-name>
+      <role-name>asadmin</role-name>
+    </auth-constraint>
+  </security-constraint>
+
 </web-app>

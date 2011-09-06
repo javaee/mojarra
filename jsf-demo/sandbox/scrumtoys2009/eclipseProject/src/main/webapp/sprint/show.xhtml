@@ -56,7 +56,7 @@
         <ui:define name="navigationBar">
             <h:commandLink action="/project/show" value="#{i18n['sprint.form.label.projects']}"/>
             <h:outputText value="#{i18n['navigation.separtor']}"/>
-            <h:commandLink action="/project/edit"  value="#{sprintManager.project.name}"/>
+            <h:commandLink rendered="#{sprintManager.project.name != null}" action="/project/edit"  value="#{sprintManager.project.name}"/>
             <h:outputText value="#{i18n['navigation.separtor']}"/>
             <h:outputText value="#{i18n['sprints.table.title']}" styleClass="tituloForm"/>
         </ui:define>
@@ -65,9 +65,9 @@
                 <h:panelGrid columns="2" headerClass="tituloForm" footerClass="footerForm">
 
                     <h:outputText value="#{i18n['sprint.show.table.label.empty']}"
-                                  rendered="#{sprintManager.sprints.rowCount eq 0}" />
-                    <h:dataTable value="#{sprintManager.sprints}" var="sprint"
-                                 rendered="#{sprintManager.sprints.rowCount > 0}"
+                                  rendered="#{sprintList.sprints.rowCount eq 0}" />
+                    <h:dataTable value="#{sprintList.sprints}" var="sprint"
+                                 rendered="#{sprintList.sprints.rowCount > 0}"
                                  title="#{i18n['sprint.show.table.title']}"
                                  summary="#{i18n['sprint.show.table.title']}"
                                  border="0"
@@ -81,7 +81,7 @@
                             <f:facet name="header">
                                 <h:outputText value="#" />
                             </f:facet>
-                            <h:outputText value="#{sprintManager.sprints.rowIndex + 1}" />
+                            <h:outputText value="#{sprintList.sprints.rowIndex + 1}" />
                         </h:column>
                         <h:column>
                             <f:facet name="header">
@@ -115,20 +115,20 @@
                             <f:facet name="header">
                                 <h:outputText value="#{i18n['sprint.show.table.header.actions']}"/>
                             </f:facet>
-                            <h:commandButton styleClass="botaoPostIt" action="#{sprintManager.edit}" value="#{i18n['sprint.show.button.edit']}"  />
+                            <h:commandButton styleClass="botaoPostIt" action="#{sprintList.edit}" value="#{i18n['sprint.show.button.edit']}"  />
 
-                            <h:commandButton id="btnDeleteSprint" styleClass="botaoPostIt" action="#{sprintManager.remove}" value="#{i18n['sprint.show.button.delete']} AJAX"
+                            <h:commandButton id="btnDeleteSprint" styleClass="botaoPostIt" action="#{sprintList.remove}" value="#{i18n['sprint.show.button.delete']} AJAX"
                                              onclick="jsf.ajax.request(this, event, {execute: 'frmListSprints',
                                                  render: 'frmListSprints'}); return false;" />
 
-                            <h:commandButton styleClass="botaoPostIt" action="#{sprintManager.remove}" value="#{i18n['sprint.show.button.delete']}"  />
-                            <h:commandButton styleClass="botaoPostIt" action="#{sprintManager.showDashboard}" value="#{i18n['sprint.show.button.showDashboard']}"  />
-                            <h:commandButton styleClass="botaoPostIt" action="#{sprintManager.showStories}" value="#{i18n['sprint.show.button.showStories']}"  />
+                            <h:commandButton styleClass="botaoPostIt" action="#{sprintList.remove}" value="#{i18n['sprint.show.button.delete']}"  />
+                            <h:commandButton styleClass="botaoPostIt" action="#{sprintList.showDashboard}" value="#{i18n['sprint.show.button.showDashboard']}"  />
+                            <h:commandButton styleClass="botaoPostIt" action="#{sprintList.showStories}" value="#{i18n['sprint.show.button.showStories']}"  />
                         </h:column>
 
                     </h:dataTable>
                     <f:facet name="footer">
-                        <h:commandButton styleClass="botaoPostIt" action="#{sprintManager.create}" value="#{i18n['sprint.show.button.newSprint']}" />
+                        <h:commandButton rendered="#{sprintManager.project.name != null}" styleClass="botaoPostIt" action="#{sprintManager.create}" value="#{i18n['sprint.show.button.newSprint']}" />
                     </f:facet>
                 </h:panelGrid>
             </h:form>

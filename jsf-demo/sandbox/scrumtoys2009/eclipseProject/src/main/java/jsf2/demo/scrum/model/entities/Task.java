@@ -49,8 +49,13 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "tasks", uniqueConstraints = @UniqueConstraint(columnNames = {"name", "story_id"}))
-@NamedQueries({@NamedQuery(name = "task.countByNameAndStory", query = "select count(t) from Task as t where t.name = :name and t.story = :story and not(t = :currentTask)"),
-        @NamedQuery(name = "task.new.countByNameAndStory", query = "select count(t) from Task as t where t.name = :name and t.story = :story")})
+@NamedQueries({
+    @NamedQuery(name = "task.countByNameAndStory", query = "select count(t) from Task as t where t.name = :name and t.story = :story and not(t = :currentTask)"),
+    @NamedQuery(name = "task.getByStory", query = "select t from Task as t where t.story = :story"),
+    @NamedQuery(name = "task.new.countByNameAndStory", query = "select count(t) from Task as t where t.name = :name and t.story = :story"),
+    @NamedQuery(name = "task.getByStatusAndSprint", query = "select t from Task as t where t.status = :status and t.story.sprint = :sprint"),
+    @NamedQuery(name = "task.remove.ByProject", query = "delete from Task as t where t.story.sprint.project = :project")
+})
 public class Task extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;

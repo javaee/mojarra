@@ -52,8 +52,12 @@ import java.util.List;
  */
 @Entity
 @Table(name = "sprints", uniqueConstraints = @UniqueConstraint(columnNames = {"name", "project_id"}))
-@NamedQueries({@NamedQuery(name = "sprint.countByNameAndProject", query = "select count(s) from Sprint as s where s.name = :name and s.project = :project and not(s = :currentSprint)"),
-        @NamedQuery(name = "sprint.new.countByNameAndProject", query = "select count(s) from Sprint as s where s.name = :name and s.project = :project")})
+@NamedQueries({
+        @NamedQuery(name = "sprint.countByNameAndProject", query = "select count(s) from Sprint as s where s.name = :name and s.project = :project and not(s = :currentSprint)"),
+        @NamedQuery(name = "sprint.getByProject", query = "select s from Sprint as s where s.project = :project"),
+        @NamedQuery(name = "sprint.new.countByNameAndProject", query = "select count(s) from Sprint as s where s.name = :name and s.project = :project"),
+        @NamedQuery(name = "sprint.remove.ByProject", query = "delete from Sprint as s where s.project = :project")
+})
 public class Sprint extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;

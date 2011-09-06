@@ -51,19 +51,16 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.model.DataModel;
-import javax.faces.model.ListDataModel;
 import javax.faces.validator.ValidatorException;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.context.ExternalContext;
+import jsf2.demo.scrum.model.entities.Story;
+import jsf2.demo.scrum.model.entities.Task;
 
 /**
  * @author Dr. Spock (spock at dev.java.net)
@@ -74,8 +71,6 @@ public class SprintManager extends AbstractManager implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private Sprint currentSprint;
-    private DataModel<Sprint> sprints;
-    private List<Sprint> sprintList;
     @ManagedProperty("#{projectManager}")
     private ProjectManager projectManager;
     private Project currentProject;
@@ -87,11 +82,6 @@ public class SprintManager extends AbstractManager implements Serializable {
 
     @PreDestroy
     public void destroy() {
-        sprints = null;
-        if (null != sprintList) {
-            sprintList.clear();
-            sprintList = null;
-        }
         projectManager = null;
         currentProject = null;
         FacesContext context = FacesContext.getCurrentInstance();
@@ -112,12 +102,6 @@ public class SprintManager extends AbstractManager implements Serializable {
         Project pmCurrentProject = getProjectManager().getCurrentProject();
         sprint.setProject(pmCurrentProject);
         setCurrentSprint(sprint);
-        if (pmCurrentProject != null) {
-            sprintList = new LinkedList<Sprint>(pmCurrentProject.getSprints());
-        } else {
-            sprintList = Collections.emptyList();
-        }
-        sprints = new ListDataModel<Sprint>(sprintList);
     }
 
     public String create() {
@@ -143,15 +127,8 @@ public class SprintManager extends AbstractManager implements Serializable {
                 });
                 if (!currentSprint.equals(merged)) {
                     setCurrentSprint(merged);
-                    int idx = sprintList.indexOf(currentSprint);
-                    if (idx != -1) {
-                        sprintList.set(idx, merged);
-                    }
                 }
                 getProjectManager().getCurrentProject().addSprint(merged);
-                if (!sprintList.contains(merged)) {
-                    sprintList.add(merged);
-                }
             } catch (Exception e) {
                 getLogger(getClass()).log(Level.SEVERE, "Error on try to save Sprint: " + currentSprint, e);
                 addMessage("Error on try to save Sprint", FacesMessage.SEVERITY_ERROR);
@@ -160,28 +137,31 @@ public class SprintManager extends AbstractManager implements Serializable {
         }
         return "show";
     }
-
-    public String edit() {
-        setCurrentSprint(sprints.getRowData());
+    
+    
+    public String edit(Sprint sprint) {
+        setCurrentSprint(sprint);
         return "edit";
     }
 
-    public String remove() {
-        final Sprint sprint = sprints.getRowData();
+    public String remove(final Sprint sprint) {
         if (sprint != null) {
             try {
                 doInTransaction(new PersistenceActionWithoutResult() {
 
                     public void execute(EntityManager em) {
-                        if (em.contains(sprint)) {
-                            em.remove(sprint);
-                        } else {
-                            em.remove(em.merge(sprint));
-                        }
+                        Query query = em.createNamedQuery("task.remove.ByProject");
+                        query.setParameter("project", sprint.getProject());
+                        query.executeUpdate();
+
+                        query = em.createNamedQuery("story.remove.ByProject");
+                        query.setParameter("project", sprint.getProject());
+                        query.executeUpdate();
+
+                        em.remove(em.find(Sprint.class, sprint.getId()));
                     }
                 });
                 getProjectManager().getCurrentProject().removeSpring(sprint);
-                sprintList.remove(sprint);
             } catch (Exception e) {
                 getLogger(getClass()).log(Level.SEVERE, "Error on try to remove Sprint: " + currentSprint, e);
                 addMessage("Error on try to remove Sprint", FacesMessage.SEVERITY_ERROR);
@@ -247,13 +227,13 @@ public class SprintManager extends AbstractManager implements Serializable {
         return "show";
     }
 
-    public String showStories() {
-        setCurrentSprint(sprints.getRowData());
+    public String showStories(Sprint sprint) {
+        setCurrentSprint(sprint);
         return "showStories";
     }
 
-    public String showDashboard() {
-        setCurrentSprint(sprints.getRowData());
+    public String showDashboard(Sprint sprint) {
+        setCurrentSprint(sprint);
         return "showDashboard";
     }
 
@@ -263,15 +243,6 @@ public class SprintManager extends AbstractManager implements Serializable {
 
     public void setCurrentSprint(Sprint currentSprint) {
         this.currentSprint = currentSprint;
-    }
-
-    public DataModel<Sprint> getSprints() {
-        this.sprints = new ListDataModel<Sprint>(projectManager.getCurrentProject().getSprints());
-        return this.sprints;
-    }
-
-    public void setSprints(DataModel<Sprint> sprints) {
-        this.sprints = sprints;
     }
 
     public ProjectManager getProjectManager() {
@@ -288,8 +259,6 @@ public class SprintManager extends AbstractManager implements Serializable {
         // If there is a new CurrentProject we need to update sprintList and set currentSprint to null and tell user he/she needs to select a Sprint
         if (pmCurrentProject != currentProject) {
             this.setCurrentSprint(null);
-            this.sprintList = pmCurrentProject.getSprints();
-            this.sprints = new ListDataModel<Sprint>(sprintList);
             this.currentProject = pmCurrentProject;
         }
         return currentProject;
@@ -298,6 +267,5 @@ public class SprintManager extends AbstractManager implements Serializable {
     public void setProject(Project project) {
         projectManager.setCurrentProject(project);
     }
-
 
 }
