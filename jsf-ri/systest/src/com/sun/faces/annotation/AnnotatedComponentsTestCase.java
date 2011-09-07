@@ -61,6 +61,8 @@ public class AnnotatedComponentsTestCase extends HtmlUnitFacesTestCase {
         super(name);
         addExclusion(Container.WLS_10_3_4_NO_CLUSTER, "testAnnotations");
         addExclusion(Container.WLS_12_1_1_NO_CLUSTER, "testAnnotations");
+        addExclusion(Container.TOMCAT6, "testAnnotations");
+        addExclusion(Container.TOMCAT7, "testAnnotations");
     }
 
     /**
