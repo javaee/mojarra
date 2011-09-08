@@ -112,7 +112,7 @@
         <attribute name="version"/>
         <attribute name="groupId" default="${groupId}"/>
         <sequential>
-            <copy file="@{template.file}" tofile="@{output.file}"/>
+            <copy overwrite="true" file="@{template.file}" tofile="@{output.file}"/>
             <replace file="@{output.file}"
                      token="@version@"
                      value="@{version}"/>
@@ -122,17 +122,20 @@
         </sequential>
     </macrodef>
 
-    <macrodef name="obtain.pre-maven-rename.api.javadoc.jar">
+    <macrodef name="obtain.pre-maven-rename.javadoc.jar">
+      <attribute name="artifactId" />
       <attribute name="version" />
+      <attribute name="target.parent.dir" />
+     
       <sequential>
         <property name="documentation.zip"
                   value="${jsf.build.home}/jsf-demo/dist/docs/mojarra-@{version}-documentation.zip" />
         <property name="javadoc.jar"
-                  value="${mvn.pre-maven-rename.api.dir}/target/${api-artifact-id}-@{version}-javadoc.jar" />
+                  value="@{target.parent.dir}/target/@{artifactId}-@{version}-javadoc.jar" />
         <if>
           <isset property="skip.javadoc.jar" />
           <then>
-            <echo file="${mvn.pre-maven-rename.api.dir}/target/index.html" append="false">
+            <echo file="@{target.parent.dir}/target/index.html" append="false">
 &lt;html&gt;
 &lt;head&gt;&lt;title&gt;javadoc generation skipped&lt;/title&gt;&lt;/head&gt;
 &lt;body&gt;
@@ -140,8 +143,8 @@ javadoc generation skipped
 &lt;/body&gt;
 &lt;/html&gt;
             </echo>
-            <jar destfile="${mvn.pre-maven-rename.api.dir}/target/${api-artifact-id}-@{version}-javadoc.jar" 
-                 basedir="${mvn.pre-maven-rename.api.dir}/target/" includes="index.html"/>
+            <jar destfile="@{target.parent.dir}/target/@{artifactId}-@{version}-javadoc.jar" 
+                 basedir="@{target.parent.dir}/target/" includes="index.html"/>
           </then>
           <else>
             <if>
@@ -200,7 +203,10 @@ javadoc generation skipped
                     <unjar src="${api.dir}/${build.dir}/lib/jsf-api.jar"
                            overwrite="yes"
                            dest="${mvn.pre-maven-rename.api.dir}/target/classes"/>
-                    <obtain.pre-maven-rename.api.javadoc.jar version="@{version}" />
+                    <obtain.pre-maven-rename.javadoc.jar 
+                            artifactId="jsf-api"
+                            version="@{version}" 
+                            target.parent.dir="${mvn.pre-maven-rename.api.dir}"/>
                     <jsf.pre-maven-rename.mvn pomFile="${mvn.pre-maven-rename.api.dir}/jsf-api-pom.xml"
                              mvnSpecVersion="@{version}"
                              dir="${mvn.pre-maven-rename.api.dir}"
@@ -223,6 +229,11 @@ javadoc generation skipped
                     <unjar src="${impl.dir}/${build.dir}/lib/jsf-impl.jar"
                            overwrite="yes"
                            dest="${mvn.pre-maven-rename.impl.dir}/target/classes"/>
+                    <property name="skip.javadoc.jar" value="true" />
+                    <obtain.pre-maven-rename.javadoc.jar 
+                            artifactId="jsf-impl"
+                            version="@{version}" 
+                            target.parent.dir="${mvn.pre-maven-rename.impl.dir}"/>
                     <jsf.pre-maven-rename.mvn pomFile="${mvn.pre-maven-rename.impl.dir}/jsf-impl-pom.xml"
                              mvnSpecVersion="@{version}"
                              dir="${mvn.pre-maven-rename.impl.dir}"
