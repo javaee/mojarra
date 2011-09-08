@@ -564,9 +564,32 @@
               context-path="${context.path}" request="/faces/managed02.jsp"
               regexp="(?s).*/managed02.jsp PASSED.*"/>
 
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/faces/managed03.jsp"
-              status="500"/>
+        <if>
+          <bool>
+            <or>
+              <equals arg1="${container.name}" arg2="tomcat7"/>
+              <equals arg1="${container.name}" arg2="glassfishV3"/>
+              <equals arg1="${container.name}" arg2="glassfishV3.1"/>
+              <equals arg1="${container.name}" arg2="glassfishV3.1_no_cluster"/>
+            </or>
+          </bool>
+          <then>
+            <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+                  context-path="${context.path}" request="/faces/managed03.jsp"
+                  status="500"/>
+            <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+                context-path="${context.path}" request="/faces/managed07.jsp"
+                status="500"/>
+          </then>
+          <else>
+            <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+                  context-path="${context.path}" request="/faces/managed03.jsp"
+                  regexp="(?s).*An\s+Error\s+Occurred.*"/>
+            <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+                  context-path="${context.path}" request="/faces/managed07.jsp"
+                  regexp="(?s).*An\s+Error\s+Occurred.*"/>
+          </else>
+        </if>
 
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
@@ -577,9 +600,6 @@
             </tests>
         </jsf.junit>
 
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/faces/managed07.jsp"
-              status="500"/>
 
         <if>
           <bool>
@@ -830,15 +850,23 @@
     </target>
 
     <target name="test.converter05">
-        <jsf.junit context-path="${context.path}"
-                   classpath-refid="html.classpath"
-                   test-results-dir="${impl.test.results.dir}">
-            <tests>
-                <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/systest/jsp/converter/*TestCase.class"/> 
-            </tests>
-        </jsf.junit>
-
+        <if>
+          <bool>
+            <or>
+              <equals arg1="${container.name}" arg2="wls_12_1_1_no_cluster"/>
+            </or>
+          </bool>
+          <then>
+            <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+                context-path="${context.path}" request="/faces/converter05.jsp"
+                regexpFile="${regexp.path}/converter05-wls.txt"/>
+          </then>
+          <else>
+            <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+                context-path="${context.path}" request="/faces/converter05.jsp"
+                regexpFile="${regexp.path}/converter05.txt"/>
+          </else>
+        </if>
     </target>
 
     <target name="test.converter06">
@@ -1025,41 +1053,64 @@
 
     <target name="test.standard"
             description="Test the Standard RenderKit">
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" 
-              request="/faces/standard/messages01.jsp"
-              regexpFile="${regexp.path}/standard/messages01.txt"/>
 
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/faces/standard/messages02.jsp"
-              regexpFile="${regexp.path}/standard/messages02.txt"/>
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              regexpFile="${regexp.path}/standard/component01.txt"
-              context-path="${context.path}" request="/faces/standard/component01.jsp"/>
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              regexpFile="${regexp.path}/standard/autocomplete.txt"
-              context-path="${context.path}" request="/faces/standard/autocomplete.jsp"/>
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-            regexpFile="${regexp.path}/standard/dtablecolumnclasses.txt"
-            context-path="${context.path}" request="/faces/standard/dtablecolumnclasses.jsp"/>
-        <jsf.junit context-path="${context.path}"
-                   classpath-refid="html.classpath"
-                   test-results-dir="${impl.test.results.dir}">
-            <tests>
-                <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/systest/PGridColumnClassesTestCase.class,
-                                   com/sun/faces/systest/SelectOneManyEnumTestCase.class,
-                                   com/sun/faces/systest/SelectManyCollectionTestCase.class,
-                                   com/sun/faces/systest/DataTableTestCase.class,
-                                   com/sun/faces/systest/TestOutputTargets.class,
-                                   com/sun/faces/systest/LinkTypeAttributeTestCase.class,
-                                   com/sun/faces/systest/CheckboxTestCase.class,
-                                   com/sun/faces/systest/SelectOneHideNoSelectItemGroupTestCase.class,
-                                   com/sun/faces/systest/SelectOneHideNoSelectionTestCase.class,
-                                   com/sun/faces/systest/ForEachFaceletsTestCase.class,
-                                   com/sun/faces/systest/SelectOneValueExpressionHideNoSelectionTestCase.class"/>
-            </tests>
-        </jsf.junit>  
+        <if>
+          <bool>
+            <or>
+              <equals arg1="${container.name}" arg2="wls_12_1_1_no_cluster"/>
+            </or>
+          </bool>
+          <then>
+            <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+                context-path="${context.path}" 
+                request="/faces/standard/messages01.jsp"
+                regexpFile="${regexp.path}/standard/messages01-wls.txt"/>
+            <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+                context-path="${context.path}" request="/faces/standard/messages02.jsp"
+                regexpFile="${regexp.path}/standard/messages02-wls.txt"/>
+            <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+                regexpFile="${regexp.path}/standard/component01-wls.txt"
+                context-path="${context.path}" request="/faces/standard/component01.jsp"/>
+          </then>
+          <else>
+            <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+                context-path="${context.path}" 
+                request="/faces/standard/messages01.jsp"
+                regexpFile="${regexp.path}/standard/messages01.txt"/>
+            <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+                context-path="${context.path}" request="/faces/standard/messages02.jsp"
+                regexpFile="${regexp.path}/standard/messages02.txt"/>
+            <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+                regexpFile="${regexp.path}/standard/component01.txt"
+                context-path="${context.path}" request="/faces/standard/component01.jsp"/>
+            <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+                regexpFile="${regexp.path}/standard/autocomplete.txt"
+                context-path="${context.path}" request="/faces/standard/autocomplete.jsp"/>
+            <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+                regexpFile="${regexp.path}/standard/dtablecolumnclasses.txt"
+                context-path="${context.path}" request="/faces/standard/dtablecolumnclasses.jsp"/>
+            <jsf.junit context-path="${context.path}"
+                       classpath-refid="html.classpath"
+                       test-results-dir="${impl.test.results.dir}">
+                <tests>
+                    <fileset dir="${basedir}/build/classes"
+                             includes="com/sun/faces/systest/PGridColumnClassesTestCase.class,
+                                       com/sun/faces/systest/SelectOneManyEnumTestCase.class,
+                                       com/sun/faces/systest/SelectManyCollectionTestCase.class,
+                                       com/sun/faces/systest/DataTableTestCase.class,
+                                       com/sun/faces/systest/TestOutputTargets.class,
+                                       com/sun/faces/systest/LinkTypeAttributeTestCase.class,
+                                       com/sun/faces/systest/CheckboxTestCase.class,
+                                       com/sun/faces/systest/SelectOneHideNoSelectItemGroupTestCase.class,
+                                       com/sun/faces/systest/SelectOneHideNoSelectionTestCase.class,
+                                       com/sun/faces/systest/ForEachFaceletsTestCase.class,
+                                       com/sun/faces/systest/SelectOneValueExpressionHideNoSelectionTestCase.class"/>
+                </tests>
+            </jsf.junit>
+          </else>
+        </if>
+
+  
     </target>
 
     <target name="test.html.taglib"
@@ -1192,20 +1243,34 @@
     </target>
     
     <target name="test.regressions">
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-            context-path="${context.path}" request="/faces/regression/AreaTextRowsAttrTest.jsp"
-            regexpFile="${regexp.path}/regression/AreaTextRowsAttrTest.txt"/>
-       <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-            context-path="${context.path}" request="/faces/regression/SelectOneManySizeAttrTest.jsp"
-            regexpFile="${regexp.path}/regression/SelectOneManySizeAttrTest.txt" />
-        <jsf.junit context-path="${context.path}"
-                   classpath-refid="html.classpath"
-                   test-results-dir="${impl.test.results.dir}">
-            <tests>
-                <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/systest/jsp/regressions/*TestCase.class"/> 
-            </tests>
-        </jsf.junit>
+        <if>
+          <bool>
+            <or>
+              <equals arg1="${container.name}" arg2="wls_12_1_1_no_cluster"/>
+            </or>
+          </bool>
+          <then>
+            <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+                context-path="${context.path}" request="/faces/regression/AreaTextRowsAttrTest.jsp"
+                regexpFile="${regexp.path}/regression/AreaTextRowsAttrTest-wls.txt"/>
+          </then>
+          <else>
+            <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+                context-path="${context.path}" request="/faces/regression/AreaTextRowsAttrTest.jsp"
+                regexpFile="${regexp.path}/regression/AreaTextRowsAttrTest.txt"/>
+            <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+                context-path="${context.path}" request="/faces/regression/SelectOneManySizeAttrTest.jsp"
+                regexpFile="${regexp.path}/regression/SelectOneManySizeAttrTest.txt" />
+            <jsf.junit context-path="${context.path}"
+                       classpath-refid="html.classpath"
+                       test-results-dir="${impl.test.results.dir}">
+                <tests>
+                    <fileset dir="${basedir}/build/classes"
+                             includes="com/sun/faces/systest/jsp/regressions/*TestCase.class"/> 
+                </tests>
+            </jsf.junit>
+          </else>
+        </if>
 
     </target>
 

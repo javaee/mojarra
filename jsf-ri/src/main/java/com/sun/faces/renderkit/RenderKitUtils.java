@@ -73,6 +73,7 @@ import com.sun.faces.context.FacesFileNotFoundException;
 
 import javax.faces.component.*;
 import javax.faces.component.html.HtmlMessages;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * <p>A set of utilities for use in {@link RenderKit}s.</p>
@@ -1149,10 +1150,12 @@ public class RenderKitUtils {
 
     }
 
-    public static  void renderHtmlErrorPage(FacesContext ctx, FacesException fe) {
+    public static  void renderHtmlErrorPage(FacesContext ctx, FacesException fe, 
+            boolean forceRenderOfErrorPage) {
 
         ExternalContext extContext = ctx.getExternalContext();
-        if (!extContext.isResponseCommitted()) {
+        
+        if (!extContext.isResponseCommitted() || forceRenderOfErrorPage) {
             extContext.setResponseContentType("text/html; charset=UTF-8");
             try {
                 Writer w = extContext.getResponseOutputWriter();

@@ -115,7 +115,7 @@
         <attribute name="version"/>
         <attribute name="groupId" default="${groupId}"/>
         <sequential>
-            <copy file="@{template.file}" tofile="@{output.file}"/>
+            <copy overwrite="true" file="@{template.file}" tofile="@{output.file}"/>
             <replace file="@{output.file}"
                      token="@version@"
                      value="@{version}"/>

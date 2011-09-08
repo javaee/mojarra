@@ -148,7 +148,8 @@ The admin console is at http://adc2110030:7001/console weblogic:weblogic1
                 password="${wl.password}"
                 user="${wl.username}"
                 source="@{artifact}"
-                verbose="true" />
+                verbose="true" 
+                adminurl="t3://${container.host}:${container.port}" />
         </sequential>
     </macrodef>
 
@@ -215,7 +216,8 @@ The admin console is at http://adc2110030:7001/console weblogic:weblogic1
                 name="@{appName}"
                 password="${wl.password}"
                 user="${wl.username}"
-                verbose="true" debug="true" failonerror="false"/>
+                verbose="true" debug="true" failonerror="false" 
+                adminurl="t3://${container.host}:${container.port}"/>
 
         </sequential>
     </macrodef>
@@ -301,7 +303,9 @@ The admin console is at http://adc2110030:7001/console weblogic:weblogic1
             tofile="${container.home}/modules/${wl.jsf-impl.jar}" />
 
       <container.start />
-      <sleep seconds="10" />
+      <waitfor>
+        <http url="http://${container.host}:${container.port}/console/"/>
+      </waitfor>
 
       <run.wldeploy action="deploy" failonerror="false"/>
 
@@ -333,7 +337,8 @@ The admin console is at http://adc2110030:7001/console weblogic:weblogic1
                   password="${wl.password}"
                   user="${wl.username}"
                   source="${jsf.build.home}/common/ant/${container.name}/wls-jsf/target/${impl.name}-${impl.version}.war"
-                  verbose="true" />
+                  verbose="true"  
+                  adminurl="t3://${container.host}:${container.port}"/>
           </then>
           <else>
             <wldeploy action="@{action}" failonerror="@{failonerror}"
@@ -344,7 +349,8 @@ The admin console is at http://adc2110030:7001/console weblogic:weblogic1
                   name="${impl.name}"
                   password="${wl.password}"
                   user="${wl.username}"
-                  verbose="true" />
+                  verbose="true" 
+                  adminurl="t3://${container.host}:${container.port}" />
           </else>
         </if>
 
@@ -365,7 +371,10 @@ The admin console is at http://adc2110030:7001/console weblogic:weblogic1
       <delete file="${wl.home}/server/lib/consoleapp/webapp/WEB-INF/lib/jsf-impl-${impl.version}.jar" failonerror="false"/>
 
       <container.start />
-      <sleep seconds="10" />
+      <waitfor>
+        <http url="http://${container.host}:${container.port}/console/"/>
+      </waitfor>
+
 
       <run.wldeploy action="undeploy" failonerror="false" />
       <container.stop />

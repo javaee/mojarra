@@ -1,0 +1,1 @@
+(?s).*outputDatetime1.*7/10/96\s+3:31:31\s+PM\s+EDT.*outputDatetime2.*7/10/96\s+3:31:31\s+PM\s+EDT.*outputDatetime3.*7/10/96\s+3:31:31\s+PM\s+EDT.*outputNumber1.*10.000.*outputNumber2.*10,000.*outputNumber3.*10,000.*

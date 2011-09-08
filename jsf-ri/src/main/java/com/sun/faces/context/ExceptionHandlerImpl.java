@@ -61,6 +61,7 @@ import javax.el.ELException;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.renderkit.RenderKitUtils;
 import javax.faces.context.ExternalContext;
+import javax.servlet.http.HttpServletResponse;
 
 
 /**
@@ -255,18 +256,30 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
                 LOGGER.log(Level.INFO, "Exception when handling error trying to reset the response.", wrapped);
             }
         }
+        int actualStatus = HttpServletResponse.SC_OK;
+        boolean doThrow = false;
         if (null != wrapped && wrapped instanceof FacesFileNotFoundException) {
-            extContext.setResponseStatus(404);
+            extContext.setResponseStatus(actualStatus = HttpServletResponse.SC_NOT_FOUND);
          } else {
-            extContext.setResponseStatus(500);
+            extContext.setResponseStatus(actualStatus = HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
          }
 
         if (isDevelopment && !errorPagePresent) {
+            Object response = extContext.getResponse();
+            boolean isWeblogic = response.getClass().getName().contains("weblogic");
+            boolean forceRenderOfErrorPage = (isWeblogic && actualStatus == 
+                    HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             // RELEASE_PENDING_2_1
             // thThe error page here will be text/html which means not all device
             // types are going to render this properly.  This should be addressed
             // in 2.1
-            RenderKitUtils.renderHtmlErrorPage(ctx, fe);
+            RenderKitUtils.renderHtmlErrorPage(ctx, fe, forceRenderOfErrorPage);
+            if (isWeblogic && response instanceof HttpServletResponse) {
+                int reportedStatus = ((HttpServletResponse)response).getStatus();
+                doThrow = HttpServletResponse.SC_OK != actualStatus
+                          &&
+                          HttpServletResponse.SC_OK == reportedStatus;
+            }
         } else {
             if (isDevelopment) {
                 // store the view root where the exception occurred into the
@@ -274,6 +287,9 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
                 // tree and not the one rendering the errorpage
                 ctx.getExternalContext().getRequestMap().put("com.sun.faces.error.view", ctx.getViewRoot());
             }
+            doThrow = true;
+        }
+        if (doThrow) {
             throw fe;
         }
     }

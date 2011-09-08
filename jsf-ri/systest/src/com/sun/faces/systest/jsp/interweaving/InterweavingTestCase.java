@@ -53,6 +53,10 @@ public class InterweavingTestCase extends HtmlUnitFacesTestCase {
 
     public InterweavingTestCase(String name) {
         super(name);
+        addExclusion(Container.WLS_12_1_1_NO_CLUSTER, "test07");
+        addExclusion(Container.WLS_12_1_1_NO_CLUSTER, "test13");
+        addExclusion(Container.WLS_12_1_1_NO_CLUSTER, "test11");
+        addExclusion(Container.WLS_12_1_1_NO_CLUSTER, "test12");
     }
 
     public static Test suite() {

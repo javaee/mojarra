@@ -43,22 +43,7 @@ package com.sun.faces.annotation;
 import java.util.List;
 import java.util.ArrayList;
 
-import javax.faces.context.FacesContext;
-import javax.faces.application.Application;
-import javax.faces.render.RenderKitFactory;
-import javax.faces.render.RenderKit;
-import javax.faces.render.Renderer;
-import javax.faces.FactoryFinder;
-import javax.faces.validator.Validator;
-import javax.faces.convert.Converter;
-import javax.faces.component.UIComponent;
 
-import com.sun.faces.cactus.ServletFacesTestCase;
-import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.application.NamedEventManager;
-import com.sun.faces.mgbean.BeanManager;
-import com.sun.faces.mgbean.ManagedBeanInfo;
-import com.sun.faces.mgbean.BeanBuilder;
 import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSpan;
@@ -72,13 +57,12 @@ public class AnnotatedComponentsTestCase extends HtmlUnitFacesTestCase {
     // ------------------------------------------------------------ Constructors
 
 
-    public AnnotatedComponentsTestCase() {
-        super("AnnotatedComponentsTestCase");
-    }
-
-
     public AnnotatedComponentsTestCase(String name) {
         super(name);
+        addExclusion(Container.WLS_10_3_4_NO_CLUSTER, "testAnnotations");
+        addExclusion(Container.WLS_12_1_1_NO_CLUSTER, "testAnnotations");
+        addExclusion(Container.TOMCAT6, "testAnnotations");
+        addExclusion(Container.TOMCAT7, "testAnnotations");
     }
 
     /**
