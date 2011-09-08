@@ -372,9 +372,6 @@
         <copy file="${demo.dir}/glassfish-jsf-${impl.version}.jar"
               todir="${dist.dir}"/>
 
-        <delete file="${demo.dir}/glassfish-jsf-${impl.version}.jar"/>
-        <delete file="${demo.dir}/mojarra-${impl.version}.zip"/>
-
         <ant target="jsf.source"/>
 
    </target>

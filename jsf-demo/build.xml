@@ -124,7 +124,6 @@
 
 
     <target name="copyJars" depends="prepare.dist">
-        <copy file="${javax.faces-api.jar}" todir="${dist.home}/lib"/>
         <copy file="${javax.faces.jar}" todir="${dist.home}/lib"/>
     </target>
 
@@ -149,7 +148,6 @@
                             extension-name="com.sun.faces"/>
         <jar jarfile="glassfish-jsf-${impl.version}.jar">
             <fileset dir="${basedir}/tmp" includes="javax.faces.jar"/>
-            <fileset dir="${jsf.build.home}/jsf-api/build/lib" includes="javax.faces-api.jar"/>
         </jar>             
         <delete dir="${basedir}/tmp"/>
     </target>
@@ -166,6 +164,13 @@
     <macrodef name="generate.documentation">
       <attribute name="version" default="${impl.version}" />
       <sequential>
+        <if>
+          <not>
+            <resourceexists>
+              <file file="${dist.home}/mojarra-@{version}-documentation.zip" />
+            </resourceexists>
+          </not>
+      <then>
         <mkdir dir="${dist.home}"/>
         <mkdir dir="${dist.home}/docs"/>
         <mkdir dir="${dist.home}/samples"/>
@@ -176,9 +181,6 @@
         <copy file="${impl.dir}/LICENSE-APACHE.txt" todir="${dist.home}"/>
         <copy file="${impl.dir}/THIRDPARTYLICENSEREADME.txt"
               todir="${dist.home}"/>
-        <copy todir="${dist.home}/lib">
-            <fileset dir="${api.dir}/build/lib" includes="*.jar"/>
-        </copy>
         <ant dir="${api.dir}"
              antfile="build.xml"
              inheritall="false"
@@ -203,14 +205,13 @@
         <delete dir="${dist.home}/javadocs"/>
         <delete dir="${dist.home}/managed-bean-javadocs" />
         <delete dir="${dist.home}/jsdocs" />
+        <delete file="${dist.home}/docs/index.html" />
+        <delete file="${dist.home}/docs/doclist.html" />
+
         <unzip src="${dist.home}/docs/javadocs-${impl.version}.zip" dest="${dist.home}/docs" />
         <unzip src="${dist.home}/docs/jsdocs-${impl.version}.zip" dest="${dist.home}/docs" />
         <unzip src="${dist.home}/docs/renderkitdocs-${impl.version}.zip" dest="${dist.home}/docs" />
         <unzip src="${dist.home}/docs/vdldocs-${impl.version}.zip" dest="${dist.home}/docs" />
-        <delete file="${dist.home}/docs/javadocs-${impl.version}.zip" />
-        <delete file="${dist.home}/docs/jsdocs-${impl.version}.zip" />
-        <delete file="${dist.home}/docs/renderkitdocs-${impl.version}.zip" />
-        <delete file="${dist.home}/docs/vdldocs-${impl.version}.zip" />
         <echoxml file="${dist.home}/docs/doclist.html">
             <html>
             <head>
@@ -282,14 +283,9 @@
             </html>
         </echoxml>
         <zip basedir="${dist.home}/docs" excludes="*.zip" destfile="${dist.home}/mojarra-@{version}-documentation.zip" />
-        <delete dir="${dist.home}/docs/renderkitdocs"/>
-        <delete dir="${dist.home}/docs/vdldocs"/>
-        <delete dir="${dist.home}/docs/javadocs"/>
-        <delete dir="${dist.home}/docs/managed-bean-javadocs" />
-        <delete dir="${dist.home}/docs/jsdocs" />
-        <delete file="${dist.home}/docs/index.html" />
-        <delete file="${dist.home}/docs/doclist.html" />
-        <copy file="${dist.home}/mojarra-@{version}-documentation.zip" todir="${dist.home}/docs" />
+        <copy overwrite="true" file="${dist.home}/mojarra-@{version}-documentation.zip" todir="${dist.home}/docs" />
+      </then>
+      </if>
       </sequential>
     </macrodef>
 
