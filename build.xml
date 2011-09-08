@@ -300,6 +300,8 @@
                         excludes="**/*.class,
                                   **/build.properties/**,
                                   **/CVS/**,
+                                  **/.svn/**,
+                                  **/target/**,
                                   **/build/javadocs/**,
                                   **/build/managed-bean-javadocs/**,
                                   **/build/classes/**,
@@ -324,7 +326,10 @@
                                   **/INTEGRATING_WITH_V3.txt,
                                   **/PROMOTING_A_BUILD.txt,
                                   **/TESTING_A_BUILD.txt,
-                                  **/docs/**"
+                                  **/docs/**,
+                                  password.txt,
+                                  **/lib/**,
+                                  **/nbproject/**"
                         prefix="mojarra-${impl.version}-source"/>
              <zipfileset dir="${basedir}"
                         includes="${basedir}/build.xml" prefix="mojarra-${impl.version}-source"/>
