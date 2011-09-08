@@ -125,17 +125,20 @@
         </sequential>
     </macrodef>
 
-    <macrodef name="obtain.api.javadoc.jar">
+    <macrodef name="obtain.javadoc.jar">
+      <attribute name="artifactId" />
       <attribute name="version" />
+      <attribute name="target.parent.dir" />
+
       <sequential>
         <property name="documentation.zip"
                   value="${jsf.build.home}/jsf-demo/dist/docs/mojarra-@{version}-documentation.zip" />
         <property name="javadoc.jar"
-                  value="${mvn.api.dir}/target/${api-artifact-id}-@{version}-javadoc.jar" />
+                  value="@{target.parent.dir}/target/@{artifactId}-@{version}-javadoc.jar" />
         <if>
           <isset property="skip.javadoc.jar" />
           <then>
-            <echo file="${mvn.api.dir}/target/index.html" append="false">
+            <echo file="@{target.parent.dir}/target/index.html" append="false">
 &lt;html&gt;
 &lt;head&gt;&lt;title&gt;javadoc generation skipped&lt;/title&gt;&lt;/head&gt;
 &lt;body&gt;
@@ -143,8 +146,8 @@ javadoc generation skipped
 &lt;/body&gt;
 &lt;/html&gt;
             </echo>
-            <jar destfile="${mvn.api.dir}/target/${api-artifact-id}-@{version}-javadoc.jar" 
-                 basedir="${mvn.api.dir}/target/" includes="index.html"/>
+            <jar destfile="@{target.parent.dir}/target/@{artifactId}-@{version}-javadoc.jar" 
+                 basedir="@{target.parent.dir}/target/" includes="index.html"/>
           </then>
           <else>
             <if>
@@ -203,7 +206,10 @@ javadoc generation skipped
                     <unjar src="${javax.faces-api.jar}"
                            overwrite="yes"
                            dest="${mvn.api.dir}/target/classes"/>
-                    <obtain.api.javadoc.jar version="@{version}" />
+                    <obtain.javadoc.jar 
+                            artifactId="${api-artifact-id}"
+                            version="@{version}"
+                            target.parent.dir="${mvn.api.dir}" />
                     <jsf.mvn pomFile="${mvn.api.dir}/jsf-api-pom.xml"
                              mvnSpecVersion="@{version}"
                              dir="${mvn.api.dir}"
@@ -226,6 +232,11 @@ javadoc generation skipped
                     <unjar src="${impl.dir}/build/lib/javax.faces.jar"
                            overwrite="yes"
                            dest="${mvn.impl.dir}/target/classes"/>
+                    <property name="skip.javadoc.jar" value="true" />
+                    <obtain.javadoc.jar 
+                            artifactId="${impl-artifact-id}"
+                            version="@{version}"
+                            target.parent.dir="${mvn.impl.dir}" />
                     <jsf.mvn pomFile="${mvn.impl.dir}/jsf-impl-pom.xml"
                              mvnSpecVersion="@{version}"
                              dir="${mvn.impl.dir}"
