@@ -58,7 +58,8 @@ The admin console is at http://adc2110030:7001/console weblogic:weblogic1
     <property name="wl.domain.name" value="base_domain" />
     <property name="wl.admin.server.name" value="AdminServer" />
     <property name="wl.log" value="${wl.domain.home}/${wl.domain.name}/${container.name}-${build.number}-${TSTAMP}.log" />
-    <property name="wl.jsf-api.jar" value="javax.jsf_1.0.0.0_2-1.jar" />
+    <property name="wl.jsf-api.jar_A" value="javax.jsf_1.0.0.0_2-1.jar" />
+    <property name="wl.jsf-api.jar_B" value="javax.jsf_1.0.0.0_2-0.jar" />
     <property name="wl.jsf-impl.jar" value="glassfish.jsf_1.0.0.0_2-0-4.jar" />
 
     <taskdef name="wlserver" 
@@ -150,6 +151,9 @@ The admin console is at http://adc2110030:7001/console weblogic:weblogic1
                 source="@{artifact}"
                 verbose="true" 
                 adminurl="t3://${container.host}:${container.port}" />
+            <waitfor>
+              <http url="http://${container.host}:${container.port}/@{appName}/"/>
+            </waitfor>
         </sequential>
     </macrodef>
 
@@ -298,7 +302,9 @@ The admin console is at http://adc2110030:7001/console weblogic:weblogic1
             todir="${wl.home}/server/lib/consoleapp/webapp/WEB-INF/lib" />
 
       <copy file="${maven.repo.local}/com/sun/faces/jsf-api/${impl.version}/jsf-api-${impl.version}.jar" overwrite="true"
-            tofile="${container.home}/modules/${wl.jsf-api.jar}" />
+            tofile="${container.home}/modules/${wl.jsf-api.jar_A}" />
+      <copy file="${maven.repo.local}/com/sun/faces/jsf-api/${impl.version}/jsf-api-${impl.version}.jar" overwrite="true"
+            tofile="${container.home}/modules/${wl.jsf-api.jar_B}" />
       <copy file="${maven.repo.local}/com/sun/faces/jsf-impl/${impl.version}/jsf-impl-${impl.version}.jar" overwrite="true"
             tofile="${container.home}/modules/${wl.jsf-impl.jar}" />
 
@@ -363,7 +369,9 @@ The admin console is at http://adc2110030:7001/console weblogic:weblogic1
      
       <container.stop />
 
-      <delete file="${container.home}/modules/${wl.jsf-api.jar}" 
+      <delete file="${container.home}/modules/${wl.jsf-api.jar_A}" 
+              failonerror="false" />
+      <delete file="${container.home}/modules/${wl.jsf-api.jar_B}" 
               failonerror="false" />
       <delete file="${container.home}/modules/${wl.jsf-impl.jar}"
               failonerror="false" />

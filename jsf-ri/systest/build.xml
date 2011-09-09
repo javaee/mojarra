@@ -150,7 +150,7 @@
     <!-- ********** Test Execution Targets ************************************ -->
 
 
-    <target name="test" depends="init"
+    <target name="test" depends="init,define.scenario.aware.port"
             description="Execute all tests against installed /jsf-systest application">
 
         <antcall target="build.war">
@@ -248,7 +248,7 @@
     <target name="passthru" depends="define.scenario.aware.port"
             description="useful for running one test">
        
-        <ant antfile="build-tests.xml" target="test.annotations"/>
+        <ant antfile="build-tests.xml" target="test"/>
 
         
     </target>  
