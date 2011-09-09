@@ -303,7 +303,9 @@ The admin console is at http://adc2110030:7001/console weblogic:weblogic1
             tofile="${container.home}/modules/${wl.jsf-impl.jar}" />
 
       <container.start />
-      <sleep seconds="10" />
+      <waitfor>
+        <http url="http://${container.host}:${container.port}/console/"/>
+      </waitfor>
 
       <run.wldeploy action="deploy" failonerror="false"/>
 
@@ -369,7 +371,10 @@ The admin console is at http://adc2110030:7001/console weblogic:weblogic1
       <delete file="${wl.home}/server/lib/consoleapp/webapp/WEB-INF/lib/jsf-impl-${impl.version}.jar" failonerror="false"/>
 
       <container.start />
-      <sleep seconds="10" />
+      <waitfor>
+        <http url="http://${container.host}:${container.port}/console/"/>
+      </waitfor>
+
 
       <run.wldeploy action="undeploy" failonerror="false" />
       <container.stop />
