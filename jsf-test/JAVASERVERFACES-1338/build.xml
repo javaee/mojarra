@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version='1.0' encoding='UTF-8'?>
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -40,38 +40,65 @@
     holder.
 
 -->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core">
 
-    <h:head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>
-           <h:outputText value="#{i18n['login.title']}"></h:outputText>
-        </title>
-    </h:head>
+<!-- ************ JSF build file ************************************** -->
 
-    <h:body>
-      <table align="center">
-        <tr><td>
-            <form method="post" action="j_security_check">
-              <h3><h:outputText value="#{i18n['login.form.label']}"></h:outputText></h3>
-              <h:panelGrid columns="2">
-                <h:outputLabel for="j_username" value="#{i18n['login.username']}" />
-                <input type="text" id="username" name="j_username" />
+<project name="JAVASERVERFACES-1338" default="test" basedir=".">
 
-                <h:outputLabel for="j_password" value="#{i18n['login.password']}" />
-                <input type="password" id="password" name="j_password" />
+    <property file="../../build.properties"/>
 
-                <h:outputText value="" />
-                <h:panelGrid columns="2">
-                  <input type="submit" id="submit" name="submit" value="#{i18n['login.form.button']}" />
-                </h:panelGrid>
-              </h:panelGrid>
-              <h:outputText value="#{i18n['login.info']}" style="font-size: small"/>
-            </form>
-        </td></tr>
-      </table>
-    </h:body>
-</html>
+    <import file="${jsf.build.home}/common/ant/common.xml"/>
+
+    <path id="1338.classpath">  
+        <path refid="html.classpath" />
+        <pathelement location="${basedir}/i_jsf_1338_htmlunit/target/classes"/>
+    </path>
+
+    <target name="build">
+
+      <jsf.mvn dir="${jsf.build.home}/jsf-demo/sandbox/scrumtoys2009/eclipseProject" goals="install" />
+      <jsf.mvn dir="${basedir}/i_jsf_1338_htmlunit" goals="install" />
+
+    </target>    
+
+    <target name="clean">
+
+      <jsf.mvn dir="${jsf.build.home}/jsf-demo/sandbox/scrumtoys2009/eclipseProject" goals="clean" />
+      <jsf.mvn dir="${basedir}/i_jsf_1338_htmlunit" goals="clean" />
+
+    </target>    
+
+    <target name="install">
+
+      <start.database />
+      <deploy.artifact
+              artifact="${jsf.build.home}/jsf-demo/sandbox/scrumtoys2009/eclipseProject/target/scrumtoys.war"
+              appName="scrumtoys" />
+
+    </target>    
+
+    <target name="remove">
+
+      <undeploy.artifact
+              artifact="${jsf.build.home}/jsf-demo/sandbox/scrumtoys2009/eclipseProject/target/scrumtoys.war"
+              appName="scrumtoys" />
+      <stop.database />
+
+    </target>    
+
+    <target name="test" depends="define.scenario.aware.port">
+
+      <jsf.junit context-path="/scrumtoys"
+                 classpath-refid="1338.classpath"    
+                 test-results-dir="${regression.test.results.dir}">
+          <tests>
+            <fileset dir="${basedir}/i_jsf_1338_htmlunit/target/classes"
+                     includes="com/sun/faces/regression/i_jsf_1338_htmlunit/ScrumToysTestCase.class"/> 
+          </tests>
+      </jsf.junit>
+
+    </target>    
+
+
+        
+</project>

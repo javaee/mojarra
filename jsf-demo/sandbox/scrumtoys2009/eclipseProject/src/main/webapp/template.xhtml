@@ -71,7 +71,7 @@
                         <h:panelGrid columns="3" rendered="#{authManager.username != null}">
                             <h:outputText value="User: " />
                             <h:outputText value="#{authManager.username}" />
-                            <h:commandLink value="Logout" action="#{authManager.logout}" />
+                            <h:commandLink id="logout" value="Logout" action="#{authManager.logout}" />
                         </h:panelGrid>
                         <br/>
                         <ui:insert name="navigationBar"></ui:insert>

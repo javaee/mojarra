@@ -403,6 +403,26 @@
                   create-virtual-server="${create-virtual-server-value}" />
     </target>
 
+    <target name="database.start"
+            description="Start the container's database">
+        <var name="create-virtual-server-value" value="false" />
+
+        <if>
+          <equals arg1="${create-virtual-server}" 
+                  casesensitive="false" trim="true"
+                  arg2="true" />
+          <then>
+            <var name="create-virtual-server-value" value="true" />
+          </then>
+        </if>
+        <echo>
+--------- Starting database create-virtual-server: ${create-virtual-server-value} 
+        </echo>
+        <database.start
+                  create-virtual-server="${create-virtual-server-value}" />
+    </target>
+
+
     <target name="container.debug"
             description="Start the GlassFish container">
         <var name="create-virtual-server-value" value="false" />
@@ -441,6 +461,25 @@
 
     </target>
 
+    <target name="database.stop"
+            description="Stop the container database">
+        <var name="create-virtual-server-value" value="false" />
+        <if>
+          <equals arg1="${create-virtual-server}" 
+                  casesensitive="false" trim="true"
+                  arg2="true" />
+          <then>
+            <var name="create-virtual-server-value" value="true" />
+          </then>
+        </if>
+        <echo>
+--------- stopping database create-virtual-server: ${create-virtual-server-value} 
+        </echo>
+
+        <database.stop create-virtual-server="${create-virtual-server-value}" />
+
+    </target>
+
     <target name="container.restart"
             description="Stop the GlassFish container">
         <container.stop/>
@@ -453,6 +492,16 @@
         <attribute name="failonerror" default="true"/>
         <sequential>
             <start.domain failonerror="@{failonerror}"
+                          create-virtual-server="@{create-virtual-server}"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="database.start"
+            description="Start the container database">
+        <attribute name="create-virtual-server" default="false"/>
+        <attribute name="failonerror" default="true"/>
+        <sequential>
+            <start.database failonerror="@{failonerror}"
                           create-virtual-server="@{create-virtual-server}"/>
         </sequential>
     </macrodef>
@@ -471,6 +520,14 @@
         <attribute name="create-virtual-server" default="false" />
         <sequential>
             <stop.domain create-virtual-server="@{create-virtual-server}"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="database.stop"
+            description="Stop the container database">
+        <attribute name="create-virtual-server" default="false" />
+        <sequential>
+            <stop.database create-virtual-server="@{create-virtual-server}"/>
         </sequential>
     </macrodef>
 
@@ -548,6 +605,47 @@
                   </sequential>
                 </then>
               </if>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="start.database">
+        <attribute name="create-virtual-server" default="false"/>
+        <attribute name="failonerror" default="true"/>
+        <sequential>
+            <echo>
+
+"------------ Starting database ------------"
+
+            </echo>
+            <if>
+                <os family="unix"/>
+                <then>
+                    <exec executable="${container.home}/bin/asadmin"
+                          failonerror="@{failonerror}">
+                        <arg line="start-database"/>
+                    </exec>
+                    <waitfor>
+                        <http url="http://${container.host}:${container.port}"/>
+                    </waitfor>
+                </then>
+                <else>
+                  <condition property="exec.name" value="cmd.exe">
+                    <os family="windows"/>
+                  </condition>
+                  <condition property="exec.arg.1"
+                     value="${container.home}/bin/asadmin.bat">
+                     <os family="windows"/>
+                  </condition>
+                  <exec spawn="true" executable="${exec.name}">
+                      <arg value="/c" />
+                      <arg line="${exec.arg.1}" />
+                      <arg line="start-database" />
+                  </exec>                   
+                    <waitfor>
+                        <http url="http://${container.host}:${container.port}"/>
+                    </waitfor>
+                </else>
+            </if>
         </sequential>
     </macrodef>
 
@@ -763,6 +861,47 @@
                 </else>
             </if>
             <sleep seconds="15"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="stop.database">
+        <attribute name="create-virtual-server" default="false"/>
+        <attribute name="failonerror" default="true"/>
+        <sequential>
+            <echo>
+
+"------------ Stopping database ------------"
+
+            </echo>
+            <if>
+                <os family="unix"/>
+                <then>
+                    <exec executable="${container.home}/bin/asadmin"
+                          failonerror="@{failonerror}">
+                        <arg line="stop-database"/>
+                    </exec>
+                    <waitfor>
+                        <http url="http://${container.host}:${container.port}"/>
+                    </waitfor>
+                </then>
+                <else>
+                  <condition property="exec.name" value="cmd.exe">
+                    <os family="windows"/>
+                  </condition>
+                  <condition property="exec.arg.1"
+                     value="${container.home}/bin/asadmin.bat">
+                     <os family="windows"/>
+                  </condition>
+                  <exec spawn="true" executable="${exec.name}">
+                      <arg value="/c" />
+                      <arg line="${exec.arg.1}" />
+                      <arg line="stop-database" />
+                  </exec>                   
+                    <waitfor>
+                        <http url="http://${container.host}:${container.port}"/>
+                    </waitfor>
+                </else>
+            </if>
         </sequential>
     </macrodef>
 
