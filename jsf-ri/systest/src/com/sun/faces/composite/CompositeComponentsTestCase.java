@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -1004,6 +1004,13 @@ public class CompositeComponentsTestCase extends HtmlUnitFacesTestCase {
         assertTrue(pageAsText.contains("Unable to find matching navigation case with from-view-id " +
                 "'/composite/simpleCompositeComponentUsingPage.xhtml' for action '#{hello.getNextAction}' " +
                 "with outcome '/submit.xhtml'"));
+    }
+
+    public void testDefaultAttributeValues() throws Exception {
+        HtmlPage page = getPage("/faces/composite/defaultAttributesUsingPage.xhtml");
+        String pageAsText = page.asText();
+        assertTrue(pageAsText.contains("rendered=true"));
+        assertTrue(pageAsText.contains("foo=bar"));
     }
 
     // --------------------------------------------------------- Private Methods

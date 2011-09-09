@@ -40,6 +40,8 @@
 
 package com.sun.faces.application;
 
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
 import java.beans.PropertyEditor;
 import java.beans.PropertyEditorManager;
 import java.lang.reflect.Constructor;
@@ -1015,7 +1017,7 @@ public class ApplicationImpl extends Application {
                 componentMetadata);
 
         associate.getAnnotationManager().applyComponentAnnotations(context, result);
-        pushDeclaredDefaultValuesToAttributesMap(context, componentMetadata, attrs);
+        pushDeclaredDefaultValuesToAttributesMap(context, componentMetadata, attrs, result);
 
 
         return result;
@@ -1030,11 +1032,13 @@ public class ApplicationImpl extends Application {
      *
      */
     private void pushDeclaredDefaultValuesToAttributesMap(FacesContext context,
-            BeanInfo componentMetadata, Map<String, Object> attrs) {
+            BeanInfo componentMetadata, Map<String, Object> attrs, UIComponent component) {
         PropertyDescriptor[] declaredAttributes = componentMetadata.getPropertyDescriptors();
         Object defaultValue;
         String key;
         Collection<String> attributesWithDeclaredDefaultValues = null;
+
+        PropertyDescriptor[] pd = null;
 
         for (PropertyDescriptor cur : declaredAttributes) {
             defaultValue = cur.getValue("default");
@@ -1069,6 +1073,14 @@ public class ApplicationImpl extends Application {
                     // If it is a MethodExpression, it will be dealt with in
                     // retargetMethodExpressions.
                     if (isLiteralText) {
+                        try {
+                            if (null == pd) {
+                                pd = Introspector.getBeanInfo(component.getClass()).getPropertyDescriptors();
+                            }
+                        } catch (IntrospectionException e) {
+                            throw new FacesException(e);
+                        }
+                        defaultValue = convertValueToTypeIfNecessary(key, defaultValue, pd);
                         attrs.put(key, defaultValue);
                     }
                 }
@@ -1243,6 +1255,23 @@ public class ApplicationImpl extends Application {
       "java.lang.Enum"
     };
     
+    /**
+     * Helper method to convert a value to a type as defined in PropertyDescriptor(s)
+     * @param name
+     * @param value
+     * @param pd
+     * @return value
+     */
+    private Object convertValueToTypeIfNecessary(String name, Object value, PropertyDescriptor[] pd) {
+        for (PropertyDescriptor aPd : pd) {
+            if (aPd.getName().equals(name)) {
+                value = getExpressionFactory().coerceToType(value, aPd.getPropertyType());
+                break;
+            }
+        }
+        return value;
+    }
+
     /**
      * <p>To enable EL Coercion to use JSF Custom converters, this 
      * method will call <code>PropertyEditorManager.registerEditor()</code>,
