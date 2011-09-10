@@ -66,6 +66,7 @@
                      JAVASERVERFACES-1856,JAVASERVERFACES-1655,
                      JAVASERVERFACES-2033,
                      GLASSFISH-16847,
+                     JAVASERVERFACES-1338,
                      admingui" />
 
     <property name="container-agnostic-applications" value="
