@@ -866,7 +866,7 @@
 
     <macrodef name="stop.database">
         <attribute name="create-virtual-server" default="false"/>
-        <attribute name="failonerror" default="true"/>
+        <attribute name="failonerror" default="false"/>
         <sequential>
             <echo>
 
