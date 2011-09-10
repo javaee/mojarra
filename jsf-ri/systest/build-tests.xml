@@ -311,13 +311,20 @@
             </tests>
         </jsf.junit>
 
-        <jsf.tester request="/faces/pre31injection/injectedComponent.xhtml"
+        <if>
+          <bool>
+            <not>
+              <equals arg1="${container.name}" arg2="wls_12_1_1_no_cluster"/>
+            </not>
+          </bool>
+          <then>
+            <jsf.tester request="/faces/pre31injection/injectedComponent.xhtml"
                      context-path="${context.path}"
                      classpath-refid="html.classpath"
                      test-results-dir="${impl.test.results.dir}"
                      regexp="(?s).*Hello World from env-entry!.*"/>
-
-
+          </then>
+        </if>
     </target>
 
     <target name="test.el">
