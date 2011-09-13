@@ -243,23 +243,35 @@
     <target name="patch.default-web.xml" depends="test.patch.already.applied"
             unless="default-web.xml.patch.already.applied">
 
-      <property name="patchfile-01"
-                value="${jsf.build.home}/common/ant/${container.name}/lib_templates_default-web_xml.patch" />
+      <if>
+        <os family="windows"/>
+        <then>
+          <property name="patchfile-01"
+                    value="${jsf.build.home}/common/ant/${container.name}/lib_templates_default-web_xml_windows.patch" />
+          <property name="patchfile-02"
+                    value="${jsf.build.home}/common/ant/${container.name}/domains_domain1_config_default-web_xml_windows.patch" />
+        </then>
+        <else>
+          <property name="patchfile-01"
+                    value="${jsf.build.home}/common/ant/${container.name}/lib_templates_default-web_xml.patch" />
+          <property name="patchfile-02"
+                    value="${jsf.build.home}/common/ant/${container.name}/domains_domain1_config_default-web_xml.patch" />
+        </else>
+      </if>
+
       <property name="patchdir-01"
                 value="${container.home}/lib/templates" />
 
       <echo message="running patch in ${patchdir-01} using patchfile ${patchfile-01}" />
       <patch dir="${patchdir-01}" patchfile="${patchfile-01}" 
-             failonerror="false" />
+             failonerror="true" />
       
-      <property name="patchfile-02"
-                value="${jsf.build.home}/common/ant/${container.name}/domains_domain1_config_default-web_xml.patch" />
       <property name="patchdir-02"
                 value="${container.home}/domains/domain1/config" />
 
       <echo message="running patch in ${patchdir-02} using patchfile ${patchfile-02}" />
       <patch dir="${patchdir-02}" patchfile="${patchfile-02}" 
-             failonerror="false" />
+             failonerror="true" />
       
 
     </target>
