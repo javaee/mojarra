@@ -986,6 +986,8 @@ public class ConfigManager {
                             } else {
                                 schema = DbfFactory.FacesSchema.FACES_20;
                             }
+                        } else if ("2.2".equals(versionStr)) {
+                            schema = DbfFactory.FacesSchema.FACES_22;
                         } else if ("2.1".equals(versionStr)) {
                             if ("facelet-taglib".equals(documentElement.getLocalName())) {
                                 schema = DbfFactory.FacesSchema.FACELET_TAGLIB_20;
