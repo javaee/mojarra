@@ -56,35 +56,22 @@
  * limitations under the License.
  */
 
-package com.sun.faces.facelets;
+package javax.faces.view.facelets;
 
-import javax.el.ELException;
-import javax.faces.FacesException;
-import javax.faces.view.facelets.FaceletException;
-import javax.faces.view.facelets.ResourceResolver;
 import java.io.IOException;
 import java.net.URL;
 
 /**
- * FaceletFactory for producing Facelets relative to the context of the
- * underlying implementation.
+ * <p class="changed_added_2_2">FaceletFactory for producing Facelets relative to the context of the
+ * underlying implementation.</p>
  * 
- * @author Jacob Hookom
+ * @since 2.2
  */
 public abstract class FaceletFactory {
-
-    private static ThreadLocal<FaceletFactory> INSTANCE =
-          new ThreadLocal<FaceletFactory>();
 
     /**
      * Return a Facelet instance as specified by the file at the passed URI.
      * 
-     * @param uri
-     * @return
-     * @throws IOException
-     * @throws FaceletException
-     * @throws FacesException
-     * @throws ELException
      */
     public abstract Facelet getFacelet(String uri) throws IOException;
     
@@ -98,31 +85,4 @@ public abstract class FaceletFactory {
 
     public abstract long getRefreshPeriod();
 
-    /**
-     * NOT CURRENTLY USED.  However, this class may be moved to the API and
-     * the TL lookup may end up being the preferred way to get a hold of this
-     * instance.
-     *
-     * Set the static instance
-     * 
-     * @param factory
-     */
-    public static void setInstance(FaceletFactory factory) {
-        if (factory == null) {
-            INSTANCE.remove();
-        } else {
-            INSTANCE.set(factory);
-        }
-    }
-
-    /**
-     * NOT CURRENTLY USED.  However, this class may be moved to the API and
-     * the TL lookup may end up being the preferred way to get a hold of this
-     * instance.
-     * 
-     * @return
-     */
-    public static FaceletFactory getInstance() {
-        return INSTANCE.get();
-    }
 }

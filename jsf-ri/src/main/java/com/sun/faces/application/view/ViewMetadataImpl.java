@@ -41,8 +41,8 @@
 package com.sun.faces.application.view;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.facelets.Facelet;
-import com.sun.faces.facelets.FaceletFactory;
+import javax.faces.view.facelets.Facelet;
+import javax.faces.view.facelets.FaceletFactory;
 import com.sun.faces.application.ApplicationAssociate;
 
 

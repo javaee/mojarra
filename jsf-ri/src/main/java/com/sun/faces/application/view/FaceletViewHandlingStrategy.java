@@ -42,8 +42,8 @@ package com.sun.faces.application.view;
 
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.context.StateContext;
-import com.sun.faces.facelets.Facelet;
-import com.sun.faces.facelets.FaceletFactory;
+import javax.faces.view.facelets.Facelet;
+import javax.faces.view.facelets.FaceletFactory;
 import com.sun.faces.facelets.el.ContextualCompositeMethodExpression;
 import com.sun.faces.facelets.el.VariableMapperWrapper;
 import com.sun.faces.facelets.impl.DefaultFaceletFactory;

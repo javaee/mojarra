@@ -56,7 +56,7 @@
  * limitations under the License.
  */
 
-package com.sun.faces.facelets;
+package javax.faces.view.facelets;
 
 import javax.el.ELException;
 import javax.faces.FacesException;

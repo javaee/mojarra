@@ -69,7 +69,7 @@ import javax.faces.context.FacesContext;
 
 
 /**
- * <p><strong class="changed_modified_2_0 changed_modified_2_1">FactoryFinder</strong>
+ * <p><strong class="changed_modified_2_0 changed_modified_2_1 changed_modified_2_2">FactoryFinder</strong>
  * implements the standard discovery algorithm for all factory objects
  * specified in the JavaServer Faces APIs.  For a given factory class
  * name, a corresponding implementation class is searched for based on
@@ -187,6 +187,15 @@ public final class FactoryFinder {
          "javax.faces.view.facelets.FaceletCacheFactory";
 
     /**
+     * <p class="changed_added_2_1">The property name for the
+     * {@link javax.faces.view.facelets.FaceletCacheFactory} class name.</p>
+     *
+     * @since 2.2
+     */
+    public final static String FACELET_FACTORY =
+         "javax.faces.view.facelets.FaceletFactory";
+
+    /**
      * <p class="changed_added_2_0">The property name for the {@link
      * javax.faces.context.PartialViewContextFactory} class name.</p>
      */
@@ -247,11 +256,12 @@ public final class FactoryFinder {
          EXCEPTION_HANDLER_FACTORY,
          EXTERNAL_CONTEXT_FACTORY,
          FACES_CONTEXT_FACTORY,
-         LIFECYCLE_FACTORY,
-         VIEW_DECLARATION_LANGUAGE_FACTORY,
          PARTIAL_VIEW_CONTEXT_FACTORY,
+         LIFECYCLE_FACTORY,
          RENDER_KIT_FACTORY,
+         VIEW_DECLARATION_LANGUAGE_FACTORY,
          FACELET_CACHE_FACTORY,
+         FACELET_FACTORY,
          TAG_HANDLER_DELEGATE_FACTORY
     
     };
@@ -631,22 +641,26 @@ public final class FactoryFinder {
             factoryClasses = new HashMap<String, Class>(FACTORY_NAMES.length);
             factoryClasses.put(APPLICATION_FACTORY,
                  javax.faces.application.ApplicationFactory.class);
+            factoryClasses.put(VISIT_CONTEXT_FACTORY,
+                 javax.faces.component.visit.VisitContextFactory.class);
             factoryClasses.put(EXCEPTION_HANDLER_FACTORY,
                  javax.faces.context.ExceptionHandlerFactory.class);
             factoryClasses.put(EXTERNAL_CONTEXT_FACTORY,
                  javax.faces.context.ExternalContextFactory.class);
             factoryClasses.put(FACES_CONTEXT_FACTORY,
                  javax.faces.context.FacesContextFactory.class);
-            factoryClasses.put(VISIT_CONTEXT_FACTORY,
-                 javax.faces.component.visit.VisitContextFactory.class);
-            factoryClasses.put(LIFECYCLE_FACTORY,
-                 javax.faces.lifecycle.LifecycleFactory.class);
             factoryClasses.put(PARTIAL_VIEW_CONTEXT_FACTORY,
                  javax.faces.context.PartialViewContextFactory.class);
+            factoryClasses.put(LIFECYCLE_FACTORY,
+                 javax.faces.lifecycle.LifecycleFactory.class);
             factoryClasses.put(RENDER_KIT_FACTORY,
                  javax.faces.render.RenderKitFactory.class);
             factoryClasses.put(VIEW_DECLARATION_LANGUAGE_FACTORY,
                  javax.faces.view.ViewDeclarationLanguageFactory.class);
+            factoryClasses.put(FACELET_CACHE_FACTORY,
+                 javax.faces.view.facelets.FaceletCacheFactory.class);
+            factoryClasses.put(FACELET_FACTORY,
+                 javax.faces.view.facelets.FaceletFactory.class);
             factoryClasses.put(TAG_HANDLER_DELEGATE_FACTORY,
                  javax.faces.view.facelets.TagHandlerDelegateFactory.class);
         }

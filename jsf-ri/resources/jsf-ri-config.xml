@@ -45,9 +45,9 @@
 
 <faces-config xmlns="http://java.sun.com/xml/ns/javaee"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_2.xsd"
     metadata-complete="true"
-    version="2.1">
+    version="2.2">
 
 
   <!-- Configure Object Factories -->
@@ -86,6 +86,9 @@
     <facelet-cache-factory>
       com.sun.faces.facelets.impl.FaceletCacheFactoryImpl
     </facelet-cache-factory>
+    <facelet-factory>
+      com.sun.faces.facelets.impl.DefaultFaceletFactory
+    </facelet-factory>
   </factory>
 
 

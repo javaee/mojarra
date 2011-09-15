@@ -105,6 +105,11 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
     private static final String FACELET_CACHE_FACTORY = "facelet-cache-factory";
 
     /**
+     * <code>/faces-config/factory/facelet-factory</code>
+     */
+    private static final String FACELET_FACTORY = "facelet-factory";
+
+    /**
      * <code>/faces-config/factory/faces-context-factory</code>
      */
     private static final String FACES_CONTEXT_FACTORY = "faces-context-factory";
@@ -265,6 +270,9 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
                                getNodeText(n));
                 } else if (FACELET_CACHE_FACTORY.equals(n.getLocalName())) {
                     setFactory(FactoryFinder.FACELET_CACHE_FACTORY,
+                               getNodeText(n));
+                } else if (FACELET_FACTORY.equals(n.getLocalName())) {
+                    setFactory(FactoryFinder.FACELET_FACTORY,
                                getNodeText(n));
                 } else if (EXTERNAL_CONTEXT_FACTORY.equals(n.getLocalName())) {
                     setFactory(FactoryFinder.EXTERNAL_CONTEXT_FACTORY,

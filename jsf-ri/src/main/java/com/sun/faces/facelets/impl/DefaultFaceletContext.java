@@ -58,7 +58,7 @@
 
 package com.sun.faces.facelets.impl;
 
-import com.sun.faces.facelets.Facelet;
+import javax.faces.view.facelets.Facelet;
 import com.sun.faces.facelets.FaceletContextImplBase;
 import com.sun.faces.facelets.TemplateClient;
 import com.sun.faces.facelets.el.DefaultVariableMapper;

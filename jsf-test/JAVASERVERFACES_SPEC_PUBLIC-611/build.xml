@@ -1,11 +1,9 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-<html>
-<head>
+<?xml version='1.0' encoding='UTF-8'?>
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 2004-2010 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -42,15 +40,41 @@
     holder.
 
 -->
+<!-- ************ JSF build file ************************************** -->
+<project name="JAVASERVERFACES-i_spec_611" default="test" basedir=".">
 
-</head>
-<body bgcolor="white">
+    <property file="../../build.properties"/>
 
-<span class="changed_modified_2_0 changed_modified_2_1 changed_modified_2_2">Top</span> level classes for the
-JavaServer(tm) Faces API.  The most important
-class in the package is {@link javax.faces.FactoryFinder}, which is the
-mechanism by which users can override many of the key pieces of the
-implementation with their own.
+    <import file="${jsf.build.home}/common/ant/common.xml"/>
 
-</body>
-</html>
+    <target name="build">
+        <jsf.mvn dir="${basedir}/i_spec_611_war" goals="install" />
+    </target>    
+
+    <target name="clean">
+        <jsf.mvn dir="${basedir}/i_spec_611_war" goals="clean" />
+    </target>    
+
+    <target name="install">
+        <deploy.artifact
+              artifact="${basedir}/i_spec_611_war/target/i_spec_611_war.war"
+              appName="i_spec_611_war"/>
+    </target>    
+
+    <target name="remove">
+        <undeploy.artifact
+              artifact="${basedir}/i_spec_611_war/target/i_spec_611_war.war"
+              appName="i_spec_611_war"/>
+    </target>    
+
+    <target name="test" depends="define.scenario.aware.port">
+
+        <jsf.tester request="/faces/i_spec_611_war.xhtml"
+                     context-path="/i_spec_611_war"
+                     classpath-refid="html.classpath"
+                     test-results-dir="${regression.test.results.dir}"
+                     regexp="(?s).*FaceletFactory:.*MyFaceletFactory.*"/>
+
+    </target>    
+
+</project>

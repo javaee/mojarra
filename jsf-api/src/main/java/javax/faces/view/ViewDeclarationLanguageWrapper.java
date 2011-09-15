@@ -51,14 +51,14 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 
 /**
- * <p class="changed_added_2_0">Provides a simple implementation of 
+ * <p class="changed_added_2_2">Provides a simple implementation of 
  * {@link ViewDeclarationLanguage} that can
  * be subclassed by developers wishing to provide specialized behavior
  * to an existing {@link ViewDeclarationLanguage} instance.  The default
  * implementation of all methods is to call through to the wrapped
  * {@link ViewDeclarationLanguage} instance.</p>
  *
- * <p class="changed_added_2_0">Usage: extend this class and override 
+ * <p class="changed_added_2_2">Usage: extend this class and override 
  * {@link #getWrapped} to
  * return the instance being wrapping.</p>
  *

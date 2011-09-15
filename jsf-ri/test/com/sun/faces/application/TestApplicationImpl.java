@@ -89,8 +89,8 @@ import javax.faces.event.PreRenderComponentEvent;
 import com.sun.faces.RIConstants;
 import com.sun.faces.TestComponent;
 import com.sun.faces.TestForm;
-import com.sun.faces.facelets.FaceletFactory;
-import com.sun.faces.facelets.Facelet;
+import javax.faces.view.facelets.FaceletFactory;
+import javax.faces.view.facelets.Facelet;
 import com.sun.faces.facelets.impl.DefaultFaceletFactory;
 import com.sun.faces.config.WebConfiguration;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.*;
@@ -764,47 +764,6 @@ public class TestApplicationImpl extends JspFacesTestCase {
     }
 
 
-    public void testDecoratedFaceletFactory() {
-
-        FacesContext ctx = getFacesContext();
-        ExternalContext extContext = ctx.getExternalContext();
-        WebConfiguration webConfig = WebConfiguration.getInstance(extContext);
-        webConfig.overrideContextInitParameter(FaceletFactory,
-                                               "com.sun.faces.application.TestApplicationImpl$CustomFaceletFactory");
-        ApplicationAssociate.clearInstance(extContext);
-        webConfig.overrideContextInitParameter(DisableFaceletJSFViewHandler,
-                                               false);
-        ApplicationImpl impl = new ApplicationImpl();
-        ApplicationAssociate associate = ApplicationAssociate.getInstance(extContext);
-        assertEquals(CustomFaceletFactory.class.getName(),
-                     CustomFaceletFactory.class.getName(),
-                     associate.getFaceletFactory().getClass().getName());
-        assertEquals(DefaultFaceletFactory.class.getName(),
-                     DefaultFaceletFactory.class.getName(),
-                     ((CustomFaceletFactory) associate.getFaceletFactory()).getDelegate().getClass().getName());
-
-    }
-
-    public void testOverrideFaceletFactory() {
-
-        FacesContext ctx = getFacesContext();
-        ExternalContext extContext = ctx.getExternalContext();
-        WebConfiguration webConfig = WebConfiguration.getInstance(extContext);
-        webConfig.overrideContextInitParameter(FaceletFactory,
-                                               "com.sun.faces.application.TestApplicationImpl$CustomFaceletFactory2");
-        ApplicationAssociate.clearInstance(extContext);
-        webConfig.overrideContextInitParameter(DisableFaceletJSFViewHandler,
-                                               false);
-        ApplicationAssociate.clearInstance(extContext);
-        ApplicationImpl impl = new ApplicationImpl();
-        ApplicationAssociate associate = ApplicationAssociate.getInstance(extContext);
-        assertEquals(CustomFaceletFactory2.class.getName(),
-                     CustomFaceletFactory2.class.getName(),
-                     associate.getFaceletFactory().getClass().getName());
-
-    }
-
-
     // ---------------------------------------------------------- Public Methods
     
     public static void clearResourceBundlesFromAssociate(ApplicationImpl application) {
@@ -827,70 +786,6 @@ public class TestApplicationImpl extends JspFacesTestCase {
 
 
     // ----------------------------------------------------------- Inner Classes
-
-    public static final class CustomFaceletFactory2 extends FaceletFactory {
-        public Facelet getFacelet(String uri) throws IOException {
-            return null;
-        }
-
-        public Facelet getFacelet(URL url) throws IOException {
-            return null;
-        }
-
-        public Facelet getMetadataFacelet(String uri) throws IOException {
-            return null;
-        }
-
-        public Facelet getMetadataFacelet(URL url) throws IOException {
-            return null;
-        }
-
-        public ResourceResolver getResourceResolver() {
-            return null;
-        }
-
-        public long getRefreshPeriod() {
-            return 0;
-        }
-    }
-
-    public static final class CustomFaceletFactory extends FaceletFactory {
-
-        private FaceletFactory delegate;
-
-        public CustomFaceletFactory(FaceletFactory delegate) {
-            this.delegate = delegate;
-        }
-
-        public Facelet getFacelet(String uri) throws IOException {
-            return delegate.getFacelet(uri);
-        }
-
-        public Facelet getFacelet(URL url) throws IOException {
-            return delegate.getFacelet(url);
-        }
-
-        public Facelet getMetadataFacelet(String uri) throws IOException {
-            return delegate.getMetadataFacelet(uri);
-        }
-
-        public Facelet getMetadataFacelet(URL url) throws IOException {
-            return delegate.getMetadataFacelet(url);
-        }
-
-        public ResourceResolver getResourceResolver() {
-            return delegate.getResourceResolver();
-        }
-
-        public long getRefreshPeriod() {
-            return delegate.getRefreshPeriod();
-        }
-
-        public FaceletFactory getDelegate() {
-            return delegate;
-        }
-
-    }
 
     public static class CustomIntConverter implements Converter {
 

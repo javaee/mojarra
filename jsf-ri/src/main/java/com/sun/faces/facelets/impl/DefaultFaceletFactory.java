@@ -59,9 +59,9 @@
 package com.sun.faces.facelets.impl;
 
 import com.sun.faces.context.FacesFileNotFoundException;
-import com.sun.faces.facelets.Facelet;
+import javax.faces.view.facelets.Facelet;
 import javax.faces.view.facelets.FaceletCache;
-import com.sun.faces.facelets.FaceletFactory;
+import javax.faces.view.facelets.FaceletFactory;
 import com.sun.faces.facelets.compiler.Compiler;
 import com.sun.faces.util.Cache;
 import com.sun.faces.util.FacesLogger;
@@ -94,17 +94,17 @@ public class DefaultFaceletFactory extends FaceletFactory {
 
     protected final static Logger log = FacesLogger.FACELETS_FACTORY.getLogger();
 
-    private final Compiler compiler;
+    private Compiler compiler;
 
     private Map<String, URL> relativeLocations;
 
-    private final ResourceResolver resolver;
+    private ResourceResolver resolver;
 
-    private final URL baseUrl;
+    private  URL baseUrl;
     
-    private final long refreshPeriod;
+    private long refreshPeriod;
 
-    private final FaceletCache<DefaultFacelet> cache;
+    private FaceletCache<DefaultFacelet> cache;
 
     Cache<String,IdMapper> idMappers;
     
@@ -112,7 +112,15 @@ public class DefaultFaceletFactory extends FaceletFactory {
 
     // ------------------------------------------------------------ Constructors
 
-
+    public DefaultFaceletFactory() {
+        this.compiler = null;
+        this.resolver = null;
+        this.refreshPeriod = -1;
+        this.cache = null;
+        this.baseUrl = null;
+    }
+    
+    
     public DefaultFaceletFactory(Compiler compiler, ResourceResolver resolver)
     throws IOException {
 
@@ -131,7 +139,13 @@ public class DefaultFaceletFactory extends FaceletFactory {
                                  ResourceResolver resolver,
                                  long refreshPeriod,
                                  FaceletCache cache) {
-
+        this.init(compiler, resolver, refreshPeriod, cache);
+    }
+    
+    public final void init(Compiler compiler,
+            ResourceResolver resolver,
+            long refreshPeriod,
+            FaceletCache cache) {
         Util.notNull("compiler", compiler);
         Util.notNull("resolver", resolver);
         this.compiler = compiler;
@@ -179,7 +193,6 @@ public class DefaultFaceletFactory extends FaceletFactory {
         } 
         
     }
-
 
     /*
       * (non-Javadoc)

@@ -961,10 +961,6 @@ public class WebConfiguration {
               "com.sun.faces.annotationScanPackages",
               ""
         ),
-        FaceletFactory(
-              "com.sun.faces.faceletFactory",
-              ""
-        ),
         FaceletCache(
             "com.sun.faces.faceletCache",
             ""

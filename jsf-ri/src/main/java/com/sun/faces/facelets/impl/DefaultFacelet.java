@@ -58,7 +58,7 @@
 
 package com.sun.faces.facelets.impl;
 
-import com.sun.faces.facelets.Facelet;
+import javax.faces.view.facelets.Facelet;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;

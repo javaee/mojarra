@@ -59,8 +59,8 @@
 package com.sun.faces.facelets.tag.jsf;
 
 import com.sun.faces.context.StateContext;
-import com.sun.faces.facelets.Facelet;
-import com.sun.faces.facelets.FaceletFactory;
+import javax.faces.view.facelets.Facelet;
+import javax.faces.view.facelets.FaceletFactory;
 import com.sun.faces.facelets.util.ReflectionUtil;
 import com.sun.faces.facelets.el.VariableMapperWrapper;
 import com.sun.faces.facelets.tag.jsf.ComponentTagHandlerDelegateImpl.CreateComponentDelegate;

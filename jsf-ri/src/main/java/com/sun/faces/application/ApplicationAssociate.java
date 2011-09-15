@@ -49,7 +49,7 @@ import com.sun.faces.config.ConfigManager;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.facelets.compiler.Compiler;
 import com.sun.faces.facelets.compiler.SAXCompiler;
-import com.sun.faces.facelets.FaceletFactory;
+import javax.faces.view.facelets.FaceletFactory;
 import javax.faces.view.facelets.TagDecorator;
 import com.sun.faces.facelets.tag.composite.CompositeLibrary;
 import com.sun.faces.facelets.tag.jstl.core.JstlCoreLibrary;
@@ -107,6 +107,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.faces.FactoryFinder;
 import javax.faces.application.NavigationCase;
 import javax.faces.view.facelets.FaceletCacheFactory;
+import javax.faces.view.facelets.FaceletFactoryWrapper;
 
 /**
  * <p>Break out the things that are associated with the Application, but
@@ -676,18 +677,27 @@ public class ApplicationAssociate {
         }
 
         // Resource.getResourceUrl(ctx,"/")
-        FaceletFactory factory = new DefaultFaceletFactory(c, resolver, period, cache);
-
-        // Check to see if a custom Factory has been defined
-        String factoryClass = webConfig.getOptionValue(FaceletFactory);
-        if (factoryClass != null && factoryClass.length() > 0) {
-            factory = (FaceletFactory)
-                  ReflectionUtil.decorateInstance(factoryClass,
-                                                  FaceletFactory.class,
-                                                  factory);
-        }
-
-        return factory;
+        FaceletFactory toReturn = (FaceletFactory) 
+                FactoryFinder.getFactory(FactoryFinder.FACELET_FACTORY);
+        // Seek to initialize the DefaultFaceletFactory.
+        FaceletFactory factory = toReturn;
+        boolean continueSearching = true;
+        do {
+            if (factory instanceof DefaultFaceletFactory) {
+                DefaultFaceletFactory defaultFaceletFactory = 
+                        (DefaultFaceletFactory) factory;
+                defaultFaceletFactory.init(c, resolver, period, cache);
+                continueSearching = false;
+            } else {
+                if (factory instanceof FaceletFactoryWrapper) {
+                    factory = ((FaceletFactoryWrapper)factory).getWrapped();
+                } else {
+                    continueSearching = false;
+                }
+            }
+        } while (continueSearching);
+                
+        return toReturn;
 
     }
 
