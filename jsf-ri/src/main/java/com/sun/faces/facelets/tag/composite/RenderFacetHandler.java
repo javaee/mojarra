@@ -100,21 +100,18 @@ public class RenderFacetHandler extends ComponentHandler {
         if (compositeParent == null) {
             return;
         }
-        boolean required =
+        boolean requiredValue =
               ((this.required != null) && this.required.getBoolean(ctx));
-        String name = this.name.getValue(ctx);
+        String nameValue = this.name.getValue(ctx);
 
-        if (compositeParent.getFacetCount() == 0 && required) {
-            throwRequiredException(ctx, name, compositeParent);
+        if (compositeParent.getFacetCount() == 0 && requiredValue) {
+            throwRequiredException(ctx, nameValue, compositeParent);
         }
 
         Map<String,UIComponent> facetMap = compositeParent.getFacets();
-        if (facetMap.containsKey(name)) {
-            c.getAttributes().put(UIComponent.FACETS_KEY, name);
-        } else {
-            if (required) {
-                throwRequiredException(ctx, name, compositeParent);
-            }
+        c.getAttributes().put(UIComponent.FACETS_KEY, nameValue);
+        if (requiredValue && !facetMap.containsKey(nameValue)) {
+            throwRequiredException(ctx, nameValue, compositeParent);
         }
 
     }
