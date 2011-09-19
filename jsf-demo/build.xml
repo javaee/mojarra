@@ -124,7 +124,6 @@
 
 
     <target name="copyJars" depends="prepare.dist">
-        <copy file="${javax.faces-api.jar}" todir="${dist.home}/lib"/>
         <copy file="${javax.faces.jar}" todir="${dist.home}/lib"/>
     </target>
 
