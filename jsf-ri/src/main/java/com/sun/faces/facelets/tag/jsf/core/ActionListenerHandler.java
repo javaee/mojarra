@@ -96,7 +96,6 @@ public final class ActionListenerHandler extends TagHandlerImpl
         private final String type;
         private final ValueExpression binding;
 
-
         public LazyActionListener(String type, ValueExpression binding) {
             this.type = type;
             this.binding = binding;
@@ -134,7 +133,9 @@ public final class ActionListenerHandler extends TagHandlerImpl
 
     private final TagAttribute binding;
 
-    private final String listenerType;
+    private String listenerType;
+
+    private final TagAttribute typeAttribute;
 
     /**
      * @param config
@@ -142,21 +143,18 @@ public final class ActionListenerHandler extends TagHandlerImpl
     public ActionListenerHandler(TagConfig config) {
         super(config);
         this.binding = this.getAttribute("binding");
-        TagAttribute type = this.getAttribute("type");
-        if (type != null) {
-            if (!type.isLiteral()) {
-                throw new TagAttributeException(type,
-                                                "Must be a literal class name of type ActionListener");
+        this.typeAttribute = this.getAttribute("type");
+        if (null != this.typeAttribute) {
+            String stringType = null;
+            if (!this.typeAttribute.isLiteral()) {
+                FacesContext context = FacesContext.getCurrentInstance();
+                FaceletContext ctx = (FaceletContext) context.getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
+                stringType = (String) this.typeAttribute.getValueExpression(ctx, String.class).getValue(ctx);
             } else {
-                // test it out
-                try {
-                    ReflectionUtil.forName(type.getValue());
-                } catch (ClassNotFoundException e) {
-                    throw new TagAttributeException(type,
-                                                    "Couldn't qualify ActionListener", e);
-                }
+                stringType = this.typeAttribute.getValue();
             }
-            this.listenerType = type.getValue();
+            checkType(stringType);
+            this.listenerType = stringType;
         } else {
             this.listenerType = null;
         }
@@ -173,6 +171,7 @@ public final class ActionListenerHandler extends TagHandlerImpl
         if (null == parent || !(ComponentHandler.isNew(parent))) {
             return;
         }
+
         if (parent instanceof ActionSource) {
             applyAttachedObject(ctx.getFacesContext(), parent);
         } else if (parent.getAttributes()
@@ -218,4 +217,12 @@ public final class ActionListenerHandler extends TagHandlerImpl
 
     }
 
+    private void checkType(String type) {
+        try {
+            ReflectionUtil.forName(type);
+        } catch (ClassNotFoundException e) {
+            throw new TagAttributeException(typeAttribute,
+                "Couldn't qualify ActionListener", e);
+        }
+    }
 }

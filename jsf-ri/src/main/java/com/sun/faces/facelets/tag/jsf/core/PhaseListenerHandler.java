@@ -176,24 +176,24 @@ public class PhaseListenerHandler extends TagHandlerImpl {
 
     private final String listenerType;
 
+    private final TagAttribute typeAttribute;
+
     public PhaseListenerHandler(TagConfig config) {
         super(config);
         TagAttribute type = this.getAttribute("type");
         this.binding = this.getAttribute("binding");
-        if (type != null) {
-            if (!type.isLiteral()) {
-                throw new TagAttributeException(type,
-                                                "Must be a literal class name of type PhaseListener");
+        this.typeAttribute = this.getAttribute("type");
+        if (null != this.typeAttribute) {
+            String stringType = null;
+            if (!this.typeAttribute.isLiteral()) {
+                FacesContext context = FacesContext.getCurrentInstance();
+                FaceletContext ctx = (FaceletContext) context.getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
+                stringType = (String) this.typeAttribute.getValueExpression(ctx, String.class).getValue(ctx);
             } else {
-                // test it out
-                try {
-                    ReflectionUtil.forName(type.getValue());
-                } catch (ClassNotFoundException e) {
-                    throw new TagAttributeException(type,
-                                                    "Couldn't qualify PhaseListener", e);
-                }
+                stringType = this.typeAttribute.getValue();
             }
-            this.listenerType = type.getValue();
+            checkType(stringType);
+            this.listenerType = stringType;
         } else {
             this.listenerType = null;
         }
@@ -223,6 +223,15 @@ public class PhaseListenerHandler extends TagHandlerImpl {
             } else {
                 root.addPhaseListener(pl);
             }
+        }
+    }
+
+    private void checkType(String type) {
+        try {
+            ReflectionUtil.forName(type);
+        } catch (ClassNotFoundException e) {
+            throw new TagAttributeException(typeAttribute,
+                "Couldn't qualify ActionListener", e);
         }
     }
 

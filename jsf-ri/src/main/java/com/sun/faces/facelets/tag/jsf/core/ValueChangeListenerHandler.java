@@ -134,24 +134,23 @@ public final class ValueChangeListenerHandler extends TagHandlerImpl implements 
 
     private final String listenerType;
 
+    private final TagAttribute typeAttribute;
+
     public ValueChangeListenerHandler(TagConfig config) {
         super(config);
         this.binding = this.getAttribute("binding");
-        TagAttribute type = this.getAttribute("type");
-        if (type != null) {
-            if (!type.isLiteral()) {
-                throw new TagAttributeException(type,
-                                                "Must be a literal class name of type ValueChangeListener");
+        this.typeAttribute = this.getAttribute("type");
+        if (null != this.typeAttribute) {
+            String stringType = null;
+            if (!this.typeAttribute.isLiteral()) {
+                FacesContext context = FacesContext.getCurrentInstance();
+                FaceletContext ctx = (FaceletContext) context.getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
+                stringType = (String) this.typeAttribute.getValueExpression(ctx, String.class).getValue(ctx);
             } else {
-                // test it out
-                try {
-                    ReflectionUtil.forName(type.getValue());
-                } catch (ClassNotFoundException e) {
-                    throw new TagAttributeException(type,
-                                                    "Couldn't qualify ValueChangeListener", e);
-                }
+                stringType = this.typeAttribute.getValue();
             }
-            this.listenerType = type.getValue();
+            checkType(stringType);
+            this.listenerType = stringType;
         } else {
             this.listenerType = null;
         }
@@ -203,6 +202,17 @@ public final class ValueChangeListenerHandler extends TagHandlerImpl implements 
         return result;
 
     }
+
+    private void checkType(String type) {
+        try {
+            ReflectionUtil.forName(type);
+        } catch (ClassNotFoundException e) {
+            throw new TagAttributeException(typeAttribute,
+                "Couldn't qualify ActionListener", e);
+        }
+    }
+
+
         
 
 }
