@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -394,6 +394,11 @@ public class FaceletsTestCase extends HtmlUnitFacesTestCase {
             }
         }
         assertTrue(uniqueIds);
+    }
+
+    public void testDefineInsertELExpression() throws Exception {
+        HtmlPage page = getPage("/faces/facelets/Client3.xhtml");
+        assertTrue(page.asText().contains("Inserted from client3"));
     }
 
 
