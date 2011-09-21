@@ -90,13 +90,13 @@ import junit.framework.TestSuite;
 
         // Ensure the HEAD request works as expected
         String result = issueHttpRequest("HEAD", rc, repeat);
-        String [] tokens = result.split("\\s\\s");        
+        String [] tokens = result.split("[\\r\\n][\\r\\n]");        
         assertTrue(1 == tokens.length);
         assertEquals(HttpURLConnection.HTTP_OK, rc[0]);
 
         // Ensure the OPTIONS  request works as expected
         result = issueHttpRequest("OPTIONS", rc, repeat);
-        tokens = result.split("\\s\\s");        
+        tokens = result.split("[\\r\\n][\\r\\n]");        
         assertTrue(1 == tokens.length || "0".equals(tokens[1]));
         assertEquals(HttpURLConnection.HTTP_OK, rc[0]);
 
