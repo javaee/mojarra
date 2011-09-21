@@ -65,17 +65,23 @@ import javax.faces.lifecycle.Lifecycle;
 
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
+import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Map;
+import javax.faces.application.ProtectedViewException;
 import javax.faces.component.UIViewParameter;
 import javax.faces.component.visit.VisitCallback;
+import javax.faces.context.ExternalContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.PostRestoreStateEvent;
 import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.ExceptionQueuedEventContext;
+import javax.faces.render.ResponseStateManager;
 import javax.faces.view.ViewDeclarationLanguage;
 import javax.faces.view.ViewMetadata;
 
@@ -219,10 +225,12 @@ public class RestoreViewPhase extends Phase {
                 if (LOGGER.isLoggable(Level.FINE)) {
                     LOGGER.fine("New request: creating a view for " + viewId);
                 }
-
+                
                 String derivedViewId = viewHandler.deriveLogicalViewId(facesContext, viewId);
                 ViewDeclarationLanguage vdl = viewHandler.getViewDeclarationLanguage(facesContext, derivedViewId);
-
+                
+                maybeTakeProtectedViewAction(facesContext, viewHandler, vdl, viewId);
+                                
                 if (vdl != null) {
                     // If we have one, get the ViewMetadata...
                     ViewMetadata metadata = vdl.getViewMetadata(facesContext, viewId);
@@ -268,7 +276,96 @@ public class RestoreViewPhase extends Phase {
         }
 
     }
+    
+    private void maybeTakeProtectedViewAction(FacesContext context, 
+            ViewHandler viewHandler, 
+            ViewDeclarationLanguage vdl, String viewId) {
+        // http://java.net/jira/browse/JAVASERVERFACES-2204
+        // PENDING: this code is optimized to be fast to write.
+        // It must be optimized to be fast to run.
+        
+        // See git clone ssh://edburns@git.java.net/grizzly~git 1_9_36 for
+        // how grizzly does this.
+        
+        Set<String> urlPatterns = viewHandler.getProtectedViewsUnmodifiable();
+        // Implement section 12.1 of the Servlet spec.
+        boolean currentViewIsProtected = false;
+        for (String cur : urlPatterns) {
+            if (cur.equals(viewId)) {
+                currentViewIsProtected = true;
+            }
+            if (currentViewIsProtected) {
+                break;
+            }
+        }
+        
+        if (currentViewIsProtected) {
+            ExternalContext extContext = context.getExternalContext();
+            Map<String, String> headers = extContext.getRequestHeaderMap();
+            if (headers.containsKey("Referer")) {
+                String referer = headers.get("Referer");
+                boolean refererIsInProtectedSet = false;
+                for (String cur : urlPatterns) {
+                    if (cur.equals(referer)) {
+                        refererIsInProtectedSet = true;
+                    }
+                    if (refererIsInProtectedSet) {
+                        break;
+                    }
+                }
+                if (!refererIsInProtectedSet) {
+                    boolean isAbsoluteURI = referer.matches("^[a-z]+://.*");
+                    if (!isAbsoluteURI) {
+                        // PENDING real implementation must make the value of
+                        // referer suitable for passing to the ctor for URI()
+                    }
+                    URI uri = null;
+                    boolean hostsMatch = false,
+                            portsMatch = false,
+                            contextPathsMatch = false,
+                            refererOriginatesInThisWebapp = false;
+                    try {
+                        uri = new URI(referer);
+                        hostsMatch = uri.getHost().equals(extContext.getRequestServerName());
+                        portsMatch = uri.getPort() == extContext.getRequestServerPort();
+                        contextPathsMatch = uri.getPath().contains(extContext.getApplicationContextPath());
 
+                    } catch (URISyntaxException use) {
+                        throw new ProtectedViewException(use);
+                    }
+                    refererOriginatesInThisWebapp = hostsMatch && portsMatch && contextPathsMatch;
+                    if (!refererOriginatesInThisWebapp) {
+                        String message = FacesLogger.LIFECYCLE.interpolateMessage(context, 
+                                "jsf.lifecycle.invalid.referer", new String [] { referer, viewId });
+                        if (LOGGER.isLoggable(Level.SEVERE)) {
+                            LOGGER.log(Level.SEVERE, message);
+                        }
+                        // PENDING() use vdl.viewExists() to see if the view originates 
+                        // in this app. For now just throw the exception
+                        throw new ProtectedViewException(message);
+                    }
+
+                }
+            } else {
+                // We do not have a Referer header.  Fall
+                // back to inspecting the incoming request
+                String rkId = viewHandler.calculateRenderKitId(context);
+                ResponseStateManager rsm = RenderKitUtils.getResponseStateManager(context, rkId);
+                String incomingSecretKeyValue = extContext.getRequestParameterMap().
+                        get(ResponseStateManager.NON_POSTBACK_VIEW_TOKEN_PARAM);
+                String correctSecretKeyValue = rsm.getCryptographicallyStrongTokenFromSession(context);
+                if (null == incomingSecretKeyValue || 
+                    !correctSecretKeyValue.equals(incomingSecretKeyValue)) {
+                    throw new ProtectedViewException();
+                }
+                
+            }
+
+        }
+        
+        
+    }
+    
     private void deliverPostRestoreStateEvent(FacesContext facesContext) throws FacesException {
         UIViewRoot root = facesContext.getViewRoot();
         final PostRestoreStateEvent postRestoreStateEvent = new PostRestoreStateEvent(root);

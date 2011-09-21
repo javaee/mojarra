@@ -705,24 +705,13 @@ public class WebConfiguration {
 
                 if (value != null) {
                     if (LOGGER.isLoggable(Level.INFO)) {
-                        // special logic for ClientStateSavingPassword
-                        if (!entry
-                              .equals(WebEnvironmentEntry.ClientStateSavingPassword)) {
-                            if (LOGGER
-                                  .isLoggable(loggingLevel)) {
-                                LOGGER.log(loggingLevel,
-                                           "jsf.config.webconfig.enventryinfo",
-                                           new Object[]{contextName,
-                                                        entryName,
-                                                        value});
-                            }
-                        } else {
-                            if (LOGGER
-                                  .isLoggable(loggingLevel)) {
-                                LOGGER.log(loggingLevel,
-                                           "jsf.config.webconfig.enventry.clientencrypt",
-                                           contextName);
-                            }
+                        if (LOGGER
+                                .isLoggable(loggingLevel)) {
+                            LOGGER.log(loggingLevel,
+                                    "jsf.config.webconfig.enventryinfo",
+                                    new Object[]{contextName,
+                                        entryName,
+                                        value});
                         }
                     }
                     envEntries.put(entry, value);
@@ -1092,6 +1081,10 @@ public class WebConfiguration {
               true,
               null
         ),
+        DisableClientStateEncryption(
+              "com.sun.faces.disableClientStateEncryption",
+              false
+        ),
         EnableHtmlTagLibraryValidator(
               "com.sun.faces.enableHtmlTagLibValidator",
               false
@@ -1326,7 +1319,6 @@ public class WebConfiguration {
     public enum WebEnvironmentEntry {
 
 
-        ClientStateSavingPassword("ClientStateSavingPassword"),
         ProjectStage(javax.faces.application.ProjectStage.PROJECT_STAGE_JNDI_NAME);
 
         private static final String JNDI_PREFIX = "java:comp/env/";

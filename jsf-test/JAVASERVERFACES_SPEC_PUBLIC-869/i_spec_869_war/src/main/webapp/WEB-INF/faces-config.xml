@@ -46,7 +46,7 @@
     version="2.2">
 
   <protected-views>
-    <url-pattern>i_spec_869_war_protected.xhtml</url-pattern>
+    <url-pattern>/i_spec_869_war_protected.xhtml</url-pattern>
   </protected-views>
 
 </faces-config>

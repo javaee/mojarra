@@ -43,6 +43,7 @@ package com.sun.faces.renderkit;
 import java.io.IOException;
 
 import javax.faces.FacesException;
+import javax.faces.application.ProtectedViewException;
 import javax.faces.application.StateManager;
 import javax.faces.context.FacesContext;
 import javax.faces.render.ResponseStateManager;
@@ -86,6 +87,10 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 
     }
 
+    @Override
+    public String getCryptographicallyStrongTokenFromSession(FacesContext context) {
+        return helper.getCryptographicallyStrongTokenFromSession(context);
+    }
 
     /**
      * @see {@link javax.faces.render.ResponseStateManager#getState(javax.faces.context.FacesContext, String)}

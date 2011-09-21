@@ -41,7 +41,7 @@
 package javax.faces.application;
 
 import java.util.List;
-import javax.faces.component.UIComponent;
+import java.util.Set;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIViewRoot;
 import javax.faces.FacesException;
@@ -50,11 +50,10 @@ import java.util.Locale;
 import java.util.Map;
 import java.io.IOException;
 import javax.faces.FacesWrapper;
-import javax.faces.view.AttachedObjectHandler;
 import javax.faces.view.ViewDeclarationLanguage;
 
 /**
- * <p>Provides a simple implementation of {@link ViewHandler} that can
+ * <p class="changed_modified_2_2">Provides a simple implementation of {@link ViewHandler} that can
  * be subclassed by developers wishing to provide specialized behavior
  * to an existing {@link ViewHandler} instance.  The default
  * implementation of all methods is to call through to the wrapped
@@ -186,7 +185,49 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
 
     }
 
+    /**
+     *
+     * <p>The default behavior of this method is to
+     * call {@link ViewHandler#getProtectedViewsUnmodifiable}
+     * on the wrapped {@link ViewHandler} object.</p>
+     *
+     * @see ViewHandler#getProtectedViewsUnmodifiable
+     * @since 2.2
+     */
+    @Override
+    public Set<String> getProtectedViewsUnmodifiable() {
+        return getWrapped().getProtectedViewsUnmodifiable();
+    }
 
+    /**
+     *
+     * <p>The default behavior of this method is to
+     * call {@link ViewHandler#addProtectedView}
+     * on the wrapped {@link ViewHandler} object.</p>
+     *
+     * @see ViewHandler#addProtectedView
+     * @since 2.2
+     */
+    @Override
+    public void addProtectedView(String urlPattern) {
+        getWrapped().addProtectedView(urlPattern);
+    }
+
+    /**
+     *
+     * <p>The default behavior of this method is to
+     * call {@link ViewHandler#removeProtectedView}
+     * on the wrapped {@link ViewHandler} object.</p>
+     *
+     * @see ViewHandler#removeProtectedView
+     * @since 2.2
+     */
+
+    @Override
+    public boolean removeProtectedView(String urlPattern) {
+        return getWrapped().removeProtectedView(urlPattern);
+    }
+    
     /**
      * <p>The default behavior of this method is to
      * call {@link ViewHandler#getRedirectURL(javax.faces.context.FacesContext, String, java.util.Map, boolean)}

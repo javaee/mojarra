@@ -48,12 +48,14 @@ import javax.faces.application.StateManager.SerializedView;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.application.ProtectedViewException;
 
 
 
 
 /**
- * <p><strong class="changed_modified_2_0">ResponseStateManager</strong>
+ * <p><strong class="changed_modified_2_0 changed_modified_2_2">
+ * ResponseStateManager</strong>
  * is the helper class to {@link javax.faces.application.StateManager}
  * that knows the specific rendering technology being used to generate
  * the response.  It is a singleton abstract class, vended by the {@link
@@ -88,9 +90,23 @@ public abstract class ResponseStateManager {
      */
 
     public static final String VIEW_STATE_PARAM = "javax.faces.ViewState";
-
-    /*       
-     * <p>Take the argument <code>state</code> and write it into the
+    
+    /**
+     * <p class="changed_added_2_2">The value of this constant is taken
+     * to be the name of a request parameter whose value is inspected
+     * to verify the safety of an incoming non-postback request with respect
+     * to the currently configured <code>Set</code> of protected views
+     * for this application.</p>
+     * 
+     * @since 2.2
+     */
+    
+    public static final String NON_POSTBACK_VIEW_TOKEN_PARAM = 
+            "javax.faces.Token";
+    
+    /**       
+     * <p><span class=" class="changed_modified_2_2"">Take</span> the argument 
+     * <code>state</code> and write it into the
      * output using the current {@link ResponseWriter}, which must be
      * correctly positioned already.</p>
      *
@@ -101,10 +117,10 @@ public abstract class ResponseStateManager {
      *
      * <p>If the state saving method for this application is {@link
      * javax.faces.application.StateManager#STATE_SAVING_METHOD_CLIENT},
-     * the implementation may encrypt the state to be saved to the
-     * client.  We recommend that the state be unreadable by the client,
-     * and also be tamper evident.  The reference implementation follows
-     * these recommendations.  </p>
+     * the implementation <span class="changed_modified_2_2">must</span> 
+     * encrypt the state to be saved to the
+     * client <span class="changed_modified_2_2">in a tamper evident 
+     * manner</span>.</p>
      *
      * <p>If the state saving method for this application is {@link
      * javax.faces.application.StateManager#STATE_SAVING_METHOD_SERVER},
@@ -220,10 +236,19 @@ public abstract class ResponseStateManager {
     }
 
     /**
-     * <p>The implementation must inspect the current request and return
+     * <p><span class="changed_modified_2_2">The</span> implementation must 
+     * inspect the current request and return
      * an Object representing the tree structure and component state
      * passed in to a previous invocation of {@link
      * #writeState(javax.faces.context.FacesContext,java.lang.Object)}.</p>
+     * 
+     * <p class="changed_added_2_2">If the state saving method for this 
+     * application is {@link
+     * javax.faces.application.StateManager#STATE_SAVING_METHOD_CLIENT},
+     * <code>writeState()</code> will have encrypted the state in a tamper
+     * evident manner.  If the state fails to decrypt, or decrypts but 
+     * indicates evidence of tampering, a 
+     * {@link javax.faces.application.ProtectedViewException} must be thrown.</p>
      *
      * <p>For backwards compatability with existing
      * <code>ResponseStateManager</code> implementations, the default
@@ -315,7 +340,6 @@ public abstract class ResponseStateManager {
         return (!context.getExternalContext().getRequestParameterMap().isEmpty());
     }
 
-
     /**
      * <p>
      * Return the specified state as a <code>String</code> without any markup
@@ -332,6 +356,21 @@ public abstract class ResponseStateManager {
     public String getViewState(FacesContext context, Object state) {
         return null;
     }
-
-
+    
+    /**
+     * <p class="changed_added_2_2">Compliant implementations must return a 
+     * cryptographically strong token for use to protect views in this 
+     * application. The default implementation simply returns null.
+     * </p>
+     * 
+     * @param context the {@link FacesContext} for the current request
+     * 
+     * @return a cryptographically strong value
+     *
+     * @since 2.2
+     */
+    public String getCryptographicallyStrongTokenFromSession(FacesContext context) {
+        return null;
+    }
+    
 }

@@ -607,7 +607,7 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
      * been configured to not operate on postback. See {@link #isOnPostback}.</p></li>
 
      * 	  <li><p>The condition stated in the <code>if</code> property
-     * evaluates to <code>false</code>.  See {@link #isIf}</p>.</li>
+     * evaluates to <code>false</code>.  See {@link #isRendered}</p>.</li>
 
      * </ul>
 

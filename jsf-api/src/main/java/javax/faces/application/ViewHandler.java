@@ -42,9 +42,11 @@ package javax.faces.application;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -53,21 +55,14 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.faces.view.ActionSource2AttachedObjectHandler;
-import javax.faces.view.ActionSource2AttachedObjectTarget;
-import javax.faces.view.AttachedObjectHandler;
-import javax.faces.view.AttachedObjectTarget;
-import javax.faces.view.EditableValueHolderAttachedObjectHandler;
-import javax.faces.view.EditableValueHolderAttachedObjectTarget;
 import javax.faces.view.ViewDeclarationLanguage;
-import javax.faces.view.ValueHolderAttachedObjectHandler;
-import javax.faces.view.ValueHolderAttachedObjectTarget;
 
 
 
 /**
  * <p><strong><span
- * class="changed_modified_2_0 changed_modified_2_1">ViewHandler</span></strong> is the
+ * class="changed_modified_2_0 changed_modified_2_1 changed_modified_2_2">
+ * ViewHandler</span></strong> is the
  * pluggablity mechanism for allowing implementations of or applications
  * using the JavaServer Faces specification to provide their own
  * handling of the activities in the <em>Render Response</em> and
@@ -366,13 +361,60 @@ public abstract class ViewHandler {
      *  <code>path</code> is <code>null</code>.
      */
     public abstract String getResourceURL(FacesContext context, String path);
-
-
+    
+    /**
+     * <p class="changed_added_2_2">Return an unmodifiable <code>Set</code> of 
+     * the protected views currently known to this <code>ViewHandler</code>
+     * instance. Compliant implementations must return a <code>Set</code> that 
+     * is the concatenation of the contents of all the <code>&lt;url-pattern&gt;</code>
+     * elements within all the <code>&lt;protected-views&gt;</code> in all of the
+     * application configuration resources in the current application. The 
+     * default implementation returns an unmodifiable empty <code>Set</code>.</p>
+     * 
+     * @since 2.2 
+     */
+    public Set<String> getProtectedViewsUnmodifiable() {
+        return Collections.unmodifiableSet(Collections.EMPTY_SET);
+    }
+    
+    /**
+     * <p class="changed_added_2_2">Add the argument <code>urlPattern</code>
+     * to the <code>Set</code> of protected views for this application. 
+     * Compliant implementations make it so a subsequent call to 
+     * {@link #getProtectedViewsUnmodifiable} contains the argument. The 
+     * default implementation takes no action.</p>
+     * 
+     * @param urlPattern the url-pattern to add.
+     * 
+     * @since 2.2 
+     */
+    public void addProtectedView(String urlPattern) {
+        
+    }
+    
+    /**
+     * <p class="changed_added_2_2">Remove the argument <code>urlPattern</code>
+     * from the <code>Set</code> of protected views for this application, if
+     * present in the <code>Set</code>. If the argument <code>urlPattern</code>
+     * is not present in the <code>Set</code>, this method has no effect.
+     * Compliant implementations must make it so a subsequent call to 
+     * {@link #getProtectedViewsUnmodifiable} does not contain the argument. 
+     * Returns <code>true</code> if this <code>Set</code> contained the argument.
+     * The default implementation takes no action and returns <code>false</code>.</p>
+     * 
+     * @param urlPattern the url-pattern to remove.
+     * 
+     * @since 2.2 
+     */
+    public boolean removeProtectedView(String urlPattern) {
+        return false;
+    }
+    
     /**
      * <p class="changed_added_2_0"> Return a JSF action URL derived
      * from the <code>viewId</code> argument that is suitable to be used
      * by the {@link NavigationHandler} to issue a redirect request to
-     * the URL using a NonFaces request.  Compiliant implementations
+     * the URL using a NonFaces request.  Compliant implementations
      * must implement this method as specified in section JSF.7.5.2.
      * The default implementation simply calls through to {@link
      * #getActionURL}, passing the arguments <code>context</code> and

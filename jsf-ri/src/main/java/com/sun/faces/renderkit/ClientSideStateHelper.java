@@ -40,6 +40,7 @@
 
 package com.sun.faces.renderkit;
 
+import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -54,15 +55,12 @@ import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import javax.crypto.CipherInputStream;
-import javax.crypto.CipherOutputStream;
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.ClientStateTimeout;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.ClientStateWriteBufferSize;
-import static com.sun.faces.config.WebConfiguration.WebEnvironmentEntry.ClientStateSavingPassword;
 import com.sun.faces.io.Base64InputStream;
 import com.sun.faces.io.Base64OutputStreamWriter;
 import com.sun.faces.util.FacesLogger;
@@ -389,10 +387,13 @@ public class ClientSideStateHelper extends StateHelper {
      */
     protected void init() {
 
-        String pass = webConfig.getEnvironmentEntry(
-              ClientStateSavingPassword);
-        if (pass != null) {
+        if (!webConfig.isSet(BooleanWebContextInitParameter.DisableClientStateEncryption)) {
             guard = new ByteArrayGuard();
+        } else {
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE, "jsf.config.webconfig.enventry.clientencrypt");
+            }
+            
         }
 
         stateTimeoutEnabled = webConfig.isSet(ClientStateTimeout);

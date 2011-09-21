@@ -41,6 +41,7 @@
 package com.sun.faces.renderkit;
 
 
+import com.sun.faces.RIConstants;
 import java.io.IOException;
 
 import javax.faces.context.FacesContext;
@@ -180,6 +181,25 @@ public abstract class StateHelper {
                         .getCurrentInstance().getExternalContext());
         }
 
+    }
+    
+    private String createCryptographicallyStrongToken() {
+        // PENDING: http://java.net/jira/browse/JAVASERVERFACES-2204
+        String result = "" + System.currentTimeMillis();
+        
+        return result;
+    }
+    
+    private static final String TOKEN_NAME = RIConstants.FACES_PREFIX + "TOKEN";
+    
+    public String getCryptographicallyStrongTokenFromSession(FacesContext context) {
+        String result = (String) 
+                context.getExternalContext().getSessionMap().get(TOKEN_NAME);
+        if (null == result) {
+            result = createCryptographicallyStrongToken();
+            context.getExternalContext().getSessionMap().put(TOKEN_NAME, result);
+        }
+        return result;
     }
 
 

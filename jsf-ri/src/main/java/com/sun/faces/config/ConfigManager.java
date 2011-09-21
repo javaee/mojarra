@@ -68,6 +68,7 @@ import com.sun.faces.config.processor.RenderKitConfigProcessor;
 import com.sun.faces.config.processor.ValidatorConfigProcessor;
 import com.sun.faces.config.processor.FaceletTaglibConfigProcessor;
 import com.sun.faces.config.processor.FacesConfigExtensionProcessor;
+import com.sun.faces.config.processor.ProtectedViewsConfigProcessor;
 import com.sun.faces.spi.InjectionProvider;
 import com.sun.faces.spi.InjectionProviderFactory;
 import com.sun.faces.util.FacesLogger;
@@ -271,7 +272,8 @@ public class ConfigManager {
              new RenderKitConfigProcessor(),
              new NavigationConfigProcessor(),
              new BehaviorConfigProcessor(),
-             new FacesConfigExtensionProcessor()
+             new FacesConfigExtensionProcessor(),
+             new ProtectedViewsConfigProcessor()
         };
         for (int i = 0; i < configProcessors.length; i++) {
             ConfigProcessor p = configProcessors[i];

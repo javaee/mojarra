@@ -54,11 +54,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 import java.util.*;
-import java.net.MalformedURLException;
 
 import javax.faces.FactoryFinder;
 import javax.faces.component.*;
@@ -74,6 +74,7 @@ public class MultiViewHandler extends ViewHandler {
     private static final Logger logger = FacesLogger.APPLICATION.getLogger();
 
     private String[] configuredExtensions;
+    private Set<String> protectedViews;
     private boolean extensionsSet;
     
     private ViewDeclarationLanguageFactory vdlFactory;
@@ -90,6 +91,7 @@ public class MultiViewHandler extends ViewHandler {
         extensionsSet = config.isSet(WebConfiguration.WebContextInitParameter.DefaultSuffix);
         vdlFactory = (ViewDeclarationLanguageFactory)
                 FactoryFinder.getFactory(FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY);
+        protectedViews = new HashSet<String>();
 
     }
 
@@ -271,6 +273,50 @@ public class MultiViewHandler extends ViewHandler {
      * @see ViewHandler#getActionURL(javax.faces.context.FacesContext, String)
      */
     public String getActionURL(FacesContext context, String viewId) {
+        String result = getActionURLWithoutViewProtection(context, viewId);
+        // http://java.net/jira/browse/JAVASERVERFACES-2204
+        // PENDING: this code is optimized to be fast to write.
+        // It must be optimized to be fast to run.
+        
+        // See git clone ssh://edburns@git.java.net/grizzly~git 1_9_36 for
+        // how grizzly does this.
+        ViewHandler viewHandler = context.getApplication().getViewHandler();
+        Set<String> urlPatterns = viewHandler.getProtectedViewsUnmodifiable();
+        // Implement section 12.1 of the Servlet spec.
+        boolean viewIdIsProtected = false;
+        for (String cur : urlPatterns) {
+            if (cur.equals(viewId)) {
+                viewIdIsProtected = true;
+            }
+            if (viewIdIsProtected) {
+                break;
+            }
+        }
+        if (viewIdIsProtected) {
+            StringBuilder builder = new StringBuilder(result);
+            // If the result already has a query string...
+            if (result.contains("?")) {
+                // ...assume it also has one or more parameters, and 
+                // append an additional parameter.
+                builder.append("&");
+            } else {
+                // Otherwise, this is the first parameter in the result.
+                builder.append("?");
+            }
+            
+            String rkId = viewHandler.calculateRenderKitId(context);
+            ResponseStateManager rsm = RenderKitUtils.getResponseStateManager(context, rkId);
+            String tokenValue = rsm.getCryptographicallyStrongTokenFromSession(context);
+            builder.append(ResponseStateManager.NON_POSTBACK_VIEW_TOKEN_PARAM).
+                    append("=").append(tokenValue);
+            result = builder.toString();
+
+        }
+        
+        return result;
+    }
+
+    private String getActionURLWithoutViewProtection(FacesContext context, String viewId) {
 
         Util.notNull("context", context);
         Util.notNull("viewId", viewId);
@@ -364,6 +410,20 @@ public class MultiViewHandler extends ViewHandler {
 
     }
 
+    @Override
+    public void addProtectedView(String urlPattern) {
+        protectedViews.add(urlPattern);
+    }
+
+    @Override
+    public Set<String> getProtectedViewsUnmodifiable() {
+        return Collections.unmodifiableSet(protectedViews);
+    }
+
+    @Override
+    public boolean removeProtectedView(String urlPattern) {
+        return protectedViews.remove(urlPattern);
+    }
 
     /**
      * @see ViewHandler#getRedirectURL(javax.faces.context.FacesContext, String, java.util.Map, boolean)

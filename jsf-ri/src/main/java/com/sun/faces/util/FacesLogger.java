@@ -40,7 +40,13 @@
 
 package com.sun.faces.util;
 
+import java.text.MessageFormat;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 import java.util.logging.Logger;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
 
 /**
  * <p/>
@@ -93,6 +99,34 @@ public enum FacesLogger {
 
     public Logger getLogger() {
         return Logger.getLogger(loggerName, LOGGER_RESOURCES);
+    }
+    
+    public String interpolateMessage(FacesContext context,
+          String messageId,
+          Object [] params) {
+        String result = null;
+        ResourceBundle rb = null;
+        UIViewRoot root = context.getViewRoot();
+        Locale curLocale;
+        ClassLoader loader = Util.getCurrentLoader(this);
+        if (null == root) {
+            curLocale = Locale.getDefault();
+        } else {
+            curLocale = root.getLocale();
+        }
+        try {
+            rb = ResourceBundle.getBundle(getResourcesName(), curLocale, loader);
+            String message = rb.getString(messageId);
+            if (params != null) {
+                result = MessageFormat.format(message, params);
+            } else {
+                result = message;
+            }
+        } catch (MissingResourceException mre) {
+            result = messageId;
+        }
+        
+        return result;
     }
 
 }
