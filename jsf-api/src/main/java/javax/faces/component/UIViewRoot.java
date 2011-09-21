@@ -1710,6 +1710,14 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
         if (context == null) {
             throw new NullPointerException();
         }
+
+        Object superState = super.saveState(context);
+        Object attachedState = saveAttachedState(context, viewScope);
+
+        if (superState == null && attachedState == null) {
+            return null;
+        }
+
         if (values == null) {
             values = new Object[2];
         }
