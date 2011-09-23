@@ -190,7 +190,7 @@ javadoc generation skipped
                     <copy overwrite="true" 
                           todir="${mvn.api.dir}/src/main/java">
                       <fileset dir="${api.dir}/doc">
-                        <include name="*.png" />
+                        <include name="**/*.png" />
                         <include name="*.xsd" />
                         <include name="*.dtd" />
                         <include name="standard-html-renderkit.xml" />
@@ -198,10 +198,18 @@ javadoc generation skipped
                         <exclude name="javaee*.xsd" />
                         <exclude name="XMLSchema.dtd" />
                         <exclude name="datatypes.dtd" />
+                        <exclude name="changed_*.png" />
                       </fileset>
-                      <fileset dir="${api.dir}/src/main/java" includes="**/*" />
-                      <fileset dir="${api.dir}/build/generate/" 
-                               includes="**/*" excludes="last-generation" />
+                      <fileset dir="${api.dir}/src/main/java">
+                        <include name="**/*" />
+                        <exclude name="**/*.png" />
+                      </fileset>
+                      <fileset dir="${api.dir}/${build.dir}/generate/">
+                        <include name="**/*" />
+                        <exclude name="**/last-generation" />
+                        <exclude name="facesdoc/**/*.*" />
+                        <exclude name="**/*.png" />
+                      </fileset>
                     </copy>
                     <unjar src="${javax.faces-api.jar}"
                            overwrite="yes"
@@ -214,6 +222,15 @@ javadoc generation skipped
                              mvnSpecVersion="@{version}"
                              dir="${mvn.api.dir}"
                              goals="@{goal}" />
+
+                    <output.jar.contents
+                            locally.deployed.jar="${maven.repo.local}/javax/faces/javax.faces-api/@{version}/javax.faces-api-@{version}.jar" />
+                    <output.jar.contents
+                            locally.deployed.jar="${maven.repo.local}/javax/faces/javax.faces-api/@{version}/javax.faces-api-@{version}-javadoc.jar" />
+                    <output.jar.contents
+                            locally.deployed.jar="${maven.repo.local}/javax/faces/javax.faces-api/@{version}/javax.faces-api-@{version}-sources.jar" />
+
+
                 </then>
                 <else>
                      <delete failonerror="false" dir="${mvn.impl.dir}"/>
@@ -228,6 +245,10 @@ javadoc generation skipped
                       <fileset dir="${impl.dir}/src/main/java" includes="**/*" />
                       <fileset dir="${impl.dir}/build/generate/" 
                                includes="**/*" excludes="last-generation,conf/**,**/*.xsd" />
+                      <fileset dir="${api.dir}/src/main/java" includes="**/*" />
+                      <fileset dir="${api.dir}/build/generate/" 
+                               includes="**/*" excludes="last-generation,conf/**,**/*.xsd" />
+
                     </copy>
                     <unjar src="${impl.dir}/build/lib/javax.faces.jar"
                            overwrite="yes"
@@ -241,9 +262,41 @@ javadoc generation skipped
                              mvnSpecVersion="@{version}"
                              dir="${mvn.impl.dir}"
                              goals="@{goal}"/>
+
+                    <output.jar.contents
+                            locally.deployed.jar="${maven.repo.local}/org/glassfish/javax.faces/@{version}/javax.faces-@{version}.jar" />
+                    <output.jar.contents
+                            locally.deployed.jar="${maven.repo.local}/org/glassfish/javax.faces/@{version}/javax.faces-@{version}-javadoc.jar" />
+                    <output.jar.contents
+                            locally.deployed.jar="${maven.repo.local}/org/glassfish/javax.faces/@{version}/javax.faces-@{version}-sources.jar" />
+
+
                 </else>
             </if>
         </sequential>
+    </macrodef>
+
+    <macrodef name="output.jar.contents">
+      <attribute name="locally.deployed.jar" />
+      <sequential>
+        <var name="jar.contents.raw" unset="true" />
+        <var name="jar.contents" unset="true" />
+
+        <pathconvert pathsep="${line.separator}" 
+                     property="jar.contents.raw">
+          <zipfileset src="@{locally.deployed.jar}" />
+        </pathconvert>
+        <!-- Remove the leading fully qualified paths. -->
+        <propertyregex property="jar.contents" 
+                       input="${jar.contents.raw}" override="true"
+                       regexp="@{locally.deployed.jar}:" replace="" 
+                       global="true" />
+        <echo>
++++++++++++++++++++++++++++++++ START contents of @{locally.deployed.jar}:
+${jar.contents}
++++++++++++++++++++++++++++++++ END contents of @{locally.deployed.jar}:
+        </echo>
+      </sequential>                    
     </macrodef>
 
     <macrodef name="jsf.mvn">
