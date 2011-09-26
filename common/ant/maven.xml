@@ -243,11 +243,28 @@ javadoc generation skipped
                     <copy overwrite="true" 
                           todir="${mvn.impl.dir}/src/main/java">
                       <fileset dir="${impl.dir}/src/main/java" includes="**/*" />
-                      <fileset dir="${impl.dir}/build/generate/" 
-                               includes="**/*" excludes="last-generation,conf/**,**/*.xsd" />
-                      <fileset dir="${api.dir}/src/main/java" includes="**/*" />
-                      <fileset dir="${api.dir}/build/generate/" 
-                               includes="**/*" excludes="last-generation,conf/**,**/*.xsd" />
+                      <fileset dir="${impl.dir}/${build.dir}/generate/"> 
+                        <include name="**/*" />
+                        <exclude name="last-generation" />
+                        <exclude name="conf/**" />
+                        <exclude name="facesdoc/**" />
+                        <exclude name="**/*.xsd" />
+                      </fileset>
+
+                      <fileset dir="${api.dir}/src/main/java">
+                        <include name="**/*" />
+                        <exclude name="last-generation" />
+                        <exclude name="conf/**" />
+                        <exclude name="facesdoc/**" />
+                        <exclude name="**/*.xsd" />
+                      </fileset>
+                      <fileset dir="${api.dir}/build/generate/">
+                        <include name="**/*" />
+                        <exclude name="last-generation" />
+                        <exclude name="conf/**" />
+                        <exclude name="facesdoc/**" />
+                        <exclude name="**/*.xsd" />
+                      </fileset>
 
                     </copy>
                     <unjar src="${impl.dir}/build/lib/javax.faces.jar"
