@@ -46,6 +46,7 @@
 <project name="JSF-RI" default="main" basedir=".">
 
     <property name="build.dir" value="build.pre-maven-rename"/>
+    <property name="build-post-maven-rename.dir" value="build"/>
 
     <!-- ************ Per user local properties ******************************* -->
 
@@ -121,6 +122,8 @@
         <mkdir dir="${build.dir}/vdldocs/jsp"/>
         <mkdir dir="${build.dir}/vdldocs/facelets"/>
         <mkdir dir="${build.dir}/lib"/>
+        <delete failonerror="false" 
+                dir="${build-post-maven-rename.dir}/classes/javax"/>
         <antcall target="delete.and.remkdir.build.generate.dir" />
     </target>
 
@@ -374,6 +377,7 @@
             description="Clean build and distribution directories">
         <ant antfile="build-tests.xml" target="remove.tstamp"/>
         <delete dir="${build.dir}"/>
+        <delete dir="${build-post-maven-rename.dir}"/>
         <delete dir="${target.dir}"/>
         <delete dir="${dist.dir}"/>
         <delete dir="${impl.test.results.dir}"/>

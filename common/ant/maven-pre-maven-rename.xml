@@ -187,7 +187,7 @@ javadoc generation skipped
                     <copy overwrite="true" 
                           todir="${mvn.pre-maven-rename.api.dir}/src/main/java">
                       <fileset dir="${api.dir}/doc">
-                        <include name="*.png" />
+                        <include name="**/*.png" />
                         <include name="*.xsd" />
                         <include name="*.dtd" />
                         <include name="standard-html-renderkit.xml" />
@@ -195,10 +195,18 @@ javadoc generation skipped
                         <exclude name="javaee*.xsd" />
                         <exclude name="XMLSchema.dtd" />
                         <exclude name="datatypes.dtd" />
+                        <exclude name="changed_*.png" />
                       </fileset>
-                      <fileset dir="${api.dir}/src/main/java" includes="**/*" />
-                      <fileset dir="${api.dir}/${build.dir}/generate/" 
-                               includes="**/*" excludes="last-generation" />
+                      <fileset dir="${api.dir}/src/main/java">
+                        <include name="**/*" />
+                        <exclude name="**/*.png" />
+                      </fileset>
+                      <fileset dir="${api.dir}/${build.dir}/generate/">
+                        <include name="**/*" />
+                        <exclude name="**/last-generation" />
+                        <exclude name="facesdoc/**/*.*" />
+                        <exclude name="**/*.png" />
+                      </fileset>
                     </copy>
                     <unjar src="${api.dir}/${build.dir}/lib/jsf-api.jar"
                            overwrite="yes"
@@ -211,8 +219,17 @@ javadoc generation skipped
                              mvnSpecVersion="@{version}"
                              dir="${mvn.pre-maven-rename.api.dir}"
                              goals="@{goal}"/>
+                    <output.jar.contents
+                            locally.deployed.jar="${maven.repo.local}/com/sun/faces/jsf-api/@{version}/jsf-api-@{version}.jar" />
+                    <output.jar.contents
+                            locally.deployed.jar="${maven.repo.local}/com/sun/faces/jsf-api/@{version}/jsf-api-@{version}-javadoc.jar" />
+                    <output.jar.contents
+                            locally.deployed.jar="${maven.repo.local}/com/sun/faces/jsf-api/@{version}/jsf-api-@{version}-sources.jar" />
+
+
                 </then>
                 <else>
+                     <echo>Fabricating maven structure in ${mvn.pre-maven-rename.impl.dir}</echo>
                      <delete failonerror="false" dir="${mvn.pre-maven-rename.impl.dir}"/>
                      <create.pre-maven-rename.pom
                           template.file="${current.dir}/template/jsf-pre-maven-rename-impl-pom-template.xml"
@@ -223,8 +240,13 @@ javadoc generation skipped
                     <copy overwrite="true" 
                           todir="${mvn.pre-maven-rename.impl.dir}/src/main/java">
                       <fileset dir="${impl.dir}/src/main/java" includes="**/*" />
-                      <fileset dir="${impl.dir}/${build.dir}/generate/" 
-                               includes="**/*" excludes="last-generation,conf/**,**/*.xsd" />
+                      <fileset dir="${impl.dir}/${build.dir}/generate/"> 
+                        <include name="**/*" />
+                        <exclude name="last-generation" />
+                        <exclude name="conf/**" />
+                        <exclude name="facesdoc/**" />
+                        <exclude name="**/*.xsd" />
+                      </fileset>
                     </copy>
                     <unjar src="${impl.dir}/${build.dir}/lib/jsf-impl.jar"
                            overwrite="yes"
@@ -238,9 +260,40 @@ javadoc generation skipped
                              mvnSpecVersion="@{version}"
                              dir="${mvn.pre-maven-rename.impl.dir}"
                              goals="@{goal}"/>
+
+                    <output.jar.contents
+                            locally.deployed.jar="${maven.repo.local}/com/sun/faces/jsf-impl/@{version}/jsf-impl-@{version}.jar" />
+                    <output.jar.contents
+                            locally.deployed.jar="${maven.repo.local}/com/sun/faces/jsf-impl/@{version}/jsf-impl-@{version}-javadoc.jar" />
+                    <output.jar.contents
+                            locally.deployed.jar="${maven.repo.local}/com/sun/faces/jsf-impl/@{version}/jsf-impl-@{version}-sources.jar" />
+
                 </else>
             </if>
         </sequential>
+    </macrodef>
+
+    <macrodef name="output.jar.contents">
+      <attribute name="locally.deployed.jar" />
+      <sequential>
+        <var name="jar.contents.raw" unset="true" />
+        <var name="jar.contents" unset="true" />
+
+        <pathconvert pathsep="${line.separator}" 
+                     property="jar.contents.raw">
+          <zipfileset src="@{locally.deployed.jar}" />
+        </pathconvert>
+        <!-- Remove the leading fully qualified paths. -->
+        <propertyregex property="jar.contents" 
+                       input="${jar.contents.raw}" override="true"
+                       regexp="@{locally.deployed.jar}:" replace="" 
+                       global="true" />
+        <echo>
++++++++++++++++++++++++++++++++ START contents of @{locally.deployed.jar}:
+${jar.contents}
++++++++++++++++++++++++++++++++ END contents of @{locally.deployed.jar}:
+        </echo>
+      </sequential>                    
     </macrodef>
 
     <macrodef name="jsf.pre-maven-rename.mvn">
