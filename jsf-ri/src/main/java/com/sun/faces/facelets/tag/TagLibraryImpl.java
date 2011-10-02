@@ -110,7 +110,6 @@ public class TagLibraryImpl extends AbstractTagLibrary {
         public void putComponent(String name, String componentType,
                 String rendererType, Class handlerClass) {
             Util.notNull("name", name);
-            Util.notNull("componentType", componentType);
             Util.notNull("handlerClass", handlerClass);
             this.addComponent(name, componentType, rendererType, handlerClass);
         }

@@ -6,14 +6,14 @@
             elementFormDefault="qualified"
             attributeFormDefault="unqualified"
             version="2.2">
-  <xsd:include schemaLocation="javaee_5.xsd"/>
+  <xsd:include schemaLocation="javaee_6.xsd"/>
 
   <xsd:annotation>
     <xsd:documentation>
 
       DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
       
-      Copyright (c) 2010 Oracle and/or its affiliates. All rights reserved.
+      Copyright (c) 2011 Oracle and/or its affiliates. All rights reserved.
       
       The contents of this file are subject to the terms of either the GNU
       General Public License Version 2 only ("GPL") or the Common Development
@@ -57,15 +57,15 @@
       <![CDATA[[
       The XML Schema for the Tag Libraries in the JavaServer Faces
       Standard Facelets View Declaration Language (Facelets VDL)
-      (Version 2.0).
+      (Version 2.2).
       
-      JSF 2.0 Facelet Tag Libraries that wish to conform to this
+      JSF 2.2 Facelet Tag Libraries that wish to conform to this
       schema must declare it in the following manner.
       
       <facelet-taglib xmlns="http://java.sun.com/xml/ns/javaee"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibary_2_0.xsd"
-      version="2.0">
+      xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibary_2_2.xsd"
+      version="2.2">
       
       ...
       
@@ -75,7 +75,7 @@
       version of the schema using xsi:schemaLocation attribute
       for javaee namespace with the following location:
       
-      http://java.sun.com/xml/ns/javaee/web-facelettaglibary_2_0.xsd
+      http://java.sun.com/xml/ns/javaee/web-facelettaglibary_2_2.xsd
       
       ]]>
     </xsd:documentation>
@@ -427,17 +427,18 @@
     </xsd:annotation>
     <xsd:sequence>
       <xsd:group ref="javaee:descriptionGroup"/>
-      <xsd:element name="component-type"
-                   type="javaee:string"/>
+      <xsd:choice minOccurs="0"
+                  maxOccurs="unbounded">
+          <xsd:element name="component-type"
+                       type="javaee:string"/>
+          <xsd:element name="resource-id"
+                       type="javaee:string"/>
+          <xsd:element name="handler-class"
+                       type="javaee:fully-qualified-classType"/>
+      </xsd:choice>
       <xsd:element minOccurs="0"
                    maxOccurs="1"
                    name="renderer-type"
-                   type="javaee:string"/>
-      <xsd:element minOccurs="0"
-                   maxOccurs="1"
-                   name="handler-class"
-                   type="javaee:fully-qualified-classType"/>
-      <xsd:element name="resource-id"
                    type="javaee:string"/>
       <xsd:element name="component-extension"
                    type="javaee:facelet-taglib-tag-component-extensionType"
@@ -580,7 +581,7 @@
       </xsd:documentation>
     </xsd:annotation>
     <xsd:restriction base="xsd:token">
-      <xsd:enumeration value="2.0"/>
+      <xsd:enumeration value="2.2"/>
     </xsd:restriction>
   </xsd:simpleType>
 

@@ -491,6 +491,11 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
      */
     private UIComponent createComponent(FaceletContext ctx) {
         
+        UIComponent result = owner.createCustomComponent(ctx);
+        if (null != result) {
+            return result;
+        }
+        
         if (null != createCompositeComponentDelegate) {
             return createCompositeComponentDelegate.createComponent(ctx);
         }

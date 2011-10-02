@@ -41,19 +41,31 @@
 package javax.faces.view.facelets;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIPanel;
 
 
 /**
- * <p class="changed_added_2_0">Public base class for markup element
- * instances that map to {@link UIComponent} instances in the view.</p>
+ * <p class="changed_added_2_0"><span
+ * class="changed_modified_2_2">Public</span> base class for markup
+ * element instances that map to {@link UIComponent} instances in the
+ * view.</p>
  *
  * <div class="changed_added_2_0">
  *
- * <p>The implementation must guarantee that the <code>apply()</code>
- * method is overridden and takes the following actions, in this order.
- * These actions must only happen the first time this facelet is applied
- * for each user.  Subsequent applications must take no action.</p>
+ * <p><span class="changed_modified_2_2">Instances of this class are
+ * created and passed to {@link
+ * TagHandlerDelegateFactory#createComponentHandlerDelegate} when a tag
+ * corresponding to this particular component is encountered in a
+ * Facelet view.  A custom tag handler for a component, converter,
+ * validator, or behavior must extend from this class.  In this way,
+ * this instance acts as a delegate for the implementation private tag
+ * handler.  Such a subclass may choose to override as many or as few
+ * methods from this base class as desired.  If the subclass wants to
+ * completely override the action of the implementation specific tag for
+ * which this component is the delegate, it must override the
+ * <code>apply()</code> method and make it take the following actions,
+ * in this order.</span> These actions must only happen the first time
+ * this facelet is applied for each user.  Subsequent applications must
+ * take no action.</p>
 
  * <ol>
 
@@ -65,7 +77,7 @@ import javax.faces.component.UIPanel;
 	  applied to the component instance, as specified in the VDLDocs
 	  for this element.  </p></li>
 
-	  <li><p>If project stage is #{@link javax.faces.application.ProjectStage#Development},
+	  <li><p>If project stage is {@link javax.faces.application.ProjectStage#Development},
       Put the {@link javax.faces.view.Location} for this
 	  element into the component attribute <code>Map</code> under
 	  the key given by the value of the symbolic constant {@link
@@ -106,7 +118,33 @@ import javax.faces.component.UIPanel;
 	  </p></li>
 
  * </ol>
- *
+
+ * <div class="changed_added_2_2">
+
+ * <p>A common use case for extending this class is to gain access to
+ * the process by which the Facelets runtime creates component instances
+ * corresponding to markup in a Facelets view. These three methods are
+ * useful in such  cases.<p>
+
+ * <ul>
+
+ * <li><p>To control the instantiation of the <code>UIComponent</code>
+ * instance, subclasses may override {@link #createCustomComponent}.  If
+ * this method is not overridden, the tag handler for which this
+ * instance is the delegate will take the necessary action to
+ * instantiate the <code>UIComponent</code>.</p></li>
+
+ * <li><p>To be notified of creation of the
+ * <code>UIComponent</code>instance, subclasses may override {@link
+ * #onComponentCreated}.</p></li>
+
+ * <li><p>To be notified that the freshly created
+ * <code>UIComponent</code> instance has been populated with children as
+ * a result of execution of child tag handlers, subclasses may override
+ * {@link #onComponentPopulated}.</p></li>
+
+ * </div>
+
  * </div>
  *
  * @since 2.0
@@ -139,6 +177,19 @@ public class ComponentHandler extends DelegatingMetaTagHandler {
     
     public ComponentConfig getComponentConfig() {
         return this.componentConfig;
+    }
+
+    /**
+     * <p class="changed_added_2_2">Subclasses that wish to take over
+     * the task of instantiating the <code>UIComponent</code> instance
+     * corresponding to this tag handler my override this method to do
+     * so.  A <code>null</code> return from this method will cause the
+     * <code>TagHandlerDelegate</code> for instance to create the
+     * component instead.</p>
+     */
+    
+    public UIComponent createCustomComponent(FaceletContext ctx) {
+        return null;
     }
     
     

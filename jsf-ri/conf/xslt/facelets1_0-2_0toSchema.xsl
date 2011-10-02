@@ -50,7 +50,7 @@
      <taglib xmlns="http://java.sun.com/xml/ns/javaee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
-         http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_0.xsd">
+         http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_2.xsd">
   2. Change the namespace of all elements to the default of
      http://java.sun.com/xml/ns/javaee
 
@@ -64,8 +64,8 @@
         <xsl:element name="facelet-taglib"
                      namespace="http://java.sun.com/xml/ns/javaee">
             <xsl:attribute name="xsi:schemaLocation"
-                           namespace="http://www.w3.org/2001/XMLSchema-instance">http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_0.xsd</xsl:attribute>
-            <xsl:attribute name="version">2.0</xsl:attribute>
+                           namespace="http://www.w3.org/2001/XMLSchema-instance">http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_2.xsd</xsl:attribute>
+            <xsl:attribute name="version">2.2</xsl:attribute>
             <xsl:apply-templates select="*"/>
         </xsl:element>
     </xsl:template>

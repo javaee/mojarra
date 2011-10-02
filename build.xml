@@ -52,7 +52,6 @@
     <import file="${jsf.build.home}/common/ant/common.xml"/>
     <property name="tasks.home" value="${myenv.TASKS_HOME}"/>
     <property name="dist.dir" value="${basedir}/dist"/>
-    <property name="javaserverfaces-spec-eg.dir" value="${basedir}/../javaserverfaces-spec-eg-trunk"/>
 
 
     <property name="LICENSEFILE"
@@ -379,20 +378,7 @@
 
    </target>
 
-   <target name="copy.spec.pdf" if="spec-eg-dir-available">
-       <echo message="Copying PDF spec for build: ${build.number} from ${javaserverfaces-spec-eg.dir} to ${spec.snapshot.dir}" />
 
-       <copy todir="${spec.snapshot.dir}" flatten="true">
-
-         <fileset dir="${javaserverfaces-spec-eg.dir}">
-
-           <include name="**/*${build.number}*.pdf" />
-
-         </fileset>
-
-       </copy>
-
-   </target>
 
    <target name="deploy.spec.locally" if="spec-eg-dir-available">
 
@@ -409,11 +395,6 @@
      </move>
      <delete dir="${javaserverfaces-spec-eg.dir}/javadocs/spec-snapshot/jsf-spec-${spec.snapshot.version}-${build.number}" />
 
-   </target>
-
-   <target name="test.spec-eg-dir-available">
-       <available type="dir" file="${javaserverfaces-spec-eg.dir}"
-                  property="spec-eg-dir-available" />
    </target>
 
    <target name="build.spec.snapshot" depends="dist">

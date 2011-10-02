@@ -125,7 +125,7 @@ public abstract class ResponseStateManager {
      * <p>If the state saving method for this application is {@link
      * javax.faces.application.StateManager#STATE_SAVING_METHOD_SERVER},
      * and the current request is an <code>Ajax</code> request
-     * {@link javax.faces.context.PartialViewContext.isAjaxRequest} returns
+     * {@link javax.faces.context.PartialViewContext#isAjaxRequest} returns
      * <code>true</code>), use the current view state identifier if it is
      * available (do not generate a new identifier).</p>
      * 
@@ -136,10 +136,10 @@ public abstract class ResponseStateManager {
      * render kit identifier must not be written if:</p>
      * <ul>
      * <li>it is the default render kit identifier as returned by 
-     * {@link Application#getDefaultRenderKitId()} or</li>
+     * {@link javax.faces.application.Application#getDefaultRenderKitId()} or</li>
      * <li>the render kit identfier is the value of 
-     * <code>RenderKitFactory.HTML_BASIC_RENDER_KIT</code> and 
-     * {@link Application.getDefaultRenderKitId()} returns <code>null</code>.
+     * <code>javax.faces.render.RenderKitFactory.HTML_BASIC_RENDER_KIT</code> and 
+     * {@link javax.faces.application.Application#getDefaultRenderKitId()} returns <code>null</code>.
      * </li>
      * </ul> 
      *
@@ -148,11 +148,11 @@ public abstract class ResponseStateManager {
      * implementation of this method checks if the argument is an
      * instance of <code>SerializedView</code>.  If so, it calls through
      * to {@link
-     * #writeState(javax.faces.context.FacesContext,javax.faces.application.StateManager.SerializedView}.
+     * #writeState(javax.faces.context.FacesContext,javax.faces.application.StateManager.SerializedView)}.
      * If not, it expects the state to be a two element Object array.  It creates 
      * an instance of <code>SerializedView</code> and
      * stores the state as the treeStructure, and passes it to {@link
-     * #writeState(javax.faces.context.FacesContext,javax.faces.application.StateManager.SerializedView}.</p>
+     * #writeState(javax.faces.context.FacesContext,javax.faces.application.StateManager.SerializedView)}.</p>
      *
      *
      * @since 1.2

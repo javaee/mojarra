@@ -58,6 +58,8 @@
 
     <property name="Name" value="JavaServer Faces"/>
     <property name="name" value="jsf-demo"/>
+    <property name="javaserverfaces-spec-eg.dir" 
+              value="${jsf.build.home}/../javaserverfaces-spec-eg-trunk"/>
 
     <property name="build.home" value="${basedir}/build"/>
 
@@ -158,9 +160,33 @@
       <generate.documentation />
     </target>
 
+   <target name="test.spec-eg-dir-available">
+       <available type="dir" file="${javaserverfaces-spec-eg.dir}"
+                  property="spec-eg-dir-available" />
+   </target>
+
+   <target name="copy.spec.pdf" if="spec-eg-dir-available">
+       <echo message="Copying PDF spec for build: ${build.number} from ${javaserverfaces-spec-eg.dir} to ${spec.snapshot.dir}" />
+       <copy todir="${dist.home}/docs" flatten="true">
+
+         <fileset dir="${javaserverfaces-spec-eg.dir}">
+
+           <include name="**/*${build.number}*.pdf" />
+
+         </fileset>
+
+       </copy>
+
+   </target>
+
     <target name="generate.documentatation.given.documentation.version">
       <generate.documentation version="${documentation.version}" />
     </target>
+
+   <target name="get.pdf" depends="test.spec-eg-dir-available">
+        <antcall target="copy.spec.pdf" />
+   </target>
+
 
     <macrodef name="generate.documentation">
       <attribute name="version" default="${impl.version}" />
@@ -191,6 +217,16 @@
         <antcall target="api.javadocs"/>
         <antcall target="api.jsdocs"/>
         <antcall target="ri.vdldocs"/>
+        <antcall target="get.pdf" />
+        <if>
+          <available file="${dist.home}/docs/JSF_${build.number}.pdf" />
+          <then>
+            <property name="styleAttributeForPdf" value="display:block" />
+          </then>
+          <else>
+            <property name="styleAttributeForPdf" value="display:none" />
+          </else>
+        </if>
         <!--
            rlubke: commented out for now since release notes are 
                    maintained live at https://javaserverfaces.dev.java.net/nonav/rlnotes/<version>
@@ -261,6 +297,7 @@
                         <li><a href="vdldocs/jsp/index.html" target="loc">JSP Tag Documentation</a></li>
                         <li><a href="renderkitdocs/index.html" target="loc">Renderkit Documentation</a></li>
                         <li><a href="jsdocs/index.html" target="loc">Javascript Documentation</a></li>
+                        <li><a href="JSF_${build.number}.pdf" style="${styleAttributeForPdf}" target="loc">Spec PDF Document</a></li>
                     </ul>
                 </div>
                 </body>
