@@ -59,6 +59,8 @@
 package com.sun.faces.facelets.impl;
 
 import com.sun.faces.context.FacesFileNotFoundException;
+import java.net.MalformedURLException;
+import javax.faces.component.UIComponent;
 import javax.faces.view.facelets.Facelet;
 import javax.faces.view.facelets.FaceletCache;
 import javax.faces.view.facelets.FaceletFactory;
@@ -67,9 +69,12 @@ import com.sun.faces.util.Cache;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import javax.faces.view.facelets.FaceletHandler;
 import javax.faces.view.facelets.ResourceResolver;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -81,6 +86,10 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javax.el.ELException;
 import javax.faces.FacesException;
+import javax.faces.application.Application;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.faces.view.facelets.FaceletException;
 
 
 /**
@@ -293,6 +302,80 @@ public class DefaultFaceletFactory extends FaceletFactory {
         return url;
 
     }
+
+    @Override
+    public UIComponent createComponent(String taglibURI, String tagName, 
+    Map<String, Object> attributes) {
+        UIComponent result = null;
+        FacesContext context = FacesContext.getCurrentInstance();
+        Application app = context.getApplication();
+        ExternalContext extContext = context.getExternalContext();
+        File tmpDir = (File) extContext.getApplicationMap().get("javax.servlet.context.tempdir");
+        File tempFile = null;
+        FileWriter fw = null;
+        try {
+            
+            // create a temporary file in that directory
+            tempFile = File.createTempFile("mojarra", ".tmp", tmpDir);
+            fw = new FileWriter(tempFile);
+            fw.append("<?xml version='1.0' encoding='UTF-8' ?>");
+            fw.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
+            fw.append("<html xmlns=\"http://www.w3.org/1999/xhtml\"\n");
+            fw.append("      xmlns:j=\"").append(taglibURI).append("\">");
+            fw.append("  <j:").append(tagName).append(" ");
+            if (!attributes.isEmpty()) {
+                for (Map.Entry<String,Object> attr : attributes.entrySet()) {
+                    fw.append(attr.getKey()).append("=\"").append(attr.getValue().toString()).append("\"");
+                }
+            }
+            String tempId = context.getViewRoot().createUniqueId(context, tagName);
+            fw.append(" id=\"").append(tempId).append("\" />");
+            fw.append("</html>");
+            try {
+                fw.flush();
+                fw.close();
+            } catch (IOException ex) {
+            }
+                  
+            URL fabricatedFaceletPage = new URL("file://" + tempFile.getAbsolutePath());
+            Facelet f = createFacelet(fabricatedFaceletPage);
+            UIComponent tmp = (UIComponent)
+                    app.createComponent("javax.faces.NamingContainer");
+            tmp.setId(context.getViewRoot().createUniqueId());
+            f.apply(context, tmp);
+                result = tmp.findComponent(tempId);
+            tmp.getChildren().clear();
+            fw = null;
+            
+        } catch (MalformedURLException ex) {
+            
+        } catch (IOException ioe) {
+            
+        } finally {
+            if (null != fw) {
+                try {
+                    fw.close();
+                } catch (IOException ex) {
+                }
+            }
+            if (null != tempFile) {
+                boolean successful = tempFile.delete();
+                if (!successful) {
+                    
+                }
+            }
+        }
+        
+        byte [] faceletPage = "facelet".getBytes();
+        ByteArrayInputStream bais = new ByteArrayInputStream(faceletPage);
+        
+        
+        
+        
+        return result;
+    }
+    
+    
 
 
     /**

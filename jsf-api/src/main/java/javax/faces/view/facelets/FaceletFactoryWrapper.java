@@ -41,7 +41,9 @@ package javax.faces.view.facelets;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Map;
 import javax.faces.FacesWrapper;
+import javax.faces.component.UIComponent;
 
 /**
  * <p class="changed_added_2_2">Provides a simple implementation of 
@@ -69,6 +71,11 @@ public class FaceletFactoryWrapper extends FaceletFactory implements FacesWrappe
         return wrapped;
     }
 
+    @Override
+    public UIComponent createComponent(String taglibURI, String tagName, Map<String, Object> attributes) {
+        return getWrapped().createComponent(taglibURI, tagName, attributes);
+    }
+    
     @Override
     public Facelet getFacelet(String uri) throws IOException {
         return getWrapped().getFacelet(uri);

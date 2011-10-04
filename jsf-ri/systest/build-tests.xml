@@ -1028,6 +1028,12 @@
 <!-- 139-StateSaving edburns remove excludes -->
             </tests>
         </jsf.junit>
+
+        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+              context-path="${context.path}" request="/faces/facelets/i_spec_599.xhtml"
+              regexp="(?s).*success.*"/>
+        
+
         
     </target>
 

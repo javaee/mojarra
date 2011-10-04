@@ -60,6 +60,8 @@ package javax.faces.view.facelets;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Map;
+import javax.faces.component.UIComponent;
 
 /**
  * <p class="changed_added_2_2">FaceletFactory for producing Facelets relative to the context of the
@@ -69,6 +71,8 @@ import java.net.URL;
  */
 public abstract class FaceletFactory {
 
+    public abstract UIComponent createComponent(String taglibURI, String tagName, 
+            Map<String, Object> attributes);
     /**
      * Return a Facelet instance as specified by the file at the passed URI.
      * 
