@@ -40,6 +40,7 @@
 
 package com.sun.faces.config;
 
+import javax.faces.view.facelets.FaceletsResourceResolver;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -117,6 +118,7 @@ public abstract class AnnotationScanner extends AnnotationProvider {
                            "Ljavax/faces/event/NamedEvent;",
                            "Ljavax/faces/component/behavior/FacesBehavior;",
                            "Ljavax/faces/render/FacesBehaviorRenderer;",
+                           "Ljavax/faces/view/facelets/FaceletsResourceResolver;",
                            "javax.faces.component.FacesComponent",
                            "javax.faces.convert.FacesConverter",
                            "javax.faces.validator.FacesValidator",
@@ -124,7 +126,8 @@ public abstract class AnnotationScanner extends AnnotationProvider {
                            "javax.faces.bean.ManagedBean",
                            "javax.faces.event.NamedEvent",
                            "javax.faces.component.behavior.FacesBehavior",
-                           "javax.faces.render.FacesBehaviorRenderer");
+                           "javax.faces.render.FacesBehaviorRenderer",
+                           "javax.faces.view.facelets.FaceletsResourceResolver");
         FACES_ANNOTATIONS = Collections.unmodifiableSet(annotations);
         HashSet<Class<? extends Annotation>> annotationInstances =
               new HashSet<Class<? extends Annotation>>(8, 1.0f);
@@ -136,7 +139,8 @@ public abstract class AnnotationScanner extends AnnotationProvider {
                            ManagedBean.class,
                            NamedEvent.class,
                            FacesBehavior.class,
-                           FacesBehaviorRenderer.class);
+                           FacesBehaviorRenderer.class,
+                           FaceletsResourceResolver.class);
         FACES_ANNOTATION_TYPE = Collections.unmodifiableSet(annotationInstances);
     }
 

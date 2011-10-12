@@ -200,6 +200,52 @@ public class ReflectionUtil {
         return null;
     }
     
+    public static Object decorateInstance(Class clazz,
+                                    Class rootType,
+                                    Object root) {
+        Object returnObject = null;
+        try {
+            if (isDevModeEnabled()) {
+                Class<?>[] interfaces = clazz.getInterfaces();
+                if (interfaces != null) {
+                    for (Class<?> c : interfaces) {
+                        if ("groovy.lang.GroovyObject"
+                                .equals(c.getName())) {
+                            // all groovy classes will implement this interface
+                            returnObject =
+                                    createScriptProxy(rootType, clazz.getName(), root);
+                            break;
+                        }
+                    }
+                }
+            }
+            if (returnObject == null) {
+                // Look for an adapter constructor if we've got
+                // an object to adapt
+                if ((rootType != null) && (root != null)) {
+                    Constructor construct =
+                            ReflectionUtils.lookupConstructor(
+                            clazz,
+                            rootType);
+                    if (construct != null) {
+                        returnObject = construct.newInstance(root);
+                    }
+                }
+            }
+            if (clazz != null && returnObject == null) {
+                returnObject = clazz.newInstance();
+            }
+        }
+        catch (Exception e) {
+            throw new ConfigurationException(
+                    buildMessage(MessageFormat.format("Unable to create a new instance of ''{0}'': {1}",
+                    clazz.getName(),
+                    e.toString())), e);
+        }
+        return returnObject;
+
+    }
+    
     public static Object decorateInstance(String className,
                                     Class rootType,
                                     Object root) {
@@ -209,36 +255,7 @@ public class ReflectionUtil {
             try {
                 clazz = loadClass(className, returnObject, null);
                 if (clazz != null) {
-                    if (isDevModeEnabled()) {
-                        Class<?>[] interfaces = clazz.getInterfaces();
-                        if (interfaces != null) {
-                            for (Class<?> c : interfaces) {
-                                if ("groovy.lang.GroovyObject"
-                                      .equals(c.getName())) {
-                                    // all groovy classes will implement this interface
-                                    returnObject =
-                                          createScriptProxy(rootType, className, root);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    if (returnObject == null) {
-                        // Look for an adapter constructor if we've got
-                        // an object to adapt
-                        if ((rootType != null) && (root != null)) {
-                            Constructor construct =
-                                  ReflectionUtils.lookupConstructor(
-                                        clazz,
-                                        rootType);
-                            if (construct != null) {
-                                returnObject = construct.newInstance(root);
-                            }
-                        }
-                    }
-                    if (clazz != null && returnObject == null) {
-                        returnObject = clazz.newInstance();
-                    }
+                    returnObject = decorateInstance(clazz, rootType, root);
                 }
 
             } catch (ClassNotFoundException cnfe) {
