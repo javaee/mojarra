@@ -404,7 +404,7 @@
        <available type="dir" file="${javaserverfaces-spec-eg.dir}"
                   property="spec-eg-dir-available" />
 
-       <antcall target="copy.spec.pdf" />
+       <ant dir="${demo.dir}" target="copy.spec.pdf" />
 
        <echo message="Unzipping ${demo.dir}/dist/docs/mojarra-${impl.version}-documentation.zip to ${spec.snapshot.dir}" />
        <unzip src="${demo.dir}/dist/docs/mojarra-${impl.version}-documentation.zip"
