@@ -69,7 +69,7 @@ import javax.faces.validator.Validator;
 
 
 /**
- * <p class="changed_added_2_0">Provides a simple implementation of
+ * <p class="changed_added_2_0"><span class="changed_modified_2_2">Provides</span> a simple implementation of
  * {@link Application} that can be subclassed by developers wishing
  * to provide specialized behavior to an existing {@link
  * Application} instance.  The default implementation of all methods
@@ -212,8 +212,11 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link Application#getPropertyResolver} on the
      * wrapped {@link Application} object.</p>
+     * 
+     * @deprecated See superclass for alternative.
      */
     @Override
+    @Deprecated
     public PropertyResolver getPropertyResolver() {
         return getWrapped().getPropertyResolver();
     }
@@ -222,8 +225,11 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link Application#setPropertyResolver(javax.faces.el.PropertyResolver)} on the
      * wrapped {@link Application} object.</p>
+     * 
+     * @deprecated See superclass for alternative.
      */
     @Override
+    @Deprecated
     public void setPropertyResolver(PropertyResolver resolver) {
         getWrapped().setPropertyResolver(resolver);
     }
@@ -232,8 +238,11 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link Application#getVariableResolver} on the
      * wrapped {@link Application} object.</p>
+     * 
+     * @deprecated See superclass for alternative.
      */
     @Override
+    @Deprecated
     public VariableResolver getVariableResolver() {
         return getWrapped().getVariableResolver();
     }
@@ -242,8 +251,11 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link Application#setVariableResolver(javax.faces.el.VariableResolver)} on the
      * wrapped {@link Application} object.</p>
+     * 
+     * @deprecated See superclass for alternative.
      */
     @Override
+    @Deprecated
     public void setVariableResolver(VariableResolver resolver) {
         getWrapped().setVariableResolver(resolver);
     }
@@ -259,10 +271,16 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
     }
 
     /**
-     * <p class="changed_added_2_0">The default behavior of this method
+     * <p class="changed_added_2_0"><span class="changed_modified_2_2">The</span> default behavior of this method
      * is to call {@link Application#setViewHandler(ViewHandler)} on the
      * wrapped {@link Application} object.</p>
-     */
+     * 
+     * @throws IllegalStateException <span class="changed_modified_2_2">if this method is called after
+     * at least one request has been processed by the
+     * <code>Lifecycle</code> instance for this application.
+     * @throws NullPointerException if <code>manager</code>
+     *  is <code>null</code></span>
+ */
     @Override
     public void setViewHandler(ViewHandler handler) {
         getWrapped().setViewHandler(handler);
@@ -279,9 +297,15 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
     }
 
     /**
-     * <p class="changed_added_2_0">The default behavior of this method
+     * <p class="changed_added_2_0"><span class="changed_modified_2_2">The</span> default behavior of this method
      * is to call {@link Application#setStateManager(StateManager)} on the
      * wrapped {@link Application} object.</p>
+     * 
+     * @throws IllegalStateException <span class="changed_added_2_2">if this method is called after
+     * at least one request has been processed by the
+     * <code>Lifecycle</code> instance for this application.
+     * @throws NullPointerException if <code>manager</code>
+     *  is <code>null</code></span>
      */
     @Override
     public void setStateManager(StateManager manager) {
@@ -313,8 +337,11 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link Application#createComponent(javax.faces.el.ValueBinding, javax.faces.context.FacesContext, String)}
      * on the wrapped {@link Application} object.</p>
+     * 
+     * @deprecated See superclass for alternative.
      */
     @Override
+    @Deprecated
     public UIComponent createComponent(ValueBinding componentBinding,
                                        FacesContext context,
                                        String componentType)
@@ -398,8 +425,11 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link Application#createMethodBinding(String, Class[])} on the
      * wrapped {@link Application} object.</p>
+     * 
+     * @deprecated See superclass for alternative.
      */
     @Override
+    @Deprecated
     public MethodBinding createMethodBinding(String ref, Class<?>[] params)
           throws ReferenceSyntaxException {
         return getWrapped().createMethodBinding(ref, params);
@@ -507,9 +537,15 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
     }
 
     /**
-     * <p class="changed_added_2_0">The default behavior of this method
+     * <p class="changed_added_2_0"><span class="changed_modified_2_2">The</span> default behavior of this method
      * is to call {@link Application#setResourceHandler(ResourceHandler)} on the
      * wrapped {@link Application} object.</p>
+     * 
+     * @throws IllegalStateException <span class="changed_added_2_2">if this method is called after
+     * at least one request has been processed by the
+     * <code>Lifecycle</code> instance for this application.
+     * @throws NullPointerException if <code>resourceHandler</code>
+     *  is <code>null</code></span>
      */
     @Override
     public void setResourceHandler(ResourceHandler resourceHandler) {
@@ -537,9 +573,14 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
     }
 
     /**
-     * <p class="changed_added_2_0">The default behavior of this method
+     * <p class="changed_added_2_0"><span class="changed_modified_2_2">The</span> default behavior of this method
      * is to call {@link Application#addELResolver(javax.el.ELResolver)} on the
      * wrapped {@link Application} object.</p>
+     * 
+     * @throws IllegalStateException <span
+     * class="changed_added_2_2">if called after the first
+     * request to the {@link javax.faces.webapp.FacesServlet} has been
+     * serviced.</span>
      */
     @Override
     public void addELResolver(ELResolver resolver) {
@@ -619,8 +660,11 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link Application#evaluateExpressionGet(javax.faces.context.FacesContext, String, Class)}
      * on the wrapped {@link Application} object.</p>
+     * 
+     * @deprecated See superclass for alternative.
      */
     @Override
+    @Deprecated
     public <T> T evaluateExpressionGet(FacesContext context,
                                        String expression,
                                        Class<? extends T> expectedType)
