@@ -1105,6 +1105,7 @@
                                        com/sun/faces/systest/SelectOneHideNoSelectionTestCase.class,
                                        com/sun/faces/systest/ForEachFaceletsTestCase.class,
                                        com/sun/faces/systest/Issue1807TestCase.class,
+                                       com/sun/faces/systest/Issue2194TestCase.class,
                                        com/sun/faces/systest/SelectOneValueExpressionHideNoSelectionTestCase.class"/>
                 </tests>
             </jsf.junit>
