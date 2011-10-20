@@ -183,7 +183,7 @@ public final class FactoryFinder {
 
     /**
      * <p class="changed_added_2_1">The property name for the
-     * {@link javax.faces.view.facelets.FaceletCacheFactory} class name.</p>
+     * {@link javax.faces.view.facelets.FaceletFactory} class name.</p>
      *
      * @since 2.2
      */
