@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -63,6 +63,7 @@ import com.sun.faces.facelets.TemplateClient;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
 
 import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagAttributeException;
@@ -84,9 +85,12 @@ public final class InsertHandler extends TagHandlerImpl implements TemplateClien
         TagAttribute attr = this.getAttribute("name");
         if (attr != null) {
             if (!attr.isLiteral()) {
-                throw new TagAttributeException(this.tag, attr, "Must be Literal");
+                FacesContext context = FacesContext.getCurrentInstance();
+                FaceletContext ctx = (FaceletContext) context.getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
+                this.name = (String) attr.getValueExpression(ctx, String.class).getValue(ctx);
+            } else {
+                this.name = attr.getValue();
             }
-            this.name = attr.getValue();
         } else {
             this.name = null;
         }
