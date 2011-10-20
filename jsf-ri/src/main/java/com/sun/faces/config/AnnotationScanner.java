@@ -84,6 +84,7 @@ import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.Anno
  *  <li>javax.faces.render.FacesRenderer</li>
  *  <li>javax.faces.bean.ManagedBean</li>
  *  <li>javax.faces.event.NamedEvent</li>
+ *  <li>javax.faces.view.facelets.FaceletsResourceResolver</li>
  * </ul>
  */
 public abstract class AnnotationScanner extends AnnotationProvider {

@@ -648,30 +648,31 @@ public class ApplicationAssociate {
 
         // resource resolver
         ResourceResolver resolver = new DefaultResourceResolver();
-        
-        Set<? extends Class> resourceResolvers = 
-                ConfigManager.getAnnotatedClasses(ctx).get(FaceletsResourceResolver.class);
-        if ((null != resourceResolvers) && !resourceResolvers.isEmpty()) {
-            Class resolverClass = resourceResolvers.iterator().next();
-            if (1 < resourceResolvers.size()) {
-                if (LOGGER.isLoggable(Level.SEVERE)) {
-                    LOGGER.log(Level.SEVERE, "Found more than one class " + 
-                            "annotated with FaceletsResourceResolver.  Will " + 
-                            "use {0} and ignore the others", resolverClass);
-                }
-            }
+
+        String resolverName = webConfig.getOptionValue(FaceletsResourceResolver);
+        if (resolverName != null && resolverName.length() > 0) {
             resolver = (ResourceResolver) 
-                    ReflectionUtil.decorateInstance(resolverClass,
+                    ReflectionUtil.decorateInstance(resolverName,
                     ResourceResolver.class,
                     resolver);
         } else {
-            String resolverName = webConfig.getOptionValue(FaceletsResourceResolver);
-            if (resolverName != null && resolverName.length() > 0) {
+        
+            Set<? extends Class> resourceResolvers = 
+                    ConfigManager.getAnnotatedClasses(ctx).get(FaceletsResourceResolver.class);
+            if ((null != resourceResolvers) && !resourceResolvers.isEmpty()) {
+                Class resolverClass = resourceResolvers.iterator().next();
+                if (1 < resourceResolvers.size()) {
+                    if (LOGGER.isLoggable(Level.SEVERE)) {
+                        LOGGER.log(Level.SEVERE, "Found more than one class " + 
+                                "annotated with FaceletsResourceResolver.  Will " + 
+                                "use {0} and ignore the others", resolverClass);
+                    }
+                }
                 resolver = (ResourceResolver) 
-                        ReflectionUtil.decorateInstance(resolverName,
+                        ReflectionUtil.decorateInstance(resolverClass,
                         ResourceResolver.class,
                         resolver);
-            }
+            } 
         }
         
         FaceletCache cache = null;
