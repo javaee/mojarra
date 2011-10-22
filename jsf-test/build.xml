@@ -73,7 +73,8 @@
                     JAVASERVERFACES-2079,
                     JAVASERVERFACES-2065,
                     JAVASERVERFACES-1845,
-                    JAVASERVERFACES-1995" />
+                    JAVASERVERFACES-1995,
+                    JAVASERVERFACES-2232" />
 
     <target name="main" depends="define.applications"
             description="">

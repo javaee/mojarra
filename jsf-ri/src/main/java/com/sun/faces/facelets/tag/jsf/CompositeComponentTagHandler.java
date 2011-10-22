@@ -164,6 +164,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
         } else {
             cc = context.getApplication().createComponent(context, ccResource);
         }
+        setCompositeComponent(context, cc);
 
         return cc;
 
@@ -206,7 +207,30 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
 
     }
     
+    
+    // The value of this string, prepended to this.tagId, is used as a
+    // key in the FacesContext attributes map, the value for which is
+    // the UIComponent that formerly was stored in an instance variable called
+    // cc.
+    private static final String ccInstanceVariableStandinKey = CompositeComponentTagHandler.class.getName() + "_";
 
+    @Override
+    public void setCompositeComponent(FacesContext context, UIComponent cc) {
+        Map contextMap = context.getAttributes();
+        String key = ccInstanceVariableStandinKey + this.tagId;
+        if (!contextMap.containsKey(key)) {
+            contextMap.put(key, cc);
+        }
+    }
+
+    public UIComponent getCompositeComponent(FacesContext context) {
+        Map contextMap = context.getAttributes();
+        String key = ccInstanceVariableStandinKey + this.tagId;
+        UIComponent result = (UIComponent) contextMap.get(key);
+
+        return result;
+    }
+    
     /**
      * Specialized implementation to prevent caching of the MetaRuleset when
      * ProjectStage is Development.
@@ -242,8 +266,13 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
 
         Util.notNull("type", type);
         FacesContext context = FacesContext.getCurrentInstance();
-        FaceletContext faceletContext = (FaceletContext) context.getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
-        UIComponent cc = createComponent(faceletContext);
+        UIComponent cc = getCompositeComponent(context);
+        if (null == cc) {        
+            FaceletContext faceletContext = (FaceletContext) context.getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
+            cc = createComponent(faceletContext);
+            setCompositeComponent(context, cc);
+            
+        }
         MetaRuleset m = new CompositeComponentMetaRuleset(getTag(), type, (BeanInfo) cc.getAttributes().get(UIComponent.BEANINFO_KEY));
 
         // ignore standard component attributes
@@ -545,12 +574,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
             public void applyMetadata(FaceletContext ctx, Object instance) {
 
                 UIComponent c = (UIComponent) instance;
-                Object value = attribute.getObject(ctx,type);
-                // don't set the attributes value in the components attributemap
-                // if it is null, as this will throw a NullPointerException.
-                if(value!=null) {
-                    c.getAttributes().put(name, value);
-                }
+                c.getAttributes().put(name, attribute.getObject(ctx, type));
 
             }
 
