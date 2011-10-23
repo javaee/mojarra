@@ -59,7 +59,7 @@ import com.sun.faces.renderkit.RenderKitUtils;
 
 /** <B>OutputMessageRenderer</B> is a class that renderes UIOutput */
 
-public class OutputMessageRenderer extends HtmlBasicRenderer {
+public class OutputMessageRenderer extends HtmlBasicInputRenderer {
 
     // ---------------------------------------------------------- Public Methods
 
@@ -83,17 +83,7 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
             return;
         }
 
-
-
-        Object currentObj = ((ValueHolder) component).getValue();
-        String currentValue;
-        if (currentObj != null) {
-            currentValue = currentObj.toString();
-        } else {
-            // if the value is null, do not output anything.
-            return;
-        }
-
+        String currentValue = getCurrentValue(context, component);
         int childCount = component.getChildCount();
         List<Object> parameterList;
 
