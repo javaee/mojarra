@@ -81,7 +81,7 @@
                   context-path="/i_mojarra_2232_war"
                   classpath-refid="html.classpath"
                   test-results-dir="${regression.test.results.dir}"
-                  regexp="(?s).*Constructor\s*message:\s*[\s*JavaTopLevelComponent\s*constructor\s*called].*" />
+                  regexp="(?s).*Constructor\s*message:\s*\[\s*JavaTopLevelComponent\s*constructor\s*called\].*" />
     </target>    
 
 </project>
