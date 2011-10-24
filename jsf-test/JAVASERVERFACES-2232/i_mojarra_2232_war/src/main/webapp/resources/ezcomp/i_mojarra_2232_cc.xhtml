@@ -5,39 +5,10 @@
 
     <cc:interface componentType="javaTopLevelComponent">
 
-        <cc:attribute name="untypedXunset" />
-        <cc:attribute name="untypedXliteral" />
-        <cc:attribute name="untypedXwideEL" />
-        <cc:attribute name="untypedXmediumEL" />
-        <cc:attribute name="untypedXnarrowEL" />
-        <cc:attribute name="untypedXnullEL" />
-        <cc:attribute name="untypedXsetByApi" />
-
-        <cc:attribute name="typedXunset"
-            type="com.sun.faces.regression.i_spec_745_war.UserBean$Dog" />
-
-        <cc:attribute name="typedXliteral" type="java.lang.Integer" />
-
-        <cc:attribute name="typedXwideEL"
-            type="com.sun.faces.regression.i_spec_745_war.UserBean$Dog" />
-
-        <cc:attribute name="typedXmediumEL"
-            type="com.sun.faces.regression.i_spec_745_war.UserBean$Dog" />
-
-        <cc:attribute name="typedXnarrowEL"
-            type="com.sun.faces.regression.i_spec_745_war.UserBean$Dog" />
-
-        <cc:attribute name="typedXnullEL"
-            type="com.sun.faces.regression.i_spec_745_war.UserBean$Dog" />
-
-        <cc:attribute name="typedXsetByApi"
-            type="com.sun.faces.regression.i_spec_745_war.UserBean$Dog" />
-
     </cc:interface>
     <cc:implementation>
 
-        <p>#{getTestType.from(cc.attrs)}</p>
-        <p>#{cc.attrs.customProperty}</p>
+        <p>This is the CC</p>.
 
     </cc:implementation> 
 
