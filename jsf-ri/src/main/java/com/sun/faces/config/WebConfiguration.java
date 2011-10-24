@@ -452,7 +452,9 @@ public class WebConfiguration {
                            new Object[]{
                                  value,
                                  param.getQualifiedName(),
-                                 "true|false"
+                                 "true|false",
+                                 "true|false",
+                                 new Boolean(param.getDefaultValue()).toString()
                            });
             }
             return false;
