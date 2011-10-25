@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -41,6 +41,7 @@
 package javax.faces.event;
 
 import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -92,6 +93,37 @@ public abstract class ComponentSystemEvent extends SystemEvent {
         }
         return result;
     }
+
+    /**
+     * <p class="changed_added_2_2">Before calling the corresponding method
+     * on the superclass, verify that there is a current component so
+     * that EL expressions that start with #{component} or #{cc} operate
+     * as expected.</p>
+     *
+     * @param listener {@link FacesListener} to evaluate
+     * @since 2.2
+     */
+    @Override
+    public void processListener(FacesListener listener) {
+        UIComponent c = getComponent();
+        UIComponent cFromStack;
+        boolean didPush = false;
+        FacesContext context = FacesContext.getCurrentInstance();
+        cFromStack = UIComponent.getCurrentComponent(context);
+        if (null == cFromStack) {
+            didPush = true;
+            c.pushComponentToEL(context, null);
+        }
+        try {
+            super.processListener(listener);
+        } finally {
+            if (didPush) {
+                c.popComponentFromEL(context);
+            }
+        }
+    }
+    
+    
 
     // -------------------------------------------------------------- Properties
 
