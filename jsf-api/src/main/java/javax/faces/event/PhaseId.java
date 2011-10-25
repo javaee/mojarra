@@ -154,17 +154,17 @@ public class PhaseId implements Comparable {
 
         if (ANY_PHASE_NAME.equals(phase)) {
             result = PhaseId.ANY_PHASE;
-        } else if (APPLY_REQUEST_VALUES_NAME.equals(phase)) {
+        } else if (APPLY_REQUEST_VALUES_NAME.equalsIgnoreCase(phase)) {
             result = PhaseId.APPLY_REQUEST_VALUES;
-        } else if (INVOKE_APPLICATION_NAME.equals(phase)) {
+        } else if (INVOKE_APPLICATION_NAME.equalsIgnoreCase(phase)) {
             result = PhaseId.INVOKE_APPLICATION;
-        } else if (PROCESS_VALIDATIONS_NAME.equals(phase)) {
+        } else if (PROCESS_VALIDATIONS_NAME.equalsIgnoreCase(phase)) {
             result = PhaseId.PROCESS_VALIDATIONS;
-        } else if (RENDER_RESPONSE_NAME.equals(phase)) {
+        } else if (RENDER_RESPONSE_NAME.equalsIgnoreCase(phase)) {
             result = PhaseId.RENDER_RESPONSE;
-        } else if (RESTORE_VIEW_NAME.equals(phase)) {
+        } else if (RESTORE_VIEW_NAME.equalsIgnoreCase(phase)) {
             result = PhaseId.RESTORE_VIEW;
-        } else if (UPDATE_MODEL_VALUES_NAME.equals(phase)) {
+        } else if (UPDATE_MODEL_VALUES_NAME.equalsIgnoreCase(phase)) {
             result = PhaseId.UPDATE_MODEL_VALUES;
         } else {
             throw new FacesException("Not a valid phase [" + phase + "]");

@@ -2586,8 +2586,10 @@ will not pass validation.</p> ]]>
 
                 <p>Specifies the phase in which the action invocation
                 should occur using the name of the phase constant in the
-                PhaseId class (the case does not matter). The default is
-                INVOKE_APPLICATION.</p>
+                PhaseId class (the case does not matter). The value must
+                be one of APPLY_REQUEST_VALUES, PROCESS_VALIDATIONS,
+                UPDATE_MODEL_VALUES, or INVOKE_APPLICATION. The default
+                is INVOKE_APPLICATION.</p>
 
             ]]></description>
             <name>phase</name>
