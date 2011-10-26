@@ -1154,7 +1154,7 @@ an item <strong>and</strong> the field is marked as required, then it
 will not pass validation.</p> ]]>
 
             </description>
-            <name>itemLabelEscaped</name>
+            <name>noSelectionOption</name>
             <deferred-value>
                 <type>java.lang.Boolean</type>
             </deferred-value>
