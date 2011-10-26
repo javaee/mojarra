@@ -300,7 +300,10 @@ public class ConfigureListener implements ServletRequestListener,
         ServletContext context = sce.getServletContext();
         InitFacesContext initContext = null;
         try {
-            initContext = new InitFacesContext(context);
+            initContext = InitFacesContext.getInstance(context);
+            if (null == initContext) {
+                    initContext = new InitFacesContext(context);
+            }
 
             if (webAppListener != null) {
                 webAppListener.contextDestroyed(sce);

@@ -899,7 +899,7 @@ public class ELFlash extends Flash {
                     }
                 }
             }
-            phaseMap.remove(CONSTANTS.FacesMessageAttributeName);
+            phaseMap.remove(CONSTANTS.FacesMessageAttributeName.toString());
         }
     }
 
@@ -1206,6 +1206,7 @@ public class ELFlash extends Flash {
                     // Don't make the flash older on debug requests
                     if (!UIDebug.debugRequest(context)) {
                         previousRequestFlashInfo.setLifetimeMarker(LifetimeMarker.SecondTimeThru);
+                        nextRequestFlashInfo = null;
                     }
                 }
                 Map<String, Object> flashMap;
