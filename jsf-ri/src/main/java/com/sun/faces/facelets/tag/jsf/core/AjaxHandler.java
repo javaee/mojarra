@@ -454,6 +454,9 @@ class AjaxBehaviorListenerImpl implements AjaxBehaviorListener, Serializable {
         } catch (MethodNotFoundException mnfe) {
             // Attempt to call public void method(AjaxBehaviorEvent event)
             oneArgListener.invoke(elContext, new Object[]{event});
+        } catch (IllegalArgumentException iae) {
+            // Attempt to call public void method(AjaxBehaviorEvent event)
+            oneArgListener.invoke(elContext, new Object[]{event});
         }
     }
 }

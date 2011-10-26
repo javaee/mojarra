@@ -70,6 +70,7 @@
                      admingui" />
 
     <property name="container-agnostic-applications" value="
+                    JAVASERVERFACES-2195,
                     JAVASERVERFACES-2111,
                     JAVASERVERFACES-1958,
                     JAVASERVERFACES-832,
