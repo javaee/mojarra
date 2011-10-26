@@ -129,6 +129,9 @@ class DeclarativeSystemEventListener implements ComponentSystemEventListener, Se
         } catch (MethodNotFoundException mnfe) {
             // Attempt to call public void method(ComponentSystemEvent event)
             oneArgListener.invoke(elContext, new Object[]{event});
+        } catch (IllegalArgumentException iae) {
+            // Attempt to call public void method(ComponentSystemEvent event)
+            oneArgListener.invoke(elContext, new Object[]{event});
         }
     }
 
