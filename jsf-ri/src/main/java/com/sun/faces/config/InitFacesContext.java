@@ -40,7 +40,6 @@
 
 package com.sun.faces.config;
 
-import com.sun.faces.RIConstants;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.ResponseStream;
@@ -66,7 +65,6 @@ import java.net.MalformedURLException;
 
 import com.sun.faces.context.ApplicationMap;
 import com.sun.faces.context.InitParameterMap;
-import javax.faces.event.PhaseId;
 
 /**
  * A special, minimal implementation of FacesContext used at application initialization time.
@@ -74,7 +72,7 @@ import javax.faces.event.PhaseId;
  */
 public class InitFacesContext extends FacesContext {
 
-    private ServletContextAdapter ec;
+    private ExternalContext ec;
     private UIViewRoot viewRoot;
     private FacesContext orig;
     private Map<Object,Object> attributes;
@@ -95,22 +93,6 @@ public class InitFacesContext extends FacesContext {
     public InitFacesContext(ServletContext sc) {
         ec = new ServletContextAdapter(sc);
         orig = FacesContext.getCurrentInstance();
-        setCurrentInstance(this);
-        sc.setAttribute(INIT_FACES_CONTEXT_ATTR_NAME, this);
-    }
-    
-    private static final String INIT_FACES_CONTEXT_ATTR_NAME = RIConstants.FACES_PREFIX + "InitFacesContext";
-    
-    static InitFacesContext getInstance(ServletContext sc) {
-        InitFacesContext result = (InitFacesContext) sc.getAttribute(INIT_FACES_CONTEXT_ATTR_NAME);
-        if (null != result) {
-            result.callSetCurrentInstance();
-        }
-        
-        return result;
-    }
-
-    void callSetCurrentInstance() {
         setCurrentInstance(this);
     }
 
@@ -211,23 +193,10 @@ public class InitFacesContext extends FacesContext {
 
     public void release() {
         setCurrentInstance(orig);
-        getExternalContext().getApplicationMap().remove(INIT_FACES_CONTEXT_ATTR_NAME);
         if (null != attributes) {
             attributes.clear();
             attributes = null;
         }
-        ec.release();
-        ec = null;
-        elContext = null;
-        if (null != viewRoot) {
-            Map viewMap = viewRoot.getViewMap(false);
-            if (null != viewMap) {
-                viewMap.clear();
-            }
-        }
-        viewRoot = null;
-        orig = null;
-
     }
 
     public void renderResponse() { }
@@ -257,12 +226,6 @@ public class InitFacesContext extends FacesContext {
         }
 
         public void dispatch(String path) throws IOException {
-        }
-        
-        private void release() {
-            servletContext = null;
-            applicationMap = null;
-            initMap = null;
         }
 
         public String encodeActionURL(String url) {
