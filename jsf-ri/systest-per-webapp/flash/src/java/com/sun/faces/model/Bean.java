@@ -96,4 +96,8 @@ public class Bean {
         return "flash12?faces-redirect=true";
     }
 
+    public String test2087() {
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("foo", "read strobist");;
+        return "flash13?faces-redirect=true";
+    }
 }

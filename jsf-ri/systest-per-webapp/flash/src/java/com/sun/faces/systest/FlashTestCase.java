@@ -318,6 +318,21 @@ public class FlashTestCase extends HtmlUnitFacesTestCase {
         pageText = page.asText();
         assertTrue(!pageText.contains("4711"));
 
+        // Test for JAVASERVERFACES-2087
+        page = getPage("/faces/flash13.xhtml");
+        button = (HtmlSubmitInput) page.getHtmlElementById("flashbtn");
+        page = (HtmlPage) button.click();  // http://localhost:${container.port}/jsf-flash/flash13.jsf
+        
+        pageText = page.asText();
+        assertTrue(pageText.contains("read strobist"));
+
+        page = getPage("/faces/flash13.xhtml");
+        pageText = page.asText();
+        assertTrue(!pageText.contains("read strobist"));
+
+        page = getPage("/faces/flash13.xhtml");
+        pageText = page.asText();
+        assertTrue(!pageText.contains("read strobist"));
     }
 
 }
