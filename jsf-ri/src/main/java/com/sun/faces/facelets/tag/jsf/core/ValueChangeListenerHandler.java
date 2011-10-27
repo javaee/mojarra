@@ -197,7 +197,13 @@ public final class ValueChangeListenerHandler extends TagHandlerImpl implements 
         TagAttribute attr = this.getAttribute("for");
 
         if (null != attr) {
-            result = attr.getValue();
+            if (attr.isLiteral()) {
+                result = attr.getValue();
+            } else {
+                FacesContext context = FacesContext.getCurrentInstance();
+                FaceletContext ctx = (FaceletContext) context.getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
+                result = (String)attr.getValueExpression(ctx, String.class).getValue(ctx);
+            }
         }
         return result;
 
