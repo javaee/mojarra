@@ -41,9 +41,12 @@
 package javax.faces.context;
 
 import java.util.Map;
+import javax.faces.event.PostKeepFlashValueEvent;
+import javax.faces.event.PostPutFlashValueEvent;
 
 /**
- * <p class="changed_added_2_0">The <strong>Flash</strong> concept is
+ * <p class="changed_added_2_0"><span class="changed_modified_2_2">The</span>
+ * <strong>Flash</strong> concept is
  * taken from <a target="_"
  * href="http://api.rubyonrails.com/classes/ActionController/Flash.html">Ruby
  * on Rails</a> and provides a way to pass temporary objects between the
@@ -179,7 +182,14 @@ foo = #{flash.foo}
  */
 public abstract class Flash implements Map<String, Object> {
     
-
+    /** <p class="changed_added_2_2">Because <code>null</code>
+     * values are not allowed as the source for subclasses of <code>EventObject</code>,
+     * such as {@link PostKeepFlashValueEvent} and {@link PostPutFlashValueEvent}, 
+     * this value is substituted for <code>null</code> in the case when a 
+     * <code>null</code> value is put to or kept in the flash.
+     */
+    public static final String NULL_VALUE = "javax.faces.context.Flash.NULL_VALUE";
+    
     /**
      * <p class="changed_added_2_0">Return the value of this JavaBeans
      * property for the flash for this session.  This value determines

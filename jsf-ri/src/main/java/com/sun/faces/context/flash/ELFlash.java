@@ -57,12 +57,17 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
 import javax.faces.event.PhaseId;
+import javax.faces.event.PostKeepFlashValueEvent;
+import javax.faces.event.PostPutFlashValueEvent;
+import javax.faces.event.PreClearFlashEvent;
+import javax.faces.event.PreRemoveFlashValueEvent;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -130,8 +135,8 @@ public class ELFlash extends Flash {
 
     private long numberOfFlashesBetweenFlashReapings = Long.
      parseLong(WebContextInitParameter.NumberOfFlashesBetweenFlashReapings.getDefaultValue());
-
-    private long lastReaping;
+    
+    private Application application;
 
     // </editor-fold>
 
@@ -230,9 +235,7 @@ public class ELFlash extends Flash {
             numberOfConcurentFlashUsers = Integer.parseInt(value);
         } catch (NumberFormatException nfe) {
 	    if (LOGGER.isLoggable(Level.WARNING)) {
-		LOGGER.log(Level.WARNING,
-			   "Unable to set number of concurrent flash users.  Defaulting to " +
-                           numberOfConcurentFlashUsers);
+		LOGGER.log(Level.WARNING, "Unable to set number of concurrent flash users.  Defaulting to {0}", numberOfConcurentFlashUsers);
 	    }
 
         }
@@ -242,12 +245,12 @@ public class ELFlash extends Flash {
             numberOfFlashesBetweenFlashReapings = Long.parseLong(value);
         } catch (NumberFormatException nfe) {
 	    if (LOGGER.isLoggable(Level.WARNING)) {
-		LOGGER.log(Level.WARNING,
-			   "Unable to set number flashes between flash repaings.  Defaulting to " +
-                           numberOfFlashesBetweenFlashReapings);
+		LOGGER.log(Level.WARNING, "Unable to set number flashes between flash repaings.  Defaulting to {0}", numberOfFlashesBetweenFlashReapings);
 	    }
 
         }
+        
+        application = FacesContext.getCurrentInstance().getApplication();
 
     }
 
@@ -381,20 +384,25 @@ public class ELFlash extends Flash {
     public Object put(String key, Object value) {
         Boolean b = null;
         Object result = null;
+        boolean wasSpecialPut = false;
 
         if (null != key) {
             if (key.equals("keepMessages")) {
                 this.setKeepMessages(b = Boolean.parseBoolean((String) value));
+                wasSpecialPut = true;
             }
             if (key.equals("redirect")) {
                 this.setRedirect(b = Boolean.parseBoolean((String) value));
+                wasSpecialPut = true;
             }
         }
-        result = (null == b) ? getPhaseMapForWriting().put(key, value) : b;
-        if (LOGGER.isLoggable(Level.FINEST)) {
-            LOGGER.log(Level.FINEST, "put({0},{1})", new Object [] { key, value});
+        if (!wasSpecialPut) {
+            result = (null == b) ? getPhaseMapForWriting().put(key, value) : b;
+            if (LOGGER.isLoggable(Level.FINEST)) {
+                LOGGER.log(Level.FINEST, "put({0},{1})", new Object [] { key, value});
+            }
+            application.publishEvent(FacesContext.getCurrentInstance(), PostPutFlashValueEvent.class, key);
         }
-
         return result;
     }
 
@@ -402,6 +410,7 @@ public class ELFlash extends Flash {
     public Object remove(Object key) {
         Object result = null;
 
+        application.publishEvent(FacesContext.getCurrentInstance(), PreRemoveFlashValueEvent.class, key);
         result = getPhaseMapForWriting().remove(key);
 
         return result;
@@ -527,6 +536,8 @@ public class ELFlash extends Flash {
 
             if (null != toKeep) {
                 getPhaseMapForWriting().put(key, toKeep);
+                application.publishEvent(FacesContext.getCurrentInstance(), PostKeepFlashValueEvent.class, key);
+
             }
         }
 
@@ -643,6 +654,16 @@ public class ELFlash extends Flash {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Helpers">
+    
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("[\n");
+        for (Map.Entry<String, Object> entry : this.entrySet()) {
+            builder.append("{").append(entry.getKey()).append(", ").append(entry.getValue()).append("}\n");
+        }
+        builder.append("]\n");
+        return builder.toString();
+    }
 
     private void maybeWriteCookie(FacesContext context,
             PreviousNextFlashInfoManager flashManager) {
@@ -1141,6 +1162,9 @@ public class ELFlash extends Flash {
                                     previousRequestFlashInfo.getSequenceNumber()});
 
                     }
+                    FacesContext context = FacesContext.getCurrentInstance();
+                    context.getApplication().publishEvent(context, PreClearFlashEvent.class, 
+                            flashMap);
                     flashMap.clear();
                 }
                 // remove it from the flash
@@ -1157,8 +1181,14 @@ public class ELFlash extends Flash {
                                 nextRequestFlashInfo.getSequenceNumber()});
 
                 }
+                Map<String, Object> flashMap = nextRequestFlashInfo.getFlashMap();
+                                
+                FacesContext context = FacesContext.getCurrentInstance();
+                context.getApplication().publishEvent(context, PreClearFlashEvent.class, 
+                        flashMap);
+                
                 // clear the old map
-                nextRequestFlashInfo.getFlashMap().clear();
+                flashMap.clear();
                 // remove it from the flash
                 innerMap.remove(nextRequestFlashInfo.getSequenceNumber() + "");
                 nextRequestFlashInfo = null;
