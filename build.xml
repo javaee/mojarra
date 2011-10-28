@@ -545,6 +545,39 @@
       <call.modules target="mvn.deploy.promoted" />
     </target>
 
+    <target name="hudson.deploy">
+
+      <!-- Do not deploy the javax.faces-api jar on this branch. 
+           That jar must only be deployed from the trunk because the 
+           2.1 spec has been frozen. -->
+
+      <ant inheritAll="true"
+            target="mvn.deploy.${mojarra.build.type}${mojarra.build.local.or.blank}"
+               dir="jsf-ri" />
+
+      <ant inheritAll="true"
+            antfile="build-pre-maven-rename.xml"
+            target="main"
+               dir="jsf-api" />
+
+      <ant inheritAll="true"
+            antfile="build-pre-maven-rename.xml"
+            target="mvn.pre-maven-rename.deploy.${mojarra.build.type}${mojarra.build.local.or.blank}"
+               dir="jsf-api" />
+
+      <ant inheritAll="true"
+            antfile="build-pre-maven-rename.xml"
+            target="main"
+               dir="jsf-ri" />
+
+      <ant inheritAll="true"
+            antfile="build-pre-maven-rename.xml"
+            target="mvn.pre-maven-rename.deploy.${mojarra.build.type}${mojarra.build.local.or.blank}"
+               dir="jsf-ri" />
+
+    </target>
+
+    <target name="blank" />
 </project>
 
 

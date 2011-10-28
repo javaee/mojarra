@@ -58,6 +58,8 @@ jsf.build.home=<SET CURRENT DIRECTORY>
 # --------------------------------------------------
 http.proxy.host=
 http.proxy.port=
+https.proxy.host=
+https.proxy.port=
 
 # --------------------------------------------------
 #    Container Name - a simple identifier which maps
