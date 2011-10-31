@@ -128,6 +128,27 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
 
     }
+    
+    public void testUnbalancedPushPop() {
+        facesContext.getAttributes().clear();
+        UIViewRoot root = new UIViewRoot();
+        facesContext.setViewRoot(root);
+
+        TestComponent 
+                c1 = new TestComponent(),
+                c2 = new TestComponent(),
+                c3 = new TestComponent();
+        root.getChildren().add(c1);
+        c1.getChildren().add(c2);
+        c1.getChildren().add(c3);
+        root.pushComponentToEL(facesContext, null);
+        c1.pushComponentToEL(facesContext, null);
+        c2.pushComponentToEL(facesContext, null);
+        c3.pushComponentToEL(facesContext, null);
+        c1.popComponentFromEL(facesContext);
+        root.popComponentFromEL(facesContext);
+        
+    }
 
 
     public void testComponentToFromELBackwardCompatible() {
