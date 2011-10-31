@@ -7,6 +7,7 @@
 </h:head>
 <h:body>
   <h:form>
+      <p>FacesConfigApplicationFactory: #{facesContext.application.injectedMessage}</p>
       <p>FacesConfigActionListener: #{facesContext.application.actionListener.injectedMessage}</p>
       <p>FacesConfigNavigationHandler: #{facesContext.application.navigationHandler.injectedMessage}</p>
       <p>FacesConfigViewHandler: #{facesContext.application.viewHandler.injectedMessage}</p>
@@ -14,6 +15,7 @@
       <p>FacesConfigELResolver: #{FacesConfigELResolverMessage}</p>
       <p>FacesConfigResourceHandler: #{FacesConfigResourceHandlerMessage}</p>
       <p>FacesConfigSystemEventListener: #{FacesConfigSystemEventListenerMessage}</p>
+      <p>FacesConfigPhaseListener: #{FacesConfigPhaseListenerBeforeMessage}</p>
     <p><h:commandButton value="submit" /></p>
   </h:form>
 </h:body>

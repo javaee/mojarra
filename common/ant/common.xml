@@ -178,6 +178,12 @@
         <remoteRepository refid="j.n.repo"/>
     </artifact:dependencies>
     
+    <artifact:dependencies filesetId="jsf-spi.filepath" pathId="jsf-spi.path">
+        <dependency groupId="com.sun.faces" artifactId="jsf-spi" version="1.0-SNAPSHOT" scope="provided"/>
+        <localRepository refid="local.repository"/>
+        <remoteRepository refid="j.n.repo"/>
+    </artifact:dependencies>
+    
     <artifact:dependencies filesetId="commons.filepath" pathId="commons.path">
         <dependency groupId="commons-collections" artifactId="commons-collections" version="2.1.1"/>
         <dependency groupId="commons-digester" artifactId="commons-digester" version="1.5"/>
@@ -240,6 +246,11 @@
     </path>
 
     <path id="compile.classpath">
+        <path refid="compile.path"/>
+    </path>
+
+    <path id="api-compile.classpath">
+        <path refid="jsf-spi.path"/>
         <path refid="compile.path"/>
     </path>
 

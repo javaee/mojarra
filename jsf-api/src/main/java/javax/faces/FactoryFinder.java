@@ -41,6 +41,7 @@
 package javax.faces;
 
 
+import com.sun.faces.spi.InjectionProvider;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -62,6 +63,7 @@ import java.util.logging.Level;
 import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Collection;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.faces.context.ExternalContext;
@@ -415,6 +417,31 @@ public final class FactoryFinder {
 
         // Identify the web application class loader
         ClassLoader cl = getClassLoader();
+        
+        InjectionProvider provider = getInjectionProvider();
+        if (null != provider) {
+            Collection factories = null;
+            for (Map.Entry<FactoryManagerCacheKey, FactoryManager> entry : 
+                    FACTORIES_CACHE.applicationMap.entrySet()) {
+                factories = entry.getValue().getFactories();
+                for (Object curFactory : factories) {
+                    try {
+                        provider.invokePreDestroy(curFactory);
+                    } catch (Exception ex) {
+                        if (LOGGER.isLoggable(Level.SEVERE)) {
+                            String message = MessageFormat.format("Unable to invoke @PreDestroy annotated methods on {0}.", 
+                                    curFactory);
+                            LOGGER.log(Level.SEVERE, message, ex);
+                        }
+                    }
+                }
+            }
+        } else {
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE, "Unable to call @PreDestroy annotated methods because no InjectionProvider can be found. Does this container implement the Mojarra Injection SPI?");
+            }
+        }
+        
 
         FACTORIES_CACHE.removeApplicationFactoryManager(cl);
 
@@ -422,6 +449,19 @@ public final class FactoryFinder {
 
 
     // -------------------------------------------------------- Private Methods
+    
+    private static InjectionProvider getInjectionProvider() {
+        InjectionProvider result = null;
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (null != context) {
+            result = (InjectionProvider) context.getAttributes().get("com.sun.faces.config.ConfigManager_INJECTION_PROVIDER_TASK");
+        } else {
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE, "No InjectionProvider can be found. Does this container implement the Mojarra Injection SPI?");
+            }
+        }
+        return result;
+    }
 
 
     /**
@@ -634,6 +674,7 @@ public final class FactoryFinder {
         Object[] newInstanceArgs = new Object[1];
         Constructor ctor;
         Object result = null;
+        InjectionProvider provider = null;
 
         // if we have a previousImpl and the appropriate one arg ctor.
         if ((null != previousImpl) &&
@@ -645,6 +686,18 @@ public final class FactoryFinder {
                 ctor = clazz.getConstructor(getCtorArg);
                 newInstanceArgs[0] = previousImpl;
                 result = ctor.newInstance(newInstanceArgs);
+                
+                provider = getInjectionProvider();
+                if (null != provider) {
+                    provider.inject(result);
+                    provider.invokePostConstruct(result);
+                } else {
+                    if (LOGGER.isLoggable(Level.SEVERE)) {
+                        LOGGER.log(Level.SEVERE, "Unable to inject {0} because no InjectionProvider can be found. Does this container implement the Mojarra Injection SPI?", result);
+                    }
+                }
+                
+                
             }
             catch (NoSuchMethodException nsme) {
                 // fall through to "zero-arg-ctor" case
@@ -945,6 +998,10 @@ public final class FactoryFinder {
 
 
         // ------------------------------------------------------ Public Methods
+        
+        public Collection<Object> getFactories() {
+            return factories.values();
+        }
 
 
         public void addFactory(String factoryName, String implementation) {
