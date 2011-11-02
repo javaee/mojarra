@@ -762,7 +762,7 @@ javax.faces.level=ALL
             <fileset dir="${build.generate.dir}">
                 <include name="**/*.java"/>
             </fileset>
-            <classpath refid="compile.classpath"/>
+            <classpath refid="api-compile.classpath"/>
         </javadoc>
 
         <javadoc packagenames="javax.*"
@@ -898,6 +898,10 @@ javax.faces.level=ALL
         </condition>
         <property name="exec.arg.cp" value="${build.lib.dir}/${name}.jar:${jsf-tools.jar}"/>
     	<echo>tools path:  ${build.lib.dir}/${name}.jar:${jsf-tools.jar}</echo>
+        <path id="ExtraApiClassPath">
+          <path refid="jsf-spi.path"/>
+          <pathelement location="${javaee-api.jar}" />
+        </path>
         <!-- invoke the javac processor to produce stripped .class files -->
         <exec executable="${exec.name}" failonerror="true">
             <arg line="${exec.arg.1}"/>
@@ -906,7 +910,7 @@ javax.faces.level=ALL
             <arg line="-cp ${exec.arg.cp}"/>
             <arg line="-processor com.sun.faces.tools.StripClassesForApiJar"/>
             <arg line="-Acom.sun.tools.javac.sym.Jar=${build.lib.dir}/${name}.jar"/>
-            <arg line="-Acom.sun.tools.javac.sym.ExtraApiClassPath=${javaee-api.jar}"/>
+            <arg line="-Acom.sun.tools.javac.sym.ExtraApiClassPath=${toString:ExtraApiClassPath}"/>
             <arg line="-Acom.sun.tools.javac.sym.Dest=${build.lib.dir}/jsf-api-stripped"/>
             <arg line="${src.paths}"/>
         </exec>
