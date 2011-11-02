@@ -147,7 +147,7 @@ ${applications}
 
     <target name="define.V3.1.applications" if="container.is.V3.1">
        <property name="applications" 
-                 value="${container-agnostic-applications},${applications-for-V3.1-only}" />
+                 value="${applications-for-V3.1-only},${container-agnostic-applications}" />
     </target>
 
     <target name="define.V3.1_no_cluster.applications" if="container.is.V3.1_no_cluster">

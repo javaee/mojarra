@@ -44,6 +44,7 @@ package javax.faces.component;
 import java.io.IOException;
 import java.io.InputStream;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -1764,63 +1765,14 @@ private void doFind(FacesContext context, String clientId) {
 
     }
 
-    /**
-     * Temporary stack for JDK 1.5.  Replace with an ArrayDeque when we can have a dependency on JDK 1.6
-     */
-    private static class ComponentStack
-    {
-      public ComponentStack()
-      {
-        _components = new UIComponent[20];
-        _topIndex = 0;
-        
-        // if we have no context, the current element is null
-        _components[0] = null;
-      }
-      
-      public UIComponent pop()
-      {
-          UIComponent top = peek();
-          if (0 < _topIndex) {
-              _topIndex--;
-          }
-
-          return top;
-      }
-      
-      public void push(UIComponent component)
-      {
-        _topIndex++;
-        int newIndex = _topIndex;
-        int currSize = _components.length;
-        
-        if (newIndex == currSize)
-        {
-          UIComponent[] newArray = new UIComponent[currSize * 2];
-          System.arraycopy(_components, 0, newArray, 0, currSize);
-          
-          _components = newArray;
-        }
-        
-        _components[newIndex] = component;
-      }
-      
-      public UIComponent peek()
-      {
-        return _components[_topIndex];
-      }
-      
-      private UIComponent[] _components;
-      private int _topIndex;
-    }
     
-    private static ComponentStack _getComponentELStack(String keyName, Map<Object, Object> contextAttributes)
+    private static ArrayDeque<UIComponent> _getComponentELStack(String keyName, Map<Object, Object> contextAttributes)
     {
-      ComponentStack elStack = (ComponentStack)contextAttributes.get(keyName);
+      ArrayDeque<UIComponent> elStack = (ArrayDeque<UIComponent>)contextAttributes.get(keyName);
       
       if (elStack == null)
       {
-        elStack = new ComponentStack();
+        elStack = new ArrayDeque<UIComponent>();
         contextAttributes.put(keyName, elStack);
       }
       
@@ -1876,7 +1828,7 @@ private void doFind(FacesContext context, String clientId) {
         }
 
         Map<Object, Object> contextAttributes = context.getAttributes();
-        ComponentStack componentELStack = _getComponentELStack(_CURRENT_COMPONENT_STACK_KEY,
+        ArrayDeque<UIComponent> componentELStack = _getComponentELStack(_CURRENT_COMPONENT_STACK_KEY,
                                                                contextAttributes);
         componentELStack.push(component);
         component._isPushedAsCurrentRefCount++;
@@ -1944,12 +1896,13 @@ private void doFind(FacesContext context, String clientId) {
       // will become unbalanced.  Detect and correct for those cases here.
  
       // detect case where push was never called.  In that case, pop should be a no-op
-      if (_isPushedAsCurrentRefCount < 1)
-        return;
+      if (_isPushedAsCurrentRefCount < 1) {
+          return;
+      }
            
       Map<Object, Object> contextAttributes = context.getAttributes();
       
-      ComponentStack componentELStack = _getComponentELStack(_CURRENT_COMPONENT_STACK_KEY,
+      ArrayDeque<UIComponent> componentELStack = _getComponentELStack(_CURRENT_COMPONENT_STACK_KEY,
                                                              contextAttributes);
       
       // check for the other unbalanced case, a component was pushed but never popped.  Keep
@@ -1958,7 +1911,7 @@ private void doFind(FacesContext context, String clientId) {
            topComponent != this;
            topComponent = componentELStack.peek())
       {
-        topComponent.popComponentFromEL(context);
+          topComponent.popComponentFromEL(context);
       }
       
       // pop ourselves off of the stack
@@ -1979,9 +1932,11 @@ private void doFind(FacesContext context, String clientId) {
       // composite stack
       if (UIComponent.isCompositeComponent(this))
       {
-        ComponentStack compositeELStack=_getComponentELStack(_CURRENT_COMPOSITE_COMPONENT_STACK_KEY,
+        ArrayDeque<UIComponent> compositeELStack=_getComponentELStack(_CURRENT_COMPOSITE_COMPONENT_STACK_KEY,
                                                              contextAttributes);
-        compositeELStack.pop();        
+        if (!compositeELStack.isEmpty()) {
+            compositeELStack.pop();
+        }        
 
         // update the current composite component with the new top of stack.
           // We only do this because of the spec
@@ -1990,6 +1945,7 @@ private void doFind(FacesContext context, String clientId) {
         }
       }
     }
+    
     // It is safe to cache this because components never go from being
     // composite to non-composite.
     private transient Boolean isCompositeComponent = null;
@@ -2081,7 +2037,7 @@ private void doFind(FacesContext context, String clientId) {
      */
     public static UIComponent getCurrentComponent(FacesContext context) {
         Map<Object, Object> contextAttributes = context.getAttributes();
-        ComponentStack componentELStack = _getComponentELStack(_CURRENT_COMPONENT_STACK_KEY,
+        ArrayDeque<UIComponent> componentELStack = _getComponentELStack(_CURRENT_COMPONENT_STACK_KEY,
                                                                contextAttributes);
 
       return componentELStack.peek();
@@ -2104,7 +2060,7 @@ private void doFind(FacesContext context, String clientId) {
     public static UIComponent getCurrentCompositeComponent(FacesContext context) {
       // return (UIComponent)context.getAttributes().get(UIComponent.CURRENT_COMPOSITE_COMPONENT);
         Map<Object, Object> contextAttributes = context.getAttributes();
-        ComponentStack compositeELStack = _getComponentELStack(_CURRENT_COMPOSITE_COMPONENT_STACK_KEY,
+        ArrayDeque<UIComponent> compositeELStack = _getComponentELStack(_CURRENT_COMPOSITE_COMPONENT_STACK_KEY,
                                                              contextAttributes);
         return compositeELStack.peek();
     }
