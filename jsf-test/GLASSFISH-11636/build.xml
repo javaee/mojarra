@@ -45,6 +45,7 @@
 
 <project name="GLASSFISH-11636" default="test" basedir=".">
 
+    <property file="../../build.properties"/>
     <import file="${jsf.build.home}/common/ant/common.xml"/>
 
     <target name="build">
