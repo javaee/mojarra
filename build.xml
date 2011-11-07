@@ -558,12 +558,16 @@
       <ant inheritAll="true"
             antfile="build-pre-maven-rename.xml"
             target="main"
-               dir="jsf-api" />
+               dir="jsf-api">
+        <property name="skip.javadoc.jar"  value="true" />
+      </ant>
 
       <ant inheritAll="true"
             antfile="build-pre-maven-rename.xml"
             target="mvn.pre-maven-rename.deploy.${mojarra.build.type}${mojarra.build.local.or.blank}"
-               dir="jsf-api" />
+               dir="jsf-api">
+        <property name="skip.javadoc.jar"  value="true" />
+      </ant>
 
       <ant inheritAll="true"
             antfile="build-pre-maven-rename.xml"
