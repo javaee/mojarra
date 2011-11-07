@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<weblogic-web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.bea.com/ns/weblogic/weblogic-web-app.xsd" xmlns="http://www.bea.com/ns/weblogic/weblogic-web-app">
-  <library-ref>
-    <library-name>@impl.name@</library-name>
-    <specification-version>@spec.version@</specification-version>
-  </library-ref>
-</weblogic-web-app>

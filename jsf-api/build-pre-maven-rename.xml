@@ -89,7 +89,7 @@
         <pathelement location="${jsf-tools.jar}"/>
         <pathelement location="${tools.dir}/build/classes"/>
         <path refid="apache.commons.classpath"/>
-        <path refid="compile.classpath"/>
+        <path refid="api-compile.classpath"/>
         <path refid="junit.classpath"/>
     </path>
 
@@ -161,7 +161,7 @@
         <jsf.javac destdir="${build.classes.dir}"
                    srcdir="${src.dir}:${build.generate.dir}">
             <classpath>
-                <path refid="compile.classpath"/>
+                <path refid="api-compile.classpath"/>
             </classpath>
         </jsf.javac>
     </target>
@@ -765,7 +765,7 @@ javax.faces.level=ALL
             <fileset dir="${build.generate.dir}">
                 <include name="**/*.java"/>
             </fileset>
-            <classpath refid="compile.classpath"/>
+            <classpath refid="api-compile.classpath"/>
         </javadoc>
 
         <javadoc packagenames="javax.*"
