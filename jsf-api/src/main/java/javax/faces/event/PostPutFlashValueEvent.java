@@ -61,7 +61,7 @@ public class PostPutFlashValueEvent extends SystemEvent {
      * <p class="changed_added_2_2">Instantiate a new
      * <code>PostPutFlashValueEvent</code> that indicates the argument
      * <code>key</code> was just put to the flash. If the argument is 
-     * <code>null</code>, the literal {@link Flash.NULL_VALUE} must be passed
+     * <code>null</code>, the literal {@link Flash#NULL_VALUE} must be passed
      * to the superclass constructor.</p>
 
      * @param key the key in the flash that was just added.

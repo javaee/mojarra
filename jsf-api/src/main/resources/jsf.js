@@ -79,7 +79,10 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
     var jsf = {};
 
     /**
-     * The namespace for Ajax functionality.
+
+     * <span class="changed_modified_2_2">The namespace for Ajax
+     * functionality.</span>
+
      * @name jsf.ajax
      * @namespace
      * @exec
@@ -89,6 +92,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
         var eventListeners = [];
         var errorListeners = [];
 
+        var delayHandler = null;
         /**
          * Determine if the current browser is part of Microsoft's failed attempt at
          * standards modification.
@@ -1506,7 +1510,10 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 }
             },
             /**
-             * <p>Send an asynchronous Ajax request to the server.
+
+             * <p><span class="changed_modified_2_2">Send</span> an
+             * asynchronous Ajax req uest to the server.
+
              * <p><b>Usage:</b></p>
              * <pre><code>
              * Example showing all optional arguments:
@@ -1591,6 +1598,19 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              * </ul>
              * <li>If <code>options.render</code> does not exist do not create and send the
              * post data argument <code>javax.faces.partial.render</code>.</li>
+
+             * <li class="changed_added_2_2">If
+             * <code>options.render</code> exists let it be the value
+             * <em>delay</em>, for this discussion.  If
+             * <code>options.render</code> does not exist let
+             * <em>delay</em> be 300.  If less than <em>delay</em>
+             * milliseconds elapses between calls to <em>request()</em>
+             * only the most recent one is sent and all other requests
+             * are discarded. The default value of this option is 300.
+             * If the value of <em>delay</em> is the literal string
+             * <code>'none'</code> without the quotes, no delay is
+             * used. </li>
+
              * <li>Determine additional arguments (if any) from the <code>event</code>
              * argument.  The following name/value pairs may be used from the
              * <code>event</code> object:
@@ -1685,6 +1705,21 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              * <td><code>params</code></td>
              * <td><code>object containing parameters to include in the request</code></td>
              * </tr>
+
+             * <tr class="changed_added_2_2">
+
+             * <td><code>delay</code></td>
+
+             * <td><code>If less than <em>delay</em> milliseconds
+             * elapses between calls to <em>request()</em> only the most
+             * recent one is sent and all other requests are
+             * discarded. The default value of this option is
+             * 300.</code> If the value of <em>delay</em> is the literal string
+             * <code>'none'</code> without the quotes, no delay is
+             * used. </td>
+
+             * </tr>
+
              * </table>
              * The <code>options</code> argument is optional.
              * @member jsf.ajax
@@ -1698,6 +1733,10 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
 
                 if (typeof source === 'undefined' || source === null) {
                     throw new Error("jsf.ajax.request: source not set");
+                }
+                if(delayHandler) {
+                    clearTimeout(delayHandler);
+                    delayHandler = null;
                 }
 
                 // set up the element based on source
@@ -1798,12 +1837,25 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                         args["javax.faces.partial.render"] = options.render;
                     }
                 }
+                var defaultDelayValue = 300;
+                var explicitlyDoNotDelay = (typeof options.delay == 'string') &&
+                                           (options.delay.toLowerCase() == 'none');
+                var delayValue;
+                if (typeof options.delay == 'undefined') {
+                    delayValue = defaultDelayValue;
+                } else if (typeof options.delay == 'number') {
+                    delayValue = options.delay;
+                } else if (!explicitlyDoNotDelay) {
+                    throw new Error('invalid value for delay option: ' + options.delay);
+                }
 
                 // remove non-passthrough options
                 delete options.execute;
                 delete options.render;
                 delete options.onerror;
                 delete options.onevent;
+                delete options.delay;
+
                 // copy all other options to args
                 for (var property in options) {
                     if (options.hasOwnProperty(property)) {
@@ -1822,20 +1874,28 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 } else {
                     args["url"] = encodedUrlField.value;
                 }
+                var sendRequest = function() {
+                    var ajaxEngine = new AjaxEngine();
+                    ajaxEngine.setupArguments(args);
+                    ajaxEngine.queryString = viewState;
+                    ajaxEngine.context.onevent = onevent;
+                    ajaxEngine.context.onerror = onerror;
+                    ajaxEngine.context.sourceid = element.id;
+                    ajaxEngine.context.formid = form.id;
+                    ajaxEngine.context.render = args["javax.faces.partial.render"];
+                    ajaxEngine.sendRequest();
 
-                var ajaxEngine = new AjaxEngine();
-                ajaxEngine.setupArguments(args);
-                ajaxEngine.queryString = viewState;
-                ajaxEngine.context.onevent = onevent;
-                ajaxEngine.context.onerror = onerror;
-                ajaxEngine.context.sourceid = element.id;
-                ajaxEngine.context.formid = form.id;
-                ajaxEngine.context.render = args["javax.faces.partial.render"];
-                ajaxEngine.sendRequest();
+                    // null out element variables to protect against IE memory leak
+                    element = null;
+                    form = null;
+                    sendRequest = null;
+                };
 
-                // null out element variables to protect against IE memory leak
-                element = null;
-                form = null;
+                if (explicitlyDoNotDelay) {
+                    sendRequest();
+                } else {
+                    delayHandler = setTimeout(sendRequest, delayValue);
+                }
 
             },
             /**

@@ -351,7 +351,8 @@
 
     <target name="api.jsdocs">
             <!-- Create the jsdocs distribution -->
-        <copy todir="${dist.home}/jsdocs">
+        <mkdir dir="${dist.home}/jsdocs/symbols" />
+        <copy todir="${dist.home}/jsdocs/symbols">
            <fileset dir="${api.dir}/doc">
              <include name="changed*.png" />
              <include name="expert*.png" />

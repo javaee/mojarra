@@ -292,6 +292,23 @@
     </attribute>
 
     <attribute>
+      <description><![CDATA[ <p class="changed_added_2_2">If less than
+      <em>delay</em> milliseconds elapses between calls to
+      <em>request()</em> only the most recent one is sent and all other
+      requests are discarded. The default value of this option is
+      300.</code> If the value of <em>delay</em> is the literal string
+      <code>'none'</code> without the quotes, no delay is used. </p>
+
+      ]]></description>
+      <name>delay</name>
+      <required>false</required>
+      <deferred-value>
+          <type>java.lang.String</type>
+      </deferred-value>
+
+    </attribute>
+
+    <attribute>
       <description><![CDATA[
         <p class="changed_added_2_0">The name of the JavaScript function that will handle errors.</p>
 

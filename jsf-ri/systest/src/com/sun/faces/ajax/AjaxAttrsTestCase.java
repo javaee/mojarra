@@ -108,6 +108,27 @@ public class AjaxAttrsTestCase extends HtmlUnitFacesTestCase {
         value = button.getValueAttribute();
 
         assertTrue("expected New Value but got "+value, "New Value".equals(value));
+
+        String onclick = button.getOnClickAttribute();
+        assertTrue(onclick.matches("(?s).*'delay':'none'.*"));
+        
+        button = (HtmlSubmitInput)
+              getInputContainingGivenId(page, "form:attrImplicitDelay");
+
+        value = button.getValueAttribute();
+        
+        assertTrue("expected Dummy Implicit Delay but got "+value, "Dummy Implicit Delay".equals(value));
+        onclick = button.getOnClickAttribute();
+        assertTrue(!onclick.matches("(?s).*'delay':'none'.*"));
+        
+        button = (HtmlSubmitInput)
+              getInputContainingGivenId(page, "form:attrDelay");
+
+        value = button.getValueAttribute();
+        
+        assertTrue("expected Dummy Delay but got "+value, "Dummy Delay".equals(value));
+        onclick = button.getOnClickAttribute();
+        assertTrue(onclick.matches("(?s).*'delay':'200'.*"));
         
     }
 }

@@ -60,6 +60,7 @@ import javax.faces.event.PhaseId;
 import javax.faces.render.ClientBehaviorRenderer;
 
 import com.sun.faces.renderkit.RenderKitUtils;
+import javax.el.ValueExpression;
 
 /*
  *<b>AjaxBehaviorRenderer</b> renders Ajax behavior for a component.
@@ -171,6 +172,7 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
         String onevent = ajaxBehavior.getOnevent();
         String onerror = ajaxBehavior.getOnerror();
         String sourceId = behaviorContext.getSourceId();
+        String delay = ajaxBehavior.getDelay();
         Collection<ClientBehaviorContext.Parameter> params = behaviorContext.getParameters();
 
         // Needed workaround for SelectManyCheckbox - if execute doesn't have sourceId,
@@ -213,7 +215,7 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
         ajaxCommand.append(",");
         appendIds(component, ajaxCommand, render);
 
-        if ((onevent != null) || (onerror != null) || !params.isEmpty())  {
+        if ((onevent != null) || (onerror != null) || (delay != null) || !params.isEmpty())  {
 
             ajaxCommand.append(",{");
 
@@ -223,6 +225,10 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
 
             if (onerror != null) {
                 RenderKitUtils.appendProperty(ajaxCommand, "onerror", onerror, false);
+            }
+            
+            if (delay != null) {
+                RenderKitUtils.appendProperty(ajaxCommand, "delay", delay, true);
             }
 
             if (!params.isEmpty()) {

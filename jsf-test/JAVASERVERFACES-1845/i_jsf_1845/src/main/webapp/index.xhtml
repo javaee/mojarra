@@ -19,12 +19,12 @@
 			<h:outputLabel value="Show Button" for="buttonCheckbox" />
 			<h:selectBooleanCheckbox id="buttonCheckbox"
 				value="#{foo.showButton}">
-				<f:ajax render="buttonGroup" />
+				<f:ajax delay="none" render="buttonGroup" />
 			</h:selectBooleanCheckbox>
 			<h:panelGroup id="buttonGroup">
 				<c:if test="#{foo.showButton}">
 					<h:commandButton id="clickme"  value="Click Me" action="#{foo.bar}">
-						<f:ajax render="buttonGroup" />
+						<f:ajax delay="none" render="buttonGroup" />
 					</h:commandButton>
 				</c:if>
 			</h:panelGroup>
