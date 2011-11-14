@@ -784,6 +784,15 @@ public class HtmlUtils {
         }
     }
 
+    static public void writeTextForXML(Writer out, String text, char[] outbuf)
+        throws IOException {
+        char[] textBuffer = new char[128];
+        int len = text.toString().length();
+        if (textBuffer.length < len) {
+            textBuffer = new char[len * 2];
+        }
+        HtmlUtils.writeText(out, true, true, outbuf, text, textBuffer);
+    }
 
     // Encode a String into URI-encoded form.  This code will
     // appear rather (ahem) similar to java.net.URLEncoder

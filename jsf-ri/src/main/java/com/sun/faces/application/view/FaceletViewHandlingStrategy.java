@@ -54,6 +54,7 @@ import com.sun.faces.scripting.groovy.GroovyHelper;
 import com.sun.faces.util.Cache.Factory;
 import com.sun.faces.util.Cache;
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.HtmlUtils;
 import com.sun.faces.util.RequestStateManager;
 import com.sun.faces.util.Util;
 import java.beans.BeanDescriptor;
@@ -927,7 +928,10 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         encoding = getResponseEncoding(context, writer.getCharacterEncoding());
 
         // apply them to the response
-        extContext.setResponseContentType(contentType);
+        char[] buffer = new char[1028];
+        HtmlUtils.writeTextForXML(writer, contentType, buffer);
+        String str = String.valueOf(buffer).trim();
+        extContext.setResponseContentType(str);
         extContext.setResponseCharacterEncoding(encoding);
 
         // Now, clone with the real writer
