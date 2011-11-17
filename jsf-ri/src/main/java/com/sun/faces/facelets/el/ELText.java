@@ -68,6 +68,8 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sun.faces.util.HtmlUtils;
+
 /**
  * Handles parsing EL Strings in accordance with the EL-API Specification. The
  * parser accepts either <code>${..}</code> or <code>#{..}</code>.
@@ -206,7 +208,8 @@ public class ELText {
                 IOException {
             Object v = this.ve.getValue(ctx);
             if (v != null) {
-                out.write((String) v);
+                char[] buffer = new char[1028];
+                HtmlUtils.writeTextForXML(out, v.toString(), buffer);
             }
         }
 

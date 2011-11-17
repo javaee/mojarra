@@ -782,7 +782,9 @@ public class HtmlResponseWriter extends ResponseWriter {
         // or a leading space before the '-->' to support
         // IE conditional commentsoth
         writer.write("<!--");
-        writer.write(comment.toString());
+        String str = comment.toString();
+        ensureTextBufferCapacity(str);
+        HtmlUtils.writeText(writer, true, true, buffer, str, textBuffer);
         writer.write("-->");
 
     }
@@ -1024,6 +1026,9 @@ public class HtmlResponseWriter extends ResponseWriter {
         int len = source.length();
         if (textBuffer.length < len) {
             textBuffer = new char[len * 2];
+        }
+        if (buffer.length < len) {
+            buffer = new char[len * 2];
         }
     }
 
