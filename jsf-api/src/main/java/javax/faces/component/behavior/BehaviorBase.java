@@ -96,6 +96,10 @@ public class BehaviorBase implements Behavior, PartialStateHolder {
     public void broadcast(BehaviorEvent event)
         throws AbortProcessingException {
 
+        if (null == event) {
+            throw new NullPointerException();
+        }
+
         if (null != listeners) {
             for (BehaviorListener listener : listeners) {
                 if (event.isAppropriateListener(listener)) {
