@@ -501,6 +501,7 @@
         <attribute name="regexp" default=""/>
         <attribute name="regexpFile" default=""/>
         <attribute name="status" default=""/>
+        <attribute name="textPage" default="" />
         <attribute name="force.no.cluster" default="${force.no.cluster}"/>
         <attribute name="instance.numbers" default="${instance.numbers}" />
         <attribute name="custom.port" default="${scenario.aware.port}" />
@@ -526,6 +527,7 @@
                 <sysproperty key="regexp" value="@{regexp}"/>
                 <sysproperty key="regexpFile" value="@{regexpFile}"/>
                 <sysproperty key="status" value="@{status}"/>
+                <sysproperty key="textPage" value="@{textPage}"/>
                 <sysproperty key="host" value="${container.host}"/>
                 <sysproperty key="port" value="@{custom.port}"/>
                 <sysproperty key="context.path" value="@{context-path}"/>

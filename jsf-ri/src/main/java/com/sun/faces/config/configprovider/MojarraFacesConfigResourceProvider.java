@@ -43,6 +43,7 @@ package com.sun.faces.config.configprovider;
 import com.sun.faces.spi.ConfigurationResourceProvider;
 
 import java.net.URI;
+import java.net.URL;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -75,7 +76,13 @@ public class MojarraFacesConfigResourceProvider implements
         // Doing so allows us to be more OSGi friendly.
         ClassLoader loader = this.getClass().getClassLoader();
         try {
-            list.add(new URI(loader.getResource(JSF_RI_CONFIG).toExternalForm()));
+            URL url = loader.getResource(JSF_RI_CONFIG);
+            String urlStr = url.toExternalForm();
+            if (urlStr.contains(" ")) {
+                urlStr = urlStr.replaceAll(" ", "%20");
+            }
+
+            list.add(new URI(urlStr));
         } catch (URISyntaxException ex) {
             throw new FacesException(ex);
         }
