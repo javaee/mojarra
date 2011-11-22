@@ -92,6 +92,12 @@
     </target>    
 
     <target name="test" depends="define.scenario.aware.port">
+      <parallel threadsPerProcessor="1" threadCount="8">
+        <antcall target="do.test" />
+      </parallel>
+    </target>
+    
+    <target name="do.test" depends="define.scenario.aware.port">
       <for list="${repetitions}" param="app" trim="true"><sequential>
         <antcall inheritall="true" target="do.install" />
 
