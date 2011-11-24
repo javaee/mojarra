@@ -300,6 +300,9 @@
               filtering="true"/>
 
         <filter token="package" value="javax.faces.component"/>
+        <copy file="${tools.dir}/template-src/SharedUtils.java"
+              todir="${build.generate.dir}/javax/faces/component"
+              filtering="true"/>
         <copy file="${tools.dir}/template-src/MessageFactory.java"
               todir="${build.generate.dir}/javax/faces/component"
               filtering="true"/>
