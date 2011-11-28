@@ -1,5 +1,4 @@
 <?xml version='1.0' encoding='UTF-8'?>
-
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -49,10 +48,13 @@
 -->
 <project name="JSF-API" default="main" basedir=".">
 
+    <property name="build.dir" value="build.pre-maven-rename"/>
+
     <property file="${user.home}/build.properties"/>
     <property file="../build.properties"/>
 
     <import file="${jsf.build.home}/common/ant/common.xml"/>
+    <import file="${jsf.build.home}/common/ant/maven-pre-maven-rename.xml"/>
 
     <!-- Structural -->
     <property name="doc.dir" value="${basedir}/doc"/>
@@ -61,7 +63,6 @@
     <property name="tools.dir" value="${basedir}/tools"/>
     <property name="test.dir" value="${basedir}/src/test/java"/>
     <property name="dist.dir" value="${basedir}/dist"/>
-    <property name="build.dir" value="build"/>
     <property name="target.dir" value="target"/>
     <property name="build.classes.dir" value="${build.dir}/classes"/>
     <property name="build.lib.dir" value="${build.dir}/lib"/>
@@ -75,9 +76,10 @@
     <property name="build.mifdocs.dir" value="${build.dir}/mifdocs"/>
     <property name="javadoc.private" value="false"/>
     <property name="javadoc.protected" value="true"/>
+    <property name="artifact-id" value="jsf-api"/>
 
     <property name="assertion.classes" value="-ea:javax.faces..."/>
-    <property name="name" value="jsf-api-intermediate"/>
+    <property name="name" value="jsf-api"/>
     <property name="DocName" value="JavaServer Faces API"/>
 
     <path id="test.classpath">
@@ -205,7 +207,7 @@
             </classpath>
         </taskdef>
         <generateComponents
-              generatorConfig="${tools.dir}/conf/HtmlBasicTaglib21.properties"
+              generatorConfig="${tools.dir}/conf/HtmlBasicTaglib21.pre-maven-rename.properties"
               facesConfig="${standard.renderkit.xml}"
               fork="true">
             <classpath>
@@ -215,7 +217,7 @@
                 <pathelement location="${commons-digester.jar}" />
                 <pathelement location="${commons-collections.jar}" />
                 <pathelement location="${commons-logging.jar}" />
-                <pathelement location="${jsf-api-intermediate.jar}"/>
+                <pathelement location="${jsf-api.jar}"/>
                 <pathelement location="${tools.dir}/build/classes"/>
             </classpath>
             <assertions>
@@ -243,6 +245,7 @@
         <copy todir="${build.generate.dir}/facesdoc/">
            <fileset dir="${doc.dir}">
              <include name="changed*.png" />
+             <include name="expert*.png" />
              <include name="changed*.cur" />
            </fileset>
         </copy>
@@ -254,7 +257,7 @@
             <classpath>
                 <path refid="apache.commons.classpath"/>
                 <path refid="compile.classpath"/>
-                <pathelement location="${jsf-api-intermediate.jar}"/>
+                <pathelement location="${jsf-api.jar}"/>
                 <pathelement location="${tools.dir}/build/classes"/>
             </classpath>
             <sysproperty key="java.endorsed.dirs" value="${endorsed.dirs}"/>
@@ -273,18 +276,6 @@
         </path>
 
         <mkdir dir="${tools.dir}/build/classes"/>
-        <jsf.javac srcdir="${tools.dir}/src/main/java"
-                   destdir="${tools.dir}/build/classes">
-            <classpath>
-                <path refid="compile.classpath"/>
-                <path refid="apache.commons.classpath"/>
-                <path refid="ant.classpath"/>
-            </classpath>
-        </jsf.javac>
-        <copy todir="${tools.dir}/build/classes">
-            <fileset dir="${tools.dir}/src/main/resources"
-                     includes="**/*.properties"/>
-        </copy>
         <copy todir="${tools.dir}/build/classes" >
             <fileset dir="${impl.dir}/src/main/resources"
                      includes="**/LogStrings.properties"/>
@@ -424,7 +415,9 @@
                 copy.template.sources,
                 test.FactoryFinder,
                 test.FactoryFinder2,
+                test.FacesWrapper,
                 test.PhaseId,
+                test.application,
                 test.component,
                 test.validator,
                 test.mock,
@@ -460,6 +453,18 @@
         </jsf.junit>
     </target>   
 
+    <target name="test.FacesWrapper" depends="build.test.dir">
+        <echo message="Running FacesWrapper tests ..."/>
+        <jsf.junit test-results-dir="${api.test.results.dir}"
+                   classpath-refid="test.classpath"
+                   assert.classes="${assertion.classes}">
+            <tests>
+                <fileset dir="${build.test.dir}"
+                         includes="javax/faces/FacesWrapperTestCase.class"/>
+            </tests>
+        </jsf.junit>
+    </target>   
+            	
     <target name="test.PhaseId" depends="build.test.dir">
         <echo message="Running PhaseId tests ..."/>
         <jsf.junit test-results-dir="${api.test.results.dir}"
@@ -492,6 +497,29 @@ javax.faces.level=ALL
                 <fileset dir="${build.test.dir}"
                          includes="javax/faces/component/*TestCase.class"
                          excludes="javax/faces/component/UIDataTestCase.class,javax/faces/component/UIFormTestCase.class"/>
+            </tests>
+        </jsf.junit>
+    </target>
+
+    <target name="test.application" depends="build.test.dir">
+        <echo message="Running javax.faces.application tests ..."/>
+        <delete file="${api.test.results.dir}/api-test.log"/>
+        <delete file="${api.test.results.dir}/test-logging.properties"/>
+        <echo file="${api.test.results.dir}/test-logging.properties">
+handlers=java.util.logging.FileHandler
+java.util.logging.FileHandler.append=true
+java.util.logging.FileHandler.encoding=UTF-8
+java.util.logging.FileHandler.formatter=java.util.logging.SimpleFormatter
+java.util.logging.FileHandler.pattern=${api.test.results.dir}/api-test.log
+javax.faces.level=ALL
+        </echo>
+        <jsf.junit test-results-dir="${api.test.results.dir}"
+                   classpath-refid="test.classpath"
+                   assert.classes="${assertion.classes}"
+                   logging.config.file="${api.test.results.dir}/test-logging.properties">
+            <tests>
+                <fileset dir="${build.test.dir}"
+                         includes="javax/faces/application/*TestCase.class"/>
             </tests>
         </jsf.junit>
     </target>
@@ -571,15 +599,6 @@ javax.faces.level=ALL
             </replacevalue>
         </replace>
         <delete file="${basedir}/doc/standard-html-renderkit-impl.xml"/>
-
-        <mkdir dir="${tools.dir}/build/classes"/>
-        <antcall target="tools.javac"/>
-        <javac srcdir="${tools.dir}/src/main/java"
-               destdir="${tools.dir}/build/classes">
-            <classpath>
-                <path refid="compile.classpath"/>
-            </classpath>
-        </javac>
 
         <!-- validate the generated standard-html-renderkit.xml -->
         <taskdef name="validate" classname="com.sun.faces.ant.ValidateTask">
@@ -698,6 +717,7 @@ javax.faces.level=ALL
         <copy todir="${build.javadocs.dir}/">
            <fileset dir="${doc.dir}">
              <include name="changed*.png" />
+             <include name="expert*.png" />
              <include name="changed*.cur" />
            </fileset>
         </copy>
@@ -722,7 +742,7 @@ javax.faces.level=ALL
                  windowtitle="${DocName} (${spec.version})"
                  stylesheetfile="${resources.dir}/jsf-api.css"
                  source="1.5"
-                 doctitle="${DocName} (${spec.version})"
+                 doctitle="${DocName} (${spec.version} SNAPSHOT ${build.number})"
                  bottom="Copyright 2002-2010 Oracle America Inc, Inc. All Rights Reserved.">
             <fileset dir="${src.dir}">
                 <include name="**/*.java"/>
@@ -832,36 +852,33 @@ javax.faces.level=ALL
     <!--
        USE THE FOLLOWING TARGETS TO PUSH VARIOUS BUILD TYPES TO YOUR LOCAL
        M2 REPOSITORY
+ant -Dgpg.passphrase=PASSPHRASE HERE mvn.deploy.snapshot.local
     -->
 
-    <target name="mvn.deploy.snapshot.local" depends="strip.api.jar">
-        <mvn.deploy.snapshot.local type="api" 
-                                   version="${spec.snapshot.version}"/>
+    <target name="mvn.pre-maven-rename.deploy.snapshot.local">
+        <mvn.pre-maven-rename.deploy.snapshot.local type="api"/>
     </target>
 
-    <target name="mvn.deploy.promoted.local" depends="strip.api.jar">
-        <mvn.deploy.promoted.local type="api"/>
+
+    <target name="mvn.pre-maven-rename.deploy.promoted.local">
+        <mvn.pre-maven-rename.deploy.promoted.local type="api"/>
     </target>
 
-    <target name="mvn.deploy.release.local" depends="strip.api.jar">
-        <mvn.deploy.release.local type="api" 
-                                  version="${spec.version}"/>
+
+    <target name="mvn.pre-maven-rename.deploy.release.local">
+        <mvn.pre-maven-rename.deploy.release.local type="api"/>
     </target>
 
     <target name="strip.api.jar" 
             depends="get.faces.java.packages.as.space.separated.string">
         <!-- path maintenance -->
+        <move file="${build.lib.dir}/${name}.jar" failonerror="true"
+              tofile="${build.lib.dir}/${name}-full.jar" />
         <delete failonerror="false" dir="${build.lib.dir}/jsf-api-stripped" />
         <mkdir dir="${build.lib.dir}/jsf-api-stripped" />
         <!-- windows or unix java exec invocation -->
         <condition property="exec.name" value="cmd.exe">
             <os family="windows"/>
-        </condition>
-        <condition property="exec.name" value="${java.home}/bin/javac">
-            <available file="${java.home}/bin/javac"/>
-        </condition>
-        <condition property="exec.name" value="${java.home}/../bin/javac">
-            <available file="${java.home}/../bin/javac"/>
         </condition>
         <condition property="exec.arg.1"
                    value="/c ${java.home}/bin/javac">
@@ -874,22 +891,22 @@ javax.faces.level=ALL
             <arg line="${exec.arg.1}"/>
             <arg line="-XDprocess.packages"/>
             <arg line="-proc:only"/>
-            <arg line="-cp ${build.lib.dir}/${name}.jar:${tools.dir}/build/classes"/>
+            <arg line="-cp ${build.lib.dir}/${name}-full.jar:${tools.dir}/build/classes"/>
             <arg line="-processor com.sun.faces.tools.StripClassesForApiJar"/>
-            <arg line="-Acom.sun.tools.javac.sym.Jar=${build.lib.dir}/${name}.jar"/>
-            <arg line="-Acom.sun.tools.javac.sym.ExtraApiClassPath=${servlet.jar}:${jsp.jar}:${el-api.jar}:${jstl.jar}:${validation-api.jar}"/>
+            <arg line="-Acom.sun.tools.javac.sym.Jar=${build.lib.dir}/${name}-full.jar"/>
+            <arg line="-Acom.sun.tools.javac.sym.ExtraApiClassPath=${javaee-api.jar}"/>
             <arg line="-Acom.sun.tools.javac.sym.Dest=${build.lib.dir}/jsf-api-stripped"/>
             <arg line="${src.paths}"/>
         </exec>
-        <!-- jar up the stripped files into javax.faces-api.jar. -->
+        <!-- jar up the stripped files into jsf-api.jar. -->
         <!-- Extract the original manifest -->
-        <unjar src="${build.lib.dir}/${name}.jar"
+        <unjar src="${build.lib.dir}/${name}-full.jar"
                dest="${build.lib.dir}/jsf-api-stripped">
           <patternset>
             <include name="META-INF/MANIFEST.MF" />
           </patternset>
         </unjar>
-        <jar destfile="${javax.faces-api.jar}"
+        <jar destfile="${build.lib.dir}/${name}.jar"
              basedir="${build.lib.dir}/jsf-api-stripped"
              manifest="${build.lib.dir}/jsf-api-stripped/META-INF/MANIFEST.MF" />
     </target>
@@ -926,33 +943,32 @@ javax.faces.level=ALL
                      replace="." global="true" />
     </target>
         
-    <target name="mvn.deploy.api.release.local" depends="strip.api.jar">
+    <target name="mvn.pre-maven-rename.deploy.api.release.local" depends="strip.api.jar">
 
-        <mvn.deploy.release.local version="${spec.version}" type="api"/>
+        <mvn.pre-maven-rename.deploy.release.local groupId="javax.faces" version="${spec.version}" type="api"/>
     </target>
 
 
     <!--
        USE THE FOLLOWING TARGETS TO PUSH VARIOUS BUILD TYPES TO THE
        JAVA.NET M2 REPOSITORY
-
-ant -Dgpg.passphrase=PASSPHRASE HERE mvn.deploy.snapshot.local
-
     -->
-     <target name="mvn.deploy.snapshot" depends="strip.api.jar">
-        <mvn.deploy.snapshot type="api" 
-                             version="${spec.snapshot.version}"/>
+     <target name="mvn.pre-maven-rename.deploy.snapshot">
+        <mvn.pre-maven-rename.deploy.snapshot type="api"/>
     </target>
 
 
-    <target name="mvn.deploy.promoted" depends="strip.api.jar">
-        <mvn.deploy.promoted type="api"/>
+    <target name="mvn.pre-maven-rename.deploy.promoted">
+        <mvn.pre-maven-rename.deploy.promoted type="api"/>
     </target>
 
 
-    <target name="mvn.deploy.release" depends="strip.api.jar">
-        <mvn.deploy.release type="api" 
-                            version="${spec.version}"/>
+    <target name="mvn.pre-maven-rename.deploy.release">
+        <mvn.pre-maven-rename.deploy.release type="api"/>
+    </target>
+
+    <target name="mvn.pre-maven-rename.deploy.api.release" depends="strip.api.jar">
+        <mvn.pre-maven-rename.deploy.release groupId="javax.faces" version="${spec.version}" type="api"/>
     </target>
 
     <target name="passthru">

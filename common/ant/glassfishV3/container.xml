@@ -170,9 +170,17 @@
                 <container.stop/>
             </then>
         </if>
+        <ant dir="${api.dir}" antfile="build-pre-maven-rename.xml" inheritAll="true"
+             target="main">
+          <property name="skip.javadoc.jar" value="true" />
+        </ant>
+        <ant dir="${impl.dir}" antfile="build-pre-maven-rename.xml" inheritAll="true"
+             target="main">
+          <property name="skip.javadoc.jar" value="true" />
+        </ant>
 
-        <copy overwrite="true" file="${api.dir}/build/lib/jsf-api.jar" toFile="${container.home}/modules/jsf-api.jar"/>
-        <copy overwrite="true" file="${impl.dir}/build/lib/jsf-impl.jar" toFile="${container.home}/modules/jsf-impl.jar"/>
+        <copy overwrite="true" file="${api.dir}/build.pre-maven-rename/lib/jsf-api.jar" toFile="${container.home}/modules/jsf-api.jar"/>
+        <copy overwrite="true" file="${impl.dir}/build.pre-maven-rename/lib/jsf-impl.jar" toFile="${container.home}/modules/jsf-impl.jar"/>
 
         <if>
             <os family="windows"/>

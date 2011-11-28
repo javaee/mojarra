@@ -85,7 +85,6 @@
 
     <!-- Artifacts of interest -->
     <property name="jsf-api.jar" value="${api.dir}/build/lib/jsf-api.jar"/>
-    <property name="jsf-tools.jar" value="${tools.dir}/build/lib/jsf-tools.jar"/>
     <property name="jsf-impl.jar" value="${impl.dir}/build/lib/jsf-impl.jar"/>   
     <property name="jsf.test.jar" value="${jsf.build.home}/lib/jsf-extensions-test-time.jar"/>    
     <property name="installer.jar" value="${jsf.build.home}/common/lib/installer-builder.jar"/>

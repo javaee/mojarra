@@ -54,8 +54,7 @@
 
     <!-- Construct compile classpath -->
     <path id="test.compile.classpath">
-        <pathelement location="${jsf-api.jar}"/>
-        <pathelement location="${jsf-impl.jar}"/>
+        <pathelement path="${javax.faces.jar}"/>
         <pathelement location="${jsf.test.jar}"/>
         <path refid="compile.classpath"/>
         <pathelement location="${basedir}/build/classes"/>       

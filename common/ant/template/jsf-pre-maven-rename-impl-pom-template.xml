@@ -43,15 +43,15 @@
 
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.glassfish</groupId>
-    <artifactId>javax.faces</artifactId>
+    <groupId>@groupId@</groupId>
+    <artifactId>jsf-impl</artifactId>
     <version>@version@</version>
     <packaging>jar</packaging>
     <name>
-        Oracle's implementation of the JSF 2.0 specification.
+        Oracle's implementation of the JSF 2.2 specification.
     </name>
     <description>
-        This is the master POM file for Oracle's Implementation of the JSF 2.0 Specification.
+        This is the master POM file for Oracle's Implementation of the JSF 2.2 Specification.
     </description>
     <url>http://java.sun.com/javaee/javaserverfaces/</url>
     <licenses>
@@ -65,13 +65,13 @@
     </licenses>
     <scm>
         <url>http://java.net/projects/mojarra/sources</url>
-        <connection>scm:svn:https://svn.java.net/svn/mojarra~svn/branches/MOJARRA_2_0X_ROLLING</connection>
+        <connection>scm:svn:https://svn.java.net/svn/mojarra~svn/trunk</connection>
     </scm>
     <developers>
         <developer>
             <id>edburns</id>
             <name>Ed Burns</name>
-            <email>edward.burns@oracle.com</email>
+            <email>ed.burns@sun.com</email>
             <organization>Oracle America, Inc.</organization>
             <roles>
                 <role>project-owner</role>
@@ -81,17 +81,17 @@
         <developer>
             <id>rlubke</id>
             <name>Ryan Lubke</name>
-            <email>ryan.lubke@oracle.com</email>
+            <email>Ryan.Lubke@sun.com</email>
             <organization>Oracle America, Inc.</organization>
             <roles>
-                <role>developer</role>
+                <role>project-owner</role>
             </roles>
             <timezone>-9</timezone>
         </developer>
         <developer>
             <id>rogerk</id>
             <name>Roger Kitain</name>
-            <email>Roger.Kitain@oracle.com</email>
+            <email>Roger.Kitain@sun.com</email>
             <organization>Oracle America, Inc.</organization>
             <roles>
                 <role>project-owner</role>
@@ -101,20 +101,10 @@
         <developer>
             <id>driscoll</id>
             <name>Jim Driscoll</name>
-            <email>jim.dirscoll@oracle.com</email>
+            <email>jim.dirscoll@sun.com</email>
             <organization>Oracle America, Inc.</organization>
             <roles>
                 <role>project-owner</role>
-            </roles>
-            <timezone>-9</timezone>
-        </developer>
-        <developer>
-            <id>sheetalv</id>
-            <name>Sheetal Vartak</name>
-            <email>sheetal.vartak@oracle.com</email>
-            <organization>Oracle America, Inc.</organization>
-            <roles>
-                <role>developer</role>
             </roles>
             <timezone>-9</timezone>
         </developer>
@@ -131,7 +121,6 @@
         <url>https://maven.java.net/service/local/staging/deploy/maven2/</url>
       </repository>
     </distributionManagement>
-
     <build>
         <defaultGoal>install</defaultGoal>
         <plugins>
@@ -149,9 +138,9 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
-                <configuration>
-                  <updateReleaseInfo>true</updateReleaseInfo>
-               </configuration>
+                 <configuration>
+                   <updateReleaseInfo>true</updateReleaseInfo>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -168,16 +157,6 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifestFile>target/classes/META-INF/MANIFEST.MF
-                        </manifestFile>
-                    </archive>
-                </configuration>
-            </plugin>
-            <plugin>
               <groupId>org.codehaus.mojo</groupId>
               <artifactId>build-helper-maven-plugin</artifactId>
               <version>1.7</version>
@@ -191,7 +170,7 @@
                   <configuration>
                     <artifacts>
                       <artifact>
-                        <file>target/javax.faces-@version@-javadoc.jar</file>
+                        <file>target/jsf-impl-@version@-javadoc.jar</file>
                         <type>jar</type>
                         <classifier>javadoc</classifier>
                       </artifact>
@@ -199,6 +178,16 @@
                   </configuration>
                 </execution>
               </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestFile>target/classes/META-INF/MANIFEST.MF
+                        </manifestFile>
+                    </archive>
+                </configuration>
             </plugin>
         </plugins>
 
@@ -259,21 +248,26 @@
     </organization>
     <dependencies>
         <dependency>
-            <groupId>jetty</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>2.5-6.0.2</version>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.0.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <!-- this includes el-api -->
-            <groupId>jetty</groupId>
-            <artifactId>jsp-api</artifactId>
-            <version>2.1-6.0.2</version>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>javax.servlet.jsp-api</artifactId>
+            <version>2.2.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>jstl</groupId>
-            <artifactId>jstl</artifactId>
+            <groupId>javax.el</groupId>
+            <artifactId>javax.el-api</artifactId>
+            <version>2.2.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet.jsp.jstl</groupId>
+            <artifactId>jstl-api</artifactId>
             <version>1.2</version>
             <scope>provided</scope>
         </dependency>

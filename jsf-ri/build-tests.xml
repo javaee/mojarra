@@ -76,8 +76,7 @@
     <!-- Compilation Classpath -->
     <path id="test.compile.classpath">
         <pathelement location="${conf.test.dir}"/>
-        <pathelement location="${jsf-api.jar}"/>      
-        <pathelement location="${jsf-impl.jar}"/>
+        <pathelement location="${javax.faces.jar}"/>
         <pathelement location="${jsf.test.jar}"/>
         <path refid="compile.classpath"/>
         <path refid="cactus.compile.classpath"/>        
@@ -87,8 +86,7 @@
     <path id="test.runtime.classpath">
         <pathelement location="${out.test.dir}/classes"/>
         <pathelement location="${conf.test.dir}"/> 
-        <pathelement location="${jsf-api.jar}"/>      
-        <pathelement location="${jsf-impl.jar}"/>
+        <pathelement location="${javax.faces.jar}"/>
         <pathelement location="${jsf.test.jar}"/>
         <!-- Temporary until javax.security is available on maven -->
         <pathelement location="${dependency.base.dir}/glassfish/lib/javaee.jar"/>

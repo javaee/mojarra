@@ -1,5 +1,4 @@
 <?xml version='1.0' encoding='UTF-8'?>
-
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -46,18 +45,21 @@
 
 <project name="JSF-RI" default="main" basedir=".">
 
+    <property name="build.dir" value="build.pre-maven-rename"/>
+    <property name="build-post-maven-rename.dir" value="build"/>
 
     <!-- ************ Per user local properties ******************************* -->
 
     <property file="${user.home}/build.properties"/>    
     <property file="../build.properties"/>    
     <import file="${jsf.build.home}/common/ant/common.xml"/>
+    <import file="${jsf.build.home}/common/ant/maven-pre-maven-rename.xml"/>
+    <property name="jsf-api.jar" value="${api.dir}/${build.dir}/lib/jsf-api.jar"/>
 
 
     <!-- ******************* Structural ************************** -->
 
     <!-- The base directory for compilation targets -->
-    <property name="build.dir" value="build"/>
     <property name="target.dir" value="target"/>
    <property name="build.classes.dir" value="${build.dir}/classes"/>
     <property name="build.generate.dir" value="${build.dir}/generate"/>
@@ -81,7 +83,7 @@
 
     <!-- Misc -->
     <property name="conf.share.dir" value="${basedir}/conf/share"/>
-    <property name="name" value="${impl-artifact-id}"/>
+    <property name="name" value="jsf-impl"/>
 
     <property name="dependency.base.dir" value="${jsf.build.home}/dependencies"/>
     <property name="dependency.jar.dir" value="${dependency.base.dir}/jars"/>
@@ -89,10 +91,11 @@
     <property name="build.javadocs.dir" value="${build.dir}/javadocs"/>
     <property name="javadoc.private" value="true"/>
     <property name="javadoc.protected" value="false"/>
+    <property name="artifact-id" value="jsf-impl"/>
     <property name="DocName" value="Mojarra Implementation Javadoc"/>
 
     <path id="impl.compile.classpath">
-        <pathelement location="${jsf-api-intermediate.jar}"/>
+        <pathelement location="${jsf-api.jar}"/>
         <path refid="apache.commons.classpath"/>
         <path refid="compile.classpath"/>
         <pathelement location="${tools.dir}/build/classes"/>
@@ -118,6 +121,8 @@
         <mkdir dir="${build.dir}/vdldocs/jsp"/>
         <mkdir dir="${build.dir}/vdldocs/facelets"/>
         <mkdir dir="${build.dir}/lib"/>
+        <delete failonerror="false" 
+                dir="${build-post-maven-rename.dir}/classes/javax"/>
         <antcall target="delete.and.remkdir.build.generate.dir" />
     </target>
 
@@ -143,6 +148,10 @@
         <filter token="package" value="com.sun.faces.application.view"/>
         <copy file="${tools.dir}/template-src/StateHolderSaver.java"
               todir="${build.generate.dir}/com/sun/faces/application/view"
+              filtering="true"/>
+        <filter token="package" value="com.sun.faces.context"/>
+        <copy file="${tools.dir}/template-src/StateHolderSaver.java"
+              todir="${build.generate.dir}/com/sun/faces/context"
               filtering="true"/>
 
         <filter token="protection" value="public"/>
@@ -178,6 +187,11 @@
               file="${build.generate.dir}/com/sun/faces/application/view/StateHolderSaver.java"
               token="@serialVersionUID@"
               value="4866548262845392093L"/>
+
+        <replace
+              file="${build.generate.dir}/com/sun/faces/context/StateHolderSaver.java"
+              token="@serialVersionUID@"
+              value="146780782953074472L"/>
     </target>
 
     <target name="check.taglib.generation.necessity">
@@ -204,14 +218,6 @@
 
         <mkdir dir="${tools.dir}/build/classes"/>
         <copy todir="${tools.dir}/build/classes">
-            <fileset dir="${tools.dir}/src/main/java"
-                     includes="**/*.properties"/>
-        </copy>
-        <copy todir="${tools.dir}/build/classes">
-            <fileset dir="${tools.dir}/src/main/resources"
-                     includes="**/*.properties"/>
-        </copy>
-        <copy todir="${tools.dir}/build/classes">
             <fileset dir="${impl.dir}/src/main/resources"
                      includes="**/LogStrings.properties"/>
         </copy>
@@ -220,13 +226,6 @@
             <fileset dir="${api.dir}/doc"
                       includes="*.dtd,*.xsd"/>
         </copy>
-        <jsf.javac srcdir="${tools.dir}/src/main/java"
-               destdir="${tools.dir}/build/classes">
-            <classpath>
-                <path refid="impl.compile.classpath"/>
-                <path refid="ant.classpath"/>
-            </classpath>
-        </jsf.javac>
         <taskdef name="generateTaglib"
                  classname="com.sun.faces.ant.TaglibGenTask">
             <classpath>
@@ -240,12 +239,11 @@
             </classpath>
         </taskdef>
         <generateTaglib
-              generatorConfig="${tools.dir}/conf/HtmlBasicTaglib21.properties"
+              generatorConfig="${tools.dir}/conf/HtmlBasicTaglib21.pre-maven-rename.properties"
               facesConfig="${standard.renderkit.xml}"
               fork="true">
             <classpath>
                 <path refid="impl.compile.classpath"/>
-                <pathelement location="${tools.dir}/build/classes"/>
             </classpath>
             <sysproperty key="java.endorsed.dirs" value="${endorsed.dirs}"/>
             <jvmarg line="${debug.jvm.args}"/>
@@ -254,12 +252,11 @@
             </assertions>
         </generateTaglib>
         <generateAttrManager
-              generatorConfig="${tools.dir}/conf/HtmlBasicTaglib21.properties"
+              generatorConfig="${tools.dir}/conf/HtmlBasicTaglib21.pre-maven-rename.properties"
               facesConfig="${standard.renderkit.xml}"
               fork="true">
             <classpath>
                 <path refid="impl.compile.classpath"/>
-                <pathelement location="${tools.dir}/build/classes"/>
             </classpath>
             <sysproperty key="java.endorsed.dirs" value="${endorsed.dirs}"/>
             <jvmarg line="${debug.jvm.args}"/>
@@ -335,7 +332,7 @@
             args="-o ${build.classes.dir}/META-INF/resources/javax.faces/jsf.js ${build.classes.dir}/META-INF/resources/javax.faces/jsf-uncompressed.js"/>
         <!--
             RELEASE_PENDING (rlubke,driscoll)
-            For now these are copied to the root of the javax.faces.jar, but
+            For now these are copied to the root of the jsf-impl.jar, but
             eventually they should be in com.sun.faces per the copy statement
             above.
         -->
@@ -361,12 +358,6 @@
               toDir="${build.classes.dir}/com/sun/faces"/>
         <unzip src="${jsf.build.home}/lib/injectionproviders.jar"
                dest="${build.classes.dir}"/>
-        <unzip src="${jsf-api-intermediate.jar}"
-               dest="${build.classes.dir}">
-          <patternset>
-            <exclude name="META-INF/MANIFEST.MF" />
-          </patternset>
-        </unzip>
         <copy todir="${build.classes.dir}/META-INF">
             <fileset dir="${conf.share.dir}">
                 <include name="jsf_core.tld"/>
@@ -383,6 +374,7 @@
             description="Clean build and distribution directories">
         <ant antfile="build-tests.xml" target="remove.tstamp"/>
         <delete dir="${build.dir}"/>
+        <delete dir="${build-post-maven-rename.dir}"/>
         <delete dir="${target.dir}"/>
         <delete dir="${dist.dir}"/>
         <delete dir="${impl.test.results.dir}"/>
@@ -473,6 +465,7 @@
         <copy todir="${build.dir}/vdldocs/jsp">
            <fileset dir="${basedir}/../jsf-api/doc/">
              <include name="changed*.png" />
+             <include name="expert*.png" />
              <include name="changed*.cur" />
            </fileset>
         </copy>
@@ -488,12 +481,11 @@
         </taskdef>
 
         <generateFaceletsTld
-              generatorConfig="${tools.dir}/conf/FaceletsHtmlBasicTaglib21.properties"
+              generatorConfig="${tools.dir}/conf/FaceletsHtmlBasicTaglib21.pre-maven-rename.properties"
               facesConfig="${standard.renderkit.xml}"
               fork="true">
             <classpath>
                 <path refid="impl.compile.classpath"/>
-                <pathelement location="${tools.dir}/build/classes"/>
             </classpath>
             <sysproperty key="java.endorsed.dirs" value="${endorsed.dirs}"/>
             <jvmarg line="${debug.jvm.args}"/>
@@ -515,11 +507,12 @@
         <copy todir="${build.dir}/vdldocs/facelets">
            <fileset dir="${basedir}/../jsf-api/doc/">
              <include name="changed*.png" />
+             <include name="expert*.png" />
              <include name="changed*.cur" />
            </fileset>
         </copy>
         <copy failonerror="false" overwrite="true" todir="${build.dir}/vdldocs/facelets/h">
-           <fileset dir="${basedir}/../jsf-api/build/generate/facesdoc/HTML_BASIC">
+           <fileset dir="${basedir}/../jsf-api/${build.dir}/generate/facesdoc/HTML_BASIC">
              <include name="javax.faces.Outputjavax.faces.resource.Script.html" />
            </fileset>
         </copy>
@@ -535,7 +528,7 @@
     </target>
 
     <target name="test"
-             depends="update,init.test,run.junit.test,run.cactus.test,run.systest,run.systest-per-webapp"
+             depends="update,init.test,compile.test,run.systest,run.junit.test,run.systest-per-webapp,run.systest-per-webapp-on-virtual-server,run.cactus.test"
             description="Run all unit and system tests"/>
 
     <target name="test.generate.reports"
@@ -545,29 +538,68 @@
         <mkdir dir="${impl.test.results.dir}"/>
     </target>
 
-    <target name="run.systest" description="Run system tests"
-            depends="init.test">              
-        <ant dir="${basedir}/systest" inheritall="false" target="test"/>        
+    <target name="run.systest" description="Run system tests">              
+        <ant dir="${basedir}/systest" inheritall="false" target="test">
+          <property name="force.no.cluster" value="${force.no.cluster}" />
+        </ant>
+
     </target>
 
     <target name="run.systest-per-webapp"
-            description="Run per-webapp system tests"
-            depends="init.test,compile.test">
+            description="Run per-webapp system tests">
         <ant dir="${basedir}/systest-per-webapp" inheritall="false"
-             target="test"/>
+             target="test">
+          <property name="force.no.cluster" value="${force.no.cluster}" />
+        </ant>       
+
         <ant dir="${basedir}/systest-per-webapp" inheritall="false"
-             target="remove"/>
+             target="remove">
+        <property name="force.no.cluster" value="${force.no.cluster}" />
+        </ant>
+    </target>
+
+   <target name="run.systest-per-webapp-on-virtual-server"
+           depends="discover.container.version" 
+           if="container.is.V3.1_no_cluster"
+           description="Run per-webapp system tests on 3 virtual servers">
+        <ant dir="${basedir}/systest-per-webapp" inheritall="false"
+             target="remove">
+          <property name="force.no.cluster" value="${force.no.cluster}" />
+        </ant>
+        <container.stop />
+        <var name="force.no.cluster" value="true" />
+        <container.start />
+        <ant dir="${basedir}/systest-per-webapp" inheritall="true"
+             target="install-virtual-server">
+          <property name="force.no.cluster" value="true" />
+        </ant>
+        <ant dir="${basedir}/systest-per-webapp" inheritall="false"
+             target="test-virtual-server">
+          <property name="force.no.cluster" value="true" />
+          <property name="instance.numbers" value="1,2" />
+        </ant>
+        <ant dir="${basedir}/systest-per-webapp" inheritall="false"
+             target="remove-virtual-server">
+          <property name="force.no.cluster" value="${force.no.cluster}" />
+        </ant>
     </target>
 
 
-    <target name="run.junit.test" depends="init.test,compile.test"
+    <target name="run.junit.test"
             description="Run unit tests not requiring cactus">
-        <ant antfile="build-tests.xml" target="run.test"/>
+        <ant antfile="build-tests.xml" target="run.test">
+        </ant>
     </target>
 
-    <target name="run.cactus.test" depends="init.test,compile.test"
+    <target name="run.cactus.test"
             description="Run unit tests requiring cactus">
-        <ant antfile="build-tests.xml" target="execute.cactus.tests"/>
+        <container.stop />
+        <var name="force.no.cluster" value="true" />
+        <container.start />
+
+        <ant antfile="build-tests.xml" target="execute.cactus.tests" inheritAll="true">
+          <property name="force.no.cluster" value="true" />
+        </ant>
     </target>
 
    <target name="generate.reports">
@@ -604,6 +636,9 @@
         <replace file="tmp.bnd"
                  token="@impl.version@"
                  value="${impl.version}"/>
+        <replace file="tmp.bnd"
+                 token="@full.impl.version@"
+                 value="${full.impl.version}"/>
         <if>
             <equals arg1="${build.type}" arg2=""/>
             <then>
@@ -659,8 +694,8 @@
             <replacevalue><![CDATA[
 <faces-config xmlns="http://java.sun.com/xml/ns/javaee"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
-    version="2.0">]]>
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd"
+    version="2.1">]]>
             </replacevalue>
         </replace>
         <delete file="${basedir}/merged.xml"/>
@@ -670,7 +705,27 @@
 
 
     <target name="passthru">
-        <ant antfile="build-tests.xml" target="do.compile.test"/>
+        <ant antfile="build-tests.xml" target="passthru" 
+             inheritAll="true">
+          <property name="force.no.cluster" value="true" />
+        </ant>
+
+    </target>
+
+    <target name="undeploy">
+        <ant antfile="build-tests.xml" target="undeploy" 
+             inheritAll="true">
+          <property name="force.no.cluster" value="true" />
+        </ant>
+
+    </target>
+
+    <target name="deploy">
+        <ant antfile="build-tests.xml" target="deploy" 
+             inheritAll="true">
+          <property name="force.no.cluster" value="true" />
+        </ant>
+
     </target>
 
     <target name="prepare.cactus.webapp">
@@ -680,23 +735,21 @@
      <!--
        USE THE FOLLOWING TARGETS TO PUSH VARIOUS BUILD TYPES TO YOUR LOCAL
        M2 REPOSITORY
-
 ant -Dgpg.passphrase=PASSPHRASE HERE mvn.deploy.snapshot.local
-
     -->
 
-    <target name="mvn.deploy.snapshot.local" description="Deploy a SNAPSHOT build to the local maven repo">
-        <mvn.deploy.snapshot.local type="impl"/>
+    <target name="mvn.pre-maven-rename.deploy.snapshot.local" description="Deploy a SNAPSHOT build to the local maven repo">
+        <mvn.pre-maven-rename.deploy.snapshot.local type="impl"/>
     </target>
 
 
-    <target name="mvn.deploy.promoted.local">
-        <mvn.deploy.promoted.local type="impl"/>
+    <target name="mvn.pre-maven-rename.deploy.promoted.local">
+        <mvn.pre-maven-rename.deploy.promoted.local type="impl"/>
     </target>
 
 
-    <target name="mvn.deploy.release.local">
-        <mvn.deploy.release.local type="impl"/>
+    <target name="mvn.pre-maven-rename.deploy.release.local">
+        <mvn.pre-maven-rename.deploy.release.local type="impl"/>
     </target>
 
 
@@ -704,18 +757,18 @@ ant -Dgpg.passphrase=PASSPHRASE HERE mvn.deploy.snapshot.local
        USE THE FOLLOWING TARGETS TO PUSH VARIOUS BUILD TYPES TO THE
        JAVA.NET M2 REPOSITORY
     -->
-     <target name="mvn.deploy.snapshot">
-        <mvn.deploy.snapshot type="impl"/>
+     <target name="mvn.pre-maven-rename.deploy.snapshot">
+        <mvn.pre-maven-rename.deploy.snapshot type="impl"/>
     </target>
 
 
-    <target name="mvn.deploy.promoted">
-        <mvn.deploy.promoted type="impl"/>
+    <target name="mvn.pre-maven-rename.deploy.promoted">
+        <mvn.pre-maven-rename.deploy.promoted type="impl"/>
     </target>
 
 
-    <target name="mvn.deploy.release">
-        <mvn.deploy.release type="impl"/>
+    <target name="mvn.pre-maven-rename.deploy.release">
+        <mvn.pre-maven-rename.deploy.release type="impl"/>
     </target>
 
     <target name="javadoc_check">

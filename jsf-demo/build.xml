@@ -1,41 +1,46 @@
 <?xml version="1.0"?>
 
 <!--
- DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- 
- Copyright 1997-2009 Sun Microsystems, Inc. All rights reserved.
- 
- The contents of this file are subject to the terms of either the GNU
- General Public License Version 2 only ("GPL") or the Common Development
- and Distribution License("CDDL") (collectively, the "License").  You
- may not use this file except in compliance with the License. You can obtain
- a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
- or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
- language governing permissions and limitations under the License.
- 
- When distributing the software, include this License Header Notice in each
- file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
- Sun designates this particular file as subject to the "Classpath" exception
- as provided by Sun in the GPL Version 2 section of the License file that
- accompanied this code.  If applicable, add the following below the License
- Header, with the fields enclosed by brackets [] replaced by your own
- identifying information: "Portions Copyrighted [year]
- [name of copyright owner]"
- 
- Contributor(s):
- 
- If you wish your version of this file to be governed by only the CDDL or
- only the GPL Version 2, indicate your decision by adding "[Contributor]
- elects to include this software in this distribution under the [CDDL or GPL
- Version 2] license."  If you don't indicate a single choice of license, a
- recipient has the option to distribute your version of this file under
- either the CDDL, the GPL Version 2 or to extend the choice of license to
- its licensees as provided above.  However, if you add GPL Version 2 code
- and therefore, elected the GPL Version 2 license, then the option applies
- only if the new code is made subject to such option by the copyright
- holder.
--->
 
+    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+    Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+
+    The contents of this file are subject to the terms of either the GNU
+    General Public License Version 2 only ("GPL") or the Common Development
+    and Distribution License("CDDL") (collectively, the "License").  You
+    may not use this file except in compliance with the License.  You can
+    obtain a copy of the License at
+    https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+    or packager/legal/LICENSE.txt.  See the License for the specific
+    language governing permissions and limitations under the License.
+
+    When distributing the software, include this License Header Notice in each
+    file and include the License file at packager/legal/LICENSE.txt.
+
+    GPL Classpath Exception:
+    Oracle designates this particular file as subject to the "Classpath"
+    exception as provided by Oracle in the GPL Version 2 section of the License
+    file that accompanied this code.
+
+    Modifications:
+    If applicable, add the following below the License Header, with the fields
+    enclosed by brackets [] replaced by your own identifying information:
+    "Portions Copyright [year] [name of copyright owner]"
+
+    Contributor(s):
+    If you wish your version of this file to be governed by only the CDDL or
+    only the GPL Version 2, indicate your decision by adding "[Contributor]
+    elects to include this software in this distribution under the [CDDL or GPL
+    Version 2] license."  If you don't indicate a single choice of license, a
+    recipient has the option to distribute your version of this file under
+    either the CDDL, the GPL Version 2 or to extend the choice of license to
+    its licensees as provided above.  However, if you add GPL Version 2 code
+    and therefore, elected the GPL Version 2 license, then the option applies
+    only if the new code is made subject to such option by the copyright
+    holder.
+
+-->
 
 <!-- ************ JSF build file ************************************** -->
 
@@ -120,8 +125,7 @@
 
 
     <target name="copyJars" depends="prepare.dist">
-        <copy file="${jsf-api.jar}" todir="${dist.home}/lib"/>
-        <copy file="${jsf-impl.jar}" todir="${dist.home}/lib"/>
+        <copy file="${javax.faces.jar}" todir="${dist.home}/lib"/>
     </target>
 
     <!-- target for building standalone JSF distribution -->
@@ -140,18 +144,34 @@
 
         <echo>Creating Special JAR for GlassFish</echo>
         <mkdir dir="${basedir}/tmp"/>
-        <jsf.manifested.jar jarfile="${basedir}/tmp/jsf-impl.jar"
+        <jsf.manifested.jar jarfile="${basedir}/tmp/javax.faces.jar"
                             basedir="${jsf.build.home}/jsf-ri/build/classes"
                             extension-name="com.sun.faces"/>
         <jar jarfile="glassfish-jsf-${impl.version}.jar">
-            <fileset dir="${basedir}/tmp" includes="jsf-impl.jar"/>
-            <fileset dir="${jsf.build.home}/jsf-api/build/lib" includes="jsf-api.jar"/>
+            <fileset dir="${basedir}/tmp" includes="javax.faces.jar"/>
         </jar>             
         <delete dir="${basedir}/tmp"/>
     </target>
 
 
     <target name="prepare.dist">
+      <generate.documentation />
+    </target>
+
+    <target name="generate.documentatation.given.documentation.version">
+      <generate.documentation version="${documentation.version}" />
+    </target>
+
+    <macrodef name="generate.documentation">
+      <attribute name="version" default="${impl.version}" />
+      <sequential>
+        <if>
+          <not>
+            <resourceexists>
+              <file file="${dist.home}/mojarra-@{version}-documentation.zip" />
+            </resourceexists>
+          </not>
+      <then>
         <mkdir dir="${dist.home}"/>
         <mkdir dir="${dist.home}/docs"/>
         <mkdir dir="${dist.home}/samples"/>
@@ -162,9 +182,6 @@
         <copy file="${impl.dir}/LICENSE-APACHE.txt" todir="${dist.home}"/>
         <copy file="${impl.dir}/THIRDPARTYLICENSEREADME.txt"
               todir="${dist.home}"/>
-        <copy todir="${dist.home}/lib">
-            <fileset dir="${api.dir}/build/lib" includes="*.jar"/>
-        </copy>
         <ant dir="${api.dir}"
              antfile="build.xml"
              inheritall="false"
@@ -189,14 +206,13 @@
         <delete dir="${dist.home}/javadocs"/>
         <delete dir="${dist.home}/managed-bean-javadocs" />
         <delete dir="${dist.home}/jsdocs" />
+        <delete file="${dist.home}/docs/index.html" />
+        <delete file="${dist.home}/docs/doclist.html" />
+
         <unzip src="${dist.home}/docs/javadocs-${impl.version}.zip" dest="${dist.home}/docs" />
         <unzip src="${dist.home}/docs/jsdocs-${impl.version}.zip" dest="${dist.home}/docs" />
         <unzip src="${dist.home}/docs/renderkitdocs-${impl.version}.zip" dest="${dist.home}/docs" />
         <unzip src="${dist.home}/docs/vdldocs-${impl.version}.zip" dest="${dist.home}/docs" />
-        <delete file="${dist.home}/docs/javadocs-${impl.version}.zip" />
-        <delete file="${dist.home}/docs/jsdocs-${impl.version}.zip" />
-        <delete file="${dist.home}/docs/renderkitdocs-${impl.version}.zip" />
-        <delete file="${dist.home}/docs/vdldocs-${impl.version}.zip" />
         <echoxml file="${dist.home}/docs/doclist.html">
             <html>
             <head>
@@ -242,8 +258,8 @@
                 <body>
                 <div class="navbar" align="center">
                     <ul>
-                        <li class="first"><a href="javadocs/index.html" target="loc">JSF 2.0 API Documentation</a></li>
-                        <li><a href="managed-bean-javadocs/index.html" target="loc">JSF 2.0 Managed Bean Documentation</a></li>
+                        <li class="first"><a href="javadocs/index.html" target="loc">JSF API Documentation</a></li>
+                        <li><a href="managed-bean-javadocs/index.html" target="loc">JSF Managed Bean Documentation</a></li>
                         <li><a href="vdldocs/facelets/index.html" target="loc">Facelets Tag Documentation</a></li>
                         <li><a href="vdldocs/jsp/index.html" target="loc">JSP Tag Documentation</a></li>
                         <li><a href="renderkitdocs/index.html" target="loc">Renderkit Documentation</a></li>
@@ -267,16 +283,12 @@
             </frameset>
             </html>
         </echoxml>
-        <zip basedir="${dist.home}/docs" excludes="*.zip" destfile="${dist.home}/mojarra-${impl.version}-documentation.zip" />
-        <delete dir="${dist.home}/docs/renderkitdocs"/>
-        <delete dir="${dist.home}/docs/vdldocs"/>
-        <delete dir="${dist.home}/docs/javadocs"/>
-        <delete dir="${dist.home}/docs/managed-bean-javadocs" />
-        <delete dir="${dist.home}/docs/jsdocs" />
-        <delete file="${dist.home}/docs/index.html" />
-        <delete file="${dist.home}/docs/doclist.html" />
-        <move file="${dist.home}/mojarra-${impl.version}-documentation.zip" todir="${dist.home}/docs" />
-    </target>
+        <zip basedir="${dist.home}/docs" excludes="*.zip" destfile="${dist.home}/mojarra-@{version}-documentation.zip" />
+        <copy overwrite="true" file="${dist.home}/mojarra-@{version}-documentation.zip" todir="${dist.home}/docs" />
+      </then>
+      </if>
+      </sequential>
+    </macrodef>
 
     <target name="api.javadocs">
 
