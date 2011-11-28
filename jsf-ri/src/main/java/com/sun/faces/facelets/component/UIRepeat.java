@@ -490,6 +490,11 @@ public class UIRepeat extends UINamingContainer {
                 Integer begin = this.getBegin();
                 Integer step = this.getStep();
                 Integer end = this.getEnd();
+                Integer offset = this.getOffset();
+
+                if (null != offset && offset > 0) {
+                    begin = offset;
+                }
 
                 // grab renderer
                 String rendererType = getRendererType();
