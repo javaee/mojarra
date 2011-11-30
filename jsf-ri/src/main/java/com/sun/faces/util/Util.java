@@ -296,12 +296,25 @@ public class Util {
 
 
     public static ClassLoader getCurrentLoader(Object fallbackClass) {
-        ClassLoader loader =
-            Thread.currentThread().getContextClassLoader();
+        ClassLoader loader = getContextClassLoader();
         if (loader == null) {
             loader = fallbackClass.getClass().getClassLoader();
         }
         return loader;
+    }
+
+    private static ClassLoader getContextClassLoader() {
+        if (System.getSecurityManager() == null) {
+            return Thread.currentThread().getContextClassLoader();
+        } else {
+            return (ClassLoader)
+                java.security.AccessController.doPrivileged(
+                    new java.security.PrivilegedAction() {
+                        public java.lang.Object run() {
+                            return Thread.currentThread().getContextClassLoader();
+                        }
+                    });
+        }
     }
 
 
