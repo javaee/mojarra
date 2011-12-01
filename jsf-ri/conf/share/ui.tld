@@ -871,7 +871,7 @@ template.  </div>]]>
             <![CDATA[
 <div class="changed_added_2_0">
 	
-<p>Use this tag as an alternative to <code>h:dataTable</code> or
+<p><span class="changed_modified_2_2">Use</span> this tag as an alternative to <code>h:dataTable</code> or
 <code>c:forEach</code>, especially when you are using the
 <code>jsfc</code> feature of Facelets. You can specify this component as
 the value of the <code>jsfc</code> attribute, like this:
@@ -921,8 +921,10 @@ collection.</p>
 <div class="changed_added_2_0">
 
 <p>Read-write property setting the size of the collection to iterate.
-If this value is less than the actual size of the collection, a
-<code>FacesException</code> must be thrown.</p>
+<span class="changed_added_2_2">
+The value of this attribute must be less than or equal to the actual
+size of the collection, or a <code>FacesException</code> must be thrown.</p>
+</span>
 
 </div>]]>
 
