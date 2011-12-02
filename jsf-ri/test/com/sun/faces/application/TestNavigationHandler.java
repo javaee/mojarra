@@ -41,6 +41,7 @@ package com.sun.faces.application;
 import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.util.Util;
 import com.sun.faces.config.DbfFactory;
+import com.sun.faces.application.packagehack.PackageHack;
 
 import javax.faces.FactoryFinder;
 import javax.faces.event.SystemEventListener;
@@ -399,10 +400,12 @@ public class TestNavigationHandler extends ServletFacesTestCase {
         NavigationCase ncase = cnh.getNavigationCase(getFacesContext(),
                                                      null,
                                                      "redirectOutcome3");
-        String url = getFacesContext().getExternalContext().encodeRedirectURL("/path.xhtml", ncase.getParameters());
+        String url = getFacesContext().getExternalContext().encodeRedirectURL("/path.xhtml", PackageHack.evaluateExpressions(getFacesContext(), 
+                ncase.getParameters()));
         System.out.println("URL: " + url);
         assertTrue(url.contains("param=1"));
-        url = getFacesContext().getExternalContext().encodeRedirectURL("/path.xhtml", ncase.getParameters());
+        url = getFacesContext().getExternalContext().encodeRedirectURL("/path.xhtml", 
+                PackageHack.evaluateExpressions(getFacesContext(),ncase.getParameters()));
         assertTrue(url.contains("param=2"));
         
     }

@@ -182,7 +182,7 @@ public class NavigationCase {
                 extContext.getRequestServerPort(),
                 context.getApplication().getViewHandler().getRedirectURL(context,
                                                                          getToViewId(context),
-                                                                         getParameters(),
+                                                                         SharedUtils.evaluateExpressions(context, getParameters()),
                                                                          isIncludeViewParams()));
 
     }

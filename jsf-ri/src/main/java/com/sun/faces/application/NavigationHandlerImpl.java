@@ -166,7 +166,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                 String redirectUrl =
                       viewHandler.getRedirectURL(context,
                                                  caseStruct.viewId,
-                                                 caseStruct.navCase.getParameters(),
+                                                 SharedUtils.evaluateExpressions(context, caseStruct.navCase.getParameters()),
                                                  caseStruct.navCase.isIncludeViewParams());
                 try {
                     if (logger.isLoggable(Level.FINE)) {

@@ -133,6 +133,21 @@
         <mkdir dir="${build.generate.dir}/com/sun/faces/util"/>
         <filter token="protection" value="public"/>
 
+        <filter token="package" value="com.sun.faces.mgbean"/>
+        <copy file="${tools.dir}/template-src/SharedUtils.java"
+              todir="${build.generate.dir}/com/sun/faces/mgbean"
+              filtering="true"/>
+
+        <filter token="package" value="com.sun.faces.config.processor"/>
+        <copy file="${tools.dir}/template-src/SharedUtils.java"
+              todir="${build.generate.dir}/com/sun/faces/config/processor"
+              filtering="true"/>
+
+        <filter token="package" value="com.sun.faces.el"/>
+        <copy file="${tools.dir}/template-src/SharedUtils.java"
+              todir="${build.generate.dir}/com/sun/faces/el"
+              filtering="true"/>
+
         <filter token="package" value="com.sun.faces.util"/>
         <copy file="${tools.dir}/template-src/MessageFactory.java"
               todir="${build.generate.dir}/com/sun/faces/util"
@@ -154,6 +169,10 @@
                 <include name="*Adapter.java"/>
             </fileset>
         </copy>
+        <copy file="${tools.dir}/template-src/SharedUtils.java"
+              todir="${build.generate.dir}/com/sun/faces/application"
+              filtering="true"/>
+
 
         <replace
               file="${build.generate.dir}/com/sun/faces/application/MethodBindingMethodExpressionAdapter.java"

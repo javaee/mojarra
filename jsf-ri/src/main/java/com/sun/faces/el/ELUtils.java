@@ -678,7 +678,7 @@ public class ELUtils {
 
     public static Scope getScopeForExpression(String expression) {
 
-        if (isMixedExpression(expression)) {
+        if (SharedUtils.isMixedExpression(expression)) {
             return (getNarrowestScopeFromExpression(expression));
         } else {
             return (getScopeForSingleExpression(expression));
@@ -792,40 +792,6 @@ public class ELUtils {
             }
         }
         return result;
-    }
-
-
-    /*
-    * Determine whether String is a mixed value binding expression or not.
-    */
-    public static boolean isMixedExpression(String expression) {
-
-        if (null == expression) {
-            return false;
-        }
-
-        // if it doesn't start and end with delimiters
-        return (!(expression.startsWith("#{") && expression.endsWith("}")))
-                  && isExpression(expression);
-
-    }
-
-
-    /*
-    * Determine whether String is a value binding expression or not.
-    */
-    public static boolean isExpression(String expression) {
-
-        if (null == expression) {
-            return false;
-        }
-        int start = expression.indexOf("#{");
-
-        //check to see if attribute has an expression
-        return (expression.indexOf("#{") != -1) &&
-               (start < expression.indexOf('}'));
-
-
     }
 
 
