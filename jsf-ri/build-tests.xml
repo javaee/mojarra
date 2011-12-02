@@ -157,6 +157,13 @@
                 <include name="*Adapter.java"/>
             </fileset>
         </copy>
+
+
+        <filter token="package" value="com.sun.faces.application.packagehack"/>
+        <copy file="${tools.dir}/template-src/SharedUtils.java"
+              todir="${out.test.dir}/classes/com/sun/faces/application/packagehack"
+              filtering="true"/>
+
         <replace
               file="${out.test.dir}/classes/com/sun/faces/application/MethodBindingMethodExpressionAdapter.java"
               token="@serialVersionUID@"
@@ -176,17 +183,17 @@
               file="${out.test.dir}/classes/com/sun/faces/application/ValueBindingValueExpressionAdapter.java"
               token="@serialVersionUID@"
               value="7410146713650507654L"/>
-        <jsf.javac srcdir="${src.test.dir}"
-                   destdir="${out.test.dir}/classes">
-            <classpath>
-                <path refid="test.compile.classpath"/>
-            </classpath>
-        </jsf.javac>
         <jsf.javac srcdir="${out.test.dir}/classes"
                    destdir="${out.test.dir}/classes">
             <classpath>
                 <path refid="test.compile.classpath"/>
             </classpath>    
+        </jsf.javac>
+        <jsf.javac srcdir="${src.test.dir}"
+                   destdir="${out.test.dir}/classes">
+            <classpath>
+                <path refid="test.compile.classpath"/>
+            </classpath>
         </jsf.javac>
     </target>    
 

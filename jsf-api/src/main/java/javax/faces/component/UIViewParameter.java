@@ -41,8 +41,6 @@
 package javax.faces.component;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.el.ValueExpression;
 import javax.faces.FactoryFinder;
 import javax.faces.application.FacesMessage;
@@ -77,9 +75,6 @@ import javax.faces.render.Renderer;
  * @since 2.0
  */
 public class UIViewParameter extends UIInput {
-    
-    private static Logger LOGGER = Logger.getLogger("javax.faces.component",
-            "javax.faces.LogStrings");
 
     
     // ------------------------------------------------------ Manifest Constants
@@ -351,8 +346,7 @@ public class UIViewParameter extends UIInput {
         }
 
         Object currentValue = ve.getValue(context.getELContext());
-        String result = null;
-        
+
         // If there is a converter attribute, use it to to ask application
         // instance for a converter with this identifer.
         Converter c = getConverter();
@@ -365,35 +359,23 @@ public class UIViewParameter extends UIInput {
             }
             // Do not look for "by-type" converters for Strings
             if (currentValue instanceof String) {
-                result = (String) currentValue;
-            } else {
-                // if converter attribute set, try to acquire a converter
-                // using its class type.
-                
-                Class converterType = currentValue.getClass();
-                c = context.getApplication().createConverter(converterType);
-                
-                // if there is no default converter available for this identifier,
-                // assume the model type to be String.
-                if (c == null) {
-                    result = currentValue.toString();
-                }
+                return (String) currentValue;
+            }
+
+            // if converter attribute set, try to acquire a converter
+            // using its class type.
+
+            Class converterType = currentValue.getClass();
+            c = context.getApplication().createConverter(converterType);
+
+            // if there is no default converter available for this identifier,
+            // assume the model type to be String.
+            if (c == null) {
+                return currentValue.toString();
             }
         }
-        if (null == result && null != c) {
-            result = c.getAsString(context, this, currentValue);
-        }
 
-        if (SharedUtils.isExpression(result)) {
-            if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.log(Level.SEVERE,
-                        "severe.uiviewparam_value_is_expression",
-                        new Object[] { result });
-            }
-            result = null;
-        }
-
-        return result;
+        return c.getAsString(context, this, currentValue);
     }
 
     /**

@@ -255,7 +255,7 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
                             action = getNodeText(n);
                         } else if (IF.equals(n.getLocalName())) {
                             String expression = getNodeText(n);
-                            if (ELUtils.isExpression(expression) && !ELUtils.isMixedExpression(expression)) {
+                            if (SharedUtils.isExpression(expression) && !SharedUtils.isMixedExpression(expression)) {
                                 condition = expression;
                             }
                             else {

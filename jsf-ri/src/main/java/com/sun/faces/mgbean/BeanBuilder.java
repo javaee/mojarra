@@ -463,7 +463,7 @@ public abstract class BeanBuilder {
         String scope = beanInfo.getScope();
         if (!ELUtils.isScopeValid(scope)) {
             // custom scope - make sure it's valid
-            if (!ELUtils.isExpression(scope)) {
+            if (!SharedUtils.isExpression(scope)) {
                 String message = MessageUtils.getExceptionMessageString(
                          MessageUtils.MANAGED_BEAN_INVALID_SCOPE_ERROR_ID,
                          beanInfo.getName());
@@ -528,7 +528,7 @@ public abstract class BeanBuilder {
             this.expressionString = expressionString;
             this.expectedType = expectedType;
 
-            if (ELUtils.isExpression(this.expressionString)) {
+            if (SharedUtils.isExpression(this.expressionString)) {
                 List<String> expressions = ELUtils.getExpressionsFromString(this.expressionString);
                 if (!expressions.isEmpty()) {
                     for (String expression : expressions) {
@@ -544,7 +544,7 @@ public abstract class BeanBuilder {
                         segment[0] = null;
                     }
                 }
-                if (!ELUtils.isExpression(beanInfo.getScope())) {
+                if (!SharedUtils.isExpression(beanInfo.getScope())) {
                     ELUtils.Scope expressionScope = ELUtils
                           .getNarrowestScopeFromExpression(this.expressionString);
                     if (expressionScope != null) {

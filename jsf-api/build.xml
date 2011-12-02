@@ -318,6 +318,11 @@
             </fileset>
         </copy>
 
+        <filter token="package" value="javax.faces.application"/>
+        <copy file="${tools.dir}/template-src/SharedUtils.java"
+              todir="${build.generate.dir}/javax/faces/application"
+              filtering="true"/>
+
         <filter token="package" value="javax.faces.convert"/>
         <copy file="${tools.dir}/template-src/MessageFactory.java"
               todir="${build.generate.dir}/javax/faces/convert"
