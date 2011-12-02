@@ -40,11 +40,8 @@
 
 package com.sun.faces.context;
 
-import com.sun.faces.el.ELUtils;
 import com.sun.faces.util.Util;
 
-import javax.faces.context.FacesContext;
-import javax.faces.application.Application;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -79,8 +76,6 @@ class UrlBuilder {
     private String fragment;
     private Map<String, List<String>> parameters;
     private String encoding;
-    private FacesContext ctx;
-    private Application app;
 
 
     // ------------------------------------------------------------ Constructors
@@ -94,8 +89,6 @@ class UrlBuilder {
         extractSegments(url);
         this.encoding = encoding;
         // PERF TL lookup per-instance
-        ctx = FacesContext.getCurrentInstance();
-        app = ctx.getApplication();
     }
 
 
@@ -126,7 +119,7 @@ class UrlBuilder {
                     throw new IllegalArgumentException("Parameter name cannot be empty");
                 }
                 List<String> values = entry.getValue();
-                List<String> retValues = evaluateExpressions(values);
+                List<String> retValues = values;
                 addValuesToParameter(entry.getKey().trim(), retValues, true);
             }
         }
@@ -308,27 +301,6 @@ class UrlBuilder {
 
 
     // --------------------------------------------------------- Private Methods
-
-
-    private List<String> evaluateExpressions(List<String> values) {
-        if (!values.isEmpty()) {
-            List<String> ret = new ArrayList<String>(values.size());
-            for (String val : values) {
-                if (val != null) {
-                    String value = val.trim();
-                    if (ELUtils.isExpression(value)) {
-                        value = app.evaluateExpressionGet(ctx,
-                                                          value,
-                                                          String.class);
-                    }
-                    ret.add(value);
-                }
-            }
-            
-            return ret;
-        }
-        return values;
-    }
 
 
     private void cleanFragment() {
