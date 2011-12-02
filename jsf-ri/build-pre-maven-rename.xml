@@ -150,9 +150,30 @@
         <copy file="${tools.dir}/template-src/StateHolderSaver.java"
               todir="${build.generate.dir}/com/sun/faces/application/view"
               filtering="true"/>
+        <filter token="package" value="com.sun.faces.application"/>
+        <copy file="${tools.dir}/template-src/SharedUtils.java"
+              todir="${build.generate.dir}/com/sun/faces/application"
+              filtering="true"/>
         <filter token="package" value="com.sun.faces.context"/>
         <copy file="${tools.dir}/template-src/StateHolderSaver.java"
               todir="${build.generate.dir}/com/sun/faces/context"
+              filtering="true"/>
+        <copy file="${tools.dir}/template-src/SharedUtils.java"
+              todir="${build.generate.dir}/com/sun/faces/application"
+              filtering="true"/>
+        <filter token="package" value="com.sun.faces.mgbean"/>
+        <copy file="${tools.dir}/template-src/SharedUtils.java"
+              todir="${build.generate.dir}/com/sun/faces/mgbean"
+              filtering="true"/>
+
+        <filter token="package" value="com.sun.faces.config.processor"/>
+        <copy file="${tools.dir}/template-src/SharedUtils.java"
+              todir="${build.generate.dir}/com/sun/faces/config/processor"
+              filtering="true"/>
+
+        <filter token="package" value="com.sun.faces.el"/>
+        <copy file="${tools.dir}/template-src/SharedUtils.java"
+              todir="${build.generate.dir}/com/sun/faces/el"
               filtering="true"/>
 
         <filter token="protection" value="public"/>
