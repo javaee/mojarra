@@ -60,14 +60,26 @@ public class BehaviorHolderAttachedObjectTargetHandler extends
     AttachedObjectTargetImpl newAttachedObjectTargetImpl() {
         BehaviorHolderAttachedObjectTargetImpl target = new BehaviorHolderAttachedObjectTargetImpl();
         TagAttribute event = this.getAttribute("event");
+        FaceletContext ctx = null;
+
         if (null != event) {
-            target.setEvent(event.getValue());
+            if (!event.isLiteral()) {
+                FacesContext facesContext = FacesContext.getCurrentInstance();
+                ctx = (FaceletContext) facesContext.getAttributes()
+                  .get(FaceletContext.FACELET_CONTEXT_KEY);
+                String eventStr = (String)event.getValueExpression(ctx, String.class).getValue(ctx);
+                target.setEvent(eventStr);
+            } else {
+                target.setEvent(event.getValue());
+            }
         }
         TagAttribute defaultAttr = this.getAttribute("default");
         if (null != defaultAttr) {
-            FacesContext facesContext = FacesContext.getCurrentInstance();
-            FaceletContext ctx = (FaceletContext) facesContext.getAttributes()
+            if (null == ctx) {
+                FacesContext facesContext = FacesContext.getCurrentInstance();
+                ctx = (FaceletContext) facesContext.getAttributes()
                   .get(FaceletContext.FACELET_CONTEXT_KEY);
+            }
             target.setDefaultEvent(defaultAttr.getBoolean(ctx));
         }
         return target;
