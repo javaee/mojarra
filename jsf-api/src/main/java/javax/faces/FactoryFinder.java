@@ -221,8 +221,7 @@ public final class FactoryFinder {
 
     // ------------------------------------------------------- Static Variables
 
-    private static final FactoryManagerCache FACTORIES_CACHE =
-          new FactoryManagerCache();
+    private static final FactoryManagerCache FACTORIES_CACHE;
 
 
     /**
@@ -232,32 +231,58 @@ public final class FactoryFinder {
      * *value* of each of the literals, not just
      * the last part of the literal!</p>
      */
-    private static final String[] FACTORY_NAMES = {
-         APPLICATION_FACTORY,
-         VISIT_CONTEXT_FACTORY,
-         EXCEPTION_HANDLER_FACTORY,
-         EXTERNAL_CONTEXT_FACTORY,
-         FACES_CONTEXT_FACTORY,
-         LIFECYCLE_FACTORY,
-         VIEW_DECLARATION_LANGUAGE_FACTORY,
-         PARTIAL_VIEW_CONTEXT_FACTORY,
-         RENDER_KIT_FACTORY,
-         TAG_HANDLER_DELEGATE_FACTORY
-    
-    };
+    private static final String[] FACTORY_NAMES;
 
     /**
      * <p>Map of Class instances for the our factory names.</p>
      */
-    private static Map<String, Class> factoryClasses = null;
+    private static Map<String, Class> factoryClasses;
 
-    private static final Logger LOGGER =
-         Logger.getLogger("javax.faces", "javax.faces.LogStrings");
+    private static final Logger LOGGER;
 
-    // Ensure the factory names are sorted.
-    //
     static {
+        FACTORIES_CACHE = new FactoryManagerCache();
+
+        FACTORY_NAMES = new String [] {
+            APPLICATION_FACTORY,
+            VISIT_CONTEXT_FACTORY,
+            EXCEPTION_HANDLER_FACTORY,
+            EXTERNAL_CONTEXT_FACTORY,
+            FACES_CONTEXT_FACTORY,
+            LIFECYCLE_FACTORY,
+            VIEW_DECLARATION_LANGUAGE_FACTORY,
+            PARTIAL_VIEW_CONTEXT_FACTORY,
+            RENDER_KIT_FACTORY,
+            TAG_HANDLER_DELEGATE_FACTORY
+        };
+
+        // Ensure the factory names are sorted.
+        //
         Arrays.sort(FACTORY_NAMES);
+        
+        factoryClasses = new HashMap<String, Class>(FACTORY_NAMES.length);
+        factoryClasses.put(APPLICATION_FACTORY,
+                           javax.faces.application.ApplicationFactory.class);
+        factoryClasses.put(EXCEPTION_HANDLER_FACTORY,
+                           javax.faces.context.ExceptionHandlerFactory.class);
+        factoryClasses.put(EXTERNAL_CONTEXT_FACTORY,
+                           javax.faces.context.ExternalContextFactory.class);
+        factoryClasses.put(FACES_CONTEXT_FACTORY,
+                           javax.faces.context.FacesContextFactory.class);
+        factoryClasses.put(VISIT_CONTEXT_FACTORY,
+                           javax.faces.component.visit.VisitContextFactory.class);
+        factoryClasses.put(LIFECYCLE_FACTORY,
+                           javax.faces.lifecycle.LifecycleFactory.class);
+        factoryClasses.put(PARTIAL_VIEW_CONTEXT_FACTORY,
+                           javax.faces.context.PartialViewContextFactory.class);
+        factoryClasses.put(RENDER_KIT_FACTORY,
+                           javax.faces.render.RenderKitFactory.class);
+        factoryClasses.put(VIEW_DECLARATION_LANGUAGE_FACTORY,
+                           javax.faces.view.ViewDeclarationLanguageFactory.class);
+        factoryClasses.put(TAG_HANDLER_DELEGATE_FACTORY,
+                           javax.faces.view.facelets.TagHandlerDelegateFactory.class);
+
+        LOGGER = Logger.getLogger("javax.faces", "javax.faces.LogStrings");
     }
 
 
@@ -617,29 +642,6 @@ public final class FactoryFinder {
      */
     private static Class getFactoryClass(String factoryClassName) {
 
-        if (null == factoryClasses) {
-            factoryClasses = new HashMap<String, Class>(FACTORY_NAMES.length);
-            factoryClasses.put(APPLICATION_FACTORY,
-                 javax.faces.application.ApplicationFactory.class);
-            factoryClasses.put(EXCEPTION_HANDLER_FACTORY,
-                 javax.faces.context.ExceptionHandlerFactory.class);
-            factoryClasses.put(EXTERNAL_CONTEXT_FACTORY,
-                 javax.faces.context.ExternalContextFactory.class);
-            factoryClasses.put(FACES_CONTEXT_FACTORY,
-                 javax.faces.context.FacesContextFactory.class);
-            factoryClasses.put(VISIT_CONTEXT_FACTORY,
-                 javax.faces.component.visit.VisitContextFactory.class);
-            factoryClasses.put(LIFECYCLE_FACTORY,
-                 javax.faces.lifecycle.LifecycleFactory.class);
-            factoryClasses.put(PARTIAL_VIEW_CONTEXT_FACTORY,
-                 javax.faces.context.PartialViewContextFactory.class);
-            factoryClasses.put(RENDER_KIT_FACTORY,
-                 javax.faces.render.RenderKitFactory.class);
-            factoryClasses.put(VIEW_DECLARATION_LANGUAGE_FACTORY,
-                 javax.faces.view.ViewDeclarationLanguageFactory.class);
-            factoryClasses.put(TAG_HANDLER_DELEGATE_FACTORY,
-                 javax.faces.view.facelets.TagHandlerDelegateFactory.class);
-        }
         return factoryClasses.get(factoryClassName);
 
     }
@@ -712,12 +714,14 @@ public final class FactoryFinder {
                     // FactoryManager.  Iterate through the data structure 
                     // containing all FactoryManager instances for this VM.
                     FactoryManagerCacheKey curKey;
-                    boolean foundMatchInApplicationMap = false;
+                    boolean classLoadersMatchButContextsDoNotMatch = false;
+                    boolean foundNoMatchInApplicationMap = true;
                     for (Map.Entry<FactoryManagerCacheKey, FactoryManager> cur : applicationMap.entrySet()) {
                         curKey = cur.getKey();
                         // If the current FactoryManager is for a
                         // the same ClassLoader as the current ClassLoader...
                         if (curKey.getClassLoader().equals(cl)) {
+                            foundNoMatchInApplicationMap = false;
                             // Check the other descriminator for the
                             // key: the context.  
 
@@ -727,7 +731,7 @@ public final class FactoryFinder {
 
                             if ((null != key.getContext() && null != curKey.getContext()) &&
                                 (!key.getContext().equals(curKey.getContext()))) {
-                                foundMatchInApplicationMap = true;
+                                classLoadersMatchButContextsDoNotMatch = true;
                                 toCopy = cur.getValue();
                             }
                             else {
@@ -738,7 +742,11 @@ public final class FactoryFinder {
                             break;
                         }
                     }
-                    createNewFactoryManagerInstance = (null == result && !foundMatchInApplicationMap);
+                    // We must create a new FactoryManager if there was no match
+                    // at all found in the applicationMap, or a match was found
+                    // and the match is safe to use in this web app
+                    createNewFactoryManagerInstance = foundNoMatchInApplicationMap ||
+                            (null == result && classLoadersMatchButContextsDoNotMatch);
                 } else {
                     createNewFactoryManagerInstance = true;
                 }
@@ -813,19 +821,29 @@ public final class FactoryFinder {
         public FactoryManagerCacheKey(FacesContext facesContext, ClassLoader cl,
                 Map<FactoryManagerCacheKey,FactoryManager> factoryMap) {
             this.cl = cl;
-            if (null != facesContext) {
+            boolean resolveValueFromFactoryMap = false;
+            
+            
+            if (null == facesContext) {
+                resolveValueFromFactoryMap = true;
+            } else {
                 ExternalContext extContext = facesContext.getExternalContext();
                 context = extContext.getContext();
-                Map<String, Object> appMap = extContext.getApplicationMap();
-                
-                Long val = (Long) appMap.get(KEY);
-                if (null == val) {
-                    marker = new Long(System.currentTimeMillis());
-                    appMap.put(KEY, marker);
+                if (null == context) {
+                    resolveValueFromFactoryMap = true;
                 } else {
-                    marker = val;
+                    Map<String, Object> appMap = extContext.getApplicationMap();
+                
+                    Long val = (Long) appMap.get(KEY);
+                    if (null == val) {
+                        marker = new Long(System.currentTimeMillis());
+                        appMap.put(KEY, marker);
+                    } else {
+                        marker = val;
+                    }
                 }
-            } else {
+            } 
+            if (resolveValueFromFactoryMap) {
                 // We don't have a FacesContext.
                 // Our only recourse is to inspect the keys of the
                 // factoryMap and see if any of them has a classloader

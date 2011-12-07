@@ -86,6 +86,11 @@ public class Util {
     // (ex: Util.CONVERSION_ERROR_MESSAGE_ID) and the number of substitution
     // parameters to test/com/sun/faces/util/TestUtil_messages (see comment there).
 
+    /**
+     * Flag that, when true, enables special behavior in the RI to enable
+     * unit testing.
+     */
+    private static boolean unitTestModeEnabled = false;
 
     /**
      * Flag that enables/disables the core TLV.
@@ -115,7 +120,7 @@ public class Util {
     private static ThreadLocal<Map<String, Object>> nonFacesContextApplicationMap;
 
 
-    private static void setNonFacesContextApplicationMap(Map<String, Object> instance) {
+    public static void setNonFacesContextApplicationMap(Map<String, Object> instance) {
         lazilyInitializeNonFacesContextApplicationMap();
         if (null == instance) {
             nonFacesContextApplicationMap.remove();
@@ -240,6 +245,13 @@ public class Util {
 
     }
 
+    public static void setUnitTestModeEnabled(boolean enabled) {
+        unitTestModeEnabled = enabled;
+    }
+
+    public static boolean isUnitTestModeEnabled() {
+        return unitTestModeEnabled;
+    }
 
     public static void setCoreTLVActive(boolean active) {
         Map<String, Object> appMap = getApplicationMap();
@@ -294,14 +306,26 @@ public class Util {
 
 
     public static ClassLoader getCurrentLoader(Object fallbackClass) {
-        ClassLoader loader =
-            Thread.currentThread().getContextClassLoader();
+        ClassLoader loader = getContextClassLoader();
         if (loader == null) {
             loader = fallbackClass.getClass().getClassLoader();
         }
         return loader;
     }
 
+    private static ClassLoader getContextClassLoader() {
+        if (System.getSecurityManager() == null) {
+            return Thread.currentThread().getContextClassLoader();
+        } else {
+            return (ClassLoader)
+                java.security.AccessController.doPrivileged(
+                    new java.security.PrivilegedAction() {
+                        public java.lang.Object run() {
+                            return Thread.currentThread().getContextClassLoader();
+                        }
+                    });
+        }
+    }
 
     public static void notNull(String varname, Object var) {
 

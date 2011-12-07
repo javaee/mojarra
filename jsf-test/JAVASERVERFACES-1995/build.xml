@@ -52,6 +52,7 @@
     <import file="${jsf.build.home}/common/ant/common.xml"/>
 
     <target name="build">
+        <jsf.mvn dir="${basedir}/maven-module-that-makes-jar-for-WEB-INF-lib" goals="install" />
         <jsf.mvn dir="${basedir}/i_jsf_1995_war_1" goals="install" />
         <jsf.mvn dir="${basedir}/i_jsf_1995_war_2" goals="install" />
         <jsf.mvn dir="${basedir}/i_jsf_1995_ear" goals="install" />
@@ -59,6 +60,7 @@
     </target>    
 
     <target name="clean">
+        <jsf.mvn dir="${basedir}/maven-module-that-makes-jar-for-WEB-INF-lib" goals="clean" />
         <jsf.mvn dir="${basedir}/i_jsf_1995_war_1" goals="clean" />
         <jsf.mvn dir="${basedir}/i_jsf_1995_war_2" goals="clean" />
         <jsf.mvn dir="${basedir}/i_jsf_1995_ear" goals="clean" />

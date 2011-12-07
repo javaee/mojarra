@@ -151,6 +151,7 @@ public class ConfigureListener implements ServletRequestListener,
         if (timer != null) {
             timer.startTiming();
         }
+        InitFacesContext initContext = new InitFacesContext(context);
 
 
         if (LOGGER.isLoggable(Level.FINE)) {
@@ -198,7 +199,6 @@ public class ConfigureListener implements ServletRequestListener,
         // bootstrap of faces required
         webAppListener = new WebappLifecycleListener(context);
         webAppListener.contextInitialized(sce);
-        InitFacesContext initContext = new InitFacesContext(context);
         ReflectionUtils.initCache(Thread.currentThread().getContextClassLoader());
         Throwable caughtThrowable = null;
 
@@ -300,7 +300,10 @@ public class ConfigureListener implements ServletRequestListener,
         ServletContext context = sce.getServletContext();
         InitFacesContext initContext = null;
         try {
-            initContext = new InitFacesContext(context);
+            initContext = InitFacesContext.getInstance(context);
+            if (null == initContext) {
+                    initContext = new InitFacesContext(context);
+            }
 
             if (webAppListener != null) {
                 webAppListener.contextDestroyed(sce);
@@ -331,6 +334,9 @@ public class ConfigureListener implements ServletRequestListener,
                     PreDestroyApplicationEvent.class,
                     Application.class,
                     app);
+
+            Util.setNonFacesContextApplicationMap(null);
+
         } catch (Exception e) {
             if (LOGGER.isLoggable(Level.SEVERE)) {
                 LOGGER.log(Level.SEVERE,
@@ -338,7 +344,7 @@ public class ConfigureListener implements ServletRequestListener,
                         e);
             }
         } finally {
-            ApplicationAssociate.clearInstance(initContext.getExternalContext());
+            ApplicationAssociate.clearInstance(context);
             ApplicationAssociate.setCurrentInstance(null);
             // Release the initialization mark on this web application
             ConfigManager.getInstance().destroy(context);
