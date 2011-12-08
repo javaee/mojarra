@@ -83,6 +83,10 @@ public class AdminGuiTestCase extends HtmlUnitFacesTestCase {
         
         client.setThrowExceptionOnFailingStatusCode(false);
         CookieManager cm = client.getCookieManager();
+        
+        page = getPage("/common/index.jsf");
+
+        cm.clearCookies();
         page = getPage("/common/index.jsf?bare=true");
         Cookie jSessionID = cm.getCookie("JSESSIONID");
         
