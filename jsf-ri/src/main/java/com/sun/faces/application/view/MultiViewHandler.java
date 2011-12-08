@@ -539,7 +539,7 @@ public class MultiViewHandler extends ViewHandler {
 
         UIViewRoot currentRoot = ctx.getViewRoot();
         String currentViewId = currentRoot.getViewId();
-        Collection<UIViewParameter> toViewParams = Collections.emptyList();;
+        Collection<UIViewParameter> toViewParams = Collections.emptyList();
         Collection<UIViewParameter> currentViewParams;
         boolean currentIsSameAsNew = false;
         currentViewParams = ViewMetadata.getViewParameters(currentRoot);
