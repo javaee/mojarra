@@ -599,7 +599,7 @@ public class MultiViewHandler extends ViewHandler {
 
         UIViewRoot currentRoot = ctx.getViewRoot();
         String currentViewId = currentRoot.getViewId();
-        Collection<UIViewParameter> toViewParams;
+        Collection<UIViewParameter> toViewParams = Collections.emptyList();
         Collection<UIViewParameter> currentViewParams;
         boolean currentIsSameAsNew = false;
         currentViewParams = ViewMetadata.getViewParameters(currentRoot);
@@ -611,8 +611,10 @@ public class MultiViewHandler extends ViewHandler {
         else {
             ViewDeclarationLanguage pdl = getViewDeclarationLanguage(ctx, viewId);
             ViewMetadata viewMetadata = pdl.getViewMetadata(ctx, viewId);
-            UIViewRoot root = viewMetadata.createMetadataView(ctx);
-            toViewParams = ViewMetadata.getViewParameters(root);
+            if (null != viewMetadata) {
+                UIViewRoot root = viewMetadata.createMetadataView(ctx);
+                toViewParams = ViewMetadata.getViewParameters(root);
+            }
         }
 
         if (toViewParams.isEmpty()) {
