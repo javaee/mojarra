@@ -213,7 +213,7 @@
         <echo message="PENDING - Please implement"/>
     </target>
 
-    <target name="container.deploy" depends="patch.default-web.xml"
+    <target name="container.deploy" 
             description="Deploy the JSF Implementation artifacts to the target container.">
         <if>
             <os family="windows"/>
@@ -237,56 +237,6 @@
                 </echo>
             </then>
         </if>       
-    </target>
-
-    <target name="patch.default-web.xml" depends="test.patch.already.applied"
-            unless="default-web.xml.patch.already.applied">
-
-      <property name="patchfile-01"
-                value="${jsf.build.home}/common/ant/${container.name}/lib_templates_default-web_xml.patch" />
-      <property name="patchdir-01"
-                value="${container.home}/lib/templates" />
-
-      <echo message="running patch in ${patchdir-01} using patchfile ${patchfile-01}" />
-      <patch dir="${patchdir-01}" patchfile="${patchfile-01}" 
-             failonerror="false" />
-      
-      <property name="patchfile-02"
-                value="${jsf.build.home}/common/ant/${container.name}/domains_domain1_config_default-web_xml.patch" />
-      <property name="patchdir-02"
-                value="${container.home}/domains/domain1/config" />
-
-      <echo message="running patch in ${patchdir-02} using patchfile ${patchfile-02}" />
-      <patch dir="${patchdir-02}" patchfile="${patchfile-02}" 
-             failonerror="false" />
-      
-
-    </target>
-
-    <target name="test.patch.already.applied">
-
-      <loadfile property="lib.templates.default-web.xml"
-                srcFile="${container.home}/lib/templates/default-web.xml" />
-      <condition property="default-web.xml-01">
-        <contains string="${lib.templates.default-web.xml}"
-                  substring="javax.faces.jar" />
-      </condition>
-
-      <loadfile property="domains.domain1.config.default-web.xml"
-                srcFile="${container.home}/domains/domain1/config/default-web.xml" />
-      <condition property="default-web.xml-02">
-        <contains string="${domains.domain1.config.default-web.xml}"
-                  substring="javax.faces.jar" />
-      </condition>
-
-      <condition property="default-web.xml.patch.already.applied">
-        <and>
-          <isset property="default-web.xml-01" />
-          <isset property="default-web.xml-02" />
-        </and>
-      </condition>
-      <echo message="default-web.xml patches already applied: ${default-web.xml.patch.already.applied}"/>
-
     </target>
 
     <target name="define.scenario.aware.port">
