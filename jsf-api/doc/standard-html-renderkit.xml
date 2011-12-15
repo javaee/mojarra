@@ -42,7 +42,7 @@
 -->
 <!-- =========== FULL CONFIGURATION FILE ================================== -->
 <faces-config xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xi="http://www.w3.org/2001/XInclude" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd" version="2.0">
-<!-- Generic User Interface Components -->
+  <!-- Generic User Interface Components -->
   <component>
     <component-type>javax.faces.Column</component-type>
     <component-class>javax.faces.component.UIColumn</component-class>
@@ -379,7 +379,7 @@
         <method-signature>
                 void actionListener(javax.faces.event.ActionEvent)
             </method-signature>
-<!-- PENDING modify tlddoc to handle an OR of method signatures 
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -1342,7 +1342,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-<!-- PENDING modify tlddoc to handle an OR of method signatures 
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -2791,7 +2791,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-<!-- PENDING modify tlddoc to handle an OR of method signatures 
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -3177,7 +3177,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void actionListener(javax.faces.event.ActionEvent)
             </method-signature>
-<!-- PENDING modify tlddoc to handle an OR of method signatures 
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -3749,7 +3749,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-<!-- PENDING modify tlddoc to handle an OR of method signatures 
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -4469,7 +4469,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-<!-- PENDING modify tlddoc to handle an OR of method signatures 
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -4830,7 +4830,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-<!-- PENDING modify tlddoc to handle an OR of method signatures 
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -5056,7 +5056,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <component-family>javax.faces.ViewRoot</component-family>
     </component-extension>
   </component>
-<!-- Concrete HTML Components -->
+  <!-- Concrete HTML Components -->
   <component>
     <description><![CDATA[<p>Represents a column that will be rendered 
       in an HTML <code>table</code> element.</p>]]></description>
@@ -5427,7 +5427,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void actionListener(javax.faces.event.ActionEvent)
             </method-signature>
-<!-- PENDING modify tlddoc to handle an OR of method signatures 
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -6066,7 +6066,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void actionListener(javax.faces.event.ActionEvent)
             </method-signature>
-<!-- PENDING modify tlddoc to handle an OR of method signatures 
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -8135,6 +8135,753 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
   </component>
   <component>
     <description><![CDATA[<p>Represents an HTML <code>input</code> element
+      of type <code>file</code>.</p>]]></description>
+    <display-name>Input File</display-name>
+    <component-type>javax.faces.HtmlInputFile</component-type>
+    <component-class>javax.faces.component.html.HtmlInputFile</component-class>
+
+    <property>
+      <description><![CDATA[
+          A mutable Map of the attributes associated with
+          this component, keyed by attribute name.
+        ]]></description>
+      <display-name>Attributes Map</display-name>
+      <icon/>
+      <property-name>attributes</property-name>
+      <property-class>java.util.Map</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          The number of child components associated with
+          this component.
+        ]]></description>
+      <display-name>Child Component Count</display-name>
+      <icon/>
+      <property-name>childCount</property-name>
+      <property-class>int</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          A mutable List of the child components associated with
+          this component.
+        ]]></description>
+      <display-name>Child Component List</display-name>
+      <icon/>
+      <property-name>children</property-name>
+      <property-class>java.util.List</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          A mutable Map of the facets associated with
+          this component, keyed by facet name.
+        ]]></description>
+      <display-name>Facets Map</display-name>
+      <icon/>
+      <property-name>facets</property-name>
+      <property-class>java.util.Map</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          The component family to which this component belongs.  This property
+          is used to select an appropriate Renderer.
+        ]]></description>
+      <display-name>Component Family</display-name>
+      <icon/>
+      <property-name>family</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          The component identifier for this component.  This value must be
+          unique within the closest parent component that is a naming
+          container.
+        ]]></description>
+      <display-name>Component Identifier</display-name>
+      <icon/>
+      <property-name>id</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+    <property>
+      <description><![CDATA[
+          The parent component for this component.  On the root component
+          in the component tree (which must be of type UIViewRoot), this
+          property is null.
+        ]]></description>
+      <display-name>Parent Component</display-name>
+      <icon/>
+      <property-name>parent</property-name>
+      <property-class>javax.faces.component.UIComponent</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          Flag indicating whether or not this component should be rendered
+          (during Render Response Phase), or processed on any subsequent
+          form submit.  The default value for this property is true.
+        ]]></description>
+      <display-name>Rendered Flag</display-name>
+      <icon/>
+      <property-name>rendered</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          Identifier used (in conjunction with the "family" property) to
+          select an appropriate Renderer to encode and decode this component.
+        ]]></description>
+      <display-name>Renderer Type</display-name>
+      <icon/>
+      <property-name>rendererType</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          Flag indicating whether or not this component takes responsibility
+          for rendering its own children.  This decision is normally delegated
+          to the associated Renderer, if there is one.
+        ]]></description>
+      <display-name>Renders Children</display-name>
+      <icon/>
+      <property-name>rendersChildren</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Converter instance registered with this component.
+        </description>
+      <display-name>Converter</display-name>
+      <icon/>
+      <property-name>converter</property-name>
+      <property-class>javax.faces.convert.Converter</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          For output components, this is the same as the "value" property.
+          For input components, this is the most recently user-entered
+          value, which will be pushed to the application data model during
+          Update Model Values phase, if a value binding is present for the
+          "value" property.
+        </description>
+      <display-name>Local Value</display-name>
+      <icon/>
+      <property-name>localValue</property-name>
+      <property-class>java.lang.Object</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          The current value of this component.
+        </description>
+      <display-name>Value</display-name>
+      <icon/>
+      <property-name>value</property-name>
+      <property-class>java.lang.Object</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Flag indicating whether the "localValue" property
+          of this component has been set.  This property is
+          reset automatically when the "value" propertyis set.
+        </description>
+      <display-name>Local Value Set</display-name>
+      <icon/>
+      <property-name>localValueSet</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Flag indicating that the user is required to provide a submitted
+          value for this input component.
+        </description>
+      <display-name>Required Flag</display-name>
+      <icon/>
+      <property-name>required</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the validation message for the "required"
+          facility, if the "required" facility is used.
+        </description>
+      <display-name>Required Message</display-name>
+      <icon/>
+      <property-name>requiredMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the converter message, replacing any message
+          that comes from the converter.
+        </description>
+      <display-name>Converter Message</display-name>
+      <icon/>
+      <property-name>converterMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the validator message, replacing any
+          message that comes from the validator.
+        </description>
+      <display-name>Validator Message</display-name>
+      <icon/>
+      <property-name>validatorMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          The value submitted for this input component by the user, prior to
+          any required conversion or validation.
+        </description>
+      <display-name>Submitted Value</display-name>
+      <icon/>
+      <property-name>submittedValue</property-name>
+      <property-class>java.lang.Object</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          MethodExpression representing a validator method that will be called
+          during Process Validations to perform correctness checks on the
+          value of this component.  The expression must evaluate to a public
+          method that takes FacesContext, UIComponent, and Object parameters,
+          with a return type of void.
+        </description>
+      <display-name>Validator</display-name>
+      <icon/>
+      <property-name>validator</property-name>
+      <property-class>javax.el.MethodExpression</property-class>
+      <property-extension>
+        <method-signature>
+                void validate(javax.faces.context.FacesContext, javax.faces.component.UIComponent, java.lang.Object)
+            </method-signature>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[<p>
+
+          MethodExpression representing a value change listener method
+          that will be notified when a new value has been set for this
+          input component.  The expression must evaluate to a public
+          method that takes a <code>ValueChangeEvent</code> parameter,
+          with a return type of void, <span class="changed_added_2_0">or
+          to a public method that takes no arguments with a return type
+          of void.  In the latter case, the method has no way of easily
+          knowing what the new value is, but this can be useful in cases
+          where a notification is needed that "this value
+          changed".</span>
+
+</p>]]></description>
+      <display-name>Value Change Listener</display-name>
+      <icon/>
+      <property-name>valueChangeListener</property-name>
+      <property-class>javax.el.MethodExpression</property-class>
+      <property-extension>
+        <method-signature>
+                void valueChange(javax.faces.event.ValueChangeEvent)
+            </method-signature>
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+as required by 
+https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
+            <method-signature>
+                void valueChange()
+            </method-signature>
+-->
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Flag indicating that this component's value must be
+          converted and validated immediately (that is, during
+          Apply Request Values phase), rather than waiting
+          until Process Validations phase.
+        </description>
+      <display-name>Immediate Action</display-name>
+      <icon/>
+      <property-name>immediate</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Flag indicating whether or not any required conversion or validation
+          on this component value has been performed successfully.
+        </description>
+      <display-name>Valid Flag</display-name>
+      <icon/>
+      <property-name>valid</property-name>
+      <property-class>valid</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+      </property-extension>
+    </property>
+
+
+    <property>
+      <description>
+          CSS style(s) to be applied when this component is rendered.
+        </description>
+      <display-name>CSS Styles</display-name>
+      <icon/>
+      <property-name>style</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Space-separated list of CSS style class(es) to be applied when
+          this element is rendered.  This value must be passed through
+          as the "class" attribute on generated markup.
+        </description>
+      <display-name>CSS Style Classes</display-name>
+      <icon/>
+      <property-name>styleClass</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>false</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Advisory title information about markup elements generated
+          for this component.
+        </description>
+      <display-name>Advisory Title</display-name>
+      <icon/>
+      <property-name>title</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+
+
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          clicked over this element.
+        </description>
+      <display-name>Button Click Script</display-name>
+      <icon/>
+      <property-name>onclick</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          double clicked over this element.
+        </description>
+      <display-name>Double Click Script</display-name>
+      <icon/>
+      <property-name>ondblclick</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          pressed down over this element.
+        </description>
+      <display-name>Mouse Down Script</display-name>
+      <icon/>
+      <property-name>onmousedown</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          released over this element.
+        </description>
+      <display-name>Mouse Up Script</display-name>
+      <icon/>
+      <property-name>onmouseup</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          moved onto this element.
+        </description>
+      <display-name>Mouse Over Script</display-name>
+      <icon/>
+      <property-name>onmouseover</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          moved within this element.
+        </description>
+      <display-name>Mouse Move Script</display-name>
+      <icon/>
+      <property-name>onmousemove</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          moved away from this element.
+        </description>
+      <display-name>Mouse Out Script</display-name>
+      <icon/>
+      <property-name>onmouseout</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a key is
+          pressed and released over this element.
+        </description>
+      <display-name>Key Press Script</display-name>
+      <icon/>
+      <property-name>onkeypress</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a key is
+          pressed down over this element.
+        </description>
+      <display-name>Key Down Script</display-name>
+      <icon/>
+      <property-name>onkeydown</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a key is
+          released over this element.
+        </description>
+      <display-name>Key Up Script</display-name>
+      <icon/>
+      <property-name>onkeyup</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+
+
+    <property>
+      <description>
+          Access key that, when pressed, transfers focus
+          to this element.
+        </description>
+      <display-name>Access Key</display-name>
+      <icon/>
+      <property-name>accesskey</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when this element loses focus.
+        </description>
+      <display-name>Focus Off Script</display-name>
+      <icon/>
+      <property-name>onblur</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when this element receives focus.
+        </description>
+      <display-name>Focus On Script</display-name>
+      <icon/>
+      <property-name>onfocus</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Position of this element in the tabbing order
+          for the current document.  This value must be
+          an integer between 0 and 32767.
+        </description>
+      <display-name>Tab Index</display-name>
+      <icon/>
+      <property-name>tabindex</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+
+
+    <property>
+      <description>
+          Direction indication for text that does not inherit directionality.
+          Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+        </description>
+      <display-name>Direction</display-name>
+      <icon/>
+      <property-name>dir</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Code describing the language used in the generated markup
+          for this component.
+        </description>
+      <display-name>Language Code</display-name>
+      <icon/>
+      <property-name>lang</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+
+
+    <property>
+      <description>
+          Flag indicating that this element must never receive focus or
+          be included in a subsequent submit.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as disabled="disabled".            
+        </description>
+      <display-name>Disabled Flag</display-name>
+      <icon/>
+      <property-name>disabled</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <pass-through>false</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when this element loses focus
+          and its value has been modified since gaining focus.
+        </description>
+      <display-name>Input Change Script</display-name>
+      <icon/>
+      <property-name>onchange</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>false</pass-through>
+        <behavior/>
+        <behavior>valueChange</behavior>
+        <default-behavior>true</default-behavior>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when text within this
+          element is selected by the user.
+        </description>
+      <display-name>Text Select Script</display-name>
+      <icon/>
+      <property-name>onselect</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Flag indicating that this component will prohibit changes by
+          the user.  The element may receive focus unless it has also
+          been disabled.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as readonly="readonly".
+        </description>
+      <display-name>Read Only Flag</display-name>
+      <icon/>
+      <property-name>readonly</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <pass-through>false</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A localized user presentable name for this component.
+        </description>
+      <display-name>Label</display-name>
+      <icon/>
+      <property-name>label</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <renderer-attribute-ignore>true</renderer-attribute-ignore>
+      </property-extension>
+    </property>
+
+
+    <property>
+      <description>
+          Alternate textual description of the
+          element rendered by this component.
+        </description>
+      <display-name>Alternate Text</display-name>
+      <icon/>
+      <property-name>alt</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+        If the value of this attribute is "off", render "off" as the value
+        of the attribute. This indicates that the  browser should
+        disable its autocomplete feature for this component.  This is
+        useful for components that perform autocompletion and do not
+        want the browser interfering.  If this attribute is not set or the value 
+        is "on", render nothing.
+        </description>
+      <display-name>Enable or disable browser autocompletion.</display-name>
+      <icon/>
+      <property-name>autocomplete</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+    <property>
+      <description>
+          The maximum number of characters that may
+          be entered in this field.
+        </description>
+      <display-name>Maximum Length</display-name>
+      <icon/>
+      <property-name>maxlength</property-name>
+      <property-class>int</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          The number of characters used to determine
+          the width of this field.
+        </description>
+      <display-name>Field Width</display-name>
+      <icon/>
+      <property-name>size</property-name>
+      <property-class>int</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+
+    <component-extension>
+      <base-component-type>javax.faces.Input</base-component-type>
+      <renderer-type>javax.faces.File</renderer-type>
+    </component-extension>
+  </component>
+  <component>
+    <description><![CDATA[<p>Represents an HTML <code>input</code> element
       of type <code>hidden</code>.</p>]]></description>
     <display-name>Input Hidden</display-name>
     <component-type>javax.faces.HtmlInputHidden</component-type>
@@ -8441,7 +9188,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-<!-- PENDING modify tlddoc to handle an OR of method signatures 
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -8796,7 +9543,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-<!-- PENDING modify tlddoc to handle an OR of method signatures 
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -9558,7 +10305,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-<!-- PENDING modify tlddoc to handle an OR of method signatures 
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -10304,7 +11051,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-<!-- PENDING modify tlddoc to handle an OR of method signatures 
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -15505,7 +16252,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-<!-- PENDING modify tlddoc to handle an OR of method signatures 
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -16215,7 +16962,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-<!-- PENDING modify tlddoc to handle an OR of method signatures 
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -16991,7 +17738,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-<!-- PENDING modify tlddoc to handle an OR of method signatures 
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -17729,7 +18476,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-<!-- PENDING modify tlddoc to handle an OR of method signatures 
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -18457,7 +19204,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-<!-- PENDING modify tlddoc to handle an OR of method signatures 
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -19182,7 +19929,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-<!-- PENDING modify tlddoc to handle an OR of method signatures 
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -19899,7 +20646,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-<!-- PENDING modify tlddoc to handle an OR of method signatures 
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -20333,7 +21080,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <renderer-type>javax.faces.Radio</renderer-type>
     </component-extension>
   </component>
-<!--
+  <!--
          the following components are here merely for AttributeManager
          generation.
     -->
@@ -20699,7 +21446,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <renderer-type>javax.faces.Body</renderer-type>
     </component-extension>
   </component>
-<!-- Standard HTML Renderkit -->
+  <!-- Standard HTML Renderkit -->
   <render-kit>
     <description><![CDATA[
      The standard HTML RenderKit.  Please see the spec for additional
@@ -23216,6 +23963,461 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       </attribute>
       <renderer-extension>
         <renders-children>true</renders-children>
+      </renderer-extension>
+    </renderer>
+    <renderer>
+      <description><![CDATA[<p class="changed_added_2_2"><span>Renders</span>
+            an HTML "input" element of "type" "file". The standard HTML_BASIC
+            RenderKit specifies behavior that assumes Servlet 3.0 or later.  
+            Portlet implementations must override this implementation with a 
+            semantically equivalent one that functions under the constraints 
+            of the Portlet specification.</p>
+
+      <div class="changed_added_2_2">
+
+      <p><a name="decode">Decode Behavior</a></p>
+
+      <ul>
+
+      <p>Obtain the <code>Map</code> from the "requestParameterMap"
+      property of the <code>ExternalContext</code>.  If the
+      <code>Map</code> contains an entry for the "clientId" of the
+      component, pass the value of the entry to the
+      <code>setSubmittedValue()</code> method of the component, which
+      must be an instance of <code>EditableValueHolder</code>, and
+      return.  Otherwise, obtain the "request" property from the
+      <code>ExternalContext</code> and cast it to
+      <code>javax.servlet.http.HttpServletRequest</code>.  Call
+      <code>getParts()</code> on the httpServletRequest. Iterate over
+      the parts.  If the "name" property of the current part is equal to
+      the "clientId", pass the current part to the
+      <code>setSubmittedValue()</code> method of the component.  If an
+      exception is thrown during the iteration, log the exception and
+      continue.</p>
+
+      <p>The standard implementation must override the 
+      <code>getConvertedValue()</code> so that it simply returns the
+      <code>submittedValue</code> argument.</p>
+
+      </ul>
+
+      <p>Encode Behavior</p>
+
+      <ul>
+
+      <p>  Render the clientId of the component as
+      the value of the "name" attribute.  Render the current value of
+      the component as the value of the "value" attribute.  If the
+      "styleClass" attribute is specified, render its value as the value
+      of the "class" attribute.
+      </p>
+
+      </ul>
+
+</div> ]]></description>
+      <component-family>javax.faces.Input</component-family>
+      <renderer-type>javax.faces.File</renderer-type>
+      <renderer-class>
+        com.sun.faces.renderkit.html_basic.FileRenderer
+    </renderer-class>
+
+      <attribute>
+        <description>
+          CSS style(s) to be applied when this component is rendered.
+        </description>
+        <display-name>CSS Styles</display-name>
+        <icon/>
+        <attribute-name>style</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Space-separated list of CSS style class(es) to be applied when
+          this element is rendered.  This value must be passed through
+          as the "class" attribute on generated markup.
+        </description>
+        <display-name>CSS Style Classes</display-name>
+        <icon/>
+        <attribute-name>styleClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>false</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Advisory title information about markup elements generated
+          for this component.
+        </description>
+        <display-name>Advisory Title</display-name>
+        <icon/>
+        <attribute-name>title</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+
+
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          clicked over this element.
+        </description>
+        <display-name>Button Click Script</display-name>
+        <icon/>
+        <attribute-name>onclick</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          double clicked over this element.
+        </description>
+        <display-name>Double Click Script</display-name>
+        <icon/>
+        <attribute-name>ondblclick</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          pressed down over this element.
+        </description>
+        <display-name>Mouse Down Script</display-name>
+        <icon/>
+        <attribute-name>onmousedown</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          released over this element.
+        </description>
+        <display-name>Mouse Up Script</display-name>
+        <icon/>
+        <attribute-name>onmouseup</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          moved onto this element.
+        </description>
+        <display-name>Mouse Over Script</display-name>
+        <icon/>
+        <attribute-name>onmouseover</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          moved within this element.
+        </description>
+        <display-name>Mouse Move Script</display-name>
+        <icon/>
+        <attribute-name>onmousemove</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          moved away from this element.
+        </description>
+        <display-name>Mouse Out Script</display-name>
+        <icon/>
+        <attribute-name>onmouseout</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a key is
+          pressed and released over this element.
+        </description>
+        <display-name>Key Press Script</display-name>
+        <icon/>
+        <attribute-name>onkeypress</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a key is
+          pressed down over this element.
+        </description>
+        <display-name>Key Down Script</display-name>
+        <icon/>
+        <attribute-name>onkeydown</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a key is
+          released over this element.
+        </description>
+        <display-name>Key Up Script</display-name>
+        <icon/>
+        <attribute-name>onkeyup</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+
+
+      <attribute>
+        <description>
+          Access key that, when pressed, transfers focus
+          to this element.
+        </description>
+        <display-name>Access Key</display-name>
+        <icon/>
+        <attribute-name>accesskey</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when this element loses focus.
+        </description>
+        <display-name>Focus Off Script</display-name>
+        <icon/>
+        <attribute-name>onblur</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when this element receives focus.
+        </description>
+        <display-name>Focus On Script</display-name>
+        <icon/>
+        <attribute-name>onfocus</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Position of this element in the tabbing order
+          for the current document.  This value must be
+          an integer between 0 and 32767.
+        </description>
+        <display-name>Tab Index</display-name>
+        <icon/>
+        <attribute-name>tabindex</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+
+
+      <attribute>
+        <description>
+          Direction indication for text that does not inherit directionality.
+          Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+        </description>
+        <display-name>Direction</display-name>
+        <icon/>
+        <attribute-name>dir</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Code describing the language used in the generated markup
+          for this component.
+        </description>
+        <display-name>Language Code</display-name>
+        <icon/>
+        <attribute-name>lang</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+
+
+      <attribute>
+        <description>
+          Flag indicating that this element must never receive focus or
+          be included in a subsequent submit.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as disabled="disabled".            
+        </description>
+        <display-name>Disabled Flag</display-name>
+        <icon/>
+        <attribute-name>disabled</attribute-name>
+        <attribute-class>boolean</attribute-class>
+        <attribute-extension>
+          <pass-through>false</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when this element loses focus
+          and its value has been modified since gaining focus.
+        </description>
+        <display-name>Input Change Script</display-name>
+        <icon/>
+        <attribute-name>onchange</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>false</pass-through>
+          <behavior/>
+          <behavior>valueChange</behavior>
+          <default-behavior>true</default-behavior>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when text within this
+          element is selected by the user.
+        </description>
+        <display-name>Text Select Script</display-name>
+        <icon/>
+        <attribute-name>onselect</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Flag indicating that this component will prohibit changes by
+          the user.  The element may receive focus unless it has also
+          been disabled.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as readonly="readonly".
+        </description>
+        <display-name>Read Only Flag</display-name>
+        <icon/>
+        <attribute-name>readonly</attribute-name>
+        <attribute-class>boolean</attribute-class>
+        <attribute-extension>
+          <pass-through>false</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          A localized user presentable name for this component.
+        </description>
+        <display-name>Label</display-name>
+        <icon/>
+        <attribute-name>label</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <renderer-attribute-ignore>true</renderer-attribute-ignore>
+        </attribute-extension>
+      </attribute>
+
+
+      <attribute>
+        <description>
+          Alternate textual description of the
+          element rendered by this component.
+        </description>
+        <display-name>Alternate Text</display-name>
+        <icon/>
+        <attribute-name>alt</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+        If the value of this attribute is "off", render "off" as the value
+        of the attribute. This indicates that the  browser should
+        disable its autocomplete feature for this component.  This is
+        useful for components that perform autocompletion and do not
+        want the browser interfering.  If this attribute is not set or the value 
+        is "on", render nothing.
+        </description>
+        <display-name>Enable or disable browser autocompletion.</display-name>
+        <icon/>
+        <attribute-name>autocomplete</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+      <attribute>
+        <description>
+          The maximum number of characters that may
+          be entered in this field.
+        </description>
+        <display-name>Maximum Length</display-name>
+        <icon/>
+        <attribute-name>maxlength</attribute-name>
+        <attribute-class>int</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          The number of characters used to determine
+          the width of this field.
+        </description>
+        <display-name>Field Width</display-name>
+        <icon/>
+        <attribute-name>size</attribute-name>
+        <attribute-class>int</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+
+      <renderer-extension>
+        <renders-children>false</renders-children>
       </renderer-extension>
     </renderer>
     <renderer>

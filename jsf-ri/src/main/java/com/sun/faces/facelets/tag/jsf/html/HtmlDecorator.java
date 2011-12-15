@@ -123,6 +123,11 @@ public final class HtmlDecorator implements TagDecorator {
                                 HtmlLibrary.Namespace, "commandButton", tag
                                         .getQName(), na);
                     }
+                    if ("file".equals(t)) {
+                        return new Tag(tag.getLocation(),
+                                HtmlLibrary.Namespace, "inputFile", tag
+                                        .getQName(), na);
+                    }
                 }
             }
         }
