@@ -374,6 +374,7 @@ public class RestoreViewPhase extends Phase {
             // new VisitHint(s) yet - but still wish to know that they should be non-iterating
             // during state saving.  It should be removed at some point.
             facesContext.getAttributes().put(SKIP_ITERATION_HINT, true);
+            facesContext.getApplication().publishEvent(facesContext, PostRestoreStateEvent.class, root);
 
             Set<VisitHint> hints = EnumSet.of(VisitHint.SKIP_ITERATION);
             VisitContext visitContext = VisitContext.createVisitContext(facesContext, null, hints);
