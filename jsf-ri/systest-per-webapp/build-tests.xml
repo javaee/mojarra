@@ -94,7 +94,7 @@
               value="com/sun/faces/systest/ReplaceVariableResolverTestCase.class"/>
     <property name="add-elresolver-and-replace-variableresolver-programmatically" 
               value="com/sun/faces/systest/AddELResolverAndReplaceVariableresolverProgrammaticallyTestCase.class"/>
-    <property name="replace-variableresolver-and-add-elresolver-programmatically" 
+    <property name="replace-vr-add-er" 
               value="com/sun/faces/systest/ReplaceVariableResolverAndAddELResolverProgrammaticallyTestCase.class"/>
     <property name="converter-property-editor" 
               value="com/sun/faces/systest/ConverterPropertyEditorTestCase.class"/>
