@@ -92,7 +92,7 @@
               value="com/sun/faces/systest/ReplaceVariableResolverTestCase.class"/>
     <property name="replace-variableresolver-programmatically" 
               value="com/sun/faces/systest/ReplaceVariableResolverTestCase.class"/>
-    <property name="add-elresolver-and-replace-variableresolver-programmatically" 
+    <property name="add-er-replace-vr" 
               value="com/sun/faces/systest/AddELResolverAndReplaceVariableresolverProgrammaticallyTestCase.class"/>
     <property name="replace-vr-add-er" 
               value="com/sun/faces/systest/ReplaceVariableResolverAndAddELResolverProgrammaticallyTestCase.class"/>
