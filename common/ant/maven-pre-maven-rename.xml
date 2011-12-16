@@ -284,13 +284,13 @@ javadoc generation skipped
           <zipfileset src="@{locally.deployed.jar}" />
         </pathconvert>
         <!-- Remove the leading fully qualified paths. -->
-        <propertyregex property="jar.contents" 
+<!--        <propertyregex property="jar.contents" 
                        input="${jar.contents.raw}" override="true"
                        regexp="@{locally.deployed.jar}:" replace="" 
-                       global="true" />
+                       global="true" />-->
         <echo>
 +++++++++++++++++++++++++++++++ START contents of @{locally.deployed.jar}:
-${jar.contents}
+${jar.contents.raw}
 +++++++++++++++++++++++++++++++ END contents of @{locally.deployed.jar}:
         </echo>
       </sequential>                    

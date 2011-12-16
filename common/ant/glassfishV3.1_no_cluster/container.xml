@@ -70,15 +70,6 @@
                    description="If true, deploy with --type osgi."
                    default="false"/>
         <sequential>
-            <condition property="exec.name" value="cmd.exe">
-                <os family="windows"/>
-            </condition>
-            <condition property="exec.arg.1"
-                       value="/c ${container.home}/bin/asadmin">
-                <os family="windows"/>
-            </condition>
-            <property name="exec.name" value="${container.home}/bin/asadmin"/>
-            <property name="exec.arg.1" value=""/>
             <echo>
 
 ---------------- Glassfish - Deploying @{appName} ---------------- 
@@ -120,17 +111,13 @@
             </if>
             <property name="osgi-value" value="" />
             <echo message="osgi-value: ${osgi-value}" />
-            <exec executable="${exec.name}" failonerror="true">
-                <arg line="${exec.arg.1}"/>
-                <arg line="deploy"/>
-                <arg line="${use-virtual-servers-value}"/>
-                <arg line="${osgi-value}"/>
-                <arg line="--user ${glassfish.admin.user}"/>
-                <arg line="--passwordfile ${glassfish.password.file}"/>
-                <arg line="--host ${glassfish.admin.host}"/>
-                <arg line="--port ${glassfish.admin.port}"/>
-                <arg line="@{artifact}"/>
-            </exec>
+            <taskdef 
+                name="glassfish-admin"
+                classname="org.glassfish.ant.tasks.AdminTask"
+                classpath="${dependency.base.dir}/jars/ant-tasks.jar" />
+            <glassfish-admin 
+                installDir="${container.home}"
+                command="--user ${glassfish.admin.user} --passwordfile ${glassfish.password.file} --host ${glassfish.admin.host} --port ${glassfish.admin.port} deploy ${use-virtual-servers-value} ${osgi-value} @{artifact}"/>
         </sequential>
     </macrodef>
 
@@ -173,29 +160,25 @@
         <attribute name="appName"
                    description="The name of the application"/>
         <sequential>
-            <condition property="exec.name" value="cmd.exe">
-                <os family="windows"/>
-            </condition>
-            <condition property="exec.arg.1"
-                       value="/c ${container.home}/bin/asadmin">
-                <os family="windows"/>
-            </condition>
-            <property name="exec.name" value="${container.home}/bin/asadmin"/>
-            <property name="exec.arg.1" value=""/>
             <echo>
 
 ---------------- Glassfish - Undeploying @{appName} ---------------- 
 
             </echo>
-            <exec executable="${exec.name}">
-                <arg line="${exec.arg.1}"/>
-                <arg line="undeploy"/>
-                <arg line="--user ${glassfish.admin.user}"/>
-                <arg line="--passwordfile ${glassfish.password.file}"/>
-                <arg line="--host ${glassfish.admin.host}"/>
-                <arg line="--port ${glassfish.admin.port}"/>
-                <arg line="@{appName}"/>
-            </exec>
+            <trycatch>
+                <try>
+                    <taskdef 
+                        name="glassfish-admin"
+                        classname="org.glassfish.ant.tasks.AdminTask"
+                        classpath="${dependency.base.dir}/jars/ant-tasks.jar" />
+                    <glassfish-admin 
+                        installDir="${container.home}"
+                        command="--user ${glassfish.admin.user} --passwordfile ${glassfish.password.file} --host ${glassfish.admin.host} --port ${glassfish.admin.port} undeploy @{appName}"/>
+                </try>
+                <finally>
+                    <echo>Unable to undeploy, continuing on</echo>
+                </finally>
+            </trycatch>
         </sequential>
     </macrodef>
 
@@ -215,12 +198,7 @@
 
     <target name="container.deploy" 
             description="Deploy the JSF Implementation artifacts to the target container.">
-        <if>
-            <os family="windows"/>
-            <then>
-                <container.stop/>
-            </then>
-        </if>
+        <container.stop/>
         <delete failonerror="false" 
                 file="${container.home}/modules/jsf-api.jar" />
         <delete failonerror="false" 
@@ -228,15 +206,7 @@
 
         <copy overwrite="true" file="${impl.dir}/build/lib/javax.faces.jar" toFile="${container.home}/modules/javax.faces.jar"/>
 
-        <if>
-            <os family="windows"/>
-            <then>
-                <!-- container.start/ -->
-                <echo>The container may have been stopped. Please restart it, if
-                    needed.
-                </echo>
-            </then>
-        </if>       
+        <container.start/>
     </target>
 
     <target name="define.scenario.aware.port">
@@ -251,24 +221,9 @@
 
     <target name="container.deploy.test.dependencies"
             description="Deploy any container level dependencies to the container.">
-        <if>
-            <os family="windows"/>
-            <then>
-                <container.stop/>
-            </then>
-        </if>
-
+        <container.stop/>
         <copy overwrite="true" file="${groovy.jar}" todir="${container.home}/modules"/>
-
-        <if>
-            <os family="windows"/>
-            <then>
-                <!-- container.start/ -->
-                <echo>The container may have been stopped. Please restart it, if
-                    needed.
-                </echo>
-            </then>
-        </if>       
+        <container.start/>
     </target>
 
     <target name="create.virtual.servers">
@@ -289,25 +244,20 @@
 ---------  Configuring GlassFish 3.1 for OSGi WAB deployment
         </echo>
         <container.start failonerror="false" />
-        <exec executable="${container.home}/bin/asadmin"
-                          failonerror="false">
-           <arg line="delete-jvm-options"/>
-           <arg line="--target server-config"/>
-           <arg line="-Dorg.glassfish.additionalOSGiBundlesToStart='org.apache.felix.shell,org.apache.felix.gogo.runtime,org.apache.felix.gogo.shell,org.apache.felix.gogo.command'"/>
-         </exec>
-         <exec executable="${container.home}/bin/asadmin"
-                          failonerror="false">
-           <arg line="delete-jvm-options"/>
-           <arg line="--target server-config"/>
-           <arg line="-Dorg.glassfish.additionalOSGiBundlesToStart='org.apache.felix.shell,org.apache.felix.gogo.runtime,org.apache.felix.gogo.shell,org.apache.felix.shell.remote,org.apache.felix.fileinstall'"/>
-         </exec>
-         <exec executable="${container.home}/bin/asadmin"
-                          failonerror="true">
-           <arg line="create-jvm-options"/>
-           <arg line="--target server-config"/>
-           <arg line="-Dorg.glassfish.additionalOSGiBundlesToStart='org.apache.felix.shell,org.apache.felix.gogo.runtime,org.apache.felix.gogo.shell,org.apache.felix.shell.remote,org.apache.felix.fileinstall'"/>
-         </exec>
-         <container.stop />
+        <taskdef 
+            name="glassfish-admin"
+            classname="org.glassfish.ant.tasks.AdminTask"
+            classpath="${dependency.base.dir}/jars/ant-tasks.jar" />
+        <glassfish-admin 
+            installDir="${container.home}"
+            command="--user ${glassfish.admin.user} --passwordfile ${glassfish.password.file} --host ${glassfish.admin.host} --port ${glassfish.admin.port} delete-jvm-options --target server-config -Dorg.glassfish.additionalOSGiBundlesToStart='org.apache.felix.shell,org.apache.felix.gogo.runtime,org.apache.felix.gogo.shell,org.apache.felix.gogo.command'"/>
+        <glassfish-admin 
+            installDir="${container.home}"
+            command="--user ${glassfish.admin.user} --passwordfile ${glassfish.password.file} --host ${glassfish.admin.host} --port ${glassfish.admin.port} delete-jvm-options --target server-config -Dorg.glassfish.additionalOSGiBundlesToStart='org.apache.felix.shell,org.apache.felix.gogo.runtime,org.apache.felix.gogo.shell,org.apache.felix.shell.remote,org.apache.felix.fileinstall'"/>
+        <glassfish-admin 
+            installDir="${container.home}"
+            command="--user ${glassfish.admin.user} --passwordfile ${glassfish.password.file} --host ${glassfish.admin.host} --port ${glassfish.admin.port} create-jvm-options --target server-config -Dorg.glassfish.additionalOSGiBundlesToStart='org.apache.felix.shell,org.apache.felix.gogo.runtime,org.apache.felix.gogo.shell,org.apache.felix.shell.remote,org.apache.felix.fileinstall'"/>
+         <container.stop/>
     </target>
 
 
@@ -411,69 +361,38 @@
 "------------ Starting ${glassfish.domain} ------------"
 
             </echo>
+            <taskdef 
+                name="glassfish-start-server"
+                classname="org.glassfish.ant.tasks.StartServerTask"
+                classpath="${dependency.base.dir}/jars/ant-tasks.jar" />
+            <glassfish-start-server 
+                installDir="${container.home}"
+                domain="${glassfish.domain}"/>
+            <waitfor>
+                <http url="http://${container.host}:${container.port}"/>
+            </waitfor>
             <if>
-                <os family="unix"/>
+                <equals arg1="@{create-virtual-server}" 
+                        casesensitive="false" trim="true"
+                        arg2="true" />
                 <then>
-                    <exec executable="${container.home}/bin/asadmin"
-                          failonerror="@{failonerror}">
-                        <arg line="start-domain"/>
-                        <arg line="--user ${glassfish.admin.user}"/>
-                        <arg line="${glassfish.domain}"/>
-                    </exec>
-                    <waitfor>
-                        <http url="http://${container.host}:${container.port}"/>
-                    </waitfor>
+                    <sequential>
+                        <create.virtual.servers />
+                        <for list="${instance.numbers}" param="num" trim="true">
+                            <sequential>
+                                <waitfor>
+                                    <http url="http://${container.host}:@{num}${glassfish.virtual.server.port}"/>
+                                </waitfor>
+                            </sequential>
+                        </for>
+                    </sequential>
                 </then>
-                <else>
-                    <exec executable="${container.home}/bin/asadmin.bat"
-                          failonerror="@{failonerror}"
-                          spawn="true">
-                        <arg line="start-domain"/>
-                        <arg line="--user ${glassfish.admin.user}"/>
-                        <arg line="${glassfish.domain}"/>
-                    </exec>
-                    <waitfor>
-                        <http url="http://${container.host}:${container.port}"/>
-                    </waitfor>
-                    <exec executable="${container.home}/bin/asadmin.bat"
-                          failonerror="@{failonerror}">
-                        <arg line="delete-jvm-options"/>
-                        <arg line="--target server-config"/>
-                        <arg line="-Dorg.glassfish.additionalOSGiBundlesToStart='org.apache.felix.shell,org.apache.felix.gogo.runtime,org.apache.felix.gogo.shell,org.apache.felix.gogo.command'"/>
-                    </exec>
-                    <exec executable="${container.home}/bin/asadmin.bat"
-                          failonerror="@{failonerror}">
-                        <arg line="create-jvm-options"/>
-                        <arg line="--target server-config"/>
-                        <arg line="-Dorg.glassfish.additionalOSGiBundlesToStart='org.apache.felix.shell,org.apache.felix.gogo.runtime,org.apache.felix.gogo.shell,org.apache.felix.shell.remote,org.apache.felix.fileinstall'"/>
-                    </exec>
-                </else>
             </if>
-            <if>
-              <equals arg1="@{create-virtual-server}" 
-                      casesensitive="false" trim="true"
-                      arg2="true" />
-                <then>
-                  <sequential>
-                    <create.virtual.servers />
-                    <for list="${instance.numbers}" param="num" trim="true">
-                      <sequential>
-                        <waitfor>
-                          <http url="http://${container.host}:@{num}${glassfish.virtual.server.port}"/>
-                       </waitfor>
-                     </sequential>
-                   </for>
-                  </sequential>
-                </then>
-              </if>
         </sequential>
     </macrodef>
 
     <macrodef name="create.virtual.servers">
         <sequential>
-            <if>
-                <os family="unix"/>
-                <then>
                     <for list="${instance.numbers}" param="num" trim="true">
                       <sequential>
                         <echo>
@@ -481,103 +400,42 @@
 "------------ Creating ${glassfish.virtual.server}@{num} --listenerport @{num}${glassfish.virtual.server.port} ------------"
 
                         </echo>
-			<exec executable="${container.home}/bin/asadmin"
-			      failonerror="true">
-			    <arg line="create-virtual-server"/>
-			    <arg line="--user ${glassfish.admin.user}"/>
-			    <arg line="--hosts localhost"/>
-			    <arg line="${glassfish.virtual.server}@{num}"/>
-			</exec>
-			<exec executable="${container.home}/bin/asadmin"
-			      failonerror="true">
-			    <arg line="create-http-listener"/>
-			    <arg line="--listeneraddress 0.0.0.0"/>
-			    <arg line="--user ${glassfish.admin.user}"/>
-			    <arg line="--listenerport @{num}${glassfish.virtual.server.port}"/>
-			    <arg line="--defaultvs ${glassfish.virtual.server}@{num} --servername localhost.localdomain"/>
-			    <arg line="--acceptorthreads 1 myHttpListener@{num}"/>
-			</exec>
-                      </sequential>
-                    </for>
-                </then>
-                <else>
-                    <for list="${instance.numbers}" param="num" trim="true">
-                      <sequential>
-                        <echo>
-
-"------------ Creating ${glassfish.virtual.server}@{num} ------------"
-
-                        </echo>
-                        <exec executable="${container.home}/bin/asadmin.bat"
-                              spawn="true">
-			    <arg line="create-virtual-server"/>
-			    <arg line="--user ${glassfish.admin.user}"/>
-			    <arg line="--hosts localhost"/>
-			    <arg line="${glassfish.virtual.server}@{num}"/>
-                        </exec>
-                        <exec executable="${container.home}/bin/asadmin.bat"
-                              spawn="true">
-			    <arg line="create-http-listener"/>
-			    <arg line="--listeneraddress 0.0.0.0"/>
-			    <arg line="--user ${glassfish.admin.user}"/>
-			    <arg line="--listenerport @{num}${glassfish.virtual.server.port}"/>
-			    <arg line="--defaultvs ${glassfish.virtual.server}@{num} --servername localhost.localdomain"/>
-			    <arg line="--acceptorthreads 1 myHttpListener@{num}"/>
-                        </exec>
-                      </sequential>
-                    </for>
-                </else>
-            </if>
+                    <taskdef 
+                        name="glassfish-admin"
+                        classname="org.glassfish.ant.tasks.AdminTask"
+                        classpath="${dependency.base.dir}/jars/ant-tasks.jar" />
+                    <glassfish-admin 
+                        installDir="${container.home}"
+                        command="--user ${glassfish.admin.user} create-virtual-server --hosts localhost ${glassfish.virtual.server}@{num}"/>
+                    <glassfish-admin 
+                        installDir="${container.home}"
+                        command="--user ${glassfish.admin.user} create-http-listener --listenerport @{num}${glassfish.virtual.server.port} --defaultvs ${glassfish.virtual.server}@{num} --servername localhost.localdomain --acceptorthreads 1 --listeneraddress 0.0.0.0 myHttpListener@{num}"/>
+                </sequential>
+            </for>
         </sequential>
     </macrodef>
 
- <macrodef name="delete.virtual.servers">
+    <macrodef name="delete.virtual.servers">
         <sequential>
-            <if>
-                <os family="unix"/>
-                <then>
-                    <for list="${instance.numbers}" param="num" trim="true">
-                      <sequential>
-                        <echo>
+            <for list="${instance.numbers}" param="num" trim="true">
+                <sequential>
+                    <echo>
   
 "------------ Deleting ${glassfish.virtual.server}@{num} ------------"
 
-                        </echo>
-                        <exec executable="${container.home}/bin/asadmin"
-                              failonerror="false">
-                            <arg line="delete-http-listener"/>
-                            <arg line="myHttpListener@{num}"/>
-                        </exec>
-                        <exec executable="${container.home}/bin/asadmin"
-                              failonerror="false">
-                            <arg line="delete-virtual-server"/>
-                            <arg line="${glassfish.virtual.server}@{num}"/>
-                        </exec>
-                      </sequential>
-                    </for>
-                </then>
-                <else>
-                    <for list="${instance.numbers}" param="num" trim="true">
-                      <sequential>
-                        <echo>
-  
-"------------ Deleting ${glassfish.virtual.server}@{num} ------------"
-
-                        </echo>
-			<exec executable="${container.home}/bin/asadmin.bat"
-			      spawn="true">
-				<arg line="delete-http-listener"/>
-				<arg line="myHttpListener@{num}"/>
-			</exec>
-			<exec executable="${container.home}/bin/asadmin.bat"
-			      spawn="true">
-				<arg line="delete-virtual-server"/>
-				<arg line="${glassfish.virtual.server}@{num}"/>
-			</exec>
-                      </sequential>
-                    </for>
-                </else>
-            </if>
+                    </echo>
+                    <taskdef 
+                        name="glassfish-admin"
+                        classname="org.glassfish.ant.tasks.AdminTask"
+                        classpath="${dependency.base.dir}/jars/ant-tasks.jar" />
+                    <glassfish-admin 
+                        installDir="${container.home}"
+                        command="delete-http-listener myHttpListener@{num}"/>
+                    <glassfish-admin 
+                        installDir="${container.home}"
+                        command="delete-virtual-server ${glassfish.virtual.server}@{num}"/>
+                </sequential>
+            </for>
         </sequential>
     </macrodef>
 
@@ -645,42 +503,21 @@
 
             </echo>
             <if>
-                <os family="unix"/>
+                <equals arg1="@{create-virtual-server}" 
+                    casesensitive="false" trim="true"
+                    arg2="true" />
                 <then>
-                    <if>
-                      <equals arg1="@{create-virtual-server}" 
-                              casesensitive="false" trim="true"
-                              arg2="true" />
-                        <then>
-                          <sequential>
-                            <delete.virtual.servers />
-                          </sequential>
-                        </then>
-                    </if>
-                    <exec executable="${container.home}/bin/asadmin">
-                        <arg line="stop-domain"/>
-                        <arg line="${glassfish.domain}"/>
-                    </exec>
+                    <sequential>
+                        <delete.virtual.servers />
+                    </sequential>
                 </then>
-                <else>
-                    <if>
-                      <equals arg1="@{create-virtual-server}" 
-                              casesensitive="false" trim="true"
-                              arg2="true" />
-                        <then>
-                          <sequential>
-                            <delete.virtual.servers />
-                          </sequential>
-                        </then>
-                    </if>
-                    <exec executable="${container.home}/bin/asadmin.bat"
-                          spawn="true">
-                        <arg line="stop-domain"/>
-                        <arg line="${glassfish.domain}"/>
-                    </exec>
-                </else>
             </if>
-            <sleep seconds="15"/>
+            <taskdef name="glassfish-stop-server"
+                classname="org.glassfish.ant.tasks.StopServerTask"
+                classpath="${dependency.base.dir}/jars/ant-tasks.jar" />
+            <glassfish-stop-server 
+                installDir="${container.home}"
+                domain="${glassfish.domain}"/>
         </sequential>
     </macrodef>
 
@@ -695,4 +532,3 @@
 
 
 </project>
-
