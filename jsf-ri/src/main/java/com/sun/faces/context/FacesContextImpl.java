@@ -44,6 +44,8 @@ import javax.el.ELContext;
 import javax.el.ELContextListener;
 import javax.el.ELContextEvent;
 import javax.faces.FactoryFinder;
+import javax.faces.component.visit.ComponentModification;
+import javax.faces.component.visit.ComponentModificationManager;
 import javax.faces.context.ExceptionHandler;
 import javax.faces.event.PhaseId;
 import javax.faces.application.*;
@@ -532,6 +534,39 @@ public class FacesContextImpl extends FacesContext {
         return currentPhaseId;
 
     }
+
+    @Override
+    public ComponentModificationManager getComponentModificationManager() {
+        return new ComponentModificationManager() {
+
+            @Override
+            public void push(ComponentModification mod) {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public ComponentModification peek() {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public ComponentModification pop() {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public ComponentModification suspend(FacesContext context) {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public void resume(FacesContext context, ComponentModification mods) {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+        };
+    }
+    
+    
 
 
     /**
