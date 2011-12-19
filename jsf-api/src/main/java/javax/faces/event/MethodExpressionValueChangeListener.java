@@ -127,7 +127,7 @@ public class MethodExpressionValueChangeListener implements ValueChangeListener,
      * AbortProcessingException}, including the cause of the
      * failure.</span></p>
      * 
-     * @throws NullPointerException {@inheritDoc}     
+     * @throws NullPointerException if the argument valueChangeEvent is null.
      * @throws AbortProcessingException {@inheritDoc}     
      */ 
     public void processValueChange(ValueChangeEvent valueChangeEvent) throws AbortProcessingException {
