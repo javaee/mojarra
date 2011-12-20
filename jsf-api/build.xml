@@ -856,8 +856,12 @@ javax.faces.level=ALL
             <available file="${java.home}/../bin/javac"/>
         </condition>
         <condition property="exec.arg.1"
-                   value="/c ${java.home}/bin/javac">
-            <os family="windows"/>
+                   value="/c ${java.home}/bin/javac.exe">
+            <available file="${java.home}/bin/javac.exe"/>
+        </condition>
+        <condition property="exec.arg.1"
+                   value="/c ${java.home}/../bin/javac.exe">
+            <available file="${java.home}/../bin/javac.exe"/>
         </condition>
         <property name="exec.name" value="${java.home}/bin/javac"/>
         <property name="exec.arg.1" value=""/>
@@ -866,7 +870,7 @@ javax.faces.level=ALL
             <arg line="${exec.arg.1}"/>
             <arg line="-XDprocess.packages"/>
             <arg line="-proc:only"/>
-            <arg line="-cp ${build.lib.dir}/${name}.jar:${jsf-tools.jar}"/>
+            <arg line="-cp ${build.lib.dir}/${name}.jar${path.separator}${jsf-tools.jar}"/>
             <arg line="-processor com.sun.faces.tools.StripClassesForApiJar"/>
             <arg line="-Acom.sun.tools.javac.sym.Jar=${build.lib.dir}/${name}.jar"/>
             <arg line="-Acom.sun.tools.javac.sym.ExtraApiClassPath=${javaee-api.jar}"/>
@@ -897,6 +901,10 @@ javax.faces.level=ALL
 
       <!-- Massage the property value to make it be as desired. -->
 
+      <propertyregex property="src.dir.paths" input="${src.dir.paths}" override="true"
+                     regexp="\\" replace="/" global="true" />
+      <propertyregex property="src.dir" input="${src.dir}" override="true"
+                     regexp="\\" replace="/" global="true" />
       <!-- Remove the leading fully qualified paths. -->
       <propertyregex property="src.paths" input="${src.dir.paths}" override="true"
                      regexp="${src.dir}" replace="" global="true" />
