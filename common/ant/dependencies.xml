@@ -142,6 +142,9 @@
     <property name="glassfish.download.url" value="http://download.java.net/javaee5/v2ur1/promoted/"/>
     <property name="glassfish.installer.jar" value="glassfish-installer-v2ur1-b09d-"/>
 
+    <property name="gf-ant.version" value="3.1.1"/>
+    <property name="gf-ant.jar"     value="${dependency.jar.dir}/ant-tasks.jar"/>
+
     <!--  source build properties -->
     
     <property name="commons.logging.url" value="http://svn.apache.org/repos/asf/commons/proper/logging/tags/LOGGING_1_0_4/"/>
@@ -181,6 +184,18 @@
             </then>
         </if>
 
+        <!-- GLASSFISH ANT JAR -->
+        <if>
+            <not>
+                <available file="${gf-ant.jar}" property="ignored"/>
+            </not>
+            <then>
+                <get src="http://download.java.net/maven/glassfish/org/glassfish/ant-tasks/${gf-ant.version}/ant-tasks-${gf-ant.version}.jar"
+                     dest="${gf-ant.jar}"
+                     usetimestamp="true"/>
+            </then>
+        </if>
+        
         <!-- JUNIT -->
         <if>
             <and>
