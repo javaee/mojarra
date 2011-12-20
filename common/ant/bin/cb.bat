@@ -114,7 +114,7 @@ for /f "tokens=*" %%F in ('wc -l %ADD_FILE% ^| grep -v "      0"') do (
 	del %ZIP%
 	echo. > %DUMMY%
 	zip %ZIP% %DUMMY%
-	type %ADD_FILE% | cut -c3- | zip %ZIP% -@
+	type %ADD_FILE% | cut -c9- | zip %ZIP% -@
 	zip -d %ZIP% %DUMMY%
 	del %DUMMY%
 	echo.
