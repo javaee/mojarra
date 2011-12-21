@@ -52,7 +52,7 @@ import javax.faces.render.RenderKitFactory;
 import javax.faces.render.Renderer;
 
 /**
- * <p class="changed_added_2_0"><strong>UIViewParameter</strong> represents a
+ * <p class="changed_added_2_0"><strong class="changed_modified_2_2">UIViewParameter</strong> represents a
  * binding between a request parameter and a model property or {@link UIViewRoot}
  * property. This is a bi-directional binding.</p>
  *
@@ -176,12 +176,14 @@ public class UIViewParameter extends UIInput {
     }
 
     /**
-     * <p class="changed_added_2_0">Assume that the submitted value is
-     * always a string.</p>
+     * <p class="changed_added_2_0"><span class="changed_modified_2_2">Assume</span>
+     * that the submitted value is
+     * always a string, <span class="changed_added_2_2">but the return type
+     * from this method is <code>Object</code>.</span>.</p>
      * @since 2.0
      */
     @Override
-    public String getSubmittedValue() {
+    public Object getSubmittedValue() {
         return (String) getStateHelper().get(PropertyKeys.submittedValue);
     }
 

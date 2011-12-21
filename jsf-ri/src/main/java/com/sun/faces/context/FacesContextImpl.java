@@ -537,6 +537,7 @@ public class FacesContextImpl extends FacesContext {
 
     @Override
     public ComponentModificationManager getComponentModificationManager() {
+        assertNotReleased();
         return new ComponentModificationManager() {
 
             @Override

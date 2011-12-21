@@ -296,7 +296,7 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
      * @since 2.2
      */
     public String getPhase() {
-        PhaseId myPhaseId = (PhaseId) getStateHelper().eval(PropertyKeys.phase);
+        PhaseId myPhaseId = getPhaseId();
         String result = null;
         if (null != myPhaseId) {
             result = myPhaseId.getName();
@@ -671,15 +671,6 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
             c = c.getParent();
         } while (c != null);
         return null;
-    }
-
-    private Lifecycle getLifecycle(final FacesContext context) {
-        LifecycleFactory lifecycleFactory = (LifecycleFactory) FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
-        String lifecycleId = context.getExternalContext().getInitParameter(FacesServlet.LIFECYCLE_ID_ATTR);
-        if (lifecycleId == null) {
-            lifecycleId = LifecycleFactory.DEFAULT_LIFECYCLE;
-        }
-        return lifecycleFactory.getLifecycle(lifecycleId);
     }
 
     /**
