@@ -908,7 +908,7 @@ ant -Dgpg.passphrase=PASSPHRASE HERE mvn.deploy.snapshot.local
             <arg line="-cp ${build.lib.dir}/${name}-full.jar:${jsf-tools.jar}"/>
             <arg line="-processor com.sun.faces.tools.StripClassesForApiJar"/>
             <arg line="-Acom.sun.tools.javac.sym.Jar=${build.lib.dir}/${name}-full.jar"/>
-            <arg line="-Acom.sun.tools.javac.sym.ExtraApiClassPath=${javaee-api.jar}"/>
+            <arg line="-Acom.sun.tools.javac.sym.ExtraApiClassPath=${javaee-api.jar}${path.separator}${com.sun.faces:jsf-spi:jar}"/>
             <arg line="-Acom.sun.tools.javac.sym.Dest=${build.lib.dir}/jsf-api-stripped"/>
             <arg line="${src.paths}"/>
         </exec>
