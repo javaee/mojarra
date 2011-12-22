@@ -52,6 +52,13 @@ import javax.faces.context.FacesContext;
  * return <code>null</code> for JSP views and non-<code>null</code> for
  * views authored in Facelets for JSF 2, this specification only applys
  * to Facelets for JSF 2.</p>
+ * 
+ * <p class="changed_added_2_2">Implementations must call
+ * {@link javax.faces.component.UIComponent#visitTree} on the 
+ * {@link javax.faces.component.UIViewRoot} to perform the saving and restoring
+ * of the view in the {@link #saveView} and {@link #restoreView} methods,
+ * respectively.
+ * </p>
  *
  * @since 2.0
  */

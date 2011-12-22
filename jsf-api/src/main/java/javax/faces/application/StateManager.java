@@ -51,9 +51,13 @@ import java.io.IOException;
 
 
 /**
- * <p><strong class="changed_modified_2_0 changed_modified_2_1">StateManager</strong>
+ * <p class="changed_deleted_2_2">
+ * <strong class="changed_modified_2_0 changed_modified_2_1 changed_modified_2_2">StateManager</strong>
  * directs the process of saving and
- * restoring the view between requests.  <span class="changed_added_2_0">An
+ * restoring the view between requests.  <span class="changed_deleted_2_2">
+ * This class is deprecated as of version 2.2.  Its functionality has been
+ * absorbed into {@link javax.faces.view.StateManagementStrategy}.</span> 
+ * <span class="changed_added_2_0">An
  * implementation
  * of this class must be thread-safe.</span>  The {@link StateManager}
  * instance for an application is retrieved from the {@link Application}
@@ -64,7 +68,7 @@ import java.io.IOException;
  * implementation and is therefore aware of the markup language
  * details.</p>
  */
-
+@Deprecated
 public abstract class StateManager {
 
     // ------------------------------------------------------ Manifest Constants

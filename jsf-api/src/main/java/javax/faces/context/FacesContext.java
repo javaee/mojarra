@@ -730,9 +730,9 @@ public abstract class FacesContext {
     }
 
     /**
-     * <p class="changed_added_2_2">
-     * Return the {@link ComponentContextManager} for this single
-     * run through the JSF request processing lifecycle.</p>
+     * <p class="changed_added_2_2"> Return the {@link
+     * javax.faces.component.visit.ComponentModificationManager} for
+     * this single run through the JSF request processing lifecycle.</p>
      *
      * <p class="changed_added_2_2">The default implementation throws
      * <code>UnsupportedOperationException</code> and is provided

@@ -73,7 +73,7 @@ import javax.faces.view.ViewDeclarationLanguage;
 
 /**
  * <p><strong class="changed_modified_2_0
- * changed_modified_2_0_rev_a">Application</strong> represents a
+ * changed_modified_2_0_rev_a changed_modified_2_2">Application</strong> represents a
  * per-web-application singleton object where applications based on
  * JavaServer Faces (or implementations wishing to provide extended
  * functionality) can register application-wide singletons that provide
@@ -622,18 +622,31 @@ public abstract class Application {
 
 
     /**
-     * <p>Return the {@link StateManager} instance that will be utilized
+     * <p><span class="changed_deleted_2_2">This method is deprecated as of version 2.2.  
+     * The functionality of <code>StateManager</code> has been
+     * absorbed into {@link javax.faces.view.StateManagementStrategy},
+     * which is returned from the method 
+     * {@link javax.faces.view.ViewDeclarationLanguage#getStateManagementStrategy}.
+     * </span>
+     * Return the {@link StateManager} instance that will be utilized
      * during the <em>Restore View</em> and <em>Render Response</em>
      * phases of the request processing lifecycle.  If not explicitly set,
      * a default implementation must be provided that performs the functions
      * described in the {@link StateManager} description
      * in the JavaServer Faces Specification.</p>
      */
+    @Deprecated
     public abstract StateManager getStateManager();
 
 
     /**
-     * <p>Set the {@link StateManager} instance that will be utilized
+     * <p><span class="changed_deleted_2_2">This method is deprecated as of version 2.2.  
+     * The functionality of <code>StateManager</code> has been
+     * absorbed into {@link javax.faces.view.StateManagementStrategy},
+     * which is returned from the method 
+     * {@link javax.faces.view.ViewDeclarationLanguage#getStateManagementStrategy}.
+     * </span>
+     * Set the {@link StateManager} instance that will be utilized
      * during the <em>Restore View</em> and <em>Render Response</em>
      * phases of the request processing lifecycle.</p>
      *
@@ -645,6 +658,7 @@ public abstract class Application {
      * @throws NullPointerException if <code>manager</code>
      *  is <code>null</code>
      */
+    @Deprecated
     public abstract void setStateManager(StateManager manager);
 
 
