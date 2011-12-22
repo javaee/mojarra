@@ -51,13 +51,10 @@ import java.io.IOException;
 
 
 /**
- * <p class="changed_deleted_2_2">
+ * <p>
  * <strong class="changed_modified_2_0 changed_modified_2_1 changed_modified_2_2">StateManager</strong>
  * directs the process of saving and
- * restoring the view between requests.  <span class="changed_deleted_2_2">
- * This class is deprecated as of version 2.2.  Its functionality has been
- * absorbed into {@link javax.faces.view.StateManagementStrategy}.</span> 
- * <span class="changed_added_2_0">An
+ * restoring the view between requests.  <span class="changed_added_2_0">An
  * implementation
  * of this class must be thread-safe.</span>  The {@link StateManager}
  * instance for an application is retrieved from the {@link Application}
@@ -68,7 +65,7 @@ import java.io.IOException;
  * implementation and is therefore aware of the markup language
  * details.</p>
  */
-@Deprecated
+
 public abstract class StateManager {
 
     // ------------------------------------------------------ Manifest Constants
@@ -232,7 +229,9 @@ public abstract class StateManager {
     }
 
     /**
-     * <p>Return an opaque <code>Object</code> containing sufficient
+     * <p><span class="changed_deleted_2_2">The functionality of this method
+     * is now handled by {@link javax.faces.view.StateManagementStrategy#saveView}.
+     * </span> Return an opaque <code>Object</code> containing sufficient
      * information for this same instance to restore the state of the
      * current {@link UIViewRoot} on a subsequent request.  The returned
      * object must implement <code>java.io.Serializable</code>. If there
@@ -264,6 +263,7 @@ public abstract class StateManager {
      *                               the same non-<code>null</code> component id
      * @since 1.2
      */
+    @Deprecated
     public Object saveView(FacesContext context) {
         Object stateArray[] = null;
 
@@ -415,7 +415,9 @@ public abstract class StateManager {
 
 
     /**
-     * <p>Restore the tree structure and the component state of the view
+     * <p><span class="changed_deleted_2_2">The functionality of this method
+     * is now handled by {@link javax.faces.view.StateManagementStrategy#restoreView}.
+     * </span> Restore the tree structure and the component state of the view
      * for the specified <code>viewId</code>, in an implementation dependent
      * manner, and return the restored {@link UIViewRoot}.  If there is no
      * saved state information available for this <code>viewId</code>,
@@ -442,6 +444,7 @@ public abstract class StateManager {
      * @throws IllegalArgumentException if <code>renderKitId</code>
      *                                  is <code>null</code>.
      */
+    @Deprecated
     public abstract UIViewRoot restoreView(FacesContext context, String viewId,
                                            String renderKitId);
 

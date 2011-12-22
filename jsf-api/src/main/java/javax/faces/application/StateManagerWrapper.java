@@ -47,7 +47,7 @@ import java.io.IOException;
 import javax.faces.FacesWrapper;
 
 /**
- * <p class="changed_deleted_2_2">Provides a simple implementation of {@link StateManager} that can
+ * <p>Provides a simple implementation of {@link StateManager} that can
  * be subclassed by developers wishing to provide specialized behavior
  * to an existing {@link StateManager} instance.  The default
  * implementation of all methods is to call through to the wrapped
@@ -58,7 +58,6 @@ import javax.faces.FacesWrapper;
  *
  * @since 1.2
  */
-@Deprecated
 public abstract class StateManagerWrapper extends StateManager implements FacesWrapper<StateManager> {
 
     /**
