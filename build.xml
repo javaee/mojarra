@@ -79,12 +79,29 @@
         </sequential>
     </macrodef>
 
+    <macrodef name="call.modules.pre-maven-rename">
+        <attribute name="target"/>
+        <sequential>
+            <subant target="@{target}" inheritAll="false">
+                <property name="force.no.cluster" value="${force.no.cluster}" />
+                <filelist dir="${api.dir}">
+                    <file name="build-pre-maven-rename.xml"/>
+                </filelist>    
+                <filelist dir="${impl.dir}">
+                    <file name="build-pre-maven-rename.xml"/>
+                </filelist>
+            </subant>
+        </sequential>
+    </macrodef>
+
+
     <target name="clean"
             description="Clean build and distribution directories">       
         <delete file="mojarra-samples.zip"/>
         <delete dir="${basedir}/build"/>
         <delete dir="${dist.dir}"/>
         <call.modules target="clean"/>        
+        <call.modules.pre-maven-rename target="clean"/>        
         <ant dir="jsf-demo" target="clean" />
         <ant dir="updatecenter2" target="updatecenter2.clean" />
     </target>  

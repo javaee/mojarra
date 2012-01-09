@@ -647,6 +647,12 @@
 
     <target name="jars" depends="compile">
 
+        <delete failonerror="false">
+          <fileset dir="${basedir}/build">
+            <include name="**/mojarra-jsf-api-probe-provider.xml" />
+          </fileset>
+        </delete>
+
         <copy file="${basedir}/mojarra-jsf-impl.bnd" tofile="tmp.bnd"/>
         <replace file="tmp.bnd"
                  token="@spec.version@"
