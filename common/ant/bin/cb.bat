@@ -102,7 +102,7 @@ echo ******************************************************************* >> %CB%
 echo * SECTION: Diffs >> %CB%
 echo ******************************************************************* >> %CB%
 
-svn diff 2>&1 | grep -v "^cvs server:" | grep -v "^\?"  >> %CB%
+svn diff -x --ignore-eol-style 2>&1 | grep -v "^cvs server:" | grep -v "^\?"  >> %CB%
 
 for /f "tokens=*" %%F in ('wc -l %ADD_FILE% ^| grep -v "      0"') do (
 	echo ******************************************************************* >> %CB%
