@@ -1492,6 +1492,60 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
     }
 
+    /**
+     * Verify that the PreRemoveFromView event is triggered before actually 
+     * removing the child from the view. Fixes JAVASERVERFACES-2265.
+     */
+    public void testChildrenListPreRemovePublish() {
+        Listener listener = new Listener();
+        application.subscribeToEvent(PreRemoveFromViewEvent.class, listener);
+        
+        UIComponent c1 = createComponent();
+        c1.setInView(true);
+        UIComponent c2 = createComponent();
+        c2.setInView(true);
+        
+        c1.getChildren().add(c2);
+        assertTrue(c1.getChildCount() == 1);
+        c1.getChildren().remove(c2);
+
+        /*
+         * Verify that the event indeed happen.
+         */
+        SystemEvent e = listener.getEvent();
+        assertNotNull(e);
+        assertTrue(e.getSource() == c2);
+        assertTrue(e instanceof PreRemoveFromViewEvent);
+        
+        /*
+         * Since we are now looking at the result, the number of children
+         * should be down to 0. And the triggering event should not have
+         * a parent.
+         */
+        assertTrue(c1.getChildCount() == 0);
+        assertNull(((UIComponent) e.getSource()).getParent());
+        
+        c1.getChildren().add(c2);
+        assertTrue(c1.getChildCount() == 1);
+        listener.reset();
+        c1.getChildren().remove(0);
+        
+        /*
+         * Verify that the event indeed happen.
+         */
+        e = listener.getEvent();
+        assertNotNull(e);
+        assertTrue(e.getSource() == c2);
+        assertTrue(e instanceof PreRemoveFromViewEvent);
+
+        /*
+         * Since we are now looking at the result, the number of children
+         * should be down to 0. And the triggering component should not have
+         * a parent.
+         */
+        assertTrue(c1.getChildCount() == 0);
+        assertNull(((UIComponent) e.getSource()).getParent());
+    }
 
     public void testChildrenListAfterAddPublish() {
 

@@ -2695,8 +2695,8 @@ public abstract class UIComponentBase extends UIComponent {
 
         public UIComponent remove(int index) {
             UIComponent child = get(index);
-            super.remove(index);
             child.setParent(null);
+            super.remove(index);
             return (child);
         }
 
@@ -2706,8 +2706,10 @@ public abstract class UIComponentBase extends UIComponent {
                 throw new NullPointerException();
             }
 
-            if (super.remove(element)) {
+            if (super.indexOf(element) != -1) {
                 element.setParent(null);
+            }            
+            if (super.remove(element)) {
                 return (true);
             } else {
                 return (false);
