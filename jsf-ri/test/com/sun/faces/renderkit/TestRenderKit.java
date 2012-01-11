@@ -55,6 +55,8 @@ import com.sun.faces.config.processor.ConfigProcessor;
 import com.sun.faces.config.processor.FactoryConfigProcessor;
 import com.sun.faces.config.processor.ApplicationConfigProcessor;
 import com.sun.faces.config.processor.RenderKitConfigProcessor;
+import com.sun.faces.spi.InjectionProvider;
+import com.sun.faces.spi.InjectionProviderFactory;
 import com.sun.faces.util.Util;
 
 import javax.faces.FactoryFinder;
@@ -492,7 +494,12 @@ public class TestRenderKit extends ServletFacesTestCase {
                 p.setNext(configProcessors[i + 1]);
             }
         }
-
+        
+        InjectionProvider containerConnector =
+                InjectionProviderFactory.createInstance(ctx.getExternalContext());
+        ctx.getAttributes().put("com.sun.faces.config.ConfigManager_INJECTION_PROVIDER_TASK", 
+                containerConnector);
+        
         configProcessors[0].process(servletContext, new DocumentInfo[] {
                                            new DocumentInfo(defaultDoc, new URI(runtime.toExternalForm())),
                                            new DocumentInfo(renderKitDoc, new URI(renderkit.toExternalForm())) });
