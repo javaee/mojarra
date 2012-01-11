@@ -85,8 +85,10 @@ public class Issue2255TestCase extends HtmlUnitFacesTestCase {
         assertTrue(page.asText().contains("false"));
         HtmlCheckBoxInput cbox = (HtmlCheckBoxInput) page.getElementById("cc:form:test");
         page = cbox.click();
+        Thread.sleep(2000);
         assertTrue(page.asText().contains("true"));
         page = cbox.click();
+        Thread.sleep(2000);
         assertTrue(page.asText().contains("false"));
     }
 }
