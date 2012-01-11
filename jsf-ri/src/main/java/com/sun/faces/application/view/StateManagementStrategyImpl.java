@@ -40,34 +40,28 @@
 
 package com.sun.faces.application.view;
 
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.faces.FactoryFinder;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.visit.VisitResult;
-import javax.faces.context.FacesContext;
-import javax.faces.render.ResponseStateManager;
-
 import com.sun.faces.context.StateContext;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.ComponentStruct;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
-
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.logging.Logger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.io.IOException;
-import java.util.Collections;
+import javax.faces.FactoryFinder;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.visit.VisitResult;
+import javax.faces.context.FacesContext;
+import javax.faces.render.ResponseStateManager;
 import javax.faces.application.StateManager;
-import javax.faces.component.ContextCallback;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
 import javax.faces.component.visit.VisitHint;
@@ -76,6 +70,8 @@ import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.view.ViewDeclarationLanguage;
 import javax.faces.view.ViewDeclarationLanguageFactory;
+import static com.sun.faces.RIConstants.DYNAMIC_ACTIONS;
+import static com.sun.faces.RIConstants.DYNAMIC_COMPONENT;
 
 /**
  * <p>
@@ -94,11 +90,6 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
     private static final Logger LOGGER = FacesLogger.APPLICATION_VIEW.getLogger();
 
     private final ViewDeclarationLanguageFactory vdlFactory;
-
-    private static final String CLIENTIDS_TO_REMOVE_NAME =
-            "com.sun.faces.application.view.CLIENTIDS_TO_REMOVE";
-    private static final String CLIENTIDS_TO_ADD_NAME =
-            "com.sun.faces.application.view.CLIENTIDS_TO_ADD";
 
     private static String SKIP_ITERATION_HINT =
         "javax.faces.visit.SKIP_ITERATION";
@@ -163,6 +154,8 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
                     Object stateObj;
                     if (!target.isTransient()) {
                         if (stateContext.componentAddedDynamically(target)) {
+                            target.getAttributes().put(DYNAMIC_COMPONENT,
+                                    new Integer(target.getParent().getChildren().indexOf(target)));
                             stateObj = new StateHolderSaver(finalContext, target);
                         } else {
                             stateObj = target.saveState(context.getFacesContext());
@@ -182,23 +175,27 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
             // during state saving.  It should be removed at some point.
             context.getAttributes().remove(SKIP_ITERATION_HINT);
         }
-
-        // handle dynamic adds/removes
-        List<String> removeList = stateContext.getDynamicRemoves();
-        if (null != removeList && !removeList.isEmpty()) {
-            stateMap.put(CLIENTIDS_TO_REMOVE_NAME, removeList);
-        }
-        Map<String, ComponentStruct> addList = stateContext.getDynamicAdds();
-        if (null != addList && !addList.isEmpty()) {
-            List<Object> savedAddList = new ArrayList<Object>(addList.size());
-            for (ComponentStruct s : addList.values()) {
-                savedAddList.add(s.saveState(context));
-            }
-            stateMap.put(CLIENTIDS_TO_ADD_NAME, savedAddList.toArray());
-        }
-        //return stateMap;
+    
+        saveDynamicActions(context, stateContext, stateMap);
         return new Object[] { null, stateMap };
+    }
 
+    /**
+     * Save the dynamic actions.
+     * 
+     * @param context the Faces context.
+     * @param stateContext the state context.
+     * @param stateMap the state.
+     */
+    private void saveDynamicActions(FacesContext context, StateContext stateContext, Map<String, Object> stateMap) {
+        List<ComponentStruct> actions = stateContext.getDynamicActions();
+        if (actions != null) {
+            List<Object> savedActions = new ArrayList<Object>(actions.size());
+            for(ComponentStruct action : actions) {
+                savedActions.add(action.saveState(context));
+            }
+            stateMap.put(DYNAMIC_ACTIONS, savedActions);
+        }
     }
 
 
@@ -281,95 +278,7 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
                     }
 
                 });
-
-
-
-                // Handle dynamic add/removes
-                //noinspection unchecked
-                List<String> removeList = (List<String>) state.get(CLIENTIDS_TO_REMOVE_NAME);
-                if (null != removeList && !removeList.isEmpty()) {
-                    for (String cur : removeList) {
-                        boolean trackMods = stateContext.trackViewModifications();
-                        if (trackMods) {
-                            stateContext.setTrackViewModifications(false);
-                        }
-                        viewRoot.invokeOnComponent(context, cur, new ContextCallback() {
-
-                            public void invokeContextCallback(FacesContext context, UIComponent target) {
-                                UIComponent parent = target.getParent();
-                                if (null != parent) {
-                                    parent.getChildren().remove(target);
-                                }
-                            }
-
-                        });
-                        if (trackMods) {
-                            stateContext.setTrackViewModifications(true);
-                        }
-                    }
-                }
-
-                Object restoredAddList[] = (Object[]) state.get(CLIENTIDS_TO_ADD_NAME);
-                if (restoredAddList != null && restoredAddList.length > 0) {
-                    // Restore the list of added components
-                    List<ComponentStruct> addList = new ArrayList<ComponentStruct>(restoredAddList.length);
-                    for (Object aRestoredAddList : restoredAddList) {
-                        ComponentStruct cur = new ComponentStruct();
-                        cur.restoreState(context, aRestoredAddList);
-                        addList.add(cur);
-                    }
-                    // restore the components themselves
-                    for (ComponentStruct cur : addList) {
-                        final ComponentStruct finalCur = cur;
-                        // Find the parent
-
-                        viewRoot.visitTree(visitContext, new VisitCallback() {
-                            public VisitResult visit(VisitContext context, UIComponent target) {
-                                VisitResult result = VisitResult.ACCEPT;
-                                if (finalCur.parentClientId.equals(target.getClientId(context.getFacesContext()))) {
-                                    StateHolderSaver saver = (StateHolderSaver) state.get(finalCur.clientId);
-                                    UIComponent toAdd = (UIComponent) saver.restore(context.getFacesContext());
-                                    int idx = finalCur.indexOfChildInParent;
-                                    if (idx == -1) {
-                                        // add facet to the parent
-                                        target.getFacets().put(finalCur.facetName, toAdd);
-                                    } else {
-                                        // add the child to the parent at correct index
-                                        try {
-                                            target.getChildren().add(finalCur.indexOfChildInParent, toAdd);
-                                        } catch (IndexOutOfBoundsException ioobe) {
-                                            // the indexing within the parent list is off during the restore.
-                                                // This is most likely due to a transient component added during
-                                                // RENDER_REPONSE phase.
-                                                if (LOGGER.isLoggable(Level.FINE)) {
-                                                    LOGGER.log(Level.FINE,
-                                                            "Unable to insert child with client ID {0} into parent with client ID {1} into list at index {2}.",
-                                                            new Object[]{finalCur.clientId,
-                                                                finalCur.parentClientId,
-                                                                finalCur.indexOfChildInParent});
-                                                }
-                                                target.getChildren().add(toAdd);
-                                        }
-
-
-                                    }
-
-                                   // Add back to dynamic adds list
-                                    Map<String, ComponentStruct> dynamicAdds = stateContext.getDynamicAdds();
-                                    assert(null != dynamicAdds);
-                                    String clientId = toAdd.getClientId(context.getFacesContext());
-                                    if (!dynamicAdds.containsKey(clientId)) {
-                                        ComponentStruct toAddCS = new ComponentStruct();
-                                        toAddCS.absorbComponent(context.getFacesContext(), toAdd);
-                                        dynamicAdds.put(clientId, toAddCS);
-                                    }
-                                }
-
-                                return result;
-                            }
-                        });
-                    }
-                }
+                restoreDynamicActions(context, stateContext, state);
             } finally {
                 stateContext.setTrackViewModifications(true); 
                 // PENDING: This is included for those component frameworks that don't utilize the
@@ -385,9 +294,164 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
 
     }
 
+    /**
+     * Restore the list of dynamic actions and replay them.
+     * 
+     * @param context the Faces context.
+     * @param stateContext the state context.
+     * @param stateMap the state.
+     * @param viewRoot the view root.
+     */
+    private void restoreDynamicActions(FacesContext context, StateContext stateContext, Map<String, Object> stateMap) {
+        List<Object> savedActions = (List<Object>) stateMap.get(DYNAMIC_ACTIONS);
+        List<ComponentStruct> actions = stateContext.getDynamicActions();
+        
+        if (savedActions != null && !savedActions.isEmpty()) {
+            for(Object object : savedActions) {
+                ComponentStruct action = new ComponentStruct();
+                action.restoreState(context, object);
+                if (ComponentStruct.ADD.equals(action.action)) {
+                    restoreDynamicAdd(context, stateMap, action);
+                }
+                if (ComponentStruct.REMOVE.equals(action.action)) {
+                    restoreDynamicRemove(context, action);
+                }
+                pruneAndReAddToDynamicActions(actions, action);
+            }
+        }
+    }
 
-
-
-    // --------------------------------------------------------- Private Methods
+    /**
+     * Methods that takes care of pruning and re-adding an action to the 
+     * dynamic action list.
+     * 
+     * <p>
+     *  Note the restoring will auto-prune the dynamic actions list, by
+     *  applying the notion that an R1A1R2 is the same as R2, and a A1R1A2 is 
+     *  the same as A2.
+     * </p>
+     * 
+     * @param dynamicActionList the dynamic action list.
+     * @param struct the component struct to add.
+     */
+    private void pruneAndReAddToDynamicActions(List<ComponentStruct> dynamicActionList, ComponentStruct struct) {
+        int firstIndex = dynamicActionList.indexOf(struct);
+        if (firstIndex == -1) {
+            dynamicActionList.add(struct);
+        } else {
+            int lastIndex = dynamicActionList.lastIndexOf(struct);
+            if (lastIndex == -1 || lastIndex == firstIndex) {
+                dynamicActionList.add(struct);
+            } else {
+                dynamicActionList.remove(lastIndex);
+                dynamicActionList.remove(firstIndex);
+                dynamicActionList.add(struct);
+            }
+        }
+    }
+    
+    /**
+     * Method that takes care of restoring a dynamic add.
+     * 
+     * @param context the Faces context.
+     * @param state the state.
+     * @param struct the component struct.
+     */
+    private void restoreDynamicAdd(FacesContext context, Map<String, Object> state, ComponentStruct struct) {
+        UIComponent parent = findComponent(context, struct.parentClientId);
+        if (parent != null) {
+            UIComponent child = findComponent(context, struct.clientId);
+            if (child != null) {
+                /*
+                 * If Facelets engine restored the child before us we are going to 
+                 * use it, but we need to remove it (if we are not a facet), before 
+                 * we can add it in the correct place.
+                 */
+                if (struct.facetName == null) {
+                    parent.getChildren().remove(child);
+                }
+            } else {
+                /*
+                 * We added a completely new dynamic component, so we need to 
+                 * restore it here. The state map should have saved it.
+                 */
+                StateHolderSaver saver = (StateHolderSaver) state.get(struct.clientId);
+                if (saver != null) {
+                    child = (UIComponent) saver.restore(context);
+                } else {
+                    // TODO change it to a logging statement.
+                    System.out.println(
+                            "Unable to find state for component with clientId '" + 
+                            struct.clientId + "', not restoring it.");
+                }
+            }
+            if (child != null) {
+                if (struct.facetName != null) {
+                    parent.getFacets().put(struct.facetName, child);
+                } else {
+                    child.setId(struct.id);
+                    parent.getChildren().add(child);
+                    child.getClientId();
+                }
+            }
+        } else {
+            // TODO change it to a logging statement.
+            System.out.println(
+                    "Unable to find parent component with clientId '" + 
+                    struct.parentClientId + "', not adding child.");
+        }
+    }
+    
+    /**
+     * Method that takes care of restoring a dynamic remove.
+     * 
+     * @param context the Faces context.
+     * @param struct the component struct.
+     */
+    private void restoreDynamicRemove(FacesContext context, ComponentStruct struct) {
+        UIComponent child = findComponent(context, struct.clientId);
+        if (child != null) {
+            UIComponent parent = child.getParent();
+            parent.getChildren().remove(child);
+        } else {
+            // TODO change it to a logging statement.
+            System.out.println(
+                    "Unable to find component with clientId '" + 
+                    struct.clientId + "', no need to remove it.");
+        }
+    }
+    
+    /**
+     * Find the given component in the component tree.
+     * 
+     * @param context the Faces context.
+     * @param clientId the client id of the component to find.
+     */
+    private UIComponent findComponent(final FacesContext context, final String clientId) {
+        UIComponent result = context.getViewRoot().findComponent(clientId);
+        if (result == null) {
+            /*
+             * Since we did not find it the cheaper way we need to assume there
+             * is a UINamingContainer that does not prepend its ID. So we are 
+             * going to have to walk the tree to find it.
+             */
+            final List<UIComponent> found = new ArrayList<UIComponent>();
+            VisitContext visitContext = VisitContext.createVisitContext(context);
+            context.getViewRoot().visitTree(visitContext, new VisitCallback() {
+                public VisitResult visit(VisitContext visitContext, UIComponent component) {
+                    VisitResult result = VisitResult.ACCEPT;
+                    if (component.getClientId(visitContext.getFacesContext()).equals(clientId)) {
+                        found.add(component); 
+                        result = VisitResult.COMPLETE;
+                    }
+                    return result;
+                }
+            });
+            if (!found.isEmpty()) {
+                result = found.get(0);
+            }    
+        }
+        return result;
+    }
 
 }

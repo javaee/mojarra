@@ -243,20 +243,17 @@ public final class ComponentSupport {
                     }
                 }
             }
+            /*
+             * Make sure we look for the child recursively it might have moved
+             * into a different parent in the parent hierarchy. Note currently
+             * we are only looking down the tree. Maybe it would be better
+             * to use the VisitTree API instead.
+             */
+            UIComponent foundChild = findChildByTagId(c, id);
+            if (foundChild != null) {
+                return foundChild;
+            }
         }
-//        int sz = parent.getChildCount();
-//        if (sz > 0) {
-//            UIComponent c = null;
-//            List cl = parent.getChildren();
-//            String cid = null;
-//            while (--sz >= 0) {
-//                c = (UIComponent) cl.get(sz);
-//                cid = (String) c.getAttributes().get(MARK_CREATED);
-//                if (id.equals(cid)) {
-//                    return c;
-//                }
-//            }
-//        }
         return null;
     }
 
@@ -633,7 +630,7 @@ public final class ComponentSupport {
      * @return the old value of the needUniqueIds flag
      * @see getNeedUniqueIds
      */
-    public final static boolean setNeedUniqueIds(FaceletContext ctx,
+    public static boolean setNeedUniqueIds(FaceletContext ctx,
                                                  boolean needUniqueIds) {
         Boolean old = (Boolean)ctx.getAttribute(_UNIQUE_IDS_ATTR);
         ctx.setAttribute(_UNIQUE_IDS_ATTR, Boolean.valueOf(needUniqueIds));

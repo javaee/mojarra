@@ -43,7 +43,6 @@ package @package@;
 import javax.faces.context.FacesContext;
 import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponent;
-
 import java.io.Serializable;
 
 /**
@@ -57,7 +56,8 @@ class StateHolderSaver implements Serializable {
     private Serializable savedState = null;
 
     public static final String DYNAMIC_COMPONENT =
-            "com.sun.faces.StateHolderSaver_DYNAMIC_COMPONENT";
+            "com.sun.faces.DynamicComponent";
+    
     private enum StateHolderTupleIndices {
         StateHolderSaverInstance,
         ComponentAddedDynamically,

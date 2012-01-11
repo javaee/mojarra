@@ -43,14 +43,12 @@ package com.sun.faces.facelets.tag.jsf;
 import com.sun.faces.component.behavior.AjaxBehaviors;
 import com.sun.faces.component.validator.ComponentValidators;
 import com.sun.faces.component.CompositeComponentStackManager;
-import static com.sun.faces.component.CompositeComponentStackManager.StackType.TreeCreation;
 import com.sun.faces.context.StateContext;
 import com.sun.faces.facelets.impl.IdMapper;
 import com.sun.faces.facelets.tag.MetaRulesetImpl;
 import com.sun.faces.facelets.tag.jsf.core.FacetHandler;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
-
 import javax.el.ValueExpression;
 import javax.faces.application.Application;
 import javax.faces.application.ProjectStage;
@@ -70,6 +68,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static com.sun.faces.RIConstants.DYNAMIC_COMPONENT;
+import static com.sun.faces.component.CompositeComponentStackManager.StackType.TreeCreation;
 
 public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
     
@@ -148,11 +148,22 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
             parent.getAttributes().get(id) != null) {
             c = findReparentedComponent(ctx, parent, id);
         }
-
+        else {
+            /**
+             * If we found a child that is dynamic, the actual parent might 
+             * have changed, so we will change it to the current parent of 
+             * the found child if they are different.
+             */
+            if (c != null && c.getParent() != parent && 
+                c.getAttributes().containsKey(DYNAMIC_COMPONENT)) {
+                parent = c.getParent();
+            }
+        }
+        
         boolean componentFound = false;
         if (c != null) {
-           componentFound = true;
-           doExistingComponentActions(ctx, id, c);
+            componentFound = true;
+                doExistingComponentActions(ctx, id, c);
         } else {
             c = this.createComponent(ctx);
             
@@ -178,10 +189,10 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         if (c instanceof NamingContainer) {
             oldUnique = ComponentSupport.setNeedUniqueIds(ctx, false);
             setUniqueIds = true;
-	    }
+        }
         try {
-            // first allow c to get populated
-            owner.applyNextHandler(ctx, c);
+                // first allow c to get populated
+                owner.applyNextHandler(ctx, c);
         } finally {
             if (setUniqueIds)
                 ComponentSupport.setNeedUniqueIds(ctx, oldUnique);
@@ -189,8 +200,8 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
 
         // finish cleaning up orphaned children
         if (componentFound) {
-           doOrphanedChildCleanup(ctx, parent, c);
-        }
+               doOrphanedChildCleanup(ctx, parent, c);
+            }
 
         this.privateOnComponentPopulated(ctx, c);
         owner.onComponentPopulated(ctx, c, parent);
@@ -200,7 +211,6 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         addComponentToView(ctx, parent, c, componentFound);
         adjustIndexOfDynamicChildren(context, c);
         popComponentFromEL(ctx, c, ccStackManager, compcompPushed);
-        
     }
 
     private void adjustIndexOfDynamicChildren(FacesContext context, 
@@ -236,7 +246,11 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         for (UIComponent cur : dynamicChildren) {
             int i = stateContext.getIndexOfDynamicallyAddedChildInParent(cur);
             if (-1 != i) {
-                children.add(i, cur);
+                if (i < children.size()) {
+                    children.add(i, cur);
+                } else {
+                    children.add(cur);
+                }
             }
         }
     }

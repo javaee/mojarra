@@ -40,18 +40,26 @@
 
 package com.sun.faces.util;
 
-import java.util.Map;
 import javax.faces.component.StateHolder;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 /**
  * Utility class to enable partial state saving of components that have been
  * dynamically added to the view.
  */
-public class ComponentStruct implements StateHolder {
+public class ComponentStruct implements StateHolder {    
+    /**
+     * Marker that specifies this is an ADD.
+     */
+    public static final String ADD = "ADD";
+    /**
+     * Marker that specifies this is a REMOVE.
+     */
+    public static final String REMOVE = "REMOVE";
 
+    public String action;
     public String parentClientId;
+    public String id;
     public String clientId;
     public int indexOfChildInParent = -1;
     public String facetName;
@@ -68,46 +76,55 @@ public class ComponentStruct implements StateHolder {
             return;
         }
         Object s[] = (Object[]) state;
-        this.parentClientId = s[0].toString();
-        this.clientId = s[1].toString();
-        this.indexOfChildInParent = (Integer) s[2];
-        this.facetName = (String) s[3];
+        this.action = (String) s[0];
+        this.parentClientId = (String) s[1];
+        this.clientId = (String) s[2];
+        this.id = (String) s[3];
+        this.indexOfChildInParent = (Integer) s[4];
+        this.facetName = (String) s[5];
     }
 
     public Object saveState(FacesContext ctx) {
         if (ctx == null) {
             throw new NullPointerException();
         }
-        Object state[] = new Object[4];
-        state[0] = this.parentClientId;
-        state[1] = this.clientId;
-        state[2] = this.indexOfChildInParent;
-        state[3] = this.facetName;
+        Object state[] = new Object[6];
+        state[0] = this.action;
+        state[1] = this.parentClientId;
+        state[2] = this.clientId;
+        state[3] = this.id;
+        state[4] = this.indexOfChildInParent;
+        state[5] = this.facetName;
         return state;
     }
 
     public void setTransient(boolean trans) {
     }
 
-    public void absorbComponent(FacesContext context, UIComponent added) {
-        UIComponent parent = added.getParent();
-        this.clientId = added.getClientId(context);
-        this.parentClientId = parent.getClientId(context);
-        // this needs work
-        int idx = parent.getChildren().indexOf(added);
-        if (idx == -1) {
-            // this must be a facet
-            for (Map.Entry<String, UIComponent> facet : parent.getFacets().entrySet()) {
-                if (facet.getValue() == added) {
-                    this.facetName = facet.getKey();
-                    break;
-                }
-            }
-        } else {
-            this.indexOfChildInParent = parent.getChildren().indexOf(added);
+    @Override
+    public boolean equals(Object obj) {
+        boolean result = false;
+        
+        if (obj instanceof ComponentStruct) {
+            ComponentStruct struct = (ComponentStruct) obj;
+            result = struct.clientId.equals(this.clientId);
         }
+        
+        return result;
+    }
 
+    /**
+     * Hash code.
+     * 
+     * @return the hashcode.
+     */
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 89 * hash + (this.clientId != null ? this.clientId.hashCode() : 0);
+        return hash;
     }
 
 
+    
 } // END ComponentStruct

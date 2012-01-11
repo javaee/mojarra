@@ -44,7 +44,6 @@ import com.sun.faces.RIConstants;
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.application.ApplicationStateInfo;
 import com.sun.faces.util.ComponentStruct;
-
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
@@ -53,14 +52,13 @@ import javax.faces.event.PostAddToViewEvent;
 import javax.faces.event.PreRemoveFromViewEvent;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
-
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import static com.sun.faces.context.StateHolderSaver.DYNAMIC_COMPONENT;
+import static com.sun.faces.RIConstants.DYNAMIC_CHILD_COUNT;
+import static com.sun.faces.RIConstants.DYNAMIC_COMPONENT;
 
 /**
  * Context for dealing with partial state saving mechanics.
@@ -70,10 +68,6 @@ public class StateContext {
 
     private static final String KEY = StateContext.class.getName() + "_KEY";
     
-    private static final String HAS_ONE_OR_MORE_DYNAMIC_CHILD =
-            StateContext.class.getName() + "_HAS_ONE_OR_MORE_DYNAMIC_CHILD";
-
-
     private boolean partial;
     private boolean partialLocked;
     private boolean trackMods = true;
@@ -203,9 +197,7 @@ public class StateContext {
      *  view construction
      */
     public boolean componentAddedDynamically(UIComponent c) {
-
         return c.getAttributes().containsKey(DYNAMIC_COMPONENT);
-
     }
 
     public int getIndexOfDynamicallyAddedChildInParent(UIComponent c) {
@@ -218,19 +210,19 @@ public class StateContext {
     }
 
     public boolean hasOneOrMoreDynamicChild(UIComponent parent) {
-        return parent.getAttributes().containsKey(HAS_ONE_OR_MORE_DYNAMIC_CHILD);
+        return parent.getAttributes().containsKey(DYNAMIC_CHILD_COUNT);
     }
 
     private int incrementDynamicChildCount(UIComponent parent) {
         int result = 0;
         Map<String, Object> attrs = parent.getAttributes();
-        Integer cur = (Integer) attrs.get(HAS_ONE_OR_MORE_DYNAMIC_CHILD);
+        Integer cur = (Integer) attrs.get(DYNAMIC_CHILD_COUNT);
         if (null != cur) {
             result = cur++;
         } else {
             result = 1;
         }
-        attrs.put(HAS_ONE_OR_MORE_DYNAMIC_CHILD, (Integer) result);
+        attrs.put(DYNAMIC_CHILD_COUNT, (Integer) result);
 
         return result;
     }
@@ -238,158 +230,161 @@ public class StateContext {
     private int decrementDynamicChildCount(UIComponent parent) {
         int result = 0;
         Map<String, Object> attrs = parent.getAttributes();
-        Integer cur = (Integer) attrs.get(HAS_ONE_OR_MORE_DYNAMIC_CHILD);
+        Integer cur = (Integer) attrs.get(DYNAMIC_CHILD_COUNT);
         if (null != cur) {
             result = (0 < cur) ? cur-- : 0;
 
         }
         if (0 == result && null != cur){
-            attrs.remove(HAS_ONE_OR_MORE_DYNAMIC_CHILD);
+            attrs.remove(DYNAMIC_CHILD_COUNT);
         }
 
         return result;
     }
 
     /**
-     * @return a <code>Map</code> containing information about all components
-     *  added after the initial view construction.
+     * Get the dynamic list (of adds and removes).
      */
-    public Map<String,ComponentStruct> getDynamicAdds() {
-
-        return ((modListener != null) ? modListener.getDynamicAdds() : null);
-
+    public List<ComponentStruct> getDynamicActions() {
+        return ((modListener != null) ? modListener.getDynamicActions() : null);
     }
-
-
-    /**
-     * @return a <code>List</code> of client IDs that have been removed after
-     *  the initial view construction.
-     */
-    public List<String> getDynamicRemoves() {
-
-        return ((modListener != null) ? modListener.dynamicRemoves : null);
-
-    }
-
 
     // ---------------------------------------------------------- Nested Classes
 
 
+    /**
+     * A system event listener which is used to listen for changes on the 
+     * component tree after restore view and before rendering out the view.
+     */
     public class AddRemoveListener implements SystemEventListener {
 
+        /**
+         * Stores the state context we work for,
+         */
         private StateContext stateCtx;
-        private LinkedHashMap<String, ComponentStruct> dynamicAdds;
-        private List<String> dynamicRemoves;
+        /**
+         * Stores the list of adds/removes.
+         */
+        private List<ComponentStruct> dynamicActions;
 
-
-        // -------------------------------------------------------- Constructors
-
-
-        public AddRemoveListener(FacesContext ctx) {
-            stateCtx = StateContext.getStateContext(ctx);
+        /**
+         * Constructor.
+         * 
+         * @param context the Faces context. 
+         */
+        public AddRemoveListener(FacesContext context) {
+            stateCtx = StateContext.getStateContext(context);
         }
 
-        // -------------------------------------------------------- Getters
-
-        public Map<String, ComponentStruct> getDynamicAdds() {
-            if (null == dynamicAdds) {
-                dynamicAdds = new LinkedHashMap<String, ComponentStruct>();
+        /**
+         * Get the list of adds/removes.
+         * 
+         * @return the list of adds/removes.
+         */
+        public List<ComponentStruct> getDynamicActions() {
+            synchronized(this) {
+                if (dynamicActions == null) {
+                    dynamicActions = new ArrayList<ComponentStruct>();
+                }
             }
-
-            return dynamicAdds;
+            return dynamicActions;
         }
 
-        // ------------------------------------ Methods From SystemEventListener
-
-
+        /**
+         * Process the add/remove event.
+         * 
+         * @param event the add/remove event.
+         * @throws AbortProcessingException when processing should be aborted.
+         */
         public void processEvent(SystemEvent event)
               throws AbortProcessingException {
             FacesContext ctx = FacesContext.getCurrentInstance();
             if (event instanceof PreRemoveFromViewEvent) {
                 if (stateCtx.trackViewModifications()) {
-                    handleRemoveEvent(ctx, (PreRemoveFromViewEvent) event);
+                    handleRemove(ctx, ((PreRemoveFromViewEvent) event).getComponent());
                 }
             } else {
                 if (stateCtx.trackViewModifications()) {
-                    handleAddEvent(ctx, (PostAddToViewEvent) event);
+                    handleAdd(ctx, ((PostAddToViewEvent) event).getComponent());
                 }
             }
         }
 
+        /**
+         * Are we listening for these particular changes.
+         * 
+         * <p>
+         *  Note we are only interested in UIComponent adds/removes that are
+         *  not the UIViewRoot itself.
+         * </p>
+         * 
+         * @param source the source object we might be listening for.
+         * @return true if the source is OK, false otherwise.
+         */
         public boolean isListenerForSource(Object source) {
-            return (source instanceof UIComponent);
+            return (source instanceof UIComponent && !(source instanceof UIViewRoot));
+        }
+        
+        /**
+         * Handle the remove.
+         * 
+         * @param context the Faces context.
+         * @param component the UI component to add to the list as a REMOVE.
+         */
+        private void handleRemove(FacesContext context, UIComponent component) {
+            if (!component.isTransient()) {
+                if (component.isInView()) {
+                    decrementDynamicChildCount(component.getParent());
+                    ComponentStruct struct = new ComponentStruct();
+                    struct.action = ComponentStruct.REMOVE;
+                    struct.clientId = component.getClientId(context);
+                    struct.id = component.getId();
+                    getDynamicActions().add(struct);
+                }            
+            }
         }
 
-
-        // ----------------------------------------------------- Private Methods
-
-
-        private void handleRemoveEvent(FacesContext context,
-                                       PreRemoveFromViewEvent event) {
-
-            UIComponent removed = event.getComponent();
-            if (removed.isTransient()) {
-                return;
-            }
-            
-            // this component, while not transient may be a child or facet
-            // of component that is.  We'll have to search the parent hierarchy
-            // to the root to confirm.
-            UIComponent parent = removed.getParent();
-            while (parent != null) {
-                if (parent.isTransient()) {
-                    return;
+        /**
+         * Handle the add.
+         * 
+         * @param context the Faces context.
+         * @param component the UI component to add to the list as an ADD.
+         */
+        private void handleAdd(FacesContext context, UIComponent component) {            
+            if (!component.isTransient()) {
+                if (component.getParent() != null && component.getParent().isInView()) {                    
+                    if (component.getParent().getFacets().containsValue(component)) {
+                        Map facets = component.getParent().getFacets();
+                        Iterator entries = facets.entrySet().iterator();
+                        while (entries.hasNext()) {
+                            Map.Entry entry = (Map.Entry) entries.next();
+                            if (entry.getValue() == component) {
+                                incrementDynamicChildCount(component.getParent());
+                                component.getAttributes().put(DYNAMIC_COMPONENT, component.getParent().getChildren().indexOf(component));
+                                component.clearInitialState();
+                                ComponentStruct struct = new ComponentStruct();
+                                struct.action = ComponentStruct.ADD;
+                                struct.facetName = entry.getKey().toString();
+                                struct.parentClientId = component.getParent().getClientId(context);
+                                struct.clientId = component.getClientId(context);
+                                struct.id = component.getId();
+                                getDynamicActions().add(struct);
+                            }
+                        }
+                    }
+                    else {
+                        incrementDynamicChildCount(component.getParent());
+                        component.getAttributes().put(DYNAMIC_COMPONENT, component.getParent().getChildren().indexOf(component));
+                        component.clearInitialState();
+                        ComponentStruct struct = new ComponentStruct();
+                        struct.action = ComponentStruct.ADD;
+                        struct.parentClientId = component.getParent().getClientId(context);
+                        struct.clientId = component.getClientId(context);
+                        struct.id = component.getId();
+                        getDynamicActions().add(struct);
+                    }
                 }
-                parent = parent.getParent();
             }
-            
-            if (dynamicRemoves == null) {
-                dynamicRemoves = new ArrayList<String>();
-            }
-            String clientId = event.getComponent().getClientId(context);
-            if (dynamicAdds != null && dynamicAdds.containsKey(clientId)) {
-                dynamicAdds.remove(clientId);
-            }
-            StateContext.this.decrementDynamicChildCount(removed.getParent());
-            dynamicRemoves.add(clientId);
-        }
-
-
-        private void handleAddEvent(FacesContext context,
-                                    PostAddToViewEvent event) {
-
-            // if the root is transient, then no action is ever needed here
-            if (context.getViewRoot().isTransient()) {
-                return;
-            }
-
-            UIComponent added = event.getComponent();
-            if (added.isTransient() || added instanceof UIViewRoot) {
-                return;
-            }
-
-            // this component, while not transient may be a child or facet
-            // of component that is.  We'll have to search the parent hierarchy
-            // to the root to confirm.
-            UIComponent parent = added.getParent();
-            while (parent != null) {
-                if (parent.isTransient()) {
-                    return;
-                }
-                parent = parent.getParent();
-            }
-
-            parent = added.getParent();
-            StateContext.this.incrementDynamicChildCount(parent);
-            ComponentStruct toAdd = new ComponentStruct();
-            toAdd.absorbComponent(context, added);
-
-            if (dynamicRemoves != null) {
-                dynamicRemoves.remove(toAdd.clientId);
-            }
-            added.getAttributes().put(DYNAMIC_COMPONENT, new Integer(toAdd.indexOfChildInParent));
-            getDynamicAdds().put(toAdd.clientId, toAdd);
-
         }
 
     } // END AddRemoveListener
