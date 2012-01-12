@@ -87,7 +87,7 @@ public class AdminGuiTestCase extends HtmlUnitFacesTestCase {
         page = getPage("/common/index.jsf");
 
         cm.clearCookies();
-        page = getPage("/common/index.jsf");
+        page = getPage("/common/index.jsf?bare=true");
         Cookie jSessionID = cm.getCookie("JSESSIONID");
         
         Cookie c1 = new Cookie("", "_common_applications_uploadFrame.jsf", "left:0&top:0&badCookieChars:%28%2C%29%2C%3C%2C%3E%2C@%2C%2C%2C%3B%2C%3A%2C%5C%2C%22%2C/%2C%5B%2C%5D%2C%3F%2C%3D%2C%7B%2C%7D%2C%20%2C%09; treeForm_tree-hi=treeForm:tree:applications; JSESSIONID=" + jSessionID.getValue());
@@ -140,7 +140,7 @@ public class AdminGuiTestCase extends HtmlUnitFacesTestCase {
         cm.clearCookies();
         client.setThrowExceptionOnFailingStatusCode(false);
 
-        page = getPage("/common/index.jsf");
+        page = getPage("/common/index.jsf?bare=true");
         jSessionID = cm.getCookie("JSESSIONID");
         
         c1 = new Cookie("", "_common_applications_uploadFrame.jsf", "left:0&top:0&badCookieChars:%28%2C%29%2C%3C%2C%3E%2C@%2C%2C%2C%3B%2C%3A%2C%5C%2C%22%2C/%2C%5B%2C%5D%2C%3F%2C%3D%2C%7B%2C%7D%2C%20%2C%09; treeForm_tree-hi=treeForm:tree:applications; JSESSIONID=" + jSessionID.getValue());
