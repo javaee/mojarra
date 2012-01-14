@@ -956,11 +956,22 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
                                 findComponentResourceBundleLocaleMatch(context, 
                                 ccResource.getResourceName(), 
                                 ccResource.getLibraryName()))) {
+                            InputStream propertiesInputStream = null;
                             try {
-                                InputStream propertiesInputStream = ccResource.getInputStream();
+                                propertiesInputStream = ccResource.getInputStream();
                                 resourceBundle = new PropertyResourceBundle(propertiesInputStream);
                             } catch (IOException ex) {
                                 Logger.getLogger(UIComponent.class.getName()).log(Level.SEVERE, null, ex);
+                            } finally{
+                            	if(null != propertiesInputStream){
+                                    try{
+                                        propertiesInputStream.close();
+                                    } catch(IOException ioe){
+                                        if (LOGGER.isLoggable(Level.SEVERE)) {
+                                            LOGGER.log(Level.SEVERE, null, ioe);
+                                        }
+                                    }
+                            	}
                             }
                         }
                     }
@@ -1136,11 +1147,22 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
             if (null != context) {
                 result = context.getApplication().getResourceHandler().
                         createResource(resourceName, libraryName);
+                InputStream propertiesInputStream = null;
                 try {
-                    InputStream propertiesInputStream = result.getInputStream();
+                    propertiesInputStream = result.getInputStream();
                     resourceBundle = new PropertyResourceBundle(propertiesInputStream);
                 } catch (IOException ex) {
                     Logger.getLogger(UIComponent.class.getName()).log(Level.SEVERE, null, ex);
+                } finally{
+                    if(null != propertiesInputStream){
+                        try{
+                            propertiesInputStream.close();
+                        } catch(IOException ioe){
+                            if (LOGGER.isLoggable(Level.SEVERE)) {
+                                LOGGER.log(Level.SEVERE, null, ioe);
+                            }
+                        }
+                    }
                 }
             }
         }
