@@ -98,19 +98,13 @@ public class MultiViewHandler extends ViewHandler {
 
 
     /**
-     * Do not call the default implementation of {@link javax.faces.application.ViewHandler#initView(javax.faces.context.FacesContext)}
-     * if the {@link javax.faces.context.ExternalContext#getRequestCharacterEncoding()} returns a
-     * <code>non-null</code> result.
+     * Call the default implementation of {@link javax.faces.application.ViewHandler#initView(javax.faces.context.FacesContext)}
      *
      * @see javax.faces.application.ViewHandler#initView(javax.faces.context.FacesContext)
      */
     @Override
     public void initView(FacesContext context) throws FacesException {
-
-        if (context.getExternalContext().getRequestCharacterEncoding() == null) {
-            super.initView(context);
-        }
-
+        super.initView(context);
     }
 
 

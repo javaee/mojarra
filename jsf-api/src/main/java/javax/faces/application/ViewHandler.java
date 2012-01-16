@@ -482,7 +482,11 @@ public abstract class ViewHandler {
      */
     
     public void initView(FacesContext context) throws FacesException {
-        String encoding = calculateCharacterEncoding(context);
+        String encoding = context.getExternalContext().getRequestCharacterEncoding();
+        if (null != encoding) {
+            return;
+        }
+        encoding = calculateCharacterEncoding(context);
         if (null != encoding) {
             try {
                 context.getExternalContext().setRequestCharacterEncoding(encoding);
