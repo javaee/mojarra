@@ -91,6 +91,8 @@
 
     <target name="test" depends="define.scenario.aware.port">
 
+        <sleep seconds="5" />
+
         <jsf.tester request="/i_gf_11636.page"
                      context-path="/jsf-wab-test"
                      classpath-refid="html.classpath"
