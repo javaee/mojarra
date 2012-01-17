@@ -123,12 +123,22 @@ public class CompositeComponentTagLibrary extends TagLibraryImpl {
             InputStream componentStream = null;
             try {
                 componentStream = ccResource.getInputStream();
+                result = (componentStream != null);
             } catch (IOException ex) {
                 if (LOGGER.isLoggable(Level.SEVERE)) {
                     LOGGER.log(Level.SEVERE, ex.toString(), ex);
                 }
+            } finally {
+                try {
+                    if (result) {
+                        componentStream.close();
+                    }
+                } catch (IOException ex) {
+                    if (LOGGER.isLoggable(Level.SEVERE)) {
+                        LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                    }
+                } 
             }
-            result = (componentStream != null);
         }
         return result || super.containsTagHandler(ns, localName);
     }
@@ -193,13 +203,25 @@ public class CompositeComponentTagLibrary extends TagLibraryImpl {
 
         Resource scriptComponentResource = context.getApplication().getViewHandler().getViewDeclarationLanguage(context, context.getViewRoot().getViewId()).getScriptComponentResource(context, 
                 componentResource);
+        InputStream is = null;
         try {
-            result = (null != scriptComponentResource) && (null != scriptComponentResource.getInputStream());
+            is = scriptComponentResource.getInputStream();
+            result = (null != scriptComponentResource) && (null != is);
         } catch (IOException ex) {
             if (LOGGER.isLoggable(Level.SEVERE)) {
                 LOGGER.log(Level.SEVERE, ex.toString(), ex);
             }
-        }
+        } finally {
+                try {
+                    if (null != is) {
+                        is.close();
+                    }
+                } catch (IOException ex) {
+                    if (LOGGER.isLoggable(Level.SEVERE)) {
+                        LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                    }
+                } 
+            }
         
         return result;
     }
