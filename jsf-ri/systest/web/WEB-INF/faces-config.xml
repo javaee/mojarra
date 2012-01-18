@@ -264,6 +264,15 @@
   </managed-bean>
 
   <managed-bean>
+    <managed-bean-name>issue13582626Bean</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.systest.model.TestBean
+    </managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+
+  <managed-bean>
     <managed-bean-name>phaseListener</managed-bean-name>
     <managed-bean-class>
       com.sun.faces.systest.model.PrintEventToRequestMapPhaseListener
