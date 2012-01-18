@@ -259,6 +259,11 @@
                      classpath-refid="html.classpath"
                      test-results-dir="${impl.test.results.dir}"
                      status="500"/>        
+        <jsf.tester request="/faces/facelets/i_bugdb_13582626_fViewNullLocale.xhtml"
+                     context-path="${context.path}"
+                     classpath-refid="html.classpath"
+                     test-results-dir="${impl.test.results.dir}"
+                     regexp="(?s).*text\s+value.*"/>
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
                    test-results-dir="${impl.test.results.dir}">

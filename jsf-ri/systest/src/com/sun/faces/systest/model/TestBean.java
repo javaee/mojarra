@@ -339,6 +339,10 @@ public enum Color { Red, Blue, Green, Orange }
     public void setMultiSelection(String [] newMultiSelection) {
     multiSelection = newMultiSelection;
     }
+    
+    public Object getNullProperty() {
+        return null;
+    }
 
     public ArrayList getOneElementList() {
         return oneElementList;
