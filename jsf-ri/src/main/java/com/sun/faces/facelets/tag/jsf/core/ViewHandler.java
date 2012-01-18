@@ -62,6 +62,7 @@ import com.sun.faces.context.StateContext;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 
+import com.sun.faces.util.FacesLogger;
 import javax.el.MethodExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
@@ -70,7 +71,11 @@ import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagConfig;
 import java.io.IOException;
+import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.context.FacesContext;
+import javax.faces.view.facelets.TagAttributeException;
 
 /**
  * Container for all JavaServer Faces core and custom component actions used on
@@ -82,6 +87,8 @@ import javax.faces.context.FacesContext;
  * @version $Id$
  */
 public final class ViewHandler extends TagHandlerImpl {
+    
+    private static final Logger LOGGER = FacesLogger.TAGLIB.getLogger();
 
     private final static Class[] LISTENER_SIG = new Class[] { PhaseEvent.class };
 
@@ -125,8 +132,20 @@ public final class ViewHandler extends TagHandlerImpl {
         Object partialStateSavingVal = null;
         if (root != null) {
             if (this.locale != null) {
-                root.setLocale(ComponentSupport.getLocale(ctx,
-                        this.locale));
+                try {
+                    root.setLocale(ComponentSupport.getLocale(ctx,
+                            this.locale));
+                } catch (TagAttributeException tae) {
+                    Object result = this.locale.getObject(ctx);
+                    if (null == result) {
+                        Locale l = Locale.getDefault();
+                        // Special case for bugdb 13582626
+                        if (LOGGER.isLoggable(Level.WARNING)) {
+                            LOGGER.log(Level.WARNING, "Using {0} for locale because expression {1} returned null.", new Object[]{l, this.locale.toString()});
+                        }
+                        root.setLocale(l);
+                    }
+                }
             }
             if (this.renderKitId != null) {
                 String v = this.renderKitId.getValue(ctx);
