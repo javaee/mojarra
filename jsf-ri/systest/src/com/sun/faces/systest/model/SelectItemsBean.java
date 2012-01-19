@@ -49,6 +49,33 @@ import javax.faces.model.SelectItemGroup;
 
 @ManagedBean
 public class SelectItemsBean {
+    
+    private SelectItem selectedHobbit;
+    private List<SelectItem> ctorHobbits;
+
+    public List<SelectItem> getCtorHobbits() {
+        return ctorHobbits;
+    }
+
+    public SelectItem getSelectedHobbit() {
+        return selectedHobbit;
+    }
+
+    public void setSelectedHobbit(SelectItem selectedHobbit) {
+        this.selectedHobbit = selectedHobbit;
+    }
+
+    public SelectItemsBean() {
+        this.ctorHobbits = new ArrayList<SelectItem>();
+        SelectItem initialValue = new SelectItem("Frodo");
+        setSelectedHobbit(initialValue);
+        this.ctorHobbits.add(initialValue);
+        this.ctorHobbits.add(new SelectItem("Pippin"));
+        this.ctorHobbits.add(new SelectItem("Bilbo"));
+        this.ctorHobbits.add(new SelectItem("Merry"));
+    }
+    
+    
 
 	public List<SelectItem> getHobbits() {
 		List<SelectItem> result = new ArrayList<SelectItem>(4);

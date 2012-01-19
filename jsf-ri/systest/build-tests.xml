@@ -1303,13 +1303,14 @@
     </target>
 
     <target name="passthru" depends="define.scenario.aware.port">
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/faces/TestCoreValidatorFail.jsp"
-              status="500"/>
- 
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/TestCoreValidatorFail.jsp"
-              status="500"/>
+            <jsf.junit context-path="${context.path}"
+                   classpath-refid="html.classpath"
+                   test-results-dir="${impl.test.results.dir}">
+            <tests>
+                <fileset dir="${basedir}/build/classes"
+                         includes="com/sun/faces/render/SelectStarTestCase.class" />
+            </tests>
+        </jsf.junit>
 
 
     </target>

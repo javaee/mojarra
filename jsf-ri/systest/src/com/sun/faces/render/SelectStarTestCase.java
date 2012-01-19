@@ -254,5 +254,19 @@ public class SelectStarTestCase extends HtmlUnitFacesTestCase {
         assertTrue(selectOption.asText().equals("Apple"));
     }
 
+    
+    public void testMojarra932() throws Exception {
+        getPage("/faces/render/Mojarra932UsingPage.xhtml");
+        HtmlSelect selectOneMenu = (HtmlSelect) lastpage.getHtmlElementById("selectOneMenu");
+        List<HtmlOption> selectOneListOptions = selectOneMenu.getOptions();
+        HtmlOption noSelectionValue = selectOneListOptions.get(4);
+        selectOneMenu.setSelectedAttribute(noSelectionValue, true);
+        HtmlSubmitInput button = (HtmlSubmitInput) lastpage.getHtmlElementById("button");
+        lastpage = button.click();
+        String text = lastpage.asText();
+        assertTrue(text.matches("(?s).*REQUIRED.*"));
+        assertTrue(text.matches("(?s).*Frodo.*"));
+        
+    }
 
 }

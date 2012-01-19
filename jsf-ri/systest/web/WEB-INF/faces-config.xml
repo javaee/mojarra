@@ -339,6 +339,13 @@
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
 
+    <managed-bean>
+        <managed-bean-name>mojarra932Bean</managed-bean-name>
+        <managed-bean-class>com.sun.faces.systest.model.SelectItemsBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+
+
 
    <!-- validator -->
   <validator>
