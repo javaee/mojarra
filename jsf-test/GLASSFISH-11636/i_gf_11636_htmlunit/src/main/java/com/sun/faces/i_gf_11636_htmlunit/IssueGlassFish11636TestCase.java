@@ -65,8 +65,8 @@ public class IssueGlassFish11636TestCase extends HtmlUnitFacesTestCase {
     // ------------------------------------------------------------ Test Methods
 
     public void testBasicAppFunctionality() throws Exception {
-
-        HtmlPage page = getPage("/i_gf_11636.page");
+        
+        HtmlPage page = getPageWithRetry("/i_gf_11636.page", 10);
         
         String text = page.asText();
         assertTrue(text.matches("(?s).*bean:\\s*bar.*"));
