@@ -185,6 +185,9 @@
 
                 <echo message="Successfully invoked test." />
             </try>
+            <catch>
+                <fail message="Failed in test.with.container.refresh"/>
+            </catch>
             <finally>
                 <echo message="About to stop container." />
                 <container.stop/>
@@ -220,6 +223,9 @@
                 </subant>
                 <echo message="Successfully invoked test." />
             </try>
+            <catch>
+                <fail message="Failed in smoketest.with.container.refresh"/>
+            </catch>
             <finally>
                 <echo message="About to stop container." />
                 <container.stop/>
