@@ -185,6 +185,7 @@
 
                 <echo message="Successfully invoked test." />
             </try>
+            
             <finally>
                 <echo message="About to stop container." />
                 <container.stop/>
