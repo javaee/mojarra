@@ -87,8 +87,11 @@
                     JAVASERVERFACES-2266,
                     JAVASERVERFACES-2255,
                     JAVASERVERFACES-2232,
-                    GLASSFISH-18007,
-                    JAVASERVERFACES-2113" />
+                    GLASSFISH-18007" />
+<!--
+Disabled - because of error: mising target: container.undeploy.test.dependencies
+                    JAVASERVERFACES-2113"
+-->
 
     <target name="main" depends="define.applications"
             description="">
