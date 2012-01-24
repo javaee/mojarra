@@ -47,11 +47,22 @@
 
     <property file="../../build.properties"/>
     <import file="${jsf.build.home}/common/ant/common.xml"/>
+    <import file="${jsf.build.home}/common/ant/test-app.xml"/>   
+
+    <path id="11636.classpath">  
+        <path refid="html.classpath" />
+        <pathelement location="${basedir}/i_gf_11636_htmlunit/target/classes"/>
+    </path>
+
+
 
     <target name="build">
 
       <jsf.mvn dir="${basedir}/maven-module-that-makes-jar-for-WEB-INF-lib" goals="install" />
       <jsf.mvn dir="${basedir}/maven-module-that-makes-wab" goals="install" />
+
+      <jsf.mvn dir="${basedir}/i_gf_11636_htmlunit" goals="install" />
+
 
     </target>    
 
@@ -59,6 +70,8 @@
 
       <jsf.mvn dir="${basedir}/maven-module-that-makes-jar-for-WEB-INF-lib" goals="clean" />
       <jsf.mvn dir="${basedir}/maven-module-that-makes-wab" goals="clean" />
+
+      <jsf.mvn dir="${basedir}/i_gf_11636_htmlunit" goals="clean" />
 
     </target>    
 
@@ -91,12 +104,14 @@
 
     <target name="test" depends="define.scenario.aware.port">
 
-        <jsf.tester request="/i_gf_11636.page"
-                     context-path="/jsf-wab-test"
-                     classpath-refid="html.classpath"
-                     test-results-dir="${regression.test.results.dir}"
-                     regexp="(?s).*bean:\s*bar.*"/>
-
+          <jsf.junit context-path="/jsf-wab-test"
+                   classpath-refid="11636.classpath"    
+                   test-results-dir="${regression.test.results.dir}">
+              <tests>
+                  <fileset dir="${basedir}/i_gf_11636_htmlunit/target/classes"
+                       includes="**/*TestCase.class"/> 
+              </tests>
+          </jsf.junit>
 
     </target>    
 
