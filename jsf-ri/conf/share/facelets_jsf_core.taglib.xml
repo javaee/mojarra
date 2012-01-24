@@ -1153,7 +1153,7 @@
                 attribute must be escaped. This flag is set to "true" by
                 default.
             ]]></description>
-            <name>escapeItem</name>
+            <name>itemEscaped</name>
             <type>java.lang.String</type>
         </attribute>
         <attribute>
