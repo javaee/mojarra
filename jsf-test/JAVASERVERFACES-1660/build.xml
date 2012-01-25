@@ -40,52 +40,62 @@
     holder.
 
 -->
+
 <!-- ************ JSF build file ************************************** -->
-<project name="GLASSFISH-16847" default="test" basedir=".">
+
+<project name="JAVASERVERFACES-1660" default="test" basedir=".">
 
     <property file="../../build.properties"/>
-    <path id="16847.classpath">  
+    <path id="1660.classpath">  
         <path refid="html.classpath" />
-        <pathelement location="${basedir}/htmlunit/target/classes"/>
+        <pathelement location="${basedir}/i_mojarra_1660_htmlunit/target/classes"/>
     </path>
 
     <import file="${jsf.build.home}/common/ant/common.xml"/>
 
     <target name="build">
-        <jsf.mvn dir="${basedir}/jsftest" goals="install" />
+
+      <jsf.mvn dir="${basedir}/i_mojarra_1660_war" goals="install" />
+      <jsf.mvn dir="${basedir}/i_mojarra_1660_htmlunit" goals="install" />
+
+
     </target>    
 
     <target name="clean">
-        <jsf.mvn dir="${basedir}/jsftest" goals="clean" />
+
+      <jsf.mvn dir="${basedir}/i_mojarra_1660_war" goals="clean" />
+      <jsf.mvn dir="${basedir}/i_mojarra_1660_htmlunit" goals="clean" />
+
     </target>    
 
     <target name="install">
+      <deploy.artifact
+              artifact="${basedir}/i_mojarra_1660_war/target/i_mojarra_1660_war.war"
+              appName="i_mojarra_1660_war"/>
+
     </target>    
 
     <target name="remove">
-        <undeploy.artifact
-              artifact="${basedir}/i_jsf_2052/target/jsftest.war"
-              appName="jsftest"/>
+
+      <undeploy.artifact
+              artifact="${basedir}/i_mojarra_1660_war/target/i_mojarra_1660_war.war"
+              appName="i_mojarra_1660_war"/>
+
     </target>    
 
     <target name="test" depends="define.scenario.aware.port">
-        <deploy.artifact
-              artifact="${basedir}/jsftest/target/jsftest.war"
-              appName="jsftest"/>
-         <jsf.tester request="/faces/IssueGLASSFISH16847UsingPage.xhtml" 
-                    context-path="/hellojsf"
-                    classpath-refid="16847.classpath"    
-                    regexp="(?s).*BHAVANI.*.91999000000.*INDIA.*SHANKAR.*.199999999999.*USA.*Mr.*X.*.122222222.*SFO.*"
-                    test-results-dir="${regression.test.results.dir}"/>
-         <antcall target="remove" />
-         <deploydir.artifact
-              explodedWarDir="${basedir}/jsftest/target/jsftest"
-              appName="jsftest"/>
-          <jsf.tester request="/faces/IssueGLASSFISH16847UsingPage.xhtml" 
-                    context-path="/jsftest"
-                    classpath-refid="16847.classpath"    
-                    regexp="(?s).*BHAVANI.*.91999000000.*INDIA.*SHANKAR.*.199999999999.*USA.*Mr.*X.*.122222222.*SFO.*"
-                    test-results-dir="${regression.test.results.dir}"/>
+
+          <jsf.junit context-path="/i_mojarra_1660_war"
+                   classpath-refid="1660.classpath"    
+                   test-results-dir="${regression.test.results.dir}">
+              <tests>
+                  <fileset dir="${basedir}/i_mojarra_1660_htmlunit/target/classes"
+                       includes="**/*TestCase.class"/> 
+              </tests>
+          </jsf.junit>
+
     </target>    
 
+
+        
 </project>

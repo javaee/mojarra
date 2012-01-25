@@ -104,7 +104,8 @@
                     JAVASERVERFACES-2255,
                     JAVASERVERFACES-2089,
                     GLASSFISH-18007,
-                    JAVASERVERFACES-2113" />
+                    JAVASERVERFACES-2113,
+                    JAVASERVERFACES-1660" />
 
     <target name="main" depends="define.applications"
             description="">

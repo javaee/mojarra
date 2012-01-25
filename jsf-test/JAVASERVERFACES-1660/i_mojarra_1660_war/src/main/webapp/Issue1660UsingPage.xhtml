@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html">
+
+<h:head>
+	<title>JAVASERVERFACES-1660 Demo</title>
+</h:head>
+<h:body>
+	<h1>The application demonstrating issue JAVASERVERFACES-1660</h1>
+	<h:form prependId="false">
+		<h:outputText value="Simple value is "/>
+		<h:outputText value="#{myBean.simpleValue}"/>
+		<br/>
+		<h:outputText value="Complex value would be "/>
+		<!-- The following element causes the error. -->
+		<h:outputText value="#{myBean.complexValue}"/>
+
+		<h:commandButton id="button" value="invokeMe"/>
+	</h:form>
+</h:body>
+</html>
