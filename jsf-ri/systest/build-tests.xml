@@ -1308,7 +1308,7 @@
                    test-results-dir="${impl.test.results.dir}">
             <tests>
                 <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/render/SelectStarTestCase.class" />
+                         includes="com/sun/faces/component/ComponentTestCase.class" />
             </tests>
         </jsf.junit>
 

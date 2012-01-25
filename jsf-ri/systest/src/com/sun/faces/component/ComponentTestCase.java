@@ -97,6 +97,28 @@ public class ComponentTestCase extends HtmlUnitFacesTestCase {
         }
 
     }
+    
+    public void testIssue1492Regression() throws Exception {
+        
+        HtmlPage page = getPage("/faces/component02.jsp");
+        HtmlSubmitInput submit = (HtmlSubmitInput)
+                getInputContainingGivenId(page, "submit");
+        
+        // exactly one occurrence of "ctor called"
+        assertTrue(page.asXml().matches("(?s).*|\\s*(ctor called)1\\s|.*"));
+        
+        try {
+            page = submit.click();
+        } catch (Exception ioe) {
+            fail("No exception should have been thrown: " +
+                    ioe.getMessage());
+        }
+
+        // exactly zero occurrence of "ctor called"
+        assertTrue(page.asXml().matches("(?s).*|\\s*|.*"));
+        
+        
+    }
 
 
 } // end of class PathTestCase
