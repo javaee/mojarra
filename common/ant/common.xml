@@ -179,7 +179,7 @@
     </artifact:dependencies>
     
     <artifact:dependencies filesetId="jsf-spi.filepath" pathId="jsf-spi.path">
-        <dependency groupId="com.sun.faces" artifactId="jsf-spi" version="1.0-SNAPSHOT" scope="provided"/>
+        <dependency groupId="com.sun.faces" artifactId="jsf-spi" version="1.0" scope="provided"/>
         <localRepository refid="local.repository"/>
         <remoteRepository refid="j.n.repo"/>
     </artifact:dependencies>
