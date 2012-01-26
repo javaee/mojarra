@@ -452,8 +452,7 @@
             </then>
         </if>
         -->
-        <!-- Groovy -->
-        <!--
+        <!-- Groovy -->       
         <if>
             <not>
                 <available file="${groovy.jar}" property="ignored"/>
@@ -463,8 +462,7 @@
                      dest="${groovy.jar}"
                      usetimestamp="true"/>
             </then>
-        </if>
-        -->
+        </if>        
 
         <!-- Trinidad -->
         <echo>${trinidad.zip}</echo>
