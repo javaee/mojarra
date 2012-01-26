@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -39,53 +39,59 @@
     only if the new code is made subject to such option by the copyright
     holder.
 
--->
-<!-- ************ JSF build file ************************************** -->
-<project name="GLASSFISH-16847" default="test" basedir=".">
+--><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+   <groupId>com.sun.faces</groupId>
+   <artifactId>i_mojarra_1660_htmlunit</artifactId>
+   <packaging>jar</packaging>
+   <name>i_jsf_1660_htmlunit</name>
+   <version>1.0-SNAPSHOT</version>
 
-    <property file="../../build.properties"/>
-    <path id="16847.classpath">  
-        <path refid="html.classpath" />
-        <pathelement location="${basedir}/htmlunit/target/classes"/>
-    </path>
+   <dependencies>
 
-    <import file="${jsf.build.home}/common/ant/common.xml"/>
+      <dependency>
+	<artifactId>htmlunit</artifactId>
+	<groupId>net.sourceforge.htmlunit</groupId>
+	<version>2.4</version>
+         <scope>provided</scope>
+      </dependency>
+      <dependency>
+         <groupId>junit</groupId>
+         <artifactId>junit</artifactId>
+         <version>3.8.1</version>
+         <scope>provided</scope>
+      </dependency>
+      <dependency>
+	<groupId>com.sun.faces.extensions</groupId>
+	<artifactId>jsf-extensions-test-time</artifactId>
+	<version>2.0</version>
+	<scope>provided</scope>
+      </dependency>
 
-    <target name="build">
-        <jsf.mvn dir="${basedir}/jsftest" goals="install" />
-    </target>    
+   </dependencies>
 
-    <target name="clean">
-        <jsf.mvn dir="${basedir}/jsftest" goals="clean" />
-    </target>    
+   <build>
+      <plugins>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>2.0.2</version>
+            <configuration>
+               <source>1.6</source>
+               <target>1.6</target>
+            </configuration>
+         </plugin>
+      </plugins>
+      <finalName>i_jsf_1660_htmlunit</finalName>
+   </build>
 
-    <target name="install">
-    </target>    
-
-    <target name="remove">
-        <undeploy.artifact
-              artifact="${basedir}/i_jsf_2052/target/jsftest.war"
-              appName="jsftest"/>
-    </target>    
-
-    <target name="test" depends="define.scenario.aware.port">
-        <deploy.artifact
-              artifact="${basedir}/jsftest/target/jsftest.war"
-              appName="jsftest"/>
-         <jsf.tester request="/faces/IssueGLASSFISH16847UsingPage.xhtml" 
-                    context-path="/hellojsf"
-                    classpath-refid="16847.classpath"    
-                    regexp="(?s).*BHAVANI.*.91999000000.*INDIA.*SHANKAR.*.199999999999.*USA.*Mr.*X.*.122222222.*SFO.*"
-                    test-results-dir="${regression.test.results.dir}"/>
-         <antcall target="remove" />
-         <deploydir.artifact
-              explodedWarDir="${basedir}/jsftest/target/jsftest"
-              appName="jsftest"/>
-          <jsf.tester request="/faces/IssueGLASSFISH16847UsingPage.xhtml" 
-                    context-path="/jsftest"
-                    classpath-refid="16847.classpath"    
-                    regexp="(?s).*BHAVANI.*.91999000000.*INDIA.*SHANKAR.*.199999999999.*USA.*Mr.*X.*.122222222.*SFO.*"
-                    test-results-dir="${regression.test.results.dir}"/>
-    </target>    
+   <repositories>
+     <repository>
+       <id>java.net</id>
+       <name>java.net</name>
+       <url>http://download.java.net/maven/2</url>
+       <layout>default</layout>
+     </repository>
+   </repositories>
 
 </project>
