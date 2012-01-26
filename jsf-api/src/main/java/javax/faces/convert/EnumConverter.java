@@ -196,12 +196,27 @@ public class EnumConverter implements Converter, PartialStateHolder {
         }
 
         if (targetClass == null) {
-            throw new ConverterException(
-                 MessageFactory.getMessage(context,
-                      ENUM_NO_CLASS_ID,
-                      value,
-                      MessageFactory.getLabel(context,
-                           component)));
+            boolean throwException = true;
+            if (null != value) {
+                try {
+                    targetClass = ((Enum)value).getDeclaringClass();
+                    throwException = null == targetClass;
+                } catch (ClassCastException cce) {
+                    // Let the ConverterException be thrown because 
+                    // it contains more information and is more expected 
+                    // in this case.
+                }
+                        
+            }
+            
+            if (throwException) {
+                throw new ConverterException(
+                        MessageFactory.getMessage(context,
+                        ENUM_NO_CLASS_ID,
+                        value,
+                        MessageFactory.getLabel(context,
+                        component)));
+            }
         }
 
         // If the specified value is null, return null
