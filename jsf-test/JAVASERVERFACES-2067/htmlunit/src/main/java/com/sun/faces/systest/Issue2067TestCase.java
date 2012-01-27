@@ -90,10 +90,6 @@ public class Issue2067TestCase extends HtmlUnitFacesTestCase {
         HtmlPage page = getPage("/");
         String xmlText = page.asXml();
         xmlText = xmlText.replace("\n", "").trim();
-        assertTrue(xmlText.matches("(?s).*HELLO    </form>  </body></html>"));
-
+        assertTrue(xmlText.indexOf("javax.faces.ViewState") < xmlText.indexOf("HELLO"));
     }
-
-    
-
 }
