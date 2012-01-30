@@ -67,7 +67,7 @@
       <dependency>
 	<groupId>com.sun.faces</groupId>
 	<artifactId>jsf-extensions-test-time</artifactId>
-	<version>2.2-SNAPSHOT</version>
+	<version>2.2</version>
 	<scope>compile</scope>
       </dependency>
 
