@@ -53,7 +53,6 @@ import com.sun.faces.spi.SerializationProviderFactory;
 import com.sun.faces.spi.SerializationProvider;
 import com.sun.faces.config.WebConfiguration;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.CompressViewState;
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableViewStateIdRendering;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.AutoCompleteOffOnViewState;
 
 
@@ -61,21 +60,6 @@ import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParamet
  * Common code for the default <code>StateHelper</code> implementations.
  */
 public abstract class StateHelper {
-
-    /**
-     * <p>
-     * State hidden field start.  Content after this is the actual
-     * state representation followed by the {@link #STATE_FIELD_END}.
-     * </p>
-     *
-     * @see {@link com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter#EnableViewStateIdRendering}
-     */
-    protected static final char[] STATE_FIELD_START =
-          ("<input type=\"hidden\" name=\""
-           + ResponseStateManager.VIEW_STATE_PARAM
-           + "\" id=\""
-           + ResponseStateManager.VIEW_STATE_PARAM
-           + "\" value=\"").toCharArray();
 
     /**
      * <p>
@@ -167,9 +151,7 @@ public abstract class StateHelper {
               .createInstance(ctx.getExternalContext());
         webConfig = WebConfiguration.getInstance(ctx.getExternalContext());
         compressViewState = webConfig.isOptionEnabled(CompressViewState);
-        stateFieldStart = (webConfig.isOptionEnabled(EnableViewStateIdRendering)
-                           ? STATE_FIELD_START
-                           : STATE_FIELD_START_NO_ID);
+        stateFieldStart = STATE_FIELD_START_NO_ID;
         stateFieldEnd = (webConfig.isOptionEnabled(AutoCompleteOffOnViewState)
                            ? STATE_FIELD_AUTOCOMPLETE_END
                            : STATE_FIELD_END);

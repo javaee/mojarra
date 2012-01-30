@@ -136,13 +136,14 @@ function getPostData(form, control) {
             var len = formValues.length;
             formValues[len] = new Object();
             formValues[len].id = child.id;
+            formValues[len].name = child.name;
             formValues[len].value = child.getAttribute("value");
         }
         child = child.nextSibling;
     }
     var postData = ""; 
     for (var i=0; i<formValues.length; i++) {
-        if (formValues[i].id == "javax.faces.ViewState") {
+        if ((formValues[i].id == "javax.faces.ViewState") || (formValues[i].name == "javax.faces.ViewState")) {
             var re = new RegExp("\\+", "g");
             var val = formValues[i].value;
             formValues[i].value = val.replace(re, "\%2B");

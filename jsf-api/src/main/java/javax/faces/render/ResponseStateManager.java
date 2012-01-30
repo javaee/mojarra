@@ -77,9 +77,10 @@ public abstract class ResponseStateManager {
             "javax.faces.RenderKitId";
             
     /**
-     * <p><span class="changed_modified_2_0">Implementations</span> must
-     * use this value as the name and id of the client parameter in
-     * which to save the state between requests.</p>
+     * <p><span class="changed_modified_2_0
+     * changed_modified_2_2">Implementations</span> must use this value
+     * as the name of the client parameter in which to save the state
+     * between requests.</p>
 
      * <p class="changed_added_2_0">It is strongly recommend that
      * implementations guard against cross site scripting attacks by at
