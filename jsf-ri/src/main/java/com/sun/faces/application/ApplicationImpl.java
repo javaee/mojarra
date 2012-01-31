@@ -1445,7 +1445,7 @@ public class ApplicationImpl extends Application {
         //Search for converters registered to superclasses of targetClass
         Class<?> superclass = targetClass.getSuperclass();
         if (superclass != null) {
-            returnVal = createConverterBasedOnClass(superclass, null);
+            returnVal = createConverterBasedOnClass(superclass, targetClass);
             if (returnVal != null) {
                 if (LOGGER.isLoggable(Level.FINE)) {
                     LOGGER.fine(MessageFormat.format("Created converter of type ''{0}''",
