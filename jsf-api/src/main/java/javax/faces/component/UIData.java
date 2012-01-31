@@ -69,6 +69,7 @@ import javax.faces.event.PhaseId;
 import javax.faces.event.PostValidateEvent;
 import javax.faces.event.PreValidateEvent;
 import javax.faces.model.ArrayDataModel;
+import javax.faces.model.CollectionDataModel;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.ResultDataModel;
@@ -84,7 +85,7 @@ import javax.servlet.jsp.jstl.sql.Result;
 
 /**
  * <p><strong class="changed_modified_2_0_rev_a
- * changed_modified_2_1">UIData</strong> is a {@link UIComponent} that
+ * changed_modified_2_1 changed_modified_2_2">UIData</strong> is a {@link UIComponent} that
  * supports data binding to a collection of data objects represented by
  * a {@link DataModel} instance, which is the current value of this
  * component itself (typically established via a {@link
@@ -713,7 +714,7 @@ public class UIData extends UIComponentBase
 
 
     /**
-     * <p>Return the value of the UIData.  This value must either be
+     * <p><span class="changed_modified_2_2">Return</span> the value of the UIData.  This value must either be
      * be of type {@link DataModel}, or a type that can be adapted
      * into a {@link DataModel}.  <code>UIData</code> will automatically
      * adapt the following types:</p>
@@ -721,7 +722,8 @@ public class UIData extends UIComponentBase
      * <li>Arrays</li>
      * <li><code>java.util.List</code></li>
      * <li><code>java.sql.ResultSet</code></li>
-     * <li><code>javax.servlet.jsp.jstl.sql.Result</code></li>
+     * <li><code>javax.servlet.jsp.jstl.sql.Result</code>
+     * <li class="changed_added_2_2"><code>java.util.Collection</code></li>
      * </ul>
      * <p>All other types will be adapted using the {@link ScalarDataModel}
      * class, which will treat the object as a single row of data.</p>
@@ -1347,7 +1349,7 @@ public class UIData extends UIComponentBase
      * <p>If {@link #isRowAvailable} returns <code>false</code>, take no
      * further action and return <code>false</code>.</p>
      *
-     * <p class="changed_modified_2_0_rev_a">>Call {@link
+     * <p class="changed_modified_2_0_rev_a">Call {@link
      * UIComponent#visitTree} on each of the children of this
      * <code>UIColumn</code> instance.</p>
 
@@ -1808,6 +1810,8 @@ public class UIData extends UIComponentBase
             setDataModel(new ResultSetDataModel((ResultSet) current));
         } else if (current instanceof Result) {
             setDataModel(new ResultDataModel((Result) current));
+        } else if (current instanceof Collection) {
+            setDataModel(new CollectionDataModel((Collection) current));
         } else {
             setDataModel(new ScalarDataModel(current));
         }
