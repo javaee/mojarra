@@ -101,7 +101,7 @@ public class AdminGuiTestCase extends HtmlUnitFacesTestCase {
         
         // Set the war path
         HtmlTextInput textInput = (HtmlTextInput) page.getElementById("form:sheet1:section1:prop1:dirPath");
-        String dirPathValue = System.getProperty("warfile");;
+        String dirPathValue = System.getProperty("warfile");
         System.err.println("DIRPATH:"+dirPathValue);
         textInput.setValueAttribute(dirPathValue);
         
