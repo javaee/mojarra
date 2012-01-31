@@ -92,9 +92,16 @@ this file.  Use the following as an example.
   </target>
 
     <target name="define.applications" depends="discover.container.version,define.tomcat7.applications,define.V2.applications,define.V3.applications,define.V3.1.applications,define.V3.1_no_cluster.applications">
+      <propertyregex property="applications.nowhitespace" input="${applications}" override="true"
+                     regexp="\s+" replace="" global="true" />
+
+
+      <propertyregex property="applications.formatted" input="${applications.nowhitespace}" override="true"
+                     regexp="," replace="${line.separator}" global="true" />
+
       <echo>
 +++++++++++++++ Executing the following regression tests
-${applications}
+${applications.formatted}
 +++++++++++++++
       </echo>
     </target>

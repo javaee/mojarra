@@ -50,11 +50,22 @@
     <import file="${jsf.build.home}/common/ant/common.xml"/>   
     <import file="${jsf.build.home}/common/ant/test-app.xml"/>   
 
+    <path id="15985.classpath">  
+        <path refid="html.classpath" />
+        <pathelement location="${basedir}/i_gf_15985_htmlunit/target/classes"/>
+    </path>
+
+
+
     <target name="build">
+
+      <jsf.mvn dir="${basedir}/i_gf_15985_htmlunit" goals="install" />
 
     </target>    
 
     <target name="clean">
+
+      <jsf.mvn dir="${basedir}/i_gf_15985_htmlunit" goals="clean" />
 
     </target>    
 
@@ -65,6 +76,7 @@
         </not>
         <then>
           <sequential>
+            <antcall target="container.stop" />
             <antcall target="container.init.osgi" />
             <antcall target="container.start" />
           </sequential>
@@ -87,12 +99,14 @@
 
     <target name="test" depends="define.scenario.aware.port">
 
-        <jsf.tester request="/faces/i_gf_15985.xhtml"
-                     context-path="/dummy-web"
-                     classpath-refid="html.classpath"
-                     test-results-dir="${regression.test.results.dir}"
-                     regexp="(?s).*Hello\s*from\s*CDI.*Hello\s*from\s*JSF.*"/>
-
+          <jsf.junit context-path="/dummy-web"
+                   classpath-refid="15985.classpath"    
+                   test-results-dir="${regression.test.results.dir}">
+              <tests>
+                  <fileset dir="${basedir}/i_gf_15985_htmlunit/target/classes"
+                       includes="**/*TestCase.class"/> 
+              </tests>
+          </jsf.junit>
 
     </target>    
 

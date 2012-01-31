@@ -238,7 +238,7 @@
         <echo message="PENDING - Please implement"/>
     </target>
 
-    <target name="container.deploy"
+    <target name="container.deploy" 
             description="Deploy the JSF Implementation artifacts to the target container.">
         <if>
             <os family="windows"/>
@@ -246,7 +246,6 @@
                 <container.stop/>
             </then>
         </if>
-
         <delete failonerror="false" 
                 file="${container.home}/modules/jsf-api.jar" />
         <delete failonerror="false" 
@@ -264,6 +263,7 @@
             </then>
         </if>       
     </target>
+
 
     <target name="container.deploy.test.dependencies"
             description="Deploy any container level dependencies to the container.">
@@ -296,7 +296,7 @@
             </then>
         </if>
 
-        <delete file="${container.home}/modules/${groovy.jarfile}"/>
+        <delete file="${container.home}/modules/${groovy.jar}"/>
 
         <if>
             <os family="windows"/>

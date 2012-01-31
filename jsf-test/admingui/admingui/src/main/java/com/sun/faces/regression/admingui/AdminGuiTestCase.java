@@ -84,8 +84,6 @@ public class AdminGuiTestCase extends HtmlUnitFacesTestCase {
         client.setThrowExceptionOnFailingStatusCode(false);
         CookieManager cm = client.getCookieManager();
         
-        page = getPage("/common/index.jsf");
-
         cm.clearCookies();
         try {
             page = getPage("/common/index.jsf?bare=true");
@@ -103,7 +101,8 @@ public class AdminGuiTestCase extends HtmlUnitFacesTestCase {
         
         // Set the war path
         HtmlTextInput textInput = (HtmlTextInput) page.getElementById("form:sheet1:section1:prop1:dirPath");
-        String dirPathValue = System.getProperty("user.dir") + "/jsf-test/admingui/admingui_test_war/target/admingui_test_war.war";
+        String dirPathValue = System.getProperty("warfile");;
+        System.err.println("DIRPATH:"+dirPathValue);
         textInput.setValueAttribute(dirPathValue);
         
         // Set the appType

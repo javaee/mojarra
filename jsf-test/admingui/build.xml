@@ -110,6 +110,10 @@
                 <fileset dir="${basedir}/admingui/target/classes"
                      includes="com/sun/faces/regression/admingui/AdminGuiTestCase.class"/> 
             </tests>
+            <custom-sysproperties>
+                <sysproperty key="warfile"
+                             value="${basedir}/admingui_test_war/target/admingui_test_war.war"/>
+            </custom-sysproperties>
         </jsf.junit>
     </target>    
 

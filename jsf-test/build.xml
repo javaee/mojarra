@@ -63,7 +63,8 @@
               value="GLASSFISH-11636,
                      GLASSFISH-15985,
                      GLASSFISH-17218,
-                     JAVASERVERFACES-1856,JAVASERVERFACES-1655,
+                     JAVASERVERFACES-1856,
+                     JAVASERVERFACES-1655,
                      JAVASERVERFACES-2033,
                      GLASSFISH-16847,
                      JAVASERVERFACES-1338,
@@ -108,25 +109,12 @@
                     JAVASERVERFACES-1660,
                     JAVASERVERFACES_SPEC_PUBLIC-479" />
 
-    <target name="main" depends="define.applications"
-            description="">
-        <!-- ensure the api jar is deployed to the local maven repo -->
-        <ant dir="${api.dir}" target="mvn.deploy.snapshot.local">
-          <property name="skip.javadoc.jar"  value="true" />
-        </ant>
-        <mkdir dir="${regression.test.results.dir}" />
-        <antcall target="remove" />
-        <for list="${applications}" param="app" trim="true">
-            <sequential>
-              <echo message="Descending into ${basedir}/@{app} and executing target build" />
-              <ant dir="@{app}" inheritAll="true" inheritRefs="true" target="build" />
-            </sequential>
-        </for>
-    </target>    
-
     <target name="clean" depends="define.applications"
             description="">
         <!-- ensure the api jar is deployed to the local maven repo -->
+        <ant dir="${api.dir}" target="main">
+          <property name="skip.javadoc.jar"  value="true" />
+        </ant>
         <ant dir="${api.dir}" target="mvn.deploy.snapshot.local">
           <property name="skip.javadoc.jar"  value="true" />
         </ant>
@@ -134,46 +122,46 @@
 
         <for list="${applications}" param="app" trim="true">
             <sequential>
-              <echo message="Descending into ${basedir}/@{app} and executing target clean" />
-              <ant dir="@{app}" inheritAll="true" inheritRefs="true" target="clean" />
+                <echo message="Descending into ${basedir}/@{app} and executing target clean" />
+                <ant dir="@{app}" inheritAll="true" inheritRefs="true" target="clean" />
             </sequential>
         </for>
 
                
     </target>    
 
-    <target name="install" depends="define.applications"
-            description="">
-        <for list="${applications}" param="app" trim="true">
-            <sequential>
-              <echo message="Descending into ${basedir}/@{app} and executing target install" />
-              <ant dir="@{app}" inheritAll="true" inheritRefs="true" target="install" />
-            </sequential>
-        </for>
-    </target>    
-
-    <target name="remove" depends="define.applications"
-            description="">
-        <for list="${applications}" param="app" trim="true">
-            <sequential>
-              <echo message="Descending into ${basedir}/@{app} and executing target remove" />
-              <ant dir="@{app}" inheritAll="true" inheritRefs="true" target="remove" />
-            </sequential>
-        </for>
-    </target>
-
     <target name="test" depends="define.applications"
             description="">
-        <container.stop />
-        <container.start />
-        <antcall target="install" />
-        <for list="${applications}" param="app" trim="true">
-            <sequential>
-              <echo message="Descending into ${basedir}/@{app} and executing target test" />
-              <ant dir="@{app}" inheritAll="true" inheritRefs="true" target="test" />
-            </sequential>
-        </for>
-        <antcall target="remove" />
+    <!-- ensure the api jar is deployed to the local maven repo -->
+    <ant dir="${api.dir}" target="mvn.deploy.snapshot.local">
+      <property name="skip.javadoc.jar"  value="true" />
+    </ant>
+    <mkdir dir="${regression.test.results.dir}" />
+
+    <container.start/>
+
+    <for list="${applications}" param="app" trim="true">
+      <sequential>
+        <echo message="Descending into ${basedir}/@{app} and executing target remove" />
+        <ant dir="@{app}" inheritAll="true" inheritRefs="true" target="remove" />
+
+        <echo message="Descending into ${basedir}/@{app} and executing target build" />
+        <ant dir="@{app}" inheritAll="true" inheritRefs="true" target="build" />
+
+        <echo message="Descending into ${basedir}/@{app} and executing target install" />
+        <ant dir="@{app}" inheritAll="true" inheritRefs="true" target="install" />
+
+        <echo message="Descending into ${basedir}/@{app} and executing target test" />
+        <ant dir="@{app}" inheritAll="true" inheritRefs="true" target="test" />
+
+        <echo message="Descending into ${basedir}/@{app} and executing target remove" />
+        <ant dir="@{app}" inheritAll="true" inheritRefs="true" target="remove" />
+
+      </sequential>
+    </for>
+
+    <container.stop/>
+
     </target>    
 
     

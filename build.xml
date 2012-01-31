@@ -100,6 +100,11 @@
 
     <target name="clean"
             description="Clean build and distribution directories">       
+        <subant target="clean" inheritAll="false">
+          <filelist dir="${regression.test.dir}">
+            <file name="build.xml"/>
+          </filelist>
+        </subant>
         <delete file="mojarra-samples.zip"/>
         <delete dir="${basedir}/build"/>
         <delete dir="${dist.dir}"/>
@@ -107,15 +112,6 @@
         <ant dir="jsf-demo" target="clean" />
         <ant dir="updatecenter2" target="updatecenter2.clean" />
     </target>  
-
-    <target name="modules.clean">
-      <call.modules target="clean"/>        
-      <subant target="clean" inheritAll="false">
-        <filelist dir="${regression.test.dir}">
-          <file name="build.xml"/>
-        </filelist>
-      </subant>
-    </target>
 
     <target name="main" description="Build Mojarra">
         <call.modules target="main"/>
@@ -139,20 +135,7 @@
 
     <target name="test" description="Run API, Impl, and Demo automated tests">
         <call.modules target="test"/>
-
-        <subant target="clean" inheritAll="false">
-          <filelist dir="${regression.test.dir}">
-            <file name="build.xml"/>
-          </filelist>
-        </subant>
-
-        <subant target="main" inheritAll="false">
-          <filelist dir="${regression.test.dir}">
-              <file name="build.xml"/>
-          </filelist>
-        </subant>
-
-        <subant target="test" inheritAll="false">
+        <subant target="test" inheritAll="false" failonerror="true">
           <filelist dir="${regression.test.dir}">
               <file name="build.xml"/>
           </filelist>
@@ -184,6 +167,7 @@
 
                 <echo message="Successfully invoked test." />
             </try>
+
             <finally>
                 <echo message="About to stop container." />
                 <container.stop/>
