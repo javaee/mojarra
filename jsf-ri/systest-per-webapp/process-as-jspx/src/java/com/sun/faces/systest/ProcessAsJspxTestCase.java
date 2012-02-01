@@ -159,6 +159,7 @@ public class ProcessAsJspxTestCase extends HtmlUnitFacesTestCase {
         assertFalse(XmlDeclaration.matcher(xml).matches());
         assertFalse(XmlPI.matcher(xml).matches());
         assertFalse(CDATASection.matcher(xml).matches());
+        assertTrue(xml.matches("(?s).*<p>This\\s+is\\s+CDATA\\s+content</p>.*"));
         assertTrue(NotEscapedText.matcher(xml).matches());
         assertFalse(Comment.matcher(xml).matches());
     }

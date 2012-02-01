@@ -34,7 +34,7 @@
 
 <h2>CDATA section: consumed</h2>
 
-<![CDATA[ <p>This is CDATA</p> ]]>
+<![CDATA[ <p>This is CDATA content</p> ]]>
 
 <h2>Inline text escaping: not escaped</h2>
 
