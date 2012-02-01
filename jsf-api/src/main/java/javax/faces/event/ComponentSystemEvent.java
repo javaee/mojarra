@@ -115,7 +115,11 @@ public abstract class ComponentSystemEvent extends SystemEvent {
             c.pushComponentToEL(context, null);
         }
         try {
-            super.processListener(listener);
+            if (listener instanceof SystemEventListener) {
+                super.processListener(listener);
+            } else if (listener instanceof ComponentSystemEventListener) {
+                ((ComponentSystemEventListener)listener).processEvent(this);
+            }
         } finally {
             if (didPush) {
                 c.popComponentFromEL(context);
