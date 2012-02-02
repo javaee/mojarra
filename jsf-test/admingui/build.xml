@@ -73,6 +73,7 @@
        <!-- overridable defaults: -->
        <property name="admingui.retries" value="5" />
        <property name="sleep.seconds" value="10" />
+       <property name="adminguitest.retries" value="10" />
 
        <retry retrycount="${admingui.retries}">
            <sequential>
@@ -102,7 +103,7 @@
     </target>
 
     <target name="test" depends="admingui-check,define.scenario.aware.port">
-       <retry retrycount="${admingui.retries}">
+       <retry retrycount="${adminguitest.retries}">
         <jsf.junit context-path=""
                  custom.port="${glassfish.admin.port}"
                  classpath-refid="admingui.classpath"    
