@@ -103,8 +103,6 @@ public final class SAXCompiler extends Compiler {
 
         protected final CompilationManager unit;
 
-        private boolean inSuppressedCDATA;
-        
         public CompilationHandler(CompilationManager unit, String alias) {
             this.unit = unit;
             this.alias = alias;
@@ -113,9 +111,7 @@ public final class SAXCompiler extends Compiler {
         public void characters(char[] ch, int start, int length)
                 throws SAXException {
             if (this.inDocument) {
-                if (!inSuppressedCDATA) {
-                    this.unit.writeText(new String(ch, start, length));
-                }
+                this.unit.writeText(new String(ch, start, length));
             }
         }
 
@@ -149,7 +145,6 @@ public final class SAXCompiler extends Compiler {
                 if (!unit.getWebConfiguration().getFaceletsConfiguration().isConsumeCDATA(alias)) {
                     this.unit.writeInstruction("]]>");
                 }
-                this.inSuppressedCDATA = false;
             }
         }
 
@@ -208,10 +203,7 @@ public final class SAXCompiler extends Compiler {
         public void startCDATA() throws SAXException {
             if (this.inDocument) {
                 if (!unit.getWebConfiguration().getFaceletsConfiguration().isConsumeCDATA(alias)) {
-                    inSuppressedCDATA = false;
                     this.unit.writeInstruction("<![CDATA[");
-                } else {
-                    inSuppressedCDATA = true;
                 }
             }
         }
