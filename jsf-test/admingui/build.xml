@@ -102,6 +102,7 @@
     </target>
 
     <target name="test" depends="admingui-check,define.scenario.aware.port">
+       <retry retrycount="${admingui.retries}">
         <jsf.junit context-path=""
                  custom.port="${glassfish.admin.port}"
                  classpath-refid="admingui.classpath"    
@@ -115,6 +116,7 @@
                              value="${basedir}/admingui_test_war/target/admingui_test_war.war"/>
             </custom-sysproperties>
         </jsf.junit>
+       </retry>
     </target>    
 
 </project>
