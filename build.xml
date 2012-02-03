@@ -145,7 +145,7 @@
 
     <target name="test.with.container.refresh"
             description="Stop the target container, deploy the build artifacts, restart the container and test">
-        <trycatch>
+        <trycatch reference="exception_ref">
             <try>
                 <container.stop/>
                 <antcall target="container.deploy"/>
@@ -166,13 +166,24 @@
 
 
                 <echo message="Successfully invoked test." />
+
             </try>
 
+            <catch>
+               <property name="exception" refid="exception_ref" />
+               <property name="message" value="Error in trycatch block:${line.separator}${exception}" />
+               <echo message="${message}" />
+               <fail message="${message}" />
+            </catch>
+
             <finally>
+
                 <echo message="About to stop container." />
                 <container.stop/>
+
             </finally>
         </trycatch>
+
     </target>
 
     <target name="smoketest.with.container.refresh"
