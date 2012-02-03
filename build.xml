@@ -146,6 +146,7 @@
 
     <target name="test.with.container.refresh"
             description="Stop the target container, deploy the build artifacts, restart the container and test">
+      <trycatch reference="exception_ref">
         <trycatch>
             <try>
                 <container.stop/>
@@ -168,6 +169,13 @@
 
                 <echo message="Successfully invoked test." />
             </try>
+
+            <catch>
+               <property name="exception" refid="exception_ref" />
+               <property name="message" value="Error in trycatch block:${line.separator}${exception}" />
+               <echo message="${message}" />
+               <fail message="${message}" />
+            </catch>
             
             <finally>
                 <echo message="About to stop container." />
