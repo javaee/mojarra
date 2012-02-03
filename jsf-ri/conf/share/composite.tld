@@ -1227,17 +1227,21 @@ example.</p>
             <![CDATA[
 <div class="changed_added_2_0">
 
-<p>This element is used in the
+<p><span class="changed_modified_2_2">This</span> element is used in the
 <code>&lt;composite:implementation&gt;</code> section.  Any child
-components or template text within the composite component tag in the
-using page will be re-parented into the composite component at the point
-indicated by this tag's placement within the
+components and/or template text within the composite component tag in
+the using page will be re-parented into the composite component at the
+point indicated by this tag's placement within the
 <code>&lt;composite:implementation&gt;</code> section.  The normal
-use-case for this element is to have only one occurrence within the
+use-case for this element is to have exactly one occurrence within the
 <code>&lt;composite:implementation&gt;</code> section.  Inserting
 multiple occurrences may cause duplicate id errors.  The results are
 undefined if there are multiple occurrences of this element in the
-<code>&lt;composite:implementation&gt;</code> section.</p>
+<code>&lt;composite:implementation&gt;</code> section.  <span
+class="changed_added_2_2">The results are undefined if there are child
+components and/or template text in the composite component tag in the
+using page, but there is no occurrence of this element in the
+<code>&lt;composite:implementation&gt;</code> section.</span></p>
 
 </div>]]>
         </description>
@@ -1254,11 +1258,15 @@ undefined if there are multiple occurrences of this element in the
                 <![CDATA[
 <div class="changed_added_2_0">
 
-<p>The presence of this tag in a
-<code>&lt;composite:implementation&gt;</code> section must cause the
+<p><span class="changed_modified_2_2">The</span> presence of this tag in
+a <code>&lt;composite:implementation&gt;</code> section must cause the
 named facet to be taken from the facet map of the <em>top level
 component</em> and inserted as a facet child of the component in which
-this element is nested.</p>
+this element is nested.  <span class="changed_added_2_2">The results are
+undefined if there are facets in the composite component tag in the
+using page, but there is no correspondingly named occurrence of this
+element in the <code>&lt;composite:implementation&gt;</code>
+section.</span></p>
 
 </div>]]>
 

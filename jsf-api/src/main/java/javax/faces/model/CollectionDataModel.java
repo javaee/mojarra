@@ -74,7 +74,7 @@ public class CollectionDataModel<E> extends DataModel<E> {
      * <p>Construct a new {@link CollectionDataModel} wrapping the specified
      * list.</p>
      *
-     * @param list List to be wrapped (if any)
+     * @param collection Collection to be wrapped.
      */
     public CollectionDataModel(Collection<E> collection) {
 
