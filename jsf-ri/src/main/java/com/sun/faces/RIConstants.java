@@ -104,6 +104,9 @@ public class RIConstants {
 
     public static final String VIEWID_KEY_NAME = FACES_PREFIX + "viewId";
 
+    public static final String ATTRS_WITH_DECLARED_DEFAULT_VALUES =
+        FACES_PREFIX + "ATTR_NAMES_WITH_DEFAULT_VALUES";
+
     private RIConstants() {
 
         throw new IllegalStateException();

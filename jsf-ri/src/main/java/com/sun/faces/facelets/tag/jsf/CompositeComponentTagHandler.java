@@ -58,6 +58,7 @@
 
 package com.sun.faces.facelets.tag.jsf;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.context.StateContext;
 import com.sun.faces.facelets.Facelet;
 import com.sun.faces.facelets.FaceletFactory;
@@ -94,11 +95,13 @@ import javax.faces.view.facelets.MetadataTarget;
 import javax.faces.view.facelets.Tag;
 import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.MetaRule;
+import java.beans.BeanDescriptor;
 import java.beans.PropertyDescriptor;
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -637,6 +640,18 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
                 ValueExpression ve = attr.getValueExpression(ctx, type);
                 UIComponent cc = (UIComponent) instance;
                 assert (UIComponent.isCompositeComponent(cc));
+                Map<String, Object> attrs = cc.getAttributes();
+                BeanInfo componentMetadata = (BeanInfo) attrs.get(UIComponent.BEANINFO_KEY);
+                BeanDescriptor desc = componentMetadata.getBeanDescriptor();
+                Collection<String> attributesWithDeclaredDefaultValues = (Collection<String>)
+                    desc.getValue(RIConstants.ATTRS_WITH_DECLARED_DEFAULT_VALUES);
+                if (null != attributesWithDeclaredDefaultValues &&
+                        attributesWithDeclaredDefaultValues.contains(name)) {
+                    // It is necessary to remove the value from the attribute
+                    // map because the ELexpression transparancy doesn't know
+                    // about the value's existence.
+                    attrs.remove(name);
+                }
                 cc.setValueExpression(name, ve);
 
             }
