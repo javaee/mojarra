@@ -71,6 +71,7 @@
                      JAVASERVERFACES-2232,
                      JAVASERVERFACES-2306,
                      JAVASERVERFACES-2307,
+                     JAVASERVERFACES-2308,
                      JAVASERVERFACES-1660" />
 
 <!-- edburns re-enable once working on 2.1 branch
