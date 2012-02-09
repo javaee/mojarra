@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright 1997-2011 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2012 Sun Microsystems, Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -536,6 +536,15 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
         };
 
         /**
+         * Determine if this current browser is IE9 or greater 
+         * @param node
+         * @ignore
+         */
+        var isIE9Plus = function isIE9Plus() {
+            return typeof XDomainRequest !== "undefined" && typeof window.msPerformance !== "undefined";
+        }
+        
+        /**
          * Deletes node
          * @param node
          * @ignore
@@ -548,7 +557,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 // if there's no parent, there's nothing to do
                 return;
             }
-            if (!isIE()) {
+            if (!isIE() || (isIE() && isIE9Plus())) {
                 // nothing special required
                 node.parentNode.removeChild(node);
                 return;
