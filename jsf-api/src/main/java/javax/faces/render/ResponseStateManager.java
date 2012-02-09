@@ -78,9 +78,19 @@ public abstract class ResponseStateManager {
             
     /**
      * <p><span class="changed_modified_2_0
-     * changed_modified_2_2">Implementations</span> must use this value
-     * as the name of the client parameter in which to save the state
-     * between requests.</p>
+     * changed_modified_2_2">Implementations</span> must use this
+     * constant field value as the name of the client parameter in which
+     * to save the state between requests. <span
+     * class="changed_added_2_2">The <code>id</code> attribute must be a
+     * concatenation of the return from {@link
+     * javax.faces.component.UIViewRoot#getContainerClientId}, the
+     * return from {@link
+     * javax.faces.component.UINamingContainer#getSeparatorChar}, this
+     * constant field value, the separator char, and a number that is 
+     * guaranteed to be unique with respect to all the other instances of
+     * this kind of client parameter in the view.</span>
+     * 
+     * </span></p>
 
      * <p class="changed_added_2_0">It is strongly recommend that
      * implementations guard against cross site scripting attacks by at

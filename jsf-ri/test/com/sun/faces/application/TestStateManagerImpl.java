@@ -302,20 +302,31 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
 
         initView(ctx);
 
+        // 
+        // Cause the state to be written to the hidden field
+        //
         StringWriter capture = new StringWriter();
         ResponseWriter writer = new HtmlResponseWriter(capture,
                                                        "text/html",
                                                        "UTF-8");
         ctx.setResponseWriter(writer);
         StateManager manager = ctx.getApplication().getStateManager();
-        Object state = ctx.getApplication().getStateManager().saveView(ctx);
+        Object state = manager.saveView(ctx);
         manager.writeState(ctx, state);
+        
+        //
+        // Extract the state from the hidden field
+        //
         String rawResult = capture.toString();
         Pattern p = Pattern.compile("\\bvalue=\"(.+)\"");
         Matcher m = p.matcher(rawResult);
         assertTrue(m.find());
         String control = m.group(1);
-        String result = ctx.getApplication().getStateManager().getViewState(ctx);
+        
+        // 
+        // Get the state as a string
+        // 
+        String result = manager.getViewState(ctx);
 
         assertEquals(control, result);
 

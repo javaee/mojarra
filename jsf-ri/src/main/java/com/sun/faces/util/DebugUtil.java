@@ -345,33 +345,30 @@ public class DebugUtil {
 //    }
 
     public static void printTree(Object [] root, Writer out) {
+        
         if (null == root) {
             indentPrintln(out, "null");
             return;
         }
-
-/* PENDING
-   indentPrintln(out, "===>Type:" + root.getComponentType());
-*/
-        // drill down to the bottom of the first element in the array
-        boolean foundBottom = false;
-        Object [] myState = root;
-        while (!foundBottom) {
-            Object state = myState[0];
-            foundBottom = !state.getClass().isArray();
-            if (!foundBottom) {
-                myState = (Object []) state;
+        
+        Object obj;
+        for (int i = 0; i < root.length; i++) {
+            obj = root[i];
+            if (null == obj) {
+                indentPrintln(out, "null");
+            } else {
+                if (obj.getClass().isArray()) {
+                    curDepth++;
+                    printTree((Object [])obj, out);
+                    curDepth--;
+                } else {
+                    indentPrintln(out, obj.toString());
+                }
+                
             }
         }
-
-        indentPrintln(out, "type:" + myState[8]);
-
-        curDepth++;
-        root = (Object []) root[1];
-        for (int i = 0; i < root.length; i++) {
-            printTree((Object []) root[i], out);
-        }
-        curDepth--;
+        
+        
     }
 //
 // General Methods

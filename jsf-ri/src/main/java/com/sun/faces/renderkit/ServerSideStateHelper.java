@@ -232,6 +232,9 @@ public class ServerSideStateHelper extends StateHelper {
              } else {
                  ResponseWriter writer = ctx.getResponseWriter();
                  writer.write(stateFieldStart);
+                 String viewStateId = Util.getViewStateId(ctx);
+                 writer.write(viewStateId);
+                 writer.write(stateFieldMiddle);
                  writer.write(id);
                  writer.write(stateFieldEnd);
                  writeRenderKitIdField(ctx, writer);

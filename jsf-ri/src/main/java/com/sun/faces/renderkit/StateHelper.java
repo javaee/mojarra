@@ -63,18 +63,23 @@ public abstract class StateHelper {
 
     /**
      * <p>
-     * Alternate hidden field to generate W3C valid XHTML.  This version
-     * includes no id attribute.  This version will be used when the
-     * <code>EnableViewStateIdRendering</code> is disabled.
+     * The first portion of the hidden state field.
      * </p>
      *
-     * @see {@link com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter#EnableViewStateIdRendering}
      */
-    protected static final char[] STATE_FIELD_START_NO_ID =
+    protected static final char[] STATE_FIELD_START =
           ("<input type=\"hidden\" name=\""
            + ResponseStateManager.VIEW_STATE_PARAM
-           + "\" value=\"").toCharArray();
+           + "\" id=\"").toCharArray();
 
+    /**
+     * <p>
+     * The second portion of the hidden state field.
+     * </p>
+     *
+     */
+    protected static final char[] STATE_FIELD_MIDDLE =
+          ("\" value=\"").toCharArray();
 
     /**
      * <p>
@@ -124,10 +129,16 @@ public abstract class StateHelper {
 
     /**
      * This will be used the by the different <code>StateHelper</code> implementations
-     * when writing the start of the state field.  This value of this field is
-     * determined by the value of the {@link com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter#EnableViewStateIdRendering}<code>
+     * when writing the start of the state field.
      */
     protected char[] stateFieldStart;
+    
+    /**
+     * This will be used by the different <code>StateHelper</code> implementations
+     * when writing the middle of the state field.
+     */
+    
+    protected char[] stateFieldMiddle;
 
 
     /**
@@ -151,7 +162,8 @@ public abstract class StateHelper {
               .createInstance(ctx.getExternalContext());
         webConfig = WebConfiguration.getInstance(ctx.getExternalContext());
         compressViewState = webConfig.isOptionEnabled(CompressViewState);
-        stateFieldStart = STATE_FIELD_START_NO_ID;
+        stateFieldStart = STATE_FIELD_START;
+        stateFieldMiddle = STATE_FIELD_MIDDLE;
         stateFieldEnd = (webConfig.isOptionEnabled(AutoCompleteOffOnViewState)
                            ? STATE_FIELD_AUTOCOMPLETE_END
                            : STATE_FIELD_END);

@@ -107,7 +107,8 @@
                     GLASSFISH-18007,
                     JAVASERVERFACES-2113,
                     JAVASERVERFACES-1660,
-                    JAVASERVERFACES_SPEC_PUBLIC-479" />
+                    JAVASERVERFACES_SPEC_PUBLIC-479,
+                    JAVASERVERFACES_SPEC_PUBLIC-220" />
 
     <target name="clean" depends="define.applications"
             description="">

@@ -537,12 +537,15 @@ public abstract class ResourceHelper {
     }
 
 
-    protected boolean resourceSupportsEL(String resourceName, FacesContext ctx) {
+    protected boolean resourceSupportsEL(String resourceName, String libraryName, FacesContext ctx) {
 
         ExternalContext extContext = ctx.getExternalContext();
         String contentType = extContext.getMimeType(resourceName);
-        return (contentType != null
-                   && (Arrays.binarySearch(EL_CONTENT_TYPES, contentType) >= 0));
+        boolean result = (contentType != null
+                   && (Arrays.binarySearch(EL_CONTENT_TYPES, contentType) >= 0)) ||
+                (null != resourceName && null != libraryName && 
+                "javax.faces".equals(libraryName) && "jsf.js".equals(resourceName));
+        return result;
 
     }
 

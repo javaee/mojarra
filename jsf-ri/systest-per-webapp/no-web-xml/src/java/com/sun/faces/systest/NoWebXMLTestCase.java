@@ -95,7 +95,7 @@ public class NoWebXMLTestCase extends HtmlUnitFacesTestCase {
         String pageAsText = page.asText();
         assertTrue(pageAsText.contains("Good Morning"));
         String pageText = page.asXml();
-        assertTrue(pageText.contains("<input type=\"hidden\" name=\"javax.faces.ViewState\""));
+        assertTrue(pageText.contains("<input type=\"hidden\" name=\"javax.faces.ViewState\" id="));
 
         page = getPage("/hello.jsf");
 
@@ -106,7 +106,7 @@ public class NoWebXMLTestCase extends HtmlUnitFacesTestCase {
         pageAsText = page.asText();
         assertTrue(pageAsText.contains("Good Morning"));
         pageText = page.asXml();
-        assertTrue(pageText.contains("<input type=\"hidden\" name=\"javax.faces.ViewState\""));
+        assertTrue(pageText.contains("<input type=\"hidden\" name=\"javax.faces.ViewState\" id="));
 
         page = getPage("/hello.faces");
 
@@ -117,7 +117,7 @@ public class NoWebXMLTestCase extends HtmlUnitFacesTestCase {
         pageAsText = page.asText();
         assertTrue(pageAsText.contains("Good Morning"));        
         pageText = page.asXml();
-        assertTrue(pageText.contains("<input type=\"hidden\" name=\"javax.faces.ViewState\""));
+        assertTrue(pageText.contains("<input type=\"hidden\" name=\"javax.faces.ViewState\" id="));
 
     }
 }

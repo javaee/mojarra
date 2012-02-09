@@ -64,6 +64,7 @@ import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.Clie
 import com.sun.faces.io.Base64InputStream;
 import com.sun.faces.io.Base64OutputStreamWriter;
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.Util;
 
 /**
  * <p>
@@ -168,6 +169,9 @@ public class ClientSideStateHelper extends StateHelper {
         } else {
             ResponseWriter writer = ctx.getResponseWriter();
             writer.write(stateFieldStart);
+            String viewStateId = Util.getViewStateId(ctx);
+            writer.write(viewStateId);
+            writer.write(stateFieldMiddle);
             doWriteState(state, writer);
             writer.write(stateFieldEnd);
             writeRenderKitIdField(ctx, writer);

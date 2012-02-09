@@ -72,7 +72,9 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
       (jsf.implversion && jsf.implversion >= 3))) {
 
     /**
-     * The top level global namespace for JavaServer Faces functionality.
+     * <span class="changed_modified_2_2">The top level global namespace
+     * for JavaServer Faces functionality.</span>
+
      * @name jsf
      * @namespace
      */
@@ -791,13 +793,15 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
          * @param context context of request
          * @ignore
          */
-        var doUpdate = function doUpdate(element, context) {
+        var doUpdate = function doUpdate(element, context, partialResponseId) {
             var id, content, markup, state;
             var stateForm;
             var scripts = []; // temp holding value for array of script nodes
 
             id = element.getAttribute('id');
-            if (id === "javax.faces.ViewState") {
+            var viewStateRegex = new RegExp("javax.faces.ViewState" +
+                                            jsf.separatorchar + ".*$");
+            if (id.match(viewStateRegex)) {
 
                 state = element.firstChild;
 
@@ -2081,7 +2085,9 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                     return;
                 }
 
-                var responseType = xml.getElementsByTagName("partial-response")[0].firstChild;
+                var partialResponse = xml.getElementsByTagName("partial-response")[0];
+                var partialResponseId = partialResponse.getAttribute("id");
+                var responseType = partialResponse.firstChild;
 
                 if (responseType.nodeName === "error") { // it's an error
                     var errorName = responseType.firstChild.firstChild.nodeValue;
@@ -2110,7 +2116,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                     for (var i = 0; i < changes.length; i++) {
                         switch (changes[i].nodeName) {
                             case "update":
-                                doUpdate(changes[i], context);
+                                doUpdate(changes[i], context, partialResponseId);
                                 break;
                             case "delete":
                                 doDelete(changes[i]);
@@ -2315,12 +2321,18 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
     };
 
     /**
+     * <p class="changed_added_2_2">The result of calling
+     * <code>UINamingContainer.getNamingContainerSeparatorChar().</p>
+     */
+    jsf.separatorchar = '#{facesContext.namingContainerSeparatorChar}';
+
+    /**
      * <p>An integer specifying the specification version that this file implements.
      * It's format is: rightmost two digits, bug release number, next two digits,
      * minor release number, leftmost digits, major release number.
      * This number may only be incremented by a new release of the specification.</p>
      */
-    jsf.specversion = 20000;
+    jsf.specversion = 22000;
 
     /**
      * <p>An integer specifying the implementation version that this file implements.

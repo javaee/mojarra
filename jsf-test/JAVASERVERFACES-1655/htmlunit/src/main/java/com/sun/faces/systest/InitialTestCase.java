@@ -100,7 +100,7 @@ public class InitialTestCase extends HtmlUnitFacesTestCase {
         assertTrue(pageAsText.contains("Happy Birthday"));
 
         String pageText = page.asXml();
-        assertTrue(pageText.contains("<input type=\"hidden\" name=\"javax.faces.ViewState\""));
+        assertTrue(pageText.contains("<input type=\"hidden\" name=\"javax.faces.ViewState\" id="));
     }
 
     public void testBasicAppFunctionalityNegative() throws Exception {
@@ -122,6 +122,6 @@ public class InitialTestCase extends HtmlUnitFacesTestCase {
         assertTrue(pageAsText.contains("please enter a valid age between 0 and 65"));
 
         String pageText = page.asXml();
-        assertTrue(pageText.contains("<input type=\"hidden\" name=\"javax.faces.ViewState\""));
+        assertTrue(pageText.contains("<input type=\"hidden\" name=\"javax.faces.ViewState\" id="));
     }
 }

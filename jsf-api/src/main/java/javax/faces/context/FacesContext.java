@@ -55,16 +55,18 @@ import javax.faces.render.RenderKit;
 
 import javax.el.ELContext;
 import javax.faces.FactoryFinder;
+import javax.faces.component.UINamingContainer;
 import javax.faces.component.visit.ComponentModificationManager;
 import javax.faces.event.PhaseId;
 
 
 /**
- * <p><strong class="changed_modified_2_0 changed_modified_2_1">FacesContext</strong>
- * contains all of the per-request state information related to the
- * processing of a single JavaServer Faces request, and the rendering of
- * the corresponding response.  It is passed to, and potentially
- * modified by, each phase of the request processing lifecycle.</p>
+ * <p><strong class="changed_modified_2_0 changed_modified_2_1
+ * changed_modified_2_2">FacesContext</strong> contains all of the
+ * per-request state information related to the processing of a single
+ * JavaServer Faces request, and the rendering of the corresponding
+ * response.  It is passed to, and potentially modified by, each phase
+ * of the request processing lifecycle.</p>
  *
  * <p>A {@link FacesContext} instance is associated with a particular
  * request at the beginning of request processing, by a call to the
@@ -422,6 +424,18 @@ public abstract class FacesContext {
      *  this instance has been released
      */
     public abstract Iterator<FacesMessage> getMessages(String clientId);
+    
+    /**
+     * <p class="changed_added_2_2">Return the result of calling {@link
+     * UINamingContainer#getSeparatorChar}, passing <code>this</code> as
+     * the argument.  Note that this enables accessing the value of this
+     * property from the EL expression
+     * <code>#{facesContext.namingContainerSeparatorChar}</code>.</p>
+     */
+
+    public char getNamingContainerSeparatorChar() {
+        return UINamingContainer.getSeparatorChar(this);
+    }
 
 
     /**

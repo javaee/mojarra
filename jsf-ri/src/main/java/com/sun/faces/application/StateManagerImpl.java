@@ -418,6 +418,13 @@ public class StateManagerImpl extends StateManager {
             }
         }
 
+        @Override
+        public String toString() {
+            return "TreeNode{" + "componentType=" + componentType + ", id=" + id + ", parent=" + parent + '}';
+        }
+        
+        
+
     } // END TreeNode
 
 
@@ -462,6 +469,13 @@ public class StateManagerImpl extends StateManager {
             out.writeUTF(this.facetName);
 
         }
+
+        @Override
+        public String toString() {
+            return "FacetNode{" + "facetName=" + facetName + '}';
+        }
+        
+        
 
     } // END FacetNode
 

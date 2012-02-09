@@ -202,7 +202,7 @@ public class WebappResourceHelper extends ResourceHelper {
                                          resourceName,
                                          null,
                                          compressable,
-                                         resourceSupportsEL(resourceName, ctx),
+                                         resourceSupportsEL(resourceName, library.getName(), ctx),
                                          ctx.isProjectStage(ProjectStage.Development),
                                          cacheTimestamp);
             } else {
@@ -211,7 +211,7 @@ public class WebappResourceHelper extends ResourceHelper {
                                          localePrefix,
                                          this,
                                          compressable,
-                                         resourceSupportsEL(resourceName, ctx),
+                                         resourceSupportsEL(resourceName, null, ctx),
                                          ctx.isProjectStage(ProjectStage.Development),
                                          cacheTimestamp);
             }
@@ -231,7 +231,7 @@ public class WebappResourceHelper extends ResourceHelper {
                                          resourceName,
                                          version,
                                          compressable,
-                                         resourceSupportsEL(resourceName, ctx),
+                                         resourceSupportsEL(resourceName, library.getName(), ctx),
                                          ctx.isProjectStage(ProjectStage.Development),
                                          cacheTimestamp);
             } else {
@@ -240,7 +240,7 @@ public class WebappResourceHelper extends ResourceHelper {
                                          localePrefix,
                                          this,
                                          compressable,
-                                         resourceSupportsEL(resourceName, ctx),
+                                         resourceSupportsEL(resourceName, null, ctx),
                                          ctx.isProjectStage(ProjectStage.Development),
                                          cacheTimestamp);
             }

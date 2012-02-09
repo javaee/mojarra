@@ -67,6 +67,7 @@ import java.util.logging.Logger;
 import com.sun.faces.component.visit.PartialVisitContext;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
+import javax.faces.component.UINamingContainer;
 
  public class PartialViewContextImpl extends PartialViewContext {
 
@@ -390,7 +391,7 @@ import com.sun.faces.util.Util;
     private void renderAll(FacesContext context, UIViewRoot viewRoot) throws IOException {
         // If this is a "render all via ajax" request,
         // make sure to wrap the entire page in a <render> elemnt
-        // with the special id of VIEW_ROOT_ID.  This is how the client
+        // with the special viewStateId of VIEW_ROOT_ID.  This is how the client
         // JavaScript knows how to replace the entire document with
         // this response.
         PartialViewContext pvc = context.getPartialViewContext();
@@ -412,7 +413,9 @@ import com.sun.faces.util.Util;
             // Get the view state and write it to the response..
             PartialViewContext pvc = context.getPartialViewContext();
             PartialResponseWriter writer = pvc.getPartialResponseWriter();
-            writer.startUpdate(PartialResponseWriter.VIEW_STATE_MARKER);
+            String viewStateId = Util.getViewStateId(context);
+                            
+            writer.startUpdate(viewStateId);
             String state = context.getApplication().getStateManager().getViewState(context);
             writer.write(state);
             writer.endUpdate();

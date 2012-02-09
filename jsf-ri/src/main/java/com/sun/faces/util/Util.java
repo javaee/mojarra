@@ -68,6 +68,8 @@ import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import javax.faces.component.UINamingContainer;
+import javax.faces.render.ResponseStateManager;
 import javax.servlet.ServletContext;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.SAXParserFactory;
@@ -935,6 +937,25 @@ public class Util {
         }
 
         return false;
+    }
+    
+    public static String getViewStateId(FacesContext context) {
+        String result = null;
+        final String viewStateCounterKey = "com.sun.faces.util.ViewStateCounterKey";
+        Map<Object, Object> contextAttrs = context.getAttributes();
+        Integer counter = (Integer) contextAttrs.get(viewStateCounterKey);
+        if (null == counter) {
+            counter = new Integer(0);
+        }
+        
+        char sep = UINamingContainer.getSeparatorChar(context);
+        UIViewRoot root = context.getViewRoot();
+        result = root.getContainerClientId(context) + sep + 
+                ResponseStateManager.VIEW_STATE_PARAM + sep +
+                + counter;
+        contextAttrs.put(viewStateCounterKey, counter++);
+        
+        return result;
     }
 
 

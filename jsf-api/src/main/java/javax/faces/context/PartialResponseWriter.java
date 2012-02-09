@@ -42,6 +42,7 @@ package javax.faces.context;
 
 import java.io.IOException;
 import java.util.Map;
+import javax.faces.component.UINamingContainer;
 import javax.faces.render.ResponseStateManager;
 
 /**
@@ -120,6 +121,9 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
         }
         writer.write("<?xml version='1.0' encoding='" + encoding + "'?>\n");
         writer.startElement("partial-response", null);
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        String id = ctx.getViewRoot().getContainerClientId(ctx);
+        writer.writeAttribute("id", id, "id");
     }
 
     /**

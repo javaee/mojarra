@@ -319,6 +319,20 @@ public abstract class FacesContextWrapper extends FacesContext implements FacesW
     }
 
     /**
+     * <p class="changed_added_2_2">The default behavior of this method
+     * is to call {@link FacesContext#getNamingContainerSeparatorChar()}
+     * on the wrapped {@link FacesContext} object.</p>
+     *
+     * @see javax.faces.context.FacesContext#getNamingContainerSeparatorChar()
+     */
+    @Override
+    public char getNamingContainerSeparatorChar() {
+        return getWrapped().getNamingContainerSeparatorChar();
+    }
+    
+    
+
+    /**
      * <p>The default behavior of this method is to
      * call {@link FacesContext#getPartialViewContext()} ()}
      * on the wrapped {@link FacesContext} object.</p>

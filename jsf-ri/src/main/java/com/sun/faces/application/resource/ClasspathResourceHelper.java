@@ -246,7 +246,7 @@ public class ClasspathResourceHelper extends ResourceHelper {
                                      resourceName,
                                      null,
                                      compressable,
-                                     resourceSupportsEL(resourceName, ctx),
+                                     resourceSupportsEL(resourceName, library.getName(), ctx),
                                      ctx.isProjectStage(ProjectStage.Development),
                                      cacheTimestamp);
         } else {
@@ -255,7 +255,7 @@ public class ClasspathResourceHelper extends ResourceHelper {
                                      localePrefix,
                                      this,
                                      compressable,
-                                     resourceSupportsEL(resourceName, ctx),
+                                     resourceSupportsEL(resourceName, null, ctx),
                                      ctx.isProjectStage(ProjectStage.Development),
                                      cacheTimestamp);
         }
