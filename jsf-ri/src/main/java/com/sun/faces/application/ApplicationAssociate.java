@@ -45,6 +45,7 @@ import com.sun.faces.scripting.groovy.GroovyHelper;
 import com.sun.faces.application.resource.ResourceCache;
 import com.sun.faces.application.resource.ResourceManager;
 import com.sun.faces.application.annotation.AnnotationManager;
+import com.sun.faces.application.annotation.FacesComponentUsage;
 import com.sun.faces.config.ConfigManager;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.facelets.compiler.Compiler;
@@ -80,6 +81,7 @@ import com.sun.faces.el.VariableResolverChainWrapper;
 import com.sun.faces.facelets.PrivateApiFaceletCacheAdapter;
 import com.sun.faces.lifecycle.ELResolverInitPhaseListener;
 
+import java.util.ArrayList;
 import javax.el.CompositeELResolver;
 import javax.el.ELResolver;
 import javax.el.ExpressionFactory;
@@ -106,6 +108,7 @@ import java.util.logging.Logger;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.faces.FactoryFinder;
 import javax.faces.application.NavigationCase;
+import javax.faces.component.FacesComponent;
 import javax.faces.view.facelets.FaceletCacheFactory;
 import javax.faces.view.facelets.FaceletFactoryWrapper;
 import javax.faces.view.facelets.FaceletsResourceResolver;
@@ -136,6 +139,14 @@ public class ApplicationAssociate {
      * card, and some may be specified as an asterisk "*".
      */
     private Map<String, Set<NavigationCase>> navigationMap = null;
+    
+    /*
+     * The FacesComponentTagLibrary uses the information in this map 
+     * to help it fabricate tag handlers for components annotated with
+     * FacesComponent.
+     * Key: namespace
+     */
+    private Map<String, List<FacesComponentUsage>> facesComponentsByNamespace = null;
 
     // Flag indicating that a response has been rendered.
     private boolean responseRendered = false;
@@ -533,8 +544,39 @@ public class ApplicationAssociate {
     public boolean hasRequestBeenServiced() {
         return requestServiced;
     }
+    
+    public void addFacesComponent(FacesComponentUsage facesComponentUsage) {
+        FacesComponent facesComponent = facesComponentUsage.getAnnotation();
+        assert(facesComponent.tagHandler());
+        if (null == facesComponentsByNamespace) {
+            facesComponentsByNamespace = new HashMap<String, List<FacesComponentUsage>>();
+        }
 
+        List<FacesComponentUsage> componentsInNamespace = null;
+        final String namespace = facesComponent.namespace();
+        
+        if (!facesComponentsByNamespace.containsKey(facesComponent.namespace())) {
+            componentsInNamespace = new ArrayList<FacesComponentUsage>();
+            facesComponentsByNamespace.put(namespace, componentsInNamespace);
+        } else {
+            componentsInNamespace = facesComponentsByNamespace.get(namespace);
+        }
+        componentsInNamespace.add(facesComponentUsage);
 
+    }
+    
+    public List<FacesComponentUsage> getComponentsForNamespace(String ns) {
+        List<FacesComponentUsage> result = Collections.emptyList();
+        if (null != facesComponentsByNamespace) {
+            if (facesComponentsByNamespace.containsKey(ns)) {
+                result = facesComponentsByNamespace.get(ns);
+            }
+
+        }
+       
+        return result;
+    }
+    
     /**
      * Add a navigation case to the internal case set.  If a case set
      * does not already exist in the case list map containing this case

@@ -60,6 +60,8 @@ package com.sun.faces.facelets.tag;
 
 import com.sun.faces.facelets.compiler.CompilationMessageHolder;
 import com.sun.faces.facelets.tag.jsf.CompositeComponentTagLibrary;
+import com.sun.faces.facelets.tag.jsf.FacesComponentTagLibrary;
+import com.sun.faces.facelets.tag.jsf.LazyTagLibrary;
 import com.sun.faces.util.Util;
 
 import javax.faces.FacesException;
@@ -108,13 +110,21 @@ public final class CompositeTagLibrary implements TagLibrary {
             }
         }
         // PENDING: this is a terribly inefficient impl.  Needs refactoring.
-        CompositeComponentTagLibrary toTest = new CompositeComponentTagLibrary(ns);
-        if (toTest.tagLibraryForNSExists(ns)) {
+        LazyTagLibrary lazyLibraries [] = new LazyTagLibrary[2];
+        lazyLibraries[0] = new CompositeComponentTagLibrary(ns);
+        lazyLibraries[1] = new FacesComponentTagLibrary(ns);
+        LazyTagLibrary toTest = null;
+        for (int i = 0; i < lazyLibraries.length; i++) {
+            if (lazyLibraries[i].tagLibraryForNSExists(ns)) {
+                toTest = lazyLibraries[i];
+                break;
+            }
+        }
+        if (null != toTest) {
             TagLibrary [] librariesPlusOne = new TagLibrary[libraries.length+1];
             System.arraycopy(this.libraries, 0, librariesPlusOne, 
                     0, libraries.length);
-            librariesPlusOne[libraries.length] = 
-                    new CompositeComponentTagLibrary(ns);
+            librariesPlusOne[libraries.length] = toTest;
             for (int i = 0; i < this.libraries.length; i++) {
                 libraries[i] = null;
             }

@@ -40,6 +40,7 @@
 
 package com.sun.faces.application.annotation;
 
+import com.sun.faces.application.ApplicationAssociate;
 import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.Collections;
@@ -67,7 +68,8 @@ public class ComponentConfigHandler implements ConfigAnnotationHandler {
         HANDLES = Collections.unmodifiableCollection(handles);
     }
 
-    private Map<String,String> components;
+    // key: componentId 
+    private Map<String,FacesComponentUsage> components;
 
 
     // ------------------------------------- Methods from ComponentConfigHandler
@@ -89,9 +91,9 @@ public class ComponentConfigHandler implements ConfigAnnotationHandler {
     public void collect(Class<?> target, Annotation annotation) {
 
         if (components == null) {
-            components = new HashMap<String,String>();
+            components = new HashMap<String,FacesComponentUsage>();
         }
-        components.put(((FacesComponent) annotation).value(), target.getName());
+        components.put(((FacesComponent) annotation).value(),new FacesComponentUsage(target, (FacesComponent) annotation));
 
     }
 
@@ -103,8 +105,12 @@ public class ComponentConfigHandler implements ConfigAnnotationHandler {
 
         if (components != null) {
             Application app = ctx.getApplication();
-            for (Map.Entry<String, String> entry : components.entrySet()) {
-                app.addComponent(entry.getKey(), entry.getValue());
+            ApplicationAssociate appAss = ApplicationAssociate.getCurrentInstance();
+            for (Map.Entry<String, FacesComponentUsage> entry : components.entrySet()) {
+                if (entry.getValue().getAnnotation().tagHandler()) {
+                    appAss.addFacesComponent(entry.getValue());
+                }
+                app.addComponent(entry.getKey(), entry.getValue().getTarget().getName());
             }
         }
 

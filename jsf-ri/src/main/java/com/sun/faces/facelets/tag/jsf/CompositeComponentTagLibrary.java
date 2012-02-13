@@ -76,7 +76,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-public class CompositeComponentTagLibrary extends TagLibraryImpl {
+public class CompositeComponentTagLibrary extends LazyTagLibrary {
     
     private static final Logger LOGGER = FacesLogger.FACELETS_COMPONENT.getLogger();
 
@@ -178,6 +178,7 @@ public class CompositeComponentTagLibrary extends TagLibraryImpl {
     private static final String NS_COMPOSITE_COMPONENT_PREFIX = 
             "http://java.sun.com/jsf/composite/";
     
+    @Override
     public boolean tagLibraryForNSExists(String toTest) {
         boolean result = false;
         

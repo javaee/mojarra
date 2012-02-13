@@ -881,7 +881,7 @@ public class ApplicationImpl extends Application {
     }
 
     /**
-     * @see javax.faces.application.Application#addComponent(String, String)
+     * @see javax.faces.application.Application#addFacesComponent(String, String)
      */
     public void addComponent(String componentType, String componentClass) {
 

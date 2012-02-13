@@ -113,5 +113,8 @@
                 <source-level>1.5</source-level>
             </compilation-unit>
         </java-data>
+        <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
+            <word>Facelet</word>
+        </spellchecker-wordlist>
     </configuration>
 </project>
