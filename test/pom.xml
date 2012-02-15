@@ -300,6 +300,54 @@
                 <tomcat.version>7.0.16</tomcat.version>
             </properties>
         </profile>
+        <profile>
+            <id>integration-weblogic-cargo</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.cargo</groupId>
+                        <artifactId>cargo-maven2-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>start-container</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>start</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>stop-container</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <container>
+                                <containerId>${integration.container.id}</containerId>
+                                <home>${integration.container.home}</home>
+                            </container>
+                            <configuration>
+                                <type>${integration.container.type}</type>
+                                <home>${integration.container.runtime}</home>
+                                <properties>
+                                    <cargo.servlet.port>${integration.serverPort}</cargo.servlet.port>
+                                </properties>
+                            </configuration>
+                        </configuration>
+                    </plugin>                    
+                </plugins>
+            </build>
+            <properties>
+                <integration.container.root>C:/Weblogic12c</integration.container.root>
+                <integration.container.id>weblogic103x</integration.container.id>
+                <integration.container.home>${integration.container.root}/wlserver</integration.container.home>
+                <integration.container.runtime>${integration.container.root}/user_projects/domains/base_domain</integration.container.runtime>
+                <integration.container.type>existing</integration.container.type>
+                <integration.serverPort>7001</integration.serverPort>
+            </properties>
+        </profile>
     </profiles>
     <properties>
         <integration.serverName>localhost</integration.serverName>
