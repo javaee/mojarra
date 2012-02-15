@@ -8,7 +8,7 @@
     <artifactId>com.sun.faces.test</artifactId>
     <version>2.1.8-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>Mojarra Test POM</name>
+    <name>Mojarra 2.1.x Test POM</name>
     <modules>
         <module>agnostic</module>
         <module>cluster</module>
