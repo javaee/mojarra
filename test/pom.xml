@@ -301,9 +301,30 @@
             </properties>
         </profile>
         <profile>
-            <id>integration-weblogic-cargo</id>
+            <id>integration-weblogic12c-cargo</id>
             <build>
                 <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.7</version>
+                        <executions>
+                            <execution>
+                                <id>package</id>
+                                <phase>package</phase>
+                                <configuration>
+                                    <target>
+                                        <delete>
+                                            <fileset dir="${integration.container.runtime}/autodeploy" includes="**/*"/>
+                                        </delete>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
                     <plugin>
                         <groupId>org.codehaus.cargo</groupId>
                         <artifactId>cargo-maven2-plugin</artifactId>
