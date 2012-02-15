@@ -547,7 +547,7 @@ public class ApplicationAssociate {
     
     public void addFacesComponent(FacesComponentUsage facesComponentUsage) {
         FacesComponent facesComponent = facesComponentUsage.getAnnotation();
-        assert(facesComponent.tagHandler());
+        assert(facesComponent.createTag());
         if (null == facesComponentsByNamespace) {
             facesComponentsByNamespace = new HashMap<String, List<FacesComponentUsage>>();
         }

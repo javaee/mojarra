@@ -69,7 +69,7 @@ import java.lang.annotation.Inherited;
  * <p><span class="changed_modified_2_2">The</span> presence of this annotation
  * on a class that extends {@link UIComponent} must cause the runtime to 
  * register this class as a component suitable for inclusion in a view.
- * <span class="changed_added_2_2">If the <code>tagHandler</code> attribute
+ * <span class="changed_added_2_2">If the <code>createTag</code> attribute
  * is <code>true</code>, the runtime must create a corresponding Facelet
  * tag handler according to the rules specified in the attributes of 
  * this annotation.</span></p>
@@ -83,7 +83,7 @@ public @interface FacesComponent {
     
     /**
      * <p class="changed_added_2_2">Components that declare a 
-     * <code>tagHandler = true</code> attribute will be placed into this tag
+     * <code>createTag = true</code> attribute will be placed into this tag
      * namespace if the namespace attribute is omitted.</p>
      */
     public static final String NAMESPACE = "http://java.sun.com/jsf/component";
@@ -106,10 +106,10 @@ public @interface FacesComponent {
      * by the value of the {@link #namespace} attribute.</p>
      */
     
-    boolean tagHandler() default false;
+    boolean createTag() default false;
     
     /**
-     * <p class="changed_added_2_2">If the value of the {@link #tagHandler} 
+     * <p class="changed_added_2_2">If the value of the {@link #createTag} 
      * attribute is <code>true</code>, the runtime must use this
      * value as the tag name for including an instance of the component
      * annotated with this annotation in a view.  If this attribute is not
@@ -120,7 +120,7 @@ public @interface FacesComponent {
     String tagName() default "";
     
     /**
-     * <p class="changed_added_2_2">If the value of the {@link #tagHandler} 
+     * <p class="changed_added_2_2">If the value of the {@link #createTag} 
      * attribute is <code>true</code>, the value of this attribute is taken
      * to be the tag library namespace into which this component is placed.</p>
      * 

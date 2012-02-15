@@ -107,7 +107,7 @@ public class ComponentConfigHandler implements ConfigAnnotationHandler {
             Application app = ctx.getApplication();
             ApplicationAssociate appAss = ApplicationAssociate.getCurrentInstance();
             for (Map.Entry<String, FacesComponentUsage> entry : components.entrySet()) {
-                if (entry.getValue().getAnnotation().tagHandler()) {
+                if (entry.getValue().getAnnotation().createTag()) {
                     appAss.addFacesComponent(entry.getValue());
                 }
                 app.addComponent(entry.getKey(), entry.getValue().getTarget().getName());

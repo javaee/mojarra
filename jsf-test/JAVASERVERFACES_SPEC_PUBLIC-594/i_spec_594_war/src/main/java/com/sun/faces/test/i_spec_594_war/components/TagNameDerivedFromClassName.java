@@ -43,7 +43,7 @@ package com.sun.faces.test.i_spec_594_war.components;
 import javax.faces.component.FacesComponent;
 import javax.faces.component.html.HtmlInputText;
 
-@FacesComponent(value="TagNameDerivedFromClassName", tagHandler=true)
+@FacesComponent(value="TagNameDerivedFromClassName", createTag=true)
 public class TagNameDerivedFromClassName extends HtmlInputText {
     
 }
