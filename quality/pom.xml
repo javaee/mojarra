@@ -7,7 +7,7 @@
     <artifactId>javax.faces</artifactId>
     <version>2.2.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>quality</name>
+    <name>Mojarra Trunk Quality</name>
     <build>
         <plugins>
             <plugin>
@@ -76,33 +76,9 @@
     </build>
     <dependencies>
         <dependency>
-            <groupId>org.glassfish</groupId>
-            <artifactId>javax.servlet</artifactId>
-            <version>3.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.web</groupId>
-            <artifactId>el-impl</artifactId>
-            <scope>provided</scope>
-            <version>2.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.web</groupId>
-            <artifactId>javax.servlet.jsp</artifactId>
-            <version>2.2.3</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.web</groupId>
-            <artifactId>javax.servlet.jsp.jstl</artifactId>
-            <version>1.2.1</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
-            <version>1.0.0.GA</version>
+            <groupId>javax</groupId>
+            <artifactId>javaee-web-api</artifactId>
+            <version>6.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -110,12 +86,7 @@
             <artifactId>groovy-all</artifactId>
             <version>1.8.5</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
-            <version>6.0</version>
-            <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
     </dependencies>
     <properties>
