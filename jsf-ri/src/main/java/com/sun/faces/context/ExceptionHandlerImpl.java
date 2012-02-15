@@ -266,20 +266,13 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
 
         if (isDevelopment && !errorPagePresent) {
             Object response = extContext.getResponse();
-            boolean isWeblogic = response.getClass().getName().contains("weblogic");
-            boolean forceRenderOfErrorPage = (isWeblogic && actualStatus == 
+            boolean forceRenderOfErrorPage = (actualStatus == 
                     HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             // RELEASE_PENDING_2_1
             // thThe error page here will be text/html which means not all device
             // types are going to render this properly.  This should be addressed
             // in 2.1
             RenderKitUtils.renderHtmlErrorPage(ctx, fe, forceRenderOfErrorPage);
-            if (isWeblogic && response instanceof HttpServletResponse) {
-                int reportedStatus = ((HttpServletResponse)response).getStatus();
-                doThrow = HttpServletResponse.SC_OK != actualStatus
-                          &&
-                          HttpServletResponse.SC_OK == reportedStatus;
-            }
         } else {
             if (isDevelopment) {
                 // store the view root where the exception occurred into the
