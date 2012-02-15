@@ -835,6 +835,21 @@
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
+      <xsd:element name="flash-factory"
+                   type="javaee:fully-qualified-classType">
+        <xsd:annotation>
+          <xsd:documentation>
+
+            The "flash-factory" element contains the
+            fully qualified class name of the concrete
+            FaceletFactory implementation class that will
+            be called when
+            FactoryFinder.getFactory(FLASH_FACTORY) is
+            called.
+            
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
       <xsd:element name="factory-extension"
                    type="javaee:faces-config-factory-extensionType"
                    minOccurs="0"

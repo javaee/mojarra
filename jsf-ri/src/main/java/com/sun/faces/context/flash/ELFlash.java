@@ -280,7 +280,7 @@ public class ELFlash extends Flash {
      * @return The flash <code>Map</code> for this session.
      */
     
-    public static ELFlash getFlash(ExternalContext extContext, boolean create) {
+    static ELFlash getFlash(ExternalContext extContext, boolean create) {
         Map<String, Object> appMap = extContext.getApplicationMap();
         ELFlash flash = (ELFlash) 
             appMap.get(FLASH_ATTRIBUTE_NAME);
@@ -577,6 +577,13 @@ public class ELFlash extends Flash {
     }
 
     public void doPostPhaseActions(FacesContext context) {
+        if (context.getAttributes().containsKey(ACT_AS_DO_LAST_PHASE_ACTIONS)) {
+            Boolean outgoingResponseIsRedirect = 
+                    (Boolean) context.getAttributes().get(ACT_AS_DO_LAST_PHASE_ACTIONS);
+            doLastPhaseActions(context, outgoingResponseIsRedirect);
+            return;
+        }
+        
         PhaseId currentPhase = context.getCurrentPhaseId();
         Map<Object, Object> contextMap = context.getAttributes();
         boolean
@@ -587,6 +594,9 @@ public class ELFlash extends Flash {
             doLastPhaseActions(context, false);
         }
     }
+    
+    public static final String ACT_AS_DO_LAST_PHASE_ACTIONS = 
+            ELFlash.class.getPackage().getName() + ".ACT_AS_DO_LAST_PHASE_ACTIONS";
 
     /**
      * <p>This is the most magic of methods.  There are several scenarios
@@ -679,7 +689,7 @@ public class ELFlash extends Flash {
     }
 
 
-    void setKeepFlag(FacesContext context) {
+    static void setKeepFlag(FacesContext context) {
         context.getAttributes().put(CONSTANTS.KeepFlagAttributeName, Boolean.TRUE);
     }
 

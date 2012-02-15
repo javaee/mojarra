@@ -51,7 +51,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.faces.FactoryFinder;
 import javax.faces.context.Flash;
+import javax.faces.context.FlashFactory;
 
 /**
  * <p>Provide a feature semantically identical to the <a target="_"
@@ -212,14 +214,16 @@ public class FlashELResolver extends ELResolver {
         ExternalContext extCtx = facesContext.getExternalContext();
 
         // try to get the flash from the session.
-        Map<String, Object> flash = ELFlash.getFlash(extCtx, false);
+        FlashFactory ff = (FlashFactory) 
+                FactoryFinder.getFactory(FactoryFinder.FLASH_FACTORY);
+        Map<String, Object> flash = ff.getFlash(extCtx, false);
         
         elContext.setPropertyResolved(true);
         
         if (null == flash)
         {
           // create a new one and store it in the session.
-          flash = ELFlash.getFlash(extCtx, true);
+          flash = ff.getFlash(extCtx, true);
           extCtx.getSessionMap().put(ELFlash.FLASH_ATTRIBUTE_NAME, flash);
         }
         
@@ -234,7 +238,9 @@ public class FlashELResolver extends ELResolver {
       ExternalContext extCtx = facesContext.getExternalContext();
 
       // try to get the flash from the session.
-      Map<String, Object> flash = ELFlash.getFlash(extCtx, false);
+      FlashFactory ff = (FlashFactory) 
+              FactoryFinder.getFactory(FactoryFinder.FLASH_FACTORY);
+      Map<String, Object> flash = ff.getFlash(extCtx, false);
 
       if (base == flash)
       {
@@ -250,7 +256,8 @@ public class FlashELResolver extends ELResolver {
           result = base;
           // Set a flag so the flash itself can look in the request
           // and promote the value to the next request
-          ELFlash.getFlash(extCtx, true).setKeepFlag(facesContext);
+          ff.getFlash(extCtx, true);
+          ELFlash.setKeepFlag(facesContext);
         }
         // Otherwise, if base is the flash, and property is "now"...
         else if (property.toString().equals(FLASH_NOW_VARIABLE_NAME))

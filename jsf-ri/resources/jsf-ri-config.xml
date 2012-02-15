@@ -65,6 +65,9 @@
     <faces-context-factory>
       com.sun.faces.context.FacesContextFactoryImpl
     </faces-context-factory>
+    <flash-factory>
+      com.sun.faces.context.flash.FlashFactoryImpl
+    </flash-factory>
     <partial-view-context-factory>
       com.sun.faces.context.PartialViewContextFactoryImpl
     </partial-view-context-factory>

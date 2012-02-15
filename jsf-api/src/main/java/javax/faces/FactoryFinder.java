@@ -189,13 +189,23 @@ public final class FactoryFinder {
          "javax.faces.view.facelets.FaceletCacheFactory";
 
     /**
-     * <p class="changed_added_2_1">The property name for the
+     * <p class="changed_added_2_2">The property name for the
      * {@link javax.faces.view.facelets.FaceletFactory} class name.</p>
      *
      * @since 2.2
      */
     public final static String FACELET_FACTORY =
          "javax.faces.view.facelets.FaceletFactory";
+    
+    
+    /**
+     * <p class="changed_added_2_2">The property name for the
+     * {@link javax.faces.context.FlashFactory} class name.</p>
+     * 
+     * @since 2.2
+     */
+    public final static String FLASH_FACTORY =
+         "javax.faces.context.FlashFactory";
 
     /**
      * <p class="changed_added_2_0">The property name for the {@link
@@ -269,6 +279,7 @@ public final class FactoryFinder {
             EXCEPTION_HANDLER_FACTORY,
             EXTERNAL_CONTEXT_FACTORY,
             FACES_CONTEXT_FACTORY,
+            FLASH_FACTORY,
             PARTIAL_VIEW_CONTEXT_FACTORY,
             LIFECYCLE_FACTORY,
             RENDER_KIT_FACTORY,
@@ -293,6 +304,8 @@ public final class FactoryFinder {
                  javax.faces.context.ExternalContextFactory.class);
         factoryClasses.put(FACES_CONTEXT_FACTORY,
                  javax.faces.context.FacesContextFactory.class);
+        factoryClasses.put(FLASH_FACTORY,
+                 javax.faces.context.FlashFactory.class);
         factoryClasses.put(PARTIAL_VIEW_CONTEXT_FACTORY,
                  javax.faces.context.PartialViewContextFactory.class);
         factoryClasses.put(LIFECYCLE_FACTORY,

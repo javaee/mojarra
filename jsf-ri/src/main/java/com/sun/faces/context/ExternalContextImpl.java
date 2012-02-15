@@ -80,6 +80,8 @@ import com.sun.faces.util.TypedCollections;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.context.flash.ELFlash;
+import javax.faces.FactoryFinder;
+import javax.faces.context.FlashFactory;
 
 /**
  * <p>This implementation of {@link ExternalContext} is specific to the
@@ -103,7 +105,7 @@ public class ExternalContextImpl extends ExternalContext {
     private Map<String,Object> cookieMap = null;
     private Map<String,String> initParameterMap = null;
     private Map<String,String> fallbackContentTypeMap = null;
-    private ELFlash flash;
+    private Flash flash;
 
     private enum ALLOWABLE_COOKIE_PROPERTIES {
         domain,
@@ -560,7 +562,7 @@ public class ExternalContextImpl extends ExternalContext {
     public void redirect(String requestURI) throws IOException {
 
         FacesContext ctx = FacesContext.getCurrentInstance();
-        getELFlash().doLastPhaseActions(ctx, true);
+        doLastPhaseActions(ctx, true);
 
         if (ctx.getPartialViewContext().isPartialRequest()) {
             PartialResponseWriter pwriter;
@@ -858,7 +860,7 @@ public class ExternalContextImpl extends ExternalContext {
      */
     @Override
     public void responseFlushBuffer() throws IOException {
-        getELFlash().doLastPhaseActions(FacesContext.getCurrentInstance(), false);
+        doLastPhaseActions(FacesContext.getCurrentInstance(), false);
 
         response.flushBuffer();
 
@@ -949,15 +951,22 @@ public class ExternalContextImpl extends ExternalContext {
 
     @Override
     public Flash getFlash() {
-        return getELFlash();
-    }
-
-    private ELFlash getELFlash() {
-
         if (null == flash) {
-            flash = ELFlash.getFlash(this, true);
+            FlashFactory ff = (FlashFactory) FactoryFinder.getFactory(FactoryFinder.FLASH_FACTORY);
+            flash = ff.getFlash(this, true);
         }
         return flash;
+    }
+
+    private void doLastPhaseActions(FacesContext context, 
+            boolean outgoingResponseIsRedirect) {
+        Map<Object, Object> attrs = context.getAttributes();
+        try {
+            attrs.put(ELFlash.ACT_AS_DO_LAST_PHASE_ACTIONS, outgoingResponseIsRedirect);
+            getFlash().doPostPhaseActions(context);
+        } finally {
+            attrs.remove(ELFlash.ACT_AS_DO_LAST_PHASE_ACTIONS);
+        }
 
     }
 

@@ -85,6 +85,11 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
     private static final String EXCEPTION_HANDLER_FACTORY = "exception-handler-factory";
 
     /**
+     * <code>/faces-config/factory/flash-factory</code>
+     */
+    private static final String FLASH_FACTORY = "flash-factory";
+
+    /**
      * <code>/faces-config/factory/visit-context-factory</code>
      */
     private static final String VISIT_CONTEXT_FACTORY = "visit-context-factory";
@@ -254,6 +259,9 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
                                getNodeText(n));
                 } else if (LIFECYCLE_FACTORY.equals(n.getLocalName())) {
                     setFactory(FactoryFinder.LIFECYCLE_FACTORY,
+                               getNodeText(n));
+                } else if (FLASH_FACTORY.equals(n.getLocalName())) {
+                    setFactory(FactoryFinder.FLASH_FACTORY,
                                getNodeText(n));
                 } else if (FACES_CONTEXT_FACTORY.equals(n.getLocalName())) {
                     fcCount.incrementAndGet();

@@ -42,7 +42,6 @@ package com.sun.faces.context;
 
 
 import com.sun.faces.util.Util;
-import com.sun.faces.util.MessageUtils;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -51,9 +50,6 @@ import javax.faces.context.ExternalContextFactory;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.lifecycle.Lifecycle;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 
 public class FacesContextFactoryImpl extends FacesContextFactory {
 
