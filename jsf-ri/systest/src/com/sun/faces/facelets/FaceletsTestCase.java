@@ -367,6 +367,22 @@ public class FaceletsTestCase extends HtmlUnitFacesTestCase {
         validateToggleState1(divs);
 
     }
+    
+    public void testIssue1576() throws Exception {
+        HtmlPage page = getPage("/faces/facelets/Issue1576UsingPage.xhtml");
+        
+        String text = page.asText();
+        char copyright = 0xa9;
+        char middot = 0xb7;
+        char nbsp = 0xa0;
+
+        assertTrue(-1 != text.indexOf(copyright));
+        assertTrue(-1 != text.indexOf(middot));
+        // nbsp is converted to space on the server
+        assertTrue(-1 == text.indexOf(nbsp));
+
+        
+    }
 
 
     /**
