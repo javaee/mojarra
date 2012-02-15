@@ -78,6 +78,7 @@ public class RenderFacetIT {
     }
 
     @Test
+    @Ignore
     public void testRenderFacet2() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/renderFacet/renderFacet2.xhtml");
         assertTrue(page.getBody().asText().indexOf("myFacet Text") != -1);
