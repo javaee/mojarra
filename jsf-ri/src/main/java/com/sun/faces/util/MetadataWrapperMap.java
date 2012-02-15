@@ -95,12 +95,12 @@ public abstract class MetadataWrapperMap<K, V> implements Map<K, V> {
     protected abstract V onPut(K key, V value);
 
     public void putAll(Map m) {
-	this.putAll(m);
+	this.wrapped.putAll(m);
     }
 
     @SuppressWarnings(value="")
     public V remove(Object key) {
-	return this.remove(key);
+	return this.wrapped.remove(key);
     }
 
     public int size() {
