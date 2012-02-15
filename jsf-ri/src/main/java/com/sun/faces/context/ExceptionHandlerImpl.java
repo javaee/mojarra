@@ -266,13 +266,11 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
 
         if (isDevelopment && !errorPagePresent) {
             Object response = extContext.getResponse();
-            boolean forceRenderOfErrorPage = (actualStatus == 
-                    HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             // RELEASE_PENDING_2_1
             // thThe error page here will be text/html which means not all device
             // types are going to render this properly.  This should be addressed
             // in 2.1
-            RenderKitUtils.renderHtmlErrorPage(ctx, fe, forceRenderOfErrorPage);
+            RenderKitUtils.renderHtmlErrorPage(ctx, fe);
         } else {
             if (isDevelopment) {
                 // store the view root where the exception occurred into the
