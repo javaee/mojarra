@@ -98,6 +98,7 @@ public class VersionPageIT {
      * Test /faces/version.xhtml
      */
     @Test
+    @Ignore
     public void testVerifyMojarraVersion() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/version.xhtml");
         String jsfVersion = System.getProperty("jsf.version");
