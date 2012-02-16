@@ -80,6 +80,7 @@ public class MessagesRenderTestCase extends HtmlUnitFacesTestCase {
         HtmlPage page = getPage("/faces/messages.xhtml");
         String pageXml = page.asXml().replaceAll("\n","");
         pageXml = pageXml.replaceAll("\t","");
+        pageXml = pageXml.replaceAll("\r","");
         String case1 = "<!-- Case 1: Expected output: Both summary and detail rendered. -->      <ul>        <li>          This is the summary This is the detail        </li>        <li>          This is the summary This is the detail        </li>      </ul>";
         String case2 = "<!-- Case 2: Expected output: Both summary and detail rendered. Tooltip detail rendered. -->      <ul>        <li>          <span title=" + '"' + "This is the detail" + '"' + ">            This is the summary This is the detail          </span>        </li>        <li>          <span title=" + '"' + "This is the detail" + '"' + ">            This is the summary This is the detail          </span>        </li>      </ul>"; 
         String case3 = "<!-- Case 3: Expected output: Both summary and detail rendered. Tooltip detail rendered. -->      <ul>        <li>          <span title=" + '"' + "This is the detail" + '"' + ">            This is the summary This is the detail          </span>        </li>        <li>          <span title=" + '"' + "This is the detail" + '"' + ">            This is the summary This is the detail          </span>        </li>      </ul>";
