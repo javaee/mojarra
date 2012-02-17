@@ -48,6 +48,12 @@ import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.gargoylesoftware.htmlunit.html.HtmlUnorderedList;
 import com.gargoylesoftware.htmlunit.html.HtmlDivision;
 import com.sun.faces.htmlunit.AbstractTestCase;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.Socket;
+import java.net.URL;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -362,6 +368,66 @@ public class FaceletsTestCase extends AbstractTestCase {
         getAllElementsOfGivenClass(page, divs, HtmlDivision.class);
         validateToggleState1(divs);
 
+    }
+
+    public void testIssue1576() throws Exception {
+        HtmlPage page = getPage("/faces/facelets/Issue1576UsingPage.xhtml");
+        
+        String text = page.asText();
+        char copyright = 0xa9;
+        char middot = 0xb7;
+        char nbsp = 0xa0;
+
+        assertTrue(-1 != text.indexOf(copyright));
+        assertTrue(-1 != text.indexOf(middot));
+        // nbsp is converted to space on the server
+        assertTrue(-1 == text.indexOf(nbsp));
+        
+        int [] rc = new int[1];
+
+        // We have to use Socket to do this because HtmlUnit swallows the doctype.
+        String xml = this.issueHttpRequest("GET", rc, "/faces/facelets/Issue1576UsingPage.xhtml");
+        // assert there is exactly one DOCTYPE
+        int i = xml.indexOf("DOCTYPE");
+        assertTrue(-1 != i);
+        assertTrue(-1 == xml.indexOf("DOCTYPE", i + "DOCTYPE".length()));
+        
+        // assert there is exactly one html
+        i = xml.indexOf("<html");
+        assertTrue(-1 != i);
+        assertTrue(-1 == xml.indexOf("<html", i + "<html".length()));
+                
+    }
+    
+    
+    private String issueHttpRequest(String methodName, int [] rc, String path) throws Exception {
+
+        URL url = getURL(path);
+        Socket s = new Socket(url.getHost(), url.getPort());
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(s.getOutputStream()));
+        String requestLine = methodName + " /" + contextPath + path + " HTTP/1.1\r\n";
+        writer.write(requestLine);
+        writer.write("Host: " + url.getHost() + ":" + url.getPort() + "\r\n");
+        writer.write("User-Agent: systest-client\r\n");
+        writer.write("Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n");
+        writer.write("Connection: close\r\n");
+        writer.write("\r\n");
+        writer.flush();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(s.getInputStream()));
+        String cur = null;
+        StringBuilder builder = new StringBuilder();
+        rc[0] = -1;
+        while (null != (cur = reader.readLine())) {
+            if (-1 == rc[0]) {
+                String [] tokens = cur.split("\\s");
+                rc[0] = Integer.valueOf(tokens[1]);
+            }
+            builder.append(cur).append("\n");
+        }
+        writer.close();
+
+        
+        return builder.toString();
     }
 
 
