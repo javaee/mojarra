@@ -337,7 +337,7 @@ public class DefaultFaceletFactory extends FaceletFactory {
             } catch (IOException ex) {
             }
                   
-            URL fabricatedFaceletPage = tempFile.toURL();
+            URL fabricatedFaceletPage = tempFile.toURI().toURL();
             Facelet f = createFacelet(fabricatedFaceletPage);
             UIComponent tmp = (UIComponent)
                     app.createComponent("javax.faces.NamingContainer");
