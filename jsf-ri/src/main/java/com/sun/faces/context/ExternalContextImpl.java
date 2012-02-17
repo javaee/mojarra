@@ -136,7 +136,7 @@ public class ExternalContextImpl extends ExternalContext {
         this.response = response;
         WebConfiguration config = WebConfiguration.getInstance(sc);
         if (config.isOptionEnabled(SendPoweredByHeader)) {
-            ((HttpServletResponse) response).addHeader("X-Powered-By", "JSF/2.0");
+            ((HttpServletResponse) response).addHeader("X-Powered-By", "JSF/2.2");
         }
         fallbackContentTypeMap = new HashMap<String,String>(3, 1.0f);
         fallbackContentTypeMap.put("js", "text/javascript");
