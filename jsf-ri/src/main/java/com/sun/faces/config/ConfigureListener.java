@@ -872,7 +872,7 @@ public class ConfigureListener implements ServletRequestListener,
          */
         private SAXParserFactory getConfiguredFactory() {
 
-            SAXParserFactory factory = SAXParserFactory.newInstance();
+            SAXParserFactory factory = Util.createSAXParserFactory();
             factory.setValidating(false);
             factory.setNamespaceAware(true);
             return factory;

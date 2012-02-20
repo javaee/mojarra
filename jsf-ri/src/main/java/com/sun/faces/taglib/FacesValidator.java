@@ -49,6 +49,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import com.sun.faces.util.Util;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -266,7 +267,7 @@ public abstract class FacesValidator extends TagLibraryValidator {
 	    }
 
             // parse the page
-            SAXParserFactory f = SAXParserFactory.newInstance();
+            SAXParserFactory f = Util.createSAXParserFactory();
             f.setNamespaceAware(true);
             f.setValidating(true);
             SAXParser p = f.newSAXParser();
