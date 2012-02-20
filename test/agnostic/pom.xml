@@ -10,7 +10,7 @@
     <groupId>com.sun.faces.test</groupId>
     <artifactId>com.sun.faces.test.agnostic</artifactId>
     <packaging>pom</packaging>
-    <name>Mojarra Test Agnostic - POM</name>
+    <name>Mojarra 2.1.x Test - Agnostic - POM</name>
     <modules>
         <module>shared</module>
         <module>composite</module>
