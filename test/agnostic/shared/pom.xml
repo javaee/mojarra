@@ -10,7 +10,7 @@
     <groupId>com.sun.faces.test</groupId>
     <artifactId>com.sun.faces.test.agnostic.shared</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra Test Agnostic - Shared Tests</name>
+    <name>Mojarra 2.1.x Test - Agnostic - Shared Tests</name>
     <build>
         <finalName>test-agnostic-shared</finalName>
     </build>
