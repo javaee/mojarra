@@ -1,6 +1,5 @@
 package com.sun.faces.test.util;
 
-import com.sun.faces.test.util.ClusterUtils;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
