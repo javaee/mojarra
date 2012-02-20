@@ -10,18 +10,10 @@
     <groupId>com.sun.faces.test</groupId>
     <artifactId>com.sun.faces.test.agnostic.composite</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra Test Agnostic - Composite Components</name>
+    <name>Mojarra 2.1.x Test - Agnostic - Composite Components</name>
     <build>
         <finalName>test-agnostic-composite</finalName>
     </build>
-    <dependencies>
-        <dependency>
-            <groupId>org.glassfish.web</groupId>
-            <artifactId>el-impl</artifactId>
-            <version>2.2.1-b03</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
     <properties>
         <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
     </properties>
