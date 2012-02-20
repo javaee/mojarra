@@ -8,7 +8,7 @@
     <artifactId>com.sun.faces.test</artifactId>
     <version>2.1.8-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>Mojarra 2.1.x Test POM</name>
+    <name>Mojarra 2.1.x Test - POM</name>
     <modules>
         <module>agnostic</module>
         <module>cluster</module>
@@ -368,6 +368,140 @@
                 <integration.container.type>existing</integration.container.type>
                 <integration.serverPort>7001</integration.serverPort>
             </properties>
+        </profile>
+        <profile>
+            <id>integration-glassfish-cluster</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.7</version>
+                        <executions>
+                            <execution>
+                                <id>start-container</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <echo>=== Starting ${integration.container.cluster.domain}s ===</echo>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                            <arg line="start-domain ${integration.container.cluster.domain}"/>
+                                        </exec>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
+                                            <arg line="start-domain ${integration.container.cluster.domain}"/>
+                                        </exec>
+                                        <echo>=== Starting ${integration.container.cluster.name} ===</echo>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                            <arg line="start-cluster ${integration.container.cluster.name}"/>
+                                        </exec>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
+                                            <arg line="start-cluster ${integration.container.cluster.name}"/>
+                                        </exec>
+                                        <echo>=== Deploying ${project.build.finalName} to ${integration.container.cluster.name} ===</echo>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                            <arg line="deploy --force --target ${integration.container.cluster.name} ${project.build.directory}/${project.build.finalName}.war"/>
+                                        </exec>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
+                                            <arg line="deploy --force --target ${integration.container.cluster.name} ${project.build.directory}/${project.build.finalName}.war"/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>stop-container</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <echo>=== Undeploying ${project.build.finalName} from ${integration.container.cluster.name} ===</echo>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                            <arg line="undeploy --target ${integration.container.cluster.name} ${project.build.finalName}"/>
+                                        </exec>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
+                                            <arg line="undeploy --target ${integration.container.cluster.name} ${project.build.finalName}"/>
+                                        </exec>
+                                        <echo>=== Stopping ${integration.container.cluster.name} ===</echo>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                            <arg line="stop-cluster ${integration.container.cluster.name}"/>
+                                        </exec>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
+                                            <arg line="stop-cluster ${integration.container.cluster.name}"/>
+                                        </exec>
+                                        <echo>=== Stopping ${integration.container.cluster.domain} ===</echo>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                            <arg line="stop-domain ${integration.container.cluster.domain}"/>
+                                        </exec>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="unix">
+                                            <arg line="stop-domain ${integration.container.cluster.domain}"/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>                    
+                </plugins>
+            </build>
+            <properties>
+                <integration.container.home>C:/Glassfish3.1.1c</integration.container.home>
+                <integration.container.cluster.domain>domain1</integration.container.cluster.domain>
+                <integration.container.cluster.name>cluster1</integration.container.cluster.name>
+            </properties>
+        </profile>
+        <profile>
+            <id>integration-failsafe-cluster</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <version>2.11</version>
+                        <inherited>true</inherited>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                                <configuration>
+                                    <systemPropertyVariables>
+                                        <integration.url>${integration.protocol}://${integration.serverName1}:${integration.serverPort1}/${project.build.finalName}/</integration.url>
+                                        <integration.url2>${integration.protocol}://${integration.serverName2}:${integration.serverPort2}/${project.build.finalName}/</integration.url2>
+                                    </systemPropertyVariables>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>                
+                </plugins>
+            </build>
+            <properties>
+                <integration.protocol>http</integration.protocol>
+                <integration.serverPort1>28080</integration.serverPort1>
+                <integration.serverName1>localhost</integration.serverName1>
+                <integration.serverPort2>28081</integration.serverPort2>
+                <integration.serverName2>localhost</integration.serverName2>
+            </properties>
+            <reporting>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-report-plugin</artifactId>
+                        <version>2.11</version>
+                        <reportSets>
+                            <reportSet>
+                                <id>integration-tests</id>
+                                <reports>
+                                    <report>failsafe-report-only</report>
+                                </reports>
+                            </reportSet>
+                        </reportSets>
+                    </plugin>
+                </plugins>
+            </reporting>
         </profile>
     </profiles>
     <properties>
