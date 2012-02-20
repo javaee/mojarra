@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>com.sun.faces.test</artifactId>
@@ -10,5 +12,15 @@
     <groupId>com.sun.faces.test</groupId>
     <artifactId>com.sun.faces.test.cluster</artifactId>
     <packaging>pom</packaging>
-    <name>Mojarra Test Cluster - POM</name>
+    <name>Mojarra 2.1.x Test - Cluster - POM</name>
+    <modules>
+        <module>shared</module>
+    </modules>
+    <dependencies>
+        <dependency>
+            <groupId>com.sun.faces.test</groupId>
+            <artifactId>com.sun.faces.test.util</artifactId>
+            <version>2.1.8-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>
