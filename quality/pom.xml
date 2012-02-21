@@ -185,6 +185,13 @@
                 <configuration>
                     <configLocation>${project.build.directory}/../src/checkstyle/config.xml</configLocation>
                 </configuration>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>checkstyle</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
             </plugin>            
         </plugins>
     </reporting>
