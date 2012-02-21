@@ -183,7 +183,7 @@
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <version>2.9</version>
                 <configuration>
-                    <configLocation>src/checkstyle/config.xml</configLocation>
+                    <configLocation>${project.build.directory}../src/checkstyle/config.xml</configLocation>
                 </configuration>
             </plugin>            
         </plugins>
