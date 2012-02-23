@@ -82,6 +82,7 @@ import com.sun.faces.util.FacesLogger;
 import com.sun.faces.context.flash.ELFlash;
 import javax.faces.FactoryFinder;
 import javax.faces.context.FlashFactory;
+import javax.faces.lifecycle.ClientWindow;
 
 /**
  * <p>This implementation of {@link ExternalContext} is specific to the
@@ -94,6 +95,7 @@ public class ExternalContextImpl extends ExternalContext {
     private ServletContext servletContext = null;
     private ServletRequest request = null;
     private ServletResponse response = null;
+    private ClientWindow clientWindow = null;
 
     private Map<String,Object> applicationMap = null;
     private Map<String,Object> sessionMap = null;
@@ -157,6 +159,17 @@ public class ExternalContextImpl extends ExternalContext {
         return (((HttpServletRequest) request).getSession(create));
     }
 
+    @Override
+    public String getSessionId(boolean create) {
+        HttpSession session = null;
+        String id = null;
+        
+        session = (HttpSession)getSession(create);
+        if (null != session) {
+            id = session.getId();
+        }
+        return id;
+    }
 
     /**
      * @see javax.faces.context.ExternalContext#getContext()
@@ -189,8 +202,7 @@ public class ExternalContextImpl extends ExternalContext {
     public Object getRequest() {
         return this.request;
     }
-
-
+    
     /**
      * @see ExternalContext#setRequest(Object)
      */
@@ -232,6 +244,15 @@ public class ExternalContextImpl extends ExternalContext {
         }
     }
 
+    @Override
+    public ClientWindow getClientWindow() {
+        return clientWindow;
+    }
+
+    @Override
+    public void setClientWindow(ClientWindow window) {
+        this.clientWindow = window;
+    }
 
     /**
      * @see ExternalContext#setResponseCharacterEncoding(String)

@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+  <title>A Simple JavaServer Faces 2.0 View</title>
+</h:head>
+<h:body>
+    <script type="text/javascript">
+        //<![CDATA[
+        var windowId = "";
+        var callGetWindowId = function callGetWindowId() {
+            windowId = jsf.getWindowId(document.forms[0]);
+            var echoWindowId = document.getElementById("echoWindowId");
+            echoWindowId.innerHTML = "<b>" + windowId + "</b>";
+            return true;
+        }
+        //]]>        
+        
+    </script>
+    
+    
+  <h:form prependId="false">
+      First name: <h:inputText id="firstName" value="#{userBean.firstName}" /> Last name: #{userBean.lastName}
+      <p><h:commandButton id="submitAjax" value="submitAjax" onclick="callGetWindowId()">
+              <f:ajax execute="@form" render="echoPanel" />
+          </h:commandButton>
+    
+    </p>
+      <p><h:commandButton id="submitNonAjax" value="submitNonAjax" /> </p>
+      
+    
+    <h:panelGroup id="echoPanel">
+        
+        |#{userBean.firstName}|
+        
+    </h:panelGroup>
+      
+      <p>|WindowId: <span id="echoWindowId" />|</p>
+      
+  </h:form>
+</h:body>
+</html>

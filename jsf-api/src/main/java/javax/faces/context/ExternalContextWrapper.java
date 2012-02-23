@@ -51,6 +51,7 @@ import java.net.MalformedURLException;
 import java.security.Principal;
 
 import javax.faces.FacesWrapper;
+import javax.faces.lifecycle.ClientWindow;
 
 /**
  * <p class="changed_added_2_0"><span class="changed_modified_2_2">Provides</span>
@@ -418,6 +419,20 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
     }
 
     /**
+     * <p class="changed_added_2_2">The default behavior of this method is to
+     * call {@link ExternalContext#getSessionId(boolean)}
+     * on the wrapped {@link ExternalContext} object.</p>
+     * 
+     * @since 2.2
+     *
+     * @see javax.faces.context.ExternalContext#getSessionId(boolean)
+     */
+    @Override
+    public String getSessionId(boolean create) {
+        return getWrapped().getSessionId(create);
+    }
+
+    /**
      * <p>The default behavior of this method is to
      * call {@link ExternalContext#getSessionMap()}
      * on the wrapped {@link ExternalContext} object.</p>
@@ -451,6 +466,23 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
     public void setSessionMaxInactiveInterval(int interval) {
         getWrapped().setSessionMaxInactiveInterval(interval);
     }
+    
+    /**
+     * <p class="changed_added_2_2">The default behavior of this method is to
+     * call {@link ExternalContext#setClientWindow}
+     * on the wrapped {@link ExternalContext} object.</p>
+     * 
+     * @since 2.2
+     * 
+     * @param window the window associated with this request.
+     */
+
+    @Override
+    public void setClientWindow(ClientWindow window) {
+        getWrapped().setClientWindow(window);
+    }
+    
+    
 
     /**
      * <p>The default behavior of this method is to
@@ -461,6 +493,20 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
      */
     public Principal getUserPrincipal() {
         return getWrapped().getUserPrincipal();
+    }
+
+    /**
+     * <p class="changed_added_2_2">The default behavior of this method is to
+     * call {@link ExternalContext#getClientWindow}
+     * on the wrapped {@link ExternalContext} object.</p>
+     * 
+     * @since 2.2
+     *
+     * @see javax.faces.context.ExternalContext#getClientWindow()
+     */
+    @Override
+    public ClientWindow getClientWindow() {
+        return getWrapped().getClientWindow();
     }
 
     /**

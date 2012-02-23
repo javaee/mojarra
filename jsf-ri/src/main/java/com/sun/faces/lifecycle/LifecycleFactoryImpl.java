@@ -53,6 +53,8 @@ import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 
 /**
  * <B>LifecycleFactoryImpl</B> is the stock implementation of Lifecycle
@@ -76,10 +78,11 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
     public LifecycleFactoryImpl() {
         super();
         lifecycleMap = new ConcurrentHashMap<String,Lifecycle>();
+        ExternalContext extContext = FacesContext.getCurrentInstance().getExternalContext();
 
         // We must have an implementation under this key.
         lifecycleMap.put(LifecycleFactory.DEFAULT_LIFECYCLE,
-                         new LifecycleImpl());
+                         new LifecycleImpl(extContext));
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Created Default Lifecycle");
         }

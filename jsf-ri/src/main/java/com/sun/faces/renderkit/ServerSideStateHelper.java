@@ -234,9 +234,10 @@ public class ServerSideStateHelper extends StateHelper {
                  writer.write(stateFieldStart);
                  String viewStateId = Util.getViewStateId(ctx);
                  writer.write(viewStateId);
-                 writer.write(stateFieldMiddle);
+                 writer.write(fieldMiddle);
                  writer.write(id);
-                 writer.write(stateFieldEnd);
+                 writer.write(fieldEnd);
+                 writeWindowIdField(ctx, writer);
                  writeRenderKitIdField(ctx, writer);
              }
         }

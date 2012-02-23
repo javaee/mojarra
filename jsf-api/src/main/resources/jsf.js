@@ -804,12 +804,14 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
          * @ignore
          */
         var doUpdate = function doUpdate(element, context, partialResponseId) {
-            var id, content, markup, state;
-            var stateForm;
+            var id, content, markup, state, windowId;
+            var stateForm, windowIdForm;
             var scripts = []; // temp holding value for array of script nodes
 
             id = element.getAttribute('id');
             var viewStateRegex = new RegExp("javax.faces.ViewState" +
+                                            jsf.separatorchar + ".*$");
+            var windowIdRegex = new RegExp("javax.faces.WindowId" +
                                             jsf.separatorchar + ".*$");
             if (id.match(viewStateRegex)) {
 
@@ -852,6 +854,52 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                                     f.appendChild(field);
                                 }
                                 field.value = state.nodeValue;
+                            }
+                        }
+                    }
+                }
+                return;
+            } else if (id.match(windowIdRegex)) {
+
+                windowId = element.firstChild;
+
+                // Now set the windowId from the server into the DOM
+                // but only for the form that submitted the request.
+
+                windowIdForm = document.getElementById(context.formid);
+                if (!windowIdForm || !windowIdForm.elements) {
+                    // if the form went away for some reason, or it lacks elements 
+                    // we're going to just return silently.
+                    return;
+                }
+                var field = windowIdForm.elements["javax.faces.WindowId"];
+                if (typeof field == 'undefined') {
+                    field = document.createElement("input");
+                    field.type = "hidden";
+                    field.name = "javax.faces.WindowId";
+                    windowIdForm.appendChild(field);
+                }
+                field.value = windowId.nodeValue;
+
+                // Now set the windowId from the server into the DOM
+                // for any form that is a render target.
+
+                if (typeof context.render !== 'undefined' && context.render !== null) {
+                    var temp = context.render.split(' ');
+                    for (var i = 0; i < temp.length; i++) {
+                        if (temp.hasOwnProperty(i)) {
+                            // See if the element is a form and
+                            // the form is not the one that caused the submission..
+                            var f = document.forms[temp[i]];
+                            if (typeof f !== 'undefined' && f !== null && f.id !== context.formid) {
+                                field = f.elements["javax.faces.WindowId"];
+                                if (typeof field === 'undefined') {
+                                    field = document.createElement("input");
+                                    field.type = "hidden";
+                                    field.name = "javax.faces.WindowId";
+                                    f.appendChild(field);
+                                }
+                                field.value = windowId.nodeValue;
                             }
                         }
                     }
@@ -1913,7 +1961,8 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
 
             },
             /**
-             * <p>Receive an Ajax response from the server.
+             * <p><span class="changed_modified_2_2">Receive</span> an Ajax response 
+             * from the server.
              * <p><b>Usage:</b></p>
              * <pre><code>
              * jsf.ajax.response(request, context);
@@ -1948,15 +1997,57 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              * &lt;/update&gt;</code></pre>
              * Update the entire DOM replacing the appropriate <code>head</code> and/or
              * <code>body</code> sections with the content from the response.</li>
-             * <li>If an <code>update</code> element is found in the response with the identifier
+
+             * <li class="changed_modified_2_2">If an
+             * <code>update</code> element is found in the response with
+             * an identifier containing
              * <code>javax.faces.ViewState</code>:
-             * <pre><code>&lt;update id="javax.faces.ViewState"&gt;
+
+             * <pre><code>&lt;update id="&lt;VIEW_ROOT_CONTAINER_CLIENT_ID&gt;&lt;SEP&gt;javax.faces.ViewState&lt;SEP&gt;&lt;UNIQUE_PER_VIEW_NUMBER&gt;"&gt;
              *    &lt;![CDATA[...]]&gt;
              * &lt;/update&gt;</code></pre>
-             * locate and update the submitting form's <code>javax.faces.ViewState</code> value
-             * with the <code>CDATA</code> contents from the response.  Locate and update the 
-             * <code>javax.faces.ViewState</code> value for all forms specified in the 
-             * <code>render</code> target list.</li>
+
+             * locate and update the submitting form's
+             * <code>javax.faces.ViewState</code> value with the
+             * <code>CDATA</code> contents from the response.
+             * &lt;SEP&gt: is the currently configured
+             * <code>UINamingContainer.getSeparatorChar()</code>.
+             * &lt;VIEW_ROOT_CONTAINER_CLIENT_ID&gt; is the return from
+             * <code>UIViewRoot.getContainerClientId()</code> on the
+             * view from whence this state originated.
+             * &lt;UNIQUE_PER_VIEW_NUMBER&gt; is a number that must be
+             * unique within this view, but must not be included in the
+             * view state.  This requirement is simply to satisfy XML
+             * correctness in parity with what is done in the
+             * corresponding non-partial JSF view.  Locate and update
+             * the <code>javax.faces.ViewState</code> value for all
+             * forms specified in the <code>render</code> target
+             * list.</li>
+
+             * <li class="changed_added_2_2">If an
+             * <code>update</code> element is found in the response with
+             * an identifier containing
+             * <code>javax.faces.WindowId</code>:
+
+             * <pre><code>&lt;update id="javax.faces.WindowId&lt;SEP&gt;&lt;UNIQUE_PER_VIEW_NUMBER&gt;"&gt;
+             *    &lt;![CDATA[...]]&gt;
+             * &lt;/update&gt;</code></pre>
+
+             * locate and update the submitting form's
+             * <code>javax.faces.WindowId</code> value with the
+             * <code>CDATA</code> contents from the response.
+             * &lt;SEP&gt: is the currently configured
+             * <code>UINamingContainer.getSeparatorChar()</code>.
+             * &lt;UNIQUE_PER_VIEW_NUMBER&gt; is a number that must be
+             * unique within this view, but must not be included in the
+             * view state.  This requirement is simply to satisfy XML
+             * correctness in parity with what is done in the
+             * corresponding non-partial JSF view.  Locate and update
+             * the <code>javax.faces.WindowId</code> value for all
+             * forms specified in the <code>render</code> target
+             * list.</li>
+
+
              * <li>If an <code>update</code> element is found in the response with the identifier
              * <code>javax.faces.ViewHead</code>:
              * <pre><code>&lt;update id="javax.faces.ViewHead"&gt;
@@ -2285,6 +2376,28 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
     };
 
     /**
+     * <p class="changed_added_2_2">Return the windowId of the window
+     * in which the argument form is rendered.</p>
+
+     * @param form The <code>form</code> element whose contained
+     * <code>input</code> controls will be collected and encoded.
+     * Only successful controls will be collected and encoded in
+     * accordance with: <a href="http://www.w3.org/TR/html401/interact/forms.html#h-17.13.2">
+     * Section 17.13.2 of the HTML Specification</a>.
+     *
+     * @returns String The windowId of the current window, or null 
+     *  if the windowId cannot be determined.
+     * @function jsf.getViewState
+     */
+    jsf.getWindowId = function(form) {
+        var field = form.elements["javax.faces.WindowId"];
+        if (!(typeof field == 'undefined')) {
+            return field.value;
+        }
+    }
+
+
+    /**
      * The namespace for JavaServer Faces JavaScript utilities.
      * @name jsf.util
      * @namespace
@@ -2332,7 +2445,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
 
     /**
      * <p class="changed_added_2_2">The result of calling
-     * <code>UINamingContainer.getNamingContainerSeparatorChar().</p>
+     * <code>UINamingContainer.getNamingContainerSeparatorChar().</code></p>
      */
     jsf.separatorchar = '#{facesContext.namingContainerSeparatorChar}';
 

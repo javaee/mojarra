@@ -67,7 +67,7 @@ import java.util.logging.Logger;
 import com.sun.faces.component.visit.PartialVisitContext;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
-import javax.faces.component.UINamingContainer;
+import javax.faces.lifecycle.ClientWindow;
 
  public class PartialViewContextImpl extends PartialViewContext {
 
@@ -419,6 +419,14 @@ import javax.faces.component.UINamingContainer;
             String state = context.getApplication().getStateManager().getViewState(context);
             writer.write(state);
             writer.endUpdate();
+            
+            ClientWindow window = context.getExternalContext().getClientWindow();
+            if (null != window) {
+                String windowIdId = Util.getWindowIdId(context);
+                writer.startUpdate(windowIdId);
+                writer.write(window.getId());
+                writer.endUpdate();
+            }
         }
 
     }

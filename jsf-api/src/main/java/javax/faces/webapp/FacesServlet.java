@@ -506,8 +506,9 @@ public final class FacesServlet implements Servlet {
 
 
     /**
-     * <p class="changed_modified_2_0">Process an incoming request, and create the
-     * corresponding response according to the following
+     * <p class="changed_modified_2_0"><span
+     * class="changed_modified_2_2">Process</span> an incoming request,
+     * and create the corresponding response according to the following
      * specification.</p>
      * 
      * <div class="changed_modified_2_0">
@@ -550,9 +551,11 @@ public final class FacesServlet implements Servlet {
      * javax.faces.application.ResourceHandler#isResourceRequest}.  If
      * this returns <code>true</code> call {@link
      * javax.faces.application.ResourceHandler#handleResourceRequest}.
-     * If this returns <code>false</code>, call {@link
-     * javax.faces.lifecycle.Lifecycle#execute} followed by {@link
-     * javax.faces.lifecycle.Lifecycle#render}.  If a {@link
+     * If this returns <code>false</code>, <span
+     * class="changed_added_2_2">call {@link
+     * javax.faces.lifecycle.Lifecycle#attachWindow} followed by </span>
+     * {@link javax.faces.lifecycle.Lifecycle#execute} followed by
+     * {@link javax.faces.lifecycle.Lifecycle#render}.  If a {@link
      * javax.faces.FacesException} is thrown in either case, extract the
      * cause from the <code>FacesException</code>.  If the cause is
      * <code>null</code> extract the message from the
@@ -633,6 +636,7 @@ public final class FacesServlet implements Servlet {
             if (handler.isResourceRequest(context)) {
                 handler.handleResourceRequest(context);
             } else {
+                lifecycle.attachWindow(context);
                 lifecycle.execute(context);
                 lifecycle.render(context);
             }

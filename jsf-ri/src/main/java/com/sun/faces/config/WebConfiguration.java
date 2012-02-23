@@ -71,6 +71,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.faces.FactoryFinder;
 import javax.faces.component.UIInput;
 import javax.faces.event.PhaseListener;
+import javax.faces.lifecycle.ClientWindow;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.validator.BeanValidator;
@@ -959,7 +960,12 @@ public class WebConfiguration {
         FaceletsProcessingFileExtensionProcessAs(
                 "",
                 ""
-        );
+        ),
+        WindowIdMode(
+              ClientWindow.WINDOW_ID_MODE_PARAM_NAME,
+              "none"
+        ),
+;
 
 
 

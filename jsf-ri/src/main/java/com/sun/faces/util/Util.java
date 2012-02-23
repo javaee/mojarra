@@ -953,10 +953,26 @@ public class Util {
         result = root.getContainerClientId(context) + sep + 
                 ResponseStateManager.VIEW_STATE_PARAM + sep +
                 + counter;
-        contextAttrs.put(viewStateCounterKey, counter++);
+        contextAttrs.put(viewStateCounterKey, ++counter);
         
         return result;
     }
 
+    public static String getWindowIdId(FacesContext context) {
+        String result = null;
+        final String windowIdIdCounterKey = "com.sun.faces.util.WindowIdCounterKey";
+        Map<Object, Object> contextAttrs = context.getAttributes();
+        Integer counter = (Integer) contextAttrs.get(windowIdIdCounterKey);
+        if (null == counter) {
+            counter = new Integer(0);
+        }
+        
+        char sep = UINamingContainer.getSeparatorChar(context);
+        result = ResponseStateManager.WINDOW_ID_PARAM + sep +
+                + counter;
+        contextAttrs.put(windowIdIdCounterKey, ++counter);
+        
+        return result;
+    }
 
 } // end of class Util

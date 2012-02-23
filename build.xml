@@ -134,7 +134,7 @@
     </target>
 
     <target name="test" description="Run API, Impl, and Demo automated tests">
-        <call.modules target="test"/>
+<!--        <call.modules target="test"/> -->
         <subant target="test" inheritAll="false" failonerror="true">
           <filelist dir="${regression.test.dir}">
               <file name="build.xml"/>

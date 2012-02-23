@@ -41,6 +41,7 @@
 package com.sun.faces.renderkit;
 
 
+import javax.faces.lifecycle.ClientWindow;
 import com.sun.faces.RIConstants;
 import java.io.IOException;
 
@@ -52,6 +53,7 @@ import javax.faces.render.RenderKitFactory;
 import com.sun.faces.spi.SerializationProviderFactory;
 import com.sun.faces.spi.SerializationProvider;
 import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.util.Util;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.CompressViewState;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.AutoCompleteOffOnViewState;
 
@@ -74,11 +76,22 @@ public abstract class StateHelper {
 
     /**
      * <p>
+     * The first portion of the window id field.
+     * </p>
+     *
+     */
+    protected static final char[] WINDOW_ID_FIELD_START =
+          ("<input type=\"hidden\" name=\""
+           + ResponseStateManager.WINDOW_ID_PARAM
+           + "\" id=\"").toCharArray();
+
+    /**
+     * <p>
      * The second portion of the hidden state field.
      * </p>
      *
      */
-    protected static final char[] STATE_FIELD_MIDDLE =
+    protected static final char[] FIELD_MIDDLE =
           ("\" value=\"").toCharArray();
 
     /**
@@ -86,7 +99,7 @@ public abstract class StateHelper {
      * The end of the hidden state field.
      * </p>
      */
-    protected static final char[] STATE_FIELD_END =
+    protected static final char[] FIELD_END =
           "\" />".toCharArray();
 
     /**
@@ -134,19 +147,25 @@ public abstract class StateHelper {
     protected char[] stateFieldStart;
     
     /**
+     * This will be used the by the different <code>StateHelper</code> implementations
+     * when writing the start of the windowId field.
+     */
+    protected char[] windowIdFieldStart;
+    
+    /**
      * This will be used by the different <code>StateHelper</code> implementations
-     * when writing the middle of the state field.
+     * when writing the middle of the state or viewId fields.
      */
     
-    protected char[] stateFieldMiddle;
+    protected char[] fieldMiddle;
 
 
     /**
      * This will be used the by the different <code>StateHelper</code> implementations
-     * when writing the end of the state field.  This value of this field is
+     * when writing the end of the state or viewId field.  This value of this field is
      * determined by the value of the {@link com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter#AutoCompleteOffOnViewState}<code>
      */
-    protected char[] stateFieldEnd;
+    protected char[] fieldEnd;
 
 
     // ------------------------------------------------------------ Constructors
@@ -163,10 +182,11 @@ public abstract class StateHelper {
         webConfig = WebConfiguration.getInstance(ctx.getExternalContext());
         compressViewState = webConfig.isOptionEnabled(CompressViewState);
         stateFieldStart = STATE_FIELD_START;
-        stateFieldMiddle = STATE_FIELD_MIDDLE;
-        stateFieldEnd = (webConfig.isOptionEnabled(AutoCompleteOffOnViewState)
+        windowIdFieldStart = WINDOW_ID_FIELD_START;
+        fieldMiddle = FIELD_MIDDLE;
+        fieldEnd = (webConfig.isOptionEnabled(AutoCompleteOffOnViewState)
                            ? STATE_FIELD_AUTOCOMPLETE_END
-                           : STATE_FIELD_END);
+                           : FIELD_END);
 
 
         if (serialProvider == null) {
@@ -277,6 +297,20 @@ public abstract class StateHelper {
             writer.endElement("input");
         }
 
+    }
+    
+    protected void writeWindowIdField(FacesContext context,
+                                      ResponseWriter writer)
+    throws IOException {
+        ClientWindow window = context.getExternalContext().getClientWindow();
+        if (null != window) {
+            writer.write(windowIdFieldStart);
+            writer.write(Util.getWindowIdId(context));
+            writer.write(fieldMiddle);
+            writer.write(window.getId());
+            writer.write(fieldEnd);
+        }
+        
     }
 
 }

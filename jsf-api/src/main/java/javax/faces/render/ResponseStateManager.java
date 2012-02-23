@@ -103,6 +103,14 @@ public abstract class ResponseStateManager {
     public static final String VIEW_STATE_PARAM = "javax.faces.ViewState";
     
     /**
+     * <p class="changed_added_2_2">The name of the request parameter that
+     * refers to the encoded WindowId.</p>
+     * 
+     */
+    
+    public static final String WINDOW_ID_PARAM = "javax.faces.WindowId";
+    
+    /**
      * <p class="changed_added_2_2">The value of this constant is taken
      * to be the name of a request parameter whose value is inspected
      * to verify the safety of an incoming non-postback request with respect
@@ -116,7 +124,7 @@ public abstract class ResponseStateManager {
             "javax.faces.Token";
     
     /**       
-     * <p><span class=" class="changed_modified_2_2"">Take</span> the argument 
+     * <p><span class="changed_modified_2_2"">Take</span> the argument 
      * <code>state</code> and write it into the
      * output using the current {@link ResponseWriter}, which must be
      * correctly positioned already.</p>
@@ -164,6 +172,14 @@ public abstract class ResponseStateManager {
      * an instance of <code>SerializedView</code> and
      * stores the state as the treeStructure, and passes it to {@link
      * #writeState(javax.faces.context.FacesContext,javax.faces.application.StateManager.SerializedView)}.</p>
+     * 
+     * <p class="changed_added_2_2">The {@link javax.faces.lifecycle.ClientWindow}
+     * must be written using these 
+     * steps.  Call {@link javax.faces.context.ExternalContext#getClientWindow}.
+     * If the result is <code>null</code>, take no further action regarding 
+     * the <code>ClientWindow</code>.  If the result is non-<code>null</code>,
+     * write a hidden field whose name is {@link #WINDOW_ID_PARAM} and whose 
+     * id </p>
      *
      *
      * @since 1.2

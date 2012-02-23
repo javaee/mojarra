@@ -40,6 +40,7 @@
 
 package com.sun.faces.lifecycle;
 
+import com.sun.faces.config.WebConfiguration;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
@@ -52,6 +53,8 @@ import javax.faces.lifecycle.Lifecycle;
 
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
+import javax.faces.context.ExternalContext;
+import javax.faces.lifecycle.ClientWindow;
 
 
 /**
@@ -89,12 +92,49 @@ public class LifecycleImpl extends Lifecycle {
     // List for registered PhaseListeners
     private List<PhaseListener> listeners =
           new CopyOnWriteArrayList<PhaseListener>();
+    private boolean isWindowIdEnabled = false;
+    
+    public LifecycleImpl() {
+        
+    }
+
+    public LifecycleImpl(ExternalContext extContext) {
+        WebConfiguration config = WebConfiguration.getInstance(extContext);
+        String optionValue = config.getOptionValue(WebConfiguration.WebContextInitParameter.WindowIdMode);
+        isWindowIdEnabled = (null != optionValue) && !optionValue.equals(WebConfiguration.WebContextInitParameter.WindowIdMode.getDefaultValue());
 
         
+    }
 
     // ------------------------------------------------------- Lifecycle Methods
 
+    @Override
+    public void attachWindow(FacesContext context) {
+        if (!isWindowIdEnabled) {
+            return;
+        }
+        if (context == null) {
+            throw new NullPointerException
+                (MessageUtils.getExceptionMessageString
+                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+        }
 
+        ExternalContext extContext = context.getExternalContext();
+        ClientWindow myWindow = extContext.getClientWindow();
+        if (null == myWindow) {
+            myWindow = new ClientWindowImpl();
+            myWindow.decode(context);
+            extContext.setClientWindow(myWindow);
+            
+        }
+        
+        
+        // If you need to do the "send down the HTML" trick, be sure to
+        // mark responseComplete true after doing so.  That way
+        // the remaining lifecycle methods will not execute.
+        
+    }
+    
     // Execute the phases up to but not including Render Response
     public void execute(FacesContext context) throws FacesException {
 

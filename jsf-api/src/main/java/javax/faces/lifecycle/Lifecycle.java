@@ -46,7 +46,7 @@ import javax.faces.event.PhaseListener;
 
 
 /**
- * <p><strong>Lifecycle</strong> manages the
+ * <p><strong class="changed_modified_2_2">Lifecycle</strong> manages the
  * processing of the entire lifecycle of a particular JavaServer Faces
  * request.  It is responsible for executing all of the phases that have
  * been defined by the JavaServer Faces Specification, in the specified
@@ -97,6 +97,19 @@ public abstract class Lifecycle {
      *  is <code>null</code>
      */
     public abstract void execute(FacesContext context) throws FacesException;
+    
+    
+    /**
+     * <p class="changed_added_2_2">Create or restore the window to be 
+     * used to display the {@link javax.faces.component.UIViewRoot} for
+     * this run through the lifecycle.</p>
+     * 
+     * 
+     * @since 2.2
+     */
+    
+    public void attachWindow(FacesContext context) {
+    }
 
 
     /**

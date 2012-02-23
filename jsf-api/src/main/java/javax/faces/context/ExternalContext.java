@@ -56,6 +56,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.Principal;
 import java.util.*;
+import javax.faces.lifecycle.ClientWindow;
 
 
 /**
@@ -1338,6 +1339,37 @@ public abstract class ExternalContext {
      *  created if there is no session associated with the current request
      */
     public abstract Object getSession(boolean create);
+    
+    /**
+     * <p class="changed_added_2_2">Return the id of the current session
+     * or the empty string if no session has been created and the 
+     * <code>create</code> parameter is <code>false</code>.</p>
+     * 
+     * <div class="changed_added_2_2">
+     *
+     * <p><em>Servlet:</em> If <code>create</code> is true, obtain
+     * a reference to the <code>HttpSession</code> for the current request
+     * (creating the session if necessary) and return its id.  If 
+     * <code>create</code> is <code>false</code>, obtain a reference to the
+     * current session, if one exists, and return its id.  If no session exists,
+     * return the empty string.</p>
+     * 
+     * </div>
+     * 
+     * @since 2.2
+     * 
+     * @param create Flag indicating whether or not a new session should be
+     *  created if there is no session associated with the current request
+     */
+    public String getSessionId(boolean create) {
+        String result = "";
+        if (defaultExternalContext != null) {
+            result = defaultExternalContext.getSessionId(create);
+        } else {
+            throw new UnsupportedOperationException();
+        }
+        return result;
+    }
 
     /**
      * <p class="changed_added_2_1">Returns the maximum time interval, in seconds, that
@@ -1419,6 +1451,24 @@ public abstract class ExternalContext {
      *
      */
     public abstract Principal getUserPrincipal();
+    
+    
+    /**
+     * <p class="changed_added_2_2">Return the {@link ClientWindow} set in a preceding
+     * call to {@link #setClientWindow}, or <code>null</code> if no such call has
+     * been made.</p>
+     * 
+     * @since 2.2
+     *
+     */
+    public ClientWindow getClientWindow() {
+        if (defaultExternalContext != null) {
+            return defaultExternalContext.getClientWindow();
+        } else {
+            throw new UnsupportedOperationException();
+        }
+        
+    }
 
 
     /**
@@ -1798,6 +1848,23 @@ public abstract class ExternalContext {
             throw new UnsupportedOperationException();
         }
 
+    }
+    
+    /**
+     * <p class="changed_added_2_2">Associate this instance with a {@link ClientWindow}.</p>
+     * 
+     * @param window the window with which this instance is associated.
+     * 
+     * @since 2.2
+     */
+    
+    public void setClientWindow(ClientWindow window) {
+        if (defaultExternalContext != null) {
+            defaultExternalContext.setClientWindow(window);
+        } else {
+            throw new UnsupportedOperationException();
+        }
+        
     }
 
     /**
