@@ -44,7 +44,7 @@
 
 
     <property file="${user.home}/build.properties"/>
-    <property file="../../build.properties"/>
+    <property file="../../../build.properties"/>
     <import file="${jsf.build.home}/common/ant/common.xml"/>
 
     <!-- Configure the context path for this application -->
@@ -127,6 +127,19 @@
             </archive-elements>
         </jsf.war>
     </target>
+
+    <target name="install">
+        <deploy.artifact
+              artifact="${basedir}/target/jsf-ezcomp02.war"
+              appName="jsf-ezcomp02"/>
+    </target>    
+
+    <target name="remove">
+        <undeploy.artifact
+              artifact="${basedir}/target/jsf-ezcomp02.war"
+              appName="jsf-ezcomp02"/>
+    </target>    
+
 
 </project> 
  
