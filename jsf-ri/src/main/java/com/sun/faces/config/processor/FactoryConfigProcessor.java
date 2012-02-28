@@ -147,6 +147,7 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
           FactoryFinder.EXCEPTION_HANDLER_FACTORY,
           FactoryFinder.EXTERNAL_CONTEXT_FACTORY,
           FactoryFinder.FACES_CONTEXT_FACTORY,
+          FactoryFinder.FLASH_FACTORY,
           FactoryFinder.LIFECYCLE_FACTORY,
           FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY,
           FactoryFinder.PARTIAL_VIEW_CONTEXT_FACTORY,
