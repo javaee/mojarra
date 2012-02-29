@@ -968,8 +968,8 @@ public class Util {
         }
         
         char sep = UINamingContainer.getSeparatorChar(context);
-        result = ResponseStateManager.WINDOW_ID_PARAM + sep +
-                + counter;
+        result = context.getViewRoot().getContainerClientId(context) + sep + 
+                ResponseStateManager.WINDOW_ID_PARAM + sep + counter;
         contextAttrs.put(windowIdIdCounterKey, ++counter);
         
         return result;

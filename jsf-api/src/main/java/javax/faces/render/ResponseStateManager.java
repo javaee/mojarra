@@ -104,7 +104,14 @@ public abstract class ResponseStateManager {
     
     /**
      * <p class="changed_added_2_2">The name of the request parameter that
-     * refers to the encoded WindowId.</p>
+     * refers to the encoded WindowId.  The <code>id</code> attribute must be a
+     * concatenation of the return from {@link
+     * javax.faces.component.UIViewRoot#getContainerClientId}, the
+     * return from {@link
+     * javax.faces.component.UINamingContainer#getSeparatorChar}, this
+     * constant field value, the separator char, and a number that is 
+     * guaranteed to be unique with respect to all the other instances of
+     * this kind of client parameter in the view.</p>
      * 
      */
     

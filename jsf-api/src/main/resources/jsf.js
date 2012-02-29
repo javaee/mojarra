@@ -811,7 +811,8 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
             id = element.getAttribute('id');
             var viewStateRegex = new RegExp("javax.faces.ViewState" +
                                             jsf.separatorchar + ".*$");
-            var windowIdRegex = new RegExp("javax.faces.WindowId" +
+            var windowIdRegex = new RegExp("^.*" + jsf.separatorchar + 
+                                           "javax.faces.WindowId" +
                                             jsf.separatorchar + ".*$");
             if (id.match(viewStateRegex)) {
 
@@ -2029,7 +2030,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              * an identifier containing
              * <code>javax.faces.WindowId</code>:
 
-             * <pre><code>&lt;update id="javax.faces.WindowId&lt;SEP&gt;&lt;UNIQUE_PER_VIEW_NUMBER&gt;"&gt;
+             * <pre><code>&lt;update id="&lt;VIEW_ROOT_CONTAINER_CLIENT_ID&gt;&lt;SEP&gt;javax.faces.WindowId&lt;SEP&gt;&lt;UNIQUE_PER_VIEW_NUMBER&gt;"&gt;
              *    &lt;![CDATA[...]]&gt;
              * &lt;/update&gt;</code></pre>
 
@@ -2038,6 +2039,9 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              * <code>CDATA</code> contents from the response.
              * &lt;SEP&gt: is the currently configured
              * <code>UINamingContainer.getSeparatorChar()</code>.
+             * &lt;VIEW_ROOT_CONTAINER_CLIENT_ID&gt; is the return from
+             * <code>UIViewRoot.getContainerClientId()</code> on the
+             * view from whence this state originated.             
              * &lt;UNIQUE_PER_VIEW_NUMBER&gt; is a number that must be
              * unique within this view, but must not be included in the
              * view state.  This requirement is simply to satisfy XML
