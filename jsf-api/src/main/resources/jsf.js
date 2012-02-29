@@ -2383,22 +2383,95 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
      * <p class="changed_added_2_2">Return the windowId of the window
      * in which the argument form is rendered.</p>
 
-     * @param form The <code>form</code> element whose contained
-     * <code>input</code> controls will be collected and encoded.
-     * Only successful controls will be collected and encoded in
-     * accordance with: <a href="http://www.w3.org/TR/html401/interact/forms.html#h-17.13.2">
-     * Section 17.13.2 of the HTML Specification</a>.
-     *
+     * <p>PENDING: edburns implement URL mode.</p>
+
+     * @param {optional String|DomNode} node. Determine the nature of
+     * the argument.  If not present, search for the windowId within
+     * <code>document.forms</code>.  If present and the value is a
+     * string, assume the string is a DOM id and get the element with
+     * that id and start the search from there.  If present and the
+     * value is a DOM element, start the search from there.
+
      * @returns String The windowId of the current window, or null 
      *  if the windowId cannot be determined.
+
+     * @throws an error if more than one unique WindowId is found.
+
      * @function jsf.getViewState
      */
-    jsf.getWindowId = function(form) {
-        var field = form.elements["javax.faces.WindowId"];
-        if (!(typeof field == 'undefined')) {
-            return field.value;
+    jsf.getWindowId = function(node) {
+        var FORM = "form";
+        var WIN_ID = "javax.faces.WindowId";
+
+        var fetchWindowIdFromForms = function (forms) {
+            var result_idx = {};
+            var result;
+            var foundCnt = 0;
+            for (var cnt = forms.length - 1; cnt >= 0; cnt--) {
+                var UDEF = 'undefined';
+                var currentForm = forms[cnt];
+                var windowId = currentForm[WIN_ID] && currentForm[WIN_ID].value;
+                if (UDEF != typeof windowId) {
+                    if (foundCnt > 0 && UDEF == typeof result_idx[windowId]) throw Error("Multiple different windowIds found in document");
+                    result = windowId;
+                    result_idx[windowId] = true;
+                    foundCnt++;
+                }
+            }
+            return result;
         }
-    }
+
+        var getChildForms = function (currentElement) {
+            //Special condition no element we return document forms
+            //as search parameter, ideal would be to
+            //have the viewroot here but the frameworks
+            //can deal with that themselves by using
+            //the viewroot as currentElement
+            if (!currentElement) {
+                return document.forms;
+            }
+            
+            var targetArr = [];
+            if (!currentElement.tagName) return [];
+            else if (currentElement.tagName.toLowerCase() == FORM) {
+                targetArr.push(currentElement);
+                return targetArr;
+            }
+            
+            //if query selectors are supported we can take
+            //a non recursive shortcut
+            if (currentElement.querySelectorAll) {
+                return currentElement.querySelectorAll(FORM);
+            }
+            
+            //old recursive way, due to flakeyness of querySelectorAll
+            for (var cnt = currentElement.childNodes.length - 1; cnt >= 0; cnt--) {
+                var currentChild = currentElement.childNodes[cnt];
+                targetArr = targetArr.concat(getChildForms(currentChild, FORM));
+            }
+            return targetArr;
+        }
+        
+        var fetchWindowIdFromURL = function () {
+            var href = window.location.href;
+            var windowId = "windowId";
+            var regex = new RegExp("[\\?&]" + windowId + "=([^&#\\;]*)");
+            var results = regex.exec(href);
+            //initial trial over the url and a regexp
+            if (results != null) return results[1];
+            return null;
+        }
+        
+        //byId ($)
+        var finalNode = (node && (typeof node == "string" || node instanceof String)) ?
+            document.getElementById(node) : (node || null);
+        
+        var forms = getChildForms(finalNode);
+        var result = fetchWindowIdFromForms(forms);
+        return (null != result) ? result : fetchWindowIdFromURL();
+        
+
+    };
 
 
     /**
