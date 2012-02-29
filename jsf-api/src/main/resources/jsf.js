@@ -55,7 +55,7 @@
 
 /**
  @project JSF JavaScript Library
- @version 2.0
+ @version 2.2
  @description This is the standard implementation of the JSF JavaScript Library.
  */
 
