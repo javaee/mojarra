@@ -169,19 +169,18 @@
 
     <artifact:dependencies filesetId="compile.filepath" pathId="compile.path">
         <dependency groupId="javax.el" artifactId="el-api" version="1.0" scope="provided"/>
-        <dependency groupId="org.glassfish" artifactId="javax.servlet" version="3.0-SNAPSHOT" scope="provided"/>
-        <dependency groupId="javax.servlet.jsp" artifactId="jsp-api" version="2.1" scope="provided"/>
+        <dependency groupId="javax.servlet" artifactId="javax.servlet-api" version="3.0.1" scope="provided"/>
+        <dependency groupId="javax.servlet.jsp" artifactId="javax.servlet.jsp-api" version="2.2.1" scope="provided"/>
+
         <dependency groupId="javax.annotation" artifactId="jsr250-api" version="1.0" scope="provided"/>
         <dependency groupId="org.codehaus.groovy" artifactId="groovy-all" version="1.6.9" scope="provided"/>
         <dependency groupId="javax.validation" artifactId="validation-api" version="1.0.0.GA" scope="provided"/>
         <dependency groupId="javax.inject" artifactId="javax.inject" version="1.0-PFD-1" scope="provided"/>
-        <dependency groupId="jstl" artifactId="jstl" version="1.2" scope="provided" />
+        <dependency groupId="javax.servlet.jsp.jstl" artifactId="jstl-api" version="1.2" scope="provided" />
+
         <dependency groupId="com.sun.el" artifactId="el-ri" version="1.0" scope="provided"/>
         <localRepository refid="local.repository"/>
         <remoteRepository refid="j.n.repo"/>
-        <remoteRepository refid="gf.repo"/>
-        <remoteRepository refid="gf.nexus.repo"/>
-        <remoteRepository refid="jboss.repo"/>  <!-- needed for validation-api -->
     </artifact:dependencies>
     
     <artifact:dependencies filesetId="commons.filepath" pathId="commons.path">
