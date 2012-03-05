@@ -93,7 +93,12 @@ public class ComponentConfigHandler implements ConfigAnnotationHandler {
         if (components == null) {
             components = new HashMap<String,FacesComponentUsage>();
         }
-        components.put(((FacesComponent) annotation).value(),new FacesComponentUsage(target, (FacesComponent) annotation));
+        String value = ((FacesComponent) annotation).value();
+        if (null == value || 0 == value.length()) {
+            value = target.getSimpleName();
+            value = Character.toLowerCase(value.charAt(0)) + value.substring(1);
+        }
+        components.put(value,new FacesComponentUsage(target, (FacesComponent) annotation));
 
     }
 

@@ -89,14 +89,19 @@ public @interface FacesComponent {
     public static final String NAMESPACE = "http://java.sun.com/jsf/component";
 
     /**
-     * <p class="changed_added_2_0">The value of this annotation
-     * attribute is taken to be the <em>component-type</em> with which
-     * instances of this class of component can be instantiated by
+     * <p class="changed_added_2_0"><span class="changed_modified_2_2">The</span>
+     * value of this annotation attribute is taken to be the 
+     * <em>component-type</em> with which instances of this class of component can be instantiated by
      * calling {@link
-     * javax.faces.application.Application#createComponent(java.lang.String)}</p>
+     * javax.faces.application.Application#createComponent(java.lang.String)}.
+     * <span class="changed_added_2_2">If no value is specified, or the value is
+     * <code>null</code>, the value is taken to be the return of calling
+     * <code>getSimpleName</code> on the class to which this annotation
+     * is attached and lowercasing the first character.  If more than one
+     * component with this derived name is found, the results are undefined.</span></p>
      */ 
 
-    String value();
+    String value() default "";
     
     /**
      * <p class="changed_added_2_2">If the value of this attribute is 

@@ -131,6 +131,13 @@ public class FacesComponentTagLibrary extends LazyTagLibrary {
             FacesComponentUsage facesComponentUsage = 
                     findFacesComponentUsageForLocalName(ns, localName);
             String componentType = facesComponentUsage.getAnnotation().value();
+
+            if (null == componentType || 0 == componentType.length()) {
+                componentType = facesComponentUsage.getTarget().getSimpleName();
+                componentType = Character.toLowerCase(componentType.charAt(0)) + 
+                        componentType.substring(1);
+            }
+            
             UIComponent throwAwayComponent = FacesContext.getCurrentInstance().
                     getApplication().createComponent(componentType);
             String rendererType = throwAwayComponent.getRendererType();
