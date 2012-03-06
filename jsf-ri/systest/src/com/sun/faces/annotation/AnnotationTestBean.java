@@ -64,6 +64,7 @@ import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.mgbean.BeanBuilder;
 import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.mgbean.ManagedBeanInfo;
+import javax.faces.FacesException;
 
 
 public class AnnotationTestBean {
@@ -111,6 +112,26 @@ public class AnnotationTestBean {
         assertFalse(defaultValidatorIds.contains("AnnotatedValidator"));
         injectedString = ((AnnotatedValidator)v).getWelcomeMessage();
         assertTrue(injectedString.equals("Hello World from env-entry!"));
+
+        v = app.createValidator("annotatedValidatorNoValue");
+        assertNotNull(v);
+        assertTrue(v instanceof AnnotatedValidatorNoValue);
+        defaultValidatorIds = app.getDefaultValidatorInfo().keySet();
+        assertFalse(defaultValidatorIds.contains("AnnotatedValidatorNoValue"));
+        String welcomeMessage = ((AnnotatedValidatorNoValue)v).getWelcomeMessage();
+        assertTrue(welcomeMessage.equals("AnnotatedValidatorNoValue"));
+        
+        boolean exceptionThrown = false;
+        v = null;
+        try {
+            v = app.createValidator("AnnotatedValidatorNoValue");
+        }
+        catch (FacesException fe) {
+            assertTrue(null == v);
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+        
 
         // AnnotatedValidatorDefault has isDefault set to true.  Make sure
         // it's present in the default validator info obtained above.

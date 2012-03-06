@@ -92,7 +92,12 @@ public class ValidatorConfigHandler implements ConfigAnnotationHandler {
             validators = new HashMap<ValidatorInfo,String>();
         }
         FacesValidator validatorAnnotation = (FacesValidator) annotation;
-        ValidatorInfo info = new ValidatorInfo(validatorAnnotation.value(), validatorAnnotation.isDefault());
+        String value = ((FacesValidator) annotation).value();
+        if (null == value || 0 == value.length()) {
+            value = target.getSimpleName();
+            value = Character.toLowerCase(value.charAt(0)) + value.substring(1);
+        }
+        ValidatorInfo info = new ValidatorInfo(value, validatorAnnotation.isDefault());
         validators.put(info, target.getName());
 
     }

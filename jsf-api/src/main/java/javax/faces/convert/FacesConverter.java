@@ -47,17 +47,19 @@ import java.lang.annotation.Target;
 import java.lang.annotation.Inherited;
 
 /**
- * <p class="changed_added_2_0">The presence of this annotation on a
- * class automatically registers the class with the runtime as a {@link
- * Converter}.  The value of the {@link #value} attribute is taken to be
- * <em>converter-id</em>, the value of the {@link #forClass} attribute
- * is taken to be <em>converter-for-class</em> and the fully qualified
- * class name of the class to which this annotation is attached is taken
- * to be the <em>converter-class</em>.  The implementation must
- * guarantee that for each class annotated with
- * <code>FacesConverter</code>, found with the algorithm in section JSF.11.5,
- * the proper variant of <code>Application.addConverter()</code> is
- * called.  If <em>converter-id</em> is not the empty string, {@link
+ * <p class="changed_added_2_0"><span
+ * class="changed_modified_2_2">The</span> presence of this annotation
+ * on a class automatically registers the class with the runtime as a
+ * {@link Converter}.  The value of the {@link #value} attribute is
+ * taken to be <em>converter-id</em>, the value of the {@link #forClass}
+ * attribute is taken to be <em>converter-for-class</em> and the fully
+ * qualified class name of the class to which this annotation is
+ * attached is taken to be the <em>converter-class</em>.  The
+ * implementation must guarantee that for each class annotated with
+ * <code>FacesConverter</code>, found with the algorithm in section
+ * JSF.11.5, the proper variant of
+ * <code>Application.addConverter()</code> is called.  If
+ * <em>converter-id</em> is not the empty string, {@link
  * javax.faces.application.Application#addConverter(java.lang.String,java.lang.String)}
  * is called, passing the derived <em>converter-id</em> as the first
  * argument and the derived <em>converter-class</em> as the second
@@ -77,11 +79,17 @@ import java.lang.annotation.Inherited;
 public @interface FacesConverter {
 
     /**
-     * <p class="changed_added_2_0">The value of this annotation
+     * <p class="changed_added_2_0"><span
+     * class="changed_modified_2_2">The</span> value of this annotation
      * attribute is taken to be the <em>converter-id</em> with which
      * instances of this class of converter can be instantiated by
      * calling {@link
-     * javax.faces.application.Application#createConverter(java.lang.String)}.</p>
+     * javax.faces.application.Application#createConverter(java.lang.String)}. 
+     * <span class="changed_added_2_2">If no value is specified, or the value is
+     * <code>null</code>, the value is taken to be the return of calling
+     * <code>getSimpleName</code> on the class to which this annotation
+     * is attached and lowercasing the first character.  If more than one
+     * converter with this derived name is found, the results are undefined.</span></p>
      */ 
 
     String value() default "";
