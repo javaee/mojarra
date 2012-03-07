@@ -94,11 +94,6 @@ public abstract class ClientWindow {
     public static final String WINDOW_ID_MODE_PARAM_NAME =
           "javax.faces.WINDOW_ID_MODE";
     
-    /**
-     * 
-     * @return 
-     */
-    
     public abstract String getId();
     
     public abstract void decode(FacesContext context);
