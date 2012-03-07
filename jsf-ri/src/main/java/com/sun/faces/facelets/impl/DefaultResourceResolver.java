@@ -58,27 +58,28 @@
 
 package com.sun.faces.facelets.impl;
 
-import com.sun.faces.facelets.util.Resource;
-
 import javax.faces.FacesException;
-import javax.faces.context.FacesContext;
 import javax.faces.view.facelets.ResourceResolver;
-import java.io.IOException;
 import java.net.URL;
+import javax.faces.application.Resource;
+import javax.faces.application.ResourceHandler;
 
 public class DefaultResourceResolver extends ResourceResolver {
+    
+    private ResourceHandler resourceHandler = null;
 
-    public DefaultResourceResolver() {
+    public DefaultResourceResolver(ResourceHandler resourceHandler) {
         super();
+        this.resourceHandler = resourceHandler;
     }
 
     public URL resolveUrl(String path) {
-        try {
-            return Resource.getResourceUrl(FacesContext.getCurrentInstance(),
-                    path);
-        } catch (IOException e) {
-            throw new FacesException(e);
+        Resource faceletResource = resourceHandler.createResource(path);
+        URL result = null;
+        if (null != faceletResource) {
+            result = faceletResource.getURL();
         }
+        return result;
     }
 
     @Override

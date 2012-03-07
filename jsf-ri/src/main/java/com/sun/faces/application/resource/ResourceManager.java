@@ -75,6 +75,8 @@ public class ResourceManager {
      */
     private static final Pattern CONFIG_MIMETYPE_PATTERN =
           Pattern.compile("[a-z-]*/[a-z0-9.\\*-]*");
+    
+    private ResourceHelper faceletResourceHelper = new FaceletResourceHelper();
 
     /**
      * {@link ResourceHelper} used for looking up webapp-based resources.
@@ -244,13 +246,12 @@ public class ResourceManager {
             }
         }
 
-        String resName = trimLeadingSlash(resourceName);
         ResourceInfo info =
-              findResource(library, resName, localePrefix, compressable, ctx);
+              findResource(library, resourceName, localePrefix, compressable, ctx);
         if (info == null && localePrefix != null) {
             // no localized resource found, try to find a
             // resource that isn't localized
-            info = findResource(library, resName, null, compressable, ctx);
+            info = findResource(library, resourceName, null, compressable, ctx);
         }
 
         // If no resource has been found so far, and we have a library that
@@ -279,11 +280,11 @@ public class ResourceManager {
             }
    
             if (library != null) {
-                info = findResource(library, resName, localePrefix, compressable, ctx);
+                info = findResource(library, resourceName, localePrefix, compressable, ctx);
                 if (info == null && localePrefix != null) {
                     // no localized resource found, try to find a
                     // resource that isn't localized
-                    info = findResource(library, resName, null, compressable, ctx);
+                    info = findResource(library, resourceName, null, compressable, ctx);
                 }
             }
 
@@ -422,11 +423,19 @@ public class ResourceManager {
                                                     compressable,
                                                     ctx);
         } else {
-            ResourceInfo resource = webappHelper.findResource(null,
-                                                              resourceName,
-                                                              localePrefix,
-                                                              compressable,
-                                                              ctx);
+            ResourceInfo resource = faceletResourceHelper.findResource(library, 
+                    resourceName, 
+                    localePrefix, 
+                    compressable, 
+                    ctx);
+                    
+            if (resource == null) {
+                resource = webappHelper.findResource(null,
+                        resourceName,
+                        localePrefix,
+                        compressable,
+                        ctx);
+            }
             if (resource == null) {
                 resource = classpathHelper.findResource(null,
                                                         resourceName,
@@ -502,21 +511,6 @@ public class ResourceManager {
                 } catch (MissingResourceException ignored) { }
         }
         return localePrefix;
-
-    }
-
-
-    /**
-     * @param s input String
-     * @return the String without a leading slash if it has one.
-     */
-    private String trimLeadingSlash(String s) {
-
-        if (s.charAt(0) == '/') {
-            return s.substring(1);
-        } else {
-            return s;
-        }
 
     }
 

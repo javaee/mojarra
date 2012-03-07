@@ -40,76 +40,21 @@
  */
 package com.sun.faces.application.resource;
 
-public class ResourceInfo {
+import java.net.URL;
 
-    public ResourceInfo(LibraryInfo library, 
-            String name, 
-            VersionInfo version) {
-        this.library = library;
-        this.helper = library.getHelper();
-        this.localePrefix = library.getLocalePrefix();
-        this.name = name;
-        this.version = version;
-        this.libraryName = library.getName();
-        
+public class FaceletResourceInfo extends ResourceInfo {
+
+    public FaceletResourceInfo(String name, VersionInfo version, 
+            ResourceHelper helper, URL url) {
+        super(name, version, helper);
+        this.url = url;
     }
     
-    public ResourceInfo(String name, VersionInfo version, ResourceHelper helper) {
-        this.name = name;
-        this.version = version;
-        this.helper = helper;
-    }
+    private URL url;
 
-    ResourceHelper helper;
-    LibraryInfo library;
-    String libraryName;
-    String localePrefix;
-    String name;
-    String path;
-    VersionInfo version;
-
-    /**
-     * @return return the {@link ResourceHelper} for this resource
-     */
-    public ResourceHelper getHelper() {
-        return helper;
+    public URL getUrl() {
+        return url;
     }
-
-    /**
-     * @return the Library associated with this resource, if any.
-     */
-    public LibraryInfo getLibraryInfo() {
-        return library;
-    }
-
-    /**
-     * @return the Locale prefix, if any.
-     */
-    public String getLocalePrefix() {
-        return localePrefix;
-    }
-
-    /**
-     * @return return the library name.
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * @return the full path (including the library, if any) of the
-     *  resource.
-     */
-    public String getPath() {
-        return path;
-    }
-
-    /**
-     * @return return the version of the resource, or <code>null</code> if the
-     *         resource isn't versioned.
-     */
-    public VersionInfo getVersion() {
-        return version;
-    }
+    
     
 }

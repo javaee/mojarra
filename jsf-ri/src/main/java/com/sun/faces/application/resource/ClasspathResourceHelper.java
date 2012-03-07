@@ -98,7 +98,7 @@ public class ClasspathResourceHelper extends ResourceHelper {
 
 
     /**
-     * @see ResourceHelper#getNonCompressedInputStream(ResourceInfo, javax.faces.context.FacesContext)
+     * @see ResourceHelper#getNonCompressedInputStream(ClientResourceInfo, javax.faces.context.FacesContext)
      */
     protected InputStream getNonCompressedInputStream(ResourceInfo resource, FacesContext ctx)
     throws IOException {
@@ -116,7 +116,7 @@ public class ClasspathResourceHelper extends ResourceHelper {
 
 
     /**
-     * @see com.sun.faces.application.resource.ResourceHelper#getURL(ResourceInfo, javax.faces.context.FacesContext)
+     * @see com.sun.faces.application.resource.ResourceHelper#getURL(ClientResourceInfo, javax.faces.context.FacesContext)
      */
     public URL getURL(ResourceInfo resource, FacesContext ctx) {
 
@@ -214,6 +214,8 @@ public class ClasspathResourceHelper extends ResourceHelper {
                                      boolean compressable,
                                      FacesContext ctx) {
 
+        resourceName = trimLeadingSlash(resourceName);
+
         ClassLoader loader = Util.getCurrentLoader(this);
         String basePath;
         if (library != null) {
@@ -239,10 +241,10 @@ public class ClasspathResourceHelper extends ResourceHelper {
             }
         }
 
-        ResourceInfo value;
+        ClientResourceInfo value;
 
         if (library != null) {
-            value = new ResourceInfo(library,
+            value = new ClientResourceInfo(library,
                                      resourceName,
                                      null,
                                      compressable,
@@ -250,7 +252,7 @@ public class ClasspathResourceHelper extends ResourceHelper {
                                      ctx.isProjectStage(ProjectStage.Development),
                                      cacheTimestamp);
         } else {
-            value = new ResourceInfo(resourceName,
+            value = new ClientResourceInfo(resourceName,
                                      null,
                                      localePrefix,
                                      this,

@@ -50,6 +50,8 @@ import com.sun.faces.config.ConfigManager;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.facelets.compiler.Compiler;
 import com.sun.faces.facelets.compiler.SAXCompiler;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.SystemEvent;
 import javax.faces.view.facelets.FaceletFactory;
 import javax.faces.view.facelets.TagDecorator;
 import com.sun.faces.facelets.tag.composite.CompositeLibrary;
@@ -107,8 +109,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.faces.FactoryFinder;
+import javax.faces.application.Application;
 import javax.faces.application.NavigationCase;
 import javax.faces.component.FacesComponent;
+import javax.faces.event.PostConstructApplicationEvent;
+import javax.faces.event.SystemEventListener;
 import javax.faces.view.facelets.FaceletCacheFactory;
 import javax.faces.view.facelets.FaceletFactoryWrapper;
 import javax.faces.view.facelets.FaceletsResourceResolver;
@@ -200,6 +205,8 @@ public class ApplicationAssociate {
     private PropertyEditorHelper propertyEditorHelper;
 
     private NamedEventManager namedEventManager;
+    
+    private WebConfiguration webConfig;
 
     public ApplicationAssociate(ApplicationImpl appImpl) {
         app = appImpl;
@@ -222,7 +229,7 @@ public class ApplicationAssociate {
         //noinspection CollectionWithoutInitialCapacity
         navigationMap = new ConcurrentHashMap<String, Set<NavigationCase>>();
         injectionProvider = (InjectionProvider) ctx.getAttributes().get(ConfigManager.INJECTION_PROVIDER_KEY);
-        WebConfiguration webConfig = WebConfiguration.getInstance(externalContext);
+        webConfig = WebConfiguration.getInstance(externalContext);
         beanManager = new BeanManager(injectionProvider,
                                       webConfig.isOptionEnabled(
                                            EnableLazyBeanValidation));
@@ -236,11 +243,6 @@ public class ApplicationAssociate {
         groovyHelper = GroovyHelper.getCurrentInstance();
 
         devModeEnabled = (appImpl.getProjectStage() == ProjectStage.Development);
-        // initialize Facelets
-        if (!webConfig.isOptionEnabled(DisableFaceletJSFViewHandler)) {
-            compiler = createCompiler(webConfig);
-            faceletFactory = createFaceletFactory(ctx, compiler, webConfig);
-        }
 
         if (!devModeEnabled) {
             resourceCache = new ResourceCache();
@@ -249,6 +251,35 @@ public class ApplicationAssociate {
         resourceManager = new ResourceManager(resourceCache);
         namedEventManager = new NamedEventManager();
         applicationStateInfo = new ApplicationStateInfo();
+        
+        appImpl.subscribeToEvent(PostConstructApplicationEvent.class,
+                         Application.class, new PostConstructApplicationListener());
+    }
+    
+    private class PostConstructApplicationListener implements SystemEventListener {
+
+        public boolean isListenerForSource(Object source) {
+            return source instanceof Application;
+        }
+
+        public void processEvent(SystemEvent event) throws AbortProcessingException {
+            ApplicationAssociate.this.initializeFacelets();
+        }
+        
+    }
+    
+    public void initializeFacelets() {
+        if (null != compiler) {
+            return;
+        }
+        
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        
+        if (!webConfig.isOptionEnabled(DisableFaceletJSFViewHandler)) {
+            compiler = createCompiler(webConfig);
+            faceletFactory = createFaceletFactory(ctx, compiler, webConfig);
+        }
+        
     }
 
     public static ApplicationAssociate getInstance(ExternalContext
@@ -318,6 +349,11 @@ public class ApplicationAssociate {
     }
 
     public Compiler getCompiler() {
+        if (null == compiler) {
+            initializeFacelets();
+        }
+        
+        
         return compiler;
     }
 
@@ -689,7 +725,7 @@ public class ApplicationAssociate {
         long period = Long.parseLong(refreshPeriod);
 
         // resource resolver
-        ResourceResolver resolver = new DefaultResourceResolver();
+        ResourceResolver resolver = new DefaultResourceResolver(app.getResourceHandler());
 
         String resolverName = webConfig.getOptionValue(FaceletsResourceResolver);
         if (resolverName != null && resolverName.length() > 0) {

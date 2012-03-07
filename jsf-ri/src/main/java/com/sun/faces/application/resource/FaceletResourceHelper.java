@@ -40,76 +40,53 @@
  */
 package com.sun.faces.application.resource;
 
-public class ResourceInfo {
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import javax.faces.FacesException;
+import javax.faces.context.FacesContext;
 
-    public ResourceInfo(LibraryInfo library, 
-            String name, 
-            VersionInfo version) {
-        this.library = library;
-        this.helper = library.getHelper();
-        this.localePrefix = library.getLocalePrefix();
-        this.name = name;
-        this.version = version;
-        this.libraryName = library.getName();
+public class FaceletResourceHelper extends ResourceHelper {
+
+    public FaceletResourceHelper() {
+    }
+
+    @Override
+    public LibraryInfo findLibrary(String libraryName, String localePrefix, FacesContext ctx) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public ResourceInfo findResource(LibraryInfo library, String resourceName, String localePrefix, boolean compressable, FacesContext ctx) {
+        FaceletResourceInfo result = null;
+        try {
+            URL url = Resource.getResourceUrl(ctx, resourceName);
+            if (null != url) {
+                result = new FaceletResourceInfo(resourceName, null, this, url);
+            }
+        } catch (MalformedURLException ex) {
+            throw new FacesException(ex);
+        }
         
+        return result;
     }
+
+    @Override
+    public String getBaseResourcePath() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    protected InputStream getNonCompressedInputStream(ResourceInfo info, FacesContext ctx) throws IOException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public URL getURL(ResourceInfo resource, FacesContext ctx) {
+        return ((FaceletResourceInfo)resource).getUrl();
+    }
+
     
-    public ResourceInfo(String name, VersionInfo version, ResourceHelper helper) {
-        this.name = name;
-        this.version = version;
-        this.helper = helper;
-    }
-
-    ResourceHelper helper;
-    LibraryInfo library;
-    String libraryName;
-    String localePrefix;
-    String name;
-    String path;
-    VersionInfo version;
-
-    /**
-     * @return return the {@link ResourceHelper} for this resource
-     */
-    public ResourceHelper getHelper() {
-        return helper;
-    }
-
-    /**
-     * @return the Library associated with this resource, if any.
-     */
-    public LibraryInfo getLibraryInfo() {
-        return library;
-    }
-
-    /**
-     * @return the Locale prefix, if any.
-     */
-    public String getLocalePrefix() {
-        return localePrefix;
-    }
-
-    /**
-     * @return return the library name.
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * @return the full path (including the library, if any) of the
-     *  resource.
-     */
-    public String getPath() {
-        return path;
-    }
-
-    /**
-     * @return return the version of the resource, or <code>null</code> if the
-     *         resource isn't versioned.
-     */
-    public VersionInfo getVersion() {
-        return version;
-    }
     
 }

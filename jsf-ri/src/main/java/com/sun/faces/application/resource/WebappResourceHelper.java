@@ -100,7 +100,7 @@ public class WebappResourceHelper extends ResourceHelper {
 
 
     /**
-     * @see ResourceHelper#getInputStream(ResourceInfo,javax.faces.context.FacesContext)
+     * @see ResourceHelper#getInputStream(ClientResourceInfo,javax.faces.context.FacesContext)
      */
     protected InputStream getNonCompressedInputStream(ResourceInfo resource, FacesContext ctx)
     throws IOException {
@@ -111,7 +111,7 @@ public class WebappResourceHelper extends ResourceHelper {
 
 
     /**
-     * @see ResourceHelper#getURL(ResourceInfo, javax.faces.context.FacesContext)
+     * @see ResourceHelper#getURL(ClientResourceInfo, javax.faces.context.FacesContext)
      */
     public URL getURL(ResourceInfo resource, FacesContext ctx) {
 
@@ -163,6 +163,8 @@ public class WebappResourceHelper extends ResourceHelper {
                                      String localePrefix,
                                      boolean compressable,
                                      FacesContext ctx) {
+        
+        resourceName = trimLeadingSlash(resourceName);
 
         String basePath;
         if (library != null) {
@@ -195,10 +197,10 @@ public class WebappResourceHelper extends ResourceHelper {
               ctx.getExternalContext().getResourcePaths(basePath);
         // if getResourcePaths returns null or an empty set, this means that we have
         // a non-directory resource, therefor, this resource isn't versioned.
-        ResourceInfo value;
+        ClientResourceInfo value;
         if (resourcePaths == null || resourcePaths.size() == 0) {
             if (library != null) {
-                value = new ResourceInfo(library,
+                value = new ClientResourceInfo(library,
                                          resourceName,
                                          null,
                                          compressable,
@@ -206,7 +208,7 @@ public class WebappResourceHelper extends ResourceHelper {
                                          ctx.isProjectStage(ProjectStage.Development),
                                          cacheTimestamp);
             } else {
-                value = new ResourceInfo(resourceName,
+                value = new ClientResourceInfo(resourceName,
                                          null,
                                          localePrefix,
                                          this,
@@ -227,7 +229,7 @@ public class WebappResourceHelper extends ResourceHelper {
                 }
             }
             if (library != null) {
-                value = new ResourceInfo(library,
+                value = new ClientResourceInfo(library,
                                          resourceName,
                                          version,
                                          compressable,
@@ -235,7 +237,7 @@ public class WebappResourceHelper extends ResourceHelper {
                                          ctx.isProjectStage(ProjectStage.Development),
                                          cacheTimestamp);
             } else {
-                value = new ResourceInfo(resourceName,
+                value = new ClientResourceInfo(resourceName,
                                          version,
                                          localePrefix,
                                          this,

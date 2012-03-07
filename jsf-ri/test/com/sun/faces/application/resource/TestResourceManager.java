@@ -83,7 +83,7 @@ public class TestResourceManager extends ServletFacesTestCase {
 
 
     public void testWebappNonVersionedResource() throws Exception {
-        ResourceInfo resource = manager.findResource(null, "duke-nv.gif", "image/gif", getFacesContext());
+        ClientResourceInfo resource = (ClientResourceInfo) manager.findResource(null, "duke-nv.gif", "image/gif", getFacesContext());
         assertTrue(resource != null);
         assertTrue(resource.getLibraryInfo() == null);
         assertTrue(resource.getHelper() instanceof WebappResourceHelper);
@@ -95,7 +95,7 @@ public class TestResourceManager extends ServletFacesTestCase {
     }
 
     public void testWebappVersionedResource() throws Exception {
-        ResourceInfo resource = manager.findResource(null, "duke.gif", "image/gif", getFacesContext());
+        ClientResourceInfo resource = (ClientResourceInfo) manager.findResource(null, "duke.gif", "image/gif", getFacesContext());
         assertTrue(resource != null);
         assertTrue(resource.getLibraryInfo() == null);
         assertTrue(resource.getHelper() instanceof WebappResourceHelper);
@@ -107,7 +107,7 @@ public class TestResourceManager extends ServletFacesTestCase {
     }
 
     public void testWebappNonVersionedLibraryVersionedResource() throws Exception {
-        ResourceInfo resource = manager.findResource("nvLibrary", "duke.gif", "image/gif", getFacesContext());
+        ClientResourceInfo resource = (ClientResourceInfo) manager.findResource("nvLibrary", "duke.gif", "image/gif", getFacesContext());
         assertTrue(resource != null);
 
         // validate the library
@@ -127,7 +127,7 @@ public class TestResourceManager extends ServletFacesTestCase {
     }
 
     public void testWebappNonVersionedLibraryNonVersionedResource() throws Exception {
-        ResourceInfo resource = manager.findResource("nvLibrary", "duke-nv.gif", "image/gif", getFacesContext());
+        ClientResourceInfo resource = (ClientResourceInfo) manager.findResource("nvLibrary", "duke-nv.gif", "image/gif", getFacesContext());
         assertTrue(resource != null);
 
         // validate the library
@@ -147,7 +147,7 @@ public class TestResourceManager extends ServletFacesTestCase {
     }
 
     public void testWebappVersionedLibraryNonVersionedResource() throws Exception {
-        ResourceInfo resource = manager.findResource("vLibrary", "duke-nv.gif", "image/gif", getFacesContext());
+        ClientResourceInfo resource = (ClientResourceInfo) manager.findResource("vLibrary", "duke-nv.gif", "image/gif", getFacesContext());
         assertTrue(resource != null);
 
         // validate the library
@@ -167,7 +167,7 @@ public class TestResourceManager extends ServletFacesTestCase {
     }
 
     public void testWebappVersionedLibraryVersionedResource() throws Exception {
-        ResourceInfo resource = manager.findResource("vLibrary", "duke.gif", "image/gif", getFacesContext());
+        ClientResourceInfo resource = (ClientResourceInfo) manager.findResource("vLibrary", "duke.gif", "image/gif", getFacesContext());
         assertTrue(resource != null);
 
         // validate the library
@@ -188,7 +188,7 @@ public class TestResourceManager extends ServletFacesTestCase {
 
 
     public void testWebappPathResource() throws Exception {
-        ResourceInfo resource = manager.findResource("nvLibrary", "images/duke-nv.gif", "image/gif", getFacesContext());
+        ClientResourceInfo resource = (ClientResourceInfo) manager.findResource("nvLibrary", "images/duke-nv.gif", "image/gif", getFacesContext());
         assertTrue(resource != null);
         assertTrue("images/duke-nv.gif".equals(resource.getName()));
         assertTrue(resource.getHelper() instanceof WebappResourceHelper);
@@ -199,7 +199,7 @@ public class TestResourceManager extends ServletFacesTestCase {
 
 
     public void testJarNonVersionedResources() throws Exception {
-        ResourceInfo resource = manager.findResource(null, "duke-jar-nv.gif", "image/gif", getFacesContext());
+        ClientResourceInfo resource = (ClientResourceInfo) manager.findResource(null, "duke-jar-nv.gif", "image/gif", getFacesContext());
         assertTrue(resource != null);
         assertTrue(resource.getLibraryInfo() == null);
         assertTrue(resource.getHelper() instanceof ClasspathResourceHelper);
@@ -212,7 +212,7 @@ public class TestResourceManager extends ServletFacesTestCase {
 
     /*
     public void testJarVersionedResource() throws Exception {
-        ResourceInfo resource = manager.findResource(null, "duke-jar.gif", "image/gif", getFacesContext());
+        ClientResourceInfo resource = manager.findResource(null, "duke-jar.gif", "image/gif", getFacesContext());
         assertTrue(resource != null);
         assertTrue(resource.getLibraryInfo() == null);
         assertTrue(resource.getHelper() instanceof ClasspathResourceHelper);
@@ -226,7 +226,7 @@ public class TestResourceManager extends ServletFacesTestCase {
 
     /*
     public void testJarNonVersionedLibraryVersionedResource() throws Exception {
-        ResourceInfo resource = manager.findResource("nvLibrary-jar", "duke.gif", "image/gif", getFacesContext());
+        ClientResourceInfo resource = manager.findResource("nvLibrary-jar", "duke.gif", "image/gif", getFacesContext());
         assertTrue(resource != null);
 
         // validate the library
@@ -247,7 +247,7 @@ public class TestResourceManager extends ServletFacesTestCase {
     */
 
     public void testJarNonVersionedLibraryNonVersionedResource() throws Exception {
-        ResourceInfo resource = manager.findResource("nvLibrary-jar", "duke-nv.gif", "image/gif", getFacesContext());
+        ClientResourceInfo resource = (ClientResourceInfo) manager.findResource("nvLibrary-jar", "duke-nv.gif", "image/gif", getFacesContext());
         assertTrue(resource != null);
 
         // validate the library
@@ -268,7 +268,7 @@ public class TestResourceManager extends ServletFacesTestCase {
 
     /*
     public void testJarVersionedLibraryNonVersionedResource() throws Exception {
-        ResourceInfo resource = manager.findResource("vLibrary-jar", "duke-nv.gif", "image/gif", getFacesContext());
+        ClientResourceInfo resource = manager.findResource("vLibrary-jar", "duke-nv.gif", "image/gif", getFacesContext());
         assertTrue(resource != null);
 
         // validate the library
@@ -290,7 +290,7 @@ public class TestResourceManager extends ServletFacesTestCase {
 
     /*
     public void testJarVersionedLibraryVersionedResource() throws Exception {
-        ResourceInfo resource = manager.findResource("vLibrary-jar", "duke.gif", "image/gif", getFacesContext());
+        ClientResourceInfo resource = manager.findResource("vLibrary-jar", "duke.gif", "image/gif", getFacesContext());
         assertTrue(resource != null);
 
         // validate the library
@@ -311,7 +311,7 @@ public class TestResourceManager extends ServletFacesTestCase {
     */
 
     public void testNoExtensionVersionedResource() throws Exception {
-        ResourceInfo resource = manager.findResource("vLibrary", "duke2.gif", "image/gif", getFacesContext());
+        ClientResourceInfo resource = (ClientResourceInfo) manager.findResource("vLibrary", "duke2.gif", "image/gif", getFacesContext());
         assertTrue(resource != null);
 
         // validate the library
@@ -341,35 +341,35 @@ public class TestResourceManager extends ServletFacesTestCase {
         assertTrue(manager.findResource("nvLibrary", "duke.fig", null, getFacesContext()) == null);
     }
 
-    public void testResourceInfoCompression() throws Exception {
+    public void testClientResourceInfoCompression() throws Exception {
         WebConfiguration config = WebConfiguration.getInstance();
         config.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.CompressableMimeTypes, "image/gif,text/css,text/plain");
         // create a new ResourceManager so that the mime type configuration is picked up
         ResourceManager manager = new ResourceManager(null);
-        ResourceInfo resource = manager.findResource("nvLibrary", "images/duke-nv.gif", "image/gif", getFacesContext());
+        ClientResourceInfo resource = (ClientResourceInfo) manager.findResource("nvLibrary", "images/duke-nv.gif", "image/gif", getFacesContext());
         assertTrue(resource != null);
         assertTrue(resource.isCompressable());
         assertTrue(compressionPathIsValid(resource));
         
         // ensure compression disabled for a content type that is null
-        resource = manager.findResource("nvLibrary", "images/duke-nv.gif", "text/javascript", getFacesContext());
+        resource = (ClientResourceInfo) manager.findResource("nvLibrary", "images/duke-nv.gif", "text/javascript", getFacesContext());
         assertTrue(resource != null);
         assertTrue(!resource.isCompressable());
         assertTrue(resource.getCompressedPath() == null);
 
         // if a resource is compressable, but the compressed result is larger
-        // than the original resource, the returned ResourceInfo shouldn't
+        // than the original resource, the returned ClientResourceInfo shouldn't
         // be marked as compressable and getCompressedPath() will be null
-        resource = manager.findResource(null, "simple.txt", "text/plain", getFacesContext());
+        resource = (ClientResourceInfo) manager.findResource(null, "simple.txt", "text/plain", getFacesContext());
         assertTrue(resource != null);
         assertTrue(!resource.isCompressable());
         assertTrue(resource.getCompressedPath() == null);
 
         // if a resource is compressable, but the compressed result is larger
-        // than the original resource, the returned ResourceInfo should be
+        // than the original resource, the returned ClientResourceInfo should be
         // marked compressable.  However, since css files may have EL expressions
         // embedded within, the the resource will be marked as supporting such.
-        resource = manager.findResource(null, "simple.css", "text/plain", getFacesContext());
+        resource = (ClientResourceInfo) manager.findResource(null, "simple.css", "text/plain", getFacesContext());
         assertTrue(resource != null);
         assertTrue(resource.isCompressable());
         assertTrue(resource.supportsEL());
@@ -381,7 +381,7 @@ public class TestResourceManager extends ServletFacesTestCase {
     public void testELEvalDisabledIfNoExpressionEvaluated() throws Exception {
 
         ResourceManager manager = new ResourceManager(null);
-        ResourceInfo resource = manager.findResource(null, "simple.css", "text/css", getFacesContext());
+        ClientResourceInfo resource = (ClientResourceInfo) manager.findResource(null, "simple.css", "text/css", getFacesContext());
         assertNotNull(resource);
         assertTrue(resource.supportsEL());
         ResourceImpl resImpl = new ResourceImpl(resource, "text/css", 0, 0);
@@ -394,7 +394,7 @@ public class TestResourceManager extends ServletFacesTestCase {
         }
         assertTrue(!resource.supportsEL());
 
-        resource = manager.findResource(null, "simple-with-el.css", "text/css", getFacesContext());
+        resource = (ClientResourceInfo) manager.findResource(null, "simple-with-el.css", "text/css", getFacesContext());
 
         assertNotNull(resource);
         assertTrue(resource.supportsEL());
@@ -414,7 +414,7 @@ public class TestResourceManager extends ServletFacesTestCase {
     // --------------------------------------------------------- Private Methods
 
 
-    private boolean compressionPathIsValid(ResourceInfo resource)
+    private boolean compressionPathIsValid(ClientResourceInfo resource)
     throws IOException {
 
         ExternalContext extContext = getFacesContext().getExternalContext();

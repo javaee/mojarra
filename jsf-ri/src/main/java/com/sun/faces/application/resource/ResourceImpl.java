@@ -325,6 +325,14 @@ public class ResourceImpl extends Resource implements Externalizable {
      * @see javax.faces.application.Resource#userAgentNeedsUpdate(javax.faces.context.FacesContext)
      */
     public boolean userAgentNeedsUpdate(FacesContext context) {
+        
+        // PENDING(edburns): this is a sub-optimal implementation choice
+        // done in the interest of prototyping.  It's never a good idea 
+        // to do a switch statement based on the type of an object.
+        
+        if (resourceInfo instanceof FaceletResourceInfo) {
+            return true;
+        }
 
         // http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html
         // 14.25 If-Modified-Since
@@ -341,7 +349,7 @@ public class ResourceImpl extends Resource implements Externalizable {
               context.getExternalContext().getRequestHeaderMap();
 
         if (requestHeaders.containsKey(IF_MODIFIED_SINCE)) {
-            long lastModifiedOfResource = resourceInfo.getLastModified(context);
+            long lastModifiedOfResource = ((ClientResourceInfo)resourceInfo).getLastModified(context);
             long lastModifiedHeader = getIfModifiedHeader(context.getExternalContext());
             return lastModifiedOfResource > lastModifiedHeader;
         }

@@ -56,7 +56,7 @@
  * limitations under the License.
  */
 
-package com.sun.faces.facelets.util;
+package com.sun.faces.application.resource;
 
 import com.sun.faces.util.FacesLogger;
 
@@ -100,7 +100,7 @@ public final class Resource {
      *         called to get the resource
      * @throws MalformedURLException
      */
-    public static URL getResourceUrl(FacesContext ctx, String path)
+    static URL getResourceUrl(FacesContext ctx, String path)
             throws MalformedURLException {
         final ExternalContext externalContext = ctx.getExternalContext();
         URL url = externalContext.getResource(path);
