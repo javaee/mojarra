@@ -147,17 +147,19 @@ public abstract class ScriptStyleBaseRenderer extends Renderer implements Compon
           throws IOException {
 
         String ccID = (String) component.getAttributes().get(COMP_KEY);
-        UIComponent cc = context.getViewRoot().findComponent(':' + ccID);
-        UIComponent curCC = UIComponent.getCurrentCompositeComponent(context);
-        if (cc != curCC) {
-            // the first pop maps to the component we're rendering.
-            // push the composite component to the 'stack' and then re-push
-            // the component we're rendering so the current component is
-            // correct.
-            component.popComponentFromEL(context);
-            component.pushComponentToEL(context, cc);
-            component.pushComponentToEL(context, component);
-        } 
+        if (null != ccID) {
+            UIComponent cc = context.getViewRoot().findComponent(':' + ccID);
+            UIComponent curCC = UIComponent.getCurrentCompositeComponent(context);
+            if (cc != curCC) {
+                // the first pop maps to the component we're rendering.
+                // push the composite component to the 'stack' and then re-push
+                // the component we're rendering so the current component is
+                // correct.
+                component.popComponentFromEL(context);
+                component.pushComponentToEL(context, cc);
+                component.pushComponentToEL(context, component);
+            }
+        }
 
     }
         
