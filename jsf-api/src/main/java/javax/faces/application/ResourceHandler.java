@@ -111,6 +111,9 @@ import javax.faces.context.FacesContext;
  *  to obtain the encoded URI for the resource.  See {@link
  *  Resource#getRequestPath} and the Standard HTML RenderKit specification for
  *  the complete specification.</p>
+
+ * <p class="changed_added_2_2">This usage of resources does not apply
+ * for resources that correspond to VDL resources.</p>
  *
  * </ul>
  *
@@ -124,7 +127,10 @@ import javax.faces.context.FacesContext;
  *  orchestrated by {@link #handleResourceRequest}, which calls {@link
  *  Resource#getInputStream} to obtain bytes of the resource.  See
  *  {@link #handleResourceRequest} for the complete specification.</p>
- *
+
+ * <p class="changed_added_2_2">This usage of resources does not apply
+ * for resources that correspond to VDL resources.</p>
+
  * </ul>
  *
  * </div>
@@ -211,6 +217,39 @@ public abstract class ResourceHandler {
      * for use in encoding or decoding the named resource.
      */
     public abstract Resource createResource(String resourceName);
+    
+    /**
+     * <p class="changed_added_2_2">Create an instance of <code>Resource</code>
+     * given the argument <code>resourceName</code>, which may contain "/" 
+     * characters.  The {@link javax.faces.view.ViewDeclarationLanguage} calls
+     * this method when it needs to load a view from a persistent store, such as
+     * a filesystem.  This method is functionality equivalent to 
+     * {@link #createResource(java.lang.String)}, but all callsites that need
+     * to load VDL views must use this method so that classes that want to 
+     * decorate the <code>ResourceHandler</code> in order to only affect the
+     * loading of views may do so without affecting the processing of other
+     * kinds of resources, such as scripts and stylesheets.
+     * A {@link javax.faces.context.FacesContext} must be present
+     * before calling this method.  To preserve compatibility with prior revisions of the
+     * specification, a default implementation must be provided that calls
+     * {@link #createResource(java.lang.String)}. </p>
+     * 
+     * @param resourceName the name of the resource to be interpreted as a view
+     * by the {@link javax.faces.view.ViewDeclarationLanguage}.
+
+     * @throws NullPointerException if <code>resourceName</code> is
+     *  <code>null</code>.
+
+     * @return a newly created <code>Resource</code> instance, suitable
+     * for use by the {@link javax.faces.view.ViewDeclarationLanguage}.
+     * 
+     * @since 2.2
+
+     */
+    
+    public Resource createViewResource(String resourceName) {
+        return FacesContext.getCurrentInstance().getApplication().getResourceHandler().createResource(resourceName);
+    }
 
     /**
      * <p class="changed_added_2_2">Create an instance of

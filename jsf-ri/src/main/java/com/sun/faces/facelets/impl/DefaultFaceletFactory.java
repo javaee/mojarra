@@ -107,6 +107,9 @@ public class DefaultFaceletFactory extends FaceletFactory {
 
     private Map<String, URL> relativeLocations;
 
+    // We continue to use a ResourceResolver just in case someone
+    // provides a custom one.  The DefaultResourceResolver simply uses
+    // the ResourceHandler to do its work.
     private ResourceResolver resolver;
 
     private  URL baseUrl;

@@ -112,6 +112,16 @@ public class ResourceHandlerImpl extends ResourceHandler {
 
     }
 
+    @Override
+    public Resource createViewResource(String resourceName) {
+
+        Util.notNull("resourceName", resourceName);
+
+        return createResource(resourceName, null, null);
+    }
+    
+    
+
     /**
      * @see ResourceHandler#createResourceFromId(String)
      */

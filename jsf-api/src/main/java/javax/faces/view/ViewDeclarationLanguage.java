@@ -42,18 +42,17 @@ package javax.faces.view;
 
 import java.beans.BeanInfo;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.application.Resource;
+import javax.faces.application.ResourceHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 
 /**
  * <p class="changed_added_2_0"><span class="changed_modified_2_0_rev_a
- * changed_modified_2_1">The</span> contract that a view declaration
+ * changed_modified_2_1 changed_modified_2_2">The</span> contract that a view declaration
  * language must implement to interact with the JSF runtime.  An
  * implementation of this class must be thread-safe.</p>
  *
@@ -541,12 +540,13 @@ public abstract class ViewDeclarationLanguage {
 
 
     /**
-     * <p class="changed_added_2_1">Tests whether a physical resource
+     * <p class="changed_added_2_1"><span class="changed_modified_2_2">Tests</span>
+     * whether a physical resource
      * corresponding to the specified viewId exists.</p>
      *
-     * <p>The default implementation uses 
-     * <code>ExternalContext.getResource()</code> to locate the physical
-     * resource.</p>
+     * <p class="changed_modified_2_2">The default implementation uses 
+     * {@link javax.faces.application.ResourceHandler#createViewResource(java.lang.String)}
+     * to locate the physical resource.</p>
      *
      * @param context The <code>FacesContext</code> for this request.
      * @param viewId the view id to test
@@ -555,17 +555,11 @@ public abstract class ViewDeclarationLanguage {
      */    
     public boolean viewExists(FacesContext context, 
                               String viewId) {
-       try {
-           return context.getExternalContext().getResource(viewId) != null;
-       } catch (MalformedURLException e) {
-           if (LOGGER.isLoggable(Level.SEVERE)) {
-               LOGGER.log(Level.SEVERE,
-                          e.toString(),
-                          e);
-           }
-       }
+        boolean result = false;
+        ResourceHandler rh = context.getApplication().getResourceHandler();
+        result = null != rh.createViewResource(viewId);
 
-       return false;
+        return result;
     }
 
     /**

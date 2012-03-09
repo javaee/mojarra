@@ -73,7 +73,7 @@ public class DefaultResourceResolver extends ResourceResolver {
     }
 
     public URL resolveUrl(String path) {
-        Resource faceletResource = resourceHandler.createResource(path);
+        Resource faceletResource = resourceHandler.createViewResource(path);
         URL result = null;
         if (null != faceletResource) {
             result = faceletResource.getURL();

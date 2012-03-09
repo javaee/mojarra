@@ -789,17 +789,13 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     @Override
     public boolean viewExists(FacesContext context, 
                               String viewId) {
+        boolean result = false;
         if (handlesViewId(viewId)) {
-            if (faceletFactory == null) {
-                ApplicationAssociate associate = ApplicationAssociate.getInstance(context.getExternalContext());
-                faceletFactory = associate.getFaceletFactory();
-                assert (faceletFactory != null);
-            }
-           
-            return faceletFactory.getResourceResolver().resolveUrl(viewId) != null;
+            ResourceHandler rh = context.getApplication().getResourceHandler();
+            result = null != rh.createViewResource(viewId);
         }
 
-        return false;
+        return result;
     }
 
     @Override 

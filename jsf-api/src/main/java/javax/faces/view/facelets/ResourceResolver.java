@@ -61,7 +61,10 @@ package javax.faces.view.facelets;
 import java.net.URL;
 
 /**
- * <p class="changed_added_2_0">Provide a hook to decorate or override
+ * <p class="changed_added_2_0"><span class="changed_deleted_2_2">Deprecated as 
+ * of JSF 2.2.  The same functionality is more correctly provided by
+ * {@link javax.faces.application.ResourceHandler}.</span> Provide
+ * a hook to decorate or override
  * the way that Facelets loads template files.  A default implementation
  * must be provided that satisfies the requirements for loading
  * templates as in Pre-JSF 2.0 Facelets.</p>
@@ -87,6 +90,7 @@ import java.net.URL;
 
  */
 
+@Deprecated
 public abstract class ResourceResolver {
 
     public static final String FACELETS_RESOURCE_RESOLVER_PARAM_NAME = 

@@ -85,8 +85,6 @@ public abstract class FaceletFactory {
 
     public abstract Facelet getMetadataFacelet(URL url) throws IOException;
 
-    public abstract ResourceResolver getResourceResolver();
-
     public abstract long getRefreshPeriod();
 
 }

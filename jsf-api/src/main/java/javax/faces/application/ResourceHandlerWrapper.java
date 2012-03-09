@@ -91,6 +91,7 @@ public abstract class ResourceHandlerWrapper extends ResourceHandler implements 
      *
      * @since 2.2
      */
+    @Override
     public Resource createResourceFromId(String resourceId) {
 
         return getWrapped().createResourceFromId(resourceId);
@@ -109,6 +110,16 @@ public abstract class ResourceHandlerWrapper extends ResourceHandler implements 
 
     }
 
+    /**
+     * <p class="changed_added_2_2">The default behavior of this method
+     * is to call {@link ResourceHandler#createViewResource(String)} on the wrapped
+     * {@link ResourceHandler} object.</p>
+     */
+
+    @Override
+    public Resource createViewResource(String resourceName) {
+        return getWrapped().createViewResource(resourceName);
+    }
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method

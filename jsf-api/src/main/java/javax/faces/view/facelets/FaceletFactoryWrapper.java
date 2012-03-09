@@ -100,12 +100,5 @@ public class FaceletFactoryWrapper extends FaceletFactory implements FacesWrappe
     public long getRefreshPeriod() {
         return getWrapped().getRefreshPeriod();
     }
-
-    @Override
-    public ResourceResolver getResourceResolver() {
-        return getWrapped().getResourceResolver();
-    }
-    
-    
     
 }
