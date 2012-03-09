@@ -187,17 +187,6 @@ public class TestResourceManager extends ServletFacesTestCase {
     }
 
 
-    public void testWebappPathResource() throws Exception {
-        ClientResourceInfo resource = (ClientResourceInfo) manager.findResource("nvLibrary", "images/duke-nv.gif", "image/gif", getFacesContext());
-        assertTrue(resource != null);
-        assertTrue("images/duke-nv.gif".equals(resource.getName()));
-        assertTrue(resource.getHelper() instanceof WebappResourceHelper);
-        assertTrue(!resource.isCompressable());
-        assertTrue(resource.getCompressedPath() == null);
-        assertTrue("/resources/nvLibrary/images/duke-nv.gif".equals(resource.getPath()));
-    }
-
-
     public void testJarNonVersionedResources() throws Exception {
         ClientResourceInfo resource = (ClientResourceInfo) manager.findResource(null, "duke-jar-nv.gif", "image/gif", getFacesContext());
         assertTrue(resource != null);
@@ -346,13 +335,13 @@ public class TestResourceManager extends ServletFacesTestCase {
         config.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.CompressableMimeTypes, "image/gif,text/css,text/plain");
         // create a new ResourceManager so that the mime type configuration is picked up
         ResourceManager manager = new ResourceManager(null);
-        ClientResourceInfo resource = (ClientResourceInfo) manager.findResource("nvLibrary", "images/duke-nv.gif", "image/gif", getFacesContext());
+        ClientResourceInfo resource = (ClientResourceInfo) manager.findResource("nvLibrary", "duke-nv.gif", "image/gif", getFacesContext());
         assertTrue(resource != null);
         assertTrue(resource.isCompressable());
         assertTrue(compressionPathIsValid(resource));
         
         // ensure compression disabled for a content type that is null
-        resource = (ClientResourceInfo) manager.findResource("nvLibrary", "images/duke-nv.gif", "text/javascript", getFacesContext());
+        resource = (ClientResourceInfo) manager.findResource("nvLibrary", "duke-nv.gif", "text/javascript", getFacesContext());
         assertTrue(resource != null);
         assertTrue(!resource.isCompressable());
         assertTrue(resource.getCompressedPath() == null);

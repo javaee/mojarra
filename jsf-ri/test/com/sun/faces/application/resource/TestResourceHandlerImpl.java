@@ -188,12 +188,6 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
         assertTrue("duke-nv.gif".equals(resource.getResourceName()));
         assertTrue("image/gif".equals(resource.getContentType()));
 
-        resource = handler.createResource("images/duke-nv.gif", "nvLibrary");
-        assertTrue(resource != null);
-        assertTrue("nvLibrary".equals(resource.getLibraryName()));
-        assertTrue("images/duke-nv.gif".equals(resource.getResourceName()));
-        assertTrue("image/gif".equals(resource.getContentType()));
-
         resource = handler.createResource("duke-nv.gif", "nvLibrary", "text/xml");
         assertTrue(resource != null);
         assertTrue("nvLibrary".equals(resource.getLibraryName()));

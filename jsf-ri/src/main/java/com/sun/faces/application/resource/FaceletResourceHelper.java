@@ -54,14 +54,42 @@ public class FaceletResourceHelper extends ResourceHelper {
 
     @Override
     public LibraryInfo findLibrary(String libraryName, String localePrefix, FacesContext ctx) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        LibraryInfo result = null;
+
+        try {
+            String path = libraryName;
+            // prepend the leading '/' if necessary.
+            if ('/' != path.charAt(0)) {
+                path = "/" + path;
+            }
+            URL url = Resource.getResourceUrl(ctx, path);
+            // By definition, FaceletResourceHelper only deals with files
+            // in the web app root, not in the resource directories
+            if (null != url && -1 == url.getPath().indexOf("/META-INF/")) {
+                result = new FaceletLibraryInfo(libraryName, null, localePrefix, this, url);
+            }
+        } catch (MalformedURLException ex) {
+            throw new FacesException(ex);
+        }
+        
+        
+        return result;
     }
 
     @Override
     public ResourceInfo findResource(LibraryInfo library, String resourceName, String localePrefix, boolean compressable, FacesContext ctx) {
         FaceletResourceInfo result = null;
         try {
-            URL url = Resource.getResourceUrl(ctx, resourceName);
+            String path = resourceName;
+            if (null != library) {
+                path = library.getPath() + "/" + resourceName;
+            } else {
+                // prepend the leading '/' if necessary.
+                if ('/' != path.charAt(0)) {
+                    path = "/" + path;
+                }
+            }
+            URL url = Resource.getResourceUrl(ctx, path);
             if (null != url) {
                 result = new FaceletResourceInfo(resourceName, null, this, url);
             }
@@ -74,7 +102,7 @@ public class FaceletResourceHelper extends ResourceHelper {
 
     @Override
     public String getBaseResourcePath() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return "";
     }
 
     @Override

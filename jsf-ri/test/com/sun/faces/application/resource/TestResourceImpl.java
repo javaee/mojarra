@@ -155,6 +155,18 @@ public class TestResourceImpl extends ServletFacesTestCase {
         assertTrue(expectedURI.equals(resource.getRequestPath()));
 
     }
+    
+    public void testFaceletResources() throws Exception {
+        ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();
+        assertTrue (handler != null);
+        
+        Resource resource = handler.createResource("rootLibrary-duke.gif", "rootLibrary");
+        assertNotNull(resource);
+        
+        resource = handler.createResource("root-duke.gif");
+        
+        
+    }
 
     public void beginToURIExtensionMapping(WebRequest req) {
         req.setURL(localHostPath, "/test", "/foo.faces", null, null);
@@ -300,11 +312,6 @@ public class TestResourceImpl extends ServletFacesTestCase {
 
         // versioned resource containing one path element
         resource = handler.createResource("duke.gif");
-        assertTrue(resource != null);
-        assertTrue("image/gif".equals(resource.getContentType()));
-
-        // non-versioned resource containing multiple path elements
-        resource = handler.createResource("images/duke-nv.gif", "nvLibrary");
         assertTrue(resource != null);
         assertTrue("image/gif".equals(resource.getContentType()));
 

@@ -354,8 +354,10 @@ public class ResourceManager {
      * specified <code>arguments</code>.
      * <p/>
      * <p> The lookup process will first search the file system of the web
-     * application.  If the library is not found, then it processed to
-     * searching the classpath.</p>
+     * application *within the resources directory*.  
+     * If the library is not found, then it processed to
+     * searching the classpath, if not found there, search from the webapp root
+     * *excluding* the resources directory.</p>
      * <p/>
      * <p> If a library is found, this method will return a {@link
      * LibraryInfo} instance that contains the name, version, and {@link
@@ -374,10 +376,15 @@ public class ResourceManager {
         LibraryInfo library = webappHelper.findLibrary(libraryName,
                                                        localePrefix,
                                                        ctx);
+        
         if (library == null) {
             library = classpathHelper.findLibrary(libraryName,
                                                   localePrefix,
                                                   ctx);
+        }
+        
+        if (library == null) {
+            library = faceletResourceHelper.findLibrary(libraryName, localePrefix, ctx);
         }
 
         // if not library is found at this point, let the caller deal with it
@@ -423,25 +430,31 @@ public class ResourceManager {
                                                     compressable,
                                                     ctx);
         } else {
-            ResourceInfo resource = faceletResourceHelper.findResource(library, 
-                    resourceName, 
-                    localePrefix, 
-                    compressable, 
-                    ctx);
-                    
-            if (resource == null) {
+            // If the resourceName contains a "/" don't bother consulting 
+            // the other kinds of resourceHelper.
+            boolean skipToFaceletResourceHelper = -1 != resourceName.indexOf("/");
+            ResourceInfo resource = null;
+            
+            if (!skipToFaceletResourceHelper) {
                 resource = webappHelper.findResource(null,
                         resourceName,
                         localePrefix,
                         compressable,
                         ctx);
             }
-            if (resource == null) {
+            if (resource == null && !skipToFaceletResourceHelper) {
                 resource = classpathHelper.findResource(null,
                                                         resourceName,
                                                         localePrefix,
                                                         compressable, 
                                                         ctx);
+            }
+            if (resource == null) {
+                resource = faceletResourceHelper.findResource(library, 
+                    resourceName, 
+                    localePrefix, 
+                    compressable, 
+                    ctx);
             }
             return resource;
         }

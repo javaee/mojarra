@@ -240,6 +240,8 @@
                             prefix="WEB-INF"/>
                 <zipfileset dir="${basedir}/web/test/resources"
                             prefix="resources"/>
+                <zipfileset dir="${basedir}/web/test/rootLibrary"
+                            prefix="rootLibrary"/>
             </archive-elements>
         </jsf.war>        
         <copy todir="${out.test.dir}">
@@ -262,6 +264,13 @@
         <touch file="${out.test.dir}/last-testrun"/>
         <antcall target="run.cactus.test"/>
         <antcall target="undeploy"/>
+        <container.stop />
+        <container.start />
+        <antcall target="deploy"/>
+        <antcall target="run.cactus.resource.test"/>
+        <antcall target="undeploy"/>
+        <container.stop />
+        <container.start />
     </target>
 
     <target name="force.execute.cactus.tests">
@@ -306,13 +315,6 @@
                       name="com.sun.faces.renderkit.html_basic.TestRenderers_3"/>
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.renderkit.html_basic.TestRenderers_4"/>
-
-                <test todir="${impl.test.results.dir}"
-                    name="com.sun.faces.application.resource.TestResourceManager"/>
-                <test todir="${impl.test.results.dir}"
-                    name="com.sun.faces.application.resource.TestResourceHandlerImpl"/>
-                <test todir="${impl.test.results.dir}"
-                    name="com.sun.faces.application.resource.TestResourceImpl"/>
                 <test todir="${impl.test.results.dir}"
                     name="com.sun.faces.application.TestAdapters"/>
                 <test todir="${impl.test.results.dir}"
@@ -468,6 +470,28 @@
         </jsf.junit>       
     </target>
 
+    <target name="run.cactus.resource.test" depends="define.scenario.aware.port">
+        <jsf.junit classpath-refid="test.runtime.classpath"
+                   test-results-dir="${impl.test.results.dir}"
+                   explodedWarDir="${basedir}/build/target/test"
+                   custom.port="${scenario.aware.port}">
+            <custom-sysproperties>
+                <sysproperty key="cactus.contextURL"
+                             value="http://${container.host}:${scenario.aware.port}/test"/>
+            </custom-sysproperties>
+            <suite>
+                <test todir="${impl.test.results.dir}"
+                    name="com.sun.faces.application.resource.TestResourceManager"/>
+                <test todir="${impl.test.results.dir}"
+                    name="com.sun.faces.application.resource.TestResourceHandlerImpl"/>
+                <test todir="${impl.test.results.dir}"
+                    name="com.sun.faces.application.resource.TestResourceImpl"/>
+            </suite>
+
+        </jsf.junit>       
+    </target>
+
+
     <target name="run.cactus.test.single" depends="define.scenario.aware.port">
         <jsf.junit classpath-refid="test.runtime.classpath"
                    test-results-dir="${impl.test.results.dir}"
@@ -590,7 +614,7 @@ find jsf-ri/testresults jsf-ri/testresults/systest jsf-test/build/testresults js
             </suite>
 
         </jsf.junit>       
-
+       
        
     </target>
 

@@ -46,10 +46,15 @@ import javax.faces.context.FacesContext;
 
 
 /**
- * <p class="changed_added_2_0"><strong class="changed_modified_2_0_rev_a">ResourceHandler</strong> is the
- * run-time API by which {@link javax.faces.component.UIComponent} and
- * {@link javax.faces.render.Renderer} instances can reference {@link
- * Resource} instances.  An implementation of this class must be thread-safe.</p>
+ * <p class="changed_added_2_0"><strong
+ * class="changed_modified_2_0_rev_a
+ * changed_modified_2_2">ResourceHandler</strong> is the run-time API by
+ * which {@link javax.faces.component.UIComponent} and {@link
+ * javax.faces.render.Renderer} instances<span
+ * class="changed_added_2_2">, and the {@link
+ * javax.faces.view.ViewDeclarationLanguage} can reference {@link
+ * Resource} instances.</span>  An implementation of this class must be
+ * thread-safe.</p>
  *
  * <div class="changed_added_2_0">
  *
