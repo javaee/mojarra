@@ -115,7 +115,12 @@
         </java-data>
         <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
             <word>Facelet</word>
+            <word>http</word>
+            <word>hyperlink</word>
+            <word>param</word>
+            <word>postback</word>
             <word>stylesheets</word>
+            <word>url</word>
         </spellchecker-wordlist>
     </configuration>
 </project>

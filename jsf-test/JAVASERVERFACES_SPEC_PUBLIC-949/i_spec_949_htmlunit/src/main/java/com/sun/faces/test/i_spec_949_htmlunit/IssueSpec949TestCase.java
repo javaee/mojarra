@@ -42,6 +42,7 @@ package com.sun.faces.test.i_spec_949_htmlunit;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
@@ -82,6 +83,9 @@ public class IssueSpec949TestCase extends HtmlUnitFacesTestCase {
     public String doTestAndReturnWindowId(WebClient yourClient, String windowName) throws Exception {
         String windowId = null;
         
+        // 
+        // Do some actions on this page
+        //
         HtmlPage page = (HtmlPage) yourClient.openWindow(getURL("/"), windowName).getEnclosedPage();
         HtmlTextInput textField = (HtmlTextInput) page.getElementById("firstName");
         textField.setValueAttribute("ajaxFirstName");
@@ -105,6 +109,39 @@ public class IssueSpec949TestCase extends HtmlUnitFacesTestCase {
         Thread.sleep(2000);
         pageText = page.asText();
         assertTrue(pageText.contains("|nonAjaxFirstName|"));
+        
+        
+        // 
+        // visit another page via a commandLink
+        //
+        HtmlAnchor link = (HtmlAnchor) page.getElementById("commandLink");
+        page = link.click();
+        button = (HtmlSubmitInput) page.getElementById("getWindowId");
+        page = button.click();
+        Thread.sleep(2000);
+        pageText = page.asText();
+        windowIdLabelIndex = pageText.indexOf(windowIdLabel);
+        String newPageWindowId = pageText.substring(windowIdLabelIndex + windowIdLabel.length());
+        assertEquals(windowId, newPageWindowId);
+        
+        // 
+        // Go back to the first page
+        //
+        button = (HtmlSubmitInput) page.getElementById("back");
+        page = button.click();
+        
+        // 
+        // visit another page via an h:link
+        //
+        link = (HtmlAnchor) page.getElementById("outcomeTargetLink");
+        page = link.click();
+        button = (HtmlSubmitInput) page.getElementById("getWindowId");
+        page = button.click();
+        Thread.sleep(2000);
+        pageText = page.asText();
+        windowIdLabelIndex = pageText.indexOf(windowIdLabel);
+        newPageWindowId = pageText.substring(windowIdLabelIndex + windowIdLabel.length());
+        assertEquals(windowId, newPageWindowId);
         
         return windowId;
     }

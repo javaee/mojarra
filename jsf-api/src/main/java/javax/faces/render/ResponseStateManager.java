@@ -103,19 +103,37 @@ public abstract class ResponseStateManager {
     public static final String VIEW_STATE_PARAM = "javax.faces.ViewState";
     
     /**
-     * <p class="changed_added_2_2">The name of the request parameter that
-     * refers to the encoded WindowId.  The <code>id</code> attribute must be a
+     * <p class="changed_added_2_2">The name of the hidden field that
+     * refers to the encoded WindowId.  This field is only used if 
+     * {@link javax.faces.lifecycle.ClientWindow#WINDOW_ID_MODE_PARAM_NAME}
+     * is not "none". The <code>id</code> attribute must be a
      * concatenation of the return from {@link
      * javax.faces.component.UIViewRoot#getContainerClientId}, the
      * return from {@link
      * javax.faces.component.UINamingContainer#getSeparatorChar}, this
      * constant field value, the separator char, and a number that is 
      * guaranteed to be unique with respect to all the other instances of
-     * this kind of client parameter in the view.</p>
+     * this kind of client parameter in the view.  The value of this parameter 
+     * is the return from {@link javax.faces.lifecycle.ClientWindow#getId}.</p>
+     * 
+     * @since 2.2
      * 
      */
     
     public static final String WINDOW_ID_PARAM = "javax.faces.WindowId";
+    
+    /**
+     * <p class="changed_added_2_2">The name of the URL query parameter that 
+     * is only used if {@link javax.faces.lifecycle.ClientWindow#WINDOW_ID_MODE_PARAM_NAME}
+     * is "url".  The name of the parameter is given by the constant value 
+     * of this field.  The value of this parameter 
+     * is the return from {@link javax.faces.lifecycle.ClientWindow#getId}.
+     * </p>
+     * 
+     * @since 2.2
+     */
+    
+    public static final String WINDOW_ID_URL_PARAM = "jfwid";
     
     /**
      * <p class="changed_added_2_2">The value of this constant is taken
@@ -180,13 +198,23 @@ public abstract class ResponseStateManager {
      * stores the state as the treeStructure, and passes it to {@link
      * #writeState(javax.faces.context.FacesContext,javax.faces.application.StateManager.SerializedView)}.</p>
      * 
-     * <p class="changed_added_2_2">The {@link javax.faces.lifecycle.ClientWindow}
-     * must be written using these 
-     * steps.  Call {@link javax.faces.context.ExternalContext#getClientWindow}.
-     * If the result is <code>null</code>, take no further action regarding 
-     * the <code>ClientWindow</code>.  If the result is non-<code>null</code>,
-     * write a hidden field whose name is {@link #WINDOW_ID_PARAM} and whose 
-     * id </p>
+     * <p class="changed_added_2_2">The {@link
+     * javax.faces.lifecycle.ClientWindow} must be written using these
+     * steps.  Call {@link
+     * javax.faces.context.ExternalContext#getClientWindow}.  If the
+     * result is <code>null</code>, take no further action regarding the
+     * <code>ClientWindow</code>.  If the result is
+     * non-<code>null</code>, write a hidden field whose name is {@link
+     * #WINDOW_ID_PARAM} and whose id is
+     * <code>&lt;VIEW_ROOT_CONTAINER_CLIENT_ID&gt;&lt;SEP&gt;javax.faces.WindowId&lt;SEP&gt;&lt;UNIQUE_PER_VIEW_NUMBER&gt;</code>
+     * where &lt;SEP&gt: is the currently configured
+     * <code>UINamingContainer.getSeparatorChar()</code>.
+     * &lt;VIEW_ROOT_CONTAINER_CLIENT_ID&gt; is the return from
+     * <code>UIViewRoot.getContainerClientId()</code> on the view from
+     * whence this state originated.  &lt;UNIQUE_PER_VIEW_NUMBER&gt; is
+     * a number that must be unique within this view, but must not be
+     * included in the view state.  The value of the field is implementation
+     * dependent but must uniquely identify this window within the user's session.</p>
      *
      *
      * @since 1.2
@@ -394,7 +422,8 @@ public abstract class ResponseStateManager {
     /**
      * <p class="changed_added_2_2">Compliant implementations must return a 
      * cryptographically strong token for use to protect views in this 
-     * application. The default implementation simply returns null.
+     * application. For backwards compatability with earlier revisions, a
+     * default implementation is provided that simply returns <code>null</code>.
      * </p>
      * 
      * @param context the {@link FacesContext} for the current request

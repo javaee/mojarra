@@ -64,7 +64,7 @@
  */
 if (typeof OpenAjax !== "undefined" &&
     typeof OpenAjax.hub.registerLibrary !== "undefined") {
-    OpenAjax.hub.registerLibrary("jsf", "www.sun.com", "2.0", null);
+    OpenAjax.hub.registerLibrary("jsf", "www.sun.com", "2.2", null);
 }
 
 // Detect if this is already loaded, and if loaded, if it's a higher version

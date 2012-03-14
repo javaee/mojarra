@@ -49,6 +49,9 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import javax.faces.context.FacesContext;
+import javax.faces.lifecycle.ClientWindow;
+import javax.faces.render.ResponseStateManager;
 
 /**
  * <p>The <strong>UrlBuilder</strong> provides a convenient way to assemble a URL. It
@@ -214,6 +217,7 @@ class UrlBuilder {
 
 
     protected void appendQueryString() {
+        boolean hasQueryString = false;
         if (parameters != null) {
             // parse residual query string
             parseQueryString();
@@ -236,10 +240,28 @@ class UrlBuilder {
                     nextSeparatorChar = PARAMETER_PAIR_SEPARATOR;
                 }
             }
+            hasQueryString = true;
         }
         else if (queryString != null) {
             url.append(QUERY_STRING_SEPARATOR).append(queryString);
+            hasQueryString = true;
         }
+        
+        FacesContext context = FacesContext.getCurrentInstance();
+        boolean appendWindowId = ClientWindow.isClientWindowUrlModeEnabled(context);
+        if (appendWindowId && -1 == url.indexOf(ResponseStateManager.WINDOW_ID_URL_PARAM)) {
+            ClientWindow  cw = context.getExternalContext().getClientWindow();
+            if (null != cw) {
+                String windowId = cw.getId();
+                if (!hasQueryString) {
+                    url.append(QUERY_STRING_SEPARATOR);
+                } else {
+                    url.append(PARAMETER_PAIR_SEPARATOR);
+                }
+                url.append(ResponseStateManager.WINDOW_ID_URL_PARAM).append(PARAMETER_NAME_VALUE_SEPARATOR).append(windowId);
+            }
+        }
+        
     }
 
 

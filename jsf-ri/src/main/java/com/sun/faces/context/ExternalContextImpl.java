@@ -83,6 +83,7 @@ import com.sun.faces.context.flash.ELFlash;
 import javax.faces.FactoryFinder;
 import javax.faces.context.FlashFactory;
 import javax.faces.lifecycle.ClientWindow;
+import javax.faces.render.ResponseStateManager;
 
 /**
  * <p>This implementation of {@link ExternalContext} is specific to the
@@ -538,6 +539,24 @@ public class ExternalContextImpl extends ExternalContext {
      * @see ExternalContext#encodeActionURL(String)
      */
     public String encodeActionURL(String url) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        boolean appendWindowId = ClientWindow.isClientWindowUrlModeEnabled(context);
+        if (appendWindowId && -1 == url.indexOf(ResponseStateManager.WINDOW_ID_URL_PARAM)) {
+            ClientWindow  cw = context.getExternalContext().getClientWindow();
+            if (null != cw) {
+                String windowId = cw.getId();
+                StringBuilder builder = new StringBuilder(url);
+                int q = url.indexOf(UrlBuilder.QUERY_STRING_SEPARATOR);
+                if (-1 == q) {
+                    builder.append(UrlBuilder.QUERY_STRING_SEPARATOR);
+                } else {
+                    builder.append(UrlBuilder.PARAMETER_PAIR_SEPARATOR);
+                }
+                builder.append(ResponseStateManager.WINDOW_ID_URL_PARAM).append(UrlBuilder.PARAMETER_NAME_VALUE_SEPARATOR).append(windowId);
+                url = builder.toString();
+            }
+        }
+        // If we have a query string, append it
         return ((HttpServletResponse) response).encodeURL(url);
     }
 

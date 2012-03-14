@@ -43,12 +43,12 @@
 -->
 
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core">
-<h:head>
-  <title>A Simple JavaServer Faces 2.0 View</title>
-</h:head>
-<h:body>
+      xmlns:h="http://java.sun.com/jsf/html">
+    <h:head>
+        <title>page 2</title>
+        <h:outputScript library="javax.faces" name="jsf.js" />
+    </h:head>
+    <h:body>
     <script type="text/javascript">
         //<![CDATA[
         var windowId = "";
@@ -61,30 +61,19 @@
         //]]>        
         
     </script>
-    
-    
-  <h:form prependId="false">
-      First name: <h:inputText id="firstName" value="#{userBean.firstName}" /> Last name: #{userBean.lastName}
-      <p><h:commandButton id="submitAjax" value="submitAjax" onclick="callGetWindowId()">
-              <f:ajax execute="@form" render="echoPanel" />
-          </h:commandButton>
-    
-    </p>
-      <p><h:commandButton id="submitNonAjax" value="submitNonAjax" /> </p>
-      
-      <p><h:commandLink id="commandLink" value="page2 via commandLink" 
-                        action="page2" /></p>
-      <p><h:link id="outcomeTargetLink" value="page2 via link" outcome="page2" /></p>
-      
-    
-    <h:panelGroup id="echoPanel">
         
-        |#{userBean.firstName}|
+        <h:form prependId="false">
         
-    </h:panelGroup>
-      
-      <p>|WindowId: <span id="echoWindowId" />|</p>
-      
-  </h:form>
-</h:body>
+            <p><input type="submit" id="getWindowId" onclick="callGetWindowId(); return false;"
+                   name="getWindowId" value="getWindowId" /></p>
+            
+            <p><h:commandButton value="back" id="back" action="main" /></p>
+            
+            <p>|WindowId: <span id="echoWindowId" />|</p>
+            
+        </h:form>
+        
+        
+    </h:body>
 </html>
+

@@ -20,7 +20,7 @@
     <!-- Faces Servlet -->
     <context-param>
         <param-name>javax.faces.WINDOW_ID_MODE</param-name>
-        <param-value>field</param-value>
+        <param-value>url</param-value>
     </context-param>
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
