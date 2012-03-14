@@ -1252,11 +1252,15 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
 
 
     /**
-     * <p>Search for and return the {@link UIComponent} with an <code>id</code>
-     * that matches the specified search expression (if any), according to the
-     * algorithm described below.</p>
-     *
-     * <p>For a method to find a component given a simple
+     * <p><span class="changed_modified_2_2">Search</span> for and
+     * return the {@link UIComponent} with an <code>id</code> that
+     * matches the specified search expression (if any), according to
+     * the algorithm described below.</p>
+
+     * <p><span class="changed_added_2_2">This method is not intended to
+     * be used with components that reside inside of an iterating
+     * component.  To take action on a component inside of an
+     * iteration</span>, or to find a find a component given a simple
      * <code>clientId</code>, see {@link #invokeOnComponent}.</p>
      *
      * <p>Component identifiers are required to be unique within the scope of
