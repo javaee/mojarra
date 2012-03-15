@@ -58,6 +58,7 @@
 
 package com.sun.faces.facelets.impl;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.context.FacesFileNotFoundException;
 import java.net.MalformedURLException;
 import javax.faces.component.UIComponent;
@@ -74,8 +75,11 @@ import java.io.File;
 import javax.faces.view.facelets.FaceletHandler;
 import javax.faces.view.facelets.ResourceResolver;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.net.URL;
 
@@ -315,28 +319,30 @@ public class DefaultFaceletFactory extends FaceletFactory {
         ExternalContext extContext = context.getExternalContext();
         File tmpDir = (File) extContext.getApplicationMap().get("javax.servlet.context.tempdir");
         File tempFile = null;
-        FileWriter fw = null;
+        OutputStreamWriter osw = null;
         try {
             
             // create a temporary file in that directory
             tempFile = File.createTempFile("mojarra", ".tmp", tmpDir);
-            fw = new FileWriter(tempFile);
-            fw.append("<?xml version='1.0' encoding='UTF-8' ?>");
-            fw.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
-            fw.append("<html xmlns=\"http://www.w3.org/1999/xhtml\"\n");
-            fw.append("      xmlns:j=\"").append(taglibURI).append("\">");
-            fw.append("  <j:").append(tagName).append(" ");
+            osw = new OutputStreamWriter(new FileOutputStream(tempFile), RIConstants.CHAR_ENCODING);
+            osw.append("<?xml version='1.0' encoding='");
+            osw.append(RIConstants.CHAR_ENCODING);
+            osw.append("' ?>");
+            osw.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
+            osw.append("<html xmlns=\"http://www.w3.org/1999/xhtml\"\n");
+            osw.append("      xmlns:j=\"").append(taglibURI).append("\">");
+            osw.append("  <j:").append(tagName).append(" ");
             if (!attributes.isEmpty()) {
                 for (Map.Entry<String,Object> attr : attributes.entrySet()) {
-                    fw.append(attr.getKey()).append("=\"").append(attr.getValue().toString()).append("\"");
+                    osw.append(attr.getKey()).append("=\"").append(attr.getValue().toString()).append("\"");
                 }
             }
             String tempId = context.getViewRoot().createUniqueId(context, tagName);
-            fw.append(" id=\"").append(tempId).append("\" />");
-            fw.append("</html>");
+            osw.append(" id=\"").append(tempId).append("\" />");
+            osw.append("</html>");
             try {
-                fw.flush();
-                fw.close();
+                osw.flush();
+                osw.close();
             } catch (IOException ex) {
             }
                   
@@ -348,16 +354,16 @@ public class DefaultFaceletFactory extends FaceletFactory {
             f.apply(context, tmp);
                 result = tmp.findComponent(tempId);
             tmp.getChildren().clear();
-            fw = null;
+            osw = null;
             
         } catch (MalformedURLException ex) {
             
         } catch (IOException ioe) {
             
         } finally {
-            if (null != fw) {
+            if (null != osw) {
                 try {
-                    fw.close();
+                    osw.close();
                 } catch (IOException ex) {
                 }
             }
@@ -369,8 +375,15 @@ public class DefaultFaceletFactory extends FaceletFactory {
             }
         }
         
-        byte [] faceletPage = "facelet".getBytes();
-        ByteArrayInputStream bais = new ByteArrayInputStream(faceletPage);
+        try {
+            byte [] faceletPage = "facelet".getBytes(RIConstants.CHAR_ENCODING);
+            ByteArrayInputStream bais = new ByteArrayInputStream(faceletPage);
+        } catch (UnsupportedEncodingException uee) {
+            if (log.isLoggable(Level.SEVERE)) {
+                log.log(Level.SEVERE, "Unsupported encoding when creating component for " + tagName + " in " + taglibURI,
+                        uee);
+            }
+        }
         
         
         

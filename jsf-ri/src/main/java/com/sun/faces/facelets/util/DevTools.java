@@ -58,6 +58,7 @@
 
 package com.sun.faces.facelets.util;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.facelets.tag.ui.UIDebug;
 import com.sun.faces.util.Util;
 
@@ -325,7 +326,7 @@ public final class DevTools {
         while ((read = is.read(buff)) != -1) {
             baos.write(buff, 0, read);
         }
-        String str = baos.toString();
+        String str = baos.toString(RIConstants.CHAR_ENCODING);
         return str.split("@@");
 
     }

@@ -40,6 +40,7 @@
 
 package com.sun.faces.config;
 
+import com.sun.faces.RIConstants;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.ValidateFacesConfigFiles;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableThreading;
@@ -1066,7 +1067,7 @@ public class ConfigManager {
             byte[] b = new byte[size];
             String s;
             while (!isZeroLengthOrEmpty && -1 != is.read(b, 0, size)) {
-                s = (new String(b)).trim();
+                s = (new String(b, RIConstants.CHAR_ENCODING)).trim();
                 isZeroLengthOrEmpty = 0 == s.length();
                 b[0] = 0;
                 for (int i = 1; i < size; i += i) {

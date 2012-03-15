@@ -600,6 +600,9 @@ public final class FactoryFinder {
                         }
                         result.add(reader.readLine());
                     } catch (UnsupportedEncodingException uee) {
+                        // The DM_DEFAULT_ENCODING warning is acceptable here
+                        // because we explicitly *want* to use the Java runtime's
+                        // default encoding.
                         reader =
                               new BufferedReader(new InputStreamReader(stream));
                     } finally {

@@ -40,6 +40,7 @@
 
 package com.sun.faces.scripting.groovy;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.scripting.ScriptManager;
 import com.sun.faces.util.FacesLogger;
 
@@ -120,7 +121,7 @@ public class GroovyScriptManager implements ScriptManager {
         BufferedReader in = null;
         try {
             URL url = sc.getResource(pathElement);
-            in = new BufferedReader(new InputStreamReader(url.openStream()));
+            in = new BufferedReader(new InputStreamReader(url.openStream(), RIConstants.CHAR_ENCODING));
             String line = in.readLine();
             while ((line != null) && (!containsAnnotation)) {
                 line = line.trim();

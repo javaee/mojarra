@@ -40,6 +40,7 @@
 
 package com.sun.faces.renderkit;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
@@ -218,7 +219,7 @@ public class ClientSideStateHelper extends StateHelper {
         InputStream bis = new Base64InputStream(stateString);
         try {
             if (guard != null) {
-                byte[] bytes = stateString.getBytes();
+                byte[] bytes = stateString.getBytes(RIConstants.CHAR_ENCODING);
                 int numRead = bis.read(bytes, 0, bytes.length);
                 byte[] decodedBytes = new byte[numRead];
                 bis.reset();

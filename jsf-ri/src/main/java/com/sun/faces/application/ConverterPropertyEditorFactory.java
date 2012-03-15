@@ -641,6 +641,9 @@ public class ConverterPropertyEditorFactory {
         try {
             utf8 = text.getBytes("UTF-8");
         } catch (UnsupportedEncodingException e) {
+            // The DM_DEFAULT_ENCODING warning is acceptable here
+            // because we explicitly *want* to use the Java runtime's
+            // default encoding.
             utf8 = text.getBytes();
         }
         byte[] info = new byte[utf8.length + 3];
