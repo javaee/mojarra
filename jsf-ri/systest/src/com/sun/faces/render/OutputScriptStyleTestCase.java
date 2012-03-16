@@ -142,7 +142,7 @@ public class OutputScriptStyleTestCase extends HtmlUnitFacesTestCase {
         // case 9
         assertTrue(text.matches(
                 "(?s).*<head>.*"+
-                "<link.* type=\"text/css\".*rel=\"stylesheet\".* href=\"/jsf-systest/faces/javax.faces.resource/case9.css\"\\s*/>.*" + 
+                "<link.* type=\"text/css\".*rel=\"stylesheet\".* href=\"/jsf-systest/faces/javax.faces.resource/case9.css.*\"\\s*/>.*" + 
                 "</head>.*"
                 ));
         
@@ -163,7 +163,7 @@ public class OutputScriptStyleTestCase extends HtmlUnitFacesTestCase {
         // case 11
         assertTrue(text.matches(
                 "(?s).*<head>.*"+
-                "<link.* type=\"text/css\".*rel=\"stylesheet\".* href=\"/jsf-systest/faces/javax.faces.resource/case11.css\"\\s*/>.*" + 
+                "<link.* type=\"text/css\".*rel=\"stylesheet\".* href=\"/jsf-systest/faces/javax.faces.resource/case11.css.*\"\\s*/>.*" + 
                 "</head>.*"
                 ));
         
@@ -172,7 +172,7 @@ public class OutputScriptStyleTestCase extends HtmlUnitFacesTestCase {
         // case 12
         assertTrue(text.matches(
                 "(?s).*<head>.*"+
-                "<link.* type=\"text/css\".*rel=\"stylesheet\".* href=\"/jsf-systest/faces/javax.faces.resource/case12.css\"\\s*/>.*" + 
+                "<link.* type=\"text/css\".*rel=\"stylesheet\".* href=\"/jsf-systest/faces/javax.faces.resource/case12.css.*\"\\s*/>.*" + 
                 "</head>.*"
                 ));
 
@@ -181,7 +181,7 @@ public class OutputScriptStyleTestCase extends HtmlUnitFacesTestCase {
         // case 14
         assertTrue(text.matches(
                 "(?s).*<head>.*"+
-                "<link.* type=\"text/css\".*rel=\"stylesheet\".* href=\"/jsf-systest/faces/javax.faces.resource/case14.css\"\\s*/>.*" + 
+                "<link.* type=\"text/css\".*rel=\"stylesheet\".* href=\"/jsf-systest/faces/javax.faces.resource/case14.css.*\"\\s*/>.*" + 
                 "</head>.*"
                 ));
 

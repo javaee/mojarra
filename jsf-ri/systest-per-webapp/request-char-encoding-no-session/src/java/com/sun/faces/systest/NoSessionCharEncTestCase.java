@@ -82,11 +82,6 @@ public class NoSessionCharEncTestCase extends HtmlUnitFacesTestCase {
     public void testCharEnc() throws Exception {
 
         HtmlPage page = getPageSticky("/faces/utf8.xhtml");
-        assertTrue("Incorrect encoding.  Expected extContextCharEnc: UTF-8 hasSession: false ",
-                page.asText().matches("(?s).*extContextCharEnc:.*UTF-8.*hasSession:.*false.*"));
-        page = getPageSticky("/faces/ascii.xhtml");
-        assertTrue("Incorrect encoding.  Expected extContextCharEnc: US-ASCII hasSession: false ",
-                page.asText().matches("(?s).*extContextCharEnc:.*US-ASCII.*hasSession:.*false.*"));
 
         // force creation of the session
         getPageSticky("/faces/utf8.xhtml?makeSession=true");
