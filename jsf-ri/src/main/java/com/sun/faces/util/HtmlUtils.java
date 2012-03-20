@@ -40,6 +40,7 @@
 
 package com.sun.faces.util;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
 
 import java.io.ByteArrayOutputStream;
@@ -826,7 +827,7 @@ public class HtmlUtils {
                     if (encoding != null) {
                         writer = new OutputStreamWriter(buf, encoding);
                     } else {
-                        writer = new OutputStreamWriter(buf);
+                        writer = new OutputStreamWriter(buf, RIConstants.CHAR_ENCODING);
                     }
                     charArray = new char[1];
                 }
@@ -887,7 +888,7 @@ public class HtmlUtils {
                     if (encoding != null) {
                         writer = new OutputStreamWriter(buf, encoding);
                     } else {
-                        writer = new OutputStreamWriter(buf);
+                        writer = new OutputStreamWriter(buf, RIConstants.CHAR_ENCODING);
                     }
                     charArray = new char[1];
                 }

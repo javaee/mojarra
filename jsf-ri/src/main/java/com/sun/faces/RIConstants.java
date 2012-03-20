@@ -90,7 +90,7 @@ public class RIConstants {
     public static final String APPLICATION_XML_CONTENT_TYPE = "application/xml";
     public static final String TEXT_XML_CONTENT_TYPE = "text/xml";
     public static final String ALL_MEDIA = "*/*";
-    public static final String CHAR_ENCODING = "ISO-8859-1";
+    public static final String CHAR_ENCODING = "UTF-8";
     public static final String DEFAULT_LIFECYCLE = 
           FACES_PREFIX + "DefaultLifecycle";
     public static final String DEFAULT_STATEMANAGER =

@@ -40,6 +40,7 @@
 
 package com.sun.faces.config;
 
+import com.sun.faces.RIConstants;
 import java.net.URI;
 import com.sun.faces.util.FacesLogger;
 
@@ -649,7 +650,7 @@ public class JavaClassScanningAnnotationScanner extends AnnotationScanner {
                                 stringValue =
                                       new String(bytes, 0, length, "US-ASCII");
                             } else {
-                                stringValue = new String(bytes, 0, length);
+                                stringValue = new String(bytes, 0, length, RIConstants.CHAR_ENCODING);
                             }
                             if (JavaClassScanningAnnotationScanner.isAnnotation(stringValue)) {
                                 return true;

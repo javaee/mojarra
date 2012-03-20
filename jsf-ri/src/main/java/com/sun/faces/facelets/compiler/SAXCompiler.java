@@ -456,11 +456,11 @@ public final class SAXCompiler extends Compiler {
     protected static String writeXmlDecl(InputStream is, CompilationManager mngr)
             throws IOException {
         is.mark(128);
-        String encoding = "UTF-8";
+        String encoding = RIConstants.CHAR_ENCODING;
         try {
             byte[] b = new byte[128];
             if (is.read(b) > 0) {
-                String r = new String(b);
+                String r = new String(b, RIConstants.CHAR_ENCODING);
                 Matcher m = XmlDeclaration.matcher(r);
                 if (m.find()) {
                     WebConfiguration config = mngr.getWebConfiguration();

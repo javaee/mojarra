@@ -380,6 +380,9 @@ public class InjectionProviderFactory {
                             reader =
                                   new BufferedReader(new InputStreamReader(input, "UTF-8"));
                         } catch (Exception e) {
+                            // The DM_DEFAULT_ENCODING warning is acceptable here
+                            // because we explicitly *want* to use the Java runtime's
+                            // default encoding.
                             reader =
                                   new BufferedReader(new InputStreamReader(input));
                         }

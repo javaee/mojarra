@@ -42,10 +42,12 @@ package com.sun.faces.util;
 
 // DebugUtil.java
 
+import com.sun.faces.RIConstants;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.Iterator;
 import java.util.logging.Level;
@@ -168,9 +170,15 @@ public class DebugUtil {
      * @param out the PrintStream to write to
      */
     public static void printTree(UIComponent root, PrintStream out) {
-        PrintWriter writer = new PrintWriter(out);
-        printTree(root, writer);
-        writer.flush();
+        PrintWriter writer;
+        try {
+            writer = new PrintWriter(new PrintStream(out, true, RIConstants.CHAR_ENCODING));
+            printTree(root, writer);
+            writer.flush();
+
+        } catch (UnsupportedEncodingException ex) {
+            System.out.println(ex.getMessage());
+        }
     }
     
     public static void printTree(UIComponent root, Logger logger, Level level) {
