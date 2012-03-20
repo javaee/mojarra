@@ -60,6 +60,8 @@ package com.sun.faces.facelets.tag.jsf;
 
 import com.sun.faces.facelets.el.LegacyMethodBinding;
 
+import javax.el.ExpressionFactory;
+import javax.el.MethodExpression;
 import javax.faces.component.ActionSource;
 import javax.faces.component.ActionSource2;
 import javax.faces.event.ActionEvent;
@@ -76,6 +78,7 @@ final class ActionSourceRule extends MetaRule {
     public final static Class[] ACTION_SIG = new Class[0];
 
     public final static Class[] ACTION_LISTENER_SIG = new Class[] { ActionEvent.class };
+    public final static Class[] ACTION_LISTENER_ZEROARG_SIG = new Class[] { };
 
     final static class ActionMapper extends Metadata {
 
@@ -134,10 +137,20 @@ final class ActionSourceRule extends MetaRule {
         }
 
         public void applyMetadata(FaceletContext ctx, Object instance) {
+            
+            ExpressionFactory expressionFactory = ctx.getExpressionFactory();
+
+            MethodExpression methodExpressionOneArg = attr.getMethodExpression(
+                ctx, null, ActionSourceRule.ACTION_LISTENER_SIG);
+            
+            MethodExpression methodExpressionZeroArg = 
+                    expressionFactory.createMethodExpression(
+                        ctx, methodExpressionOneArg.getExpressionString(), 
+                        Void.class, ActionSourceRule.ACTION_LISTENER_ZEROARG_SIG);            
+            
             ((ActionSource2) instance)
                     .addActionListener(new MethodExpressionActionListener(
-                            this.attr.getMethodExpression(ctx, null,
-                                    ActionSourceRule.ACTION_LISTENER_SIG)));
+                            methodExpressionOneArg, methodExpressionZeroArg));
 
         }
 
