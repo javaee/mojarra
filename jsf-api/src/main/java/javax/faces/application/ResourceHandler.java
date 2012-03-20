@@ -76,7 +76,11 @@ import javax.faces.context.FacesContext;
  *
  * <p><code>resources/&lt;resourceIdentifier&gt;</code></p>
  *
- * <p>relative to the web app root.</p>
+ * <p>relative to the web app root.  <span
+ * class="changed_added_2_2">"resources" is the default location, but
+ * this location can be changed by the value of the {@link
+ * #WEBAPP_RESOURCES_DIRECTORY_PARAM_NAME}
+ * <code>&lt;context-param&gt;</code>.</span></p>
  *
  * <p>For the default implementation, resources packaged in the
  * classpath must reside under the JAR entry name</p>
@@ -150,6 +154,24 @@ public abstract class ResourceHandler {
      */
     public static final String RESOURCE_IDENTIFIER = "/javax.faces.resource";
 
+
+    /**
+
+     * <p class="changed_added_2_2">If a
+     * <code>&lt;context-param&gt;</code> with the param name equal to
+     * the value of {@link #WEBAPP_RESOURCES_DIRECTORY_PARAM_NAME}
+     * exists, the runtime must interpret its value as a path, relative
+     * to the web app root, where resources are to be located.  This
+     * param value must not start with a "/", though it may contain "/"
+     * characters.  If no such <code>&lt;context-param&gt;</code> exists, or
+     * its value is invalid, the value "resources", without the quotes,
+     * must be used by the runtime as the value.</p>
+     *
+     * @since 2.2
+     */
+
+    public static final String WEBAPP_RESOURCES_DIRECTORY_PARAM_NAME = 
+        "javax.faces.WEBAPP_RESOURCES_DIRECTORY";
 
     /**
      * <p class="changed_added_2_0">The name of a key within the
