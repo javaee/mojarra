@@ -1257,11 +1257,19 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * matches the specified search expression (if any), according to
      * the algorithm described below.</p>
 
-     * <p><span class="changed_added_2_2">This method is not intended to
-     * be used with components that reside inside of an iterating
-     * component.  To take action on a component inside of an
-     * iteration</span>, or to find a find a component given a simple
-     * <code>clientId</code>, see {@link #invokeOnComponent}.</p>
+     * <p class="changed_added_2_2">WARNING: The found
+     * <code>UIComponent</code> instance, if any, is returned
+     * <strong>without</strong> regard for its tree traversal context.
+     * Retrieving an EL-bound attribute from the component is not safe.
+     * EL expressions can contain implicit objects, such as
+     * <code>#{component}</code>, which assume they are being evaluated
+     * within the scope of a tree traversal context.  Evaluating
+     * expressions with these kinds of implicit objects outside of a
+     * tree traversal context produces undefined results.  See {@link
+     * #invokeOnComponent} for a method that <strong>does</strong>
+     * correctly account for the tree traversal context when operating
+     * on the found <code>UIComponent</code> instance.  {@link #invokeOnComponent}
+     * is also useful to find components given a simple <code>clientId</code>.
      *
      * <p>Component identifiers are required to be unique within the scope of
      * the closest ancestor {@link NamingContainer} that encloses this
