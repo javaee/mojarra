@@ -207,7 +207,7 @@ public abstract class ResponseStateManager {
      * non-<code>null</code>, write a hidden field whose name is {@link
      * #WINDOW_ID_PARAM} and whose id is
      * <code>&lt;VIEW_ROOT_CONTAINER_CLIENT_ID&gt;&lt;SEP&gt;javax.faces.WindowId&lt;SEP&gt;&lt;UNIQUE_PER_VIEW_NUMBER&gt;</code>
-     * where &lt;SEP&gt: is the currently configured
+     * where &lt;SEP&gt; is the currently configured
      * <code>UINamingContainer.getSeparatorChar()</code>.
      * &lt;VIEW_ROOT_CONTAINER_CLIENT_ID&gt; is the return from
      * <code>UIViewRoot.getContainerClientId()</code> on the view from
