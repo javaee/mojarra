@@ -66,10 +66,17 @@ public abstract class StateManagementStrategy {
 
     
     /**
-     * <p class="changed_added_2_0">Return the state of the current view
-     * in an <code>Object</code> that implements
-     * <code>Serializable</code>.  The default implementation must
-     * perform the following algorithm or its semantic equivalent.</p>
+     * <p class="changed_added_2_0"><span
+     * class="changed_modified_2_2">Return</span> the state of the
+     * current view in an <code>Object</code> that implements
+     * <code>Serializable</code> <span class="changed_modified_2_2">and
+     * can be passed to
+     * <code>java.io.ObjectOutputStream.writeObject()</code> without
+     * causing a <code>java.io.NotSerializableException</code> to be
+     * thrown.</span> The default implementation must perform the
+     * following algorithm or its semantic equivalent, <span
+     * class="changed_modified_2_2">explicitly performing all the steps
+     * listed here.</span></p>
      *
      * <div class="changed_added_2_0">
 
