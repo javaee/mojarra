@@ -552,7 +552,7 @@
     </target>
 
     <target name="test"
-             depends="update,init.test,compile.test,run.systest,run.junit.test,run.systest-per-webapp,run.systest-per-webapp-on-virtual-server,run.cactus.test"
+             depends="update,init.test,compile.test,run.systest,run.junit.test,run.systest-per-webapp,run.systest-per-webapp-on-virtual-server"
             description="Run all unit and system tests"/>
 
     <target name="test.generate.reports"
