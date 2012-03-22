@@ -53,6 +53,7 @@ public class LibraryInfo {
     private String localePrefix;
     private ResourceHelper helper;
     private String path;
+    private String nonLocalizedPath;
 
     /**
      * Constructs a new <code>LibraryInfo</code> using the specified details.
@@ -68,6 +69,16 @@ public class LibraryInfo {
         this.version = version;
         this.localePrefix = localePrefix;
         this.helper = helper;
+        initPath();
+    }
+    
+    LibraryInfo(LibraryInfo other, boolean copyLocalePrefix) {
+        this.name = other.name;
+        this.version = other.version;
+        if (copyLocalePrefix) {
+            this.localePrefix = other.localePrefix;
+        }
+        this.helper = other.helper;
         initPath();
     }
 
@@ -138,7 +149,17 @@ public class LibraryInfo {
     public String getPath() {
         return path;
     }
-
+    
+    public String getPath(String localePrefix) {
+        String result = null;
+        if (null == localePrefix) {
+            result = nonLocalizedPath;
+        } else {
+            result = path;
+        }
+        return result;
+    }
+    
     /**
      * @return the Locale prefix, if any.
      */
@@ -163,16 +184,23 @@ public class LibraryInfo {
      */
     private void initPath() {
 
-        StringBuilder sb = new StringBuilder(64);
-        sb.append(helper.getBaseResourcePath());
+        StringBuilder builder = new StringBuilder(64),
+                      noLocaleBuilder = new StringBuilder(64);
+        
+        builder.append(helper.getBaseResourcePath());
+        noLocaleBuilder.append(helper.getBaseResourcePath());
+        
         if (localePrefix != null) {
-            sb.append('/').append(localePrefix);
+            builder.append('/').append(localePrefix);
         }
-        sb.append('/').append(name);
+        builder.append('/').append(name);
+        noLocaleBuilder.append('/').append(name);
         if (version != null) {
-            sb.append('/').append(version.getVersion());
+            builder.append('/').append(version.getVersion());
+            noLocaleBuilder.append('/').append(version.getVersion());
         }
-        path = sb.toString();
+        path = builder.toString();
+        nonLocalizedPath = noLocaleBuilder.toString();
         
     }
 

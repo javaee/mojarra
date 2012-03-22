@@ -112,7 +112,7 @@ public class ResourceLocalePrefixTestCase extends HtmlUnitFacesTestCase {
             assertTrue(page != null);
             List<HtmlImage> images = new ArrayList<HtmlImage>(2);
             getAllElementsOfGivenClass(page, images, HtmlImage.class);
-            assertTrue(images.size() == 2);
+            assertTrue(images.size() == 4);
             HtmlImage img = images.get(0);
             assertTrue((
                   "/jsf-resource-locale-prefix/faces/javax.faces.resource/duke.gif?loc="
@@ -125,6 +125,13 @@ public class ResourceLocalePrefixTestCase extends HtmlUnitFacesTestCase {
                   + (("ja".equals(locale)
                       ? "en"
                       : locale))).equals(img.getSrcAttribute()));
+            img = images.get(2);
+            assertTrue((
+                  "/jsf-resource-locale-prefix/faces/javax.faces.resource/duke-non-localized-non-lib.gif").equals(img.getSrcAttribute()));
+            img = images.get(3);
+            assertTrue((img.getSrcAttribute()).contains(
+                  "/jsf-resource-locale-prefix/faces/javax.faces.resource/duke-non-localized.gif?ln=lib"));
+
             List<HtmlScript> scripts = new ArrayList<HtmlScript>(1);
         getAllElementsOfGivenClass(page, scripts, HtmlScript.class);
         assertTrue(scripts.size() == 1);

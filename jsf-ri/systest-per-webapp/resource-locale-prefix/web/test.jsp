@@ -52,6 +52,11 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 Non-library:&nbsp;<img src="${resource['duke.gif']}" alt="non-library" border="0"/>
 <br/>
 Library:&nbsp;<img src="${resource['lib:duke.gif']}" alt="library" border="0"/>
+<br />
+Non-localized non-library: &nbsp;<img src="${resource['duke-non-localized-non-lib.gif']}" alt="non-library" border="0"/>
+<br />
+Non-localized library: &nbsp;<img src="${resource['lib:duke-non-localized.gif']}" alt="library" border="0"/>
+
 <f:view>
     <h:form>
         <h:commandLink value="Click Me"/>

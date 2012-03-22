@@ -965,6 +965,10 @@ public class WebConfiguration {
               ClientWindow.WINDOW_ID_MODE_PARAM_NAME,
               "none"
         ),
+        WebAppResourcesDirectory(
+              "javax.faces.WebAppResourcesDirectory",
+              "/resources"
+        ),
 ;
 
 

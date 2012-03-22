@@ -215,11 +215,12 @@ public abstract class Resource {
 
 
     /**
-     * <p class="changed_added_2_0">Return a path to this resource such
-     * that, when the browser resolves it against the base URI for the
-     * view that includes the resource, and issues a GET request to the
-     * resultant fully qualified URL, the bytes of the resource are
-     * returned in response.</p>
+     * <p class="changed_added_2_0"><span
+     * class="changed_modified_2_2">Return</span> a path to this
+     * resource such that, when the browser resolves it against the base
+     * URI for the view that includes the resource, and issues a GET
+     * request to the resultant fully qualified URL, the bytes of the
+     * resource are returned in response.</p>
      *
      * <div class="changed_added_2_0">
      *
@@ -253,18 +254,25 @@ public abstract class Resource {
      *
      * </li>
      *
-     * <li><p>If {@link #getLibraryName} returns non-<code>null</code>,
-     * build up a string, called <em>resourceMetaData</em> for
-     * discussion, as follows:</p>
+     * <li class="changed_modified_2_2"><p>Build up a string, called
+     * <em>resourceMetaData</em> which is an &amp; separated string of
+     * name=value pairs suitable for inclusion in a URL query
+     * string.</p>
      *
      * <ul>
      *
-     * <p><code>resourceMetaData = "?ln=" + {@link
-     * #getLibraryName}</code></p>
+     * <p>If {@link #getLibraryName} returns non-<code>null</code>,
+     * <code>resourceMetaData</code> must include "ln=" + the return
+     * from {@link #getLibraryName}</p>
+
+     * <p class="changed_added_2_2">If there is a
+     * <code>localePrefix</code> for this application, as defined in
+     * {@link ResourceHandler#LOCALE_PREFIX}, <code>resourceMetaData</code> must
+     * include "loc=" + the <code>localePrefix</code>.</p>
      *
      * </ul>
      *
-     * <p>Append <em>resourceMetaData</em> to <em>result</em>.</p>
+     * <p>Append "?" + <em>resourceMetaData</em> to <em>result</em>.</p>
      *
      * </li>
      *
@@ -272,7 +280,7 @@ public abstract class Resource {
      * ViewHandler#getResourceURL}.</p></li>
      *
      * </ul>
-     *
+
      * </div>
      *
      * @return the path to this resource, intended to be included in the

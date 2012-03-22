@@ -53,6 +53,18 @@ public class FaceletResourceHelper extends ResourceHelper {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        return obj instanceof FaceletResourceHelper;
+    }
+
+    @Override
+    public int hashCode() {
+        return 3;
+    }
+    
+    
+
+    @Override
     public LibraryInfo findLibrary(String libraryName, String localePrefix, FacesContext ctx) {
         LibraryInfo result = null;
 
@@ -115,6 +127,6 @@ public class FaceletResourceHelper extends ResourceHelper {
         return ((FaceletResourceInfo)resource).getUrl();
     }
 
-    
+
     
 }

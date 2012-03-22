@@ -83,6 +83,33 @@ public class ClasspathResourceHelper extends ResourceHelper {
 
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ClasspathResourceHelper other = (ClasspathResourceHelper) obj;
+        if (this.cacheTimestamp != other.cacheTimestamp) {
+            return false;
+        }
+        if (this.enableMissingResourceLibraryDetection != other.enableMissingResourceLibraryDetection) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 67 * hash + (this.cacheTimestamp ? 1 : 0);
+        hash = 67 * hash + (this.enableMissingResourceLibraryDetection ? 1 : 0);
+        return hash;
+    }
+
+    
 
     // --------------------------------------------- Methods from ResourceHelper
 
@@ -130,7 +157,7 @@ public class ClasspathResourceHelper extends ResourceHelper {
 
     }
 
-
+    
     /**
      * @see ResourceHelper#findLibrary(String, String, javax.faces.context.FacesContext)
      */
@@ -219,7 +246,7 @@ public class ClasspathResourceHelper extends ResourceHelper {
         ClassLoader loader = Util.getCurrentLoader(this);
         String basePath;
         if (library != null) {
-            basePath = library.getPath() + '/' + resourceName;
+            basePath = library.getPath(localePrefix) + '/' + resourceName;
         } else {
             if (localePrefix == null) {
                 basePath = getBaseResourcePath() + '/' + resourceName;

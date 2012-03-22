@@ -214,7 +214,8 @@ public abstract class ResourceHandler {
     
 
     /**
-     * <p class="changed_added_2_0">Create an instance of
+     * <p class="changed_added_2_0"><span
+     * class="changed_modified_2_2">Create</span> an instance of
      * <code>Resource</code> given the argument
      * <code>resourceName</code>.  The content-type of the resource is
      * derived by passing the <em>resourceName</em> to {@link
@@ -222,11 +223,13 @@ public abstract class ResourceHandler {
 
      * <div class="changed_added_2_0">
 
-     * <p>The algorithm specified in section JSF.2.6.1.4 of the spec prose
-     * document <a
+     * <p>The algorithm specified in section JSF.2.6.1.4 of the spec
+     * prose document <a
      * href="../../../overview-summary.html#prose_document">linked in
      * the overview summary</a> must be executed to create the
-     * <code>Resource</code></p>
+     * <code>Resource</code>.  <span class="changed_added_2_2">New
+     * requirements were introduced in version 2.2 of the
+     * specification.</span></p>
 
      * </div>
 
@@ -282,11 +285,11 @@ public abstract class ResourceHandler {
 
      * <div class="changed_added_2_2">
 
-     * <p>The resource must be identified according to the specification in
-     * JSF.2.6.1.3 of the spec prose
-     * document <a
+     * <p>The resource must be identified according to the specification
+     * in JSF.2.6.1.3 of the spec prose document <a
      * href="../../../overview-summary.html#prose_document">linked in
-     * the overview summary</a>.</p>
+     * the overview summary</a>.  New requirements were introduced in
+     * version 2.2 of the specification.</p>
 
      * </div>
 
@@ -306,21 +309,24 @@ public abstract class ResourceHandler {
     }
 
     /**
-     * <p class="changed_added_2_0">Create an instance of
+     * <p class="changed_added_2_0"><span
+     * class="changed_modified_2_2">Create</span> an instance of
      * <code>Resource</code> with a resourceName given by the value of
      * the argument <code>resourceName</code> that is a member of the
      * library named by the argument <code>libraryName</code>.  The
      * content-type of the resource is derived by passing the
-     * <em>resourceName</em> to
-     * {@link javax.faces.context.ExternalContext#getMimeType}.</p>
+     * <em>resourceName</em> to {@link
+     * javax.faces.context.ExternalContext#getMimeType}.</p>
      *
      * <div class="changed_added_2_0">
 
-     * <p>The algorithm specified in section JSF.2.6.1.4 of the spec prose
-     * document <a
+     * <p>The algorithm specified in section JSF.2.6.1.4 of the spec
+     * prose document <a
      * href="../../../overview-summary.html#prose_document">linked in
      * the overview summary</a> must be executed to create the
-     * <code>Resource</code></p>
+     * <code>Resource</code>. <span class="changed_added_2_2">New
+     * requirements were introduced in version 2.2 of the
+     * specification.</span></p>
 
      * </div>
 
@@ -342,7 +348,8 @@ public abstract class ResourceHandler {
 
 
     /**
-     * <p class="changed_added_2_0">Create an instance of
+     * <p class="changed_added_2_0"><span
+     * class="changed_modified_2_2">Create</span> an instance of
      * <code>Resource</code> with a <em>resourceName</em> given by the
      * value of the argument <code>resourceName</code> that is a member
      * of the library named by the argument <code>libraryName</code>
@@ -351,11 +358,13 @@ public abstract class ResourceHandler {
      *
      * <div class="changed_added_2_0">
 
-     * <p>The algorithm specified in section JSF.2.6.1.4 of the spec prose
-     * document <a
+     * <p>The algorithm specified in section JSF.2.6.1.4 of the spec
+     * prose document <a
      * href="../../../overview-summary.html#prose_document">linked in
      * the overview summary</a> must be executed to create the
-     * <code>Resource</code></p>
+     * <code>Resource</code>. <span class="changed_added_2_2">New
+     * requirements were introduced in version 2.2 of the
+     * specification.</span></p>
 
      * </div>
 
@@ -384,9 +393,20 @@ public abstract class ResourceHandler {
                                             String contentType);
     
     /**
-     * <p class="changed_added_2_0">Return <code>true</code> if the 
-     * resource library named by the argument <code>libraryName</code>
-     * can be found.</p>
+     * <p class="changed_added_2_0"><span
+     * class="changed_modified_2_2">Return</span> <code>true</code> if
+     * the resource library named by the argument
+     * <code>libraryName</code> can be found.  <span
+     * class="changed_added_2_2">If there is a <code>localePrefix</code>
+     * for this application, as defined in {@link #LOCALE_PREFIX}, first
+     * look for the library with the prefix.  If no such library is
+     * found, look for the library without the prefix.  This allows
+     * developers to avoid duplication of files.  For example, consider
+     * the case where the developer wants to have a resource library
+     * containing a localized image resource and a non-localized script
+     * resource.  By checking both locations for the existence of the
+     * library, along with other spec changes in section 2.6.1.4, this
+     * scenario is enabled.</span></p>
      *
      * @since 2.0
      * 

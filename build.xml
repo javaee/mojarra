@@ -143,6 +143,23 @@
 
     </target>
 
+    <target name="test.with.cactus.tests" description="Run API, Impl, and Demo automated tests">
+        <call.modules target="test"/>
+        <subant target="run.cactus.test" inheritAll="false">
+          <property name="force.no.cluster" value="${force.no.cluster}" />
+          <filelist dir="${impl.dir}">
+            <file name="build.xml"/>
+          </filelist>
+        </subant>
+        <subant target="test" inheritAll="false" failonerror="true">
+          <filelist dir="${regression.test.dir}">
+              <file name="build.xml"/>
+          </filelist>
+        </subant>
+
+    </target>
+
+
     <target name="test.with.container.refresh"
             description="Stop the target container, deploy the build artifacts, restart the container and test">
         <trycatch reference="exception_ref">
@@ -185,6 +202,49 @@
         </trycatch>
 
     </target>
+
+    <target name="test.with.cactus.tests.with.container.refresh"
+            description="Stop the target container, deploy the build artifacts, restart the container and test">
+        <trycatch reference="exception_ref">
+            <try>
+                <container.stop/>
+                <antcall target="container.deploy"/>
+                <echo message="Successfully deployed JSF implementation to container." />
+                <echo message="About to start container." />
+                <container.start/>
+                <echo message="Successfully started container." />
+                <echo message="About to invoke tests." />
+                <antcall target="test.with.cactus.tests"/>
+
+                <!-- taking jsf-demo out of the standard build/test loop
+                     as one can't build the current source bundle as jsf-demo
+                     isn't included
+                <filelist dir="${demo.dir}">
+                    <file name="build.xml"/>
+                </filelist>
+                     -->
+
+                <echo message="Successfully invoked test." />
+
+            </try>
+
+            <catch>
+               <property name="exception" refid="exception_ref" />
+               <property name="message" value="Error in trycatch block:${line.separator}${exception}" />
+               <echo message="${message}" />
+               <fail message="${message}" />
+            </catch>
+
+            <finally>
+
+                <echo message="About to stop container." />
+                <container.stop/>
+
+            </finally>
+        </trycatch>
+
+    </target>
+
 
     <target name="smoketest.with.container.refresh"
             description="Stop the target container, deploy the build artifacts, restart the container and run systest with partial state saving enabled">

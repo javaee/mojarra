@@ -41,6 +41,14 @@
 package com.sun.faces.application.resource;
 
 public class ResourceInfo {
+    
+    ResourceHelper helper;
+    LibraryInfo library;
+    String libraryName;
+    String localePrefix;
+    String name;
+    String path;
+    VersionInfo version;
 
     public ResourceInfo(LibraryInfo library, 
             String name, 
@@ -59,14 +67,77 @@ public class ResourceInfo {
         this.version = version;
         this.helper = helper;
     }
+    
+    public ResourceInfo(ResourceInfo other, boolean copyLocalePrefix) {
+        this.helper = other.helper;
+        this.library = new LibraryInfo(other.library, copyLocalePrefix);
+        this.libraryName = library.getName();
+        if (copyLocalePrefix) {
+            this.localePrefix = other.localePrefix;
+        }
+        this.name = other.name;
+        this.path = other.path;
+        this.version = other.version;
+    }
+    
+    public void copy(ResourceInfo other) {
+        this.helper = other.helper;
+        this.library = other.library;
+        this.libraryName = other.libraryName;
+        this.localePrefix = other.localePrefix;
+        this.name = other.name;
+        this.path = other.path;
+        this.version = other.version;
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        if (this == obj) {
+            return true;
+        }
+        final ResourceInfo other = (ResourceInfo) obj;
+        if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
+            return false;
+        }
+        if ((this.libraryName == null) ? (other.libraryName != null) : !this.libraryName.equals(other.libraryName)) {
+            return false;
+        }
+        if ((this.localePrefix == null) ? (other.localePrefix != null) : !this.localePrefix.equals(other.localePrefix)) {
+            return false;
+        }
+        if (this.version != other.version && (this.version == null || !this.version.equals(other.version))) {
+            return false;
+        }
+        if (this.library != other.library && (this.library == null || !this.library.equals(other.library))) {
+            return false;
+        }
+        if ((this.path == null) ? (other.path != null) : !this.path.equals(other.path)) {
+            return false;
+        }
+        if ((this.helper == null) ? (other.helper != null) : !this.helper.equals(other.helper)) {
+            return false;
+        }
+        return true;
+    }
 
-    ResourceHelper helper;
-    LibraryInfo library;
-    String libraryName;
-    String localePrefix;
-    String name;
-    String path;
-    VersionInfo version;
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + (this.name != null ? this.name.hashCode() : 0);
+        hash = 97 * hash + (this.libraryName != null ? this.libraryName.hashCode() : 0);
+        hash = 97 * hash + (this.localePrefix != null ? this.localePrefix.hashCode() : 0);
+        hash = 97 * hash + (this.version != null ? this.version.hashCode() : 0);
+        hash = 97 * hash + (this.library != null ? this.library.hashCode() : 0);
+        hash = 97 * hash + (this.path != null ? this.path.hashCode() : 0);
+        hash = 97 * hash + (this.helper != null ? this.helper.hashCode() : 0);
+        return hash;
+    }
 
     /**
      * @return return the {@link ResourceHelper} for this resource

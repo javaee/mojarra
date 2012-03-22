@@ -166,70 +166,13 @@ public abstract class ResourceHelper {
         if (toStream instanceof ClientResourceInfo) {
             ClientResourceInfo resource = (ClientResourceInfo) toStream;
         
-            if (resource.isCompressable() && clientAcceptsCompression(ctx)) {
-                if (!resource.supportsEL()) {
-                    try {
-                        String path = resource.getCompressedPath();
-                        in = new BufferedInputStream(
-                                new FileInputStream(path
-                                + File.separatorChar
-                                + COMPRESSED_CONTENT_FILENAME));
-                    } catch (IOException ioe) {
-                        if (LOGGER.isLoggable(Level.SEVERE)) {
-                            LOGGER.log(Level.SEVERE,
-                                    ioe.getMessage(),
-                                    ioe);
-                        }
-                        // return null so that the override code will try to serve
-                        // the non-compressed content
-                        in = null;
-                    }
-                } else {
-                    InputStream temp = null;
-                    try {
-                        // using dynamic compression here
-                        temp = new BufferedInputStream(
-                                new ELEvaluatingInputStream(ctx,
-                                        resource,
-                                        getNonCompressedInputStream(resource,
-                                ctx)));
-                        byte[] buf = new byte[512];
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream(512);
-                        OutputStream out = new GZIPOutputStream(baos);
-                        for (int read = temp.read(buf); read != -1; read = temp.read(buf)) {
-                            out.write(buf, 0, read);
-                        }
-                        out.flush();
-                        out.close();
-                        in = new BufferedInputStream(
-                                new ByteArrayInputStream(baos.toByteArray()));
-                        
-                    } catch (IOException ioe) {
-                        if (LOGGER.isLoggable(Level.SEVERE)) {
-                            LOGGER.log(Level.SEVERE,
-                                    ioe.getMessage(),
-                                    ioe);
-                        }
-                    } finally {
-                        if (temp != null) {
-                            try {
-                                temp.close();
-                            } catch (IOException ioe) {
-                                // ignore
-                            }
-                        }
-                    }
-                }
-            }
-            if (in == null) {
-                if (resource.supportsEL()) {
-                    return new BufferedInputStream(
-                            new ELEvaluatingInputStream(ctx,
-                                    resource,
-                                    getNonCompressedInputStream(resource,
-                            ctx)));
-                } else {
-                    in = getNonCompressedInputStream(resource, ctx);
+            in = getInputStreamFromClientInfo(resource, ctx);
+            if (null == in) {
+                ClientResourceInfo resourceWithoutLocalePrefix = 
+                        new ClientResourceInfo(resource, false);
+                in = getInputStreamFromClientInfo(resourceWithoutLocalePrefix, ctx);
+                if (null != in) {
+                    resource.copy(resourceWithoutLocalePrefix);
                 }
             }
         
@@ -238,6 +181,79 @@ public abstract class ResourceHelper {
         }
         return in;
 
+    }
+    
+    private InputStream getInputStreamFromClientInfo(ClientResourceInfo resource,
+            FacesContext ctx) throws IOException {
+        InputStream in = null;
+        
+        if (resource.isCompressable() && clientAcceptsCompression(ctx)) {
+            if (!resource.supportsEL()) {
+                try {
+                    String path = resource.getCompressedPath();
+                    in = new BufferedInputStream(
+                            new FileInputStream(path
+                            + File.separatorChar
+                            + COMPRESSED_CONTENT_FILENAME));
+                } catch (IOException ioe) {
+                    if (LOGGER.isLoggable(Level.SEVERE)) {
+                        LOGGER.log(Level.SEVERE,
+                                ioe.getMessage(),
+                                ioe);
+                    }
+                    // return null so that the override code will try to serve
+                    // the non-compressed content
+                    in = null;
+                }
+            } else {
+                InputStream temp = null;
+                try {
+                    // using dynamic compression here
+                    temp = new BufferedInputStream(
+                            new ELEvaluatingInputStream(ctx,
+                                    resource,
+                                    getNonCompressedInputStream(resource,
+                            ctx)));
+                    byte[] buf = new byte[512];
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream(512);
+                    OutputStream out = new GZIPOutputStream(baos);
+                    for (int read = temp.read(buf); read != -1; read = temp.read(buf)) {
+                        out.write(buf, 0, read);
+                    }
+                    out.flush();
+                    out.close();
+                    in = new BufferedInputStream(
+                            new ByteArrayInputStream(baos.toByteArray()));
+                    
+                } catch (IOException ioe) {
+                    if (LOGGER.isLoggable(Level.SEVERE)) {
+                        LOGGER.log(Level.SEVERE,
+                                ioe.getMessage(),
+                                ioe);
+                    }
+                } finally {
+                    if (temp != null) {
+                        try {
+                            temp.close();
+                        } catch (IOException ioe) {
+                            // ignore
+                        }
+                    }
+                }
+            }
+        }
+        if (in == null) {
+            if (resource.supportsEL()) {
+                return new BufferedInputStream(
+                        new ELEvaluatingInputStream(ctx,
+                                resource,
+                                getNonCompressedInputStream(resource,
+                        ctx)));
+            } else {
+                in = getNonCompressedInputStream(resource, ctx);
+            }
+        }
+        return in;
     }
 
 

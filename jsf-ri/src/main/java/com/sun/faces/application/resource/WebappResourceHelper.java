@@ -70,7 +70,7 @@ public class WebappResourceHelper extends ResourceHelper {
 
     private static final Logger LOGGER = FacesLogger.RESOURCE.getLogger();
 
-    private static final String BASE_RESOURCE_PATH = "/resources";
+    private String BASE_RESOURCE_PATH;
 
     private boolean cacheTimestamp;
 
@@ -82,9 +82,37 @@ public class WebappResourceHelper extends ResourceHelper {
 
         WebConfiguration webconfig = WebConfiguration.getInstance();
         cacheTimestamp = webconfig.isOptionEnabled(CacheResourceModificationTimestamp);
+        BASE_RESOURCE_PATH = webconfig.getOptionValue(WebConfiguration.WebContextInitParameter.WebAppResourcesDirectory);
 
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final WebappResourceHelper other = (WebappResourceHelper) obj;
+        if ((this.BASE_RESOURCE_PATH == null) ? (other.BASE_RESOURCE_PATH != null) : !this.BASE_RESOURCE_PATH.equals(other.BASE_RESOURCE_PATH)) {
+            return false;
+        }
+        if (this.cacheTimestamp != other.cacheTimestamp) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 37 * hash + (this.BASE_RESOURCE_PATH != null ? this.BASE_RESOURCE_PATH.hashCode() : 0);
+        hash = 37 * hash + (this.cacheTimestamp ? 1 : 0);
+        return hash;
+    }
+
+    
 
     // --------------------------------------------- Methods from ResourceHelper
 
@@ -122,6 +150,8 @@ public class WebappResourceHelper extends ResourceHelper {
         }
 
     }
+    
+    
 
 
     /**
@@ -168,7 +198,7 @@ public class WebappResourceHelper extends ResourceHelper {
 
         String basePath;
         if (library != null) {
-            basePath = library.getPath() + '/' + resourceName;
+            basePath = library.getPath(localePrefix) + '/' + resourceName;
         } else {
             if (localePrefix == null) {
                 basePath = getBaseResourcePath() + '/' + resourceName;
