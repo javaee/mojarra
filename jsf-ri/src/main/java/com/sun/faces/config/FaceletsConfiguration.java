@@ -96,6 +96,30 @@ public class FaceletsConfiguration {
 
         return currentModeIsXhtml;
     }
+    
+    public boolean isOutputHtml5Doctype(String alias) {
+        boolean currentModeIsHtml5 = true;
+        
+        String extension = alias;
+        if (null == extension) {
+            extension = ".xhtml";
+        }
+        int i = extension.indexOf(".");
+        if (-1 != i && 1 < extension.length()) {
+            extension = extension.substring(i);
+        } else {
+            extension = ".xhtml";
+        }
+
+        assert (null != faceletsProcessingMappings);
+        if (faceletsProcessingMappings.containsKey(extension)) {
+            String value = faceletsProcessingMappings.get(extension);
+            currentModeIsHtml5 = value.equals("html5");
+        }
+        
+        
+        return currentModeIsHtml5;
+    }
 
     public boolean isConsumeComments(String alias) {
         boolean consumeComments = false;

@@ -224,14 +224,16 @@ public final class SAXCompiler extends Compiler {
                 throws SAXException {
             // If there is a process-as value for the extension, only allow
             // the PI to be written if its value is xhtml
+            FaceletsConfiguration facelets = this.unit.getWebConfiguration().getFaceletsConfiguration();
             boolean processAsXhtml =
-                    this.unit.getWebConfiguration().getFaceletsConfiguration().isProcessCurrentDocumentAsFaceletsXhtml(alias);
+                    facelets.isProcessCurrentDocumentAsFaceletsXhtml(alias);
 
 
             if (this.inDocument && processAsXhtml) {
                 // JAVASERVERFACES-2328, perform an additional check
                 boolean isInInclude = IncludeHandler.isInInclude();
                 if (!isInInclude) {
+                    boolean isHtml5 = facelets.isOutputHtml5Doctype(alias);
                     // If we're in an ajax request, this is unnecessary and bugged
                     // RELEASE_PENDING - this is a hack, and should probably not be here -
                     // but the alternative is to somehow figure out how *not* to escape the "<!"
@@ -239,14 +241,14 @@ public final class SAXCompiler extends Compiler {
                     // remind me to have rlubke take a look.  But I'm stumped.
                     StringBuffer sb = new StringBuffer(64);
                     sb.append("<!DOCTYPE ").append(name);
-                    if (publicId != null) {
+                    if (!isHtml5 && publicId != null) {
                         sb.append(" PUBLIC \"").append(publicId).append("\"");
                         if (systemId != null) {
                             sb.append(" \"").append(systemId).append("\"");
                         }
-                } else if (systemId != null) {
-                    sb.append(" SYSTEM \"").append(systemId).append("\"");
-                }
+                    } else if (!isHtml5 && systemId != null) {
+                        sb.append(" SYSTEM \"").append(systemId).append("\"");
+                    }
                     sb.append(">\n");
                     this.unit.writeInstruction(sb.toString());
                 }
