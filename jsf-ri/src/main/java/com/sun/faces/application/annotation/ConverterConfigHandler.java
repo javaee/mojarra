@@ -91,18 +91,12 @@ public class ConverterConfigHandler implements ConfigAnnotationHandler {
         if (converters == null) {
             converters = new HashMap<Object,String>();
         }
-        Object key;
+        Object key = null;
         FacesConverter converterAnnotation = (FacesConverter) annotation;
         if (0 == converterAnnotation.value().length()) {
             key = converterAnnotation.forClass();
         } else {
-            String value = ((FacesConverter) annotation).value();
-            if (null == value || 0 == value.length()) {
-                value = target.getSimpleName();
-                value = Character.toLowerCase(value.charAt(0)) + value.substring(1);
-            }
-
-            key = value;
+            key = converterAnnotation.value();
         }
         converters.put(key, target.getName());
 

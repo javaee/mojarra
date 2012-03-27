@@ -137,18 +137,6 @@ public class AnnotationTestBean {
         // it's present in the default validator info obtained above.
         assertTrue(defaultValidatorIds.contains("AnnotatedValidatorDefault"));
         
-        exceptionThrown = false;
-        cv = null;
-        try {
-            cv = app.createConverter("AnnotatedConverterNoValue");
-            assertEquals("no_value", cv.getAsString(ctx, c, v));
-        }
-        catch (FacesException fe) {
-            assertTrue(null == cv);
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-        
         Behavior b = app.createBehavior("AnnotatedBehavior");
         assertNotNull(b);
         assertTrue(b instanceof AnnotatedBehavior);
