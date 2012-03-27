@@ -210,6 +210,7 @@ public class UIRepeatTestCase extends HtmlUnitFacesTestCase {
 
     }
 
+    /******* PENDING(edburns): disable this test until JAVASERVERFACES-2356 is resolved
     public void testDebugViewState() throws Exception {
         tearDown();
         setUp();
@@ -224,5 +225,6 @@ public class UIRepeatTestCase extends HtmlUnitFacesTestCase {
 
 
     }
+    ***********/
 
 }
