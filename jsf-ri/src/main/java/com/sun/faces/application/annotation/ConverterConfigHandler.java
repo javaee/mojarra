@@ -96,10 +96,13 @@ public class ConverterConfigHandler implements ConfigAnnotationHandler {
         if (0 == converterAnnotation.value().length()) {
             key = converterAnnotation.forClass();
         } else {
-            String id = target.getSimpleName();
-            id = Character.toLowerCase(id.charAt(0)) + 
-                    id.substring(1);
-            key = id;
+            String value = ((FacesConverter) annotation).value();
+            if (null == value || 0 == value.length()) {
+                value = target.getSimpleName();
+                value = Character.toLowerCase(value.charAt(0)) + value.substring(1);
+            }
+
+            key = value;
         }
         converters.put(key, target.getName());
 
