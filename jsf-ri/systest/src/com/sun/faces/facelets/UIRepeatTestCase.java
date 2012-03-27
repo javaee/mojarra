@@ -211,6 +211,8 @@ public class UIRepeatTestCase extends HtmlUnitFacesTestCase {
     }
 
     public void testDebugViewState() throws Exception {
+        tearDown();
+        setUp();
         HtmlPage page = getPage("/faces/facelets/uirepeat5.xhtml");
         HtmlElement form = page.getElementById("form");
         page = (HtmlPage) form.type('D', true, true, false);
