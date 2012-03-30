@@ -44,18 +44,15 @@ import com.sun.faces.spi.AnnotationScanner;
 import com.sun.faces.spi.InjectionProvider;
 import com.sun.faces.spi.InjectionProviderException;
 import com.sun.faces.util.FacesLogger;
-import java.util.Map;
 
 import javax.annotation.PreDestroy;
 import javax.annotation.PostConstruct;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.annotation.Annotation;
-import java.util.Collections;
-import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 import java.util.logging.Level;
-import javax.servlet.ServletContext;
 
 /**
  * <p>This <code>InjectionProvider</code> will be used if the
@@ -123,6 +120,22 @@ public class WebContainerInjectionProvider implements InjectionProvider {
         }
 
     }
+    
+    private static class MethodHolder {
+        
+        private final Method method;
+
+        public MethodHolder(Method method){
+            this.method = method;
+        }
+
+        public Method getMethod() {
+            return method;
+        }
+    }
+    
+    private static ConcurrentHashMap<Class, ConcurrentHashMap<Class<? extends Annotation>, MethodHolder>> methodsPerClazz =
+            new ConcurrentHashMap<Class, ConcurrentHashMap<Class<? extends Annotation>, MethodHolder>>();
 
 
     private static Method getAnnotatedMethod(Object managedBean,
@@ -130,63 +143,99 @@ public class WebContainerInjectionProvider implements InjectionProvider {
 
         Class<?> clazz = managedBean.getClass();
         while (!Object.class.equals(clazz)) {
+            
+            ConcurrentHashMap<Class<? extends Annotation>, MethodHolder> methodsMap = methodsPerClazz.get(clazz);
+            
+            if(methodsMap==null) {
+                
+                ConcurrentHashMap<Class<? extends Annotation>, MethodHolder> newMethodsMap = 
+                        new ConcurrentHashMap<Class<? extends Annotation>, MethodHolder>();
+                
+                methodsMap = methodsPerClazz.putIfAbsent(clazz, newMethodsMap);
+                
+                if(methodsMap==null) {
+                    methodsMap = newMethodsMap;
+                }                           
+            }
+            
+            MethodHolder methodHolder = methodsMap.get(annotation);
+            
+            if(methodHolder==null) {
+                Method[] methods = clazz.getDeclaredMethods();
+                Method method = getAnnotatedMethodForMethodArr(methods, annotation);
+                
+                MethodHolder newMethodHolder = new MethodHolder(method);
+                
+                methodHolder = methodsMap.putIfAbsent(annotation, newMethodHolder);
 
-            Method[] methods = clazz.getDeclaredMethods();
-            for (Method method : methods) {
-                if (method.isAnnotationPresent(annotation)) {
-                    // validate method
-                    if (Modifier.isStatic(method.getModifiers())) {
-                        if (LOGGER.isLoggable(Level.WARNING)) {
-                            LOGGER.log(Level.WARNING,
-                                       "jsf.core.web.injection.method_not_static",
-                                       new Object[] { method.toString(),
-                                                      annotation.getName() });
-                        }
-                        continue;
-                    }
-                    if (!Void.TYPE.equals(method.getReturnType())) {
-                        if (LOGGER.isLoggable(Level.WARNING)) {
-                            LOGGER.log(Level.WARNING,
-                                       "jsf.core.web.injection.method_return_not_void",
-                                       new Object[] { method.toString(),
-                                                      annotation.getName() });
-                        }
-                        continue;
-                    }
-                    if (method.getParameterTypes().length != 0) {
-                        if (LOGGER.isLoggable(Level.WARNING)) {
-                            LOGGER.log(Level.WARNING,
-                                       "jsf.core.web.injection.method_no_params",
-                                       new Object[] { method.toString(),
-                                                      annotation.getName() });
-                        }
-                        continue;
-                    }
-                    Class<?>[] exceptions = method.getExceptionTypes();
-                    if (method.getExceptionTypes().length != 0) {
-                        boolean hasChecked = false;
-                        for (Class<?> excClass : exceptions) {
-                            if (!RuntimeException.class.isAssignableFrom(excClass)) {
-                                hasChecked = true;
-                                break;
-                            }
-                        }
-                        if (hasChecked) {
-                            if (LOGGER.isLoggable(Level.WARNING)) {
-                                LOGGER.log(Level.WARNING,
-                                     "jsf.core.web.injection.method_no_checked_exceptions",
-                                     new Object[]{method.toString(),
-                                          annotation.getName()});
-                            }
-                            continue;
-                        }
-                    }
-                    // we found a match.
-                    return method;
+                if(methodHolder==null) {
+                    methodHolder = newMethodHolder;
                 }
             }
 
+            if(methodHolder.getMethod()!=null) {
+                return methodHolder.getMethod();
+            }
+
             clazz = clazz.getSuperclass();
+        }
+
+        return null;
+    }
+
+    private static Method getAnnotatedMethodForMethodArr(Method[] methods, Class<? extends Annotation> annotation) {
+        for (Method method : methods) {
+            if (method.isAnnotationPresent(annotation)) {
+                // validate method
+                if (Modifier.isStatic(method.getModifiers())) {
+                    if (LOGGER.isLoggable(Level.WARNING)) {
+                        LOGGER.log(Level.WARNING,
+                                   "jsf.core.web.injection.method_not_static",
+                                   new Object[] { method.toString(),
+                                                  annotation.getName() });
+                    }
+                    continue;
+                }
+                if (!Void.TYPE.equals(method.getReturnType())) {
+                    if (LOGGER.isLoggable(Level.WARNING)) {
+                        LOGGER.log(Level.WARNING,
+                                   "jsf.core.web.injection.method_return_not_void",
+                                   new Object[] { method.toString(),
+                                                  annotation.getName() });
+                    }
+                    continue;
+                }
+                if (method.getParameterTypes().length != 0) {
+                    if (LOGGER.isLoggable(Level.WARNING)) {
+                        LOGGER.log(Level.WARNING,
+                                   "jsf.core.web.injection.method_no_params",
+                                   new Object[] { method.toString(),
+                                                  annotation.getName() });
+                    }
+                    continue;
+                }
+                Class<?>[] exceptions = method.getExceptionTypes();
+                if (method.getExceptionTypes().length != 0) {
+                    boolean hasChecked = false;
+                    for (Class<?> excClass : exceptions) {
+                        if (!RuntimeException.class.isAssignableFrom(excClass)) {
+                            hasChecked = true;
+                            break;
+                        }
+                    }
+                    if (hasChecked) {
+                        if (LOGGER.isLoggable(Level.WARNING)) {
+                            LOGGER.log(Level.WARNING,
+                                 "jsf.core.web.injection.method_no_checked_exceptions",
+                                 new Object[]{method.toString(),
+                                      annotation.getName()});
+                        }
+                        continue;
+                    }
+                }
+                // we found a match.
+                return method;
+            }
         }
 
         return null;
