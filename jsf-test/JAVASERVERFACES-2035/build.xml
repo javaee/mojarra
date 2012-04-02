@@ -74,14 +74,14 @@
     </target>    
 
     <target name="test" depends="define.scenario.aware.port">
-        <jsf.junit context-path="/i_jsf_2035"
+<!--        <jsf.junit context-path="/i_jsf_2035"
                  classpath-refid="2035.classpath"    
                  test-results-dir="${regression.test.results.dir}">
             <tests>
                 <fileset dir="${basedir}/htmlunit/target/classes"
                      includes="com/sun/faces/systest/Issue2035TestCase.class"/> 
             </tests>
-        </jsf.junit>
+        </jsf.junit>-->
     </target>    
 
 </project>
