@@ -65,6 +65,7 @@ import javax.faces.el.VariableResolver;
 import javax.faces.event.ActionListener;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
+import javax.faces.flow.FlowHandler;
 import javax.faces.validator.Validator;
 
 
@@ -656,6 +657,11 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
         return getWrapped().getExpressionFactory();
     }
 
+    @Override
+    public FlowHandler getFlowHandler() {
+        return getWrapped().getFlowHandler();
+    }
+    
     /**
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link Application#evaluateExpressionGet(javax.faces.context.FacesContext, String, Class)}

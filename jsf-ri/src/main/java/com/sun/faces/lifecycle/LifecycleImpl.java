@@ -53,7 +53,12 @@ import javax.faces.lifecycle.Lifecycle;
 
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
+import javax.faces.application.Application;
 import javax.faces.context.ExternalContext;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.PostConstructApplicationEvent;
+import javax.faces.event.SystemEvent;
+import javax.faces.event.SystemEventListener;
 import javax.faces.lifecycle.ClientWindow;
 
 
@@ -93,17 +98,35 @@ public class LifecycleImpl extends Lifecycle {
     private List<PhaseListener> listeners =
           new CopyOnWriteArrayList<PhaseListener>();
     private boolean isWindowIdEnabled = false;
+    private WebConfiguration config;
     
     public LifecycleImpl() {
         
     }
 
-    public LifecycleImpl(ExternalContext extContext) {
-        WebConfiguration config = WebConfiguration.getInstance(extContext);
+    public LifecycleImpl(FacesContext context) {
+        ExternalContext extContext = context.getExternalContext();
+        config = WebConfiguration.getInstance(extContext);
+        context.getApplication().subscribeToEvent(PostConstructApplicationEvent.class,
+                         Application.class, new PostConstructApplicationListener());
+        
+    }
+    
+    private class PostConstructApplicationListener implements SystemEventListener {
+
+        public boolean isListenerForSource(Object source) {
+            return source instanceof Application;
+        }
+
+        public void processEvent(SystemEvent event) throws AbortProcessingException {
+            LifecycleImpl.this.postConstructApplicationInitialization();
+        }
+        
+    }
+    
+    private void postConstructApplicationInitialization() {
         String optionValue = config.getOptionValue(WebConfiguration.WebContextInitParameter.WindowIdMode);
         isWindowIdEnabled = (null != optionValue) && !optionValue.equals(WebConfiguration.WebContextInitParameter.WindowIdMode.getDefaultValue());
-
-        
     }
 
     // ------------------------------------------------------- Lifecycle Methods

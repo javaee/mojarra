@@ -81,6 +81,7 @@ import com.sun.faces.el.ELUtils;
 import com.sun.faces.el.FacesCompositeELResolver;
 import com.sun.faces.el.VariableResolverChainWrapper;
 import com.sun.faces.facelets.PrivateApiFaceletCacheAdapter;
+import com.sun.faces.flow.FlowHandlerImpl;
 import com.sun.faces.lifecycle.ELResolverInitPhaseListener;
 
 import java.util.ArrayList;
@@ -114,6 +115,7 @@ import javax.faces.application.NavigationCase;
 import javax.faces.component.FacesComponent;
 import javax.faces.event.PostConstructApplicationEvent;
 import javax.faces.event.SystemEventListener;
+import javax.faces.flow.FlowHandler;
 import javax.faces.view.facelets.FaceletCacheFactory;
 import javax.faces.view.facelets.FaceletFactoryWrapper;
 import javax.faces.view.facelets.FaceletsResourceResolver;
@@ -207,6 +209,8 @@ public class ApplicationAssociate {
     private NamedEventManager namedEventManager;
     
     private WebConfiguration webConfig;
+    
+    private FlowHandler flowHandler;
 
     public ApplicationAssociate(ApplicationImpl appImpl) {
         app = appImpl;
@@ -264,6 +268,8 @@ public class ApplicationAssociate {
 
         public void processEvent(SystemEvent event) throws AbortProcessingException {
             ApplicationAssociate.this.initializeFacelets();
+            // PENDING(edburns): Make this come from a factory.
+            ApplicationAssociate.this.flowHandler = new FlowHandlerImpl();
         }
         
     }
@@ -488,6 +494,10 @@ public class ApplicationAssociate {
 
     public FacesCompositeELResolver getFacesELResolverForJsp() {
         return facesELResolverForJsp;
+    }
+    
+    public FlowHandler getFlowHandler() {
+        return flowHandler;
     }
 
     public void setFacesELResolverForJsp(FacesCompositeELResolver celr) {

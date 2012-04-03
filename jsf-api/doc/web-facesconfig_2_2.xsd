@@ -188,6 +188,8 @@
                    type="javaee:faces-config-converterType"/>
       <xsd:element name="managed-bean"
                    type="javaee:faces-config-managed-beanType"/>
+      <xsd:element name="faces-flow-definition"
+                   type="javaee:faces-config-faces-flow-definitionType"/>
       <xsd:element name="name"
                    type="javaee:java-identifierType"
                    minOccurs="0"
@@ -1617,6 +1619,54 @@
         </xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
+    <xsd:attribute name="id"
+                   type="xsd:ID"/>
+  </xsd:complexType>
+
+<!-- **************************************************** -->
+
+  <xsd:complexType name="faces-config-faces-flow-definitionType">
+    <xsd:annotation>
+      <xsd:documentation>
+
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:group ref="javaee:descriptionGroup"/>
+      <xsd:element name="default-flow-node"
+                   type="javaee:java-identifierType">
+        <xsd:annotation>
+          <xsd:documentation>
+
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="view"
+                   type="javaee:faces-config-faces-flow-definition-viewType"
+                   minOccurs="0"
+                   maxOccurs="unbounded">
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="id"
+                   type="xsd:ID"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="faces-config-faces-flow-definition-viewType">
+    <xsd:annotation>
+      <xsd:documentation>
+
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="page"
+                   type="javaee:java-identifierType">
+        <xsd:annotation>
+          <xsd:documentation>
+
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
     <xsd:attribute name="id"
                    type="xsd:ID"/>
   </xsd:complexType>

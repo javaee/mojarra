@@ -68,6 +68,7 @@ public enum FacesLogger {
     FACELETS_INCLUDE("facelets.tag.ui.include"),
     FACELETS_FACELET("faclets.facelet"),
     FACELETS_FACTORY("facelets.factory"),
+    FLOW("flow"),
     LIFECYCLE("lifecycle"),
     MANAGEDBEAN("managedbean"),
     RENDERKIT("renderkit"),

@@ -363,8 +363,6 @@
 
         <copy file="conf/share/javax.servlet.ServletContainerInitializer"
               toDir="${build.classes.dir}/META-INF/services" />
-        <copy file="conf/share/javax.enterprise.inject.spi.Extension"
-              toDir="${build.classes.dir}/META-INF/services" />
         <copy toDir="${build.classes.dir}/com/sun/faces/metadata/taglib">
             <fileset dir="${conf.share.dir}">
                 <include name="*.taglib.xml" /> 

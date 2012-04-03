@@ -67,6 +67,7 @@ import javax.el.ELException;
 import javax.el.ELResolver;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
+import javax.faces.flow.FlowHandler;
 import javax.faces.validator.Validator;
 import javax.faces.view.ViewDeclarationLanguage;
 
@@ -591,6 +592,16 @@ public abstract class Application {
         throw new UnsupportedOperationException();
 
     }
+
+    public FlowHandler getFlowHandler() {
+
+        if (defaultApplication != null) {
+            return defaultApplication.getFlowHandler();
+        }
+        throw new UnsupportedOperationException();
+
+    }
+
 
 
     /**

@@ -38,29 +38,15 @@
  * holder.
 
  */
-package com.sun.faces.flow;
+package javax.faces.flow;
 
-import javax.enterprise.event.Observes;
-import javax.enterprise.inject.spi.AfterBeanDiscovery;
-import javax.enterprise.inject.spi.BeforeBeanDiscovery;
-import javax.enterprise.inject.spi.Extension;
-import javax.faces.application.FlowScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 
-public class FlowCDIExtension implements Extension {
+public abstract class FlowHandler {
     
-
-    public FlowCDIExtension() {
+    public abstract Flow getCurrentFlow(FacesContext context);
+            
+    public abstract void transition(FacesContext context, UIComponent src, UIComponent target);
         
-    }
-    
-    void addScope(@Observes final BeforeBeanDiscovery event) {
-        event.addScope(FlowScoped.class, true, true);
-    }
-
-    void afterBeanDiscovery(@Observes final AfterBeanDiscovery event) {
-        event.addContext(new FlowCDIContext());
-    }
-    
-    
-    
 }

@@ -117,6 +117,8 @@ public class WebConfiguration {
     private ArrayList<DeferredLoggingAction> deferredLoggingActions;
 
     private FaceletsConfiguration faceletsConfig;
+    
+    private boolean hasFlows;
 
 
     // ------------------------------------------------------------ Constructors
@@ -210,7 +212,14 @@ public class WebConfiguration {
 
     }
 
+    public boolean isHasFlows() {
+        return hasFlows;
+    }
 
+    public void setHasFlows(boolean hasFlows) {
+        this.hasFlows = hasFlows;
+    }
+    
     /**
      * Obtain the value of the specified boolean parameter
      * @param param the parameter of interest
@@ -244,6 +253,10 @@ public class WebConfiguration {
 
         return result;
 
+    }
+    
+    public void setOptionValue(WebContextInitParameter param, String value) {
+        contextParameters.put(param, value);
     }
 
     public FaceletsConfiguration getFaceletsConfiguration() {

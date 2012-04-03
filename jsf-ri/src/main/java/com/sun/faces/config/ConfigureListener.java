@@ -58,6 +58,7 @@ import com.sun.faces.el.ELContextImpl;
 import com.sun.faces.el.ELContextListenerImpl;
 import com.sun.faces.el.ELUtils;
 import com.sun.faces.el.FacesCompositeELResolver;
+import com.sun.faces.flow.FlowCDIContext;
 import com.sun.faces.mgbean.BeanBuilder;
 import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.scripting.groovy.GroovyHelper;
@@ -389,6 +390,7 @@ public class ConfigureListener implements ServletRequestListener,
         if (webAppListener != null) {
             webAppListener.sessionDestroyed(event);
         }
+        FlowCDIContext.sessionDestroyed(event);
     }
 
 

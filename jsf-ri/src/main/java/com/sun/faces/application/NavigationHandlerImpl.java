@@ -152,6 +152,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     /**
      * @see javax.faces.application.NavigationHandler#handleNavigation(javax.faces.context.FacesContext, String, String)
      */
+    @Override
     public void handleNavigation(FacesContext context,
                                  String fromAction,
                                  String outcome) {
@@ -174,6 +175,10 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                 isUIViewActionBroadcastAndViewdsDiffer = !viewIdBefore.equals(viewIdAfter);
             } 
             if (caseStruct.navCase.isRedirect() || isUIViewActionBroadcastAndViewdsDiffer) {
+                
+                // PENDING(edburns): Flows currently don't work with redirect.
+                // Obviously I have to fix that.
+
                 // perform a 302 redirect.
                 String redirectUrl =
                       viewHandler.getRedirectURL(context,
@@ -207,7 +212,12 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                 UIViewRoot newRoot = viewHandler.createView(context,
                                                             caseStruct.viewId);
                 updateRenderTargets(context, caseStruct.viewId);
+                // Unconditionally tell the flow system we are transitioning
+                // between nodes.  Let the flow system figure it out if these nodes
+                // are in flows or not.
+                context.getApplication().getFlowHandler().transition(context, context.getViewRoot(), newRoot);
                 context.setViewRoot(newRoot);
+
                 if (logger.isLoggable(Level.FINE)) {
                     logger.fine("Set new view in FacesContext for " +
                                 caseStruct.viewId);
@@ -546,7 +556,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         if (!viewIdToTest.startsWith("/")) {
             int lastSlash = currentViewId.lastIndexOf("/");
             if (lastSlash != -1) {
-                currentViewId = currentViewId.substring(0, lastSlash + 1);
+                    currentViewId = currentViewId.substring(0, lastSlash + 1);
                 viewIdToTest = currentViewId + viewIdToTest;
             } else {
                 viewIdToTest = "/" + viewIdToTest;
@@ -559,7 +569,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         if (null != viewIdToTest) {
             CaseStruct caseStruct = new CaseStruct();
             caseStruct.viewId = viewIdToTest;
-            caseStruct.navCase = new NavigationCase(currentViewId,
+            caseStruct.navCase = new NavigationCase(viewId,
                                                     fromAction,
                                                     outcome,
                                                     null,

@@ -86,6 +86,7 @@ import javax.faces.el.ValueBinding;
 import javax.faces.el.VariableResolver;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ActionListener;
+import javax.faces.flow.FlowHandler;
 import javax.faces.validator.Validator;
 
 import com.sun.faces.RIConstants;
@@ -412,6 +413,13 @@ public class ApplicationImpl extends Application {
     public ExpressionFactory getExpressionFactory() {
         return associate.getExpressionFactory();
     }
+
+    @Override
+    public FlowHandler getFlowHandler() {
+        return associate.getFlowHandler();
+    }
+    
+    
 
 
     /**

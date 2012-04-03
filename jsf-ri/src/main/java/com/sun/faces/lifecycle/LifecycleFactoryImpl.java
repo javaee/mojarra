@@ -78,11 +78,10 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
     public LifecycleFactoryImpl() {
         super();
         lifecycleMap = new ConcurrentHashMap<String,Lifecycle>();
-        ExternalContext extContext = FacesContext.getCurrentInstance().getExternalContext();
 
         // We must have an implementation under this key.
         lifecycleMap.put(LifecycleFactory.DEFAULT_LIFECYCLE,
-                         new LifecycleImpl(extContext));
+                         new LifecycleImpl(FacesContext.getCurrentInstance()));
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Created Default Lifecycle");
         }

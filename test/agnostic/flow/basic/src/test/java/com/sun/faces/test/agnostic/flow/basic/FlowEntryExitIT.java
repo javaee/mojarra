@@ -94,11 +94,8 @@ public class FlowEntryExitIT {
         webClient.closeAllWindows();
     }
 
-    /**
-     * Verify if the simple facelet page works.
-     */
     @Test
-    public void testSimpleFaceletPage() throws Exception {
+    public void testFlowEntryExit() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
 
         assertTrue(page.getBody().asText().indexOf("Page with link to flow entry") != -1);
@@ -106,6 +103,28 @@ public class FlowEntryExitIT {
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("start");
         page = button.click();
         
-        assertTrue(page.getBody().asText().indexOf("First page in the flow") != -1);
+        String pageText = page.getBody().asText();
+        assertTrue(pageText.indexOf("First page in the flow") != -1);
+        assertTrue(pageText.contains("basicFlow"));
+        
+        button = (HtmlSubmitInput) page.getElementById("nonFlow");
+        webClient.setThrowExceptionOnFailingStatusCode(false);
+        page = button.click();
+        pageText = page.getBody().asText();
+        
+        assertTrue(pageText.contains("ContextNotActiveException"));
+        assertTrue(pageText.contains("javax.faces.flow.FlowScoped"));
+        
+        page = webClient.getPage(webUrl);
+
+        assertTrue(page.getBody().asText().indexOf("Page with link to flow entry") != -1);
+
+        button = (HtmlSubmitInput) page.getElementById("start");
+        page = button.click();
+        
+        pageText = page.getBody().asText();
+        assertTrue(pageText.indexOf("First page in the flow") != -1);
+        assertTrue(pageText.contains("basicFlow"));        
+        
     }
 }
