@@ -92,6 +92,9 @@
                         </executions>
                         <configuration>
                             <systemPropertyVariables>
+                                <integration.serverPort>${integration.serverPort}</integration.serverPort>
+                                <integration.serverName>${integration.serverName}</integration.serverName>
+                                <integration.serverProtocol>${integration.serverProtocol}</integration.serverProtocol>
                                 <integration.url>${integration.protocol}://${integration.serverName}:${integration.serverPort}/${project.build.finalName}/</integration.url>
                             </systemPropertyVariables>
                         </configuration>
