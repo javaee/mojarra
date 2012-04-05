@@ -36,7 +36,7 @@
                                 </artifactItem>
                             </artifactItems>
                             <includes>**/*.java</includes>
-                            <outputDirectory>${project.build.directory}/../src/main/java</outputDirectory>
+                            <outputDirectory>src/main/java</outputDirectory>
                             <overWriteReleases>true</overWriteReleases>
                             <overWriteSnapshots>true</overWriteSnapshots>
                         </configuration>
@@ -58,7 +58,7 @@
                                 </artifactItem>
                             </artifactItems>
                             <excludes>**/*.class</excludes>
-                            <outputDirectory>${project.build.directory}/../src/main/resources</outputDirectory>
+                            <outputDirectory>src/main/resources</outputDirectory>
                             <overWriteReleases>true</overWriteReleases>
                             <overWriteSnapshots>true</overWriteSnapshots>
                         </configuration>
@@ -91,6 +91,18 @@
             <groupId>org.glassfish</groupId>
             <artifactId>javax.servlet</artifactId>
             <version>3.1.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-easymock</artifactId>
+            <version>1.4.11</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+            <version>1.4.11</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
