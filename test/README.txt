@@ -12,6 +12,7 @@
 	2. cluster, tests for a clustered server.
 	3. selenium, tests that are browser specific.
 	4. virtual, tests that execute on a virtual server.
+        5. web-profile, tests that required JavaEE 6 Web Profile or later.
 
  In the test master POM we currently have the following profiles available:
 
