@@ -303,6 +303,24 @@
                                             <outputDirectory>${integration.container.extractDir}/apache-tomcat-${tomcat.version}/apache-tomcat-${tomcat.version}/lib</outputDirectory>
                                             <destFileName>javax.faces.jar</destFileName>
                                         </artifactItem>
+                                        <artifactItem>
+                                            <groupId>javax.servlet.jsp.jstl</groupId> 
+                                            <artifactId>jstl-api</artifactId> 
+                                            <version>1.2</version> 
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>                                     
+                                            <outputDirectory>${integration.container.extractDir}/apache-tomcat-${tomcat.version}/apache-tomcat-${tomcat.version}/lib</outputDirectory>
+                                            <destFileName>jstl-api.jar</destFileName>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>org.glassfish.web</groupId>
+                                            <artifactId>javax.servlet.jsp.jstl</artifactId>
+                                            <version>1.2.1</version>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>                                     
+                                            <outputDirectory>${integration.container.extractDir}/apache-tomcat-${tomcat.version}/apache-tomcat-${tomcat.version}/lib</outputDirectory>
+                                            <destFileName>jstl-impl.jar</destFileName>
+                                        </artifactItem>
                                     </artifactItems>
                                 </configuration>
                             </execution>
