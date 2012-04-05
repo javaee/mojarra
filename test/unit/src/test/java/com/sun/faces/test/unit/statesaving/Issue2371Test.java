@@ -39,21 +39,19 @@
  */
 package com.sun.faces.test.unit.statesaving;
 
-import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.application.ApplicationStateInfo;
 import com.sun.faces.application.view.StateManagementStrategyImpl;
-import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.component.visit.VisitContextFactoryImpl;
 import com.sun.faces.context.StateContext;
-import com.sun.faces.facelets.Facelet;
-import com.sun.faces.facelets.FaceletFactory;
 import com.sun.faces.renderkit.RenderKitUtils;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.UUID;
 import javax.faces.FactoryFinder;
-import javax.faces.application.Application;
-import javax.faces.application.ViewHandler;
+import javax.faces.component.UIComponentBase;
 import javax.faces.component.UIViewRoot;
+import javax.faces.component.html.HtmlOutputText;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKit;
@@ -61,10 +59,10 @@ import javax.faces.render.ResponseStateManager;
 import javax.faces.view.ViewDeclarationLanguage;
 import javax.faces.view.ViewDeclarationLanguageFactory;
 import javax.faces.view.ViewMetadata;
-import javax.servlet.ServletContext;
 import org.easymock.EasyMock;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.powermock.api.easymock.PowerMock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import static org.junit.Assert.*;
@@ -72,8 +70,7 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 import static org.easymock.EasyMock.expect;
-import org.junit.Ignore;
-import org.powermock.api.easymock.PowerMock;
+import static org.easymock.EasyMock.anyObject;
 
 /**
  * A JUnit test for issue #2371.
@@ -165,7 +162,7 @@ public class Issue2371Test {
 
         UIViewRoot viewRoot = PowerMock.createPartialMock(UIViewRoot.class, "getFacesContext");
         Object[] state = null;
-        
+
         expect(FactoryFinder.getFactory("javax.faces.view.ViewDeclarationLanguageFactory")).andReturn(vdlFactory);
         expect(RenderKitUtils.getResponseStateManager(fc, "HTML_BASIC")).andReturn(rsm);
         expect(fc.isProcessingEvents()).andReturn(false);
@@ -177,13 +174,103 @@ public class Issue2371Test {
         vdl.buildView(fc, viewRoot);
         expect(rsm.getState(fc, "/faces/test.xhtml")).andReturn(state);
         replay(fc, FacesContext.class, FactoryFinder.class, RenderKitUtils.class, vdlFactory, rsm, vdl, viewMetadata, viewRoot);
-        
+
         StateManagementStrategyImpl strategy = new StateManagementStrategyImpl();
         assertNull(strategy.restoreView(fc, "/faces/test.xhtml", "HTML_BASIC"));
 
         verify(fc, FacesContext.class, FactoryFinder.class, RenderKitUtils.class, vdlFactory, rsm, vdl, viewMetadata, viewRoot);
     }
 
+    /**
+     * Test restoring a view with a single output text.
+     */
+    @Test
+    public void testRestoreOutputText() throws Exception {
+        /*
+         * First save the state.
+         */
+        FacesContext fc = EasyMock.createMock(FacesContext.class);
+        RenderKit renderKit = EasyMock.createMock(RenderKit.class);
+        UIViewRoot viewRoot = new UIViewRoot();
+        HtmlOutputText htmlOutputText = new HtmlOutputText();
+        htmlOutputText.getAttributes().put(UIComponentBase.class.getName() + ".ADDED", true);
+        viewRoot.getChildren().add(htmlOutputText);
+        htmlOutputText.getAttributes().remove(UIComponentBase.class.getName());
+        HashMap<Object, Object> fcAttributes = new HashMap<Object, Object>();
+        StateContext stateContext = createStateContext();
+        fcAttributes.put(StateContext.class.getName() + "_KEY", stateContext);
+        ExternalContext extContext = EasyMock.createMock(ExternalContext.class);
+        ViewDeclarationLanguageFactory vdlFactory = EasyMock.createMock(ViewDeclarationLanguageFactory.class);
+        VisitContextFactoryImpl visitFactory = new VisitContextFactoryImpl();
+        mockStatic(FactoryFinder.class);
+        mockStatic(FacesContext.class);
+
+        expect(FactoryFinder.getFactory("javax.faces.view.ViewDeclarationLanguageFactory")).andReturn(vdlFactory);
+        expect(FactoryFinder.getFactory("javax.faces.component.visit.VisitContextFactory")).andReturn(visitFactory);
+        expect(fc.getViewRoot()).andReturn(viewRoot).anyTimes();
+        expect(fc.getRenderKit()).andReturn(renderKit).anyTimes();
+        expect(renderKit.getRenderer((String) anyObject(), (String) anyObject())).andReturn(null).anyTimes();
+        expect(fc.getAttributes()).andReturn(fcAttributes).anyTimes();
+        expect(fc.getExternalContext()).andReturn(extContext).anyTimes();
+        expect(extContext.getInitParameter("javax.faces.HONOR_CURRENT_COMPONENT_ATTRIBUTES")).andReturn("false").anyTimes();
+        expect(FacesContext.getCurrentInstance()).andReturn(fc).anyTimes();
+        replay(FactoryFinder.class, FacesContext.class, fc, renderKit, extContext, vdlFactory);
+        
+        StateManagementStrategyImpl strategy = new StateManagementStrategyImpl();
+        Object[] state = (Object[]) strategy.saveView(fc);
+        viewRoot = new UIViewRoot();
+        verify(FactoryFinder.class, FacesContext.class, fc, renderKit, extContext, vdlFactory);
+
+        EasyMock.resetToDefault(fc, renderKit, extContext, vdlFactory);
+        
+        /*
+         * And now try to restore this state.
+         */
+        ResponseStateManager rsm = EasyMock.createMock(ResponseStateManager.class);
+        ViewDeclarationLanguage vdl = EasyMock.createMock(ViewDeclarationLanguage.class);
+        ViewMetadata viewMetadata = EasyMock.createMock(ViewMetadata.class);
+        
+        mockStatic(FacesContext.class);
+        mockStatic(FactoryFinder.class);
+        mockStatic(RenderKitUtils.class);
+
+        expect(RenderKitUtils.getResponseStateManager(fc, "HTML_BASIC")).andReturn(rsm);
+        expect(fc.isProcessingEvents()).andReturn(false);
+        expect(vdlFactory.getViewDeclarationLanguage("/faces/test.xhtml")).andReturn(vdl);
+        expect(vdl.getViewMetadata(fc, "/faces/test.xhtml")).andReturn(viewMetadata);
+        expect(viewMetadata.createMetadataView(fc)).andReturn(viewRoot);
+        fc.setViewRoot(viewRoot);
+        fc.setProcessingEvents(true);
+        
+        /*
+         * Since we have mocked out the VDL we will need to re-add the HtmlOutputText
+         * so state restoring can properly restore state onto it.
+         */
+        vdl.buildView(fc, viewRoot);
+        htmlOutputText = new HtmlOutputText();
+        htmlOutputText.getAttributes().put(UIComponentBase.class.getName() + ".ADDED", true);
+        viewRoot.getChildren().add(htmlOutputText);
+        htmlOutputText.getAttributes().remove(UIComponentBase.class.getName() + ".ADDED");
+        
+        expect(rsm.getState(fc, "/faces/test.xhtml")).andReturn(state);
+        expect(fc.getAttributes()).andReturn(fcAttributes).anyTimes();
+        expect(fc.getApplication()).andReturn(null);
+        expect(FactoryFinder.getFactory("javax.faces.component.visit.VisitContextFactory")).andReturn(visitFactory);
+        expect(fc.getExternalContext()).andReturn(extContext).anyTimes();
+        expect(extContext.getInitParameter("javax.faces.HONOR_CURRENT_COMPONENT_ATTRIBUTES")).andReturn("false").anyTimes();
+        expect(fc.getViewRoot()).andReturn(viewRoot).anyTimes();
+        expect(FacesContext.getCurrentInstance()).andReturn(fc).anyTimes();
+        expect(fc.getRenderKit()).andReturn(renderKit).anyTimes();
+        expect(renderKit.getRenderer((String) anyObject(), (String) anyObject())).andReturn(null).anyTimes();
+        fc.setProcessingEvents(false);
+        replay(fc, FacesContext.class, FactoryFinder.class, RenderKitUtils.class, renderKit, vdlFactory, rsm, vdl, viewMetadata, extContext);
+
+        UIViewRoot restoredRoot = strategy.restoreView(fc, "/faces/test.xhtml", "HTML_BASIC");
+        assertNotNull(restoredRoot);
+
+        verify(fc, FacesContext.class, FactoryFinder.class, RenderKitUtils.class, renderKit, vdlFactory, rsm, vdl, viewMetadata, extContext);
+    }
+    
     /**
      * Utility method to create a state context.
      */
@@ -196,17 +283,5 @@ public class Issue2371Test {
         } catch (Exception exception) {
         }
         return result;
-    }
-
-    /**
-     * Utility method to set FacesContext.
-     */
-    private void setFacesContext(FacesContext fc) {
-        try {
-            Method method = FacesContext.class.getDeclaredMethod("setCurrentInstance", FacesContext.class);
-            method.setAccessible(true);
-            method.invoke(null, fc);
-        } catch (Exception exception) {
-        }
     }
 }
