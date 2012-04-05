@@ -39,32 +39,49 @@
  */
 package com.sun.faces.test.unit.statesaving;
 
+import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.application.ApplicationStateInfo;
 import com.sun.faces.application.view.StateManagementStrategyImpl;
+import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.context.StateContext;
-import com.sun.faces.renderkit.RenderKitImpl;
-import com.sun.faces.renderkit.ResponseStateManagerImpl;
+import com.sun.faces.facelets.Facelet;
+import com.sun.faces.facelets.FaceletFactory;
+import com.sun.faces.renderkit.RenderKitUtils;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import javax.faces.FactoryFinder;
+import javax.faces.application.Application;
+import javax.faces.application.ViewHandler;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKit;
+import javax.faces.render.ResponseStateManager;
+import javax.faces.view.ViewDeclarationLanguage;
+import javax.faces.view.ViewDeclarationLanguageFactory;
+import javax.faces.view.ViewMetadata;
+import javax.servlet.ServletContext;
 import org.easymock.EasyMock;
 import org.junit.Test;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import static org.junit.Assert.*;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.verify;
+import static org.easymock.EasyMock.expect;
 import org.junit.Ignore;
+import org.powermock.api.easymock.PowerMock;
 
 /**
  * A JUnit test for issue #2371.
  *
  * @author Manfred Riem (manfred.riem@oracle.com)
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({FacesContext.class, FactoryFinder.class, RenderKitUtils.class})
 public class Issue2371Test {
 
     /**
@@ -130,32 +147,43 @@ public class Issue2371Test {
         assertNotNull(state);
         verify(facesContext, extContext);
     }
-    
+
     /**
-     * Test restoring a view.
+     * Test restoring without active state (should return null).
      */
     @Test
-    @Ignore
-    public void testRestoreRoot() {
-        FactoryFinder.setFactory(
-                FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY,
-                "com.sun.faces.application.view.ViewDeclarationLanguageFactoryImpl");
-        FacesContext facesContext = EasyMock.createMock(FacesContext.class);
-        ExternalContext extContext = EasyMock.createMock(ExternalContext.class);
-        RenderKit renderKit = EasyMock.createMock(RenderKit.class);
-        setFacesContext(facesContext);
-        expect(facesContext.getExternalContext()).andReturn(extContext);
-        expect(extContext.getContext()).andReturn(null);
-        expect(facesContext.getRenderKit()).andReturn(renderKit);
-        ResponseStateManagerImpl responseStateManager = new ResponseStateManagerImpl();
-        expect(renderKit.getResponseStateManager()).andReturn(responseStateManager);
-        replay(facesContext, extContext, renderKit);
+    public void testRestoreWithoutActiveState() throws Exception {
+        FacesContext fc = EasyMock.createMock(FacesContext.class);
+        ViewDeclarationLanguageFactory vdlFactory = EasyMock.createMock(ViewDeclarationLanguageFactory.class);
+        ResponseStateManager rsm = EasyMock.createMock(ResponseStateManager.class);
+        ViewDeclarationLanguage vdl = EasyMock.createMock(ViewDeclarationLanguage.class);
+        ViewMetadata viewMetadata = EasyMock.createMock(ViewMetadata.class);
+
+        mockStatic(FacesContext.class);
+        mockStatic(FactoryFinder.class);
+        mockStatic(RenderKitUtils.class);
+
+        UIViewRoot viewRoot = PowerMock.createPartialMock(UIViewRoot.class, "getFacesContext");
+        Object[] state = null;
+        
+        expect(FactoryFinder.getFactory("javax.faces.view.ViewDeclarationLanguageFactory")).andReturn(vdlFactory);
+        expect(RenderKitUtils.getResponseStateManager(fc, "HTML_BASIC")).andReturn(rsm);
+        expect(fc.isProcessingEvents()).andReturn(false);
+        expect(vdlFactory.getViewDeclarationLanguage("/faces/test.xhtml")).andReturn(vdl);
+        expect(vdl.getViewMetadata(fc, "/faces/test.xhtml")).andReturn(viewMetadata);
+        expect(viewMetadata.createMetadataView(fc)).andReturn(viewRoot);
+        fc.setViewRoot(viewRoot);
+        fc.setProcessingEvents(true);
+        vdl.buildView(fc, viewRoot);
+        expect(rsm.getState(fc, "/faces/test.xhtml")).andReturn(state);
+        replay(fc, FacesContext.class, FactoryFinder.class, RenderKitUtils.class, vdlFactory, rsm, vdl, viewMetadata, viewRoot);
+        
         StateManagementStrategyImpl strategy = new StateManagementStrategyImpl();
-        assertNotNull(strategy.restoreView(facesContext, null, "HTML_BASIC"));
-        verify(facesContext, extContext);
-        setFacesContext(null);
+        assertNull(strategy.restoreView(fc, "/faces/test.xhtml", "HTML_BASIC"));
+
+        verify(fc, FacesContext.class, FactoryFinder.class, RenderKitUtils.class, vdlFactory, rsm, vdl, viewMetadata, viewRoot);
     }
-    
+
     /**
      * Utility method to create a state context.
      */
@@ -165,7 +193,7 @@ public class Issue2371Test {
             Constructor constructor = StateContext.class.getDeclaredConstructor(ApplicationStateInfo.class);
             constructor.setAccessible(true);
             result = (StateContext) constructor.newInstance((ApplicationStateInfo) null);
-        } catch(Exception exception) {            
+        } catch (Exception exception) {
         }
         return result;
     }
@@ -178,7 +206,7 @@ public class Issue2371Test {
             Method method = FacesContext.class.getDeclaredMethod("setCurrentInstance", FacesContext.class);
             method.setAccessible(true);
             method.invoke(null, fc);
-        } catch(Exception exception) {            
+        } catch (Exception exception) {
         }
     }
 }
