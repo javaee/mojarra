@@ -13,7 +13,6 @@
     <name>Mojarra Test Agnostic - POM</name>
     <modules>
         <module>shared</module>
-        <module>flow</module>
         <module>externalContext</module>
         <module>renderKit</module>
     </modules>
