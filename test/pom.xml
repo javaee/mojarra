@@ -15,6 +15,7 @@
         <module>cluster</module>
         <module>selenium</module>
         <module>virtual</module>
+        <module>web-profile</module>
     </modules>
     <build>
         <plugins>
