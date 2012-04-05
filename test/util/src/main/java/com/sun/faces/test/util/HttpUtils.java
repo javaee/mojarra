@@ -38,38 +38,56 @@
  * holder.
 
  */
-package javax.faces.flow;
+package com.sun.faces.test.util;
 
-import java.io.Serializable;
-import javax.faces.context.FacesContext;
-import javax.faces.lifecycle.ClientWindow;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.Socket;
 
-public class Flow implements Serializable {
+public class HttpUtils {
     
-    private static final long serialVersionUID = -7506626306507232154L;
-    
-    private String id;
+    /**
+     * <p>Create an HTTP request line from the following parameters.</p>
+     * 
+     * <code><pre>&lt;methodName&gt; + " /" + &lt;path&gt; + " HTTP/1.1\r\n"</pre></code>
+     * 
+     * <p>Open a socket to the specified host and port, and issue the request. 
+     * Read the result into a buffer and return it as the result.  Save aside the
+     * HTTP response code into the outbound argument rc, which must have 
+     * at least one element.</p>
+     * 
+     */ 
 
-    public String getId() {
-        return id;
-    }
+    public static String issueHttpRequest(String methodName, int [] rc, String host, String port, String path) throws Exception {
+        Integer portInt = Integer.valueOf(port);
 
-    public void setId(String id) {
-        this.id = id;
-    }
-    
-    public String getIdForCurrentWindow(FacesContext context) {
-        String result = null;
-        ClientWindow curWindow = context.getExternalContext().getClientWindow();
-        result = curWindow.getId() + "_" + getId();
+        Socket s = new Socket(host, portInt);
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(s.getOutputStream()));
+        String requestLine = methodName + " /" + path + " HTTP/1.1\r\n";
+        writer.write(requestLine);
+        writer.write("Host: " + host + ":" + port + "\r\n");
+        writer.write("User-Agent: systest-client\r\n");
+        writer.write("Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n");
+        writer.write("Connection: close\r\n");
+        writer.write("\r\n");
+        writer.flush();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(s.getInputStream()));
+        String cur = null;
+        StringBuilder builder = new StringBuilder();
+        rc[0] = -1;
+        while (null != (cur = reader.readLine())) {
+            if (-1 == rc[0]) {
+                String [] tokens = cur.split("\\s");
+                rc[0] = Integer.valueOf(tokens[1]);
+            }
+            builder.append(cur).append("\n");
+        }
+        writer.close();
+
         
-        return result;
-    }
-    
-    public static String createIdForCurrentWindow(FacesContext context, String flowId) {
-        ClientWindow curWindow = context.getExternalContext().getClientWindow();
-        String result = curWindow.getId() + "_" + flowId;
-        return result;
+        return builder.toString();
     }
     
 }

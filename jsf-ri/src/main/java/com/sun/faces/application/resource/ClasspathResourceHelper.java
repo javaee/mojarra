@@ -223,6 +223,8 @@ public class ClasspathResourceHelper extends ResourceHelper {
                     if (!libraryScanner.libraryExists(libraryName, localePrefix)) {
                         return null;
                     }
+                } else {
+                  //  return null;
                 }
             }
         }
@@ -264,7 +266,22 @@ public class ClasspathResourceHelper extends ResourceHelper {
             // try using this class' loader (necessary when running in OSGi)
             basePathURL = this.getClass().getClassLoader().getResource(basePath);
             if (basePathURL == null) {
-                return null;
+                // Try it without the localePrefix
+                if (library != null) {
+                    basePath = library.getPath(null) + '/' + resourceName;
+                } else {
+                    basePath = getBaseResourcePath() + '/' + resourceName;
+                }
+                basePathURL = loader.getResource(basePath);
+                if (basePathURL == null) {
+                    // try using this class' loader (necessary when running in OSGi)
+                    basePathURL = this.getClass().getClassLoader().getResource(basePath);
+                    if (basePathURL == null) {
+                        return null;
+                    }
+                }
+
+                localePrefix = null;
             }
         }
 

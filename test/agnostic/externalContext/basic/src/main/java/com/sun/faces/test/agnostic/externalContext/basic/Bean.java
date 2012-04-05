@@ -1,8 +1,8 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- * 
+ *
  * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
- * 
+ *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -11,20 +11,20 @@
  * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- * 
+ *
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at packager/legal/LICENSE.txt.
- * 
+ *
  * GPL Classpath Exception:
  * Oracle designates this particular file as subject to the "Classpath"
  * exception as provided by Oracle in the GPL Version 2 section of the License
  * file that accompanied this code.
- * 
+ *
  * Modifications:
  * If applicable, add the following below the License Header, with the fields
  * enclosed by brackets [] replaced by your own identifying information:
  * "Portions Copyright [year] [name of copyright owner]"
- * 
+ *
  * Contributor(s):
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
@@ -36,40 +36,38 @@
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
  * holder.
-
  */
-package javax.faces.flow;
+package com.sun.faces.test.agnostic.externalContext.basic;
 
 import java.io.Serializable;
+
+import java.util.HashMap;
+import java.util.Map;
+import javax.enterprise.context.RequestScoped;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
-import javax.faces.lifecycle.ClientWindow;
 
-public class Flow implements Serializable {
+@ManagedBean
+@RequestScoped
+public class Bean implements Serializable {
     
-    private static final long serialVersionUID = -7506626306507232154L;
-    
-    private String id;
+    @ManagedProperty(value="#{facesContext}")
+    private FacesContext facesContext;
 
-    public String getId() {
-        return id;
+    public FacesContext getFacesContext() {
+        return facesContext;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setFacesContext(FacesContext facesContext) {
+        this.facesContext = facesContext;
     }
     
-    public String getIdForCurrentWindow(FacesContext context) {
-        String result = null;
-        ClientWindow curWindow = context.getExternalContext().getClientWindow();
-        result = curWindow.getId() + "_" + getId();
-        
-        return result;
+
+    public String getName() {
+        Map<String, Object> m = new HashMap<String, Object>();
+        m.put("httpOnly", Boolean.TRUE);
+        facesContext.getExternalContext().addResponseCookie("csftaebName", "csftaebValue", m);
+        return "TestBean";
     }
-    
-    public static String createIdForCurrentWindow(FacesContext context, String flowId) {
-        ClientWindow curWindow = context.getExternalContext().getClientWindow();
-        String result = curWindow.getId() + "_" + flowId;
-        return result;
-    }
-    
 }

@@ -124,7 +124,7 @@ public abstract class ExternalContext {
     // ---------------------------------------------------------- Public Methods
 
     /**
-     * <p class="changed_added_2_0">Adds the cookie represented by the
+     * <p class="changed_added_2_0"><span class="changed_modified_2_2">Adds</span> the cookie represented by the
      * arguments to the response.</p>
      *
      * <div class="changed_added_2_0">
@@ -198,6 +198,16 @@ public abstract class ExternalContext {
      * <td>String</td>
      *
      * <td>setPath</td>
+     *
+     * </tr>
+     *
+     * <tr class="changed_added_2_2">
+     *
+     * <td>httpOnly</td>
+     *
+     * <td>Boolean</td>
+     *
+     * <td>setHttpOnly</td>
      *
      * </tr>
      *

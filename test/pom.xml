@@ -10,10 +10,10 @@
     <packaging>pom</packaging>
     <name>Mojarra Test POM</name>
     <modules>
+        <module>util</module>
         <module>agnostic</module>
         <module>cluster</module>
         <module>selenium</module>
-        <module>util</module>
         <module>virtual</module>
     </modules>
     <build>
@@ -92,6 +92,7 @@
                         </executions>
                         <configuration>
                             <systemPropertyVariables>
+                                <project.build.finalName>${project.build.finalName}</project.build.finalName>
                                 <integration.serverPort>${integration.serverPort}</integration.serverPort>
                                 <integration.serverName>${integration.serverName}</integration.serverName>
                                 <integration.serverProtocol>${integration.serverProtocol}</integration.serverProtocol>
@@ -102,6 +103,7 @@
                 </plugins>
             </build>
             <properties>
+                <project.build.finalName>${project.build.finalName}</project.build.finalName>
                 <integration.serverPort>8080</integration.serverPort>
                 <integration.serverName>localhost</integration.serverName>
                 <integration.protocol>http</integration.protocol>
@@ -184,6 +186,53 @@
                             </execution>
                         </executions>
                     </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.cargo</groupId>
+                        <artifactId>cargo-maven2-plugin</artifactId>
+                        <version>1.1.4</version>
+                        <inherited>true</inherited>
+                        <executions>
+                            <execution>
+                                <id>start-container</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>start</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>stop-container</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                            </execution>
+                        </executions>                        
+                        <configuration>
+                            <container>
+                                <containerId>${integration.container.id}</containerId>
+                                <type>installed</type>
+                                <home>${integration.container.home}</home>
+                            </container>
+                            <configuration>
+                                <type>standalone</type>
+                                <properties>
+                                    <cargo.hostname>${integration.serverName}</cargo.hostname>
+                                    <cargo.servlet.port>${integration.serverPort}</cargo.servlet.port>
+                                </properties>
+                            </configuration>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+            <properties>
+                <integration.container.home>C:/Glassfish3.1.1</integration.container.home>
+                <integration.container.id>glassfish3x</integration.container.id>
+            </properties>
+        </profile>
+        <profile>
+            <id>integration-glassfish-cargo-no-mojarra-copy</id>
+            <build>
+                <plugins>
                     <plugin>
                         <groupId>org.codehaus.cargo</groupId>
                         <artifactId>cargo-maven2-plugin</artifactId>
@@ -312,6 +361,7 @@
         </profile>
     </profiles>
     <properties>
+        <project.build.finalName>${project.build.finalName}</project.build.finalName>
         <integration.serverName>localhost</integration.serverName>
         <integration.serverPort>8080</integration.serverPort>
         <jsf.artifactId>javax.faces</jsf.artifactId>

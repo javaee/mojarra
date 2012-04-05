@@ -610,7 +610,7 @@ find jsf-ri/testresults jsf-ri/testresults/systest jsf-test/build/testresults js
             </custom-sysproperties>
             <suite>
                 <test todir="${impl.test.results.dir}"
-                      name="com.sun.faces.application.TestNavigationHandler"/>
+                    name="com.sun.faces.application.resource.TestResourceManager"/>
             </suite>
 
         </jsf.junit>       

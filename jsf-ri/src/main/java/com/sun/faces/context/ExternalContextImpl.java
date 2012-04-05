@@ -114,7 +114,8 @@ public class ExternalContextImpl extends ExternalContext {
         domain,
         maxAge,
         path,
-        secure
+        secure,
+        httpOnly
     }
 
     static final Class theUnmodifiableMapClass =
@@ -738,6 +739,9 @@ public class ExternalContextImpl extends ExternalContext {
                         break;
                     case secure:
                         cookie.setSecure((Boolean) v);
+                        break;
+                    case httpOnly:
+                        cookie.setHttpOnly((Boolean) v);
                         break;
                     default:
                         throw new IllegalStateException(); // shouldn't happen

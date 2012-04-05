@@ -1185,9 +1185,7 @@
         <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/renderkit02.jsp"
               regexp="(?s).*/renderkit02.jsp PASSED.*"/>
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/renderkit03.jsp"
-              regexp="(?s).*This IS A SIMPLE LABEL FROM THE CUSTOM RENDERER.*/renderkit03.jsp PASSED.*"/>
+        <!-- test renderkit03.jsp moved to test/agnostic/renderKit/basic/src/main/webapp/renderkit03.jsp -->
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
                    test-results-dir="${impl.test.results.dir}">
