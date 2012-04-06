@@ -51,7 +51,7 @@
     <groupId>com.sun.faces.test</groupId>
     <artifactId>com.sun.faces.test.webprofile.flow.basic</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra Test Web-Profile - Flow Tests</name>
+    <name>Mojarra Test - Web-Profile - Flow - Basic Tests</name>
     <build>
         <finalName>test-webprofile-flow-basic</finalName>
     </build>

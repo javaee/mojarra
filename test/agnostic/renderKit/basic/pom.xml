@@ -51,7 +51,7 @@
     <groupId>com.sun.faces.test</groupId>
     <artifactId>com.sun.faces.test.agnostic.renderKit.basic</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra Test Agnostic - RenderKit - Basic Tests</name>
+    <name>Mojarra Test - Agnostic - RenderKit - Basic Tests</name>
     <build>
         <finalName>test-agnostic-renderKit-basic</finalName>
     </build>

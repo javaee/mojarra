@@ -10,7 +10,7 @@
     <groupId>com.sun.faces.test</groupId>
     <artifactId>com.sun.faces.test.webprofile.flow</artifactId>
     <packaging>pom</packaging>
-    <name>Mojarra Test Web-Profile - Flow - POM</name>
+    <name>Mojarra Test - Web-Profile - Flow - POM</name>
     <modules>
         <module>basic</module>
     </modules>
