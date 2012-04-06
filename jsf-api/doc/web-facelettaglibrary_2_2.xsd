@@ -151,6 +151,8 @@
         <xsd:sequence>
           <xsd:element name="namespace"
                        type="javaee:string"/>
+          <xsd:element maxOccurrs="1" name="short-name"
+                       type="javaee:string"/>
           <xsd:element minOccurs="0"
                        maxOccurs="1"
                        name="composite-library-name"
