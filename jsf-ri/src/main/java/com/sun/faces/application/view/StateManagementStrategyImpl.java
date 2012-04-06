@@ -249,7 +249,7 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
         }
         final StateContext stateContext = StateContext.getStateContext(context);
 
-        if (null != state) {
+        if (Collections.EMPTY_MAP != state) {
             try {
                 stateContext.setTrackViewModifications(false);
                 final Application app = context.getApplication();

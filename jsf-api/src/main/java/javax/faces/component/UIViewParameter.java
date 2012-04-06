@@ -184,7 +184,7 @@ public class UIViewParameter extends UIInput {
      */
     @Override
     public Object getSubmittedValue() {
-        return (String) getStateHelper().get(PropertyKeys.submittedValue);
+        return getStateHelper().get(PropertyKeys.submittedValue);
     }
 
     /**
