@@ -89,7 +89,7 @@
     </macrodef>
 
     <target name="test" depends="define.scenario.aware.port">
-        <testtype of="untypedXunset" expected="Object" /> 
+<!--        <testtype of="untypedXunset" expected="Object" /> 
         <testtype of="untypedXsetByApi" expected="Object" />
         <testtype of="untypedXliteral" expected="Object" />
         <testtype of="untypedXwideEL" expected="Animal" />
@@ -103,7 +103,7 @@
         <testtype of="typedXmediumEL" expected="Dog" />
         <testtype of="typedXnarrowEL" expected="Wienerdoodle" />
         <testtype of="typedXnullEL" expected="Dog" />
-        <testtype of="typedXsetByApi" expected="Dog" />
+        <testtype of="typedXsetByApi" expected="Dog" />-->
     </target>    
 
 </project>
