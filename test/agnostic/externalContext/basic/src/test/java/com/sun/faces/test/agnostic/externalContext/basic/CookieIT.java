@@ -46,15 +46,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 import com.gargoylesoftware.htmlunit.WebClient;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.Socket;
 import static com.sun.faces.test.util.HttpUtils.issueHttpRequest;
 
 public class CookieIT {
-    
+
     /**
      * Stores the web URL.
      */
@@ -66,7 +61,7 @@ public class CookieIT {
 
     /**
      * Setup before testing.
-     * 
+     *
      * @throws Exception when a serious error occurs.
      */
     @BeforeClass
@@ -75,7 +70,7 @@ public class CookieIT {
 
     /**
      * Cleanup after testing.
-     * 
+     *
      * @throws Exception when a serious error occurs.
      */
     @AfterClass
@@ -101,14 +96,11 @@ public class CookieIT {
 
     @Test
     public void testHttpOnly() throws Exception {
-        int [] rc = new int [1];
+        int[] rc = new int[1];
         String contextPath = System.getProperty("project.build.finalName");
         String port = System.getProperty("integration.serverPort");
         String host = System.getProperty("integration.serverName");
         String result = issueHttpRequest("GET", rc, host, port, contextPath + "/faces/index.xhtml");
         assertTrue(result.contains("HttpOnly"));
-
-        
     }
-        
 }
