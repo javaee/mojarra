@@ -57,16 +57,10 @@
     </build>
     <dependencies>
         <dependency>
-            <groupId>org.glassfish</groupId>
-            <artifactId>javax.faces</artifactId>
+            <groupId>com.sun.faces.test</groupId>
+            <artifactId>com.sun.faces.test.util</artifactId>
             <version>${project.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-          <groupId>com.sun.faces.test</groupId>
-          <artifactId>com.sun.faces.test.util</artifactId>
-          <version>${project.version}</version>
-          <scope>test</scope>
+            <scope>test</scope>
         </dependency>
     </dependencies>
     <properties>
