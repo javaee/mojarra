@@ -332,7 +332,7 @@ public class StateContext {
          * @param component the UI component to add to the list as a REMOVE.
          */
         private void handleRemove(FacesContext context, UIComponent component) {
-            if (!component.isTransient()) {
+            if (!component.isTransient() && !hasTransientAncestor(component)) {
                 if (component.isInView()) {
                     decrementDynamicChildCount(component.getParent());
                     ComponentStruct struct = new ComponentStruct();
@@ -351,7 +351,7 @@ public class StateContext {
          * @param component the UI component to add to the list as an ADD.
          */
         private void handleAdd(FacesContext context, UIComponent component) {            
-            if (!component.isTransient()) {
+            if (!component.isTransient() && !hasTransientAncestor(component)) {
                 if (component.getParent() != null && component.getParent().isInView()) {                    
                     if (component.getParent().getFacets().containsValue(component)) {
                         Map facets = component.getParent().getFacets();
@@ -385,6 +385,17 @@ public class StateContext {
                     }
                 }
             }
+        }
+        
+        private boolean hasTransientAncestor(UIComponent component) {
+            UIComponent parent = component.getParent();
+            while (parent != null) {
+                if (parent.isTransient()) {
+                    return true;
+                }
+                parent = parent.getParent();
+            }
+            return false;
         }
 
     } // END AddRemoveListener

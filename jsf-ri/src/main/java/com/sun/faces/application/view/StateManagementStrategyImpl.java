@@ -164,7 +164,7 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
                             stateMap.put(target.getClientId(context.getFacesContext()), stateObj);
                         }
                     }    else {
-                        return result;
+                        return VisitResult.REJECT;
                     }
                     return result;
                 }
