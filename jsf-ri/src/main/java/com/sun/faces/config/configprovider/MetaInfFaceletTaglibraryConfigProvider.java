@@ -48,8 +48,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Set;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.servlet.ServletContext;
 import javax.faces.FacesException;
@@ -81,6 +79,11 @@ public class MetaInfFaceletTaglibraryConfigProvider implements
         "META-INF/jstl-fn.taglib.xml"
     };
 
+    private static final String[] BUILT_IN_TAGLIB_XML_FILES = {
+        "META-INF/mojarra_ext.taglib.xml",
+        "com/sun/faces/metadata/taglib/faces-flow.taglib.xml"
+        
+    };
 
     // -------------------------------------------- Methods from ConfigProcessor
 
@@ -88,9 +91,17 @@ public class MetaInfFaceletTaglibraryConfigProvider implements
     public Collection<URI> getResources(ServletContext context) {
 
         try {
-            URL[] urls = Classpath.search(Util.getCurrentLoader(this),
+            URL[] externalTaglibUrls = Classpath.search(Util.getCurrentLoader(this),
                                           "META-INF/",
                                           SUFFIX);
+            URL[] builtInTaglibUrls = new URL[BUILT_IN_TAGLIB_XML_FILES.length];
+            ClassLoader runtimeClassLoader = this.getClass().getClassLoader();
+            for (int i = 0; i < BUILT_IN_TAGLIB_XML_FILES.length; i++) {
+                builtInTaglibUrls[i] = runtimeClassLoader.getResource(BUILT_IN_TAGLIB_XML_FILES[i]);
+            }
+            URL[] urls = new URL[externalTaglibUrls.length + builtInTaglibUrls.length];
+            System.arraycopy(externalTaglibUrls, 0, urls, 0, externalTaglibUrls.length);
+            System.arraycopy(builtInTaglibUrls, 0, urls, externalTaglibUrls.length, builtInTaglibUrls.length);
             // perform some 'correctness' checking.  If the user has
             // removed the FaceletViewHandler from their configuration,
             // but has left the jsf-facelets.jar in the classpath, we

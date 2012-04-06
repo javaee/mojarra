@@ -992,16 +992,14 @@ public class ConfigManager {
                                 schema = DbfFactory.FacesSchema.FACES_20;
                             }
                         } else if ("2.2".equals(versionStr)) {
-                            schema = DbfFactory.FacesSchema.FACES_22;
+                            if ("facelet-taglib".equals(documentElement.getLocalName())) {
+                                schema = DbfFactory.FacesSchema.FACELET_TAGLIB_22;
+                            } else {
+                                schema = DbfFactory.FacesSchema.FACES_22;
+                            }
                         } else if ("2.1".equals(versionStr)) {
                             if ("facelet-taglib".equals(documentElement.getLocalName())) {
                                 schema = DbfFactory.FacesSchema.FACELET_TAGLIB_20;
-                            } else {
-                                schema = DbfFactory.FacesSchema.FACES_21;
-                            }
-                        } else if ("2.2".equals(versionStr)) {
-                            if ("facelet-taglib".equals(documentElement.getLocalName())) {
-                                schema = DbfFactory.FacesSchema.FACELET_TAGLIB_22;
                             } else {
                                 schema = DbfFactory.FacesSchema.FACES_21;
                             }

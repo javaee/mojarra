@@ -44,26 +44,68 @@ import com.sun.faces.config.WebConfiguration;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.faces.component.UIComponent;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.flow.Flow;
 import javax.faces.flow.FlowHandler;
+import javax.faces.flow.ViewNode;
 
 public class FlowHandlerImpl extends FlowHandler {
 
     public FlowHandlerImpl() {
         WebConfiguration config = WebConfiguration.getInstance();
-        hasFlows = config.isHasFlows();
+        flowFeatureIsEnabled = config.isHasFlows();
+        flows = new ConcurrentHashMap<String, Flow>();
     }
     
-    private boolean hasFlows;
+    private boolean flowFeatureIsEnabled;
+    private Map<String, Flow> flows;
+
+    @Override
+    public Flow getFlow(String id) {
+        Flow result = flows.get(id);
+        
+        return result;
+    }
+
+    @Override
+    public Flow getFlowByNodeId(String id) {
+        if (null == id || 0 == id.length()) {
+            throw new IllegalStateException();
+        }
+        Flow result = null;
+        for (Flow cur : flows.values()) {
+            for (ViewNode curView : cur.getViews()) {
+                if (id.equals(curView.getId())) {
+                    result = cur;
+                    break;
+                }
+            }
+            if (null != result) {
+                break;
+            }
+        }
+        
+        return result;
+    }
+    
+    
+
+    @Override
+    public void addFlow(Flow toAdd) {
+        if (null == toAdd || null == toAdd.getId() || 0 == toAdd.getId().length()) {
+            throw new IllegalArgumentException();
+        }
+        flows.put(toAdd.getId(), toAdd);
+    }
     
     
     
     @Override
     public Flow getCurrentFlow(FacesContext context) {
-        if (!hasFlows) {
+        if (!flowFeatureIsEnabled) {
             return null;
         }
         return getFlowStack(context).peek();
@@ -75,7 +117,7 @@ public class FlowHandlerImpl extends FlowHandler {
     @Override
     @SuppressWarnings(value="")
     public void transition(FacesContext context, UIComponent src, UIComponent target) {
-        if (!hasFlows) {
+        if (!flowFeatureIsEnabled) {
             return;
         }
         
@@ -85,10 +127,9 @@ public class FlowHandlerImpl extends FlowHandler {
             popFlow(context);
         }
         
-        if ("/start.xhtml".equals(targetFlowId)) {
-            Flow currentFlow = new Flow();
-            currentFlow.setId("flow");
-            pushFlow(context, currentFlow);
+        Flow newFlow = this.getFlowByNodeId(targetFlowId);
+        if (null != newFlow) {
+            pushFlow(context, newFlow);
         }
     }
     
@@ -133,6 +174,11 @@ public class FlowHandlerImpl extends FlowHandler {
         String result = "";
         if (source instanceof javax.faces.component.UIViewRoot) {
             result = ((javax.faces.component.UIViewRoot)source).getViewId();
+            int dot = result.indexOf(".");
+            if (-1 != dot) {
+                result = result.substring(0, dot);
+            }
+            
         }
         
         return result;
@@ -142,6 +188,10 @@ public class FlowHandlerImpl extends FlowHandler {
         String result = "";
         if (target instanceof javax.faces.component.UIViewRoot) {
             result = ((javax.faces.component.UIViewRoot)target).getViewId();
+            int dot = result.indexOf(".");
+            if (-1 != dot) {
+                result = result.substring(0, dot);
+            }
         }
         
         return result;

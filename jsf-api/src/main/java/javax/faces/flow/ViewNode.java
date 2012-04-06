@@ -40,19 +40,30 @@
  */
 package javax.faces.flow;
 
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
+import java.io.Serializable;
 
-public abstract class FlowHandler {
+public class ViewNode implements Serializable {
     
-    public abstract Flow getFlow(String id);
+    private static final long serialVersionUID = -8548240128992712331L;
     
-    public abstract Flow getFlowByNodeId(String id);
+    private String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
     
-    public abstract void addFlow(Flow toAdd);
+    private String vdlDocumentId;
+
+    public String getVdlDocumentId() {
+        return vdlDocumentId;
+    }
+
+    public void setVdlDocumentId(String vdlDocumentId) {
+        this.vdlDocumentId = vdlDocumentId;
+    }
     
-    public abstract Flow getCurrentFlow(FacesContext context);
-            
-    public abstract void transition(FacesContext context, UIComponent src, UIComponent target);
-        
 }

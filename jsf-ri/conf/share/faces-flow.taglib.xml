@@ -1,9 +1,9 @@
-<?xml version='1.0' encoding='UTF-8' ?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 2009-2010 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -41,39 +41,58 @@
 
 -->
 
-<!DOCTYPE html>
+<facelet-taglib xmlns="http://java.sun.com/xml/ns/javaee"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_2.xsd"
+                version="2.2">
+    <description><![CDATA[
+        Specify how a flow is declared in VDL pages.  This schema is functionally
+        equivalent to the same content in a faces-config.xml file.
+    ]]></description>
+    <namespace>http://java.sun.com/jsf/flow</namespace>
+    <short-name>j</short-name>
+    <tag>
+        <description><![CDATA[
 
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:j="http://java.sun.com/jsf/flow">
-    
-    <f:metadata>
-        <j:faces-flow-definition id="flow">
-            
-            <!-- A faces-flow-definition in a facelet page without any other 
-            children declares a faces flow equivalent to this:
-            
-              <default-node>the name of this page without any extension</default-node>
-              <view id="the name of this page without any extension">
-                <vdl-document>the name of this page with the extension</vdl-document>
-              </view>
-            
-            -->
+        ]]></description>
+        <tag-name>faces-flow-definition</tag-name>
+        <handler-class>com.sun.faces.facelets.flow.FacesFlowDefinitionTagHandler</handler-class>
+        <attribute>
+            <description>
+                <![CDATA[
 
-        </j:faces-flow-definition>
-    </f:metadata>
-    <head>
-        <title>First page in the flow</title>
-    </head>
-    <body>
-    <h:form prependId="false">
-        <p>First page in the flow</p>
-        <p>Flow bean name: #{flowBean.name}</p>
-        
-        <p><h:commandButton id="index" value="home" action="index" /></p>
-        <p><h:commandButton id="nonFlow" value="nonFlow" action="nonFlow" /></p>
-        
-    </h:form>
-    </body>
-</html>
+                ]]>
+            </description>
+            <name>
+                id
+            </name>
+            <required>
+                true
+            </required>
+            <type>
+                java.lang.String
+            </type>
+        </attribute>
+    </tag>
+    <tag>
+        <description><![CDATA[
+
+        ]]></description>
+        <tag-name>default-node</tag-name>
+        <handler-class>com.sun.faces.facelets.flow.DefaultNodeTagHandler</handler-class>
+    </tag>
+    <tag>
+        <description><![CDATA[
+
+        ]]></description>
+        <tag-name>view</tag-name>
+        <handler-class>com.sun.faces.facelets.flow.ViewNodeTagHandler</handler-class>
+    </tag>
+    <tag>
+        <description><![CDATA[
+
+        ]]></description>
+        <tag-name>vdl-document</tag-name>
+        <handler-class>com.sun.faces.facelets.flow.VDLDocumentTagHandler</handler-class>
+    </tag>
+</facelet-taglib>

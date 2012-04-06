@@ -61,6 +61,8 @@ import javax.faces.application.ConfigurableNavigationHandler;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIViewAction;
 import javax.faces.context.Flash;
+import javax.faces.view.ViewDeclarationLanguage;
+import javax.faces.view.ViewMetadata;
 
 /**
  * <p><strong>NavigationHandlerImpl</strong> is the class that implements
@@ -209,8 +211,23 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                    logger.fine("Response complete for " + caseStruct.viewId);
                }
             } else {
-                UIViewRoot newRoot = viewHandler.createView(context,
-                                                            caseStruct.viewId);
+                ViewDeclarationLanguage vdl = viewHandler.getViewDeclarationLanguage(context, caseStruct.viewId);
+                ViewMetadata metadata = null;
+                UIViewRoot newRoot = null;
+                if (null != vdl) {
+                    // Will be null for JSP views
+                    metadata = vdl.getViewMetadata(context, caseStruct.viewId);
+                    
+                    if (null != metadata) {
+                        newRoot = metadata.createMetadataView(context);
+                    }
+                    
+                } 
+                
+                if (null == newRoot) {
+                    newRoot = viewHandler.createView(context,
+                            caseStruct.viewId);
+                }
                 updateRenderTargets(context, caseStruct.viewId);
                 // Unconditionally tell the flow system we are transitioning
                 // between nodes.  Let the flow system figure it out if these nodes

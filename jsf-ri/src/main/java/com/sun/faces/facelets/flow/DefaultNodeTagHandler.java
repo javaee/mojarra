@@ -38,21 +38,23 @@
  * holder.
 
  */
-package javax.faces.flow;
+package com.sun.faces.facelets.flow;
 
+import com.sun.faces.facelets.tag.TagHandlerImpl;
+import java.io.IOException;
 import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
+import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.TagConfig;
 
-public abstract class FlowHandler {
+public class DefaultNodeTagHandler extends TagHandlerImpl {
+
+    public DefaultNodeTagHandler(TagConfig config) {
+        super(config);
+    }
     
-    public abstract Flow getFlow(String id);
+    public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
+    }
     
-    public abstract Flow getFlowByNodeId(String id);
     
-    public abstract void addFlow(Flow toAdd);
     
-    public abstract Flow getCurrentFlow(FacesContext context);
-            
-    public abstract void transition(FacesContext context, UIComponent src, UIComponent target);
-        
 }

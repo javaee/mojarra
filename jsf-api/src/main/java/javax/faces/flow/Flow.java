@@ -41,6 +41,7 @@
 package javax.faces.flow;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.faces.context.FacesContext;
 import javax.faces.lifecycle.ClientWindow;
 
@@ -57,6 +58,28 @@ public class Flow implements Serializable {
     public void setId(String id) {
         this.id = id;
     }
+    
+    private String defaultNodeId;
+
+    public String getDefaultNodeId() {
+        return defaultNodeId;
+    }
+
+    public void setDefaultNodeId(String defaultNodeId) {
+        this.defaultNodeId = defaultNodeId;
+    }
+    
+    private List<ViewNode> views;
+
+    public List<ViewNode> getViews() {
+        return views;
+    }
+
+    public void setViews(List<ViewNode> views) {
+        this.views = views;
+    }
+    
+    
     
     public String getIdForCurrentWindow(FacesContext context) {
         String result = null;
