@@ -70,32 +70,32 @@
 
     <target name="install">
 
-      <start.database />
+<!--      <start.database />
       <deploy.artifact
               artifact="${jsf.build.home}/jsf-demo/sandbox/scrumtoys2009/eclipseProject/target/scrumtoys.war"
-              appName="scrumtoys" />
+              appName="scrumtoys" />-->
 
     </target>    
 
     <target name="remove">
 
-      <undeploy.artifact
+<!--      <undeploy.artifact
               artifact="${jsf.build.home}/jsf-demo/sandbox/scrumtoys2009/eclipseProject/target/scrumtoys.war"
               appName="scrumtoys" />
-      <stop.database />
+      <stop.database />-->
 
     </target>    
 
     <target name="test" depends="define.scenario.aware.port">
 
-      <jsf.junit context-path="/scrumtoys"
+<!--      <jsf.junit context-path="/scrumtoys"
                  classpath-refid="1338.classpath"    
                  test-results-dir="${regression.test.results.dir}">
           <tests>
             <fileset dir="${basedir}/i_jsf_1338_htmlunit/target/classes"
                      includes="com/sun/faces/regression/i_jsf_1338_htmlunit/ScrumToysTestCase.class"/> 
           </tests>
-      </jsf.junit>
+      </jsf.junit>-->
 
     </target>    
 
