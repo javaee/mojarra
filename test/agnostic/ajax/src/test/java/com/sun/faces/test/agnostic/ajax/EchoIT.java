@@ -110,27 +110,22 @@ public class EchoIT {
         assertTrue(page.getElementById("form1:out1").asXml().indexOf("hello") != -1);
     }
 
-//    // Test basic ajax functionality
-//    public void testAjaxEchoLT() throws Exception {
-//        getPage("/faces/ajax/ajaxEcho.xhtml");
-//
-//        // First we'll check the first page was output correctly
-//        checkTrue("form1:out1","");
-//        checkTrue("form1:in1","");
-//
-//        HtmlTextInput in1 = (HtmlTextInput) lastpage.getHtmlElementById("form1:in1");
-//
-//        in1.type("<");
-//
-//        // Submit the ajax request
-//        HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("form1:button1");
-//        lastpage = (HtmlPage) button1.click();
-//
-//        // Check that the ajax request succeeds
-//        checkTrue("form1:out1","<");
-//    }
-//
-//
+    @Test
+    public void testAjaxEchoLT() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "/faces/echo.xhtml");
+
+        assertTrue(page.getElementById("form1:out1").asText().indexOf("<") == -1);
+
+        HtmlTextInput in1 = (HtmlTextInput) page.getHtmlElementById("form1:in1");
+        in1.type("<");
+
+        HtmlSubmitInput button1 = (HtmlSubmitInput) page.getHtmlElementById("form1:button1");
+        page = (HtmlPage) button1.click();
+        webClient.waitForBackgroundJavaScript(60000);
+
+        assertTrue(page.getElementById("form1:out1").asText().indexOf("<") != -1);
+    }
+
 //    /*
 //     * Regression test for bug #939
 //     */
