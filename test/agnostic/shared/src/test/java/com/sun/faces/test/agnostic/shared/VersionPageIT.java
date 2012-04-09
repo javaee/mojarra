@@ -46,10 +46,11 @@ import static org.junit.Assert.*;
 
 /**
  * Verify the simple facelet page.
- * 
+ *
  * @author Manfred Riem (manfred.riem@oracle.com)
  */
 public class VersionPageIT {
+
     /**
      * Stores the web URL.
      */
@@ -61,7 +62,7 @@ public class VersionPageIT {
 
     /**
      * Setup before testing.
-     * 
+     *
      * @throws Exception when a serious error occurs.
      */
     @BeforeClass
@@ -70,7 +71,7 @@ public class VersionPageIT {
 
     /**
      * Cleanup after testing.
-     * 
+     *
      * @throws Exception when a serious error occurs.
      */
     @AfterClass
@@ -93,15 +94,16 @@ public class VersionPageIT {
     public void tearDown() {
         webClient.closeAllWindows();
     }
-    
+
     /**
      * Test /faces/version.xhtml
      */
     @Test
-    @Ignore
     public void testVerifyMojarraVersion() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/version.xhtml");
         String jsfVersion = System.getProperty("jsf.version");
-        assertTrue("Unexpected JSF version", page.getBody().asText().indexOf(jsfVersion) != -1);
+        if (jsfVersion != null && !jsfVersion.endsWith("-SNAPSHOT")) {
+            assertTrue("Unexpected JSF version", page.getBody().asText().indexOf(jsfVersion) != -1);
+        }
     }
 }
