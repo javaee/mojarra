@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,56 +37,25 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.ajax;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import static org.junit.Assert.*;
-import org.junit.Test;
+// Javascript for ajaxEcho test
 
-public class InvalidXMLIT {
-
-    /**
-     * Stores the web URL.
-     */
-    private String webUrl;
-    /**
-     * Stores the web client.
-     */
-    private WebClient webClient;
-
-    /**
-     * Setup before testing.
-     */
-    @Before
-    public void setUp() {
-        webUrl = System.getProperty("integration.url");
-        webClient = new WebClient();
-        webClient.setJavaScriptEnabled(true);
-        webClient.setJavaScriptTimeout(60000);
+function buttonpush(target, exec, element, event) {
+    try {
+        jsf.ajax.request(element, event, {execute: exec, render: target});
+    } catch (ex) {
+        // Handle errors here
+        alert(ex);
     }
+    return false;
+} 
 
-    /**
-     * Tear down after testing.
-     */
-    @After
-    public void tearDown() {
-        webClient.closeAllWindows();
+function resetpush(element, event) {
+    try {
+        jsf.ajax.request(element, event, {execute: element.id});
+    } catch (ex) {
+        // Handle errors here
+        alert(ex);
     }
-
-    @Test
-    public void testInvalidXML() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "/faces/invalidXML.xhtml");
-
-        HtmlSubmitInput button1 = (HtmlSubmitInput) page.getHtmlElementById("form1:bad");
-        page = (HtmlPage) button1.click();
-        webClient.waitForBackgroundJavaScript(60000);
-
-        assertTrue(page.asXml().indexOf("Bread &amp; Butter") != -1);
-    }
+    return false;
 }

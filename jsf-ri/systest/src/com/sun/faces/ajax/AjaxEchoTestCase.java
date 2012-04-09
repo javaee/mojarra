@@ -75,45 +75,45 @@ public class AjaxEchoTestCase  extends HtmlUnitFacesTestCase {
     }
 
 
-    // Test basic ajax functionality
-    public void testAjaxEcho() throws Exception {
-        getPage("/faces/ajax/ajaxEcho.xhtml");
+//    // Test basic ajax functionality
+//    public void testAjaxEcho() throws Exception {
+//        getPage("/faces/ajax/ajaxEcho.xhtml");
+//
+//        // First we'll check the first page was output correctly
+//        checkTrue("form1:out1","");
+//        checkTrue("form1:in1","");
+//
+//        HtmlTextInput in1 = (HtmlTextInput) lastpage.getHtmlElementById("form1:in1");
+//
+//        in1.type("hello");
+//
+//        // Submit the ajax request
+//        HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("form1:button1");
+//        lastpage = (HtmlPage) button1.click();
+//
+//        // Check that the ajax request succeeds
+//        checkTrue("form1:out1","hello");
+//    }
 
-        // First we'll check the first page was output correctly
-        checkTrue("form1:out1","");
-        checkTrue("form1:in1","");
-
-        HtmlTextInput in1 = (HtmlTextInput) lastpage.getHtmlElementById("form1:in1");
-
-        in1.type("hello");
-
-        // Submit the ajax request
-        HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("form1:button1");
-        lastpage = (HtmlPage) button1.click();
-
-        // Check that the ajax request succeeds
-        checkTrue("form1:out1","hello");
-    }
-
-    // Test using a valid string as the request identifier, instead of an element
-    public void testAjaxEchoWithStringId() throws Exception {
-        getPage("/faces/ajax/ajaxEcho.xhtml");
-
-        // First we'll check the first page was output correctly
-        checkTrue("form1:out1","");
-        checkTrue("form1:in1","");
-
-        HtmlTextInput in1 = (HtmlTextInput) lastpage.getHtmlElementById("form1:in1");
-
-        in1.type("hello");
-
-        // Submit the ajax request
-        HtmlSubmitInput button2 = (HtmlSubmitInput) lastpage.getHtmlElementById("form1:button2");
-        lastpage = (HtmlPage) button2.click();
-
-        // Check that the ajax request succeeds
-        checkTrue("form1:out1","hello");
-    }
+//    // Test using a valid string as the request identifier, instead of an element
+//    public void testAjaxEchoWithStringId() throws Exception {
+//        getPage("/faces/ajax/ajaxEcho.xhtml");
+//
+//        // First we'll check the first page was output correctly
+//        checkTrue("form1:out1","");
+//        checkTrue("form1:in1","");
+//
+//        HtmlTextInput in1 = (HtmlTextInput) lastpage.getHtmlElementById("form1:in1");
+//
+//        in1.type("hello");
+//
+//        // Submit the ajax request
+//        HtmlSubmitInput button2 = (HtmlSubmitInput) lastpage.getHtmlElementById("form1:button2");
+//        lastpage = (HtmlPage) button2.click();
+//
+//        // Check that the ajax request succeeds
+//        checkTrue("form1:out1","hello");
+//    }
 
     // Test basic ajax functionality
     public void testAjaxEchoLT() throws Exception {
