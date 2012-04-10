@@ -55,10 +55,17 @@ import javax.faces.flow.ViewNode;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagConfig;
+import javax.faces.view.facelets.TagException;
 
 public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
     
     private static final String FLOW_DATA_MAP_ATTR_NAME = FacesFlowDefinitionTagHandler.class.getPackage().getName() + ".FLOW_DATA";
+    
+    enum FlowDataKeys {
+        DefaultNodeId,
+        Views
+        
+    } 
     
     static Map<Object,Object> getFlowData(FaceletContext ctx) {
         Map<Object, Object> attrs = ctx.getFacesContext().getAttributes();
@@ -74,18 +81,51 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
         return result;
         
     }
+    
+    private void clearFlowData(FaceletContext ctx) {
+        getFlowData(ctx).clear();
+    }
 
     public FacesFlowDefinitionTagHandler(TagConfig config) {
         super(config);
     }
     
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
+        
+        // PENDING(edburns): we should explicitly allow or disallow nested <j:faces-flow-definition> handlers.
+        // I'm leaning toward disallow.
+        
+        clearFlowData(ctx);
         this.nextHandler.apply(ctx, parent);
         FacesContext context = ctx.getFacesContext();
         FlowHandler flowHandler = context.getApplication().getFlowHandler();
         
         Map<Object, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
+        TagAttribute flowIdAttr = this.getRequiredAttribute("id");
+        String flowId = flowIdAttr.getValue(ctx);
+        Flow newFlow = flowHandler.getFlow(flowId);
+        
+        if (null == newFlow) {
+
+            newFlow = new Flow();
+            newFlow.setId(flowId);
+            flowHandler.addFlow(newFlow);
+
+        } else {
+            
+            // Inspect the flow for a view corresponding to this page.
+            if (null != newFlow.getView(getMyNodeId())) {
+                // If we have one, take no further action.
+                return;
+            } 
+            // else we have a flow, but no view corresponding to this page.
+        }
+        
         if (flowData.isEmpty()) {
+            List<ViewNode> viewsInFlow = null;
+        
+            // <editor-fold defaultstate="collapsed" desc="No flow data, create the entire flow now using conventions">       
+            
             // Create a simple flow like this
             
             // <faces-flow-definition id=this tag's id attribute>
@@ -94,33 +134,86 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
             //     <vdl-document>the name of this page with the extension</vdl-document>
             //   </view>
             // </faces-flow-definition>
-            TagAttribute flowIdAttr = this.getRequiredAttribute("id");
-            String flowId = flowIdAttr.getValue(ctx);
-            Flow newFlow = flowHandler.getFlow(flowId);
-            if (null == newFlow) {
-                newFlow = new Flow();
-                newFlow.setId(flowId);
-                
-                String myViewId = this.tag.getLocation().getPath();
-                newFlow.setDefaultNodeId(myViewId);
-
-                int dot = myViewId.indexOf(".");
-                String id = myViewId.substring(0, dot);
-                ViewNode viewNode = new ViewNode();
-                viewNode.setVdlDocumentId(myViewId);
-                viewNode.setId(id);
-                List<ViewNode> viewsInFlow = Collections.synchronizedList(new ArrayList<ViewNode>());
-                viewsInFlow.add(viewNode);
+            
+            //
+            // <default-node>
+            //
+            if (null == newFlow.getDefaultNodeId()) {
+                newFlow.setDefaultNodeId(getMyNodeId());
+            } 
+            
+            //
+            // <view>s
+            //
+            if (null == newFlow.getViews()) {
+                viewsInFlow = synthesizeViews();
                 newFlow.setViews(viewsInFlow);
-                
-                flowHandler.addFlow(newFlow);
+            } else if (null == newFlow.getView(getMyNodeId())) {
+                ViewNode viewNode = new ViewNode();
+                viewNode.setId(getMyNodeId());
+                viewNode.setVdlDocumentId(this.tag.getLocation().getPath());
+                newFlow.getViews().add(viewNode);
             }
-
+            
+            // </editor-fold>
+ 
         } else {
             
+            // <editor-fold defaultstate="collapsed" desc="Some flow data, create the flow now with that data, using conventions for gaps">       
+
+            if (null == newFlow.getDefaultNodeId()) {
+                //
+                // <default-node>
+                //
+                // If we have some flow data, we must have a default-node.
+                String defaultNodeId = (String)flowData.get(FlowDataKeys.DefaultNodeId);
+                
+                if (null == defaultNodeId || 0 == defaultNodeId.length()) {
+                    throw new TagException(tag, "Unable to determine default-node.");
+                }
+                
+                newFlow.setDefaultNodeId(defaultNodeId);
+            }
+            
+            //
+            // <view>s
+            //
+            // We may or may not have views.
+            List<ViewNode> viewsFromTag = (List<ViewNode>) flowData.get(FlowDataKeys.Views);
+            if (null == viewsFromTag) {
+                // If not, make one from this view.
+                viewsFromTag = synthesizeViews();
+            }
+            if (null == newFlow.getViews()) {            
+                newFlow.setViews(viewsFromTag);
+            } else {
+                newFlow.getViews().addAll(viewsFromTag);
+            }
+            
+            // </editor-fold>
+            
         }
+        
+        
     }
     
+    private List<ViewNode> synthesizeViews() {
+        List<ViewNode> viewsInFlow = null;
+        ViewNode viewNode = new ViewNode();
+        viewNode.setId(getMyNodeId());
+        viewNode.setVdlDocumentId(this.tag.getLocation().getPath());
+        viewsInFlow = Collections.synchronizedList(new ArrayList<ViewNode>());
+        viewsInFlow.add(viewNode);
+        
+        return viewsInFlow;
+    }
     
+    private String getMyNodeId() {
+        String myViewId = this.tag.getLocation().getPath();
+        int dot = myViewId.indexOf(".");
+        String id = myViewId.substring(0, dot);
+        return id;
+        
+    }
     
 }

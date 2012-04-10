@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8' ?>
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -41,17 +41,32 @@
 
 -->
 
-<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
-    <servlet>
-        <servlet-name>Faces Servlet</servlet-name>
-        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>Faces Servlet</servlet-name>
-        <url-pattern>/faces/*</url-pattern>
-    </servlet-mapping>
-    <welcome-file-list>
-        <welcome-file>faces/index.xhtml</welcome-file>
-    </welcome-file-list>
-</web-app>
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:j="http://java.sun.com/jsf/flow">
+    
+    <f:metadata>
+        <j:faces-flow-definition id="flow">
+            
+            <j:default-node />
+            
+        </j:faces-flow-definition>
+    </f:metadata>
+    <head>
+        <title>First page in the flow</title>
+    </head>
+    <body>
+    <h:form prependId="false">
+        <p>First page in the flow</p>
+        <p>Flow bean name: #{flowBean.name}</p>
+        
+        <p><h:commandButton id="index" value="home" action="index" /></p>
+        <p><h:commandButton id="next_a" value="next" action="next_a" /></p>
+        <p><h:commandButton id="nonFlow" value="nonFlow" action="nonFlow" /></p>
+        
+    </h:form>
+    </body>
+</html>

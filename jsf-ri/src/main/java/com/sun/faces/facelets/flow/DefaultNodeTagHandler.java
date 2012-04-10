@@ -42,9 +42,12 @@ package com.sun.faces.facelets.flow;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
 import java.io.IOException;
+import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagConfig;
+
+import com.sun.faces.facelets.flow.FacesFlowDefinitionTagHandler.FlowDataKeys;
 
 public class DefaultNodeTagHandler extends TagHandlerImpl {
 
@@ -53,6 +56,23 @@ public class DefaultNodeTagHandler extends TagHandlerImpl {
     }
     
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
+        this.nextHandler.apply(ctx, parent);
+        
+        Map<Object,Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
+        String defaultNodeId = (String) flowData.get(FlowDataKeys.DefaultNodeId);
+        
+        if (null == defaultNodeId) {
+            flowData.put(FlowDataKeys.DefaultNodeId, getMyNodeId());
+        }
+        
+    }
+    
+    private String getMyNodeId() {
+        String myViewId = this.tag.getLocation().getPath();
+        int dot = myViewId.indexOf(".");
+        String id = myViewId.substring(0, dot);
+        return id;
+        
     }
     
     
