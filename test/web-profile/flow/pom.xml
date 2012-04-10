@@ -13,5 +13,6 @@
     <name>Mojarra Test - Web-Profile - Flow - POM</name>
     <modules>
         <module>basic</module>
+        <module>basic-multi-page</module>
     </modules>
 </project>
