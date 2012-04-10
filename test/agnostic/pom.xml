@@ -19,9 +19,6 @@
                 <version>2.2</version>
                 <configuration>
                     <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
-                    <filters>
-                        <filter>${basedir}/src/main/filter/${webapp.filter}.properties</filter>
-                    </filters>
                 </configuration>
             </plugin>
         </plugins>    
@@ -33,6 +30,6 @@
         <module>stateSaving</module>
     </modules>
     <properties>
-        <webapp.filter>partialStateSaving</webapp.filter>
+        <webapp.partialStateSaving>true</webapp.partialStateSaving>
     </properties>
 </project>
