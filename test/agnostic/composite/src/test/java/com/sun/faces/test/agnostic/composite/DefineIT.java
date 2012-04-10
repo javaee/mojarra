@@ -71,10 +71,9 @@ public class DefineIT {
         webClient.closeAllWindows();
     }
     
-    @Test
-    @Ignore
-    public void testTemplate1() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/define/define1.xhtml");
-        assertTrue(page.getBody().asText().indexOf("What is in a name?") != -1);
-    }
+//    @Test
+//    public void testTemplate1() throws Exception {
+//        HtmlPage page = webClient.getPage(webUrl + "faces/define/define1.xhtml");
+//        assertTrue(page.getBody().asText().indexOf("What is in a name?") != -1);
+//    }
 }

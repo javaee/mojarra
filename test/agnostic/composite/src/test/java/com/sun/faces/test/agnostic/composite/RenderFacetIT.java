@@ -77,10 +77,9 @@ public class RenderFacetIT {
         assertTrue(page.getBody().asText().indexOf("This came from a rendered facet") != -1);
     }
 
-    @Test
-    @Ignore
-    public void testRenderFacet2() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/renderFacet/renderFacet2.xhtml");
-        assertTrue(page.getBody().asText().indexOf("myFacet Text") != -1);
-    }
+//    @Test
+//    public void testRenderFacet2() throws Exception {
+//        HtmlPage page = webClient.getPage(webUrl + "faces/renderFacet/renderFacet2.xhtml");
+//        assertTrue(page.getBody().asText().indexOf("myFacet Text") != -1);
+//    }
 }
