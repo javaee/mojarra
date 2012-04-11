@@ -54,5 +54,7 @@ public abstract class FlowHandler {
     public abstract Flow getCurrentFlow(FacesContext context);
             
     public abstract void transition(FacesContext context, UIComponent src, UIComponent target);
+    
+    public abstract boolean isActive(FacesContext context, String id);
         
 }

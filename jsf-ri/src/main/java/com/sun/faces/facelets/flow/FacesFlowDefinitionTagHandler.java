@@ -82,6 +82,26 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
         
     }
     
+    private String getFlowId(FaceletContext ctx) {
+        String id = null;
+        
+        TagAttribute flowIdAttr = this.getAttribute("id");
+        if (null != flowIdAttr) {
+            id = flowIdAttr.getValue(ctx);
+        } else {
+            id = this.tag.getLocation().getPath();
+            int slash = id.lastIndexOf("/");
+            if (0 == slash) {
+                id = "";
+            } else {
+                id = id.substring(0, slash);
+            }
+        }
+        
+        
+        return id;
+    }
+    
     private void clearFlowData(FaceletContext ctx) {
         getFlowData(ctx).clear();
     }
@@ -101,8 +121,7 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
         FlowHandler flowHandler = context.getApplication().getFlowHandler();
         
         Map<Object, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
-        TagAttribute flowIdAttr = this.getRequiredAttribute("id");
-        String flowId = flowIdAttr.getValue(ctx);
+        String flowId = getFlowId(ctx);
         Flow newFlow = flowHandler.getFlow(flowId);
         
         if (null == newFlow) {
