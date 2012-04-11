@@ -50,6 +50,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
+import javax.enterprise.context.ContextNotActiveException;
 import javax.enterprise.context.spi.Context;
 import javax.enterprise.context.spi.Contextual;
 import javax.enterprise.context.spi.CreationalContext;
@@ -67,10 +68,12 @@ public class FlowCDIContext implements Context, Serializable {
     
     private static final long serialVersionUID = -7144653402477623609L;
     
+    private Map<Contextual<?>, String> flowIds;
+    
     // This should be vended from a factory for decoration purposes.
     
-    public FlowCDIContext() {
-        
+    public FlowCDIContext(Map<Contextual<?>, String> flowIds) {
+        this.flowIds = flowIds;
     }
     
     private static final String PER_SESSION_BEAN_MAP_LIST = FlowCDIContext.class.getPackage().getName() + ".PER_SESSION_BEAN_MAP_LIST";
@@ -234,6 +237,15 @@ public class FlowCDIContext implements Context, Serializable {
             synchronized (flowScopedBeanMap) {
                 result = (T) flowScopedBeanMap.get(contextual);
                 if (null == result) {
+                    
+                    FacesContext facesContext = FacesContext.getCurrentInstance();
+                    FlowHandler flowHandler = facesContext.getApplication().getFlowHandler();
+                    String flowIdForBean = flowIds.get(contextual);
+                    if (!flowHandler.isActive(facesContext, flowIdForBean)) {
+                        throw new ContextNotActiveException("Request to activate bean in flow '" + flowIdForBean + "', but that flow is not active.");
+                    }
+
+                    
                     result = contextual.create(creational);
                     
                     if (null != result) {

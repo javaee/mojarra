@@ -77,8 +77,8 @@ public class CustomRenderKitImpl extends RenderKit {
 // Instance Variables
 //
     // used for ResponseWriter creation;
-    private static String HTML_CONTENT_TYPE = "text/html";
-    private static String CHAR_ENCODING = "ISO-8859-1";
+    private final static String HTML_CONTENT_TYPE = "text/html";
+    private final static String CHAR_ENCODING = "ISO-8859-1";
 //
 // Ivars used during actual client lifetime
 //

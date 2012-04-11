@@ -49,23 +49,18 @@
       xmlns:j="http://java.sun.com/jsf/flow">
     
     <f:metadata>
-        <j:faces-flow-definition id="flow">
+        <j:faces-flow-definition/>
             
-            <j:default-node />
-            
-        </j:faces-flow-definition>
     </f:metadata>
     <head>
         <title>First page in the flow</title>
     </head>
     <body>
     <h:form prependId="false">
-        <p>First page in the flow</p>
+        <p>Second page in the flow</p>
         <p>Flow bean name: #{flowBean.name}</p>
         
-        <p><h:commandButton id="index" value="home" action="index" /></p>
-        <p><h:commandButton id="next_a" value="next" action="next_a" /></p>
-        <p><h:commandButton id="nonFlow" value="nonFlow" action="nonFlow" /></p>
+        <p><h:commandButton id="start" value="back" action="start" /></p>
         
     </h:form>
     </body>

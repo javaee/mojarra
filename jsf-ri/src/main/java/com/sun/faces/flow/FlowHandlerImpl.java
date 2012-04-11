@@ -100,6 +100,21 @@ public class FlowHandlerImpl extends FlowHandler {
         }
         flows.put(toAdd.getId(), toAdd);
     }
+
+    @Override
+    public boolean isActive(FacesContext context, String id) {
+        boolean result = false;
+        Deque<Flow> flowStack = getFlowStack(context);
+        for (Flow cur : flowStack) {
+            if (id.equals(cur.getId())) {
+                result = true;
+                break;
+            }
+        }
+        
+        return result;
+    }
+    
     
     
     

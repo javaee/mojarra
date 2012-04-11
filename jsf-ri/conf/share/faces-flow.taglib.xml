@@ -67,7 +67,7 @@
                 id
             </name>
             <required>
-                true
+                false
             </required>
             <type>
                 java.lang.String
