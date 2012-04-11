@@ -113,6 +113,16 @@
         <ant dir="updatecenter2" target="updatecenter2.clean" />
     </target>  
 
+    <target name="clean.mojarra.only"
+            description="Clean just the Mojarra code">       
+        <subant target="clean" inheritAll="false">
+          <filelist dir="${jsf.build.home}">
+            <file name="jsf-api/build.xml" />
+            <file name="jsf-ri/build.xml" />
+          </filelist>
+        </subant>
+    </target>  
+
     <target name="main" description="Build Mojarra">
         <call.modules target="main"/>
     </target>
