@@ -80,21 +80,19 @@ public class ComponentStruct implements StateHolder {
         this.parentClientId = (String) s[1];
         this.clientId = (String) s[2];
         this.id = (String) s[3];
-        this.indexOfChildInParent = (Integer) s[4];
-        this.facetName = (String) s[5];
+        this.facetName = (String) s[4];
     }
 
     public Object saveState(FacesContext ctx) {
         if (ctx == null) {
             throw new NullPointerException();
         }
-        Object state[] = new Object[6];
+        Object state[] = new Object[5];
         state[0] = this.action;
         state[1] = this.parentClientId;
         state[2] = this.clientId;
         state[3] = this.id;
-        state[4] = this.indexOfChildInParent;
-        state[5] = this.facetName;
+        state[4] = this.facetName;
         return state;
     }
 

@@ -389,8 +389,13 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
                 if (struct.facetName != null) {
                     parent.getFacets().put(struct.facetName, child);
                 } else {
+                    int childIndex = (Integer) child.getAttributes().get(DYNAMIC_COMPONENT);
                     child.setId(struct.id);
-                    parent.getChildren().add(child);
+                    if (childIndex >= parent.getChildCount()) {
+                        parent.getChildren().add(child);
+                    } else {
+                        parent.getChildren().add(childIndex, child);
+                    }
                     child.getClientId();
                 }
             }

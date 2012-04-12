@@ -360,8 +360,8 @@ public class StateContext {
                             Map.Entry entry = (Map.Entry) entries.next();
                             if (entry.getValue() == component) {
                                 incrementDynamicChildCount(component.getParent());
-                                component.getAttributes().put(DYNAMIC_COMPONENT, component.getParent().getChildren().indexOf(component));
                                 component.clearInitialState();
+                                component.getAttributes().put(DYNAMIC_COMPONENT, component.getParent().getChildren().indexOf(component));
                                 ComponentStruct struct = new ComponentStruct();
                                 struct.action = ComponentStruct.ADD;
                                 struct.facetName = entry.getKey().toString();
@@ -374,8 +374,8 @@ public class StateContext {
                     }
                     else {
                         incrementDynamicChildCount(component.getParent());
-                        component.getAttributes().put(DYNAMIC_COMPONENT, component.getParent().getChildren().indexOf(component));
                         component.clearInitialState();
+                        component.getAttributes().put(DYNAMIC_COMPONENT, component.getParent().getChildren().indexOf(component));
                         ComponentStruct struct = new ComponentStruct();
                         struct.action = ComponentStruct.ADD;
                         struct.parentClientId = component.getParent().getClientId(context);
