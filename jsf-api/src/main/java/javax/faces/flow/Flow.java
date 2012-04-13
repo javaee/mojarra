@@ -69,6 +69,10 @@ public class Flow implements Serializable {
         this.defaultNodeId = defaultNodeId;
     }
     
+    public String getDefaultNodeIdPath() {
+        return getId() + "/" + getDefaultNodeId();
+    }
+    
     private List<ViewNode> views;
 
     public List<ViewNode> getViews() {

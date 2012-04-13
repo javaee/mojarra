@@ -61,6 +61,7 @@ import javax.faces.application.ConfigurableNavigationHandler;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIViewAction;
 import javax.faces.context.Flash;
+import javax.faces.flow.Flow;
 import javax.faces.view.ViewDeclarationLanguage;
 import javax.faces.view.ViewMetadata;
 
@@ -563,11 +564,17 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         }
 
         // If the viewIdToTest needs an extension, take one from the currentViewId.
+        String currentExtension;
+        int idx = currentViewId.lastIndexOf('.');
+        if (idx != -1) {
+            currentExtension = currentViewId.substring(idx);
+        } else {
+            // PENDING, don't hard code XHTML here, look it up from configuration
+            currentExtension = ".xhtml";
+        }
+        
         if (viewIdToTest.lastIndexOf('.') == -1) {
-            int idx = currentViewId.lastIndexOf('.');
-            if (idx != -1) {
-                viewIdToTest = viewIdToTest + currentViewId.substring(idx);
-            }
+            viewIdToTest = viewIdToTest + currentExtension;
         }
 
         if (!viewIdToTest.startsWith("/")) {
@@ -582,6 +589,23 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
 
         ViewHandler viewHandler = Util.getViewHandler(context);
         viewIdToTest = viewHandler.deriveViewId(context, viewIdToTest);
+        
+        if (null == viewIdToTest) {
+            Flow flow = context.getApplication().getFlowHandler().getFlow(outcome);
+            // If this outcome corresponds to an existing flow...
+            if (null != flow) {
+                // make a navigation case from its defaultNode.
+                viewIdToTest = flow.getDefaultNodeIdPath();
+            } else {
+                // try a convention.  Create a viewId by treating outcome
+                // as a directory name *and* file name, which is assumed to be
+                // the file name of the default-node in the flow.
+                viewIdToTest = "/" + outcome + "/" + outcome + currentExtension;
+                viewIdToTest = viewHandler.deriveViewId(context, viewIdToTest);
+
+            }
+            
+        }
 
         if (null != viewIdToTest) {
             CaseStruct caseStruct = new CaseStruct();
