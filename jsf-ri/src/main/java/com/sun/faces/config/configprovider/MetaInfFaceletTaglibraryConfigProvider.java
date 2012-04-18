@@ -152,7 +152,9 @@ public class MetaInfFaceletTaglibraryConfigProvider implements
                         ret = new ArrayList<URI>();
                     }
                     try {
-                        ret.add(new URI(url.toExternalForm()));
+                        String urlString = url.toExternalForm();
+                        urlString = urlString.replaceAll(" ", "%20");
+                        ret.add(new URI(urlString));
                     } catch (URISyntaxException ex) {
                         throw new FacesException(ex);
                     }
