@@ -53,15 +53,16 @@
             
     </f:metadata>
     <head>
-        <title>Second page in the flow</title>
+        <title>Last page in the flow</title>
     </head>
     <body>
-    <h:form prependId="false">
-        <p>Second page in the flow</p>
+        
+        <p>Last page in the flow</p>
         <p>Flow bean name: #{flowBean.name}</p>
         
-        <p><h:commandButton id="start" value="back" action="bounded-task-flow" /></p>
-        <p><h:commandButton id="next" value="next" action="next_b" /></p>
+    <h:form prependId="false">
+        <p><h:commandButton id="back" value="back" action="next_a" /></p>
+        <p><h:commandButton id="return" value="return" action="taskFlowReturn1" /></p>
         
     </h:form>
     </body>

@@ -44,9 +44,10 @@ import com.sun.faces.facelets.tag.TagHandlerImpl;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import javax.faces.application.NavigationCase;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.flow.Flow;
@@ -55,27 +56,26 @@ import javax.faces.flow.ViewNode;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagConfig;
-import javax.faces.view.facelets.TagException;
 
 public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
     
     private static final String FLOW_DATA_MAP_ATTR_NAME = FacesFlowDefinitionTagHandler.class.getPackage().getName() + ".FLOW_DATA";
     
     enum FlowDataKeys {
-        DefaultNodeId,
+        FlowReturnNavigationCase,
         Views
         
     } 
     
-    static Map<Object,Object> getFlowData(FaceletContext ctx) {
+    static Map<FlowDataKeys,Object> getFlowData(FaceletContext ctx) {
         Map<Object, Object> attrs = ctx.getFacesContext().getAttributes();
-        Map<Object, Object> result = Collections.emptyMap();
+        Map<FlowDataKeys, Object> result = Collections.emptyMap();
         if (!attrs.containsKey(FLOW_DATA_MAP_ATTR_NAME)) {
             // Because Facelets is single threaded, this need not be concurrent.
-            result = new HashMap<Object, Object>();
+            result = new EnumMap<FlowDataKeys, Object>(FlowDataKeys.class);
             attrs.put(FLOW_DATA_MAP_ATTR_NAME, result);
         } else {
-            result = (Map<Object, Object>) attrs.get(FLOW_DATA_MAP_ATTR_NAME);
+            result = (Map<FlowDataKeys, Object>) attrs.get(FLOW_DATA_MAP_ATTR_NAME);
         }
         
         return result;
@@ -120,7 +120,7 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
         FacesContext context = ctx.getFacesContext();
         FlowHandler flowHandler = context.getApplication().getFlowHandler();
         
-        Map<Object, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
+        Map<FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
         String flowId = getFlowId(ctx);
         Flow newFlow = flowHandler.getFlow(flowId);
         
@@ -185,13 +185,8 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
                 // <default-node>
                 //
                 // If we have some flow data, we must have a default-node.
-                String defaultNodeId = (String)flowData.get(FlowDataKeys.DefaultNodeId);
                 
-                if (null == defaultNodeId || 0 == defaultNodeId.length()) {
-                    throw new TagException(tag, "Unable to determine default-node.");
-                }
-                
-                newFlow.setDefaultNodeId(defaultNodeId);
+                newFlow.setDefaultNodeId(getMyNodeId());
             }
             
             //
@@ -208,6 +203,19 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
             } else {
                 newFlow.getViews().addAll(viewsFromTag);
             }
+            
+            //
+            // <faces-flow-return>
+            //
+            FlowNavigationCase facesFlowReturn = FacesFlowReturnTagHandler.getNavigationCase(ctx);
+            if (null != facesFlowReturn) {
+                Map<String, NavigationCase> returns = newFlow.getReturns(context);
+                String returnId = facesFlowReturn.getReturnId();
+                if (!returns.containsKey(returnId)) {
+                    returns.put(returnId, facesFlowReturn);
+                }
+            }
+            
             
             // </editor-fold>
             

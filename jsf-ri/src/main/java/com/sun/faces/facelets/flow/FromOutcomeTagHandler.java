@@ -42,36 +42,26 @@ package com.sun.faces.facelets.flow;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
 import java.io.IOException;
-import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagConfig;
+import javax.faces.view.facelets.TagException;
 
-import com.sun.faces.facelets.flow.FacesFlowDefinitionTagHandler.FlowDataKeys;
+public class FromOutcomeTagHandler extends TagHandlerImpl {
 
-public class DefaultNodeTagHandler extends TagHandlerImpl {
-
-    public DefaultNodeTagHandler(TagConfig config) {
+    public FromOutcomeTagHandler(TagConfig config) {
         super(config);
     }
     
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
         this.nextHandler.apply(ctx, parent);
-        
-        Map<Object,Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
-        String defaultNodeId = (String) flowData.get(FlowDataKeys.DefaultNodeId);
-        
-        if (null == defaultNodeId) {
-            flowData.put(FlowDataKeys.DefaultNodeId, getMyNodeId());
+        FlowNavigationCase cur = FacesFlowReturnTagHandler.getNavigationCase(ctx);
+        if (null == cur) {
+            throw new TagException(tag, "Unable to determine <navigation-case> for which " +
+                    this.nextHandler.toString() + " is the <from-outcome>.");
         }
+        cur.setFromOutcome(this.nextHandler.toString());
         
-    }
-    
-    private String getMyNodeId() {
-        String myViewId = this.tag.getLocation().getPath();
-        int dot = myViewId.indexOf(".");
-        String id = myViewId.substring(0, dot);
-        return id;
         
     }
     

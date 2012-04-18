@@ -41,7 +41,11 @@
 package javax.faces.flow;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import javax.faces.application.NavigationCase;
 import javax.faces.context.FacesContext;
 import javax.faces.lifecycle.ClientWindow;
 
@@ -98,6 +102,12 @@ public class Flow implements Serializable {
         
         return result;
         
+    }
+    
+    private Map<String,NavigationCase> returns = new ConcurrentHashMap<String, NavigationCase>();
+    
+    public Map<String,NavigationCase> getReturns(FacesContext context) {
+        return returns;
     }
     
     public String getIdForCurrentWindow(FacesContext context) {

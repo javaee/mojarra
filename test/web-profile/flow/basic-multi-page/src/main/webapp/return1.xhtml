@@ -44,25 +44,15 @@
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:j="http://java.sun.com/jsf/flow">
-    
-    <f:metadata>
-        <j:faces-flow-definition/>
-            
-    </f:metadata>
+      xmlns:h="http://java.sun.com/jsf/html">
     <head>
-        <title>Second page in the flow</title>
+        <title>Page navigated to upon return from bounded-task-flow</title>
     </head>
     <body>
+        <h1>Page navigated to upon return from bounded-task-flow</h1>
+        
     <h:form prependId="false">
-        <p>Second page in the flow</p>
-        <p>Flow bean name: #{flowBean.name}</p>
-        
-        <p><h:commandButton id="start" value="back" action="bounded-task-flow" /></p>
-        <p><h:commandButton id="next" value="next" action="next_b" /></p>
-        
+        <p>return page</p>
     </h:form>
-    </body>
+</body>
 </html>

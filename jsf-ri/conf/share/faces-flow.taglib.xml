@@ -78,8 +78,22 @@
         <description><![CDATA[
 
         ]]></description>
-        <tag-name>default-node</tag-name>
-        <handler-class>com.sun.faces.facelets.flow.DefaultNodeTagHandler</handler-class>
+        <tag-name>faces-flow-return</tag-name>
+        <handler-class>com.sun.faces.facelets.flow.FacesFlowReturnTagHandler</handler-class>
+    </tag>
+    <tag>
+        <description><![CDATA[
+
+        ]]></description>
+        <tag-name>from-outcome</tag-name>
+        <handler-class>com.sun.faces.facelets.flow.FromOutcomeTagHandler</handler-class>
+    </tag>
+    <tag>
+        <description><![CDATA[
+
+        ]]></description>
+        <tag-name>navigation-case</tag-name>
+        <handler-class>com.sun.faces.facelets.flow.NavigationCaseTagHandler</handler-class>
     </tag>
     <tag>
         <description><![CDATA[

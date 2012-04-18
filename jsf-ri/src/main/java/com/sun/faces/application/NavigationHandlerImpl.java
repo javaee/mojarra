@@ -57,11 +57,13 @@ import java.util.logging.Logger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
+import javax.faces.application.Application;
 import javax.faces.application.ConfigurableNavigationHandler;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIViewAction;
 import javax.faces.context.Flash;
 import javax.faces.flow.Flow;
+import javax.faces.flow.FlowHandler;
 import javax.faces.view.ViewDeclarationLanguage;
 import javax.faces.view.ViewMetadata;
 
@@ -589,26 +591,55 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
 
         ViewHandler viewHandler = Util.getViewHandler(context);
         viewIdToTest = viewHandler.deriveViewId(context, viewIdToTest);
+        CaseStruct caseStruct = null;
         
-        if (null == viewIdToTest) {
-            Flow flow = context.getApplication().getFlowHandler().getFlow(outcome);
+        
+        if (null == viewIdToTest && !isDiscerningFlowRouting(context)) {
+            FlowHandler flowHandler = context.getApplication().getFlowHandler();
+            Flow flow = flowHandler.getFlow(outcome);
             // If this outcome corresponds to an existing flow...
             if (null != flow) {
                 // make a navigation case from its defaultNode.
                 viewIdToTest = flow.getDefaultNodeIdPath();
             } else {
-                // try a convention.  Create a viewId by treating outcome
-                // as a directory name *and* file name, which is assumed to be
-                // the file name of the default-node in the flow.
-                viewIdToTest = "/" + outcome + "/" + outcome + currentExtension;
-                viewIdToTest = viewHandler.deriveViewId(context, viewIdToTest);
+                
+                // First, see if we are in a flow.
+                flow = flowHandler.getCurrentFlow(context);
+                if (null != flow) {
+                    // If so, see if the outcome is one of this flow's 
+                    // faces-flow-return nodes.
+                    NavigationCase navCase = flow.getReturns(context).get(outcome);
+                    if (null != navCase) {
+                        String fromOutcome = navCase.getFromOutcome();
+                        if (SharedUtils.isExpression(fromOutcome)) {
+                            Application app = context.getApplication();
+                            fromOutcome = app.evaluateExpressionGet(context, fromOutcome, String.class);
+
+                        }
+                        CaseStruct result = null;
+                        try {
+                            setDiscerningFlowRouting(context, true);
+                            result = getViewId(context, fromAction, fromOutcome);
+                        } finally {
+                            setDiscerningFlowRouting(context, false);
+                        }
+                        return result;
+
+                    }
+                } else {
+                    // try a convention.  Create a viewId by treating outcome
+                    // as a directory name *and* file name, which is assumed to be
+                    // the file name of the default-node in the flow.
+                    viewIdToTest = "/" + outcome + "/" + outcome + currentExtension;
+                    viewIdToTest = viewHandler.deriveViewId(context, viewIdToTest);
+                }
 
             }
             
         }
 
-        if (null != viewIdToTest) {
-            CaseStruct caseStruct = new CaseStruct();
+        if (null != viewIdToTest && null == caseStruct) {
+            caseStruct = new CaseStruct();
             caseStruct.viewId = viewIdToTest;
             caseStruct.navCase = new NavigationCase(viewId,
                                                     fromAction,
@@ -623,6 +654,24 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
 
         return null;
 
+    }
+    
+    private static final String DISCERNING_FLOW_ROUTING_KEY = NavigationHandlerImpl.class.getPackage().getName();
+    
+    private boolean isDiscerningFlowRouting(FacesContext context) {
+        boolean result = false;
+        
+        Map<Object, Object> attrs = context.getAttributes();
+        if (attrs.containsKey(DISCERNING_FLOW_ROUTING_KEY)) {
+            result = (Boolean) attrs.get(DISCERNING_FLOW_ROUTING_KEY);
+        }
+        
+        return result;
+    }
+    
+    private void setDiscerningFlowRouting(FacesContext context, boolean newValue) {
+        Map<Object, Object> attrs = context.getAttributes();
+        attrs.put(DISCERNING_FLOW_ROUTING_KEY, (Boolean) newValue);
     }
 
 

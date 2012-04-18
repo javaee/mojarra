@@ -320,7 +320,15 @@ public final class SAXCompiler extends Compiler {
         @Override
         public void characters(char[] ch, int start, int length)
         throws SAXException {
-            // no-op
+            if (!metadataProcessed) {
+                if (processingMetadata) {
+                    // PENDING consider optimizing this to be a no-op
+                    // on whitespace, but don't instantiate the String 
+                    // just to test that.
+                    this.unit.writeText(new String(ch, start, length));
+                }
+            }
+
         }
 
         @Override
