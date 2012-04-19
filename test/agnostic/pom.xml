@@ -28,6 +28,7 @@
         <module>shared</module>
         <module>composite</module>
         <module>stateSaving</module>
+        <module>renderKit</module>
     </modules>
     <properties>
         <webapp.partialStateSaving>true</webapp.partialStateSaving>

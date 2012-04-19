@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -499,8 +499,34 @@ public class RenderKitUtils {
         assert (writer != null);
         assert (component != null);
 
+        List<String> excludedAttributes = null;
+
+        renderXHTMLStyleBooleanAttributes(writer, component, excludedAttributes);
+    }
+    
+    /**
+     * <p>Renders the attributes from {@link #BOOLEAN_ATTRIBUTES}
+     * using <code>XHMTL</code> semantics (i.e., disabled="disabled").</p>
+     *
+     * @param writer writer the {@link ResponseWriter} to be used when writing
+     *  the attributes
+     * @param component the component
+     * @param excludedAttributes a <code>List</code> of attributes that are to be excluded from rendering
+     * @throws IOException if an error occurs writing the attributes
+     */
+    public static void renderXHTMLStyleBooleanAttributes(ResponseWriter writer,
+                                                         UIComponent component,
+                                                         List excludedAttributes)
+        throws IOException {
+
+        assert (writer != null);
+        assert (component != null);
+
         Map attrMap = component.getAttributes();
         for (String attrName : BOOLEAN_ATTRIBUTES) {
+            if (isExcludedAttribute(attrName, excludedAttributes)) {
+                continue;
+            }
             Object val = attrMap.get(attrName);
             if (val == null) {
                 continue;
@@ -778,6 +804,27 @@ public class RenderKitUtils {
         }
         return true;
 
+    }
+
+    /**
+     * <p>This method expects a <code>List</code> of attribute names that are to
+     * be excluded from rendering.  A <code>Renderer</code> may include an attribute name in this
+     * list for exclusion. For example, <code>h:link</code> may use the <code>disabled</code>
+     * attribute with a value of <code>true</code>.  However we don't want <code>disabled</code>
+     * passed through and rendered on the <code>span</code> element as it is invalid HTML.</p>
+     *
+     * @param attributeName the attribute name that is to be tested for exclusion
+     * @param excludedAttributes the list of attribute names that are to be excluded from rendering
+     * @return <code>true</code> if the attribute name is not in the exclude list.
+     */
+    private static boolean isExcludedAttribute(String attributeName, List excludedAttributes) {
+        if (null == excludedAttributes) {
+            return false;
+        }
+        if (excludedAttributes.contains(attributeName)) {
+            return true;
+        }
+        return false;
     }
 
     /**

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -45,6 +45,8 @@ import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import javax.faces.application.NavigationCase;
 import javax.faces.application.ProjectStage;
 import javax.faces.component.UIComponent;
@@ -59,6 +61,8 @@ public class OutcomeTargetLinkRenderer extends OutcomeTargetRenderer {
     private static final String NO_NAV_CASE =
           OutcomeTargetLinkRenderer.class.getName() + "_NO_NAV_CASE";
 
+    //Attributes that are to excluded from rendering for this renderer.
+    private static final List<String> EXCLUDED_ATTRIBUTES = Arrays.asList("disabled");
 
     // --------------------------------------------------- Methods from Renderer
 
@@ -128,7 +132,7 @@ public class OutcomeTargetLinkRenderer extends OutcomeTargetRenderer {
         writer.startElement("span", component);
         writeIdAndNameAttributes(context, writer, component);
         renderLinkCommonAttributes(writer, component);
-        renderPassThruAttributes(context, writer, component, ATTRIBUTES);
+        renderPassThruAttributes(context, writer, component, ATTRIBUTES, EXCLUDED_ATTRIBUTES);
         writeValue(writer, component);
 
         // shame that we can't put this in encodeEnd, but then we have to attempt to resolve the navigation case again
@@ -156,7 +160,7 @@ public class OutcomeTargetLinkRenderer extends OutcomeTargetRenderer {
         writer.writeURIAttribute("href", hrefVal, "outcome");
 
         renderLinkCommonAttributes(writer, component);
-        renderPassThruAttributes(context, writer, component, ATTRIBUTES);
+        renderPassThruAttributes(context, writer, component, ATTRIBUTES, null);
         writeValue(writer, component);
 
     }
