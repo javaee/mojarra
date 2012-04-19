@@ -58,10 +58,10 @@
 
 package com.sun.faces.facelets.tag.jsf;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.context.StateContext;
 import com.sun.faces.facelets.tag.jsf.core.FacetHandler;
 import com.sun.faces.util.MessageUtils;
-
 import javax.faces.FacesException;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.ProjectStage;
@@ -571,7 +571,16 @@ public final class ComponentSupport {
         }
         String facetName = getFacetName(parent);
         if (facetName == null) {
-            parent.getChildren().add(child);
+            if (child.getAttributes().containsKey(RIConstants.DYNAMIC_COMPONENT)) {
+                int childIndex = (Integer) child.getAttributes().get(RIConstants.DYNAMIC_COMPONENT);
+                if (childIndex >= parent.getChildCount() || childIndex == -1) {
+                    parent.getChildren().add(child);
+                } else {
+                    parent.getChildren().add(childIndex, child);
+                }                
+            } else {
+                parent.getChildren().add(child);
+            }
         } else {
             UIComponent existing = parent.getFacets().get(facetName);
             if (existing != null && existing != child) {

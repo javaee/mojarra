@@ -25,8 +25,9 @@
     </build>
     <modules>
         <module>ajax</module>
-        <module>shared</module>
         <module>composite</module>
+        <module>dynamic</module>
+        <module>shared</module>
         <module>stateSaving</module>
         <module>renderKit</module>
     </modules>

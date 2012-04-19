@@ -151,12 +151,13 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         else {
             /**
              * If we found a child that is dynamic, the actual parent might 
-             * have changed, so we will change it to the current parent of 
-             * the found child if they are different.
+             * have changed, so we need to remove it from the actual parent.
+             * The reapplyDynamicActions will then replay the actions and
+             * will make sure it ends up in the correct order.
              */
             if (c != null && c.getParent() != parent && 
                 c.getAttributes().containsKey(DYNAMIC_COMPONENT)) {
-                parent = c.getParent();
+                c.getParent().getChildren().remove(c);
             }
         }
         

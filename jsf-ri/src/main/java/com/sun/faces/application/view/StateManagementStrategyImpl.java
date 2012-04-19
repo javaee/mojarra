@@ -72,6 +72,7 @@ import javax.faces.view.ViewDeclarationLanguage;
 import javax.faces.view.ViewDeclarationLanguageFactory;
 import static com.sun.faces.RIConstants.DYNAMIC_ACTIONS;
 import static com.sun.faces.RIConstants.DYNAMIC_COMPONENT;
+import javax.faces.component.ContextCallback;
 
 /**
  * <p>
@@ -177,6 +178,7 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
         }
     
         saveDynamicActions(context, stateContext, stateMap);
+        clearDynamicActions(stateContext);
         return new Object[] { null, stateMap };
     }
 
@@ -326,9 +328,10 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
      * dynamic action list.
      * 
      * <p>
-     *  Note the restoring will auto-prune the dynamic actions list, by
-     *  applying the notion that an R1A1R2 is the same as R2, and a A1R1A2 is 
-     *  the same as A2.
+     *  If you remove a component, re-add it to the same parent and then remove 
+     *  it again, you only have to capture the FIRST remove. Similarly if you 
+     *  add a component, remove it, and then re-add it to the same parent you 
+     *  only need to capture the LAST add.
      * </p>
      * 
      * @param dynamicActionList the dynamic action list.
@@ -343,9 +346,14 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
             if (lastIndex == -1 || lastIndex == firstIndex) {
                 dynamicActionList.add(struct);
             } else {
-                dynamicActionList.remove(lastIndex);
-                dynamicActionList.remove(firstIndex);
-                dynamicActionList.add(struct);
+                if (ComponentStruct.ADD.equals(struct.action)) {
+                    dynamicActionList.remove(lastIndex);
+                    dynamicActionList.remove(firstIndex);
+                    dynamicActionList.add(struct);
+                }
+                if (ComponentStruct.REMOVE.equals(struct.action)) {
+                    dynamicActionList.remove(lastIndex);
+                }
             }
         }
     }
@@ -358,52 +366,66 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
      * @param struct the component struct.
      */
     private void restoreDynamicAdd(FacesContext context, Map<String, Object> state, ComponentStruct struct) {
-        UIComponent parent = findComponent(context, struct.parentClientId);
+        UIComponent parent = locateComponentByClientId(context, struct.parentClientId);
+
         if (parent != null) {
-            UIComponent child = findComponent(context, struct.clientId);
+            UIComponent child = locateComponentByClientId(context, struct.clientId);
+
+            /*
+             * If Facelets engine restored the child before us we are going to 
+             * use it, but we need to remove it before we can add it in the 
+             * correct place.
+             */
             if (child != null) {
-                /*
-                 * If Facelets engine restored the child before us we are going to 
-                 * use it, but we need to remove it (if we are not a facet), before 
-                 * we can add it in the correct place.
-                 */
                 if (struct.facetName == null) {
                     parent.getChildren().remove(child);
+                } else {
+                    parent.getFacets().remove(struct.facetName);
                 }
-            } else {
-                /*
-                 * We added a completely new dynamic component, so we need to 
-                 * restore it here. The state map should have saved it.
-                 */
+            }
+            
+            /*
+             * The child was not build previously, so we are going to check
+             * if the component was saved in the state.
+             */
+            if (child == null) {
                 StateHolderSaver saver = (StateHolderSaver) state.get(struct.clientId);
                 if (saver != null) {
                     child = (UIComponent) saver.restore(context);
-                } else {
-//                    // TODO change it to a logging statement.
-//                    System.out.println(
-//                            "Unable to find state for component with clientId '" + 
-//                            struct.clientId + "', not restoring it.");
                 }
             }
+
+            /*
+             * Are we adding =BACK= in a component that was not in the state,
+             * because it was added by the initial buildView and removed by
+             * another dynamic action?
+             */
+            if (child == null) {
+                StateContext stateContext = StateContext.getStateContext(context);
+                child = stateContext.getDynamicComponents().get(struct.clientId);
+            }
+
+            /*
+             * Now if we have the child we are going to add it back in.
+             */
             if (child != null) {
                 if (struct.facetName != null) {
                     parent.getFacets().put(struct.facetName, child);
                 } else {
-                    int childIndex = (Integer) child.getAttributes().get(DYNAMIC_COMPONENT);
+                    int childIndex = -1;
+                    if (child.getAttributes().containsKey(DYNAMIC_COMPONENT)) {
+                        childIndex = (Integer) child.getAttributes().get(DYNAMIC_COMPONENT);
+                    }
                     child.setId(struct.id);
-                    if (childIndex >= parent.getChildCount()) {
+                    if (childIndex >= parent.getChildCount() || childIndex == -1) {
                         parent.getChildren().add(child);
                     } else {
                         parent.getChildren().add(childIndex, child);
                     }
                     child.getClientId();
                 }
+                child.getAttributes().put(DYNAMIC_COMPONENT, child.getParent().getChildren().indexOf(child));
             }
-        } else {
-//            // TODO change it to a logging statement.
-//            System.out.println(
-//                    "Unable to find parent component with clientId '" + 
-//                    struct.parentClientId + "', not adding child.");
         }
     }
     
@@ -414,15 +436,12 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
      * @param struct the component struct.
      */
     private void restoreDynamicRemove(FacesContext context, ComponentStruct struct) {
-        UIComponent child = findComponent(context, struct.clientId);
+        UIComponent child = locateComponentByClientId(context, struct.clientId);
         if (child != null) {
+            StateContext stateContext = StateContext.getStateContext(context);
+            stateContext.getDynamicComponents().put(struct.clientId, child);
             UIComponent parent = child.getParent();
             parent.getChildren().remove(child);
-        } else {
-            // TODO change it to a logging statement.
-            System.out.println(
-                    "Unable to find component with clientId '" + 
-                    struct.clientId + "', no need to remove it.");
         }
     }
     
@@ -432,15 +451,23 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
      * @param context the Faces context.
      * @param clientId the client id of the component to find.
      */
-    private UIComponent findComponent(final FacesContext context, final String clientId) {
-        UIComponent result = context.getViewRoot().findComponent(clientId);
-        if (result == null) {
+    private UIComponent locateComponentByClientId(final FacesContext context, final String clientId) {
+        final List<UIComponent> found = new ArrayList<UIComponent>();
+        UIComponent result = null;
+
+        context.getViewRoot().invokeOnComponent(context, clientId, new ContextCallback() {
+
+            public void invokeContextCallback(FacesContext context, UIComponent target) {
+                found.add(target);
+            }
+        });
+
+        if (found.isEmpty()) {
             /*
              * Since we did not find it the cheaper way we need to assume there
              * is a UINamingContainer that does not prepend its ID. So we are 
              * going to have to walk the tree to find it.
              */
-            final List<UIComponent> found = new ArrayList<UIComponent>();
             VisitContext visitContext = VisitContext.createVisitContext(context);
             context.getViewRoot().visitTree(visitContext, new VisitCallback() {
                 public VisitResult visit(VisitContext visitContext, UIComponent component) {
@@ -452,11 +479,99 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
                     return result;
                 }
             });
-            if (!found.isEmpty()) {
-                result = found.get(0);
-            }    
         }
+        if (!found.isEmpty()) {
+            result = found.get(0);
+        }    
         return result;
     }
 
+    /**
+     * Reapply the dynamic actions after Facelets reapply.
+     * 
+     * <p>
+     *   Note a precondition to this method is that tracking view modifications
+     *   is turned off during the execution of this method. The caller of this
+     *   method is responsible for turning tracking view modifications off and
+     *   on as required.
+     * </p>
+     * 
+     * @param context the Faces context.
+     */
+    public void reapplyDynamicActions(FacesContext context) {
+        StateContext stateContext = StateContext.getStateContext(context);
+        List<ComponentStruct> actions = stateContext.getDynamicActions();
+        for(ComponentStruct action : actions) {
+            if (ComponentStruct.REMOVE.equals(action.action)) {
+                reapplyDynamicRemove(context, action);
+            }
+            if (ComponentStruct.ADD.equals(action.action)) {
+                reapplyDynamicAdd(context, action);
+            }
+        }
+    }
+
+    /**
+     * Reapply the dynamic remove after Facelets reapply.
+     * 
+     * @param context the Faces context.
+     * @param struct the component struct.
+     */
+    private void reapplyDynamicRemove(FacesContext context, ComponentStruct struct) {
+        UIComponent child = locateComponentByClientId(context, struct.clientId);
+        if (child != null) {
+            StateContext stateContext = StateContext.getStateContext(context);
+            stateContext.getDynamicComponents().put(struct.clientId, child);
+            UIComponent parent = child.getParent();
+            parent.getChildren().remove(child);
+        }
+    }
+
+    /*
+     * Reapply the dynamic add after Facelets reapply.
+     * 
+     * @param context the Faces context.
+     * @param struct the component struct.
+     */
+    private void reapplyDynamicAdd(FacesContext context, ComponentStruct struct) {
+        UIComponent parent = locateComponentByClientId(context, struct.parentClientId);
+        if (parent != null) {
+            UIComponent child = locateComponentByClientId(context, struct.clientId);
+            
+            if (child == null) {
+                StateContext stateContext = StateContext.getStateContext(context);
+                child = stateContext.getDynamicComponents().get(struct.clientId);
+            }
+            
+            if (child != null) {
+                if (struct.facetName != null) {
+                    parent.getFacets().remove(struct.facetName);
+                    parent.getFacets().put(struct.facetName, child);
+                    child.getClientId();
+                } else {
+                    int childIndex = -1;
+                    if (child.getAttributes().containsKey(DYNAMIC_COMPONENT)) {
+                        childIndex = (Integer) child.getAttributes().get(DYNAMIC_COMPONENT);
+                    }
+                    child.setId(struct.id);
+                    if (childIndex >= parent.getChildCount() || childIndex == -1) {
+                        parent.getChildren().add(child);
+                    } else {
+                        parent.getChildren().add(childIndex, child);
+                    }
+                    child.getClientId();
+                    child.getAttributes().put(DYNAMIC_COMPONENT, child.getParent().getChildren().indexOf(child));
+                }
+            }
+        }
+    }
+
+    /**
+     * Clear out the dynamic actions.
+     * 
+     * @param stateContext the state context.
+     */
+    private void clearDynamicActions(StateContext stateContext) {
+        stateContext.getDynamicActions().clear();
+    }
 }

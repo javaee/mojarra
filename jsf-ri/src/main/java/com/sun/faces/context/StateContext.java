@@ -57,6 +57,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 import static com.sun.faces.RIConstants.DYNAMIC_CHILD_COUNT;
 import static com.sun.faces.RIConstants.DYNAMIC_COMPONENT;
 
@@ -249,6 +250,15 @@ public class StateContext {
         return ((modListener != null) ? modListener.getDynamicActions() : null);
     }
 
+    /**
+     * Get the hash map of dynamic components.
+     * 
+     * @return the hash map of dynamic components.
+     */
+    public HashMap<String, UIComponent> getDynamicComponents() {
+        return ((modListener != null) ? modListener.getDynamicComponents() : null);
+    }
+
     // ---------------------------------------------------------- Nested Classes
 
 
@@ -266,6 +276,10 @@ public class StateContext {
          * Stores the list of adds/removes.
          */
         private List<ComponentStruct> dynamicActions;
+        /**
+         * Stores the hash map of dynamic components.
+         */
+        private transient HashMap<String, UIComponent> dynamicComponents;
 
         /**
          * Constructor.
@@ -290,6 +304,20 @@ public class StateContext {
             return dynamicActions;
         }
 
+        /**
+         * Get the hash map of dynamic components.
+         * 
+         * @return the hash map of dynamic components.
+         */
+        public HashMap<String, UIComponent> getDynamicComponents() {
+            synchronized(this) {
+                if (dynamicComponents == null) {
+                    dynamicComponents = new HashMap<String, UIComponent>();
+                }
+            }
+            return dynamicComponents;
+        }
+        
         /**
          * Process the add/remove event.
          * 
@@ -339,6 +367,7 @@ public class StateContext {
                     struct.action = ComponentStruct.REMOVE;
                     struct.clientId = component.getClientId(context);
                     struct.id = component.getId();
+                    getDynamicComponents().put(struct.clientId, component);
                     getDynamicActions().add(struct);
                 }            
             }
@@ -350,9 +379,20 @@ public class StateContext {
          * @param context the Faces context.
          * @param component the UI component to add to the list as an ADD.
          */
-        private void handleAdd(FacesContext context, UIComponent component) {            
+        private void handleAdd(FacesContext context, UIComponent component) {
             if (!component.isTransient() && !hasTransientAncestor(component)) {
-                if (component.getParent() != null && component.getParent().isInView()) {                    
+                if (component.getParent() != null && component.getParent().isInView()) {
+                    String id = component.getId();
+                    
+                    /*
+                    * Since adding a component, can mean you are really reparenting 
+                    * it, we need to make sure the OLD clientId is not cached, we do 
+                    * that by setting the id.
+                    */
+                    if (id != null) {
+                        component.setId(id);
+                    }
+
                     if (component.getParent().getFacets().containsValue(component)) {
                         Map facets = component.getParent().getFacets();
                         Iterator entries = facets.entrySet().iterator();
@@ -368,6 +408,7 @@ public class StateContext {
                                 struct.parentClientId = component.getParent().getClientId(context);
                                 struct.clientId = component.getClientId(context);
                                 struct.id = component.getId();
+                                getDynamicComponents().put(struct.clientId, component);
                                 getDynamicActions().add(struct);
                             }
                         }
@@ -381,6 +422,7 @@ public class StateContext {
                         struct.parentClientId = component.getParent().getClientId(context);
                         struct.clientId = component.getClientId(context);
                         struct.id = component.getId();
+                        getDynamicComponents().put(struct.clientId, component);
                         getDynamicActions().add(struct);
                     }
                 }

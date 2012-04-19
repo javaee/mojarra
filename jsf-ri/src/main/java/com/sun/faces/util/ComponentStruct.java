@@ -61,7 +61,6 @@ public class ComponentStruct implements StateHolder {
     public String parentClientId;
     public String id;
     public String clientId;
-    public int indexOfChildInParent = -1;
     public String facetName;
 
     public boolean isTransient() {
