@@ -572,6 +572,8 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
      * @param stateContext the state context.
      */
     private void clearDynamicActions(StateContext stateContext) {
-        stateContext.getDynamicActions().clear();
+        if (stateContext != null && stateContext.getDynamicActions() != null) {
+            stateContext.getDynamicActions().clear();
+        }
     }
 }
