@@ -30,6 +30,7 @@
         <module>shared</module>
         <module>stateSaving</module>
         <module>renderKit</module>
+        <module>vdl</module>
     </modules>
     <properties>
         <webapp.partialStateSaving>true</webapp.partialStateSaving>
