@@ -47,6 +47,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import static org.junit.Assert.assertTrue;
 
 public class FlowEntryExitIT {
@@ -124,7 +125,40 @@ public class FlowEntryExitIT {
         
         pageText = page.getBody().asText();
         assertTrue(pageText.indexOf("First page in the flow") != -1);
-        assertTrue(pageText.contains("basicFlow"));        
+        assertTrue(pageText.contains("basicFlow"));   
+        
+    }
+    
+    @Test
+    public void testFacesFlowScope() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl);
+        
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("start");
+        page = button.click();
+
+        String pageText = page.getBody().asText();
+        assertTrue(pageText.indexOf("First page in the flow") != -1);
+        assertTrue(pageText.contains("basicFlow"));
+
+        button = (HtmlSubmitInput) page.getElementById("next_a");
+        page = button.click();
+        
+        HtmlTextInput input = (HtmlTextInput) page.getElementById("input");
+        final String facesFlowScopeValue = "Value in faces flow scope";
+        input.setValueAttribute(facesFlowScopeValue);
+        
+        button = (HtmlSubmitInput) page.getElementById("next");
+        page = button.click();
+        
+        assertTrue(page.asText().contains(facesFlowScopeValue));
+        
+        button = (HtmlSubmitInput) page.getElementById("return");
+        page = button.click();
+        
+        assertTrue(page.asText().contains("return page"));
+        assertTrue(!page.asText().contains(facesFlowScopeValue));
+        
+        
         
     }
 }

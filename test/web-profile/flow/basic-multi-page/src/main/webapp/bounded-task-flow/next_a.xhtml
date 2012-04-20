@@ -60,6 +60,8 @@
         <p>Second page in the flow</p>
         <p>Flow bean name: #{flowBean.name}</p>
         
+        <p>value: <h:inputText id="input" value="#{facesFlowScope.value}" /></p>
+        
         <p><h:commandButton id="start" value="back" action="bounded-task-flow" /></p>
         <p><h:commandButton id="next" value="next" action="next_b" /></p>
         

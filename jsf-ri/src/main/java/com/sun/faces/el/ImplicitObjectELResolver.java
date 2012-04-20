@@ -59,6 +59,7 @@ import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.component.CompositeComponentStackManager;
 import java.util.HashMap;
+import javax.faces.flow.FlowHandler;
 
 public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
 
@@ -68,6 +69,7 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
     {
         String[] implictNames = new String[]{
         "application", "applicationScope", "cc", "component", "cookie", "facesContext",
+        "facesFlowScope",
         "header", "headerValues", "initParam", "param", "paramValues",
         "request", "requestScope", "resource", "session", "sessionScope", 
         "view", "viewScope" };
@@ -140,6 +142,13 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
                 case FACES_CONTEXT:
                     context.setPropertyResolved(true);
                     return facesContext;
+                case FACES_FLOW:
+                    FlowHandler flowHandler = facesContext.getApplication().getFlowHandler();
+                    Map<Object, Object> flowScope = flowHandler.getCurrentFlowScope();
+                    if (null != flowScope) {
+                        context.setPropertyResolved(true);
+                    }
+                    return flowScope;
                 case HEADER:
                     context.setPropertyResolved(true);
                     return extCtx.getRequestHeaderMap();

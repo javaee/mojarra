@@ -40,10 +40,13 @@
  */
 package javax.faces.flow;
 
+import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 public abstract class FlowHandler {
+    
+    public abstract Map<Object, Object> getCurrentFlowScope();
     
     public abstract Flow getFlow(String id);
     

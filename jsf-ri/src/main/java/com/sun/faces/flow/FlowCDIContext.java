@@ -70,6 +70,8 @@ public class FlowCDIContext implements Context, Serializable {
     
     private Map<Contextual<?>, String> flowIds;
     
+    private static final FlowScopeMapKey FLOW_SCOPE_MAP_KEY = new FlowScopeMapKey();
+    
     // This should be vended from a factory for decoration purposes.
     
     public FlowCDIContext(Map<Contextual<?>, String> flowIds) {
@@ -90,6 +92,11 @@ public class FlowCDIContext implements Context, Serializable {
         ExternalContext extContext = context.getExternalContext();
         Map<String, Object> sessionMap = extContext.getSessionMap();
         Flow currentFlow = getCurrentFlow(context);
+        
+        if (null == currentFlow) {
+            return null;
+        }
+        
         String flowBeansForWindowId = currentFlow.getIdForCurrentWindow(context) + "_beans";
         result = (Map<Contextual<?>, Object>) sessionMap.get(flowBeansForWindowId);
         if (null == result) {
@@ -162,6 +169,19 @@ public class FlowCDIContext implements Context, Serializable {
         
     }
     
+    private static class FlowScopeMapKey implements Contextual<Object> {
+
+        public Object create(CreationalContext<Object> cc) {
+            return cc;
+        }
+
+        public void destroy(Object t, CreationalContext<Object> cc) {
+            Map<Object,Object> flowScope = (Map<Object,Object>) t;
+            flowScope.clear();
+        }
+        
+    }
+    
     
     // </editor-fold>    
 
@@ -203,13 +223,27 @@ public class FlowCDIContext implements Context, Serializable {
     
     // </editor-fold>
 
-    // <editor-fold defaultstate="collapsed" desc="Called from code related to flow">       
+    // <editor-fold defaultstate="collapsed" desc="Called from code related to flow">  
     
+    static Map<Object, Object> getCurrentFlowScope() {
+        Map<Contextual<?>, Object> flowScopedBeanMap = getFlowScopedBeanMapForCurrentFlow();
+        Map<Object, Object> result = null;
+        if (null != flowScopedBeanMap) {
+            result = (Map<Object, Object>) flowScopedBeanMap.get(FLOW_SCOPE_MAP_KEY);
+            if (null == result) {
+                result = new ConcurrentHashMap<Object, Object>();
+                flowScopedBeanMap.put(FLOW_SCOPE_MAP_KEY, result);
+            }
+        }
+        return result; 
+    }
+        
     static void flowExited() {
         Map<Contextual<?>, Object> flowScopedBeanMap = getFlowScopedBeanMapForCurrentFlow();
         Map<Contextual<?>, CreationalContext<?>> creationalMap = getFlowScopedCreationalMapForCurrentFlow();
         assert(!flowScopedBeanMap.isEmpty());
         assert(!creationalMap.isEmpty());
+        List<Contextual<?>> flowScopedBeansToRemove = new ArrayList<Contextual<?>>();
         
         for (Entry<Contextual<?>, Object> entry : flowScopedBeanMap.entrySet()) {
             Contextual owner = entry.getKey();
@@ -217,7 +251,23 @@ public class FlowCDIContext implements Context, Serializable {
             CreationalContext creational = creationalMap.get(owner);
             
             owner.destroy(bean, creational);
+            flowScopedBeansToRemove.add(owner);
         }
+        
+        for (Contextual<?> cur : flowScopedBeansToRemove) {
+            flowScopedBeanMap.remove(cur);
+            creationalMap.remove(cur);
+        }
+        
+    }
+    
+    static void flowEntered() {
+        Map<Contextual<?>, Object> flowScopedBeanMap = getFlowScopedBeanMapForCurrentFlow();
+        Map<Contextual<?>, CreationalContext<?>> creationalMap = getFlowScopedCreationalMapForCurrentFlow();
+        
+        
+        
+        getCurrentFlowScope();
         
     }
 

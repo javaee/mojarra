@@ -41,7 +41,6 @@
 package javax.faces.flow;
 
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -53,8 +52,50 @@ public class Flow implements Serializable {
     
     private static final long serialVersionUID = -7506626306507232154L;
     
+    public Flow() {
+    }
+    
     private String id;
+    private String defaultNodeId;
+    private List<ViewNode> views;
+    private Map<String,NavigationCase> returns = new ConcurrentHashMap<String, NavigationCase>();
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Flow other = (Flow) obj;
+        if ((this.id == null) ? (other.id != null) : !this.id.equals(other.id)) {
+            return false;
+        }
+        if ((this.defaultNodeId == null) ? (other.defaultNodeId != null) : !this.defaultNodeId.equals(other.defaultNodeId)) {
+            return false;
+        }
+        if (this.views != other.views && (this.views == null || !this.views.equals(other.views))) {
+            return false;
+        }
+        if (this.returns != other.returns && (this.returns == null || !this.returns.equals(other.returns))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 37 * hash + (this.id != null ? this.id.hashCode() : 0);
+        hash = 37 * hash + (this.defaultNodeId != null ? this.defaultNodeId.hashCode() : 0);
+        hash = 37 * hash + (this.views != null ? this.views.hashCode() : 0);
+        hash = 37 * hash + (this.returns != null ? this.returns.hashCode() : 0);
+        return hash;
+    }
+    
+    
+    
     public String getId() {
         return id;
     }
@@ -63,8 +104,6 @@ public class Flow implements Serializable {
         this.id = id;
     }
     
-    private String defaultNodeId;
-
     public String getDefaultNodeId() {
         return defaultNodeId;
     }
@@ -77,7 +116,6 @@ public class Flow implements Serializable {
         return getId() + "/" + getDefaultNodeId();
     }
     
-    private List<ViewNode> views;
 
     public List<ViewNode> getViews() {
         return views;
@@ -103,8 +141,6 @@ public class Flow implements Serializable {
         return result;
         
     }
-    
-    private Map<String,NavigationCase> returns = new ConcurrentHashMap<String, NavigationCase>();
     
     public Map<String,NavigationCase> getReturns(FacesContext context) {
         return returns;

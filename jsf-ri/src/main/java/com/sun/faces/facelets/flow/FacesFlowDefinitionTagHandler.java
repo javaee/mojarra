@@ -125,6 +125,9 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
         Flow newFlow = flowHandler.getFlow(flowId);
         
         if (null == newFlow) {
+            
+            // In the current implementation, this is the only place where a flow 
+            // is instantiated.
 
             newFlow = new Flow();
             newFlow.setId(flowId);

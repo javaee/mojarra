@@ -64,6 +64,11 @@ public class FlowHandlerImpl extends FlowHandler {
     private Map<String, Flow> flows;
 
     @Override
+    public Map<Object, Object> getCurrentFlowScope() {
+        return FlowCDIContext.getCurrentFlowScope();
+    }
+    
+    @Override
     public Flow getFlow(String id) {
         Flow result = flows.get(id);
         
@@ -138,14 +143,17 @@ public class FlowHandlerImpl extends FlowHandler {
         
         String  sourceFlowId = getSourceFlowId(context, src),
                 targetFlowId = getTargetFlowId(context, target);
-        if (!sourceFlowId.equals(targetFlowId)) {
+        Flow sourceFlow = this.getFlowByNodeId(sourceFlowId),
+             targetFlow = this.getFlowByNodeId(targetFlowId);
+        if (    (null == sourceFlow && null != targetFlow) ||
+                (null != sourceFlow && null == targetFlow) ||
+                !sourceFlow.equals(targetFlow) ) {
             popFlow(context);
+            if (null != targetFlow) {
+                pushFlow(context, targetFlow);
+            }
         }
         
-        Flow newFlow = this.getFlowByNodeId(targetFlowId);
-        if (null != newFlow) {
-            pushFlow(context, newFlow);
-        }
     }
     
     
@@ -154,6 +162,7 @@ public class FlowHandlerImpl extends FlowHandler {
     private void pushFlow(FacesContext context, Flow toPush) {
         Deque<Flow> flowStack = getFlowStack(context);
         flowStack.push(toPush);
+        FlowCDIContext.flowEntered();
     }
     
     private Flow peekFlow(FacesContext context) {
