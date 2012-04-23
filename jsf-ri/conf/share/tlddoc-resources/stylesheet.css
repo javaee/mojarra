@@ -555,7 +555,7 @@ a[href^="composite/insertChildren.html"], a[href^="composite/insertFacet.html"],
                  border-left-width:thin; border-right:none;
                  border-top:none; border-bottom:none; border-color:orange }
 
-a[href^="viewAction.html"], a[href^="f/viewAction.html"], a[href^="h/inputFile.html"] { cursor: url(changed_added_2_2_cursor.cur), auto;
+a[href^="faces-flow-definition.html"], a[href^="j/faces-flow-definition.html"], a[href^="j/tld-frame.html"], a[href^="viewAction.html"], a[href^="f/viewAction.html"], a[href^="h/inputFile.html"] { cursor: url(changed_added_2_2_cursor.cur), auto;
                  background: url(changed_added_2_2.png); 
                  padding-left:0.2em; border-left:solid;
                  border-left-width:thin; border-right:none;
