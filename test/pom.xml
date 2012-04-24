@@ -11,6 +11,7 @@
     <name>Mojarra 2.1.x Test - POM</name>
     <modules>
         <module>agnostic</module>
+        <module>web-profile</module>
         <module>cluster</module>
         <module>selenium</module>
         <module>virtual</module>
