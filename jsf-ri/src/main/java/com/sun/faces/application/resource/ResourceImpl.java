@@ -174,7 +174,7 @@ public class ResourceImpl extends Resource implements Externalizable {
      * @see javax.faces.application.Resource#getInputStream()
      */
     public InputStream getInputStream() throws IOException {
-
+		initResourceInfo();
         return resourceInfo.getHelper().getInputStream(resourceInfo,
                                                        FacesContext.getCurrentInstance());
 
@@ -280,6 +280,7 @@ public class ResourceImpl extends Resource implements Externalizable {
             uri += "?ln=" + getLibraryName();
         }
         String version = "";
+        initResourceInfo();
         if (resourceInfo.getLibraryInfo() != null && resourceInfo.getLibraryInfo().getVersion() != null) {
             version += resourceInfo.getLibraryInfo().getVersion().toString();
         }
@@ -341,6 +342,7 @@ public class ResourceImpl extends Resource implements Externalizable {
               context.getExternalContext().getRequestHeaderMap();
 
         if (requestHeaders.containsKey(IF_MODIFIED_SINCE)) {
+            initResourceInfo();
             long lastModifiedOfResource = resourceInfo.getLastModified(context);
             long lastModifiedHeader = getIfModifiedHeader(context.getExternalContext());
             return lastModifiedOfResource > lastModifiedHeader;
@@ -411,15 +413,28 @@ public class ResourceImpl extends Resource implements Externalizable {
         setContentType((String) in.readObject());
         initialTime = in.readLong();
         maxAge = in.readLong();
-
+		/*
         ResourceManager manager =
               ApplicationAssociate.getInstance(FacesContext.getCurrentInstance().getExternalContext()).getResourceManager();
         resourceInfo = manager.findResource(getLibraryName(),
                                             getResourceName(),
                                             getContentType(),
                                             FacesContext.getCurrentInstance());
+		*/
     }
 
+    private void initResourceInfo(){
+        if(resourceInfo!=null){
+            return;
+        }
+        ResourceManager manager =
+                ApplicationAssociate.getInstance(FacesContext.getCurrentInstance().getExternalContext()).getResourceManager();
+        resourceInfo = manager.findResource(getLibraryName(),
+                getResourceName(),
+                getContentType(),
+                FacesContext.getCurrentInstance());
+    }
+	
     // --------------------------------------------------------- Private Methods
 
 
