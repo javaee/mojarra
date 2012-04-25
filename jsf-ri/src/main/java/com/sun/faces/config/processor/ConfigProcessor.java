@@ -63,6 +63,17 @@ public interface ConfigProcessor {
      */
     public void setNext(ConfigProcessor nextProcessor);
 
+    /**
+     * <p>Return the next config processor in the chain, or null.</p>
+     * 
+     */
+    public ConfigProcessor getNext();
+    
+    /*
+     * Called to initialize the per-application metadata used by the ConfigProcessor
+     */
+    
+    public void initializeClassMetadataMap(ServletContext sc);
 
     /**
      * <p>

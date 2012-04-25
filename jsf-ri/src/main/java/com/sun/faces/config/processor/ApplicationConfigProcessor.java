@@ -288,22 +288,22 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                             } else if (DEFAULT_RENDERKIT_ID.equals(n.getLocalName())) {
                                 setDefaultRenderKitId(app, n);
                             } else if (ACTION_LISTENER.equals(n.getLocalName())) {
-                                addActionListener(app, n);
+                                addActionListener(sc, app, n);
                             } else if (NAVIGATION_HANDLER.equals(n.getLocalName())) {
-                                setNavigationHandler(app, n);
+                                setNavigationHandler(sc, app, n);
                             } else if (VIEW_HANDLER.equals(n.getLocalName())) {
                                 String viewHandler = getNodeText(n);
                                 if (viewHandler != null) {
                                     viewHandlers.put(viewHandler, n);
                                 }
                             } else if (STATE_MANAGER.equals(n.getLocalName())) {
-                                setStateManager(app, n);
+                                setStateManager(sc, app, n);
                             } else if (EL_RESOLVER.equals(n.getLocalName())) {
-                                addELResolver(associate, n);
+                                addELResolver(sc, associate, n);
                             } else if (PROPERTY_RESOLVER.equals(n.getLocalName())) {
-                                addPropertyResolver(associate, n);
+                                addPropertyResolver(sc, associate, n);
                             } else if (VARIABLE_RESOLVER.equals(n.getLocalName())) {
-                                addVariableResolver(associate, n);
+                                addVariableResolver(sc, associate, n);
                             } else if (DEFAULT_LOCALE.equals(n.getLocalName())) {
                                 setDefaultLocale(app, n);
                             } else if (SUPPORTED_LOCALE.equals(n.getLocalName())) {
@@ -311,9 +311,9 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                             } else if (RESOURCE_BUNDLE.equals(n.getLocalName())) {
                                 addResouceBundle(associate, n);
                             } else if (RESOURCE_HANDLER.equals(n.getLocalName())) {
-                                setResourceHandler(app, n);
+                                setResourceHandler(sc, app, n);
                             } else if (SYSTEM_EVENT_LISTENER.equals(n.getLocalName())) {
-                                addSystemEventListener(app, n);
+                                addSystemEventListener(sc, app, n);
                             } else if (DEFAULT_VALIDATORS.equals(n.getLocalName())) {
                                 if (defaultValidatorIds == null) {
                                     defaultValidatorIds = new LinkedHashSet<String>();
@@ -332,7 +332,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
         registerDefaultValidatorIds(app, defaultValidatorIds);
 
         // perform any special processing for ViewHandlers...
-        processViewHandlers(app, viewHandlers);
+        processViewHandlers(sc, app, viewHandlers);
 
         // process NamedEvent annotations, if any
         processAnnotations(NamedEvent.class);
@@ -452,14 +452,14 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
 
     }
 
-    private void addActionListener(Application application,
+    private void addActionListener(ServletContext sc, Application application,
                                    Node actionListener) {
 
         if (actionListener != null) {
 
             String listener = getNodeText(actionListener);
             if (listener != null) {
-                Object instance = createInstance(listener,
+                Object instance = createInstance(sc, listener,
                                                  ActionListener.class,
                                                  application.getActionListener(),
                                                  actionListener);
@@ -478,20 +478,20 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
     }
 
 
-    private void setNavigationHandler(Application application,
+    private void setNavigationHandler(ServletContext sc, Application application,
                                       Node navigationHandler) {
 
         if (navigationHandler != null) {
 
             String handler = getNodeText(navigationHandler);
             if (handler != null) {
-                Class<?> rootType = findRootType(handler,
+                Class<?> rootType = findRootType(sc, handler,
                                                  navigationHandler,
                                                  new Class[] {
                                                        ConfigurableNavigationHandler.class,
                                                        NavigationHandler.class
                                                      });
-                Object instance = createInstance(handler,
+                Object instance = createInstance(sc, handler,
                                                  ((rootType != null) ? rootType : NavigationHandler.class),
                                                  application.getNavigationHandler(),
                                                  navigationHandler);
@@ -511,13 +511,13 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
     }
 
 
-    private void setStateManager(Application application,
+    private void setStateManager(ServletContext sc, Application application,
                                  Node stateManager) {
 
         if (stateManager != null) {
             String manager = getNodeText(stateManager);
             if (manager != null) {
-                Object instance = createInstance(manager,
+                Object instance = createInstance(sc, manager,
                                                  StateManager.class,
                                                  application.getStateManager(),
                                                  stateManager);
@@ -535,13 +535,13 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
 
     }
 
-    private void setViewHandler(Application application,
+    private void setViewHandler(ServletContext sc, Application application,
                                 Node viewHandler) {
 
         if (viewHandler != null) {
             String handler = getNodeText(viewHandler);
             if (handler != null) {
-                Object instance = createInstance(handler,
+                Object instance = createInstance(sc, handler,
                                                  ViewHandler.class,
                                                  application.getViewHandler(),
                                                  viewHandler);
@@ -560,7 +560,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
     }
 
 
-    private void addELResolver(ApplicationAssociate associate,
+    private void addELResolver(ServletContext sc, ApplicationAssociate associate,
                                Node elResolver) {
 
         if (elResolver != null) {
@@ -574,7 +574,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                 }
                 String elResolverClass = getNodeText(elResolver);
                 if (elResolverClass != null) {
-                    Object elRes = createInstance(elResolverClass,
+                    Object elRes = createInstance(sc, elResolverClass,
                                                   ELResolver.class,
                                                   null,
                                                   elResolver);
@@ -595,7 +595,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
 
 
     @SuppressWarnings("deprecation")
-    private void addPropertyResolver(ApplicationAssociate associate,
+    private void addPropertyResolver(ServletContext sc, ApplicationAssociate associate,
                                      Node propertyResolver) {
 
         if (propertyResolver != null) {
@@ -607,7 +607,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
 
                 String resolver = getNodeText(propertyResolver);
                 if (resolver != null) {
-                    resolverImpl = createInstance(resolver,
+                    resolverImpl = createInstance(sc, resolver,
                                                   PropertyResolver.class,
                                                   resolverImpl,
                                                   propertyResolver);
@@ -629,7 +629,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
 
 
     @SuppressWarnings("deprecation")
-    private void addVariableResolver(ApplicationAssociate associate,
+    private void addVariableResolver(ServletContext sc, ApplicationAssociate associate,
                                      Node variableResolver) {
 
         if (variableResolver != null) {
@@ -640,7 +640,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                 }
                 String resolver = getNodeText(variableResolver);
                 if (resolver != null) {
-                    resolverImpl = createInstance(resolver,
+                    resolverImpl = createInstance(sc, resolver,
                                                   VariableResolver.class,
                                                   resolverImpl,
                                                   variableResolver);
@@ -761,12 +761,12 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
     }
 
 
-    private void setResourceHandler(Application application, Node resourceHandler) {
+    private void setResourceHandler(ServletContext sc, Application application, Node resourceHandler) {
 
         if (resourceHandler != null) {
             String handler = getNodeText(resourceHandler);
             if (handler != null) {
-                Object instance = createInstance(handler,
+                Object instance = createInstance(sc, handler,
                                                  ResourceHandler.class,
                                                  application.getResourceHandler(),
                                                  resourceHandler);
@@ -784,7 +784,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
     }
 
 
-    private void addSystemEventListener(Application application,
+    private void addSystemEventListener(ServletContext sc, Application application,
                                         Node systemEventListener) {
 
         NodeList children = systemEventListener.getChildNodes();
@@ -805,7 +805,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
         }
         if (listenerClass != null) {
             SystemEventListener selInstance = (SystemEventListener)
-                  createInstance(listenerClass,
+                  createInstance(sc, listenerClass,
                                  SystemEventListener.class,
                                  null,
                                  systemEventListener);
@@ -815,7 +815,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                     // SystemEvent.class
                     //noinspection unchecked
                     Class<? extends SystemEvent> eventClazz =
-                          (Class<? extends SystemEvent>) loadClass(eventClass, this, null);
+                          (Class<? extends SystemEvent>) loadClass(sc, eventClass, this, null);
                     // If there is a sourceClass, use it, otherwise use null
                     Class sourceClazz =
                           (sourceClass != null && sourceClass.length() != 0)
@@ -842,7 +842,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
     }
 
 
-    private void processViewHandlers(Application app,
+    private void processViewHandlers(ServletContext sc, Application app,
                                      LinkedHashMap<String, Node> viewHandlers) {
         // take special action on the ViewHandlers that have been
         // configured for the application.  If any of the ViewHandlers
@@ -861,7 +861,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
             }
         }
         for (Node n : viewHandlers.values()) {
-            setViewHandler(app, n);
+            setViewHandler(sc, app, n);
         }
     }
 

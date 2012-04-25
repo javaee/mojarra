@@ -156,7 +156,7 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
                  .getElementsByTagNameNS(namespace, RENDERKIT);
 
             if (renderkits != null && renderkits.getLength() > 0) {
-                addRenderKits(renderkits, document, renderers, behaviorRenderers, rkf);
+                addRenderKits(sc, renderkits, document, renderers, behaviorRenderers, rkf);
             }
         }
 
@@ -176,7 +176,7 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
             }
             
             for (Map.Entry<Document,List<Node>> renderEntry : entry.getValue().entrySet()) {
-                addRenderers(rk, renderEntry.getKey(), renderEntry.getValue());
+                addRenderers(sc, rk, renderEntry.getKey(), renderEntry.getValue());
             }
         }
         // now add the accumulated behavior renderers to the RenderKits
@@ -190,7 +190,7 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
             }
             
             for (Map.Entry<Document,List<Node>> renderEntry : entry.getValue().entrySet()) {
-                addClientBehaviorRenderers(rk, renderEntry.getKey(), renderEntry.getValue());
+                addClientBehaviorRenderers(sc, rk, renderEntry.getKey(), renderEntry.getValue());
             }
         }
         invokeNext(sc, documentInfos);
@@ -201,7 +201,7 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
     // --------------------------------------------------------- Private Methods
 
 
-    private void addRenderKits(NodeList renderKits,
+    private void addRenderKits(ServletContext sc, NodeList renderKits,
                                Document owningDocument,
                                Map<String,Map<Document,List<Node>>> renderers,
                                Map<String,Map<Document,List<Node>>> behaviorRenderers,
@@ -239,7 +239,7 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
             if (rkClass != null) {
                 RenderKit previous = rkf.getRenderKit(FacesContext.getCurrentInstance(), 
                         rkId);
-                RenderKit rk = (RenderKit) createInstance(rkClass,
+                RenderKit rk = (RenderKit) createInstance(sc, rkClass,
                                                           RenderKit.class,
                                                           previous,
                                                           renderKit);
@@ -284,7 +284,7 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
 
     }
 
-    private void addRenderers(RenderKit renderKit,
+    private void addRenderers(ServletContext sc, RenderKit renderKit,
                               Document owningDocument,
                               List<Node> renderers) {
 
@@ -310,7 +310,7 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
             if ((rendererFamily != null)
                   && (rendererType != null)
                   && (rendererClass != null)) {
-                Renderer r = (Renderer) createInstance(rendererClass,
+                Renderer r = (Renderer) createInstance(sc, rendererClass,
                                                        Renderer.class,
                                                        null,
                                                        renderer);
@@ -331,7 +331,7 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
 
     }
 
-    private void addClientBehaviorRenderers(RenderKit renderKit,
+    private void addClientBehaviorRenderers(ServletContext sc, RenderKit renderKit,
                               Document owningDocument,
                               List<Node> behaviorRenderers) {
 
@@ -353,7 +353,7 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
 
             if ((behaviorRendererType != null)
                   && (behaviorRendererClass != null)) {
-                ClientBehaviorRenderer r = (ClientBehaviorRenderer) createInstance(behaviorRendererClass,
+                ClientBehaviorRenderer r = (ClientBehaviorRenderer) createInstance(sc, behaviorRendererClass,
                                                        ClientBehaviorRenderer.class,
                                                        null,
                                                        behaviorRenderer);                

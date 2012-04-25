@@ -98,16 +98,35 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
 
 
     private ConfigProcessor nextProcessor;  
-    private ApplicationInstanceFactoryMetadataMap<String,Object> classMetadataMap = null;
     private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
     private ProjectStage projectStage;
 
     // -------------------------------------------- Methods from ConfigProcessor
     
     public AbstractConfigProcessor() {
-        classMetadataMap = new ApplicationInstanceFactoryMetadataMap(new ConcurrentHashMap<String, Object>());
     }
 
+    private ApplicationInstanceFactoryMetadataMap<String,Object> getClassMetadataMap(ServletContext sc) {
+        ApplicationInstanceFactoryMetadataMap<String,Object> classMetadataMap = 
+                (ApplicationInstanceFactoryMetadataMap<String,Object>) sc.getAttribute(getClassMetadataMapKey());
+        if (null == classMetadataMap) {
+            classMetadataMap = new ApplicationInstanceFactoryMetadataMap(new ConcurrentHashMap<String, Object>());
+            sc.setAttribute(getClassMetadataMapKey(), classMetadataMap);
+        }
+        
+        return classMetadataMap;
+    }
+
+    @Override
+    public void initializeClassMetadataMap(ServletContext sc) {
+        getClassMetadataMap(sc);
+    }
+    
+    protected String getClassMetadataMapKey() {
+        return this.getClass().getName() + CLASS_METADATA_MAP_KEY_SUFFIX;
+    }
+    
+    private static final String CLASS_METADATA_MAP_KEY_SUFFIX = ".METADATA";
 
     /**
      * @see ConfigProcessor#setNext(ConfigProcessor)
@@ -116,6 +135,11 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
 
         this.nextProcessor = nextProcessor;
         
+    }
+    
+    @Override
+    public ConfigProcessor getNext() {
+        return this.nextProcessor;
     }
     
 
@@ -218,12 +242,12 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
 
     }
 
-    protected Class<?> findRootType(String source,
+    protected Class<?> findRootType(ServletContext sc, String source,
                                     Node sourceNode,
                                     Class<?>[] ctorArguments) {
 
         try {
-            Class<?> sourceClass = loadClass(source, this, null);
+            Class<?> sourceClass = loadClass(sc, source, this, null);
             for (Class<?> ctorArg : ctorArguments) {
                 if (ReflectionUtils.lookupConstructor(sourceClass, ctorArg) != null) {
                     return ctorArg;
@@ -240,11 +264,11 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
     }
 
 
-    protected Object createInstance(String className, Node source) {
-        return createInstance(className, null, null, source);
+    protected Object createInstance(ServletContext sc, String className, Node source) {
+        return createInstance(sc, className, null, null, source);
     }
 
-    protected Object createInstance(String className,
+    protected Object createInstance(ServletContext sc, String className,
                                     Class rootType,
                                     Object root,
                                     Node source) {
@@ -252,7 +276,7 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
         Object returnObject = null;
         if (className != null) {
             try {
-                clazz = loadClass(className, returnObject, null);
+                clazz = loadClass(sc, className, returnObject, null);
                 if (clazz != null) {
                     if (isDevModeEnabled()) {
                         Class<?>[] interfaces = clazz.getInterfaces();
@@ -282,6 +306,9 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
                     if (clazz != null && returnObject == null) {
                         returnObject = clazz.newInstance();
                     }
+                    
+                    ApplicationInstanceFactoryMetadataMap<String,Object>
+                            classMetadataMap = getClassMetadataMap(sc);
 
                     if (classMetadataMap.hasAnnotations(className)) {
                         InjectionProvider injectionProvider = (InjectionProvider) FacesContext.getCurrentInstance().getAttributes().get(ConfigManager.INJECTION_PROVIDER_KEY);
@@ -337,10 +364,12 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
     }
 
 
-    protected Class<?> loadClass(String className,
+    protected Class<?> loadClass(ServletContext sc, String className,
                                  Object fallback,
                                  Class<?> expectedType)
     throws ClassNotFoundException {
+        ApplicationInstanceFactoryMetadataMap<String,Object>
+                classMetadataMap = getClassMetadataMap(sc);
 
         Class<?> clazz = (Class<?>) classMetadataMap.get(className);
         if (null == clazz) {

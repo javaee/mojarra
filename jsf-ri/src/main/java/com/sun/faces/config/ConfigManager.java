@@ -303,6 +303,15 @@ public class ConfigManager {
         return CONFIG_MANAGER;
 
     }
+    
+    private void initializeConfigProcessers(ServletContext sc) {
+        ConfigProcessor p = FACES_CONFIG_PROCESSOR_CHAIN;
+        do {
+            p.initializeClassMetadataMap(sc);
+            
+        } while (null != (p = p.getNext()));
+
+    }
 
 
     /**
@@ -317,6 +326,7 @@ public class ConfigManager {
 
         if (!hasBeenInitialized(sc)) {
             initializedContexts.add(sc);
+            initializeConfigProcessers(sc);
             ExecutorService executor = null;
             try {
                 WebConfiguration webConfig = WebConfiguration.getInstance(sc);

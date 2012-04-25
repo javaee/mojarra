@@ -108,7 +108,7 @@ public class LifecycleConfigProcessor extends AbstractConfigProcessor {
                     if (n.getNodeType() == Node.ELEMENT_NODE) {
                         NodeList listeners = ((Element) n).getElementsByTagNameNS(namespace,
                                                                                   PHASE_LISTENER);
-                        addPhaseListeners(factory, listeners);
+                        addPhaseListeners(sc, factory, listeners);
                     }
                 }
             }            
@@ -121,7 +121,7 @@ public class LifecycleConfigProcessor extends AbstractConfigProcessor {
     // --------------------------------------------------------- Private Methods
 
 
-    private void addPhaseListeners(LifecycleFactory factory,
+    private void addPhaseListeners(ServletContext sc, LifecycleFactory factory,
                                    NodeList phaseListeners) {
 
         if (phaseListeners != null && phaseListeners.getLength() > 0) {
@@ -129,7 +129,7 @@ public class LifecycleConfigProcessor extends AbstractConfigProcessor {
                 Node plNode = phaseListeners.item(i);
                 String pl = getNodeText(plNode);
                 if (pl != null) {
-                    Object plInstance = createInstance(pl,
+                    Object plInstance = createInstance(sc, pl,
                                                        PhaseListener.class,
                                                        null,
                                                        plNode);
