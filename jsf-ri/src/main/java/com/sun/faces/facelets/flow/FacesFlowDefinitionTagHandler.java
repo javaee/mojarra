@@ -47,6 +47,8 @@ import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import javax.el.ExpressionFactory;
+import javax.el.MethodExpression;
 import javax.faces.application.NavigationCase;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -63,7 +65,9 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
     
     enum FlowDataKeys {
         FlowReturnNavigationCase,
-        Views
+        Views,
+        Initializer,
+        Finalizer
         
     } 
     
@@ -218,6 +222,30 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
                     returns.put(returnId, facesFlowReturn);
                 }
             }
+            
+            //
+            // <initializer>
+            //
+            String meStr = (String) flowData.get(FlowDataKeys.Initializer);
+            MethodExpression me = null;
+            ExpressionFactory ef = context.getApplication().getExpressionFactory();
+            final Class argTypes[] = new Class [0]; // PENDING(edburns): arguments must be supported.
+            if (null != meStr) {
+                me = ef.createMethodExpression(context.getELContext(), meStr, null, argTypes);
+                newFlow.setInitializer(me);
+            }
+
+            //
+            // <finalizer>
+            //
+            meStr = (String) flowData.get(FlowDataKeys.Finalizer);
+            me = null;
+            if (null != meStr) {
+                me = ef.createMethodExpression(context.getELContext(), meStr, null, argTypes);
+                newFlow.setFinalizer(me);
+            }
+
+            
             
             
             // </editor-fold>

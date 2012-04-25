@@ -44,6 +44,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import javax.el.MethodExpression;
 import javax.faces.application.NavigationCase;
 import javax.faces.context.FacesContext;
 import javax.faces.lifecycle.ClientWindow;
@@ -59,6 +60,8 @@ public class Flow implements Serializable {
     private String defaultNodeId;
     private List<ViewNode> views;
     private Map<String,NavigationCase> returns = new ConcurrentHashMap<String, NavigationCase>();
+    private MethodExpression initializer;
+    private MethodExpression finalizer;
 
     @Override
     public boolean equals(Object obj) {
@@ -81,20 +84,28 @@ public class Flow implements Serializable {
         if (this.returns != other.returns && (this.returns == null || !this.returns.equals(other.returns))) {
             return false;
         }
+        if (this.initializer != other.initializer && (this.initializer == null || !this.initializer.equals(other.initializer))) {
+            return false;
+        }
+        if (this.finalizer != other.finalizer && (this.finalizer == null || !this.finalizer.equals(other.finalizer))) {
+            return false;
+        }
         return true;
     }
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 37 * hash + (this.id != null ? this.id.hashCode() : 0);
-        hash = 37 * hash + (this.defaultNodeId != null ? this.defaultNodeId.hashCode() : 0);
-        hash = 37 * hash + (this.views != null ? this.views.hashCode() : 0);
-        hash = 37 * hash + (this.returns != null ? this.returns.hashCode() : 0);
+        int hash = 3;
+        hash = 59 * hash + (this.id != null ? this.id.hashCode() : 0);
+        hash = 59 * hash + (this.defaultNodeId != null ? this.defaultNodeId.hashCode() : 0);
+        hash = 59 * hash + (this.views != null ? this.views.hashCode() : 0);
+        hash = 59 * hash + (this.returns != null ? this.returns.hashCode() : 0);
+        hash = 59 * hash + (this.initializer != null ? this.initializer.hashCode() : 0);
+        hash = 59 * hash + (this.finalizer != null ? this.finalizer.hashCode() : 0);
         return hash;
     }
-    
-    
+
+
     
     public String getId() {
         return id;
@@ -159,5 +170,23 @@ public class Flow implements Serializable {
         String result = curWindow.getId() + "_" + flowId;
         return result;
     }
+
+    public MethodExpression getFinalizer() {
+        return finalizer;
+    }
+
+    public void setFinalizer(MethodExpression finalizer) {
+        this.finalizer = finalizer;
+    }
+
+    public MethodExpression getInitializer() {
+        return initializer;
+    }
+
+    public void setInitializer(MethodExpression initializer) {
+        this.initializer = initializer;
+    }
+    
+    
     
 }

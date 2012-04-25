@@ -45,6 +45,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import javax.el.MethodExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -163,6 +164,10 @@ public class FlowHandlerImpl extends FlowHandler {
         Deque<Flow> flowStack = getFlowStack(context);
         flowStack.push(toPush);
         FlowCDIContext.flowEntered();
+        MethodExpression me  = toPush.getInitializer();
+        if (null != me) {
+            me.invoke(context.getELContext(), null);
+        }
     }
     
     private Flow peekFlow(FacesContext context) {
@@ -174,6 +179,10 @@ public class FlowHandlerImpl extends FlowHandler {
         Deque<Flow> flowStack = getFlowStack(context);
         Flow currentFlow = peekFlow(context);
         if (null != currentFlow) {
+            MethodExpression me  = currentFlow.getFinalizer();
+            if (null != me) {
+                me.invoke(context.getELContext(), null);
+            }
             FlowCDIContext.flowExited();
         }
         return flowStack.pollFirst();

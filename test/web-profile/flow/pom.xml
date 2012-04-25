@@ -15,5 +15,6 @@
         <module>mojarra-cdi-extension</module>
         <module>basic</module>
         <module>basic-multi-page</module>
+        <module>intermediate</module>
     </modules>
 </project>

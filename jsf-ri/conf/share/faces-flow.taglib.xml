@@ -109,4 +109,18 @@
         <tag-name>vdl-document</tag-name>
         <handler-class>com.sun.faces.facelets.flow.VDLDocumentTagHandler</handler-class>
     </tag>
+    <tag>
+        <description><![CDATA[
+
+        ]]></description>
+        <tag-name>initializer</tag-name>
+        <handler-class>com.sun.faces.facelets.flow.InitializerTagHandler</handler-class>
+    </tag>
+    <tag>
+        <description><![CDATA[
+
+        ]]></description>
+        <tag-name>finalizer</tag-name>
+        <handler-class>com.sun.faces.facelets.flow.FinalizerTagHandler</handler-class>
+    </tag>
 </facelet-taglib>
