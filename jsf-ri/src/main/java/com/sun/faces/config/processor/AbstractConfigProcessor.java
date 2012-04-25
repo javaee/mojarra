@@ -99,7 +99,6 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
 
     private ConfigProcessor nextProcessor;  
     private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
-    private ProjectStage projectStage;
 
     // -------------------------------------------- Methods from ConfigProcessor
     
@@ -278,7 +277,7 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
             try {
                 clazz = loadClass(sc, className, returnObject, null);
                 if (clazz != null) {
-                    if (isDevModeEnabled()) {
+                    if (isDevModeEnabled(sc)) {
                         Class<?>[] interfaces = clazz.getInterfaces();
                         if (interfaces != null) {
                             for (Class<?> c : interfaces) {
@@ -375,7 +374,7 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
         if (null == clazz) {
             try {
                 clazz =  Util.loadClass(className, fallback);
-                if (!this.isDevModeEnabled()) {
+                if (!this.isDevModeEnabled(sc)) {
                     classMetadataMap.put(className, clazz);    
                 } else {
                     classMetadataMap.scanForAnnotations(className, clazz);
@@ -441,11 +440,14 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
     }
 
 
-    private boolean isDevModeEnabled() {
-        return getProjectStage().equals(ProjectStage.Development);
+    private boolean isDevModeEnabled(ServletContext sc) {
+        return getProjectStage(sc).equals(ProjectStage.Development);
     }
     
-    private ProjectStage getProjectStage() {
+    private ProjectStage getProjectStage(ServletContext sc) {
+        ProjectStage projectStage = null;
+        final String projectStageKey = AbstractConfigProcessor.class.getName() + ".PROJECTSTAGE";
+        projectStage = (ProjectStage) sc.getAttribute(projectStageKey);
         
         if (projectStage == null) {
             WebConfiguration webConfig =
@@ -482,7 +484,7 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
             if (projectStage == null) {
                 projectStage = ProjectStage.Production;
             }
-           
+            sc.setAttribute(projectStageKey, projectStage);
         }
         return projectStage;
 
