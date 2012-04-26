@@ -23,6 +23,14 @@
             </plugin>
         </plugins>    
     </build>
+    <dependencies>
+        <dependency>
+            <groupId>com.sun.faces.test</groupId>
+            <artifactId>com.sun.faces.test.util</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>    
     <modules>
         <module>ajax</module>
         <module>composite</module>
