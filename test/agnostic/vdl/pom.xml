@@ -52,18 +52,6 @@
     <artifactId>com.sun.faces.test.agnostic.vdl</artifactId>
     <packaging>pom</packaging>
     <name>Mojarra 2.1.x Test - Agnostic - VDL - POM</name>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.2</version>
-                <configuration>
-                    <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
-                </configuration>
-            </plugin>
-        </plugins>    
-    </build>
     <modules>
         <module>facelets</module>
     </modules>
