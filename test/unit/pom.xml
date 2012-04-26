@@ -9,7 +9,6 @@
     </parent>
     <groupId>com.sun.faces.test</groupId>
     <artifactId>com.sun.faces.test.unit</artifactId>
-    <version>2.1.8-SNAPSHOT</version>
     <name>Mojarra 2.1.x Test - Unit Tests</name>
     <build>
         <plugins>
@@ -29,7 +28,7 @@
                                 <artifactItem>
                                     <groupId>org.glassfish</groupId>
                                     <artifactId>javax.faces</artifactId>
-                                    <version>2.1.8-SNAPSHOT</version>
+                                    <version>${project.version}</version>
                                     <type>jar</type>
                                     <classifier>sources</classifier>
                                     <overWrite>true</overWrite>
@@ -52,7 +51,7 @@
                                 <artifactItem>
                                     <groupId>org.glassfish</groupId>
                                     <artifactId>javax.faces</artifactId>
-                                    <version>2.1.8-SNAPSHOT</version>
+                                    <version>${project.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
                                 </artifactItem>
