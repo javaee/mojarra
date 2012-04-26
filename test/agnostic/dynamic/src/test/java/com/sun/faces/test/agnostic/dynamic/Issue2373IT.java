@@ -41,6 +41,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 public class Issue2373IT {
 
@@ -59,6 +60,7 @@ public class Issue2373IT {
     }
 
     @Test
+    @Ignore
     public void testMoveComponent() throws Exception {
 
         /*
@@ -85,6 +87,7 @@ public class Issue2373IT {
     }
 
     @Test
+    @Ignore
     public void testMoveComponent2() throws Exception {
 
         /*
@@ -111,6 +114,7 @@ public class Issue2373IT {
     }
 
     @Test
+    @Ignore
     public void testMoveComponent3() throws Exception {
         /*
          * Make sure the Moveable HELLO is before the first panelBox11
@@ -154,6 +158,7 @@ public class Issue2373IT {
     }
     
     @Test
+    @Ignore
     public void testToggle1() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/toggle.xhtml");
         for(int i=0; i<10; i++) {
