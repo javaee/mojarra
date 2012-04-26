@@ -51,7 +51,7 @@
     <groupId>com.sun.faces.test</groupId>
     <artifactId>com.sun.faces.test.agnostic.renderKit</artifactId>
     <packaging>pom</packaging>
-    <name>Mojarra Test - Agnostic - RenderKit - POM</name>
+    <name>Mojarra 2.1.x Test - Agnostic - RenderKit - POM</name>
     <modules>
         <module>basic</module>
     </modules>
