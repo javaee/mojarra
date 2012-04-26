@@ -55,7 +55,4 @@
     <modules>
         <module>faces-config-extension</module>
     </modules>
-    <properties>
-        <webapp.partialStateSaving>true</webapp.partialStateSaving>
-    </properties>
 </project>

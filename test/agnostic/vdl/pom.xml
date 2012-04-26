@@ -67,7 +67,4 @@
     <modules>
         <module>facelets</module>
     </modules>
-    <properties>
-        <webapp.partialStateSaving>true</webapp.partialStateSaving>
-    </properties>
 </project>
