@@ -11,12 +11,12 @@
     <name>Mojarra 2.1.x Test - POM</name>
     <modules>
         <module>agnostic</module>
-        <module>web-profile</module>
         <module>cluster</module>
         <module>selenium</module>
-        <module>virtual</module>
         <module>unit</module>
         <module>util</module>
+        <module>virtual</module>
+        <module>web-profile</module>
     </modules>
     <build>
         <plugins>
