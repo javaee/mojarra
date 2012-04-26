@@ -51,7 +51,7 @@
     <groupId>com.sun.faces.test</groupId>
     <artifactId>com.sun.faces.test.agnostic.vdl.facelets.faces-config-extension.html5</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra Test - Agnostic - VDL - facelets - faces-config-extension - html5</name>
+    <name>Mojarra 2.1.x Test - Agnostic - VDL - facelets - faces-config-extension - html5</name>
     <build>
         <finalName>test-agnostic-vdl-facelets-faces-config-extension-html5</finalName>
     </build>
@@ -63,7 +63,6 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
     <properties>
         <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
     </properties>
