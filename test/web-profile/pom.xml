@@ -10,7 +10,7 @@
     <groupId>com.sun.faces.test</groupId>
     <artifactId>com.sun.faces.test.webprofile</artifactId>
     <packaging>pom</packaging>
-    <name>Mojarra Test - Web-Profile - POM</name>
+    <name>Mojarra 2.1.x Test - Web-Profile - POM</name>
     <build>
         <plugins>
             <plugin>
@@ -23,12 +23,10 @@
             </plugin>
         </plugins>    
     </build>
-
     <modules>
         <module>el</module>
     </modules>
     <properties>
         <webapp.partialStateSaving>true</webapp.partialStateSaving>
     </properties>
-
 </project>

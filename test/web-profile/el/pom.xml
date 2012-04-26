@@ -51,7 +51,7 @@
     <groupId>com.sun.faces.test</groupId>
     <artifactId>com.sun.faces.test.webprofile.el</artifactId>
     <packaging>pom</packaging>
-    <name>Mojarra Test - Web-Profile - EL - POM</name>
+    <name>Mojarra 2.1.x Test - Web-Profile - EL - POM</name>
     <modules>
         <module>basic</module>
     </modules>

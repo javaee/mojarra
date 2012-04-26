@@ -51,8 +51,7 @@
     <groupId>com.sun.faces.test</groupId>
     <artifactId>com.sun.faces.test.webprofile.el.basic</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra Test - Web-Profile - EL - Basic Tests</name>
-
+    <name>Mojarra 2.1.x Test - Web-Profile - EL - Basic Tests</name>
     <build>
         <finalName>test-webprofile-el-basic</finalName>
     </build>
