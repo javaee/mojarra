@@ -11,7 +11,6 @@
     </parent>
     <groupId>com.sun.faces.test.selenium</groupId>
     <artifactId>com.sun.faces.test.selenium.agnostic.shared</artifactId>
-    <version>2.1.8-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>Mojarra 2.1.x Test - Selenium - Agnostic Shared Tests</name>
     <build>
