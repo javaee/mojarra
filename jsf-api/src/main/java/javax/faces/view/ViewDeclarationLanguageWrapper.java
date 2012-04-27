@@ -101,7 +101,7 @@ public abstract class ViewDeclarationLanguageWrapper extends ViewDeclarationLang
 
     @Override
     public void buildView(FacesContext context, UIViewRoot root) throws IOException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        getWrapped().buildView(context, root);
     }
 
     @Override
