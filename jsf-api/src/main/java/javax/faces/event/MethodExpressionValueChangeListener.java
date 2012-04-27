@@ -145,10 +145,17 @@ public class MethodExpressionValueChangeListener implements ValueChangeListener,
         } catch (MethodNotFoundException mnf) {
             if (null != methodExpressionZeroArg) {
 
-                // try to invoke a no-arg version
-                methodExpressionZeroArg.invoke(elContext, new Object[]{});
+                try {
+                    // try to invoke a no-arg version
+                    methodExpressionZeroArg.invoke(elContext, new Object[]{});
+                }
+                catch (ELException ee) {
+                    throw new AbortProcessingException(ee.getMessage(), ee.getCause());
+                }
             }
-        } 
+        } catch (ELException ee) {
+            throw new AbortProcessingException(ee.getMessage(), ee.getCause());
+        }
     }
 
 

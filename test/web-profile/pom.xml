@@ -24,7 +24,6 @@
         </plugins>    
     </build>
     <modules>
-        <module>el</module>
     </modules>
     <properties>
         <webapp.partialStateSaving>true</webapp.partialStateSaving>

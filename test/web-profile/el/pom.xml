@@ -53,6 +53,5 @@
     <packaging>pom</packaging>
     <name>Mojarra 2.1.x Test - Web-Profile - EL - POM</name>
     <modules>
-        <module>basic</module>
     </modules>
 </project>
