@@ -54,7 +54,8 @@ import javax.el.MethodNotFoundException;
 
 /**
  * <p><strong><span class="changed_modified_2_0
- * changed_modified_2_0_rev_a">MethodExpressionActionListener</span></strong>
+ * changed_modified_2_0_rev_a
+ * changed_modified_2_2">MethodExpressionActionListener</span></strong>
  * is an {@link ActionListener} that wraps a {@link
  * MethodExpression}. When it receives a {@link ActionEvent}, it
  * executes a method on an object identified by the {@link
@@ -120,17 +121,18 @@ public class MethodExpressionActionListener implements ActionListener,
     // ------------------------------------------------------- Event Method
 
     /**
-     * <p><span class="changed_modified_2_0">Call</span> through to the
-     * {@link MethodExpression} passed in our constructor.  <span
+     * <p><span class="changed_modified_2_0
+     * changed_modified_2_2">Call</span> through to the {@link
+     * MethodExpression} passed in our constructor.  <span
      * class="changed_added_2_0">First, try to invoke the
      * <code>MethodExpression</code> passed to the constructor of this
      * instance, passing the argument {@link ActionEvent} as the
      * argument.  If a {@link MethodNotFoundException} is thrown, call
      * to the zero argument <code>MethodExpression</code> derived from
      * the <code>MethodExpression</code> passed to the constructor of
-     * this instance.  If that fails for any reason, throw an {@link
-     * AbortProcessingException}, including the cause of the
-     * failure.</span></p>
+     * this instance.  <span class="changed_deleted_2_2"><del>If that
+     * fails for any reason, throw an {@link AbortProcessingException},
+     * including the cause of the failure.</del></span></span></p>
      * 
      * @throws NullPointerException {@inheritDoc}     
      * @throws AbortProcessingException {@inheritDoc}     
