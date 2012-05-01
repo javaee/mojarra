@@ -55,13 +55,13 @@
 
     <property name="applications-for-V3.1-only"
               value="GLASSFISH-11636,
-                     GLASSFISH-15985,
                      GLASSFISH-17218,
                      JAVASERVERFACES-1856" />
 
+<!-- GLASSFISH-15985 Disabled until wab deployment issue in Glassfish is fixed -->
+
     <property name="applications-for-V3.1_no_cluster-only"
               value="GLASSFISH-11636,
-                     GLASSFISH-15985,
                      GLASSFISH-17218,
                      JAVASERVERFACES-1856,
                      JAVASERVERFACES-1655,
@@ -70,6 +70,8 @@
                      JAVASERVERFACES-1338,
                      admingui,
                      JAVASERVERFACES_SPEC_PUBLIC-949" />
+
+<!-- GLASSFISH-15985 Disabled until wab deployment issue in Glassfish is fixed -->
 
     <property name="container-agnostic-applications" value="
                     JAVASERVERFACES-2195,
