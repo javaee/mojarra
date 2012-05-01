@@ -698,8 +698,8 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
             // First, copy over core attributes
             for (iIndex = 0,iLength = coreElementAttributes.length; iIndex < iLength; iIndex++) {
                 attributeName = coreElementAttributes[iIndex];
-                newValue = source[attributeName];
-                oldValue = target[attributeName];
+                newValue = source.getAttribute(attributeName);
+                oldValue = target.getAttribute(attributeName);
                 if (oldValue != newValue) {
                     target[attributeName] = newValue;
                 }
@@ -709,8 +709,8 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
             if (target.nodeName.toLowerCase() === 'input') {
                 for (iIndex = 0,iLength = inputElementAttributes.length; iIndex < iLength; iIndex++) {
                     attributeName = inputElementAttributes[iIndex];
-                    newValue = source[attributeName];
-                    oldValue = target[attributeName];
+                    newValue = source.getAttribute(attributeName);
+                    oldValue = target.getAttribute(attributeName);
                     if (oldValue != newValue) {
                         target[attributeName] = newValue;
                     }
