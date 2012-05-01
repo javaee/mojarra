@@ -40,7 +40,6 @@
 
 package com.sun.faces.test.agnostic.ajax; 
 
-import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
@@ -79,13 +78,11 @@ public class Issue2381IT {
      */
     @Test
     public void testBodyAttributesAfterUpdate() throws Exception {
-        // This will synchronize the Ajax request/response to ensure the page from
-        // the Ajax request/response has updated Ajax response information.
-        NicelyResynchronizingAjaxController ac = new NicelyResynchronizingAjaxController();
-        webClient.setAjaxController(ac);
         HtmlPage page = webClient.getPage(webUrl+"faces/updateBody.xhtml");
         HtmlSubmitInput button = page.getHtmlElementById("form1:bodytag");
         HtmlPage page1 = button.click();
+        // This will ensure JavaScript finishes before evaluating the page.
+        webClient.waitForBackgroundJavaScript(60000);
         assertTrue(page1.asXml().contains("BODY CLASS:foo BODY TITLE:fooTitle BODY LANG:fooLang"));
     }
 
