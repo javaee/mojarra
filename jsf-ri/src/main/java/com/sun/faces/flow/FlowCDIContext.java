@@ -61,6 +61,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.flow.Flow;
 import javax.faces.flow.FlowHandler;
+import javax.faces.lifecycle.ClientWindow;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 
@@ -97,7 +98,12 @@ public class FlowCDIContext implements Context, Serializable {
             return null;
         }
         
-        String flowBeansForWindowId = currentFlow.getIdForCurrentWindow(context) + "_beans";
+        ClientWindow curWindow = context.getExternalContext().getClientWindow();
+        if (null == curWindow) { 
+            throw new IllegalStateException("Unable to obtain current ClientWindow.  Is the ClientWindow feature enabled?");
+        }
+
+        String flowBeansForWindowId = currentFlow.getClientWindowFlowId(curWindow) + "_beans";
         result = (Map<Contextual<?>, Object>) sessionMap.get(flowBeansForWindowId);
         if (null == result) {
             result = new ConcurrentHashMap<Contextual<?>, Object>();
@@ -114,7 +120,13 @@ public class FlowCDIContext implements Context, Serializable {
         ExternalContext extContext = context.getExternalContext();
         Map<String, Object> sessionMap = extContext.getSessionMap();
         Flow currentFlow = getCurrentFlow(context);
-        String creationalForWindowId = currentFlow.getIdForCurrentWindow(context) + "_creational";
+
+        ClientWindow curWindow = context.getExternalContext().getClientWindow();
+        if (null == curWindow) { 
+            throw new IllegalStateException("Unable to obtain current ClientWindow.  Is the ClientWindow feature enabled?");
+        }
+
+        String creationalForWindowId = currentFlow.getClientWindowFlowId(curWindow) + "_creational";
         result = (Map<Contextual<?>, CreationalContext<?>>) sessionMap.get(creationalForWindowId);
         if (null == result) {
             result = new ConcurrentHashMap<Contextual<?>, CreationalContext<?>>();

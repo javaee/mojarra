@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.flow.intermediate;
+package com.sun.faces.test.webprofile.flow.intermediate;
 
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import org.junit.After;
@@ -97,37 +97,34 @@ public class FlowEntryExitIntermediateIT {
 
     @Test
     public void testFacesFlowScope() throws Exception {
+        performTest();
+        /**** PENDING(edburns): calling this test twice in a row will cause failure.
+         * That should not be the case.
+        performTest();
+         */
+        
+    }
+    
+    private void performTest() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
         
-        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("start");
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("maintain-customer-record");
+        
         page = button.click();
-
+        
         String pageText = page.getBody().asText();
-        assertTrue(pageText.indexOf("First page in the flow") != -1);
-        assertTrue(pageText.indexOf("Initializer called") != -1);
-        assertTrue(pageText.contains("basicFlow"));
-
-        button = (HtmlSubmitInput) page.getElementById("next_a");
-        page = button.click();
         
-        HtmlTextInput input = (HtmlTextInput) page.getElementById("input");
-        final String facesFlowScopeValue = "Value in faces flow scope";
-        input.setValueAttribute(facesFlowScopeValue);
-        
-        button = (HtmlSubmitInput) page.getElementById("next");
-        page = button.click();
-        
-        assertTrue(page.asText().contains(facesFlowScopeValue));
+        assertTrue(pageText.contains("Create customer page"));
+        assertTrue(pageText.contains("Initializer called"));
         
         button = (HtmlSubmitInput) page.getElementById("return");
+        
         page = button.click();
         
         pageText = page.getBody().asText();
-        assertTrue(pageText.contains("return page"));
-        assertTrue(pageText.indexOf("Finalizer called") != -1);
-
-        assertTrue(!page.asText().contains(facesFlowScopeValue));
         
+        assertTrue(pageText.contains("return page"));
+        assertTrue(pageText.contains("Finalizer called"));
         
         
     }

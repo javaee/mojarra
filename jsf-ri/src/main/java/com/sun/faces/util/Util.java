@@ -370,6 +370,55 @@ public class Util {
                     });
         }
     }
+    
+    public static String removeAllButLastSlashPathSegment(String input) {
+        // Trim the leading slash, if any.
+        if (input.charAt(0) == '/') {
+            input = input.substring(1);
+        }
+        int len = input.length();
+        // Trim the trailing slash, if any.
+        if (input.charAt(len - 1) == '/') {
+            input = input.substring(0, len - 1);
+        }
+        
+        // Trim any path segments that remain, leaving only the 
+        // last path segment.
+        int slash = input.lastIndexOf("/");
+        
+        // Do we have a "/"?
+        if (-1 != slash) {
+            input = input.substring(slash + 1);
+        }
+        
+        return input;
+    }
+    
+    public static String removeLastPathSegment(String input) {
+        int slash = input.lastIndexOf("/");
+        
+        // Do we have a "/"?
+        if (-1 != slash) {
+            input = input.substring(0, slash);
+        }
+        
+        return input;
+    }
+    
+    public static String getFlowIdFromComponent(FacesContext context, UIComponent target) {
+        String result = "";
+        if (target instanceof javax.faces.component.UIViewRoot) {
+            result = Util.removeAllButLastSlashPathSegment(((javax.faces.component.UIViewRoot)target).getViewId());
+            int dot = result.indexOf(".");
+            if (-1 != dot) {
+                result = result.substring(0, dot);
+            }
+        }
+        
+        return result;
+    }
+
+    
 
     public static void notNull(String varname, Object var) {
 

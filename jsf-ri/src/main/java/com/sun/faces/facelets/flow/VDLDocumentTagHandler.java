@@ -40,8 +40,11 @@
  */
 package com.sun.faces.facelets.flow;
 
+import com.sun.faces.facelets.flow.FacesFlowDefinitionTagHandler.FlowDataKeys;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
+import com.sun.faces.util.Util;
 import java.io.IOException;
+import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagConfig;
@@ -53,6 +56,12 @@ public class VDLDocumentTagHandler extends TagHandlerImpl {
     }
     
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
+        this.nextHandler.apply(ctx, parent);
+        Map<FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
+        String vdlDocument = this.nextHandler.toString();
+        String path = Util.removeLastPathSegment(this.tag.getLocation().getPath());
+        flowData.put(FlowDataKeys.VDLDocument, path + "/" + vdlDocument);
+
     }
     
     

@@ -40,50 +40,23 @@
  */
 package com.sun.faces.facelets.flow;
 
-import com.sun.faces.facelets.flow.FacesFlowDefinitionTagHandler.FlowDataKeys;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import javax.faces.component.UIComponent;
-import javax.faces.flow.ViewNode;
 import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagConfig;
-import javax.faces.view.facelets.TagException;
 
-public class ViewNodeTagHandler extends TagHandlerImpl {
+public class DefaultNodeTagHandler extends TagHandlerImpl {
 
-    public ViewNodeTagHandler(TagConfig config) {
+    public DefaultNodeTagHandler(TagConfig config) {
         super(config);
     }
     
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
-        Map<FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
-        flowData.remove(FlowDataKeys.VDLDocument);
-        try {
-            this.nextHandler.apply(ctx, parent);
-            List<ViewNode> viewsFromTag = (List<ViewNode>) flowData.get(FlowDataKeys.Views);
-            if (null == viewsFromTag) {
-                viewsFromTag = new ArrayList<ViewNode>();
-                flowData.put(FlowDataKeys.Views, viewsFromTag);
-            }
-            ViewNode view = new ViewNode();
-            TagAttribute idAttr = this.getRequiredAttribute("id");
-            view.setId(idAttr.getValue(ctx));
-            String vdlDocument = (String) flowData.get(FlowDataKeys.VDLDocument);
-            if (null == vdlDocument) {
-                throw new TagException(tag, "View withd id '" + idAttr.getValue(ctx) + 
-                        "' does not have the required nested <vdl-document> element.");
-            }
-            view.setVdlDocumentId(vdlDocument);
-            viewsFromTag.add(view);
-            
-        } finally {
-            flowData.remove(FlowDataKeys.VDLDocument);
-        }
-        
+        this.nextHandler.apply(ctx, parent);
+        Map<FacesFlowDefinitionTagHandler.FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
+        flowData.put(FacesFlowDefinitionTagHandler.FlowDataKeys.DefaultNodeId, this.nextHandler.toString());
     }
     
     

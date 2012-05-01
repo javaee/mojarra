@@ -208,6 +208,15 @@ public final class FactoryFinder {
          "javax.faces.context.FlashFactory";
 
     /**
+     * <p class="changed_added_2_2">The property name for the
+     * {@link javax.faces.flow.FlowHandlerFactory} class name.</p>
+     * 
+     * @since 2.2
+     */
+    public final static String FLOW_HANDLER_FACTORY =
+         "javax.faces.flow.FlowHandlerFactory";
+
+    /**
      * <p class="changed_added_2_0">The property name for the {@link
      * javax.faces.context.PartialViewContextFactory} class name.</p>
      */

@@ -44,10 +44,11 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.faces.context.FacesContext;
+import javax.faces.flow.Flow;
 
 /**
  * <p
- * class="changed_added_2_0"><strong>ConfigurableNavigationHandler</strong>
+ * class="changed_added_2_0"><strong class="changed_modified_2_2">ConfigurableNavigationHandler</strong>
  * extends the contract of {@link NavigationHandler} to allow runtime
  * inspection of the {@link NavigationCase}s that make up the rule-base
  * for navigation.  An implementation compliant with the version of the
@@ -108,6 +109,19 @@ public abstract class ConfigurableNavigationHandler extends NavigationHandler {
      */
     public void performNavigation(String outcome) {
         this.handleNavigation(FacesContext.getCurrentInstance(), null, outcome);
+    }
+    
+    /**
+     * <p class="changed_added_2_2">Called by the flow system to cause
+     * the flow to be inspected for navigation rules.  For backward
+     * compatibility with earlier implementations, an empty method
+     * is provided.</p>
+     * 
+     * 
+     * @since 2.2
+     */
+    public void inspectFlow(FacesContext context, Flow flow) {
+        
     }
 
 }

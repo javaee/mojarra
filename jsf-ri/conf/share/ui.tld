@@ -203,6 +203,10 @@
         2.1
     </tlib-version>
 
+    <display-name>
+        Facelets Templating
+    </display-name>
+
     <short-name>
         ui
     </short-name>

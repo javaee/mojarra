@@ -49,11 +49,18 @@
 
     <!-- ========== Tag Library Description Elements ========================= -->
 
-    <description>
-        Specify how a flow is declared in VDL pages.  This schema is functionally
-        equivalent to the same content in a faces-config.xml file.
-    </description>
-    <tlib-version>1.2</tlib-version>
+    <description><![CDATA[
+
+        <p class="changed_added_2_2">Specify how a flow is declared in
+        VDL pages.  This schema is functionally equivalent to the same
+        content in the Application Configuration Resources.</p>
+
+        <h2>Creating a Faces Flow</h2>
+
+
+    ]]></description>
+    <tlib-version>2.2</tlib-version>
+    <display-name>Faces Flows</display-name>
     <short-name>j</short-name>
     <uri>http://java.sun.com/jsf/flow</uri>
 

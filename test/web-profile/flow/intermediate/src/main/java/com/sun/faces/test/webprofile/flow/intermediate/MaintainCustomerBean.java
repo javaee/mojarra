@@ -38,54 +38,39 @@
  * holder.
 
  */
-package com.sun.faces.facelets.flow;
+package com.sun.faces.test.webprofile.flow.intermediate;
 
-import com.sun.faces.facelets.flow.FacesFlowDefinitionTagHandler.FlowDataKeys;
-import com.sun.faces.facelets.tag.TagHandlerImpl;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
 import java.util.Map;
-import javax.faces.component.UIComponent;
-import javax.faces.flow.ViewNode;
-import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.TagAttribute;
-import javax.faces.view.facelets.TagConfig;
-import javax.faces.view.facelets.TagException;
+import javax.faces.context.FacesContext;
+import javax.faces.flow.FlowScoped;
+import javax.inject.Named;
 
-public class ViewNodeTagHandler extends TagHandlerImpl {
-
-    public ViewNodeTagHandler(TagConfig config) {
-        super(config);
-    }
-    
-    public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
-        Map<FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
-        flowData.remove(FlowDataKeys.VDLDocument);
-        try {
-            this.nextHandler.apply(ctx, parent);
-            List<ViewNode> viewsFromTag = (List<ViewNode>) flowData.get(FlowDataKeys.Views);
-            if (null == viewsFromTag) {
-                viewsFromTag = new ArrayList<ViewNode>();
-                flowData.put(FlowDataKeys.Views, viewsFromTag);
-            }
-            ViewNode view = new ViewNode();
-            TagAttribute idAttr = this.getRequiredAttribute("id");
-            view.setId(idAttr.getValue(ctx));
-            String vdlDocument = (String) flowData.get(FlowDataKeys.VDLDocument);
-            if (null == vdlDocument) {
-                throw new TagException(tag, "View withd id '" + idAttr.getValue(ctx) + 
-                        "' does not have the required nested <vdl-document> element.");
-            }
-            view.setVdlDocumentId(vdlDocument);
-            viewsFromTag.add(view);
-            
-        } finally {
-            flowData.remove(FlowDataKeys.VDLDocument);
-        }
-        
-    }
-    
-    
-    
+@Named
+@FlowScoped(id="maintain-customer-record")
+public class MaintainCustomerBean implements Serializable
+{
+   public MaintainCustomerBean() {
+      super();
+   }
+   
+   public String createCustomer() {
+      //  Logic to create a new customer object.
+      return "success";
+   }
+   
+   public String fetchCustomer() {
+      //  Logic to fetch a customer.
+      return "success";
+   }
+   
+   public void initializeFlow() {
+       Map<String,Object> requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
+       requestMap.put("initializerMessage", "Initializer called");
+   }
+   
+   public void cleanUpFlow() {
+       Map<String,Object> requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
+       requestMap.put("finalizerMessage", "Finalizer called");
+   }
 }

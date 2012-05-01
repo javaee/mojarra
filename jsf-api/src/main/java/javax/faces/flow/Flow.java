@@ -49,20 +49,38 @@ import javax.faces.application.NavigationCase;
 import javax.faces.context.FacesContext;
 import javax.faces.lifecycle.ClientWindow;
 
+/**
+ * <p class="changed_added_2_2">This class is the runtime representation
+ * of a Faces Flow.  Once placed into service by the runtime, an
+ * instance of this class is immutable.  The implementation must be
+ * thread-safe because instances will be shared across all usages of the
+ * flow within the application.</p>
+ *
+ *
+ * @since 2.2
+ */
+
 public class Flow implements Serializable {
-    
-    private static final long serialVersionUID = -7506626306507232154L;
     
     public Flow() {
     }
     
+    // <editor-fold defaultstate="collapsed" desc="Instance variables">       
+
     private String id;
     private String defaultNodeId;
     private List<ViewNode> views;
     private Map<String,NavigationCase> returns = new ConcurrentHashMap<String, NavigationCase>();
+    private Map<String,List<NavigationCase>> switches = new ConcurrentHashMap<String, List<NavigationCase>>();
     private MethodExpression initializer;
     private MethodExpression finalizer;
+    
+    // </editor-fold>
 
+    // <editor-fold defaultstate="collapsed" desc="Object helpers">       
+    
+    private static final long serialVersionUID = -7506626306507232154L;
+    
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
@@ -105,8 +123,18 @@ public class Flow implements Serializable {
         return hash;
     }
 
-
+    // </editor-fold>
     
+    // <editor-fold defaultstate="collapsed" desc="Simple properties">       
+
+
+    /**
+     * <p class="changed_added_2_2">Return the application-unique id for
+     * this flow.</p>
+
+     * @since 2.2
+     */
+
     public String getId() {
         return id;
     }
@@ -121,54 +149,6 @@ public class Flow implements Serializable {
 
     public void setDefaultNodeId(String defaultNodeId) {
         this.defaultNodeId = defaultNodeId;
-    }
-    
-    public String getDefaultNodeIdPath() {
-        return getId() + "/" + getDefaultNodeId();
-    }
-    
-
-    public List<ViewNode> getViews() {
-        return views;
-    }
-
-    public void setViews(List<ViewNode> views) {
-        this.views = views;
-    }
-    
-    public ViewNode getView(String viewNodeId) {
-        List<ViewNode> myViews = getViews();
-        ViewNode result = null;
-        
-        if (null != myViews) {
-            for (ViewNode cur : myViews) {
-                if (viewNodeId.equals(cur.getId())) {
-                    result = cur;
-                    break;
-                }
-            }
-        }
-        
-        return result;
-        
-    }
-    
-    public Map<String,NavigationCase> getReturns(FacesContext context) {
-        return returns;
-    }
-    
-    public String getIdForCurrentWindow(FacesContext context) {
-        String result = null;
-        ClientWindow curWindow = context.getExternalContext().getClientWindow();
-        result = curWindow.getId() + "_" + getId();
-        
-        return result;
-    }
-    
-    public static String createIdForCurrentWindow(FacesContext context, String flowId) {
-        ClientWindow curWindow = context.getExternalContext().getClientWindow();
-        String result = curWindow.getId() + "_" + flowId;
-        return result;
     }
 
     public MethodExpression getFinalizer() {
@@ -187,6 +167,68 @@ public class Flow implements Serializable {
         this.initializer = initializer;
     }
     
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Graph properties">       
+    
+    public List<ViewNode> getViews() {
+        return views;
+    }
+
+    public void setViews(List<ViewNode> views) {
+        this.views = views;
+    }
+    
+    public Map<String,NavigationCase> getReturns(FacesContext context) {
+        return returns;
+    }
+    
+    public Map<String,List<NavigationCase>> getSwitches(FacesContext context) {
+        return switches;
+    }
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Graph navigation">       
+    
+    public FlowNode getNode(String viewNodeId) {
+        List<ViewNode> myViews = getViews();
+        ViewNode result = null;
+        
+        if (null != myViews) {
+            for (ViewNode cur : myViews) {
+                if (viewNodeId.equals(cur.getId())) {
+                    result = cur;
+                    break;
+                }
+            }
+        }
+        
+        return result;
+        
+    }
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Outside interaction">       
     
     
+    /**
+     * <p class="changed_added_2_2">Obtain the current {@link
+     * javax.faces.lifecycle.ClientWindow} from the {@link
+     * javax.faces.context.ExternalContext}.  Get the window's id and 
+     * append "_" and the return from {@link #getId}.  Return the result.</p>
+     *
+     * @since 2.2
+     */
+    
+    public String getClientWindowFlowId(ClientWindow curWindow) {
+        String result = null;
+
+        result = curWindow.getId() + "_" + getId();
+        
+        return result;
+    }
+    
+    // </editor-fold>
 }

@@ -42,8 +42,6 @@ package com.sun.faces.facelets.flow;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.view.facelets.FaceletContext;
@@ -51,9 +49,9 @@ import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagConfig;
 import javax.faces.view.facelets.TagException;
 
-public class FacesFlowReturnTagHandler extends TagHandlerImpl {
+public class SwitchNodeTagHandler extends TagHandlerImpl {
 
-    public FacesFlowReturnTagHandler(TagConfig config) {
+    public SwitchNodeTagHandler(TagConfig config) {
         super(config);
     }
     
@@ -61,69 +59,52 @@ public class FacesFlowReturnTagHandler extends TagHandlerImpl {
         FlowNavigationCase result = null;
 
         Map<FacesFlowDefinitionTagHandler.FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
-        result = (FlowNavigationCase) flowData.get(FacesFlowDefinitionTagHandler.FlowDataKeys.FlowReturnNavigationCase);
+        result = (FlowNavigationCase) flowData.get(FacesFlowDefinitionTagHandler.FlowDataKeys.SwitchNavigationCase);
         if (null == result) {
             result = new FlowNavigationCase();
-            flowData.put(FacesFlowDefinitionTagHandler.FlowDataKeys.FlowReturnNavigationCase, result);
+            flowData.put(FacesFlowDefinitionTagHandler.FlowDataKeys.SwitchNavigationCase, result);
         }
         
         return result;
     }
     
-    private static void clearNavigationCase(FaceletContext ctx) {
-        Map<FacesFlowDefinitionTagHandler.FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
-        flowData.remove(FacesFlowDefinitionTagHandler.FlowDataKeys.FlowReturnNavigationCase);
-    }
     
-    public static List<FlowNavigationCase> getNavigationCases(FaceletContext ctx) {
-        List<FlowNavigationCase> cases = null;
-        Map<FacesFlowDefinitionTagHandler.FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
-        cases = (List<FlowNavigationCase>) flowData.get(FacesFlowDefinitionTagHandler.FlowDataKeys.NavigationCases);
-        if (null == cases) {
-            cases = new ArrayList<FlowNavigationCase>();
-            flowData.put(FacesFlowDefinitionTagHandler.FlowDataKeys.NavigationCases, cases);
-        }
-        
-        return cases;
-    }
-    
-    public static boolean isWithinFacesFlowReturn(FaceletContext ctx) {
+    public static boolean isWithinSwitch(FaceletContext ctx) {
         boolean result = false;
 
         Map<FacesFlowDefinitionTagHandler.FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
-        result = flowData.containsKey(FacesFlowDefinitionTagHandler.FlowDataKeys.WithinFacesFlowReturn) ? true : false;
+        result = flowData.containsKey(FacesFlowDefinitionTagHandler.FlowDataKeys.WithinSwitch) ? true : false;
 
         return result;
     }
     
-    private static void setWithinFacesFlowReturn(FaceletContext ctx, boolean state) {
+    private static void setWithinSwitch(FaceletContext ctx, boolean state) {
         Map<FacesFlowDefinitionTagHandler.FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
 
         if (state) {
-            flowData.put(FacesFlowDefinitionTagHandler.FlowDataKeys.WithinFacesFlowReturn, Boolean.TRUE);
+            flowData.put(FacesFlowDefinitionTagHandler.FlowDataKeys.WithinSwitch, Boolean.TRUE);
         } else {
-            flowData.remove(FacesFlowDefinitionTagHandler.FlowDataKeys.WithinFacesFlowReturn);
+            flowData.remove(FacesFlowDefinitionTagHandler.FlowDataKeys.WithinSwitch);
         }
     }
     
+    
+    
+    
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
         try {
-            setWithinFacesFlowReturn(ctx, true);
+            setWithinSwitch(ctx, true);
             this.nextHandler.apply(ctx, parent);
             TagAttribute id = this.getRequiredAttribute("id");
-            List<FlowNavigationCase> taskFlowReturns = getNavigationCases(ctx);        
             FlowNavigationCase taskFlowReturn = getNavigationCase(ctx);
-            if (null == taskFlowReturns) {
-                throw new TagException(tag, "Unable to determine from-outcome for task flow return id " + id.getValue(ctx));
+            if (null == taskFlowReturn) {
+                throw new TagException(tag, "Unable to determine from-outcome for faces flow switch id " + id.getValue(ctx));
             }
             taskFlowReturn.setEnclosingId(id.getValue(ctx));
-            taskFlowReturns.add(taskFlowReturn);
-            clearNavigationCase(ctx);
-
+        } finally {
+            setWithinSwitch(ctx, false);
         }
-        finally {
-            setWithinFacesFlowReturn(ctx, false);
-        }
+        
     }
     
     

@@ -43,6 +43,7 @@ import java.util.Map;
 import java.util.Set;
 import javax.faces.FacesWrapper;
 import javax.faces.context.FacesContext;
+import javax.faces.flow.Flow;
 
 /**
  * <p class="changed_added_2_2">Provides a simple implementation of
@@ -87,6 +88,11 @@ public abstract class ConfigurableNavigationHandlerWrapper extends ConfigurableN
     @Override
     public void performNavigation(String outcome) {
         getWrapped().performNavigation(outcome);
+    }
+
+    @Override
+    public void inspectFlow(FacesContext context, Flow flow) {
+        getWrapped().inspectFlow(context, flow);
     }
 
     

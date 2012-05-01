@@ -296,7 +296,7 @@ public class NavigationCase {
      * <code>&lt;navigation-case&gt;</code>, if any.  The expression to
      * be evaluated is passed into the constructor as a string.  When
      * the expression is evaluated, its value must be coerced into a
-     * <code>boolean</code> per the normail EL coercion rules.</p>
+     * <code>boolean</code> per the normal EL coercion rules.</p>
      *
      * @param context the {@link FacesContext} for the current request
      *

@@ -1,8 +1,8 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- *
+ * 
  * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
- *
+ * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -11,20 +11,20 @@
  * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- *
+ * 
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at packager/legal/LICENSE.txt.
- *
+ * 
  * GPL Classpath Exception:
  * Oracle designates this particular file as subject to the "Classpath"
  * exception as provided by Oracle in the GPL Version 2 section of the License
  * file that accompanied this code.
- *
+ * 
  * Modifications:
  * If applicable, add the following below the License Header, with the fields
  * enclosed by brackets [] replaced by your own identifying information:
  * "Portions Copyright [year] [name of copyright owner]"
- *
+ * 
  * Contributor(s):
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
@@ -36,37 +36,43 @@
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
  * holder.
+
  */
-package com.sun.faces.test.agnostic.flow.basic;
+package com.sun.faces.facelets.flow;
 
-import javax.faces.flow.FlowScoped;
-import java.io.Serializable;
+import com.sun.faces.facelets.tag.TagHandlerImpl;
+import java.io.IOException;
+import javax.faces.component.UIComponent;
+import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.TagConfig;
+import javax.faces.view.facelets.TagException;
 
-import java.util.Map;
-import javax.faces.context.FacesContext;
-import javax.inject.Named;
+public class IfTagHandler extends TagHandlerImpl {
 
-@Named
-@FlowScoped(id="/bounded-task-flow")
-public class FlowBean implements Serializable {
-
-   public String getName() {
-       return "basicFlow";
-   }
-   
-   public String getReturnValue() {
-       return "/return1";
-   }
-   
-   public void initializer() {
-       Map<String,Object> requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
-       requestMap.put("initializerMessage", "Initializer called");
-   }
-   
-   public void finalizer() {
-       Map<String,Object> requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
-       requestMap.put("finalizerMessage", "Finalizer called");
-   }
-
-   
+    public IfTagHandler(TagConfig config) {
+        super(config);
+    }
+    
+    public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
+        this.nextHandler.apply(ctx, parent);
+        if (FacesFlowReturnTagHandler.isWithinFacesFlowReturn(ctx)) {
+            FlowNavigationCase cur = FacesFlowReturnTagHandler.getNavigationCase(ctx);
+            if (null == cur) {
+                throw new TagException(tag, "Unable to determine <navigation-case> for which " +
+                        this.nextHandler.toString() + " is the <from-outcome>.");
+            }
+            cur.setCondition(this.nextHandler.toString());
+        } else if (SwitchNodeTagHandler.isWithinSwitch(ctx)) {
+            FlowNavigationCase cur = SwitchNodeTagHandler.getNavigationCase(ctx);
+            if (null == cur) {
+                throw new TagException(tag, "Unable to determine <navigation-case> for which " +
+                        this.nextHandler.toString() + " is the <from-outcome>.");
+            }
+            cur.setCondition(this.nextHandler.toString());
+            
+        }
+    }
+    
+    
+    
 }

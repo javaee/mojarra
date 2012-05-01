@@ -378,9 +378,6 @@ public abstract class Application {
      * for the sole purpose of not breaking existing applications that extend
      * this class.</p>
      *
-     * @return <code>ResourceBundle</code> for the current UIViewRoot,
-     * otherwise null
-     *
      * @throws FacesException if a bundle was defined, but not resolvable
      *
      * @throws NullPointerException if ctx == null || name == null
@@ -592,6 +589,25 @@ public abstract class Application {
         throw new UnsupportedOperationException();
 
     }
+
+    /**
+     * <p class="changed_added_2_2">If this application has flows,
+     * return the thread-safe singleton {@link FlowHandler} for this
+     * application.  This method must never return {@code null}, even if
+     * the application has no flows.  This is necessary to enable
+     * dynamic flow creation during the application's lifetime.</p>
+     *
+     * <div class="changed_added_2_2">
+     *
+     * <p>If the current implementation does not implement this method,
+     * this API method throws
+     * <code>UnsupportedOperationException</code>.</p>
+
+     * </div>
+
+     * @since 2.2
+     *
+     */ 
 
     public FlowHandler getFlowHandler() {
 

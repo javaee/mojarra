@@ -123,4 +123,25 @@
         <tag-name>finalizer</tag-name>
         <handler-class>com.sun.faces.facelets.flow.FinalizerTagHandler</handler-class>
     </tag>
+    <tag>
+        <description><![CDATA[
+
+        ]]></description>
+        <tag-name>default-node</tag-name>
+        <handler-class>com.sun.faces.facelets.flow.DefaultNodeTagHandler</handler-class>
+    </tag>
+    <tag>
+        <description><![CDATA[
+
+        ]]></description>
+        <tag-name>switch</tag-name>
+        <handler-class>com.sun.faces.facelets.flow.SwitchNodeTagHandler</handler-class>
+    </tag>
+   <tag>
+        <description><![CDATA[
+
+        ]]></description>
+        <tag-name>if</tag-name>
+        <handler-class>com.sun.faces.facelets.flow.IfTagHandler</handler-class>
+    </tag>
 </facelet-taglib>

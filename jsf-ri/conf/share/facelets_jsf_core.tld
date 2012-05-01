@@ -54,6 +54,7 @@
         any particular RenderKit.
     </description>
     <tlib-version>1.2</tlib-version>
+    <display-name>Faces Core</display-name>
     <short-name>f</short-name>
     <uri>http://java.sun.com/jsf/core</uri>
 

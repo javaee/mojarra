@@ -41,6 +41,7 @@
 package com.sun.faces.facelets.flow;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
+import com.sun.faces.util.Util;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -65,9 +66,15 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
     
     enum FlowDataKeys {
         FlowReturnNavigationCase,
+        NavigationCases,
         Views,
+        VDLDocument,
         Initializer,
-        Finalizer
+        Finalizer,
+        DefaultNodeId,
+        WithinFacesFlowReturn,
+        WithinSwitch,
+        SwitchNavigationCase
         
     } 
     
@@ -94,10 +101,11 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
             id = flowIdAttr.getValue(ctx);
         } else {
             id = this.tag.getLocation().getPath();
+            if (id.charAt(0) == '/') {
+                id = id.substring(1);
+            }
             int slash = id.lastIndexOf("/");
-            if (0 == slash) {
-                id = "";
-            } else {
+            if (-1 != slash) {
                 id = id.substring(0, slash);
             }
         }
@@ -127,6 +135,7 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
         Map<FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
         String flowId = getFlowId(ctx);
         Flow newFlow = flowHandler.getFlow(flowId);
+        boolean addFlow = false;
         
         if (null == newFlow) {
             
@@ -135,12 +144,12 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
 
             newFlow = new Flow();
             newFlow.setId(flowId);
-            flowHandler.addFlow(newFlow);
+            addFlow = true;
 
         } else {
             
             // Inspect the flow for a view corresponding to this page.
-            if (null != newFlow.getView(getMyNodeId())) {
+            if (null != newFlow.getNode(getMyNodeId())) {
                 // If we have one, take no further action.
                 return;
             } 
@@ -174,7 +183,7 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
             if (null == newFlow.getViews()) {
                 viewsInFlow = synthesizeViews();
                 newFlow.setViews(viewsInFlow);
-            } else if (null == newFlow.getView(getMyNodeId())) {
+            } else if (null == newFlow.getNode(getMyNodeId())) {
                 ViewNode viewNode = new ViewNode();
                 viewNode.setId(getMyNodeId());
                 viewNode.setVdlDocumentId(this.tag.getLocation().getPath());
@@ -192,8 +201,12 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
                 // <default-node>
                 //
                 // If we have some flow data, we must have a default-node.
-                
-                newFlow.setDefaultNodeId(getMyNodeId());
+                String defaultNodeId = (String) flowData.get(FlowDataKeys.DefaultNodeId);
+                if (null != defaultNodeId) {
+                    newFlow.setDefaultNodeId(defaultNodeId);
+                } else {
+                    newFlow.setDefaultNodeId(getMyNodeId());
+                }
             }
             
             //
@@ -214,15 +227,32 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
             //
             // <faces-flow-return>
             //
-            FlowNavigationCase facesFlowReturn = FacesFlowReturnTagHandler.getNavigationCase(ctx);
-            if (null != facesFlowReturn) {
+            List<FlowNavigationCase> facesFlowReturns = FacesFlowReturnTagHandler.getNavigationCases(ctx);
+            if (null != facesFlowReturns) {
                 Map<String, NavigationCase> returns = newFlow.getReturns(context);
-                String returnId = facesFlowReturn.getReturnId();
-                if (!returns.containsKey(returnId)) {
-                    returns.put(returnId, facesFlowReturn);
+                for (FlowNavigationCase cur : facesFlowReturns) {
+                    String returnId = cur.getEnclosingId();
+                    if (!returns.containsKey(returnId)) {
+                        returns.put(returnId, cur);
+                    }
                 }
             }
             
+            //
+            // <switch>
+            //
+            FlowNavigationCase switchElement = SwitchNodeTagHandler.getNavigationCase(ctx);
+            if (null != switchElement) {
+                Map<String, List<NavigationCase>> switches = newFlow.getSwitches(context);
+                if (null != switches) {
+                    String switchId = switchElement.getEnclosingId();
+                    if (null != switchId && !switches.containsKey(switchId)) {
+                        List<NavigationCase> cases = new ArrayList<NavigationCase>();
+                        cases.add(switchElement);
+                        switches.put(switchId, cases);
+                    }
+                }
+            }
             //
             // <initializer>
             //
@@ -251,7 +281,12 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
             // </editor-fold>
             
         }
-        
+
+        // This needs to be done at the end so that the flow is fully populated.
+        if (addFlow) {
+            flowHandler.addFlow(context, newFlow);
+
+        }
         
     }
     
@@ -267,7 +302,8 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
     }
     
     private String getMyNodeId() {
-        String myViewId = this.tag.getLocation().getPath();
+        String myViewId = Util.removeAllButLastSlashPathSegment(this.tag.getLocation().getPath());
+
         int dot = myViewId.indexOf(".");
         String id = myViewId.substring(0, dot);
         return id;

@@ -44,22 +44,52 @@
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:j="http://java.sun.com/jsf/flow">
+    
+    <f:metadata>
+
+        <j:faces-flow-definition>
+            <j:default-node>router1</j:default-node>
+            
+            <j:faces-flow-return id="success">
+                <j:navigation-case>
+                    <j:from-outcome>/complete</j:from-outcome>
+                </j:navigation-case>
+            </j:faces-flow-return>
+            <j:faces-flow-return id="errorOccurred">
+                <j:navigation-case>
+                    <j:from-outcome>error</j:from-outcome>
+                </j:navigation-case>
+            </j:faces-flow-return>
+            
+            <!-- If a customerId was specified then we'll edit it, otherwise create a new customer. -->
+            <j:switch id="router1">
+                <j:navigation-case>
+                    <j:if>#{facesFlowScope.customerId == null}</j:if>
+                    <j:from-outcome>create-customer</j:from-outcome>
+                </j:navigation-case>
+            </j:switch>
+            
+            <j:view id="create-customer">
+                <j:vdl-document>create-customer.xhtml</j:vdl-document>
+            </j:view>
+
+            <j:view id="maintain-customer-record">
+                <j:vdl-document>maintain-customer-record.xhtml</j:vdl-document>
+            </j:view>
+            
+            
+            <j:initializer>#{maintainCustomerBean.initializeFlow}</j:initializer>
+            <j:finalizer>#{maintainCustomerBean.cleanUpFlow}</j:finalizer>
+            
+        </j:faces-flow-definition>
+
+    </f:metadata>
     <head>
-        <title>Page navigated to upon return from bounded-task-flow</title>
+        <title>First page in the flow</title>
     </head>
     <body>
-        <h1>Page navigated to upon return from bounded-task-flow</h1>
-        
-    <h:form prependId="false">
-        <p>return page</p>
-        
-        <p>Finalizer message: #{finalizerMessage}</p>
-
-        
-        
-        <p>facesFlowScope value, should be empty: #{facesFlowScope.value}</p>
-                
-    </h:form>
-</body>
+    </body>
 </html>

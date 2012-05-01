@@ -55,12 +55,22 @@ public class FromOutcomeTagHandler extends TagHandlerImpl {
     
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
         this.nextHandler.apply(ctx, parent);
-        FlowNavigationCase cur = FacesFlowReturnTagHandler.getNavigationCase(ctx);
-        if (null == cur) {
-            throw new TagException(tag, "Unable to determine <navigation-case> for which " +
-                    this.nextHandler.toString() + " is the <from-outcome>.");
+        if (FacesFlowReturnTagHandler.isWithinFacesFlowReturn(ctx)) {
+            FlowNavigationCase cur = FacesFlowReturnTagHandler.getNavigationCase(ctx);
+            if (null == cur) {
+                throw new TagException(tag, "Unable to determine <navigation-case> for which " +
+                        this.nextHandler.toString() + " is the <from-outcome>.");
+            }
+            cur.setFromOutcome(this.nextHandler.toString());
+        } else if (SwitchNodeTagHandler.isWithinSwitch(ctx)) {
+            FlowNavigationCase cur = SwitchNodeTagHandler.getNavigationCase(ctx);
+            if (null == cur) {
+                throw new TagException(tag, "Unable to determine <navigation-case> for which " +
+                        this.nextHandler.toString() + " is the <from-outcome>.");
+            }
+            cur.setFromOutcome(this.nextHandler.toString());
+            
         }
-        cur.setFromOutcome(this.nextHandler.toString());
         
         
     }

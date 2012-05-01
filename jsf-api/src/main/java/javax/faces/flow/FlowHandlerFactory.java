@@ -1,8 +1,8 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- * 
+ *
  * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
- * 
+ *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -11,20 +11,20 @@
  * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- * 
+ *
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at packager/legal/LICENSE.txt.
- * 
+ *
  * GPL Classpath Exception:
  * Oracle designates this particular file as subject to the "Classpath"
  * exception as provided by Oracle in the GPL Version 2 section of the License
  * file that accompanied this code.
- * 
+ *
  * Modifications:
  * If applicable, add the following below the License Header, with the fields
  * enclosed by brackets [] replaced by your own identifying information:
  * "Portions Copyright [year] [name of copyright owner]"
- * 
+ *
  * Contributor(s):
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
@@ -36,56 +36,39 @@
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
  * holder.
-
+ *
+ *
+ * This file incorporates work covered by the following copyright and
+ * permission notice:
+ *
+ * Copyright 2005-2007 The Apache Software Foundation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-package com.sun.faces.facelets.flow;
 
-import com.sun.faces.facelets.flow.FacesFlowDefinitionTagHandler.FlowDataKeys;
-import com.sun.faces.facelets.tag.TagHandlerImpl;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import javax.faces.component.UIComponent;
-import javax.faces.flow.ViewNode;
-import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.TagAttribute;
-import javax.faces.view.facelets.TagConfig;
-import javax.faces.view.facelets.TagException;
+package javax.faces.flow;
 
-public class ViewNodeTagHandler extends TagHandlerImpl {
+import javax.faces.context.FacesContext;
 
-    public ViewNodeTagHandler(TagConfig config) {
-        super(config);
-    }
+/**
+ * <p class="changed_added_2_2">The {@link javax.faces.application.Application} uses
+ * this factory to create the instance of {@link FlowHandler}</p>
+ * 
+ * @since 2.2
+ */
+public abstract class FlowHandlerFactory {
     
-    public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
-        Map<FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
-        flowData.remove(FlowDataKeys.VDLDocument);
-        try {
-            this.nextHandler.apply(ctx, parent);
-            List<ViewNode> viewsFromTag = (List<ViewNode>) flowData.get(FlowDataKeys.Views);
-            if (null == viewsFromTag) {
-                viewsFromTag = new ArrayList<ViewNode>();
-                flowData.put(FlowDataKeys.Views, viewsFromTag);
-            }
-            ViewNode view = new ViewNode();
-            TagAttribute idAttr = this.getRequiredAttribute("id");
-            view.setId(idAttr.getValue(ctx));
-            String vdlDocument = (String) flowData.get(FlowDataKeys.VDLDocument);
-            if (null == vdlDocument) {
-                throw new TagException(tag, "View withd id '" + idAttr.getValue(ctx) + 
-                        "' does not have the required nested <vdl-document> element.");
-            }
-            view.setVdlDocumentId(vdlDocument);
-            viewsFromTag.add(view);
-            
-        } finally {
-            flowData.remove(FlowDataKeys.VDLDocument);
-        }
-        
-    }
-    
-    
-    
+    public abstract FlowHandler createFlowHandler(FacesContext context);
+
+
 }

@@ -147,6 +147,16 @@ public class JspToFaceletsTLD21Generator extends JspTLDGenerator {
             propManager.getProperty(PropertyManager.TAGLIB_SHORT_NAME));
         writer.closeElement();
 
+        try {
+            String displayName = propManager.getProperty(PropertyManager.TAGLIB_DISPLAY_NAME);
+            writer.startElement("display-name");
+            writer.writeText(
+                    displayName);
+            writer.closeElement();
+        } catch (Exception ex) {
+            
+        }
+        
         writer.startElement("uri");
         writer.writeText(propManager.getProperty(PropertyManager.TAGLIB_URI));
         writer.closeElement();

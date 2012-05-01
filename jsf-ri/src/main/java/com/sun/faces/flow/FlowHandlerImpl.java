@@ -41,11 +41,14 @@
 package com.sun.faces.flow;
 
 import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.util.Util;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.el.MethodExpression;
+import javax.faces.application.ConfigurableNavigationHandler;
+import javax.faces.application.NavigationHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -100,11 +103,15 @@ public class FlowHandlerImpl extends FlowHandler {
     
 
     @Override
-    public void addFlow(Flow toAdd) {
+    public void addFlow(FacesContext context, Flow toAdd) {
         if (null == toAdd || null == toAdd.getId() || 0 == toAdd.getId().length()) {
             throw new IllegalArgumentException();
         }
         flows.put(toAdd.getId(), toAdd);
+        NavigationHandler navigationHandler = context.getApplication().getNavigationHandler();
+        if (navigationHandler instanceof ConfigurableNavigationHandler) {
+            ((ConfigurableNavigationHandler)navigationHandler).inspectFlow(context, toAdd);
+        }
     }
 
     @Override
@@ -137,24 +144,38 @@ public class FlowHandlerImpl extends FlowHandler {
     
     @Override
     @SuppressWarnings(value="")
-    public void transition(FacesContext context, UIComponent src, UIComponent target) {
+    public Flow transition(FacesContext context, UIComponent src, UIComponent target) {
+        Flow newFlow = null;
         if (!flowFeatureIsEnabled) {
-            return;
+            return newFlow;
         }
         
-        String  sourceFlowId = getSourceFlowId(context, src),
-                targetFlowId = getTargetFlowId(context, target);
+        String  sourceFlowId = Util.getFlowIdFromComponent(context, src),
+                targetFlowId = Util.getFlowIdFromComponent(context, target);
         Flow sourceFlow = this.getFlowByNodeId(sourceFlowId),
              targetFlow = this.getFlowByNodeId(targetFlowId);
-        if (    (null == sourceFlow && null != targetFlow) ||
-                (null != sourceFlow && null == targetFlow) ||
-                !sourceFlow.equals(targetFlow) ) {
+        // there has to be a better way to structure this logic
+        if (!flowsEqual(sourceFlow, targetFlow)) {
             popFlow(context);
             if (null != targetFlow) {
                 pushFlow(context, targetFlow);
+                newFlow = targetFlow;
             }
-        }
+        } 
+        return newFlow;
         
+    }
+    
+    private boolean flowsEqual(Flow flow1, Flow flow2) {
+        boolean result = false;
+        if (flow1 == flow2) {
+            result = true;
+        } else if ((null == flow1) || (null == flow2)) {
+            result = false;
+        } else {
+            result = flow1.equals(flow2);
+        }
+        return result;
     }
     
     
@@ -202,34 +223,7 @@ public class FlowHandlerImpl extends FlowHandler {
         
         return result;
     }
-    
-    private String getSourceFlowId(FacesContext context, UIComponent source) {
-        String result = "";
-        if (source instanceof javax.faces.component.UIViewRoot) {
-            result = ((javax.faces.component.UIViewRoot)source).getViewId();
-            int dot = result.indexOf(".");
-            if (-1 != dot) {
-                result = result.substring(0, dot);
-            }
-            
-        }
         
-        return result;
-    }
-    
-    private String getTargetFlowId(FacesContext context, UIComponent target) {
-        String result = "";
-        if (target instanceof javax.faces.component.UIViewRoot) {
-            result = ((javax.faces.component.UIViewRoot)target).getViewId();
-            int dot = result.indexOf(".");
-            if (-1 != dot) {
-                result = result.substring(0, dot);
-            }
-        }
-        
-        return result;
-    }
-    
     // </editor-fold>
     
 }

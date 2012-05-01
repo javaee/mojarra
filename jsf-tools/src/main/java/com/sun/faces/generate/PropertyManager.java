@@ -65,6 +65,11 @@ public class PropertyManager {
     public static final String TAGLIB_SHORT_NAME = "taglib.shortname";
 
     /**
+     * <p>The display-name of the generated tag library.</p>
+     */
+    public static final String TAGLIB_DISPLAY_NAME = "taglib.displayname";
+
+    /**
      * <p>The URI by which the tag library will be known by.</p>
      */
     public static final String TAGLIB_URI = "taglib.uri";

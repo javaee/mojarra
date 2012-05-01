@@ -49,22 +49,26 @@
       xmlns:j="http://java.sun.com/jsf/flow">
     
     <f:metadata>
-        <j:faces-flow-definition/>
+
+        <j:faces-flow-definition>
             
+        </j:faces-flow-definition>
+
     </f:metadata>
     <head>
-        <title>Second page in the flow</title>
+        <title>Create customer page</title>
     </head>
     <body>
+        
+        <p>Create customer page</p>
+        
     <h:form prependId="false">
-        <p>Second page in the flow</p>
-        <p>Flow bean name: #{flowBean.name}</p>
         
-        <p>value: <h:inputText id="input" value="#{facesFlowScope.value}" /></p>
-        
-        <p><h:commandButton id="start" value="back" action="bounded-task-flow" /></p>
-        <p><h:commandButton id="next" value="next" action="next_b" /></p>
+        <p>Initializer message: #{initializerMessage}</p>
+
+        <p><h:commandButton id="return" value="return" action="success" /></p>
         
     </h:form>
+        
     </body>
 </html>

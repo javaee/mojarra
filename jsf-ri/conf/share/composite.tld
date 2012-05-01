@@ -68,13 +68,12 @@
 
 <h2>Creating a Composite Component</h2>
 
-  <p>The default implementation must support authoring A composite
-  component is declared by creating a Facelets2 file inside of a resource
-  library.  (See section JSF.2.6 of the specification prose document for
-  more information about resource libraries.)  A composite component
-  must reside within a resource library.  It is not possible to create a
-  composite component without putting it inside of a resource
-  library.</p>
+  <p>A composite component is declared by creating a Facelets2 file
+  inside of a resource library.  (See section JSF.2.6 of the
+  specification prose document for more information about resource
+  libraries.)  A composite component must reside within a resource
+  library.  It is not possible to create a composite component without
+  putting it inside of a resource library.</p>
 
   <p>The default XML namespace URI of the taglib that contains the
   composite component, for use in <em>the using page</em>, is
@@ -240,8 +239,12 @@ apply.</p>
         2.1
     </tlib-version>
 
+    <display-name>
+        Composite Components
+    </display-name>
+
     <short-name>
-        composite
+        cc
     </short-name>
 
     <uri>

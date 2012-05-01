@@ -44,14 +44,19 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
+import javax.el.ExpressionFactory;
+import javax.el.ValueExpression;
 import javax.faces.application.NavigationCase;
 import javax.faces.context.FacesContext;
 
 public class FlowNavigationCase extends NavigationCase {
     
     private String fromOutcome;
+    private String condition;
+    private ValueExpression conditionExpr;
     
-    private String returnId;
+    // This is the id of the <return> or <switch>
+    private String enclosingId;
 
     
     public FlowNavigationCase() {
@@ -76,7 +81,18 @@ public class FlowNavigationCase extends NavigationCase {
 
     @Override
     public Boolean getCondition(FacesContext context) {
-        return super.getCondition(context);
+        if (conditionExpr == null && condition != null) {
+            ExpressionFactory factory =
+                  context.getApplication().getExpressionFactory();
+            conditionExpr = factory.createValueExpression(context.getELContext(),
+                                                          condition,
+                                                          Boolean.class);
+        }
+
+        return ((conditionExpr != null)
+                ? (Boolean) conditionExpr.getValue(context.getELContext())
+                : null);
+
     }
 
     @Override
@@ -109,12 +125,12 @@ public class FlowNavigationCase extends NavigationCase {
         return super.getResourceURL(context);
     }
 
-    public String getReturnId() {
-        return returnId;
+    public String getEnclosingId() {
+        return enclosingId;
     }
 
-    public void setReturnId(String returnId) {
-        this.returnId = returnId;
+    public void setEnclosingId(String returnId) {
+        this.enclosingId = returnId;
     }
 
     @Override
@@ -124,7 +140,7 @@ public class FlowNavigationCase extends NavigationCase {
 
     @Override
     public boolean hasCondition() {
-        return super.hasCondition();
+        return (condition != null);
     }
 
     @Override
@@ -146,7 +162,8 @@ public class FlowNavigationCase extends NavigationCase {
     }
 
     
-    public void setCondition(FacesContext context, Boolean condition) {
+    public void setCondition(String condition) {
+        this.condition = condition;
     }
 
     
@@ -176,10 +193,6 @@ public class FlowNavigationCase extends NavigationCase {
 
     
     public void setToViewId(FacesContext context, String toViewId) {
-    }
-
-    
-    public void setHasCondition(boolean a) {
     }
 
     
