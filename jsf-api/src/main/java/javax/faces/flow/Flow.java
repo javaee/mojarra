@@ -70,8 +70,8 @@ public class Flow implements Serializable {
     private String id;
     private String startNodeId;
     private List<ViewNode> views;
-    private Map<String,NavigationCase> returns = new ConcurrentHashMap<String, NavigationCase>();
-    private Map<String,List<NavigationCase>> switches = new ConcurrentHashMap<String, List<NavigationCase>>();
+    private ConcurrentHashMap<String,NavigationCase> returns = new ConcurrentHashMap<String, NavigationCase>();
+    private ConcurrentHashMap<String,List<NavigationCase>> switches = new ConcurrentHashMap<String, List<NavigationCase>>();
     private MethodExpression initializer;
     private MethodExpression finalizer;
     
