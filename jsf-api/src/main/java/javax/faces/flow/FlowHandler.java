@@ -112,6 +112,63 @@ import javax.faces.context.FacesContext;
  * the flows with a stack-like runtime data structure, stored in a
  * per-user fashion and associated with the {@code ClientWindow}.</p>
 
+ * <p><strong>The Flow Graph</strong></p>
+
+ * <p>Prior versions of the specification defined a flow graph but the
+ * only kind of node in the graph was a VDL view.  The Faces Flow
+ * feature currently defines the following node types.</p>
+
+ *
+ * <ul>
+
+ * <li><p>View</p>
+
+ * <p>This is the regular JSF VDL View that has been in the
+ * specification since the beginning.</p>
+
+ * </li>
+
+ * <li><p>Switch</p>
+
+ * <p>This is a list of EL expressions.  When control is passed to a
+ * switch node, each expression in the list is evaluated and the first
+ * one that returns {@code true} is used to define the id of the next
+ * node to which control must be passed.  If none of the expressions
+ * evaluates to {@code true}, control passes to the specified default
+ * id.</p>
+
+ * </li>
+
+ * <li><p>Return</p>
+
+ * <p>This node type specifies an outcome that is returned to the
+ * calling flow.</p>
+
+ * </li>
+
+ * <li><p>Method Call</p>
+
+ * <p>This node type allows invocation of arbitrary application logic at
+ * any point in the executiong of the flow.  An outcome can be specified
+ * that will cause a navigation case to be navigated to after the method
+ * has been invoked.</p>
+
+ * </li>
+
+ * <li><p>Faces Flow Call</p>
+
+ * <p>This node type allows one flow to call another flow.  The calling
+ * flow remains active and is not exited until control returns from the
+ * called flow.</p>
+
+ * </li>
+
+ * </ul>
+
+ * <p>This UML diagram shows the relationship of the flow node types to
+ * the {@code FlowHandler}.  Non-implemented classes are shaded in
+ * gray.</p>
+
  * <img src="FlowHierarchy.jpg" style="display: block; margin-left: auto; margin-right: auto"></img>
 
  * </div>

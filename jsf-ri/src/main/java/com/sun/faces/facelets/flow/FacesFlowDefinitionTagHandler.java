@@ -71,7 +71,7 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
         VDLDocument,
         Initializer,
         Finalizer,
-        DefaultNodeId,
+        StartNodeId,
         WithinFacesFlowReturn,
         WithinSwitch,
         SwitchNavigationCase
@@ -173,8 +173,8 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
             //
             // <default-node>
             //
-            if (null == newFlow.getDefaultNodeId()) {
-                newFlow.setDefaultNodeId(getMyNodeId());
+            if (null == newFlow.getStartNodeId()) {
+                newFlow.setStartNodeId(getMyNodeId());
             } 
             
             //
@@ -196,16 +196,16 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
             
             // <editor-fold defaultstate="collapsed" desc="Some flow data, create the flow now with that data, using conventions for gaps">       
 
-            if (null == newFlow.getDefaultNodeId()) {
+            if (null == newFlow.getStartNodeId()) {
                 //
                 // <default-node>
                 //
-                // If we have some flow data, we must have a default-node.
-                String defaultNodeId = (String) flowData.get(FlowDataKeys.DefaultNodeId);
-                if (null != defaultNodeId) {
-                    newFlow.setDefaultNodeId(defaultNodeId);
+                // If we have some flow data, we must have a start-node.
+                String startNodeId = (String) flowData.get(FlowDataKeys.StartNodeId);
+                if (null != startNodeId) {
+                    newFlow.setStartNodeId(startNodeId);
                 } else {
-                    newFlow.setDefaultNodeId(getMyNodeId());
+                    newFlow.setStartNodeId(getMyNodeId());
                 }
             }
             

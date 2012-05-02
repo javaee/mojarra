@@ -250,12 +250,12 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                 if (null != newFlow) {
                     // We need to determine if newRoot is the right node within
                     // newFlow.
-                    String defaultNodeId = newFlow.getDefaultNodeId();
-                    assert(null != defaultNodeId);
-                    assert(0 < defaultNodeId.length());
-                    if (!defaultNodeId.equals(Util.getFlowIdFromComponent(context, newRoot))) {
+                    String startNodeId = newFlow.getStartNodeId();
+                    assert(null != startNodeId);
+                    assert(0 < startNodeId.length());
+                    if (!startNodeId.equals(Util.getFlowIdFromComponent(context, newRoot))) {
                         context.setViewRoot(newRoot);
-                        handleNavigation(context, fromAction, defaultNodeId);
+                        handleNavigation(context, fromAction, startNodeId);
                     } else {
                         context.setViewRoot(newRoot);
                     }
@@ -698,7 +698,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             // If this outcome corresponds to an existing flow...
             if (null != flow) {
                 // make a navigation case from its defaultNode.
-                FlowNode node = flow.getNode(flow.getDefaultNodeId());
+                FlowNode node = flow.getNode(flow.getStartNodeId());
                 if (null != node && node instanceof ViewNode) {
                     viewIdToTest = ((ViewNode)node).getVdlDocumentId();
                 }

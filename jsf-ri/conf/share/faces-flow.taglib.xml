@@ -127,8 +127,8 @@
         <description><![CDATA[
 
         ]]></description>
-        <tag-name>default-node</tag-name>
-        <handler-class>com.sun.faces.facelets.flow.DefaultNodeTagHandler</handler-class>
+        <tag-name>start-node</tag-name>
+        <handler-class>com.sun.faces.facelets.flow.StartNodeTagHandler</handler-class>
     </tag>
     <tag>
         <description><![CDATA[

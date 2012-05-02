@@ -47,16 +47,16 @@ import javax.faces.component.UIComponent;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagConfig;
 
-public class DefaultNodeTagHandler extends TagHandlerImpl {
+public class StartNodeTagHandler extends TagHandlerImpl {
 
-    public DefaultNodeTagHandler(TagConfig config) {
+    public StartNodeTagHandler(TagConfig config) {
         super(config);
     }
     
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
         this.nextHandler.apply(ctx, parent);
         Map<FacesFlowDefinitionTagHandler.FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
-        flowData.put(FacesFlowDefinitionTagHandler.FlowDataKeys.DefaultNodeId, this.nextHandler.toString());
+        flowData.put(FacesFlowDefinitionTagHandler.FlowDataKeys.StartNodeId, this.nextHandler.toString());
     }
     
     

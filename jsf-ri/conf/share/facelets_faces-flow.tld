@@ -60,8 +60,48 @@
         term "faces-config" is equivalent to "Application Configuration
         Resources".</p>
 
-        <h2>Creating a Faces Flow</h2>
+<p>Usage example</p>
 
+<div class="xml" style="font-family:monospace;"><ol><li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;f:metadata<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
+<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li>
+<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;j:faces-flow-definition<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
+<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;j:start-node<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>router1<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/j:start-node<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
+<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; </div></li>
+<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;j:faces-flow-return</span> <span style="color: #000066;">id</span>=<span style="color: #ff0000;">&quot;success&quot;</span><span style="color: #000000; font-weight: bold;">&gt;</span></span></div></li>
+<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;j:navigation-case<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
+<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;j:from-outcome<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>/complete<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/j:from-outcome<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
+<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/j:navigation-case<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
+<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/j:faces-flow-return<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
+<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;j:faces-flow-return</span> <span style="color: #000066;">id</span>=<span style="color: #ff0000;">&quot;errorOccurred&quot;</span><span style="color: #000000; font-weight: bold;">&gt;</span></span></div></li>
+<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;j:navigation-case<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
+<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;j:from-outcome<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>error<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/j:from-outcome<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
+<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/j:navigation-case<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
+<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/j:faces-flow-return<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
+<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; </div></li>
+<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #808080; font-style: italic;">&lt;!-- If a customerId was specified then we'll edit it, otherwise create a new customer. --&gt;</span></div></li>
+<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;j:switch</span> <span style="color: #000066;">id</span>=<span style="color: #ff0000;">&quot;router1&quot;</span><span style="color: #000000; font-weight: bold;">&gt;</span></span></div></li>
+<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;j:navigation-case<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
+<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;j:if<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>#{facesFlowScope.customerId == null}<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/j:if<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
+<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;j:from-outcome<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>create-customer<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/j:from-outcome<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
+<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/j:navigation-case<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
+<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/j:switch<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
+<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; </div></li>
+<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;j:view</span> <span style="color: #000066;">id</span>=<span style="color: #ff0000;">&quot;create-customer&quot;</span><span style="color: #000000; font-weight: bold;">&gt;</span></span></div></li>
+<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;j:vdl-document<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>create-customer.xhtml<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/j:vdl-document<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
+<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/j:view<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
+<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li>
+<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;j:view</span> <span style="color: #000066;">id</span>=<span style="color: #ff0000;">&quot;maintain-customer-record&quot;</span><span style="color: #000000; font-weight: bold;">&gt;</span></span></div></li>
+<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;j:vdl-document<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>maintain-customer-record.xhtml<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/j:vdl-document<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
+<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/j:view<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
+<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; </div></li>
+<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; </div></li>
+<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;j:initializer<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>#{maintainCustomerBean.initializeFlow}<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/j:initializer<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
+<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;j:finalizer<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>#{maintainCustomerBean.cleanUpFlow}<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/j:finalizer<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
+<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; </div></li>
+<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/j:faces-flow-definition<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
+<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li>
+<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/f:metadata<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
+</ol></div>		</div>
 
 ]]></description>
     <tlib-version>2.2</tlib-version>
@@ -79,15 +119,40 @@
              
         <div class="changed_added_2_2">
 
-<p>VDL usage</p>
+<p><strong>VDL usage</strong></p>
 
-<p>The presence of this element in a VDL view indicates that this view
-must be considered as a <code>ViewNode</code> of the flow referenced by
-the value of the <code>id</code> attribute.</p>
+<p>Several conventions apply when using this element in a VDL view, but
+in all cases, the presence of this element in a VDL view indicates that
+this view must be considered as a <code>ViewNode</code> of the flow.
+There are two varieties of usage of this element within VDL views: the
+"flow defining view" and the "member view".  In any given VDL defined
+view, there must be exactly one flow defining view and zero or more
+member views.</p>
 
-        </div>
+<p><em>Identifying the flow defining view</em></p>
 
-      ]]>
+<p>The flow defining view must be the first view in a flow that is
+encountered during a user's traversal of the application.</p>
+
+<p>If this VDL view resides in a directory whose name is equal to the
+filename of the VDL view, the directory name is taken to be the id of
+the flow, and the value of the id attribute of the
+<code>&lt;faces-flow-definition&gt;</code>, if any, is ignored.  If
+there is no <code>&lt;start-node&gt;</code> defined, it assumed to be
+the VDL view in which this element appears.</p>
+
+<p>If this VDL view does not reside in a directory, or resides in a
+directory whose name is not equal to the filename of the VDL view, the
+id and <code>&lt;start-node&gt;</code> must be explicitly specified.</p>
+
+<p><strong>faces-config usage</strong></p>
+
+<p>The entire flow is defined as child elements, or references to other
+elements of this element.</p>
+
+</div>
+
+]]>
      </description>
      <name>faces-flow-definition</name>
      <tag-class></tag-class>
@@ -96,13 +161,25 @@ the value of the <code>id</code> attribute.</p>
      <attribute>
          <description><![CDATA[
          
-         <p class="changed_added_2_2">The id of this flow.  This must be
-         unique within the defining scope of the current document.  When
-         used in the Application Configuration Resources, this attribute
-         is required.  When used in a VDL view, this attribute is
-         optional.  If not specified, the id of the flow is taken from
-         the directory containing this VDL document.</p>
-            
+         <p class="changed_added_2_2">The id of this flow.<p>
+
+        <div class="changed_added_2_2">
+
+<p>VDL usage</p>
+
+<p>This attribute is optional when used in a VDL view.  See the element
+documentation for details.</p>
+
+<p>faces-config usage</p>
+
+<p>This attribute is required when used in a faces-config file.  It must
+be unique within the faces-config file in which this element
+appears.</p>
+
+
+        </div>
+
+
          ]]></description>
          <name>id</name>
          <required>false</required>
@@ -112,5 +189,348 @@ the value of the <code>id</code> attribute.</p>
 
      </attribute>
    </tag>
+
+ <tag>
+     <description>
+
+        <![CDATA[
+
+<p class="changed_added_2_2">Declare the id of the starting node in the
+flow graph.  The start node may be any of the node types mentioned in
+the class javadocs for <code><a target="_"
+href="../../../javadocs/javax/faces/flow/FlowHandler.html">FlowHandler</a></code>.</p>
+
+<div class="changed_added_2_2">
+
+<p><strong>VDL usage</strong></p>
+
+<p>This element is optional when used in VDL views. See the element
+documentation for <code>&lt;faces-flow-definition&gt;</code> for
+details.</p>
+
+<p><strong>faces-config usage</strong></p>
+
+<p>This element is required when used a in a faces-config.</p>
+
+</div>
+
+]]>
+     </description>
+     <name>start-node</name>
+     <tag-class></tag-class>
+     <body-content>empty</body-content>
+
+   </tag>
+
+ <tag>
+     <description>
+
+        <![CDATA[
+
+<p class="changed_added_2_2">Define a return node in a flow graph.</p>
+
+<div class="changed_added_2_2">
+
+<p><strong>VDL usage</strong></p>
+
+<p>This element must contain exactly one <code>&lt;navigation-case&gt;</code> element, 
+which must contain exactly one <code>&lt;from-outcome&gt;</code> element.</p>
+
+<p><strong>faces-config usage</strong></p>
+
+<p>The semantics are identical when used in a faces-config.</p>
+
+</div>
+
+]]>
+     </description>
+     <name>faces-flow-return</name>
+     <tag-class></tag-class>
+     <body-content>empty</body-content>
+
+     <attribute>
+         <description><![CDATA[
+         
+         <p class="changed_added_2_2">The id of this faces flow return.<p>
+
+        <div class="changed_added_2_2">
+
+<p>VDL usage</p>
+
+<p>This attribute is required when used in a VDL view.  It must be
+unique within the flow.</p>
+
+<p>faces-config usage</p>
+
+<p>This attribute is required when used in a faces-config file.  It must
+be unique within the faces-config file in which this element
+appears.</p>
+
+
+        </div>
+
+
+         ]]></description>
+         <name>id</name>
+         <required>false</required>
+         <deferred-value>
+             <type>java.lang.String</type>
+         </deferred-value>         
+
+     </attribute>
+
+
+   </tag>
+
+ <tag>
+     <description>
+
+        <![CDATA[
+
+         <p class="changed_added_2_2">Define a navigation case for a faces flow.  This element is used within <code>&lt;faces-flow-return&gt;</code> and <code>&lt;switch&gt;</code> elements.<p>
+
+<p class="changed_added_2_2">The semantics of this element are identical
+whether it is used in a VDL view or in a faces-config file.</p>
+
+</div>
+
+]]>
+     </description>
+     <name>navigation-case</name>
+     <tag-class></tag-class>
+     <body-content>empty</body-content>
+
+   </tag>
+
+ <tag>
+     <description>
+
+        <![CDATA[
+
+<p class="changed_added_2_2">Define a switch node in a flow graph.</p>
+
+<div class="changed_added_2_2">
+
+<p><strong>VDL usage</strong></p>
+
+<p>This element must contain one or more
+<code>&lt;navigation-case&gt;</code> elements, each of which must
+contain exactly one <code>&lt;if&gt;</code> and one <code>&lt;from-outcome&gt;</code> element.</p>
+
+<p><strong>faces-config usage</strong></p>
+
+<p>The semantics are identical when used in a faces-config.</p>
+
+</div>
+
+]]>
+     </description>
+     <name>switch</name>
+     <tag-class></tag-class>
+     <body-content>empty</body-content>
+
+     <attribute>
+         <description><![CDATA[
+         
+         <p class="changed_added_2_2">The id of this switch return.<p>
+
+        <div class="changed_added_2_2">
+
+<p>VDL usage</p>
+
+<p>This attribute is required when used in a VDL view.  It must be
+unique within the flow.</p>
+
+<p>faces-config usage</p>
+
+<p>This attribute is required when used in a faces-config file.  It must
+be unique within the faces-config file in which this element
+appears.</p>
+
+
+        </div>
+
+
+         ]]></description>
+         <name>id</name>
+         <required>false</required>
+         <deferred-value>
+             <type>java.lang.String</type>
+         </deferred-value>         
+
+     </attribute>
+
+
+   </tag>
+
+
+ <tag>
+     <description>
+
+        <![CDATA[
+
+         <p class="changed_added_2_2">The content of this element must
+         be an EL expression that may be invoked when the containing
+         swich is activated.  If the expresion returns
+         <code>true</code>, the <code>&lt;from-outcome&gt;</code>
+         sibling elements outcome is used as the id of the node in the
+         flow graph to which control must be passed.</p>
+
+<p class="changed_added_2_2">The semantics of this element are identical
+whether it is used in a VDL view or in a faces-config file.</p>
+
+</div>
+
+]]>
+     </description>
+     <name>if</name>
+     <tag-class></tag-class>
+     <body-content>empty</body-content>
+
+   </tag>
+
+
+ <tag>
+     <description>
+
+        <![CDATA[
+
+         <p class="changed_added_2_2">Define a node id to which control
+         will be passed.  The meaning of this element depends on the
+         element in which it resides.<p>
+
+<p class="changed_added_2_2">The semantics of this element are identical
+whether it is used in a VDL view or in a faces-config file.</p>
+
+</div>
+
+]]>
+     </description>
+     <name>from-outcome</name>
+     <tag-class></tag-class>
+     <body-content>empty</body-content>
+
+   </tag>
+
+ <tag>
+     <description>
+
+        <![CDATA[
+
+<p class="changed_added_2_2">Define a view node in a flow graph.</p>
+
+<div class="changed_added_2_2">
+
+<p><strong>VDL usage</strong></p>
+
+<p>This element must contain exactly one
+<code>&lt;vdl-document&gt;</code> element.</p>
+
+<p><strong>faces-config usage</strong></p>
+
+<p>The semantics are identical when used in a faces-config.</p>
+
+</div>
+
+]]>
+     </description>
+     <name>view</name>
+     <tag-class></tag-class>
+     <body-content>empty</body-content>
+
+     <attribute>
+         <description><![CDATA[
+         
+         <p class="changed_added_2_2">The id of this view.<p>
+
+        <div class="changed_added_2_2">
+
+<p>VDL usage</p>
+
+<p>This attribute is required when used in a VDL view.  It must be
+unique within the flow.</p>
+
+<p>faces-config usage</p>
+
+<p>This attribute is required when used in a faces-config file.  It must
+be unique within the faces-config file in which this element
+appears.</p>
+
+
+        </div>
+
+
+         ]]></description>
+         <name>id</name>
+         <required>false</required>
+         <deferred-value>
+             <type>java.lang.String</type>
+         </deferred-value>         
+
+     </attribute>
+
+   </tag>
+
+ <tag>
+     <description>
+
+        <![CDATA[
+
+         <p class="changed_added_2_2">Define the vdl-document for the enclosing view.<p>
+
+<p class="changed_added_2_2">The semantics of this element are identical
+whether it is used in a VDL view or in a faces-config file.</p>
+
+</div>
+
+]]>
+     </description>
+     <name>vdl-document</name>
+     <tag-class></tag-class>
+     <body-content>empty</body-content>
+
+   </tag>
+
+ <tag>
+     <description>
+
+        <![CDATA[
+
+         <p class="changed_added_2_2">A <code>MethodExpression</code> that will be invoked when the flow is entered.<p>
+
+<p class="changed_added_2_2">The semantics of this element are identical
+whether it is used in a VDL view or in a faces-config file.</p>
+
+</div>
+
+]]>
+     </description>
+     <name>initializer</name>
+     <tag-class></tag-class>
+     <body-content>empty</body-content>
+
+   </tag>
+
+ <tag>
+     <description>
+
+        <![CDATA[
+
+         <p class="changed_added_2_2">A <code>MethodExpression</code> that will be invoked when the flow is exited.<p>
+
+<p class="changed_added_2_2">The semantics of this element are identical
+whether it is used in a VDL view or in a faces-config file.</p>
+
+</div>
+
+]]>
+     </description>
+     <name>finalizer</name>
+     <tag-class></tag-class>
+     <body-content>empty</body-content>
+
+   </tag>
+
+
 
 </taglib>

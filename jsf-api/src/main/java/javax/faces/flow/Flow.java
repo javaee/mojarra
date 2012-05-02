@@ -68,7 +68,7 @@ public class Flow implements Serializable {
     // <editor-fold defaultstate="collapsed" desc="Instance variables">       
 
     private String id;
-    private String defaultNodeId;
+    private String startNodeId;
     private List<ViewNode> views;
     private Map<String,NavigationCase> returns = new ConcurrentHashMap<String, NavigationCase>();
     private Map<String,List<NavigationCase>> switches = new ConcurrentHashMap<String, List<NavigationCase>>();
@@ -93,7 +93,7 @@ public class Flow implements Serializable {
         if ((this.id == null) ? (other.id != null) : !this.id.equals(other.id)) {
             return false;
         }
-        if ((this.defaultNodeId == null) ? (other.defaultNodeId != null) : !this.defaultNodeId.equals(other.defaultNodeId)) {
+        if ((this.startNodeId == null) ? (other.startNodeId != null) : !this.startNodeId.equals(other.startNodeId)) {
             return false;
         }
         if (this.views != other.views && (this.views == null || !this.views.equals(other.views))) {
@@ -115,7 +115,7 @@ public class Flow implements Serializable {
     public int hashCode() {
         int hash = 3;
         hash = 59 * hash + (this.id != null ? this.id.hashCode() : 0);
-        hash = 59 * hash + (this.defaultNodeId != null ? this.defaultNodeId.hashCode() : 0);
+        hash = 59 * hash + (this.startNodeId != null ? this.startNodeId.hashCode() : 0);
         hash = 59 * hash + (this.views != null ? this.views.hashCode() : 0);
         hash = 59 * hash + (this.returns != null ? this.returns.hashCode() : 0);
         hash = 59 * hash + (this.initializer != null ? this.initializer.hashCode() : 0);
@@ -157,12 +157,17 @@ public class Flow implements Serializable {
      * @since 2.2
      */
     
-    public String getDefaultNodeId() {
-        return defaultNodeId;
+    public String getStartNodeId() {
+        return startNodeId;
     }
 
-    public void setDefaultNodeId(String defaultNodeId) {
-        this.defaultNodeId = defaultNodeId;
+    /**
+     * <p class="changed_added_2_2">This setter will likely be moved
+     * from the public API into the implementation.</p>
+     * @since 2.2
+     */
+    public void setStartNodeId(String defaultNodeId) {
+        this.startNodeId = defaultNodeId;
     }
 
     public MethodExpression getFinalizer() {
