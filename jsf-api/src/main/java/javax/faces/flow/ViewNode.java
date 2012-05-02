@@ -42,15 +42,33 @@ package javax.faces.flow;
 
 import java.io.Serializable;
 
+/**
+ * <p class="changed_added_2_2"><strong>ViewNode</strong> is the class
+ * that represents a VDL view in a faces flow graph.</p>
+ *
+ * @since 2.2
+ */
+
 public class ViewNode extends FlowNode implements Serializable {
     
     private static final long serialVersionUID = -8548240128992712331L;
     
     private String id;
 
+    /**
+     * <p class="changed_added_2_2">Return the immutable id for this
+     * view node.  This must be unique within the flow.</p>
+     * @since 2.2
+     */
     public String getId() {
         return id;
     }
+
+    /**
+     * <p class="changed_added_2_2">This setter will likely be moved
+     * from the public API into the implementation.</p>
+     * @since 2.2
+     */
 
     public void setId(String id) {
         this.id = id;
@@ -58,10 +76,22 @@ public class ViewNode extends FlowNode implements Serializable {
     
     private String vdlDocumentId;
 
+    /**
+     * <p class="changed_added_2_2">Return the immutable VDL document id
+     * for this view node.  This is normally the path to the VDL page
+     * that defines this view node.  This must be unique within the
+     * flow.</p>
+     * @since 2.2
+     */
     public String getVdlDocumentId() {
         return vdlDocumentId;
     }
 
+    /**
+     * <p class="changed_added_2_2">This setter will likely be moved
+     * from the public API into the implementation.</p>
+     * @since 2.2
+     */
     public void setVdlDocumentId(String vdlDocumentId) {
         this.vdlDocumentId = vdlDocumentId;
     }

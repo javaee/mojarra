@@ -303,7 +303,7 @@ public class FlowCDIContext implements Context, Serializable {
                     FacesContext facesContext = FacesContext.getCurrentInstance();
                     FlowHandler flowHandler = facesContext.getApplication().getFlowHandler();
                     String flowIdForBean = flowIds.get(contextual);
-                    if (!flowHandler.isActive(facesContext, flowIdForBean)) {
+                    if (!flowHandler.isActive(facesContext, null, flowIdForBean)) {
                         throw new ContextNotActiveException("Request to activate bean in flow '" + flowIdForBean + "', but that flow is not active.");
                     }
 

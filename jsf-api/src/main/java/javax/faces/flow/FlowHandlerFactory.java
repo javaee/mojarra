@@ -37,18 +37,6 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  *
- *
- * This file incorporates work covered by the following copyright and
- * permission notice:
- *
- * Copyright 2005-2007 The Apache Software Foundation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -61,13 +49,20 @@ package javax.faces.flow;
 import javax.faces.context.FacesContext;
 
 /**
- * <p class="changed_added_2_2">The {@link javax.faces.application.Application} uses
- * this factory to create the instance of {@link FlowHandler}</p>
+ * <p class="changed_added_2_2"><strong>FlowHandlerFactory</strong> is
+ * used by the {@link javax.faces.application.Application} to create the
+ * singleton instance of {@link FlowHandler}.</p>
  * 
  * @since 2.2
  */
 public abstract class FlowHandlerFactory {
     
+    /**
+     * <p class="changed_added_2_2">Create the singleton instance of
+     * {@link FlowHandler}.</p>
+     * 
+     * @since 2.2
+     */
     public abstract FlowHandler createFlowHandler(FacesContext context);
 
 

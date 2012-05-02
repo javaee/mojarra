@@ -50,13 +50,16 @@ import java.lang.annotation.Target;
 import javax.enterprise.context.NormalScope;
 
 /**
- * <p class="changed_added_2_2">Classes with this annotation attached to them
- * will be considered to be in the scope of the named flow.  The implementation
- * must provide an implementation of <code>javax.enterprise.inject.spi.Extension</code>
- * that implements the semantics such that beans with this annotation are created
- * when the user enters into the named flow, and de-allocated when the user exits 
- * the named flow.</p>
+ * <p class="changed_added_2_2"><strong>FlowScoped</strong> is a CDI
+ * scope that causes the runtime to consider classes with this
+ * annotation to be in the scope of the specified {@link Flow}.  The
+ * implementation must provide an implementation of {@code
+ * javax.enterprise.inject.spi.Extension} that implements the semantics
+ * such that beans with this annotation are created when the user enters
+ * into the specified {@code Flow}, and de-allocated when the user exits
+ * the specified {@code Flow}.</p>
  * 
+ * @since 2.2
  */
 
 
@@ -67,6 +70,24 @@ import javax.enterprise.context.NormalScope;
 @Retention(value = RetentionPolicy.RUNTIME)
 public @interface FlowScoped {
 
-   String id();
+   
+    /**
+     * <p class="changed_added_2_2">Must be equivalent to the {@link
+     * Flow#getId} of a defined flow for this application.</p>
+     *
+     * @since 2.2
+     */
+    String id();
+
+    /**
+     * <p class="changed_added_2_2">If not empty, declare the defining
+     * document id within which the {@link Flow} referenced by {@link
+     * #id} is unique.  If empty the, the runtime assumes that all flow
+     * ids are unique within the scope of the application.</p>
+     *
+     * @since 2.2
+     */
+    
+    String definingDocumentId() default "";
 
 }

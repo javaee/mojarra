@@ -719,6 +719,8 @@ javax.faces.level=ALL
 
         <copy todir="${build.javadocs.dir}/javax/faces/component"
               file="${src.dir}/javax/faces/component/UIComponentHierarchy.jpg"/>
+        <copy todir="${build.javadocs.dir}/javax/faces/flow"
+              file="${src.dir}/javax/faces/flow/FlowHierarchy.jpg"/>
         <copy todir="${build.javadocs.dir}/javax/faces/event"
               file="${src.dir}/javax/faces/event/EventHierarchy.jpg"/>
 

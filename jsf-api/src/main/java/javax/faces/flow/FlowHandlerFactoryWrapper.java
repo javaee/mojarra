@@ -40,16 +40,16 @@
 package javax.faces.flow;
 
 import javax.faces.context.FacesContext;
-import javax.faces.view.facelets.*;
 import javax.faces.FacesWrapper;
 
 /**
- * <p class="changed_added_2_2">Provides a simple implementation of 
- * {@link FlowHandlerFactory} that can
- * be subclassed by developers wishing to provide specialized behavior
- * to an existing {@link FlowHandlerFactory} instance.  The default
- * implementation of all methods is to call through to the wrapped
- * {@link FlowHandlerFactory} instance.</p>
+ * <p
+ * class="changed_added_2_2"><strong>FlowHandlerFactoryWrapper</strong>
+ * provides a simple implementation of {@link FlowHandlerFactory} that
+ * can be subclassed by developers wishing to provide specialized
+ * behavior to an existing {@link FlowHandlerFactory} instance.  The
+ * default implementation of all methods is to call through to the
+ * wrapped {@link FlowHandlerFactory} instance.</p>
  *
  * <p class="changed_added_2_2>Usage: extend this class and override 
  * {@link #getWrapped} to
@@ -65,6 +65,14 @@ public class FlowHandlerFactoryWrapper extends FlowHandlerFactory implements Fac
         this.wrapped = wrapped;
     }
 
+    /**
+     * <p class="changed_added_2_2">A class that implements this
+     * interface uses this method to return an instance of the class
+     * being wrapped.</p>
+     *
+     * @since 2.2
+     */
+
     public FlowHandlerFactory getWrapped() {
         return wrapped;
     }
@@ -73,8 +81,5 @@ public class FlowHandlerFactoryWrapper extends FlowHandlerFactory implements Fac
     public FlowHandler createFlowHandler(FacesContext context) {
         return getWrapped().createFlowHandler(context);
     }
-    
-    
-
     
 }

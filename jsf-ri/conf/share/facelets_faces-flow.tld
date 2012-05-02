@@ -51,14 +51,19 @@
 
     <description><![CDATA[
 
-        <p class="changed_added_2_2">Specify how a flow is declared in
-        VDL pages.  This schema is functionally equivalent to the same
-        content in the Application Configuration Resources.</p>
+        <p class="changed_added_2_2">Elements for defining faces
+        flows. When these elements are used in VDL views, they must be
+        nested within the <code>&lt;f:metada&gt;</code> section.  The
+        meaning of these elements in VDL views is functionally
+        equivalent to the same content in the Application Configuration
+        Resources.  Throughout the specification of these elements, the
+        term "faces-config" is equivalent to "Application Configuration
+        Resources".</p>
 
         <h2>Creating a Faces Flow</h2>
 
 
-    ]]></description>
+]]></description>
     <tlib-version>2.2</tlib-version>
     <display-name>Faces Flows</display-name>
     <short-name>j</short-name>
@@ -70,17 +75,36 @@
  <tag>
      <description>
 
-        <![CDATA[<p class="changed_added_2_2">Declare that this VDL page is part of a faces flow.</p>]]>
+        <![CDATA[<p class="changed_added_2_2">Define a faces flow.</p>
+             
+        <div class="changed_added_2_2">
+
+<p>VDL usage</p>
+
+<p>The presence of this element in a VDL view indicates that this view
+must be considered as a <code>ViewNode</code> of the flow referenced by
+the value of the <code>id</code> attribute.</p>
+
+        </div>
+
+      ]]>
      </description>
      <name>faces-flow-definition</name>
      <tag-class></tag-class>
      <body-content>empty</body-content>
 
      <attribute>
-         <description>
+         <description><![CDATA[
+         
+         <p class="changed_added_2_2">The id of this flow.  This must be
+         unique within the defining scope of the current document.  When
+         used in the Application Configuration Resources, this attribute
+         is required.  When used in a VDL view, this attribute is
+         optional.  If not specified, the id of the flow is taken from
+         the directory containing this VDL document.</p>
             
-         </description>
-         <name>type</name>
+         ]]></description>
+         <name>id</name>
          <required>false</required>
          <deferred-value>
              <type>java.lang.String</type>

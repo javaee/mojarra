@@ -694,7 +694,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         
         if (null == viewIdToTest && !isDiscerningFlowRouting(context)) {
             FlowHandler flowHandler = context.getApplication().getFlowHandler();
-            Flow flow = flowHandler.getFlow(outcome);
+            Flow flow = flowHandler.getFlow(context, null, outcome);
             // If this outcome corresponds to an existing flow...
             if (null != flow) {
                 // make a navigation case from its defaultNode.
@@ -768,7 +768,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                 for (NavigationCase cur : cases) {
                     if (cur.getCondition(context)) {
                         outcome = cur.getFromOutcome();
-                        Flow flow = flowHandler.getFlow(fromAction);
+                        Flow flow = flowHandler.getFlow(context, null, fromAction);
                         // If this outcome corresponds to an existing flow...
                         if (null != flow) {
                             FlowNode node = flow.getNode(outcome);

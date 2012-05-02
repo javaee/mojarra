@@ -42,6 +42,14 @@ package javax.faces.flow;
 
 import java.io.Serializable;
 
+/**
+ * <p class="changed_added_2_2"><strong>FlowNode</strong> is the base
+ * class for all nodes in a faces flow graph.</p>
+ *
+ *
+ * @since 2.2
+ */
+
 public abstract class FlowNode implements Serializable {
     
     private static final long serialVersionUID = -8723709434356426852L;

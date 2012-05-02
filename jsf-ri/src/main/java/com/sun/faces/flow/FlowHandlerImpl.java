@@ -73,14 +73,13 @@ public class FlowHandlerImpl extends FlowHandler {
     }
     
     @Override
-    public Flow getFlow(String id) {
+    public Flow getFlow(FacesContext context, Object definingDocument, String id) {
         Flow result = flows.get(id);
         
         return result;
     }
 
-    @Override
-    public Flow getFlowByNodeId(String id) {
+    private Flow getFlowByNodeId(String id) {
         if (null == id || 0 == id.length()) {
             throw new IllegalStateException();
         }
@@ -103,7 +102,7 @@ public class FlowHandlerImpl extends FlowHandler {
     
 
     @Override
-    public void addFlow(FacesContext context, Flow toAdd) {
+    public void addFlow(FacesContext context, Object definingDocument, Flow toAdd) {
         if (null == toAdd || null == toAdd.getId() || 0 == toAdd.getId().length()) {
             throw new IllegalArgumentException();
         }
@@ -115,7 +114,7 @@ public class FlowHandlerImpl extends FlowHandler {
     }
 
     @Override
-    public boolean isActive(FacesContext context, String id) {
+    public boolean isActive(FacesContext context, Object definingDocument, String id) {
         boolean result = false;
         Deque<Flow> flowStack = getFlowStack(context);
         for (Flow cur : flowStack) {

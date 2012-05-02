@@ -50,11 +50,11 @@ import javax.faces.context.FacesContext;
 import javax.faces.lifecycle.ClientWindow;
 
 /**
- * <p class="changed_added_2_2">This class is the runtime representation
- * of a Faces Flow.  Once placed into service by the runtime, an
- * instance of this class is immutable.  The implementation must be
- * thread-safe because instances will be shared across all usages of the
- * flow within the application.</p>
+ * <p class="changed_added_2_2"><strong>Flow</strong> is the runtime
+ * representation of a Faces Flow.  Once placed into service by the
+ * runtime, an instance of this class is immutable.  The implementation
+ * must be thread-safe because instances will be shared across all
+ * usages of the flow within the application.</p>
  *
  *
  * @since 2.2
@@ -129,8 +129,9 @@ public class Flow implements Serializable {
 
 
     /**
-     * <p class="changed_added_2_2">Return the application-unique id for
-     * this flow.</p>
+     * <p class="changed_added_2_2">Return the immutable id for this
+     * Flow.  This must be unique within a flow definition, but need not
+     * be unique within the entire application.</p>
 
      * @since 2.2
      */
@@ -139,9 +140,22 @@ public class Flow implements Serializable {
         return id;
     }
 
+    /**
+     * <p class="changed_added_2_2">This setter will likely be moved
+     * from the public API into the implementation.</p>
+     * @since 2.2
+     */
     public void setId(String id) {
         this.id = id;
     }
+
+    /**
+     * <p class="changed_added_2_2">Return the immutable id for the
+     * default node that should be activated when this flow is
+     * entered.</p>
+     *
+     * @since 2.2
+     */
     
     public String getDefaultNodeId() {
         return defaultNodeId;

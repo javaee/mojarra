@@ -134,7 +134,7 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
         
         Map<FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
         String flowId = getFlowId(ctx);
-        Flow newFlow = flowHandler.getFlow(flowId);
+        Flow newFlow = flowHandler.getFlow(context, null, flowId);
         boolean addFlow = false;
         
         if (null == newFlow) {
@@ -284,7 +284,7 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
 
         // This needs to be done at the end so that the flow is fully populated.
         if (addFlow) {
-            flowHandler.addFlow(context, newFlow);
+            flowHandler.addFlow(context, null, newFlow);
 
         }
         
