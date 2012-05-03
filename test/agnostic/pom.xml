@@ -36,6 +36,7 @@
         <module>composite</module>
         <module>dynamic</module>
         <module>renderKit</module>
+        <module>resource</module>
         <module>shared</module>
         <module>stateSaving</module>
         <module>vdl</module>
