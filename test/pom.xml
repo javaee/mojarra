@@ -742,6 +742,7 @@
                                 </goals>
                                 <configuration>
                                     <systemPropertyVariables>
+                                        <project.build.finalName>${project.build.finalName}</project.build.finalName>
                                         <integration.serverPort>${integration.serverPort1}</integration.serverPort>
                                         <integration.serverName>${integration.serverName1}</integration.serverName>
                                         <integration.serverProtocol>${integration.serverProtocol}</integration.serverProtocol>
@@ -757,6 +758,7 @@
                                 </goals>
                                 <configuration>
                                     <systemPropertyVariables>
+                                        <project.build.finalName>${project.build.finalName}</project.build.finalName>
                                         <integration.serverPort>${integration.serverPort2}</integration.serverPort>
                                         <integration.serverName>${integration.serverName2}</integration.serverName>
                                         <integration.serverProtocol>${integration.serverProtocol}</integration.serverProtocol>
