@@ -181,7 +181,6 @@ public class StripClassesForApiJar extends AbstractProcessor {
         com.sun.tools.javac.main.JavaCompiler compiler = com.sun.tools.javac.main.JavaCompiler.instance(task.getContext());
         ClassReader reader = ClassReader.instance(task.getContext());
         ClassWriter writer = ClassWriter.instance(task.getContext());
-        Name.Table names = Name.Table.instance(task.getContext());
         Type.moreInfo = true;
         Pool pool = new Pool();
 	ClassSymbol cs = null;
