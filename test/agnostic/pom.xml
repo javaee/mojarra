@@ -16,5 +16,6 @@
         <module>externalContext</module>
         <module>renderKit</module>
         <module>shared</module>
+        <module>vdl</module>
     </modules>
 </project>
