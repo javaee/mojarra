@@ -469,7 +469,7 @@
                                         <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
                                             <arg line="stop-domain ${integration.container.cluster.domain}"/>
                                         </exec>
-                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="unix">
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
                                             <arg line="stop-domain ${integration.container.cluster.domain}"/>
                                         </exec>
                                     </target>
@@ -710,7 +710,7 @@
                                         <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
                                             <arg line="stop-domain"/>
                                         </exec>
-                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="unix">
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
                                             <arg line="stop-domain"/>
                                         </exec>
                                     </target>
