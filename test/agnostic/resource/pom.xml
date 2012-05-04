@@ -51,7 +51,7 @@
     <groupId>com.sun.faces.test</groupId>
     <artifactId>com.sun.faces.test.agnostic.resource</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra 2.1.x Test - Agnostic - Resource</name>
+    <name>Mojarra Trunk Test - Agnostic - Resource</name>
     <build>
         <finalName>test-agnostic-resource</finalName>
     </build>
