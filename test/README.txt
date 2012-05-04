@@ -151,5 +151,27 @@
        be build up in the following way 
 
         ${integration.protocol}://${integration.serverName}:$integration.serverPort}/${project.build.finalName}/
+
+  Example invocation
+  ==================
+
+  Consider this entry in a maven ~/.m2/settings.xml <profiles> section:
+
+    <profile>
+      <id>mojarra-trunk</id>
+      <properties>
+        <integration.container.home>/full/path/to/container/glassfish-3.1.2/glassfish3</integration.container.home>
+        <jsf.version>2.2.0-SNAPSHOT</jsf.version>
+      </properties>
+    </profile>
+
+  The following mvn invocation, in this directory will invoke all the
+  tests.  This assumes the container has already been started and
+  configured with the version of Mojarra to test.
+
+mvn -Dcargo.remote.password= -Pmojarra-trunk clean install
+mvn -Dcargo.remote.password= -Pmojarra-trunk,integration-glassfish-cargo cargo:redeploy
+mvn -Dcargo.remote.password= -Pmojarra-trunk,integration-failsafe verify 
+
  
 --END
