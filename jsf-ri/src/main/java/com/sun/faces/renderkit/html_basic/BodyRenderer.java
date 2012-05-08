@@ -37,18 +37,14 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
 package com.sun.faces.renderkit.html_basic;
 
 import java.io.IOException;
 import java.util.ListIterator;
-
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.faces.render.Renderer;
-
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.renderkit.AttributeManager;
@@ -58,7 +54,7 @@ import com.sun.faces.renderkit.AttributeManager;
  * the standard HTML body element as well as rendering any resources
  * that should be output before the <code>body</code> tag is closed.</p>
  */
-public class BodyRenderer extends Renderer {
+public class BodyRenderer extends HtmlBasicRenderer {
 
     private static final Attribute[] BODY_ATTRIBUTES =
              AttributeManager.getAttributes(AttributeManager.Key.OUTPUTBODY);
@@ -69,11 +65,19 @@ public class BodyRenderer extends Renderer {
         // no-op
     }
 
+    /**
+     * Encode the beginning.
+     * 
+     * @param context the Faces context.
+     * @param component the UI component.
+     * @throws IOException when an I/O error occurs.
+     */
     @Override
     public void encodeBegin(FacesContext context, UIComponent component)
           throws IOException {
         ResponseWriter writer = context.getResponseWriter();
         writer.startElement("body", component);
+        writeIdAttributeIfNecessary(context, writer, component);
         String styleClass = (String) component.getAttributes().get("styleClass");
         if (styleClass != null && styleClass.length() != 0) {
             writer.writeAttribute("class", styleClass, "styleClass");
@@ -104,4 +108,13 @@ public class BodyRenderer extends Renderer {
         writer.endElement("body");
     }
     
+    /**
+     * Do we render our children.
+     * 
+     * @return false.
+     */
+    @Override
+    public boolean getRendersChildren() {
+        return false;
+    }
 }
