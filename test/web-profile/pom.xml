@@ -23,13 +23,11 @@
             </plugin>
         </plugins>    
     </build>
-
     <modules>
-        <module>flow</module>
         <module>el</module>
+        <module>flow</module>
     </modules>
     <properties>
         <webapp.partialStateSaving>true</webapp.partialStateSaving>
     </properties>
-
 </project>

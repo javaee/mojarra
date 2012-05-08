@@ -10,10 +10,10 @@
     <packaging>pom</packaging>
     <name>Mojarra ${project.version} - Test - POM</name>
     <modules>
-        <module>util</module>
         <module>agnostic</module>
         <module>cluster</module>
         <module>selenium</module>
+        <module>util</module>
         <module>virtual</module>
         <module>web-profile</module>
     </modules>

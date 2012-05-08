@@ -12,9 +12,9 @@
     <packaging>pom</packaging>
     <name>Mojarra ${project.version} - Test - Web-Profile - Flow - POM</name>
     <modules>
-        <module>mojarra-cdi-extension</module>
         <module>basic</module>
         <module>basic-multi-page</module>
         <module>intermediate</module>
+        <module>mojarra-cdi-extension</module>
     </modules>
 </project>
