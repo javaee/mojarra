@@ -52,7 +52,7 @@
     <groupId>com.sun.faces.test</groupId>
     <artifactId>com.sun.faces.test.agnostic.vdl.facelets.replacevdl</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra Trunk Test - Agnostic - VDL - facelets - Replace VDL</name>
+    <name>Mojarra ${project.version} - Test - Agnostic - VDL - facelets - Replace VDL</name>
     <build>
         <finalName>test-agnostic-vdl-replace-vdl</finalName>
     </build>

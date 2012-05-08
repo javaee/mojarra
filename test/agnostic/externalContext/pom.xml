@@ -10,7 +10,7 @@
     <groupId>com.sun.faces.test</groupId>
     <artifactId>com.sun.faces.test.agnostic.externalContext</artifactId>
     <packaging>pom</packaging>
-    <name>Mojarra Test - Agnostic - ExternalContext - POM</name>
+    <name>Mojarra ${project.version} - Test - Agnostic - ExternalContext - POM</name>
     <modules>
         <module>basic</module>
     </modules>

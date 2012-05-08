@@ -10,7 +10,7 @@
     <groupId>com.sun.faces.test.selenium</groupId>
     <artifactId>com.sun.faces.test.selenium</artifactId>
     <packaging>pom</packaging>
-    <name>Mojarra Test - Selenium - POM</name>
+    <name>Mojarra ${project.version} - Test - Selenium - POM</name>
     <modules>
         <module>agnostic</module>
     </modules>
@@ -18,7 +18,7 @@
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
-            <version>2.16.1</version>
+            <version>2.21.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -30,7 +30,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-failsafe-plugin</artifactId>
-                        <version>2.11</version>
+                        <version>2.12</version>
                         <inherited>true</inherited>
                         <executions>
                             <execution>
@@ -58,7 +58,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-report-plugin</artifactId>
-                        <version>2.11</version>
+                        <version>2.12</version>
                         <reportSets>
                             <reportSet>
                                 <id>integration-tests</id>

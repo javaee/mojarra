@@ -10,7 +10,7 @@
     <groupId>com.sun.faces.test.selenium</groupId>
     <artifactId>com.sun.faces.test.selenium.agnostic</artifactId>
     <packaging>pom</packaging>
-    <name>Mojarra Test - Selenium - Agnostic - POM</name>
+    <name>Mojarra ${project.version} - Test - Selenium - Agnostic - POM</name>
     <modules>
         <module>shared</module>
     </modules>

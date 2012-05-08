@@ -10,5 +10,5 @@
     <groupId>com.sun.faces.test</groupId>
     <artifactId>com.sun.faces.test.virtual</artifactId>
     <packaging>pom</packaging>
-    <name>Mojarra Test - Virtual Server - POM</name>
+    <name>Mojarra ${project.version} - Test - Virtual Server - POM</name>
 </project>

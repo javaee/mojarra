@@ -10,7 +10,7 @@
     <groupId>com.sun.faces.test</groupId>
     <artifactId>com.sun.faces.test.agnostic.renderKit</artifactId>
     <packaging>pom</packaging>
-    <name>Mojarra Test - Agnostic - RenderKit - POM</name>
+    <name>Mojarra ${project.version} - Test - Agnostic - RenderKit - POM</name>
     <modules>
         <module>basic</module>
     </modules>

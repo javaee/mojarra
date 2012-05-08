@@ -51,7 +51,7 @@
     <groupId>com.sun.faces.test</groupId>
     <artifactId>com.sun.faces.test.agnostic.externalContext.basic</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra Test - Agnostic - ExternalContext - Basic Tests</name>
+    <name>Mojarra ${project.version} - Test - Agnostic - ExternalContext - Basic Tests</name>
     <build>
         <finalName>test-agnostic-externalContext-basic</finalName>
     </build>

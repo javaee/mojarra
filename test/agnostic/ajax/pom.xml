@@ -10,7 +10,7 @@
     <groupId>com.sun.faces.test</groupId>
     <artifactId>com.sun.faces.test.agnostic.ajax</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra Test - Agnostic - Ajax - POM</name>
+    <name>Mojarra ${project.version} - Test - Agnostic - Ajax - POM</name>
     <build>
         <finalName>test-agnostic-ajax</finalName>
     </build>

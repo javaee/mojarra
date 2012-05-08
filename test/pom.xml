@@ -8,7 +8,7 @@
     <artifactId>com.sun.faces.test</artifactId>
     <version>2.2.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>Mojarra Test - POM</name>
+    <name>Mojarra ${project.version} - Test - POM</name>
     <modules>
         <module>util</module>
         <module>agnostic</module>
@@ -22,16 +22,16 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
+                <version>2.4</version>
                 <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
+                    <source>1.6</source>
+                    <target>1.6</target>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>2.1.1</version>
+                <version>2.2</version>
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
@@ -87,7 +87,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-failsafe-plugin</artifactId>
-                        <version>2.11</version>
+                        <version>2.12</version>
                         <inherited>true</inherited>
                         <executions>
                             <execution>
@@ -120,7 +120,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-report-plugin</artifactId>
-                        <version>2.11</version>
+                        <version>2.12</version>
                         <reportSets>
                             <reportSet>
                                 <id>integration-tests</id>
@@ -196,7 +196,7 @@
                     <plugin>
                         <groupId>org.codehaus.cargo</groupId>
                         <artifactId>cargo-maven2-plugin</artifactId>
-                        <version>1.1.4</version>
+                        <version>1.2.1</version>
                         <inherited>true</inherited>
                         <executions>
                             <execution>
@@ -243,7 +243,7 @@
                     <plugin>
                         <groupId>org.codehaus.cargo</groupId>
                         <artifactId>cargo-maven2-plugin</artifactId>
-                        <version>1.1.4</version>
+                        <version>1.2.1</version>
                         <inherited>true</inherited>
                         <executions>
                             <execution>
@@ -373,7 +373,7 @@
                     <plugin>
                         <groupId>org.codehaus.cargo</groupId>
                         <artifactId>cargo-maven2-plugin</artifactId>
-                        <version>1.1.4</version>
+                        <version>1.2.1</version>
                         <inherited>true</inherited>
                         <executions>
                             <execution>
@@ -579,7 +579,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-failsafe-plugin</artifactId>
-                        <version>2.11</version>
+                        <version>2.12</version>
                         <inherited>true</inherited>
                         <executions>
                             <execution>
@@ -630,7 +630,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-report-plugin</artifactId>
-                        <version>2.11</version>
+                        <version>2.12</version>
                         <reportSets>
                             <reportSet>
                                 <id>integration-tests</id>

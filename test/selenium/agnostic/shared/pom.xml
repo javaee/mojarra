@@ -12,7 +12,7 @@
     <groupId>com.sun.faces.test.selenium</groupId>
     <artifactId>com.sun.faces.test.selenium.agnostic.shared</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra Test - Selenium - Agnostic - Shared Tests</name>
+    <name>Mojarra ${project.version} - Test - Selenium - Agnostic - Shared Tests</name>
     <build>
         <finalName>test-selenium-agnostic-shared</finalName>
     </build>

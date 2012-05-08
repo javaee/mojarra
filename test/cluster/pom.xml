@@ -10,5 +10,5 @@
     <groupId>com.sun.faces.test</groupId>
     <artifactId>com.sun.faces.test.cluster</artifactId>
     <packaging>pom</packaging>
-    <name>Mojarra Test - Cluster - POM</name>
+    <name>Mojarra ${project.version} - Test - Cluster - POM</name>
 </project>

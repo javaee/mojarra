@@ -9,7 +9,7 @@
     </parent>
     <groupId>com.sun.faces.test</groupId>
     <artifactId>com.sun.faces.test.util</artifactId>
-    <name>Mojarra Test - Utils</name>
+    <name>Mojarra ${project.version} - Test - Utils</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>

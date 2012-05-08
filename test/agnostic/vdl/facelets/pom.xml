@@ -51,7 +51,7 @@
     <groupId>com.sun.faces.test</groupId>
     <artifactId>com.sun.faces.test.agnostic.vdl.facelets</artifactId>
     <packaging>pom</packaging>
-    <name>Mojarra Trunk Test - Agnostic - VDL - facelets - POM</name>
+    <name>Mojarra ${project.version} - Test - Agnostic - VDL - facelets - POM</name>
     <modules>
         <module>replace-vdl</module>
     </modules>
