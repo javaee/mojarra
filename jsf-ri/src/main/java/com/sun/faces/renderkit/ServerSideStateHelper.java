@@ -68,9 +68,12 @@ import com.sun.faces.util.LRUMap;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.RequestStateManager;
 
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.AutoCompleteOffOnViewState;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableViewStateIdRendering;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.NumberOfLogicalViews;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.NumberOfViews;
 import com.sun.faces.config.WebConfiguration;
+import javax.faces.render.ResponseStateManager;
 
 /**
  * <p>
@@ -230,15 +233,23 @@ public class ServerSideStateHelper extends StateHelper {
              if (stateCapture != null) {
                 stateCapture.append(id);
              } else {
-                 ResponseWriter writer = ctx.getResponseWriter();
-                 writer.write(stateFieldStart);
-                 writer.write(id);
-                 writer.write(stateFieldEnd);
-                 writeRenderKitIdField(ctx, writer);
+                ResponseWriter writer = ctx.getResponseWriter();
+                 
+                writer.startElement("input", null);
+                writer.writeAttribute("type", "hidden", null);
+                writer.writeAttribute("name", ResponseStateManager.VIEW_STATE_PARAM, null);
+                if (webConfig.isOptionEnabled(EnableViewStateIdRendering)) {
+                    writer.writeAttribute("id", ResponseStateManager.VIEW_STATE_PARAM, null);
+                }
+                writer.writeAttribute("value", id, null);
+                if (webConfig.isOptionEnabled(AutoCompleteOffOnViewState)) {
+                    writer.writeAttribute("autocomplete", "off", null);
+                }
+                writer.endElement("input");
+                 
+                writeRenderKitIdField(ctx, writer);
              }
         }
-
-
     }
 
 

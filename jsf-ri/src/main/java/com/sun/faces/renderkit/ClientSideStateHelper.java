@@ -54,18 +54,19 @@ import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import javax.crypto.CipherInputStream;
-import javax.crypto.CipherOutputStream;
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.AutoCompleteOffOnViewState;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableViewStateIdRendering;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.ClientStateTimeout;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.ClientStateWriteBufferSize;
 import static com.sun.faces.config.WebConfiguration.WebEnvironmentEntry.ClientStateSavingPassword;
 import com.sun.faces.io.Base64InputStream;
 import com.sun.faces.io.Base64OutputStreamWriter;
 import com.sun.faces.util.FacesLogger;
+import javax.faces.render.ResponseStateManager;
 
 /**
  * <p>
@@ -169,9 +170,21 @@ public class ClientSideStateHelper extends StateHelper {
             doWriteState(state, new StringBuilderWriter(stateCapture));
         } else {
             ResponseWriter writer = ctx.getResponseWriter();
-            writer.write(stateFieldStart);
-            doWriteState(state, writer);
-            writer.write(stateFieldEnd);
+            
+            writer.startElement("input", null);
+            writer.writeAttribute("type", "hidden", null);
+            writer.writeAttribute("name", ResponseStateManager.VIEW_STATE_PARAM, null);
+            if (webConfig.isOptionEnabled(EnableViewStateIdRendering)) {
+                writer.writeAttribute("id", ResponseStateManager.VIEW_STATE_PARAM, null);
+            }
+            StringBuilder stateBuilder = new StringBuilder();
+            doWriteState(state, new StringBuilderWriter(stateBuilder));
+            writer.writeAttribute("value", stateBuilder.toString(), null);
+            if (webConfig.isOptionEnabled(AutoCompleteOffOnViewState)) {
+                writer.writeAttribute("autocomplete", "off", null);
+            }
+            writer.endElement("input");
+            
             writeRenderKitIdField(ctx, writer);
         }
 
