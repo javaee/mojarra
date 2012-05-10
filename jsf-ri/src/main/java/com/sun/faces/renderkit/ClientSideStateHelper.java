@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -60,12 +60,15 @@ import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableViewStateIdRendering;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.AutoCompleteOffOnViewState;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.ClientStateTimeout;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.ClientStateWriteBufferSize;
 import com.sun.faces.io.Base64InputStream;
 import com.sun.faces.io.Base64OutputStreamWriter;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
+import javax.faces.render.ResponseStateManager;
 
 /**
  * <p>
@@ -169,12 +172,22 @@ public class ClientSideStateHelper extends StateHelper {
             doWriteState(state, new StringBuilderWriter(stateCapture));
         } else {
             ResponseWriter writer = ctx.getResponseWriter();
-            writer.write(stateFieldStart);
-            String viewStateId = Util.getViewStateId(ctx);
-            writer.write(viewStateId);
-            writer.write(fieldMiddle);
-            doWriteState(state, writer);
-            writer.write(fieldEnd);
+            
+            writer.startElement("input", null);
+            writer.writeAttribute("type", "hidden", null);
+            writer.writeAttribute("name", ResponseStateManager.VIEW_STATE_PARAM, null);
+            if (webConfig.isOptionEnabled(EnableViewStateIdRendering)) {
+                String viewStateId = Util.getViewStateId(ctx);
+                writer.writeAttribute("id", viewStateId, null);
+            }
+            StringBuilder stateBuilder = new StringBuilder();
+            doWriteState(state, new StringBuilderWriter(stateBuilder));
+            writer.writeAttribute("value", stateBuilder.toString(), null);
+            if (webConfig.isOptionEnabled(AutoCompleteOffOnViewState)) {
+                writer.writeAttribute("autocomplete", "off", null);
+            }
+            writer.endElement("input");
+
             writeWindowIdField(ctx, writer);
             writeRenderKitIdField(ctx, writer);
         }
@@ -398,8 +411,8 @@ public class ClientSideStateHelper extends StateHelper {
         } else {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE, "jsf.config.webconfig.enventry.clientencrypt");
-            }
-            
+        }
+
         }
 
         stateTimeoutEnabled = webConfig.isSet(ClientStateTimeout);

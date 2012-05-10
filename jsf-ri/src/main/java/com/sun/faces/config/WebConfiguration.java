@@ -1185,6 +1185,10 @@ public class WebConfiguration {
               "com.sun.faces.serializeServerState",
               false
         ),
+        EnableViewStateIdRendering(
+            "com.sun.faces.enableViewStateIdRendering",
+            true
+        ),
         RegisterConverterPropertyEditors(
             "com.sun.faces.registerConverterPropertyEditors",
             false
