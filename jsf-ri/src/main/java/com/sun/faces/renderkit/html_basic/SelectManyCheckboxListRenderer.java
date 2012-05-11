@@ -358,7 +358,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
 
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
         
-        RenderKitUtils.renderSelectOnclick(context, component, true);
+        RenderKitUtils.renderSelectOnclick(context, component, false);
 
         writer.endElement("input");
         writer.startElement("label", component);
