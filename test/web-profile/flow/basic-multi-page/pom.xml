@@ -56,12 +56,6 @@
         <finalName>test-webprofile-flow-basic_multi_page</finalName>
     </build>
     <dependencies>
-      <dependency>
-        <groupId>com.sun.faces</groupId>
-        <artifactId>mojarra-cdi-extensions</artifactId>
-        <version>${project.version}</version>
-        <scope>compile</scope>
-      </dependency>
     </dependencies>
     <properties>
         <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>

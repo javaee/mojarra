@@ -363,6 +363,8 @@
 
         <copy file="conf/share/javax.servlet.ServletContainerInitializer"
               toDir="${build.classes.dir}/META-INF/services" />
+        <copy file="conf/share/javax.enterprise.inject.spi.Extension"
+              toDir="${build.classes.dir}/META-INF/services" />
         <copy toDir="${build.classes.dir}/com/sun/faces/metadata/taglib">
             <fileset dir="${conf.share.dir}">
                 <include name="*.taglib.xml" /> 
@@ -528,7 +530,6 @@
             <arg value="${conf.share.dir}/jstl-core.tld"/>
             <arg value="${conf.share.dir}/jstl-fn.tld"/>
             <arg value="${conf.share.dir}/ui.tld"/>
-            <arg value="${conf.share.dir}/facelets_faces-flow.tld"/>
         </java>
         <copy todir="${build.dir}/vdldocs/facelets">
            <fileset dir="${basedir}/../jsf-api/doc/">
