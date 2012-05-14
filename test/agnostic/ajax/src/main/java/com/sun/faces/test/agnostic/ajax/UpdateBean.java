@@ -40,6 +40,8 @@
 
 package com.sun.faces.test.agnostic.ajax;
 
+import java.util.HashMap;
+import java.util.Map;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
@@ -75,6 +77,32 @@ public class UpdateBean {
                 writer.startEval();
                 writer.write("var body = document.getElementsByTagName('body')[0];");
                 writer.write("document.getElementById('status').innerHTML='BODY CLASS:'+body.className+' BODY TITLE:'+body.title+' BODY LANG:'+body.lang");
+                writer.endEval();
+                writer.endDocument();
+                writer.flush();
+                ctx.responseComplete();
+            } catch (Exception e) {
+                throw new FacesException(e);
+            }
+        }
+        return null;
+    }
+
+    public String updateValueAsAttributeName() {
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        ExternalContext extContext = ctx.getExternalContext();
+        if (ctx.getPartialViewContext().isAjaxRequest()) {
+            try {
+                Map attrs = new HashMap();
+                attrs.put("value", "");
+                extContext.setResponseContentType("text/xml");
+                extContext.addResponseHeader("Cache-Control", "no-cache");
+                PartialResponseWriter writer =
+                    ctx.getPartialViewContext().getPartialResponseWriter();
+                writer.startDocument();
+                writer.updateAttributes("form1:foo", attrs); 
+                writer.startEval();
+                writer.write("document.getElementById('form1:foo').value = 'bar';");
                 writer.endEval();
                 writer.endDocument();
                 writer.flush();

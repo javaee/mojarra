@@ -1099,7 +1099,11 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 var name = nodes[i].getAttribute('name');
                 var value = nodes[i].getAttribute('value');
                 if (!isIE()) {
-                    target.setAttribute(name, value);
+                    if (name === 'value') {
+                        target.value = value;
+                    } else {
+                        target.setAttribute(name, value);
+                    }
                 } else { // if it's IE, then quite a bit more work is required
                     if (name === 'class') {
                         name = 'className';
