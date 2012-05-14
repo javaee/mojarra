@@ -132,6 +132,10 @@
         </property-extension>
     </property>
 
+    <!-- PENDING(edburns): Replace this with a call to &lt;xi:include
+         href="id-props.xml" xpointer="xpointer(/root/*)"/&gt; for the
+         final spec generation.  -->
+
     <property>
         <description><![CDATA[
           The component identifier for this component.  This value must be

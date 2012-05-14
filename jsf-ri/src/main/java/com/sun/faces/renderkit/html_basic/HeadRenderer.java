@@ -40,6 +40,8 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import com.sun.faces.config.FaceletsConfiguration;
+import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.renderkit.AttributeManager;
@@ -77,6 +79,12 @@ public class HeadRenderer extends Renderer {
                                                 writer,
                                                 component,
                                                 HEAD_ATTRIBUTES);
+        WebConfiguration webConfig = WebConfiguration.getInstance(context.getExternalContext());
+        FaceletsConfiguration faceletsConfig = webConfig.getFaceletsConfiguration();
+        if (faceletsConfig.isOutputHtml5Doctype(null)) {
+            String clientId = component.getClientId(context);
+            writer.writeAttribute("id", clientId, "clientId");
+        }
     }
 
     @Override
