@@ -622,8 +622,7 @@ public final class ComponentSupport {
             String viewId = root.getViewId();
             if (viewId != null) {
                 StateContext stateCtx = StateContext.getStateContext(ctx);
-                return stateCtx
-                      .partialStateSaving(ctx, viewId);
+                return stateCtx.isPartialStateSaving(ctx, viewId);
             }
         }
         return false;

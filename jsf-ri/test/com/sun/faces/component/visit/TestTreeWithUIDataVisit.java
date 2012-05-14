@@ -42,7 +42,7 @@
 
 package com.sun.faces.component.visit;
 
-import com.sun.faces.application.view.StateManagementStrategyImpl;
+import com.sun.faces.application.view.FaceletPartialStateManagementStrategy;
 import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.util.Util;
 
@@ -348,7 +348,7 @@ public class TestTreeWithUIDataVisit extends ServletFacesTestCase {
         c1.getChildren().add(column1Data);
         data.getChildren().add(c1);
         form.getChildren().add(data);
-        StateManagementStrategyImpl strategy = new StateManagementStrategyImpl();
+        FaceletPartialStateManagementStrategy strategy = new FaceletPartialStateManagementStrategy();
 
         String[] expectedIds = { "SAVE:form:table",
                                  "SAVE:form:table:tableFacet",

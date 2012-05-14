@@ -116,7 +116,7 @@ public class TestStateContext extends ServletFacesTestCase {
     public void testPartialStateSaving() {
     	  FacesContext ctx = getFacesContext();
         StateContext stateContext = StateContext.getStateContext(ctx);
-        boolean partial = stateContext.partialStateSaving(ctx, "10");
+        boolean partial = stateContext.isPartialStateSaving(ctx, "10");
         assertTrue(partial);
     }
 

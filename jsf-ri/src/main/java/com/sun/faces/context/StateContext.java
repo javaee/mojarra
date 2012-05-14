@@ -113,7 +113,7 @@ public class StateContext {
      * @return <code>true</code> if partial state saving should be used for the
      *  specified view ID, otherwise <code>false</code>
      */
-    public boolean partialStateSaving(FacesContext ctx, String viewId) {
+    public boolean isPartialStateSaving(FacesContext ctx, String viewId) {
         // track UIViewRoot changes
         UIViewRoot root = ctx.getViewRoot();
         UIViewRoot refRoot = viewRootRef.get();

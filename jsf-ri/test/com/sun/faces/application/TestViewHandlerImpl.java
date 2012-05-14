@@ -318,7 +318,7 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
                                     info);
         FaceletViewHandlingStrategy strat = new FaceletViewHandlingStrategy();
         getFacesContext().getViewRoot().setViewId("/index.xhtml");
-        assertNotNull(strat.getStateManagementStrategy(getFacesContext(), "/index.xhmtl"));
+        assertNotNull(strat.getStateManagementStrategy(getFacesContext(), "/index.xhtml"));
         assertNotNull(getFacesContext().getAttributes().remove("com.sun.faces.context.StateContext_KEY"));
         getFacesContext().getViewRoot().setViewId("/index2.xhtml");
         assertNotNull(strat.getStateManagementStrategy(getFacesContext(), "/index2.xhtml"));
@@ -334,10 +334,10 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
                                     info);
 
         getFacesContext().getViewRoot().setViewId("/index.xhtml");
-        assertNull(strat.getStateManagementStrategy(getFacesContext(), "/index.xhmtl"));
+        assertNotNull(strat.getStateManagementStrategy(getFacesContext(), "/index.xhtml"));
         assertNotNull(getFacesContext().getAttributes().remove("com.sun.faces.context.StateContext_KEY"));
         getFacesContext().getViewRoot().setViewId("/index2.xhtml");
-        assertNull(strat.getStateManagementStrategy(getFacesContext(), "/index2.xhtml"));
+        assertNotNull(strat.getStateManagementStrategy(getFacesContext(), "/index2.xhtml"));
         assertNotNull(getFacesContext().getAttributes().remove("com.sun.faces.context.StateContext_KEY"));
 
         // ---------------------------------------------
@@ -351,7 +351,7 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
                                     info);
 
         getFacesContext().getViewRoot().setViewId("/index.xhtml");
-        assertNull(strat.getStateManagementStrategy(getFacesContext(), "/index.xhtml"));
+        assertNotNull(strat.getStateManagementStrategy(getFacesContext(), "/index.xhtml"));
         assertNotNull(getFacesContext().getAttributes().remove("com.sun.faces.context.StateContext_KEY"));
 
         getFacesContext().getViewRoot().setViewId("/index2.xhtml");
@@ -370,11 +370,11 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
         
 
         getFacesContext().getViewRoot().setViewId("/index.xhtml");
-        assertNull(strat.getStateManagementStrategy(getFacesContext(), "/index.xhtml"));
+        assertNotNull(strat.getStateManagementStrategy(getFacesContext(), "/index.xhtml"));
         assertNotNull(getFacesContext().getAttributes().remove("com.sun.faces.context.StateContext_KEY"));
 
         getFacesContext().getViewRoot().setViewId("/index2.xhtml");
-        assertNull(strat.getStateManagementStrategy(getFacesContext(), "/index2.xhtml"));
+        assertNotNull(strat.getStateManagementStrategy(getFacesContext(), "/index2.xhtml"));
         assertNotNull(getFacesContext().getAttributes().remove("com.sun.faces.context.StateContext_KEY"));
 
         getFacesContext().getViewRoot().setViewId("/index3.xhtml");
