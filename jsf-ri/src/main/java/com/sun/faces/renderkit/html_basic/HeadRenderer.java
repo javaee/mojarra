@@ -81,7 +81,7 @@ public class HeadRenderer extends Renderer {
                                                 HEAD_ATTRIBUTES);
         WebConfiguration webConfig = WebConfiguration.getInstance(context.getExternalContext());
         FaceletsConfiguration faceletsConfig = webConfig.getFaceletsConfiguration();
-        if (faceletsConfig.isOutputHtml5Doctype(null)) {
+        if (faceletsConfig.isOutputHtml5Doctype(context.getViewRoot().getViewId())) {
             String clientId = component.getClientId(context);
             writer.writeAttribute("id", clientId, "clientId");
         }
