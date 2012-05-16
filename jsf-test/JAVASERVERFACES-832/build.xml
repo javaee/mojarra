@@ -73,7 +73,7 @@
                      context-path="/i_jsf_832_war"
                      classpath-refid="html.classpath"
                      test-results-dir="${regression.test.results.dir}"
-                     regexp="(?s).*One\s+or\s+more\s+resources\s+have\s+the\s+target\s+of\s+.head.,\s+but\s+no\s+.head.\s+component\s+has\s+been\s+defined\s+within\s+the\s+view.*"/>
+                     regexp="(?s).*form1:messages.*head.*head.*"/>
 
     </target>    
 

@@ -68,7 +68,7 @@ public class ViewExpiredExceptionTestCase extends HtmlUnitFacesTestCase {
      * Return the tests included in this test suite.
      */
     public static Test suite() {
-        return (new TestSuite(InvalidMappingTestCase.class));
+        return (new TestSuite(ViewExpiredExceptionTestCase.class));
     }
 
 

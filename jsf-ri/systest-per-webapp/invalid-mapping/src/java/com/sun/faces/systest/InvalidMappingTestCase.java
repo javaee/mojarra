@@ -83,7 +83,23 @@ public class InvalidMappingTestCase extends HtmlUnitFacesTestCase {
         WebClient client = new WebClient();
         client.setThrowExceptionOnFailingStatusCode(false);
         client.setTimeout(0);                
-        HtmlPage page = (HtmlPage) getPage("/test.jsp", client);       
-        assertTrue(page.asText().contains("The FacesServlet cannot have a url-pattern of /*"));
+        HtmlPage page = (HtmlPage) getPage("/test.jsp", client);
+        // this assert will fail on machines with system locale other then en-us: 
+        //assertTrue(page.asText(), page.asText().contains("The FacesServlet cannot have a url-pattern of /*"));
+
+        // therefore test fo language independent parts of the expected message only:
+        assertEquals(500, page.getWebResponse().getStatusCode());
+        String pageText = page.asText();
+        int pos = pageText.indexOf("javax.servlet.ServletException");
+        assertTrue(pos > 0);  // pageText contains "javax.servlet.ServletException"
+        pos += "javax.servlet.ServletException".length();
+        int end = pageText.indexOf("root cause");
+        String exceptionMsg = pageText.substring(pos, end);
+        // now exceptionMsg must contain the exception message of ServletException, this msg must contain
+        // "FacesServlet" once, "url-pattern" twice and "/*" once.
+        assertEquals(exceptionMsg, 2, exceptionMsg.split("FacesServlet").length); // split must result in two parts
+        assertEquals(exceptionMsg, 3, exceptionMsg.split("url-pattern").length); // split must result in three parts
+        assertEquals(exceptionMsg, 2, exceptionMsg.split("/\\*").length); // split must result in three parts
+        
     }
 }
