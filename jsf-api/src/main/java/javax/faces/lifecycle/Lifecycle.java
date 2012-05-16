@@ -104,7 +104,7 @@ public abstract class Lifecycle {
      * ClientWindow} to be used to display the {@link
      * javax.faces.component.UIViewRoot} for this run through the
      * lifecycle.  See the class documentation for {@link ClientWindow}
-     * for an overview of the feature.  If the value of the {@link ClientWindow#WINDOW_ID_MODE_PARAM_NAME}
+     * for an overview of the feature.  If the value of the {@link ClientWindow#CLIENT_WINDOW_MODE_PARAM_NAME}
      * configuration parameter is "none" without the quotes, this method
      * must take no action.  Otherwise, call {@link javax.faces.context.ExternalContext#getClientWindow()}.
      * If the result is <code>null</code>, create a new instance of <code>ClientWindow</code>

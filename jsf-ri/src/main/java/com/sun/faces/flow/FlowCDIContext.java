@@ -103,12 +103,12 @@ public class FlowCDIContext implements Context, Serializable {
             throw new IllegalStateException("Unable to obtain current ClientWindow.  Is the ClientWindow feature enabled?");
         }
 
-        String flowBeansForWindowId = currentFlow.getClientWindowFlowId(curWindow) + "_beans";
-        result = (Map<Contextual<?>, Object>) sessionMap.get(flowBeansForWindowId);
+        String flowBeansForClientWindow = currentFlow.getClientWindowFlowId(curWindow) + "_beans";
+        result = (Map<Contextual<?>, Object>) sessionMap.get(flowBeansForClientWindow);
         if (null == result) {
             result = new ConcurrentHashMap<Contextual<?>, Object>();
-            sessionMap.put(flowBeansForWindowId, result);
-            ensureBeanMapCleanupOnSessionDestroyed(sessionMap, flowBeansForWindowId);
+            sessionMap.put(flowBeansForClientWindow, result);
+            ensureBeanMapCleanupOnSessionDestroyed(sessionMap, flowBeansForClientWindow);
         }
         
         return result;
@@ -126,34 +126,34 @@ public class FlowCDIContext implements Context, Serializable {
             throw new IllegalStateException("Unable to obtain current ClientWindow.  Is the ClientWindow feature enabled?");
         }
 
-        String creationalForWindowId = currentFlow.getClientWindowFlowId(curWindow) + "_creational";
-        result = (Map<Contextual<?>, CreationalContext<?>>) sessionMap.get(creationalForWindowId);
+        String creationalForClientWindow = currentFlow.getClientWindowFlowId(curWindow) + "_creational";
+        result = (Map<Contextual<?>, CreationalContext<?>>) sessionMap.get(creationalForClientWindow);
         if (null == result) {
             result = new ConcurrentHashMap<Contextual<?>, CreationalContext<?>>();
-            sessionMap.put(creationalForWindowId, result);
-            ensureCreationalCleanupOnSessionDestroyed(sessionMap, creationalForWindowId);
+            sessionMap.put(creationalForClientWindow, result);
+            ensureCreationalCleanupOnSessionDestroyed(sessionMap, creationalForClientWindow);
         }
         
         return result;
 
     }
     
-    private static void ensureBeanMapCleanupOnSessionDestroyed(Map<String, Object> sessionMap, String flowBeansForWindowId) {
+    private static void ensureBeanMapCleanupOnSessionDestroyed(Map<String, Object> sessionMap, String flowBeansForClientWindow) {
         List<String> beanMapList = (List<String>) sessionMap.get(PER_SESSION_BEAN_MAP_LIST);
         if (null == beanMapList) {
             beanMapList = new ArrayList<String>();
             sessionMap.put(PER_SESSION_BEAN_MAP_LIST, beanMapList);
         }
-        beanMapList.add(flowBeansForWindowId);
+        beanMapList.add(flowBeansForClientWindow);
     }
     
-    private static void ensureCreationalCleanupOnSessionDestroyed(Map<String, Object> sessionMap, String creationalForWindowId) {
+    private static void ensureCreationalCleanupOnSessionDestroyed(Map<String, Object> sessionMap, String creationalForClientWindow) {
         List<String> beanMapList = (List<String>) sessionMap.get(PER_SESSION_CREATIONAL_LIST);
         if (null == beanMapList) {
             beanMapList = new ArrayList<String>();
             sessionMap.put(PER_SESSION_CREATIONAL_LIST, beanMapList);
         }
-        beanMapList.add(creationalForWindowId);
+        beanMapList.add(creationalForClientWindow);
     }
     
     @SuppressWarnings({"FinalPrivateMethod"})

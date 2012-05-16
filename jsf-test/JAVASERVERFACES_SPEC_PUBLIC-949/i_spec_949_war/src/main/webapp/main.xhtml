@@ -51,11 +51,11 @@
 <h:body>
     <script type="text/javascript">
         //<![CDATA[
-        var windowId = "";
-        var callGetWindowId = function callGetWindowId() {
-            windowId = jsf.getWindowId(document.forms[0]);
-            var echoWindowId = document.getElementById("echoWindowId");
-            echoWindowId.innerHTML = "<b>" + windowId + "</b>";
+        var clientWindow = "";
+        var callGetClientWindow = function callGetClientWindow() {
+            clientWindow = jsf.getClientWindow(document.forms[0]);
+            var echoClientWindow = document.getElementById("echoClientWindow");
+            echoClientWindow.innerHTML = "<b>" + clientWindow + "</b>";
             return true;
         }
         //]]>        
@@ -65,7 +65,7 @@
     
   <h:form prependId="false">
       First name: <h:inputText id="firstName" value="#{userBean.firstName}" /> Last name: #{userBean.lastName}
-      <p><h:commandButton id="submitAjax" value="submitAjax" onclick="callGetWindowId()">
+      <p><h:commandButton id="submitAjax" value="submitAjax" onclick="callGetClientWindow()">
               <f:ajax execute="@form" render="echoPanel" />
           </h:commandButton>
     
@@ -83,7 +83,7 @@
         
     </h:panelGroup>
       
-      <p>|WindowId: <span id="echoWindowId" />|</p>
+      <p>|ClientWindow: <span id="echoClientWindow" />|</p>
       
   </h:form>
 </h:body>

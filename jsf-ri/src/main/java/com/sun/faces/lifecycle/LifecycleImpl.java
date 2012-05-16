@@ -97,7 +97,7 @@ public class LifecycleImpl extends Lifecycle {
     // List for registered PhaseListeners
     private List<PhaseListener> listeners =
           new CopyOnWriteArrayList<PhaseListener>();
-    private boolean isWindowIdEnabled = false;
+    private boolean isClientWindowEnabled = false;
     private WebConfiguration config;
     
     public LifecycleImpl() {
@@ -125,15 +125,15 @@ public class LifecycleImpl extends Lifecycle {
     }
     
     private void postConstructApplicationInitialization() {
-        String optionValue = config.getOptionValue(WebConfiguration.WebContextInitParameter.WindowIdMode);
-        isWindowIdEnabled = (null != optionValue) && !optionValue.equals(WebConfiguration.WebContextInitParameter.WindowIdMode.getDefaultValue());
+        String optionValue = config.getOptionValue(WebConfiguration.WebContextInitParameter.ClientWindowMode);
+        isClientWindowEnabled = (null != optionValue) && !optionValue.equals(WebConfiguration.WebContextInitParameter.ClientWindowMode.getDefaultValue());
     }
 
     // ------------------------------------------------------- Lifecycle Methods
 
     @Override
     public void attachWindow(FacesContext context) {
-        if (!isWindowIdEnabled) {
+        if (!isClientWindowEnabled) {
             return;
         }
         if (context == null) {

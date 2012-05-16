@@ -58,22 +58,22 @@ public class ClientWindowImpl extends ClientWindow {
     public void decode(FacesContext context) {
         Map<String, String> requestParamMap = context.getExternalContext().getRequestParameterMap();
         if (ClientWindow.isClientWindowUrlModeEnabled(context)) {
-            id = requestParamMap.get(ResponseStateManager.WINDOW_ID_URL_PARAM);
+            id = requestParamMap.get(ResponseStateManager.CLIENT_WINDOW_URL_PARAM);
         }
         // The hidden field always takes precedence, if present.
-        if (requestParamMap.containsKey(ResponseStateManager.WINDOW_ID_PARAM)) {
-            id = requestParamMap.get(ResponseStateManager.WINDOW_ID_PARAM);
+        if (requestParamMap.containsKey(ResponseStateManager.CLIENT_WINDOW_PARAM)) {
+            id = requestParamMap.get(ResponseStateManager.CLIENT_WINDOW_PARAM);
         }
         if (null == id) {
-            id = calculateWindowId(context);
+            id = calculateClientWindow(context);
         }
     }
     
-    private String calculateWindowId(FacesContext context) {
-        final String windowIdCounterKey = "com.sun.faces.lifecycle.WindowIdCounterKey";
+    private String calculateClientWindow(FacesContext context) {
+        final String clientWindowCounterKey = "com.sun.faces.lifecycle.ClientWindowCounterKey";
         ExternalContext extContext = context.getExternalContext();
         Map<String, Object> sessionAttrs = extContext.getSessionMap();
-        Integer counter = (Integer) sessionAttrs.get(windowIdCounterKey);
+        Integer counter = (Integer) sessionAttrs.get(clientWindowCounterKey);
         if (null == counter) {
             counter = new Integer(0);
         }
@@ -81,7 +81,7 @@ public class ClientWindowImpl extends ClientWindow {
         id = extContext.getSessionId(true) + sep +
                 + counter;
         
-        sessionAttrs.put(windowIdCounterKey, ++counter);
+        sessionAttrs.put(clientWindowCounterKey, ++counter);
         
         return id;
     }

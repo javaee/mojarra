@@ -979,8 +979,8 @@ public class WebConfiguration {
                 "",
                 ""
         ),
-        WindowIdMode(
-              ClientWindow.WINDOW_ID_MODE_PARAM_NAME,
+        ClientWindowMode(
+              ClientWindow.CLIENT_WINDOW_MODE_PARAM_NAME,
               "none"
         ),
         WebAppResourcesDirectory(

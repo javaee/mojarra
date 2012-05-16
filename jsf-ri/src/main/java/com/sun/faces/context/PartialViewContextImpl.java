@@ -422,8 +422,8 @@ import javax.faces.lifecycle.ClientWindow;
             
             ClientWindow window = context.getExternalContext().getClientWindow();
             if (null != window) {
-                String windowIdId = Util.getWindowIdId(context);
-                writer.startUpdate(windowIdId);
+                String clientWindowId = Util.getClientWindowId(context);
+                writer.startUpdate(clientWindowId);
                 writer.write(window.getId());
                 writer.endUpdate();
             }

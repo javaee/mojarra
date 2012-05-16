@@ -127,19 +127,19 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
             // I expect we can dispense with WebConfiguration.hasFlows.
             WebConfiguration config = WebConfiguration.getInstance(sc);
             config.setHasFlows(true);
-            String optionValue = config.getOptionValue(WebConfiguration.WebContextInitParameter.WindowIdMode);
-            boolean windowIdNeedsEnabling = false;
+            String optionValue = config.getOptionValue(WebConfiguration.WebContextInitParameter.ClientWindowMode);
+            boolean clientWindowNeedsEnabling = false;
             if ("none".equals(optionValue)) {
-                windowIdNeedsEnabling = true;
+                clientWindowNeedsEnabling = true;
                 String featureName = 
-                        WebConfiguration.WebContextInitParameter.WindowIdMode.getQualifiedName();
+                        WebConfiguration.WebContextInitParameter.ClientWindowMode.getQualifiedName();
                 LOGGER.log(Level.WARNING, 
                         "{0} was set to none, but Faces Flows requires {0} is enabled.  Setting to ''url''.", new Object[]{featureName});
             } else if (null == optionValue) {
-                windowIdNeedsEnabling = true;
+                clientWindowNeedsEnabling = true;
             }
-            if (windowIdNeedsEnabling) {
-                config.setOptionValue(WebConfiguration.WebContextInitParameter.WindowIdMode, "url");
+            if (clientWindowNeedsEnabling) {
+                config.setOptionValue(WebConfiguration.WebContextInitParameter.ClientWindowMode, "url");
             }
             
         }

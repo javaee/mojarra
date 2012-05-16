@@ -51,11 +51,11 @@
     <h:body>
     <script type="text/javascript">
         //<![CDATA[
-        var windowId = "";
-        var callGetWindowId = function callGetWindowId() {
-            windowId = jsf.getWindowId(document.forms[0]);
-            var echoWindowId = document.getElementById("echoWindowId");
-            echoWindowId.innerHTML = "<b>" + windowId + "</b>";
+        var clientWindow = "";
+        var callGetClientWindow = function callGetClientWindow() {
+            clientWindow = jsf.getClientWindow(document.forms[0]);
+            var echoClientWindow = document.getElementById("echoClientWindow");
+            echoClientWindow.innerHTML = "<b>" + clientWindow + "</b>";
             return true;
         }
         //]]>        
@@ -64,12 +64,12 @@
         
         <h:form prependId="false">
         
-            <p><input type="submit" id="getWindowId" onclick="callGetWindowId(); return false;"
-                   name="getWindowId" value="getWindowId" /></p>
+            <p><input type="submit" id="getClientWindow" onclick="callGetClientWindow(); return false;"
+                   name="getClientWindow" value="getClientWindow" /></p>
             
             <p><h:commandButton value="back" id="back" action="main" /></p>
             
-            <p>|WindowId: <span id="echoWindowId" />|</p>
+            <p>|ClientWindow: <span id="echoClientWindow" />|</p>
             
         </h:form>
         

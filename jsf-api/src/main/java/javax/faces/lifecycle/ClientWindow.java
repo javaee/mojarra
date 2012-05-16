@@ -61,7 +61,7 @@ import javax.faces.render.ResponseStateManager;
 
  * <p>The generation of <code>ClientWindow</code> is controlled by the
  * value of the <code>context-param</code> named by the value of {@link
- * #WINDOW_ID_MODE_PARAM_NAME}.  If this <code>context-param</code> is
+ * #CLIENT_WINDOW_MODE_PARAM_NAME}.  If this <code>context-param</code> is
  * not specified, or its value is "none", no <code>ClientWindow</code>
  * instances will be generated, and the entire feature is effectively
  * disabled for the entire application.</p>
@@ -69,7 +69,7 @@ import javax.faces.render.ResponseStateManager;
  * <p>Other modes</p>
 
  * <p>For all other valid values of {@link
- * #WINDOW_ID_MODE_PARAM_NAME}, including custom values not explicitly covered
+ * #CLIENT_WINDOW_MODE_PARAM_NAME}, including custom values not explicitly covered
  * in this specification, the lifetime of a
  * <code>ClientWindow</code> starts on the first request made by a
  * particular client window (or tab, or pop-up, etc) to the JSF runtime
@@ -88,11 +88,11 @@ import javax.faces.render.ResponseStateManager;
  * <p>During state saving, regardless of the window id mode, or state
  * saving mode, a hidden field must be written whose name, id and value
  * are given as specified in {@link
- * javax.faces.render.ResponseStateManager#WINDOW_ID_PARAM}. </p>
+ * javax.faces.render.ResponseStateManager#CLIENT_WINDOW_PARAM}. </p>
 
  * <p>url mode</p>
 
- * <p>If the value of the {@link #WINDOW_ID_MODE_PARAM_NAME} is "url",
+ * <p>If the value of the {@link #CLIENT_WINDOW_MODE_PARAM_NAME} is "url",
  * without the quotes, the encoding of the <code>ClientWindow</code>
  * must be performed as follows, in addition to the hidden field already
  * described.  The runtime must ensure that any component that renders a
@@ -102,7 +102,7 @@ import javax.faces.render.ResponseStateManager;
  * This requirement is met by several of the "encode" methods on {@link
  * javax.faces.context.ExternalContext} See {@link
  * javax.faces.context.ExternalContext#encodeActionURL(java.lang.String)
- * } for details, including a special case where the windowId is not
+ * } for details, including a special case where the ClientWindow is not
  * appended even though url mode is enabled.</p>
 
  * </ul>
@@ -122,8 +122,8 @@ public abstract class ClientWindow {
      *
      * @since 2.2
      */
-    public static final String WINDOW_ID_MODE_PARAM_NAME =
-          "javax.faces.WINDOW_ID_MODE";
+    public static final String CLIENT_WINDOW_MODE_PARAM_NAME =
+          "javax.faces.CLIENT_WINDOW_MODE";
     
     
     /**
@@ -140,10 +140,10 @@ public abstract class ClientWindow {
     /**
      * <p class="changed_added_2_2">The implementation is responsible
      * for examining the incoming request and extracting the value that must 
-     * be returned from the {@link #getId} method.  If {@link #WINDOW_ID_MODE_PARAM_NAME}
-     * is "none" this method must not be invoked.  If {@link #WINDOW_ID_MODE_PARAM_NAME}
+     * be returned from the {@link #getId} method.  If {@link #CLIENT_WINDOW_MODE_PARAM_NAME}
+     * is "none" this method must not be invoked.  If {@link #CLIENT_WINDOW_MODE_PARAM_NAME}
      * is "url" the implementation must first look for a request parameter
-     * under the name given by the value of {@link javax.faces.render.ResponseStateManager#WINDOW_ID_PARAM}.
+     * under the name given by the value of {@link javax.faces.render.ResponseStateManager#CLIENT_WINDOW_PARAM}.
      * If no value is found, look for a request parameter under the name given
      * by the value of {@link javax.faces.render.ResponseStateManager#WINDOW_ID_URL_PARAM}.
      * If no value is found, fabricate an id that uniquely identifies this
@@ -166,11 +166,11 @@ public abstract class ClientWindow {
     
     /**
      * <p class="changed_added_2_2">Components that permit per-use disabling
-     * of the appending of the windowId in generated URLs must call this method
+     * of the appending of the ClientWindow in generated URLs must call this method
      * first before rendering those URLs.  The caller must call {@link #enableClientWindowUrlMode(javax.faces.context.FacesContext)}
      * from a <code>finally</code> block after rendering the URL.  If 
-     * {@link #WINDOW_ID_MODE_PARAM_NAME} is "url" without the quotes, all generated
-     * URLs that cause a GET request must append the windowId by default.</p>
+     * {@link #CLIENT_WINDOW_MODE_PARAM_NAME} is "url" without the quotes, all generated
+     * URLs that cause a GET request must append the ClientWindow by default.</p>
      * 
      * @param context the {@link FacesContext} for this request.
      * 
@@ -184,10 +184,10 @@ public abstract class ClientWindow {
     
     /**
      * <p class="changed_added_2_2">Components that permit per-use disabling
-     * of the appending of the windowId in generated URLs must call this method
+     * of the appending of the ClientWindow in generated URLs must call this method
      * first after rendering those URLs.  If 
-     * {@link #WINDOW_ID_MODE_PARAM_NAME} is "url" without the quotes, all generated
-     * URLs that cause a GET request must append the windowId by default.</p>
+     * {@link #CLIENT_WINDOW_MODE_PARAM_NAME} is "url" without the quotes, all generated
+     * URLs that cause a GET request must append the ClientWindow by default.</p>
      * 
      * @param context the {@link FacesContext} for this request.
      * 
@@ -201,10 +201,10 @@ public abstract class ClientWindow {
     }
     
     /**
-     * <p class="changed_added_2_2">Methods that append the windowId to generated
+     * <p class="changed_added_2_2">Methods that append the ClientWindow to generated
      * URLs must call this method to see if they are permitted to do so.  If 
-     * {@link #WINDOW_ID_MODE_PARAM_NAME} is "url" without the quotes, all generated
-     * URLs that cause a GET request must append the windowId by default.</p>
+     * {@link #CLIENT_WINDOW_MODE_PARAM_NAME} is "url" without the quotes, all generated
+     * URLs that cause a GET request must append the ClientWindow by default.</p>
      * 
      * @param context the {@link FacesContext} for this request.
      * 

@@ -188,7 +188,7 @@ public class ClientSideStateHelper extends StateHelper {
             }
             writer.endElement("input");
 
-            writeWindowIdField(ctx, writer);
+            writeClientWindowField(ctx, writer);
             writeRenderKitIdField(ctx, writer);
         }
 

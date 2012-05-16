@@ -812,7 +812,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
             var viewStateRegex = new RegExp("javax.faces.ViewState" +
                                             jsf.separatorchar + ".*$");
             var windowIdRegex = new RegExp("^.*" + jsf.separatorchar + 
-                                           "javax.faces.WindowId" +
+                                           "javax.faces.ClientWindow" +
                                             jsf.separatorchar + ".*$");
             if (id.match(viewStateRegex)) {
 
@@ -873,11 +873,11 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                     // we're going to just return silently.
                     return;
                 }
-                var field = windowIdForm.elements["javax.faces.WindowId"];
+                var field = windowIdForm.elements["javax.faces.ClientWindow"];
                 if (typeof field == 'undefined') {
                     field = document.createElement("input");
                     field.type = "hidden";
-                    field.name = "javax.faces.WindowId";
+                    field.name = "javax.faces.ClientWindow";
                     windowIdForm.appendChild(field);
                 }
                 field.value = windowId.nodeValue;
@@ -893,11 +893,11 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                             // the form is not the one that caused the submission..
                             var f = document.forms[temp[i]];
                             if (typeof f !== 'undefined' && f !== null && f.id !== context.formid) {
-                                field = f.elements["javax.faces.WindowId"];
+                                field = f.elements["javax.faces.ClientWindow"];
                                 if (typeof field === 'undefined') {
                                     field = document.createElement("input");
                                     field.type = "hidden";
-                                    field.name = "javax.faces.WindowId";
+                                    field.name = "javax.faces.ClientWindow";
                                     f.appendChild(field);
                                 }
                                 field.value = windowId.nodeValue;
@@ -2032,14 +2032,14 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              * <li class="changed_added_2_2">If an
              * <code>update</code> element is found in the response with
              * an identifier containing
-             * <code>javax.faces.WindowId</code>:
+             * <code>javax.faces.ClientWindow</code>:
 
-             * <pre><code>&lt;update id="&lt;VIEW_ROOT_CONTAINER_CLIENT_ID&gt;&lt;SEP&gt;javax.faces.WindowId&lt;SEP&gt;&lt;UNIQUE_PER_VIEW_NUMBER&gt;"&gt;
+             * <pre><code>&lt;update id="&lt;VIEW_ROOT_CONTAINER_CLIENT_ID&gt;&lt;SEP&gt;javax.faces.ClientWindow&lt;SEP&gt;&lt;UNIQUE_PER_VIEW_NUMBER&gt;"&gt;
              *    &lt;![CDATA[...]]&gt;
              * &lt;/update&gt;</code></pre>
 
              * locate and update the submitting form's
-             * <code>javax.faces.WindowId</code> value with the
+             * <code>javax.faces.ClientWindow</code> value with the
              * <code>CDATA</code> contents from the response.
              * &lt;SEP&gt: is the currently configured
              * <code>UINamingContainer.getSeparatorChar()</code>.
@@ -2051,7 +2051,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              * view state.  This requirement is simply to satisfy XML
              * correctness in parity with what is done in the
              * corresponding non-partial JSF view.  Locate and update
-             * the <code>javax.faces.WindowId</code> value for all
+             * the <code>javax.faces.ClientWindow</code> value for all
              * forms specified in the <code>render</code> target
              * list.</li>
 
@@ -2403,9 +2403,9 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
 
      * @function jsf.getViewState
      */
-    jsf.getWindowId = function(node) {
+    jsf.getClientWindow = function(node) {
         var FORM = "form";
-        var WIN_ID = "javax.faces.WindowId";
+        var WIN_ID = "javax.faces.ClientWindow";
 
         var fetchWindowIdFromForms = function (forms) {
             var result_idx = {};

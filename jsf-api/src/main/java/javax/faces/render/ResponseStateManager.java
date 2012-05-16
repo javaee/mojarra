@@ -104,8 +104,8 @@ public abstract class ResponseStateManager {
     
     /**
      * <p class="changed_added_2_2">The name of the hidden field that
-     * refers to the encoded WindowId.  This field is only used if 
-     * {@link javax.faces.lifecycle.ClientWindow#WINDOW_ID_MODE_PARAM_NAME}
+     * refers to the encoded ClientWindow.  This field is only used if 
+     * {@link javax.faces.lifecycle.ClientWindow#CLIENT_WINDOW_MODE_PARAM_NAME}
      * is not "none". The <code>id</code> attribute must be a
      * concatenation of the return from {@link
      * javax.faces.component.UIViewRoot#getContainerClientId}, the
@@ -120,11 +120,11 @@ public abstract class ResponseStateManager {
      * 
      */
     
-    public static final String WINDOW_ID_PARAM = "javax.faces.WindowId";
+    public static final String CLIENT_WINDOW_PARAM = "javax.faces.ClientWindow";
     
     /**
      * <p class="changed_added_2_2">The name of the URL query parameter that 
-     * is only used if {@link javax.faces.lifecycle.ClientWindow#WINDOW_ID_MODE_PARAM_NAME}
+     * is only used if {@link javax.faces.lifecycle.ClientWindow#CLIENT_WINDOW_MODE_PARAM_NAME}
      * is "url".  The name of the parameter is given by the constant value 
      * of this field.  The value of this parameter 
      * is the return from {@link javax.faces.lifecycle.ClientWindow#getId}.
@@ -133,7 +133,7 @@ public abstract class ResponseStateManager {
      * @since 2.2
      */
     
-    public static final String WINDOW_ID_URL_PARAM = "jfwid";
+    public static final String CLIENT_WINDOW_URL_PARAM = "jfwid";
     
     /**
      * <p class="changed_added_2_2">The value of this constant is taken
@@ -205,8 +205,8 @@ public abstract class ResponseStateManager {
      * result is <code>null</code>, take no further action regarding the
      * <code>ClientWindow</code>.  If the result is
      * non-<code>null</code>, write a hidden field whose name is {@link
-     * #WINDOW_ID_PARAM} and whose id is
-     * <code>&lt;VIEW_ROOT_CONTAINER_CLIENT_ID&gt;&lt;SEP&gt;javax.faces.WindowId&lt;SEP&gt;&lt;UNIQUE_PER_VIEW_NUMBER&gt;</code>
+     * #CLIENT_WINDOW_PARAM} and whose id is
+     * <code>&lt;VIEW_ROOT_CONTAINER_CLIENT_ID&gt;&lt;SEP&gt;javax.faces.ClientWindow&lt;SEP&gt;&lt;UNIQUE_PER_VIEW_NUMBER&gt;</code>
      * where &lt;SEP&gt; is the currently configured
      * <code>UINamingContainer.getSeparatorChar()</code>.
      * &lt;VIEW_ROOT_CONTAINER_CLIENT_ID&gt; is the return from

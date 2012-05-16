@@ -82,7 +82,7 @@ public abstract class StateHelper {
      */
     protected static final char[] WINDOW_ID_FIELD_START =
           ("<input type=\"hidden\" name=\""
-           + ResponseStateManager.WINDOW_ID_PARAM
+           + ResponseStateManager.CLIENT_WINDOW_PARAM
            + "\" id=\"").toCharArray();
 
     /**
@@ -148,9 +148,9 @@ public abstract class StateHelper {
     
     /**
      * This will be used the by the different <code>StateHelper</code> implementations
-     * when writing the start of the windowId field.
+     * when writing the start of the ClientWindow field.
      */
-    protected char[] windowIdFieldStart;
+    protected char[] clientWindowFieldStart;
     
     /**
      * This will be used by the different <code>StateHelper</code> implementations
@@ -182,7 +182,7 @@ public abstract class StateHelper {
         webConfig = WebConfiguration.getInstance(ctx.getExternalContext());
         compressViewState = webConfig.isOptionEnabled(CompressViewState);
         stateFieldStart = STATE_FIELD_START;
-        windowIdFieldStart = WINDOW_ID_FIELD_START;
+        clientWindowFieldStart = WINDOW_ID_FIELD_START;
         fieldMiddle = FIELD_MIDDLE;
         fieldEnd = (webConfig.isOptionEnabled(AutoCompleteOffOnViewState)
                            ? STATE_FIELD_AUTOCOMPLETE_END
@@ -299,13 +299,13 @@ public abstract class StateHelper {
 
     }
     
-    protected void writeWindowIdField(FacesContext context,
+    protected void writeClientWindowField(FacesContext context,
                                       ResponseWriter writer)
     throws IOException {
         ClientWindow window = context.getExternalContext().getClientWindow();
         if (null != window) {
-            writer.write(windowIdFieldStart);
-            writer.write(Util.getWindowIdId(context));
+            writer.write(clientWindowFieldStart);
+            writer.write(Util.getClientWindowId(context));
             writer.write(fieldMiddle);
             writer.write(window.getId());
             writer.write(fieldEnd);

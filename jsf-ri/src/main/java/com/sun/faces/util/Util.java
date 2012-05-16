@@ -1007,19 +1007,19 @@ public class Util {
         return result;
     }
 
-    public static String getWindowIdId(FacesContext context) {
+    public static String getClientWindowId(FacesContext context) {
         String result = null;
-        final String windowIdIdCounterKey = "com.sun.faces.util.WindowIdCounterKey";
+        final String clientWindowIdCounterKey = "com.sun.faces.util.ClientWindowCounterKey";
         Map<Object, Object> contextAttrs = context.getAttributes();
-        Integer counter = (Integer) contextAttrs.get(windowIdIdCounterKey);
+        Integer counter = (Integer) contextAttrs.get(clientWindowIdCounterKey);
         if (null == counter) {
             counter = new Integer(0);
         }
         
         char sep = UINamingContainer.getSeparatorChar(context);
         result = context.getViewRoot().getContainerClientId(context) + sep + 
-                ResponseStateManager.WINDOW_ID_PARAM + sep + counter;
-        contextAttrs.put(windowIdIdCounterKey, ++counter);
+                ResponseStateManager.CLIENT_WINDOW_PARAM + sep + counter;
+        contextAttrs.put(clientWindowIdCounterKey, ++counter);
         
         return result;
     }

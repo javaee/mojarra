@@ -69,19 +69,19 @@ public class IssueSpec949TestCase extends HtmlUnitFacesTestCase {
 
     // ------------------------------------------------------------ Test Methods
 
-    public void testWindowId() throws Exception {
-        String windowId1, windowId2, window1Session, window2Session;
-        windowId1 = doTestAndReturnWindowId(client, "window0");
-        windowId2 = doTestAndReturnWindowId(client, "window1");
-        assertNotSame(windowId1, windowId2);
-        window1Session = windowId1.substring(0, windowId1.indexOf(':'));
-        window2Session = windowId2.substring(0, windowId2.indexOf(':'));
+    public void testClientWindow() throws Exception {
+        String clientWindow1, clientWindow2, window1Session, window2Session;
+        clientWindow1 = doTestAndReturnClientWindow(client, "window0");
+        clientWindow2 = doTestAndReturnClientWindow(client, "window1");
+        assertNotSame(clientWindow1, clientWindow2);
+        window1Session = clientWindow1.substring(0, clientWindow1.indexOf(':'));
+        window2Session = clientWindow2.substring(0, clientWindow2.indexOf(':'));
         assertEquals(window1Session, window2Session);
 
     }
     
-    public String doTestAndReturnWindowId(WebClient yourClient, String windowName) throws Exception {
-        String windowId = null;
+    public String doTestAndReturnClientWindow(WebClient yourClient, String windowName) throws Exception {
+        String clientWindow = null;
         
         // 
         // Do some actions on this page
@@ -96,9 +96,9 @@ public class IssueSpec949TestCase extends HtmlUnitFacesTestCase {
         String pageText = page.asText();
         assertTrue(pageText.contains("|ajaxFirstName|"));
 
-        final String windowIdLabel = "WindowId: ";
-        int windowIdLabelIndex = pageText.indexOf(windowIdLabel);
-        windowId = pageText.substring(windowIdLabelIndex + windowIdLabel.length());
+        final String clientWindowLabel = "ClientWindow: ";
+        int clientWindowLabelIndex = pageText.indexOf(clientWindowLabel);
+        clientWindow = pageText.substring(clientWindowLabelIndex + clientWindowLabel.length());
         
         
         textField = (HtmlTextInput) page.getElementById("firstName");
@@ -116,13 +116,13 @@ public class IssueSpec949TestCase extends HtmlUnitFacesTestCase {
         //
         HtmlAnchor link = (HtmlAnchor) page.getElementById("commandLink");
         page = link.click();
-        button = (HtmlSubmitInput) page.getElementById("getWindowId");
+        button = (HtmlSubmitInput) page.getElementById("getClientWindow");
         page = button.click();
         Thread.sleep(2000);
         pageText = page.asText();
-        windowIdLabelIndex = pageText.indexOf(windowIdLabel);
-        String newPageWindowId = pageText.substring(windowIdLabelIndex + windowIdLabel.length());
-        assertEquals(windowId, newPageWindowId);
+        clientWindowLabelIndex = pageText.indexOf(clientWindowLabel);
+        String newPageClientWindow = pageText.substring(clientWindowLabelIndex + clientWindowLabel.length());
+        assertEquals(clientWindow, newPageClientWindow);
         
         // 
         // Go back to the first page
@@ -135,15 +135,15 @@ public class IssueSpec949TestCase extends HtmlUnitFacesTestCase {
         //
         link = (HtmlAnchor) page.getElementById("outcomeTargetLink");
         page = link.click();
-        button = (HtmlSubmitInput) page.getElementById("getWindowId");
+        button = (HtmlSubmitInput) page.getElementById("getClientWindow");
         page = button.click();
         Thread.sleep(2000);
         pageText = page.asText();
-        windowIdLabelIndex = pageText.indexOf(windowIdLabel);
-        newPageWindowId = pageText.substring(windowIdLabelIndex + windowIdLabel.length());
-        assertEquals(windowId, newPageWindowId);
+        clientWindowLabelIndex = pageText.indexOf(clientWindowLabel);
+        newPageClientWindow = pageText.substring(clientWindowLabelIndex + clientWindowLabel.length());
+        assertEquals(clientWindow, newPageClientWindow);
         
-        return windowId;
+        return clientWindow;
     }
 
     
