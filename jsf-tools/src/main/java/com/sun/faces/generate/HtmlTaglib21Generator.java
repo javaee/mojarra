@@ -168,14 +168,14 @@ public class HtmlTaglib21Generator extends HtmlTaglib12Generator {
         writer.indent();
         writer.fwrite("super.setProperties(component);\n");
 
-        String iVar =
-            GeneratorUtil.stripJavaxFacesPrefix(componentType).toLowerCase();
+        String downcastComponent =
+            GeneratorUtil.stripJavaxFacesPrefix(componentType).toLowerCase() + "_iVar";
 
-        writer.fwrite(componentClass + ' ' + iVar + " = null;\n");
+        writer.fwrite(componentClass + ' ' + downcastComponent + " = null;\n");
 
         writer.fwrite("try {\n");
         writer.indent();
-        writer.fwrite(iVar + " = (" + componentClass + ") component;\n");
+        writer.fwrite(downcastComponent + " = (" + componentClass + ") component;\n");
         writer.outdent();
         writer.fwrite("} catch (ClassCastException cce) {\n");
         writer.indent();
@@ -192,7 +192,7 @@ public class HtmlTaglib21Generator extends HtmlTaglib12Generator {
             writer.indent();
             writer.fwrite("if (!converter.isLiteralText()) {\n");
             writer.indent();
-            writer.fwrite(iVar +
+            writer.fwrite(downcastComponent +
                 ".setValueExpression(\"converter\", converter);\n");
             writer.outdent();
             writer.fwrite("} else {\n");
@@ -200,7 +200,7 @@ public class HtmlTaglib21Generator extends HtmlTaglib12Generator {
             writer.fwrite("Converter conv = FacesContext.getCurrentInstance().getApplication()." +
                 "createConverter(converter." +
                 "getExpressionString());\n");
-            writer.fwrite(iVar + ".setConverter(conv);\n");
+            writer.fwrite(downcastComponent + ".setConverter(conv);\n");
             writer.outdent();
             writer.fwrite("}\n");
             writer.outdent();
@@ -231,14 +231,13 @@ public class HtmlTaglib21Generator extends HtmlTaglib12Generator {
                 continue;
             }
             String ivar = mangle(propertyName);           
-            String comp =
-                GeneratorUtil.stripJavaxFacesPrefix(componentType).toLowerCase();
+            
             String capPropName = capitalize(propertyName);
 
             if (property.isValueExpressionEnabled()) {
                 writer.fwrite("if (" + ivar + " != null) {\n");
                 writer.indent();
-                writer.fwrite(comp);
+                writer.fwrite(downcastComponent);
                 if ("_for".equals(ivar)) {
                     writer.write(".setValueExpression(\"for\", " +
                                  ivar + ");\n");
@@ -253,7 +252,7 @@ public class HtmlTaglib21Generator extends HtmlTaglib12Generator {
                     writer.fwrite("if (" + ivar + " != null) {\n");
                     writer.indent();
 
-                    writer.fwrite(comp + ".setActionExpression(" + ivar +
+                    writer.fwrite(downcastComponent + ".setActionExpression(" + ivar +
                         ");\n");
                     
                     writer.outdent();
@@ -262,7 +261,7 @@ public class HtmlTaglib21Generator extends HtmlTaglib12Generator {
                     writer.fwrite("if (" + ivar + " != null) {\n");
                     writer.indent();
                     
-                    writer.fwrite(comp + ".add" + capitalize(ivar) +
+                    writer.fwrite(downcastComponent + ".add" + capitalize(ivar) +
                         "(new MethodExpression" + capitalize(ivar) + '(' +
                         ivar + "));\n");
 
@@ -272,7 +271,7 @@ public class HtmlTaglib21Generator extends HtmlTaglib12Generator {
             } else {
                 writer.fwrite("if (" + ivar + " != null) {\n");
                 writer.indent();
-                writer.fwrite(comp + ".set" + capPropName + "(" + ivar + ");\n");
+                writer.fwrite(downcastComponent + ".set" + capPropName + "(" + ivar + ");\n");
                 writer.outdent();
                 writer.fwrite("}\n");
             }
@@ -293,13 +292,11 @@ public class HtmlTaglib21Generator extends HtmlTaglib12Generator {
             String attributeName = attribute.getAttributeName();           
 
             String ivar = mangle(attributeName);
-            String comp =
-                GeneratorUtil.stripJavaxFacesPrefix(componentType).toLowerCase();
 
             writer.fwrite("if (" + ivar + " != null) {\n");
             writer.indent();
            
-            writer.fwrite(comp);
+            writer.fwrite(downcastComponent);
             if ("_for".equals(ivar)) {              
                 writer.write(".setValueExpression(\"for\", " +
                     ivar + ");\n");

@@ -5504,6 +5504,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <pass-through>true</pass-through>
       </property-extension>
     </property>
+    <property>
+      <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+      <display-name>HTML5 Custom Data Attributes</display-name>
+      <icon/>
+      <property-name>data</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
 
 
     <property>
@@ -6138,6 +6195,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <display-name>Advisory Title</display-name>
       <icon/>
       <property-name>title</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+      <display-name>HTML5 Custom Data Attributes</display-name>
+      <icon/>
+      <property-name>data</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
@@ -6807,6 +6921,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <pass-through>true</pass-through>
       </property-extension>
     </property>
+    <property>
+      <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+      <display-name>HTML5 Custom Data Attributes</display-name>
+      <icon/>
+      <property-name>data</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
 
 
     <property>
@@ -7410,6 +7581,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <pass-through>true</pass-through>
       </property-extension>
     </property>
+    <property>
+      <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+      <display-name>HTML5 Custom Data Attributes</display-name>
+      <icon/>
+      <property-name>data</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
 
 
     <property>
@@ -7871,6 +8099,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <display-name>Advisory Title</display-name>
       <icon/>
       <property-name>title</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+      <display-name>HTML5 Custom Data Attributes</display-name>
+      <icon/>
+      <property-name>data</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
@@ -8514,6 +8799,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <display-name>Advisory Title</display-name>
       <icon/>
       <property-name>title</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+      <display-name>HTML5 Custom Data Attributes</display-name>
+      <icon/>
+      <property-name>data</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
@@ -9621,6 +9963,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <pass-through>true</pass-through>
       </property-extension>
     </property>
+    <property>
+      <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+      <display-name>HTML5 Custom Data Attributes</display-name>
+      <icon/>
+      <property-name>data</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
 
 
     <property>
@@ -10383,6 +10782,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <pass-through>true</pass-through>
       </property-extension>
     </property>
+    <property>
+      <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+      <display-name>HTML5 Custom Data Attributes</display-name>
+      <icon/>
+      <property-name>data</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
 
 
     <property>
@@ -11129,6 +11585,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <pass-through>true</pass-through>
       </property-extension>
     </property>
+    <property>
+      <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+      <display-name>HTML5 Custom Data Attributes</display-name>
+      <icon/>
+      <property-name>data</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
 
 
     <property>
@@ -11687,6 +12200,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <pass-through>true</pass-through>
       </property-extension>
     </property>
+    <property>
+      <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+      <display-name>HTML5 Custom Data Attributes</display-name>
+      <icon/>
+      <property-name>data</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
 
 
     <property>
@@ -12050,6 +12620,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <display-name>Advisory Title</display-name>
       <icon/>
       <property-name>title</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+      <display-name>HTML5 Custom Data Attributes</display-name>
+      <icon/>
+      <property-name>data</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
@@ -12427,6 +13054,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <pass-through>true</pass-through>
       </property-extension>
     </property>
+    <property>
+      <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+      <display-name>HTML5 Custom Data Attributes</display-name>
+      <icon/>
+      <property-name>data</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
 
 
     <property>
@@ -12698,6 +13382,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <display-name>Advisory Title</display-name>
       <icon/>
       <property-name>title</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+      <display-name>HTML5 Custom Data Attributes</display-name>
+      <icon/>
+      <property-name>data</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
@@ -13186,6 +13927,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <display-name>Advisory Title</display-name>
       <icon/>
       <property-name>title</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+      <display-name>HTML5 Custom Data Attributes</display-name>
+      <icon/>
+      <property-name>data</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
@@ -13970,6 +14768,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <pass-through>true</pass-through>
       </property-extension>
     </property>
+    <property>
+      <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+      <display-name>HTML5 Custom Data Attributes</display-name>
+      <icon/>
+      <property-name>data</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
 
 
     <property>
@@ -14609,6 +15464,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <pass-through>true</pass-through>
       </property-extension>
     </property>
+    <property>
+      <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+      <display-name>HTML5 Custom Data Attributes</display-name>
+      <icon/>
+      <property-name>data</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
 
 
     <property>
@@ -15121,6 +16033,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <pass-through>true</pass-through>
       </property-extension>
     </property>
+    <property>
+      <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+      <display-name>HTML5 Custom Data Attributes</display-name>
+      <icon/>
+      <property-name>data</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
 
 
     <property>
@@ -15352,6 +16321,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <display-name>Advisory Title</display-name>
       <icon/>
       <property-name>title</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+      <display-name>HTML5 Custom Data Attributes</display-name>
+      <icon/>
+      <property-name>data</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
@@ -16343,6 +17369,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <pass-through>true</pass-through>
       </property-extension>
     </property>
+    <property>
+      <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+      <display-name>HTML5 Custom Data Attributes</display-name>
+      <icon/>
+      <property-name>data</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
 
 
     <property>
@@ -17048,6 +18131,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <display-name>Advisory Title</display-name>
       <icon/>
       <property-name>title</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+      <display-name>HTML5 Custom Data Attributes</display-name>
+      <icon/>
+      <property-name>data</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
@@ -17829,6 +18969,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <pass-through>true</pass-through>
       </property-extension>
     </property>
+    <property>
+      <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+      <display-name>HTML5 Custom Data Attributes</display-name>
+      <icon/>
+      <property-name>data</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
 
 
     <property>
@@ -18567,6 +19764,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <pass-through>true</pass-through>
       </property-extension>
     </property>
+    <property>
+      <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+      <display-name>HTML5 Custom Data Attributes</display-name>
+      <icon/>
+      <property-name>data</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
 
 
     <property>
@@ -19277,6 +20531,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <display-name>Advisory Title</display-name>
       <icon/>
       <property-name>title</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+      <display-name>HTML5 Custom Data Attributes</display-name>
+      <icon/>
+      <property-name>data</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
@@ -20007,6 +21318,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <pass-through>true</pass-through>
       </property-extension>
     </property>
+    <property>
+      <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+      <display-name>HTML5 Custom Data Attributes</display-name>
+      <icon/>
+      <property-name>data</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
 
 
     <property>
@@ -20724,6 +22092,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <pass-through>true</pass-through>
       </property-extension>
     </property>
+    <property>
+      <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+      <display-name>HTML5 Custom Data Attributes</display-name>
+      <icon/>
+      <property-name>data</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
 
 
     <property>
@@ -21274,6 +22699,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <pass-through>true</pass-through>
       </property-extension>
     </property>
+    <property>
+      <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+      <display-name>HTML5 Custom Data Attributes</display-name>
+      <icon/>
+      <property-name>data</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
 
 
     <property>
@@ -21742,6 +23224,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <display-name>Advisory Title</display-name>
         <icon/>
         <attribute-name>title</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+        <display-name>HTML5 Custom Data Attributes</display-name>
+        <icon/>
+        <attribute-name>data</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
@@ -22287,6 +23826,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <display-name>Advisory Title</display-name>
         <icon/>
         <attribute-name>title</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+        <display-name>HTML5 Custom Data Attributes</display-name>
+        <icon/>
+        <attribute-name>data</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
@@ -22852,6 +24448,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
           <pass-through>true</pass-through>
         </attribute-extension>
       </attribute>
+      <attribute>
+        <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+        <display-name>HTML5 Custom Data Attributes</display-name>
+        <icon/>
+        <attribute-name>data</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
 
 
       <attribute>
@@ -23348,6 +25001,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
           <pass-through>true</pass-through>
         </attribute-extension>
       </attribute>
+      <attribute>
+        <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+        <display-name>HTML5 Custom Data Attributes</display-name>
+        <icon/>
+        <attribute-name>data</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
 
 
       <attribute>
@@ -23678,6 +25388,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <display-name>Advisory Title</display-name>
         <icon/>
         <attribute-name>title</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+        <display-name>HTML5 Custom Data Attributes</display-name>
+        <icon/>
+        <attribute-name>data</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
@@ -24054,6 +25821,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <display-name>Advisory Title</display-name>
         <icon/>
         <attribute-name>title</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+        <display-name>HTML5 Custom Data Attributes</display-name>
+        <icon/>
+        <attribute-name>data</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
@@ -24522,6 +26346,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
           <pass-through>true</pass-through>
         </attribute-extension>
       </attribute>
+      <attribute>
+        <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+        <display-name>HTML5 Custom Data Attributes</display-name>
+        <icon/>
+        <attribute-name>data</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
 
 
       <attribute>
@@ -24976,6 +26857,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
           <pass-through>true</pass-through>
         </attribute-extension>
       </attribute>
+      <attribute>
+        <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+        <display-name>HTML5 Custom Data Attributes</display-name>
+        <icon/>
+        <attribute-name>data</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
 
 
       <attribute>
@@ -25397,6 +27335,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <display-name>Advisory Title</display-name>
         <icon/>
         <attribute-name>title</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+        <display-name>HTML5 Custom Data Attributes</display-name>
+        <icon/>
+        <attribute-name>data</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
@@ -25834,6 +27829,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
           <pass-through>true</pass-through>
         </attribute-extension>
       </attribute>
+      <attribute>
+        <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+        <display-name>HTML5 Custom Data Attributes</display-name>
+        <icon/>
+        <attribute-name>data</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
 
 
       <attribute>
@@ -26028,6 +28080,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <display-name>Advisory Title</display-name>
         <icon/>
         <attribute-name>title</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+        <display-name>HTML5 Custom Data Attributes</display-name>
+        <icon/>
+        <attribute-name>data</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
@@ -26236,6 +28345,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
           <pass-through>true</pass-through>
         </attribute-extension>
       </attribute>
+      <attribute>
+        <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+        <display-name>HTML5 Custom Data Attributes</display-name>
+        <icon/>
+        <attribute-name>data</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
 
 
       <attribute>
@@ -26332,6 +28498,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <display-name>Advisory Title</display-name>
         <icon/>
         <attribute-name>title</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+        <display-name>HTML5 Custom Data Attributes</display-name>
+        <icon/>
+        <attribute-name>data</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
@@ -26672,6 +28895,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <display-name>Advisory Title</display-name>
         <icon/>
         <attribute-name>title</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+        <display-name>HTML5 Custom Data Attributes</display-name>
+        <icon/>
+        <attribute-name>data</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
@@ -27260,6 +29540,63 @@ attributes on the "span".</p>
         <display-name>Advisory Title</display-name>
         <icon/>
         <attribute-name>title</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+        <display-name>HTML5 Custom Data Attributes</display-name>
+        <icon/>
+        <attribute-name>data</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
@@ -27936,6 +30273,63 @@ this application, and passing the result through the
           <pass-through>true</pass-through>
         </attribute-extension>
       </attribute>
+      <attribute>
+        <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+        <display-name>HTML5 Custom Data Attributes</display-name>
+        <icon/>
+        <attribute-name>data</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
 
 
       <attribute>
@@ -28286,6 +30680,63 @@ this application, and passing the result through the
           <pass-through>true</pass-through>
         </attribute-extension>
       </attribute>
+      <attribute>
+        <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+        <display-name>HTML5 Custom Data Attributes</display-name>
+        <icon/>
+        <attribute-name>data</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
 
 
       <attribute>
@@ -28410,6 +30861,63 @@ this application, and passing the result through the
         <display-name>Advisory Title</display-name>
         <icon/>
         <attribute-name>title</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+        <display-name>HTML5 Custom Data Attributes</display-name>
+        <icon/>
+        <attribute-name>data</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
@@ -28940,6 +31448,63 @@ this application, and passing the result through the
           <pass-through>true</pass-through>
         </attribute-extension>
       </attribute>
+      <attribute>
+        <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+        <display-name>HTML5 Custom Data Attributes</display-name>
+        <icon/>
+        <attribute-name>data</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
 
 
       <attribute>
@@ -29369,6 +31934,63 @@ this application, and passing the result through the
         <display-name>Advisory Title</display-name>
         <icon/>
         <attribute-name>title</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+        <display-name>HTML5 Custom Data Attributes</display-name>
+        <icon/>
+        <attribute-name>data</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
@@ -29969,6 +32591,63 @@ this application, and passing the result through the
           <pass-through>true</pass-through>
         </attribute-extension>
       </attribute>
+      <attribute>
+        <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+        <display-name>HTML5 Custom Data Attributes</display-name>
+        <icon/>
+        <attribute-name>data</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
 
 
       <attribute>
@@ -30413,6 +33092,63 @@ this application, and passing the result through the
           <pass-through>true</pass-through>
         </attribute-extension>
       </attribute>
+      <attribute>
+        <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+        <display-name>HTML5 Custom Data Attributes</display-name>
+        <icon/>
+        <attribute-name>data</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
 
 
       <attribute>
@@ -30845,6 +33581,63 @@ this application, and passing the result through the
           <pass-through>true</pass-through>
         </attribute-extension>
       </attribute>
+      <attribute>
+        <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+        <display-name>HTML5 Custom Data Attributes</display-name>
+        <icon/>
+        <attribute-name>data</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
 
 
       <attribute>
@@ -31267,6 +34060,63 @@ this application, and passing the result through the
         <display-name>Advisory Title</display-name>
         <icon/>
         <attribute-name>title</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+        <display-name>HTML5 Custom Data Attributes</display-name>
+        <icon/>
+        <attribute-name>data</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
@@ -31715,6 +34565,63 @@ this application, and passing the result through the
         <display-name>Advisory Title</display-name>
         <icon/>
         <attribute-name>title</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+        <display-name>HTML5 Custom Data Attributes</display-name>
+        <icon/>
+        <attribute-name>data</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
@@ -32847,6 +35754,63 @@ unmodified to the rendered output.</p>
         <display-name>Advisory Title</display-name>
         <icon/>
         <attribute-name>title</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description><![CDATA[<div class="changed_added_2_2"><p>
+
+          If the view being rendered is not HTML5, the value of this
+          attribute must be ignored.  Otherwise, determine the correct
+          markup element to host the data- attribute(s).  This markup
+          element will always be the outer-most markup element
+          corresponding precisely to this component instance.  If
+          necessary, a <code>&lt;div&gt;</code> or a
+          <code>&lt;span&gt;</code> must be rendered to host the data-
+          attribute(s), depending on whether or not the component is,
+          itself, block or inline in nature.</p>
+
+          <p>Interpret the value of the attribute as a JSON string.</p>
+
+          <p>If none of the right hand side values in the JSON string is
+          itself a JSON object, for each name : value pair in the JSON
+          object output
+          <code>data-[<em>name</em>]="[<em>value</em>]"</code>, where
+          <em>name</em> is the name from the name : value pair, and
+          <em>value</em> is the value from the name : value pair.</p>
+
+          <p>If any of the right hand side values in the JSON string is
+          a JSON object render the attributes according to the following
+          algorithm.  Let <em>nameStack</em> be a stack data structure.
+          Let <em>jsonObj</em> be a JSON object comprised of
+          <em>jsonName</em> and <em>jsonValue</em>.  Parse the value of
+          the attribute as JSON into <em>jsonObj</em>.  Push
+          <em>jsonName</em> onto <em>nameStack</em>.  If
+          <em>jsonValue</em> is a JSON object, recursively apply the
+          algorithm.  Otherwise, render a <code>data-</code> attribute
+          with the name <code>data-<em>stackExplode</em></code>, where
+          <em>stackExplode</em> is a printout of the entire stack,
+          starting with the literal string "data-" and followed by each
+          element in the stack, separated by "-".  The value of such a
+          <code>data-</code> attribute is <em>jsonValue</em>, enclosed
+          in quotes.  When all the values for the current
+          <em>jsonName</em> have been handled, pop <em>jsonName</em>
+          from the <em>nameStack</em>.</p>
+
+          <p>Consider this example.</p>
+
+          <p><code>&lt;h:outputText data="{ a : { b : { c : { d : e, f : g }, h, { i : { j : { k : l } } } } } }" value="foo"/&gt;</code></p>
+
+          <p>This would be rendered as <code><pre>
+&lt;span data-a-b-c-d="e" data-a-b-c-f="g" data-a-b-c="h"<br /> data-a-b-c-i-j-k="l"&gt;foo&lt;/span&gt;
+</pre></code></p>
+
+          </div>]]></description>
+        <display-name>HTML5 Custom Data Attributes</display-name>
+        <icon/>
+        <attribute-name>data</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>

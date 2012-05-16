@@ -100,6 +100,7 @@ public class TextRenderer extends HtmlBasicInputRenderer {
         String dir = (String) component.getAttributes().get("dir");
         String lang = (String) component.getAttributes().get("lang");
         String title = (String) component.getAttributes().get("title");
+        String data = (String) component.getAttributes().get("data");
         if (component instanceof UIInput) {
             writer.startElement("input", component);
             writeIdAttributeIfNecessary(context, writer, component);
@@ -150,6 +151,7 @@ public class TextRenderer extends HtmlBasicInputRenderer {
                  || dir != null
                  || lang != null
                  || title != null
+                 || data != null
                  || (shouldWriteIdAttribute = shouldWriteIdAttribute(component))) {
                 writer.startElement("span", component);
                 writeIdAttributeIfNecessary(context, writer, component);
@@ -177,6 +179,7 @@ public class TextRenderer extends HtmlBasicInputRenderer {
                  || dir != null
                  || lang != null
                  || title != null
+                 || data != null
                  || (shouldWriteIdAttribute))) {
             writer.endElement("span");
         }
