@@ -148,7 +148,7 @@ public abstract class ResourceHelper {
      * to the compressed content, log the exception, and instead try to return
      * a stream to the original content.
      * </p>
-     * @param resource the resource to obtain an InputStream to
+     * @param toStream the resource to obtain an InputStream to
      * @param ctx the {@link javax.faces.context.FacesContext} for the current request
      * @return an <code>InputStream</code> to the resource, or
      *  <code>null</code> if no resource is found
@@ -287,7 +287,7 @@ public abstract class ResourceHelper {
      * combination in an implementation dependent manner.
      * </p>
      * <p>
-     * If the resource is found, and is compressable, call {@link #handleCompression(ResourceInfo)}
+     * If the resource is found, and is compressable, call {@link #handleCompression(com.sun.faces.application.resource.ClientResourceInfo)}
      * to compress the content.
      * </p>
      *
@@ -409,7 +409,7 @@ public abstract class ResourceHelper {
 
     /**
      * Utility method to compress the content of the original resource
-     * to the temporary directory specified by {@link com.sun.faces.application.resource.ResourceInfo#getCompressedPath()}.
+     * to the temporary directory specified by {@link com.sun.faces.application.resource.ClientResourceInfo#getCompressedPath()}.
      *
      * @param info the resource to be compressed
      * @return <code>true</code> if compression succeeded <em>and</em> the compressed
