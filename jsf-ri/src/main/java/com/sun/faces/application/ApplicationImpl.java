@@ -889,7 +889,7 @@ public class ApplicationImpl extends Application {
     }
 
     /**
-     * @see javax.faces.application.Application#addFacesComponent(String, String)
+     * @see javax.faces.application.Application#addComponent(java.lang.String, java.lang.String)
      */
     public void addComponent(String componentType, String componentClass) {
 
