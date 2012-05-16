@@ -571,7 +571,7 @@ public class ConverterPropertyEditorFactory {
     /**
      * Return a PropertyEditor class appropriate for editing the given
      * <code>targetClass</code>. The new class will be defined from a
-     * {@link DisposableClassLoader}.
+     * DisposableClassLoader.
      * 
      * @param targetClass
      *            the class of object that the returned property editor class
