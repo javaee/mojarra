@@ -125,7 +125,7 @@ public class ClasspathResourceHelper extends ResourceHelper {
 
 
     /**
-     * @see ResourceHelper#getNonCompressedInputStream(ClientResourceInfo, javax.faces.context.FacesContext)
+     * @see ResourceHelper#getNonCompressedInputStream(com.sun.faces.application.resource.ResourceInfo, javax.faces.context.FacesContext)
      */
     protected InputStream getNonCompressedInputStream(ResourceInfo resource, FacesContext ctx)
     throws IOException {
@@ -143,7 +143,7 @@ public class ClasspathResourceHelper extends ResourceHelper {
 
 
     /**
-     * @see com.sun.faces.application.resource.ResourceHelper#getURL(ClientResourceInfo, javax.faces.context.FacesContext)
+     * @see ResourceHelper#getURL(com.sun.faces.application.resource.ResourceInfo, javax.faces.context.FacesContext)
      */
     public URL getURL(ResourceInfo resource, FacesContext ctx) {
 
