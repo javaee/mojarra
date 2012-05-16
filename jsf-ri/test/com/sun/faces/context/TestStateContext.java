@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -43,39 +43,13 @@
 package com.sun.faces.context;
 
 import com.sun.faces.cactus.ServletFacesTestCase;
-import com.sun.faces.context.StateContext;
-import com.sun.faces.lifecycle.LifecycleImpl;
 import com.sun.faces.util.ComponentStruct;
 import com.sun.faces.util.Util;
-
-import javax.faces.application.FacesMessage;
-import javax.faces.application.Application;
-import javax.faces.component.UICommand;
-import javax.faces.component.UIComponent;
+import java.util.List;
+import java.util.Locale;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseStream;
-import javax.faces.context.ResponseWriter;
-import javax.faces.render.RenderKit;
-import javax.faces.render.RenderKitFactory;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.el.ELContextListener;
-import javax.el.ELContextEvent;
-
-import java.io.IOException;
-import java.io.Writer;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Locale;
-import java.util.NoSuchElementException;
-import java.util.Map;
-import java.util.Collections;
-
-import org.apache.cactus.WebRequest;
 
 /**
  * <B>TestStateContext</B> is a class ...
@@ -121,6 +95,7 @@ public class TestStateContext extends ServletFacesTestCase {
 //
 // Methods from TestCase
 //
+    @Override
     public void setUp() {
         super.setUp();
         UIViewRoot viewRoot = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
@@ -141,7 +116,7 @@ public class TestStateContext extends ServletFacesTestCase {
     public void testPartialStateSaving() {
     	  FacesContext ctx = getFacesContext();
         StateContext stateContext = StateContext.getStateContext(ctx);
-        boolean partial = stateContext.partialStateSaving(ctx, "10");
+        boolean partial = stateContext.isPartialStateSaving(ctx, "10");
         assertTrue(partial);
     }
 
@@ -154,7 +129,7 @@ public class TestStateContext extends ServletFacesTestCase {
         UIOutput output = new UIOutput();
         output.setId("foo");
         viewRoot.getChildren().add(output);
-        Map<String,ComponentStruct> added = stateContext.getDynamicAdds();
+        List<ComponentStruct> added = stateContext.getDynamicActions();
         assertTrue(added.size() > 0);
     }
 }

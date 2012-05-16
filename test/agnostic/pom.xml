@@ -8,14 +8,16 @@
         <version>2.2.0-SNAPSHOT</version>
     </parent>
     <groupId>com.sun.faces.test</groupId>
-    <artifactId>com.sun.faces.test.agnostic</artifactId>
+    <artifactId>agnostic</artifactId>
     <packaging>pom</packaging>
     <name>Mojarra ${project.version} - Test - Agnostic - POM</name>
     <modules>
         <module>ajax</module>
+        <module>dynamic</module>
         <module>externalContext</module>
         <module>renderKit</module>
         <module>shared</module>
+        <module>stateSaving</module>
         <module>vdl</module>
     </modules>
 </project>

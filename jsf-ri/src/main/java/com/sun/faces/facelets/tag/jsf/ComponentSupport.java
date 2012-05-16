@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -58,6 +58,7 @@
 
 package com.sun.faces.facelets.tag.jsf;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.context.StateContext;
 import com.sun.faces.facelets.tag.jsf.core.FacetHandler;
 import com.sun.faces.util.MessageUtils;
@@ -90,7 +91,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import javax.faces.component.UIViewAction;
 
 /**
  * 
@@ -236,20 +236,17 @@ public final class ComponentSupport {
                     }
                 }
             }
+            /*
+             * Make sure we look for the child recursively it might have moved
+             * into a different parent in the parent hierarchy. Note currently
+             * we are only looking down the tree. Maybe it would be better
+             * to use the VisitTree API instead.
+             */
+            UIComponent foundChild = findChildByTagId(c, id);
+            if (foundChild != null) {
+                return foundChild;
+            }
         }
-//        int sz = parent.getChildCount();
-//        if (sz > 0) {
-//            UIComponent c = null;
-//            List cl = parent.getChildren();
-//            String cid = null;
-//            while (--sz >= 0) {
-//                c = (UIComponent) cl.get(sz);
-//                cid = (String) c.getAttributes().get(MARK_CREATED);
-//                if (id.equals(cid)) {
-//                    return c;
-//                }
-//            }
-//        }
         return null;
     }
 
@@ -425,7 +422,16 @@ public final class ComponentSupport {
 
         String facetName = getFacetName(parent);
         if (facetName == null) {
-            parent.getChildren().add(child);
+            if (child.getAttributes().containsKey(RIConstants.DYNAMIC_COMPONENT)) {
+                int childIndex = (Integer) child.getAttributes().get(RIConstants.DYNAMIC_COMPONENT);
+                if (childIndex >= parent.getChildCount() || childIndex == -1) {
+                    parent.getChildren().add(child);
+                } else {
+                    parent.getChildren().add(childIndex, child);
+                }                
+            } else {
+                parent.getChildren().add(child);
+            }
         } else {
             UIComponent existing = parent.getFacets().get(facetName);
             if (existing != null && existing != child) {
@@ -467,8 +473,7 @@ public final class ComponentSupport {
             String viewId = root.getViewId();
             if (viewId != null) {
                 StateContext stateCtx = StateContext.getStateContext(ctx);
-                return stateCtx
-                      .partialStateSaving(ctx, viewId);
+                return stateCtx.isPartialStateSaving(ctx, viewId);
             }
         }
         return false;
@@ -484,7 +489,7 @@ public final class ComponentSupport {
      * @return the old value of the needUniqueIds flag
      * @see getNeedUniqueIds
      */
-    public final static boolean setNeedUniqueIds(FaceletContext ctx,
+    public static boolean setNeedUniqueIds(FaceletContext ctx,
                                                  boolean needUniqueIds) {
         Boolean old = (Boolean)ctx.getAttribute(_UNIQUE_IDS_ATTR);
         ctx.setAttribute(_UNIQUE_IDS_ATTR, Boolean.valueOf(needUniqueIds));

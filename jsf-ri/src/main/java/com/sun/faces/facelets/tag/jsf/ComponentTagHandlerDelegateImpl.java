@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -43,14 +43,12 @@ package com.sun.faces.facelets.tag.jsf;
 import com.sun.faces.component.behavior.AjaxBehaviors;
 import com.sun.faces.component.validator.ComponentValidators;
 import com.sun.faces.component.CompositeComponentStackManager;
-import static com.sun.faces.component.CompositeComponentStackManager.StackType.TreeCreation;
 import com.sun.faces.context.StateContext;
 import com.sun.faces.facelets.impl.IdMapper;
 import com.sun.faces.facelets.tag.MetaRulesetImpl;
 import com.sun.faces.facelets.tag.jsf.core.FacetHandler;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
-
 import javax.el.ValueExpression;
 import javax.faces.application.Application;
 import javax.faces.application.ProjectStage;
@@ -70,6 +68,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static com.sun.faces.RIConstants.DYNAMIC_COMPONENT;
+import static com.sun.faces.component.CompositeComponentStackManager.StackType.TreeCreation;
 
 public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
     
@@ -148,11 +148,23 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
             parent.getAttributes().get(id) != null) {
             c = findReparentedComponent(ctx, parent, id);
         }
-
+        else {
+            /**
+             * If we found a child that is dynamic, the actual parent might 
+             * have changed, so we need to remove it from the actual parent.
+             * The reapplyDynamicActions will then replay the actions and
+             * will make sure it ends up in the correct order.
+             */
+            if (c != null && c.getParent() != parent && 
+                c.getAttributes().containsKey(DYNAMIC_COMPONENT)) {
+                c.getParent().getChildren().remove(c);
+            }
+        }
+        
         boolean componentFound = false;
         if (c != null) {
-           componentFound = true;
-           doExistingComponentActions(ctx, id, c);
+            componentFound = true;
+                doExistingComponentActions(ctx, id, c);
         } else {
             c = this.createComponent(ctx);
             
@@ -178,10 +190,10 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         if (c instanceof NamingContainer) {
             oldUnique = ComponentSupport.setNeedUniqueIds(ctx, false);
             setUniqueIds = true;
-	    }
+        }
         try {
-            // first allow c to get populated
-            owner.applyNextHandler(ctx, c);
+                // first allow c to get populated
+                owner.applyNextHandler(ctx, c);
         } finally {
             if (setUniqueIds)
                 ComponentSupport.setNeedUniqueIds(ctx, oldUnique);
@@ -189,8 +201,8 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
 
         // finish cleaning up orphaned children
         if (componentFound) {
-           doOrphanedChildCleanup(ctx, parent, c);
-        }
+               doOrphanedChildCleanup(ctx, parent, c);
+            }
 
         this.privateOnComponentPopulated(ctx, c);
         owner.onComponentPopulated(ctx, c, parent);
@@ -200,7 +212,6 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         addComponentToView(ctx, parent, c, componentFound);
         adjustIndexOfDynamicChildren(context, c);
         popComponentFromEL(ctx, c, ccStackManager, compcompPushed);
-        
     }
 
     private void adjustIndexOfDynamicChildren(FacesContext context, 
@@ -236,7 +247,11 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         for (UIComponent cur : dynamicChildren) {
             int i = stateContext.getIndexOfDynamicallyAddedChildInParent(cur);
             if (-1 != i) {
-                children.add(i, cur);
+                if (i < children.size()) {
+                    children.add(i, cur);
+                } else {
+                    children.add(cur);
+                }
             }
         }
     }
@@ -490,11 +505,6 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
      * @return
      */
     private UIComponent createComponent(FaceletContext ctx) {
-        
-        UIComponent result = owner.createCustomComponent(ctx);
-        if (null != result) {
-            return result;
-        }
         
         if (null != createCompositeComponentDelegate) {
             return createCompositeComponentDelegate.createComponent(ctx);

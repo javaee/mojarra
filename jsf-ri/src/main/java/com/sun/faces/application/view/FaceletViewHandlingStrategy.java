@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -115,7 +115,13 @@ import javax.servlet.http.HttpSession;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FaceletsBufferSize;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FaceletsViewMappings;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.StateSavingMethod;
+import com.sun.faces.util.ComponentStruct;
 import static javax.faces.application.StateManager.IS_BUILDING_INITIAL_STATE;
+import javax.faces.component.ContextCallback;
+import javax.faces.component.visit.VisitCallback;
+import javax.faces.component.visit.VisitContext;
+import javax.faces.component.visit.VisitResult;
+import static com.sun.faces.RIConstants.DYNAMIC_COMPONENT;
 
 /**
  * This {@link ViewHandlingStrategy} handles Facelets/PDL-based views.
@@ -138,7 +144,6 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     public static final String IS_BUILDING_METADATA =
           FaceletViewHandlingStrategy.class.getName() + ".IS_BUILDING_METADATA";
     
-    private volatile StateManagementStrategyImpl stateManagementStrategy;
     private MethodRetargetHandlerManager retargetHandlerManager =
           new MethodRetargetHandlerManager();
 
@@ -169,20 +174,16 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
     @Override
     public StateManagementStrategy getStateManagementStrategy(FacesContext context, String viewId) {
-
+        StateManagementStrategy result;
+        
         StateContext stateCtx = StateContext.getStateContext(context);
-        if (stateCtx.partialStateSaving(context, viewId)) {
-            if (stateManagementStrategy == null) {
-                synchronized (this) {
-                    if (stateManagementStrategy == null) {
-                        stateManagementStrategy = new StateManagementStrategyImpl();
-                    }
-                }
-            }
-            return stateManagementStrategy;
+        if (stateCtx.isPartialStateSaving(context, viewId)) {
+            result = new FaceletPartialStateManagementStrategy(context);
+        } else {
+            result = new FaceletFullStateManagementStrategy(context);
         }
-        return null; // a null return means use full state saving
-
+        
+        return result;
     }
     
     /*
@@ -485,20 +486,34 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
      * @see {@link javax.faces.view.ViewDeclarationLanguage#restoreView(javax.faces.context.FacesContext, String)}
      */
     @Override
-    public UIViewRoot restoreView(FacesContext ctx,
+    public UIViewRoot restoreView(FacesContext context,
                                   String viewId) {
-        Util.notNull("context", ctx);
+        Util.notNull("context", context);
         Util.notNull("viewId", viewId);
 
-        if (UIDebug.debugRequest(ctx)) {
-            ctx.getApplication().createComponent(UIViewRoot.COMPONENT_TYPE);
+        if (UIDebug.debugRequest(context)) {
+            context.getApplication().createComponent(UIViewRoot.COMPONENT_TYPE);
+        }
+        
+        UIViewRoot viewRoot;
+
+        if (StateContext.getStateContext(context).isPartialStateSaving(context, viewId)) {
+            try {
+                context.setProcessingEvents(false);
+                ViewDeclarationLanguage vdl = vdlFactory.getViewDeclarationLanguage(viewId);
+                viewRoot = vdl.getViewMetadata(context, viewId).createMetadataView(context);
+                context.setViewRoot(viewRoot);
+                context.setProcessingEvents(true);
+                vdl.buildView(context, viewRoot);
+            } catch (IOException ioe) {
+                throw new FacesException(ioe);
+            }
         }
 
-        UIViewRoot root = super.restoreView(ctx, viewId);
-        StateContext stateCtx = StateContext.getStateContext(ctx);
-
-        stateCtx.startTrackViewModifications(ctx, root);
-
+        UIViewRoot root = super.restoreView(context, viewId);        
+        StateContext stateCtx = StateContext.getStateContext(context);
+        stateCtx.startTrackViewModifications(context, root);
+        
         return root;
     }
 
@@ -790,6 +805,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             try {
                 stateCtx.setTrackViewModifications(false);
                 f.apply(ctx, view);
+                reapplyDynamicActions(ctx);
             } finally {
                 stateCtx.setTrackViewModifications(true);
             }
@@ -816,6 +832,11 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             ctx.getAttributes().put(IS_BUILDING_INITIAL_STATE, Boolean.TRUE);
             stateCtx.setTrackViewModifications(false);
             f.apply(ctx, view);
+            
+            if (!stateCtx.isPartialStateSaving(ctx, view.getViewId())) {
+                reapplyDynamicActions(ctx);
+            }
+            
             doPostBuildActions(ctx, view);
         } finally {
             ctx.getAttributes().remove(IS_BUILDING_INITIAL_STATE);
@@ -837,10 +858,10 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         if (handlesViewId(viewId)) {
             ResourceHandler rh = context.getApplication().getResourceHandler();
             result = null != rh.createViewResource(viewId);
-        }
-
+            }
+           
         return result;
-    }
+        }
 
     @Override 
     public String getId() {
@@ -1150,7 +1171,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
      
     private void doPostBuildActions(FacesContext ctx, UIViewRoot root) {
         StateContext stateCtx = StateContext.getStateContext(ctx);
-        if (stateCtx.partialStateSaving(ctx, root.getViewId())) {
+        if (stateCtx.isPartialStateSaving(ctx, root.getViewId())) {
 	    // lu4242            root.markInitialState();
         }
         stateCtx.startTrackViewModifications(ctx, root);
@@ -1159,7 +1180,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
      private void markInitialState(FacesContext ctx, UIViewRoot root)
      {
          StateContext stateCtx = StateContext.getStateContext(ctx);
-         if (stateCtx.partialStateSaving(ctx, root.getViewId())) {
+         if (stateCtx.isPartialStateSaving(ctx, root.getViewId())) {
              try {
                  ctx.getAttributes().put(IS_BUILDING_INITIAL_STATE, Boolean.TRUE);
                  if (!root.isTransient()) {
@@ -1836,4 +1857,139 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
     } // END NullWriter
 
+    /**
+     * Clear out the dynamic actions.
+     *
+     * @param stateContext the state context.
+     */
+    private void clearDynamicActions(StateContext stateContext) {
+        if (stateContext != null && stateContext.getDynamicActions() != null) {
+            stateContext.getDynamicActions().clear();
+        }
+    }
+
+    /**
+     * Find the given component in the component tree.
+     *
+     * @param context the Faces context.
+     * @param clientId the client id of the component to find.
+     */
+    private UIComponent locateComponentByClientId(final FacesContext context, final String clientId) {
+        final List<UIComponent> found = new ArrayList<UIComponent>();
+        UIComponent result = null;
+
+        context.getViewRoot().invokeOnComponent(context, clientId, new ContextCallback() {
+
+            public void invokeContextCallback(FacesContext context, UIComponent target) {
+                found.add(target);
+            }
+        });
+
+        /*
+         * Since we did not find it the cheaper way we need to assume there is a
+         * UINamingContainer that does not prepend its ID. So we are going to
+         * walk the tree to find it.
+         */
+        if (found.isEmpty()) {
+            VisitContext visitContext = VisitContext.createVisitContext(context);
+            context.getViewRoot().visitTree(visitContext, new VisitCallback() {
+
+                public VisitResult visit(VisitContext visitContext, UIComponent component) {
+                    VisitResult result = VisitResult.ACCEPT;
+                    if (component.getClientId(visitContext.getFacesContext()).equals(clientId)) {
+                        found.add(component);
+                        result = VisitResult.COMPLETE;
+                    }
+                    return result;
+                }
+            });
+        }
+        if (!found.isEmpty()) {
+            result = found.get(0);
+        }
+        return result;
+    }
+
+    /**
+     * Reapply the dynamic actions after Facelets reapply.
+     *
+     * <p> Note a precondition to this method is that tracking view
+     * modifications is turned off during the execution of this method. The
+     * caller of this method is responsible for turning tracking view
+     * modifications off and on as required. </p>
+     *
+     * @param context the Faces context.
+     */
+    private void reapplyDynamicActions(FacesContext context) {
+        StateContext stateContext = StateContext.getStateContext(context);
+        List<ComponentStruct> actions = stateContext.getDynamicActions();
+        if (actions != null) {
+            for (ComponentStruct action : actions) {
+                if (ComponentStruct.REMOVE.equals(action.action)) {
+                    reapplyDynamicRemove(context, action);
+                }
+                if (ComponentStruct.ADD.equals(action.action)) {
+                    reapplyDynamicAdd(context, action);
+                }
+            }
+        }
+    }
+
+    /**
+     * Reapply the dynamic add after Facelets reapply.
+     *
+     * @param context the Faces context. 
+     * @param struct the component struct.
+     */
+    private void reapplyDynamicAdd(FacesContext context, ComponentStruct struct) {
+        UIComponent parent = locateComponentByClientId(context, struct.parentClientId);
+
+        if (parent != null) {
+            
+            UIComponent child = locateComponentByClientId(context, struct.clientId);
+            StateContext stateContext = StateContext.getStateContext(context);
+
+            if (child == null) {
+                child = stateContext.getDynamicComponents().get(struct.clientId);
+            }
+
+            if (child != null) {
+                if (struct.facetName != null) {
+                    parent.getFacets().remove(struct.facetName);
+                    parent.getFacets().put(struct.facetName, child);
+                    child.getClientId();
+                } else {
+                    int childIndex = -1;
+                    if (child.getAttributes().containsKey(DYNAMIC_COMPONENT)) {
+                        childIndex = (Integer) child.getAttributes().get(DYNAMIC_COMPONENT);
+                    }
+                    child.setId(struct.id);
+                    if (childIndex >= parent.getChildCount() || childIndex == -1) {
+                        parent.getChildren().add(child);
+                    } else {
+                        parent.getChildren().add(childIndex, child);
+                    }
+                    child.getClientId();
+                    child.getAttributes().put(DYNAMIC_COMPONENT, child.getParent().getChildren().indexOf(child));
+                }
+                stateContext.getDynamicComponents().put(struct.clientId, child);
+            }
+        }
+    }
+
+    /**
+     * Reapply the dynamic remove after Facelets reapply.
+     *
+     * @param context the Faces context.
+     * @param struct the component struct.
+     */
+    private void reapplyDynamicRemove(FacesContext context, ComponentStruct struct) {
+        UIComponent child = locateComponentByClientId(context, struct.clientId);
+        if (child != null) {
+            StateContext stateContext = StateContext.getStateContext(context);
+            stateContext.getDynamicComponents().put(struct.clientId, child);
+            UIComponent parent = child.getParent();
+            parent.getChildren().remove(child);
+        }
+    }
 }
