@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.statesaving;
+package com.sun.faces.test.agnostic.statesaving.basic;
 
 import javax.faces.component.FacesComponent;
 import javax.faces.component.UIComponentBase;
@@ -49,14 +49,14 @@ import javax.faces.event.PreRenderViewEvent;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 
-@FacesComponent(value = "com.sun.faces.test.agnostic.statesaving.DynamicParentComponent")
+@FacesComponent(value = "com.sun.faces.test.agnostic.statesaving.basic.DynamicParentComponent")
 public class DynamicParentComponent extends UIComponentBase implements SystemEventListener {
 
     /**
      * Constructor.
      */
     public DynamicParentComponent() {
-        setRendererType("com.sun.faces.test.agnostic.statesaving.DynamicParentComponentRenderer");
+        setRendererType("com.sun.faces.test.agnostic.statesaving.basic.DynamicParentComponentRenderer");
 
         FacesContext context = FacesContext.getCurrentInstance();
         UIViewRoot root = context.getViewRoot();
@@ -72,7 +72,7 @@ public class DynamicParentComponent extends UIComponentBase implements SystemEve
      * @return the component family.
      */
     public String getFamily() {
-        return "com.sun.faces.test.agnostic.statesaving.DynamicParentComponent";
+        return "com.sun.faces.test.agnostic.statesaving.basic.DynamicParentComponent";
     }
 
     /**

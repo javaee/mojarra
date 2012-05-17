@@ -8,7 +8,7 @@
  * and Distribution License("CDDL") (collectively, the "License").  You
  * may not use this file except in compliance with the License.  You can
  * obtain a copy of the License at
- * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+ * https://glassfish.dev.java.net/public/CDDLGPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
  *
@@ -37,42 +37,33 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.statesaving;
+package com.sun.faces.test.agnostic.statesaving.disableiduniqueness;
 
-import java.io.IOException;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.junit.*;
+import static org.junit.Assert.*;
 
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.render.FacesRenderer;
-import javax.faces.render.Renderer;
+public class Issue2414IT {
 
-@FacesRenderer(componentFamily = "com.sun.faces.test.agnostic.statesaving.DynamicParentComponent",
-rendererType = "com.sun.faces.test.agnostic.statesaving.DynamicParentComponentRenderer")
-public class DynamicParentComponentRenderer extends Renderer {
-    /**
-     * Encode the begin.
-     * 
-     * @param context the Faces context.
-     * @param component the UI component.
-     * @throws IOException 
-     */
-    @Override
-    public void encodeBegin(FacesContext context, UIComponent component) throws IOException {
-        context.getResponseWriter().write("<div>");
-        super.encodeBegin(context, component);
+    private String webUrl;
+    private WebClient webClient;
+
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
-    
-    /**
-     * Encode the end.
-     * 
-     * @param context the Faces context.
-     * @param component the UI component.
-     * @throws IOException 
-     */
-    @Override
-    public void encodeEnd(FacesContext context, UIComponent component)
-            throws IOException {
-        context.getResponseWriter().write("</div>");
-        super.encodeEnd(context, component);
+
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
+    }
+
+    @Test
+    public void testHelloPage() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/hello.xhtml");
+        assertEquals(200, page.getWebResponse().getStatusCode());
+        assertTrue(page.asText().contains("com.sun.faces.context.FacesContextImpl"));
     }
 }

@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.test.agnostic.statesaving;
+package com.sun.faces.test.agnostic.statesaving.basic;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIForm;

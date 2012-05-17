@@ -43,6 +43,7 @@
 package com.sun.faces.util;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.io.FastStringWriter;
 
 import javax.el.ELResolver;
@@ -58,7 +59,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.event.AbortProcessingException;
 import java.beans.FeatureDescriptor;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Locale;
@@ -68,8 +68,7 @@ import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
-import javax.faces.component.UINamingContainer;
-import javax.faces.render.ResponseStateManager;
+import javax.faces.application.ProjectStage;
 import javax.servlet.ServletContext;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.SAXParserFactory;
@@ -322,6 +321,7 @@ public class Util {
         return factory;
     }
 
+
     public static Class loadClass(String name,
                                   Object fallbackClass)
         throws ClassNotFoundException {
@@ -370,55 +370,7 @@ public class Util {
                     });
         }
     }
-    
-    public static String removeAllButLastSlashPathSegment(String input) {
-        // Trim the leading slash, if any.
-        if (input.charAt(0) == '/') {
-            input = input.substring(1);
-        }
-        int len = input.length();
-        // Trim the trailing slash, if any.
-        if (input.charAt(len - 1) == '/') {
-            input = input.substring(0, len - 1);
-        }
-        
-        // Trim any path segments that remain, leaving only the 
-        // last path segment.
-        int slash = input.lastIndexOf("/");
-        
-        // Do we have a "/"?
-        if (-1 != slash) {
-            input = input.substring(slash + 1);
-        }
-        
-        return input;
-    }
-    
-    public static String removeLastPathSegment(String input) {
-        int slash = input.lastIndexOf("/");
-        
-        // Do we have a "/"?
-        if (-1 != slash) {
-            input = input.substring(0, slash);
-        }
-        
-        return input;
-    }
-    
-    public static String getFlowIdFromComponent(FacesContext context, UIComponent target) {
-        String result = "";
-        if (target instanceof javax.faces.component.UIViewRoot) {
-            result = Util.removeAllButLastSlashPathSegment(((javax.faces.component.UIViewRoot)target).getViewId());
-            int dot = result.indexOf(".");
-            if (-1 != dot) {
-                result = result.substring(0, dot);
-            }
-        }
-        
-        return result;
-    }
 
-    
 
     public static void notNull(String varname, Object var) {
 
@@ -662,29 +614,6 @@ public class Util {
             sb.append(stack.toString()).append('\n');
         }
         return sb.toString();
-    }
-    
-    public static Map<Object,Object> getDataAttributes(UIComponent component, boolean create) {
-        Map<Object,Object> result = null;
-        Map<String, Object> componentAttrs = component.getAttributes();
-        
-        if (componentAttrs.containsKey(UIComponent.DATA_ATTRIBUTES_KEY)) {
-            try {
-                result = (Map<Object, Object>) componentAttrs.get(UIComponent.DATA_ATTRIBUTES_KEY);
-            }
-            catch (ClassCastException cce) {
-                String message = "Unexpected type for value of component attribute UIComponent.DATA_ATTRIBUTES_KEY." + 
-                        "Expected Map<Object,Object>, received " + 
-                        componentAttrs.get(UIComponent.DATA_ATTRIBUTES_KEY).getClass().getName() + 
-                        ".";
-                throw new FacesException(message, cce);
-            }
-        } else if (create) {
-            result = new HashMap<Object,Object>();
-            componentAttrs.put(UIComponent.DATA_ATTRIBUTES_KEY, result);
-        }
-        
-        return result;
     }
 
     /**
@@ -944,34 +873,44 @@ public class Util {
                                           UIComponent component,
                                           Set<String> componentIds) {
 
-        // deal with children/facets that are marked transient.
-        for (Iterator<UIComponent> kids = component.getFacetsAndChildren();
-             kids.hasNext();) {
+        boolean uniquenessCheckDisabled = false;
+        
+        if (context.isProjectStage(ProjectStage.Production)) {
+            WebConfiguration config = WebConfiguration.getInstance(context.getExternalContext());
+            uniquenessCheckDisabled = config.isOptionEnabled(
+                WebConfiguration.BooleanWebContextInitParameter.DisableIdUniquenessCheck);
+        }
+        
+        if (!uniquenessCheckDisabled) {
+        
+            // deal with children/facets that are marked transient.
+            for (Iterator<UIComponent> kids = component.getFacetsAndChildren();
+                kids.hasNext();) {
 
-            UIComponent kid = kids.next();
-            // check for id uniqueness
-            String id = kid.getClientId(context);
-            if (componentIds.add(id)) {
-                checkIdUniqueness(context, kid, componentIds);
-            } else {
-                if (LOGGER.isLoggable(Level.SEVERE)) {
-                    LOGGER.log(Level.SEVERE,
-                               "jsf.duplicate_component_id_error",
-                               id);
+                UIComponent kid = kids.next();
+                // check for id uniqueness
+                String id = kid.getClientId(context);
+                if (componentIds.add(id)) {
+                    checkIdUniqueness(context, kid, componentIds);
+                } else {
+                    if (LOGGER.isLoggable(Level.SEVERE)) {
+                        LOGGER.log(Level.SEVERE,
+                                   "jsf.duplicate_component_id_error",
+                                   id);
 
 
-                    FastStringWriter writer = new FastStringWriter(128);
-                    DebugUtil.simplePrintTree(context.getViewRoot(), id, writer);
-                    LOGGER.severe(writer.toString());
+                        FastStringWriter writer = new FastStringWriter(128);
+                        DebugUtil.simplePrintTree(context.getViewRoot(), id, writer);
+                        LOGGER.severe(writer.toString());
+                    }
+
+                    String message =
+                          MessageUtils.getExceptionMessageString(
+                                MessageUtils.DUPLICATE_COMPONENT_ID_ERROR_ID, id);
+                    throw new IllegalStateException(message);
                 }
-
-                String message =
-                      MessageUtils.getExceptionMessageString(
-                            MessageUtils.DUPLICATE_COMPONENT_ID_ERROR_ID, id);
-                throw new IllegalStateException(message);
             }
         }
-
     }
 
     public static void setNonFacesContextApplicationMap(Map<String, Object> instance) {
@@ -983,68 +922,5 @@ public class Util {
         }
     }
 
-    static public boolean classHasAnnotations(Class<?> clazz) {
-        if (clazz != null) {
-            while (clazz != Object.class) {
-                Field[] fields = clazz.getDeclaredFields();
-                if (fields != null) {
-                    for (Field field : fields) {
-                        if (field.getAnnotations().length > 0) {
-                            return true;
-                        }
-                    }
-                }
-
-                Method[] methods = clazz.getDeclaredMethods();
-                if (methods != null) {
-                    for (Method method : methods) {
-                        if (method.getDeclaredAnnotations().length > 0) {
-                            return true;
-                        }
-                    }
-                }
-
-                clazz = clazz.getSuperclass();
-            }
-        }
-
-        return false;
-    }
-    
-    public static String getViewStateId(FacesContext context) {
-        String result = null;
-        final String viewStateCounterKey = "com.sun.faces.util.ViewStateCounterKey";
-        Map<Object, Object> contextAttrs = context.getAttributes();
-        Integer counter = (Integer) contextAttrs.get(viewStateCounterKey);
-        if (null == counter) {
-            counter = new Integer(0);
-        }
-        
-        char sep = UINamingContainer.getSeparatorChar(context);
-        UIViewRoot root = context.getViewRoot();
-        result = root.getContainerClientId(context) + sep + 
-                ResponseStateManager.VIEW_STATE_PARAM + sep +
-                + counter;
-        contextAttrs.put(viewStateCounterKey, ++counter);
-        
-        return result;
-    }
-
-    public static String getClientWindowId(FacesContext context) {
-        String result = null;
-        final String clientWindowIdCounterKey = "com.sun.faces.util.ClientWindowCounterKey";
-        Map<Object, Object> contextAttrs = context.getAttributes();
-        Integer counter = (Integer) contextAttrs.get(clientWindowIdCounterKey);
-        if (null == counter) {
-            counter = new Integer(0);
-        }
-        
-        char sep = UINamingContainer.getSeparatorChar(context);
-        result = context.getViewRoot().getContainerClientId(context) + sep + 
-                ResponseStateManager.CLIENT_WINDOW_PARAM + sep + counter;
-        contextAttrs.put(clientWindowIdCounterKey, ++counter);
-        
-        return result;
-    }
 
 } // end of class Util
