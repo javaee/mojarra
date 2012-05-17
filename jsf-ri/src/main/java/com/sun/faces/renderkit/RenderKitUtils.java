@@ -65,16 +65,16 @@ import javax.faces.render.ResponseStateManager;
 import javax.faces.render.Renderer;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.facelets.util.DevTools;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.RequestStateManager;
 
+import javax.el.ELContext;
+import javax.el.ValueExpression;
+
 import javax.faces.component.*;
 import javax.faces.component.html.HtmlMessages;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
 
 /**
  * <p>A set of utilities for use in {@link RenderKit}s.</p>
@@ -360,6 +360,33 @@ public class RenderKitUtils {
                                                 component,
                                                 attributes,
                                                 behaviors);
+        }
+        Map<Object,Object> dataAttrs = Util.getDataAttributes(component, false);
+        if (null != dataAttrs) {
+            renderDataAttributes(context, writer, component, dataAttrs);
+        }
+    }
+    
+    private static void renderDataAttributes(FacesContext context, 
+            ResponseWriter writer, UIComponent component, Map<Object,Object> attrs) throws IOException {
+        Object key,val;
+        String keyStr, valStr;
+        ValueExpression ve;
+        ELContext elc = context.getELContext();
+        for (Map.Entry<Object, Object> cur : attrs.entrySet()) {
+            key = cur.getKey();
+            if (key instanceof ValueExpression) {
+                keyStr = "data-" + ((ValueExpression)key).getValue(elc).toString();
+            } else {
+                keyStr = "data-" + key.toString();
+            }
+            val = cur.getValue();
+            if (val instanceof ValueExpression) {
+                valStr = ((ValueExpression)val).getValue(elc).toString();
+            } else {
+                valStr = val.toString();
+            }
+            writer.writeAttribute(keyStr, valStr, keyStr);
         }
     }
 
@@ -673,11 +700,6 @@ public class RenderKitUtils {
                                       false);
 
                         renderedBehavior = true;
-                    } else if ("data".equals(name)) {
-                        WebConfiguration webConfig = WebConfiguration.getInstance(context.getExternalContext());
-                        if (webConfig.getFaceletsConfiguration().isOutputHtml5Doctype(context.getViewRoot().getViewId())) {
-                            renderDataAttribute(context, writer, value.toString());
-                        }
                     } else {
                         writer.writeAttribute(prefixAttribute(name, isXhtml),
                                               value,
@@ -716,69 +738,6 @@ public class RenderKitUtils {
 
         }
     }
-    
-    private static void renderDataAttribute(FacesContext context, ResponseWriter writer,
-            String dataValue) throws IOException {
-        JSONObject json = null;
-        
-        try { 
-            json = new JSONObject(dataValue);
-            Iterator<String> keys = json.keys();
-            Object value = null;
-            boolean isSimple = true;
-            while (keys.hasNext()) {
-                value = json.get(keys.next());
-                if (value instanceof JSONObject) {
-                    isSimple = false;
-                    break;
-                }
-            }
-            if (isSimple) {
-                keys = json.keys();
-                String key = null;
-                String attrName = null;
-                while (keys.hasNext()) {
-                    key = keys.next();
-                    attrName = "data-" + key;
-                    writer.writeAttribute(attrName, json.get(key), attrName);
-                }
-            } else {
-                Deque<String> stack = new ArrayDeque<String>();
-                renderNestedDataAttribute(context, stack, writer, json);
-            }
-            
-        } catch (JSONException je) {
-            if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.log(Level.SEVERE, "Unable to render JSON", je);
-            }
-            
-        }
-    }
-    
-    private static void renderNestedDataAttribute(FacesContext context, Deque<String> nameStack,
-            ResponseWriter writer, JSONObject json) throws JSONException, IOException {
-        Iterator<String> keys = json.keys();
-        String key = null;
-        Object value = null;
-        while (keys.hasNext()) {
-            key = keys.next();
-            nameStack.push(key);
-            value = json.get(key);
-            if (value instanceof JSONObject) {
-                renderNestedDataAttribute(context, nameStack, writer, (JSONObject)value);
-            } else {
-                StringBuilder attrNameBuilder = new StringBuilder("data");
-                Iterator<String> attrNames = nameStack.descendingIterator();
-                while (attrNames.hasNext()) {
-                    attrNameBuilder.append("-").append(attrNames.next());
-                }
-                String attrName = attrNameBuilder.toString();
-                writer.writeAttribute(attrName, value.toString(), attrName);
-                nameStack.pop();
-            }
-        }
-    }
-    
 
     /**
      * <p>Loops over all known attributes and attempts to render each one.
@@ -1390,7 +1349,7 @@ public class RenderKitUtils {
      *
      * @param context the {@link FacesContext} for the current request.
      * @param component the component to obtain the image information from
-     * @param attrNameBuilder the attribute name that needs to be queried if the
+     * @param attrName the attribute name that needs to be queried if the
      *  name and library attributes are not specified
      *
      * @return the encoded path to the image source

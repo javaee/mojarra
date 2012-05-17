@@ -55,6 +55,7 @@ import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.util.Util;
 
 /**
  * <B>TextRenderer</B> is a class that renders the current value of
@@ -100,7 +101,7 @@ public class TextRenderer extends HtmlBasicInputRenderer {
         String dir = (String) component.getAttributes().get("dir");
         String lang = (String) component.getAttributes().get("lang");
         String title = (String) component.getAttributes().get("title");
-        String data = (String) component.getAttributes().get("data");
+        boolean hasDataAttribute = (null != Util.getDataAttributes(component, false));
         if (component instanceof UIInput) {
             writer.startElement("input", component);
             writeIdAttributeIfNecessary(context, writer, component);
@@ -151,7 +152,7 @@ public class TextRenderer extends HtmlBasicInputRenderer {
                  || dir != null
                  || lang != null
                  || title != null
-                 || data != null
+                 || hasDataAttribute
                  || (shouldWriteIdAttribute = shouldWriteIdAttribute(component))) {
                 writer.startElement("span", component);
                 writeIdAttributeIfNecessary(context, writer, component);
@@ -179,7 +180,7 @@ public class TextRenderer extends HtmlBasicInputRenderer {
                  || dir != null
                  || lang != null
                  || title != null
-                 || data != null
+                 || hasDataAttribute
                  || (shouldWriteIdAttribute))) {
             writer.endElement("span");
         }

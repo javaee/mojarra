@@ -46,12 +46,45 @@
       xmlns:h="http://java.sun.com/jsf/html">
 
     <h:form id="form">
-        <p><h:outputText data="{ name : value }" value="simple"/></p>
-        
-        <p><h:outputText data="{ outer : { inner : innerValue } }" value="nested" /></p>
-        
-        <p><h:outputText data="{ a : { b : { c : { d : e, f : g }, h : i, j : { k : { l : { m : n } } } } } }" value="complex" /></p>
 
-    </h:form>
+        <p>
+            
+        <h:outputText value="nameAndValueFromEL">
+            <f:dataAttribute name="#{initParam['javax.faces.PROJECT_STAGE']}" value="#{facesContext.viewRoot.viewId}" />
+        </h:outputText>
+            
+            
+        </p>
 
+        <p>
+            
+        <h:outputText value="simple">
+            <f:dataAttribute name="name" value="value" />
+        </h:outputText>
+
+        </p>
+    
+        <p>
+        
+        <h:outputText value="nested">
+            <f:dataAttribute name="outer-inner" value="innerValue" />
+        </h:outputText>
+        
+        
+        </p>
+    
+        <p>
+        
+        <h:outputText value="complex">
+            <f:dataAttribute name="a-b-c-d" value="e" />
+            <f:dataAttribute name="a-b-c-f" value="g" />
+            <f:dataAttribute name="a-b-c-h" value="i" />
+            <f:dataAttribute name="a-b-c-j-k-l-m" value="n" />
+        </h:outputText>
+        
+        </p>
+        
+    
+</h:form>
+    
 </html>

@@ -378,6 +378,53 @@
 
     <tag>
         <description>
+            <![CDATA[<p class="changed_added_2_2">Add an HTML5 data-*
+            attribute to the enclosing component.</p>
+
+            <div class="changed_added_2_2">
+
+            <p>Lazily create a <code>java.util.Map</code> and store it
+            in the component attributes map under the under the key
+            given by the value of the symbolic constant
+            <code>UIComponent.DATA_ATTRIBUTES_KEY</code>.  Add an entry
+            in the map with the name and value taken from the
+            corresponding attributes on this element, preserving the
+            <code>ValueExpression</code> nature of the name and value,
+            if necessary.</p>
+
+            </div>
+
+            ]]>
+        </description>
+        <name>dataAttribute</name>
+        <tag-class></tag-class>
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description><![CDATA[<p class="changed_added_2_2">The name
+            of the data-* attribute.  The value of name will be appended
+            to the literal string "data-" (without the quotes) in the
+            rendered markup for the component, as specified in the
+            overview for the HTML_BASIC RenderKit.</p>]]></description>
+            <name>name</name>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description><![CDATA[<p class="changed_added_2_2">The value
+            of the data-* attribute.  </p>]]></description>
+            <name>value</name>
+                <deferred-value>
+                    <type>java.lang.Object</type>
+                </deferred-value>
+        </attribute>
+    </tag>
+
+
+    <tag>
+        <description>
             Register a named Converter instance on the UIComponent
             associated with the closest parent UIComponent custom action.
         </description>

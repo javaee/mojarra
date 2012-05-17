@@ -663,6 +663,29 @@ public class Util {
         }
         return sb.toString();
     }
+    
+    public static Map<Object,Object> getDataAttributes(UIComponent component, boolean create) {
+        Map<Object,Object> result = null;
+        Map<String, Object> componentAttrs = component.getAttributes();
+        
+        if (componentAttrs.containsKey(UIComponent.DATA_ATTRIBUTES_KEY)) {
+            try {
+                result = (Map<Object, Object>) componentAttrs.get(UIComponent.DATA_ATTRIBUTES_KEY);
+            }
+            catch (ClassCastException cce) {
+                String message = "Unexpected type for value of component attribute UIComponent.DATA_ATTRIBUTES_KEY." + 
+                        "Expected Map<Object,Object>, received " + 
+                        componentAttrs.get(UIComponent.DATA_ATTRIBUTES_KEY).getClass().getName() + 
+                        ".";
+                throw new FacesException(message, cce);
+            }
+        } else if (create) {
+            result = new HashMap<Object,Object>();
+            componentAttrs.put(UIComponent.DATA_ATTRIBUTES_KEY, result);
+        }
+        
+        return result;
+    }
 
     /**
      * <p>PRECONDITION: argument <code>response</code> is non-null and

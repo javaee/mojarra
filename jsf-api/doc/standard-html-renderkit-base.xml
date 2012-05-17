@@ -1126,9 +1126,9 @@
     <render-kit>
 
         <description>
-            <![CDATA[
-     The standard HTML RenderKit.  Please see the spec for additional
-     details for the standard render-kit.
+            <![CDATA[ <span class="changed_modified_2_2">The</span>
+            standard HTML RenderKit.  Please see the spec for additional
+            details for the standard render-kit.
 
      <div class="changed_added_2_0">
      <p>The following new renderers have been
@@ -1301,6 +1301,51 @@
        are <code>UIParameter</code> children the parameter names and values must be passed into the client behavior
        getScript method via the <code>ClientBehaviorContext</code>.</p> 
          
+     </ul>
+     </div>
+
+     <div class="changed_added_2_2">
+     <p><a name="general_behavior_encoding">General</a> notes regarding HTML5 support.</p>
+
+     <p>The HTML_BASIC RenderKit supports HTML 5 where it makes sense to
+     do so.</p>
+
+     <ul>
+
+       <p>Support for <code>data-*</code> attributes</p>
+
+       <p>If the component to be encoded has an entry in its component
+       attributes map under the key given by the value of the symbolic
+       constant <code>UIComponent.DATA_ATTRIBUTES_KEY</code>, this entry
+       must be a <code>java.util.Map</code>.  If an entry is
+       present under that key, but its type is not as expected, a
+       <code>FacesException</code> must be thrown.  Otherwise, determine
+       the correct markup element to host the data- attribute(s).  Let
+       this element be <em>dataHostingElement</em>.  This markup element
+       will always be the outer-most markup element corresponding
+       precisely to this component instance. If necessary, a
+       <code>&lt;div&gt;</code> or a <code>&lt;span&gt;</code> must be
+       rendered to host the data- attribute(s), depending on whether or
+       not the component is, itself, block or inline in nature.  For
+       each entry in the map, do the following.</p>
+
+       <p>If the key is a <code>ValueExpression</code> get its value and
+       append it to the literal string "<code>data-</code>", without the
+       quotes.  Otherwise get the string value of the key and append it
+       to the literal string "<code>data-</code>" without the quotes.
+       Let the result be <em>dataAttributeName</em>.</p>
+
+       <p>If the value is a <code>ValueExpression</code> get its value.
+       Otherwise get the string value of the entry's value.  Let the
+       result be <em>dataAttributeValue</em>.</p>
+
+       <p>Render an attribute on <em>dataHostingElement</em> using
+       <code>ResponseWriter.writeAttribute()</code>.  The name of the
+       attribute is <em>dataAttributeName</em> and the value of the
+       attribute is <em>dataAttributeValue</em>.  Also pass
+       <em>dataAttributeName</em> as the last argument to
+       <code>ResponseWriter.writeAttribute()</code>.</p>
+
      </ul>
      </div>
 

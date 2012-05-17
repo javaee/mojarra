@@ -202,6 +202,16 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
     public static final String VIEW_LOCATION_KEY = "javax.faces.component.VIEW_LOCATION_KEY";
     
     /**
+     * <p class="changed_added_2_2">The value of this constant is used as the key
+     * in the component attributes <code>Map</code> for the 
+     * {@code Map<Object,Object>} that renderers must use to render the HTML 5
+     * {@code data-*} attributes.</p>
+     *
+     * @since 2.0
+     */
+    public static final String DATA_ATTRIBUTES_KEY = "javax.faces.component.DATA_ATTRIBUTES_KEY";
+    
+    /**
      * <p class="changed_added_2_0">The value of this constant is used as the key
      * in the <em>composite component BeanDescriptor</em> for a 
      * <code>ValueExpression</code> that evaluates to the 
