@@ -201,7 +201,7 @@ public final class ChainTypeCompositeELResolver extends FacesCompositeELResolver
   /**
    * <p>Guarantee that this instance knows of what chain it is a
    * member.</p>
-   * @param chainType the {@link ELResolverChainType} 
+   * @param chainType the ELResolverChainType
    */
   public ChainTypeCompositeELResolver(ELResolverChainType chainType)
   {
