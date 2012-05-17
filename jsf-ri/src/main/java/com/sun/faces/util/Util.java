@@ -43,6 +43,7 @@
 package com.sun.faces.util;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.io.FastStringWriter;
 
 import javax.el.ELResolver;
@@ -67,6 +68,7 @@ import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import javax.faces.application.ProjectStage;
 import javax.servlet.ServletContext;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.SAXParserFactory;
@@ -871,34 +873,44 @@ public class Util {
                                           UIComponent component,
                                           Set<String> componentIds) {
 
-        // deal with children/facets that are marked transient.
-        for (Iterator<UIComponent> kids = component.getFacetsAndChildren();
-             kids.hasNext();) {
+        boolean uniquenessCheckDisabled = false;
+        
+        if (context.isProjectStage(ProjectStage.Production)) {
+            WebConfiguration config = WebConfiguration.getInstance(context.getExternalContext());
+            uniquenessCheckDisabled = config.isOptionEnabled(
+                WebConfiguration.BooleanWebContextInitParameter.DisableIdUniquenessCheck);
+        }
+        
+        if (!uniquenessCheckDisabled) {
+        
+            // deal with children/facets that are marked transient.
+            for (Iterator<UIComponent> kids = component.getFacetsAndChildren();
+                kids.hasNext();) {
 
-            UIComponent kid = kids.next();
-            // check for id uniqueness
-            String id = kid.getClientId(context);
-            if (componentIds.add(id)) {
-                checkIdUniqueness(context, kid, componentIds);
-            } else {
-                if (LOGGER.isLoggable(Level.SEVERE)) {
-                    LOGGER.log(Level.SEVERE,
-                               "jsf.duplicate_component_id_error",
-                               id);
+                UIComponent kid = kids.next();
+                // check for id uniqueness
+                String id = kid.getClientId(context);
+                if (componentIds.add(id)) {
+                    checkIdUniqueness(context, kid, componentIds);
+                } else {
+                    if (LOGGER.isLoggable(Level.SEVERE)) {
+                        LOGGER.log(Level.SEVERE,
+                                   "jsf.duplicate_component_id_error",
+                                   id);
 
 
-                    FastStringWriter writer = new FastStringWriter(128);
-                    DebugUtil.simplePrintTree(context.getViewRoot(), id, writer);
-                    LOGGER.severe(writer.toString());
+                        FastStringWriter writer = new FastStringWriter(128);
+                        DebugUtil.simplePrintTree(context.getViewRoot(), id, writer);
+                        LOGGER.severe(writer.toString());
+                    }
+
+                    String message =
+                          MessageUtils.getExceptionMessageString(
+                                MessageUtils.DUPLICATE_COMPONENT_ID_ERROR_ID, id);
+                    throw new IllegalStateException(message);
                 }
-
-                String message =
-                      MessageUtils.getExceptionMessageString(
-                            MessageUtils.DUPLICATE_COMPONENT_ID_ERROR_ID, id);
-                throw new IllegalStateException(message);
             }
         }
-
     }
 
     public static void setNonFacesContextApplicationMap(Map<String, Object> instance) {

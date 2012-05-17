@@ -1237,7 +1237,10 @@ public class WebConfiguration {
         EnableMissingResourceLibraryDetection(
               "com.sun.faces.enableMissingResourceLibraryDetection",
               false
-        );
+        ),
+        DisableIdUniquenessCheck(
+            "com.sun.faces.disableIdUniquenessCheck",
+            false);
 
         private BooleanWebContextInitParameter alternate;
 

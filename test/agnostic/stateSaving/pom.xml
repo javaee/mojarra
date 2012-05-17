@@ -7,14 +7,12 @@
         <artifactId>com.sun.faces.test.agnostic</artifactId>
         <version>2.1.8-SNAPSHOT</version>
     </parent>
-    <groupId>com.sun.faces.test</groupId>
-    <artifactId>com.sun.faces.test.agnostic.statesaving</artifactId>
-    <packaging>war</packaging>
-    <name>Mojarra 2.1.x Test - Agnostic - State Saving</name>
-    <build>
-        <finalName>test-agnostic-statesaving</finalName>
-    </build>
-    <properties>
-        <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
-    </properties>
+    <groupId>com.sun.faces.test.agnostic.statesaving</groupId>
+    <artifactId>pom</artifactId>
+    <packaging>pom</packaging>
+    <name>Mojarra ${project.version} - Test - Agnostic - State Saving</name>
+    <modules>
+        <module>basic</module>
+        <module>disableIdUniqueness</module>
+    </modules>
 </project>

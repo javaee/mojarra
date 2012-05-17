@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic;
+package com.sun.faces.test.agnostic.statesaving.basic;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
