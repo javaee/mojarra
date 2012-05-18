@@ -9,10 +9,10 @@
         <groupId>com.sun.faces.test</groupId>
         <version>2.1.8-SNAPSHOT</version>
     </parent>
-    <groupId>com.sun.faces.test</groupId>
-    <artifactId>com.sun.faces.test.cluster</artifactId>
+    <groupId>com.sun.faces.test.cluster</groupId>
+    <artifactId>pom</artifactId>
     <packaging>pom</packaging>
-    <name>Mojarra 2.1.x Test - Cluster - POM</name>
+    <name>Mojarra ${project.version} - Test - Cluster</name>
     <modules>
         <module>shared</module>
     </modules>
