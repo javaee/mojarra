@@ -113,4 +113,31 @@ public class UpdateBean {
         }
         return null;
     }
+
+    public String updateDisabledAsAttributeName() {
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        ExternalContext extContext = ctx.getExternalContext();
+        if (ctx.getPartialViewContext().isAjaxRequest()) {
+            try {
+                Map attrs = new HashMap();
+                attrs.put("disabled", "true");
+                extContext.setResponseContentType("text/xml");
+                extContext.addResponseHeader("Cache-Control", "no-cache");
+                PartialResponseWriter writer =
+                    ctx.getPartialViewContext().getPartialResponseWriter();
+                writer.startDocument();
+                writer.updateAttributes("form1:foo", attrs);
+                writer.startEval();
+                writer.write("document.getElementById('form1:foo').disabled = false;");
+                writer.endEval();
+                writer.endDocument();
+                writer.flush();
+                ctx.responseComplete();
+            } catch (Exception e) {
+                throw new FacesException(e);
+            }
+        }
+        return null;
+    }
+
 }
