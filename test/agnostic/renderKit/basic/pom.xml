@@ -48,7 +48,7 @@
         <artifactId>pom</artifactId>
         <version>2.1.8-SNAPSHOT</version>
     </parent>
-    <groupId>com.sun.faces.test.test.agnostic.renderKit</groupId>
+    <groupId>com.sun.faces.test.agnostic.renderKit</groupId>
     <artifactId>basic</artifactId>
     <packaging>war</packaging>
     <name>Mojarra ${project.version} - Test - Agnostic - RenderKit - Basic</name>
