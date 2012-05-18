@@ -8,9 +8,9 @@
         <version>2.1.8-SNAPSHOT</version>
     </parent>
     <groupId>com.sun.faces.test.selenium</groupId>
-    <artifactId>com.sun.faces.test.selenium</artifactId>
+    <artifactId>pom</artifactId>
     <packaging>pom</packaging>
-    <name>Mojarra 2.1.x Test - Selenium - POM</name>
+    <name>Mojarra ${project.version} - Test - Selenium</name>
     <modules>
         <module>agnostic</module>
     </modules>
