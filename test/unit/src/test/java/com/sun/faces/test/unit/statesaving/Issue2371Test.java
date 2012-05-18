@@ -49,6 +49,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.UUID;
 import javax.faces.FactoryFinder;
+import javax.faces.application.ProjectStage;
 import javax.faces.component.UIComponentBase;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.html.HtmlOutputText;
@@ -129,6 +130,7 @@ public class Issue2371Test {
         StateContext stateContext = createStateContext();
         fcAttributes.put(StateContext.class.getName() + "_KEY", stateContext);
         UIViewRoot viewRoot = new UIViewRoot();
+        expect(facesContext.isProjectStage(ProjectStage.Production)).andReturn(false);
         expect(facesContext.getViewRoot()).andReturn(viewRoot);
         expect(facesContext.getAttributes()).andReturn(fcAttributes);
         expect(facesContext.getAttributes()).andReturn(fcAttributes);
@@ -205,6 +207,7 @@ public class Issue2371Test {
         mockStatic(FactoryFinder.class);
         mockStatic(FacesContext.class);
 
+        expect(fc.isProjectStage(ProjectStage.Production)).andReturn(false).anyTimes();
         expect(FactoryFinder.getFactory("javax.faces.view.ViewDeclarationLanguageFactory")).andReturn(vdlFactory);
         expect(FactoryFinder.getFactory("javax.faces.component.visit.VisitContextFactory")).andReturn(visitFactory);
         expect(fc.getViewRoot()).andReturn(viewRoot).anyTimes();
