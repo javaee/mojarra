@@ -8,8 +8,8 @@
         <version>2.1.8-SNAPSHOT</version>
     </parent>
     <groupId>com.sun.faces.test</groupId>
-    <artifactId>com.sun.faces.test.util</artifactId>
-    <name>Mojarra 2.1.x Test - Utils</name>
+    <artifactId>util</artifactId>
+    <name>Mojarra ${project.version} - Test - Utils</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
