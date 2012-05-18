@@ -8,8 +8,8 @@
         <version>2.1.8-SNAPSHOT</version>
     </parent>
     <groupId>com.sun.faces.test</groupId>
-    <artifactId>com.sun.faces.test.unit</artifactId>
-    <name>Mojarra 2.1.x Test - Unit Tests</name>
+    <artifactId>unit</artifactId>
+    <name>Mojarra ${project.version} - Test - Unit Tests</name>
     <build>
         <plugins>
             <plugin>
