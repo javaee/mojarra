@@ -2333,6 +2333,17 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <value-expression-enabled>true</value-expression-enabled>
       </property-extension>
     </property>
+    <property>
+      <description><![CDATA[<p class="changed_added_2_2">Disable appending the <code>ClientWindow</code> on the rendering of this element.</p>
+        ]]></description>
+      <display-name>Disable ClientWindow on rendered OutcomeTarget</display-name>
+      <icon/>
+      <property-name>disableClientWindow</property-name>
+      <property-class>java.lang.Boolean</property-class>
+      <property-extension>
+        <default-value>false</default-value>
+      </property-extension>
+    </property>
 
     <component-extension>
       <component-family>javax.faces.OutcomeTarget</component-family>
@@ -13708,7 +13719,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     </component-extension>
   </component>
   <component>
-    <description><![CDATA[<p>Represents an HTML <code>a</code> (hyperlink) element that may be
+    <description><![CDATA[<p><span class="changed_modified_2_2">Represents</span> an HTML <code>a</code> (hyperlink) element that may be
       used to link to a URL handled by the Faces Servlet resolved preemptively using the logical
       outcome defined by the <code>outcome</code> property.]]></description>
     <display-name>Outcome Target Hyperlink</display-name>
@@ -13927,6 +13938,17 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[<p class="changed_added_2_2">Disable appending the <code>ClientWindow</code> on the rendering of this element.</p>
+        ]]></description>
+      <display-name>Disable ClientWindow on rendered OutcomeTarget</display-name>
+      <icon/>
+      <property-name>disableClientWindow</property-name>
+      <property-class>java.lang.Boolean</property-class>
+      <property-extension>
+        <default-value>false</default-value>
       </property-extension>
     </property>
 
@@ -14345,7 +14367,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     </component-extension>
   </component>
   <component>
-    <description><![CDATA[<p>Represents an HTML <code>input</code> element of type "button" or image that
+    <description><![CDATA[<p><span class="changed_modified_2_2">Represents</span> an HTML <code>input</code> element of type "button" or image that
             may be used to link to a URL handled by the Faces Servlet resolved preemptively using
             the logical outcome defined by the <code>outcome</code> property. The button behaves like
             a link, so the current form is not submitted when it is activated (the transitive of how
@@ -14566,6 +14588,17 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[<p class="changed_added_2_2">Disable appending the <code>ClientWindow</code> on the rendering of this element.</p>
+        ]]></description>
+      <display-name>Disable ClientWindow on rendered OutcomeTarget</display-name>
+      <icon/>
+      <property-name>disableClientWindow</property-name>
+      <property-class>java.lang.Boolean</property-class>
+      <property-extension>
+        <default-value>false</default-value>
       </property-extension>
     </property>
 
@@ -21639,7 +21672,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
        <p>If the component to be encoded has an entry in its component
        attributes map under the key given by the value of the symbolic
        constant <code>UIComponent.DATA_ATTRIBUTES_KEY</code>, this entry
-       must be a <code>Map&lt;Object, Object&gt;</code>.  If an entry is
+       must be a <code>java.util.Map</code>.  If an entry is
        present under that key, but its type is not as expected, a
        <code>FacesException</code> must be thrown.  Otherwise, determine
        the correct markup element to host the data- attribute(s).  Let
@@ -27227,7 +27260,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <description><![CDATA[
 
 <p><span class="changed_added_2_0 changed_modified_2_0_rev_a
-changed_modified_2_1">Render</span> <span class="changed_added_2_0
+changed_modified_2_1 changed_modified_2_2">Render</span> <span class="changed_added_2_0
 changed_modified_2_1">an HTML "a" anchor element.  The value of the
 component is rendered as the anchor text and the outcome of the
 component is used to determine the target URL rendered in the "href"
@@ -27821,6 +27854,19 @@ attributes on the "span".</p>
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
+
+      <attribute>
+        <description><![CDATA[<p class="changed_added_2_2">Disable appending the <code>ClientWindow</code> on the rendering of this element.</p>
+        ]]></description>
+        <display-name>Disable ClientWindow on rendered OutcomeTarget</display-name>
+        <icon/>
+        <attribute-name>disableClientWindow</attribute-name>
+        <attribute-class>java.lang.Boolean</attribute-class>
+        <attribute-extension>
+          <default-value>false</default-value>
+        </attribute-extension>
+      </attribute>
+
       <renderer-extension>
         <renders-children>true</renders-children>
         <body-tag>true</body-tag>
@@ -27831,7 +27877,7 @@ attributes on the "span".</p>
     <renderer>
       <description><![CDATA[
 
-<p><span class="changed_modified_2_1">Render a button that does not
+<p><span class="changed_modified_2_1"><span class="changed_modified_2_2">Render</span> a button that does not
 cause an HTTP POST.</span></p>
 
 <div class="changed_added_2_0"><div class="changed_modified_2_1">
@@ -28259,6 +28305,19 @@ this application, and passing the result through the
         <icon/>
         <attribute-name>fragment</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+
+      <attribute>
+        <description><![CDATA[<p class="changed_added_2_2">Disable appending the <code>ClientWindow</code> on the rendering of this element.</p>
+        ]]></description>
+        <display-name>Disable ClientWindow on rendered OutcomeTarget</display-name>
+        <icon/>
+        <attribute-name>disableClientWindow</attribute-name>
+        <attribute-class>java.lang.Boolean</attribute-class>
+        <attribute-extension>
+          <default-value>false</default-value>
+        </attribute-extension>
       </attribute>
 
       <renderer-extension>

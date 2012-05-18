@@ -166,7 +166,9 @@ public abstract class ClientWindow {
      * first before rendering those URLs.  The caller must call {@link #enableClientWindowUrlQueryParameter(javax.faces.context.FacesContext)}
      * from a <code>finally</code> block after rendering the URL.  If 
      * {@link #CLIENT_WINDOW_MODE_PARAM_NAME} is "url" without the quotes, all generated
-     * URLs that cause a GET request must append the ClientWindow by default.</p>
+     * URLs that cause a GET request must append the ClientWindow by default.
+     * This is specified as a static method because callsites need to access it
+     * without having access to an actual {@code ClientWindow} instance.</p>
      * 
      * @param context the {@link FacesContext} for this request.
      * 
@@ -183,7 +185,9 @@ public abstract class ClientWindow {
      * of the appending of the ClientWindow in generated URLs must call this method
      * first after rendering those URLs.  If 
      * {@link #CLIENT_WINDOW_MODE_PARAM_NAME} is "url" without the quotes, all generated
-     * URLs that cause a GET request must append the ClientWindow by default.</p>
+     * URLs that cause a GET request must append the ClientWindow by default.
+     * This is specified as a static method because callsites need to access it
+     * without having access to an actual {@code ClientWindow} instance.</p>
      * 
      * @param context the {@link FacesContext} for this request.
      * 
@@ -200,7 +204,9 @@ public abstract class ClientWindow {
      * <p class="changed_added_2_2">Methods that append the ClientWindow to generated
      * URLs must call this method to see if they are permitted to do so.  If 
      * {@link #CLIENT_WINDOW_MODE_PARAM_NAME} is "url" without the quotes, all generated
-     * URLs that cause a GET request must append the ClientWindow by default.</p>
+     * URLs that cause a GET request must append the ClientWindow by default.
+     * This is specified as a static method because callsites need to access it
+     * without having access to an actual {@code ClientWindow} instance.</p>
      * 
      * @param context the {@link FacesContext} for this request.
      * 

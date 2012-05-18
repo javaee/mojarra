@@ -55,6 +55,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutcomeTarget;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+import javax.faces.lifecycle.ClientWindow;
 
 public abstract class OutcomeTargetRenderer extends HtmlBasicRenderer {
 
@@ -164,10 +165,31 @@ public abstract class OutcomeTargetRenderer extends HtmlBasicRenderer {
         String toViewId = navCase.getToViewId(context);
         Map<String,List<String>> params = getParamOverrides(component);
         addNavigationParams(navCase, params);
-        return Util.getViewHandler(context).getBookmarkableURL(context,
+        String result = null;
+        boolean didDisableClientWindowRendering = false;
+
+        
+        try {
+            Map<String, Object> attrs = component.getAttributes();
+            Object val = attrs.get("disableClientWindow");
+            if (null != val) {
+                didDisableClientWindowRendering = "true".equalsIgnoreCase(val.toString());
+            }
+            if (didDisableClientWindowRendering) {
+                ClientWindow.disableClientWindowUrlQueryParameter(context);
+            }
+            
+            result = Util.getViewHandler(context).getBookmarkableURL(context,
                                                                toViewId,
                                                                params,
                                                                isIncludeViewParams(component, navCase));
+        } finally {
+            if (didDisableClientWindowRendering) {
+                ClientWindow.enableClientWindowUrlQueryParameter(context);
+            }
+        }
+        
+        return result;
     }
 
     protected void addNavigationParams(NavigationCase navCase,

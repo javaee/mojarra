@@ -66,8 +66,7 @@ public class Issue1995_war_1_TestCase extends HtmlUnitFacesTestCase {
 
     public void testBasicAppFunctionality() throws Exception {
 
-        HtmlPage page = getPage("/");
-
+ 
         assertTrue(page.asXml().contains("javax.faces.ViewState"));
         assertTrue(page.asText().matches("(?s).*.war_1\\s+bean:\\s+war1Bean\\s+war_2\\s+bean:\\s+bean:\\s+bar..*"));
     }

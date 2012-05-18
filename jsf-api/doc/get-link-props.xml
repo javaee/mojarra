@@ -57,45 +57,20 @@
 
 -->
 <root xmlns:xi="http://www.w3.org/2001/XInclude">
-    <xi:include href="uioutput-props.xml" xpointer="xpointer(/root/*)"/>
+
     <property>
-        <description>
-          The logical outcome used to resolve a navigation case.
+        <description><![CDATA[<p class="changed_added_2_2">Disable appending the <code>ClientWindow</code> on the rendering of this element.</p>
+        ]]>
         </description>
-        <display-name>Outcome</display-name>
+        <display-name>Disable ClientWindow on rendered OutcomeTarget</display-name>
         <icon></icon>
-        <property-name>outcome</property-name>
-        <property-class>java.lang.String</property-class>
-        <property-extension>
-            <value-expression-enabled>true</value-expression-enabled>
-        </property-extension>
-    </property>
-    <property>
-        <description>
-          Whether to include page parameters in the target URI.
-        </description>
-        <display-name>Include Page Parameters</display-name>
-        <icon></icon>
-        <property-name>includeViewParams</property-name>
+        <property-name>disableClientWindow</property-name>
         <property-class>java.lang.Boolean</property-class>
         <property-extension>
-            <value-expression-enabled>true</value-expression-enabled>
+          <default-value>false</default-value>
         </property-extension>
-    </property>
-    <property>
-        <description>
-          Return the URI fragment, as specified in RFC 2396.
-        </description>
-        <display-name>HTML Fragment</display-name>
-        <icon></icon>
-        <property-name>fragment</property-name>
-        <property-class>java.lang.String</property-class>
-        <property-extension>
-            <value-expression-enabled>true</value-expression-enabled>
-        </property-extension>
-    </property>
 
-    <xi:include href="get-link-props.xml" xpointer="xpointer(/root/*)"/>
+    </property>
 
    
 </root>

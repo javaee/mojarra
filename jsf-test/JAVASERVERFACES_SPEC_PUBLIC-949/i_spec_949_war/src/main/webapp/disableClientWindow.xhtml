@@ -46,47 +46,18 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core">
 <h:head>
-  <title>A Simple JavaServer Faces 2.0 View</title>
+  <title>disableClientWindow</title>
 </h:head>
 <h:body>
-    <script type="text/javascript">
-        //<![CDATA[
-        var clientWindow = "";
-        var callGetClientWindow = function callGetClientWindow() {
-            clientWindow = jsf.getClientWindow(document.forms[0]);
-            var echoClientWindow = document.getElementById("echoClientWindow");
-            echoClientWindow.innerHTML = "<b>" + clientWindow + "</b>";
-            return true;
-        }
-        //]]>        
-        
-    </script>
-    
     
   <h:form prependId="false">
-      First name: <h:inputText id="firstName" value="#{userBean.firstName}" /> Last name: #{userBean.lastName}
-      <p><h:commandButton id="submitAjax" value="submitAjax" onclick="callGetClientWindow()">
-              <f:ajax execute="@form" render="echoPanel" />
-          </h:commandButton>
-    
-    </p>
-      <p><h:commandButton id="submitNonAjax" value="submitNonAjax" /> </p>
+      <p><h:link id="disableClientWindowEL" value="page2 via link disableClientWindowFrom EL" outcome="page2" disableClientWindow="#{null != facesContext}" /></p>
       
-      <p><h:commandLink id="commandLink" value="page2 via commandLink" 
-                        action="page2" /></p>
-      <p><h:link id="outcomeTargetLink" value="page2 via link" outcome="page2" /></p>
+      <p><h:link id="disableClientWindowLiteral" value="page2 via link disableClientWindow from literal" outcome="page2" disableClientWindow="true" /></p>
       
-      <p><input type="submit" id="getClientWindow" onclick="callGetClientWindow(); return false;"
-                name="getClientWindow" value="getClientWindow" /></p>
-    
-    <h:panelGroup id="echoPanel">
-        
-        |#{userBean.firstName}|
-        
-    </h:panelGroup>
+      <p><h:button id="disableClientWindowButtonEL" value="page2 via button disableClientWindowFrom EL" outcome="page2" disableClientWindow="#{null != facesContext}" /></p>
       
-      <p>|ClientWindow: <span id="echoClientWindow" />|</p>
-      
+      <p><h:button id="disableClientWindowButtonLiteral" value="page2 via button disableClientWindow from literal" outcome="page2" disableClientWindow="true" /></p>
   </h:form>
 </h:body>
 </html>

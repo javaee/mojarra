@@ -40,14 +40,17 @@
 
 package com.sun.faces.test.i_spec_949_htmlunit;
 
-import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.ClickableElement;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
+import java.util.List;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -78,6 +81,36 @@ public class IssueSpec949TestCase extends HtmlUnitFacesTestCase {
         window2Session = clientWindow2.substring(0, clientWindow2.indexOf(':'));
         assertEquals(window1Session, window2Session);
 
+    }
+    
+    public void testDisableClientWindow() throws Exception {
+        doTestClientWindowsDifferent("/faces/disableClientWindow.xhtml", "disableClientWindowEL");
+
+        doTestClientWindowsDifferent("/faces/disableClientWindow.xhtml", "disableClientWindowLiteral");
+
+        doTestClientWindowsDifferent("/faces/disableClientWindow.xhtml", "disableClientWindowButtonEL");
+
+        doTestClientWindowsDifferent("/faces/disableClientWindow.xhtml", "disableClientWindowButtonLiteral");
+    }
+    
+    public void doTestClientWindowsDifferent(String path, String id) throws Exception {
+        HtmlPage page = null;
+        List<HtmlElement> clientWindowHiddenFields = null;
+        ClickableElement link = null;
+        String clientWindowBeforeClick, clientWindowAfterClick;
+        
+        // Click the link and verify the ClientWindow is different on the new page.
+        page = getPage(path);
+        link = (ClickableElement) page.getElementById(id);
+        clientWindowHiddenFields = page.getElementsByName("javax.faces.ClientWindow");
+        clientWindowBeforeClick = ((HtmlInput)clientWindowHiddenFields.get(0)).getDefaultValue();
+        
+        page = link.click();
+        clientWindowHiddenFields = page.getElementsByName("javax.faces.ClientWindow");
+        clientWindowAfterClick = ((HtmlInput)clientWindowHiddenFields.get(0)).getDefaultValue();
+        
+        assertNotSame("ClientWindow should not be the same on second page", clientWindowBeforeClick, clientWindowAfterClick);
+        
     }
     
     public String doTestAndReturnClientWindow(WebClient yourClient, String windowName) throws Exception {
