@@ -45,14 +45,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.sun.faces.test</groupId>
-        <artifactId>com.sun.faces.test.agnostic.vdl.facelets</artifactId>
+        <groupId>com.sun.faces.test.agnostic.vdl.facelets</groupId>
+        <artifactId>pom</artifactId>
         <version>2.1.8-SNAPSHOT</version>
     </parent>
-    <groupId>com.sun.faces.test</groupId>
-    <artifactId>com.sun.faces.test.agnostic.vdl.facelets.replacevdl</artifactId>
+    <groupId>com.sun.faces.test.agnostic.vdl.facelets</groupId>
+    <artifactId>replacevdl</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra 2.1.x Test - Agnostic - VDL - facelets - Replace VDL</name>
+    <name>Mojarra ${project.version} - Test - Agnostic - VDL - Facelets - Replace VDL</name>
     <build>
         <finalName>test-agnostic-vdl-replace-vdl</finalName>
     </build>
