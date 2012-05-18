@@ -68,16 +68,17 @@ import javax.faces.render.ResponseStateManager;
 
  * <p>Other modes</p>
 
- * <p>For all other valid values of {@link
- * #CLIENT_WINDOW_MODE_PARAM_NAME}, including custom values not explicitly covered
- * in this specification, the lifetime of a
+ * <p>To accomadate the widest possible range of implementation choices
+ * to support this feature, explicit names for modes other than "none"
+ * are not specified.  However, for all values of {@link
+ * #CLIENT_WINDOW_MODE_PARAM_NAME}, the lifetime of a
  * <code>ClientWindow</code> starts on the first request made by a
  * particular client window (or tab, or pop-up, etc) to the JSF runtime
- * and persists as long as that window remains open or the session expires, 
- * whichever comes first.  A client window is
- * always associated with exactly one <code>UIViewRoot</code> instance
- * at a time, but may display many different <code>UIViewRoot</code>s
- * during its lifetime.</p>
+ * and persists as long as that window remains open or the session
+ * expires, whichever comes first.  A client window is always associated
+ * with exactly one <code>UIViewRoot</code> instance at a time, but may
+ * display many different <code>UIViewRoot</code>s during its
+ * lifetime.</p>
 
  * <p>The <code>ClientWindow</code> instance is associated with the
  * incoming request during the {@link Lifecycle#attachWindow} method.
@@ -86,24 +87,19 @@ import javax.faces.render.ResponseStateManager;
  * javax.faces.context.ExternalContext#setClientWindow}.</p>
 
  * <p>During state saving, regardless of the window id mode, or state
- * saving mode, a hidden field must be written whose name, id and value
- * are given as specified in {@link
+ * saving mode, for ajax and non-ajax requests, a hidden field must be
+ * written whose name, id and value are given as specified in {@link
  * javax.faces.render.ResponseStateManager#CLIENT_WINDOW_PARAM}. </p>
 
- * <p>url mode</p>
-
- * <p>If the value of the {@link #CLIENT_WINDOW_MODE_PARAM_NAME} is "url",
- * without the quotes, the encoding of the <code>ClientWindow</code>
- * must be performed as follows, in addition to the hidden field already
- * described.  The runtime must ensure that any component that renders a
- * hyperlink that causes the user agent to send a GET request to the
- * Faces server when it is clicked has a query parameter with a name and
- * value specified in {@link ResponseStateManager#WINDOW_ID_URL_PARAM}.
- * This requirement is met by several of the "encode" methods on {@link
- * javax.faces.context.ExternalContext} See {@link
+ * <p>In addition to the hidden field already described.  The runtime
+ * must ensure that any component that renders a hyperlink that causes
+ * the user agent to send a GET request to the Faces server when it is
+ * clicked has a query parameter with a name and value specified in
+ * {@link ResponseStateManager#CLIENT_WINDOW_URL_PARAM}.  This
+ * requirement is met by several of the "encode" methods on {@link
+ * javax.faces.context.ExternalContext}. See {@link
  * javax.faces.context.ExternalContext#encodeActionURL(java.lang.String)
- * } for details, including a special case where the ClientWindow is not
- * appended even though url mode is enabled.</p>
+ * } for details.</p>
 
  * </ul>
  
@@ -145,7 +141,7 @@ public abstract class ClientWindow {
      * is "url" the implementation must first look for a request parameter
      * under the name given by the value of {@link javax.faces.render.ResponseStateManager#CLIENT_WINDOW_PARAM}.
      * If no value is found, look for a request parameter under the name given
-     * by the value of {@link javax.faces.render.ResponseStateManager#WINDOW_ID_URL_PARAM}.
+     * by the value of {@link javax.faces.render.ResponseStateManager#CLIENT_WINDOW_URL_PARAM}.
      * If no value is found, fabricate an id that uniquely identifies this
      * <code>ClientWindow</code> within the scope of the current session.  This
      * value must be encrypted with a key stored in the http session and made 
@@ -161,13 +157,13 @@ public abstract class ClientWindow {
     
     public abstract void decode(FacesContext context);
     
-    private static final String PER_USE_CLIENT_WINDOW_URL_MODE_DISABLED_KEY = 
-            "javax.faces.lifecycle.ClientWindowUrlModeEnablement";
+    private static final String PER_USE_CLIENT_WINDOW_URL_QUERY_PARAMETER_DISABLED_KEY = 
+            "javax.faces.lifecycle.ClientWindowUrlQueryParameterEnablement";
     
     /**
      * <p class="changed_added_2_2">Components that permit per-use disabling
      * of the appending of the ClientWindow in generated URLs must call this method
-     * first before rendering those URLs.  The caller must call {@link #enableClientWindowUrlMode(javax.faces.context.FacesContext)}
+     * first before rendering those URLs.  The caller must call {@link #enableClientWindowUrlQueryParameter(javax.faces.context.FacesContext)}
      * from a <code>finally</code> block after rendering the URL.  If 
      * {@link #CLIENT_WINDOW_MODE_PARAM_NAME} is "url" without the quotes, all generated
      * URLs that cause a GET request must append the ClientWindow by default.</p>
@@ -177,9 +173,9 @@ public abstract class ClientWindow {
      * @since 2.2
      */
     
-    public static void disableClientWindowUrlMode(FacesContext context) {
+    public static void disableClientWindowUrlQueryParameter(FacesContext context) {
         Map<Object, Object> attrMap = context.getAttributes();
-        attrMap.put(PER_USE_CLIENT_WINDOW_URL_MODE_DISABLED_KEY, Boolean.TRUE);
+        attrMap.put(PER_USE_CLIENT_WINDOW_URL_QUERY_PARAMETER_DISABLED_KEY, Boolean.TRUE);
     }
     
     /**
@@ -194,9 +190,9 @@ public abstract class ClientWindow {
      * @since 2.2
      */
     
-    public static void enableClientWindowUrlMode(FacesContext context) {
+    public static void enableClientWindowUrlQueryParameter(FacesContext context) {
         Map<Object, Object> attrMap = context.getAttributes();
-        attrMap.remove(PER_USE_CLIENT_WINDOW_URL_MODE_DISABLED_KEY);
+        attrMap.remove(PER_USE_CLIENT_WINDOW_URL_QUERY_PARAMETER_DISABLED_KEY);
         
     }
     
@@ -211,10 +207,10 @@ public abstract class ClientWindow {
      * @since 2.2
      */
     
-    public static boolean isClientWindowUrlModeEnabled(FacesContext context) {
+    public static boolean isClientWindowUrlQueryParameterEnabled(FacesContext context) {
         boolean result = false;
         Map<Object, Object> attrMap = context.getAttributes();
-        result = !attrMap.containsKey(PER_USE_CLIENT_WINDOW_URL_MODE_DISABLED_KEY);
+        result = !attrMap.containsKey(PER_USE_CLIENT_WINDOW_URL_QUERY_PARAMETER_DISABLED_KEY);
         return result;
     }
     

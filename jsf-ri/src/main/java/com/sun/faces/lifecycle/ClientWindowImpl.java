@@ -57,7 +57,7 @@ public class ClientWindowImpl extends ClientWindow {
     @Override
     public void decode(FacesContext context) {
         Map<String, String> requestParamMap = context.getExternalContext().getRequestParameterMap();
-        if (ClientWindow.isClientWindowUrlModeEnabled(context)) {
+        if (ClientWindow.isClientWindowUrlQueryParameterEnabled(context)) {
             id = requestParamMap.get(ResponseStateManager.CLIENT_WINDOW_URL_PARAM);
         }
         // The hidden field always takes precedence, if present.

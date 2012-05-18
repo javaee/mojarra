@@ -281,14 +281,14 @@ public abstract class ExternalContext {
      *
      * <ul>
      * 
-     * <p class="changed_added_2_2">Call {@link javax.faces.lifecycle.ClientWindow#isClientWindowUrlModeEnabled(javax.faces.context.FacesContext)}.
+     * <p class="changed_added_2_2">Call {@link javax.faces.lifecycle.ClientWindow#isClientWindowUrlQueryParameterEnabled(javax.faces.context.FacesContext) }.
      * If the result is <code>false</code> take no further action and return
      * the rewritten URL.  If the result is <code>true</code>, call {@link #getClientWindow()}.
      * If the result is non-<code>null</code>, call {@link javax.faces.lifecycle.ClientWindow#getId()}
      * and append the id to the query string of the URL, making the necessary
      * allowances for a pre-existing query string or no query-string.  The name
      * of the query string parameter is given by the value of the constant
-     * {@link javax.faces.render.ResponseStateManager#WINDOW_ID_URL_PARAM}.</p>
+     * {@link javax.faces.render.ResponseStateManager#CLIENT_WINDOW_URL_PARAM}.</p>
      * 
      * </ul>
      *

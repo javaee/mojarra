@@ -248,7 +248,7 @@ class UrlBuilder {
         }
         
         FacesContext context = FacesContext.getCurrentInstance();
-        boolean appendClientWindow = ClientWindow.isClientWindowUrlModeEnabled(context);
+        boolean appendClientWindow = ClientWindow.isClientWindowUrlQueryParameterEnabled(context);
         if (appendClientWindow && -1 == url.indexOf(ResponseStateManager.CLIENT_WINDOW_URL_PARAM)) {
             ClientWindow  cw = context.getExternalContext().getClientWindow();
             if (null != cw) {
