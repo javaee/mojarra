@@ -186,6 +186,18 @@
                     <links>
                         <link>http://docs.oracle.com/javaee/6/api/</link>
                     </links>
+                    <additionalDependencies>
+                        <additionalDependency>
+                            <groupId>javax.validation</groupId>
+                            <artifactId>validation-api</artifactId>
+                            <version>1.0.0.GA</version>
+                        </additionalDependency>
+                        <additionalDependency>
+                            <groupId>org.codehaus.groovy</groupId>
+                            <artifactId>groovy-all</artifactId>
+                            <version>1.8.5</version>
+                        </additionalDependency>
+                    </additionalDependencies>                
                 </configuration>
             </plugin>
             <plugin>
