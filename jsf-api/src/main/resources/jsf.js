@@ -1101,6 +1101,8 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 if (!isIE()) {
                     if (name === 'value') {
                         target.value = value;
+                    } else if (name === 'disabled') {
+                        target.disabled = value;
                     } else {
                         target.setAttribute(name, value);
                     }
