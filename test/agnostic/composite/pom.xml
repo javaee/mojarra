@@ -10,7 +10,7 @@
     <groupId>com.sun.faces.test</groupId>
     <artifactId>com.sun.faces.test.agnostic.composite</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra 2.1.x Test - Agnostic - Composite Components</name>
+    <name>Mojarra ${project.version} - Test - Agnostic - Composite Components</name>
     <build>
         <finalName>test-agnostic-composite</finalName>
     </build>
