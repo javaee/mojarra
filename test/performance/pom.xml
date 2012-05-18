@@ -109,8 +109,8 @@
                                     <input>${basedir}/src/test/jmeter</input>
                                     <historydir>${basedir}/chronos-history</historydir>
                                     <sysproperties>
-                                        <proxy.httpHost>www-proxy.us.oracle.com</proxy.httpHost>
-                                        <proxy.httpPort>80</proxy.httpPort>
+                                        <http.proxyHost>www-proxy.us.oracle.com</http.proxyHost>
+                                        <http.proxyPort>80</http.proxyPort>
                                     </sysproperties>
                                 </configuration>
                                 <goals>
@@ -122,8 +122,8 @@
                                 <configuration>
                                     <historydir>${basedir}/chronos-history</historydir>
                                     <sysproperties>
-                                        <proxy.httpHost>www-proxy.us.oracle.com</proxy.httpHost>
-                                        <proxy.httpPort>80</proxy.httpPort>
+                                        <http.proxyHost>www-proxy.us.oracle.com</http.proxyHost>
+                                        <http.proxyPort>80</http.proxyPort>
                                     </sysproperties>
                                 </configuration>
                                 <goals>
