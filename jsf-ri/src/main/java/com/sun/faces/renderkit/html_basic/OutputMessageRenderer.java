@@ -84,6 +84,10 @@ public class OutputMessageRenderer extends HtmlBasicInputRenderer {
         }
 
         String currentValue = getCurrentValue(context, component);
+        // If null, do not putput anything - return.
+        if (null == currentValue) {
+            return;
+        }
         int childCount = component.getChildCount();
         List<Object> parameterList;
 
