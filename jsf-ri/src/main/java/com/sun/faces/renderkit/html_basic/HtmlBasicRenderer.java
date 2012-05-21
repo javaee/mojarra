@@ -207,7 +207,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
         if (null != behaviorEvent) {
             List<ClientBehavior> behaviorsForEvent = behaviors.get(behaviorEvent);
 
-            if (behaviors.size() > 0) {
+            if (behaviorsForEvent != null && behaviorsForEvent.size() > 0) {
                String behaviorSource = params.get("javax.faces.source");
                String clientId = component.getClientId();
                if (isBehaviorSource(context, behaviorSource, clientId)) {
