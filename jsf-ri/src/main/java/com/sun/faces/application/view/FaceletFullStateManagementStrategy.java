@@ -60,7 +60,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.FacesException;
 import javax.faces.application.ProjectStage;
-import javax.faces.component.ContextCallback;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.visit.VisitCallback;
@@ -72,6 +71,8 @@ import javax.faces.render.ResponseStateManager;
 import javax.faces.view.StateManagementStrategy;
 import static com.sun.faces.RIConstants.DYNAMIC_ACTIONS;
 import static com.sun.faces.RIConstants.DYNAMIC_COMPONENT;
+import javax.faces.component.NamingContainer;
+import javax.faces.component.UIForm;
 
 /**
  * A state management strategy for FSS.
@@ -180,7 +181,7 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
      * @param context the Faces context.
      * @param clientId the client id of the component to find.
      */
-    private UIComponent locateComponentByClientId(final FacesContext context, final String clientId) {
+    private UIComponent locateComponentByClientId(final FacesContext context, final UIComponent subTree,  final String clientId) {
         if (LOGGER.isLoggable(Level.FINEST)) {
             LOGGER.log(Level.FINEST, "FaceletFullStateManagementStrategy.locateComponentByClientId", clientId);
         }
@@ -188,32 +189,51 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
         final List<UIComponent> found = new ArrayList<UIComponent>();
         UIComponent result = null;
 
-        context.getViewRoot().invokeOnComponent(context, clientId, new ContextCallback() {
-
-            public void invokeContextCallback(FacesContext context, UIComponent target) {
-                found.add(target);
-            }
-        });
-
-        /*
-         * Since we did not find it the cheaper way we need to assume there is a
-         * UINamingContainer that does not prepend its ID. So we are going to
-         * walk the tree to find it.
-         */
-        if (found.isEmpty()) {
-            VisitContext visitContext = VisitContext.createVisitContext(context);
-            context.getViewRoot().visitTree(visitContext, new VisitCallback() {
+        try {
+            context.getAttributes().put(SKIP_ITERATION_HINT, true);
+            Set<VisitHint> hints = EnumSet.of(VisitHint.SKIP_ITERATION);
+        
+            VisitContext visitContext = VisitContext.createVisitContext(context, null, hints);
+            subTree.visitTree(visitContext, new VisitCallback() {
 
                 public VisitResult visit(VisitContext visitContext, UIComponent component) {
                     VisitResult result = VisitResult.ACCEPT;
                     if (component.getClientId(visitContext.getFacesContext()).equals(clientId)) {
+                        /*
+                         * If the client id matches up we have found our match.
+                         */
                         found.add(component);
                         result = VisitResult.COMPLETE;
+                    } else if (component instanceof UIForm) {
+                        /*
+                         * If the component is a UIForm and it is prepending its id
+                         * then we can short circuit out of here if the the client
+                         * id of the component we are trying to find does not begin
+                         * with the id of the UIForm.
+                         */
+                        UIForm form = (UIForm) component;
+                        if (form.isPrependId() && !clientId.startsWith(form.getClientId(visitContext.getFacesContext()))) {
+                            result = VisitResult.REJECT;
+                        }
+                    } else if (component instanceof NamingContainer) {
+                        /*
+                         * If the component is a naming container then assume it is
+                         * prepending its id so if our client id we are looking for
+                         * does not start with the naming container id we can skip
+                         * visiting this tree.
+                         */
+                        if (!clientId.startsWith(component.getClientId(visitContext.getFacesContext()))) {
+                            result = VisitResult.REJECT;
+                        }
                     }
+
                     return result;
                 }
             });
+        } finally {
+            context.getAttributes().remove(SKIP_ITERATION_HINT);
         }
+
         if (!found.isEmpty()) {
             result = found.get(0);
         }
@@ -382,10 +402,10 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
             LOGGER.finest("FaceletFullStateManagementStrategy.restoreDynamicAdd");
         }
 
-        UIComponent parent = locateComponentByClientId(context, struct.parentClientId);
+        UIComponent parent = locateComponentByClientId(context, context.getViewRoot(), struct.parentClientId);
 
         if (parent != null) {
-            UIComponent child = locateComponentByClientId(context, struct.clientId);
+            UIComponent child = locateComponentByClientId(context, parent, struct.clientId);
 
             /*
              * If Facelets engine restored the child before us we are going to
@@ -457,7 +477,7 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
             LOGGER.finest("FaceletFullStateManagementStrategy.restoreDynamicRemove");
         }
 
-        UIComponent child = locateComponentByClientId(context, struct.clientId);
+        UIComponent child = locateComponentByClientId(context, context.getViewRoot(), struct.clientId);
         if (child != null) {
             StateContext stateContext = StateContext.getStateContext(context);
             stateContext.getDynamicComponents().put(struct.clientId, child);
