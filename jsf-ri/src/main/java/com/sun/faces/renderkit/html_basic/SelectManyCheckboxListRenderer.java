@@ -211,8 +211,13 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
             return false;
         }
         char sepChar = UINamingContainer.getSeparatorChar(ctx);
-        String actualBehaviorId =
-              behaviorSourceId.substring(0, behaviorSourceId.lastIndexOf(sepChar));
+        String actualBehaviorId;
+        if (behaviorSourceId.lastIndexOf(sepChar) != -1) { 
+            actualBehaviorId = behaviorSourceId.substring(0, behaviorSourceId.lastIndexOf(sepChar));
+        } else {
+            actualBehaviorId = behaviorSourceId;
+        }
+        
         return (actualBehaviorId.equals(componentClientId));
 
     }
