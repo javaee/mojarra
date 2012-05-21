@@ -173,5 +173,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <webapp.disableIdUniqueness>false</webapp.disableIdUniqueness>
+        <webapp.delegate>true</webapp.delegate>
+        <webapp.useBundledJsf>false</webapp.useBundledJsf>
     </properties>
 </project>
