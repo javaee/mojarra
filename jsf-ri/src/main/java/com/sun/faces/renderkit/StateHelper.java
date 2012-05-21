@@ -76,17 +76,6 @@ public abstract class StateHelper {
 
     /**
      * <p>
-     * The first portion of the window id field.
-     * </p>
-     *
-     */
-    protected static final char[] WINDOW_ID_FIELD_START =
-          ("<input type=\"hidden\" name=\""
-           + ResponseStateManager.CLIENT_WINDOW_PARAM
-           + "\" id=\"").toCharArray();
-
-    /**
-     * <p>
      * The second portion of the hidden state field.
      * </p>
      *
@@ -147,12 +136,6 @@ public abstract class StateHelper {
     protected char[] stateFieldStart;
     
     /**
-     * This will be used the by the different <code>StateHelper</code> implementations
-     * when writing the start of the ClientWindow field.
-     */
-    protected char[] clientWindowFieldStart;
-    
-    /**
      * This will be used by the different <code>StateHelper</code> implementations
      * when writing the middle of the state or viewId fields.
      */
@@ -182,7 +165,6 @@ public abstract class StateHelper {
         webConfig = WebConfiguration.getInstance(ctx.getExternalContext());
         compressViewState = webConfig.isOptionEnabled(CompressViewState);
         stateFieldStart = STATE_FIELD_START;
-        clientWindowFieldStart = WINDOW_ID_FIELD_START;
         fieldMiddle = FIELD_MIDDLE;
         fieldEnd = (webConfig.isOptionEnabled(AutoCompleteOffOnViewState)
                            ? STATE_FIELD_AUTOCOMPLETE_END
@@ -299,18 +281,25 @@ public abstract class StateHelper {
 
     }
     
-    protected void writeClientWindowField(FacesContext context,
-                                      ResponseWriter writer)
-    throws IOException {
+    /**
+     * Write the client window state field.
+     * 
+     * @param context the Faces context.
+     * @param writer the response writer.
+     * @throws IOException when an I/O error occurs.
+     */
+    protected void writeClientWindowField(FacesContext context, ResponseWriter writer) throws IOException {
         ClientWindow window = context.getExternalContext().getClientWindow();
-        if (null != window) {
-            writer.write(clientWindowFieldStart);
-            writer.write(Util.getClientWindowId(context));
-            writer.write(fieldMiddle);
-            writer.write(window.getId());
-            writer.write(fieldEnd);
-        }
-        
+        if (null != window) {       
+            writer.startElement("input", null);
+            writer.writeAttribute("type", "hidden", null);
+            writer.writeAttribute("name", ResponseStateManager.CLIENT_WINDOW_PARAM, null);
+            writer.writeAttribute("id", Util.getClientWindowId(context), null);
+            writer.writeAttribute("value", window.getId(), null);
+            if (webConfig.isOptionEnabled(AutoCompleteOffOnViewState)) {
+                writer.writeAttribute("autocomplete", "off", null);
+            }
+            writer.endElement("input");
+        }        
     }
-
 }
