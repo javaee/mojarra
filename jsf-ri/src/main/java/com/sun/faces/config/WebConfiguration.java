@@ -987,6 +987,10 @@ public class WebConfiguration {
               "javax.faces.WebAppResourcesDirectory",
               "/resources"
         ),
+        MultiTemplateName(
+                ResourceHandler.MULTI_TEMPLATE_PARAM_NAME,
+                ResourceHandler.DEFAULT_MULTI_TEMPLATE
+                ),
 ;
 
 

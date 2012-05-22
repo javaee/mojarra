@@ -26,6 +26,7 @@
     <modules>
         <module>el</module>
         <module>flow</module>
+        <module>multi_templating</module>
     </modules>
     <properties>
         <webapp.partialStateSaving>true</webapp.partialStateSaving>

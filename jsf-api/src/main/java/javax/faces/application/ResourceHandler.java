@@ -172,6 +172,25 @@ public abstract class ResourceHandler {
 
     public static final String WEBAPP_RESOURCES_DIRECTORY_PARAM_NAME = 
         "javax.faces.WEBAPP_RESOURCES_DIRECTORY";
+    
+    /**
+     * <p class="changed_added_2_2">If a 
+     * <code>&lt;context-param&gt;</code> with the param name equal to
+     * the value of {@link #MULTI_TEMPLATE_PARAM_NAME}
+     * exists, the runtime must interpret its value as the name of a resource
+     * library that conforms to the naming conventions of a multi-template.</p>
+     * @since 2.2
+     */
+    public static final String MULTI_TEMPLATE_PARAM_NAME = 
+            "javax.faces.MULTI_TEMPLATE";
+    
+    /**
+     * <p class="changed_added_2_2">The name of the default multi-template
+     * to look for in the absence of a value for {@link #MULTI_TEMPLATE_PARAM_NAME}.</p>
+     * @since 2.2
+     */
+    public static final String DEFAULT_MULTI_TEMPLATE = 
+            "javax_faces_template";
 
     /**
      * <p class="changed_added_2_0">The name of a key within the

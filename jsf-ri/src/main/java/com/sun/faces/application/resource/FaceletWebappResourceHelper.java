@@ -47,14 +47,14 @@ import java.net.URL;
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 
-public class FaceletResourceHelper extends ResourceHelper {
+public class FaceletWebappResourceHelper extends ResourceHelper {
 
-    public FaceletResourceHelper() {
+    public FaceletWebappResourceHelper() {
     }
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof FaceletResourceHelper;
+        return obj instanceof FaceletWebappResourceHelper;
     }
 
     @Override
@@ -75,7 +75,7 @@ public class FaceletResourceHelper extends ResourceHelper {
                 path = "/" + path;
             }
             URL url = Resource.getResourceUrl(ctx, path);
-            // By definition, FaceletResourceHelper only deals with files
+            // By definition, FaceletWebappResourceHelper only deals with files
             // in the web app root, not in the resource directories
             if (null != url && -1 == url.getPath().indexOf("/META-INF/")) {
                 result = new FaceletLibraryInfo(libraryName, null, localePrefix, this, url);

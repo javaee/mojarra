@@ -76,7 +76,7 @@ public class ResourceManager {
     private static final Pattern CONFIG_MIMETYPE_PATTERN =
           Pattern.compile("[a-z-]*/[a-z0-9.\\*-]*");
     
-    private ResourceHelper faceletResourceHelper = new FaceletResourceHelper();
+    private ResourceHelper faceletResourceHelper = new FaceletWebappResourceHelper();
 
     /**
      * {@link ResourceHelper} used for looking up webapp-based resources.
