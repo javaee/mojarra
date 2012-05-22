@@ -60,6 +60,7 @@ import java.util.Map;
 import java.util.HashMap;
 import static com.sun.faces.RIConstants.DYNAMIC_CHILD_COUNT;
 import static com.sun.faces.RIConstants.DYNAMIC_COMPONENT;
+import javax.faces.FacesException;
 
 /**
  * Context for dealing with partial state saving mechanics.
@@ -367,8 +368,7 @@ public class StateContext {
                     struct.action = ComponentStruct.REMOVE;
                     struct.clientId = component.getClientId(context);
                     struct.id = component.getId();
-                    getDynamicComponents().put(struct.clientId, component);
-                    getDynamicActions().add(struct);
+                    handleAddRemoveWithAutoPrune(component, struct);
                 }            
             }
         }
@@ -408,8 +408,7 @@ public class StateContext {
                                 struct.parentClientId = component.getParent().getClientId(context);
                                 struct.clientId = component.getClientId(context);
                                 struct.id = component.getId();
-                                getDynamicComponents().put(struct.clientId, component);
-                                getDynamicActions().add(struct);
+                                handleAddRemoveWithAutoPrune(component, struct);
                             }
                         }
                     }
@@ -422,13 +421,88 @@ public class StateContext {
                         struct.parentClientId = component.getParent().getClientId(context);
                         struct.clientId = component.getClientId(context);
                         struct.id = component.getId();
-                        getDynamicComponents().put(struct.clientId, component);
-                        getDynamicActions().add(struct);
+                        handleAddRemoveWithAutoPrune(component, struct);
                     }
                 }
             }
         }
         
+        /**
+         * Methods that takes care of pruning and adding an action to the 
+         * dynamic action list.
+         *
+         * <pre>
+         *  If you add a component and the dynamic action list does not contain
+         *  the component yet then add it to the dynamic action list, regardless
+         *  whether or not if was an ADD or REMOVE.
+         * </pre>
+         * 
+         * <pre>
+         *  Else if you add a component and it is already in the dynamic action 
+         *  list and it is the only action for that client id in the dynamic 
+         *  action list then:
+         *   1) If the previous action was an ADD then
+         *      a) If the current action is a REMOVE then remove the component 
+         *         out of the dynamic action list.
+         *      b) If the current action is an ADD then throw a FacesException.
+         *   2) If the previous action was a REMOVE then
+         *      a) If the current action is an ADD then add it to the dynamic
+         *         action list.
+         *      b) If the current action is a REMOVE then throw a FacesException.
+         * </pre>
+         * 
+         * <pre>
+         *  Else if a REMOVE and ADD where captured before then:
+         *   1) If the current action is REMOVE then remove the last dynamic 
+         *      action out of the dynamic action list.
+         *   2) If the current action is ADD then throw a FacesException.
+         * </pre>
+         * 
+         * @param component the UI component.
+         * @param struct the dynamic action.
+         */
+        private void handleAddRemoveWithAutoPrune(UIComponent component, ComponentStruct struct) {
+
+            List<ComponentStruct> actionList = getDynamicActions();
+            HashMap<String, UIComponent> componentMap = getDynamicComponents();
+            
+            int firstIndex = actionList.indexOf(struct);
+            if (firstIndex == -1) {
+                actionList.add(struct);
+                componentMap.put(struct.clientId, component);
+            } else {
+                int lastIndex = actionList.lastIndexOf(struct);
+                if (lastIndex == firstIndex) {
+                    ComponentStruct previousStruct = actionList.get(firstIndex);
+                    if (ComponentStruct.ADD.equals(previousStruct.action)) {
+                        if (ComponentStruct.ADD.equals(struct.action)) {
+                            throw new FacesException("Cannot add the same component twice: " + struct.clientId);
+                        }
+                        if (ComponentStruct.REMOVE.equals(struct.action)) {
+                            actionList.remove(firstIndex);
+                            componentMap.remove(struct.clientId);
+                        }
+                    }
+                    if (ComponentStruct.REMOVE.equals(previousStruct.action)) {
+                        if (ComponentStruct.ADD.equals(struct.action)) {
+                            actionList.add(struct);
+                            componentMap.put(struct.clientId, component);                            
+                        }
+                        if (ComponentStruct.REMOVE.equals(struct.action)) {
+                            throw new FacesException("Cannot remove the same component twice: " + struct.clientId);
+                        }
+                    }
+                } else {
+                    if (ComponentStruct.ADD.equals(struct.action)) {
+                        throw new FacesException("Cannot add the same component twice: " + struct.clientId);
+                    }
+                    if (ComponentStruct.REMOVE.equals(struct.action)) {
+                        actionList.remove(lastIndex);
+                    }
+                }
+            }
+        }
+                
         private boolean hasTransientAncestor(UIComponent component) {
             UIComponent parent = component.getParent();
             while (parent != null) {
