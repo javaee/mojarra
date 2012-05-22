@@ -24,8 +24,11 @@
                         </goals>
                         <configuration>
                             <target>
-                                <delete dir="${basedir}/src/main/java"/>
-                                <delete dir="${basedir}/src/main/resources"/>
+                                <delete dir="${basedir}/src/main/java/com"/>
+                                <delete dir="${basedir}/src/main/java/javax"/>
+                                <delete dir="${basedir}/src/main/resources/com"/>
+                                <delete dir="${basedir}/src/main/resources/javax"/>
+                                <delete dir="${basedir}/src/main/resources/META-INF"/>
                             </target>
                         </configuration>
                     </execution>
