@@ -24082,12 +24082,10 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
 
       <ul>
 
-      <p>  Render the clientId of the component as
-      the value of the "name" attribute.  Render the current value of
-      the component as the value of the "value" attribute.  If the
+      <p> Render the clientId of the component as the value of the
+      "name" attribute.  Do not render the "value" attribute.  If the
       "styleClass" attribute is specified, render its value as the value
-      of the "class" attribute.
-      </p>
+      of the "class" attribute.  </p>
 
       </ul>
 
