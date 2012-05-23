@@ -108,7 +108,6 @@ public class TextRenderer extends HtmlBasicInputRenderer {
             
             if (component instanceof HtmlInputFile) {
                 writer.writeAttribute("type", "file", null);
-                writer.writeAttribute("value", "", null);
             }
             else {
                 writer.writeAttribute("type", "text", null);
