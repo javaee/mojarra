@@ -115,6 +115,12 @@
                      test-results-dir="${regression.test.results.dir}"
                      regexp="(?s).*org.jboss.jsr299.tck.tests.context.conversation.Cloud.Petelong-running\s+conversation begun.*"/>
 
+      <undeploy.artifact
+              artifact="${basedir}/org.jboss.jsr299.tck.tests.context.conversation.InvalidatingSessionDestroysConversationTest.war"
+              appName="org.jboss.jsr299.tck.tests.context.conversation.InvalidatingSessionDestroysConversationTest" />
+
+
+
     </target>
 
     <target name="app-check">
