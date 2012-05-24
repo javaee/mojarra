@@ -109,7 +109,7 @@ public class StateContext {
     }
 
     /**
-     * @param current FacesContext.
+     * @param ctx FacesContext.
      * @param viewId the view ID to check or null if viewId is unknown.
      * @return <code>true</code> if partial state saving should be used for the
      *  specified view ID, otherwise <code>false</code>
