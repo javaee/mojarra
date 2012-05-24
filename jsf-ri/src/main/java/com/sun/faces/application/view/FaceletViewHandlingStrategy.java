@@ -122,6 +122,7 @@ import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
 import javax.faces.component.visit.VisitResult;
 import static com.sun.faces.RIConstants.DYNAMIC_COMPONENT;
+import javax.faces.application.ProjectStage;
 
 /**
  * This {@link ViewHandlingStrategy} handles Facelets/PDL-based views.
@@ -414,6 +415,10 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                     }
                 }
             } else {
+                if (ctx.isProjectStage(ProjectStage.Development)) {
+                    FormOmittedChecker.check(ctx);
+                }
+                
                 // render the view to the response
                 writer.startDocument();
                 viewToRender.encodeAll(ctx);

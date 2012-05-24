@@ -4,13 +4,13 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.sun.faces.test</groupId>
-        <artifactId>com.sun.faces.test</artifactId>
-        <version>2.1.8-SNAPSHOT</version>
+        <artifactId>pom</artifactId>
+        <version>2.1.9-SNAPSHOT</version>
     </parent>
-    <groupId>com.sun.faces.test</groupId>
-    <artifactId>com.sun.faces.test.webprofile</artifactId>
+    <groupId>com.sun.faces.test.webprofile</groupId>
+    <artifactId>pom</artifactId>
     <packaging>pom</packaging>
-    <name>Mojarra 2.1.x Test - Web-Profile - POM</name>
+    <name>Mojarra ${project.version} - Test - Web-Profile</name>
     <build>
         <plugins>
             <plugin>
@@ -24,6 +24,7 @@
         </plugins>    
     </build>
     <modules>
+        <module>seam</module>
     </modules>
     <properties>
         <webapp.partialStateSaving>true</webapp.partialStateSaving>

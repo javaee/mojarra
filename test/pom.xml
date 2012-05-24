@@ -16,6 +16,7 @@
         <module>unit</module>
         <module>util</module>
         <module>virtual</module>
+        <module>web-profile</module>
     </modules>
     <build>
         <plugins>
