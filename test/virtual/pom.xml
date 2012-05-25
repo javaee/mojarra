@@ -11,4 +11,12 @@
     <artifactId>pom</artifactId>
     <packaging>pom</packaging>
     <name>Mojarra ${project.version} - Test - Virtual Server</name>
+    <dependencies>
+        <dependency>
+            <groupId>com.sun.faces.test</groupId>
+            <artifactId>util</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>    
 </project>

@@ -54,7 +54,7 @@
     <packaging>war</packaging>
     <name>Mojarra ${project.version} - Test - Agnostic - VDL - Facelets - Replace VDL</name>
     <build>
-        <finalName>test-agnostic-vdl-replace-vdl</finalName>
+        <finalName>test-agnostic-vdl-facelets-replace-vdl</finalName>
     </build>
     <properties>
         <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>

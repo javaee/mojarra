@@ -54,7 +54,7 @@
     <packaging>war</packaging>
     <name>Mojarra ${project.version} - Test - Agnostic - VDL - Facelets - Form Omitted Production</name>
     <build>
-        <finalName>test-agnostic-vdl-form-omitted-production</finalName>
+        <finalName>test-agnostic-vdl-facelets-form-omitted-production</finalName>
     </build>
     <properties>
         <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
