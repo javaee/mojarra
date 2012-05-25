@@ -643,6 +643,41 @@
                 </plugins>
             </reporting>
         </profile>
+        <profile>
+            <id>integration-glassfish-deploy</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.7</version>
+                        <executions>
+                            <execution>
+                                <id>deploy-wars</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <echo>=== Deploying ${project.build.finalName} ===</echo>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                            <arg line="deploy --force ${project.build.directory}/${project.build.finalName}.war"/>
+                                        </exec>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
+                                            <arg line="deploy --force ${project.build.directory}/${project.build.finalName}.war"/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>                    
+                </plugins>
+            </build>
+            <properties>
+                <integration.container.home>C:/Glassfish3.1.1</integration.container.home>
+            </properties>
+        </profile>
     </profiles>
     <properties>
         <project.build.finalName>${project.build.finalName}</project.build.finalName>
