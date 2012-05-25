@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.sun.faces.test</groupId>
-        <artifactId>com.sun.faces.test</artifactId>
+        <artifactId>pom</artifactId>
         <version>2.2.0-SNAPSHOT</version>
     </parent>
     <groupId>com.sun.faces.test</groupId>
-    <artifactId>com.sun.faces.test.util</artifactId>
+    <artifactId>util</artifactId>
     <name>Mojarra ${project.version} - Test - Utils</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
