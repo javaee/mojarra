@@ -62,7 +62,7 @@ public class Issue2425IT {
     }
 
     @Test
-    public void testHBodyWithGivenId() throws Exception {
+    public void testUIRepeatAttributes() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/uirepeat.xhtml");
         assertTrue(page.asText().contains("lstr0 lstr1 lstr2 lstr3 lstr4"));
         assertTrue(page.asText().contains("vstr0 vstr1 vstr2 vstr3 vstr4"));
