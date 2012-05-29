@@ -1,14 +1,14 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
  * may not use this file except in compliance with the License.  You can
  * obtain a copy of the License at
- * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+ * https://glassfish.dev.java.net/public/CDDLGPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
  *
@@ -37,52 +37,37 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.systest;
+package com.sun.faces.test.agnostic.renderKit.basic;
 
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
+import org.junit.*;
+import static org.junit.Assert.*;
 
-import javax.faces.component.NamingContainer;
+public class Issue2425IT {
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
+    private String webUrl;
+    private WebClient webClient;
 
-public class Issue2258TestCase extends HtmlUnitFacesTestCase {
-
-    public Issue2258TestCase(String name) {
-        super(name);
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-    /**
-     * Set up instance variables required by this test case.
-     */
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(Issue2258TestCase.class));
-    }
-
-    /**
-     * Tear down instance variables required by this test case.
-     */
-    @Override
+    @After
     public void tearDown() {
-        super.tearDown();
+        webClient.closeAllWindows();
     }
 
-    // ------------------------------------------------------------ Test Methods
-    public void testOffset() throws Exception {
-        HtmlPage page = getPage("/faces/Test.xhtml");
-        assertTrue(page.asText().contains("Literal str0 Literal str1 Literal str2 Literal str3 Literal str4"));
-        assertTrue(page.asText().contains("VE str0 VE str1 VE str2 VE str3 VE str4"));
+    @Test
+    public void testUIRepeatAttributes() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/uirepeat.xhtml");
+        assertTrue(page.asText().contains("lstr0 lstr1 lstr2 lstr3 lstr4"));
+        assertTrue(page.asText().contains("vstr0 vstr1 vstr2 vstr3 vstr4"));
+        assertTrue(page.asText().contains("pstr0 pstr1 pstr2 pstr3 pstr4"));
+        assertTrue(page.asText().contains("mstr0 mstr1 mstr2 mstr3 mstr4 mstr5 mstr6 mstr7 mstr8 mstr9"));
+        assertTrue(page.asText().contains("ostr2 ostr3 ostr4"));
     }
 }

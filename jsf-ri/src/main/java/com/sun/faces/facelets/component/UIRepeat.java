@@ -121,6 +121,7 @@ public class UIRepeat extends UINamingContainer {
     private Integer begin;
     private Integer end;
     private Integer step;
+    private Integer size;
 
     public UIRepeat() {
         this.setRendererType("facelets.ui.Repeat");
@@ -148,13 +149,13 @@ public class UIRepeat extends UINamingContainer {
     }
 
     public void setSize(Integer size) {
-        this.end = size;
+        this.size = size;
     }
 
     public Integer getSize() {
 
-        if (this.end != null) {
-            return end;
+        if (this.size != null) {
+            return size;
         }
         ValueExpression ve = this.getValueExpression("size");
         if (ve != null) {
@@ -513,6 +514,9 @@ public class UIRepeat extends UINamingContainer {
                 int e = ((end != null) ? end : rowCount);
                 int s = ((step != null) ? step : 1);
                 validateIterationControlValues(rowCount, i, e);
+                if (null != size && size > 0) {
+                    e = size - 1;
+                }
 
                 this.setIndex(faces, i);
                 this.updateIterationStatus(faces, new IterationStatus(true, (i + s > e || rowCount == 1), i, begin, end, step));
