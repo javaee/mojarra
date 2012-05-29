@@ -154,9 +154,6 @@ public class UIRepeat extends UINamingContainer {
 
     public Integer getSize() {
 
-//        if (this.end != null) {
-//            return end;
-//        }
         if (this.size != null) {
             return size;
         }
