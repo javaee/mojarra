@@ -60,7 +60,6 @@ public abstract class FaceletCache<V> {
      * @param url URL for the Facelet being retrieved
      * @return cached Facelet instance, If no instance is available,
      * it will be created using the Facelet InstanceFactory and stored in the cache
-     * @see getFaceletInstanceFactory
      */
     public abstract V getFacelet(URL url) throws IOException;
 
