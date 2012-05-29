@@ -116,6 +116,7 @@ import javax.faces.component.FacesComponent;
 import javax.faces.event.PostConstructApplicationEvent;
 import javax.faces.event.SystemEventListener;
 import javax.faces.flow.FlowHandler;
+import javax.faces.flow.FlowHandlerFactory;
 import javax.faces.view.facelets.FaceletCacheFactory;
 import javax.faces.view.facelets.FaceletFactoryWrapper;
 import javax.faces.view.facelets.FaceletsResourceResolver;
@@ -268,8 +269,8 @@ public class ApplicationAssociate {
 
         public void processEvent(SystemEvent event) throws AbortProcessingException {
             ApplicationAssociate.this.initializeFacelets();
-            // PENDING(edburns): Make this come from a factory.
-            ApplicationAssociate.this.flowHandler = new FlowHandlerImpl();
+            FlowHandlerFactory flowHandlerFactory = (FlowHandlerFactory) FactoryFinder.getFactory(FactoryFinder.FLOW_HANDLER_FACTORY);
+            ApplicationAssociate.this.flowHandler = flowHandlerFactory.createFlowHandler(FacesContext.getCurrentInstance());
         }
         
     }

@@ -289,6 +289,7 @@ public final class FactoryFinder {
             EXTERNAL_CONTEXT_FACTORY,
             FACES_CONTEXT_FACTORY,
             FLASH_FACTORY,
+            FLOW_HANDLER_FACTORY,
             PARTIAL_VIEW_CONTEXT_FACTORY,
             LIFECYCLE_FACTORY,
             RENDER_KIT_FACTORY,
@@ -329,6 +330,8 @@ public final class FactoryFinder {
                  javax.faces.view.facelets.FaceletFactory.class);
         factoryClasses.put(TAG_HANDLER_DELEGATE_FACTORY,
                  javax.faces.view.facelets.TagHandlerDelegateFactory.class);
+        factoryClasses.put(FLOW_HANDLER_FACTORY,
+                 javax.faces.flow.FlowHandlerFactory.class);
 
         LOGGER = Logger.getLogger("javax.faces", "javax.faces.LogStrings");
     }

@@ -88,7 +88,7 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
      * <code>/faces-config/factory/flash-factory</code>
      */
     private static final String FLASH_FACTORY = "flash-factory";
-
+    
     /**
      * <code>/faces-config/factory/visit-context-factory</code>
      */
@@ -138,6 +138,11 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
      * <code>/faces-config/factory/external-context-factory</code>
      */
     private static final String EXTERNAL_CONTEXT_FACTORY = "external-context-factory";
+    
+    /**
+     * <code>/faces-config/factory/flow-handler-factory</code>
+     */
+    private static final String FLOW_HANDLER_FACTORY = "flow-handler-factory";
 
     /**
      * <code>Array of Factory names for post-configuration validation.</code>
@@ -146,7 +151,7 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
           FactoryFinder.APPLICATION_FACTORY,
           FactoryFinder.EXCEPTION_HANDLER_FACTORY,
           FactoryFinder.EXTERNAL_CONTEXT_FACTORY,
-          FactoryFinder.FACES_CONTEXT_FACTORY,
+          FactoryFinder.FACES_CONTEXT_FACTORY,          
           FactoryFinder.FLASH_FACTORY,
           FactoryFinder.LIFECYCLE_FACTORY,
           FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY,
@@ -155,7 +160,7 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
           FactoryFinder.VISIT_CONTEXT_FACTORY,
           FactoryFinder.FACELET_CACHE_FACTORY,
           FactoryFinder.TAG_HANDLER_DELEGATE_FACTORY,
-    
+          FactoryFinder.FLOW_HANDLER_FACTORY,
     };
 
     private boolean validateFactories = true;
@@ -289,10 +294,12 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
                 } else if (PARTIAL_VIEW_CONTEXT_FACTORY.equals(n.getLocalName())) {
                     setFactory(FactoryFinder.PARTIAL_VIEW_CONTEXT_FACTORY,
                                getNodeText(n));
+                } else if (FLOW_HANDLER_FACTORY.equals(n.getLocalName())) {
+                    setFactory(FactoryFinder.FLOW_HANDLER_FACTORY,
+                               getNodeText(n));
                 }
             }
         }
-
     }
 
 
