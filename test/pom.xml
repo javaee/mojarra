@@ -33,7 +33,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.2</version>
+                <inherited>true</inherited>
                 <configuration>
+                    <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
@@ -819,17 +821,37 @@
                                 </goals>
                                 <configuration>
                                     <target>
-                                        <echo>=== Deploying ${project.build.finalName} ===</echo>
-                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
-                                            <arg line="deploy --force ${project.build.directory}/${project.build.finalName}.war"/>
-                                        </exec>
-                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
-                                            <arg line="deploy --force ${project.build.directory}/${project.build.finalName}.war"/>
-                                        </exec>
+                                        <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.plugin.classpath"/>
+                                        <available file="${project.build.directory}/${project.build.finalName}.war" property="war.exists"/>
+                                        <if>
+                                            <isset property="war.exists"/>
+                                            <then>
+                                                <echo>=== Deploying ${project.build.finalName} ===</echo>
+                                                <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                                    <arg line="deploy --force ${project.build.directory}/${project.build.finalName}.war"/>
+                                                </exec>
+                                                <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
+                                                    <arg line="deploy --force ${project.build.directory}/${project.build.finalName}.war"/>
+                                                </exec>
+                                            </then>
+                                        </if>
                                     </target>
                                 </configuration>
                             </execution>
                         </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>ant-contrib</groupId>
+                                <artifactId>ant-contrib</artifactId>
+                                <version>1.0b3</version>
+                                <exclusions>
+                                    <exclusion>
+                                        <groupId>ant</groupId>
+                                        <artifactId>ant</artifactId>
+                                    </exclusion>
+                                </exclusions>
+                            </dependency>
+                        </dependencies>
                     </plugin>                    
                 </plugins>
             </build>
