@@ -76,7 +76,7 @@ public final class ExpiringConcurrentCache<K, V> extends ConcurrentCache<K, V> {
     
     /**
      * Public constructor.
-     * @param factory used to create new instances of objects that are not already available
+     * @param f used to create new instances of objects that are not already available
      * @param checker used to check whether an object in the cache has expired
      */
     public ExpiringConcurrentCache(Factory<K, V> f, ExpiryChecker<K, V> checker) {
