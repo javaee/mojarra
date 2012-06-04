@@ -169,9 +169,9 @@
                 <configuration>
                     <comparisonArtifacts>
                         <comparisonArtifact>
-                            <groupId>javax.faces</groupId>
-                            <artifactId>javax.faces-api</artifactId>
-                            <version>2.1</version>
+                            <groupId>org.glassfish</groupId>
+                            <artifactId>javax.faces</artifactId>
+                            <version>2.1.9</version>
                         </comparisonArtifact>
                     </comparisonArtifacts>
                 </configuration>
