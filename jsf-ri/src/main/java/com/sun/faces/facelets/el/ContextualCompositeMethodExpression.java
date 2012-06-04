@@ -60,6 +60,11 @@ package com.sun.faces.facelets.el;
 
 import com.sun.faces.component.CompositeComponentStackManager;
 
+import com.sun.faces.util.FacesLogger;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.el.MethodExpression;
 import javax.el.ValueExpression;
 import javax.el.MethodInfo;
@@ -126,6 +131,9 @@ import javax.faces.view.Location;
  */
 public class ContextualCompositeMethodExpression extends MethodExpression {
 
+    // Log instance for this class
+    private static final Logger LOGGER = FacesLogger.FACELETS_EL.getLogger();
+
     private final MethodExpression delegate;
     private final ValueExpression source;
     private final Location location;
@@ -187,11 +195,19 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
                 // When this happens, we need to evaluate the source expression
                 // to find and invoke the MethodExpression at the next highest
                 // nesting level.  Is there a cleaner way to detect this case?
-                Object fallback = source.getValue(elContext);
-                if (fallback != null && fallback instanceof MethodExpression) {
-                    return ((MethodExpression) fallback).invoke(elContext, objects);
-                } else {
-                    throw ele;
+                try {
+                    Object fallback = source.getValue(elContext);
+                    if (fallback != null && fallback instanceof MethodExpression) {
+                        return ((MethodExpression) fallback).invoke(elContext, objects);
+
+                    }
+
+                } catch(Exception ex) {
+                    if (LOGGER.isLoggable(Level.WARNING)) {
+                        LOGGER.log(Level.WARNING,
+                            "jsf.facelets.el.method.expression.invoke.error:"+ex.toString(),
+                            new Object[] { source.getExpressionString() });
+                    }
                 }
             }
             throw ele;

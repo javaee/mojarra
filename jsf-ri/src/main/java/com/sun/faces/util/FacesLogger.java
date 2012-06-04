@@ -62,6 +62,7 @@ public enum FacesLogger {
     CONTEXT("context"),
     FACELETS_COMPILER("facelets.compiler"),
     FACELETS_COMPONENT("facelets.tag.component"),
+    FACELETS_EL("facelets.el"),
     FACELETS_META("facelets.tag.meta"),
     FACELETS_COMPOSITION("facelets.tag.ui.composition"),
     FACELETS_DECORATE("facelets.tag.ui.decorate"),
