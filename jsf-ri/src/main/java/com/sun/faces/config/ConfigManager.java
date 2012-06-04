@@ -189,7 +189,7 @@ public class ConfigManager {
 
 
     /**
-     * Name of the attribute added by {@link ParseTask} to indiciate a
+     * Name of the attribute added by ParseTask to indicate a
      * {@link Document} instance as a representation of
      * <code>/WEB-INF/faces-config.xml</code>.
      */
