@@ -39,31 +39,51 @@
  */
 package com.sun.faces.test.agnostic.composite;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import org.junit.*;
+import static org.junit.Assert.*;
 
 /**
+ * Integration tests for composite components.
+ *
  * @author Manfred Riem (manfred.riem@oracle.com)
  */
-@ManagedBean(name = "actionBean")
-@RequestScoped
-public class ActionBean {
+public class Issue1806IT {
 
-    public String action() {
-        FacesContext ctx = FacesContext.getCurrentInstance();
-        UIComponent c = UIComponent.getCurrentComponent(ctx);
-        ctx.addMessage(null,
-                new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                "Action invoked: " + c.getClientId(ctx),
-                "Action invoked: " + c.getClientId(ctx)));
-        return "";
+    /**
+     * Stores the web URL.
+     */
+    private String webUrl;
+    /**
+     * Stores the web client.
+     */
+    private WebClient webClient;
 
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-    public String submit() {
-        throw new RuntimeException();
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
+    }
+
+    // This test method ensures a RuntimeException is thrown (since that is what is thrown in the
+    // test bean.
+    @Test
+    public void testException() throws Exception {
+        boolean exceptionThrown = false;
+        try {
+            HtmlPage page = webClient.getPage(webUrl + "faces/action/action3.xhtml");
+            HtmlSubmitInput button = (HtmlSubmitInput)page.getElementById("form:action:form1:submit");
+            button.click();
+        } catch (RuntimeException re) {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
     }
 }
