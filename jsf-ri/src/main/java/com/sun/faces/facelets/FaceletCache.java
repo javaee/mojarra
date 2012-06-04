@@ -75,7 +75,6 @@ public abstract class FaceletCache<V> {
      * @param url URL for the Metadata Facelet being retrieved
      * @return cached Metadata Facelet instance, If no instance is available,
      * it will be created using the Metadata Facelet InstanceFactory and stored in the cache
-     * @see getMetadataFaceletInstanceFactory
      */
     public abstract V getMetadataFacelet(URL url) throws IOException;
 
