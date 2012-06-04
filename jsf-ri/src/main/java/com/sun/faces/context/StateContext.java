@@ -181,10 +181,11 @@ public class StateContext {
 
     /**
      * Toggles the current modification tracking status.
+     * 
      * @param trackMods if <code>true</code> and the listener installed by
-     *  {@link #startTrackViewModifications()} is present, then view modifications
-     *  will be tracked.  If <code>false</code>, then modification events
-     *  will be ignored.
+     * {@link #startTrackViewModifications(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot) 
+     * is present, then view modifications will be tracked.  If 
+     * <code>false</code>, then modification events will be ignored.
      */
     public void setTrackViewModifications(boolean trackMods) {
 
