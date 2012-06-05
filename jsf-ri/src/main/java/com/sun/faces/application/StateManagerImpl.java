@@ -104,7 +104,7 @@ public class StateManagerImpl extends StateManager {
      *
      * @param context the Faces context.
      * @param state the state.
-     * @see {@link StateManager#writeState(javax.faces.context.FacesContext, Object)}
+     * @throws IOException when an I/O error occurs.
      */
     @Override
     public void writeState(FacesContext context, Object state) throws IOException {
