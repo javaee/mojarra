@@ -63,7 +63,6 @@ import com.sun.faces.config.FaceletsConfiguration;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.facelets.tag.TagAttributeImpl;
 import com.sun.faces.facelets.tag.TagAttributesImpl;
-import com.sun.faces.facelets.tag.ui.IncludeHandler;
 import com.sun.faces.util.Util;
 import org.xml.sax.*;
 import org.xml.sax.ext.LexicalHandler;
@@ -159,13 +158,6 @@ public final class SAXCompiler extends Compiler {
 
         public void endElement(String uri, String localName, String qName)
                 throws SAXException {
-            // JAVASERVERFACES-2328, perform an additional check
-            if ("html".equals(localName)) {
-                if (IncludeHandler.isInInclude()) {
-                    return;
-                }
-            }
-            
             this.unit.popTag();
         }
 
@@ -224,47 +216,34 @@ public final class SAXCompiler extends Compiler {
                 throws SAXException {
             // If there is a process-as value for the extension, only allow
             // the PI to be written if its value is xhtml
-            FaceletsConfiguration facelets = this.unit.getWebConfiguration().getFaceletsConfiguration();
             boolean processAsXhtml =
-                    facelets.isProcessCurrentDocumentAsFaceletsXhtml(alias);
+                    this.unit.getWebConfiguration().getFaceletsConfiguration().isProcessCurrentDocumentAsFaceletsXhtml(alias);
 
 
             if (this.inDocument && processAsXhtml) {
-                // JAVASERVERFACES-2328, perform an additional check
-                boolean isInInclude = IncludeHandler.isInInclude();
-                if (!isInInclude) {
-                    boolean isHtml5 = facelets.isOutputHtml5Doctype(alias);
-                    // If we're in an ajax request, this is unnecessary and bugged
-                    // RELEASE_PENDING - this is a hack, and should probably not be here -
-                    // but the alternative is to somehow figure out how *not* to escape the "<!"
-                    // within the cdata of the ajax response.  Putting the PENDING in here to
-                    // remind me to have rlubke take a look.  But I'm stumped.
-                    StringBuffer sb = new StringBuffer(64);
-                    sb.append("<!DOCTYPE ").append(name);
-                    if (!isHtml5 && publicId != null) {
-                        sb.append(" PUBLIC \"").append(publicId).append("\"");
-                        if (systemId != null) {
-                            sb.append(" \"").append(systemId).append("\"");
-                        }
-                    } else if (!isHtml5 && systemId != null) {
-                        sb.append(" SYSTEM \"").append(systemId).append("\"");
+                // If we're in an ajax request, this is unnecessary and bugged
+                // RELEASE_PENDING - this is a hack, and should probably not be here -
+                // but the alternative is to somehow figure out how *not* to escape the "<!"
+                // within the cdata of the ajax response.  Putting the PENDING in here to
+                // remind me to have rlubke take a look.  But I'm stumped.
+                StringBuffer sb = new StringBuffer(64);
+                sb.append("<!DOCTYPE ").append(name);
+                if (publicId != null) {
+                    sb.append(" PUBLIC \"").append(publicId).append("\"");
+                    if (systemId != null) {
+                        sb.append(" \"").append(systemId).append("\"");
                     }
-                    sb.append(">\n");
-                    this.unit.writeInstruction(sb.toString());
+                } else if (systemId != null) {
+                    sb.append(" SYSTEM \"").append(systemId).append("\"");
                 }
+                sb.append(">\n");
+                this.unit.writeInstruction(sb.toString());
             }
             this.inDocument = false;
         }
 
         public void startElement(String uri, String localName, String qName,
                 Attributes attributes) throws SAXException {
-            // JAVASERVERFACES-2328, perform an additional check
-            if ("html".equals(localName)) { 
-                if (IncludeHandler.isInInclude()) {
-                    return;
-                }
-            }
-            
             this.unit.pushTag(new Tag(this.createLocation(), uri, localName,
                     qName, this.createAttributes(attributes)));
         }
