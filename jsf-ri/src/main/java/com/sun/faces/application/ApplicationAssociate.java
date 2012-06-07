@@ -221,8 +221,7 @@ public class ApplicationAssociate {
         FacesContext ctx = FacesContext.getCurrentInstance();
         if (ctx == null) {
             throw new IllegalStateException(
-                 MessageUtils.getExceptionMessageString(
-                      MessageUtils.APPLICATION_ASSOCIATE_CTOR_WRONG_CALLSTACK_ID));
+                    "ApplicationAssociate ctor not called in same callstack as ConfigureListener.contextInitialized()");
         }
         ExternalContext externalContext = ctx.getExternalContext();
         if (null != externalContext.getApplicationMap().get(ASSOCIATE_KEY)) {
