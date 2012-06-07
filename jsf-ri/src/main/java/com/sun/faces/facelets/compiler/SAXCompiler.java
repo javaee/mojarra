@@ -165,12 +165,12 @@ public final class SAXCompiler extends Compiler {
 
         public void endElement(String uri, String localName, String qName)
                 throws SAXException {
-            // JAVASERVERFACES-2328, perform an additional check
-            if ("html".equals(localName)) {
-                if (IncludeHandler.isInInclude()) {
-                    return;
-                }
-            }
+//            // JAVASERVERFACES-2328, perform an additional check
+//            if ("html".equals(localName)) {
+//                if (IncludeHandler.isInInclude()) {
+//                    return;
+//                }
+//            }
             
             this.unit.popTag();
         }
@@ -268,9 +268,9 @@ public final class SAXCompiler extends Compiler {
             boolean isHtml = false;
             if ("html".equals(localName)) { 
                 isHtml = true;
-                if (IncludeHandler.isInInclude()) {
-                    return;
-                }
+//                if (IncludeHandler.isInInclude()) {
+//                    return;
+//                }
             }
             
             this.unit.pushTag(new Tag(this.createLocation(), uri, localName,
