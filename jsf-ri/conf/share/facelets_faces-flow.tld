@@ -53,7 +53,7 @@
 
         <p class="changed_added_2_2">Elements for defining faces
         flows. When these elements are used in VDL views, they must be
-        nested within the <code>&lt;f:metada&gt;</code> section.  The
+        nested within the <code>&lt;f:metadata&gt;</code> section.  The
         meaning of these elements in VDL views is functionally
         equivalent to the same content in the Application Configuration
         Resources.  Throughout the specification of these elements, the
