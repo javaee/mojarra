@@ -1375,6 +1375,9 @@ public class RenderKitUtils {
             return;
         }
 
+        if (builder.length() == 0) {
+            builder.append("jsf.util.chain(this,event,");
+        }
         if (builder.charAt(builder.length() - 1) != ',')
             builder.append(',');
 
@@ -1593,7 +1596,6 @@ public class RenderKitUtils {
 
         // Hard to pre-compute builder initial capacity
         StringBuilder builder = new StringBuilder(100);
-        builder.append("jsf.util.chain(this,event,");
 
         appendScriptToChain(builder, userHandler);
 
@@ -1621,6 +1623,10 @@ public class RenderKitUtils {
 
             // We are now submitting since we've rendered a submit script.
             submitting = true;
+        }
+
+        if (builder.length() == 0) {
+            return null;
         }
 
         builder.append(")");

@@ -82,7 +82,9 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
             throw new IllegalArgumentException(
                 "Instance of javax.faces.component.behavior.AjaxBehavior required: " + behavior);
         }
-
+        if (((AjaxBehavior)behavior).isDisabled()) {
+            return null;
+        }
         return buildAjaxCommand(behaviorContext, (AjaxBehavior)behavior);
     }
 
