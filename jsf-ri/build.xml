@@ -678,7 +678,7 @@
             <else>
                 <replace file="tmp.bnd"
                          token="@osgi.version@"
-                         value="${impl.version.number}-${build.type}"/>
+                         value="${impl.version.number}${build.type}"/>
             </else>
         </if>
         <replace file="tmp.bnd"
