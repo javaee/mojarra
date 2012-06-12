@@ -78,8 +78,8 @@ public class MissingActionListenerMethodTestCase extends HtmlUnitFacesTestCase {
         HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("testForm:testButton");
         try {
             button.click();
-        } catch (Exception e) {
             Assert.fail();
+        } catch (Exception e) {
         }
     }
 }

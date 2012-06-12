@@ -139,51 +139,25 @@ public class MethodExpressionActionListener implements ActionListener,
      */
     public void processAction(ActionEvent actionEvent) throws AbortProcessingException {
 
-        Throwable cause = null;
-        Throwable thrown = null;
         if (actionEvent == null) {
             throw new NullPointerException();
         }
+        
         FacesContext context = FacesContext.getCurrentInstance();
         ELContext elContext = context.getELContext();
+
         try {
-            methodExpressionOneArg.invoke(elContext, new Object[] {actionEvent});
-        } catch (MethodNotFoundException mnfe) {
-          if (null != methodExpressionZeroArg) {
-                try {
-                    // try to invoke a no-arg version
-                    methodExpressionZeroArg.invoke(elContext, new Object[]{});
-                }
-                catch (ELException ee) {
-                    cause = ee.getCause();
-                    thrown = ee;
-                }
-              
-          }
-        } catch (ELException ee) {
-            cause = ee.getCause();
-            thrown = ee;
-        }
-        if (null != thrown) {
-            if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.log(Level.SEVERE,
-                           "severe.event.exception_invoking_processaction",
-                           new Object[]{
-                                 cause == null ? thrown.getClass().getName() : cause.getClass().getName(),
-                                 methodExpressionOneArg.getExpressionString(),
-                                 actionEvent.getComponent().getId()
-                           });
-                StringWriter writer = new StringWriter(1024);
-                if (cause == null) {
-                    thrown.printStackTrace(new PrintWriter(writer));
-                } else {
-                    cause.printStackTrace(new PrintWriter(writer));
-                }
-                LOGGER.severe(writer.toString());
+            try {
+                methodExpressionOneArg.invoke(elContext, new Object[] {actionEvent});
+            } catch (MethodNotFoundException mnfe) {
+                methodExpressionZeroArg.invoke(elContext, new Object[]{});
             }
-            throw cause == null ? new AbortProcessingException(thrown.getMessage(), 
-                    thrown) : new AbortProcessingException(thrown.getMessage(), cause);
-            
+        } catch (ELException ee) {
+            if (ee.getCause() instanceof AbortProcessingException) {
+                throw (AbortProcessingException) ee.getCause();
+            } else {
+                throw (ELException) ee;
+            }
         }
     }
 

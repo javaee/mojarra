@@ -46,14 +46,10 @@ import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ValueChangeEvent;
 import javax.inject.Named;
 
-@Named
+@Named(value = "issue2397Bean")
 @SessionScoped
-public class Bean implements Serializable {
-    
-    public void throwException(ValueChangeEvent vce) throws AbortProcessingException {
-        throw new NullPointerException();
-    }
-    
+public class Issue2397Bean implements Serializable {
+
     private String property;
 
     public String getProperty() {
@@ -63,5 +59,16 @@ public class Bean implements Serializable {
     public void setProperty(String property) {
         this.property = property;
     }
-    
+
+    public void actionWithException() throws AbortProcessingException {
+        throw new IllegalStateException();
+    }
+
+    public void actionWithAbort() throws AbortProcessingException {
+        throw new AbortProcessingException();
+    }
+
+    public void throwException(ValueChangeEvent vce) throws AbortProcessingException {
+        throw new NullPointerException();
+    }
 }

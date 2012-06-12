@@ -37,25 +37,18 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
-package com.sun.faces.test.webprofile.el.basic; 
+package com.sun.faces.test.webprofile.el.basic;
 
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-
 import org.junit.*;
 import static org.junit.Assert.*;
 
 public class Issue2397IT {
 
-    /**
-     * Stores the web URL.
-     */
     private String webUrl;
-    /**
-     * Stores the web client.
-     */
     private WebClient webClient;
 
     @Before
@@ -69,18 +62,30 @@ public class Issue2397IT {
         webClient.closeAllWindows();
     }
 
-
-    // ------------------------------------------------------------ Test Methods
-
     @Test
-    public void testDisabledLink() throws Exception {
-
-        HtmlPage page = webClient.getPage(webUrl+"faces/exceptionDuringValueChangeEL.xhtml");
+    public void testExceptionDuringValueChangeEL() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/exceptionDuringValueChangeEL.xhtml");
         webClient.setThrowExceptionOnFailingStatusCode(false);
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("submit");
         page = button.click();
         assertTrue(page.asText().contains("java.lang.NullPointerException"));
-
     }
 
+    @Test
+    public void testExceptionDuringMethodExpressionEL() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/exceptionDuringMethodExpressionEL.xhtml");
+        webClient.setThrowExceptionOnFailingStatusCode(false);
+        HtmlSubmitInput input = (HtmlSubmitInput) page.getElementById("submit");
+        page = input.click();
+        assertTrue(page.asText().contains("IllegalStateException"));
+    }
+
+    @Test
+    public void testAbortDuringMethodExpressionEL() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/abortDuringMethodExpressionEL.xhtml");
+        webClient.setThrowExceptionOnFailingStatusCode(false);
+        HtmlSubmitInput input = (HtmlSubmitInput) page.getElementById("submit");
+        page = input.click();
+        assertEquals(200, page.getWebResponse().getStatusCode());
+    }
 }

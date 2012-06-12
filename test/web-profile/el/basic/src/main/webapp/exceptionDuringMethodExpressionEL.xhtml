@@ -39,15 +39,13 @@
     holder.
 
 -->
+
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html">
-
     <h:form id="form" prependId="false">
-        <h:inputText value="#{issue2397Bean.property}" id="input"
-                     valueChangeListener="#{issue2397Bean.throwException}" />
-        <h:commandButton id="submit" value="submit" />
+        <h:inputText value="#{issue2397Bean.property}" id="input" />
+        <h:commandButton id="submit" actionListener="#{issue2397Bean.actionWithException}" value="Submit"/>
     </h:form>
-
 </html>
