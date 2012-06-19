@@ -391,13 +391,16 @@ public class HtmlResponseWriter extends ResponseWriter {
     public ResponseWriter cloneWithWriter(Writer writer) {
 
         try {
-            return new HtmlResponseWriter(writer,
+            HtmlResponseWriter responseWriter =  new HtmlResponseWriter(writer,
                                           getContentType(),
                                           getCharacterEncoding(),
                                           isScriptHidingEnabled,
                                           isScriptInAttributeValueEnabled,
                                           disableUnicodeEscaping,
                                           isPartial);
+            responseWriter.dontEscape = this.dontEscape;
+            return responseWriter;
+            
         } catch (FacesException e) {
             // This should never happen
             throw new IllegalStateException();
