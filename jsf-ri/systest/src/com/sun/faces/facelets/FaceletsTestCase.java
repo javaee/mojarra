@@ -392,11 +392,6 @@ public class FaceletsTestCase extends AbstractTestCase {
         assertTrue(-1 != i);
         assertTrue(-1 == xml.indexOf("DOCTYPE", i + "DOCTYPE".length()));
         
-        // assert there is exactly one html
-        i = xml.indexOf("<html");
-        assertTrue(-1 != i);
-        assertTrue(-1 == xml.indexOf("<html", i + "<html".length()));
-                
     }
     
     
