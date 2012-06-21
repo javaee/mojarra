@@ -375,31 +375,26 @@ public class FaceletsTestCase extends HtmlUnitFacesTestCase {
     }
     
     public void testIssue1576() throws Exception {
-//        HtmlPage page = getPage("/faces/facelets/Issue1576UsingPage.xhtml");
-//        
-//        String text = page.asText();
-//        char copyright = 0xa9;
-//        char middot = 0xb7;
-//        char nbsp = 0xa0;
-//
-//        assertTrue(-1 != text.indexOf(copyright));
-//        assertTrue(-1 != text.indexOf(middot));
-//        // nbsp is converted to space on the server
-//        assertTrue(-1 == text.indexOf(nbsp));
-//        
-//        int [] rc = new int[1];
-//
-//        // We have to use Socket to do this because HtmlUnit swallows the doctype.
-//        String xml = this.issueHttpRequest("GET", rc, "/faces/facelets/Issue1576UsingPage.xhtml");
-//        // assert there is exactly one DOCTYPE
-//        int i = xml.indexOf("DOCTYPE");
-//        assertTrue(-1 != i);
-//        assertTrue(-1 == xml.indexOf("DOCTYPE", i + "DOCTYPE".length()));
-//        
-//        // assert there is exactly one html
-//        i = xml.indexOf("<html");
-//        assertTrue(-1 != i);
-//        assertTrue(-1 == xml.indexOf("<html", i + "<html".length()));
+        HtmlPage page = getPage("/faces/facelets/Issue1576UsingPage.xhtml");
+        
+        String text = page.asText();
+        char copyright = 0xa9;
+        char middot = 0xb7;
+        char nbsp = 0xa0;
+
+        assertTrue(-1 != text.indexOf(copyright));
+        assertTrue(-1 != text.indexOf(middot));
+        // nbsp is converted to space on the server
+        assertTrue(-1 == text.indexOf(nbsp));
+        
+        int [] rc = new int[1];
+
+        // We have to use Socket to do this because HtmlUnit swallows the doctype.
+        String xml = this.issueHttpRequest("GET", rc, "/faces/facelets/Issue1576UsingPage.xhtml");
+        // assert there is exactly one DOCTYPE
+        int i = xml.indexOf("DOCTYPE");
+        assertTrue(-1 != i);
+        assertTrue(-1 == xml.indexOf("DOCTYPE", i + "DOCTYPE".length()));
                 
     }
     
