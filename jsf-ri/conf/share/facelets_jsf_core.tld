@@ -414,6 +414,30 @@
         </attribute>
     </tag>
 
+    <tag>
+        <description>
+            <![CDATA[<p class="changed_added_2_2">Add attributes to the 
+            <code>passThroughAttributes Map</code> of the <code>UIComponent</code> 
+            associated with the closest parent <code>UIComponent</code> tag.
+            For each <code>Map.Entry</code> in the <code>Map&lt;String, Object&gt;</code>
+            referenced by the value attribute of this tag, take the following action.
+            Call <code>component.getPassThroughAttributes().put(entry.getKey(), entry.getValue())</code>.</p>
+
+]]>
+        </description>
+        <name>passThroughAttributes</name>
+        <tag-class></tag-class>
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description><![CDATA[<p class="changed_added_2_2">An EL <code>ValueExpression</code> that evaluates to a <code>Map&lt;String, Object&gt;</code>.</p>]]></description>
+            <name>value</name>
+            <deferred-value>
+                <type>java.util.Map</type>
+            </deferred-value>
+        </attribute>
+    </tag>
+
 
     <tag>
         <description>

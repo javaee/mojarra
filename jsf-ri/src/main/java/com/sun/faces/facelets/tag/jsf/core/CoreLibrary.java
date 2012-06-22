@@ -94,6 +94,8 @@ public final class CoreLibrary extends AbstractTagLibrary {
 
         this.addTagHandler("passThroughAttribute", PassThroughAttributeHandler.class);
 
+        this.addTagHandler("passThroughAttributes", PassThroughAttributesHandler.class);
+
         this.addConverter("convertDateTime", DateTimeConverter.CONVERTER_ID, ConvertDateTimeHandler.class);
 
         this.addConverter("convertNumber", NumberConverter.CONVERTER_ID, ConvertNumberHandler.class);

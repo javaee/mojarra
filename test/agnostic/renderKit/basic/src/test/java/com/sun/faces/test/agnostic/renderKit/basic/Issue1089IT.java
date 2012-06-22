@@ -74,4 +74,14 @@ public class Issue1089IT {
         assertTrue(pageMarkup.contains("data-a-b-c-j-k-l-m=\"n\""));
 
     }
+    
+    @Test
+    public void testPassThroughAttributes() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/passThroughAttributes.xhtml");
+        String pageMarkup = page.getBody().asXml();
+        assertTrue(pageMarkup.contains("elname=\"/passThroughAttributes.xhtml\""));
+        assertTrue(pageMarkup.contains("literalname=\"literalValue\""));
+
+    }
+    
 }

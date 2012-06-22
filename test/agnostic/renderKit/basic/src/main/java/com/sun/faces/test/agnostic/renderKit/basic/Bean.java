@@ -38,16 +38,30 @@
  * holder.
  */
 
-package com.sun.faces.test.agnostic.renderkit.basic;
+package com.sun.faces.test.agnostic.renderKit.basic;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
-import javax.faces.FacesException;
+import javax.faces.context.FacesContext;
 
 @ManagedBean
 @RequestScoped
 
 public class Bean {
+
+    public Bean() {
+        passThroughAttrs = new ConcurrentHashMap<String, Object>();
+        passThroughAttrs.put("literalName", "literalValue");
+        passThroughAttrs.put("elName", FacesContext.getCurrentInstance().getApplication().getExpressionFactory().createValueExpression(FacesContext.getCurrentInstance().getELContext(), "#{facesContext.viewRoot.viewId}", String.class));
+    }
+    
+    private Map<String, Object> passThroughAttrs;
+
+    public Map<String, Object> getPassThroughAttrs() {
+        return passThroughAttrs;
+    }
 
     private String nullValue = null;
 
@@ -58,4 +72,6 @@ public class Bean {
     public void setNullValue(String nullValue) {
         this.nullValue = nullValue;
     }
+    
+    
 }

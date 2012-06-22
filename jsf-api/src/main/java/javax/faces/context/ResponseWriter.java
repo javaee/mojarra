@@ -105,7 +105,8 @@ public abstract class ResponseWriter extends Writer {
 
 
     /**
-     * <p>Write the start of an element, up to and including the
+     * <p><span class="changed_modified_2_2">Write</span> the start of an element, 
+       up to and including the
      * element name.  Once this method has been called, clients can
      * call the <code>writeAttribute()</code> or
      * <code>writeURIAttribute()</code> methods to add attributes and
@@ -118,8 +119,14 @@ public abstract class ResponseWriter extends Writer {
      * <code>flush()</code>, or <code>write()</code>.</p>
      *
      * @param name      Name of the element to be started
-     * @param component The {@link UIComponent} (if any) to which
-     *                  this element corresponds
+
+     * @param component The {@link UIComponent} (if any) to which this
+     *                  element corresponds.  <span
+     *                  class="changed_added_2_2"> This component is
+     *                  inspected for its pass through attributes as
+     *                  described in the standard HTML_BASIC {@code
+     *                  RenderKit} specification.</span>
+
      * @throws IOException          if an input/output error occurs
      * @throws NullPointerException if <code>name</code>
      *                              is <code>null</code>
