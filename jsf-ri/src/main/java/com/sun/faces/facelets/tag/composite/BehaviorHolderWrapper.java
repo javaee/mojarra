@@ -120,6 +120,16 @@ public class BehaviorHolderWrapper extends UIComponent implements
         return parent.getAttributes();
     }
 
+    @Override
+    public Map<String, Object> getPassThroughAttributes() {
+        return parent.getPassThroughAttributes();
+    }
+
+    @Override
+    public Map<String, Object> getPassThroughAttributes(boolean create) {
+        return parent.getPassThroughAttributes(create);
+    }
+
     /**
      * @see javax.faces.component.UIComponent#getChildCount()
      */

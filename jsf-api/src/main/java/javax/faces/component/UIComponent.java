@@ -202,16 +202,6 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
     public static final String VIEW_LOCATION_KEY = "javax.faces.component.VIEW_LOCATION_KEY";
     
     /**
-     * <p class="changed_added_2_2">The value of this constant is used as the key
-     * in the component attributes <code>Map</code> for the 
-     * {@code Map<Object,Object>} that renderers must use to render the HTML 5
-     * {@code data-*} attributes.</p>
-     *
-     * @since 2.0
-     */
-    public static final String DATA_ATTRIBUTES_KEY = "javax.faces.component.DATA_ATTRIBUTES_KEY";
-    
-    /**
      * <p class="changed_added_2_0">The value of this constant is used as the key
      * in the <em>composite component BeanDescriptor</em> for a 
      * <code>ValueExpression</code> that evaluates to the 
@@ -264,14 +254,15 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
         bindings,
         rendererType,
         systemEventListeners,
-        behaviors
+        behaviors,
+        passThroughAttributes
     }
 
     /**
      * List of attributes that have been set on the component (this
      * may be from setValueExpression, the attributes map, or setters
      * from the concrete HTML components.  This allows
-     * for faster rendering of attributes as this list is authoratative
+     * for faster rendering of attributes as this list is authoritative
      * on what has been set.
      */
     List<String> attributesThatAreSet;
@@ -320,6 +311,48 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      */
     public abstract Map<String, Object> getAttributes();
     
+    /**
+     * <p class="changed_added_2_2">Return a data structure containing the attributes
+     * of this component that should be rendered directly to the output without
+     * interpretation by the {@link javax.faces.render.Renderer}.  This method must
+     * never return {@code null}.  The returned
+     * {@code Map} implementation must support all of the standard and optional 
+     * {@code Map} methods, plus support the following additional requirements.</p>
+     * 
+     * <div class="changed_added_2_2">
+     * 
+     * <p>The {@code Map} implementation must implement {@code java.io.Serializable}.</p>
+     * 
+     * <p>Any attempt to add a {@code null} key or value must throw a {@code NullPointerException}.</p>
+     * 
+     * <p>Any attempt to add a key that is not a {@code String} must
+     * throw an {@code IllegalArgumentException}.</p>
+     * 
+     * </div>
+     *
+     * @since 2.2
+     */
+
+    public abstract Map<String, Object> getPassThroughAttributes();
+    
+    
+    /**
+     * <p class="changed_added_2_2">This method has the same specification as 
+     * {@link #getPassThroughAttributes() } except that it is allowed to return 
+     * {@code null} if and only if the argument {@code param} is {@code false}
+     * and no pass through attribute data structure exists for this instance.</p>
+
+     * @param create if <code>true</code>, a new {@code Map}
+     * instance will be created if it does not exist already.  If
+     * <code>false</code>, and there is no existing
+     * <code>Map</code> instance, one will not be created and
+     * <code>null</code> will be returned.
+     * @return A {@code Map} instance, or {@code null}.
+     * 
+     * @since 2.2
+     */
+    
+    public abstract Map<String, Object> getPassThroughAttributes(boolean create);
     
     // ---------------------------------------------------------------- Bindings
 

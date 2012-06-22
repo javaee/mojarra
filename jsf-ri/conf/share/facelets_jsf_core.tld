@@ -378,34 +378,26 @@
 
     <tag>
         <description>
-            <![CDATA[<p class="changed_added_2_2">Add an HTML5 data-*
-            attribute to the enclosing component.</p>
+            <![CDATA[<p class="changed_added_2_2">Add an attribute to the 
+            <code>passThroughAttributes Map</code> of the <code>UIComponent</code> 
+            associated with the closest parent <code>UIComponent</code> tag.</p>
 
-            <div class="changed_added_2_2">
-
-            <p>Lazily create a <code>java.util.Map</code> and store it
-            in the component attributes map under the under the key
-            given by the value of the symbolic constant
-            <code>UIComponent.DATA_ATTRIBUTES_KEY</code>.  Add an entry
-            in the map with the name and value taken from the
-            corresponding attributes on this element, preserving the
-            <code>ValueExpression</code> nature of the name and value,
-            if necessary.</p>
-
-            </div>
-
-            ]]>
+]]>
         </description>
-        <name>dataAttribute</name>
+        <name>passThroughAttribute</name>
         <tag-class></tag-class>
         <body-content>empty</body-content>
 
         <attribute>
             <description><![CDATA[<p class="changed_added_2_2">The name
-            of the data-* attribute.  The value of name will be appended
-            to the literal string "data-" (without the quotes) in the
-            rendered markup for the component, as specified in the
-            overview for the HTML_BASIC RenderKit.</p>]]></description>
+            of the pass through attribute.  An attribute with this name,
+            and the corresponding value will appear on the outer most
+            markup element in the rendered markup for the component, as
+            specified in the overview for the HTML_BASIC RenderKit.  If
+            the name of this attribute conflicts with
+            <code>Renderer</code> specific attribute, the value
+            specified here supercedes the one that would otherwise be
+            rendered by the <code>Renderer</code></p>]]></description>
             <name>name</name>
             <deferred-value>
                 <type>java.lang.String</type>
@@ -414,7 +406,7 @@
 
         <attribute>
             <description><![CDATA[<p class="changed_added_2_2">The value
-            of the data-* attribute.  </p>]]></description>
+            of the pass through attribute.  </p>]]></description>
             <name>value</name>
                 <deferred-value>
                     <type>java.lang.Object</type>

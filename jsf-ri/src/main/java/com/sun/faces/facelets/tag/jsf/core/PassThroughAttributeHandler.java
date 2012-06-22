@@ -83,7 +83,7 @@ import java.util.Map;
  *      javax.el.ValueExpression)
  * @author Jacob Hookom
  */
-public final class DataAttributeHandler extends TagHandlerImpl 
+public final class PassThroughAttributeHandler extends TagHandlerImpl 
     implements javax.faces.view.facelets.AttributeHandler {
 
     private final TagAttribute name;
@@ -93,7 +93,7 @@ public final class DataAttributeHandler extends TagHandlerImpl
     /**
      * @param config
      */
-    public DataAttributeHandler(TagConfig config) {
+    public PassThroughAttributeHandler(TagConfig config) {
         super(config);
         this.name = this.getRequiredAttribute("name");
         this.value = this.getRequiredAttribute("value");
@@ -113,11 +113,12 @@ public final class DataAttributeHandler extends TagHandlerImpl
 
         // only process if the parent is new to the tree
         if (parent.getParent() == null) {
-            Map<Object,Object> dataAttrs = Util.getDataAttributes(parent, true);
-            Object attrName, attrValue;
-            attrName = (this.name.isLiteral()) ? this.name.getValue(ctx) : this.name.getValueExpression(ctx, Object.class);
+            Map<String,Object> passThroughAttrs = parent.getPassThroughAttributes(true);
+            String attrName;
+            Object attrValue;
+            attrName = this.name.getValue(ctx);
             attrValue = (this.value.isLiteral()) ? this.value.getValue(ctx) : this.value.getValueExpression(ctx, Object.class);
-            dataAttrs.put(attrName, attrValue);
+            passThroughAttrs.put(attrName, attrValue);
         }
     }
 

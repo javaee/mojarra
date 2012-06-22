@@ -361,35 +361,8 @@ public class RenderKitUtils {
                                                 attributes,
                                                 behaviors);
         }
-        Map<Object,Object> dataAttrs = Util.getDataAttributes(component, false);
-        if (null != dataAttrs) {
-            renderDataAttributes(context, writer, component, dataAttrs);
-        }
     }
     
-    private static void renderDataAttributes(FacesContext context, 
-            ResponseWriter writer, UIComponent component, Map<Object,Object> attrs) throws IOException {
-        Object key,val;
-        String keyStr, valStr;
-        ValueExpression ve;
-        ELContext elc = context.getELContext();
-        for (Map.Entry<Object, Object> cur : attrs.entrySet()) {
-            key = cur.getKey();
-            if (key instanceof ValueExpression) {
-                keyStr = "data-" + ((ValueExpression)key).getValue(elc).toString();
-            } else {
-                keyStr = "data-" + key.toString();
-            }
-            val = cur.getValue();
-            if (val instanceof ValueExpression) {
-                valStr = ((ValueExpression)val).getValue(elc).toString();
-            } else {
-                valStr = val.toString();
-            }
-            writer.writeAttribute(keyStr, valStr, keyStr);
-        }
-    }
-
     // Renders the onchange handler for input components.  Handles
     // chaining together the user-provided onchange handler with
     // any Behavior scripts.

@@ -77,6 +77,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -206,6 +207,57 @@ public abstract class UIComponentBase extends UIComponent {
         return (attributes);
 
     }
+
+    @Override
+    public Map<String, Object> getPassThroughAttributes() {
+        
+        return getPassThroughAttributes(true);
+    }
+    
+    @Override
+    public Map<String, Object> getPassThroughAttributes(boolean create) {
+        Map<String, Object> result = (Map<String, Object>) 
+                this.getStateHelper().get(PropertyKeys.passThroughAttributes);
+        if (null == result) {
+            if (create) {
+                result = new ConcurrentHashMap<String, Object>() {
+
+                    @Override
+                    public Object put(String key, Object value) {
+                        if (null == key || null == value) {
+                            throw new NullPointerException();
+                        }
+                        validateKey(key);
+                        return super.put(key, value);
+                    }
+
+                    @Override
+                    public Object putIfAbsent(String key, Object value) {
+                        if (null == key || null == value) {
+                            throw new NullPointerException();
+                        }
+                        validateKey(key);
+                        return super.putIfAbsent(key, value);
+                    }
+                
+                    private void validateKey(Object key) {
+                        if (!(key instanceof String) || (key instanceof ValueExpression)) {
+                            throw new IllegalArgumentException();
+                        }
+                    }
+                
+                };
+                this.getStateHelper().put(PropertyKeys.passThroughAttributes, 
+                        result);
+            }
+        }
+        
+        return result;
+
+    }
+
+    
+    
 
 
     // ---------------------------------------------------------------- Bindings

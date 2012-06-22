@@ -56,6 +56,9 @@ import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.io.FastStringWriter;
 import com.sun.faces.util.HtmlUtils;
 import com.sun.faces.util.MessageUtils;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import javax.el.ValueExpression;
 import javax.faces.context.ExternalContext;
 
 
@@ -156,6 +159,8 @@ public class HtmlResponseWriter extends ResponseWriter {
     // Secondary cdata buffer, used for writeText
     private final static int cdataTextBufferSize = 128;
     private char[] cdataTextBuffer = new char[cdataTextBufferSize];
+    
+    private Map<String, Object> passthroughAttributes;
 
     // Internal buffer for to store the result of String.getChars() for
     // values passed to the writer as String to reduce the overhead
@@ -615,6 +620,14 @@ public class HtmlResponseWriter extends ResponseWriter {
 
         writer.write('<');
         writer.write(name);
+        
+        if (null != componentForElement) {
+            Map<String, Object> passThroughAttrs = componentForElement.getPassThroughAttributes(false);
+            if (null != passThroughAttrs && !passThroughAttrs.isEmpty()) {
+                considerPassThroughAttributes(passThroughAttrs);
+            }
+        }
+        
         closeStart = true;
 
     }
@@ -713,6 +726,10 @@ public class HtmlResponseWriter extends ResponseWriter {
         }
 
         if (isCdata) {
+            return;
+        }
+        
+        if (containsPassThroughAttribute(name)) {
             return;
         }
 
@@ -979,7 +996,17 @@ public class HtmlResponseWriter extends ResponseWriter {
     public void writeURIAttribute(String name, Object value,
                                   String componentPropertyName)
           throws IOException {
+        if (null != name && containsPassThroughAttribute(name)) {
+            return;
+        }
+        writeURIAttributeIgnoringPassThroughAttributes(name, value, 
+                componentPropertyName);
 
+    }
+    
+    private void writeURIAttributeIgnoringPassThroughAttributes(String name, Object value,
+            String componentPropertyName) throws IOException {
+        
         if (name == null) {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
                   MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "name"));
@@ -1074,9 +1101,44 @@ public class HtmlResponseWriter extends ResponseWriter {
         }
 
     }
+    
+    private void considerPassThroughAttributes(Map<String, Object> toCopy) {
+        assert(null != toCopy && !toCopy.isEmpty());
+        
+        if (null != passthroughAttributes) {
+            throw new IllegalStateException("Error, this method should only be called once per instance.");
+        }
+        passthroughAttributes = new ConcurrentHashMap<String, Object>(toCopy);
+    }
+    
+    private boolean containsPassThroughAttribute(String attrName) {
+        boolean result = false;
+        if (null != passthroughAttributes) {
+            result = passthroughAttributes.containsKey(attrName);
+        }
+        return result;
+    }
 
 
     private void flushAttributes() throws IOException {
+        boolean hasPassthroughAttributes = 
+                null != passthroughAttributes && !passthroughAttributes.isEmpty();
+        
+        if (hasPassthroughAttributes) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            for (Map.Entry<String, Object> entry : passthroughAttributes.entrySet()) {
+                Object valObj = entry.getValue();
+                String val;
+                if (valObj instanceof ValueExpression) {
+                    val = (String) ((ValueExpression) valObj).getValue(context.getELContext());
+                } else {
+                    val = (String) valObj;
+                }
+                writeURIAttributeIgnoringPassThroughAttributes(entry.getKey(), val, entry.getKey());
+                
+            }
+        }
+
 
         // a little complex, but the end result is, potentially, two
         // fewer temp objects created per call.
@@ -1099,7 +1161,12 @@ public class HtmlResponseWriter extends ResponseWriter {
             }
             attributesBuffer.reset();
         }
-
+        
+        if (hasPassthroughAttributes) {
+            passthroughAttributes.clear();
+            passthroughAttributes = null;
+        }
+        
     }
 
 
