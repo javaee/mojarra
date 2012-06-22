@@ -83,7 +83,7 @@ import java.util.ResourceBundle;
 
     /**
      * @see #getMessage(Locale, String, Object...)
-     * @param FacesMessage.Serverity set a custom severity
+     * @param severity set a custom severity
      */
     @protection@ static FacesMessage getMessage(Locale locale,
                                                 String messageId,
@@ -97,7 +97,7 @@ import java.util.ResourceBundle;
 
     /**
      * @see #getMessage(FacesContext, String, Object...)
-     * @param FacesMessage.Serverity set a custom severity
+     * @param severity set a custom severity
      */
     @protection@ static FacesMessage getMessage(FacesContext context,
                                                 String messageId,
