@@ -68,7 +68,7 @@
         <property-name>rootElement</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-            <pass-through>true</pass-through>
+            <ignored-by-renderer>true</ignored-by-renderer>
             <required>true</required>
         </property-extension>
     </property>
@@ -84,7 +84,7 @@
         <property-name>public</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-            <pass-through>true</pass-through>
+            <ignored-by-renderer>true</ignored-by-renderer>
             <required>false</required>
         </property-extension>
     </property>
@@ -100,7 +100,7 @@
         <property-name>system</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-            <pass-through>true</pass-through>
+            <ignored-by-renderer>true</ignored-by-renderer>
             <required>false</required>
         </property-extension>
     </property>

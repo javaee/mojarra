@@ -68,7 +68,7 @@
         <property-name>xmlns</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-            <pass-through>true</pass-through>
+            <ignored-by-renderer>true</ignored-by-renderer>
         </property-extension>
     </property>
 

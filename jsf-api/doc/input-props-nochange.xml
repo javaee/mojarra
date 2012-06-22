@@ -69,7 +69,7 @@
         <property-name>disabled</property-name>
         <property-class>boolean</property-class>
         <property-extension>
-            <pass-through>false</pass-through>
+            <ignored-by-renderer>false</ignored-by-renderer>
         </property-extension>
     </property>
 
@@ -83,7 +83,7 @@
         <property-name>onselect</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-            <pass-through>true</pass-through>
+            <ignored-by-renderer>true</ignored-by-renderer>
             <behavior/>
         </property-extension>
     </property>
@@ -101,7 +101,7 @@
         <property-name>readonly</property-name>
         <property-class>boolean</property-class>
         <property-extension>
-            <pass-through>false</pass-through>
+            <ignored-by-renderer>false</ignored-by-renderer>
         </property-extension>
     </property>
 

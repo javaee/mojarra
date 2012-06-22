@@ -67,7 +67,7 @@
         <property-name>accept</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-            <pass-through>true</pass-through>
+            <ignored-by-renderer>true</ignored-by-renderer>
         </property-extension>
     </property>
 
@@ -95,7 +95,7 @@
         <property-class>java.lang.String</property-class>
         <property-extension>
             <default-value>"application/x-www-form-urlencoded"</default-value>
-            <pass-through>true</pass-through>
+            <ignored-by-renderer>true</ignored-by-renderer>
         </property-extension>
     </property>
 
@@ -108,7 +108,7 @@
         <property-name>onreset</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-            <pass-through>true</pass-through>
+            <ignored-by-renderer>true</ignored-by-renderer>
         </property-extension>
     </property>
 
@@ -121,7 +121,7 @@
         <property-name>onsubmit</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-            <pass-through>true</pass-through>
+            <ignored-by-renderer>true</ignored-by-renderer>
         </property-extension>
     </property>
 
@@ -136,7 +136,7 @@
         <property-name>target</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-            <pass-through>true</pass-through>
+            <ignored-by-renderer>true</ignored-by-renderer>
         </property-extension>
     </property>
 </root>

@@ -412,7 +412,7 @@ public class FacesConfigRuleSet extends RuleSetBase {
             (prefix + "/attribute/attribute-extension/default-value",
              "setDefaultValue", 0);
         digester.addCallMethod
-            (prefix + "/attribute/attribute-extension/pass-through",
+            (prefix + "/attribute/attribute-extension/ignored-by-renderer",
              "setPassThrough", 0, new String[] { "java.lang.Boolean" });
         digester.addCallMethod
             (prefix + "/attribute/attribute-extension/required",
@@ -532,7 +532,7 @@ public class FacesConfigRuleSet extends RuleSetBase {
             (prefix + "/property/property-extension/default-value",
              "setDefaultValue", 0);
         digester.addCallMethod
-            (prefix + "/property/property-extension/pass-through",
+            (prefix + "/property/property-extension/ignored-by-renderer",
              "setPassThrough", 0, new String[] { "java.lang.Boolean" });
         digester.addCallMethod
             (prefix + "/property/property-extension/read-only",

@@ -67,7 +67,7 @@
         <property-name>bgcolor</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-            <pass-through>true</pass-through>
+            <ignored-by-renderer>true</ignored-by-renderer>
         </property-extension>
     </property>
 
@@ -81,7 +81,7 @@
         <property-name>border</property-name>
         <property-class>int</property-class>
         <property-extension>
-            <pass-through>true</pass-through>
+            <ignored-by-renderer>true</ignored-by-renderer>
         </property-extension>
     </property>
 
@@ -95,7 +95,7 @@
         <property-name>cellpadding</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-            <pass-through>true</pass-through>
+            <ignored-by-renderer>true</ignored-by-renderer>
         </property-extension>
     </property>
 
@@ -113,7 +113,7 @@
         <property-name>cellspacing</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-            <pass-through>true</pass-through>
+            <ignored-by-renderer>true</ignored-by-renderer>
         </property-extension>
     </property>
 
@@ -162,7 +162,7 @@
         <property-name>frame</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-            <pass-through>true</pass-through>
+            <ignored-by-renderer>true</ignored-by-renderer>
         </property-extension>
     </property>
 
@@ -229,7 +229,7 @@
         <property-name>rules</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-            <pass-through>true</pass-through>
+            <ignored-by-renderer>true</ignored-by-renderer>
         </property-extension>
     </property>
 
@@ -244,7 +244,7 @@
         <property-name>summary</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-            <pass-through>true</pass-through>
+            <ignored-by-renderer>true</ignored-by-renderer>
         </property-extension>
     </property>
 
@@ -257,7 +257,7 @@
         <property-name>width</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-            <pass-through>true</pass-through>
+            <ignored-by-renderer>true</ignored-by-renderer>
         </property-extension>
     </property>
     <property>

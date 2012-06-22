@@ -66,7 +66,7 @@
         <property-name>cols</property-name>
         <property-class>int</property-class>
         <property-extension>
-            <pass-through>true</pass-through>
+            <ignored-by-renderer>true</ignored-by-renderer>
         </property-extension>
     </property>
 
@@ -79,7 +79,7 @@
         <property-name>rows</property-name>
         <property-class>int</property-class>
         <property-extension>
-            <pass-through>true</pass-through>            
+            <ignored-by-renderer>true</ignored-by-renderer>            
             <value-expression-enabled>true</value-expression-enabled>
         </property-extension>
     </property>

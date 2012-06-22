@@ -447,13 +447,13 @@ public class RenderKitSpecificationGenerator implements Generator {
                 sb.append("<h3>Note:</h3>\n");
                 sb.append("\n");
                 sb.append(
-                    "<p>Attributes with a <code>pass-through</code> value of\n");
+                    "<p>Attributes with a <code class=\"changed_modified_2_2\">ignored-by-renderer</code> value of\n");
                 sb.append(
-                    "<code>true</code> are not interpreted by the renderer and are passed\n");
+                    "<code>true</code> are not interpreted by the renderer and are conveyed\n");
                 sb.append(
-                    "straight through to the rendered markup, without checking for validity.  Attributes with a\n");
+                    "straight to the rendered markup, without checking for validity.  Attributes with a\n");
                 sb.append(
-                    "<code>pass-through</code> value of <code>false</code> are interpreted\n");
+                    "<code class=\"changed_modified_2_2\">ignored-by-renderer</code> value of <code>false</code> are interpreted\n");
                 sb.append(
                     "by the renderer, and may or may not be checked for validity by the renderer.</p>\n");
                 sb.append("\n");
@@ -467,7 +467,7 @@ public class RenderKitSpecificationGenerator implements Generator {
                 sb.append(
                     "<tr BGCOLOR=\"#CCCCFF\" CLASS=\"TableHeadingColor\">\n");
                 sb.append("<th><b>attribute-name</b></th>\n");
-                sb.append("<th><b>pass-through</b></th>\n");
+                sb.append("<th><b class=\"changed_modified_2_2\">ignored-by-renderer</b></th>\n");
                 sb.append("<th><b>attribute-class</b></th>\n");
                 sb.append("<th><b>description</b></th>\n");
                 sb.append("<th><b>default-value</b></th>\n");

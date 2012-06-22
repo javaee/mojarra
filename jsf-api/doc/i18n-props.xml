@@ -67,7 +67,7 @@
         <property-name>dir</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-            <pass-through>true</pass-through>
+            <ignored-by-renderer>true</ignored-by-renderer>
         </property-extension>
     </property>
 
@@ -81,7 +81,7 @@
         <property-name>lang</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-            <pass-through>true</pass-through>
+            <ignored-by-renderer>true</ignored-by-renderer>
         </property-extension>
     </property>
 </root>

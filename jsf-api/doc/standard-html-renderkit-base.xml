@@ -1096,7 +1096,7 @@
             <property-name>onload</property-name>
             <property-class>java.lang.String</property-class>
             <property-extension>
-                <pass-through>true</pass-through>
+                <ignored-by-renderer>true</ignored-by-renderer>
                 <behavior/>
             </property-extension>
         </property>
@@ -1109,7 +1109,7 @@
             <property-name>onunload</property-name>
             <property-class>java.lang.String</property-class>
             <property-extension>
-                <pass-through>true</pass-through>
+                <ignored-by-renderer>true</ignored-by-renderer>
                 <behavior/>
             </property-extension>
         </property>
@@ -1275,8 +1275,8 @@
        Renderers for the <code>javax.faces.Command</code></a> component.
        The generation of JavaScript in any other Renderer in the
        HTML_BASIC renderkit is not permitted.  However, any JavaScript
-       code provided by the user as the value of a passthru attribute,
-       such as "onmouseover", is excluded from this restriction.</p>
+       code provided by the user as the value of an <code>ignored-by-renderer</code> 
+       attribute, such as "onmouseover", is excluded from this restriction.</p>
 
      </ul>
 
@@ -1305,52 +1305,36 @@
      </div>
 
      <div class="changed_added_2_2">
-     <p><a name="general_behavior_encoding">General</a> notes regarding HTML5 support.</p>
-
-     <p>The HTML_BASIC RenderKit supports HTML 5 where it makes sense to
-     do so.</p>
+     <p><a name="general_behavior_encoding">Rendering</a> Pass Through Attributes.</p>
 
      <ul>
 
-       <p>Support for <code>data-*</code> attributes</p>
+       <p>The set of attributes written for a component is determined by
+       its <code>Renderer</code> and collectively are known as
+       <em>renderer specific attributes</em>.  In addition to
+       <em>renderer specific attributes</em>, <em>pass through
+       attributes</em> are also possible.  <em>Pass through
+       attributes</em> are declared as markup attributes on components
+       in the VDL view and are stored in the <code>Map</code> returned
+       by <code>UIComponent.getPassThroughAttributes()</code>.  When
+       rendering a <code>UIComponent</code> instance,
+       <code>Renderer</code>s call
+       <code>ResponseWriter.startElement()</code>, passing in the
+       <code>UIComponent</code> instance.  The
+       <code>ResponseWriter</code> must ensure that any <em>pass through
+       attributes</em> are rendered on the outer-most markup element for
+       the component.  If there is a <em>pass through attribute</em>
+       with the same name as a <em>renderer specific attribute</em>, the
+       <em>pass through attribute</em> takes precedence.  <em>Pass
+       through attributes</em> are rendered as if they were passed to
+       <code>ResponseWriter.writeURIAttribute()</code>.</p>
 
-       <p>If the component to be encoded has an entry in its component
-       attributes map under the key given by the value of the symbolic
-       constant <code>UIComponent.DATA_ATTRIBUTES_KEY</code>, this entry
-       must be a <code>java.util.Map</code>.  If an entry is
-       present under that key, but its type is not as expected, a
-       <code>FacesException</code> must be thrown.  Otherwise, determine
-       the correct markup element to host the data- attribute(s).  Let
-       this element be <em>dataHostingElement</em>.  This markup element
-       will always be the outer-most markup element corresponding
-       precisely to this component instance. If necessary, a
-       <code>&lt;div&gt;</code> or a <code>&lt;span&gt;</code> must be
-       rendered to host the data- attribute(s), depending on whether or
-       not the component is, itself, block or inline in nature.  For
-       each entry in the map, do the following.</p>
-
-       <p>If the key is a <code>ValueExpression</code> get its value and
-       append it to the literal string "<code>data-</code>", without the
-       quotes.  Otherwise get the string value of the key and append it
-       to the literal string "<code>data-</code>" without the quotes.
-       Let the result be <em>dataAttributeName</em>.</p>
-
-       <p>If the value is a <code>ValueExpression</code> get its value.
-       Otherwise get the string value of the entry's value.  Let the
-       result be <em>dataAttributeValue</em>.</p>
-
-       <p>Render an attribute on <em>dataHostingElement</em> using
-       <code>ResponseWriter.writeAttribute()</code>.  The name of the
-       attribute is <em>dataAttributeName</em> and the value of the
-       attribute is <em>dataAttributeValue</em>.  Also pass
-       <em>dataAttributeName</em> as the last argument to
-       <code>ResponseWriter.writeAttribute()</code>.</p>
 
      </ul>
      </div>
 
 
-    </ul>]]>
+</ul>]]>
 
         </description>
 
@@ -1505,11 +1489,12 @@
       <ul>
 
       <p>If the value of the <code>disabled</code> attribute is
-      <code>true</code>, render a span element.  Render all the passthru
-      attributes and the <code>target</code> attribute as pass-through
-      attributes on the span, even though the <code>target</code>
-      attribute will have no effect on a span.  Render the current value
-      of the component as the content of the span.  Return.</p>
+      <code>true</code>, render a span element.  Render all the
+      ignored-by-renderer attributes and the <code>target</code>
+      attribute as ignored-by-renderer attributes on the span, even
+      though the <code>target</code> attribute will have no effect on a
+      span.  Render the current value of the component as the content of
+      the span.  Return.</p>
 
       <p>If the <code>disabled</code> attribute is not present, or its
       value is <code>false</code>, render an HTML <code>a</code>
@@ -1560,7 +1545,7 @@
       render the HTML "a" anchor element or its "href" attribute.
       Instead, render a "span" element.  If the "styleClass" attribute
       is specified, render its value as the value of the "class"
-      attribute on the "span".  Render any pass-through attributes on
+      attribute on the "span".  Render any ignored-by-renderer attributes on
       the "span".  The content of the span element comes from the value
       of the component or its children as specified above.</p>
 
@@ -1611,7 +1596,7 @@
       the javadoc for <code>UIData</code> to supplement this
       specification.  If the "styleClass" attribute is specified, render
       its value as the value of the "class" attribute on the "table"
-      element.  Any pass-through attributes are also rendered on the
+      element.  Any ignored-by-renderer attributes are also rendered on the
       "table" element.  </p>
 
      <p>Column Groups</p>
@@ -2315,7 +2300,7 @@
       <code>class</code> attribute.  Output the <code>style</code>
       attribute as the value of the <code>style</code> attribute.
       Output the <code>dir</code> and <code>lang</code> attributes as
-      pass through attributes.  Accrue a list of the values of all child
+      ignored-by-renderer attributes.  Accrue a list of the values of all child
       <code>UIParameter</code> components of this component.  If there
       are one or more accumulated parameter values, convert the list of
       parameter values to an <code>Object</code> array, call
@@ -2377,7 +2362,7 @@
             <code>disable</code> property is <code>false</code></span>
             are appended to the String to be output as the value of the
             "href" attribute as query parameters before rendering.  The
-            entire "href" string must be passed through a call to the
+            entire "href" string must be processed by a call to the
             <code>encodeResourceURL()</code> method of the
             <code>ExternalContext</code>.  The name of the UIParameter
             goes on the left hand side, and the value of the UIParameter
@@ -2398,7 +2383,7 @@
             element.  Instead, render a "span" element.  If the
             "styleClass" attribute is specified, render its value as the
             value of the "class" attribute on the "span".  Render any
-            pass-through attributes on the "span".
+            ignored-by-renderer attributes on the "span".
 
             </p>]]>
             </description>
@@ -2439,7 +2424,7 @@ when clicked</a>.</span></p>
 <span class="changed_modified_2_0_rev_a">whose <code>disable</code>
 property is <code>false</code></span> are appended to the String to be
 output as the value of the "href" attribute as query parameters before
-rendering.  The entire "href" string must be passed through a call to
+rendering.  The entire "href" string must be processed by a call to
 the <code>encodeResourceURL()</code> method of the
 <code>ExternalContext</code>.  The name of the <code>UIParameter</code>
 goes on the left hand side, and the value of the
@@ -2460,7 +2445,7 @@ Encoding</a>" regarding the "id" attribute for UIInput components.  If
 the "disabled" attribute is specified, do not render the HTML "a" anchor
 element or the "href" element.  Instead, render a "span" element.  If
 the "styleClass" attribute is specified, render its value as the value
-of the "class" attribute on the "span".  Render any pass-through
+of the "class" attribute on the "span".  Render any ignored-by-renderer
 attributes on the "span".</p>
 
 ]]>
@@ -2574,7 +2559,7 @@ this application, and passing the result through the
 
   </ul>
 
-  <p>The entire target URL string must be passed through a call to
+  <p>The entire target URL string must be processed by a call to
   the <code>encodeResourceURL()</code> method of the
   <code>ExternalContext</code>.  The name of the
   <code>UIParameter</code> goes on the left hand side, and the value of
@@ -2629,7 +2614,7 @@ this application, and passing the result through the
       "styleClass", "style", "dir" or "lang" attributes are present,
       render a "span" element.  If the "styleClass" attribute is
       present, render its value as the value of the "class" attribute.
-      If the "style" attribute is present, pass it thru.  If the
+      If the "style" attribute is present, convey it unmodified.  If the
       "escape" attribute is not present, or it is present and its value
       is "true" all angle brackets should be converted to the ampersand
       xx semicolon syntax when rendering the value of the "value"
@@ -2667,7 +2652,7 @@ this application, and passing the result through the
       of the "class" attribute on the "caption" element.  If the "captionStyle" attribute
       is specified, render its value as the value of the "style" attribute
       on the "caption" element.  If the "styleClass" attribute is specified, render 
-      its value as the value of the "class" attribute.  Render the pass-through 
+      its value as the value of the "class" attribute.  Render the ignored-by-renderer 
       attributes in the table below.  Render the "header" facet, if present, inside of
       "thead", "tr", and "th" elements, nested in that order.  If the
       "headerClass" attribute is specifed, render its value as the value
@@ -2810,7 +2795,7 @@ this application, and passing the result through the
       <p>Render a "table" element.  If the "styleClass" is specified,
       render the value of the "styleClass" attribute as the value of the
       "class" attribute on the "table" element. If the "style", or
-      "border" attributes are specified, pass them thru <span
+      "border" attributes are specified, convey them <span
       class="changed_added_2_0">and render their values as the "style"
       and "border" attributes on the "table", respectively.</span> If
       the "layout" attribute is specified, and its value is
@@ -3243,7 +3228,7 @@ this application, and passing the result through the
       <p>Render a "table" element. If the "styleClass" is specified,
       render the value of the "styleClass" attribute as the value of the
       "class" attribute on the "table" element. If the "style", "border"
-      attributes are specified, pass them thru <span
+      attributes are specified, convey them <span
       class="changed_added_2_0">and render their values as the "style"
       and "border" attributes on the "table", respectively.</span>. If
       the "layout" attribute is specified, and its value is
@@ -3759,7 +3744,7 @@ changed_modified_2_1 changed_modified_2_2">Render</span> the markup for a
       <ul>
 
 <p>Render the starting <code>&lt;head&gt;</code> element tag.  Any
-attributes declared on the element must be passed through unmodified to
+attributes declared on the element must be conveyed unmodified to
 the rendered output.  <span class="changed_modified_2_0_rev_a">At some
 point before rendering the closing <code>&lt;/head&gt;</code> element
 tag</span>, render any resources that have been targeted for this "head"
@@ -3772,7 +3757,7 @@ element:
       <li>Iterate over the returned <code>List</code> of <code>UIComponent</code> instances
       and call <code>encodeAll</code> on each <code>UIComponent</code> instance. 
 
-<p>Any attributes declared on the element must be passed through
+<p>Any attributes declared on the element must be conveyed
 unmodified to the rendered output.</p>
 
       </ul>
@@ -3846,7 +3831,7 @@ unmodified to the rendered output.</p>
       and call <code>encodeAll</code> on each <code>UIComponent</code> instance.
       </ul>
 
-<p>Any attributes declared on the element must be passed through
+<p>Any attributes declared on the element must be conveyed
 unmodified to the rendered output.</p>
 
 </div>]]></description>
@@ -3872,7 +3857,7 @@ unmodified to the rendered output.</p>
                <attribute-name>onload</attribute-name>
                <attribute-class>java.lang.String</attribute-class>
                <attribute-extension>
-                   <pass-through>true</pass-through>
+                   <ignored-by-renderer>true</ignored-by-renderer>
                    <behavior/>
                </attribute-extension>
             </attribute> 
@@ -3887,7 +3872,7 @@ unmodified to the rendered output.</p>
                <attribute-name>onunload</attribute-name>
                <attribute-class>java.lang.String</attribute-class>
                <attribute-extension>
-                   <pass-through>true</pass-through>
+                   <ignored-by-renderer>true</ignored-by-renderer>
                    <behavior/>
                </attribute-extension>
             </attribute> 
