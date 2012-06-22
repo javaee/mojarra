@@ -73,7 +73,8 @@ public abstract class ConcurrentCache<K, V> {
     
     /**
      * Constructs this cache using the specified <code>Factory</code>.
-     * @param factory
+     * 
+     * @param f
      */
     public ConcurrentCache(Factory<K,V> f) {
         _f = f;
