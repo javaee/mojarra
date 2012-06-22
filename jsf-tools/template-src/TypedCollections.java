@@ -137,8 +137,8 @@ import java.util.Set;
      *                the map to cast
      * @param keyType
      *                the class of the map's key type.
-     * @param keyType
-     *                the class of the map's key type.
+     * @param valueType
+     *                the class of the map's value type.
      * @return the dynamically-type checked map.
      * @throws java.lang.ClassCastException
      */
