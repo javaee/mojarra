@@ -70,7 +70,7 @@ import java.util.ResourceBundle;
 
     /**
      * @see #getMessage(String, Object...)
-     * @param FacesMessage.Serverity set a custom severity
+     * @param severity set a custom severity
      */
     @protection@ static FacesMessage getMessage(String messageId,
                                                 FacesMessage.Severity severity,
