@@ -55,9 +55,19 @@ public class Bean {
         passThroughAttrs = new ConcurrentHashMap<String, Object>();
         passThroughAttrs.put("literalName", "literalValue");
         passThroughAttrs.put("elName", FacesContext.getCurrentInstance().getApplication().getExpressionFactory().createValueExpression(FacesContext.getCurrentInstance().getELContext(), "#{facesContext.viewRoot.viewId}", String.class));
+        
+        rendererSpecificAttrs = new ConcurrentHashMap<String, Object>();
+        rendererSpecificAttrs.put("styleClass", "a b c");
+        rendererSpecificAttrs.put("size", FacesContext.getCurrentInstance().getApplication().getExpressionFactory().createValueExpression(FacesContext.getCurrentInstance().getELContext(), "#{bean.one}", Integer.class));
+        
     }
     
     private Map<String, Object> passThroughAttrs;
+    private Map<String, Object> rendererSpecificAttrs;
+
+    public Map<String, Object> getRendererSpecificAttrs() {
+        return rendererSpecificAttrs;
+    }
 
     public Map<String, Object> getPassThroughAttrs() {
         return passThroughAttrs;
@@ -72,6 +82,8 @@ public class Bean {
     public void setNullValue(String nullValue) {
         this.nullValue = nullValue;
     }
+    
+    public Integer getOne() { return (Integer) 1; }
     
     
 }

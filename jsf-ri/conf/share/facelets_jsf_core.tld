@@ -377,6 +377,36 @@
     </tag>
 
     <tag>
+        <description><![CDATA[<p class="changed_added_2_2">
+            Add attributes to the UIComponent associated with the closest
+            parent UIComponent custom action.  
+            For each <code>Map.Entry</code> in the <code>Map&lt;String, Object&gt;</code>
+            referenced by the value attribute of this tag, take the following action.
+            If <code>parent.getAttributes().containsKey(entry.getKey())</code> returns 
+            <code>true</code>, take no action for this entry.  Otherwise, if 
+            <code>entry.getValue()</code> is a <code>ValueExpression</code> call 
+            <code>parent.setValueExpression(entry.getKey(), entry.getValue())</code>.
+            Otherwise, call <code>parent.getAttributes.put(entry.getKey(), entry.getValue()).</code>
+            </p>
+
+]]>
+        </description>
+        <name>attributes</name>
+        <tag-class></tag-class>
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description><![CDATA[<p class="changed_added_2_2">An EL <code>ValueExpression</code> that evaluates to a <code>Map&lt;String, Object&gt;</code>.</p>]]></description>
+            <name>value</name>
+            <deferred-value>
+                <type>java.util.Map</type>
+            </deferred-value>
+        </attribute>
+    </tag>
+
+
+
+    <tag>
         <description>
             <![CDATA[<p class="changed_added_2_2">Add an attribute to the 
             <code>passThroughAttributes Map</code> of the <code>UIComponent</code> 

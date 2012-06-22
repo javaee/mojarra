@@ -84,4 +84,13 @@ public class Issue1089IT {
 
     }
     
+    @Test
+    public void testAttributes() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/attributes.xhtml");
+        String pageMarkup = page.getBody().asXml();
+        assertTrue(pageMarkup.contains("class=\"a b c\""));
+        assertTrue(pageMarkup.contains("size=\"1\""));
+        
+    }
+    
 }

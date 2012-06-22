@@ -92,6 +92,8 @@ public final class CoreLibrary extends AbstractTagLibrary {
 
         this.addTagHandler("attribute", AttributeHandler.class);
 
+        this.addTagHandler("attributes", AttributesHandler.class);
+
         this.addTagHandler("passThroughAttribute", PassThroughAttributeHandler.class);
 
         this.addTagHandler("passThroughAttributes", PassThroughAttributesHandler.class);
