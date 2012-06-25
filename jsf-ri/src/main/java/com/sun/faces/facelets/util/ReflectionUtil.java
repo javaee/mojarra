@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -117,8 +117,9 @@ public class ReflectionUtil {
 
     /**
      * Converts an array of Class names to Class types
-     * @param s
-     * @return
+     * 
+     * @param s the array of class names.
+     * @return the array of classes.
      * @throws ClassNotFoundException
      */
     public static Class[] toTypeArray(String[] s) throws ClassNotFoundException {
@@ -133,8 +134,9 @@ public class ReflectionUtil {
 
     /**
      * Converts an array of Class types to Class names
-     * @param c
-     * @return
+     * 
+     * @param c the array of classes.
+     * @return the array of class names.
      */
     public static String[] toTypeNameArray(Class[] c) {
         if (c == null)
