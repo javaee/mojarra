@@ -117,8 +117,9 @@ public class ReflectionUtil {
 
     /**
      * Converts an array of Class names to Class types
-     * @param s
-     * @return
+     * 
+     * @param s the array of class names.
+     * @return the array of classes.
      * @throws ClassNotFoundException
      */
     public static Class[] toTypeArray(String[] s) throws ClassNotFoundException {
@@ -133,8 +134,9 @@ public class ReflectionUtil {
 
     /**
      * Converts an array of Class types to Class names
-     * @param c
-     * @return
+     * 
+     * @param c the array of classes.
+     * @return the array of class names.
      */
     public static String[] toTypeNameArray(Class[] c) {
         if (c == null)
