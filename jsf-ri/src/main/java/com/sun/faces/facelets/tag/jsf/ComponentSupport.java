@@ -61,22 +61,11 @@ package com.sun.faces.facelets.tag.jsf;
 import com.sun.faces.RIConstants;
 import com.sun.faces.context.StateContext;
 import com.sun.faces.facelets.tag.jsf.core.FacetHandler;
-import com.sun.faces.util.MessageUtils;
 
 import javax.faces.FacesException;
-import javax.faces.application.FacesMessage;
-import javax.faces.application.ProjectStage;
-import javax.faces.component.UIData;
-import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIForm;
-import javax.faces.component.UINamingContainer;
 import javax.faces.component.UIPanel;
-import javax.faces.component.UIViewParameter;
 import javax.faces.component.UIViewRoot;
-import javax.faces.component.ActionSource;
-import javax.faces.component.ActionSource2;
-import javax.faces.component.EditableValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagAttribute;
@@ -91,6 +80,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import javax.faces.view.facelets.TagAttributes;
 
 /**
  * 
@@ -478,6 +468,23 @@ public final class ComponentSupport {
         }
         return false;
 
+    }
+    
+    public static void copyPassthroughAttributes(FaceletContext ctx, UIComponent c, Tag t) {
+        
+        if (null == c || null == t) {
+            return;
+        }
+        
+        TagAttribute[] passthroughAttrs = t.getAttributes().getAll(PassThroughAttributeLibrary.Namespace);
+        if (null != passthroughAttrs && 0 < passthroughAttrs.length) {
+            Map<String, Object> componentPassthroughAttrs = c.getPassThroughAttributes(true);
+            Object attrValue = null;
+            for (TagAttribute cur : passthroughAttrs) {
+                attrValue = (cur.isLiteral()) ? cur.getValue(ctx) : cur.getValueExpression(ctx, Object.class);
+                componentPassthroughAttrs.put(cur.getLocalName(), attrValue);
+            }
+        }
     }
 
     /**

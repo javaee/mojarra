@@ -81,6 +81,8 @@ public class Issue1089IT {
         String pageMarkup = page.getBody().asXml();
         assertTrue(pageMarkup.contains("elname=\"/passThroughAttributes.xhtml\""));
         assertTrue(pageMarkup.contains("literalname=\"literalValue\""));
+        assertTrue(!pageMarkup.contains("xmlns:p=\"http://java.sun.com/jsf/passthrough\""));
+        assertTrue(pageMarkup.contains("foo=\"bar\""));
 
     }
     

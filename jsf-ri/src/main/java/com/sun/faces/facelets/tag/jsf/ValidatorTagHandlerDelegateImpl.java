@@ -81,6 +81,7 @@ public class ValidatorTagHandlerDelegateImpl extends TagHandlerDelegate implemen
     public void apply(FaceletContext ctx, UIComponent parent)
     throws IOException {
 
+        ComponentSupport.copyPassthroughAttributes(ctx, parent, owner.getTag());
         if (wrapping) {
             applyWrapping(ctx, parent);
         } else {

@@ -210,6 +210,7 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         // this allows children to determine if it's
         // been part of the tree or not yet
         addComponentToView(ctx, parent, c, componentFound);
+        ComponentSupport.copyPassthroughAttributes(ctx, c, owner.getTag());
         adjustIndexOfDynamicChildren(context, c);
         popComponentFromEL(ctx, c, ccStackManager, compcompPushed);
     }

@@ -81,6 +81,7 @@ import com.sun.faces.el.ELUtils;
 import com.sun.faces.el.FacesCompositeELResolver;
 import com.sun.faces.el.VariableResolverChainWrapper;
 import com.sun.faces.facelets.PrivateApiFaceletCacheAdapter;
+import com.sun.faces.facelets.tag.jsf.PassThroughAttributeLibrary;
 import com.sun.faces.flow.FlowHandlerImpl;
 import com.sun.faces.lifecycle.ELResolverInitPhaseListener;
 
@@ -852,6 +853,7 @@ public class ApplicationAssociate {
         c.addTagLibrary(new HtmlLibrary());
         c.addTagLibrary(new UILibrary());
         c.addTagLibrary(new JstlCoreLibrary());
+        c.addTagLibrary(new PassThroughAttributeLibrary());
         c.addTagLibrary(new FunctionLibrary(JstlFunction.class, "http://java.sun.com/jsp/jstl/functions"));
         if (isDevModeEnabled()) {
             c.addTagLibrary(new FunctionLibrary(DevTools.class, "http://java.sun.com/mojarra/private/functions"));

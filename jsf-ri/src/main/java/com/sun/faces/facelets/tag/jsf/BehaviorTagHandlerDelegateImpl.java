@@ -77,6 +77,8 @@ class BehaviorTagHandlerDelegateImpl extends TagHandlerDelegate implements Attac
         if (parent == null || !(parent.getParent() == null)) {
             return;
         }
+        ComponentSupport.copyPassthroughAttributes(ctx, parent, owner.getTag());
+        
         if (UIComponent.isCompositeComponent(parent)) {
             // Check composite component event name:
             BeanInfo componentBeanInfo = (BeanInfo) parent.getAttributes().get(
