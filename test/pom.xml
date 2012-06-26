@@ -367,6 +367,15 @@
                                             <outputDirectory>${integration.container.extractDir}/apache-tomcat-${tomcat.version}/apache-tomcat-${tomcat.version}/lib</outputDirectory>
                                             <destFileName>jstl-impl.jar</destFileName>
                                         </artifactItem>
+                                        <artifactItem>
+                                            <groupId>org.codehaus.jettison</groupId>
+                                            <artifactId>jettison</artifactId>
+                                            <version>1.1</version>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>                                     
+                                            <outputDirectory>${integration.container.extractDir}/apache-tomcat-${tomcat.version}/apache-tomcat-${tomcat.version}/lib</outputDirectory>
+                                            <destFileName>jettison.jar</destFileName>
+                                        </artifactItem>
                                     </artifactItems>
                                 </configuration>
                             </execution>
