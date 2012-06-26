@@ -174,7 +174,8 @@
         <dependency groupId="javax.inject" artifactId="javax.inject" version="1" scope="provided"/>
         <dependency groupId="javax.enterprise" artifactId="cdi-api" version="1.0" scope="provided"/>
         <dependency groupId="javax.servlet.jsp.jstl" artifactId="jstl-api" version="1.2" scope="provided" />
-        <dependency groupId="com.sun.el" artifactId="el-ri" version="1.0" scope="provided"/>
+        <dependency groupId="com.sun.el" artifactId="el-ri" version="1.0" scope="provided" />
+        <dependency groupId="${jettison.groupId}" artifactId="${jettison.artifactId}" version="${jettison.version}" scope="provided"/>
         <localRepository refid="local.repository"/>
         <remoteRepository refid="j.n.repo"/>
     </artifact:dependencies>

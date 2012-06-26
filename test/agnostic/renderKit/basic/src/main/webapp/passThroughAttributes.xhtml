@@ -64,6 +64,28 @@
     
     </p>
     
+    
+    <p>
+        
+    <h:outputText value="json from literal">
+        
+        <f:passThroughAttributes value="#{p:jsonToMap('{ a : { b : { c : { d : e, f : g }, h : i, j : { k : { l : { m : n } } } } } }')}" />
+        
+    </h:outputText>
+        
+    </p>
+
+    <p>
+        
+    <h:outputText value="json from EL">
+        
+        <f:passThroughAttributes value="#{p:jsonToMap(bean.json)}" />
+        
+    </h:outputText>
+        
+    </p>
+    
+    
 </h:form>
     
 </html>

@@ -84,6 +84,11 @@ public class Issue1089IT {
         assertTrue(!pageMarkup.contains("xmlns:p=\"http://java.sun.com/jsf/passthrough\""));
         assertTrue(pageMarkup.contains("foo=\"bar\""));
 
+        assertTrue(pageMarkup.contains("outer-inner=\"innerValue\""));
+        assertTrue(pageMarkup.contains("a-b-c-d=\"e\""));
+        assertTrue(pageMarkup.contains("a-b-c-f=\"g\""));
+        assertTrue(pageMarkup.contains("a-b-c-h=\"i\""));
+        assertTrue(pageMarkup.contains("a-b-c-j-k-l-m=\"n\""));
     }
     
     @Test

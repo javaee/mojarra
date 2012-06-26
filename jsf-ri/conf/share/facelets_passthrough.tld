@@ -75,11 +75,20 @@
     <short-name>p</short-name>
     <uri>http://java.sun.com/jsf/passthrough</uri>
 
- <tag>
-     <description>_</description>
-     <name>_</name>
-     <body-content>empty</body-content>
- </tag>
-
+  <function>
+    <description>
+      <![CDATA[<p class="changed_added_2_2">Convert JSON into the 
+      <code>Map&lt;String, Object&gt;</code> expected by 
+      <code>UIComponent.getPassThroughAttributes()</code>.]]>
+    </description>
+    <name>jsonToMap</name>
+    <function-class>org.apache.taglibs.standard.functions.Functions</function-class>
+    <function-signature>Map&lt;String, Object&gt; jsonToMap(java.lang.String)</function-signature>
+    <example>
+      &lt;h:outputText value="#{user.value}"&gt;
+        &lt;f:passthroughAttributes value="#{p:jsonToMap(#{EvaluatesToJson})}" /&gt;
+      &lt;/h:outputText&gt;
+    </example>
+  </function>
 
 </taglib>
