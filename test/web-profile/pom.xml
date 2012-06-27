@@ -38,5 +38,6 @@
     </modules>
     <properties>
         <webapp.partialStateSaving>true</webapp.partialStateSaving>
+        <webapp.stateSavingMethod>client</webapp.stateSavingMethod>
     </properties>
 </project>
