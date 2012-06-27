@@ -30,4 +30,8 @@
         <module>stateSaving</module>
         <module>vdl</module>
     </modules>
+    <properties>
+        <webapp.partialStateSaving>true</webapp.partialStateSaving>
+        <webapp.stateSavingMethod>server</webapp.stateSavingMethod>
+    </properties>    
 </project>
