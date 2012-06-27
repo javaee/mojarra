@@ -52,6 +52,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -60,7 +61,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.FacesException;
 import javax.faces.application.ProjectStage;
+import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIForm;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
@@ -71,8 +74,6 @@ import javax.faces.render.ResponseStateManager;
 import javax.faces.view.StateManagementStrategy;
 import static com.sun.faces.RIConstants.DYNAMIC_ACTIONS;
 import static com.sun.faces.RIConstants.DYNAMIC_COMPONENT;
-import javax.faces.component.NamingContainer;
-import javax.faces.component.UIForm;
 
 /**
  * A state management strategy for FSS.
@@ -181,7 +182,7 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
      * @param context the Faces context.
      * @param clientId the client id of the component to find.
      */
-    private UIComponent locateComponentByClientId(final FacesContext context, final UIComponent subTree,  final String clientId) {
+    private UIComponent locateComponentByClientId(final FacesContext context, final UIComponent subTree, final String clientId) {
         if (LOGGER.isLoggable(Level.FINEST)) {
             LOGGER.log(Level.FINEST, "FaceletFullStateManagementStrategy.locateComponentByClientId", clientId);
         }
@@ -192,7 +193,7 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
         try {
             context.getAttributes().put(SKIP_ITERATION_HINT, true);
             Set<VisitHint> hints = EnumSet.of(VisitHint.SKIP_ITERATION);
-        
+
             VisitContext visitContext = VisitContext.createVisitContext(context, null, hints);
             subTree.visitTree(visitContext, new VisitCallback() {
 
@@ -206,10 +207,10 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
                         result = VisitResult.COMPLETE;
                     } else if (component instanceof UIForm) {
                         /*
-                         * If the component is a UIForm and it is prepending its id
-                         * then we can short circuit out of here if the the client
-                         * id of the component we are trying to find does not begin
-                         * with the id of the UIForm.
+                         * If the component is a UIForm and it is prepending its
+                         * id then we can short circuit out of here if the the
+                         * client id of the component we are trying to find does
+                         * not begin with the id of the UIForm.
                          */
                         UIForm form = (UIForm) component;
                         if (form.isPrependId() && !clientId.startsWith(form.getClientId(visitContext.getFacesContext()))) {
@@ -217,10 +218,10 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
                         }
                     } else if (component instanceof NamingContainer) {
                         /*
-                         * If the component is a naming container then assume it is
-                         * prepending its id so if our client id we are looking for
-                         * does not start with the naming container id we can skip
-                         * visiting this tree.
+                         * If the component is a naming container then assume it
+                         * is prepending its id so if our client id we are
+                         * looking for does not start with the naming container
+                         * id we can skip visiting this tree.
                          */
                         if (!clientId.startsWith(component.getClientId(visitContext.getFacesContext()))) {
                             result = VisitResult.REJECT;
@@ -557,23 +558,23 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
                 result = restoreTree(context, renderKitId, ((Object[]) state[0]).clone());
                 context.setViewRoot(result);
             }
-            
+
             if (result != null) {
                 StateContext stateContext = StateContext.getStateContext(context);
                 stateContext.startTrackViewModifications(context, result);
                 stateContext.setTrackViewModifications(false);
 
-                try { 
+                try {
                     HashMap<String, Object> stateMap = (HashMap<String, Object>) state[1];
                     if (stateMap != null) {
                         /*
-                        * Restore the component state.
-                        */
+                         * Restore the component state.
+                         */
                         restoreComponentState(context, stateMap);
 
                         /**
-                        * Restore the dynamic actions.
-                        */
+                         * Restore the dynamic actions.
+                         */
                         restoreDynamicActions(context, stateContext, stateMap);
                     }
                 } finally {
@@ -610,8 +611,7 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
                     Object stateObj;
                     if (!component.isTransient()) {
                         if (stateContext.componentAddedDynamically(component)) {
-                            component.getAttributes().put(DYNAMIC_COMPONENT,
-                                    new Integer(component.getParent().getChildren().indexOf(component)));
+                            component.getAttributes().put(DYNAMIC_COMPONENT, new Integer(getProperChildIndex(component)));
                             stateObj = new StateHolderSaver(finalContext, component);
                         } else {
                             stateObj = component.saveState(finalContext);
@@ -645,10 +645,15 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
         }
 
         List<ComponentStruct> actions = stateContext.getDynamicActions();
+        HashMap<String, UIComponent> componentMap = stateContext.getDynamicComponents();
+
         if (actions != null) {
             List<Object> savedActions = new ArrayList<Object>(actions.size());
             for (ComponentStruct action : actions) {
-                savedActions.add(action.saveState(context));
+                UIComponent component = componentMap.get(action.clientId);
+                if (!component.isTransient() && !hasTransientAncestor(component)) {
+                    savedActions.add(action.saveState(context));
+                }
             }
             viewRoot.getAttributes().put(DYNAMIC_ACTIONS, savedActions);
         }
@@ -838,5 +843,52 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
                 out.writeUTF(NULL_ID);
             }
         }
+    }
+
+    /**
+     * Helper method that determines what the index of the given child component
+     * will be taking transient siblings into account.
+     *
+     * @param component the UI component.
+     * @return the calculated index.
+     */
+    private int getProperChildIndex(UIComponent component) {
+        int result = -1;
+
+        if (component.getParent().getChildren().indexOf(component) != -1) {
+            UIComponent parent = component.getParent();
+            int index = 0;
+            Iterator<UIComponent> iterator = parent.getChildren().iterator();
+            while (iterator.hasNext()) {
+                UIComponent child = iterator.next();
+                if (child == component) {
+                    break;
+                } else {
+                    if (!child.isTransient()) {
+                        index++;
+                    }
+                }
+            }
+            result = index;
+        }
+
+        return result;
+    }
+
+    /**
+     * Does the give component have a transient ancestor.
+     *
+     * @param component the UI component.
+     * @return true if it has a transient ancestor, false otherwise.
+     */
+    private boolean hasTransientAncestor(UIComponent component) {
+        UIComponent parent = component.getParent();
+        while (parent != null) {
+            if (parent.isTransient()) {
+                return true;
+            }
+            parent = parent.getParent();
+        }
+        return false;
     }
 }

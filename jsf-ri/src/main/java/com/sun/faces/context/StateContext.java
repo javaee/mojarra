@@ -217,7 +217,7 @@ public class StateContext {
     }
 
     private int incrementDynamicChildCount(UIComponent parent) {
-        int result = 0;
+        int result;
         Map<String, Object> attrs = parent.getAttributes();
         Integer cur = (Integer) attrs.get(DYNAMIC_CHILD_COUNT);
         if (null != cur) {
@@ -362,16 +362,14 @@ public class StateContext {
          * @param component the UI component to add to the list as a REMOVE.
          */
         private void handleRemove(FacesContext context, UIComponent component) {
-            if (!component.isTransient() && !hasTransientAncestor(component)) {
-                if (component.isInView()) {
-                    decrementDynamicChildCount(component.getParent());
-                    ComponentStruct struct = new ComponentStruct();
-                    struct.action = ComponentStruct.REMOVE;
-                    struct.clientId = component.getClientId(context);
-                    struct.id = component.getId();
-                    handleAddRemoveWithAutoPrune(component, struct);
-                }            
-            }
+            if (component.isInView()) {
+                decrementDynamicChildCount(component.getParent());
+                ComponentStruct struct = new ComponentStruct();
+                struct.action = ComponentStruct.REMOVE;
+                struct.clientId = component.getClientId(context);
+                struct.id = component.getId();
+                handleAddRemoveWithAutoPrune(component, struct);
+            }            
         }
 
         /**
@@ -381,49 +379,47 @@ public class StateContext {
          * @param component the UI component to add to the list as an ADD.
          */
         private void handleAdd(FacesContext context, UIComponent component) {
-            if (!component.isTransient() && !hasTransientAncestor(component)) {
-                if (component.getParent() != null && component.getParent().isInView()) {
-                    String id = component.getId();
-                    
-                    /*
-                    * Since adding a component, can mean you are really reparenting 
-                    * it, we need to make sure the OLD clientId is not cached, we do 
-                    * that by setting the id.
-                    */
-                    if (id != null) {
-                        component.setId(id);
-                    }
+            if (component.getParent() != null && component.getParent().isInView()) {
+                String id = component.getId();
 
-                    if (component.getParent().getFacets().containsValue(component)) {
-                        Map facets = component.getParent().getFacets();
-                        Iterator entries = facets.entrySet().iterator();
-                        while (entries.hasNext()) {
-                            Map.Entry entry = (Map.Entry) entries.next();
-                            if (entry.getValue() == component) {
-                                incrementDynamicChildCount(component.getParent());
-                                component.clearInitialState();
-                                component.getAttributes().put(DYNAMIC_COMPONENT, component.getParent().getChildren().indexOf(component));
-                                ComponentStruct struct = new ComponentStruct();
-                                struct.action = ComponentStruct.ADD;
-                                struct.facetName = entry.getKey().toString();
-                                struct.parentClientId = component.getParent().getClientId(context);
-                                struct.clientId = component.getClientId(context);
-                                struct.id = component.getId();
-                                handleAddRemoveWithAutoPrune(component, struct);
-                            }
+                /*
+                * Since adding a component, can mean you are really reparenting 
+                * it, we need to make sure the OLD clientId is not cached, we do 
+                * that by setting the id.
+                */
+                if (id != null) {
+                    component.setId(id);
+                }
+
+                if (component.getParent().getFacets().containsValue(component)) {
+                    Map facets = component.getParent().getFacets();
+                    Iterator entries = facets.entrySet().iterator();
+                    while (entries.hasNext()) {
+                        Map.Entry entry = (Map.Entry) entries.next();
+                        if (entry.getValue() == component) {
+                            incrementDynamicChildCount(component.getParent());
+                            component.clearInitialState();
+                            component.getAttributes().put(DYNAMIC_COMPONENT, component.getParent().getChildren().indexOf(component));
+                            ComponentStruct struct = new ComponentStruct();
+                            struct.action = ComponentStruct.ADD;
+                            struct.facetName = entry.getKey().toString();
+                            struct.parentClientId = component.getParent().getClientId(context);
+                            struct.clientId = component.getClientId(context);
+                            struct.id = component.getId();
+                            handleAddRemoveWithAutoPrune(component, struct);
                         }
                     }
-                    else {
-                        incrementDynamicChildCount(component.getParent());
-                        component.clearInitialState();
-                        component.getAttributes().put(DYNAMIC_COMPONENT, component.getParent().getChildren().indexOf(component));
-                        ComponentStruct struct = new ComponentStruct();
-                        struct.action = ComponentStruct.ADD;
-                        struct.parentClientId = component.getParent().getClientId(context);
-                        struct.clientId = component.getClientId(context);
-                        struct.id = component.getId();
-                        handleAddRemoveWithAutoPrune(component, struct);
-                    }
+                }
+                else {
+                    incrementDynamicChildCount(component.getParent());
+                    component.clearInitialState();
+                    component.getAttributes().put(DYNAMIC_COMPONENT, component.getParent().getChildren().indexOf(component));
+                    ComponentStruct struct = new ComponentStruct();
+                    struct.action = ComponentStruct.ADD;
+                    struct.parentClientId = component.getParent().getClientId(context);
+                    struct.clientId = component.getClientId(context);
+                    struct.id = component.getId();
+                    handleAddRemoveWithAutoPrune(component, struct);
                 }
             }
         }
@@ -502,17 +498,6 @@ public class StateContext {
                     }
                 }
             }
-        }
-                
-        private boolean hasTransientAncestor(UIComponent component) {
-            UIComponent parent = component.getParent();
-            while (parent != null) {
-                if (parent.isTransient()) {
-                    return true;
-                }
-                parent = parent.getParent();
-            }
-            return false;
         }
 
     } // END AddRemoveListener
