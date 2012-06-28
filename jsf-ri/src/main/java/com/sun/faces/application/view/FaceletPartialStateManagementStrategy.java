@@ -49,13 +49,16 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.FacesException;
+import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIForm;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
@@ -66,8 +69,6 @@ import javax.faces.render.ResponseStateManager;
 import javax.faces.view.StateManagementStrategy;
 import static com.sun.faces.RIConstants.DYNAMIC_ACTIONS;
 import static com.sun.faces.RIConstants.DYNAMIC_COMPONENT;
-import javax.faces.component.NamingContainer;
-import javax.faces.component.UIForm;
 
 /**
  * The state management strategy for PSS.
@@ -106,14 +107,14 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
      * @param context the Faces context.
      * @param clientId the client id of the component to find.
      */
-    private UIComponent locateComponentByClientId(final FacesContext context, final UIComponent subTree,  final String clientId) {
+    private UIComponent locateComponentByClientId(final FacesContext context, final UIComponent subTree, final String clientId) {
         if (LOGGER.isLoggable(Level.FINEST)) {
             LOGGER.log(Level.FINEST, "FaceletPartialStateManagementStrategy.locateComponentByClientId", clientId);
         }
 
         final List<UIComponent> found = new ArrayList<UIComponent>();
         UIComponent result = null;
-        
+
         try {
             context.getAttributes().put(SKIP_ITERATION_HINT, true);
             Set<VisitHint> hints = EnumSet.of(VisitHint.SKIP_ITERATION);
@@ -125,28 +126,28 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
                     VisitResult result = VisitResult.ACCEPT;
                     if (component.getClientId(visitContext.getFacesContext()).equals(clientId)) {
                         /*
-                        * If the client id matches up we have found our match.
-                        */
+                         * If the client id matches up we have found our match.
+                         */
                         found.add(component);
                         result = VisitResult.COMPLETE;
                     } else if (component instanceof UIForm) {
                         /*
-                        * If the component is a UIForm and it is prepending its id
-                        * then we can short circuit out of here if the the client
-                        * id of the component we are trying to find does not begin
-                        * with the id of the UIForm.
-                        */
+                         * If the component is a UIForm and it is prepending its
+                         * id then we can short circuit out of here if the the
+                         * client id of the component we are trying to find does
+                         * not begin with the id of the UIForm.
+                         */
                         UIForm form = (UIForm) component;
                         if (form.isPrependId() && !clientId.startsWith(form.getClientId(visitContext.getFacesContext()))) {
                             result = VisitResult.REJECT;
                         }
                     } else if (component instanceof NamingContainer) {
                         /*
-                        * If the component is a naming container then assume it is
-                        * prepending its id so if our client id we are looking for
-                        * does not start with the naming container id we can skip
-                        * visiting this tree.
-                        */
+                         * If the component is a naming container then assume it
+                         * is prepending its id so if our client id we are
+                         * looking for does not start with the naming container
+                         * id we can skip visiting this tree.
+                         */
                         if (!clientId.startsWith(component.getClientId(visitContext.getFacesContext()))) {
                             result = VisitResult.REJECT;
                         }
@@ -155,9 +156,8 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
                     return result;
                 }
             });
-        }
-        finally {
-            context.getAttributes().remove(SKIP_ITERATION_HINT);            
+        } finally {
+            context.getAttributes().remove(SKIP_ITERATION_HINT);
         }
 
         if (!found.isEmpty()) {
@@ -417,10 +417,15 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
         }
 
         List<ComponentStruct> actions = stateContext.getDynamicActions();
+        HashMap<String, UIComponent> componentMap = stateContext.getDynamicComponents();
+        
         if (actions != null) {
             List<Object> savedActions = new ArrayList<Object>(actions.size());
             for (ComponentStruct action : actions) {
-                savedActions.add(action.saveState(context));
+                UIComponent component = componentMap.get(action.clientId);
+                if (!component.isTransient() && !hasTransientAncestor(component)) {
+                    savedActions.add(action.saveState(context));
+                }
             }
             stateMap.put(DYNAMIC_ACTIONS, savedActions);
         }
@@ -465,7 +470,7 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
                     Object stateObj;
                     if (!target.isTransient()) {
                         if (stateContext.componentAddedDynamically(target)) {
-                            target.getAttributes().put(DYNAMIC_COMPONENT, new Integer(target.getParent().getChildren().indexOf(target)));
+                            target.getAttributes().put(DYNAMIC_COMPONENT, new Integer(getProperChildIndex(target)));
                             stateObj = new StateHolderSaver(finalContext, target);
                         } else {
                             stateObj = target.saveState(context.getFacesContext());
@@ -485,5 +490,52 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
 
         saveDynamicActions(context, stateContext, stateMap);
         return new Object[]{null, stateMap};
+    }
+
+    /**
+     * Helper method that determines what the index of the given child component
+     * will be taking transient siblings into account.
+     *
+     * @param component the UI component.
+     * @return the calculated index.
+     */
+    private int getProperChildIndex(UIComponent component) {
+        int result = -1;
+
+        if (component.getParent().getChildren().indexOf(component) != -1) {
+            UIComponent parent = component.getParent();
+            int index = 0;
+            Iterator<UIComponent> iterator = parent.getChildren().iterator();
+            while (iterator.hasNext()) {
+                UIComponent child = iterator.next();
+                if (child == component) {
+                    break;
+                } else {
+                    if (!child.isTransient()) {
+                        index++;
+                    }
+                }
+            }
+            result = index;
+        }
+
+        return result;
+    }
+
+    /**
+     * Does the give component have a transient ancestor.
+     * 
+     * @param component the UI component.
+     * @return true if it has a transient ancestor, false otherwise.
+     */
+    private boolean hasTransientAncestor(UIComponent component) {
+        UIComponent parent = component.getParent();
+        while (parent != null) {
+            if (parent.isTransient()) {
+                return true;
+            }
+            parent = parent.getParent();
+        }
+        return false;
     }
 }
