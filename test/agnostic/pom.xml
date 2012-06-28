@@ -23,6 +23,7 @@
         <module>ajax</module>
         <module>composite</module>
         <module>dynamic</module>
+        <module>flash</module>
         <module>externalContext</module>
         <module>renderKit</module>
         <module>lifecycle</module>
