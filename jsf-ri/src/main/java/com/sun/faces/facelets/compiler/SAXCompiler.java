@@ -90,9 +90,8 @@ import javax.faces.context.FacesContext;
 /**
  * Compiler implementation that uses SAX
  * 
- * @see {@link com.sun.faces.facelets.compiler.Compiler}
- * 
  * @author Jacob Hookom
+ * @see Compiler
  * @version $Id$
  */
 public final class SAXCompiler extends Compiler {
