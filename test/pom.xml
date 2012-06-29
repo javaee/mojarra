@@ -206,6 +206,9 @@
                                 <goals>
                                     <goal>start</goal>
                                 </goals>
+                                <configuration>
+                                    <timeout>240000</timeout>
+                                </configuration>
                             </execution>
                             <execution>
                                 <id>stop-container</id>
@@ -213,6 +216,9 @@
                                 <goals>
                                     <goal>stop</goal>
                                 </goals>
+                                <configuration>
+                                    <timeout>240000</timeout>
+                                </configuration>
                             </execution>
                         </executions>                        
                         <configuration>
@@ -220,7 +226,6 @@
                                 <containerId>${integration.container.id}</containerId>
                                 <type>installed</type>
                                 <home>${integration.container.home}</home>
-                                <timeout>180000</timeout>
                             </container>
                             <configuration>
                                 <type>standalone</type>
