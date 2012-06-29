@@ -40,6 +40,7 @@
 
 package com.sun.faces.application.view;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.context.StateContext;
 import javax.faces.view.facelets.Facelet;
@@ -763,6 +764,11 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     @Override
     public boolean handlesViewId(String viewId) {
          if (viewId != null) {
+             
+             if (viewId.endsWith(RIConstants.FLOW_DEFINITION_ID_SUFFIX)) {
+                 return true;
+             }
+             
             // If there's no extensions array or prefixes array, then
             // assume defaults.  .xhtml extension is handled by
             // the FaceletViewHandler and .jsp will be handled by

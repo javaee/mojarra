@@ -43,24 +43,23 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:j="http://java.sun.com/jsf/flow">
     
-    <head>
-        <title>Create customer page</title>
-    </head>
-    <body>
-        
-        <p>Create customer page</p>
-        
-    <h:form prependId="false">
-        
-        <p>Initializer message: #{initializerMessage}</p>
+    <f:metadata>
+        <j:faces-flow-definition id="flow">
+            
+            <!-- A faces-flow-definition in a facelet page without any other 
+            children declares a faces flow equivalent to this:
+            
+              <start-node>the name of this page without any extension</start-node>
+              <view id="the name of this page without any extension">
+                <vdl-document>the name of this page with the extension</vdl-document>
+              </view>
+            
+            -->
 
-        <p><h:commandButton id="return" value="return" action="success" /></p>
-        
-    </h:form>
-        
-    </body>
+        </j:faces-flow-definition>
+    </f:metadata>
 </html>

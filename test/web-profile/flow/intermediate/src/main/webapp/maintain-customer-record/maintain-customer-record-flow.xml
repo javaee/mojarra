@@ -44,23 +44,46 @@
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:j="http://java.sun.com/jsf/flow">
     
-    <head>
-        <title>Create customer page</title>
-    </head>
-    <body>
-        
-        <p>Create customer page</p>
-        
-    <h:form prependId="false">
-        
-        <p>Initializer message: #{initializerMessage}</p>
+    <f:metadata>
 
-        <p><h:commandButton id="return" value="return" action="success" /></p>
-        
-    </h:form>
-        
-    </body>
+        <j:faces-flow-definition>
+            <j:start-node>router1</j:start-node>
+            
+            <j:faces-flow-return id="success">
+                <j:navigation-case>
+                    <j:from-outcome>/complete</j:from-outcome>
+                </j:navigation-case>
+            </j:faces-flow-return>
+            <j:faces-flow-return id="errorOccurred">
+                <j:navigation-case>
+                    <j:from-outcome>error</j:from-outcome>
+                </j:navigation-case>
+            </j:faces-flow-return>
+            
+            <!-- If a customerId was specified then we'll edit it, otherwise create a new customer. -->
+            <j:switch id="router1">
+                <j:navigation-case>
+                    <j:if>#{facesFlowScope.customerId == null}</j:if>
+                    <j:from-outcome>create-customer</j:from-outcome>
+                </j:navigation-case>
+            </j:switch>
+            
+            <j:view id="create-customer">
+                <j:vdl-document>create-customer.xhtml</j:vdl-document>
+            </j:view>
+
+            <j:view id="maintain-customer-record">
+                <j:vdl-document>maintain-customer-record.xhtml</j:vdl-document>
+            </j:view>
+            
+            
+            <j:initializer>#{maintainCustomerBean.initializeFlow}</j:initializer>
+            <j:finalizer>#{maintainCustomerBean.cleanUpFlow}</j:finalizer>
+            
+        </j:faces-flow-definition>
+
+    </f:metadata>
 </html>

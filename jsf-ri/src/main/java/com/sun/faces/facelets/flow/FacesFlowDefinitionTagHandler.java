@@ -40,6 +40,7 @@
  */
 package com.sun.faces.facelets.flow;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
 import com.sun.faces.util.Util;
 import java.io.IOException;
@@ -294,7 +295,15 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
         List<ViewNode> viewsInFlow = null;
         ViewNode viewNode = new ViewNode();
         viewNode.setId(getMyNodeId());
-        viewNode.setVdlDocumentId(this.tag.getLocation().getPath());
+        
+        String path = this.tag.getLocation().getPath();
+        if (path.endsWith(RIConstants.FLOW_DEFINITION_ID_SUFFIX)) {
+            int i = path.indexOf(RIConstants.FLOW_DEFINITION_ID_SUFFIX);
+            path = path.substring(0, i) + ".xhtml";
+        }
+        
+        
+        viewNode.setVdlDocumentId(path);
         viewsInFlow = Collections.synchronizedList(new ArrayList<ViewNode>());
         viewsInFlow.add(viewNode);
         
@@ -303,10 +312,14 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
     
     private String getMyNodeId() {
         String myViewId = Util.removeAllButLastSlashPathSegment(this.tag.getLocation().getPath());
+        if (myViewId.endsWith(RIConstants.FLOW_DEFINITION_ID_SUFFIX)) {
+            myViewId = myViewId.substring(0, myViewId.length() - RIConstants.FLOW_DEFINITION_ID_SUFFIX_LENGTH);
+        } else {
 
-        int dot = myViewId.indexOf(".");
-        String id = myViewId.substring(0, dot);
-        return id;
+            int dot = myViewId.indexOf(".");
+            myViewId = myViewId.substring(0, dot);
+        }
+        return myViewId;
         
     }
     

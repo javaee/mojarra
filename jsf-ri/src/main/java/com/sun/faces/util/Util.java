@@ -376,12 +376,12 @@ public class Util {
 
 
     public static String removeAllButLastSlashPathSegment(String input) {
-        // Trim the leading slash, if any.
+        // Trim the leading lastSlash, if any.
         if (input.charAt(0) == '/') {
             input = input.substring(1);
         }
         int len = input.length();
-        // Trim the trailing slash, if any.
+        // Trim the trailing lastSlash, if any.
         if (input.charAt(len - 1) == '/') {
             input = input.substring(0, len - 1);
         }
@@ -398,6 +398,33 @@ public class Util {
         return input;
     }
     
+    public static String removeAllButNextToLastSlashPathSegment(String input) {
+        // Trim the leading lastSlash, if any.
+        if (input.charAt(0) == '/') {
+            input = input.substring(1);
+        }
+        int len = input.length();
+        // Trim the trailing lastSlash, if any.
+        if (input.charAt(len - 1) == '/') {
+            input = input.substring(0, len - 1);
+        }
+        
+        // Trim any path segments that remain, leaving only the 
+        // last path segment.
+        int lastSlash = input.lastIndexOf("/");
+        
+        // Do we have a "/"?
+        if (-1 != lastSlash) {
+        
+            int startOrPreviousSlash = input.lastIndexOf("/", lastSlash - 1);
+            startOrPreviousSlash = (-1 == startOrPreviousSlash) ? 0 : startOrPreviousSlash;
+            
+            input = input.substring(startOrPreviousSlash, lastSlash);
+        }
+        
+        return input;
+    }
+    
     public static String removeLastPathSegment(String input) {
         int slash = input.lastIndexOf("/");
         
@@ -408,11 +435,28 @@ public class Util {
         
         return input;
     }
-    
+
+    /*
+     * Apply a series of conventions to the component to arrive at a potential
+     * flowId, which may or may not correspond to an actual defined flow.
+     * 
+     * Assume the target is a UIViewRoot.
+     * 
+     * Get its viewId.
+     * 
+     * Strip the leading lastSlash, if any.
+     * 
+     * If the viewId has multiple segments assume the next to last is the flowId.
+     * 
+     * Otherwise, remove the extension and assume the result is the flowId.
+     * 
+     * 
+     */
     public static String getFlowIdFromComponent(FacesContext context, UIComponent target) {
         String result = "";
         if (target instanceof javax.faces.component.UIViewRoot) {
-            result = Util.removeAllButLastSlashPathSegment(((javax.faces.component.UIViewRoot)target).getViewId());
+            result = Util.removeAllButNextToLastSlashPathSegment(((javax.faces.component.UIViewRoot)target).getViewId());
+            
             int dot = result.indexOf(".");
             if (-1 != dot) {
                 result = result.substring(0, dot);

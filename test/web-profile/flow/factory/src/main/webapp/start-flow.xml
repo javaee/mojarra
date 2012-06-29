@@ -45,19 +45,22 @@
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:j="http://java.sun.com/jsf/flow">
 
-    <head>
-        <title>First page in the flow</title>
-    </head>
-    <body>
-        <h:form prependId="false">
-            <p>First page in the flow</p>
-            <p>Flow bean name: #{flowBean.name}</p>
-            <p>Did we wrap: #{applicationScope['flowHandlerFactoryWrapped']}</p>
-            <p><h:commandButton id="index" value="home" action="index" /></p>
-        </h:form>
-        <h:messages/>
-    </body>
+    <f:metadata>
+        <j:faces-flow-definition id="flow">
+
+            <!-- A faces-flow-definition in a facelet page without any other 
+            children declares a faces flow equivalent to this:
+            
+              <start-node>the name of this page without any extension</start-node>
+              <view id="the name of this page without any extension">
+                <vdl-document>the name of this page with the extension</vdl-document>
+              </view>
+            
+            -->
+
+        </j:faces-flow-definition>
+    </f:metadata>
 </html>

@@ -122,6 +122,10 @@ public class RIConstants {
     public static final String DYNAMIC_COMPONENT =
             FACES_PREFIX + "DynamicComponent";
     
+    public static final String FLOW_DEFINITION_ID_SUFFIX = "-flow.xml";
+    
+    public static final int FLOW_DEFINITION_ID_SUFFIX_LENGTH = FLOW_DEFINITION_ID_SUFFIX.length();
+    
     private RIConstants() {
 
         throw new IllegalStateException();

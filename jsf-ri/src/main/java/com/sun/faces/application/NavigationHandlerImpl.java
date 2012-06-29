@@ -40,6 +40,7 @@
 
 package com.sun.faces.application;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.config.InitFacesContext;
 import javax.faces.FacesException;
 import javax.faces.application.NavigationCase;
@@ -221,23 +222,9 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                    logger.fine("Response complete for " + caseStruct.viewId);
                }
             } else {
-                ViewDeclarationLanguage vdl = viewHandler.getViewDeclarationLanguage(context, caseStruct.viewId);
-                ViewMetadata metadata = null;
-                UIViewRoot newRoot = null;
-                if (null != vdl) {
-                    // Will be null for JSP views
-                    metadata = vdl.getViewMetadata(context, caseStruct.viewId);
-                    
-                    if (null != metadata) {
-                        newRoot = metadata.createMetadataView(context);
-                    }
-                    
-                } 
-                
-                if (null == newRoot) {
-                    newRoot = viewHandler.createView(context,
-                            caseStruct.viewId);
-                }
+                UIViewRoot newRoot = viewHandler.createView(context,
+                                                            caseStruct.viewId);
+                loadFlowDefinition(context, viewHandler, caseStruct.viewId);
                 updateRenderTargets(context, caseStruct.viewId);
                 // Unconditionally tell the flow system we are transitioning
                 // between nodes.  Let the flow system figure it out if these nodes
@@ -269,6 +256,54 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                 }
             }
         } 
+    }
+    
+    private void loadFlowDefinition(FacesContext context, ViewHandler viewHandler,
+            String viewId) {
+        
+        ViewDeclarationLanguage vdl = viewHandler.getViewDeclarationLanguage(context, viewId);
+        
+        if (null != vdl) {
+            
+            String flowDefId = deriveValidFlowDefIdFromViewId(context, 
+                    vdl, viewId);
+            
+            if (null != flowDefId) {
+            
+                ViewMetadata metadata = null;
+                // Will be null for JSP views
+                metadata = vdl.getViewMetadata(context, flowDefId);
+                
+                if (null != metadata) {
+                    metadata.createMetadataView(context);
+                }
+            }
+        } 
+
+    }
+    
+    private String deriveValidFlowDefIdFromViewId(FacesContext context,
+            ViewDeclarationLanguage vdl, String viewId) {
+        // 1. replace the .extension with -flow.xml and see if it exists.
+        int i = viewId.indexOf(".");
+        String flowDefId = null;
+        if (-1 != i) {
+            flowDefId = viewId.substring(0, i) + RIConstants.FLOW_DEFINITION_ID_SUFFIX;
+            if (!vdl.viewExists(context, flowDefId)) {
+                // 2. prepend WEB-INF and try again
+                if (flowDefId.startsWith("/")) {
+                    flowDefId = "WEB-INF" + flowDefId;
+                } else {
+                    flowDefId = "WEB-INF/" + flowDefId;
+                }
+                if (!vdl.viewExists(context, flowDefId)) {
+                    flowDefId = null;
+                } 
+            } 
+            
+        }
+        return flowDefId;
+
     }
     
     // --------------------------------------------------------- Private Methods

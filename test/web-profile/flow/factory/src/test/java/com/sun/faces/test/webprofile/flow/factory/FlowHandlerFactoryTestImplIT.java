@@ -27,6 +27,8 @@ public class FlowHandlerFactoryTestImplIT {
     @Test
     public void testFlowHandlerFactoryWrapping() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
+        
+        Thread.sleep(3000);
 
         assertTrue(page.getBody().asText().indexOf("Page with link to flow entry") != -1);
 
