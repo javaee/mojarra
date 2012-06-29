@@ -120,7 +120,7 @@ public class StateManagerImpl extends StateManager {
      * @param viewId the view id.
      * @param renderKitId the render kit id.
      * @return the view root.
-     * @see {@link StateManager#restoreView(javax.faces.context.FacesContext, String, String)}
+     * @see StateManager#restoreView(javax.faces.context.FacesContext, java.lang.String, java.lang.String) 
      */
     public UIViewRoot restoreView(FacesContext context, String viewId, String renderKitId) {
         UIViewRoot result;
