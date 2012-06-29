@@ -489,7 +489,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
      * If {@link UIDebug#debugRequest(javax.faces.context.FacesContext)}} is <code>true</code>,
      * simply return a new UIViewRoot(), otherwise, call the default logic.
      * </p>
-     * @see {@link javax.faces.view.ViewDeclarationLanguage#restoreView(javax.faces.context.FacesContext, String)}
+     * @see ViewDeclarationLanguage#restoreView(javax.faces.context.FacesContext, java.lang.String) 
      */
     @Override
     public UIViewRoot restoreView(FacesContext context,
@@ -729,8 +729,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
 
     /**
-     * @see javax.faces.view.ViewDeclarationLanguage#createView(javax.faces.context.FacesContext, String)
-     * @return
+     * @see ViewDeclarationLanguage#createView(javax.faces.context.FacesContext, java.lang.String)
      */
     @Override
     public UIViewRoot createView(FacesContext ctx,
