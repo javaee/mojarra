@@ -42,6 +42,7 @@ package com.sun.faces.config;
 
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.config.InitFacesContext;
 
 import javax.faces.application.ResourceDependencies;
 import javax.faces.application.ResourceDependency;
@@ -110,9 +111,12 @@ public class FacesInitializer implements ServletContainerInitializer {
 
 
     public void onStartup(Set<Class<?>> classes, ServletContext servletContext)
-          throws ServletException {
+        throws ServletException {
+
+        InitFacesContext initFacesContext = new InitFacesContext(servletContext);
 
         if (shouldCheckMappings(classes, servletContext)) {
+
 
             Map<String,? extends ServletRegistration> existing = servletContext.getServletRegistrations();
             for (ServletRegistration registration : existing.values()) {
@@ -127,6 +131,7 @@ public class FacesInitializer implements ServletContainerInitializer {
                                             "javax.faces.webapp.FacesServlet");
             reg.addMapping("/faces/*", "*.jsf", "*.faces");
             servletContext.setAttribute(RIConstants.FACES_INITIALIZER_MAPPINGS_ADDED, Boolean.TRUE);
+
 
             // The following line is temporary until we can solve an ordering
             // issue in V3.  Right now the JSP container looks for a mapping

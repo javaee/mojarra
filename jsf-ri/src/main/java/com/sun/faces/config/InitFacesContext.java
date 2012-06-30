@@ -95,8 +95,10 @@ public class InitFacesContext extends FacesContext {
     public InitFacesContext(ServletContext sc) {
         ec = new ServletContextAdapter(sc);
         orig = FacesContext.getCurrentInstance();
-        setCurrentInstance(this);
         sc.setAttribute(INIT_FACES_CONTEXT_ATTR_NAME, this);
+        InitFacesContext.cleanupInitMaps(sc);
+        FacesContext.threadInitContext.put(Thread.currentThread(), this);
+        FacesContext.initContextServletContext.put(this, sc);
     }
     
     public void reInitializeExternalContext(ServletContext sc) {
@@ -116,7 +118,8 @@ public class InitFacesContext extends FacesContext {
     }
 
     void callSetCurrentInstance() {
-        setCurrentInstance(this);
+//        setCurrentInstance(this);
+        FacesContext.threadInitContext.put(Thread.currentThread(), this);
     }
 
     @Override
@@ -258,6 +261,29 @@ public class InitFacesContext extends FacesContext {
 
     public void setELContext(ELContext elContext) {
         this.elContext = elContext;        
+    }
+
+    public static void cleanupInitMaps(ServletContext context) {
+        Map threadInitContext = InitFacesContext.getThreadInitContextMap();
+        Map initContextServletContext = InitFacesContext.getInitContextServletContextMap();
+        Set entries = initContextServletContext.entrySet();
+        for (Iterator iterator1 = entries.iterator(); iterator1.hasNext();) {
+            Map.Entry entry1 = (Map.Entry)iterator1.next();
+            Object initContextKey = entry1.getKey();
+            Object value1 = entry1.getValue();
+            if (context == value1) {
+                initContextServletContext.remove(initContextKey);
+                Set threadEntries = threadInitContext.entrySet();
+                for (Iterator iterator2 = threadEntries.iterator(); iterator2.hasNext();) {
+                    Map.Entry entry2 = (Map.Entry)iterator2.next();
+                    Object thread = entry2.getKey();
+                    Object initContextValue = entry2.getValue();
+                    if (initContextKey == initContextValue) {
+                        threadInitContext.remove(initContextKey);
+                    }
+                }
+            }
+        }
     }
 
     private static class ServletContextAdapter extends ExternalContext {
@@ -497,4 +523,11 @@ public class InitFacesContext extends FacesContext {
 
     } // END ServletContextAdapter
 
+    static Map getThreadInitContextMap() {
+        return threadInitContext;
+    }
+
+    static Map getInitContextServletContextMap() {
+        return initContextServletContext;
+    }
 }
