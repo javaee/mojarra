@@ -23,12 +23,13 @@
         <module>ajax</module>
         <module>application</module>
         <module>composite</module>
+        <module>converter</module>
         <module>dynamic</module>
         <module>flash</module>
         <module>externalContext</module>
-        <module>renderKit</module>
         <module>lifecycle</module>
-        <module>converter</module>
+        <module>renderKit</module>
+        <module>resource</module>
         <module>shared</module>
         <module>stateSaving</module>
         <module>vdl</module>
