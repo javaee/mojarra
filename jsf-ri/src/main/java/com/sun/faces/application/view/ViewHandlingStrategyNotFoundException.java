@@ -54,7 +54,7 @@ public class ViewHandlingStrategyNotFoundException extends FacesException {
     // ------------------------------------------------------------ Constructors
 
     /**
-     * @see javax.faces.FacesException#Exception()
+     * @see FacesException#FacesException() 
      */
     public ViewHandlingStrategyNotFoundException() {
 
