@@ -14,6 +14,7 @@
     <modules>
         <module>basic</module>
         <module>basic-multi-page</module>
+        <module>basic-multi-page-fdl-in-web-inf</module>
         <module>factory</module>
         <module>intermediate</module>
     </modules>

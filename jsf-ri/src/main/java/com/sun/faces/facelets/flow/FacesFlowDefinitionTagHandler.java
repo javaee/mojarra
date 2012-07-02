@@ -105,6 +105,11 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
             if (id.charAt(0) == '/') {
                 id = id.substring(1);
             }
+            
+            if (id.startsWith("WEB-INF/")) {
+                id = id.substring(8);
+            }
+            
             int slash = id.lastIndexOf("/");
             if (-1 != slash) {
                 id = id.substring(0, slash);

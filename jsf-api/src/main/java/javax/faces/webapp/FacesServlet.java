@@ -180,9 +180,10 @@ import javax.servlet.http.HttpServletResponse;
  * something must be done to prevent access to the view source without
  * its first being processed by the <code>FacesServlet</code>.  One
  * common approach is to apply a &lt;security-constraint&gt; to all
- * facelet files.  Please see the <strong>Deployment Descriptor</strong>
- * chapter of the Java Servlet Specification for more information the
- * use of &lt;security-constraint&gt;.</p>
+ * facelet files and flow definition files.  Please see the
+ * <strong>Deployment Descriptor</strong> chapter of the Java Servlet
+ * Specification for more information the use of
+ * &lt;security-constraint&gt;.</p>
 
  * <p><strong>Allowable HTTP Methods</strong></p>
 
