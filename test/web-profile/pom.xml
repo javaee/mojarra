@@ -39,5 +39,6 @@
     <properties>
         <webapp.partialStateSaving>true</webapp.partialStateSaving>
         <webapp.stateSavingMethod>client</webapp.stateSavingMethod>
+        <webapp.projectStage>Production</webapp.projectStage>
     </properties>
 </project>
