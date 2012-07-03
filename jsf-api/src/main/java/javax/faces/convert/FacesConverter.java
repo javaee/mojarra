@@ -47,17 +47,19 @@ import java.lang.annotation.Target;
 import java.lang.annotation.Inherited;
 
 /**
- * <p class="changed_added_2_0">The presence of this annotation on a
- * class automatically registers the class with the runtime as a {@link
- * Converter}.  The value of the {@link #value} attribute is taken to be
- * <em>converter-id</em>, the value of the {@link #forClass} attribute
- * is taken to be <em>converter-for-class</em> and the fully qualified
- * class name of the class to which this annotation is attached is taken
- * to be the <em>converter-class</em>.  The implementation must
- * guarantee that for each class annotated with
- * <code>FacesConverter</code>, found with the algorithm in section JSF.11.5,
- * the proper variant of <code>Application.addConverter()</code> is
- * called.  If <em>converter-id</em> is not the empty string, {@link
+ * <p class="changed_added_2_0"><span
+ * class="changed_modified_2_2">The</span> presence of this annotation
+ * on a class automatically registers the class with the runtime as a
+ * {@link Converter}.  The value of the {@link #value} attribute is
+ * taken to be <em>converter-id</em>, the value of the {@link #forClass}
+ * attribute is taken to be <em>converter-for-class</em> and the fully
+ * qualified class name of the class to which this annotation is
+ * attached is taken to be the <em>converter-class</em>.  The
+ * implementation must guarantee that for each class annotated with
+ * <code>FacesConverter</code>, found with the algorithm in section
+ * JSF.11.5, the proper variant of
+ * <code>Application.addConverter()</code> is called.  If
+ * <em>converter-id</em> is not the empty string, {@link
  * javax.faces.application.Application#addConverter(java.lang.String,java.lang.String)}
  * is called, passing the derived <em>converter-id</em> as the first
  * argument and the derived <em>converter-class</em> as the second
@@ -68,6 +70,26 @@ import java.lang.annotation.Inherited;
  * argument.  The implementation must guarantee that all such calls to
  * <code>addConverter()</code> happen during application startup time
  * and before any requests are serviced.</p>
+
+ * <div class="changed_added_2_2">
+
+ * <p>The preceding text contains an important
+ * subtlety which application users should understand.  It is not
+ * possible to use a single {@code @FacesConverter} annotation to
+ * register a single {@code Converter} implementation both in the {@code
+ * by-class} and the {@code by-converter-id} data structures.  One way
+ * to achieve this result is to put the actual converter logic in an
+ * abstract base class, without a {@code @FacesConverter} annotation,
+ * and derive two sub-classes, each with a {@code @FacesConverter}
+ * annotation.  One sub-class has a {@code value} attribute but no
+ * {@code forClass} attribute, and the other sub-class has the converse.</p>
+
+ * <p>Please see the ViewDeclarationLanguage documentation for {@code
+ * <h:selectManyListBox>} for another important subtlety regarding
+ * converters and collections.</p>
+
+ * </div>
+
  *
  */
 

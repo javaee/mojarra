@@ -29866,14 +29866,26 @@ this application, and passing the result through the
     </renderer>
     <renderer>
       <description><![CDATA[<p><span class="changed_modified_2_0
-            changed_modified_2_0_rev_a">Render</span> an HTML option
-            list.</p>
+            changed_modified_2_0_rev_a
+            changed_modified_2_2">Render</span> an HTML option list.</p>
 
       <p>Decode Behavior</p>
 
       <p>This section documents the decode behavior for all renderers
       that handle <code>UISelectMany</code> or <code>UISelectOne</code>
       components.</p>
+
+      <div class="changed_added_2_2">
+
+      <p>If the collection type of the collection that provides the
+      value of this component is not one of the types handled by a
+      converter in the package <code>javax.faces.convert</code>, a
+      converter must explicitly be specified using the appropriate code
+      in the VDL.  For example, use <code>&lt;f:converter&gt;</code> in
+      JSP or Facelet pages.</p>
+
+      </div>
+      
 
       <ul>
 
