@@ -65,8 +65,7 @@ public class Issue1089IT {
     public void testDataAttributes() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/data-attributes.xhtml");
         String pageMarkup = page.getBody().asXml();
-//        This needs to be reworked to not use project stage, but another EL expression.
-//        assertTrue(pageMarkup.contains("data-development=\"/data-attributes.xhtml\""));
+        assertTrue(pageMarkup.contains("data-development=\"/data-attributes.xhtml\""));
         assertTrue(pageMarkup.contains("data-name=\"value\""));
         assertTrue(pageMarkup.contains("data-outer-inner=\"innerValue\""));
         assertTrue(pageMarkup.contains("data-a-b-c-d=\"e\""));
