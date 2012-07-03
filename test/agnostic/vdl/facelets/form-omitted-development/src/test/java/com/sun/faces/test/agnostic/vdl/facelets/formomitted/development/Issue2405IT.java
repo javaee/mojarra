@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.vdl.facelets.formomitted;
+package com.sun.faces.test.agnostic.vdl.facelets.formomitted.development;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -66,7 +66,6 @@ public class Issue2405IT {
     public void testReplaceVDL() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/form-omitted.xhtml");
         String text = page.asText();
-        assertEquals(200, page.getWebResponse().getStatusCode());
-        assertTrue(text.indexOf("The form component needs to have a UIForm in its ancestry. Suggestion: enclose the necessary components within <h:form>") == -1);
+        assertTrue(text.indexOf("The form component needs to have a UIForm in its ancestry. Suggestion: enclose the necessary components within <h:form>") != -1);
     }
 }
