@@ -204,9 +204,10 @@ public final class ComponentSupport {
     
     /**
      * By TagId, find Child
-     * @param parent
-     * @param id
-     * @return
+     * 
+     * @param parent the parent UI component
+     * @param id the id
+     * @return the UI component
      */
     public static UIComponent findChildByTagId(UIComponent parent, String id) {
         Iterator itr = parent.getFacetsAndChildren();
@@ -494,7 +495,7 @@ public final class ComponentSupport {
      * @param ctx Facelet context
      * @param needUniqueIds true if literal Ids have to be made unique, false otherwise
      * @return the old value of the needUniqueIds flag
-     * @see getNeedUniqueIds
+     * @see #getNeedUniqueIds(javax.faces.view.facelets.FaceletContext) 
      */
     public static boolean setNeedUniqueIds(FaceletContext ctx,
                                                  boolean needUniqueIds) {
@@ -509,7 +510,7 @@ public final class ComponentSupport {
      *
      * @param ctx Facelet context
      * @return true if the literal Ids need to be made unique, false otherwise
-     * @see setNeedUniqueIds
+     * @see #setNeedUniqueIds(javax.faces.view.facelets.FaceletContext, boolean) 
      */
     public static boolean getNeedUniqueIds(FaceletContext ctx) {
         Boolean val = (Boolean)ctx.getAttribute(_UNIQUE_IDS_ATTR);
