@@ -111,7 +111,7 @@ public class FlowEntryExitIT {
         button = (HtmlSubmitInput) page.getElementById("nonFlow");
         webClient.setThrowExceptionOnFailingStatusCode(false);
         page = button.click();
-        pageText = page.getBody().asText();
+        pageText = page.getBody().asXml();
         
         assertTrue(pageText.contains("ContextNotActiveException"));
         assertTrue(pageText.contains("javax.faces.flow.FlowScoped"));
