@@ -101,6 +101,30 @@ public class TestUtil_local extends TestCase {
         assertNotNull(result = Util.getLocaleFromString("tk_IQ-Traditional"));
         assertNotNull(result = Util.getLocaleFromString("tk-IQ_Traditional"));
 
+        try {
+            Util.getLocaleFromString("aoeuhoentuhtnhtnhoaenhnhu");
+            fail();
+        } catch(Exception exception) {}
+
+        try {
+            Util.getLocaleFromString("ps_PS-at-pq-wp");
+            fail();
+        } catch (Exception exception) {}
+            
+        try {
+            Util.getLocaleFromString("tg-AF-oe-12");
+            fail();
+        } catch (Exception exception) {}
+
+        try {
+            Util.getLocaleFromString("12-34");
+            fail();
+        } catch (Exception exception) {}
+
+        try {
+            Util.getLocaleFromString("12-");
+            fail();
+        } catch (Exception exception) {}
     }
 
 } // end of class TestUtil_local
