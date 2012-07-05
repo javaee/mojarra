@@ -75,20 +75,20 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * <p>How this implementation works</p>
 
- * <p>This class is an application singleton.  It has one ivar, {@link
- * #innerMap}.  Entries are added to and removed from this map as needed
+ * <p>This class is an application singleton.  It has one ivar, 
+ * innerMap.  Entries are added to and removed from this map as needed
  * according to how the flash scope is defined in the spec.  This
  * implementation never touches the session, nor does it cause the
  * session to be created.</p>
 
  * <p>Most of the hairy logic is encapsulated with in the inner class
- * {@link #PreviousNextFlashInfoManager}.  An instance of this class is
+ * PreviousNextFlashInfoManager.  An instance of this class is
  * obtained by calling one of the variants of getCurrentFlashManager().
  * When the instance is no longer needed for this request, call
  * releaseCurrentFlashManager().</p>
 
- * <p>Two very important methods are {@link getPhaseMapForWriting} and
- * {@link getPhaseMapForReading}.  These methods are the basis for the
+ * <p>Two very important methods are getPhaseMapForWriting() and
+ * getPhaseMapForReading().  These methods are the basis for the
  * Map implementation methods.  Methods that need to write to the map
  * use getPhaseMapForWriting(), those that need to read use
  * getPhaseMapForReading().  These methods allow for the laziness that
