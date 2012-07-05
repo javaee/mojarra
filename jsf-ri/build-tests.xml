@@ -325,22 +325,18 @@
                       name="com.sun.faces.application.TestApplicationImpl"/>
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.application.TestApplicationEvents"/>
+<!--
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.application.TestApplicationImpl_Config"/>
+-->
                 <test todir="${impl.test.results.dir}"
                     name="com.sun.faces.application.TestFacesMessage"/>
                 <test todir="${impl.test.results.dir}"
                     name="com.sun.faces.application.TestHASDeprStateManagerImpl"/>
                 <test todir="${impl.test.results.dir}"
-                      name="com.sun.faces.application.TestNavigationHandler"/>
-                <test todir="${impl.test.results.dir}"
-                      name="com.sun.faces.application.TestJSF2NavigationHandler"/>
-                <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.application.TestStateManagerImpl"/>
                 <test todir="${impl.test.results.dir}"
                     name="com.sun.faces.application.TestViewHandlerImpl"/>
-                <test todir="${impl.test.results.dir}"
-                      name="com.sun.faces.config.ConfigFileTestCase"/>
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.component.visit.TestTreeWithUIRepeatVisit"/>
                 <test todir="${impl.test.results.dir}"
