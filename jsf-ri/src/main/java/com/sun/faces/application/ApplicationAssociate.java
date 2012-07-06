@@ -277,9 +277,9 @@ public class ApplicationAssociate {
             ApplicationAssociate.this.initializeFacelets();
             
             WebConfiguration config = WebConfiguration.getInstance();
+            FlowHandlerFactory flowHandlerFactory = (FlowHandlerFactory) FactoryFinder.getFactory(FactoryFinder.FLOW_HANDLER_FACTORY);
+            ApplicationAssociate.this.flowHandler = flowHandlerFactory.createFlowHandler(FacesContext.getCurrentInstance());
             if (config.isHasFlows()) {
-                FlowHandlerFactory flowHandlerFactory = (FlowHandlerFactory) FactoryFinder.getFactory(FactoryFinder.FLOW_HANDLER_FACTORY);
-                ApplicationAssociate.this.flowHandler = flowHandlerFactory.createFlowHandler(FacesContext.getCurrentInstance());
                 try {
                     loadFlowsFromJars(ApplicationAssociate.this.flowHandler);
                 } catch (IOException ex) {
