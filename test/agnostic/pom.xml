@@ -64,11 +64,12 @@
         <module>application</module>
         <module>composite</module>
         <module>config</module>
+        <module>context</module>
+        <module>converter</module>
         <module>dynamic</module>
         <module>flash</module>
         <module>renderKit</module>
         <module>resource</module>
-        <module>converter</module>
         <module>shared</module>
         <module>stateSaving</module>
         <module>vdl</module>
