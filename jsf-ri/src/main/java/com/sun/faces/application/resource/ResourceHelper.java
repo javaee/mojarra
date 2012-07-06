@@ -72,6 +72,7 @@ import javax.el.ELContext;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageUtils;
+import java.util.Map;
 
 /**
  * <p>
@@ -587,7 +588,9 @@ public abstract class ResourceHelper {
      */
     private VersionInfo getVersion(String pathElement, boolean isResource) {
 
-        String[] pathElements = Util.split(pathElement, "/");
+        Map<String, Object> appMap = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
+
+        String[] pathElements = Util.split(appMap, pathElement, "/");
         String path = pathElements[pathElements.length - 1];
 
         String extension = null;
@@ -728,7 +731,9 @@ public abstract class ResourceHelper {
                                                            expressionBody);
                     throw new ELException(message);
                 }
-                String[] parts = Util.split(expressionBody, ":");
+                Map<String, Object> appMap = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
+
+                String[] parts = Util.split(appMap, expressionBody, ":");
                 if (null == parts[0] || null == parts[1]) {
                     String message =
                           MessageUtils

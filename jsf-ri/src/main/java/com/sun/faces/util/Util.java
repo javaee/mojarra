@@ -112,62 +112,7 @@ public class Util {
         throw new IllegalStateException();
     }
 
-    /**
-     * <p>The <code>ThreadLocal</code> when invoking methods on this class
-     * from outside the scope of the FacesContext, this threadLocal is used
-     * to serve as the ApplicationMap.</p>
-     */
-    private static ThreadLocal<Map<String, Object>> nonFacesContextApplicationMap;
-
-
-    public static void setNonFacesContextApplicationMap(Map<String, Object> instance) {
-        lazilyInitializeNonFacesContextApplicationMap();
-        if (null == instance) {
-            nonFacesContextApplicationMap.remove();
-        } else {
-            nonFacesContextApplicationMap.set(instance);
-        }
-    }
-
-    private static void lazilyInitializeNonFacesContextApplicationMap() {
-        if (null == nonFacesContextApplicationMap) {
-            nonFacesContextApplicationMap = new ThreadLocal<Map<String, Object>>() {
-                @Override
-                protected Map<String, Object> initialValue() {
-                    return (null);
-                }
-            };
-        }
-    }
-
-    private static Map<String, Object> getNonFacesContextApplicationMap() {
-        lazilyInitializeNonFacesContextApplicationMap();
-        return nonFacesContextApplicationMap.get();
-    }
-
-    private static Map<String, Object> getApplicationMap() {
-        Map<String, Object> result = null;
-        FacesContext context = FacesContext.getCurrentInstance();
-        if (null != context) {
-            ExternalContext externalContext = context.getExternalContext();
-            if (null != externalContext) {
-                result = externalContext.getApplicationMap();
-            }
-        }
-        // This will be true if FacesServlet.service is not on the callstack
-        if (null == result) {
-            result = getNonFacesContextApplicationMap();
-            if (null == result) {
-                result = new HashMap<String, Object>();
-                setNonFacesContextApplicationMap(result);
-            }
-        }
-
-        return result;
-    }
-
-    private static Map<String,Pattern> getPatternCache() {
-        Map<String, Object> appMap = getApplicationMap();
+    private static Map<String,Pattern> getPatternCache(Map<String, Object> appMap) {
         Map<String,Pattern> result = 
                 (Map<String,Pattern>) appMap.get(patternCacheKey);
         if (null == result) {
@@ -252,31 +197,6 @@ public class Util {
     public static boolean isUnitTestModeEnabled() {
         return unitTestModeEnabled;
     }
-
-    public static void setCoreTLVActive(boolean active) {
-        Map<String, Object> appMap = getApplicationMap();
-        appMap.put(coreTLVEnabled, (Boolean) active);
-    }
-
-    public static boolean isCoreTLVActive() {
-        Boolean result = true;
-        Map<String, Object> appMap = getApplicationMap();
-        return (null == (result = (Boolean) appMap.get(coreTLVEnabled)) ? true
-                : result.booleanValue());
-    }
-
-    public static void setHtmlTLVActive(boolean active) {
-        Map<String, Object> appMap = getApplicationMap();
-        appMap.put(htmlTLVEnabled, (Boolean) active);
-    }
-
-    public static boolean isHtmlTLVActive() {
-        Boolean result = true;
-        Map<String, Object> appMap = getApplicationMap();
-        return (null == (result = (Boolean) appMap.get(htmlTLVEnabled)) ? true
-                : result.booleanValue());
-    }
-
 
     public static Class loadClass(String name,
                                   Object fallbackClass)
@@ -634,14 +554,15 @@ public class Util {
      * @param regex the regex used for splitting
      * @return the result of <code>Pattern.spit(String, int)</code>
      */
-    public synchronized static String[] split(String toSplit, String regex) {
-        Map<String, Pattern> patternCache = getPatternCache();
+    public synchronized static String[] split(Map<String, Object> appMap, String toSplit, String regex) {
+        Map<String, Pattern> patternCache = getPatternCache(appMap);
         Pattern pattern = patternCache.get(regex);
         if (pattern == null) {
             pattern = Pattern.compile(regex);
             patternCache.put(regex, pattern);
         }
         return  pattern.split(toSplit, 0);
+        
     }
 
      public synchronized static String[] split(ServletContext sc,
