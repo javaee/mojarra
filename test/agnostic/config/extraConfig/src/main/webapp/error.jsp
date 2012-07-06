@@ -1,5 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!--
+<%--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
@@ -39,35 +38,19 @@
     only if the new code is made subject to such option by the copyright
     holder.
 
--->
+--%>
 
+<%@ page isErrorPage="true" import="java.io.*" contentType="text/plain"%>
 
-<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
-    <context-param>
-        <param-name>javax.faces.PARTIAL_STATE_SAVING</param-name>
-        <param-value>${webapp.partialStateSaving}</param-value>
-    </context-param>
-    <context-param>
-        <param-name>javax.faces.CONFIG_FILES</param-name>
-        <param-value>/WEB-INF/extra-config.xml</param-value>
-    </context-param>
+Message:
+<%=exception.getMessage()%>
 
-    <servlet>
-        <servlet-name>Faces Servlet</servlet-name>
-        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>Faces Servlet</servlet-name>
-        <url-pattern>/faces/*</url-pattern>
-    </servlet-mapping>
-    <session-config>
-        <session-timeout>30</session-timeout>
-    </session-config>
-    <error-page>
-        <exception-type>java.lang.Throwable</exception-type>
-        <location>/error.jsp</location>
-    </error-page>
-</web-app>
+StackTrace:
+<%
+	StringWriter stringWriter = new StringWriter();
+	PrintWriter printWriter = new PrintWriter(stringWriter);
+	exception.printStackTrace(printWriter);
+	out.println(stringWriter);
+	printWriter.close();
+	stringWriter.close();
+%>
