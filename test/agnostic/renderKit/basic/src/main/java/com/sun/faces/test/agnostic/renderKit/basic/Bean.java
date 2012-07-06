@@ -85,9 +85,5 @@ public class Bean {
     
     public Integer getOne() { return (Integer) 1; }
     
-    public String getJson() {
-        return "{ outer : { inner : innerValue } }";
-    }
-    
     
 }

@@ -83,9 +83,6 @@
     <property name="javax-enterprise.version" value="1.0-SP1"/>
     <property name="maven.repository.importer.version" value="1.2"/>
     <property name="yuicompressor.version" value="2.4.2"/>
-    <property name="jettison.groupId" value="org.codehaus.jettison"/>
-    <property name="jettison.artifactId" value="jettison"/>
-    <property name="jettison.version" value="1.1"/>
 
     <property name="central.maven2" value="http://repo1.maven.org/maven2" />
     <property name="redhat.maven2" value="https://repository.jboss.org/nexus/content/repositories/thirdparty-releases"/>
@@ -147,7 +144,6 @@
     <property name="javax-enterprise.jar" value="${dependency.jar.dir}/cdi-api-${javax-enterprise.version}.jar"/>
     <property name="glassfish.download.url" value="http://download.java.net/javaee5/v2ur1/promoted/"/>
     <property name="glassfish.installer.jar" value="glassfish-installer-v2ur1-b09d-"/>
-    <property name="jettison.jar" value="${dependency.jar.dir}/${jettison.artifactId}-${jettison.version}.jar" />
 
     <property name="gf-ant.version" value="3.1.1"/>
     <property name="gf-ant.jar"     value="${dependency.jar.dir}/ant-tasks.jar"/>
@@ -542,17 +538,6 @@
             <then>
                 <get src="${central.maven2}/javax/enterprise/cdi-api/${javax-enterprise.version}/cdi-api-${javax-enterprise.version}.jar"
                      dest="${javax-enterprise.jar}"
-                     usetimestamp="true"/>
-            </then>
-        </if>
-        <!-- jettison -->
-        <if>
-            <not>
-                <available file="${jettison.jar}" property="ignored"/>
-            </not>
-            <then>
-                <get src="${central.maven2}/org/codehaus/jettison/${jettison.artifactId}/${jettison.version}/${jettison.artifactId}-${jettison.version}.jar"
-                     dest="${jettison.jar}"
                      usetimestamp="true"/>
             </then>
         </if>

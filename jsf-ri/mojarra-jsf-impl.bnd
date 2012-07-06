@@ -62,8 +62,7 @@ Import-Package: javax.faces.*,\
   org.mortbay.jetty.annotations;resolution:=optional, \
   org.mortbay.jetty.plus.annotation;resolution:=optional, \
   org.apache.*;resolution:=optional, \
-  org.xml.sax.*,javax.naming.*, \
-  org.codehaus.jettison.*
+  org.xml.sax.*,javax.naming.*
 Include-Resource: META-INF=build/classes/META-INF,build/classes
 Bundle-Version: @osgi.version@
 Bundle-Name: Mojarra JSF Implementation @full.impl.version@

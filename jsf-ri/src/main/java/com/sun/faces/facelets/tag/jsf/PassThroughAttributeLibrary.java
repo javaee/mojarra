@@ -40,94 +40,16 @@
 
 package com.sun.faces.facelets.tag.jsf;
 
-import com.sun.faces.facelets.util.FunctionLibrary;
-import com.sun.faces.util.FacesLogger;
-import java.util.ArrayDeque;
-import java.util.Collections;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
+import com.sun.faces.facelets.tag.AbstractTagLibrary;
 
 
-public final class PassThroughAttributeLibrary extends FunctionLibrary {
+public final class PassThroughAttributeLibrary extends AbstractTagLibrary {
 
     public final static String Namespace = "http://java.sun.com/jsf/passthrough";
-    private final static Logger LOGGER = FacesLogger.FACELETS_COMPONENT.getLogger();
-
 
     public final static PassThroughAttributeLibrary Instance = new PassThroughAttributeLibrary();
 
     public PassThroughAttributeLibrary() {
-        super(PassThroughAttributeLibrary.class, Namespace);
+        super(Namespace);
     }
-    
-    public static Map<String, Object> jsonToMap(String dataValue) {
-        Map<String, Object> attrs = new HashMap<String, Object>();
-        JSONObject json = null;
-        
-        try { 
-            json = new JSONObject(dataValue);
-            Iterator<String> keys = json.keys();
-            Object value = null;
-            boolean isSimple = true;
-            while (keys.hasNext()) {
-                value = json.get(keys.next());
-                if (value instanceof JSONObject) {
-                    isSimple = false;
-                    break;
-                }
-            }
-            if (isSimple) {
-                keys = json.keys();
-                String key = null;
-                String attrName = null;
-                while (keys.hasNext()) {
-                    key = keys.next();
-                    attrs.put(attrName, json.get(key));
-                }
-            } else {
-                Deque<String> stack = new ArrayDeque<String>();
-                renderNestedAttribute(stack, attrs, json);
-            }
-            
-        } catch (JSONException je) {
-            if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.log(Level.SEVERE, "Unable to render JSON", je);
-            }
-            
-        }
-        return attrs;
-    }
-    
-    private static void renderNestedAttribute(Deque<String> nameStack,
-            Map<String, Object> attrs, JSONObject json) throws JSONException {
-        Iterator<String> keys = json.keys();
-        String key = null;
-        Object value = null;
-        while (keys.hasNext()) {
-            key = keys.next();
-            nameStack.push(key);
-            value = json.get(key);
-            if (value instanceof JSONObject) {
-                renderNestedAttribute(nameStack, attrs, (JSONObject)value);
-            } else {
-                StringBuilder attrNameBuilder = new StringBuilder();
-                Iterator<String> attrNames = nameStack.descendingIterator();
-                while (attrNames.hasNext()) {
-                    attrNameBuilder.append("-").append(attrNames.next());
-                }
-                String attrName = attrNameBuilder.substring(1);
-                attrs.put(attrName, value.toString());
-                nameStack.pop();
-            }
-        }
-    }
-    
-    
 }
