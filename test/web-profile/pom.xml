@@ -11,18 +11,6 @@
     <artifactId>pom</artifactId>
     <packaging>pom</packaging>
     <name>Mojarra ${project.version} - Test - Web-Profile</name>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.2</version>
-                <configuration>
-                    <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
-                </configuration>
-            </plugin>
-        </plugins>    
-    </build>
     <dependencies>
         <dependency>
             <groupId>com.sun.faces.test</groupId>
@@ -37,8 +25,8 @@
         <module>multi_templating</module>
     </modules>
     <properties>
-        <webapp.partialStateSaving>true</webapp.partialStateSaving>
-        <webapp.stateSavingMethod>client</webapp.stateSavingMethod>
         <webapp.projectStage>Production</webapp.projectStage>
+        <webapp.partialStateSaving>true</webapp.partialStateSaving>
+        <webapp.stateSavingMethod>server</webapp.stateSavingMethod>
     </properties>
 </project>

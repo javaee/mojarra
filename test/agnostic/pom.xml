@@ -11,18 +11,6 @@
     <artifactId>pom</artifactId>
     <packaging>pom</packaging>
     <name>Mojarra ${project.version} - Test - Agnostic</name>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.2</version>
-                <configuration>
-                    <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
-                </configuration>
-            </plugin>
-        </plugins>    
-    </build>
     <dependencies>
         <dependency>
             <groupId>com.sun.faces.test</groupId>
@@ -37,8 +25,8 @@
         <module>composite</module>
         <module>converter</module>
         <module>dynamic</module>
-        <module>flash</module>
         <module>externalContext</module>
+        <module>flash</module>
         <module>lifecycle</module>
         <module>renderKit</module>
         <module>resource</module>
