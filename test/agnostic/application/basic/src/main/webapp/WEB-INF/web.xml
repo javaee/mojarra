@@ -62,4 +62,8 @@
     <session-config>
         <session-timeout>30</session-timeout>
     </session-config>
+    <error-page>
+        <exception-type>java.lang.Throwable</exception-type>
+        <location>/error.jsp</location>
+    </error-page>
 </web-app>
