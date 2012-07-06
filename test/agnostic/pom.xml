@@ -21,7 +21,6 @@
     </dependencies>
     <modules>
         <module>ajax</module>
-        <module>application</module>
         <module>composite</module>
         <module>converter</module>
         <module>dynamic</module>
