@@ -40,6 +40,8 @@
  */
 package com.sun.faces.application.resource;
 
+import com.sun.faces.RIConstants;
+import com.sun.faces.util.Util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -102,6 +104,12 @@ public class FaceletWebappResourceHelper extends ResourceHelper {
                 }
             }
             URL url = Resource.getResourceUrl(ctx, path);
+            
+            if (null == url) {
+                ClassLoader cl = Util.getCurrentLoader(this);
+                url = cl.getResource(RIConstants.FLOW_IN_JAR_PREFIX + resourceName);
+            }
+            
             if (null != url) {
                 result = new FaceletResourceInfo(resourceName, null, this, url);
             }

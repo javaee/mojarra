@@ -16,6 +16,7 @@
         <module>basic-multi-page</module>
         <module>basic-multi-page-fdl-in-web-inf</module>
         <module>factory</module>
+        <module>multi-page-from-jar</module>
         <module>intermediate</module>
     </modules>
 </project>

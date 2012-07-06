@@ -126,6 +126,10 @@ public class RIConstants {
     
     public static final int FLOW_DEFINITION_ID_SUFFIX_LENGTH = FLOW_DEFINITION_ID_SUFFIX.length();
     
+    public static final String FLOW_IN_JAR_PREFIX = "META-INF/flows";
+    
+    public static final int FLOW_IN_JAR_PREFIX_LENGTH = FLOW_IN_JAR_PREFIX.length();
+    
     private RIConstants() {
 
         throw new IllegalStateException();

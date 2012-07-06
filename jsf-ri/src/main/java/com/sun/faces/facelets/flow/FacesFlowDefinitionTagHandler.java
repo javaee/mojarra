@@ -102,6 +102,12 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
             id = flowIdAttr.getValue(ctx);
         } else {
             id = this.tag.getLocation().getPath();
+
+            int i = id.indexOf(RIConstants.FLOW_IN_JAR_PREFIX);
+            if (-1 != i) { 
+                id = id.substring(i + RIConstants.FLOW_IN_JAR_PREFIX_LENGTH);
+            }
+            
             if (id.charAt(0) == '/') {
                 id = id.substring(1);
             }

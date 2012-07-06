@@ -82,9 +82,11 @@ import com.sun.faces.el.FacesCompositeELResolver;
 import com.sun.faces.el.VariableResolverChainWrapper;
 import com.sun.faces.facelets.PrivateApiFaceletCacheAdapter;
 import com.sun.faces.facelets.tag.jsf.PassThroughAttributeLibrary;
-import com.sun.faces.flow.FlowHandlerImpl;
+import com.sun.faces.facelets.util.Classpath;
 import com.sun.faces.lifecycle.ELResolverInitPhaseListener;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import javax.el.CompositeELResolver;
 import javax.el.ELResolver;
@@ -113,11 +115,15 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.NavigationCase;
+import javax.faces.application.ViewHandler;
 import javax.faces.component.FacesComponent;
 import javax.faces.event.PostConstructApplicationEvent;
 import javax.faces.event.SystemEventListener;
 import javax.faces.flow.FlowHandler;
 import javax.faces.flow.FlowHandlerFactory;
+import javax.faces.view.ViewDeclarationLanguage;
+import javax.faces.view.ViewMetadata;
+import javax.faces.view.facelets.Facelet;
 import javax.faces.view.facelets.FaceletCacheFactory;
 import javax.faces.view.facelets.FaceletFactoryWrapper;
 import javax.faces.view.facelets.FaceletsResourceResolver;
@@ -269,9 +275,63 @@ public class ApplicationAssociate {
 
         public void processEvent(SystemEvent event) throws AbortProcessingException {
             ApplicationAssociate.this.initializeFacelets();
-            FlowHandlerFactory flowHandlerFactory = (FlowHandlerFactory) FactoryFinder.getFactory(FactoryFinder.FLOW_HANDLER_FACTORY);
-            ApplicationAssociate.this.flowHandler = flowHandlerFactory.createFlowHandler(FacesContext.getCurrentInstance());
+            
+            WebConfiguration config = WebConfiguration.getInstance();
+            if (config.isHasFlows()) {
+                FlowHandlerFactory flowHandlerFactory = (FlowHandlerFactory) FactoryFinder.getFactory(FactoryFinder.FLOW_HANDLER_FACTORY);
+                ApplicationAssociate.this.flowHandler = flowHandlerFactory.createFlowHandler(FacesContext.getCurrentInstance());
+                try {
+                    loadFlowsFromJars(ApplicationAssociate.this.flowHandler);
+                } catch (IOException ex) {
+                    LOGGER.log(Level.SEVERE, null, ex);
+                }
+            }
+
         }
+        
+        private synchronized void loadFlowsFromJars(FlowHandler flowHandler) throws IOException {
+            final String flowsPrefix = "META-INF/flows/";
+            final int flowsPrefixLength = flowsPrefix.length();
+            URL[] flowFiles = Classpath.search(Util.getCurrentLoader(this),
+                    flowsPrefix,
+                    RIConstants.FLOW_DEFINITION_ID_SUFFIX);
+            if (null == flowFiles || 0 == flowFiles.length) {
+                return;
+            }
+            FacesContext context = FacesContext.getCurrentInstance();
+            ViewHandler viewHandler = Util.getViewHandler(context);
+            // Hack: the real FDL is not based in Facelets.
+            ViewDeclarationLanguage vdl = viewHandler.getViewDeclarationLanguage(context, "index.xhtml");
+            String flowDefId = null;
+            int i;
+            UIViewRoot root = null;
+            
+            for (URL url : flowFiles) {
+                flowDefId = url.toExternalForm();
+                LOGGER.log(Level.INFO, "Have flow URL: {0}", flowDefId);
+                i = flowDefId.indexOf(flowsPrefix);
+                assert(-1 != i);
+                flowDefId = flowDefId.substring(i + flowsPrefixLength);
+                root = viewHandler.createView(context, flowDefId);
+                ViewMetadata metadata = null;
+                // Will be null for JSP views
+                metadata = vdl.getViewMetadata(context, flowDefId);
+                
+                if (null != metadata) {
+                    
+                    Facelet f = faceletFactory.getMetadataFacelet(url);
+                    
+                    f.apply(context, root);
+                    
+                }
+                
+            }
+            
+        }
+    
+    
+    
+        
         
     }
     
