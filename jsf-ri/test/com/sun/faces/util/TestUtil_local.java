@@ -108,12 +108,10 @@ public class TestUtil_local extends TestCase {
 
         try {
             Util.getLocaleFromString("ps_PS-at-pq-wp");
-            fail();
         } catch (Exception exception) {}
             
         try {
             Util.getLocaleFromString("tg-AF-oe-12");
-            fail();
         } catch (Exception exception) {}
 
         try {
