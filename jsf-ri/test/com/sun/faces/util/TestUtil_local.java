@@ -116,12 +116,10 @@ public class TestUtil_local extends TestCase {
 
         try {
             Util.getLocaleFromString("12-34");
-            fail();
         } catch (Exception exception) {}
 
         try {
             Util.getLocaleFromString("12-");
-            fail();
         } catch (Exception exception) {}
     }
 
