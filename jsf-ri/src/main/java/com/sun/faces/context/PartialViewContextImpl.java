@@ -224,7 +224,7 @@ import javax.faces.lifecycle.ClientWindow;
     }
 
     /**
-     * @see javax.faces.context.PartialViewContext#processPartial(javax.faces.event.PhaseId))
+     * @see PartialViewContext#processPartial(javax.faces.event.PhaseId) 
      */
     @Override
     public void processPartial(PhaseId phaseId) {
