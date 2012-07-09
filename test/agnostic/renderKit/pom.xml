@@ -13,6 +13,5 @@
     <name>Mojarra ${project.version} - Test - Agnostic - RenderKit</name>
     <modules>
         <module>basic</module>
-        <module>markup</module>
     </modules>
 </project>
