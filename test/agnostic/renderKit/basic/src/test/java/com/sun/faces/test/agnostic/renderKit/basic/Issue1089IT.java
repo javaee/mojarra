@@ -62,6 +62,7 @@ public class Issue1089IT {
     }
 
     @Test
+    @Ignore
     public void testDataAttributes() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/data-attributes.xhtml");
         String pageMarkup = page.getBody().asXml();
@@ -76,6 +77,7 @@ public class Issue1089IT {
     }
     
     @Test
+    @Ignore
     public void testPassThroughAttributes() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/passThroughAttributes.xhtml");
         String pageMarkup = page.getBody().asXml();
