@@ -88,10 +88,8 @@ public class HtmlBasicValidator extends FacesValidator {
 
 
     protected DefaultHandler getSAXHandler() {
-	// don't run the TLV if we're in designTime, or the RIConstants
-	// says not to.
-	if (java.beans.Beans.isDesignTime() || 
-	    !Util.isHtmlTLVActive()) {
+	// don't run the TLV if we're in designTime
+	if (java.beans.Beans.isDesignTime()) {
 	    return null;
 	}
 	

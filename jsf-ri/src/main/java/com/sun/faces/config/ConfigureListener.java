@@ -45,7 +45,6 @@ import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.application.WebappLifecycleListener;
 
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableGroovyScripting;
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableHtmlTagLibraryValidator;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableLazyBeanValidation;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableThreading;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.ForceLoadFacesConfigFiles;
@@ -73,7 +72,6 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import javax.el.CompositeELResolver;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.faces.FactoryFinder;
@@ -209,10 +207,6 @@ public class ConfigureListener implements ServletRequestListener,
                         "jsf.config.listener.version",
                         getServletContextIdentifier(context));
             }
-
-            // see if we need to disable our TLValidator
-            Util.setHtmlTLVActive(
-                    webConfig.isOptionEnabled(EnableHtmlTagLibraryValidator));
 
             if (webConfig.isOptionEnabled(VerifyFacesConfigObjects)) {
                 if (LOGGER.isLoggable(Level.WARNING)) {

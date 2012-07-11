@@ -203,7 +203,8 @@ public class ApplicationAssociate {
                  MessageUtils.getExceptionMessageString(
                       MessageUtils.APPLICATION_ASSOCIATE_EXISTS_ID));
         }
-        externalContext.getApplicationMap().put(ASSOCIATE_KEY, this);
+        Map<String, Object> appMap = externalContext.getApplicationMap();
+        appMap.put(ASSOCIATE_KEY, this);
         //noinspection CollectionWithoutInitialCapacity
         navigationMap = new ConcurrentHashMap<String, Set<NavigationCase>>();
         injectionProvider = InjectionProviderFactory.createInstance(externalContext);
@@ -223,7 +224,7 @@ public class ApplicationAssociate {
         devModeEnabled = (appImpl.getProjectStage() == ProjectStage.Development);
         // initialize Facelets
         if (!webConfig.isOptionEnabled(DisableFaceletJSFViewHandler)) {
-            compiler = createCompiler(webConfig);
+            compiler = createCompiler(appMap, webConfig);
             faceletFactory = createFaceletFactory(compiler, webConfig);
         }
 
@@ -231,7 +232,7 @@ public class ApplicationAssociate {
             resourceCache = new ResourceCache();
         }
 
-        resourceManager = new ResourceManager(resourceCache);
+        resourceManager = new ResourceManager(appMap, resourceCache);
         namedEventManager = new NamedEventManager();
         applicationStateInfo = new ApplicationStateInfo();
     }
@@ -686,7 +687,7 @@ public class ApplicationAssociate {
     }
 
 
-    protected Compiler createCompiler(WebConfiguration webConfig) {
+    protected Compiler createCompiler(Map<String, Object> appMap, WebConfiguration webConfig) {
 
         Compiler c = new SAXCompiler();
 
@@ -695,7 +696,7 @@ public class ApplicationAssociate {
               .getOptionValue(FaceletsDecorators);
         if (decParam != null) {
             decParam = decParam.trim();
-            String[] decs = Util.split(decParam, ";");
+            String[] decs = Util.split(appMap, decParam, ";");
             TagDecorator decObj;
             for (String decorator : decs) {
                 try {
