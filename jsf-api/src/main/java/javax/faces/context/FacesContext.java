@@ -45,6 +45,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
@@ -87,6 +88,9 @@ public abstract class FacesContext {
     private FacesContext defaultFacesContext;
     private boolean processingEvents = true;
     private boolean isCreatedFromValidFactory = true;
+
+    private static ConcurrentHashMap threadInitContext = new ConcurrentHashMap(2);
+    private static ConcurrentHashMap initContextServletContext = new ConcurrentHashMap(2);
 
     public FacesContext() {
         Thread curThread = Thread.currentThread();
@@ -864,9 +868,13 @@ public abstract class FacesContext {
      * have this designation is undefined.</p>
      */
     public static FacesContext getCurrentInstance() {
+        FacesContext facesContext = instance.get();
 
-        return (instance.get());
+        if (null == facesContext) {
+            facesContext = (FacesContext)threadInitContext.get(Thread.currentThread());
 
+        }
+        return facesContext;
     }
 
 

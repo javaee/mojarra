@@ -21,7 +21,10 @@
     </dependencies>
     <modules>
         <module>ajax</module>
+        <module>application</module>
         <module>composite</module>
+        <module>config</module>
+        <module>context</module>
         <module>converter</module>
         <module>dynamic</module>
         <module>externalContext</module>

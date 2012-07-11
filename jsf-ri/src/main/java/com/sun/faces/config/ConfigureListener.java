@@ -116,6 +116,7 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -300,9 +301,9 @@ public class ConfigureListener implements ServletRequestListener,
         ServletContext context = sce.getServletContext();
         InitFacesContext initContext = null;
         try {
-            initContext = InitFacesContext.getInstance(context);
+            initContext = getInitFacesContext(context);
             if (null == initContext) {
-                    initContext = new InitFacesContext(context);
+                initContext = new InitFacesContext(context);
             }
 
             if (webAppListener != null) {
@@ -349,11 +350,9 @@ public class ConfigureListener implements ServletRequestListener,
             // Release the initialization mark on this web application
             ConfigManager.getInstance().destroy(context);
             FactoryFinder.releaseFactories();
-            if (initContext != null) {
-                initContext.release();
-            }
             ReflectionUtils.clearCache(Thread.currentThread().getContextClassLoader());
             WebConfiguration.clear(context);
+            InitFacesContext.cleanupInitMaps(context);
         }
 
     }
@@ -737,6 +736,22 @@ public class ConfigureListener implements ServletRequestListener,
             return false;
         }
 
+    }
+
+    private InitFacesContext getInitFacesContext(ServletContext context) {
+        Map initContextServletContext = InitFacesContext.getInitContextServletContextMap();
+        Set entries = initContextServletContext.entrySet();
+        InitFacesContext initContext = null;
+        for (Iterator iterator1 = entries.iterator(); iterator1.hasNext();) {
+            Map.Entry entry1 = (Map.Entry)iterator1.next();
+            Object initContextKey = entry1.getKey();
+            Object value1 = entry1.getValue();
+            if (context == value1) {
+                initContext =  (InitFacesContext)initContextKey;
+                break;
+            }
+        }
+        return initContext;
     }
 
     // ----------------------------------------------------------- Inner classes

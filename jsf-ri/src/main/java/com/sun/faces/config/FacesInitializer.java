@@ -42,6 +42,7 @@ package com.sun.faces.config;
 
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.config.InitFacesContext;
 
 import javax.faces.application.ResourceDependencies;
 import javax.faces.application.ResourceDependency;
@@ -110,7 +111,9 @@ public class FacesInitializer implements ServletContainerInitializer {
 
 
     public void onStartup(Set<Class<?>> classes, ServletContext servletContext)
-          throws ServletException {
+        throws ServletException {
+
+        InitFacesContext initFacesContext = new InitFacesContext(servletContext);
 
         if (shouldCheckMappings(classes, servletContext)) {
 
