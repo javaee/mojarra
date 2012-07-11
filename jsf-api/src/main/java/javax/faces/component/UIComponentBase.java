@@ -220,33 +220,7 @@ public abstract class UIComponentBase extends UIComponent {
                 this.getStateHelper().get(PropertyKeys.passThroughAttributes);
         if (null == result) {
             if (create) {
-                result = new ConcurrentHashMap<String, Object>() {
-
-                    @Override
-                    public Object put(String key, Object value) {
-                        if (null == key || null == value) {
-                            throw new NullPointerException();
-                        }
-                        validateKey(key);
-                        return super.put(key, value);
-                    }
-
-                    @Override
-                    public Object putIfAbsent(String key, Object value) {
-                        if (null == key || null == value) {
-                            throw new NullPointerException();
-                        }
-                        validateKey(key);
-                        return super.putIfAbsent(key, value);
-                    }
-                
-                    private void validateKey(Object key) {
-                        if (!(key instanceof String) || (key instanceof ValueExpression)) {
-                            throw new IllegalArgumentException();
-                        }
-                    }
-                
-                };
+                result = new PassThroughAttributesMap<String, Object>();
                 this.getStateHelper().put(PropertyKeys.passThroughAttributes, 
                         result);
             }
@@ -256,10 +230,33 @@ public abstract class UIComponentBase extends UIComponent {
 
     }
 
+    private static class PassThroughAttributesMap<K, V> extends ConcurrentHashMap<String, Object> implements Serializable {
+        @Override
+        public Object put(String key, Object value) {
+            if (null == key || null == value) {
+                throw new NullPointerException();
+            }
+            validateKey(key);
+            return super.put(key, value);
+        }
+        
+        @Override
+        public Object putIfAbsent(String key, Object value) {
+            if (null == key || null == value) {
+                throw new NullPointerException();
+            }
+            validateKey(key);
+            return super.putIfAbsent(key, value);
+        }
+        
+        private void validateKey(Object key) {
+            if (!(key instanceof String) || (key instanceof ValueExpression) || !(key instanceof Serializable)) {
+                throw new IllegalArgumentException();
+            }
+        }
+        
+    }
     
-    
-
-
     // ---------------------------------------------------------------- Bindings
 
 
@@ -1588,7 +1585,7 @@ public abstract class UIComponentBase extends UIComponent {
                 values[4] = stateHelper.saveState(context);
             }
             values[5] = id;
-
+            
             return (values);
         }
     }

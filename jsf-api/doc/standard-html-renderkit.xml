@@ -24028,6 +24028,56 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       </renderer-extension>
     </renderer>
     <renderer>
+      <description><![CDATA[<p class="changed_added_2_2">This
+            renderer is intended to be used with an arbitrary markup
+            element that ultimately produces a name=value pair that will
+            be sent to the server and decoded by the associated
+            <code>javax.faces.component.UIInput</code>.  </p>
+
+            <div class="changed_added_2_2">
+
+            <p><a name="decode">Decode Behavior</a></p>
+
+            <p>The decode behavior is identical to that of the
+            <code>javax.faces.Input</code> <code>javax.faces.Text</code>
+            renderer.</p>
+
+            <p><a name="decode">Encode Behavior</a></p>
+
+            <p>Look in the component's attribute map for an entry under
+            the key given by the value of the constant
+            <code>Renderer.PASSTHROUGH_RENDERER_LOCALNAME_KEY</code>.  The
+            value of this key is the element name to render.  If the
+            component has a manually declared, not auto-generated
+            <code>clientId</code>, or if the component has behaviors
+            attached to it, render the <code>clientId</code> as the
+            value of the "id" attribute.  Render the "name" attribute
+            with the value coming from the <code>clientId</code>.  Note
+            that markup authors may set this value directly on the
+            markup and the VDL processing must guarantee that the "name"
+            attribute is set as the component's <code>clientId</code>.
+            Render the current value of the component as the value of
+            the "value" attribute.</p>
+
+            <p>According to the section "Rendering Pass Through
+            Attributes" in the overview of this RenderKit, all of the
+            pass throuh attributes will be rendered exactly as shown on
+            the markup in the VDL page.</p>
+
+            </div>
+
+
+]]></description>
+      <component-family>javax.faces.Input</component-family>
+      <renderer-type>javax.faces.passthrough.Input</renderer-type>
+      <renderer-class>
+        com.sun.faces.renderkit.html_basic.PassthroughInputRenderer
+    </renderer-class>
+      <renderer-extension>
+        <renders-children>false</renders-children>
+      </renderer-extension>
+    </renderer>
+    <renderer>
       <description><![CDATA[<p class="changed_added_2_2"><span>Renders</span>
             an HTML "input" element of "type" "file". The standard HTML_BASIC
             RenderKit specifies behavior that assumes Servlet 3.0 or later.  

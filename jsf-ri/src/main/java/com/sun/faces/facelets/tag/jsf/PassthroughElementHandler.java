@@ -56,101 +56,35 @@
  * limitations under the License.
  */
 
-package javax.faces.view.facelets;
+package com.sun.faces.facelets.tag.jsf;
 
-import javax.faces.view.Location;
+import java.util.Map;
+import javax.faces.component.UIComponent;
+import javax.faces.render.Renderer;
+import javax.faces.view.facelets.ComponentConfig;
+import javax.faces.view.facelets.ComponentHandler;
+import javax.faces.view.facelets.FaceletContext;
 
 /**
- * <p class="changed_added_2_0"><span
- * class="changed_modified_2_2">The</span> runtime must create an
- * instance of this class for each element in the Facelets XHTML view. A
- * {@link TagConfig} subinterface instance is responsible for providing
- * an instance of <code>Tag</code> to the {@link TagHandler} instance
- * that is passed the <code>TagConfig</code> in its constructor.</p>
- * 
- * @since 2.0
+ * @author Jacob Hookom
+ * @version $Id: HtmlComponentHandler.java 8641 2010-10-04 20:54:50Z edburns $
  */
-public final class Tag {
-    private final TagAttributes attributes;
-
-    private final Location location;
-
-    private String namespace;
-
-    private final String localName;
-
-    private final String qName;
-
-    public Tag(Location location, String namespace, String localName,
-            String qName, TagAttributes attributes) {
-        this.location = location;
-        this.namespace = namespace;
-        this.localName = localName;
-        this.qName = qName;
-        this.attributes = attributes;
-    }
-
-    public Tag(Tag orig, TagAttributes attributes) {
-        this(orig.getLocation(), orig.getNamespace(), orig.getLocalName(), orig
-                .getQName(), attributes);
-    }
+public class PassthroughElementHandler extends ComponentHandler {
 
     /**
-     * <p class="changed_added_2_0">Return an object encapsulating the
-     * {@link TagAttributes} specified on this element in the view.</p>
-     * 
+     * @param config
      */
-    public TagAttributes getAttributes() {
-        return attributes;
+    public PassthroughElementHandler(ComponentConfig config) {
+        super(config);
     }
 
-    /**
-     * <p class="changed_added_2_0">Return the XML local name of the
-     * tag. For example, &lt;my:tag /&gt; would be "tag".</p>
-     * 
-     */
-    public String getLocalName() {
-        return localName;
-    }
-
-    /**
-     * <p class="changed_added_2_0">Return the {@link Location} of this
-     * <code>Tag</code> instance in the Facelet view.</p>
-     */
-    public Location getLocation() {
-        return location;
-    }
-
-    /**
-     * <p class="changed_added_2_0">Return the resolved XML Namespace
-     * for this tag in the Facelets view.</p>
-     */
-    public String getNamespace() {
-        return namespace;
+    @Override
+    public void onComponentCreated(FaceletContext ctx, UIComponent c, UIComponent parent) {
+        Map<String, Object> attrs = c.getAttributes();
+        attrs.put(Renderer.PASSTHROUGH_RENDERER_LOCALNAME_KEY, tag.getLocalName());
     }
     
-    /**
-     * <p class="changed_added_2_2">Allow the implementation to change
-     * the namespace of this tag.  This is necessary to enable the 
-     * markup component feature.</p>
-     * 
-     * @param namespace The namespace to set for this tag instance
-     */
     
-    public void setNamespace(String namespace) {
-        this.namespace = namespace;
-    }
 
-    /**
-     * <p class="changed_added_2_0">Return the XML qualified name for
-     * this tag.  For example, &lt;my:tag /&gt; would be "my:tag".
-     * 
-     */
-    public String getQName() {
-        return qName;
-    }
 
-    public String toString() {
-        return this.location + " <" + this.qName + ">";
-    }
 }

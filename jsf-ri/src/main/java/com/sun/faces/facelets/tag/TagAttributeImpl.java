@@ -76,6 +76,7 @@ import javax.el.MethodInfo;
 import javax.el.ELContext;
 import javax.faces.view.Location;
 import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.Tag;
 import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagAttributeException;
 import javax.faces.FacesException;
@@ -86,7 +87,7 @@ import javax.faces.FacesException;
  * @author Jacob Hookom
  * @version $Id$
  */
-public final class TagAttributeImpl extends TagAttribute {
+public class TagAttributeImpl extends TagAttribute {
 
     private final boolean literal;
 
@@ -101,6 +102,19 @@ public final class TagAttributeImpl extends TagAttribute {
     private final String value;
 
     private String string;
+    
+    private Tag tag;
+    
+    public TagAttributeImpl() {
+        this.literal = false;
+        this.localName = null;
+        this.location = null;
+        this.namespace = null;
+        this.qName = null;
+        this.value = null;
+        this.string = null;
+        this.tag = null;
+    } 
 
     public TagAttributeImpl(Location location, String ns, String localName,
             String qName, String value) {
@@ -266,6 +280,15 @@ public final class TagAttributeImpl extends TagAttribute {
     @Override
     public String getQName() {
         return this.qName;
+    }
+
+    @Override
+    public Tag getTag() {
+        return this.tag;
+    }
+    
+    public void setTag(Tag tag) {
+        this.tag = tag;
     }
 
     /**

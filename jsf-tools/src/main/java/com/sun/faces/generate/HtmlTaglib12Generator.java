@@ -767,6 +767,9 @@ public class HtmlTaglib12Generator extends AbstractGenerator {
                     continue;
                 }
                 String rendererType = renderer.getRendererType();
+                if (this.propManager.isExcludeRenderer(rendererType)) {
+                    continue;
+                }
                 tagClassName = GeneratorUtil.makeTagClassName(
                          GeneratorUtil.stripJavaxFacesPrefix(componentFamily),
                          GeneratorUtil.stripJavaxFacesPrefix(rendererType));

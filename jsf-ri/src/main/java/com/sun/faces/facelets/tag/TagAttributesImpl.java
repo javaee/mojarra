@@ -61,6 +61,7 @@ package com.sun.faces.facelets.tag;
 import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagAttributes;
 import java.util.*;
+import javax.faces.view.facelets.Tag;
 
 /**
  * A set of TagAttributesImpl, usually representing all attributes on a Tag.
@@ -78,6 +79,8 @@ public final class TagAttributesImpl extends TagAttributes {
     private final String[] ns;
 
     private final List nsattrs;
+    
+    private Tag tag;
 
     /**
      * 
@@ -187,6 +190,18 @@ public final class TagAttributesImpl extends TagAttributes {
     @Override
     public String[] getNamespaces() {
         return this.ns;
+    }
+
+    @Override
+    public Tag getTag() {
+        return this.tag;
+    }
+    
+    public void setTag(Tag tag) {
+        this.tag = tag;
+        for (TagAttribute cur : attrs) {
+            cur.setTag(tag);
+        }
     }
 
     /*

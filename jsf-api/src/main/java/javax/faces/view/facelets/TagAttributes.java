@@ -59,8 +59,8 @@
 package javax.faces.view.facelets;
 
 /**
- * <p class="changed_added_2_0">A set of TagAttributes, usually
- * representing all attributes on a Tag.</p>
+ * <p class="changed_added_2_0"><span class="changed_modified_2_2">A</span> set of 
+ * TagAttributes, usually representing all attributes on a Tag.</p>
  *
  * @since 2.0
  */
@@ -109,5 +109,34 @@ public abstract class TagAttributes {
      * @return a list of Namespaces found in this set
      */
     public abstract String[] getNamespaces();
+    
+    /**
+     * <p class="changed_added_2_2">A reference to the Tag for which this class
+     * represents the attributes.  For compatibility with previous implementations,
+     * an implementation is provided that returns {@code null}.</p>
+     * 
+     * @since 2.2
+     * 
+     * @return the {@link Tag} for which this class represents the attributes.
+     */
+    
+    public Tag getTag() {
+        return null;
+    }
+    
+    /**
+     * <p class="changed_added_2_2">Set a reference to the Tag for which
+     * this class represents the attributes.  The VDL runtime must
+     * ensure that this method is called before any {@link
+     * FaceletHandler}s for this element are instantiated. For
+     * compatibility with previous implementations, a no-op
+     * implementation is provided.</p>
+     * 
+     * @since 2.2
+     * 
+     */
+    public void setTag(Tag tag) {
+        
+    }
 
 }

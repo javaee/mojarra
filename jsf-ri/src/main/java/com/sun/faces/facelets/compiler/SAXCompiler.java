@@ -130,9 +130,9 @@ public final class SAXCompiler extends Compiler {
             }
         }
 
-        protected TagAttributes createAttributes(Attributes attrs) {
+        protected TagAttributesImpl createAttributes(Attributes attrs) {
             int len = attrs.getLength();
-            TagAttribute[] ta = new TagAttribute[len];
+            TagAttributeImpl[] ta = new TagAttributeImpl[len];
             for (int i = 0; i < len; i++) {
                 ta[i] = new TagAttributeImpl(this.createLocation(),
                         attrs.getURI(i), attrs.getLocalName(i), attrs
@@ -258,8 +258,10 @@ public final class SAXCompiler extends Compiler {
         public void startElement(String uri, String localName, String qName,
                 Attributes attributes) throws SAXException {
 
-            this.unit.pushTag(new Tag(this.createLocation(), uri, localName,
-                    qName, this.createAttributes(attributes)));
+            TagAttributes tagAttrs = this.createAttributes(attributes);
+            Tag tag = new Tag(this.createLocation(), uri, localName, qName, tagAttrs);
+            tagAttrs.setTag(tag);
+            this.unit.pushTag(tag);
             
             if ("html".equals(localName)) {
                 pushMultiTemplateCompositionIfNecessary();
@@ -319,6 +321,17 @@ public final class SAXCompiler extends Compiler {
                         public boolean isLiteral() {
                             return false;
                         }
+
+                        @Override
+                        public Tag getTag() {
+                            return null;
+                        }
+
+                        @Override
+                        public void setTag(Tag tag) {
+
+                        }
+                        
                         
                         // <editor-fold defaultstate="collapsed" desc="Intentionally unsupported">
 

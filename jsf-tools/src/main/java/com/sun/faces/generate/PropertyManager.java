@@ -46,6 +46,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.PrintStream;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -91,6 +94,12 @@ public class PropertyManager {
     public static final String TAGLIB_INCLUDE = "taglib.include";
 
     /**
+     * <p>A comma separated list of renderer-types that must be excluded 
+     * from taglib generation.</p>
+     */
+    public static final String TAGLIB_EXCLUDED_RENDERER_TYPES = "taglib.excludedRendererTypes";
+
+    /**
      * <p>A copyright to be included at the beginning of any generated file
      * (may be <code>null</code>).</p>
      */
@@ -127,6 +136,7 @@ public class PropertyManager {
         TAGLIB_FILE_NAME,
         TAGLIB_INCLUDE,
         BASE_OUTPUT_DIR,
+        TAGLIB_EXCLUDED_RENDERER_TYPES
     };
 
     /**
@@ -136,6 +146,7 @@ public class PropertyManager {
         COPYRIGHT,
         TAGLIB_DESCRIPTION,
         TAGLIB_INCLUDE,
+        TAGLIB_EXCLUDED_RENDERER_TYPES
     };
 
     // Sort the arrays so we can use Arrays.binarySearch()
@@ -223,6 +234,32 @@ public class PropertyManager {
         return propValue.trim();
 
     } // END getProperty
+    
+    private Map<String, Boolean> excludedRenderers;
+    
+    public boolean isExcludeRenderer(String rendererType) {
+        boolean result = false;
+        if (null == excludedRenderers) {
+            initializeExcludedRenderers();
+        }
+        result = excludedRenderers.containsKey(rendererType);
+        
+        return result;
+    }
+    
+    private void initializeExcludedRenderers() {
+        String excludedRenderersProp = getProperty("taglib.excludedRendererTypes");
+        if (null == excludedRenderersProp) {
+            excludedRenderers = Collections.emptyMap();
+        } else {
+            excludedRenderers = new HashMap<String, Boolean>();
+            String [] toAdd = excludedRenderersProp.split(",");
+            for (String cur : toAdd) {
+                excludedRenderers.put(cur, Boolean.TRUE);
+            }
+        }
+        
+    }
 
 
     public String toString() {

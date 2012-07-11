@@ -155,6 +155,10 @@ public class JspTLD21Generator extends JspTLDGenerator {
                     continue;
                 }
                 String rendererType = renderer.getRendererType();
+                if (this.propManager.isExcludeRenderer(rendererType)) {
+                    continue;
+                }
+                
                 writer.startElement("tag");
 
                 DescriptionBean description = renderer.getDescription("");

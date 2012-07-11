@@ -198,7 +198,14 @@
 
     <target name="container.deploy" 
             description="Deploy the JSF Implementation artifacts to the target container.">
-        <container.stop/>
+        <if>
+            <not>
+                <isset property="skip.container.bounce"/>
+            </not>
+            <then>
+              <container.stop/>
+            </then>
+        </if>
         <delete failonerror="false" 
                 file="${container.home}/modules/jsf-api.jar" />
         <delete failonerror="false" 
@@ -206,7 +213,15 @@
 
         <copy overwrite="true" file="${impl.dir}/build/lib/javax.faces.jar" toFile="${container.home}/modules/javax.faces.jar"/>
 
-        <container.start/>
+        <if>
+            <not>
+                <isset property="skip.container.bounce"/>
+            </not>
+            <then>
+              <container.start/>
+            </then>
+        </if>
+
     </target>
 
     <target name="define.scenario.aware.port">
@@ -221,9 +236,25 @@
 
     <target name="container.deploy.test.dependencies"
             description="Deploy any container level dependencies to the container.">
-        <container.stop/>
+        <if>
+            <not>
+                <isset property="skip.container.bounce"/>
+            </not>
+            <then>
+              <container.stop/>
+            </then>
+        </if>
+
         <copy overwrite="true" file="${groovy.jar}" todir="${container.home}/modules"/>
-        <container.start/>
+        <if>
+            <not>
+                <isset property="skip.container.bounce"/>
+            </not>
+            <then>
+              <container.start/>
+            </then>
+        </if>
+
     </target>
 
     <target name="container.undeploy.test.dependencies"
