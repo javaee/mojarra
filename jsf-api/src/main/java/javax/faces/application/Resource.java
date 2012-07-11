@@ -231,7 +231,7 @@ public abstract class Resource {
      * <ul>
      *
      * <li><p>Get the context-root for this web application, not ending
-     * in slash.  For discussion this will be caled
+     * in slash.  For discussion this will be called
      * <em>contextRoot</em>.</p></li>
      *
      * <li><p>Discover if the <code>FacesServlet</code> is prefix or
