@@ -149,7 +149,7 @@ public class ConfigureListener implements ServletRequestListener,
         if (timer != null) {
             timer.startTiming();
         }
-
+        InitFacesContext initContext = new InitFacesContext(context);
 
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.log(Level.FINE,
@@ -196,7 +196,6 @@ public class ConfigureListener implements ServletRequestListener,
         // bootstrap of faces required
         webAppListener = new WebappLifecycleListener(context);
         webAppListener.contextInitialized(sce);
-        InitFacesContext initContext = new InitFacesContext(context);
         ReflectionUtils.initCache(Thread.currentThread().getContextClassLoader());
         Throwable caughtThrowable = null;
 
