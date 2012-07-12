@@ -47,7 +47,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 
 /**
- * A session scoped bean used in some tests for composite components
+ * A request scoped bean used for converter tests.
  *
  * @author Manfred Riem (manfred.riem@oracle.com)
  */
@@ -61,10 +61,15 @@ public class ConverterBean {
 
     public static class TestConverter implements Converter {
 
+        public TestConverter() {
+        }
+
+        @Override
         public Object getAsObject(FacesContext context, UIComponent component, String value) {
             return value;
         }
 
+        @Override
         public String getAsString(FacesContext context, UIComponent component, Object value) {
             String cid = component.getClientId(context);
             context.addMessage(cid,

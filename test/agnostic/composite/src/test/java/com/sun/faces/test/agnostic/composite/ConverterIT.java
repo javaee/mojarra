@@ -72,7 +72,6 @@ public class ConverterIT {
     }
 
     @Test
-    @Ignore
     public void testConverter1() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/converter/converter1.xhtml");
         assertNotNull(page);
