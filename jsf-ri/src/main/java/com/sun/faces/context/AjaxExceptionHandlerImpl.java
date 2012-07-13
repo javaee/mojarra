@@ -97,8 +97,9 @@ public class AjaxExceptionHandlerImpl extends ExceptionHandlerWrapper {
     }
 
     /**
-     * @see ExceptionHandlerWrapper@getHandledExceptionQueuedEvent()
+     * @see ExceptionHandler#getHandledExceptionQueuedEvent() 
      */
+    @Override
     public ExceptionQueuedEvent getHandledExceptionQueuedEvent() {
 
         return handled;
@@ -171,7 +172,6 @@ public class AjaxExceptionHandlerImpl extends ExceptionHandlerWrapper {
 
     /**
      * @see javax.faces.context.ExceptionHandlerWrapper#getHandledExceptionQueuedEvents()
-     * @return
      */
     public Iterable<ExceptionQueuedEvent> getHandledExceptionQueuedEvents() {
 
