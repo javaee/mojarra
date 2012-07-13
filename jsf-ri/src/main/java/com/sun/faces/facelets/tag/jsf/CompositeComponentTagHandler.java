@@ -204,6 +204,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
             vdl.retargetMethodExpressions(context, c);
             getAttachedObjectHandlers(c).clear();
 
+//            getAttachedObjectHandlers(c, false).clear();
         }
 
     }
