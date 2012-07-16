@@ -1,3 +1,5 @@
+package com.sun.faces.test.agnostic.flash;
+
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
