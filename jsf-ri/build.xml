@@ -685,11 +685,11 @@
         </if>
         <replace file="tmp.bnd"
                  token="@extension.name@"
-                 value="com.sun.faces"/>
+                 value="javax.faces"/>
         <jsf.osgi.jar jarfile="${build.dir}/lib/${name}.jar"
                       bndfile="tmp.bnd"
                       basedir="${build.classes.dir}"
-                      extension-name="com.sun.faces"/>
+                      extension-name="javax.faces"/>
         <delete file="tmp.bnd"/>
     </target>
 
