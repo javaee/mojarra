@@ -933,7 +933,6 @@ public class ExternalContextImpl extends ExternalContext {
 
     /**
      * @see javax.faces.context.ExternalContext#getResponseBufferSize()
-     * @return
      */
     @Override
     public int getResponseBufferSize() {
@@ -944,8 +943,7 @@ public class ExternalContextImpl extends ExternalContext {
 
     /**
      * @see javax.faces.context.ExternalContext#getSessionMaxInactiveInterval()
-     * @return
-     */
+\     */
     @Override
     public int getSessionMaxInactiveInterval() {
 
@@ -985,7 +983,6 @@ public class ExternalContextImpl extends ExternalContext {
 
     /**
      * @see javax.faces.context.ExternalContext#encodePartialActionURL(String)
-     * @return
      */
     @Override
     public String encodePartialActionURL(String url) {
