@@ -45,19 +45,13 @@ import org.junit.*;
 import static org.junit.Assert.*;
 
 /**
- * Integration tests for composite components.
+ * Integration tests verifying the workings of cc:insertFacet.
  *
  * @author Manfred Riem (manfred.riem@oracle.com)
  */
-public class InsertFacet {
+public class InsertFacetIT {
 
-    /**
-     * Stores the web URL.
-     */
     private String webUrl;
-    /**
-     * Stores the web client.
-     */
     private WebClient webClient;
 
     @Before
