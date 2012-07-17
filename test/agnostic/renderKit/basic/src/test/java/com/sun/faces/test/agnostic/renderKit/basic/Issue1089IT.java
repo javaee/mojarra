@@ -39,9 +39,13 @@
  */
 package com.sun.faces.test.agnostic.renderKit.basic;
 
+import com.gargoylesoftware.htmlunit.html.HtmlOption;
+import java.util.List;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
+import com.gargoylesoftware.htmlunit.html.HtmlSelect;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import org.junit.*;
 import static org.junit.Assert.*;
 
@@ -92,6 +96,116 @@ public class Issue1089IT {
         String pageMarkup = page.getBody().asXml();
         assertTrue(pageMarkup.contains("class=\"a b c\""));
         assertTrue(pageMarkup.contains("size=\"1\""));
+        
+    }
+    
+    
+    @Test
+    public void testSelectPassThroughAttributesMarkup() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/passThroughAttributesSelect.xhtml");
+        
+        HtmlSelect select = (HtmlSelect) page.getElementById("form_selectOne:selectOne_selectItem_passThroughAttribute");
+        String xml = select.asXml();
+        
+        assertTrue(xml.contains("data-apple=\"apple-data\""));
+        assertTrue(xml.contains("data-apple=\"apple-data\""));
+        assertTrue(xml.contains("data-orange=\"orange-data\""));
+        assertTrue(xml.contains("data-pear=\"pear-data\""));
+        
+        select = (HtmlSelect) page.getElementById("form_selectOne:selectOne_selectItem_passThroughAttributes_stringArray");
+        xml = select.asXml();
+        assertTrue(xml.contains("data-array=\"array-data\""));
+        
+        select = (HtmlSelect) page.getElementById("form_selectOne:selectOne_selectItem_passThroughAttribute_beanCollection");
+        xml = select.asXml();
+        assertTrue(xml.contains("data-collection=\"collection-data\""));
+        
+        select = (HtmlSelect) page.getElementById("form_selectOne:selectOne_selectItem_selectItemGrouped");
+        xml = select.asXml();
+        assertTrue(xml.matches("(?s).*select.*optgroup.*option.*optgroup.*optgroup.*option.*"));
+        
+        select = (HtmlSelect) page.getElementById("form_selectMany:selectMany_selectItem_passThroughAttributes_stringArray");
+        xml = select.asXml();
+        assertTrue(xml.contains("data-array=\"array-data\""));
+        
+        select = (HtmlSelect) page.getElementById("form_selectMany:selectMany_selectItem_passThroughAttribute_beanCollection");
+        xml = select.asXml();
+        assertTrue(xml.contains("data-collection=\"collection-data\""));
+        
+        select = (HtmlSelect) page.getElementById("form_selectMany:selectMany_selectItem_selectItemGrouped");
+        xml = select.asXml();
+        assertTrue(xml.matches("(?s).*select.*optgroup.*option.*option.*option.*option.*option.*option.*optgroup.*optgroup.*option.*option.*option.*option.*optgroup.*select.*"));
+        
+    }
+    
+    @Test
+    public void testSelectOnePassThroughAttributesBehavior() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/passThroughAttributesSelect.xhtml");
+        
+        HtmlSelect select = (HtmlSelect) page.getElementById("form_selectOne:selectOne_selectItem_passThroughAttribute");
+        List<HtmlOption> options = select.getOptions();
+        HtmlOption last = options.get(options.size() - 1);
+        select.setSelectedAttribute(last, true);
+        
+        select = (HtmlSelect) page.getElementById("form_selectOne:selectOne_selectItem_passThroughAttributes_stringArray");
+        options = select.getOptions();
+        last = options.get(options.size() - 1);        
+        select.setSelectedAttribute(last, true);
+        
+        select = (HtmlSelect) page.getElementById("form_selectOne:selectOne_selectItem_passThroughAttribute_beanCollection");
+        options = select.getOptions();
+        last = options.get(options.size() - 1);        
+        select.setSelectedAttribute(last, true);
+        
+        select = (HtmlSelect) page.getElementById("form_selectOne:selectOne_selectItem_selectItemGrouped");
+        options = select.getOptions();
+        last = options.get(options.size() - 1);        
+        select.setSelectedAttribute(last, true);
+        
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form_selectOne:button");
+        
+        page = button.click();
+        String text = page.asText();
+        
+        assertTrue(text.contains("Current fruitValue: Pear"));
+        assertTrue(text.contains("Current nameValue: Brent"));
+        assertTrue(text.contains("Current hobbitValue: Pippin"));
+        assertTrue(text.contains("Current groupedNameValue: Billy"));
+    }
+    
+    @Test 
+    public void testSelectManyPassThroughAttributesBehavior() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/passThroughAttributesSelect.xhtml");
+
+        HtmlSelect select = (HtmlSelect) page.getElementById("form_selectMany:selectMany_selectItem_passThroughAttributes_stringArray");
+        List<HtmlOption> options = select.getOptions();
+        HtmlOption nextToLast = options.get(options.size() - 2),
+                last = options.get(options.size() - 1);
+        select.setSelectedAttribute(nextToLast, true);
+        select.setSelectedAttribute(last, true);
+
+        select = (HtmlSelect) page.getElementById("form_selectMany:selectMany_selectItem_passThroughAttribute_beanCollection");
+        options = select.getOptions();
+        nextToLast = options.get(options.size() - 2);
+        last = options.get(options.size() - 1);
+        select.setSelectedAttribute(nextToLast, true);
+        select.setSelectedAttribute(last, true);
+        
+        select = (HtmlSelect) page.getElementById("form_selectMany:selectMany_selectItem_selectItemGrouped");
+        options = select.getOptions();
+        nextToLast = options.get(options.size() - 2);
+        last = options.get(options.size() - 1);
+        select.setSelectedAttribute(nextToLast, true);
+        select.setSelectedAttribute(last, true);
+        
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form_selectMany:button");
+        page = button.click();
+        
+        String text = page.asText();
+        
+        assertTrue(text.contains("Current nameValueList: Billy Brent"));
+        assertTrue(text.contains("Current hobbitList: Merry Pippin"));
+        assertTrue(text.contains("Current groupedItems: Mickey Billy"));        
         
     }
     

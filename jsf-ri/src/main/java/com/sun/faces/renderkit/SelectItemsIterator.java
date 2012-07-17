@@ -65,7 +65,7 @@ import javax.faces.component.UISelectOne;
  *
  * // RELEASE_PENDING (rlubke,driscoll) performanc review
  */
-final class SelectItemsIterator implements Iterator<SelectItem> {
+public final class SelectItemsIterator<T extends SelectItem> implements Iterator<SelectItem> {
 
 
     // ------------------------------------------------------------ Constructors
@@ -93,7 +93,7 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
      * <p>Iterator over the SelectItem elements pointed at by a
      * <code>UISelectItems</code> component, or <code>null</code>.</p>
      */
-    private Iterator<SelectItem> items;
+    private ComponentAwareSelectItemIterator<SelectItem> items;
 
 
     /**
@@ -161,6 +161,12 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
         return next();
 
     }
+    
+    public UIComponent currentSelectComponent() {
+        UIComponent result = items.currentSelectComponent();
+        
+        return result;
+    }
 
 
     /**
@@ -195,14 +201,14 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
                                       ui.isItemEscaped(),
                                       ui.isNoSelectionOption());
             }
-            updateSingeItemIterator(item);
+            updateSingeItemIterator(ui, item);
             items = singleItemIterator;
         } else if (kid instanceof UISelectItems) {
             UISelectItems ui = (UISelectItems) kid;
             Object value = ui.getValue();
             if (value != null) {
                 if (value instanceof SelectItem) {
-                    updateSingeItemIterator((SelectItem) value);
+                    updateSingeItemIterator(ui, (SelectItem) value);
                     items = singleItemIterator;
                 } else if (value.getClass().isArray()) {
                     items = new ArrayIterator(ctx, (UISelectItems) kid, value);
@@ -248,12 +254,12 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
      * <code>item</code>
      * @param item the {@link SelectItem} to expose as an Iterator
      */
-    private void updateSingeItemIterator(SelectItem item) {
+    private void updateSingeItemIterator(UIComponent selectComponent, SelectItem item) {
 
         if (singleItemIterator == null) {
             singleItemIterator = new SingleElementIterator();
         }
-        singleItemIterator.updateItem(item);
+        singleItemIterator.updateItem(selectComponent, item);
 
     }
 
@@ -264,12 +270,19 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
     /**
      * Exposes single {@link SelectItem} instances as an Iterator.
      */
-    private static final class SingleElementIterator implements Iterator<SelectItem> {
+    private static final class SingleElementIterator implements ComponentAwareSelectItemIterator<SelectItem> {
 
         private SelectItem item;
+        private transient UIComponent selectComponent;
         private boolean nextCalled;
 
 
+        // ----------------------------------------------- Methods from ComponentAwareSelectItemIterator
+
+        public UIComponent currentSelectComponent() {
+            return selectComponent;
+        }
+        
         // ----------------------------------------------- Methods from Iterator
 
 
@@ -301,9 +314,10 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
         // ----------------------------------------------------- Private Methods
 
 
-        private void updateItem(SelectItem item) {
+        private void updateItem(UIComponent selectComponent, SelectItem item) {
 
             this.item = item;
+            this.selectComponent = selectComponent;
             nextCalled = false;
 
         }
@@ -316,7 +330,7 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
      * Note that this will do so re-using the same SelectItem but changing
      * the value and label as appropriate.
      */
-    private static final class MapIterator implements Iterator<SelectItem> {
+    private static final class MapIterator implements ComponentAwareSelectItemIterator<SelectItem> {
 
         private SelectItem item = new SelectItem();
         private Iterator iterator;
@@ -332,6 +346,12 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
         }
 
 
+        // ----------------------------------------------- Methods from ComponentAwareSelectItemIterator
+
+        public UIComponent currentSelectComponent() {
+            return null;
+        }
+        
         // ----------------------------------------------- Methods from Iterator
 
 
@@ -369,7 +389,7 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
      * or may not contain <code>SelectItem</code> instances.
      * </p>
      */
-    private static abstract class GenericObjectSelectItemIterator implements Iterator<SelectItem> {
+    private static abstract class GenericObjectSelectItemIterator implements ComponentAwareSelectItemIterator<SelectItem> {
 
         /**
          * SelectItem that is updated based on the current Object being
@@ -380,7 +400,7 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
         /**
          * The source <code>UISelectItems</code>.
          */
-        protected UISelectItems sourceComponent;
+        protected transient UISelectItems sourceComponent;
 
 
         // -------------------------------------------------------- Constructors
@@ -392,7 +412,12 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
 
         }
 
+        // -------------------------------------------------------- Constructors
 
+        public UIComponent currentSelectComponent() {
+            return sourceComponent;
+        }
+        
         // --------------------------------------------------- Protected Methods
 
 
@@ -525,6 +550,9 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
 
     } // END GenericObjectSelectItemIterator
 
+    private static interface ComponentAwareSelectItemIterator<E extends Object> extends Iterator<E> {
+        public UIComponent currentSelectComponent();
+    }
 
     /**
      * Handles arrays of <code>SelectItem</code>s, generic Objects,

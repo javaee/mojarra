@@ -13,5 +13,6 @@
     <name>Mojarra ${project.version} - Test - Agnostic - lifecycle</name>
     <modules>
         <module>basic</module>
+        <module>debugObjectOutputStream</module>
     </modules>
 </project>

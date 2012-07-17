@@ -40,6 +40,8 @@
 
 package com.sun.faces.test.agnostic.renderKit.basic;
 
+import com.sun.faces.test.agnostic.renderKit.basic.SelectMany05Bean.HobbitBean;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.faces.bean.ManagedBean;
@@ -85,5 +87,77 @@ public class Bean {
     
     public Integer getOne() { return (Integer) 1; }
     
+    
+    private String fruitValue;
+
+    public String getFruitValue() {
+        return fruitValue;
+    }
+
+    public void setFruitValue(String stringValue) {
+        this.fruitValue = stringValue;
+    }
+    
+    private String nameValue;
+
+    public String getNameValue() {
+        return nameValue;
+    }
+    
+    List<String> nameValueList;
+
+    public List<String> getNameValueList() {
+        return nameValueList;
+    }
+
+    public void setNameValueList(List<String> nameValueList) {
+        this.nameValueList = nameValueList;
+    }
+
+    public void setNameValue(String nameValue) {
+        this.nameValue = nameValue;
+    }
+    
+    private HobbitBean hobbitBean;
+
+    public HobbitBean getHobbitBean() {
+        return hobbitBean;
+    }
+
+    public void setHobbitBean(HobbitBean hobbitBean) {
+        this.hobbitBean = hobbitBean;
+    }
+    
+    private List<HobbitBean> hobbitBeanList;
+
+    public List<HobbitBean> getHobbitBeanList() {
+        return hobbitBeanList;
+    }
+
+    public void setHobbitBeanList(List<HobbitBean> hobbitBeanList) {
+        this.hobbitBeanList = hobbitBeanList;
+    }
+    
+    
+    
+    private String groupedNameValue;
+
+    public String getGroupedNameValue() {
+        return groupedNameValue;
+    }
+
+    public void setGroupedNameValue(String groupedNameValue) {
+        this.groupedNameValue = groupedNameValue;
+    }
+    
+    private List<String> groupedNameValueList;
+
+    public List<String> getGroupedNameValueList() {
+        return groupedNameValueList;
+    }
+
+    public void setGroupedNameValueList(List<String> groupedNameValueList) {
+        this.groupedNameValueList = groupedNameValueList;
+    }
     
 }

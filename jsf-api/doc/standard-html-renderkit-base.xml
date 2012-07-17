@@ -3050,8 +3050,13 @@ this application, and passing the result through the
       "label" attribute, the value of which is the "label" property from
       the current element, then call <code>getSelectItems()</code> and
       render each element as below.  If the current element is not a
-      <code>SelectItemGroup</code>, render an "option" element.  Follow
-      the conversion rules in the spec to obtain a renderable
+      <code>SelectItemGroup</code>, render an "option" element.  <span
+      class="changed_modified_2_2">In both the case of the "option"
+      element or the "optgroup" element, the implementation must pass
+      the <code>UISelectItem</code> or <code>UISelectItems</code>
+      corresponding to the <code>SelectItem</code> bean to the call to
+      <code>ResponseWriter.startElement()</code></span>.  Follow the
+      conversion rules in the spec to obtain a renderable
       <code>String</code> from the "value" property of the current
       element, render that as the value of the "value" atribute.  Now it
       is time to see if the current element is the selected value.  Call
@@ -3091,7 +3096,7 @@ this application, and passing the result through the
 
       </ul>
 
-      </ul>]]>
+</ul>]]>
 
             </description>
             <component-family>javax.faces.SelectMany</component-family>

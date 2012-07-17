@@ -257,7 +257,7 @@ public class RenderKitUtils {
      *                                  is <code>null</code>
      * @return a List of the select items for the specified component
      */
-    public static Iterator<SelectItem> getSelectItems(FacesContext context,
+    public static SelectItemsIterator<SelectItem> getSelectItems(FacesContext context,
                                                      UIComponent component) {
 
         Util.notNull("context", context);

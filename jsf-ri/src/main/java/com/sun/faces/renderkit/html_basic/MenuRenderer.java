@@ -87,6 +87,7 @@ import com.sun.faces.io.FastStringWriter;
 import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.renderkit.SelectItemsIterator;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.RequestStateManager;
@@ -523,6 +524,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 
     protected boolean renderOption(FacesContext context,
                                    UIComponent component,
+                                   UIComponent selectComponent,
                                    Converter converter,
                                    SelectItem curItem,
                                    Object currentSelections,
@@ -559,7 +561,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         ResponseWriter writer = context.getResponseWriter();
         assert (writer != null);
         writer.writeText("\t", component, null);
-        writer.startElement("option", component);
+        writer.startElement("option", (null != selectComponent) ? selectComponent : component);
         writer.writeAttribute("value", valueString, "value");
 
         if (isSelected) {
@@ -735,7 +737,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 
     protected int renderOptions(FacesContext context,
                                 UIComponent component,
-                                Iterator<SelectItem> items)
+                                SelectItemsIterator<SelectItem> items)
     throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
@@ -761,6 +763,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                                 component);
         while (items.hasNext()) {
             SelectItem item = items.next();
+            UIComponent selectComponent = items.currentSelectComponent();
 
             if (item instanceof SelectItemGroup) {
                 // render OPTGROUP
@@ -779,6 +782,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                 for (int i = 0; i < itemsArray.length; ++i) {
                     if (renderOption(context,
                                      component,
+                                     selectComponent,
                                      converter,
                                      itemsArray[i],
                                      currentSelections,
@@ -791,6 +795,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             } else {
                 if (renderOption(context,
                                  component,
+                                 selectComponent,
                                  converter,
                                  item,
                                  currentSelections,
@@ -835,7 +840,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         // Determine how many option(s) we need to render, and update
         // the component's "size" attribute accordingly;  The "size"
         // attribute will be rendered as one of the "pass thru" attributes
-        Iterator<SelectItem> items = RenderKitUtils.getSelectItems(context, component);
+        SelectItemsIterator<SelectItem> items = RenderKitUtils.getSelectItems(context, component);
 
         // render the options to a buffer now so that we can determine
         // the size

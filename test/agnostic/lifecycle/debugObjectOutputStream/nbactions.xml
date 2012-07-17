@@ -51,10 +51,10 @@
                 <forkMode>once</forkMode>
                 <maven.surefire.debug>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address}</maven.surefire.debug>
                 <jpda.listen>true</jpda.listen>
-                <project.build.finalName>test-agnostic-renderKit-basic</project.build.finalName>
+                <project.build.finalName>test-agnostic-lifecycle-debugObjectOutputStream</project.build.finalName>
                 <integration.serverPort>8080</integration.serverPort>
                 <integration.serverName>localhost</integration.serverName>
-                <integration.url>http://localhost:8080/test-agnostic-renderKit-basic/</integration.url>
+                <integration.url>http://localhost:8080/test-agnostic-lifecycle-debugObjectOutputStream/</integration.url>
             </properties>
             <activatedProfiles>
                 <activatedProfile>mojarra-client-state</activatedProfile>
@@ -67,21 +67,12 @@
                 <goal>surefire:test</goal>
             </goals>
             <properties>
-                <project.build.finalName>test-agnostic-renderKit-basic</project.build.finalName>
+                <project.build.finalName>test-agnostic-lifecycle-debugObjectOutputStream</project.build.finalName>
                 <integration.serverPort>8080</integration.serverPort>
                 <integration.serverName>localhost</integration.serverName>
-                <integration.url>http://localhost:8080/test-agnostic-renderKit-basic/</integration.url>
+                <integration.url>http://localhost:8080/test-agnostic-lifecycle-debugObjectOutputStream/</integration.url>
                 <test>${packageClassName}</test>
             </properties>
-            <activatedProfiles>
-                <activatedProfile>mojarra-client-state</activatedProfile>
-            </activatedProfiles>
-        </action>
-        <action>
-            <actionName>build</actionName>
-            <goals>
-                <goal>install</goal>
-            </goals>
             <activatedProfiles>
                 <activatedProfile>mojarra-client-state</activatedProfile>
             </activatedProfiles>
@@ -137,6 +128,20 @@
             </goals>
             <properties>
                 <netbeans.deploy>true</netbeans.deploy>
+                <netbeans.deploy.debugmode>true</netbeans.deploy.debugmode>
+            </properties>
+            <activatedProfiles>
+                <activatedProfile>mojarra-client-state</activatedProfile>
+            </activatedProfiles>
+        </action>
+        <action>
+            <actionName>debug.single.deploy</actionName>
+            <goals>
+                <goal>package</goal>
+            </goals>
+            <properties>
+                <netbeans.deploy>true</netbeans.deploy>
+                <netbeans.deploy.clientUrlPart>${webpagePath}</netbeans.deploy.clientUrlPart>
                 <netbeans.deploy.debugmode>true</netbeans.deploy.debugmode>
             </properties>
             <activatedProfiles>

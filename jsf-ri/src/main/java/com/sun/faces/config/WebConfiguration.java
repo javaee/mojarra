@@ -1119,6 +1119,10 @@ public class WebConfiguration {
               "com.sun.faces.disableClientStateEncryption",
               false
         ),
+        EnableClientStateDebugging(
+              "com.sun.faces.enableClientStateDebugging",
+              false
+        ),
         EnableHtmlTagLibraryValidator(
               "com.sun.faces.enableHtmlTagLibValidator",
               false

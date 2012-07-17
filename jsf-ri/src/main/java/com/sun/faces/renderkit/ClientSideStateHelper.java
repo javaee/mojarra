@@ -66,8 +66,11 @@ import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.Clie
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.ClientStateWriteBufferSize;
 import com.sun.faces.io.Base64InputStream;
 import com.sun.faces.io.Base64OutputStreamWriter;
+import com.sun.faces.util.DebugObjectOutputStream;
+import com.sun.faces.util.DebugUtil;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
+import java.util.Map;
 import javax.faces.render.ResponseStateManager;
 
 /**
@@ -130,6 +133,9 @@ public class ClientSideStateHelper extends StateHelper {
      * @see {@link com.sun.faces.config.WebConfiguration.WebContextInitParameter#ClientStateWriteBufferSize}
      */
     private int csBuffSize;
+    
+    
+    private boolean debugSerializedState;
 
 
     // ------------------------------------------------------------ Constructors
@@ -338,8 +344,40 @@ public class ClientSideStateHelper extends StateHelper {
 
             //noinspection NonSerializableObjectPassedToObjectStream
             oos.writeObject(stateToWrite[0]);
+            
+            if (debugSerializedState) {
+                ByteArrayOutputStream discard = new ByteArrayOutputStream();
+                DebugObjectOutputStream out =
+                        new DebugObjectOutputStream(discard);
+                try {
+                    out.writeObject(stateToWrite[0]);
+                } catch (Exception e) {
+                    throw new FacesException(
+                            "Serialization error. Path to offending instance: " 
+                            + out.getStack(), e);
+                }            
+                
+            }
+            
             //noinspection NonSerializableObjectPassedToObjectStream
             oos.writeObject(stateToWrite[1]);
+            
+            if (debugSerializedState) {
+                ByteArrayOutputStream discard = new ByteArrayOutputStream();
+
+                DebugObjectOutputStream out =
+                        new DebugObjectOutputStream(discard);
+                try {
+                    out.writeObject(stateToWrite[1]);
+                } catch (Exception e) {
+                    DebugUtil.printState((Map)stateToWrite[1], LOGGER);
+                    throw new FacesException(
+                            "Serialization error. Path to offending instance: " 
+                            + out.getStack(), e);
+                }            
+                
+            }
+            
 
             oos.flush();
             oos.close();
@@ -460,6 +498,8 @@ public class ClientSideStateHelper extends StateHelper {
             }
             csBuffSize = Integer.parseInt(defaultSize);
         }
+
+        debugSerializedState = webConfig.isOptionEnabled(BooleanWebContextInitParameter.EnableClientStateDebugging);
 
     }
 

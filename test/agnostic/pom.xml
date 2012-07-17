@@ -40,5 +40,6 @@
         <webapp.projectStage>Production</webapp.projectStage>
         <webapp.partialStateSaving>true</webapp.partialStateSaving>
         <webapp.stateSavingMethod>server</webapp.stateSavingMethod>
+        <webapp.enableClientStateDebugging>false</webapp.enableClientStateDebugging>
     </properties>    
 </project>
