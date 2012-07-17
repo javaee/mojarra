@@ -56,7 +56,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.text.MessageFormat;
 
-import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
 
 /**

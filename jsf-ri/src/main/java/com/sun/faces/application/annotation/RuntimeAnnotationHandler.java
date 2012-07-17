@@ -41,7 +41,6 @@
 package com.sun.faces.application.annotation;
 
 import javax.faces.context.FacesContext;
-import javax.faces.component.UIComponent;
 
 /**
  * Implementations of this class provide basic caching and processing of

@@ -43,7 +43,6 @@ package com.sun.faces.config;
 import java.net.URI;
 import org.w3c.dom.Document;
 
-import java.net.URL;
 
 
 /**

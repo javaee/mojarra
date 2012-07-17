@@ -42,7 +42,6 @@ package com.sun.faces.application;
 
 import com.sun.faces.config.WebConfiguration;
 
-import javax.faces.context.FacesContext;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
