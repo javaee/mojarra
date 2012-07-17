@@ -101,6 +101,7 @@ public class Issue1089IT {
     
     
     @Test
+    @Ignore
     public void testSelectPassThroughAttributesMarkup() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/passThroughAttributesSelect.xhtml");
         
