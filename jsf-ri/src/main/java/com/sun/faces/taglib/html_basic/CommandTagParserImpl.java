@@ -78,7 +78,7 @@ public class CommandTagParserImpl implements TagParser {
      * <p>Set the validator info object that has the current tag
      * information</p>
      *
-     * @param ValidatorInfo object with current tag info
+     * @param validatorInfo object with current tag info
      */
     public void setValidatorInfo(ValidatorInfo validatorInfo) {
         this.validatorInfo = validatorInfo;
