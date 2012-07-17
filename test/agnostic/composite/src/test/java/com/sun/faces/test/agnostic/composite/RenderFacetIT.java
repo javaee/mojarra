@@ -45,19 +45,13 @@ import org.junit.*;
 import static org.junit.Assert.*;
 
 /**
- * Integration tests for composite components.
+ * Integration tests verifying the workings of cc:renderFacet.
  *
  * @author Manfred Riem (manfred.riem@oracle.com)
  */
 public class RenderFacetIT {
 
-    /**
-     * Stores the web URL.
-     */
     private String webUrl;
-    /**
-     * Stores the web client.
-     */
     private WebClient webClient;
 
     @Before
@@ -77,9 +71,9 @@ public class RenderFacetIT {
         assertTrue(page.getBody().asText().indexOf("This came from a rendered facet") != -1);
     }
 
-//    @Test
-//    public void testRenderFacet2() throws Exception {
-//        HtmlPage page = webClient.getPage(webUrl + "faces/renderFacet/renderFacet2.xhtml");
-//        assertTrue(page.getBody().asText().indexOf("myFacet Text") != -1);
-//    }
+    @Test
+    public void testRenderFacet2() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/renderFacet/renderFacet2.xhtml");
+        assertTrue(page.getBody().asText().indexOf("myFacet Text") != -1);
+    }
 }
