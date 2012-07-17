@@ -58,7 +58,6 @@ import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 import java.util.*;
-import java.net.MalformedURLException;
 
 import javax.faces.FactoryFinder;
 import javax.faces.component.*;

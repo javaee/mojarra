@@ -41,7 +41,6 @@
 package com.sun.faces.config.configprovider;
 
 import java.net.URI;
-import java.net.URL;
 import java.util.Collection;
 
 import javax.servlet.ServletContext;
