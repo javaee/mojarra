@@ -114,9 +114,6 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
     // ------------------------------------------- Methods from ExceptionHandler
 
 
-    /**
-     * @see ExceptionHandler@getHandledExceptionQueuedEvent()
-     */
     public ExceptionQueuedEvent getHandledExceptionQueuedEvent() {
 
         return handled;
@@ -230,7 +227,6 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
 
     /**
      * @see javax.faces.context.ExceptionHandler#getHandledExceptionQueuedEvents()
-     * @return
      */
     public Iterable<ExceptionQueuedEvent> getHandledExceptionQueuedEvents() {
 
