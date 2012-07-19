@@ -90,7 +90,6 @@ public interface TagLibrary {
      *            namespace
      * @param localName
      *            local name
-     * @return 
      */
     public boolean containsTagHandler(String ns, String localName);
 
@@ -123,7 +122,6 @@ public interface TagLibrary {
      * 
      * @param ns namespace
      * @param name function name
-     * @return
      */
     public Method createFunction(String ns, String name);
 }
