@@ -76,7 +76,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 
 
     /**
-     * @see {@link ResponseStateManager#isPostback(javax.faces.context.FacesContext)}
+     * @see ResponseStateManager#isPostback(javax.faces.context.FacesContext) 
      */
     @Override
     public boolean isPostback(FacesContext context) {
@@ -88,7 +88,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 
 
     /**
-     * @see {@link javax.faces.render.ResponseStateManager#getState(javax.faces.context.FacesContext, String)}
+     * @see ResponseStateManager#getState(javax.faces.context.FacesContext, java.lang.String) 
      */
     @Override
     public Object getState(FacesContext context, String viewId) {
@@ -113,7 +113,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 
 
     /**
-     * @see {@link javax.faces.render.ResponseStateManager#writeState(javax.faces.context.FacesContext, Object)}
+     * @see ResponseStateManager#writeState(javax.faces.context.FacesContext, java.lang.Object) 
      */
     @Override
     public void writeState(FacesContext context, Object state)
@@ -125,7 +125,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 
 
     /**
-     * @see {@link javax.faces.render.ResponseStateManager#getViewState(javax.faces.context.FacesContext, Object)}
+     * @see ResponseStateManager#getViewState(javax.faces.context.FacesContext, java.lang.Object) 
      */
     @Override
     public String getViewState(FacesContext context, Object state) {
