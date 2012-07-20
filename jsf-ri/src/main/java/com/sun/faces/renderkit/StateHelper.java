@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -102,10 +102,8 @@ public abstract class StateHelper {
     /**
      * <p>
      * Factory for serialization streams.  These are pluggable via
-     * the {@link com.sun.faces.config.WebConfiguration.WebContextInitParameter#SerializationProviderClass}.
+     * the WebConfiguration.WebContextInitParameter#SerializationProviderClass.
      * </p>
-     *
-     * @see {@link com.sun.faces.config.WebConfiguration.WebContextInitParameter#SerializationProviderClass}
      */
     protected SerializationProvider serialProvider;
 
@@ -123,8 +121,6 @@ public abstract class StateHelper {
      * the memory/bandwidth footprint.  This option is common to both types
      * of state saving.
      * </p>
-     *
-     * @see {@link com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter#CompressViewState}
      */
     protected boolean compressViewState;
 
@@ -204,12 +200,12 @@ public abstract class StateHelper {
 
     /**
      * <p>
-     * Functionally similar to {@link ResponseStateManager#writeState(javax.faces.context.FacesContext, Object)}
+     * Functionally similar to ResponseStateManager#writeState(FacesContext, Object)
      * with an option to write the state directly to the provided <code>StringBuilder</code>
      * without sending any markup to the client.
      * </p>
      *
-     * @see {@link javax.faces.render.ResponseStateManager#writeState(javax.faces.context.FacesContext, Object)}
+     * @see ResponseStateManager#writeState(javax.faces.context.FacesContext, java.lang.Object) 
      */
     public abstract void writeState(FacesContext ctx,
                                     Object state,
