@@ -767,7 +767,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 
             if (item instanceof SelectItemGroup) {
                 // render OPTGROUP
-                writer.startElement("optgroup", component);
+                writer.startElement("optgroup", (null != selectComponent) ? selectComponent : component);
                 writer.writeAttribute("label", item.getLabel(), "label");
 
                 // if the component is disabled, "disabled" attribute would be rendered

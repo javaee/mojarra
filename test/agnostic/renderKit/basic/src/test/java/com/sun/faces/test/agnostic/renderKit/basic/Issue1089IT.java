@@ -134,7 +134,8 @@ public class Issue1089IT {
         
         select = (HtmlSelect) page.getElementById("form_selectMany:selectMany_selectItem_selectItemGrouped");
         xml = select.asXml();
-        assertTrue(xml.matches("(?s).*select.*optgroup.*option.*option.*option.*option.*option.*option.*optgroup.*optgroup.*option.*option.*option.*option.*optgroup.*select.*"));
+        assertTrue(xml.contains("data-grouped=\"grouped-data\""));
+        assertTrue(xml.matches("(?s).*select.*optgroup.*data-grouped=\"grouped-data\".*option.*option.*option.*option.*option.*option.*optgroup.*optgroup.*option.*option.*option.*option.*optgroup.*select.*"));
         
     }
     
