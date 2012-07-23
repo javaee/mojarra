@@ -117,8 +117,6 @@ public final class ConvertDateTimeHandler extends ConverterHandler {
 
     /**
      * Implements tag spec, see taglib documentation.
-     * 
-     * @see com.sun.faces.facelets.tag.MetaTagHandler#setAttributes(com.sun.faces.facelets.FaceletContext, Object)
      */
     @Override
     public void setAttributes(FaceletContext ctx, Object obj) {
