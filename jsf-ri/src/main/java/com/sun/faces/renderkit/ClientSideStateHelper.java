@@ -168,7 +168,7 @@ public class ClientSideStateHelper extends StateHelper {
      * state will be appended to the provided <code>StringBuilder</code> without any markup
      * included or any content written to the client.
      *
-     * @see {@link com.sun.faces.renderkit.StateHelper#writeState(javax.faces.context.FacesContext, Object, StringBuilder)}
+     * @see StateHelper#writeState(javax.faces.context.FacesContext, java.lang.Object, java.lang.StringBuilder)
      */
     public void writeState(FacesContext ctx,
                            Object state,
@@ -204,12 +204,12 @@ public class ClientSideStateHelper extends StateHelper {
     /**
      * <p>Inspects the incoming request parameters for the standardized state
      * parameter name.  In this case, the parameter value will be a Base64 encoded
-     * string previously encoded by {@link com.sun.faces.renderkit.ServerSideStateHelper#writeState(javax.faces.context.FacesContext, Object, StringBuilder)}.</p>
+     * string previously encoded by ServerSideStateHelper#writeState(FacesContext, Object, StringBuilder).</p>
      *
      * <p>The string will be Base64-decoded and the state reconstructed using standard
      * Java serialization.</p>
      *
-     * @see {@link com.sun.faces.renderkit.StateHelper#getState(javax.faces.context.FacesContext, String)}
+     * @see StateHelper#getState(javax.faces.context.FacesContext, java.lang.String)
      */
     public Object getState(FacesContext ctx, String viewId) throws IOException {
 
