@@ -525,7 +525,6 @@ public abstract class AbstractTagLibrary implements TagLibrary {
      * Add a ComponentHandlerImpl with the specified componentType and rendererType,
      * aliased by the tag name.
      * 
-     * @see ComponentHandlerImpl
      * @see javax.faces.application.Application#createComponent(java.lang.String)
      * @param name
      *            name to use, "foo" would be &lt;my:foo />
@@ -545,7 +544,6 @@ public abstract class AbstractTagLibrary implements TagLibrary {
      * aliased by the tag name. The Facelet will be compiled with the specified
      * HandlerType (which must extend AbstractComponentHandler).
      * 
-     * @see ComponentHandlerImpl
      * @param name
      *            name to use, "foo" would be &lt;my:foo />
      * @param componentType
@@ -667,7 +665,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
      * @see UserTagHandler
      * @param name
      *            name to use, "foo" would be &lt;my:foo />
-     * @param resourecId source where the Facelet (Tag) source is
+     * @param resourceId source where the Facelet (Tag) source is
      */
     protected final void addCompositeComponentTag(String name, String resourceId) {
         this.factories.put(name, new CompositeComponentTagFactory(resourceId));
