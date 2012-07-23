@@ -5,6 +5,7 @@
    <artifactId>flow_in_jar</artifactId>
    <version>1.0</version>
    <packaging>jar</packaging>
+    <name>Mojarra ${project.version} - Test - Web-Profile - Flow - Basic With Multi Page Flow Stored In Jar, the actual jar</name>
 
    <build>
      <plugins>

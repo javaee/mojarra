@@ -51,7 +51,7 @@
     <groupId>com.sun.faces.test.webprofile.flow</groupId>
     <artifactId>multi_page_from_jar</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra ${project.version} - Test - Web-Profile - Flow - Basic With Multi Page Flow Stored In Jar Tests</name>
+    <name>Mojarra ${project.version} - Test - Web-Profile - Flow - Basic With Multi Page Flow Stored In Jar, Tests</name>
     <build>
         <finalName>test-webprofile-flow-multi_page_from_jar</finalName>
     </build>
