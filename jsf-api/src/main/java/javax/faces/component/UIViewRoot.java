@@ -1278,9 +1278,11 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
     }
 
     /**
-     * <p>Generate an identifier for a component.  The identifier will
-     * be prefixed with UNIQUE_ID_PREFIX, and will be unique within
-     * this UIViewRoot.</p>
+     * <p><span class="changed_modified_2_2">Generate</span> an
+     * identifier for a component.  The identifier will be prefixed with
+     * UNIQUE_ID_PREFIX, and will be unique within <span
+     * class="changed_added_2_2">the non-{@link NamingContainer} child
+     * sub-trees of</span> this UIViewRoot.</p>
      */
     public String createUniqueId() {
         return createUniqueId(getFacesContext(), null);
