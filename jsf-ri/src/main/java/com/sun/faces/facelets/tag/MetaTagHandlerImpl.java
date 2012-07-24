@@ -81,7 +81,6 @@ public abstract class MetaTagHandlerImpl extends MetaTagHandler {
      * Extend this method in order to add your own rules.
      * 
      * @param type
-     * @return
      */
     protected MetaRuleset createMetaRuleset(Class type) {
         Util.notNull("type", type);
