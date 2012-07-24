@@ -40,11 +40,11 @@
 
 package com.sun.faces.context;
 
+import com.sun.faces.component.visit.ComponentModificationManagerImpl;
 import javax.el.ELContext;
 import javax.el.ELContextListener;
 import javax.el.ELContextEvent;
 import javax.faces.FactoryFinder;
-import javax.faces.component.visit.ComponentModification;
 import javax.faces.component.visit.ComponentModificationManager;
 import javax.faces.context.ExceptionHandler;
 import javax.faces.event.PhaseId;
@@ -76,7 +76,6 @@ import com.sun.faces.el.ELContextImpl;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import com.sun.faces.renderkit.RenderKitUtils;
-import javax.faces.FacesException;
 
 public class FacesContextImpl extends FacesContext {
 
@@ -117,6 +116,8 @@ public class FacesContextImpl extends FacesContext {
      * associated with a clientId instance.
      */
     private Map<String, List<FacesMessage>> componentMessageLists;
+    
+    private ComponentModificationManager componentModificationManager;
 
     // ----------------------------------------------------------- Constructors
 
@@ -538,33 +539,10 @@ public class FacesContextImpl extends FacesContext {
     @Override
     public ComponentModificationManager getComponentModificationManager() {
         assertNotReleased();
-        return new ComponentModificationManager() {
-
-            @Override
-            public void push(ComponentModification mod) {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-
-            @Override
-            public ComponentModification peek() {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-
-            @Override
-            public ComponentModification pop() {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-
-            @Override
-            public ComponentModification suspend(FacesContext context) {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-
-            @Override
-            public void resume(FacesContext context, ComponentModification mods) {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-        };
+        if (componentModificationManager == null) {
+            componentModificationManager = new ComponentModificationManagerImpl();
+        }
+        return componentModificationManager;
     }
     
     

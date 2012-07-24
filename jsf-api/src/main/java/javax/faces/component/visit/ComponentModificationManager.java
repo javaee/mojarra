@@ -40,6 +40,7 @@
  */
 package javax.faces.component.visit;
 
+import java.util.Collection;
 import javax.faces.context.FacesContext;
 
 /**
@@ -64,8 +65,8 @@ public abstract class ComponentModificationManager {
     
     public abstract ComponentModification pop();
     
-    public abstract ComponentModification suspend(FacesContext context);
+    public abstract Collection<ComponentModification> suspend(FacesContext context);
     
-    public abstract void resume(FacesContext context, ComponentModification mods);
+    public abstract void resume(FacesContext context, Collection<ComponentModification> mods);
     
 }
