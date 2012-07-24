@@ -32603,7 +32603,7 @@ href="../../javadocs/javax/faces/component/UIViewRoot.html#addComponentResource(
       <description><![CDATA[
 
 <p><span class="changed_modified_2_0 changed_modified_2_0_rev_a
-changed_modified_2_1">Render</span> the markup for a
+changed_modified_2_1 changed_modified_2_2">Render</span> the markup for a
 <code>&lt;link&gt;</code> element that renders the style
 <code>Resource</code> specified by the optional <code>name</code> and
 <code>library</code> attributes.</p>
@@ -32633,11 +32633,10 @@ changed_modified_2_1">Render</span> the markup for a
 calling <code>resource.getRequestPath()</code> as the value of the
 "href" attribute, the result from calling
 <code>resource.getContentType()</code> as the value of the "type"
-attribute, the literal string "stylesheet" as the value of the "rel"
-attribute, and the literal string "screen" as the value of the "media"
-<span class="changed_modified_2_1">attribute, and the value of the
-"media" attribute set to the value of the "media" attribute of this
-tag.</span></p>
+attribute, and the literal string "stylesheet" as the value of the "rel"
+attribute.  <span class="changed_modified_2_2">If this tag has a "media"
+attribute, use its value as the value of the "media" attribute.
+Otherwise, do not render a media attribute.</span></p>
 
 
 <p>The implementation of this renderer must have a <a target="_"
