@@ -107,7 +107,6 @@ public final class ConvertDateTimeHandler extends ConverterHandler {
      * Returns a new DateTimeConverter
      * 
      * @see DateTimeConverter
-     * @see com.sun.faces.facelets.tag.jsf.ConverterHandler#createConverter(com.sun.faces.facelets.FaceletContext)
      */
     protected Converter createConverter(FaceletContext ctx)
             throws FacesException, ELException, FaceletException {
