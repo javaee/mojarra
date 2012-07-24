@@ -83,8 +83,6 @@ public final class CompositeTagDecorator implements TagDecorator {
     /**
      * Uses the chain of responsibility pattern to stop processing if any of
      * the TagDecorators return a value other than null.
-     * 
-     * @see com.sun.faces.facelets.TagDecorator#decorate(com.sun.faces.facelets.Tag)
      */
     public Tag decorate(Tag tag) {
         Tag t = null;
