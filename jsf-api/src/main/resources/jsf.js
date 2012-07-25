@@ -1669,7 +1669,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              * post data argument <code>javax.faces.partial.render</code>.</li>
 
              * <li class="changed_added_2_2">If
-             * <code>options.render</code> exists let it be the value
+             * <code>options.delay</code> exists let it be the value
              * <em>delay</em>, for this discussion.  If
              * <code>options.render</code> does not exist let
              * <em>delay</em> be 300.  If less than <em>delay</em>
