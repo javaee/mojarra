@@ -91,7 +91,6 @@ public final class ConvertNumberHandler extends ConverterHandler {
      * Returns a new NumberConverter
      * 
      * @see NumberConverter
-     * @see com.sun.faces.facelets.tag.jsf.ConverterHandler#createConverter(com.sun.faces.facelets.FaceletContext)
      */
     protected Converter createConverter(FaceletContext ctx)
             throws FacesException, ELException, FaceletException {
