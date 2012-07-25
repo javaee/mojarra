@@ -87,7 +87,6 @@ public final class ConvertDelegateHandler extends ConverterHandler {
      * Uses the specified "converterId" to pull an instance from the Application
      * 
      * @see javax.faces.application.Application#createComponent(java.lang.String)
-     * @see com.sun.faces.facelets.tag.jsf.ConverterHandler#createConverter(com.sun.faces.facelets.FaceletContext)
      */
     protected Converter createConverter(FaceletContext ctx)
             throws FacesException, ELException, FaceletException {
