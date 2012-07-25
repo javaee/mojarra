@@ -1671,7 +1671,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              * <li class="changed_added_2_2">If
              * <code>options.delay</code> exists let it be the value
              * <em>delay</em>, for this discussion.  If
-             * <code>options.render</code> does not exist let
+             * <code>options.delay</code> does not exist let
              * <em>delay</em> be 300.  If less than <em>delay</em>
              * milliseconds elapses between calls to <em>request()</em>
              * only the most recent one is sent and all other requests
