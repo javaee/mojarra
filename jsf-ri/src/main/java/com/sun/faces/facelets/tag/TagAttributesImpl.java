@@ -66,7 +66,6 @@ import javax.faces.view.facelets.Tag;
 /**
  * A set of TagAttributesImpl, usually representing all attributes on a Tag.
  * 
- * @see com.sun.faces.facelets.tag.Tag
  * @see javax.faces.view.facelets.TagAttribute
  * @author Jacob Hookom
  * @version $Id$
