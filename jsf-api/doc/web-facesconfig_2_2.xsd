@@ -823,7 +823,7 @@
         <xsd:annotation>
           <xsd:documentation><![CDATA[
 
-           <p> The "facelet-factory" element contains the
+           <p class="changed_added_2_2"> The "facelet-factory" element contains the
             fully qualified class name of the concrete
             FaceletFactory implementation class that will
             be called when
@@ -838,7 +838,7 @@
         <xsd:annotation>
           <xsd:documentation><![CDATA[
 
-           <p> The "flash-factory" element contains the
+           <p class="changed_added_2_2"> The "flash-factory" element contains the
             fully qualified class name of the concrete
             FaceletFactory implementation class that will
             be called when
@@ -2502,12 +2502,12 @@ represents the node id to which control will be passed.</p>
     <xsd:annotation>
       <xsd:documentation><![CDATA[
 
-       <p> Any view that matches any of the url-patterns in this 
-        element may only be reached from another JSF view in the 
-        same web application. Because the runtime is aware of
-        which views are protected, any navigation from an 
-        unprotected view to a protected view is automatically
-        subject to protection.</p>
+       <p class="changed_added_2_2">Any view that matches any of the
+       url-patterns in this element may only be reached from another JSF
+       view in the same web application. Because the runtime is aware of
+       which views are protected, any navigation from an unprotected
+       view to a protected view is automatically subject to
+       protection.</p>
         
       ]]></xsd:documentation>
     </xsd:annotation>
