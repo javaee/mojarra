@@ -60,7 +60,6 @@ public class Issue2471IT {
     }
 
     @Test
-    @Ignore
     public void testIssue2471() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/issue2471.xhtml");
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form:submit");
