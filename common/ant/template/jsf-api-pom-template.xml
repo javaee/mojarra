@@ -185,6 +185,7 @@
                     <dir>src/main/java</dir>
                     <includes>
                       <include>web-facesconfig_${spec_version}*</include>
+                      <include>web-facelettaglibrary_${spec_version}*</include>
                     </includes>
                     <stylesheet>${dependency.base.dir}/xs3p-${xs3p.version}/xs3p.xsl</stylesheet>
                     <parameters>
@@ -194,7 +195,7 @@
                       </parameter>
                       <parameter>
                         <name>title</name>
-                        <value>JSF Application Configuration Resources XML Schema Definition</value>
+                        <value>JSF Schema</value>
                       </parameter>
                     </parameters>
                     <fileMappers>

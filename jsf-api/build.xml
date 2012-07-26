@@ -755,8 +755,18 @@ javax.faces.level=ALL
                tofile="${build.javadocs.dir}/web-facesconfig.html" />
        </then>
      </if>
+     <if>
+       <available file="${build.dir}/mvn/target/generated-resources/xml/xslt/web-facelettaglibrary_${spec_version}.html" />
+       <then>
+         <copy file="${build.dir}/mvn/target/generated-resources/xml/xslt/web-facelettaglibrary_${spec_version}.html"
+               tofile="${build.javadocs.dir}/web-facelettaglibrary.html" />
+       </then>
+     </if>
+
      <copy file="${doc.dir}/web-facesconfig_${spec_version}.xsd"
                tofile="${build.javadocs.dir}/web-facesconfig.xsd" />
+     <copy file="${doc.dir}/web-facelettaglibrary_${spec_version}.xsd"
+               tofile="${build.javadocs.dir}/web-facelettaglibrary.xsd" />
 
    </target>
 

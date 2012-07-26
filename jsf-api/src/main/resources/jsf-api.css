@@ -520,3 +520,10 @@ a[href^="#type_faces-config-protected-viewsType"], a[href^="#type_faces-config-f
                  border-left-width:thin; border-right:none;
                  border-top:none; border-bottom:none; border-color:green 
 }
+
+a[href^="#type_facelet-taglib-tag-componentType"] { cursor: url(changed_modified_2_2_cursor.cur), auto;
+                 background: url(changed_modified_2_2.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:green 
+}
