@@ -187,6 +187,16 @@
                       <include>web-facesconfig_${spec_version}*</include>
                     </includes>
                     <stylesheet>${dependency.base.dir}/xs3p-${xs3p.version}/xs3p.xsl</stylesheet>
+                    <parameters>
+                      <parameter>
+                        <name>externalCSSURL</name>
+                        <value>jsf-api.css</value>
+                      </parameter>
+                      <parameter>
+                        <name>title</name>
+                        <value>JSF Application Configuration Resources XML Schema Definition</value>
+                      </parameter>
+                    </parameters>
                     <fileMappers>
                       <fileMapper implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
                         <targetExtension>.html</targetExtension>
