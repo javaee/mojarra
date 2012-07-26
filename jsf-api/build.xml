@@ -744,6 +744,22 @@ javax.faces.level=ALL
 
     </target>
 
+   <target name="copy.xsddoc"
+           depends="prepare"
+           description="Copy the already created xsddoc">
+
+     <if>
+       <available file="${build.dir}/mvn/target/generated-resources/xml/xslt/web-facesconfig_${spec_version}.html" />
+       <then>
+         <copy file="${build.dir}/mvn/target/generated-resources/xml/xslt/web-facesconfig_${spec_version}.html"
+               tofile="${build.javadocs.dir}/web-facesconfig.html" />
+       </then>
+     </if>
+     <copy file="${doc.dir}/web-facesconfig_${spec_version}.xsd"
+               tofile="${build.javadocs.dir}/web-facesconfig.xsd" />
+
+   </target>
+
 
     <target name="generate.javadocs">
         <javadoc packagenames="javax.*"

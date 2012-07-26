@@ -1245,9 +1245,9 @@
 
   <xsd:complexType name="faces-config-ifType">
     <xsd:annotation>
-      <xsd:documentation>
+      <xsd:documentation><![CDATA[
 
-        The "if" element defines a condition that must resolve
+        <p>The "if" element defines a condition that must resolve
         to true in order for the navigation case on which it is
         defined to be matched, with the existing match criteria
         (action method and outcome) as a prerequiste, if present.
@@ -1257,9 +1257,20 @@
         If the "from-outcome" is omitted and this element is
         present, the navigation handler will match a null outcome
         and use the condition return value to determine if the
-        case should be considered a match.
+        case should be considered a match.</p>
+
+<div class="changed_added_2_2">
+
+<p>When used in a <code>&lt;switch&gt;</code> within a flow, if the
+expresion returns <code>true</code>, the
+<code>&lt;from-outcome&gt;</code> sibling element's outcome is used as
+the id of the node in the flow graph to which control must be
+passed.</p>
+
+</div>
         
-      </xsd:documentation>
+        
+      ]]></xsd:documentation>
     </xsd:annotation>
     <xsd:simpleContent>
       <xsd:extension base="javaee:faces-config-el-expressionType">
@@ -1644,8 +1655,11 @@
         <p class="changed_added_2_2">Top level element for a flow
         definition.</p>  
 
-        <p>The system must support the following conventions within the web
-        application for discovery of flows.</p>
+        <p>The system must support the following conventions within the
+        web application for discovery of flows.  In this discussion, let
+        <code>flowName</code> be the name of the flow.  If an
+        <code>id</code> attribute is present on this element, it must be
+        identical to <code>flowName</code>.</p>
 
         <ul>
 
@@ -1654,7 +1668,7 @@
 <p>When packaged in a jar, a flow definition and all of its contents
 must reside in the path <code>META-INF/flows/&lt;flowName&gt;</code> in
 the jar.  The flow definition must reside in the path
-<code>META-INF/flows/&lt;flowName&gt;/&lt;flowName-flow.xml&gt;</code>
+<code>META-INF/flows/&lt;flowName&gt;/&lt;flowName&gt;-flow.xml</code>
 in the jar.</p>
 
 <p>If <code>ProjectStage</code> is <code>Development</code>, the runtime
@@ -1669,14 +1683,14 @@ error including the <code>flowName</code> must be printed.</p>
 <p>When packaged in a directory in the web application root, a flow
 definition and all of its contents must reside in the path
 <code>flowName</code> relative to the web application root.  The flow
-definition must reside in <code>flowName/flowName-flow.xml</code>. </p>
+definition must reside in <code>&lt;flowName&gt;/&lt;flowName&gt;-flow.xml</code>. </p>
 
           </li>
 
 	  <li><p><strong>Directly in the web application root</strong></p>
 
 <p>When packaged directly in the web application root, a flow definition
-must reside in <code>flowName-flow.xml</code>.</p>
+must reside in <code>&lt;flowName&gt;-flow.xml</code>.</p>
 
           </li>
 
@@ -1692,6 +1706,9 @@ Configuration Resources, such as the
 
 <p>In all of these cases, an entire flow is discoverable starting with
 the root <code>&lt;faces-flow-definition&gt;</code> for that flow.</p>
+
+<p>If there is no <code>&lt;start-node&gt;</code> element declared, it
+is assumed to be <code>&lt;flowName&gt;.xhtml</code>.</p>
 
 
 <p>Usage example</p>
@@ -1751,7 +1768,7 @@ the root <code>&lt;faces-flow-definition&gt;</code> for that flow.</p>
 <p class="changed_added_2_2">Declare the id of the starting node in the
 flow graph.  The start node may be any of the node types mentioned in
 the class javadocs for <code><a target="_"
-href="../../../javadocs/javax/faces/flow/FlowHandler.html">FlowHandler</a></code>.</p>
+href="javax/faces/flow/FlowHandler.html">FlowHandler</a></code>.</p>
 
 ]]>
 
@@ -1762,11 +1779,42 @@ href="../../../javadocs/javax/faces/flow/FlowHandler.html">FlowHandler</a></code
       <xsd:element name="view"
                    type="javaee:faces-config-faces-flow-definition-viewType"
                    minOccurs="0"
-                   maxOccurs="unbounded">
-      </xsd:element>
+                   maxOccurs="unbounded" />
+      <xsd:element name="switch"
+                   type="javaee:faces-config-faces-flow-definition-switchType"
+                   minOccurs="0"
+                   maxOccurs="unbounded" />
+      <xsd:element name="faces-flow-return"
+                   type="javaee:faces-config-faces-flow-definition-faces-flow-returnType"
+                   minOccurs="0"
+                   maxOccurs="unbounded"/>
+      <xsd:element name="initializer"
+                   type="javaee:faces-config-faces-flow-definition-initializerType"
+                   minOccurs="0"
+                   maxOccurs="1"/>
+      <xsd:element name="finalizer"
+                   type="javaee:faces-config-faces-flow-definition-finalizerType"
+                   minOccurs="0"
+                   maxOccurs="1"/>
+
     </xsd:sequence>
     <xsd:attribute name="id"
-                   type="xsd:ID"/>
+                   type="xsd:ID">
+        <xsd:annotation>
+          <xsd:documentation>
+
+        <![CDATA[
+
+         <p class="changed_added_2_2">The id of this flow.  If this flow
+         is defined in the Application Configuration Resources, the id
+         must be unique within the Application configuration Resource
+         file in which this flow is defined.<p> ]]>
+
+
+          </xsd:documentation>
+        </xsd:annotation>
+
+    </xsd:attribute>
   </xsd:complexType>
 
   <xsd:complexType name="faces-config-faces-flow-definition-viewType">
@@ -1814,6 +1862,227 @@ href="../../../javadocs/javax/faces/flow/FlowHandler.html">FlowHandler</a></code
           </xsd:documentation>
         </xsd:annotation>
     </xsd:attribute>
+  </xsd:complexType>
+
+  <xsd:complexType name="faces-config-faces-flow-definition-switchType">
+    <xsd:annotation>
+      <xsd:documentation>
+
+        <![CDATA[
+
+<p class="changed_added_2_2">Define a switch node in a flow graph.</p>
+
+<div class="changed_added_2_2">
+
+<p>This element must contain one or more
+<code>&lt;navigation-case&gt;</code> elements, each of which must
+contain exactly one <code>&lt;if&gt;</code> and one
+<code>&lt;from-outcome&gt;</code> element.  When control passes to the
+<code>&lt;switch&gt;</code> node, each of the cases must be considered
+in order and control must past to the <code>&lt;from-outcome&gt;</code>
+of the first one whose <code>&lt;if&gt;</code> expression evaluates to 
+<code>true</code>.</p>
+
+</div>
+
+]]>
+
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="navigation-case"
+                   type="javaee:faces-config-navigation-caseType"
+                   minOccurs="0"
+                   maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>
+
+        <![CDATA[
+
+         <p class="changed_added_2_2">Defines a case that must be
+         considered in the list of cases in the
+         <code>&lt;switch&gt;</code>.</p>
+
+]]>
+
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="default"
+                   type="javaee:faces-config-faces-flow-definition-switch-defaultType"
+                   minOccurs="0"
+                   maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation>
+
+        <![CDATA[
+
+         <p class="changed_added_2_2">Defines the default case that will
+         be taken if none of the other cases in the
+         <code>&lt;switch&gt;</code> are taken.</p>
+
+]]>
+
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="id"
+                   type="xsd:ID"
+                   use="required">
+        <xsd:annotation>
+          <xsd:documentation>
+<![CDATA[
+         
+         <p class="changed_added_2_2">The id of this switch.  It must be
+         unique within the flow.</p>
+
+         ]]>
+          </xsd:documentation>
+        </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+
+  <xsd:complexType name="faces-config-faces-flow-definition-switch-defaultType">
+    <xsd:annotation>
+      <xsd:documentation><![CDATA[
+
+         <p class="changed_added_2_2">Defines the default case that will
+         be taken if none of the other cases the
+         <code>&lt;switch&gt;</code> are taken.</p>
+
+        
+      ]]></xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:group ref="javaee:descriptionGroup"/>
+      <xsd:element name="from-outcome"
+                   type="javaee:string"
+                   minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation><![CDATA[
+
+            <p>The "from-outcome" element contains a logical outcome
+            string returned by the execution of an application
+            action method selected via an "actionRef" property
+            (or a literal value specified by an "action" property)
+            of a UICommand component.  If specified, this rule
+            will be relevant only if the outcome value matches
+            this element's value.  If not specified, this rule
+            will be relevant if the outcome value is non-null
+            or, if the "if" element is present, will be relevant
+            for any outcome value, with the assumption that the
+            condition specified in the "if" element ultimately
+            determines if this rule is a match.</p>
+
+<p class="changed_added_2_2">If used in a faces flow, this element
+represents the node id to which control will be passed.</p>
+
+
+]]>
+            
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="id"
+                   type="xsd:ID">
+    </xsd:attribute>
+  </xsd:complexType>
+
+  <xsd:complexType name="faces-config-faces-flow-definition-faces-flow-returnType">
+    <xsd:annotation>
+      <xsd:documentation>
+
+        <![CDATA[
+
+<p class="changed_added_2_2">Define a return node in a flow graph.</p>
+
+<div class="changed_added_2_2">
+
+<p>This element must contain exactly one <code>&lt;navigation-case&gt;</code> element, 
+which must contain exactly one <code>&lt;from-outcome&gt;</code> element.</p>
+
+]]>
+
+      </xsd:documentation>
+    </xsd:annotation>
+
+    <xsd:sequence>
+      <xsd:element name="navigation-case"
+                   type="javaee:faces-config-navigation-caseType"
+                   minOccurs="1" maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation>
+
+        <![CDATA[
+
+         <p class="changed_added_2_2">Define a navigation case for a
+         faces flow.  This element is used within
+         <code>&lt;faces-flow-return&gt;</code> and
+         <code>&lt;switch&gt;</code> elements.<p>
+
+]]>
+
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+
+    <xsd:attribute name="id"
+                   type="xsd:ID"
+                   use="required">
+        <xsd:annotation>
+          <xsd:documentation>
+<![CDATA[
+         
+         <p class="changed_added_2_2">The id of this faces-flow-return.</p>
+
+         ]]>
+          </xsd:documentation>
+        </xsd:annotation>
+    </xsd:attribute>
+
+  </xsd:complexType>
+
+  <xsd:complexType name="faces-config-faces-flow-definition-initializerType">
+    <xsd:annotation>
+      <xsd:documentation>
+
+        <![CDATA[
+
+         <p class="changed_added_2_2">A <code>MethodExpression</code> that will be invoked when the flow is entered.<p>
+
+]]>
+
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:simpleContent>
+      <xsd:extension base="javaee:faces-config-el-expressionType">
+        <xsd:attribute name="id"
+                       type="xsd:ID"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="faces-config-faces-flow-definition-finalizerType">
+    <xsd:annotation>
+      <xsd:documentation>
+
+        <![CDATA[
+
+         <p class="changed_added_2_2">A <code>MethodExpression</code> that will be invoked when the flow is exited.<p>
+
+]]>
+
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:simpleContent>
+      <xsd:extension base="javaee:faces-config-el-expressionType">
+        <xsd:attribute name="id"
+                       type="xsd:ID"/>
+      </xsd:extension>
+    </xsd:simpleContent>
   </xsd:complexType>
 
 
@@ -2025,9 +2294,9 @@ href="../../../javadocs/javax/faces/flow/FlowHandler.html">FlowHandler</a></code
                    type="javaee:string"
                    minOccurs="0">
         <xsd:annotation>
-          <xsd:documentation>
+          <xsd:documentation><![CDATA[
 
-            The "from-outcome" element contains a logical outcome
+            <p>The "from-outcome" element contains a logical outcome
             string returned by the execution of an application
             action method selected via an "actionRef" property
             (or a literal value specified by an "action" property)
@@ -2038,7 +2307,13 @@ href="../../../javadocs/javax/faces/flow/FlowHandler.html">FlowHandler</a></code
             or, if the "if" element is present, will be relevant
             for any outcome value, with the assumption that the
             condition specified in the "if" element ultimately
-            determines if this rule is a match.
+            determines if this rule is a match.</p>
+
+<p class="changed_added_2_2">If used in a faces flow, this element
+represents the node id to which control will be passed.</p>
+
+
+]]>
             
           </xsd:documentation>
         </xsd:annotation>

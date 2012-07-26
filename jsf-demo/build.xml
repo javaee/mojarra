@@ -334,6 +334,8 @@
         <echo>Build the API Javadocs</echo>
         <ant dir="${api.dir}"
              antfile="build.xml" target="javadocs"/>
+        <ant dir="${api.dir}"
+             antfile="build.xml" target="copy.xsddoc"/>
         <echo>Copy the API Javadocs to the dist</echo>
         <filter token="build.number" value="${build.number}" />
         <copy todir="${dist.home}/javadocs" filtering="true">

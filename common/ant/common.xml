@@ -106,6 +106,7 @@
 
     <!-- Version -->
     <property name="spec.version" value="2.2"/>
+    <property name="spec_version" value="2_2"/>
     <property name="spec.snapshot.version" value="2.2-SNAPSHOT"/>
     <property name="patch.version" value="0"/>
     <property name="impl.name" value="Mojarra"/>

@@ -122,6 +122,16 @@
             <replace file="@{output.file}"
                      token="@groupId@"
                      value="@{groupId}"/>
+            <replace file="@{output.file}"
+                     token="@dependency.base.dir@"
+                     value="${dependency.base.dir}"/>
+            <replace file="@{output.file}"
+                     token="@xs3p.version@"
+                     value="${xs3p.version}"/>
+            <replace file="@{output.file}"
+                     token="@spec_version@"
+                     value="${spec_version}"/>
+
         </sequential>
     </macrodef>
 
@@ -214,6 +224,10 @@ javadoc generation skipped
                     <unjar src="${javax.faces-api.jar}"
                            overwrite="yes"
                            dest="${mvn.api.dir}/target/classes"/>
+                    <jsf.mvn pomFile="${mvn.api.dir}/jsf-api-pom.xml"
+                             mvnSpecVersion="@{version}"
+                             dir="${mvn.api.dir}"
+                             goals="xml:transform" />
                     <obtain.javadoc.jar 
                             artifactId="${api-artifact-id}"
                             version="@{version}"

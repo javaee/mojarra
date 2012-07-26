@@ -532,7 +532,6 @@
             <arg value="${conf.share.dir}/jstl-core.tld"/>
             <arg value="${conf.share.dir}/jstl-fn.tld"/>
             <arg value="${conf.share.dir}/ui.tld"/>
-            <arg value="${conf.share.dir}/facelets_faces-flow.tld"/>
         </java>
         <copy todir="${build.dir}/vdldocs/facelets">
            <fileset dir="${basedir}/../jsf-api/doc/">
@@ -829,7 +828,7 @@ ant -Dgpg.passphrase=PASSPHRASE HERE mvn.deploy.snapshot.local
                  windowtitle="${DocName} (${spec.version})"
                  source="1.5"
                  doctitle="${DocName} (${spec.version})"
-                 bottom="Copyright &#169; 2002-2010 Oracle America, Inc. All Rights Reserved.">
+                 bottom="Copyright &#169; 2002-2012 Oracle America, Inc. All Rights Reserved.">
             <fileset dir="${source.dir}">
                 <include name="com/sun/faces/spi/**/*.java"/>
             </fileset>

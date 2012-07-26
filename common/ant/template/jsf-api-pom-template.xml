@@ -168,6 +168,34 @@
                     </archive>
                 </configuration>
             </plugin>
+            <plugin>
+              <groupId>org.codehaus.mojo</groupId>
+              <artifactId>xml-maven-plugin</artifactId>
+              <version>1.0</version>
+              <executions>
+                <execution>
+                  <goals>
+                    <goal>transform</goal>
+                  </goals>
+                </execution>
+              </executions>
+              <configuration>
+                <transformationSets>
+                  <transformationSet>
+                    <dir>src/main/java</dir>
+                    <includes>
+                      <include>web-facesconfig_${spec_version}*</include>
+                    </includes>
+                    <stylesheet>${dependency.base.dir}/xs3p-${xs3p.version}/xs3p.xsl</stylesheet>
+                    <fileMappers>
+                      <fileMapper implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
+                        <targetExtension>.html</targetExtension>
+                      </fileMapper>
+                    </fileMappers>
+                  </transformationSet>
+                </transformationSets>
+              </configuration>
+            </plugin>
         </plugins>
 
     </build>
@@ -335,5 +363,11 @@
         </build>
       </profile>
     </profiles>
+
+    <properties>
+      <dependency.base.dir>@dependency.base.dir@</dependency.base.dir>
+      <xs3p.version>@xs3p.version@</xs3p.version>
+      <spec_version>@spec_version@</spec_version>
+    </properties>
 
 </project>

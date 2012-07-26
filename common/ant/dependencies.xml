@@ -56,6 +56,7 @@
     <property name="dependency.jar.dir" value="${dependency.base.dir}/jars"/>
     <property name="junit.version" value="3.8.1"/>
     <property name="htmlunit.version" value="2.4"/>
+    <property name="xs3p.version" value="1.1.5"/>
     <property name="cactus.version" value="13-1.7.2"/>
     <!-- Note that if changing the Apache Commons versions
          you must also change the versions in the source loading code -->
@@ -96,6 +97,7 @@
 
     <property name="junit.home" value="${dependency.base.dir}/junit${junit.version}"/>
     <property name="htmlunit.home" value="${dependency.base.dir}/htmlunit-${htmlunit.version}"/>
+    <property name="xs3p.home" value="${dependency.base.dir}/xs3p-${xs3p.version}"/>
     <property name="cactus.home" value="${dependency.base.dir}/jakarta-cactus-${cactus.version}"/>
     <property name="beanutils.home" value="${dependency.base.dir}/commons-beanutils-${beanutils.version}"/>
     <property name="digester.home" value="${dependency.base.dir}/commons-digester-${digester.version}"/>
@@ -237,6 +239,43 @@
                 <unzip
                         src="${dependency.base.dir}/downloads/htmlunit-${htmlunit.version}.zip"
                         dest="${dependency.base.dir}"/>
+            </then>
+        </if>
+
+        <!-- XS3P -->
+        <if>
+            <and>
+                <not>
+                    <available file="${xs3p.home}" property="ignored"/>
+                </not>
+                <not>
+                    <isset property="build.source"/>
+                </not>
+            </and>
+            <then>
+                <get src="http://downloads.sourceforge.net/project/xs3p/xs3p-${xs3p.version}.zip"
+                     dest="${dependency.base.dir}/downloads/xs3p-${xs3p.version}.zip"
+                     usetimestamp="true"/>
+                <mkdir dir="${xs3p.home}" />
+                <unzip
+                        src="${dependency.base.dir}/downloads/xs3p-${xs3p.version}.zip"
+                        dest="${xs3p.home}"/>
+            </then>
+        </if>
+
+        <if>
+            <and>
+                <not>
+                    <os family="windows"/>
+                </not>
+                <not>
+                    <isset property="build.source"/>
+                </not>
+            </and>
+            <then>
+              <patch patchfile="${jsf.build.home}/common/ant/bin/xs3p-disable-output-escaping.patch"
+                     originalfile="${xs3p.home}/xs3p.xsl" failonerror="false"
+                     dir="${xs3p.home}"/>
             </then>
         </if>
 
@@ -809,6 +848,9 @@ java -Xmx256m -jar ${dependency.base.dir}/${glassfish.installer.jar}${fl.os}.jar
         </condition>
         <condition property="dl.os" value="WINNT">
             <os family="winnt"/>
+        </condition>
+        <condition property="dl.os" value="WINNT">
+            <os family="windows"/>
         </condition>
         <condition property="dl.os" value="Darwin">
             <os name="Mac OS X"/>
