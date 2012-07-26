@@ -123,6 +123,7 @@
             <if>
                 <equals arg1="@{type}" arg2="api"/>
                 <then>
+                    <delete dir="${mvn.api.dir}"/>
                     <create.pom
                           template.file="${current.dir}/template/jsf-api-pom-template.xml"
                           output.file="${mvn.api.dir}/jsf-api-pom.xml"
@@ -153,9 +154,9 @@
                              mvnSpecVersion="@{version}"
                              dir="${mvn.api.dir}"
                              goals="@{goal}"/>
-                    <delete dir="${mvn.api.dir}"/>
                 </then>
                 <else>
+                    <delete dir="${mvn.impl.dir}"/>
                      <create.pom
                           template.file="${current.dir}/template/jsf-impl-pom-template.xml"
                           output.file="${mvn.impl.dir}/jsf-impl-pom.xml"
@@ -175,7 +176,6 @@
                              mvnSpecVersion="@{version}"
                              dir="${mvn.impl.dir}"
                              goals="@{goal}"/>
-                    <delete dir="${mvn.impl.dir}"/>
                 </else>
             </if>
         </sequential>
