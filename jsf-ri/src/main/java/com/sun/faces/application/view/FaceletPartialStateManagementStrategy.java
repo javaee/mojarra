@@ -69,6 +69,7 @@ import javax.faces.render.ResponseStateManager;
 import javax.faces.view.StateManagementStrategy;
 import static com.sun.faces.RIConstants.DYNAMIC_ACTIONS;
 import static com.sun.faces.RIConstants.DYNAMIC_COMPONENT;
+import javax.faces.application.ProjectStage;
 
 /**
  * The state management strategy for PSS.
@@ -423,7 +424,13 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
             List<Object> savedActions = new ArrayList<Object>(actions.size());
             for (ComponentStruct action : actions) {
                 UIComponent component = componentMap.get(action.clientId);
-                if (!component.isTransient() && !hasTransientAncestor(component)) {
+                if (component == null && context.isProjectStage(ProjectStage.Development)) {
+                    LOGGER.log(
+                            Level.WARNING,
+                            "Unable to save dynamic action with clientId ''{0}'' because the UIComponent cannot be found",
+                            action.clientId);
+                }
+                if (component != null && !component.isTransient() && !hasTransientAncestor(component)) {
                     savedActions.add(action.saveState(context));
                 }
             }
