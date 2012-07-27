@@ -119,10 +119,8 @@ public class ScopedAttributeELResolver extends ELResolver {
         ApplicationAssociate associate = ApplicationAssociate.getCurrentInstance();
         if (associate != null) {
             BeanManager manager = associate.getBeanManager();
-            if (manager != null) {
-                if (manager.isManaged(attribute)) {
-                    return manager.getBeanFromScope(attribute, facesContext);
-                }
+            if (manager != null && manager.isManaged(attribute)) {
+                return manager.getBeanFromScope(attribute, facesContext);
             }
         }
 
