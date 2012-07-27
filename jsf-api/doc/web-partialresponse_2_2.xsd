@@ -121,7 +121,9 @@
       <xsd:annotation>
         <xsd:documentation><![CDATA[<p>
         
-        PENDING(rogerk): retroactively write 2.0 spec language for this.
+        The "changes" element contains a collection of child elements,
+        each of which describes a different change to be applied to the
+        view in the user agent.
         
         </p>]]></xsd:documentation>
       </xsd:annotation>
