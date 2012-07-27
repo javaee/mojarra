@@ -46,63 +46,111 @@ import javax.faces.context.FacesContext;
 
 /**
  * <p class="changed_added_2_2"><strong>FlowHandler</strong> is the main
- * entry point that enables the runtime to interact with the Faces Flows
- * feature.  {@code FlowHandler} is used by the {@link
- * javax.faces.application.ConfigurableNavigationHandler} when it needs
- * to make navigational decisions related to flows.  The implementation
- * must support two means of defining Faces Flows: 1. metadata within
- * VDL pages and 2. metadata in the Application Configuration Resources.
- * Additional means of defining flows may be provided by decorating the
- * {@link FlowHandlerFactory}.</p>
+ * entry point that enables the runtime to interact with the faces flows
+ * feature.  {@link
+ * javax.faces.application.ConfigurableNavigationHandler} uses this
+ * class when it needs to make navigational decisions related to flows.
+ * The faces flow feature entirely depends on the {@link
+ * javax.faces.lifecycle.ClientWindow} feature, which itself requires
+ * explicit enabling.  Please see the specification for {@code
+ * ClientWindow} for the requirements for enabling this feature.</p>
  
  * <div class="changed_added_2_2">
 
- * <p>Regardless of the means of defining a flow, the runtime must scan
- * for and discover flows at application startup time, as well as
- * support the capability to add flows dynamically during the
- * application's lifetime.  In the case of dynamically added flows, the
- * runtime is not required to persist the flow definition for such
- * flows, but may do so.  The faces flow feature entirely depends on the
- * {@link javax.faces.lifecycle.ClientWindow} feature, which itself
- * requires explicit enabling.  Please see the specification for {@code
- * ClientWindow} for the requirements for enabling this feature.</p>
- * 
- * <p><strong>Startup Time Requirements</strong></p>
- * 
- * <p>During startup, flow definitions must be discoverd and inspected
- * and each such flow made known to the runtime with a call to {@link
- * #addFlow}.  The inspection must proceed in the following order.
- * 
- * <ul>
- 
- <li><p>VDL files accessible to the application.</p></li>
- 
- <li><p>The Application Configuration Resources.</p></li>
- * 
- * </ul>
- * 
- * <p>If the runtime discovers a conflict between a flow defined in a VDL view
- * and one defined in the Application Configuration Resources, the entry in
- * the Application Configuration Resources takes precedence.  This is
- * consistent with the behavior regarding annotations and XML as specified
- * in the section "Requirements for scanning of classes for annotations" of
- * the spec prose document.</p>
-
  * <p><strong>Defining Flows</strong></p>
 
- * <p>The runtime must support the set of XML elements described in the
- * "Faces Flows" facelet taglibrary as a means of defining the Faces
- * Flows for an application instance.  See <a
- * href="../../../overview-summary.html#overview_description">the API
- * Overview</a> for a link to the Facelet Taglibrarydocs, including the
- * Faces Flows taglibrary.  When used within VDL views, the elements
- * must reside within the view's {@code <f:metadata>} section, and must
- * be namespaced properly as with any other Facelet Taglibrary.  When
- * used in the Application Configuration Resources, the elements may
- * appear as defined in the Application Configuration Resources
- * schema.</p>
+ * <p>The implementation must support defining faces flows using the
+ * <code>&lt;faces-flow-definition&gt;</code> element as specified in
+ * the <a target="_"
+ * href="../../../web-facesconfig.html#type_faces-config-faces-flow-definitionType">Application
+ * Configuration Resources XML Schema Definition</a>.  Additional means
+ * of defining flows may be provided by decorating the {@link
+ * FlowHandlerFactory}.</p>
+
+ * <p><strong>Where to Discover Flows</strong></p>
+
+ * <ul>
+
+ * <p>The system must support the following conventions within the web
+ * application for discovery of flows.  In each of these cases, when the
+ * flow is discovered (see below), it is added to the runtime with a
+ * call to {@link #addFlow}.  In this discussion, let
+ * <code>flowName</code> be the name of the flow.</p>
+
+ *     <ul>
+
+ * <li><p><strong>In a jar on the application's classpath</strong></p>
+
+ * <p>When packaged in a jar, a flow definition and all of its contents
+ * must reside in the path <code>META-INF/flows/&lt;flowName&gt;</code>
+ * in the jar.  The flow definition must reside in the path
+ * <code>META-INF/flows/&lt;flowName&gt;/&lt;flowName&gt;-flow.xml</code>
+ * in the jar.</p>
+
+ * <p>If <code>ProjectStage</code> is <code>Development</code>, the
+ * runtime must try to detect the case of multiple flows defined with
+ * the same <code>flowName</code> and fail to deploy in that case.  A
+ * descriptive error including the <code>flowName</code> must be
+ * printed.</p>
+
+ * </li>
+
+ * <li><p><strong>Within a directory in the web application root</strong></p>
+
+ * <p>When packaged in a directory in the web application root, a flow
+ * definition and all of its contents must reside in the path
+ * <code>flowName</code> relative to the web application root.  The flow
+ * definition must reside in
+ * <code>&lt;flowName&gt;/&lt;flowName&gt;-flow.xml</code>. </p>
+
+ * </li>
+
+ * <li><p><strong>Directly in the web application
+ * root</strong></p>
+
+ * <p>When packaged directly in the web application root, a flow
+ * definition must reside in <code>&lt;flowName&gt;-flow.xml</code>.</p>
+
+ * </li>
+
+ * <li><p><strong>In the Application Configuration
+ * Resources</strong></p>
+
+ * <p>Flow definitions may be included directly in the Application
+ * Configuration Resources, such as the
+ * <code>WEB-INF/faces-config.xml</code> file.</p>
+
+ * </li>
+
+ * </ul>
+
+ * <p>In all of these cases, an entire flow is discoverable starting
+ * with the root <code>&lt;faces-flow-definition&gt;</code> for that
+ * flow.</p>
+
+ * </ul>
+
+ * <p><strong>When to Discover Flows</strong></p>
+
+ * <ul>
+
+ * <p>Because flows may be defined in several different locations, the
+ * timing of when to discover them and add them to the runtime varies.
+ * Flows defined in the Application Configuration Resources must be
+ * loaded at the same time as the Application Configuration Resources
+ * are processed, namely, deployment time.  Flows defined in any of the
+ * other places mentioned previously may be discovered and loaded
+ * lazily, when a user agent actually traverses a view in the flow.
+ * Because the runtime must use the {@link #addFlow} method to make the
+ * flow available to the application, it is possible to dynamically add
+ * flows using this same API.  The runtime is not required to persist
+ * the flow definition for such flows, but may do so.</p>
+
+ * </ul>
 
  * <p><strong>Managing Flows</strong></p>
+
+ * <ul>
 
  * <p>The singleton instance of this class must be thread safe, and
  * therefore must not store any per-user state.  Flows are, however,
@@ -118,7 +166,6 @@ import javax.faces.context.FacesContext;
  * only kind of node in the graph was a VDL view.  The Faces Flow
  * feature currently defines the following node types.</p>
 
- *
  * <ul>
 
  * <li><p>View</p>
@@ -171,6 +218,26 @@ import javax.faces.context.FacesContext;
 
  * <img src="FlowHierarchy.jpg" style="display: block; margin-left: auto; margin-right: auto"></img>
 
+ * </ul>
+
+ * <div class="changed_added_2_2">
+
+ * <p><strong>Flows and Model Objects</strong></p>
+
+ * <ul>
+
+ * <p>Managed beans annotated with the CDI annotation
+ * {@link #FlowScoped} must be instantiated upon a user agent's entry
+ * into the named scope, and must be made available for garbage
+ * collection when the user agent leaves the flow.</p>
+
+ * <p>The <code>facesFlowScoped</code> EL implicit object is also
+ * available to store values in the "current" slope.  Values stored in
+ * this scope must be made available for garbage collection when the
+ * user agent leaves the flow.</p>
+
+ * </ul>
+
  * </div>
 
  * @since 2.2
@@ -210,7 +277,7 @@ public abstract class FlowHandler {
     /**
      * <p class="changed_added_2_2">Add the argument {@link Flow} to the
      * collection of {@code Flow}s known to the current
-     * application. </p>
+     * application.  The implementation must be thread safe.</p>
      *
      * @param definingDocument An application unique identifier
      * for the document in which the argument flow is defined.

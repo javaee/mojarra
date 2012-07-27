@@ -1657,59 +1657,10 @@ passed.</p>
 <![CDATA[
 
         <p class="changed_added_2_2">Top level element for a flow
-        definition.</p>  
+        definition.  If an <code>id</code> attribute is present on this
+        element, it must be identical to <code>flowName</code>.</p>
 
-        <p>The system must support the following conventions within the
-        web application for discovery of flows.  In this discussion, let
-        <code>flowName</code> be the name of the flow.  If an
-        <code>id</code> attribute is present on this element, it must be
-        identical to <code>flowName</code>.</p>
-
-        <ul>
-
-	  <li><p><strong>In a jar on the application's classpath</strong></p>
-
-<p>When packaged in a jar, a flow definition and all of its contents
-must reside in the path <code>META-INF/flows/&lt;flowName&gt;</code> in
-the jar.  The flow definition must reside in the path
-<code>META-INF/flows/&lt;flowName&gt;/&lt;flowName&gt;-flow.xml</code>
-in the jar.</p>
-
-<p>If <code>ProjectStage</code> is <code>Development</code>, the runtime
-must try to detect the case of multiple flows defined with the same
-<code>flowName</code> and fail to deploy in that case.  A descriptive
-error including the <code>flowName</code> must be printed.</p>
-
-	  </li>
-
-	  <li><p><strong>Within a directory in the web application root</strong></p>
-
-<p>When packaged in a directory in the web application root, a flow
-definition and all of its contents must reside in the path
-<code>flowName</code> relative to the web application root.  The flow
-definition must reside in <code>&lt;flowName&gt;/&lt;flowName&gt;-flow.xml</code>. </p>
-
-          </li>
-
-	  <li><p><strong>Directly in the web application root</strong></p>
-
-<p>When packaged directly in the web application root, a flow definition
-must reside in <code>&lt;flowName&gt;-flow.xml</code>.</p>
-
-          </li>
-
-	  <li><p><strong>In the Application Configuration Resources</strong></p>
-
-<p>Flow definitions may be included directly in the Application
-Configuration Resources, such as the
-<code>WEB-INF/faces-config.xml</code> file.</p>
-
-          </li>
-
-	</ul>
-
-<p>In all of these cases, an entire flow is discoverable starting with
-the root <code>&lt;faces-flow-definition&gt;</code> for that flow.</p>
+<div class="changed_added_2_2">
 
 <p>If there is no <code>&lt;start-node&gt;</code> element declared, it
 is assumed to be <code>&lt;flowName&gt;.xhtml</code>.</p>
@@ -1756,6 +1707,7 @@ is assumed to be <code>&lt;flowName&gt;.xhtml</code>.</p>
 <li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li>
 </ol></div>		</div>
 
+</div>
 
 ]]>
 </xsd:documentation>
