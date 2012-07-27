@@ -319,9 +319,44 @@
             <xsd:documentation><![CDATA[<p>
 
               Defines the method signature for a MethodExpression-
-              enabled attribute.
-              
-            </p>]]></xsd:documentation>
+              enabled attribute.  The syntax of the method-signature
+              element is as follows (taken from the function-signature
+              EBNF in web-jsptaglibrary_2_1.xsd):</p>
+
+<code>
+
+<p>MethodSignature ::= ReturnType S MethodName S? '(' S? Parameters? S? ')'</p>
+
+<p>ReturnType        ::= Type</p>
+
+<p>MethodName        ::= Identifier</p>
+
+<p>Parameters        ::= Parameter | ( Parameter S? ',' S? Parameters )</p>
+
+<p>Parameter         ::= Type</p>
+
+</code>
+
+<p>Where:</p>
+
+<ul>
+
+	  <li><p><code>Type</code> is a basic type or a fully qualified
+	  Java class name (including package name), as per the 'Type'
+	  production in the Java Language Specification, Second Edition,
+	  Chapter 18.</p></li>
+
+	  <li><p><code>Identifier</code> is a Java identifier, as per the
+	  'Identifier' production in the Java Language Specification,
+	  Second Edition, Chapter 18.</p></li>
+
+</ul>
+
+<p>Example:</p>
+
+<p><code>java.lang.String nickName( java.lang.String, int )</code></p>
+
+]]></xsd:documentation>
           </xsd:annotation>
         </xsd:element>
       </xsd:choice>
