@@ -122,8 +122,6 @@ public final class ViewHandler extends TagHandlerImpl {
 
     /**
      * See taglib documentation.
-     * 
-     * @see com.sun.faces.facelets.FaceletHandler#apply(com.sun.faces.facelets.FaceletContext, javax.faces.component.UIComponent)
      */
     public void apply(FaceletContext ctx, UIComponent parent)
             throws IOException {
