@@ -262,7 +262,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
             // Regex to find one script, to isolate it's content [2] and attributes [1]
             var findscript = /<script([^>]*)>([\S\s]*?)<\/script>/im;
             // Regex to remove leading cruft
-            var stripStart = /^\s*(<!--)*\s*(\/\/)*\s*(\/\*)*\s*(<!\[CDATA\[)*/;
+            var stripStart = /^\s*(<!--)*\s*(\/\/)*\s*(\/\*)*\s*\n*\**\n*\s*\*.*\n*\s*\*\/(<!\[CDATA\[)*/;
             // Regex to find src attribute
             var findsrc = /src="([\S]*?)"/im;
             var initialnodes = [];
