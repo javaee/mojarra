@@ -227,7 +227,7 @@ import javax.faces.context.FacesContext;
  * <ul>
 
  * <p>Managed beans annotated with the CDI annotation
- * {@link #FlowScoped} must be instantiated upon a user agent's entry
+ * {@link FlowScoped} must be instantiated upon a user agent's entry
  * into the named scope, and must be made available for garbage
  * collection when the user agent leaves the flow.</p>
 
