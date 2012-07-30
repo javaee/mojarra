@@ -39,7 +39,6 @@ import com.sun.faces.util.MetadataWrapperMap;
 import com.sun.faces.util.Util;
 import java.util.HashMap;
 import java.util.Map;
-import javax.faces.FacesException;
 
 public class ApplicationInstanceFactoryMetadataMap<K, V> extends MetadataWrapperMap<String, Object> {
     public enum METADATA {
