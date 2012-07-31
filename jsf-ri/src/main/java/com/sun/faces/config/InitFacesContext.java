@@ -286,7 +286,7 @@ public class InitFacesContext extends FacesContext {
                     Object thread = entry2.getKey();
                     Object initContextValue = entry2.getValue();
                     if (initContextKey == initContextValue) {
-                        threadInitContext.remove(initContextKey);
+                        threadInitContext.remove(thread);
                     }
                 }
             }
