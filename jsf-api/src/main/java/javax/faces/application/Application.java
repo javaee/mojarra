@@ -73,8 +73,8 @@ import javax.faces.view.ViewDeclarationLanguage;
 
 
 /**
- * <p><strong class="changed_modified_2_0
- * changed_modified_2_0_rev_a">Application</strong> represents a
+ * <p><strong class="changed_modified_2_0 changed_modified_2_0_rev_a
+ * changed_modified_2_2">Application</strong> represents a
  * per-web-application singleton object where applications based on
  * JavaServer Faces (or implementations wishing to provide extended
  * functionality) can register application-wide singletons that provide
@@ -1746,11 +1746,11 @@ public abstract class Application {
 
 
     /**
-     * <p class="changed_added_2_0">Install the listener instance
-     * referenced by argument <code>listener</code> into the
-     * application as a listener for events of type
-     * <code>systemEventClass</code> that originate from objects of type
-     * <code>sourceClass</code>.</p>
+     * <p class="changed_added_2_0"><span
+     * class="changed_modified_2_2">Install</span> the listener instance
+     * referenced by argument <code>listener</code> into the application
+     * as a listener for events of type <code>systemEventClass</code>
+     * that originate from objects of type <code>sourceClass</code>.</p>
      *
      * <div class="changed_added_2_0">
      *
@@ -1767,6 +1767,15 @@ public abstract class Application {
      * </p>
      *
      * </div>
+
+     * <div class="changed_added_2_2">
+
+     * <p>It is valid to call this method <strong>during</strong> the
+     * processing of an event which was subscribed to by a previous call
+     * to this method.</p>
+
+     * </div>
+
      *
      * @param systemEventClass the <code>Class</code> of event for which
      * <code>listener</code> must be fired.
@@ -1802,7 +1811,8 @@ public abstract class Application {
 
 
     /**
-     * <p class="changed_added_2_0">Install the listener instance
+     * <p class="changed_added_2_0"><span
+     * class="changed_modified_2_2">Install</span> the listener instance
      * referenced by argument <code>listener</code> into application as
      * a listener for events of type <code>systemEventClass</code>.  The
      * default implementation simply calls through to {@link
@@ -1824,6 +1834,15 @@ public abstract class Application {
      * be called when events of type <code>systemEventClass</code> are
      * fired.
 
+     * <div class="changed_added_2_2">
+
+     * <p>See {@link
+     * #subscribeToEvent(java.lang.Class,java.lang.Class,javax.faces.event.SystemEventListener)}
+     * for an additional requirement regarding when it is valid to call
+     * this method.</p>
+
+     * </div>
+
      * @throws <code>NullPointerException</code> if any combination of
      * <code>systemEventClass</code>, or <code>listener</code> are
      * <code>null</code>.
@@ -1843,7 +1862,8 @@ public abstract class Application {
 
 
     /**
-     * <p class="changed_added_2_0">Remove the listener instance
+     * <p class="changed_added_2_0"><span
+     * class="changed_modified_2_2">Remove</span> the listener instance
      * referenced by argument <code>listener</code> from the application
      * as a listener for events of type
      * <code>systemEventClass</code> that originate from objects of type
@@ -1852,7 +1872,16 @@ public abstract class Application {
      * javax.faces.event.SystemEventListener)} for the specification
      * of how the listener is stored, and therefore, how it must be
      * removed.</p>
-     *
+
+     * <div class="changed_added_2_2">
+
+     * <p>See {@link
+     * #subscribeToEvent(java.lang.Class,java.lang.Class,javax.faces.event.SystemEventListener)}
+     * for an additional requirement regarding when it is valid to call
+     * this method.</p>
+
+     * </div>
+
      * @param systemEventClass the <code>Class</code> of event for which
      * <code>listener</code> must be fired.
      *
@@ -1887,12 +1916,22 @@ public abstract class Application {
 
 
     /**
-     * <p class="changed_added_2_0">Remove the listener instance
+     * <p class="changed_added_2_0"><span
+     * class="changed_modified_2_2">Remove</span> the listener instance
      * referenced by argument <code>listener</code> from the application
      * as a listener for events of type <code>systemEventClass</code>.  The
      * default implementation simply calls through to {@link #unsubscribeFromEvent(Class, javax.faces.event.SystemEventListener)}
      * passing <code>null</code> as the <code>sourceClass</code> argument</p>
      *
+     * <div class="changed_added_2_2">
+
+     * <p>See {@link
+     * #subscribeToEvent(java.lang.Class,java.lang.Class,javax.faces.event.SystemEventListener)}
+     * for an additional requirement regarding when it is valid to call
+     * this method.</p>
+
+     * </div>
+
      * @param systemEventClass the <code>Class</code> of event for which
      * <code>listener</code> must be fired.
      *
