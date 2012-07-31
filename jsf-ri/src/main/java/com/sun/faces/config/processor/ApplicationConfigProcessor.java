@@ -81,7 +81,6 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import javax.faces.validator.BeanValidator;
 import javax.validation.Validation;
-import javax.validation.ValidationException;
 import javax.validation.ValidatorFactory;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler;
 
