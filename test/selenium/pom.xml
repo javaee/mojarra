@@ -49,6 +49,7 @@
                         <configuration>
                             <systemPropertyVariables>
                                 <integration.url>${integration.protocol}://${integration.serverName}:${integration.serverPort}/${project.build.finalName}/</integration.url>
+                                <selenium.browser>${selenium.browser}</selenium.browser>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>                
@@ -78,4 +79,7 @@
             </reporting>
         </profile>
     </profiles>
+    <properties>
+        <selenium.brower>Firefox</selenium.brower>
+    </properties>
 </project>
