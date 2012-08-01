@@ -80,6 +80,6 @@
         </profile>
     </profiles>
     <properties>
-        <selenium.brower>Firefox</selenium.brower>
+        <selenium.browser>Firefox</selenium.browser>
     </properties>
 </project>
