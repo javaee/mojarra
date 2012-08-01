@@ -42,7 +42,6 @@ package com.sun.faces.context;
 
 
 import com.sun.faces.util.Util;
-import com.sun.faces.util.MessageUtils;
 
 import javax.faces.FacesException;
 import javax.faces.context.ExternalContext;

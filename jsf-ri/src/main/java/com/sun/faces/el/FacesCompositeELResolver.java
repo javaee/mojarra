@@ -40,17 +40,8 @@
 
 package com.sun.faces.el;
 
-import com.sun.faces.util.RequestStateManager;
-
-import java.beans.FeatureDescriptor;
-import java.util.Iterator;
-
 import javax.el.ELResolver;
-import javax.el.ELContext;
 import javax.el.CompositeELResolver;
-import javax.el.ELException;
-
-import javax.faces.context.FacesContext;
 
 /**
  * Maintains an ordered composite list of child <code>ELResolver for JSF</code>.
