@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -1368,29 +1368,25 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
     // ----------------------------------------------------- StateHolder Methods
 
-
-
-    //private Object[] values;
-
+    @Override
     public Object saveState(FacesContext context) {
-
         if (context == null) {
             throw new NullPointerException();
         }
-        Object[] values = null;
-        if (values == null) {
-            values = new Object[4];
+
+        Object[] result = null;
+        
+        Object superState = super.saveState(context);
+        Object validatorsState = ((validators != null) ? validators.saveState(context) : null);
+        
+        if (superState != null || emptyStringIsNull != null || validateEmptyFields != null || validatorsState != null) {
+            result = new Object[] { superState, emptyStringIsNull, validateEmptyFields, validatorsState};
         }
-
-        values[0] = super.saveState(context);
-        values[1] = emptyStringIsNull;
-        values[2] = validateEmptyFields;
-        values[3] = ((validators != null) ? validators.saveState(context) : null);
-        return (values);
-
+        
+        return (result);
     }
 
-
+    @Override
     public void restoreState(FacesContext context, Object state) {
 
         if (context == null) {
