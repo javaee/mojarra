@@ -271,18 +271,21 @@ public class InitFacesContext extends FacesContext {
      * where the entry value(s) match the initFacesContext (associated with the ServletContext).
      */
     public static void cleanupInitMaps(ServletContext context) {
-        Map threadInitContext = InitFacesContext.getThreadInitContextMap();
-        Map initContextServletContext = InitFacesContext.getInitContextServletContextMap();
-        Set entries = initContextServletContext.entrySet();
-        for (Iterator iterator1 = entries.iterator(); iterator1.hasNext();) {
-            Map.Entry entry1 = (Map.Entry)iterator1.next();
+        Map <Thread, InitFacesContext>threadInitContext = InitFacesContext.getThreadInitContextMap();
+        Map <InitFacesContext, ServletContext>initContextServletContext =
+            InitFacesContext.getInitContextServletContextMap();
+        Set<Map.Entry<InitFacesContext, ServletContext>> entries = initContextServletContext.entrySet();
+        for (Iterator<Map.Entry<InitFacesContext, ServletContext>> iterator1 =
+            entries.iterator(); iterator1.hasNext();) {
+            Map.Entry<InitFacesContext, ServletContext> entry1 = (Map.Entry)iterator1.next();
             Object initContextKey = entry1.getKey();
             Object value1 = entry1.getValue();
             if (context == value1) {
                 initContextServletContext.remove(initContextKey);
-                Set threadEntries = threadInitContext.entrySet();
-                for (Iterator iterator2 = threadEntries.iterator(); iterator2.hasNext();) {
-                    Map.Entry entry2 = (Map.Entry)iterator2.next();
+                Set<Map.Entry<Thread, InitFacesContext>> threadEntries = threadInitContext.entrySet();
+                for (Iterator<Map.Entry<Thread, InitFacesContext>> iterator2 =
+                    threadEntries.iterator(); iterator2.hasNext();) {
+                    Map.Entry<Thread, InitFacesContext>  entry2 = (Map.Entry)iterator2.next();
                     Object thread = entry2.getKey();
                     Object initContextValue = entry2.getValue();
                     if (initContextKey == initContextValue) {
