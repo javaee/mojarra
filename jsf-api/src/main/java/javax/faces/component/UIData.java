@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -75,7 +75,6 @@ import javax.faces.model.ListDataModel;
 import javax.faces.model.ResultDataModel;
 import javax.faces.model.ResultSetDataModel;
 import javax.faces.model.ScalarDataModel;
-import javax.faces.view.ViewDeclarationLanguage;
 import javax.servlet.jsp.jstl.sql.Result;
 
 
@@ -1752,23 +1751,21 @@ public class UIData extends UIComponentBase
     @Override
     public Object saveState(FacesContext context)
     {
-        if (initialStateMarked())
-        {
-            Object parentSaved = super.saveState(context);
-            if (parentSaved == null &&_rowDeltaStates.isEmpty())
-            {
+        if (initialStateMarked()) {
+            Object superState = super.saveState(context);
+            
+            if (superState == null && _rowDeltaStates.isEmpty()) {
                 return null;
             }
-            else
-            {
-                Object values[] = new Object[2];
-                values[0] = super.saveState(context);
-                values[1] = UIComponentBase.saveAttachedState(context, _rowDeltaStates);
+            else {
+                Object values[] = null;
+                Object attachedState = UIComponentBase.saveAttachedState(context, _rowDeltaStates);
+                if (superState != null || attachedState != null) {
+                    values = new Object[] { superState, attachedState };
+                }
                 return values; 
             }
-        }
-        else
-        {
+        } else {
             Object values[] = new Object[2];
             values[0] = super.saveState(context);
             values[1] = UIComponentBase.saveAttachedState(context, _rowDeltaStates);
