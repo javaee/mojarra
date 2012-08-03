@@ -69,16 +69,15 @@ import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
 /**
- * <p><span class="changed_modified_2_0
- * changed_modified_2_0_rev_a"><strong>UIInput</strong></span> is a
- * {@link UIComponent} that represents a component that both displays
- * output to the user (like {@link UIOutput} components do) and
- * processes request parameters on the subsequent request that need to
- * be decoded.  There are no restrictions on the data type of the local
- * value, or the object referenced by the value binding expression (if
- * any); however, individual {@link javax.faces.render.Renderer}s will
- * generally impose restrictions on the type of data they know how to
- * display.</p>
+ * <p><span class="changed_modified_2_0 changed_modified_2_0_rev_a
+ * changed_modified_2_2"><strong>UIInput</strong></span> is a {@link
+ * UIComponent} that represents a component that both displays output to
+ * the user (like {@link UIOutput} components do) and processes request
+ * parameters on the subsequent request that need to be decoded.  There
+ * are no restrictions on the data type of the local value, or the
+ * object referenced by the value binding expression (if any); however,
+ * individual {@link javax.faces.render.Renderer}s will generally impose
+ * restrictions on the type of data they know how to display.</p>
  *
  * <p>During the <em>Apply Request Values</em> phase
  * of the request processing lifecycle, the decoded value of this
@@ -870,9 +869,9 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
 
     /**
-     * <p><span class="changed_modified_2_0">Perform</span> the
-     * following algorithm to validate the local value of this {@link
-     * UIInput}.</p>
+     * <p><span class="changed_modified_2_0
+     * changed_modified_2_2">Perform</span> the following algorithm to
+     * validate the local value of this {@link UIInput}.</p>
 
      * <ul>
 
@@ -912,7 +911,9 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * <li>If the <code>valid</code> property of this component is still
      * <code>true</code>, retrieve the previous value of the component
      * (with <code>getValue()</code>), store the new local value using
-     * <code>setValue()</code>, and reset the submitted value to null.
+     * <code>setValue()</code>, and reset the submitted value to null 
+     * <span class="changed_added_2_2">with a call to {@link #setSubmittedValue}
+     * passing {@code null} as the argument</span>.
      * If the local value is different from the previous value of this
      * component, <span class="changed_modified_2_1">as determined by a
      * call to {@link #compareValues}</span>, fire a {@link
