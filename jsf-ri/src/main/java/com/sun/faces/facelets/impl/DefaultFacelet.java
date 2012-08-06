@@ -63,14 +63,11 @@ import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 
-import javax.el.ELException;
 import javax.el.ExpressionFactory;
-import javax.faces.FacesException;
 import javax.faces.application.ProjectStage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.FaceletException;
 import javax.faces.view.facelets.FaceletHandler;
 import java.io.Externalizable;
 import java.io.IOException;
