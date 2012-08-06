@@ -70,6 +70,7 @@ import com.sun.faces.util.DebugObjectOutputStream;
 import com.sun.faces.util.DebugUtil;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
+import java.io.InvalidClassException;
 import java.util.Map;
 import javax.faces.render.ResponseStateManager;
 
@@ -294,6 +295,13 @@ public class ClientSideStateHelper extends StateHelper {
         		LOGGER.log(Level.SEVERE, cnfe.getMessage(), cnfe);
         	}
             throw new FacesException(cnfe);
+        } catch (InvalidClassException ice) {
+            /*
+             * Thrown when the JSF runtime is trying to deserialize a client-side
+             * state that has been saved with a previous version of Mojarra. Instead
+             * of blowing up, force a ViewExpiredException.
+             */
+            return null;
         } catch (IOException iox) {
         	if (LOGGER.isLoggable(Level.SEVERE)) {
         		LOGGER.log(Level.SEVERE, iox.getMessage(), iox);
