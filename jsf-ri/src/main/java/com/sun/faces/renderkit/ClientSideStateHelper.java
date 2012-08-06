@@ -66,6 +66,7 @@ import static com.sun.faces.config.WebConfiguration.WebEnvironmentEntry.ClientSt
 import com.sun.faces.io.Base64InputStream;
 import com.sun.faces.io.Base64OutputStreamWriter;
 import com.sun.faces.util.FacesLogger;
+import java.io.InvalidClassException;
 import javax.faces.render.ResponseStateManager;
 
 /**
@@ -262,7 +263,7 @@ public class ClientSideStateHelper extends StateHelper {
                               + "to be old and returning null.");
                     }
                     return null;
-                }
+                } 
             }
             Object structure = ois.readObject();
             Object state = ois.readObject();
@@ -284,6 +285,13 @@ public class ClientSideStateHelper extends StateHelper {
         		LOGGER.log(Level.SEVERE, cnfe.getMessage(), cnfe);
         	}
             throw new FacesException(cnfe);
+        } catch (InvalidClassException ice) {
+            /*
+             * Thrown when the JSF runtime is trying to deserialize a client-side
+             * state that has been saved with a previous version of Mojarra. Instead
+             * of blowing up, force a ViewExpiredException.
+             */
+            return null;
         } catch (IOException iox) {
         	if (LOGGER.isLoggable(Level.SEVERE)) {
         		LOGGER.log(Level.SEVERE, iox.getMessage(), iox);
