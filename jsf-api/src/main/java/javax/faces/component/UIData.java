@@ -835,7 +835,7 @@ public class UIData extends UIComponentBase
         //   - create an empty StringBuilder that will be used to build
         //     this instance's ID
         if (baseClientId == null && clientIdBuilder == null) {
-            if (!isNestedWithinUIData()) {
+            if (!isNestedWithinIterator()) {
                 clientIdBuilder = new StringBuilder(super.getClientId(context));
                 baseClientId = clientIdBuilder.toString();
                 baseClientIdLength = (baseClientId.length() + 1);
@@ -848,7 +848,7 @@ public class UIData extends UIComponentBase
         int rowIndex = getRowIndex();
         if (rowIndex >= 0) {
             String cid;
-            if (!isNestedWithinUIData()) {
+            if (!isNestedWithinIterator()) {
                 // we're not nested, so the clientIdBuilder is already
                 // primed with clientID +
                 // UINamingContainer.getSeparatorChar().  Append the
@@ -868,7 +868,7 @@ public class UIData extends UIComponentBase
             }
             return (cid);
         } else {
-            if (!isNestedWithinUIData()) {
+            if (!isNestedWithinIterator()) {
                 // Not nested and no row available, so just return our baseClientId
                 return (baseClientId);
             } else {
@@ -1075,7 +1075,7 @@ public class UIData extends UIComponentBase
         FacesContext context = FacesContext.getCurrentInstance();
         // Set up the correct context and fire our wrapped event
         WrapperEvent revent = (WrapperEvent) event;
-        if (isNestedWithinUIData()) {
+        if (isNestedWithinIterator()) {
             setDataModel(null);
         }
         int oldRowIndex = getRowIndex();
@@ -1878,7 +1878,7 @@ public class UIData extends UIComponentBase
     // initialization may be performed either during a normal validation
     // (ie. processValidators()) or during a tree visit (ie. visitTree()).
     private void preValidate(FacesContext context) {
-        if (isNestedWithinUIData()) {
+        if (isNestedWithinIterator()) {
             setDataModel(null);
         }
     }
@@ -1887,7 +1887,7 @@ public class UIData extends UIComponentBase
     // initialization may be performed either during normal update
     // (ie. processUpdates()) or during a tree visit (ie. visitTree()).
     private void preUpdate(FacesContext context) {
-        if (isNestedWithinUIData()) {
+        if (isNestedWithinIterator()) {
             setDataModel(null);
         }
     }
@@ -2172,16 +2172,16 @@ public class UIData extends UIComponentBase
      */
     private boolean keepSaved(FacesContext context) {
 
-        return (contextHasErrorMessages(context) || isNestedWithinUIData());
+        return (contextHasErrorMessages(context) || isNestedWithinIterator());
 
     }
 
 
-    private Boolean isNestedWithinUIData() {
+    private Boolean isNestedWithinIterator() {
         if (isNested == null) {
             UIComponent parent = this;
             while (null != (parent = parent.getParent())) {
-                if (parent instanceof UIData) {
+                if (parent instanceof UIData || parent.getClass().getName().endsWith("UIRepeat")) {
                     isNested = Boolean.TRUE;
                     break;
                 }
