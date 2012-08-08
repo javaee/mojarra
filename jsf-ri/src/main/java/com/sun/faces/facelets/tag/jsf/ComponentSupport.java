@@ -61,7 +61,6 @@ package com.sun.faces.facelets.tag.jsf;
 import com.sun.faces.RIConstants;
 import com.sun.faces.context.StateContext;
 import com.sun.faces.facelets.tag.jsf.core.FacetHandler;
-
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIPanel;
@@ -80,7 +79,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import javax.faces.view.facelets.TagAttributes;
 
 /**
  * 
