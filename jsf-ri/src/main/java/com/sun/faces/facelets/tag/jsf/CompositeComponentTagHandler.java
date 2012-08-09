@@ -58,7 +58,6 @@
 
 package com.sun.faces.facelets.tag.jsf;
 
-import com.sun.faces.context.StateContext;
 import com.sun.faces.facelets.Facelet;
 import com.sun.faces.facelets.FaceletFactory;
 import com.sun.faces.facelets.util.ReflectionUtil;
@@ -70,7 +69,6 @@ import com.sun.faces.util.RequestStateManager;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
 import java.beans.BeanDescriptor;
-
 import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.el.VariableMapper;
@@ -102,7 +100,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
