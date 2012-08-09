@@ -115,6 +115,7 @@ import javax.faces.event.SystemEventListener;
 import javax.faces.event.SystemEventListenerHolder;
 import javax.faces.event.ExceptionQueuedEventContext;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.LinkedHashMap;
@@ -1070,7 +1071,7 @@ public class ApplicationImpl extends Application {
                         attributesWithDeclaredDefaultValues = (Collection<String>)
                                 desc.getValue(UIComponent.ATTRS_WITH_DECLARED_DEFAULT_VALUES);
                         if (null == attributesWithDeclaredDefaultValues) {
-                            attributesWithDeclaredDefaultValues = new ArrayList<String>();
+                            attributesWithDeclaredDefaultValues = new HashSet<String>();
                             desc.setValue(UIComponent.ATTRS_WITH_DECLARED_DEFAULT_VALUES,
                                     attributesWithDeclaredDefaultValues);
                         }
