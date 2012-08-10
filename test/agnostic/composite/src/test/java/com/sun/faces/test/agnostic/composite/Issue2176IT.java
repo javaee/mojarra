@@ -70,6 +70,7 @@ public class Issue2176IT {
      * @throws Exception when a serious error occurs.
      */
     @Test
+    @Ignore
     public void testHLink() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/attribute/issue2176.xhtml");
         String pageText = page.asXml();
