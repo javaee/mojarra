@@ -49,7 +49,7 @@ import javax.faces.context.FacesContext;
 
 /**
  * <p class="changed_added_2_0"><span
- * class="changed_modified_2_1">An</span> instance of
+ * class="changed_modified_2_1 changed_modified_2_2">An</span> instance of
  * <code>Resource</code> is a Java object representation of the artifact
  * that is served up in response to a <i>resource request</i> from the
  * client.  Instances of <code>Resource</code> are normally created and
@@ -313,9 +313,13 @@ public abstract class Resource {
 
 
     /**
-     * <p class="changed_added_2_0">Return <code>true</code> if the
-     * user-agent requesting this resource needs an update.  Returns
-     * <code>false</code> otherwise.  
+     * <p class="changed_added_2_0"><span
+     * class="changed_modified_2_2">Return</span> <code>true</code> if
+     * the user-agent requesting this resource needs an update.  <span
+     * class="changed_added_2_2">If the {@code If-Modified-Since} HTTP
+     * header is available for this request, its value must be consulted
+     * to determine the result.</span> Returns <code>false</code> if the
+     * user-agent does not need an update for this resource.</p>
      *
      * @return <code>true</code> or <code>false</code> depending on
      * whether or not the user-agent needs an update of this resource.
