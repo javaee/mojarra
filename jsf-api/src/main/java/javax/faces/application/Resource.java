@@ -318,7 +318,7 @@ public abstract class Resource {
      * the user-agent requesting this resource needs an update.  <span
      * class="changed_added_2_2">If the {@code If-Modified-Since} HTTP
      * header is available for this request, its value must be
-     * consulted, as specified in Section 14.25 of RFC 2616, to
+     * consulted, as specified in Section 14.25 of IETF RFC 2616, to
      * determine the result.</span> Returns <code>false</code> if the
      * user-agent does not need an update for this resource.</p>
      *
