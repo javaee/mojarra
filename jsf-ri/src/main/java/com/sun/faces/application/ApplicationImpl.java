@@ -1061,7 +1061,7 @@ public class ApplicationImpl extends Application {
                         attributesWithDeclaredDefaultValues = (Collection<String>)
                                 desc.getValue(UIComponent.ATTRS_WITH_DECLARED_DEFAULT_VALUES);
                         if (null == attributesWithDeclaredDefaultValues) {
-                            attributesWithDeclaredDefaultValues = new HashSet<String>();
+                            attributesWithDeclaredDefaultValues = new ArrayList<String>();
                             desc.setValue(UIComponent.ATTRS_WITH_DECLARED_DEFAULT_VALUES,
                                     attributesWithDeclaredDefaultValues);
                         }
