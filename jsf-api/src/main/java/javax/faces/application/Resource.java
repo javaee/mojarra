@@ -317,8 +317,9 @@ public abstract class Resource {
      * class="changed_modified_2_2">Return</span> <code>true</code> if
      * the user-agent requesting this resource needs an update.  <span
      * class="changed_added_2_2">If the {@code If-Modified-Since} HTTP
-     * header is available for this request, its value must be consulted
-     * to determine the result.</span> Returns <code>false</code> if the
+     * header is available for this request, its value must be
+     * consulted, as specified in Section 14.25 of RFC 2616, to
+     * determine the result.</span> Returns <code>false</code> if the
      * user-agent does not need an update for this resource.</p>
      *
      * @return <code>true</code> or <code>false</code> depending on
