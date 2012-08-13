@@ -115,7 +115,6 @@ import javax.faces.event.SystemEventListener;
 import javax.faces.event.SystemEventListenerHolder;
 import javax.faces.event.ExceptionQueuedEventContext;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.LinkedHashMap;
