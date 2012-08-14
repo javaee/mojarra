@@ -40,6 +40,8 @@
 
 package com.sun.faces.application.resource;
 
+import com.sun.faces.util.FacesLogger;
+import java.util.logging.Logger;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -49,6 +51,7 @@ import javax.faces.context.FacesContext;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.util.Util;
 
+import java.util.logging.Level;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.CacheResourceModificationTimestamp;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableMissingResourceLibraryDetection;
 
@@ -68,7 +71,8 @@ public class ClasspathResourceHelper extends ResourceHelper {
     private boolean cacheTimestamp;
     private volatile ZipDirectoryEntryScanner libraryScanner;
     private boolean enableMissingResourceLibraryDetection;
-
+    private static final Logger LOGGER = FacesLogger.RESOURCE.getLogger();
+    
 
 
     // ------------------------------------------------------------ Constructors
@@ -96,6 +100,7 @@ public class ClasspathResourceHelper extends ResourceHelper {
 
     }
 
+    private static final String SR = "3-6005092111";
 
     /**
      * @see ResourceHelper#getNonCompressedInputStream(ResourceInfo, javax.faces.context.FacesContext)
@@ -110,6 +115,8 @@ public class ClasspathResourceHelper extends ResourceHelper {
             // try using this class' loader (necessary when running in OSGi)
             in = this.getClass().getClassLoader().getResourceAsStream(path);
         }
+        LOGGER.log(Level.SEVERE, "{0} loading {1} from classpath", 
+                new String [] { SR, path});
         return in;
 
     }

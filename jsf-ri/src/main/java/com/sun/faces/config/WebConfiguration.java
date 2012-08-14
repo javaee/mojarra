@@ -41,6 +41,7 @@
 package com.sun.faces.config;
 
 import com.sun.faces.lifecycle.HttpMethodRestrictionsPhaseListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Enumeration;
@@ -63,11 +64,19 @@ import javax.servlet.ServletContext;
 
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.nio.channels.Channels;
+import java.nio.channels.FileChannel;
+import java.nio.channels.ReadableByteChannel;
 import java.util.Collections;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import javax.faces.FactoryFinder;
 import javax.faces.component.UIInput;
 import javax.faces.event.PhaseListener;
@@ -418,6 +427,10 @@ public class WebConfiguration {
             }
         }
 
+        enabled = this.isOptionEnabled(BooleanWebContextInitParameter.EnableResourceLibraryJarExpansion);
+        if (enabled) {
+            expandResourceLibraryJars();
+        }
 
     }
 
@@ -748,6 +761,248 @@ public class WebConfiguration {
         }
         return true;
 
+    }
+    
+    private static final String SR = "3-6005092111";
+    
+    private void expandResourceLibraryJars() {
+        
+        ClassLoader curLoader = Thread.currentThread().getContextClassLoader();
+        // This should only run on WebLogic
+        try {
+            if (null == curLoader.loadClass("weblogic.servlet.internal.ServletResponseImpl")) {
+                return;
+            }
+        } catch (ClassNotFoundException ex) {
+            return;
+        }
+                
+        File webappRoot = getWebappRoot();
+        if (null != webappRoot) {
+            List<File> resourceLibraryJarNames = getWebInfLibResourceLibraryJarNames(webappRoot);
+            assert(null != resourceLibraryJarNames);
+            if (0 < resourceLibraryJarNames.size()) {
+                File webappResources = getWebappResources(webappRoot);
+                if (null != webappResources) {
+                    for (File cur : resourceLibraryJarNames) {
+                        try {
+                            processResourceLibraryJar(webappResources, cur);
+                        } catch (IOException ex) {
+                            LOGGER.log(Level.FINE, "Unable to expand " + cur.getAbsolutePath(), ex);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    // <editor-fold defaultstate="collapsed" desc="Directory Related Housekeeping">
+    
+    File getWebappResources(File webappRoot) {
+        File webappResources = new File(webappRoot, "resources");
+                
+        if (null == webappResources) {
+            LOGGER.log(Level.FINE, "{0} Unable to obtain resources directory", SR);
+            return null;
+        }
+        
+        if (!webappResources.exists()) {
+            if (!webappResources.mkdir()) {
+                LOGGER.log(Level.FINE, "{0} Unable to create directory {1}", 
+                        new String [] {SR, webappResources.getAbsolutePath()});
+                return null;
+            }
+        } else if (!webappResources.isDirectory()) {
+            LOGGER.log(Level.FINE, "{0} {1} is not a directory", new String [] {SR, webappResources.getAbsolutePath()});
+            return null;
+            
+        }
+        return webappResources;
+        
+    }
+    
+    File getWebappRoot() {
+        Map<String, Object> appMap = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
+        File webappRoot = null;        
+        if (null == appMap) {
+            LOGGER.log(Level.FINE, "{0} Unable to obtain ApplicationMap", SR);
+            return null;
+        }
+        
+        File tmpDir = (File) appMap.get("javax.servlet.context.tempdir");
+        
+        if (null == tmpDir) {
+            LOGGER.log(Level.FINE, "{0} Unable to obtain javax.servlet.context.tempdir", SR);
+            return null;
+        }
+        
+        File tmpDirParent = tmpDir.getParentFile();
+        
+        if (null == tmpDirParent) {
+            LOGGER.log(Level.FINE, "{0} Unable to obtain parent directory of tempdir", SR);
+            return null;
+        }
+        webappRoot = new File(tmpDirParent, "war");
+        if (null == webappRoot || !webappRoot.isDirectory()) {
+            LOGGER.log(Level.FINE, "{0} Unable to obtain WebLogic expanded war directory", SR);
+            return null;
+        }
+        
+        return webappRoot;
+    }
+    
+    
+    private List<File> getWebInfLibResourceLibraryJarNames(File webappRoot) {
+        List<File> jarFiles = Collections.EMPTY_LIST;
+        
+        File webInf = new File(webappRoot, "WEB-INF");
+
+        if (null == webInf || !webInf.isDirectory()) {
+            return jarFiles;
+        }
+        
+        File webInfLib = new File(webInf, "lib");
+        
+        if (null == webInfLib || !webInfLib.isDirectory()) {
+            return jarFiles;
+        }
+        
+        String [] filesInWebInfLib = webInfLib.list();
+        if (null == filesInWebInfLib || 0 == filesInWebInfLib.length) {
+            return jarFiles;
+        }
+        jarFiles = new ArrayList<File>();
+        for (String cur : filesInWebInfLib) {
+            if (cur.endsWith(".jar")) {
+                jarFiles.add(new File(webInfLib, cur));
+            }
+        }
+        
+        return jarFiles;
+    }
+    // </editor-fold>
+    
+    private final static String META_INF_RESOURCES = "META-INF/resources";
+    private final static int META_INF_RESOURCES_LENGTH = META_INF_RESOURCES.length();
+    
+    private void processResourceLibraryJar(File webappResourcesDir, File jarFileFile) throws IOException {
+        // <editor-fold defaultstate="collapsed">
+        JarFile jarFile = new JarFile(jarFileFile);
+        if (null == jarFile) {
+            LOGGER.log(Level.FINE, "{0} Unable to create JarFile from {1}", 
+                    new String [] { SR, jarFileFile.getAbsolutePath()});
+            return;
+        }
+        
+        Enumeration<JarEntry> entries = jarFile.entries();
+        if (null == entries) {
+            LOGGER.log(Level.FINE, "{0} Unable obtain jar entries from {1}", 
+                    new String [] { SR, jarFileFile.getAbsolutePath()});
+            return;
+        }
+        JarEntry cur = null;
+        String entryName = null;
+        while (entries.hasMoreElements()) {
+            cur = entries.nextElement();
+            entryName = cur.getName();
+            if (null == entryName) {
+                LOGGER.log(Level.FINE, "{0} Unable obtain jar entries from {1}", 
+                        new String [] { SR, jarFileFile.getAbsolutePath()});
+                return;
+            }
+            if (-1 != entryName.indexOf(META_INF_RESOURCES) && 
+                META_INF_RESOURCES_LENGTH < entryName.length()) {
+                LOGGER.log(Level.FINE, "{0} processing {1}", 
+                        new String [] { SR, jarFileFile.getAbsolutePath()});
+                
+                expandResourceLibraryJar(webappResourcesDir, jarFile);
+                break;
+            }
+        }
+        // </editor-fold>   
+    }
+    
+    private void expandResourceLibraryJar(File webappResourcesDir, JarFile jarFile) throws IOException {
+        Enumeration<JarEntry> entries = jarFile.entries();
+        JarEntry cur = null;
+        String entryName = null;
+        String pathStr = null;
+        while (entries.hasMoreElements()) {
+            cur = entries.nextElement();
+            entryName = cur.getName();
+            if (null != entryName && entryName.startsWith(META_INF_RESOURCES + "/") && 
+                    META_INF_RESOURCES_LENGTH < entryName.length() + 1) {
+                pathStr = entryName.substring(META_INF_RESOURCES_LENGTH + 1);
+                if (0 == pathStr.length() || "/".equals(pathStr)) {
+                    continue;
+                }
+                
+                if (!cur.isDirectory()) {
+                    // we don't need to process JarEntries that are directories because
+                    // we'll create the directories for entries as we need them.
+                    
+                    File leafDir = webappResourcesDir;
+                    int i;
+                    if (-1 != (i = pathStr.lastIndexOf("/"))) {
+                        leafDir = mkdirs(webappResourcesDir, pathStr.substring(0, i));
+                        pathStr = pathStr.substring(i+1);
+                    }
+                    copyJarEntry(leafDir, jarFile, cur, pathStr);
+                }
+                
+            }
+        }
+        
+    }
+    
+    private void copyJarEntry(File targetDir, JarFile jarFile, JarEntry entry, 
+            String entryName) throws IOException {
+        File newEntry = new File(targetDir, entryName);
+        if (!newEntry.exists()) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(SR).append(" copying entry ").append(entryName).append(" to ").
+                    append(targetDir.getAbsolutePath()).append("\n");
+            
+            ReadableByteChannel input = null;
+            FileChannel output = null;
+            try {
+                input = Channels.newChannel(jarFile.getInputStream(entry));
+                output = new FileOutputStream(newEntry).getChannel();
+                long b = 0;
+                do {
+                    b = output.transferFrom(input, b, Long.MAX_VALUE);
+                    sb.append(b).append(" bytes transfered ");
+                } while (0 < b);
+            } finally {
+                if (null != output) {
+                    output.close();
+                }
+                if (null != input) {
+                    input.close();
+                }
+            }
+            LOGGER.log(Level.FINE, sb.toString());
+        }
+        
+    }
+    
+    
+    private File mkdirs(File baseDir, String paths) {
+        String [] segments = paths.split("/");
+        File newDir = new File(baseDir, segments[0]);
+        if (!newDir.exists()) {
+            if (!newDir.mkdir()) {
+                LOGGER.log(Level.FINE, "{0} unable to create directory {1} ", 
+                        new String [] { SR, newDir.getAbsolutePath()});
+                return null;
+            }
+        }
+        File leafDir = newDir;
+        if (1 < segments.length) {
+            leafDir = mkdirs(newDir, paths.substring(segments[0].length() + 1));
+        }
+        return leafDir;
     }
 
 
@@ -1237,6 +1492,10 @@ public class WebConfiguration {
         EnableMissingResourceLibraryDetection(
               "com.sun.faces.enableMissingResourceLibraryDetection",
               false
+        ),
+        EnableResourceLibraryJarExpansion(
+              "com.sun.faces.enableResourceLibraryJarExpansion",
+              true
         );
 
         private BooleanWebContextInitParameter alternate;
