@@ -45,7 +45,8 @@ import java.io.IOException;
 
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.faces.application.StateManager;
+
+import weblogic.servlet.internal.CharChunk;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
@@ -70,6 +71,7 @@ final class WriteBehindStateWriter extends Writer {
     private int bufSize;
     private char[] buf;
     private FacesContext context;
+    private CharChunk head;
 
 
     // -------------------------------------------------------- Constructors
@@ -88,8 +90,11 @@ final class WriteBehindStateWriter extends Writer {
         this.out = out;
         this.orig = out;
         this.context = context;
-        this.bufSize = bufSize;
-        this.buf = new char[bufSize];
+//        this.bufSize = bufSize;
+        this.bufSize = 8192;
+        this.head = CharChunk.getChunk();
+//        this.buf = new char[bufSize];
+        this.buf = head.buf;
         CUR_WRITER.set(this);
         
     }
@@ -180,6 +185,8 @@ final class WriteBehindStateWriter extends Writer {
      * Clear the ThreadLocal state.
      */
     public void release() {
+        this.buf = null;
+        CharChunk.releaseChunk(head);
         CUR_WRITER.remove();
     }
 

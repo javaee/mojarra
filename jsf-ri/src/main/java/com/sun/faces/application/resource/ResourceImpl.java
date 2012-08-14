@@ -40,6 +40,7 @@
 
 package com.sun.faces.application.resource;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Externalizable;
@@ -225,12 +226,21 @@ public class ResourceImpl extends Resource implements Externalizable {
             URL url = getURL();
             InputStream in = null;
             try {
-                URLConnection conn = url.openConnection();
-                conn.setUseCaches(false);
-                conn.connect();
-                in = conn.getInputStream();
-                long lastModified = conn.getLastModified();
-                long contentLength = conn.getContentLength();
+                long lastModified = 0;
+                long contentLength = 0;
+                if ("file".equals(url.getProtocol())) {
+                  String externalForm = url.toExternalForm();
+                  File file = new File(externalForm.substring(5));
+                  lastModified = file.lastModified();
+                  contentLength = file.length();
+                } else {
+                  URLConnection conn = url.openConnection();
+                  conn.setUseCaches(false);
+                  conn.connect();
+                  in = conn.getInputStream();
+                  lastModified = conn.getLastModified();
+                  contentLength = conn.getContentLength();
+                }
                 if (lastModified == 0) {
                     lastModified = initialTime;
                 }
