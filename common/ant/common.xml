@@ -246,6 +246,7 @@
 
     <path id="compile.classpath">
         <path refid="compile.path"/>
+        <fileset dir="${dependency.jar.dir}" includes="weblogic-dependencies.jar"/>
     </path>
 
     <path id="apache.commons.classpath">

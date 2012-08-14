@@ -45,6 +45,7 @@ import java.io.IOException;
 
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+import javax.faces.application.StateManager;
 
 import weblogic.servlet.internal.CharChunk;
 
