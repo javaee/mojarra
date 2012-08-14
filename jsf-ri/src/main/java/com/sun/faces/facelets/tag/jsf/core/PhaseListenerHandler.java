@@ -58,7 +58,6 @@
 
 package com.sun.faces.facelets.tag.jsf.core;
 
-import com.sun.faces.application.view.FaceletViewHandlingStrategy;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import com.sun.faces.facelets.util.ReflectionUtil;

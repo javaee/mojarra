@@ -60,7 +60,6 @@ package com.sun.faces.facelets.tag.jsf.core;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
 
-import com.sun.faces.util.Util;
 import javax.faces.component.UIComponent;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagAttribute;

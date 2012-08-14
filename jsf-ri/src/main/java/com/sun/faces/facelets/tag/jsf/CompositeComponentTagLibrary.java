@@ -60,7 +60,6 @@ package com.sun.faces.facelets.tag.jsf;
 
 import com.sun.faces.config.WebConfiguration;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableMissingResourceLibraryDetection;
-import com.sun.faces.facelets.tag.TagLibraryImpl;
 import com.sun.faces.util.FacesLogger;
 
 import javax.faces.FacesException;
