@@ -98,16 +98,6 @@ public class Util {
     private static boolean unitTestModeEnabled = false;
 
     /**
-     * Flag that enables/disables the core TLV.
-     */
-    private static final String coreTLVEnabled = RIConstants.FACES_PREFIX + "coreTLVEnabled";
-
-    /**
-     * Flag that enables/disables the html TLV.
-     */
-    private static final String htmlTLVEnabled = RIConstants.FACES_PREFIX + "htmlTLVEnabled";
-    
-    /**
      * RegEx patterns
      */
     private static final String patternCacheKey = RIConstants.FACES_PREFIX + "patternCache";
