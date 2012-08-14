@@ -60,7 +60,6 @@ import javax.faces.convert.Converter;
 import javax.faces.event.AbortProcessingException;
 import java.beans.FeatureDescriptor;
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
