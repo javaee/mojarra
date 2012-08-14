@@ -858,9 +858,10 @@ public class RenderKitUtils {
         String subtype;
         String level = null;
         String quality = null;
+        Map<String, Object> appMap = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
 
         // Parse "types"
-        String[] types = Util.split(accept, CONTENT_TYPE_DELIMITER);
+        String[] types = Util.split(appMap, accept, CONTENT_TYPE_DELIMITER);
         String[][] arrayAccept = new String[types.length][MAX_CONTENT_TYPE_PARTS];
         int index = -1;
         for (int i=0; i<types.length; i++) {
@@ -870,7 +871,7 @@ public class RenderKitUtils {
             // to add uniqueness to a type/subtype, and/or delimits a qualifier value:
             //    Example: text/html;level=1,text/html;level=2; q=.5
             if (token.contains(";")) {
-                String[] typeParts = Util.split(token, ";");
+                String[] typeParts = Util.split(appMap, token, ";");
                 typeSubType = new StringBuilder(typeParts[0].trim());
                 for (int j=1; j<typeParts.length; j++) {
                     quality = "not set";
@@ -878,14 +879,14 @@ public class RenderKitUtils {
                     // if "level" is present, make sure it gets included in the "type/subtype"
                     if (token.contains("level")) {
                         typeSubType.append(';').append(token);
-                        String[] levelParts = Util.split(token, "=");
+                        String[] levelParts = Util.split(appMap, token, "=");
                         level = levelParts[0].trim();
                         if (level.equalsIgnoreCase("level")) {
                             level = levelParts[1].trim();
                         }
                     } else {
                         quality = token;
-                        String[] qualityParts = Util.split(quality, "=");
+                        String[] qualityParts = Util.split(appMap, quality, "=");
                         quality = qualityParts[0].trim();
                         if (quality.equalsIgnoreCase("q")) {
                             quality = qualityParts[1].trim();
@@ -901,7 +902,7 @@ public class RenderKitUtils {
             }
             // now split type and subtype
             if (typeSubType.indexOf(CONTENT_TYPE_SUBTYPE_DELIMITER) >= 0) {
-                String[] typeSubTypeParts = Util.split(typeSubType.toString(), CONTENT_TYPE_SUBTYPE_DELIMITER);
+                String[] typeSubTypeParts = Util.split(appMap, typeSubType.toString(), CONTENT_TYPE_SUBTYPE_DELIMITER);
                 // Apparently there are user-agents that send invalid
                 // Accept headers containing no subtype (i.e. text/).
                 // For those cases, assume "*" for the subtype.

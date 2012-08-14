@@ -351,7 +351,8 @@ import com.sun.faces.util.Util;
         if (param == null) {
             return new ArrayList<String>();
         } else {
-            String[] pcs = Util.split(param, "[ \t]+");
+            Map<String, Object> appMap = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
+            String[] pcs = Util.split(appMap, param, "[ \t]+");
             return ((pcs != null && pcs.length != 0)
                     ? new ArrayList<String>(Arrays.asList(pcs))
                     : new ArrayList<String>());

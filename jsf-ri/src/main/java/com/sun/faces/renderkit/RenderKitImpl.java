@@ -328,7 +328,8 @@ public class RenderKitImpl extends RenderKit {
 
 
     private String[] contentTypeSplit(String contentTypeString) {
-        String[] result = Util.split(contentTypeString, ",");
+        Map<String, Object> appMap = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
+        String[] result = Util.split(appMap, contentTypeString, ",");
         for (int i = 0; i < result.length; i++) {
             int semicolon = result[i].indexOf(";");
             if (-1 != semicolon) {

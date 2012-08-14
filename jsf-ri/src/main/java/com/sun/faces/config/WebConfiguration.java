@@ -287,7 +287,8 @@ public class WebConfiguration {
             if (null == value) {
                 result = new String[0];
             } else {
-                result = Util.split(value, sep);
+                Map<String, Object> appMap = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
+                result = Util.split(appMap, value, sep);
             }
             cachedListParams.put(param, result);
         }

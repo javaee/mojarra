@@ -501,9 +501,11 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             }
 
             if (queryString != null && queryString.length() > 0) {
-                String[] queryElements = Util.split(queryString, "&amp;|&");
+                Map<String, Object> appMap = context.getExternalContext().getApplicationMap();
+
+                String[] queryElements = Util.split(appMap, queryString, "&amp;|&");
                 for (int i = 0, len = queryElements.length; i < len; i ++) {
-                    String[] elements = Util.split(queryElements[i], "=");
+                    String[] elements = Util.split(appMap, queryElements[i], "=");
                     if (elements.length == 2) {
                         if (parameters == null) {
                             parameters = new LinkedHashMap<String,List<String>>(len / 2, 1.0f);

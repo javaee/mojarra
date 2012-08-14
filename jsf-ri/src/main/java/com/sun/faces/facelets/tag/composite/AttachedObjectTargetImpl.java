@@ -67,6 +67,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.AttachedObjectTarget;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 public class AttachedObjectTargetImpl implements AttachedObjectTarget {
@@ -87,7 +88,9 @@ public class AttachedObjectTargetImpl implements AttachedObjectTarget {
         FacesContext ctx = FacesContext.getCurrentInstance();
         if (null != targetsList) {
             String targetsListStr = (String) targetsList.getValue(ctx.getELContext());
-            String[] targetArray = Util.split(targetsListStr, " ");
+            Map<String, Object> appMap = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
+
+            String[] targetArray = Util.split(appMap, targetsListStr, " ");
             result = new ArrayList<UIComponent>(targetArray.length);
             for (int i = 0, len = targetArray.length; i < len; i++) {
                 UIComponent comp = topLevelComponent.findComponent(

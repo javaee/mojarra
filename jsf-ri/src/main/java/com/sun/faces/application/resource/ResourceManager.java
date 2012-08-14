@@ -58,6 +58,8 @@ import javax.faces.context.FacesContext;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.config.WebConfiguration;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class is used to lookup {@link ResourceInfo} instances
@@ -108,16 +110,26 @@ public class ResourceManager {
 
     // ------------------------------------------------------------ Constructors
 
+    /*
+     * This ctor is only ever called by test code.
+     */
+
+    public ResourceManager(ResourceCache cache) {
+
+        this.cache = cache;
+        Map<String, Object> throwAwayMap = new HashMap();
+        initCompressableTypes(throwAwayMap);
+
+    }
 
     /**
      * Constructs a new <code>ResourceManager</code>.  Note:  if the current
      * {@link ProjectStage} is {@link ProjectStage#Development} caching or
      * {@link ResourceInfo} instances will not occur.
      */
-    public ResourceManager(ResourceCache cache) {
-
+    public ResourceManager(Map<String, Object> appMap, ResourceCache cache) {
         this.cache = cache;
-        initCompressableTypes();
+        initCompressableTypes(appMap);
 
     }
 
@@ -526,12 +538,12 @@ public class ResourceManager {
     /**
      * Init <code>compressableTypes</code> from the configuration.
      */
-    private void initCompressableTypes() {
+    private void initCompressableTypes(Map<String, Object> appMap) {
 
         WebConfiguration config = WebConfiguration.getInstance();
         String value = config.getOptionValue(WebConfiguration.WebContextInitParameter.CompressableMimeTypes);
         if (value != null && value.length() > 0) {
-            String[] values = Util.split(value, ",");
+            String[] values = Util.split(appMap, value, ",");
             if (values != null) {
                 for (String s : values) {
                     String pattern = s.trim();

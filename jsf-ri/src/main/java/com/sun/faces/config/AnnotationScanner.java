@@ -164,7 +164,7 @@ public abstract class AnnotationScanner extends AnnotationProvider {
         }
 
         WebConfiguration webConfig = WebConfiguration.getInstance(sc);
-	initializeAnnotationScanPackages(webConfig);
+	initializeAnnotationScanPackages(sc, webConfig);
 
     }
 
@@ -172,7 +172,7 @@ public abstract class AnnotationScanner extends AnnotationProvider {
 
     // <editor-fold defaultstate="collapsed" desc="implementation details">
 
-    private void initializeAnnotationScanPackages(WebConfiguration webConfig) {
+    private void initializeAnnotationScanPackages(ServletContext sc, WebConfiguration webConfig) {
         if (!webConfig.isSet(AnnotationScanPackages)) {
             return;
         }
@@ -186,7 +186,7 @@ public abstract class AnnotationScanner extends AnnotationProvider {
                 continue;
             }
             if (option.startsWith("jar:")) {
-                String[] parts = Util.split(option, ":");
+                String[] parts = Util.split(sc, option, ":");
                 if (parts.length != 3) {
                     if (LOGGER.isLoggable(Level.WARNING)) {
                         LOGGER.log(Level.WARNING,
@@ -196,7 +196,7 @@ public abstract class AnnotationScanner extends AnnotationProvider {
                 } else {
                     if (WILDCARD.equals(parts[1]) && !classpathPackages.containsKey(WILDCARD)) {
                         classpathPackages.clear();
-                        classpathPackages.put(WILDCARD, normalizeJarPackages(Util.split(parts[2], ",")));
+                        classpathPackages.put(WILDCARD, normalizeJarPackages(Util.split(sc, parts[2], ",")));
                     } else if (WILDCARD.equals(parts[1]) && classpathPackages.containsKey(WILDCARD)) {
                         if (LOGGER.isLoggable(Level.WARNING)) {
                             LOGGER.log(Level.WARNING,
@@ -205,7 +205,7 @@ public abstract class AnnotationScanner extends AnnotationProvider {
                         }
                     } else {
                         if (!classpathPackages.containsKey(WILDCARD)) {
-                            classpathPackages.put(parts[1], normalizeJarPackages(Util.split(parts[2], ",")));
+                            classpathPackages.put(parts[1], normalizeJarPackages(Util.split(sc, parts[2], ",")));
                         }
                     }
                 }

@@ -49,6 +49,7 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import javax.faces.context.FacesContext;
 
 /**
  * <p>The <strong>UrlBuilder</strong> provides a convenient way to assemble a URL. It
@@ -192,9 +193,11 @@ class UrlBuilder {
             return;
         }
         
-        String[] pairs = Util.split(queryString, PARAMETER_PAIR_SEPARATOR);
+        Map<String, Object> appMap = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
+
+        String[] pairs = Util.split(appMap, queryString, PARAMETER_PAIR_SEPARATOR);
         for (String pair : pairs) {
-            String[] nameAndValue = Util.split(pair, PARAMETER_NAME_VALUE_SEPARATOR);
+            String[] nameAndValue = Util.split(appMap, pair, PARAMETER_NAME_VALUE_SEPARATOR);
             // ignore malformed pair
             if (nameAndValue.length != 2
                 || nameAndValue[0].trim().length() == 0) {

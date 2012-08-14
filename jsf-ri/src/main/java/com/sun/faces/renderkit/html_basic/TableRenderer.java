@@ -55,6 +55,7 @@ import javax.faces.context.ResponseWriter;
 import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.util.Util;
+import java.util.Map;
 
 /** <p>Render a {@link UIData} component as a two-dimensional table.</p> */
 
@@ -126,7 +127,7 @@ public class TableRenderer extends BaseTableRenderer {
         int processed = 0;
         int rowIndex = data.getFirst() - 1;
         int rows = data.getRows();
-        List<Integer> bodyRows = getBodyRows(data);
+        List<Integer> bodyRows = getBodyRows(context.getExternalContext().getApplicationMap(), data);
         boolean hasBodyRows = (bodyRows != null && !bodyRows.isEmpty());
         boolean wroteTableBody = false;
         if (!hasBodyRows) {
@@ -206,12 +207,12 @@ public class TableRenderer extends BaseTableRenderer {
     // ------------------------------------------------------- Protected Methods
 
 
-    private List<Integer> getBodyRows(UIData data) {
+    private List<Integer> getBodyRows(Map<String, Object> appMap, UIData data) {
 
         List<Integer> result = null;
         String bodyRows = (String) data.getAttributes().get("bodyrows");
         if (bodyRows != null) {
-            String [] rows = Util.split(bodyRows, ",");
+            String [] rows = Util.split(appMap, bodyRows, ",");
             if (rows != null) {
                 result = new ArrayList<Integer>(rows.length);
                 for (String curRow : rows) {
