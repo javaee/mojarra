@@ -47,6 +47,7 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Enumeration;
 import java.util.Map;
@@ -54,8 +55,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Collections;
-import java.util.Map;
 
 import javax.faces.context.ExternalContext;
 import javax.servlet.ServletContext;
