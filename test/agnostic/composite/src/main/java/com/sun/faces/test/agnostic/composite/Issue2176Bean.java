@@ -58,16 +58,17 @@ import javax.faces.context.FacesContext;
 @ManagedBean(name = "issue2176Bean")
 @SessionScoped
 public class Issue2176Bean implements Serializable {
-    
+
     /**
-     * Stores the count.
+     * Stores the previos count.
      */
-    private int count;
-    
+    private int previousCount = -1;
+
     /**
-     * Get the attribute default count.
+     * Get the status.
      */
-    public int getCount() {
+    public String getStatus() {
+        String result = "SUCCESS";
         final List<Integer> seenCount = new ArrayList<Integer>();
         seenCount.add(0);
         VisitContext visitContext = VisitContext.createVisitContext(FacesContext.getCurrentInstance());
@@ -77,9 +78,12 @@ public class Issue2176Bean implements Serializable {
                 if ("javax.faces.Composite".equals(target.getRendererType())) {
                     BeanInfo beanInfo = (BeanInfo) target.getAttributes().get(UIComponent.BEANINFO_KEY);
                     Collection<String> ids = (Collection<String>) beanInfo.getBeanDescriptor().getValue(UIComponent.ATTRS_WITH_DECLARED_DEFAULT_VALUES);
+
                     int count = 0;
-                    for(String id : ids) {
-                        count++;
+                    if (ids != null) {
+                        for (String id : ids) {
+                            count++;
+                        }
                     }
                     
                     seenCount.set(0, Integer.valueOf(seenCount.get(0).intValue() + count));
@@ -87,6 +91,11 @@ public class Issue2176Bean implements Serializable {
                 return VisitResult.ACCEPT;
             }
         });
-        return seenCount.get(0);
+        int observedCount = (Integer) seenCount.get(0);
+        if (previousCount != -1 && observedCount > previousCount) {
+            result = "FAILED";
+        }
+        previousCount = observedCount;
+        return result;
     }
 }

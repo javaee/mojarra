@@ -108,6 +108,7 @@ import com.sun.faces.util.Util;
 import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
 import java.beans.PropertyDescriptor;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 
 import javax.faces.event.ExceptionQueuedEvent;
@@ -1060,7 +1061,7 @@ public class ApplicationImpl extends Application {
                         attributesWithDeclaredDefaultValues = (Collection<String>)
                                 desc.getValue(UIComponent.ATTRS_WITH_DECLARED_DEFAULT_VALUES);
                         if (null == attributesWithDeclaredDefaultValues) {
-                            attributesWithDeclaredDefaultValues = new ArrayList<String>();
+                            attributesWithDeclaredDefaultValues = new HashSet<String>();
                             desc.setValue(UIComponent.ATTRS_WITH_DECLARED_DEFAULT_VALUES,
                                     attributesWithDeclaredDefaultValues);
                         }
