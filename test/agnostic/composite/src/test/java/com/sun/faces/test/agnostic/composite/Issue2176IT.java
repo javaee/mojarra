@@ -70,22 +70,21 @@ public class Issue2176IT {
      * @throws Exception when a serious error occurs.
      */
     @Test
-    @Ignore
     public void testHLink() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/attribute/issue2176.xhtml");
         String pageText = page.asXml();
-        assertTrue(pageText.indexOf("Found 6 attribute defaults.") != -1);
+        assertTrue(pageText.indexOf("SUCCESS") != -1);
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form:submit");
         page = button.click();
         pageText = page.asXml();
-        assertTrue(pageText.indexOf("Found 6 attribute defaults.") != -1);
+        assertTrue(pageText.indexOf("SUCCESS") != -1);
         button = (HtmlSubmitInput) page.getElementById("form:submit");
         page = button.click();
         pageText = page.asXml();
-        assertTrue(pageText.indexOf("Found 6 attribute defaults.") != -1);
+        assertTrue(pageText.indexOf("SUCCESS") != -1);
         button = (HtmlSubmitInput) page.getElementById("form:submit");
         page = button.click();
         pageText = page.asXml();
-        assertTrue(pageText.indexOf("Found 6 attribute defaults.") != -1);
+        assertTrue(pageText.indexOf("SUCCESS") != -1);
     }
 }

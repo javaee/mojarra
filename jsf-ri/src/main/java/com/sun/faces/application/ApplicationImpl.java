@@ -105,6 +105,7 @@ import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.ReflectionUtils;
 import com.sun.faces.util.Util;
+import java.util.HashSet;
 
 import java.util.LinkedHashSet;
 
@@ -1070,7 +1071,7 @@ public class ApplicationImpl extends Application {
                         attributesWithDeclaredDefaultValues = (Collection<String>)
                                 desc.getValue(UIComponent.ATTRS_WITH_DECLARED_DEFAULT_VALUES);
                         if (null == attributesWithDeclaredDefaultValues) {
-                            attributesWithDeclaredDefaultValues = new ArrayList<String>();
+                            attributesWithDeclaredDefaultValues = new HashSet<String>();
                             desc.setValue(UIComponent.ATTRS_WITH_DECLARED_DEFAULT_VALUES,
                                     attributesWithDeclaredDefaultValues);
                         }
