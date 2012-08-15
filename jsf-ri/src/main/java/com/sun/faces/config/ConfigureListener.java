@@ -300,6 +300,8 @@ public class ConfigureListener implements ServletRequestListener,
             initContext = getInitFacesContext(context);
             if (null == initContext) {
                 initContext = new InitFacesContext(context);
+            } else {
+                InitFacesContext.getThreadInitContextMap().put(Thread.currentThread(), initContext);
             }
 
             if (webAppListener != null) {
