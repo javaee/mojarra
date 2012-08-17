@@ -841,7 +841,7 @@
                 <integration.container.downloadDir>C:/Temp/Cargo/download</integration.container.downloadDir>
                 <integration.container.extractDir>C:/Temp/Cargo/extracts</integration.container.extractDir>
                 <integration.container.home>C:/Temp/Cargo/tomcat7</integration.container.home>
-                <integration.container.version>7.0.27</integration.container.version>
+                <tomcat.version>7.0.27</tomcat.version>
             </properties>
         </profile>
         <profile>
