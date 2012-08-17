@@ -66,7 +66,6 @@ public class Issue1830IT {
      * works. It should just dispaly nothing.
      */
     @Test
-    @Ignore
     public void testNullValueForOutputFormat() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/issue1830.xhtml");
         for (int i=0; i<10; i++) {
