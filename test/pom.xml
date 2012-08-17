@@ -525,7 +525,7 @@
                                         <mkdir dir="${integration.container.root}"/>
                                         <unzip src="${integration.container.zipFile}" dest="${integration.container.root}"/>
                                         <exec executable="sh" osfamily="unix">
-                                            <arg line="chmod a+x ${integration.container.root}/glassfish3/glassfish/bin/*"/>
+                                            <arg line='-c "chmod a+x ${integration.container.root}/glassfish3/glassfish/bin/*"'/>
                                         </exec>
                                     </target>
                                 </configuration>
