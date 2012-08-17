@@ -23,7 +23,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.4</version>
+                <version>2.5.1</version>
                 <inherited>true</inherited>
                 <configuration>
                     <source>1.5</source>
@@ -141,33 +141,126 @@
             </reporting>
         </profile>
         <profile>
-            <id>integration-glassfish-embedded</id>
+            <id>integration-failsafe-cluster</id>
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.glassfish</groupId>
-                        <artifactId>maven-embedded-glassfish-plugin</artifactId>
-                        <version>3.1.1</version>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <version>2.12</version>
                         <inherited>true</inherited>
-                        <configuration>
-                            <name>${project.build.finalName}</name>
-                            <ports>
-                                <http-listener>${integration.serverPort}</http-listener>
-                            </ports>
-                        </configuration>
                         <executions>
                             <execution>
                                 <goals>
-                                    <goal>start</goal>
-                                    <goal>deploy</goal>
-                                    <goal>undeploy</goal>
-                                    <goal>stop</goal>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
                                 </goals>
+                                <configuration>
+                                    <systemPropertyVariables>
+                                        <integration.url>${integration.protocol}://${integration.serverName1}:${integration.serverPort1}/${project.build.finalName}/</integration.url>
+                                        <integration.url2>${integration.protocol}://${integration.serverName2}:${integration.serverPort2}/${project.build.finalName}/</integration.url2>
+                                    </systemPropertyVariables>
+                                </configuration>
                             </execution>
                         </executions>
-                    </plugin>
+                    </plugin>                
                 </plugins>
             </build>
+            <properties>
+                <integration.protocol>http</integration.protocol>
+                <integration.serverPort1>28080</integration.serverPort1>
+                <integration.serverName1>localhost</integration.serverName1>
+                <integration.serverPort2>28081</integration.serverPort2>
+                <integration.serverName2>localhost</integration.serverName2>
+            </properties>
+            <reporting>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-report-plugin</artifactId>
+                        <version>2.12</version>
+                        <reportSets>
+                            <reportSet>
+                                <id>integration-tests</id>
+                                <reports>
+                                    <report>failsafe-report-only</report>
+                                </reports>
+                            </reportSet>
+                        </reportSets>
+                    </plugin>
+                </plugins>
+            </reporting>
+        </profile>
+        <profile>
+            <id>integration-failsafe-virtual</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <version>2.12</version>
+                        <inherited>true</inherited>
+                        <executions>
+                            <execution>
+                                <id>server1</id>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                                <configuration>
+                                    <systemPropertyVariables>
+                                        <project.build.finalName>${project.build.finalName}</project.build.finalName>
+                                        <integration.serverPort>${integration.serverPort1}</integration.serverPort>
+                                        <integration.serverName>${integration.serverName1}</integration.serverName>
+                                        <integration.serverProtocol>${integration.serverProtocol}</integration.serverProtocol>
+                                        <integration.url>${integration.protocol}://${integration.serverName1}:${integration.serverPort1}/${project.build.finalName}/</integration.url>
+                                    </systemPropertyVariables>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>server2</id>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                                <configuration>
+                                    <systemPropertyVariables>
+                                        <project.build.finalName>${project.build.finalName}</project.build.finalName>
+                                        <integration.serverPort>${integration.serverPort2}</integration.serverPort>
+                                        <integration.serverName>${integration.serverName2}</integration.serverName>
+                                        <integration.serverProtocol>${integration.serverProtocol}</integration.serverProtocol>
+                                        <integration.url>${integration.protocol}://${integration.serverName2}:${integration.serverPort2}/${project.build.finalName}/</integration.url>
+                                    </systemPropertyVariables>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>                
+                </plugins>
+            </build>
+            <properties>
+                <integration.protocol>http</integration.protocol>
+                <integration.serverPort1>18080</integration.serverPort1>
+                <integration.serverName1>localhost</integration.serverName1>
+                <integration.serverPort2>28080</integration.serverPort2>
+                <integration.serverName2>localhost</integration.serverName2>
+            </properties>
+            <reporting>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-report-plugin</artifactId>
+                        <version>2.12</version>
+                        <reportSets>
+                            <reportSet>
+                                <id>integration-tests</id>
+                                <reports>
+                                    <report>failsafe-report-only</report>
+                                </reports>
+                            </reportSet>
+                        </reportSets>
+                    </plugin>
+                </plugins>
+            </reporting>
         </profile>
         <profile>
             <id>integration-glassfish-cargo</id>
@@ -213,7 +306,7 @@
                                     <goal>start</goal>
                                 </goals>
                                 <configuration>
-                                    <timeout>240000</timeout>
+                                    <timeout>300000</timeout>
                                 </configuration>
                             </execution>
                             <execution>
@@ -223,7 +316,7 @@
                                     <goal>stop</goal>
                                 </goals>
                                 <configuration>
-                                    <timeout>240000</timeout>
+                                    <timeout>300000</timeout>
                                 </configuration>
                             </execution>
                         </executions>                        
@@ -247,176 +340,6 @@
             <properties>
                 <integration.container.home>C:/Glassfish3.1.1</integration.container.home>
                 <integration.container.id>glassfish3x</integration.container.id>
-            </properties>
-        </profile>
-        <profile>
-            <id>integration-tomcat-cargo</id>
-            <build>
-                <plugins>
-                    <plugin>                 
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-dependency-plugin</artifactId>
-                        <version>2.4</version>
-                        <executions>
-                            <execution>
-                                <id>copy</id>                         
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>copy</goal>
-                                </goals>
-                                <configuration>
-                                    <artifactItems>
-                                        <artifactItem>
-                                            <groupId>${jsf.groupId}</groupId>
-                                            <artifactId>${jsf.artifactId}</artifactId>
-                                            <version>${jsf.version}</version>
-                                            <type>jar</type>
-                                            <overWrite>true</overWrite>                                     
-                                            <outputDirectory>${integration.container.extractDir}/apache-tomcat-${tomcat.version}/apache-tomcat-${tomcat.version}/lib</outputDirectory>
-                                            <destFileName>javax.faces.jar</destFileName>
-                                        </artifactItem>
-                                        <artifactItem>
-                                            <groupId>javax.servlet.jsp.jstl</groupId> 
-                                            <artifactId>jstl-api</artifactId> 
-                                            <version>1.2</version> 
-                                            <type>jar</type>
-                                            <overWrite>true</overWrite>                                     
-                                            <outputDirectory>${integration.container.extractDir}/apache-tomcat-${tomcat.version}/apache-tomcat-${tomcat.version}/lib</outputDirectory>
-                                            <destFileName>jstl-api.jar</destFileName>
-                                        </artifactItem>
-                                        <artifactItem>
-                                            <groupId>org.glassfish.web</groupId>
-                                            <artifactId>javax.servlet.jsp.jstl</artifactId>
-                                            <version>1.2.1</version>
-                                            <type>jar</type>
-                                            <overWrite>true</overWrite>                                     
-                                            <outputDirectory>${integration.container.extractDir}/apache-tomcat-${tomcat.version}/apache-tomcat-${tomcat.version}/lib</outputDirectory>
-                                            <destFileName>jstl-impl.jar</destFileName>
-                                        </artifactItem>
-                                    </artifactItems>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.codehaus.cargo</groupId>
-                        <artifactId>cargo-maven2-plugin</artifactId>
-                        <version>1.2.1</version>
-                        <inherited>true</inherited>
-                        <executions>
-                            <execution>
-                                <id>start-container</id>
-                                <phase>pre-integration-test</phase>
-                                <goals>
-                                    <goal>start</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>stop-container</id>
-                                <phase>post-integration-test</phase>
-                                <goals>
-                                    <goal>stop</goal>
-                                </goals>
-                            </execution>
-                        </executions>                        
-                        <configuration>
-                            <container>
-                                <containerId>${integration.container.id}</containerId>
-                                <zipUrlInstaller>
-                                    <url>${integration.container.downloadUrl}</url>
-                                    <downloadDir>${integration.container.downloadDir}</downloadDir>
-                                    <extractDir>${integration.container.extractDir}</extractDir>
-                                </zipUrlInstaller>
-                                <type>installed</type>
-                            </container>
-                            <configuration>
-                                <type>standalone</type>
-                                <home>${integration.container.home}</home>
-                                <properties>
-                                    <cargo.hostname>${integration.serverName}</cargo.hostname>
-                                    <cargo.servlet.port>${integration.serverPort}</cargo.servlet.port>
-                                </properties>
-                            </configuration>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-            <properties>
-                <integration.container.id>tomcat7x</integration.container.id>
-                <integration.container.downloadUrl>http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.27/bin/apache-tomcat-7.0.27.zip</integration.container.downloadUrl>
-                <integration.container.downloadDir>C:/Temp/Cargo/download</integration.container.downloadDir>
-                <integration.container.extractDir>C:/Temp/Cargo/extracts</integration.container.extractDir>
-                <integration.container.home>C:/Temp/Cargo/tomcat7</integration.container.home>
-                <tomcat.version>7.0.27</tomcat.version>
-            </properties>
-        </profile>
-        <profile>
-            <id>integration-weblogic12c-cargo</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-antrun-plugin</artifactId>
-                        <version>1.7</version>
-                        <executions>
-                            <execution>
-                                <id>package</id>
-                                <phase>package</phase>
-                                <configuration>
-                                    <target>
-                                        <delete>
-                                            <fileset dir="${integration.container.runtime}/autodeploy" includes="**/*"/>
-                                        </delete>
-                                    </target>
-                                </configuration>
-                                <goals>
-                                    <goal>run</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.codehaus.cargo</groupId>
-                        <artifactId>cargo-maven2-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>start-container</id>
-                                <phase>pre-integration-test</phase>
-                                <goals>
-                                    <goal>start</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>stop-container</id>
-                                <phase>post-integration-test</phase>
-                                <goals>
-                                    <goal>stop</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <container>
-                                <containerId>${integration.container.id}</containerId>
-                                <home>${integration.container.home}</home>
-                            </container>
-                            <configuration>
-                                <type>${integration.container.type}</type>
-                                <home>${integration.container.runtime}</home>
-                                <properties>
-                                    <cargo.servlet.port>${integration.serverPort}</cargo.servlet.port>
-                                </properties>
-                            </configuration>
-                        </configuration>
-                    </plugin>                    
-                </plugins>
-            </build>
-            <properties>
-                <integration.container.root>C:/Weblogic12c</integration.container.root>
-                <integration.container.id>weblogic103x</integration.container.id>
-                <integration.container.home>${integration.container.root}/wlserver</integration.container.home>
-                <integration.container.runtime>${integration.container.root}/user_projects/domains/base_domain</integration.container.runtime>
-                <integration.container.type>existing</integration.container.type>
-                <integration.serverPort>7001</integration.serverPort>
             </properties>
         </profile>
         <profile>
@@ -524,64 +447,100 @@
                 </plugins>
             </build>
             <properties>
-                <integration.container.home>C:/Glassfish3.1.1c</integration.container.home>
+                <integration.container.home>C:/Glassfish3.1.1</integration.container.home>
                 <integration.container.cluster.domain>domain1</integration.container.cluster.domain>
                 <integration.container.cluster.name>cluster1</integration.container.cluster.name>
             </properties>
         </profile>
         <profile>
-            <id>integration-failsafe-cluster</id>
+            <id>integration-glassfish-deploy</id>
             <build>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-failsafe-plugin</artifactId>
-                        <version>2.12</version>
-                        <inherited>true</inherited>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.7</version>
                         <executions>
                             <execution>
+                                <id>deploy-wars</id>
+                                <phase>verify</phase>
                                 <goals>
-                                    <goal>integration-test</goal>
-                                    <goal>verify</goal>
+                                    <goal>run</goal>
                                 </goals>
                                 <configuration>
-                                    <systemPropertyVariables>
-                                        <integration.url>${integration.protocol}://${integration.serverName1}:${integration.serverPort1}/${project.build.finalName}/</integration.url>
-                                        <integration.url2>${integration.protocol}://${integration.serverName2}:${integration.serverPort2}/${project.build.finalName}/</integration.url2>
-                                    </systemPropertyVariables>
+                                    <target>
+                                        <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.plugin.classpath"/>
+                                        <available file="${project.build.directory}/${project.build.finalName}.war" property="war.exists"/>
+                                        <if>
+                                            <isset property="war.exists"/>
+                                            <then>
+                                                <echo>=== Deploying ${project.build.finalName} ===</echo>
+                                                <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                                    <arg line="deploy --force ${project.build.directory}/${project.build.finalName}.war"/>
+                                                </exec>
+                                                <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
+                                                    <arg line="deploy --force ${project.build.directory}/${project.build.finalName}.war"/>
+                                                </exec>
+                                            </then>
+                                        </if>
+                                    </target>
                                 </configuration>
                             </execution>
                         </executions>
-                    </plugin>                
+                        <dependencies>
+                            <dependency>
+                                <groupId>ant-contrib</groupId>
+                                <artifactId>ant-contrib</artifactId>
+                                <version>1.0b3</version>
+                                <exclusions>
+                                    <exclusion>
+                                        <groupId>ant</groupId>
+                                        <artifactId>ant</artifactId>
+                                    </exclusion>
+                                </exclusions>
+                            </dependency>
+                        </dependencies>
+                    </plugin>                    
                 </plugins>
             </build>
             <properties>
-                <integration.protocol>http</integration.protocol>
-                <integration.serverPort1>28080</integration.serverPort1>
-                <integration.serverName1>localhost</integration.serverName1>
-                <integration.serverPort2>28081</integration.serverPort2>
-                <integration.serverName2>localhost</integration.serverName2>
+                <integration.container.home>C:/Glassfish3.1.1</integration.container.home>
             </properties>
-            <reporting>
+        </profile>
+        <profile>
+            <id>integration-glassfish-hudson</id>
+            <build>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-report-plugin</artifactId>
-                        <version>2.12</version>
-                        <reportSets>
-                            <reportSet>
-                                <id>integration-tests</id>
-                                <reports>
-                                    <report>failsafe-report-only</report>
-                                </reports>
-                            </reportSet>
-                        </reportSets>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.7</version>
+                        <executions>
+                            <execution>
+                                <id>prepare</id>
+                                <phase>validate</phase>
+                                <configuration>
+                                    <target>
+                                        <delete quiet="true" failonerror="false" dir="${integration.container.root}"/>
+                                        <mkdir dir="${integration.container.root}"/>
+                                        <unzip src="${integration.container.zipFile}" dest="${integration.container.root}"/>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
-            </reporting>
+            </build>
+            <properties>
+                <integration.container.root>C:/Glassfish3.1.2</integration.container.root>
+                <integration.container.zipFile>C:/Downloads/Glassfish3.1.2.zip</integration.container.zipFile>
+            </properties>
         </profile>
         <profile>
-            <id>integration-glassfish-cargo-prepare</id>
+            <id>integration-glassfish-prepare</id>
             <build>
                 <plugins>
                     <plugin>                 
@@ -765,82 +724,112 @@
                 </plugins>
             </build>
             <properties>
-                <integration.container.home>C:/Glassfish3.1.1v</integration.container.home>
+                <integration.container.home>C:/Glassfish3.1.1</integration.container.home>
             </properties>
         </profile>
         <profile>
-            <id>integration-failsafe-virtual</id>
+            <id>integration-tomcat-cargo</id>
             <build>
                 <plugins>
-                    <plugin>
+                    <plugin>                 
                         <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-failsafe-plugin</artifactId>
-                        <version>2.12</version>
-                        <inherited>true</inherited>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <version>2.4</version>
                         <executions>
                             <execution>
-                                <id>server1</id>
+                                <id>copy</id>                         
+                                <phase>package</phase>
                                 <goals>
-                                    <goal>integration-test</goal>
-                                    <goal>verify</goal>
+                                    <goal>copy</goal>
                                 </goals>
                                 <configuration>
-                                    <systemPropertyVariables>
-                                        <project.build.finalName>${project.build.finalName}</project.build.finalName>
-                                        <integration.serverPort>${integration.serverPort1}</integration.serverPort>
-                                        <integration.serverName>${integration.serverName1}</integration.serverName>
-                                        <integration.serverProtocol>${integration.serverProtocol}</integration.serverProtocol>
-                                        <integration.url>${integration.protocol}://${integration.serverName1}:${integration.serverPort1}/${project.build.finalName}/</integration.url>
-                                    </systemPropertyVariables>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>server2</id>
-                                <goals>
-                                    <goal>integration-test</goal>
-                                    <goal>verify</goal>
-                                </goals>
-                                <configuration>
-                                    <systemPropertyVariables>
-                                        <project.build.finalName>${project.build.finalName}</project.build.finalName>
-                                        <integration.serverPort>${integration.serverPort2}</integration.serverPort>
-                                        <integration.serverName>${integration.serverName2}</integration.serverName>
-                                        <integration.serverProtocol>${integration.serverProtocol}</integration.serverProtocol>
-                                        <integration.url>${integration.protocol}://${integration.serverName2}:${integration.serverPort2}/${project.build.finalName}/</integration.url>
-                                    </systemPropertyVariables>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>${jsf.groupId}</groupId>
+                                            <artifactId>${jsf.artifactId}</artifactId>
+                                            <version>${jsf.version}</version>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>                                     
+                                            <outputDirectory>${integration.container.extractDir}/apache-tomcat-${tomcat.version}/apache-tomcat-${tomcat.version}/lib</outputDirectory>
+                                            <destFileName>javax.faces.jar</destFileName>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>javax.servlet.jsp.jstl</groupId> 
+                                            <artifactId>jstl-api</artifactId> 
+                                            <version>1.2</version> 
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>                                     
+                                            <outputDirectory>${integration.container.extractDir}/apache-tomcat-${tomcat.version}/apache-tomcat-${tomcat.version}/lib</outputDirectory>
+                                            <destFileName>jstl-api.jar</destFileName>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>org.glassfish.web</groupId>
+                                            <artifactId>javax.servlet.jsp.jstl</artifactId>
+                                            <version>1.2.1</version>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>                                     
+                                            <outputDirectory>${integration.container.extractDir}/apache-tomcat-${tomcat.version}/apache-tomcat-${tomcat.version}/lib</outputDirectory>
+                                            <destFileName>jstl-impl.jar</destFileName>
+                                        </artifactItem>
+                                    </artifactItems>
                                 </configuration>
                             </execution>
                         </executions>
-                    </plugin>                
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.cargo</groupId>
+                        <artifactId>cargo-maven2-plugin</artifactId>
+                        <version>1.2.1</version>
+                        <inherited>true</inherited>
+                        <executions>
+                            <execution>
+                                <id>start-container</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>start</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>stop-container</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                            </execution>
+                        </executions>                        
+                        <configuration>
+                            <container>
+                                <containerId>${integration.container.id}</containerId>
+                                <zipUrlInstaller>
+                                    <url>${integration.container.downloadUrl}</url>
+                                    <downloadDir>${integration.container.downloadDir}</downloadDir>
+                                    <extractDir>${integration.container.extractDir}</extractDir>
+                                </zipUrlInstaller>
+                                <type>installed</type>
+                            </container>
+                            <configuration>
+                                <type>standalone</type>
+                                <home>${integration.container.home}</home>
+                                <properties>
+                                    <cargo.hostname>${integration.serverName}</cargo.hostname>
+                                    <cargo.servlet.port>${integration.serverPort}</cargo.servlet.port>
+                                </properties>
+                            </configuration>
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
             <properties>
-                <integration.protocol>http</integration.protocol>
-                <integration.serverPort1>18080</integration.serverPort1>
-                <integration.serverName1>localhost</integration.serverName1>
-                <integration.serverPort2>28080</integration.serverPort2>
-                <integration.serverName2>localhost</integration.serverName2>
+                <integration.container.id>tomcat7x</integration.container.id>
+                <integration.container.downloadUrl>http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.27/bin/apache-tomcat-7.0.27.zip</integration.container.downloadUrl>
+                <integration.container.downloadDir>C:/Temp/Cargo/download</integration.container.downloadDir>
+                <integration.container.extractDir>C:/Temp/Cargo/extracts</integration.container.extractDir>
+                <integration.container.home>C:/Temp/Cargo/tomcat7</integration.container.home>
+                <integration.container.version>7.0.27</integration.container.version>
             </properties>
-            <reporting>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-report-plugin</artifactId>
-                        <version>2.12</version>
-                        <reportSets>
-                            <reportSet>
-                                <id>integration-tests</id>
-                                <reports>
-                                    <report>failsafe-report-only</report>
-                                </reports>
-                            </reportSet>
-                        </reportSets>
-                    </plugin>
-                </plugins>
-            </reporting>
         </profile>
         <profile>
-            <id>integration-glassfish-deploy</id>
+            <id>integration-weblogic12c-cargo</id>
             <build>
                 <plugins>
                     <plugin>
@@ -849,49 +838,63 @@
                         <version>1.7</version>
                         <executions>
                             <execution>
-                                <id>deploy-wars</id>
-                                <phase>verify</phase>
+                                <id>package</id>
+                                <phase>package</phase>
+                                <configuration>
+                                    <target>
+                                        <delete>
+                                            <fileset dir="${integration.container.runtime}/autodeploy" includes="**/*"/>
+                                        </delete>
+                                    </target>
+                                </configuration>
                                 <goals>
                                     <goal>run</goal>
                                 </goals>
-                                <configuration>
-                                    <target>
-                                        <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.plugin.classpath"/>
-                                        <available file="${project.build.directory}/${project.build.finalName}.war" property="war.exists"/>
-                                        <if>
-                                            <isset property="war.exists"/>
-                                            <then>
-                                                <echo>=== Deploying ${project.build.finalName} ===</echo>
-                                                <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
-                                                    <arg line="deploy --force ${project.build.directory}/${project.build.finalName}.war"/>
-                                                </exec>
-                                                <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
-                                                    <arg line="deploy --force ${project.build.directory}/${project.build.finalName}.war"/>
-                                                </exec>
-                                            </then>
-                                        </if>
-                                    </target>
-                                </configuration>
                             </execution>
                         </executions>
-                        <dependencies>
-                            <dependency>
-                                <groupId>ant-contrib</groupId>
-                                <artifactId>ant-contrib</artifactId>
-                                <version>1.0b3</version>
-                                <exclusions>
-                                    <exclusion>
-                                        <groupId>ant</groupId>
-                                        <artifactId>ant</artifactId>
-                                    </exclusion>
-                                </exclusions>
-                            </dependency>
-                        </dependencies>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.cargo</groupId>
+                        <artifactId>cargo-maven2-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>start-container</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>start</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>stop-container</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <container>
+                                <containerId>${integration.container.id}</containerId>
+                                <home>${integration.container.home}</home>
+                            </container>
+                            <configuration>
+                                <type>${integration.container.type}</type>
+                                <home>${integration.container.runtime}</home>
+                                <properties>
+                                    <cargo.servlet.port>${integration.serverPort}</cargo.servlet.port>
+                                </properties>
+                            </configuration>
+                        </configuration>
                     </plugin>                    
                 </plugins>
             </build>
             <properties>
-                <integration.container.home>C:/Glassfish3.1.1</integration.container.home>
+                <integration.container.root>C:/Weblogic12c</integration.container.root>
+                <integration.container.id>weblogic103x</integration.container.id>
+                <integration.container.home>${integration.container.root}/wlserver</integration.container.home>
+                <integration.container.runtime>${integration.container.root}/user_projects/domains/base_domain</integration.container.runtime>
+                <integration.container.type>existing</integration.container.type>
+                <integration.serverPort>7001</integration.serverPort>
             </properties>
         </profile>
     </profiles>
