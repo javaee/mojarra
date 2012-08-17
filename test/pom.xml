@@ -546,7 +546,7 @@
                                 <configuration>
                                     <target>
                                         <exec executable="chmod" osfamily="unix">
-                                            <arg line="a+x ${integration.container.root}/glassfish3/bin/*"/>
+                                            <arg line="a+x ${integration.container.root}/glassfish3/glassfish/bin/*"/>
                                         </exec>
                                     </target>
                                 </configuration>
