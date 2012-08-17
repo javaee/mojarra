@@ -524,8 +524,8 @@
                                         <delete quiet="true" failonerror="false" dir="${integration.container.root}"/>
                                         <mkdir dir="${integration.container.root}"/>
                                         <unzip src="${integration.container.zipFile}" dest="${integration.container.root}"/>
-                                        <exec executable="chmod" osfamily="unix">
-                                            <arg line="a+x ${integration.container.root}/glassfish3/glassfish/bin/*"/>
+                                        <exec executable="sh" osfamily="unix">
+                                            <arg line="chmod a+x ${integration.container.root}/glassfish3/glassfish/bin/*"/>
                                         </exec>
                                     </target>
                                 </configuration>
