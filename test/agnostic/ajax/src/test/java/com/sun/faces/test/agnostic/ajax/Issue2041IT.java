@@ -46,6 +46,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 /**
  * @author Manfred Riem (manfred.riem@oracle.com)
@@ -69,6 +70,7 @@ public class Issue2041IT {
     }
 
     @Test
+    @Ignore
     public void testIssue2041() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/issue2041.xhtml");
 

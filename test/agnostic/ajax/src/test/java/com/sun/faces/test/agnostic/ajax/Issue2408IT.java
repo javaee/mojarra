@@ -83,6 +83,7 @@ public class Issue2408IT {
      * Component over Ajax. 
      */
     @Test
+    @Ignore
     public void testSelectManyCheckboxInComposite() throws Exception {
         HtmlPage page = webClient.getPage(webUrl+"faces/selectManyCheckboxInComposite.xhtml");
         final List<HtmlCheckBoxInput> checkBoxes = new ArrayList();
@@ -179,6 +180,7 @@ public class Issue2408IT {
      * Component over Ajax.
      */
     @Test
+    @Ignore
     public void testSelectOneRadioInComposite() throws Exception {
         HtmlPage page = webClient.getPage(webUrl+"faces/selectOneRadioInComposite.xhtml");
         final List<HtmlRadioButtonInput> radios = new ArrayList();
