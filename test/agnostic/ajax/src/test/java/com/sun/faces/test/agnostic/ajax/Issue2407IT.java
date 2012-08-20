@@ -77,6 +77,7 @@ public class Issue2407IT {
      * from a partial response (over Ajax). 
      */
     @Test
+    @Ignore
     public void testUpdateAttributeNamedValue() throws Exception {
         HtmlPage page = webClient.getPage(webUrl+"faces/attributeNameIsValue.xhtml");
         assertTrue(page.asXml().contains("foo"));

@@ -118,6 +118,7 @@ public class Issue2408IT {
      * Component over Ajax. The components in the page have ids.
      */
     @Test
+    @Ignore
     public void testSelectManyCheckboxIdsInComposite() throws Exception {
         HtmlPage page = webClient.getPage(webUrl+"faces/selectManyCheckboxIdsInComposite.xhtml");
         
