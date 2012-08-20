@@ -80,6 +80,7 @@ public class Issue2479IT {
      * from a partial response (over Ajax). 
      */
     @Test
+    @Ignore
     public void testSelectDataTable() throws Exception {
         HtmlPage page = webClient.getPage(webUrl+"faces/selectOneMenuDataTable.xhtml");
         HtmlSpan span1 = (HtmlSpan)page.getElementById("table:0:inCity");
