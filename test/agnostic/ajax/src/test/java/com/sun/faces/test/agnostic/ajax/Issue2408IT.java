@@ -147,6 +147,7 @@ public class Issue2408IT {
      * This test verifies correct function of SelectManyCheckbox Component over Ajax.
      */
     @Test
+    @Ignore
     public void testSelectManyCheckboxNoComposite() throws Exception {
         HtmlPage page = webClient.getPage(webUrl+"faces/selectManyCheckboxNoComposite.xhtml");
         final List<HtmlCheckBoxInput> checkBoxes = new ArrayList();
@@ -217,6 +218,7 @@ public class Issue2408IT {
      * Component over Ajax. The components in the page have ids.
      */
     @Test
+    @Ignore
     public void testSelectOneRadioIdsInComposite() throws Exception {
         HtmlPage page = webClient.getPage(webUrl+"faces/selectOneRadioIdsInComposite.xhtml");
 
