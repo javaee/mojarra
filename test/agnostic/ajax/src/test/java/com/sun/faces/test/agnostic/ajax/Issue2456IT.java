@@ -77,6 +77,7 @@ public class Issue2456IT {
      * from a partial response (over Ajax). 
      */
     @Test
+    @Ignore
     public void testScript() throws Exception {
         HtmlPage page = webClient.getPage(webUrl+"faces/script.xhtml");
         assertTrue(page.asXml().contains("SCRIPT EXECUTED!"));
