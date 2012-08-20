@@ -152,7 +152,7 @@ public class FastStringWriter extends Writer {
     }
 
     public void reset() {
-        builder.setLength(0);
+        builder.delete(0, builder.length());
     }
 
 }

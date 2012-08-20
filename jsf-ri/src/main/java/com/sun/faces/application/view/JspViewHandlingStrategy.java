@@ -204,7 +204,7 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
         ResponseWriter oldWriter = context.getResponseWriter();
 
         WriteBehindStateWriter stateWriter =
-              new WriteBehindStateWriter(extContext.getResponseOutputWriter(),
+              WriteBehindStateWriter.getCurrentInstance(extContext.getResponseOutputWriter(),
                                          context,
                                          responseBufferSize);
         ResponseWriter newWriter;
@@ -251,6 +251,7 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
 
         // clear the ThreadLocal reference.
         stateWriter.release();
+        stateWriter = null;
 
         if (null != oldWriter) {
             context.setResponseWriter(oldWriter);

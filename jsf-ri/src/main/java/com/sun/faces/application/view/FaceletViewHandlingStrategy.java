@@ -379,7 +379,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
             ExternalContext extContext = ctx.getExternalContext();
             Writer outputWriter = extContext.getResponseOutputWriter();
-            stateWriter = new WriteBehindStateWriter(outputWriter,
+            stateWriter = WriteBehindStateWriter.getCurrentInstance(outputWriter,
                                                      ctx,
                                                      responseBufferSize);
 
@@ -426,8 +426,11 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         } catch (Exception e) {
             this.handleRenderException(ctx, e);
         } finally {
-            if (stateWriter != null)
+            if (stateWriter != null) {
                 stateWriter.release();
+                stateWriter = null;
+            }
+            
         }
 
     }

@@ -66,12 +66,14 @@ final class WriteBehindStateWriter extends Writer {
     private Writer out;
     private Writer orig;
     private FastStringWriter fWriter;
+    private FastStringWriter state;
+    private StateManager stateManager;
     private boolean stateWritten;
     private int bufSize;
     private char[] buf;
     private FacesContext context;
-
-
+    
+    
     // -------------------------------------------------------- Constructors
 
 
@@ -82,16 +84,32 @@ final class WriteBehindStateWriter extends Writer {
      * @param context the {@link FacesContext} for the current request
      * @param bufSize the buffer size for post-processing buffered content
      */
-    public WriteBehindStateWriter(Writer out,
+    private WriteBehindStateWriter(Writer out,
                                   FacesContext context,
                                   int bufSize) {
+        this.init(out, context, bufSize);
+        stateManager = Util.getStateManager(context);
+        this.buf = new char[bufSize];
+        this.fWriter = new FastStringWriter(1024);
+        this.state = new FastStringWriter((stateManager.isSavingStateInClient(
+                context)) ? bufSize : 128);        
+        CUR_WRITER.set(this);
+        
+    }
+    
+    private void init(Writer out,
+            FacesContext context,
+            int bufSize) {
         this.out = out;
         this.orig = out;
         this.context = context;
         this.bufSize = bufSize;
-        this.buf = new char[bufSize];
-        CUR_WRITER.set(this);
-        
+    }
+    
+    private void resetBuf() {
+        for (int i = 0; i < this.bufSize; i++) {
+            this.buf[i] = 0;
+        }
     }
 
 
@@ -175,12 +193,30 @@ final class WriteBehindStateWriter extends Writer {
         return CUR_WRITER.get();
     }
 
-
+    public static WriteBehindStateWriter getCurrentInstance(Writer out,
+                                  FacesContext context,
+                                  int bufSize) {
+        WriteBehindStateWriter result = CUR_WRITER.get();
+        if (null == result) {
+            result = new WriteBehindStateWriter(out, context, bufSize);
+        } else {
+            result.init(out, context, bufSize);
+        }
+        return result;
+    }
+    
     /**
      * Clear the ThreadLocal state.
      */
     public void release() {
-        CUR_WRITER.remove();
+        this.resetBuf();
+        this.bufSize = -1;
+        this.context = null;
+        this.fWriter.reset();
+        this.orig = null;
+        this.out = null;
+        this.state.reset();
+        this.stateWritten = false;
     }
 
 
@@ -193,7 +229,8 @@ final class WriteBehindStateWriter extends Writer {
     public void writingState() {
         if (!stateWritten) {
             this.stateWritten = true;
-            out = fWriter = new FastStringWriter(1024);
+            fWriter.reset();
+            out = fWriter;
         }
     }
 
@@ -216,11 +253,8 @@ final class WriteBehindStateWriter extends Writer {
         // Save the state to a new instance of StringWriter to
         // avoid multiple serialization steps if the view contains
         // multiple forms.
-        StateManager stateManager = Util.getStateManager(context);
         ResponseWriter origWriter = context.getResponseWriter();
-        FastStringWriter state =
-              new FastStringWriter((stateManager.isSavingStateInClient(
-                    context)) ? bufSize : 128);
+        state.reset();
         context.setResponseWriter(origWriter.cloneWithWriter(state));
         stateManager.writeState(context, stateManager.saveView(context));
         context.setResponseWriter(origWriter);
@@ -250,6 +284,7 @@ final class WriteBehindStateWriter extends Writer {
                     if (builder.indexOf(
                           RIConstants.SAVESTATE_FIELD_MARKER,
                           pos) == tildeIdx) {
+                        this.resetBuf();
                         // buf is effectively zero'd out at this point
                         int statePos = 0;
                         while (statePos < stateLen) {
