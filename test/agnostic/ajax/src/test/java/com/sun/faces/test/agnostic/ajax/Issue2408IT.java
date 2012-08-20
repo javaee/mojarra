@@ -244,6 +244,7 @@ public class Issue2408IT {
      * This test verifies correct function of SelectOneRadio Component over Ajax.
      */
     @Test
+    @Ignore
     public void testSelectOneRadioNoComposite() throws Exception {
         HtmlPage page = webClient.getPage(webUrl+"faces/selectOneRadioNoComposite.xhtml");
         final List<HtmlRadioButtonInput> radios = new ArrayList();
