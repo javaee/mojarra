@@ -78,6 +78,7 @@ public class Issue2421IT {
      * from a partial response (over Ajax). 
      */
     @Test
+    @Ignore
     public void testUpdateAttributeNamedDisabled() throws Exception {
         HtmlPage page = webClient.getPage(webUrl+"faces/attributeNameIsDisabled.xhtml");
         HtmlTextInput input = (HtmlTextInput)page.getElementById("form1:foo");
