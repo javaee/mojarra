@@ -39,12 +39,22 @@
  */
 package com.sun.faces.test.agnostic.renderKit.passthrough;
 
+import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlOption;
+import com.gargoylesoftware.htmlunit.html.HtmlResetInput;
+import com.gargoylesoftware.htmlunit.html.HtmlSelect;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
+import com.gargoylesoftware.htmlunit.html.HtmlTextArea;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import org.junit.*;
+
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 public class Issue1111IT {
@@ -66,54 +76,81 @@ public class Issue1111IT {
     @Test
     public void testInputMarkup() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/input.xhtml");
-        assertCorrectInputs(page, "Default value");
-        
+        assertInputDefaults(page);
     }
-    
+
+    private void assertInputDefaults(HtmlPage page) {
+        assertInput(page, "inputText", "type" ,"text", "value", "text1");
+        assertInput(page, "inputText2", "type" ,"text", "value", "text2");
+        assertInput(page, "textField", "type" ,"text", "value", "text1");
+        assertInput(page, "emailField", "type" ,"email", "value", "anybody@example.com");
+        assertInput(page, "numberField", "type" ,"number", "value", "10", "pattern", "[0-9]*");
+        assertInput(page, "checkBox", "type" ,"checkbox");
+        HtmlCheckBoxInput checkBoxInput = (HtmlCheckBoxInput) page.getElementById("checkBox");
+        assertFalse(checkBoxInput.isChecked());
+    }
+
     @Test
     public void testInputPostback() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/input.xhtml");
-        
-        HtmlTextInput input = (HtmlTextInput) page.getElementById("textField");
-        
-        input.setValueAttribute("new value");
-        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button");
-        page = button.click();
-        assertCorrectInputs(page, "new value");
-        
-    }
-    
-    private void assertCorrectInputs(HtmlPage page, String value) throws Exception {
-        HtmlTextInput input = (HtmlTextInput) page.getElementById("inputText");
-        String xml = input.asXml();
-        
-        assertTrue(xml.contains("<input"));
-        assertTrue(xml.contains("id=\"inputText\""));
-        assertTrue(xml.contains("name=\"inputText\""));
-        assertTrue(xml.contains("value=\"" + value + "\""));
-        assertTrue(xml.contains("disabled=\"disabled\""));
-        assertTrue(xml.contains("type=\"text\""));
-        
-        input = (HtmlTextInput) page.getElementById("inputText2");
-        
-        xml = input.asXml();
-        
-        assertTrue(xml.contains("<input"));
-        assertTrue(xml.contains("id=\"inputText2\""));
-        assertTrue(xml.contains("name=\"inputText2\""));
-        assertTrue(xml.contains("value=\"" + value + "\""));
-        assertTrue(xml.contains("type=\"text\""));        
-        
-        input = (HtmlTextInput) page.getElementById("textField");
-        
-        xml = input.asXml();
 
-        assertTrue(xml.contains("<input"));
-        assertTrue(xml.contains("id=\"textField\""));
-        assertTrue(xml.contains("value=\"" + value + "\""));
-        assertTrue(xml.contains("name=\"textField\""));
-        assertTrue(xml.contains("type=\"text\""));        
-        
+        setValue(page, "inputText2", "new text2");
+        setValue(page, "textField", "new text1");
+        setValue(page, "emailField", "nobody@example.com");
+        setValue(page, "numberField", "12");
+        HtmlCheckBoxInput checkBoxInput = (HtmlCheckBoxInput) page.getElementById("checkBox");
+        checkBoxInput.setChecked(true);
+
+        HtmlResetInput resetButton = (HtmlResetInput) page.getElementById("resetButton");
+        page = resetButton.click();
+
+        assertInputDefaults(page);
+
+        setValue(page, "inputText2", "new text2");
+        setValue(page, "textField", "new text1");
+        setValue(page, "emailField", "nobody@example.com");
+        setValue(page, "numberField", "12");
+        checkBoxInput.setChecked(true);
+
+        HtmlSubmitInput submitButton = (HtmlSubmitInput) page.getElementById("submitButton");
+        page = submitButton.click();
+
+        assertInput(page, "inputText", "type" ,"text", "value", "new text1");
+        assertInput(page, "inputText2", "type" ,"text", "value", "new text2");
+        assertInput(page, "textField", "type" ,"text", "value", "new text1");
+        assertInput(page, "emailField", "type" ,"email", "value", "nobody@example.com");
+        assertInput(page, "numberField", "type", "number", "value", "12", "pattern", "[0-9]*");
+
+        checkBoxInput = (HtmlCheckBoxInput) page.getElementById("checkBox");
+        assertTrue(checkBoxInput.isChecked());
+    }
+
+    private void setValue(HtmlPage page, String id, String value) {
+        HtmlTextInput input = (HtmlTextInput) page.getElementById(id);
+        input.setValueAttribute(value);
+    }
+
+    private void assertInput(HtmlPage page, String id, String... attrs) {
+        assertFormElement(page, "input", id, attrs);
+    }
+
+    private void assertSelect(HtmlPage page, String id, String... attrs) {
+        assertFormElement(page, "select", id, attrs);
+    }
+
+    private void assertFormElement(HtmlPage page, String elementName, String id, String... attrs) {
+        HtmlElement input = page.getElementById(id);
+        String xml = input.asXml();
+
+        assertTrue(xml.contains("<" + elementName));
+        assertTrue(xml.contains("id=\"" + id + "\""));
+        assertTrue(xml.contains("name=\"" + id + "\""));
+
+        for(int i = 0; i < attrs.length; i++) {
+            String name = attrs[i];
+            String value = attrs[++i];
+            assertTrue(xml.contains(name + "=\"" + value + "\""));
+        }
     }
     
     @Test
@@ -125,5 +162,98 @@ public class Issue1111IT {
         webClient.setThrowExceptionOnFailingStatusCode(true);
     }        
     
+    @Test
+    public void testSelectMarkup() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/select.xhtml");
+        assertSelectAttributes(page);
+        assertDefaultSelections(page);
+    }
+
+    private void assertDefaultSelections(HtmlPage page) {
+        assertSelection(page, "selectOne", "2");
+        assertSelection(page, "selectOneSize2", "3");
+        assertSelection(page, "selectMany", "4", "6");
+    }
+
+    private void assertSelection(HtmlPage page, String id, String... values) {
+        HtmlSelect select = (HtmlSelect) page.getElementById(id);
+        List<String> valuesAsList = Arrays.asList(values);
+        for (HtmlOption option : select.getOptions()) {
+            boolean shouldBeSelected = valuesAsList.contains(option.getValueAttribute());
+
+            if(option.isSelected()) {
+                assertTrue(shouldBeSelected);
+            } else {
+                assertFalse(shouldBeSelected);
+            }
+        }
+    }
+
+    private void assertSelectAttributes(HtmlPage page) {
+        assertSelect(page, "selectOne", "size" ,"1");
+        assertSelect(page, "selectOneSize2", "size" ,"2");
+        assertSelect(page, "selectMany", "size", "7", "multiple", "multiple");
+    }
+
+    @Test
+    public void testSelectPostback() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/select.xhtml");
+
+        select(page, "selectOne", "3");
+        select(page, "selectOneSize2", "5");
+        select(page, "selectMany", "1", "2");
+
+        HtmlResetInput resetButton = (HtmlResetInput) page.getElementById("resetButton");
+        page = resetButton.click();
+
+        assertSelectAttributes(page);
+        assertDefaultSelections(page);
+
+        select(page, "selectOne", "3");
+        select(page, "selectOneSize2", "5");
+        select(page, "selectMany", "1", "2");
+
+        HtmlSubmitInput submitButton = (HtmlSubmitInput) page.getElementById("submitButton");
+        page = submitButton.click();
+
+        assertSelectAttributes(page);
+
+        assertSelection(page, "selectOne", "3");
+        assertSelection(page, "selectOneSize2", "5");
+        assertSelection(page, "selectMany", "1", "2");
+    }
+
+    private void select(HtmlPage page, String id, String... values) {
+        HtmlSelect select = (HtmlSelect) page.getElementById(id);
+        List<String> valuesAsList = Arrays.asList(values);
+
+        for (HtmlOption option : select.getOptions()) {
+            option.setSelected(valuesAsList.contains(option.getValueAttribute()));
+        }
+    }
+
+    @Test
+    public void testTextareaMarkup() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/textarea.xhtml");
+        assertFormElement(page, "textarea", "textarea", "autofocus", "autofocus");
+        HtmlTextArea textarea = (HtmlTextArea) page.getElementById("textarea");
+        assertEquals(textarea.getText(), "Long text");
+    }
+
+    @Test
+    public void testTextareaPostback() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/textarea.xhtml");
+        HtmlTextArea textarea = (HtmlTextArea) page.getElementById("textarea");
+        textarea.setText("Very long text");
+
+        HtmlSubmitInput submitButton = (HtmlSubmitInput) page.getElementById("submitButton");
+        page = submitButton.click();
+
+        assertFormElement(page, "textarea", "textarea", "autofocus", "autofocus");
+
+        textarea = (HtmlTextArea) page.getElementById("textarea");
+        assertEquals(textarea.getText(), "Very long text");
+
+    }
 
 }

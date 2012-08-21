@@ -41,34 +41,38 @@
 -->
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
       xmlns:jsf="http://java.sun.com/jsf">
 
-<h:form id="form" prependId="false">
-    
+<form jsf:id="form" jsf:prependId="false" >
 
     <p>
-        
-        <input jsf:id="inputText" type="text" jsf:value="#{bean.name}" disabled="disabled" />
-        
+        <input jsf:id="inputText" type="text" jsf:value="#{bean.text1}" disabled="disabled" />
     </p>
-    
-    <p>
-        
-        <input jsf:id="inputText2" type="text" jsf:value="#{bean.name}" />
 
-    </p>
-    
     <p>
-        
-        <input name="textField" type="text" jsf:value="#{bean.name}" />
-        
-        
+        <input name="textField" type="text" jsf:value="#{bean.text1}" />
     </p>
-    
-    <h:commandButton id="button" value="submit" />
 
-    
-</h:form>
+    <p>
+        <input jsf:id="inputText2" type="text" jsf:value="#{bean.text2}"/>
+    </p>
+
+    <p>
+        <input jsf:id="emailField" type="email" jsf:value="#{bean.email}" />
+    </p>
+
+    <p>
+        <input jsf:id="numberField" type="number" jsf:value="#{bean.number}" pattern="[0-9]*" />
+    </p>
+
+    <p>
+        <input jsf:id="checkBox" type="checkbox" jsf:value="#{bean.checkboxValue}" />
+    </p>
+
+    <input type="reset" jsf:id="resetButton" value="reset"/>
+
+    <input type="submit" jsf:id="submitButton" value="submit" />
+
+</form>
     
 </html>

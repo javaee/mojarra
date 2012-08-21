@@ -40,20 +40,19 @@
 
 -->
 <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:jsf="http://java.sun.com/jsf">
 
-<html>
-  <head><title>Passthrough Renderers</title></head>
+<form jsf:id="form" jsf:prependId="false">
 
-  <body>
+    <p>
+        <textarea jsf:id="textarea" jsf:value="#{bean.longText}" autofocus="autofocus"/>
+    </p>
 
-    <ul>
+    <input type="reset" jsf:id="resetButton" value="reset"/>
 
-        <li><a href="faces/input.xhtml">input</a>
-        <li><a href="faces/select.xhtml">select</a>
-        <li><a href="faces/textarea.xhtml">textarea</a>
+    <input type="submit" jsf:id="submitButton" value="submit" />
 
-    </ul>
-
-
-  </body>
-<html>
+</form>
+    
+</html>

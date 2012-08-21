@@ -40,20 +40,33 @@
 
 -->
 <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:jsf="http://java.sun.com/jsf" xmlns:f="http://java.sun.com/jsf/core">
 
-<html>
-  <head><title>Passthrough Renderers</title></head>
+<form jsf:id="form" jsf:prependId="false">
 
-  <body>
+    <p>
+        <select jsf:id="selectOne" size="1" jsf:value="#{bean.selectOne}">
+            <f:selectItems value="#{bean.list}"/>
+        </select>
+    </p>
 
-    <ul>
+    <p>
+        <select jsf:id="selectOneSize2" size="2" jsf:value="#{bean.selectOneSize2}">
+            <f:selectItems value="#{bean.list}"/>
+        </select>
+    </p>
 
-        <li><a href="faces/input.xhtml">input</a>
-        <li><a href="faces/select.xhtml">select</a>
-        <li><a href="faces/textarea.xhtml">textarea</a>
+    <p>
+        <select jsf:id="selectMany" multiple="multiple" jsf:value="#{bean.selectMany}">
+            <f:selectItems value="#{bean.list}"/>
+        </select>
+    </p>
 
-    </ul>
+    <input type="reset" jsf:id="resetButton" value="reset"/>
 
+    <input type="submit" jsf:id="submitButton" value="submit" />
 
-  </body>
-<html>
+</form>
+    
+</html>

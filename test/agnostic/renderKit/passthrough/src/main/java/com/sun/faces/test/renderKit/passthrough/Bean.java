@@ -41,22 +41,106 @@
 package com.sun.faces.test.renderKit.passthrough;
 
 import java.io.Serializable;
-import javax.enterprise.context.SessionScoped;
+import java.util.Arrays;
+import java.util.List;
+import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ManagedBean;
 
 @ManagedBean
 @SessionScoped
 public class Bean implements Serializable {
     
-    private String name = "Default value";
+    private String text1 = "text1";
+    private String text2 = "text2";
 
-    public String getName() {
-        return name;
+    private String email = "anybody@example.com";
+
+    private boolean checkboxValue;
+
+    private Integer number = 10;
+    private List<String> list = Arrays.asList("1", "2", "3", "4", "5", "6", "7");
+    private String selectOne = "2";
+    private String selectOneSize2 = "3";
+    private List<String> selectMany = Arrays.asList("4", "6");
+    private String longText = "Long text";
+
+    public String getText1() {
+        return text1;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setText1(String text1) {
+        this.text1 = text1;
     }
-    
-    
+
+    public String getText2() {
+        return text2;
+    }
+
+    public void setText2(String text2) {
+        this.text2 = text2;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Integer getNumber() {
+        return number;
+    }
+
+    public void setNumber(Integer number) {
+        this.number = number;
+    }
+
+    public boolean getCheckboxValue() {
+        return checkboxValue;
+    }
+
+    public void setCheckboxValue(boolean checkboxValue) {
+        this.checkboxValue = checkboxValue;
+    }
+
+    public void setList(List<String> list) {
+        this.list = list;
+    }
+
+    public List<String> getList() {
+        return list;
+    }
+
+    public void setSelectOne(String selectOne) {
+        this.selectOne = selectOne;
+    }
+
+    public String getSelectOne() {
+        return selectOne;
+    }
+
+    public void setSelectOneSize2(String selectOneSize2) {
+        this.selectOneSize2 = selectOneSize2;
+    }
+
+    public String getSelectOneSize2() {
+        return selectOneSize2;
+    }
+
+    public void setSelectMany(List<String> selectMany) {
+        this.selectMany = selectMany;
+    }
+
+    public List<String> getSelectMany() {
+        return selectMany;
+    }
+
+    public void setLongText(String longText) {
+        this.longText = longText;
+    }
+
+    public String getLongText() {
+        return longText;
+    }
 }
