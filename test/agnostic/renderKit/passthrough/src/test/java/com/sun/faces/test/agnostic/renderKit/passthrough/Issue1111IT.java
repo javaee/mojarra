@@ -146,6 +146,9 @@ public class Issue1111IT {
         assertTrue(xml.contains("id=\"" + id + "\""));
         assertTrue(xml.contains("name=\"" + id + "\""));
 
+        if(attrs == null) {
+            return;
+        }
         for(int i = 0; i < attrs.length; i++) {
             String name = attrs[i];
             String value = attrs[++i];
@@ -252,8 +255,26 @@ public class Issue1111IT {
         assertFormElement(page, "textarea", "textarea", "autofocus", "autofocus");
 
         textarea = (HtmlTextArea) page.getElementById("textarea");
-        assertEquals(textarea.getText(), "Very long text");
+        assertEquals("Very long text", textarea.getText());
+    }
 
+    @Test
+    public void testButton() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/button.xhtml");
+        assertFormElement(page, "button", "fancyButton1");
+        assertFormElement(page, "button", "fancyButton2");
+        String lastAction = page.getElementById("lastAction").getTextContent();
+        assertEquals("", lastAction);
+
+        page = page.getElementById("fancyButton1").click();
+
+        lastAction = page.getElementById("lastAction").getTextContent();
+        assertEquals("action1", lastAction);
+
+        page = page.getElementById("fancyButton2").click();
+
+        lastAction = page.getElementById("lastAction").getTextContent();
+        assertEquals("action2", lastAction);
     }
 
 }

@@ -64,6 +64,8 @@ public class Bean implements Serializable {
     private List<String> selectMany = Arrays.asList("4", "6");
     private String longText = "Long text";
 
+    private String lastAction;
+
     public String getText1() {
         return text1;
     }
@@ -142,5 +144,19 @@ public class Bean implements Serializable {
 
     public String getLongText() {
         return longText;
+    }
+
+    public String action1() {
+        lastAction = "action1";
+        return null;
+    }
+
+    public String action2() {
+        lastAction = "action2";
+        return null;
+    }
+
+    public String getLastAction() {
+        return lastAction;
     }
 }

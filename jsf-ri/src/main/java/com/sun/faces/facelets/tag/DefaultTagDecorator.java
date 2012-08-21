@@ -54,6 +54,8 @@ class DefaultTagDecorator implements TagDecorator {
 
     private static enum Mapper {
         form("h:form"), textarea("h:inputTextarea"),
+        // TODO if we want the name of the button to become the id, we have to do .id("name")
+        button("h:commandButton"),
 
         select(new ElementConverter("h:selectOneListbox", "multiple")
                 // TODO this is a little bit ugly to handle the name as if it were jsf:id. we should not support this
@@ -185,6 +187,8 @@ class DefaultTagDecorator implements TagDecorator {
 
         protected TagAttributes convertAttributes(TagAttributes original) {
             Map<String, TagAttribute> attributes = new HashMap<String, TagAttribute>();
+            TagAttribute elementName = createElementName(original.getTag());
+            attributes.put(elementName.getQName(), elementName);
 
             for (TagAttribute attribute : original.getAll()) {
                 TagAttribute converted = convertTagAttribute(attribute);
@@ -192,6 +196,16 @@ class DefaultTagDecorator implements TagDecorator {
             }
 
             return new TagAttributesImpl(attributes.values().toArray(new TagAttribute[attributes.size()]));
+        }
+
+        private TagAttribute createElementName(Tag tag) {
+            Location location = tag.getLocation();
+            String ns = Namespace.p.uri;
+            String localName = "elementName";
+            String qName = "p:" + localName;
+            String value = tag.getLocalName();
+
+            return new TagAttributeImpl(location, ns, localName, qName, value);
         }
 
         protected TagAttribute convertTagAttribute(TagAttribute attribute) {

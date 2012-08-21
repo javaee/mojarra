@@ -169,8 +169,9 @@ public class ButtonRenderer extends HtmlBasicRenderer {
                                      null,
                                      false);
 
-        writer.endElement("input");
-
+        if(component.getChildCount() == 0) {
+            writer.endElement("input");
+        }
     }
 
     @Override
@@ -178,7 +179,9 @@ public class ButtonRenderer extends HtmlBasicRenderer {
           throws IOException {
 
         rendererParamsNotNull(context, component);
-
+        if(component.getChildCount() > 0) {
+            context.getResponseWriter().endElement("input");
+        }
     }
 
     // --------------------------------------------------------- Private Methods
