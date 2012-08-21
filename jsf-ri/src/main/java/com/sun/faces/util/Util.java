@@ -329,26 +329,27 @@ public class Util {
                                   Object fallbackClass)
         throws ClassNotFoundException {
         ClassLoader loader = Util.getCurrentLoader(fallbackClass);
-        // Where to begin...
-        // JDK 6 introduced CR 6434149 where one couldn't pass
-        // in a literal for an array type ([Ljava.lang.String) and
-        // get the Class representation using ClassLoader.loadClass().
-        // It was recommended to use Class.forName(String, boolean, ClassLoader)
-        // for all ClassLoading requests.
-        // HOWEVER, when trying to eliminate the need for .groovy extensions
-        // being specified in the faces-config.xml for Groovy-based artifacts,
-        // by using a an adapter to the GroovyScriptEngine, I found that the class
-        // instance was cached somewhere, so that no matter what change I made,
-        // Class.forName() always returned the same instance.  I haven't been
-        // able to determine why this happens in the appserver environment
-        // as the same adapter in a standalone program works as one might expect.
-        // So, for now, if the classname starts with '[', then use Class.forName()
-        // to avoid CR 643419 and for all other cases, use ClassLoader.loadClass().
-        if (name.charAt(0) == '[') {
-            return Class.forName(name, true, loader);
-        } else {
-            return loader.loadClass(name);
-        }
+//        // Where to begin...
+//        // JDK 6 introduced CR 6434149 where one couldn't pass
+//        // in a literal for an array type ([Ljava.lang.String) and
+//        // get the Class representation using ClassLoader.loadClass().
+//        // It was recommended to use Class.forName(String, boolean, ClassLoader)
+//        // for all ClassLoading requests.
+//        // HOWEVER, when trying to eliminate the need for .groovy extensions
+//        // being specified in the faces-config.xml for Groovy-based artifacts,
+//        // by using a an adapter to the GroovyScriptEngine, I found that the class
+//        // instance was cached somewhere, so that no matter what change I made,
+//        // Class.forName() always returned the same instance.  I haven't been
+//        // able to determine why this happens in the appserver environment
+//        // as the same adapter in a standalone program works as one might expect.
+//        // So, for now, if the classname starts with '[', then use Class.forName()
+//        // to avoid CR 643419 and for all other cases, use ClassLoader.loadClass().
+//        if (name.charAt(0) == '[') {
+//            return Class.forName(name, true, loader);
+//        } else {
+//            return loader.loadClass(name);
+//        }
+        return Class.forName(name, true, loader);
     }
 
 
