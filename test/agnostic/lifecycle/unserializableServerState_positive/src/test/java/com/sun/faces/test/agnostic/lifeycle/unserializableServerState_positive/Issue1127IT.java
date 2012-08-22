@@ -62,6 +62,7 @@ public class Issue1127IT {
         webClient.closeAllWindows();
     }
 
+    @Ignore
     @Test
     public void testConfigurationEffective() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
