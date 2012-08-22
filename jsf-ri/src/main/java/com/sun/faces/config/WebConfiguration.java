@@ -1190,8 +1190,14 @@ public class WebConfiguration {
               false
         ),
         SerializeServerState(
-              "com.sun.faces.serializeServerState",
+              "javax.faces.SERIALIZE_SERVER_STATE",
               false
+        ),
+        SerializeServerStateDeprecated(
+              "com.sun.faces.serializeServerState",
+              false,
+               true,
+                SerializeServerState
         ),
         EnableViewStateIdRendering(
             "com.sun.faces.enableViewStateIdRendering",
