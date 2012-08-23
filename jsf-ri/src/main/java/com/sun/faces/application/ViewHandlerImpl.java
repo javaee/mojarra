@@ -104,7 +104,8 @@ public class ViewHandlerImpl extends ViewHandler {
         WebConfiguration config = WebConfiguration.getInstance();
         String defaultSuffixConfig =
               config.getOptionValue(WebConfiguration.WebContextInitParameter.DefaultSuffix);
-        configuredExtensions = Util.split(defaultSuffixConfig, " ");
+        Map<String, Object> appMap = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
+        configuredExtensions = Util.split(appMap, defaultSuffixConfig, " ");
     }
     
 

@@ -92,7 +92,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
         webconfig = WebConfiguration.getInstance();
         ExternalContext extContext = FacesContext.getCurrentInstance().getExternalContext();
         manager = ApplicationAssociate.getInstance(extContext).getResourceManager();
-        initExclusions();
+        initExclusions(extContext.getApplicationMap());
         initMaxAge();
 
     }
@@ -576,11 +576,11 @@ public class ResourceHandlerImpl extends ResourceHandler {
      * <ul>
      * will be used.
      */
-    private void initExclusions() {
+    private void initExclusions(Map<String, Object> appMap) {
 
         String excludesParam = webconfig
               .getOptionValue(ResourceExcludes);
-        String[] patterns = Util.split(excludesParam, " ");
+        String[] patterns = Util.split(appMap, excludesParam, " ");
         excludePatterns = new ArrayList<Pattern>(patterns.length);
         for (String pattern : patterns) {
             excludePatterns.add(Pattern.compile(".*\\" + pattern));
