@@ -153,7 +153,7 @@ public class FormRenderer extends HtmlBasicRenderer {
 
         // this hidden field will be checked in the decode method to
         // determine if this form has been submitted.         
-        writer.startElement("input", component);
+        writer.startElement("input", null);
         writer.writeAttribute("type", "hidden", "type");
         writer.writeAttribute("name", clientId,
                               "clientId");
@@ -170,7 +170,7 @@ public class FormRenderer extends HtmlBasicRenderer {
         String encodedPartialActionURL = externalContext.encodePartialActionURL(actionURL);
         if (encodedPartialActionURL != null) {
             if (!encodedPartialActionURL.equals(encodedActionURL)) {
-                writer.startElement("input", component);
+                writer.startElement("input", null);
                 writer.writeAttribute("type", "hidden", "type");
                 writer.writeAttribute("name", "javax.faces.encodedURL", null);
                 writer.writeAttribute("value", encodedPartialActionURL, "value");
