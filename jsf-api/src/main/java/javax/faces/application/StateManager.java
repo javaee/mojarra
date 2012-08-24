@@ -155,6 +155,24 @@ public abstract class StateManager {
      */
     public final static String IS_BUILDING_INITIAL_STATE =
             "javax.faces.IS_BUILDING_INITIAL_STATE";
+    
+    /**
+     * <p class="changed_added_2_2">
+     * If this param is set, and calling toLowerCase().equals("true") on a
+     * String representation of its value returns true, and the
+     * javax.faces.STATE_SAVING_METHOD is set to “server” (as indicated
+     * below), the server state must be guaranteed to be Serializable such
+     * that the aggregate state implements java.io.Serializable. The intent
+     * of this parameter is to ensure that the act of writing out the state
+     * to an ObjectOutputStream would not throw a NotSerializableException,
+     * but the runtime is not required verify this before saving the state.      
+     * </p>
+     * 
+     * @since 2.2
+     */
+        
+    public static final String SERIALIZE_SERVER_STATE_PARAM_NAME = 
+            "javax.faces.SERIALIZE_SERVER_STATE";
 
     /**
      * <p>Constant value for the initialization parameter named by

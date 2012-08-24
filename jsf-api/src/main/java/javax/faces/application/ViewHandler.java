@@ -129,6 +129,22 @@ public abstract class ViewHandler {
     public static final String DEFAULT_SUFFIX = ".xhtml .view.xml .jsp";
     
     /**
+     * <p class="changed_added_2_2">
+     * If this param is set, and calling toLowerCase().equals("true") on a
+     * String representation of its value returns true, the runtime must
+     * ensure that any XML comments in the Facelets source page are not
+     * delivered to the client. The runtime must also consider the
+     * facelets.SKIP_COMMENTS param name as an alias to this param name for
+     * backwards compatibility with existing facelets tag libraries.
+     * </p>
+     * 
+     * @since 2.0
+     */
+    
+    public static final String FACELETS_SKIP_COMMENTS_PARAM_NAME = 
+            "javax.faces.FACELETS_SKIP_COMMENTS";
+    
+    /**
      * <p class="changed_added_2_0">Allow the web application to define an
      * alternate suffix for Facelet based XHTML pages containing JSF content.
      * If this init parameter is not specified, the default value is
@@ -169,6 +185,90 @@ public abstract class ViewHandler {
     
     public static final String FACELETS_VIEW_MAPPINGS_PARAM_NAME = 
             "javax.faces.FACELETS_VIEW_MAPPINGS";
+    
+    /**
+     * <p class="changed_added_2_2">
+     * The buffer size to set on the response when the ResponseWriter is
+     * generated. By default the value is 1024. A value of -1 will not assign
+     * a buffer size on the response. This should be increased if you are
+     * using development mode in order to guarantee that the response isn't
+     * partially rendered when an error is generated. The runtime must also
+     * consider the facelets.BUFFER_SIZE param name as an alias to this param
+     * name for backwards compatibility with existing facelets tag libraries.</p>
+     * 
+     * @since 2.0
+     */
+    
+    public static final String FACELETS_BUFFER_SIZE_PARAM_NAME = 
+            "javax.faces.FACELETS_BUFFER_SIZE";
+    
+    /**
+     * <p class="changed_added_2_2">When a page is requested, what interval in seconds should the compiler
+     * check for changes. If you don't want the compiler to check for changes
+     * once the page is compiled, then use a value of -1. Setting a low
+     * refresh period helps during development to be able to edit pages in a
+     * running application.The runtime must also consider the
+     * facelets.REFRESH_PERIOD param name as an alias to this param name for
+     * backwards compatibility with existing facelets tag libraries.
+     * </p>
+     * 
+     * @since 2.0
+     */
+    public static final String FACELETS_REFRESH_PERIOD_PARAM_NAME = 
+            "javax.faces.FACELETS_REFRESH_PERIOD";
+    
+    /**
+     * <p class="changed_added_2_2">
+     * If this param is set, the runtime must interpret it as a semicolon (;)
+     * separated list of paths, starting with “/” (without the quotes). The
+     * runtime must interpret each entry in the list as a path relative to
+     * the web application root and interpret the file found at that path as
+     * a facelet tag library, conforming to the facelet taglibrary schema and
+     * expose the tags therein according to Section “Facelet Tag Library
+     * mechanism”. The runtime must also consider the facelets.LIBRARIES
+     * param name as an alias to this param name for backwards compatibility
+     * with existing facelets tag libraries.     
+     * </p>
+     * 
+     * 
+     * @since 2.0
+     */
+    
+    public static final String FACELETS_LIBRARIES_PARAM_NAME = 
+            "javax.faces.FACELETS_LIBRARIES";
+    
+    /**
+     * <p class="changed_added_2_2">A semicolon (;) delimitted list of class names of type
+     * javax.faces.view.facelets.TagDecorator, with a no-argument
+     * constructor. These decorators will be loaded when the first request
+     * for a Facelets VDL view hits the ViewHandler for page compilation.The
+     * runtime must also consider the facelets.DECORATORS param name as an
+     * alias to this param name for backwards compatibility with existing
+     * facelets tag libraries.
+     * </p>
+     * 
+     * @since 2.0
+     */
+    
+    public static final String FACELETS_DECORATORS_PARAM_NAME = 
+            "javax.faces.FACELETS_DECORATORS";
+    
+    /**
+     * <p class="changed_added_2_2">
+     * If this param is set, and calling toLowerCase().equals("true") on a
+     * String representation of its value returns true, the default
+     * ViewHandler must behave as specified in the latest 1.2 version of this
+     * specification. Any behavior specified in Section “Default
+     * ViewDeclarationLanguage Implementation” of the spec prose document and
+     * implemented in the default ViewHandler that pertains to handling
+     * requests for pages authored in the JavaServer Faces View Declaration
+     * Language must not be executed by the runtime.
+     * </p>
+     * 
+     * @since 2.0
+     */
+    public static final String DISABLE_FACELET_JSF_VIEWHANDLER_PARAM_NAME = 
+            "DISABLE_FACELET_JSF_VIEWHANDLER";
 
     // ---------------------------------------------------------- Public Methods
 
