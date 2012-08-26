@@ -39,6 +39,8 @@
  */
 package com.sun.faces.test.agnostic.renderKit.passthrough;
 
+import com.gargoylesoftware.htmlunit.Page;
+import com.gargoylesoftware.htmlunit.StatusHandler;
 import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlOption;
@@ -277,4 +279,73 @@ public class Issue1111IT {
         assertEquals("action2", lastAction);
     }
 
+    @Test
+    public void testComplex() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/complex.xhtml");
+        AjaxWaiter waiter = new AjaxWaiter();
+        webClient.setStatusHandler(waiter);
+
+        HtmlTextInput name = (HtmlTextInput)page.getElementById("name");
+        name.focus();
+        name.setText("Horst");
+
+        HtmlTextInput tel = (HtmlTextInput)page.getElementById("tel");
+        tel.focus();
+
+        waiter.waitForSuccess();
+
+        assertEquals("1 of 3", page.getElementById("progress").getTextContent());
+
+        tel.setText("4711");
+
+        waiter.clear();
+
+        HtmlTextInput email = (HtmlTextInput)page.getElementById("email");
+        email.focus();
+
+        waiter.waitForSuccess();
+
+        assertEquals("2 of 3", page.getElementById("progress").getTextContent());
+
+        email.setText("horst@example.com");
+        email.blur();
+
+        waiter.clear();
+        waiter.waitForSuccess();
+
+        assertEquals("3 of 3", page.getElementById("progress").getTextContent());
+    }
+
+    private static class AjaxWaiter implements StatusHandler {
+
+        private String lastMessage;
+
+        private int sleepTime = 10;
+
+        private int maxWaitTime = 5000;
+
+        @Override
+        public void statusMessageChanged(Page page, String message) {
+            this.lastMessage = message;
+        }
+
+        private void waitForSuccess() {
+            int diff = 0;
+            while (!"success".equals(lastMessage)) {
+                if(diff >= maxWaitTime) {
+                    fail("waited " + diff + "ms for ajax success");
+                }
+                try {
+                    diff += sleepTime;
+                    Thread.sleep(sleepTime);
+                } catch (InterruptedException e) {
+                    // ignore
+                }
+            }
+        }
+
+        private void clear() {
+            lastMessage = null;
+        }
+    }
 }

@@ -40,6 +40,7 @@
 package com.sun.faces.facelets.tag;
 
 import javax.faces.view.Location;
+import javax.faces.view.facelets.FaceletException;
 import javax.faces.view.facelets.Tag;
 import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagAttributes;
@@ -53,6 +54,10 @@ import java.util.Map;
 class DefaultTagDecorator implements TagDecorator {
 
     private static enum Mapper {
+        // TODO can we handle h:commandLink and h:outputLink?
+        img("h:graphicImage"), body("h:body"), head("h:head"), label("h:outputLabel"), script("h:outputScript"),
+        link("h:outputStylesheet"),
+
         form("h:form"), textarea("h:inputTextarea"),
         // TODO if we want the name of the button to become the id, we have to do .id("name")
         button("h:commandButton"),
@@ -82,7 +87,6 @@ class DefaultTagDecorator implements TagDecorator {
         private Mapper(String faceletTag) {
             elementConverter = new ElementConverter(faceletTag);
         }
-
     }
 
     private static enum Namespace {
@@ -97,17 +101,30 @@ class DefaultTagDecorator implements TagDecorator {
         }
     }
 
+    private ElementConverter defaultElementConverter = new ElementConverter("h:panelGroup");
+
     public Tag decorate(Tag tag) {
+        String ns = tag.getNamespace();
         if (!hasJsfAttribute(tag)) {
             // return immediately, if we have no jsf: attribute
             return null;
+        }
+        // we only handle html tags!
+        if (!("".equals(ns) || "http://www.w3.org/1999/xhtml".equals(ns))) {
+            throw new FaceletException("Elements with namespace " +
+                    ns + " may not have attributes in namespace " +
+                    Namespace.jsf.uri + "." +
+                    " Namespace " + Namespace.jsf.uri +
+                    " is intended for otherwise non-JSF-aware markup, such as <input type=\"text\" jsf:id >" +
+                    " It is not valid to have <h:commandButton jsf:id=\"button\" />.");
         }
         for (Mapper mapper : Mapper.values()) {
             if (tag.getLocalName().equals(mapper.name())) {
                 return mapper.elementConverter.decorate(tag);
             }
         }
-        return null;
+
+        return defaultElementConverter.decorate(tag);
     }
 
     private boolean hasJsfAttribute(Tag tag) {
@@ -220,7 +237,7 @@ class DefaultTagDecorator implements TagDecorator {
                 qName = localName;
                 ns = "";
             } else {
-                if(ns.length() != 0 && !ns.equals(attribute.getTag().getNamespace())) {
+                if (ns.length() != 0 && !ns.equals(attribute.getTag().getNamespace())) {
                     // the attribute has a different namespace than the tag. preserve it.
                     return attribute;
                 }
@@ -237,4 +254,5 @@ class DefaultTagDecorator implements TagDecorator {
             return new TagAttributeImpl(location, ns, localName, qName, value);
         }
     }
+
 }

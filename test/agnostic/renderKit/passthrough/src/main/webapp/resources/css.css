@@ -1,0 +1,14 @@
+label {
+    width: 90px;
+    display: block;
+    float: left;
+}
+
+input, progress {
+    width: 100px;
+    display: block;
+}
+
+progress {
+    white-space: nowrap;
+}

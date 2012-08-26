@@ -40,21 +40,32 @@
 
 -->
 <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:jsf="http://java.sun.com/jsf" xmlns:f="http://java.sun.com/jsf/core">
+    <head jsf:id="head">
+        <title>Putting it all together</title>
+        <script jsf:target="body" jsf:name="js.js"/>
+        <link jsf:name="css.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body jsf:id="body">
+        <form jsf:id="form" jsf:prependId="false">
+            <label jsf:for="name">Name</label>
+            <input jsf:id="name" type="text" jsf:value="#{complex.name}">
+                <f:ajax execute="@this" render="progress"/>
+            </input>
+            <label jsf:for="tel">Tel</label>
+            <input jsf:id="tel" type="tel" jsf:value="#{complex.tel}">
+                <f:ajax execute="@this" render="progress"/>
+            </input>
 
-<html>
-  <head><title>Passthrough Renderers</title></head>
+            <label jsf:for="email">Email</label>
+            <input jsf:id="email" type="email" jsf:value="#{complex.email}">
+                <f:ajax execute="@this" render="progress"/>
+            </input>
 
-  <body>
+            <label for="progress">Progress</label>
+            <progress jsf:id="progress" max="3">#{complex.progress} of 3</progress>
 
-    <ul>
-
-        <li><a href="faces/input.xhtml">input</a>
-        <li><a href="faces/select.xhtml">select</a>
-        <li><a href="faces/textarea.xhtml">textarea</a>
-        <li><a href="faces/button.xhtml">button</a>
-        <li><a href="faces/complex.xhtml">complex</a>
-
-    </ul>
-
-  </body>
-<html>
+        </form>
+    </body>
+</html>
