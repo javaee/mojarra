@@ -49,6 +49,7 @@ import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.el.ExpressionFactory;
 import javax.el.MethodExpression;
 import javax.faces.application.NavigationCase;
@@ -56,6 +57,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.flow.Flow;
 import javax.faces.flow.FlowHandler;
+import javax.faces.flow.SwitchNode;
 import javax.faces.flow.ViewNode;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagAttribute;
@@ -75,7 +77,10 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
         StartNodeId,
         WithinFacesFlowReturn,
         WithinSwitch,
-        SwitchNavigationCase
+        CurrentNavigationCase,
+        SwitchNavigationCases,
+        SwitchDefaultCase,
+        Switches,
         
     } 
     
@@ -161,7 +166,7 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
         } else {
             
             // Inspect the flow for a view corresponding to this page.
-            if (null != newFlow.getNode(getMyNodeId())) {
+            if (null != newFlow.getNode(context, getMyNodeId())) {
                 // If we have one, take no further action.
                 return;
             } 
@@ -195,7 +200,7 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
             if (null == newFlow.getViews()) {
                 viewsInFlow = synthesizeViews();
                 newFlow.setViews(viewsInFlow);
-            } else if (null == newFlow.getNode(getMyNodeId())) {
+            } else if (null == newFlow.getNode(context, getMyNodeId())) {
                 ViewNode viewNode = new ViewNode();
                 viewNode.setId(getMyNodeId());
                 viewNode.setVdlDocumentId(this.tag.getLocation().getPath());
@@ -253,18 +258,14 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
             //
             // <switch>
             //
-            FlowNavigationCase switchElement = SwitchNodeTagHandler.getNavigationCase(ctx);
+            Map<String, SwitchNode> switchElement = SwitchNodeTagHandler.getSwitches(ctx);
             if (null != switchElement) {
-                Map<String, List<NavigationCase>> switches = newFlow.getSwitches(context);
-                if (null != switches) {
-                    String switchId = switchElement.getEnclosingId();
-                    if (null != switchId && !switches.containsKey(switchId)) {
-                        List<NavigationCase> cases = new ArrayList<NavigationCase>();
-                        cases.add(switchElement);
-                        switches.put(switchId, cases);
-                    }
+                Map<String, SwitchNode> switches = newFlow.getSwitches(context);
+                for (Map.Entry<String, SwitchNode> cur : switchElement.entrySet()) {
+                    switches.put(cur.getKey(), cur.getValue());
                 }
             }
+            
             //
             // <initializer>
             //

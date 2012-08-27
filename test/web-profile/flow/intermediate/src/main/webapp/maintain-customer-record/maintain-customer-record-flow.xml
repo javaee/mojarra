@@ -69,10 +69,15 @@
                     <j:if>#{facesFlowScope.customerId == null}</j:if>
                     <j:from-outcome>create-customer</j:from-outcome>
                 </j:navigation-case>
+<!--                <j:default-outcome>view-customer</j:default-outcome> -->
             </j:switch>
             
             <j:view id="create-customer">
                 <j:vdl-document>create-customer.xhtml</j:vdl-document>
+            </j:view>
+
+            <j:view id="view-customer">
+                <j:vdl-document>view-customer.xhtml</j:vdl-document>
             </j:view>
 
             <j:view id="maintain-customer-record">

@@ -71,7 +71,7 @@ public class Flow implements Serializable {
     private String startNodeId;
     private List<ViewNode> views;
     private ConcurrentHashMap<String,NavigationCase> returns = new ConcurrentHashMap<String, NavigationCase>();
-    private ConcurrentHashMap<String,List<NavigationCase>> switches = new ConcurrentHashMap<String, List<NavigationCase>>();
+    private ConcurrentHashMap<String,SwitchNode> switches = new ConcurrentHashMap<String, SwitchNode>();
     private MethodExpression initializer;
     private MethodExpression finalizer;
     
@@ -202,7 +202,7 @@ public class Flow implements Serializable {
         return returns;
     }
     
-    public Map<String,List<NavigationCase>> getSwitches(FacesContext context) {
+    public Map<String,SwitchNode> getSwitches(FacesContext context) {
         return switches;
     }
     
@@ -210,9 +210,9 @@ public class Flow implements Serializable {
     
     // <editor-fold defaultstate="collapsed" desc="Graph navigation">       
     
-    public FlowNode getNode(String viewNodeId) {
+    public FlowNode getNode(FacesContext context, String viewNodeId) {
         List<ViewNode> myViews = getViews();
-        ViewNode result = null;
+        FlowNode result = null;
         
         if (null != myViews) {
             for (ViewNode cur : myViews) {
@@ -221,6 +221,10 @@ public class Flow implements Serializable {
                     break;
                 }
             }
+        }
+        if (null == result) {
+            Map<String, SwitchNode> mySwitches = getSwitches(context);
+            result = mySwitches.get(viewNodeId);
         }
         
         return result;

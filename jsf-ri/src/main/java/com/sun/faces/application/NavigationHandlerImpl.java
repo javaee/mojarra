@@ -68,6 +68,7 @@ import javax.faces.context.Flash;
 import javax.faces.flow.Flow;
 import javax.faces.flow.FlowHandler;
 import javax.faces.flow.FlowNode;
+import javax.faces.flow.SwitchNode;
 import javax.faces.flow.ViewNode;
 import javax.faces.view.ViewDeclarationLanguage;
 import javax.faces.view.ViewMetadata;
@@ -365,7 +366,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         assert(null != navigationMaps);
         synchronized (this) {
             NavigationMap navMap = null;
-            Map<String, List<NavigationCase>> switches = toInspect.getSwitches(context);
+            Map<String, SwitchNode> switches = toInspect.getSwitches(context);
             String flowId = toInspect.getId();
             // Is there an existing NavigationMap for this flowId
             if (navigationMaps.containsKey(flowId)) {
@@ -373,10 +374,9 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             } else {
                 if (!switches.isEmpty()) {
                     NavigationInfo info = new NavigationInfo();
-                    info.switches = new ConcurrentHashMap<String, List<NavigationCase>>();
-                    for (Map.Entry<String, List<NavigationCase>> cur : switches.entrySet()) {
-                        info.switches.put(cur.getKey(), 
-                                Collections.synchronizedList(new ArrayList<NavigationCase>(cur.getValue())));
+                    info.switches = new ConcurrentHashMap<String, SwitchNode>();
+                    for (Map.Entry<String, SwitchNode> cur : switches.entrySet()) {
+                        info.switches.put(cur.getKey(), cur.getValue());
                     }
                     navigationMaps.put(flowId, info);
                 }
@@ -735,9 +735,17 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             // If this outcome corresponds to an existing flow...
             if (null != flow) {
                 // make a navigation case from its defaultNode.
-                FlowNode node = flow.getNode(flow.getStartNodeId());
-                if (null != node && node instanceof ViewNode) {
-                    viewIdToTest = ((ViewNode)node).getVdlDocumentId();
+                FlowNode node = flow.getNode(context, flow.getStartNodeId());
+                if (null != node) {
+                    if (node instanceof ViewNode) {
+                        viewIdToTest = ((ViewNode)node).getVdlDocumentId();
+                    } else if (node instanceof SwitchNode) {
+                        // try a convention.  Create a viewId by treating outcome
+                        // as a directory name *and* file name, which is assumed to be
+                        // the file name of the default-node in the flow.
+                        viewIdToTest = "/" + outcome + "/" + outcome + currentExtension;
+                        viewIdToTest = viewHandler.deriveViewId(context, viewIdToTest);
+                    }
                 }
             } else {
                 
@@ -800,15 +808,16 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         FlowHandler flowHandler = context.getApplication().getFlowHandler();
         
         if (null != info && null != info.switches && !info.switches.isEmpty()) {
-            List<NavigationCase> cases = info.switches.get(outcome);
-            if (null != cases) {
+            SwitchNode switchNode = info.switches.get(outcome);
+            if (null != switchNode) {
+                List<NavigationCase> cases = switchNode.getCases();
                 for (NavigationCase cur : cases) {
                     if (cur.getCondition(context)) {
                         outcome = cur.getFromOutcome();
                         Flow flow = flowHandler.getFlow(context, null, fromAction);
                         // If this outcome corresponds to an existing flow...
                         if (null != flow) {
-                            FlowNode node = flow.getNode(outcome);
+                            FlowNode node = flow.getNode(context, outcome);
                             if (null != node && node instanceof ViewNode) {
                                 result = new CaseStruct();
                                 result.viewId = ((ViewNode)node).getVdlDocumentId();
@@ -921,7 +930,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     
     private static final class NavigationInfo {
         private NavigationMap ruleSet;
-        private Map<String, List<NavigationCase>> switches;
+        private Map<String, SwitchNode> switches;
     }
 
 

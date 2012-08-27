@@ -38,41 +38,48 @@
  * holder.
 
  */
-package com.sun.faces.facelets.flow;
+package javax.faces.flow;
 
-import com.sun.faces.facelets.tag.TagHandlerImpl;
-import java.io.IOException;
-import javax.faces.component.UIComponent;
-import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.TagConfig;
-import javax.faces.view.facelets.TagException;
+import java.util.List;
+import javax.faces.application.NavigationCase;
 
-public class IfTagHandler extends TagHandlerImpl {
+public class SwitchNode extends FlowNode {
+    
+    private static final long serialVersionUID = -7313685763850287357L;
+    
+    private NavigationCase defaultCase;
+    private List<NavigationCase> cases;
+    private String id;
 
-    public IfTagHandler(TagConfig config) {
-        super(config);
+    public SwitchNode(String id, NavigationCase defaultCase, List<NavigationCase> cases) {
+        this.id = id;
+        this.defaultCase = defaultCase;
+        this.cases = cases;
     }
     
-    public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
-        this.nextHandler.apply(ctx, parent);
-        if (FacesFlowReturnTagHandler.isWithinFacesFlowReturn(ctx)) {
-            FlowNavigationCase cur = FacesFlowReturnTagHandler.getNavigationCase(ctx);
-            if (null == cur) {
-                throw new TagException(tag, "Unable to determine <navigation-case> for which " +
-                        this.nextHandler.toString() + " is the <from-outcome>.");
-            }
-            cur.setCondition(this.nextHandler.toString());
-        } else if (SwitchNodeTagHandler.isWithinSwitch(ctx)) {
-            FlowNavigationCase cur = NavigationCaseTagHandler.getCurrentNavigationCase(ctx);
-            if (null == cur) {
-                throw new TagException(tag, "Unable to determine <navigation-case> for which " +
-                        this.nextHandler.toString() + " is the <from-outcome>.");
-            }
-            cur.setCondition(this.nextHandler.toString());
-            
-        }
+    public String getId() {
+        return id;
     }
-    
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public List<NavigationCase> getCases() {
+        return cases;
+    }
+
+    public void setCases(List<NavigationCase> cases) {
+        this.cases = cases;
+    }
+
+    public NavigationCase getDefaultCase() {
+        return defaultCase;
+    }
+
+    public void setDefaultCase(NavigationCase defaultCase) {
+        this.defaultCase = defaultCase;
+    }
     
     
 }
