@@ -98,14 +98,34 @@ public class FlowEntryExitIntermediateIT {
     @Test
     public void testFacesFlowScope() throws Exception {
         performTest();
-        /**** PENDING(edburns): calling this test twice in a row will cause failure.
-         * That should not be the case.
         performTest();
-         */
         
     }
     
     private void performTest() throws Exception {
+        quickEnterExit();
+        
+        HtmlPage page = webClient.getPage(webUrl);
+        
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("maintain-customer-record");
+        
+        page = button.click();
+        
+        button = (HtmlSubmitInput) page.getElementById("createCustomer");
+        page = button.click();
+        String pageText = page.asText();
+        assertTrue(pageText.matches("(?s).*Customer Id:\\s+[0-9]+.*"));
+        
+        button = (HtmlSubmitInput) page.getElementById("exit");
+        page = button.click();
+        
+        pageText = page.getBody().asText();
+        
+        assertTrue(pageText.contains("return page"));
+        assertTrue(pageText.contains("Finalizer called"));
+    }
+    
+    private void quickEnterExit() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
         
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("maintain-customer-record");
@@ -125,7 +145,6 @@ public class FlowEntryExitIntermediateIT {
         
         assertTrue(pageText.contains("return page"));
         assertTrue(pageText.contains("Finalizer called"));
-        
         
     }
 }

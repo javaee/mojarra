@@ -44,20 +44,23 @@
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
     <head>
-        <title>Page navigated to upon return from bounded-task-flow</title>
+        <title>View customer page</title>
     </head>
     <body>
-        <h1>Page navigated to upon return from bounded-task-flow</h1>
+        
+        <p>View customer page</p>
         
     <h:form prependId="false">
-        <p>return page</p>
         
-        <p>Finalizer message: #{finalizerMessage}</p>
-                
-        <p><h:commandButton id="maintain-customer-record" value="Enter flow" action="maintain-customer-record" /></p>
+        <p>Customer Id: #{facesFlowScope.customerId}</p>
+        
+        <p><h:commandButton id="exit" value="exit flow" action="success" /></p>
         
     </h:form>
-</body>
+        
+    </body>
 </html>

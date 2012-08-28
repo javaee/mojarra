@@ -137,6 +137,13 @@
         <tag-name>switch</tag-name>
         <handler-class>com.sun.faces.facelets.flow.SwitchNodeTagHandler</handler-class>
     </tag>
+    <tag>
+        <description><![CDATA[
+
+        ]]></description>
+        <tag-name>default-outcome</tag-name>
+        <handler-class>com.sun.faces.facelets.flow.DefaultOutcomeTagHandler</handler-class>
+    </tag>
    <tag>
         <description><![CDATA[
 

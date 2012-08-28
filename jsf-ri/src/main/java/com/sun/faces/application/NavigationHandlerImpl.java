@@ -331,6 +331,15 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         NavigationInfo result = null;
         assert(null != navigationMaps);
         result = navigationMaps.get(flowId);
+        if (null == result) {
+            FlowHandler fh = context.getApplication().getFlowHandler();
+            if (null != fh) {
+                Flow currentFlow = fh.getCurrentFlow(context);
+                if (null != currentFlow) {
+                    result = navigationMaps.get(currentFlow.getId());
+                }
+            }
+        }
         
         return result;
     }
@@ -819,25 +828,39 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                         Flow flow = flowHandler.getFlow(context, null, fromAction);
                         // If this outcome corresponds to an existing flow...
                         if (null != flow) {
-                            FlowNode node = flow.getNode(context, outcome);
-                            if (null != node && node instanceof ViewNode) {
-                                result = new CaseStruct();
-                                result.viewId = ((ViewNode)node).getVdlDocumentId();
-                                result.navCase = new NavigationCase(fromAction, 
-                                        fromAction, outcome, null, result.viewId, 
-                                        null, false, false);
-                            }
-
+                            result = synthesizeCaseStruct(context, flow, fromAction, outcome);
                         }
                         if (null != result) {
                             break;
                         }
                     }
                 }
+                if (null == result) {
+                    NavigationCase defaultCase = switchNode.getDefaultCase();
+                    outcome = defaultCase.getFromOutcome();
+                    Flow flow = flowHandler.getCurrentFlow(context);
+                    if (null != flow) {
+                        result = synthesizeCaseStruct(context, flow, fromAction, outcome);
+                    }
+                }
             }
             
         }
         
+        return result;
+    }
+    
+    private CaseStruct synthesizeCaseStruct(FacesContext context, Flow flow, String fromAction, String outcome) {
+        CaseStruct result = null;
+        
+        FlowNode node = flow.getNode(context, outcome);
+        if (null != node && node instanceof ViewNode) {
+            result = new CaseStruct();
+            result.viewId = ((ViewNode)node).getVdlDocumentId();
+            result.navCase = new NavigationCase(fromAction, 
+                    fromAction, outcome, null, result.viewId, 
+                    null, false, false);
+        }
         return result;
     }
     

@@ -44,6 +44,7 @@ import java.io.Serializable;
 import java.util.Map;
 import javax.faces.context.FacesContext;
 import javax.faces.flow.FlowScoped;
+import javax.faces.flow.FlowHandler;
 import javax.inject.Named;
 
 @Named
@@ -55,8 +56,17 @@ public class MaintainCustomerBean implements Serializable
    }
    
    public String createCustomer() {
-      //  Logic to create a new customer object.
-      return "success";
+       //  Logic to create a new customer object.
+       FacesContext context = FacesContext.getCurrentInstance();
+       CustomerBean customer = new CustomerBean();
+       FlowHandler flowHandler = context.getApplication().getFlowHandler();
+       Map<Object, Object> flowScope = flowHandler.getCurrentFlowScope();
+       if (null == flowScope) {
+           throw new IllegalStateException("Must have a flow handler when called from within initializer!");
+       }
+       flowScope.put("customerId", customer.getCustomerId());
+       flowScope.put("customerIdValue", customer);
+       return "router1";
    }
    
    public String fetchCustomer() {
@@ -65,8 +75,10 @@ public class MaintainCustomerBean implements Serializable
    }
    
    public void initializeFlow() {
-       Map<String,Object> requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
+       FacesContext context = FacesContext.getCurrentInstance();
+       Map<String,Object> requestMap = context.getExternalContext().getRequestMap();
        requestMap.put("initializerMessage", "Initializer called");
+
    }
    
    public void cleanUpFlow() {

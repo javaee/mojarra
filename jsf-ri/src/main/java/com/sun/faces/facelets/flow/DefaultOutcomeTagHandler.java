@@ -38,25 +38,31 @@
  * holder.
 
  */
-package com.sun.faces.test.webprofile.flow.intermediate;
+package com.sun.faces.facelets.flow;
 
-public class CustomerBean
-{
-    private static int lastId = 0;
+import com.sun.faces.facelets.tag.TagHandlerImpl;
+import java.io.IOException;
+import javax.faces.component.UIComponent;
+import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.TagConfig;
+
+public class DefaultOutcomeTagHandler extends TagHandlerImpl {
+
+    public DefaultOutcomeTagHandler(TagConfig config) {
+        super(config);
+    }
     
-    private int myId;
+    public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
+        this.nextHandler.apply(ctx, parent);
+        if (SwitchNodeTagHandler.isWithinSwitch(ctx)) {
+            FlowNavigationCase cur = SwitchNodeTagHandler.getDefaultSwitchCase(ctx, true);
+            cur.setFromOutcome(this.nextHandler.toString());
+            
+        }
+        
+        
+    }
     
-   public CustomerBean()
-   {
-      super();
-      myId = incrementId();
-   }
-   
-   public int getCustomerId() {
-       return myId;
-   }
-   
-   private synchronized int incrementId() {
-       return ++lastId;
-   }
+    
+    
 }
