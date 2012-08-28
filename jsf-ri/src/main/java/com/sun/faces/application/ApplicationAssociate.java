@@ -443,16 +443,20 @@ public class ApplicationAssociate {
          externalContext) {
         Map applicationMap = externalContext.getApplicationMap();
         ApplicationAssociate me = (ApplicationAssociate) applicationMap.get(ASSOCIATE_KEY);
-        if (null != me && null != me.resourceBundles) {
-            me.resourceBundles.clear();
+        if (null != me) {
+            if (null != me.resourceBundles) {
+                me.resourceBundles.clear();
+            }
         }
         applicationMap.remove(ASSOCIATE_KEY);
     }
 
     public static void clearInstance(ServletContext sc) {
         ApplicationAssociate me = (ApplicationAssociate) sc.getAttribute(ASSOCIATE_KEY);
-        if (null != me && null != me.resourceBundles) {
-            me.resourceBundles.clear();
+        if (null != me) {
+            if (null != me.resourceBundles) {
+                me.resourceBundles.clear();
+            }
         }
         sc.removeAttribute(ASSOCIATE_KEY);    
     }
@@ -673,8 +677,11 @@ public class ApplicationAssociate {
     
     public List<FacesComponentUsage> getComponentsForNamespace(String ns) {
         List<FacesComponentUsage> result = Collections.emptyList();
-        if (null != facesComponentsByNamespace && facesComponentsByNamespace.containsKey(ns)) {
-            result = facesComponentsByNamespace.get(ns);
+        if (null != facesComponentsByNamespace) {
+            if (facesComponentsByNamespace.containsKey(ns)) {
+                result = facesComponentsByNamespace.get(ns);
+            }
+
         }
        
         return result;
@@ -743,10 +750,12 @@ public class ApplicationAssociate {
         Locale defaultLocale = Locale.getDefault();
         locale = defaultLocale;
         // See if this FacesContext has a ViewRoot
-        if (null != (root = context.getViewRoot()) && null == (locale = root.getLocale())) {
+        if (null != (root = context.getViewRoot())) {
             // If so, ask it for its Locale
-            // If the ViewRoot has no Locale, fall back to the default.
-            locale = defaultLocale;
+            if (null == (locale = root.getLocale())) {
+                // If the ViewRoot has no Locale, fall back to the default.
+                locale = defaultLocale;
+            }
         }
         assert (null != locale);
         //ResourceBundleBean bean = resourceBundles.get(var);
@@ -802,12 +811,14 @@ public class ApplicationAssociate {
         
             Set<? extends Class> resourceResolvers = 
                     ConfigManager.getAnnotatedClasses(ctx).get(FaceletsResourceResolver.class);
-            Class resolverClass = resourceResolvers.iterator().next();
-            if ((null != resourceResolvers) && !resourceResolvers.isEmpty() && (1 < resourceResolvers.size())) {
-                if (LOGGER.isLoggable(Level.SEVERE)) {
-                    LOGGER.log(Level.SEVERE, "Found more than one class " + 
-                            "annotated with FaceletsResourceResolver.  Will " + 
-                            "use {0} and ignore the others", resolverClass);
+            if ((null != resourceResolvers) && !resourceResolvers.isEmpty()) {
+                Class resolverClass = resourceResolvers.iterator().next();
+                if (1 < resourceResolvers.size()) {
+                    if (LOGGER.isLoggable(Level.SEVERE)) {
+                        LOGGER.log(Level.SEVERE, "Found more than one class " + 
+                                "annotated with FaceletsResourceResolver.  Will " + 
+                                "use {0} and ignore the others", resolverClass);
+                    }
                 }
                 resolver = (ResourceResolver) 
                         ReflectionUtil.decorateInstance(resolverClass,
