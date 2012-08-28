@@ -84,6 +84,10 @@
                 <j:vdl-document>maintain-customer-record.xhtml</j:vdl-document>
             </j:view>
             
+            <j:method-call id="upgrade-customer">
+                <j:method>#{maintainCustomerBean.upgradeCustomer}</j:method>
+                <j:default-outcome>view-customer</j:default-outcome>
+            </j:method-call>
             
             <j:initializer>#{maintainCustomerBean.initializeFlow}</j:initializer>
             <j:finalizer>#{maintainCustomerBean.cleanUpFlow}</j:finalizer>

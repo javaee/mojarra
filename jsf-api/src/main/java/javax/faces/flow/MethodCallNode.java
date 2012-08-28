@@ -38,41 +38,44 @@
  * holder.
 
  */
-package com.sun.faces.facelets.flow;
+package javax.faces.flow;
 
-import com.sun.faces.facelets.tag.TagHandlerImpl;
-import java.io.IOException;
-import javax.el.ExpressionFactory;
+import javax.el.MethodExpression;
 import javax.el.ValueExpression;
-import javax.faces.component.UIComponent;
-import javax.faces.flow.MethodCallNode;
-import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.TagConfig;
 
-public class DefaultOutcomeTagHandler extends TagHandlerImpl {
+public class MethodCallNode extends FlowNode {
+    
+    private static final long serialVersionUID = 3250474793483848344L;
+    
+    private MethodExpression methodExpression;
+    
+    private ValueExpression outcome;
+    
+    private String id;
+    
+    public MethodExpression getMethodExpression() {
+        return methodExpression;
+    }
 
-    public DefaultOutcomeTagHandler(TagConfig config) {
-        super(config);
+    public void setMethodExpression(MethodExpression methodExpression) {
+        this.methodExpression = methodExpression;
     }
-    
-    public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
-        this.nextHandler.apply(ctx, parent);
-        if (SwitchNodeTagHandler.isWithinSwitch(ctx)) {
-            FlowNavigationCase cur = SwitchNodeTagHandler.getDefaultSwitchCase(ctx, true);
-            cur.setFromOutcome(this.nextHandler.toString());
-            
-        }
-        if (MethodCallTagHandler.isWithinMethodCall(ctx)) {
-            MethodCallNode cur = MethodCallTagHandler.getCurrentMethodCall(ctx);
-            ExpressionFactory expressionFactory = ctx.getFacesContext().getApplication().getExpressionFactory();
-            String expressionString = this.nextHandler.toString();
-            ValueExpression ve = expressionFactory.createValueExpression(ctx, expressionString, Object.class);
-            cur.setOutcome(ve);
-        }
-        
-        
+
+    public ValueExpression getOutcome() {
+        return outcome;
     }
-    
+
+    public void setOutcome(ValueExpression outcome) {
+        this.outcome = outcome;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
     
     
 }

@@ -56,6 +56,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.flow.Flow;
 import javax.faces.flow.FlowHandler;
+import javax.faces.flow.MethodCallNode;
 import javax.faces.flow.SwitchNode;
 import javax.faces.flow.ViewNode;
 import javax.faces.view.facelets.FaceletContext;
@@ -76,7 +77,10 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
         StartNodeId,
         WithinFacesFlowReturn,
         WithinSwitch,
+        WithinMethodCall,
         CurrentNavigationCase,
+        CurrentMethodCall,
+        MethodCalls,
         SwitchNavigationCases,
         SwitchDefaultCase,
         Switches,
@@ -264,6 +268,12 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
                     switches.put(cur.getKey(), cur.getValue());
                 }
             }
+            
+            //
+            // <method-call>
+            //
+            List<MethodCallNode> methodCalls = MethodCallTagHandler.getMethodCalls(ctx);
+            newFlow.setMethodCalls(methodCalls);
             
             //
             // <initializer>

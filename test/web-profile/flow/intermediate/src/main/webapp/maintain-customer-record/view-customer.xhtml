@@ -58,7 +58,11 @@
         
         <p>Customer Id: #{facesFlowScope.customerId}</p>
         
+        <p>Customer is upgraded: #{facesFlowScope.customerIdValue.upgraded}</p>
+        
         <p><h:commandButton id="exit" value="exit flow" action="success" /></p>
+        
+        <p><h:commandButton id="upgrade" value="upgrade customer" action="upgrade-customer" /></p>
         
     </h:form>
         

@@ -151,4 +151,18 @@
         <tag-name>if</tag-name>
         <handler-class>com.sun.faces.facelets.flow.IfTagHandler</handler-class>
     </tag>
+   <tag>
+        <description><![CDATA[
+
+        ]]></description>
+        <tag-name>method-call</tag-name>
+        <handler-class>com.sun.faces.facelets.flow.MethodCallTagHandler</handler-class>
+    </tag>
+   <tag>
+        <description><![CDATA[
+
+        ]]></description>
+        <tag-name>method</tag-name>
+        <handler-class>com.sun.faces.facelets.flow.MethodTagHandler</handler-class>
+    </tag>
 </facelet-taglib>

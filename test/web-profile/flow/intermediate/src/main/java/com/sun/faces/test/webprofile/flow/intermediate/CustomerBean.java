@@ -46,6 +46,16 @@ public class CustomerBean
     
     private int myId;
     
+    private boolean upgraded = false;
+
+    public boolean isUpgraded() {
+        return upgraded;
+    }
+
+    public void setUpgraded(boolean upgraded) {
+        this.upgraded = upgraded;
+    }
+    
    public CustomerBean()
    {
       super();

@@ -43,34 +43,28 @@ package com.sun.faces.facelets.flow;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
 import java.io.IOException;
 import javax.el.ExpressionFactory;
-import javax.el.ValueExpression;
+import javax.el.MethodExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.flow.MethodCallNode;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagConfig;
 
-public class DefaultOutcomeTagHandler extends TagHandlerImpl {
+public class MethodTagHandler extends TagHandlerImpl {
 
-    public DefaultOutcomeTagHandler(TagConfig config) {
+    public MethodTagHandler(TagConfig config) {
         super(config);
     }
     
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
         this.nextHandler.apply(ctx, parent);
-        if (SwitchNodeTagHandler.isWithinSwitch(ctx)) {
-            FlowNavigationCase cur = SwitchNodeTagHandler.getDefaultSwitchCase(ctx, true);
-            cur.setFromOutcome(this.nextHandler.toString());
-            
-        }
         if (MethodCallTagHandler.isWithinMethodCall(ctx)) {
             MethodCallNode cur = MethodCallTagHandler.getCurrentMethodCall(ctx);
             ExpressionFactory expressionFactory = ctx.getFacesContext().getApplication().getExpressionFactory();
             String expressionString = this.nextHandler.toString();
-            ValueExpression ve = expressionFactory.createValueExpression(ctx, expressionString, Object.class);
-            cur.setOutcome(ve);
+            MethodExpression me = expressionFactory.createMethodExpression(ctx, expressionString, Object.class, null);
+            cur.setMethodExpression(me);
+            
         }
-        
-        
     }
     
     

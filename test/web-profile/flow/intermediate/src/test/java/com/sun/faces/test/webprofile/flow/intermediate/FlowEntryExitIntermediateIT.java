@@ -39,6 +39,8 @@
  */
 package com.sun.faces.test.webprofile.flow.intermediate;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -47,8 +49,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 public class FlowEntryExitIntermediateIT {
     /**
@@ -114,7 +116,20 @@ public class FlowEntryExitIntermediateIT {
         button = (HtmlSubmitInput) page.getElementById("createCustomer");
         page = button.click();
         String pageText = page.asText();
-        assertTrue(pageText.matches("(?s).*Customer Id:\\s+[0-9]+.*"));
+        Pattern pattern = Pattern.compile("(?s).*Customer Id:\\s+([0-9])+.*");
+        Matcher matcher = pattern.matcher(pageText);
+        assertTrue(matcher.matches());
+        String customerId = matcher.group(1);
+        assertTrue(pageText.matches("(?s).*Customer is upgraded:\\s+false.*"));
+        
+        button = (HtmlSubmitInput) page.getElementById("upgrade");
+        page = button.click();
+        pageText = page.asText();
+        matcher = pattern.matcher(pageText);
+        assertTrue(matcher.matches());
+        String sameCustomerId = matcher.group(1);
+        assertTrue(pageText.matches("(?s).*Customer is upgraded:\\s+true.*"));
+        assertEquals(customerId, sameCustomerId);
         
         button = (HtmlSubmitInput) page.getElementById("exit");
         page = button.click();

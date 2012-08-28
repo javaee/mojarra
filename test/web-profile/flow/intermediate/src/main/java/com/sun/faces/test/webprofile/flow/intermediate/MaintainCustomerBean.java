@@ -62,7 +62,7 @@ public class MaintainCustomerBean implements Serializable
        FlowHandler flowHandler = context.getApplication().getFlowHandler();
        Map<Object, Object> flowScope = flowHandler.getCurrentFlowScope();
        if (null == flowScope) {
-           throw new IllegalStateException("Must have a flow handler when called from within initializer!");
+           throw new IllegalStateException("Must have a flow handler");
        }
        flowScope.put("customerId", customer.getCustomerId());
        flowScope.put("customerIdValue", customer);
@@ -72,6 +72,18 @@ public class MaintainCustomerBean implements Serializable
    public String fetchCustomer() {
       //  Logic to fetch a customer.
       return "success";
+   }
+   
+   public void upgradeCustomer() {
+       FacesContext context = FacesContext.getCurrentInstance();
+       FlowHandler flowHandler = context.getApplication().getFlowHandler();
+       Map<Object, Object> flowScope = flowHandler.getCurrentFlowScope();
+       if (null == flowScope) {
+           throw new IllegalStateException("Must have a flow handler");
+       }
+       CustomerBean customer = (CustomerBean) flowScope.get("customerIdValue");
+       customer.setUpgraded(true);
+
    }
    
    public void initializeFlow() {

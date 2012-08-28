@@ -60,6 +60,8 @@ import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
 import java.util.concurrent.ConcurrentHashMap;
+import javax.el.MethodExpression;
+import javax.el.ValueExpression;
 import javax.faces.application.Application;
 import javax.faces.application.ConfigurableNavigationHandler;
 import javax.faces.application.FacesMessage;
@@ -68,6 +70,7 @@ import javax.faces.context.Flash;
 import javax.faces.flow.Flow;
 import javax.faces.flow.FlowHandler;
 import javax.faces.flow.FlowNode;
+import javax.faces.flow.MethodCallNode;
 import javax.faces.flow.SwitchNode;
 import javax.faces.flow.ViewNode;
 import javax.faces.view.ViewDeclarationLanguage;
@@ -480,6 +483,11 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             caseStruct = findSwitchMatch(ctx, fromAction, outcome);
         }
 
+        // If we still don't have a match, see if this is a method-call
+        if (null == caseStruct && null != fromAction && null != outcome) {
+            caseStruct = findMethodCallMatch(ctx, fromAction, outcome);
+        }
+
         // no navigation case fo
         if (caseStruct == null && outcome != null && development) {
             String key;
@@ -861,6 +869,33 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                     fromAction, outcome, null, result.viewId, 
                     null, false, false);
         }
+        return result;
+    }
+    
+    private CaseStruct findMethodCallMatch(FacesContext context, String fromAction, String outcome) {
+        CaseStruct result = null;
+        FlowHandler flowHandler = context.getApplication().getFlowHandler();
+        Flow currentFlow = flowHandler.getCurrentFlow(context);
+        if (null != currentFlow) {
+            FlowNode node = currentFlow.getNode(context, outcome);
+            if (node instanceof MethodCallNode) {
+                MethodCallNode methodCallNode = (MethodCallNode) node;
+                MethodExpression me = methodCallNode.getMethodExpression();
+                if (null != me) {
+                    Object invokeResult = me.invoke(context.getELContext(), null);
+                    if (null == invokeResult) {
+                        ValueExpression ve = methodCallNode.getOutcome();
+                        if (null != ve) {
+                            invokeResult  = ve.getValue(context.getELContext());
+                        }
+                    }
+                    outcome = (String) invokeResult;
+                    result = synthesizeCaseStruct(context, currentFlow, fromAction, outcome);
+                }
+            }
+        }
+        
+
         return result;
     }
     

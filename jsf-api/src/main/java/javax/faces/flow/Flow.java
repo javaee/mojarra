@@ -70,6 +70,7 @@ public class Flow implements Serializable {
     private String id;
     private String startNodeId;
     private List<ViewNode> views;
+    private List<MethodCallNode> methodCalls;
     private ConcurrentHashMap<String,NavigationCase> returns = new ConcurrentHashMap<String, NavigationCase>();
     private ConcurrentHashMap<String,SwitchNode> switches = new ConcurrentHashMap<String, SwitchNode>();
     private MethodExpression initializer;
@@ -205,18 +206,26 @@ public class Flow implements Serializable {
     public Map<String,SwitchNode> getSwitches(FacesContext context) {
         return switches;
     }
+
+    public List<MethodCallNode> getMethodCalls(FacesContext context) {
+        return methodCalls;
+    }
+
+    public void setMethodCalls(List<MethodCallNode> methodCalls) {
+        this.methodCalls = methodCalls;
+    }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Graph navigation">       
     
-    public FlowNode getNode(FacesContext context, String viewNodeId) {
+    public FlowNode getNode(FacesContext context, String nodeId) {
         List<ViewNode> myViews = getViews();
         FlowNode result = null;
         
         if (null != myViews) {
             for (ViewNode cur : myViews) {
-                if (viewNodeId.equals(cur.getId())) {
+                if (nodeId.equals(cur.getId())) {
                     result = cur;
                     break;
                 }
@@ -224,7 +233,16 @@ public class Flow implements Serializable {
         }
         if (null == result) {
             Map<String, SwitchNode> mySwitches = getSwitches(context);
-            result = mySwitches.get(viewNodeId);
+            result = mySwitches.get(nodeId);
+        }
+        if (null == result) {
+            List<MethodCallNode> myMethods = getMethodCalls(context);
+            for (MethodCallNode cur : myMethods) {
+                if (nodeId.equals(cur.getId())) {
+                    result = cur;
+                    break;
+                }
+            }
         }
         
         return result;
