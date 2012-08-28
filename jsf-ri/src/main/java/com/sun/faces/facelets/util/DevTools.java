@@ -88,7 +88,6 @@ import java.util.logging.Level;
  * the namespace <code>http://java.sun.com/mojarra/private/functions</code>
  * </p>
  *
- * @see com.sun.faces.application.ApplicationAssociate#createCompiler(com.sun.faces.config.WebConfiguration)
  *
  */
 public final class DevTools {

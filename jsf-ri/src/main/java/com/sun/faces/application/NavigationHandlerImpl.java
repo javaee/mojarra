@@ -365,11 +365,13 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     private void initializeNavigationFromFlowThreadSafe(FacesContext context, Flow toInspect) {
         assert(null != navigationMaps);
         synchronized (this) {
-            NavigationMap navMap = null;
             Map<String, SwitchNode> switches = toInspect.getSwitches(context);
             String flowId = toInspect.getId();
             // Is there an existing NavigationMap for this flowId
             if (navigationMaps.containsKey(flowId)) {
+                if (logger.isLoggable(Level.INFO)) {
+                    logger.log(Level.INFO, "PENDING(edburns): merge existing map");
+                }
                 
             } else {
                 if (!switches.isEmpty()) {
