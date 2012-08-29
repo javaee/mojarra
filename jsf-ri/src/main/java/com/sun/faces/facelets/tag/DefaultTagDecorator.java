@@ -209,6 +209,7 @@ class DefaultTagDecorator implements TagDecorator {
 
             for (TagAttribute attribute : original.getAll()) {
                 TagAttribute converted = convertTagAttribute(attribute);
+                // avoid duplicates
                 attributes.put(converted.getQName(), converted);
             }
 
