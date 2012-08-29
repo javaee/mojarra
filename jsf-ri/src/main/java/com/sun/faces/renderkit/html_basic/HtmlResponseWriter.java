@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -117,9 +117,6 @@ public class HtmlResponseWriter extends ResponseWriter {
 
     // flag to indicate that we're writing a 'style' element
     private boolean isStyle;
-
-    // flag to indicate that we're inside a 'script' element
-    private boolean inScript;
 
     // flag to indicate that we're writing a 'src' attribute as part of
     // 'script' or 'style' element
@@ -443,15 +440,8 @@ public class HtmlResponseWriter extends ResponseWriter {
                   MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "name"));
         }
 
-        if ("script".equalsIgnoreCase(name)) {
-            inScript = false;
-        }
-
         // always turn escaping back on once an element ends
-        // if we are not in a script element
-        if (!inScript) {
-            dontEscape = false;
-        }
+        dontEscape = false;
 
         isXhtml = getContentType().equals(
             RIConstants.XHTML_CONTENT_TYPE);
@@ -1182,7 +1172,6 @@ public class HtmlResponseWriter extends ResponseWriter {
 
     private boolean isScriptOrStyle(String name) {
         if ("script".equalsIgnoreCase(name)) {
-            inScript = true;
             isScript = true;
             dontEscape = true;
         } else if ("style".equalsIgnoreCase(name)) {
@@ -1191,10 +1180,7 @@ public class HtmlResponseWriter extends ResponseWriter {
         } else {
             isScript = false;
             isStyle = false;
-            // if we are still in a script element we don't want to escape
-            if (!inScript) {
-                dontEscape = false;
-            }
+            dontEscape = false;
         }
 
         return (isScript || isStyle);
