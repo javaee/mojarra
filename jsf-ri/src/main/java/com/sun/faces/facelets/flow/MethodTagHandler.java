@@ -61,7 +61,8 @@ public class MethodTagHandler extends TagHandlerImpl {
             MethodCallNode cur = MethodCallTagHandler.getCurrentMethodCall(ctx);
             ExpressionFactory expressionFactory = ctx.getFacesContext().getApplication().getExpressionFactory();
             String expressionString = this.nextHandler.toString();
-            MethodExpression me = expressionFactory.createMethodExpression(ctx, expressionString, Object.class, null);
+            // PENDING(edburns) how do parameters work here?
+            MethodExpression me = expressionFactory.createMethodExpression(ctx, expressionString, Object.class, new Class [] {});
             cur.setMethodExpression(me);
             
         }
