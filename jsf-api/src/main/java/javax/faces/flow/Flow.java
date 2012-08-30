@@ -73,8 +73,11 @@ public class Flow implements Serializable {
     private List<MethodCallNode> methodCalls;
     private ConcurrentHashMap<String,NavigationCase> returns = new ConcurrentHashMap<String, NavigationCase>();
     private ConcurrentHashMap<String,SwitchNode> switches = new ConcurrentHashMap<String, SwitchNode>();
+    private ConcurrentHashMap<String,FacesFlowCallNode> facesFlowCalls = new ConcurrentHashMap<String, FacesFlowCallNode>();
+    private ConcurrentHashMap<String,FacesFlowCallNode> facesFlowCallsByTargetFlowId = new ConcurrentHashMap<String, FacesFlowCallNode>();
     private MethodExpression initializer;
     private MethodExpression finalizer;
+    private boolean hasBeenInitialized = false;
     
     // </editor-fold>
 
@@ -171,7 +174,7 @@ public class Flow implements Serializable {
         this.startNodeId = defaultNodeId;
     }
 
-    public MethodExpression getFinalizer() {
+    public MethodExpression getFinalizer(FacesContext context) {
         return finalizer;
     }
 
@@ -179,7 +182,8 @@ public class Flow implements Serializable {
         this.finalizer = finalizer;
     }
 
-    public MethodExpression getInitializer() {
+    public MethodExpression getInitializer(FacesContext context) {
+        init(context);
         return initializer;
     }
 
@@ -205,6 +209,16 @@ public class Flow implements Serializable {
     
     public Map<String,SwitchNode> getSwitches(FacesContext context) {
         return switches;
+    }
+    
+    public Map<String,FacesFlowCallNode> getFacesFlowCalls(FacesContext context) {
+        return facesFlowCalls;
+    }
+    
+    public FacesFlowCallNode getFacesFlowCallByTargetFlowId(FacesContext context, String targetFlowId) {
+        FacesFlowCallNode result = facesFlowCallsByTargetFlowId.get(targetFlowId);
+        
+        return result;
     }
 
     public List<MethodCallNode> getMethodCalls(FacesContext context) {
@@ -244,6 +258,10 @@ public class Flow implements Serializable {
                 }
             }
         }
+        if (null == result) {
+            Map<String, FacesFlowCallNode> myCalls = getFacesFlowCalls(context);
+            result = myCalls.get(nodeId);
+        }
         
         return result;
         
@@ -272,4 +290,25 @@ public class Flow implements Serializable {
     }
     
     // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Helpers">
+    
+    private void init(FacesContext context) {
+        if (hasBeenInitialized) {
+            return;
+        }
+        hasBeenInitialized = true;
+        
+        // Populate lookup data structures.
+        FacesFlowCallNode curNode = null;
+        String curTargetFlowId = null;
+        for (Map.Entry<String,FacesFlowCallNode> cur : facesFlowCalls.entrySet()) {
+            curNode = cur.getValue();
+            curTargetFlowId = curNode.getCalledFlowId(context);
+            facesFlowCallsByTargetFlowId.put(curTargetFlowId, curNode);
+        }
+    }
+    
+    // </editor-fold>
+
 }

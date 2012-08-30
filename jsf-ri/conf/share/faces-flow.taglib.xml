@@ -165,4 +165,32 @@
         <tag-name>method</tag-name>
         <handler-class>com.sun.faces.facelets.flow.MethodTagHandler</handler-class>
     </tag>
+   <tag>
+        <description><![CDATA[
+
+        ]]></description>
+        <tag-name>faces-flow-call</tag-name>
+        <handler-class>com.sun.faces.facelets.flow.FacesFlowCallTagHandler</handler-class>
+    </tag>
+   <tag>
+        <description><![CDATA[
+
+        ]]></description>
+        <tag-name>faces-flow-reference</tag-name>
+        <handler-class>com.sun.faces.facelets.flow.FacesFlowReferenceTagHandler</handler-class>
+    </tag>
+   <tag>
+        <description><![CDATA[
+
+        ]]></description>
+        <tag-name>faces-flow-id</tag-name>
+        <handler-class>com.sun.faces.facelets.flow.FacesFlowIdTagHandler</handler-class>
+    </tag>
+   <tag>
+        <description><![CDATA[
+
+        ]]></description>
+        <tag-name>faces-flow-document-id</tag-name>
+        <handler-class>com.sun.faces.facelets.flow.FacesFlowDocumentIdTagHandler</handler-class>
+    </tag>
 </facelet-taglib>

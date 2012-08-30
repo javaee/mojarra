@@ -67,6 +67,7 @@ import javax.faces.application.ConfigurableNavigationHandler;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIViewAction;
 import javax.faces.context.Flash;
+import javax.faces.flow.FacesFlowCallNode;
 import javax.faces.flow.Flow;
 import javax.faces.flow.FlowHandler;
 import javax.faces.flow.FlowNode;
@@ -488,6 +489,11 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             caseStruct = findMethodCallMatch(ctx, fromAction, outcome);
         }
 
+        // If we still don't have a match, see if this is a faces-flow-call
+        if (null == caseStruct && null != fromAction && null != outcome) {
+            caseStruct = findFacesFlowCallMatch(ctx, fromAction, outcome);
+        }
+
         // no navigation case fo
         if (caseStruct == null && outcome != null && development) {
             String key;
@@ -898,6 +904,34 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
 
         return result;
     }
+    
+    private CaseStruct findFacesFlowCallMatch(FacesContext context, String fromAction, String outcome) {
+        CaseStruct result = null;
+
+        FlowHandler flowHandler = context.getApplication().getFlowHandler();
+        Flow currentFlow = flowHandler.getCurrentFlow(context);
+        if (null != currentFlow) {
+            FlowNode node = currentFlow.getNode(context, outcome);
+            if (node instanceof FacesFlowCallNode) {
+                FacesFlowCallNode facesFlowCallNode = (FacesFlowCallNode) node;
+                String flowId = facesFlowCallNode.getCalledFlowId(context);
+                String flowDocumentId = facesFlowCallNode.getCalledFlowDocumentId(context);
+
+                if (null != flowId) {
+                    if (null == flowDocumentId) {
+                        flowDocumentId = flowId + "/" + flowId + ".xhtml";
+                    }
+                    ViewHandler vh = context.getApplication().getViewHandler();
+                    loadFlowDefinition(context, vh, flowDocumentId);
+                    Flow newFlow = flowHandler.getFlow(context, flowDocumentId, flowId);
+                    
+                    result = synthesizeCaseStruct(context, newFlow, fromAction, flowId);
+                }
+            }
+        }
+        
+        return result;
+    }    
     
     private static final String DISCERNING_FLOW_ROUTING_KEY = NavigationHandlerImpl.class.getPackage().getName();
     
