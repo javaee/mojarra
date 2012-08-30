@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.test.agnostic.renderKit.basic; 
+package com.sun.faces.test.agnostic.ajax; 
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -47,7 +47,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import org.junit.*;
 import static org.junit.Assert.*;
 
-public class Issue2503IT {
+public class Issue2443IT {
 
     /**
      * Stores the web URL.
@@ -72,15 +72,15 @@ public class Issue2503IT {
 
     // ------------------------------------------------------------ Test Methods
 
+    /**
+     * This test verifies that an attribute nameed 'value' can be successfully updated
+     * from a partial response (over Ajax). 
+     */
     @Test
-    public void testEscape() throws Exception {
-
-        String expected1 = "@import url(\"resources/import1.css\");";
-        String expected2 = "Tom &amp; Jerry";
-
-        HtmlPage page = webClient.getPage(webUrl+"faces/outputEscape1.xhtml");
-        assertTrue(page.asXml().contains(expected1));
-        assertTrue(page.asXml().contains(expected2));
+    public void testQuotesInScript() throws Exception {
+        String expectedText = '"' + "<div></div>" + '"' + ";";
+        HtmlPage page = webClient.getPage(webUrl+"faces/scriptQuote.xhtml");
+        assertTrue(page.asXml().contains(expectedText));
     }
-
 }
+
