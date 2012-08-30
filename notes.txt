@@ -1,0 +1,27 @@
+Notes on Frank meeting
+
+Open issues:
+
+- Our decision to standardize TagDecorator, but not provide default
+  implementations for its helper classes has led to this feature being
+  underutilized.
+
+- It may be the case that we need to expose these helper classes as part
+  of the work that is being done in 1111-passThroughElement.
+
+- On line 127 of DefaultTagDecorator, we convert anything that we
+  already don't understand to an h:panelGroup.  This assumption will not
+  be valid in all cases, so we need a more flexible solution.  Perhaps
+  we can fall back to the javax.faces.passthrough renderer solution.
+
+- How do we deal with the case when people try to use the feature
+  outside the box in which they are allowed to use it?  For example
+  using <form method="GET">?
+
+- Revisit the contract between DefaultTagDecorator and
+  HtmlResponseWriter.
+
+Test files:
+
+test/agnostic/renderKit/passthrough/src/main/webapp/complex.xhtml 
+test/agnostic/renderKit/passthrough/src/main/webapp/button.xhtml  
