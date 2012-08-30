@@ -118,6 +118,12 @@ public class HtmlResponseWriter extends ResponseWriter {
     // flag to indicate that we're writing a 'style' element
     private boolean isStyle;
 
+    // flag to indicate if we are within a script element
+    private boolean withinScript;
+
+    // flag to indicate if we are within a style element
+    private boolean withinStyle;
+
     // flag to indicate that we're writing a 'src' attribute as part of
     // 'script' or 'style' element
     private boolean scriptOrStyleSrc;
@@ -440,8 +446,21 @@ public class HtmlResponseWriter extends ResponseWriter {
                   MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "name"));
         }
 
+        // Keep track when we are exiting a script or style element
+        // for escaping purposes.
+
+        if ("script".equalsIgnoreCase(name)) {
+            withinScript = false;
+        }
+
+        if ("style".equalsIgnoreCase(name)) {
+            withinStyle = false;
+        }
+
         // always turn escaping back on once an element ends
-        dontEscape = false;
+        if (!withinScript && !withinStyle) {
+            dontEscape = false;
+        }
 
         isXhtml = getContentType().equals(
             RIConstants.XHTML_CONTENT_TYPE);
@@ -604,6 +623,18 @@ public class HtmlResponseWriter extends ResponseWriter {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
                   MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "name"));
         }
+
+        // Keep track if we are in either a script or style element so we
+        // know we do not want to escape.
+
+        if ("script".equalsIgnoreCase(name)) {
+            withinScript = true;
+        }
+
+        if ("style".equalsIgnoreCase(name)) {
+            withinStyle = true;
+        }
+
         closeStartIfNecessary();
         isScriptOrStyle(name);
         scriptOrStyleSrc = false;
@@ -1180,7 +1211,9 @@ public class HtmlResponseWriter extends ResponseWriter {
         } else {
             isScript = false;
             isStyle = false;
-            dontEscape = false;
+            if (!withinScript && !withinStyle) {
+                dontEscape = false;
+            }
         }
 
         return (isScript || isStyle);
