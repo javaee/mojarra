@@ -350,8 +350,6 @@ public class ClientSideStateHelper extends StateHelper {
 
             Object[] stateToWrite = (Object[]) state;
 
-            //noinspection NonSerializableObjectPassedToObjectStream
-            oos.writeObject(stateToWrite[0]);
             
             if (debugSerializedState) {
                 ByteArrayOutputStream discard = new ByteArrayOutputStream();
@@ -368,7 +366,7 @@ public class ClientSideStateHelper extends StateHelper {
             }
             
             //noinspection NonSerializableObjectPassedToObjectStream
-            oos.writeObject(stateToWrite[1]);
+            oos.writeObject(stateToWrite[0]);
             
             if (debugSerializedState) {
                 ByteArrayOutputStream discard = new ByteArrayOutputStream();
@@ -386,6 +384,8 @@ public class ClientSideStateHelper extends StateHelper {
                 
             }
             
+            //noinspection NonSerializableObjectPassedToObjectStream
+            oos.writeObject(stateToWrite[1]);
 
             oos.flush();
             oos.close();
