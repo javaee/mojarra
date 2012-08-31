@@ -38,8 +38,9 @@
  * holder.
  */
 
-package javax.faces.bean;
+package javax.faces.flow;
 
+import javax.faces.bean.*;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
@@ -47,24 +48,14 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
 
 /**
- * <p class="changed_added_2_0"><span
- * class="changed_modified_2_2">When</span> this annotation, along with
- * {@link ManagedBean} is found on a class, the runtime must act as if a
- * <code>&lt;managed-bean-scope&gt;view&lt;managed-bean-scope&gt;</code>
- * element was declared for the corresponding managed bean.</p>
+ * <p class="changed_added_2_2">When this annotation, along with {@link
+ * javax.inject.Named} is found on a class, the runtime must place the
+ * bean in a CDI scope that remains active as long as the user remains
+ * on the same view, including reloads or navigations from the current
+ * view immediately, with no intervening views, back to the same view,
+ * even via an HTTP GET request.</p>
 
- * <p class="changed_added_2_2">The annotations in this package may be
- * deprecated in a future version of this specification because they
- * duplicate functionality provided by other specifications included in
- * JavaEE.  When possible, the corresponding annotations from the
- * appropriate Java EE specification should be used in preference to
- * these annotations.  In this case, the corresponding annotation is
- * {@link javax.faces.flow.ViewScoped}.  The functionality of this
- * corresponding annotation is identical to this one, but it is
- * implemented as a CDI custom scope.</p>
-
- *
- * @since 2.0
+ * @since 2.2
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)

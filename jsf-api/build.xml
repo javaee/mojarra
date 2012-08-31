@@ -802,7 +802,6 @@ javax.faces.level=ALL
                 <exclude name="**/NoneScoped.java" />
                 <exclude name="**/RequestScoped.java" />
                 <exclude name="**/SessionScoped.java" />
-                <exclude name="**/ViewScoped.java" />
             </fileset>
             <fileset dir="${build.generate.dir}">
                 <include name="**/*.java"/>
@@ -830,7 +829,7 @@ javax.faces.level=ALL
                 <include name="**/NoneScoped.java" />
                 <include name="**/RequestScoped.java" />
                 <include name="**/SessionScoped.java" />
-                <include name="**/ViewScoped.java" />
+                <include name="**/javax/faces/bean/ViewScoped.java" />
             </fileset>
             <classpath refid="compile.classpath"/>
         </javadoc>
