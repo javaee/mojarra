@@ -49,7 +49,7 @@ import java.lang.annotation.Inherited;
 /**
  * <p class="changed_added_2_0"><span
  * class="changed_modified_2_2">When</span> this annotation, along with
- * {@link ManagedBean} is found on a class, the runtime must act as if a
+ * {@code ManagedBean} is found on a class, the runtime must act as if a
  * <code>&lt;managed-bean-scope&gt;view&lt;managed-bean-scope&gt;</code>
  * element was declared for the corresponding managed bean.</p>
 
@@ -59,7 +59,7 @@ import java.lang.annotation.Inherited;
  * JavaEE.  When possible, the corresponding annotations from the
  * appropriate Java EE specification should be used in preference to
  * these annotations.  In this case, the corresponding annotation is
- * {@link javax.faces.flow.ViewScoped}.  The functionality of this
+ * {@code javax.faces.flow.ViewScoped}.  The functionality of this
  * corresponding annotation is identical to this one, but it is
  * implemented as a CDI custom scope.</p>
 

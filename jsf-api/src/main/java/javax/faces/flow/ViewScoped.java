@@ -48,7 +48,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
 
 /**
- * <p class="changed_added_2_2">When this annotation, along with {@link
+ * <p class="changed_added_2_2">When this annotation, along with {@code
  * javax.inject.Named} is found on a class, the runtime must place the
  * bean in a CDI scope that remains active as long as the user remains
  * on the same view, including reloads or navigations from the current
