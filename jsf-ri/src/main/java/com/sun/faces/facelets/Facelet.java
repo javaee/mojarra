@@ -58,11 +58,8 @@
 
 package com.sun.faces.facelets;
 
-import javax.el.ELException;
-import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.view.facelets.FaceletException;
 import java.io.IOException;
 
 /**
