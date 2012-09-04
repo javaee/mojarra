@@ -62,11 +62,9 @@ import java.io.IOException;
 import java.net.URL;
 
 import javax.el.ELContext;
-import javax.el.ELException;
 import javax.el.ExpressionFactory;
 import javax.el.FunctionMapper;
 import javax.el.VariableMapper;
-import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
