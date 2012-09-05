@@ -40,10 +40,6 @@
 
 package javax.faces.model;
 
-
-import javax.faces.FacesException;
-
-
 /**
  * <p><strong>ScalarDataModel</strong> is a convenience implementation of
  * {@link DataModel} that wraps an individual Java object.</p>
