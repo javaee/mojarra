@@ -42,7 +42,6 @@ package javax.faces.model;
 
 
 import java.util.SortedMap;
-import javax.faces.FacesException;
 import javax.servlet.jsp.jstl.sql.Result;
 
 
