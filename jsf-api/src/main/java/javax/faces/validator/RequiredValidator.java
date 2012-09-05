@@ -40,7 +40,6 @@
 
 package javax.faces.validator;
 
-import java.util.List;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.application.FacesMessage;
