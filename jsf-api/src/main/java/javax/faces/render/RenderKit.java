@@ -47,9 +47,7 @@ import javax.faces.context.ResponseStream;
 import java.io.Writer;
 import java.io.OutputStream;
 import java.util.Iterator;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 
 
