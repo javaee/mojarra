@@ -41,7 +41,6 @@
 package javax.faces.validator;
 
 
-import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import java.util.EventListener;
