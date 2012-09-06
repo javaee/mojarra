@@ -798,6 +798,29 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
         };
 
         /**
+         * Find view state field for a given form.
+         * @param form
+         * @ignore
+         */
+        var getViewStateElement = function getViewStateElement(form) {
+            var viewStateElement = form['javax.faces.ViewState'];
+
+            if (viewStateElement) {
+                return viewStateElement;
+            } else {
+                var formElements = form.elements;
+                for (var i = 0, length = formElements.length; i < length; i++) {
+                    var formElement = formElements[i];
+                    if (formElement.name == 'javax.faces.ViewState') {
+                        return formElement;
+                    }
+                }
+            }
+
+            return undefined;
+        };
+
+        /**
          * Do update.
          * @param element element to update
          * @param context context of request
@@ -827,7 +850,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                     // we're going to just return silently.
                     return;
                 }
-                var field = stateForm.elements["javax.faces.ViewState"];
+                var field = getViewStateElement(stateForm);
                 if (typeof field == 'undefined') {
                     field = document.createElement("input");
                     field.type = "hidden";
@@ -847,7 +870,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                             // the form is not the one that caused the submission..
                             var f = document.forms[temp[i]];
                             if (typeof f !== 'undefined' && f !== null && f.id !== context.formid) {
-                                field = f.elements["javax.faces.ViewState"];
+                                field = getViewStateElement(f);
                                 if (typeof field === 'undefined') {
                                     field = document.createElement("input");
                                     field.type = "hidden";
