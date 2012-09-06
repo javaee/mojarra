@@ -41,7 +41,6 @@
 package javax.faces.event;
 
 import javax.el.ELContext;
-import javax.el.ELException;
 import javax.el.MethodExpression;
 import javax.el.MethodNotFoundException;
 import javax.faces.context.FacesContext;
