@@ -42,7 +42,6 @@ package javax.faces.component.behavior;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.Map;
 
 /**
