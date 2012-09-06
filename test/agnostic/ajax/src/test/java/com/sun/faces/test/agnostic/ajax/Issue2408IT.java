@@ -83,7 +83,6 @@ public class Issue2408IT {
      * Component over Ajax. 
      */
     @Test
-    @Ignore
     public void testSelectManyCheckboxInComposite() throws Exception {
         HtmlPage page = webClient.getPage(webUrl+"faces/selectManyCheckboxInComposite.xhtml");
         final List<HtmlCheckBoxInput> checkBoxes = new ArrayList();
@@ -118,7 +117,6 @@ public class Issue2408IT {
      * Component over Ajax. The components in the page have ids.
      */
     @Test
-    @Ignore
     public void testSelectManyCheckboxIdsInComposite() throws Exception {
         HtmlPage page = webClient.getPage(webUrl+"faces/selectManyCheckboxIdsInComposite.xhtml");
         
@@ -147,7 +145,6 @@ public class Issue2408IT {
      * This test verifies correct function of SelectManyCheckbox Component over Ajax.
      */
     @Test
-    @Ignore
     public void testSelectManyCheckboxNoComposite() throws Exception {
         HtmlPage page = webClient.getPage(webUrl+"faces/selectManyCheckboxNoComposite.xhtml");
         final List<HtmlCheckBoxInput> checkBoxes = new ArrayList();
@@ -182,7 +179,6 @@ public class Issue2408IT {
      * Component over Ajax.
      */
     @Test
-    @Ignore
     public void testSelectOneRadioInComposite() throws Exception {
         HtmlPage page = webClient.getPage(webUrl+"faces/selectOneRadioInComposite.xhtml");
         final List<HtmlRadioButtonInput> radios = new ArrayList();
@@ -218,7 +214,6 @@ public class Issue2408IT {
      * Component over Ajax. The components in the page have ids.
      */
     @Test
-    @Ignore
     public void testSelectOneRadioIdsInComposite() throws Exception {
         HtmlPage page = webClient.getPage(webUrl+"faces/selectOneRadioIdsInComposite.xhtml");
 
@@ -247,7 +242,6 @@ public class Issue2408IT {
      * This test verifies correct function of SelectOneRadio Component over Ajax.
      */
     @Test
-    @Ignore
     public void testSelectOneRadioNoComposite() throws Exception {
         HtmlPage page = webClient.getPage(webUrl+"faces/selectOneRadioNoComposite.xhtml");
         final List<HtmlRadioButtonInput> radios = new ArrayList();

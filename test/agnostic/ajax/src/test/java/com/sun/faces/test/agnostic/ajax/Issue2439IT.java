@@ -77,7 +77,6 @@ public class Issue2439IT {
      * from a partial response (over Ajax). 
      */
     @Test
-    @Ignore
     public void testUpdateAttributeNamedValue() throws Exception {
         String expectedString1 = "<input id="+'"'+"form1:input1"+'"'+" type="+'"'+"text"+'"'+" name="+'"'+"form1:input1"+'"'+"/>";
         

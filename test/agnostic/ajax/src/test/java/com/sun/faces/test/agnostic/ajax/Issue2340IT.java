@@ -77,7 +77,6 @@ public class Issue2340IT {
     // ------------------------------------------------------------ Test Methods
 
     @Test
-    @Ignore
     public void testCommandLinkRadio() throws Exception {
         HtmlPage page = webClient.getPage(webUrl+"faces/commandLinkRadio.xhtml");
         HtmlAnchor anchor = (HtmlAnchor)page.getElementById("testLink");
