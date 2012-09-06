@@ -70,7 +70,6 @@ public class Issue2041IT {
     }
 
     @Test
-    @Ignore
     public void testIssue2041() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/issue2041.xhtml");
 
