@@ -160,7 +160,7 @@ public abstract class StateManager {
      * <p class="changed_added_2_2">
      * If this param is set, and calling toLowerCase().equals("true") on a
      * String representation of its value returns true, and the
-     * javax.faces.STATE_SAVING_METHOD is set to “server” (as indicated
+     * javax.faces.STATE_SAVING_METHOD is set to "server" (as indicated
      * below), the server state must be guaranteed to be Serializable such
      * that the aggregate state implements java.io.Serializable. The intent
      * of this parameter is to ensure that the act of writing out the state

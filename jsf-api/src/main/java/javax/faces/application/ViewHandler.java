@@ -220,12 +220,12 @@ public abstract class ViewHandler {
     /**
      * <p class="changed_added_2_2">
      * If this param is set, the runtime must interpret it as a semicolon (;)
-     * separated list of paths, starting with “/” (without the quotes). The
+     * separated list of paths, starting with "/" (without the quotes). The
      * runtime must interpret each entry in the list as a path relative to
      * the web application root and interpret the file found at that path as
      * a facelet tag library, conforming to the facelet taglibrary schema and
-     * expose the tags therein according to Section “Facelet Tag Library
-     * mechanism”. The runtime must also consider the facelets.LIBRARIES
+     * expose the tags therein according to Section "Facelet Tag Library
+     * mechanism". The runtime must also consider the facelets.LIBRARIES
      * param name as an alias to this param name for backwards compatibility
      * with existing facelets tag libraries.     
      * </p>
@@ -258,8 +258,8 @@ public abstract class ViewHandler {
      * If this param is set, and calling toLowerCase().equals("true") on a
      * String representation of its value returns true, the default
      * ViewHandler must behave as specified in the latest 1.2 version of this
-     * specification. Any behavior specified in Section “Default
-     * ViewDeclarationLanguage Implementation” of the spec prose document and
+     * specification. Any behavior specified in Section "Default
+     * ViewDeclarationLanguage Implementation" of the spec prose document and
      * implemented in the default ViewHandler that pertains to handling
      * requests for pages authored in the JavaServer Faces View Declaration
      * Language must not be executed by the runtime.

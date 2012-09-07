@@ -139,7 +139,7 @@ public interface Converter {
      * String representation of its value returns true,
      * Application.createConverter() must guarantee that the default for the
      * timezone of all javax.faces.convert.DateTimeConverter instances must
-     * be equal to TimeZone.getDefault() instead of “GMT”.
+     * be equal to TimeZone.getDefault() instead of "GMT".
      * </p>
      * 
      * @since 2.0
