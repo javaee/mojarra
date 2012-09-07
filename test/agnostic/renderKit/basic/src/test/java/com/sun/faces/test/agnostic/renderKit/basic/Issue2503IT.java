@@ -40,6 +40,7 @@
 
 package com.sun.faces.test.agnostic.renderKit.basic; 
 
+import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
@@ -78,6 +79,11 @@ public class Issue2503IT {
         String expected1 = "@import url(\"resources/import1.css\");";
         String expected2 = "Tom &amp; Jerry";
 
+        /*
+         * We don't want this to be simulated as an IE browser since IE
+         * does some automatic replacing.
+         */
+        webClient = new WebClient(BrowserVersion.FIREFOX_3_6);
         HtmlPage page = webClient.getPage(webUrl+"faces/outputEscape1.xhtml");
         assertTrue(page.asXml().contains(expected1));
         assertTrue(page.asXml().contains(expected2));
