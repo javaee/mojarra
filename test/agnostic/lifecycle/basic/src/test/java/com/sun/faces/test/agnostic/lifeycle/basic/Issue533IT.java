@@ -61,12 +61,12 @@ public class Issue533IT {
         webClient.closeAllWindows();
     }
 
+    // http://java.net/jira/browse/JAVASERVERFACES-2509
     @Ignore
     @Test
     public void testConfigurationEffective() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
         String pageText = page.getBody().asText();
-        // PENDING(mriem): make this pass
         assertTrue(pageText.contains("MyPhaseListener called"));
     }
 }
