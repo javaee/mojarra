@@ -42,6 +42,8 @@ package com.sun.faces.renderkit.html_basic;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.reflect.Field;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIOutput;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -66,5 +68,59 @@ public class HtmlResponseWriterTest {
 
         clonedWriter = (HtmlResponseWriter) responseWriter.cloneWithWriter(writer);
         assertFalse((Boolean) field.get(clonedWriter));
+    }
+
+    /**
+     * Test CDATA.
+     */
+    @Test
+    public void testCDATAWithXHTML() throws Exception {
+        UIComponent componentForElement = new UIOutput();
+        String expected = "<script>\n//<![CDATA[\n\n function queueEvent() {\n  return false;\n}\n\n\n//]]>\n</script>";
+
+        // Case 1 start is // end is //
+        StringWriter stringWriter = new StringWriter();
+        HtmlResponseWriter responseWriter = new HtmlResponseWriter(stringWriter, "application/xhtml+xml", "UTF-8");
+        responseWriter.startElement("script", componentForElement);
+        responseWriter.write("    // <![CDATA[\n function queueEvent() {\n  return false;\n}\n\n//   ]]>  \n");
+        responseWriter.endElement("script");
+        responseWriter.flush();
+        assertEquals(expected, stringWriter.toString());
+
+        // Case 2 start is // end is /* */
+        stringWriter = new StringWriter();
+        responseWriter = new HtmlResponseWriter(stringWriter, "application/xhtml+xml", "UTF-8");
+        responseWriter.startElement("script", componentForElement);
+        responseWriter.write("    // <![CDATA[\n function queueEvent() {\n  return false;\n}\n\n/*\n  ]]> \n*/ \n");
+        responseWriter.endElement("script");
+        responseWriter.flush();
+        assertEquals(expected, stringWriter.toString());
+
+        // Case 3 start is /* */  end is /* */
+        stringWriter = new StringWriter();
+        responseWriter = new HtmlResponseWriter(stringWriter, "application/xhtml+xml", "UTF-8");
+        responseWriter.startElement("script", componentForElement);
+        responseWriter.write("    /* \n <![CDATA[ \n*/\n function queueEvent() {\n  return false;\n}\n\n/*\n  ]]> \n*/ \n");
+        responseWriter.endElement("script");
+        responseWriter.flush();
+        assertEquals(expected, stringWriter.toString());
+
+        // Case 4 start is /* */  end is //
+        stringWriter = new StringWriter();
+        responseWriter = new HtmlResponseWriter(stringWriter, "application/xhtml+xml", "UTF-8");
+        responseWriter.startElement("script", componentForElement);
+        responseWriter.write("    /* \n <![CDATA[ \n*/\n function queueEvent() {\n  return false;\n}\n\n//\n  ]]>\n");
+        responseWriter.endElement("script");
+        responseWriter.flush();
+        assertEquals(expected, stringWriter.toString());
+
+        // Case 5 start is /* */  end is //
+        stringWriter = new StringWriter();
+        responseWriter = new HtmlResponseWriter(stringWriter, "application/xhtml+xml", "UTF-8");
+        responseWriter.startElement("script", componentForElement);
+        responseWriter.write("    /* \n <![CDATA[ \n*/\n function queueEvent() {\n  return false;\n}\n\n//\n  ]]>\n");
+        responseWriter.endElement("script");
+        responseWriter.flush();
+        assertEquals(expected, stringWriter.toString());
     }
 }
