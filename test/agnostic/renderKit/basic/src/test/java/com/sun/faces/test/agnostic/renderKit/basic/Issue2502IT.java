@@ -40,6 +40,7 @@
 
 package com.sun.faces.test.agnostic.renderKit.basic; 
 
+import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
@@ -79,6 +80,11 @@ public class Issue2502IT {
         String expected2 = "&lt;i&gt;test2&lt;/i&gt;";
         String expected3 = "&lt;i&gt;test3&lt;/i&gt;";
 
+        /*
+         * We don't want this to be simulated as an IE browser since IE
+         * does some automatic replacing.
+         */
+        webClient = new WebClient(BrowserVersion.FIREFOX_3_6);
         HtmlPage page = webClient.getPage(webUrl+"faces/outputEscape.xhtml");
         assertTrue(page.asXml().contains(expected1));
         assertTrue(page.asXml().contains(expected2));
