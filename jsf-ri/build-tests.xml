@@ -506,8 +506,6 @@
                  <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.util.TestHtmlUtils"/>
                  <test todir="${impl.test.results.dir}"
-                      name="com.sun.faces.renderkit.html_basic.HtmlResponseWriterTest"/>
-                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.xml.ParseXMLTestCase"/>
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.facelets.util.ClasspathTestCase"/>  
