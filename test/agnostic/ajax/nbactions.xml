@@ -8,7 +8,7 @@
             </goals>
             <properties>
                 <test>${packageClassName}</test>
-                <integration.url>http://localhost:8080/test-agnostic-ajax</integration.url>
+                <integration.url>http://localhost:8080/test-agnostic-ajax/</integration.url>
             </properties>
         </action>
         <action>
@@ -22,7 +22,7 @@
                 <forkMode>once</forkMode>
                 <maven.surefire.debug>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address}</maven.surefire.debug>
                 <jpda.listen>true</jpda.listen>
-                <integration.url>http://localhost:8080/test-agnostic-ajax</integration.url>
+                <integration.url>http://localhost:8080/test-agnostic-ajax/</integration.url>
             </properties>
         </action>
     </actions>
