@@ -70,33 +70,67 @@
 
     <target name="install">
 
-<!--      <start.database />
-      <deploy.artifact
+      <start.database />
+      <echo message="Database started" />
+      
+      <if>
+        <os family="windows"/>
+        <then>
+          <non.ant.deploy.artifact
               artifact="${jsf.build.home}/jsf-demo/sandbox/scrumtoys2009/eclipseProject/target/scrumtoys.war"
-              appName="scrumtoys" />-->
-
+              appName="scrumtoys" />
+<!--          <echo message="sleeping for 2 minutes" />
+          <sleep minutes="2"/> -->
+        </then>
+        <else>
+          <deploy.artifact
+              artifact="${jsf.build.home}/jsf-demo/sandbox/scrumtoys2009/eclipseProject/target/scrumtoys.war"
+              appName="scrumtoys" />
+        </else>
+      </if>
     </target>    
 
     <target name="remove">
 
-<!--      <undeploy.artifact
-              artifact="${jsf.build.home}/jsf-demo/sandbox/scrumtoys2009/eclipseProject/target/scrumtoys.war"
-              appName="scrumtoys" />
-      <stop.database />-->
+      <undeploy.artifact artifact="${basedir}/target/scrumtoys.war"
+                appName="scrumtoys" />
+      <stop.database />
+      <echo message="Database stopped" />
 
     </target>    
+    
+    <target name="scrumtoys-check">
+      <var name="do.sleep" unset="true" />
+      <var name="deployment.host" unset="true" />
+      <var name="deployment.port" unset="true" />
+      <var name="path.with.leading.slash" unset="true" />
+      <var name="page.regexp" unset="true" />
+      
+      <property name="deployment.host" value="${container.host}" />
+      <property name="deployment.port" value="${container.port}" />
+      <property name="path.with.leading.slash" value="/scrumtoys/home.jsf" />
+      <property name="page.regexp" value="(?s).*Sign in to ScrumToys.*" />
+      <property name="deployment.retries" value="5" />
+      
+      <antcall target="deployment.check" />
+    </target>
 
-    <target name="test" depends="define.scenario.aware.port">
+    
 
-<!--      <jsf.junit context-path="/scrumtoys"
+    <target name="test" depends="scrumtoys-check,define.scenario.aware.port">
+      <retry retrycount="${deployment.retries}">
+        <sequential>
+          <echo message="TEST RETRY..." />
+          <jsf.junit context-path="/scrumtoys"
                  classpath-refid="1338.classpath"    
                  test-results-dir="${regression.test.results.dir}">
-          <tests>
-            <fileset dir="${basedir}/i_jsf_1338_htmlunit/target/classes"
-                     includes="com/sun/faces/regression/i_jsf_1338_htmlunit/ScrumToysTestCase.class"/> 
-          </tests>
-      </jsf.junit>-->
-
+            <tests>
+              <fileset dir="${basedir}/i_jsf_1338_htmlunit/target/classes"
+                   includes="com/sun/faces/regression/i_jsf_1338_htmlunit/ScrumToysTestCase.class"/> 
+            </tests>
+          </jsf.junit>
+        </sequential>
+      </retry>
     </target>    
 
 

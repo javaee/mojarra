@@ -161,5 +161,48 @@ ${applications.formatted}
        <property name="applications" 
                  value="${container-agnostic-applications},${applications-for-V3.1_no_cluster-only}" />
     </target>
+    
+    <target name="deployment.check">
+       <!-- this should be a macro, but macros cannot fail, or retry -->
 
+       <!-- overridable defaults: -->
+       <property name="sleep.seconds" value="10" />
+       
+        <echo>
+Testing http://${deployment.host}:${deployment.port}${path.with.leading.slash}
+For occurence of pattern ${page.regexp}.
+deployment.retries=${deployment.retries}
+sleep.seconds=${sleep.seconds}   
+        </echo>
+
+       <!-- make sure our helper property is unoccupied: -->
+       <fail if="do.sleep" />
+       
+       <retry retrycount="${deployment.retries}">
+           <sequential>
+               <local name=".sleep.seconds" />
+               <condition property=".sleep.seconds" value="${sleep.seconds}" else="0">
+                   <istrue value="${do.sleep}" />
+               </condition>
+               <sleep seconds="${.sleep.seconds}" />
+
+               <property name="do.sleep" value="true" />
+
+               <fail><condition>
+                   <resourcesmatch astext="true">
+                       <string value="" />
+                        <concat>
+                           <url url="http://${deployment.host}:${deployment.port}${path.with.leading.slash}" />
+                           <filterchain>
+                               <linecontainsregexp>
+                                   <regexp pattern="${page.regexp}" />
+                               </linecontainsregexp>
+                           </filterchain>
+                       </concat>
+                   </resourcesmatch>
+               </condition></fail>
+           </sequential>
+       </retry>
+    </target>
+    
 </project>
