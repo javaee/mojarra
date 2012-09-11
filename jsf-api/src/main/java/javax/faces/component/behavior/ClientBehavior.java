@@ -40,20 +40,10 @@
 
 package javax.faces.component.behavior;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.BehaviorEvent;
-import javax.faces.event.BehaviorListener;
 import javax.faces.render.ClientBehaviorRenderer;
-import javax.faces.render.RenderKit;
 
 /**
  * <p class="changed_added_2_0"><strong>ClientBehavior</strong> is the
