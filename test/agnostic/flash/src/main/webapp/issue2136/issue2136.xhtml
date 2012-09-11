@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Issue 2136</title>
+    </h:head>
+    <h:body>
+        <h:form id="form">
+            Value to submit:<h:inputText id="input" value="#{issue2136Bean.value}"/><br/>
+            <p>Submit with faces-redirect to page in different directory (Why does this not work?)</p>
+            <h:commandButton id="submit" action="/faces/issue2136b/issue2136b.xhtml?faces-redirect=true" value="Ok"/>
+        </h:form>
+    </h:body>
+</html>
