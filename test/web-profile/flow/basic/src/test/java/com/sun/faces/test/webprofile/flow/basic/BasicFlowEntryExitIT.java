@@ -49,7 +49,7 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import static org.junit.Assert.assertTrue;
 
-public class FlowEntryExitIT {
+public class BasicFlowEntryExitIT {
     /**
      * Stores the web URL.
      */
