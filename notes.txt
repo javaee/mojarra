@@ -50,7 +50,7 @@ Element                       Component/Renderer
 <input type="submit">         h:commandButton
 <input type="reset">          h:commandButton
 <input type="button">         h:commandButton
-<input type="number">         h:inputText
+<input type="number,search,email,datetime,date, month, week,time,datatime-local,range,color,url">         h:inputText
 <input type="tel">            h:inputText
 
 <keygen>                      javax.faces.Input javax.faces.passthrough.Input 
