@@ -306,6 +306,10 @@ public abstract class FlowHandler {
      * @since 2.2
      */
     public abstract Flow getCurrentFlow(FacesContext context);
+    
+    public Flow getCurrentFlow() {
+        return getCurrentFlow(FacesContext.getCurrentInstance());
+    }
 
     /**
      * <p class="changed_added_2_2">Perform a transition in the flow

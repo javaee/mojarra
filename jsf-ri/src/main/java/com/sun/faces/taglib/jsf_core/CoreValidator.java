@@ -42,7 +42,6 @@ package com.sun.faces.taglib.jsf_core;
 
 import com.sun.faces.taglib.FacesValidator;
 import com.sun.faces.taglib.ValidatorInfo;
-import com.sun.faces.util.Util;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
@@ -111,8 +110,7 @@ public class CoreValidator extends FacesValidator {
      * <p>Get the validator handler</p>
      */
     protected DefaultHandler getSAXHandler() {
-        if (java.beans.Beans.isDesignTime() || 
-	    !Util.isCoreTLVActive()) {
+        if (java.beans.Beans.isDesignTime()) {
 	    return null;
 	}
         return new CoreValidatorHandler();

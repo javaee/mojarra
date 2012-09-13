@@ -18,5 +18,6 @@
         <module>factory</module>
         <module>multi-page-from-jar</module>
         <module>intermediate</module>
+        <module>basic_faces_flow_call</module>
     </modules>
 </project>

@@ -39,6 +39,8 @@
  */
 package com.sun.faces.test.webprofile.flow.intermediate;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -47,8 +49,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 public class FlowEntryExitIntermediateIT {
     /**
@@ -98,14 +100,47 @@ public class FlowEntryExitIntermediateIT {
     @Test
     public void testFacesFlowScope() throws Exception {
         performTest();
-        /**** PENDING(edburns): calling this test twice in a row will cause failure.
-         * That should not be the case.
         performTest();
-         */
         
     }
     
     private void performTest() throws Exception {
+        quickEnterExit();
+        
+        HtmlPage page = webClient.getPage(webUrl);
+        
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("maintain-customer-record");
+        
+        page = button.click();
+        
+        button = (HtmlSubmitInput) page.getElementById("createCustomer");
+        page = button.click();
+        String pageText = page.asText();
+        Pattern pattern = Pattern.compile("(?s).*Customer Id:\\s+([0-9])+.*");
+        Matcher matcher = pattern.matcher(pageText);
+        assertTrue(matcher.matches());
+        String customerId = matcher.group(1);
+        assertTrue(pageText.matches("(?s).*Customer is upgraded:\\s+false.*"));
+        
+        button = (HtmlSubmitInput) page.getElementById("upgrade");
+        page = button.click();
+        pageText = page.asText();
+        matcher = pattern.matcher(pageText);
+        assertTrue(matcher.matches());
+        String sameCustomerId = matcher.group(1);
+        assertTrue(pageText.matches("(?s).*Customer is upgraded:\\s+true.*"));
+        assertEquals(customerId, sameCustomerId);
+        
+        button = (HtmlSubmitInput) page.getElementById("exit");
+        page = button.click();
+        
+        pageText = page.getBody().asText();
+        
+        assertTrue(pageText.contains("return page"));
+        assertTrue(pageText.contains("Finalizer called"));
+    }
+    
+    private void quickEnterExit() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
         
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("maintain-customer-record");
@@ -125,7 +160,6 @@ public class FlowEntryExitIntermediateIT {
         
         assertTrue(pageText.contains("return page"));
         assertTrue(pageText.contains("Finalizer called"));
-        
         
     }
 }

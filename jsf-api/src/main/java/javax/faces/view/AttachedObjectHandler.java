@@ -44,7 +44,8 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 /**
- * <p class="changed_added_2_0">The abstract base interface for a
+ * <p class="changed_added_2_0"><span class="changed_modified_2_2">The</span>
+ * abstract base interface for a
  * handler representing an <em>attached object</em> in a VDL page.
  * Subinterfaces are provided for the common attached objects that
  * expose {@link javax.faces.component.behavior.Behavior}, {@link
@@ -57,6 +58,16 @@ import javax.faces.context.FacesContext;
  * @since 2.0
  */
 public interface AttachedObjectHandler {
+    
+    /**
+     * <p class="changed_added_2_2">The key in the value set of the
+     * <em>composite component <code>BeanDescriptor</code></em>, the
+     * value for which is a
+     * <code>List&lt;AttachedObjectHandler&gt;</code>.</p>
+     */
+    public static final String ATTACHED_OBJECT_HANDLERS_KEY =
+            "javax.faces.view.AttachedObjectHandlers";
+    
 
     /**
      * <p class="changed_added_2_0">Take the argument

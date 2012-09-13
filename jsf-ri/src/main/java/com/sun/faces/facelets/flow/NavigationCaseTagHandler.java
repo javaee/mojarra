@@ -42,6 +42,8 @@ package com.sun.faces.facelets.flow;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagConfig;
@@ -52,8 +54,32 @@ public class NavigationCaseTagHandler extends TagHandlerImpl {
         super(config);
     }
     
+    public static FlowNavigationCase getCurrentNavigationCase(FaceletContext ctx) {
+        FlowNavigationCase result = null;
+
+        Map<FacesFlowDefinitionTagHandler.FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
+        result = (FlowNavigationCase) flowData.get(FacesFlowDefinitionTagHandler.FlowDataKeys.CurrentNavigationCase);
+        if (null == result) {
+            result = new FlowNavigationCase();
+            flowData.put(FacesFlowDefinitionTagHandler.FlowDataKeys.CurrentNavigationCase, result);
+        }
+        
+        return result;
+    }
+    
+    
+    
+    
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
         this.nextHandler.apply(ctx, parent);
+        if (SwitchNodeTagHandler.isWithinSwitch(ctx)) {
+            FlowNavigationCase navCase = getCurrentNavigationCase(ctx);
+            if (null != navCase) {
+                List<FlowNavigationCase> cases = SwitchNodeTagHandler.getSwitchCases(ctx);
+                cases.add(navCase);
+            }
+            
+        }
     }
     
     

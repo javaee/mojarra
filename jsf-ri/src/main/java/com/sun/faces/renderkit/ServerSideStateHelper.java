@@ -60,6 +60,7 @@ import javax.faces.FacesException;
 import javax.faces.component.UIViewRoot;
 
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.SerializeServerStateDeprecated;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.SerializeServerState;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.GenerateUniqueServerStateIds;
 import com.sun.faces.util.FacesLogger;
@@ -354,13 +355,13 @@ public class ServerSideStateHelper extends StateHelper {
 
     /**
      * @param state the object returned from <code>UIView.processSaveState</code>
-     * @return If {@link com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter#SerializeServerState} is
+     * @return If {@link com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter#SerializeServerStateDeprecated} is
      *  <code>true</code>, serialize and return the state, otherwise, return
      *  <code>state</code> unchanged.
      */
     protected Object handleSaveState(Object state) {
 
-        if (webConfig.isOptionEnabled(SerializeServerState)) {
+        if (webConfig.isOptionEnabled(SerializeServerStateDeprecated) || webConfig.isOptionEnabled(SerializeServerState)) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream(1024);
             ObjectOutputStream oas = null;
             try {
@@ -391,12 +392,12 @@ public class ServerSideStateHelper extends StateHelper {
     /**
      * @param state the state as it was stored in the session
      * @return an object that can be passed to <code>UIViewRoot.processRestoreState</code>.
-     *  If {@link com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter#SerializeServerState} de-serialize the
+     *  If {@link com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter#SerializeServerStateDeprecated} de-serialize the
      *  state prior to returning it, otherwise return <code>state</code> as is.
      */
     protected Object handleRestoreState(Object state) {
 
-        if (webConfig.isOptionEnabled(SerializeServerState)) {
+        if (webConfig.isOptionEnabled(SerializeServerStateDeprecated) || webConfig.isOptionEnabled(SerializeServerState)) {
             ByteArrayInputStream bais = new ByteArrayInputStream((byte[]) state);
             ObjectInputStream ois = null;
             try {

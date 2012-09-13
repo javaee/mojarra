@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.renderkit.basic;
+package com.sun.faces.test.agnostic.renderKit.basic;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -58,25 +58,25 @@
 
 package javax.faces.view.facelets;
 
-import javax.el.ELException;
-import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.view.facelets.FaceletException;
 import java.io.IOException;
 
 /**
- * The parent or root object in a FaceletHandler composition. The Facelet will
- * take care of populating the passed UIComponent parent in relation to the
- * create/restore lifecycle of JSF.
+ * <p><span class="changed_modified_2_2">The</span> parent or root object
+ * in a FaceletHandler composition. The Facelet will take care of
+ * populating the passed UIComponent parent in relation to the
+ * create/restore lifecycle of JSF.</p>
  * 
  * @author Jacob Hookom
  */
 public abstract class Facelet {
 
     /**
-     * The passed UIComponent parent will be populated/restored in accordance
-     * with the JSF 1.2 specification.
+     * <p><span class="changed_modified_2_2">The</span> passed
+     * UIComponent parent will be populated/restored in accordance with
+     * the <span class="changed_modified_2_2">Facelets chapter in the
+     * spec prose document.</span></p>
      * 
      * @param facesContext
      *            The current FacesContext (Should be the same as

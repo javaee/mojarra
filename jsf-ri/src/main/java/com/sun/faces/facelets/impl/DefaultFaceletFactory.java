@@ -381,10 +381,8 @@ public class DefaultFaceletFactory extends FaceletFactory {
                         uee);
             }
         }
-        
-        
-        
-        
+               
+        result.setId(null);        
         return result;
     }
     

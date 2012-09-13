@@ -63,7 +63,7 @@ public class IfTagHandler extends TagHandlerImpl {
             }
             cur.setCondition(this.nextHandler.toString());
         } else if (SwitchNodeTagHandler.isWithinSwitch(ctx)) {
-            FlowNavigationCase cur = SwitchNodeTagHandler.getNavigationCase(ctx);
+            FlowNavigationCase cur = NavigationCaseTagHandler.getCurrentNavigationCase(ctx);
             if (null == cur) {
                 throw new TagException(tag, "Unable to determine <navigation-case> for which " +
                         this.nextHandler.toString() + " is the <from-outcome>.");

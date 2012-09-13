@@ -60,14 +60,19 @@ import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
 import java.util.concurrent.ConcurrentHashMap;
+import javax.el.MethodExpression;
+import javax.el.ValueExpression;
 import javax.faces.application.Application;
 import javax.faces.application.ConfigurableNavigationHandler;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIViewAction;
 import javax.faces.context.Flash;
+import javax.faces.flow.FacesFlowCallNode;
 import javax.faces.flow.Flow;
 import javax.faces.flow.FlowHandler;
 import javax.faces.flow.FlowNode;
+import javax.faces.flow.MethodCallNode;
+import javax.faces.flow.SwitchNode;
 import javax.faces.flow.ViewNode;
 import javax.faces.view.ViewDeclarationLanguage;
 import javax.faces.view.ViewMetadata;
@@ -330,6 +335,15 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         NavigationInfo result = null;
         assert(null != navigationMaps);
         result = navigationMaps.get(flowId);
+        if (null == result) {
+            FlowHandler fh = context.getApplication().getFlowHandler();
+            if (null != fh) {
+                Flow currentFlow = fh.getCurrentFlow(context);
+                if (null != currentFlow) {
+                    result = navigationMaps.get(currentFlow.getId());
+                }
+            }
+        }
         
         return result;
     }
@@ -364,19 +378,20 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     private void initializeNavigationFromFlowThreadSafe(FacesContext context, Flow toInspect) {
         assert(null != navigationMaps);
         synchronized (this) {
-            NavigationMap navMap = null;
-            Map<String, List<NavigationCase>> switches = toInspect.getSwitches(context);
+            Map<String, SwitchNode> switches = toInspect.getSwitches(context);
             String flowId = toInspect.getId();
             // Is there an existing NavigationMap for this flowId
             if (navigationMaps.containsKey(flowId)) {
+                if (logger.isLoggable(Level.INFO)) {
+                    logger.log(Level.INFO, "PENDING(edburns): merge existing map");
+                }
                 
             } else {
                 if (!switches.isEmpty()) {
                     NavigationInfo info = new NavigationInfo();
-                    info.switches = new ConcurrentHashMap<String, List<NavigationCase>>();
-                    for (Map.Entry<String, List<NavigationCase>> cur : switches.entrySet()) {
-                        info.switches.put(cur.getKey(), 
-                                Collections.synchronizedList(new ArrayList<NavigationCase>(cur.getValue())));
+                    info.switches = new ConcurrentHashMap<String, SwitchNode>();
+                    for (Map.Entry<String, SwitchNode> cur : switches.entrySet()) {
+                        info.switches.put(cur.getKey(), cur.getValue());
                     }
                     navigationMaps.put(flowId, info);
                 }
@@ -467,6 +482,16 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         // If we still don't have a match, see if this is a switch
         if (null == caseStruct && null != fromAction && null != outcome) {
             caseStruct = findSwitchMatch(ctx, fromAction, outcome);
+        }
+
+        // If we still don't have a match, see if this is a method-call
+        if (null == caseStruct && null != fromAction && null != outcome) {
+            caseStruct = findMethodCallMatch(ctx, fromAction, outcome);
+        }
+
+        // If we still don't have a match, see if this is a faces-flow-call
+        if (null == caseStruct && null != fromAction && null != outcome) {
+            caseStruct = findFacesFlowCallMatch(ctx, fromAction, outcome);
         }
 
         // no navigation case fo
@@ -676,9 +701,11 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             }
 
             if (queryString != null && queryString.length() > 0) {
-                String[] queryElements = Util.split(queryString, "&amp;|&");
+                Map<String, Object> appMap = context.getExternalContext().getApplicationMap();
+
+                String[] queryElements = Util.split(appMap, queryString, "&amp;|&");
                 for (int i = 0, len = queryElements.length; i < len; i ++) {
-                    String[] elements = Util.split(queryElements[i], "=");
+                    String[] elements = Util.split(appMap, queryElements[i], "=");
                     if (elements.length == 2) {
                         if (parameters == null) {
                             parameters = new LinkedHashMap<String,List<String>>(len / 2, 1.0f);
@@ -733,9 +760,17 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             // If this outcome corresponds to an existing flow...
             if (null != flow) {
                 // make a navigation case from its defaultNode.
-                FlowNode node = flow.getNode(flow.getStartNodeId());
-                if (null != node && node instanceof ViewNode) {
-                    viewIdToTest = ((ViewNode)node).getVdlDocumentId();
+                FlowNode node = flow.getNode(context, flow.getStartNodeId());
+                if (null != node) {
+                    if (node instanceof ViewNode) {
+                        viewIdToTest = ((ViewNode)node).getVdlDocumentId();
+                    } else if (node instanceof SwitchNode) {
+                        // try a convention.  Create a viewId by treating outcome
+                        // as a directory name *and* file name, which is assumed to be
+                        // the file name of the default-node in the flow.
+                        viewIdToTest = "/" + outcome + "/" + outcome + currentExtension;
+                        viewIdToTest = viewHandler.deriveViewId(context, viewIdToTest);
+                    }
                 }
             } else {
                 
@@ -798,27 +833,28 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         FlowHandler flowHandler = context.getApplication().getFlowHandler();
         
         if (null != info && null != info.switches && !info.switches.isEmpty()) {
-            List<NavigationCase> cases = info.switches.get(outcome);
-            if (null != cases) {
+            SwitchNode switchNode = info.switches.get(outcome);
+            if (null != switchNode) {
+                List<NavigationCase> cases = switchNode.getCases();
                 for (NavigationCase cur : cases) {
                     if (cur.getCondition(context)) {
                         outcome = cur.getFromOutcome();
                         Flow flow = flowHandler.getFlow(context, null, fromAction);
                         // If this outcome corresponds to an existing flow...
                         if (null != flow) {
-                            FlowNode node = flow.getNode(outcome);
-                            if (null != node && node instanceof ViewNode) {
-                                result = new CaseStruct();
-                                result.viewId = ((ViewNode)node).getVdlDocumentId();
-                                result.navCase = new NavigationCase(fromAction, 
-                                        fromAction, outcome, null, result.viewId, 
-                                        null, false, false);
-                            }
-
+                            result = synthesizeCaseStruct(context, flow, fromAction, outcome);
                         }
                         if (null != result) {
                             break;
                         }
+                    }
+                }
+                if (null == result) {
+                    NavigationCase defaultCase = switchNode.getDefaultCase();
+                    outcome = defaultCase.getFromOutcome();
+                    Flow flow = flowHandler.getCurrentFlow(context);
+                    if (null != flow) {
+                        result = synthesizeCaseStruct(context, flow, fromAction, outcome);
                     }
                 }
             }
@@ -827,6 +863,75 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         
         return result;
     }
+    
+    private CaseStruct synthesizeCaseStruct(FacesContext context, Flow flow, String fromAction, String outcome) {
+        CaseStruct result = null;
+        
+        FlowNode node = flow.getNode(context, outcome);
+        if (null != node && node instanceof ViewNode) {
+            result = new CaseStruct();
+            result.viewId = ((ViewNode)node).getVdlDocumentId();
+            result.navCase = new NavigationCase(fromAction, 
+                    fromAction, outcome, null, result.viewId, 
+                    null, false, false);
+        }
+        return result;
+    }
+    
+    private CaseStruct findMethodCallMatch(FacesContext context, String fromAction, String outcome) {
+        CaseStruct result = null;
+        FlowHandler flowHandler = context.getApplication().getFlowHandler();
+        Flow currentFlow = flowHandler.getCurrentFlow(context);
+        if (null != currentFlow) {
+            FlowNode node = currentFlow.getNode(context, outcome);
+            if (node instanceof MethodCallNode) {
+                MethodCallNode methodCallNode = (MethodCallNode) node;
+                MethodExpression me = methodCallNode.getMethodExpression();
+                if (null != me) {
+                    Object invokeResult = me.invoke(context.getELContext(), null);
+                    if (null == invokeResult) {
+                        ValueExpression ve = methodCallNode.getOutcome();
+                        if (null != ve) {
+                            invokeResult  = ve.getValue(context.getELContext());
+                        }
+                    }
+                    outcome = (String) invokeResult;
+                    result = synthesizeCaseStruct(context, currentFlow, fromAction, outcome);
+                }
+            }
+        }
+        
+
+        return result;
+    }
+    
+    private CaseStruct findFacesFlowCallMatch(FacesContext context, String fromAction, String outcome) {
+        CaseStruct result = null;
+
+        FlowHandler flowHandler = context.getApplication().getFlowHandler();
+        Flow currentFlow = flowHandler.getCurrentFlow(context);
+        if (null != currentFlow) {
+            FlowNode node = currentFlow.getNode(context, outcome);
+            if (node instanceof FacesFlowCallNode) {
+                FacesFlowCallNode facesFlowCallNode = (FacesFlowCallNode) node;
+                String flowId = facesFlowCallNode.getCalledFlowId(context);
+                String flowDocumentId = facesFlowCallNode.getCalledFlowDocumentId(context);
+
+                if (null != flowId) {
+                    if (null == flowDocumentId) {
+                        flowDocumentId = flowId + "/" + flowId + ".xhtml";
+                    }
+                    ViewHandler vh = context.getApplication().getViewHandler();
+                    loadFlowDefinition(context, vh, flowDocumentId);
+                    Flow newFlow = flowHandler.getFlow(context, flowDocumentId, flowId);
+                    
+                    result = synthesizeCaseStruct(context, newFlow, fromAction, flowId);
+                }
+            }
+        }
+        
+        return result;
+    }    
     
     private static final String DISCERNING_FLOW_ROUTING_KEY = NavigationHandlerImpl.class.getPackage().getName();
     
@@ -919,7 +1024,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     
     private static final class NavigationInfo {
         private NavigationMap ruleSet;
-        private Map<String, List<NavigationCase>> switches;
+        private Map<String, SwitchNode> switches;
     }
 
 

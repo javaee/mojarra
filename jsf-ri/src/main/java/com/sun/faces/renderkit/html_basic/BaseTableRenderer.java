@@ -422,7 +422,8 @@ public abstract class BaseTableRenderer extends HtmlBasicRenderer {
             if (values == null) {
                 return EMPTY_STRING_ARRAY;
             }
-            return Util.split(values.trim(), ",");
+            Map<String, Object> appMap = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
+            return Util.split(appMap, values.trim(), ",");
 
         }
 
@@ -514,7 +515,8 @@ public abstract class BaseTableRenderer extends HtmlBasicRenderer {
             if (values == null) {
                 return (EMPTY_STRING_ARRAY);
             }
-            return Util.split(values.trim(), ",");
+            Map<String, Object> appMap = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
+            return Util.split(appMap, values.trim(), ",");
 
         }
 

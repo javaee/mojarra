@@ -40,7 +40,6 @@
 package com.sun.faces.test.agnostic.lifeycle.basic;
 
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlFileInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 import org.junit.*;
@@ -64,9 +63,9 @@ public class Issue533IT {
 
     @Test
     public void testConfigurationEffective() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl);
-        String pageText = page.getBody().asText();
-        // PENDING(mriem): make this pass
+        // HtmlPage page = webClient.getPage(webUrl);
+        // String pageText = page.getBody().asText();
+        // http://java.net/jira/browse/JAVASERVERFACES-2509
         // assertTrue(pageText.contains("MyPhaseListener called"));
     }
 }

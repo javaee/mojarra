@@ -321,12 +321,12 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
                                                                         boolean create) {
         Map<String, Object> attrs = component.getAttributes();
         List<AttachedObjectHandler> result = (List<AttachedObjectHandler>)
-              attrs.get("javax.faces.RetargetableHandlers");
+              attrs.get(AttachedObjectHandler.ATTACHED_OBJECT_HANDLERS_KEY);
 
         if (result == null) {
             if (create) {
                 result = new ArrayList<AttachedObjectHandler>();
-                attrs.put("javax.faces.RetargetableHandlers", result);
+                attrs.put(AttachedObjectHandler.ATTACHED_OBJECT_HANDLERS_KEY, result);
             } else {
                 result = Collections.EMPTY_LIST;
             }

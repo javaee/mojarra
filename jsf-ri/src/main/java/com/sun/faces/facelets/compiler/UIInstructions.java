@@ -66,9 +66,9 @@ import java.util.Arrays;
 
 public final class UIInstructions extends UILeaf {
 
-    private final ELText txt;
+    transient private final ELText txt;
 
-    private final Instruction[] instructions;
+    transient private final Instruction[] instructions;
 
     public UIInstructions(ELText txt, Instruction[] instructions) {
         this.txt = txt;

@@ -49,11 +49,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Enumeration;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Collections;
+import java.util.Map;
 
 import javax.faces.context.ExternalContext;
 import javax.servlet.ServletContext;
@@ -64,7 +65,6 @@ import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import com.sun.faces.vendor.WebContainerInjectionProvider;
-import java.util.Collections;
 
 
 /**
@@ -282,7 +282,7 @@ public class InjectionProviderFactory {
             String[] serviceEntries = getServiceEntries();
             if (serviceEntries.length > 0) {
                 for (int i = 0; i < serviceEntries.length; i++) {
-                    provider = getProviderFromEntry(serviceEntries[i]);
+                    provider = getProviderFromEntry(extContext.getApplicationMap(), serviceEntries[i]);
                     if (provider != null) {
                         break;
                     }
@@ -297,13 +297,13 @@ public class InjectionProviderFactory {
     }
 
 
-    private static String getProviderFromEntry(String entry) {
+    private static String getProviderFromEntry(Map<String, Object> appMap, String entry) {
 
         if (entry == null) {
             return null;
         }
 
-        String[] parts = Util.split(entry, ":");
+        String[] parts = Util.split(appMap, entry, ":");
         if (parts.length != 2) {
             if (LOGGER.isLoggable(Level.SEVERE)) {
                 LOGGER.log(Level.SEVERE,

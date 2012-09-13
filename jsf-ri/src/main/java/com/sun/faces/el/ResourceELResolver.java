@@ -42,6 +42,7 @@ package com.sun.faces.el;
 
 import java.beans.FeatureDescriptor;
 import java.util.Iterator;
+import java.util.Map;
 
 import javax.el.ELContext;
 import javax.el.ELException;
@@ -49,11 +50,11 @@ import javax.el.ELResolver;
 import javax.el.PropertyNotFoundException;
 import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
-import javax.faces.component.UIComponent;
 
 /**
  * ELResolver to resolve expressions like the following:
@@ -111,7 +112,9 @@ public class ResourceELResolver extends ELResolver {
                     // RELEASE_PENDING i18n
                     throw new ELException("Invalid resource format.  Property " + prop + " contains more than one colon (:)");
                 }
-                String[] parts = Util.split(prop, ":");
+                Map<String, Object> appMap = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
+
+                String[] parts = Util.split(appMap, prop, ":");
                 
                 // If the enclosing entity for this expression is itself 
                 // a resource, the "this" syntax for the library name must

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -119,8 +119,11 @@ public class HtmlResponseWriter extends ResponseWriter {
     // flag to indicate that we're writing a 'style' element
     private boolean isStyle;
 
-    // flag to indicate that we're inside a 'script' element
-    private boolean inScript;
+    // flag to indicate if we are within a script element
+    private boolean withinScript;
+
+    // flag to indicate if we are within a style element
+    private boolean withinStyle;
 
     // flag to indicate that we're writing a 'src' attribute as part of
     // 'script' or 'style' element
@@ -445,13 +448,19 @@ public class HtmlResponseWriter extends ResponseWriter {
                   MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "name"));
         }
 
+        // Keep track when we are exiting a script or style element
+        // for escaping purposes.
+
         if ("script".equalsIgnoreCase(name)) {
-            inScript = false;
+            withinScript = false;
+        }
+
+        if ("style".equalsIgnoreCase(name)) {
+            withinStyle = false;
         }
 
         // always turn escaping back on once an element ends
-        // if we are not in a script element
-        if (!inScript) {
+        if (!withinScript && !withinStyle) {
             dontEscape = false;
         }
 
@@ -616,6 +625,18 @@ public class HtmlResponseWriter extends ResponseWriter {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
                   MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "name"));
         }
+
+        // Keep track if we are in either a script or style element so we
+        // know we do not want to escape.
+
+        if ("script".equalsIgnoreCase(name)) {
+            withinScript = true;
+        }
+
+        if ("style".equalsIgnoreCase(name)) {
+            withinStyle = true;
+        }
+
         closeStartIfNecessary();
         isScriptOrStyle(name);
         scriptOrStyleSrc = false;
@@ -1230,7 +1251,6 @@ public class HtmlResponseWriter extends ResponseWriter {
 
     private boolean isScriptOrStyle(String name) {
         if ("script".equalsIgnoreCase(name)) {
-            inScript = true;
             isScript = true;
             dontEscape = true;
         } else if ("style".equalsIgnoreCase(name)) {
@@ -1239,8 +1259,7 @@ public class HtmlResponseWriter extends ResponseWriter {
         } else {
             isScript = false;
             isStyle = false;
-            // if we are still in a script element we don't want to escape
-            if (!inScript) {
+            if (!withinScript && !withinStyle) {
                 dontEscape = false;
             }
         }

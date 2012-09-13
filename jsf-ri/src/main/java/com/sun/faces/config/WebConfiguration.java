@@ -69,13 +69,16 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.faces.FactoryFinder;
+import javax.faces.application.ProjectStage;
 import javax.faces.component.UIInput;
+import javax.faces.convert.Converter;
 import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.ClientWindow;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.validator.BeanValidator;
 import javax.faces.view.facelets.ResourceResolver;
+import javax.faces.webapp.FacesServlet;
 
 
 /** Class Documentation */
@@ -301,7 +304,8 @@ public class WebConfiguration {
             if (null == value) {
                 result = new String[0];
             } else {
-                result = Util.split(value, sep);
+                Map<String, Object> appMap = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
+                result = Util.split(appMap, value, sep);
             }
             cachedListParams.put(param, result);
         }
@@ -790,7 +794,7 @@ public class WebConfiguration {
               ""
         ),
         StateSavingMethod(
-              "javax.faces.STATE_SAVING_METHOD",
+              StateManager.STATE_SAVING_METHOD_PARAM_NAME,
               "server"
         ),
         FaceletsSuffix(
@@ -802,15 +806,15 @@ public class WebConfiguration {
               ViewHandler.DEFAULT_SUFFIX
         ),
         JavaxFacesConfigFiles(
-              "javax.faces.CONFIG_FILES",
+              FacesServlet.CONFIG_FILES_ATTR,
               ""
         ),
         JavaxFacesProjectStage(
-              "javax.faces.PROJECT_STAGE",
+              ProjectStage.PROJECT_STAGE_PARAM_NAME,
               "Production"
         ),
         AlternateLifecycleId(
-              "javax.faces.LIFECYCLE_ID",
+              FacesServlet.LIFECYCLE_ID_ATTR,
               ""
         ),
         ResourceExcludes(
@@ -858,7 +862,7 @@ public class WebConfiguration {
               "1024"
         ),
         FaceletsBufferSize(
-              "javax.faces.FACELETS_BUFFER_SIZE",
+              ViewHandler.FACELETS_BUFFER_SIZE_PARAM_NAME,
               "1024"
         ),
         FaceletsBufferSizeDeprecated(
@@ -901,7 +905,7 @@ public class WebConfiguration {
             "auto"
         ),
         FaceletsDefaultRefreshPeriod(
-              "javax.faces.FACELETS_REFRESH_PERIOD",
+              ViewHandler.FACELETS_REFRESH_PERIOD_PARAM_NAME,
               "2"
         ),
         FaceletsDefaultRefreshPeriodDeprecated(
@@ -934,7 +938,7 @@ public class WebConfiguration {
               new FaceletsConfigParamLoggingStrategy()
         ),
         FaceletsLibraries(
-              "javax.faces.FACELETS_LIBRARIES",
+              ViewHandler.FACELETS_LIBRARIES_PARAM_NAME,
               ""
         ),
         FaceletsLibrariesDeprecated(
@@ -945,7 +949,7 @@ public class WebConfiguration {
               new FaceletsConfigParamLoggingStrategy()
         ),
         FaceletsDecorators(
-              "javax.faces.FACELETS_DECORATORS",
+              ViewHandler.FACELETS_DECORATORS_PARAM_NAME,
               ""
         ),
         FaceletsDecoratorsDeprecated(
@@ -984,14 +988,13 @@ public class WebConfiguration {
               "none"
         ),
         WebAppResourcesDirectory(
-              "javax.faces.WebAppResourcesDirectory",
+              ResourceHandler.WEBAPP_RESOURCES_DIRECTORY_PARAM_NAME,
               "/resources"
         ),
         MultiTemplateName(
                 ResourceHandler.MULTI_TEMPLATE_PARAM_NAME,
                 ResourceHandler.DEFAULT_MULTI_TEMPLATE
-                ),
-;
+                );
 
 
 
@@ -1190,8 +1193,14 @@ public class WebConfiguration {
               false
         ),
         SerializeServerState(
-              "com.sun.faces.serializeServerState",
+              StateManager.SERIALIZE_SERVER_STATE_PARAM_NAME,
               false
+        ),
+        SerializeServerStateDeprecated(
+              "com.sun.faces.serializeServerState",
+              false,
+               true,
+                SerializeServerState
         ),
         EnableViewStateIdRendering(
             "com.sun.faces.enableViewStateIdRendering",
@@ -1206,14 +1215,14 @@ public class WebConfiguration {
             false
         ),
         DisableFaceletJSFViewHandler(
-              "javax.faces.DISABLE_FACELET_JSF_VIEWHANDLER",
+              ViewHandler.DISABLE_FACELET_JSF_VIEWHANDLER_PARAM_NAME,
               false
         ),
         DisableDefaultBeanValidator(
                 BeanValidator.DISABLE_DEFAULT_BEAN_VALIDATOR_PARAM_NAME,
                 false),
         DateTimeConverterUsesSystemTimezone(
-              "javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE",
+              Converter.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE_PARAM_NAME,
               false
         ),
         EnableHttpMethodRestrictionPhaseListener(
@@ -1221,7 +1230,7 @@ public class WebConfiguration {
               false
         ),
         FaceletsSkipComments(
-              "javax.faces.FACELETS_SKIP_COMMENTS",
+              ViewHandler.FACELETS_SKIP_COMMENTS_PARAM_NAME,
               false
         ),
         FaceletsSkipCommentsDeprecated(

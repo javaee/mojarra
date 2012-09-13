@@ -40,10 +40,7 @@
 
 package javax.faces.model;
 
-
-import java.lang.reflect.Array;
 import java.util.Collection;
-import java.util.Iterator;
 import javax.faces.FacesException;
 
 

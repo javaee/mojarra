@@ -67,43 +67,23 @@
     <target name="remove" />
 
     <target name="admingui-check">
-       <!-- make sure our helper property is unoccupied: -->
-       <fail if="do.sleep" />
-
-       <!-- overridable defaults: -->
-       <property name="admingui.retries" value="5" />
-       <property name="sleep.seconds" value="10" />
-       <property name="adminguitest.retries" value="10" />
-
-       <retry retrycount="${admingui.retries}">
-           <sequential>
-               <local name=".sleep.seconds" />
-               <condition property=".sleep.seconds" value="${sleep.seconds}" else="0">
-                   <istrue value="${do.sleep}" />
-               </condition>
-               <sleep seconds="${.sleep.seconds}" />
-
-               <property name="do.sleep" value="true" />
-
-               <fail><condition>
-                   <resourcesmatch astext="true">
-                       <string value="" />
-                        <concat>
-                           <url url="http://${container.host}:${glassfish.admin.port}/common/index.jsf?bare=true" />
-                           <filterchain>
-                               <linecontainsregexp>
-                                   <regexp pattern="(?s).*loginform.*" />
-                               </linecontainsregexp>
-                           </filterchain>
-                       </concat>
-                   </resourcesmatch>
-               </condition></fail>
-           </sequential>
-       </retry>
+      <var name="do.sleep" unset="true" />
+      <var name="deployment.host" unset="true" />
+      <var name="deployment.port" unset="true" />
+      <var name="path.with.leading.slash" unset="true" />
+      <var name="page.regexp" unset="true" />
+      
+      <property name="deployment.host" value="${container.host}" />
+      <property name="deployment.port" value="${glassfish.admin.port}" />
+      <property name="path.with.leading.slash" value="/common/index.jsf?bare=true" />
+      <property name="page.regexp" value="(?s).*loginform.*" />
+      <property name="deployment.retries" value="5" />
+      
+      <antcall target="deployment.check" />
     </target>
 
     <target name="test" depends="admingui-check,define.scenario.aware.port">
-       <retry retrycount="${adminguitest.retries}">
+       <retry retrycount="${deployment.retries}">
         <sequential>
         <echo message="TEST RETRY..." />
         <jsf.junit context-path=""

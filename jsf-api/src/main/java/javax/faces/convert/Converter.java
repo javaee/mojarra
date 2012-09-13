@@ -47,7 +47,7 @@ import javax.faces.context.FacesContext;
 
 
 /**
- * <p><strong class="changed_modified_2_0">Converter</strong> is an
+ * <p><strong class="changed_modified_2_0 changed_modified_2_2">Converter</strong> is an
  * interface describing a Java class that can perform Object-to-String
  * and String-to-Object conversions between model data objects and a
  * String representation of those objects that is suitable for
@@ -133,4 +133,18 @@ public interface Converter {
                               Object value);
 
 
+    /**
+     * <p class="changed_added_2_2">
+     * If this param is set, and calling toLowerCase().equals("true") on a
+     * String representation of its value returns true,
+     * Application.createConverter() must guarantee that the default for the
+     * timezone of all javax.faces.convert.DateTimeConverter instances must
+     * be equal to TimeZone.getDefault() instead of "GMT".
+     * </p>
+     * 
+     * @since 2.0
+     */
+    public static final String DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE_PARAM_NAME = 
+            "javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE";
+    
 }

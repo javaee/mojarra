@@ -52,10 +52,11 @@ import java.io.ByteArrayInputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Arrays;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -631,7 +632,8 @@ public abstract class ResourceHelper {
      */
     private VersionInfo getVersion(String pathElement, boolean isResource) {
 
-        String[] pathElements = Util.split(pathElement, "/");
+        Map<String, Object> appMap = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
+        String[] pathElements = Util.split(appMap, pathElement, "/");
         String path = pathElements[pathElements.length - 1];
 
         String extension = null;
@@ -772,7 +774,9 @@ public abstract class ResourceHelper {
                                                            expressionBody);
                     throw new ELException(message);
                 }
-                String[] parts = Util.split(expressionBody, ":");
+                Map<String, Object> appMap = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
+
+                String[] parts = Util.split(appMap, expressionBody, ":");
                 if (null == parts[0] || null == parts[1]) {
                     String message =
                           MessageUtils

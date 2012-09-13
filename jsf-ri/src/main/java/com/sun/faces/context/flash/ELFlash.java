@@ -1299,7 +1299,10 @@ public class ELFlash extends Flash {
             result = new Cookie(FLASH_COOKIE_NAME, value);
             if (1 == value.length()) {
                 result.setMaxAge(0);
-                result.setPath("/");
+                result.setPath(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath());
+            } 
+            else {
+                result.setPath(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath());
             }
 
             return result;

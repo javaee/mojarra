@@ -2368,7 +2368,7 @@ will not pass validation.</p> ]]>
 
             <p class="changed_added_2_0"><span
             class="changed_modified_2_0_rev_a changed_modified_2_2">Used</span> inside of the
-            metada facet of a view, this tag causes a <a target="_"
+            metadata facet of a view, this tag causes a <a target="_"
             href="../../../javadocs/javax/faces/component/UIViewParameter.html">UIViewParameter</a>
             to be attached as metadata for the current view.  Because
             <code>UIViewParameter</code> extends <code>UIInput</code>

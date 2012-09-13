@@ -42,8 +42,31 @@ package com.sun.faces.test.webprofile.flow.intermediate;
 
 public class CustomerBean
 {
+    private static int lastId = 0;
+    
+    private int myId;
+    
+    private boolean upgraded = false;
+
+    public boolean isUpgraded() {
+        return upgraded;
+    }
+
+    public void setUpgraded(boolean upgraded) {
+        this.upgraded = upgraded;
+    }
+    
    public CustomerBean()
    {
       super();
+      myId = incrementId();
+   }
+   
+   public int getCustomerId() {
+       return myId;
+   }
+   
+   private synchronized int incrementId() {
+       return ++lastId;
    }
 }

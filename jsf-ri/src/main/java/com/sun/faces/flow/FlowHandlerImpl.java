@@ -155,7 +155,7 @@ public class FlowHandlerImpl extends FlowHandler {
              targetFlow = this.getFlowByNodeId(targetFlowId);
         // there has to be a better way to structure this logic
         if (!flowsEqual(sourceFlow, targetFlow)) {
-            popFlow(context);
+            performPops(context, sourceFlow, targetFlow);
             if (null != targetFlow) {
                 pushFlow(context, targetFlow);
                 newFlow = targetFlow;
@@ -163,6 +163,28 @@ public class FlowHandlerImpl extends FlowHandler {
         } 
         return newFlow;
         
+    }
+    
+    private void performPops(FacesContext context, Flow sourceFlow, Flow targetFlow) {
+        // case 0: sourceFlow is null.  There must be nothing to pop.
+        if (null == sourceFlow) {
+            assert(null == peekFlow(context));
+            return;
+        }
+                
+        // case 1: target is null
+        if (null == targetFlow) {
+            popAll(context);
+            return;
+        } 
+        
+        // case 2: neither source nor target are null.  If source does not
+        // have a call that calls target, we must pop source.
+        String targetFlowId = targetFlow.getId();
+        if (null == sourceFlow.getFacesFlowCallByTargetFlowId(context, targetFlowId)) {
+            popFlow(context);            
+        }
+
     }
     
     /*
@@ -189,7 +211,7 @@ public class FlowHandlerImpl extends FlowHandler {
         Deque<Flow> flowStack = getFlowStack(context);
         flowStack.push(toPush);
         FlowCDIContext.flowEntered();
-        MethodExpression me  = toPush.getInitializer();
+        MethodExpression me  = toPush.getInitializer(context);
         if (null != me) {
             me.invoke(context.getELContext(), null);
         }
@@ -204,14 +226,27 @@ public class FlowHandlerImpl extends FlowHandler {
         Deque<Flow> flowStack = getFlowStack(context);
         Flow currentFlow = peekFlow(context);
         if (null != currentFlow) {
-            MethodExpression me  = currentFlow.getFinalizer();
-            if (null != me) {
-                me.invoke(context.getELContext(), null);
-            }
-            FlowCDIContext.flowExited();
+            callFinalizer(context, currentFlow);
         }
         return flowStack.pollFirst();
         
+    }
+    
+    private void callFinalizer(FacesContext context, Flow currentFlow) {
+        MethodExpression me  = currentFlow.getFinalizer(context);
+        if (null != me) {
+            me.invoke(context.getELContext(), null);
+        }
+        FlowCDIContext.flowExited();
+    }
+    
+    private void popAll(FacesContext context) {
+        Deque<Flow> flowStack = getFlowStack(context);
+        Flow currentFlow = peekFlow(context);
+        while  (!flowStack.isEmpty()) {
+            callFinalizer(context, currentFlow);
+            currentFlow = flowStack.pollFirst();
+        }
     }
     
     private Deque<Flow> getFlowStack(FacesContext context) {

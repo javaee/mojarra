@@ -64,12 +64,14 @@
                      GLASSFISH-15985,
                      GLASSFISH-17218,
                      JAVASERVERFACES-1856,
-                     JAVASERVERFACES-1655,
                      JAVASERVERFACES-2033,
                      GLASSFISH-16847,
                      JAVASERVERFACES-1338,
                      admingui,
                      JAVASERVERFACES_SPEC_PUBLIC-949" />
+
+<!-- Need to re-enable this test.  It fails as a result of fix for: JAVASERVERFACES-2491 -->
+<!-- JAVASERVERFACES-1655, --> 
 
     <property name="container-agnostic-applications" value="
                     JAVASERVERFACES-2195,

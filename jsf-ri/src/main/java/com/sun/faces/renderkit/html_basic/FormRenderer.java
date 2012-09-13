@@ -168,15 +168,14 @@ public class FormRenderer extends HtmlBasicRenderer {
         ExternalContext externalContext = context.getExternalContext();
         String encodedActionURL = externalContext.encodeActionURL(actionURL);
         String encodedPartialActionURL = externalContext.encodePartialActionURL(actionURL);
-        if (encodedPartialActionURL != null) {
-            if (!encodedPartialActionURL.equals(encodedActionURL)) {
-                writer.startElement("input", null);
-                writer.writeAttribute("type", "hidden", "type");
-                writer.writeAttribute("name", "javax.faces.encodedURL", null);
-                writer.writeAttribute("value", encodedPartialActionURL, "value");
-                writer.endElement("input");
-                writer.write('\n');
-            }
+        if (encodedPartialActionURL != null && 
+            (!encodedPartialActionURL.equals(encodedActionURL))) {
+            writer.startElement("input", null);
+            writer.writeAttribute("type", "hidden", "type");
+            writer.writeAttribute("name", "javax.faces.encodedURL", null);
+            writer.writeAttribute("value", encodedPartialActionURL, "value");
+            writer.endElement("input");
+            writer.write('\n');
         }
 
         if (!writeStateAtEnd) {

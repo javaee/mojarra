@@ -45,11 +45,7 @@ import javax.el.ELException;
 import javax.el.MethodExpression;
 import javax.faces.context.FacesContext;
 import javax.faces.component.StateHolder;
-
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.io.StringWriter;
-import java.io.PrintWriter;
 import javax.el.MethodNotFoundException;
 
 /**

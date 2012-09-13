@@ -88,6 +88,37 @@
             </exec>
         </sequential>
     </macrodef>
+    
+    <macrodef name="non.ant.deploy.artifact">
+        <attribute name="artifact"
+                   description="The WAR to deploy"/>
+        <attribute name="appName"
+                   description="The name of the application"/>
+        <sequential>
+          <condition property="exec.name" value="cmd.exe">
+            <os family="windows"/>
+          </condition>
+          <condition property="exec.arg.1"
+                     value="${container.home}/bin/asadmin.bat">
+            <os family="windows"/>
+          </condition>
+          <echo>
+
+---------------- Glassfish - Deploying @{appName} ---------------- 
+
+          </echo>
+          <exec spawn="true" executable="${exec.name}">
+            <arg value="/c" />
+            <arg line="${exec.arg.1}" />
+            <arg line="deploy"/>
+            <arg line="--user ${glassfish.admin.user}"/>
+            <arg line="--passwordfile ${glassfish.password.file}"/>
+            <arg line="--host ${glassfish.admin.host}"/>
+            <arg line="--port ${glassfish.admin.port}"/>
+            <arg line="--contextroot @{appName} @{artifact}"/>
+          </exec>
+        </sequential>
+    </macrodef>
 
     <macrodef name="deploydir.artifact">
         <attribute name="explodedWarDir"

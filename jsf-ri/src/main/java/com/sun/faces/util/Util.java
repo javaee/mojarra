@@ -61,7 +61,6 @@ import javax.faces.event.AbortProcessingException;
 import java.beans.FeatureDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -100,16 +99,6 @@ public class Util {
      * unit testing.
      */
     private static boolean unitTestModeEnabled = false;
-
-    /**
-     * Flag that enables/disables the core TLV.
-     */
-    private static final String coreTLVEnabled = RIConstants.FACES_PREFIX + "coreTLVEnabled";
-
-    /**
-     * Flag that enables/disables the html TLV.
-     */
-    private static final String htmlTLVEnabled = RIConstants.FACES_PREFIX + "htmlTLVEnabled";
     
     /**
      * RegEx patterns
@@ -121,52 +110,7 @@ public class Util {
         throw new IllegalStateException();
     }
 
-    /**
-     * <p>The <code>ThreadLocal</code> when invoking methods on this class
-     * from outside the scope of the FacesContext, this threadLocal is used
-     * to serve as the ApplicationMap.</p>
-     */
-    private static ThreadLocal<Map<String, Object>> nonFacesContextApplicationMap;
-
-    private static void lazilyInitializeNonFacesContextApplicationMap() {
-        if (null == nonFacesContextApplicationMap) {
-            nonFacesContextApplicationMap = new ThreadLocal<Map<String, Object>>() {
-                @Override
-                protected Map<String, Object> initialValue() {
-                    return (null);
-                }
-            };
-        }
-    }
-
-    private static Map<String, Object> getNonFacesContextApplicationMap() {
-        lazilyInitializeNonFacesContextApplicationMap();
-        return nonFacesContextApplicationMap.get();
-    }
-
-    private static Map<String, Object> getApplicationMap() {
-        Map<String, Object> result = null;
-        FacesContext context = FacesContext.getCurrentInstance();
-        if (null != context) {
-            ExternalContext externalContext = context.getExternalContext();
-            if (null != externalContext) {
-                result = externalContext.getApplicationMap();
-            }
-        }
-        // This will be true if FacesServlet.service is not on the callstack
-        if (null == result) {
-            result = getNonFacesContextApplicationMap();
-            if (null == result) {
-                result = new HashMap<String, Object>();
-                setNonFacesContextApplicationMap(result);
-            }
-        }
-
-        return result;
-    }
-
-    private static Map<String,Pattern> getPatternCache() {
-        Map<String, Object> appMap = getApplicationMap();
+    private static Map<String,Pattern> getPatternCache(Map<String, Object> appMap) {
         Map<String,Pattern> result = 
                 (Map<String,Pattern>) appMap.get(patternCacheKey);
         if (null == result) {
@@ -252,30 +196,6 @@ public class Util {
         return unitTestModeEnabled;
     }
 
-    public static void setCoreTLVActive(boolean active) {
-        Map<String, Object> appMap = getApplicationMap();
-        appMap.put(coreTLVEnabled, (Boolean) active);
-    }
-
-    public static boolean isCoreTLVActive() {
-        Boolean result = true;
-        Map<String, Object> appMap = getApplicationMap();
-        return (null == (result = (Boolean) appMap.get(coreTLVEnabled)) ? true
-                : result.booleanValue());
-    }
-
-    public static void setHtmlTLVActive(boolean active) {
-        Map<String, Object> appMap = getApplicationMap();
-        appMap.put(htmlTLVEnabled, (Boolean) active);
-    }
-
-    public static boolean isHtmlTLVActive() {
-        Boolean result = true;
-        Map<String, Object> appMap = getApplicationMap();
-        return (null == (result = (Boolean) appMap.get(htmlTLVEnabled)) ? true
-                : result.booleanValue());
-    }
-
     public static TransformerFactory createTransformerFactory() {
          ClassLoader cl = Thread.currentThread().getContextClassLoader();
          TransformerFactory factory;
@@ -329,26 +249,27 @@ public class Util {
                                   Object fallbackClass)
         throws ClassNotFoundException {
         ClassLoader loader = Util.getCurrentLoader(fallbackClass);
-        // Where to begin...
-        // JDK 6 introduced CR 6434149 where one couldn't pass
-        // in a literal for an array type ([Ljava.lang.String) and
-        // get the Class representation using ClassLoader.loadClass().
-        // It was recommended to use Class.forName(String, boolean, ClassLoader)
-        // for all ClassLoading requests.
-        // HOWEVER, when trying to eliminate the need for .groovy extensions
-        // being specified in the faces-config.xml for Groovy-based artifacts,
-        // by using a an adapter to the GroovyScriptEngine, I found that the class
-        // instance was cached somewhere, so that no matter what change I made,
-        // Class.forName() always returned the same instance.  I haven't been
-        // able to determine why this happens in the appserver environment
-        // as the same adapter in a standalone program works as one might expect.
-        // So, for now, if the classname starts with '[', then use Class.forName()
-        // to avoid CR 643419 and for all other cases, use ClassLoader.loadClass().
-        if (name.charAt(0) == '[') {
-            return Class.forName(name, true, loader);
-        } else {
-            return loader.loadClass(name);
-        }
+//        // Where to begin...
+//        // JDK 6 introduced CR 6434149 where one couldn't pass
+//        // in a literal for an array type ([Ljava.lang.String) and
+//        // get the Class representation using ClassLoader.loadClass().
+//        // It was recommended to use Class.forName(String, boolean, ClassLoader)
+//        // for all ClassLoading requests.
+//        // HOWEVER, when trying to eliminate the need for .groovy extensions
+//        // being specified in the faces-config.xml for Groovy-based artifacts,
+//        // by using a an adapter to the GroovyScriptEngine, I found that the class
+//        // instance was cached somewhere, so that no matter what change I made,
+//        // Class.forName() always returned the same instance.  I haven't been
+//        // able to determine why this happens in the appserver environment
+//        // as the same adapter in a standalone program works as one might expect.
+//        // So, for now, if the classname starts with '[', then use Class.forName()
+//        // to avoid CR 643419 and for all other cases, use ClassLoader.loadClass().
+//        if (name.charAt(0) == '[') {
+//            return Class.forName(name, true, loader);
+//        } else {
+//            return loader.loadClass(name);
+//        }
+        return Class.forName(name, true, loader);
     }
 
 
@@ -770,12 +691,13 @@ public class Util {
      * the <code>Pattern</code>s in an LRUMap instead of
      * creating a new <code>Pattern</code> on each
      * invocation.</p>
+     * @param appMap the Application Map
      * @param toSplit the string to split
      * @param regex the regex used for splitting
      * @return the result of <code>Pattern.spit(String, int)</code>
      */
-    public synchronized static String[] split(String toSplit, String regex) {
-        Map<String, Pattern> patternCache = getPatternCache();
+    public synchronized static String[] split(Map<String, Object> appMap, String toSplit, String regex) {
+        Map<String, Pattern> patternCache = getPatternCache(appMap);
         Pattern pattern = patternCache.get(regex);
         if (pattern == null) {
             pattern = Pattern.compile(regex);
@@ -1007,16 +929,6 @@ public class Util {
             }
         }
     }
-
-    public static void setNonFacesContextApplicationMap(Map<String, Object> instance) {
-        lazilyInitializeNonFacesContextApplicationMap();
-        if (null == instance) {
-            nonFacesContextApplicationMap.remove();
-        } else {
-            nonFacesContextApplicationMap.set(instance);
-        }
-    }
-
 
     static public boolean classHasAnnotations(Class<?> clazz) {
         if (clazz != null) {

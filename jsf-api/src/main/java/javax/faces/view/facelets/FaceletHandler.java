@@ -59,9 +59,6 @@
 package javax.faces.view.facelets;
 
 import java.io.IOException;
-
-import javax.el.ELException;
-import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 
 /**
