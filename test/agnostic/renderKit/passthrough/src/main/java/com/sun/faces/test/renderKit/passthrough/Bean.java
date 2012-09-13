@@ -43,8 +43,8 @@ package com.sun.faces.test.renderKit.passthrough;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
-import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 
 @ManagedBean
 @SessionScoped
@@ -52,6 +52,16 @@ public class Bean implements Serializable {
     
     private String text1 = "text1";
     private String text2 = "text2";
+    
+    private String publicKey;
+
+    public String getPublicKey() {
+        return publicKey;
+    }
+
+    public void setPublicKey(String publicKey) {
+        this.publicKey = publicKey;
+    }
 
     private String email = "anybody@example.com";
 

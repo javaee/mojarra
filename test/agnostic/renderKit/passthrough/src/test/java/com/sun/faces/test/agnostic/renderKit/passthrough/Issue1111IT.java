@@ -41,22 +41,19 @@ package com.sun.faces.test.agnostic.renderKit.passthrough;
 
 import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.StatusHandler;
+import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlOption;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlResetInput;
 import com.gargoylesoftware.htmlunit.html.HtmlSelect;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-
 import com.gargoylesoftware.htmlunit.html.HtmlTextArea;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
-import org.junit.*;
-
 import java.util.Arrays;
 import java.util.List;
-
+import org.junit.*;
 import static org.junit.Assert.*;
 
 public class Issue1111IT {
@@ -277,6 +274,13 @@ public class Issue1111IT {
 
         lastAction = page.getElementById("lastAction").getTextContent();
         assertEquals("action2", lastAction);
+        
+        HtmlElement keyGen = page.getElementById("publicKey1");
+        String nameAttr = keyGen.asXml();
+        
+        String pageXml = page.asXml();
+        assertTrue(pageXml.matches("(?s).*keygen.*name=\\\"myKeyName\\\".*"));
+
     }
 
     @Test

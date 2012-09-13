@@ -39,6 +39,9 @@
  */
 package com.sun.faces.facelets.tag;
 
+import com.sun.faces.facelets.tag.jsf.PassThroughAttributeLibrary;
+import com.sun.faces.facelets.tag.jsf.PassThroughElementLibrary;
+import com.sun.faces.facelets.tag.jsf.html.HtmlLibrary;
 import javax.faces.view.Location;
 import javax.faces.view.facelets.FaceletException;
 import javax.faces.view.facelets.Tag;
@@ -102,9 +105,9 @@ class DefaultTagDecorator implements TagDecorator {
     }
 
     private static enum Namespace {
-        p("http://java.sun.com/jsf/passthrough"),
-        jsf("http://java.sun.com/jsf"),
-        h("http://java.sun.com/jsf/html");
+        p(PassThroughAttributeLibrary.Namespace),
+        jsf(PassThroughElementLibrary.Namespace),
+        h(HtmlLibrary.Namespace);
 
         private String uri;
 

@@ -61,6 +61,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.el.ValueExpression;
 import javax.faces.context.ExternalContext;
+import javax.faces.render.Renderer;
+import org.codehaus.groovy.tools.shell.util.ANSI;
 
 
 /**
@@ -1051,6 +1053,10 @@ public class HtmlResponseWriter extends ResponseWriter {
         }
 
         if (isCdata) {
+            return;
+        }
+        
+        if (name.equals(Renderer.PASSTHROUGH_RENDERER_LOCALNAME_KEY)) {
             return;
         }
 

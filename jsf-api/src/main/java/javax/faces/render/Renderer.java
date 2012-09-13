@@ -49,7 +49,7 @@ import javax.faces.context.FacesContext;
 
 
 /**
- * <p>A <strong class="changed_modified_2_0">Renderer</strong> converts
+ * <p>A <strong class="changed_modified_2_0 changed_modified_2_2">Renderer</strong> converts
  * the internal representation of {@link UIComponent}s into the output
  * stream (or writer) associated with the response we are creating for a
  * particular request.  Each <code>Renderer</code> knows how to render
@@ -89,6 +89,14 @@ import javax.faces.context.FacesContext;
  */
 
 public abstract class Renderer {
+    
+    /**
+     * <p class="changed_added_2_2">The key in the component passthrough
+     * attributes {@code Map} for the localName of the element corresponding to the component.</p>
+     * 
+     * @since 2.2
+     */
+    public static final String PASSTHROUGH_RENDERER_LOCALNAME_KEY = "javax.faces.passthrough.localName";
     
     
     // ------------------------------------------------------ Rendering Methods
