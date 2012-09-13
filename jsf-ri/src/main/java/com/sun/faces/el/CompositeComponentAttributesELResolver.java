@@ -265,11 +265,15 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
             evalMap = new ExpressionEvalMap(ctx, c);
             topMap.put(c, evalMap);
         }
-        if (evalMap == null) {
+        else {
             evalMap = topMap.get(c);
             if (evalMap == null) {
                 evalMap = new ExpressionEvalMap(ctx, c);
                 topMap.put(c, evalMap);
+            } else {
+        	// JAVASERVERFACES-2508 - running as Portlet2 FacesContext must be updated for rendering, or 
+        	// ExpressionEvalMap would have to be reconstructed for the second Portlet phase
+        	((ExpressionEvalMap)evalMap).updateFacesContext(ctx);
             }
         }
         return evalMap;
@@ -421,6 +425,11 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
 
             return result;
         }
-
+        
+        public void updateFacesContext(FacesContext ctx) {
+        	if (this.ctx != ctx) {
+        		this.ctx = ctx;
+        	}
+        }
     }
 }
