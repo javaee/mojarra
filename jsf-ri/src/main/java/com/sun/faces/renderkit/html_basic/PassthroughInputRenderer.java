@@ -58,7 +58,7 @@ public class PassthroughInputRenderer extends HtmlBasicInputRenderer {
     public void encodeBegin(FacesContext context, UIComponent component) throws IOException {
         LOGGER.info("encodeBegin called");
         Map<String, Object> attrs = component.getAttributes();
-        String localName = (String) attrs.get(Renderer.PASSTHROUGH_RENDERER_LOCALNAME_KEY);
+        String localName = ""; // PENDING(edburns): (String) attrs.get(Renderer.PASSTHROUGH_RENDERER_LOCALNAME_KEY);
         ResponseWriter writer = context.getResponseWriter();
         writer.startElement(localName, component);
 
@@ -90,7 +90,7 @@ public class PassthroughInputRenderer extends HtmlBasicInputRenderer {
           throws IOException {
         LOGGER.info("encodeEnd called");
         Map<String, Object> attrs = component.getAttributes();
-        String localName = (String) attrs.get(Renderer.PASSTHROUGH_RENDERER_LOCALNAME_KEY);
+        String localName = ""; // (String) attrs.get(Renderer.PASSTHROUGH_RENDERER_LOCALNAME_KEY);
         context.getResponseWriter().endElement(localName);
     }
     
