@@ -40,7 +40,6 @@
  */
 package com.sun.faces.test.lifecycle.basic;
 
-import javax.faces.lifecycle.FacesConfigDocumentPopulator;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -57,7 +56,6 @@ public class DocumentPopulator {
      */
     private static final String PHASE_LISTENER = "phase-listener";
 
-    @FacesConfigDocumentPopulator
     public void populateDocument(Document document) {
         String namespace = document.getDocumentElement().getNamespaceURI();
         final String expectedNamespaceURI = "http://java.sun.com/xml/ns/javaee";
