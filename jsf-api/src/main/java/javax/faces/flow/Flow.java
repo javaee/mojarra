@@ -71,6 +71,7 @@ public class Flow implements Serializable {
     private String startNodeId;
     private List<ViewNode> views;
     private List<MethodCallNode> methodCalls;
+    private ConcurrentHashMap<String, Parameter> inboundParameters = new ConcurrentHashMap<String, Parameter>();
     private ConcurrentHashMap<String,NavigationCase> returns = new ConcurrentHashMap<String, NavigationCase>();
     private ConcurrentHashMap<String,SwitchNode> switches = new ConcurrentHashMap<String, SwitchNode>();
     private ConcurrentHashMap<String,FacesFlowCallNode> facesFlowCalls = new ConcurrentHashMap<String, FacesFlowCallNode>();
@@ -194,7 +195,11 @@ public class Flow implements Serializable {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Graph properties">       
-    
+
+    public Map<String, Parameter> getInboundParameters() {
+        return inboundParameters;
+    }
+
     public List<ViewNode> getViews() {
         return views;
     }

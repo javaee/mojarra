@@ -55,6 +55,9 @@
         <p>First page in the flow</p>
         <p>Flow bean name: #{flow_b_Bean.name}</p>
         
+        <p><span id="param1FromFlowA">#{facesFlowScope.param1Value}</span></p>
+        <p><span id="param2FromFlowA">#{facesFlowScope.param2Value}</span></p>
+        
         <p><h:commandButton id="index" value="home" action="/index" /></p>
         <p><h:commandButton id="next_a" value="next" action="next_a" /></p>
         <p><h:commandButton id="nonFlow" value="nonFlow" action="/nonFlow" /></p>

@@ -330,7 +330,8 @@ public abstract class FlowHandler {
      * @since 2.2
      */
             
-    public abstract Flow transition(FacesContext context, UIComponent origin, UIComponent destination);
+    public abstract Flow transition(FacesContext context, UIComponent origin, 
+            UIComponent destination, FacesFlowCallNode outboundCallNode);
     
 
     /**

@@ -40,6 +40,8 @@
  */
 package javax.faces.flow;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.el.ValueExpression;
 import javax.faces.context.FacesContext;
 
@@ -55,8 +57,13 @@ public class FacesFlowCallNode extends FlowNode {
     private String calledFlowDocumentId;
     private ValueExpression calledFlowDocumentIdVE;
     
+    private ConcurrentHashMap<String, Parameter> outboundParameters = new ConcurrentHashMap<String, Parameter>();
+    
     // PENDING(edburns): move setters to impl, use proper el utils.
-            
+
+    public Map<String, Parameter> getOutboundParameters() {
+        return outboundParameters;
+    }
 
     public String getCalledFlowDocumentId(FacesContext context) {
         if (null != calledFlowDocumentIdVE) {

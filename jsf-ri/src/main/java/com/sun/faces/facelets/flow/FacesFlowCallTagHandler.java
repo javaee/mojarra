@@ -42,11 +42,15 @@ package com.sun.faces.facelets.flow;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.flow.FacesFlowCallNode;
+import javax.faces.flow.Parameter;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagConfig;
@@ -69,6 +73,28 @@ public class FacesFlowCallTagHandler extends TagHandlerImpl {
         
         return result;
     }
+    
+    public static List<Parameter> getOutboundParameters(FaceletContext ctx) {
+        List<Parameter> result = null;
+
+        Map<FacesFlowDefinitionTagHandler.FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
+        result = (List<Parameter>) flowData.get(FacesFlowDefinitionTagHandler.FlowDataKeys.OutboundParameters);
+        if (null == result) {
+            result = Collections.synchronizedList(new ArrayList<Parameter>());
+            flowData.put(FacesFlowDefinitionTagHandler.FlowDataKeys.OutboundParameters, result);
+        }
+        
+        return result;
+    }
+    
+    public static void clearOutboundParameters(FaceletContext ctx) {
+        List<Parameter> result = null;
+
+        Map<FacesFlowDefinitionTagHandler.FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
+        flowData.remove(FacesFlowDefinitionTagHandler.FlowDataKeys.OutboundParameters);
+    }
+    
+        
         
     public static boolean isWithinFacesFlowCall(FaceletContext ctx) {
         boolean result = false;
@@ -106,10 +132,18 @@ public class FacesFlowCallTagHandler extends TagHandlerImpl {
             FacesFlowCallNode toAdd = new FacesFlowCallNode();
             toAdd.setCalledFlowId(context, struct.getFlowId());
             toAdd.setCalledFlowDocumentId(context, struct.getFlowDocumentId());
+            List<Parameter> outboundParametersFromConfig = FacesFlowCallTagHandler.getOutboundParameters(ctx);
+            if (null != outboundParametersFromConfig) {
+                Map<String, Parameter> outboundParameters = toAdd.getOutboundParameters();
+                for (Parameter cur : outboundParametersFromConfig) {
+                    outboundParameters.put(cur.getName(), cur);
+                }
+            }
             calls.put(idStr, toAdd);
             
             
         } finally {
+            FacesFlowCallTagHandler.clearOutboundParameters(ctx);
             setWithinFacesFlowCall(ctx, false);
         }
         

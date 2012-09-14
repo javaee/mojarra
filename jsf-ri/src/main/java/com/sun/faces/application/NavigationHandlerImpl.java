@@ -60,6 +60,7 @@ import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
 import java.util.concurrent.ConcurrentHashMap;
+import javax.el.ELContext;
 import javax.el.MethodExpression;
 import javax.el.ValueExpression;
 import javax.faces.application.Application;
@@ -72,6 +73,7 @@ import javax.faces.flow.Flow;
 import javax.faces.flow.FlowHandler;
 import javax.faces.flow.FlowNode;
 import javax.faces.flow.MethodCallNode;
+import javax.faces.flow.Parameter;
 import javax.faces.flow.SwitchNode;
 import javax.faces.flow.ViewNode;
 import javax.faces.view.ViewDeclarationLanguage;
@@ -236,7 +238,9 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                 // are in flows or not.
                 Flow newFlow = 
                         context.getApplication().getFlowHandler().
-                        transition(context, context.getViewRoot(), newRoot);
+                        transition(context, context.getViewRoot(), newRoot, 
+                        (FacesFlowCallNode)
+                        context.getAttributes().get(FACES_FLOW_CALL_ATTR_NAME));
                 // newFlow will only be non-null if a transition occurred from one
                 // flow to another.
                 if (null != newFlow) {
@@ -905,6 +909,8 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         return result;
     }
     
+    private static final String FACES_FLOW_CALL_ATTR_NAME = RIConstants.FACES_PREFIX + "FACES_FLOW_CALL_ATTR_NAME";
+    
     private CaseStruct findFacesFlowCallMatch(FacesContext context, String fromAction, String outcome) {
         CaseStruct result = null;
 
@@ -924,6 +930,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                     ViewHandler vh = context.getApplication().getViewHandler();
                     loadFlowDefinition(context, vh, flowDocumentId);
                     Flow newFlow = flowHandler.getFlow(context, flowDocumentId, flowId);
+                    context.getAttributes().put(FACES_FLOW_CALL_ATTR_NAME, facesFlowCallNode);
                     
                     result = synthesizeCaseStruct(context, newFlow, fromAction, flowId);
                 }

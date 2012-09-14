@@ -55,6 +55,9 @@
         <p>First page in the flow</p>
         <p>Flow bean name: #{flow_a_Bean.name}</p>
 
+        <p><span id="param1FromFlowB">#{facesFlowScope.param1Value}</span></p>
+        <p><span id="param2FromFlowB">#{facesFlowScope.param2Value}</span></p>
+
         <p>Has a flow: #{null != facesContext.application.flowHandler.currentFlow}.</p>
         
         <p><h:commandButton id="next_a" value="next" action="next_a" /></p>

@@ -58,6 +58,7 @@ import javax.faces.flow.FacesFlowCallNode;
 import javax.faces.flow.Flow;
 import javax.faces.flow.FlowHandler;
 import javax.faces.flow.MethodCallNode;
+import javax.faces.flow.Parameter;
 import javax.faces.flow.SwitchNode;
 import javax.faces.flow.ViewNode;
 import javax.faces.view.facelets.FaceletContext;
@@ -83,6 +84,9 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
         CurrentNavigationCase,
         CurrentMethodCall,
         CurrentFacesFlowReference,
+        CurrentParameter,
+        InboundParameters,
+        OutboundParameters,
         MethodCalls,
         SwitchNavigationCases,
         SwitchDefaultCase,
@@ -90,6 +94,38 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
         FacesFlowCalls,
         
     } 
+    
+    public static List<Parameter> getInboundParameters(FaceletContext ctx) {
+        List<Parameter> result = null;
+
+        Map<FacesFlowDefinitionTagHandler.FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
+        result = (List<Parameter>) flowData.get(FacesFlowDefinitionTagHandler.FlowDataKeys.InboundParameters);
+        if (null == result) {
+            result = Collections.synchronizedList(new ArrayList<Parameter>());
+            flowData.put(FacesFlowDefinitionTagHandler.FlowDataKeys.InboundParameters, result);
+        }
+        
+        return result;
+    }
+    
+    public static Parameter getCurrentParameter(FaceletContext ctx) {
+        Parameter result = null;
+
+        Map<FacesFlowDefinitionTagHandler.FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
+        result = (Parameter) flowData.get(FacesFlowDefinitionTagHandler.FlowDataKeys.CurrentParameter);
+        if (null == result) {
+            result = new Parameter();
+            flowData.put(FacesFlowDefinitionTagHandler.FlowDataKeys.CurrentParameter, result);
+        }
+        
+        return result;
+    }
+    
+    public static void clearCurrentParameter(FaceletContext ctx) {
+
+        Map<FacesFlowDefinitionTagHandler.FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
+        flowData.remove(FacesFlowDefinitionTagHandler.FlowDataKeys.CurrentParameter);
+    }
     
     static Map<FlowDataKeys,Object> getFlowData(FaceletContext ctx) {
         Map<Object, Object> attrs = ctx.getFacesContext().getAttributes();
@@ -259,6 +295,17 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
                     if (!returns.containsKey(returnId)) {
                         returns.put(returnId, cur);
                     }
+                }
+            }
+            
+            //
+            // <inbound-parameters>
+            //
+            List<Parameter> inboundParametersFromConfig = FacesFlowDefinitionTagHandler.getInboundParameters(ctx);
+            Map<String, Parameter> inboundParameters = newFlow.getInboundParameters();
+            if (null != inboundParametersFromConfig && !inboundParametersFromConfig.isEmpty()) {
+                for (Parameter cur : inboundParametersFromConfig) {
+                    inboundParameters.put(cur.getName(), cur);
                 }
             }
             
