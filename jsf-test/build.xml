@@ -116,7 +116,8 @@
                     JAVASERVERFACES_SPEC_PUBLIC-594,
                     JAVASERVERFACES_SPEC_PUBLIC-1071,
                     JAVASERVERFACES_SPEC_PUBLIC-719,
-                    JAVASERVERFACES_SPEC_PUBLIC-1082" />
+                    JAVASERVERFACES_SPEC_PUBLIC-1082,
+                    JAVASERVERFACES-1655" />
 
     <target name="clean" depends="define.applications"
             description="">
