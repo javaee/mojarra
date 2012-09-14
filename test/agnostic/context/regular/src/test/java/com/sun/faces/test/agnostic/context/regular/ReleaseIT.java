@@ -43,6 +43,7 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -68,11 +69,13 @@ public class ReleaseIT {
     }
 
     @Test
+    @Ignore
     public void testRelease1() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/release1.xhtml");
     }
 
     @Test
+    @Ignore
     public void testRelease2() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/release2.xhtml");
     }
