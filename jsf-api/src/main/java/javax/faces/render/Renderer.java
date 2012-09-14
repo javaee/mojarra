@@ -44,8 +44,8 @@ package javax.faces.render;
 import java.io.IOException;
 import java.util.Iterator;
 import javax.faces.component.UIComponent;
-import javax.faces.convert.ConverterException;
 import javax.faces.context.FacesContext;
+import javax.faces.convert.ConverterException;
 
 
 /**
@@ -96,7 +96,7 @@ public abstract class Renderer {
      * 
      * @since 2.2
      */
-    public static final String PASSTHROUGH_RENDERER_LOCALNAME_KEY = "javax.faces.passthrough.localName";
+    public static final String PASSTHROUGH_RENDERER_LOCALNAME_KEY = "elementName";
     
     
     // ------------------------------------------------------ Rendering Methods

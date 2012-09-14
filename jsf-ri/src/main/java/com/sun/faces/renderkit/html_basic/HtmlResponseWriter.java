@@ -62,7 +62,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.el.ValueExpression;
 import javax.faces.context.ExternalContext;
 import javax.faces.render.Renderer;
-import org.codehaus.groovy.tools.shell.util.ANSI;
 
 
 /**
@@ -1219,7 +1218,7 @@ public class HtmlResponseWriter extends ResponseWriter {
         String name = getElementName(original);
 
         if(passthroughAttributes != null) {
-            passthroughAttributes.remove("elementName");
+            passthroughAttributes.remove(Renderer.PASSTHROUGH_RENDERER_LOCALNAME_KEY);
             if(passthroughAttributes.isEmpty()) {
                 passthroughAttributes = null;
             }
@@ -1242,12 +1241,10 @@ public class HtmlResponseWriter extends ResponseWriter {
     }
 
     private String getElementName(String name) {
-        // TODO we need a constant somewhere for the special passthrough attribute "elementName"
-        if(containsPassThroughAttribute("elementName")) {
+        if(containsPassThroughAttribute(Renderer.PASSTHROUGH_RENDERER_LOCALNAME_KEY)) {
             FacesContext context = FacesContext.getCurrentInstance();
 
-            // TODO we need a constant somewhere for the special passthrough attribute "elementName"
-            String elementName = getAttributeValue(context, passthroughAttributes.get("elementName"));
+            String elementName = getAttributeValue(context, passthroughAttributes.get(Renderer.PASSTHROUGH_RENDERER_LOCALNAME_KEY));
             if(elementName != null && elementName.trim().length() > 0) {
                 return elementName;
             }

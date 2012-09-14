@@ -1,17 +1,196 @@
-Notes on Frank meeting
+http://java.net/jira/browse/JAVASERVERFACES_SPEC_PUBLIC-1111
 
-Open issues:
+PROPOSAL: Use TagDecorator approach to provide passthrough elements,
+falling back on a special Renderer if necessary.
+
+SECTION: Proposal History
+
+In the last EG conference call, on 20120808, Frank Caputo proposed a
+different approach to issue 1111 then Ed had been persuing.  The group
+agreed the approach had merit, and Frank graciously agreed to prototype
+it.  In the following days and weeks Frank's prototype took shape, with
+Ed giving occasional look-ins.  Since 20120907, Ed has been working
+toward integrating the prototype into the trunk.
+
+SECTION: The Goal of the Feature
+
+The goal of this feature is to enable page authors to write almost
+entirely plain HTML (including HTML5) and let the runtime identify such
+markup as traditional JSF components.  We want to minimize the "almost"
+in the previous sentence.  A corollary of this minimization is that the
+range of HTML supported by the feature is maximized.  The current
+proposal has the "almost" shrunk down to two requirements.
+
+1. Declare the <http://java.sun.com/jsf> namespace in the Facelet view. 
+
+2. For each HTML markup that the page author wants to be considered as a
+JSF component, put at least one attribute in that namespace.  Usually
+"id" is the chosen attribute.
+
+SECTION: Summary of Frank's TagDecorator approach
+
+Frank used the existing JSF 2.0 Facelets TagDecorator API to establish a
+mapping between the existing component/renderer pairings in the
+<http://java.sun.com/jsf/html> taglibrary and plain HTML markup.  To
+this idea, Ed added the existing idea of a "Passthrough Renderer" to
+handle those cases where such a mapping does not exist or does not make
+sense.
+
+SECTION: Details
+
+This prototype data structure conveys the mapping.  Obviously, we'll
+need to decide how best to specify the mapping.  Some choices include:
+
+* A text table in the spec prose document PDF
+
+* Some kind of XML syntax in the standard-html-basic.xml renderkit
+
+    private static enum Mapper {
+        // TODO can we handle h:commandLink and h:outputLink?
+        img("h:graphicImage"), body("h:body"), head("h:head"), label("h:outputLabel"), script("h:outputScript"),
+        link("h:outputStylesheet"),
+
+        form("h:form"), textarea("h:inputTextarea"),
+        // TODO if we want the name of the button to become the id, we have to do .id("name")
+        button("h:commandButton"),
+
+        select(new ElementConverter("h:selectOneListbox", "multiple")
+                // TODO this is a little bit ugly to handle the name as if it were jsf:id. we should not support this
+                .id("name")
+                .map("multiple", "selectManyListbox")),
+
+        input(new ElementConverter("h:inputText", "type")
+                // TODO this is a little bit ugly to handle the name as if it were jsf:id. we should not support this
+                .id("name")
+                .map("hidden", "inputHidden")
+                .map("password", "inputSecret")
+                .map("number", "inputText")
+                .map("search", "inputText")
+                .map("email", "inputText")
+                .map("datetime", "inputText")
+                .map("date", "inputText")
+                .map("month", "inputText")
+                .map("week", "inputText")
+                .map("time", "inputText")
+                .map("datetime-local", "inputText")
+                .map("range", "inputText")
+                .map("color", "inputText")
+                .map("url", "inputText")
+                .map("checkbox", "selectBooleanCheckbox")
+                .map("file", "inputFile")
+                .map("submit", "commandButton")
+                .map("reset", "commandButton")
+                .map("button", "button"));
+
+        private ElementConverter elementConverter;
+
+        private Mapper(ElementConverter elementConverter) {
+            this.elementConverter = elementConverter;
+        }
+
+        private Mapper(String faceletTag) {
+            elementConverter = new ElementConverter(faceletTag);
+        }
+    }
+
+The existing TagDecorator feature enables us to poke into the page
+compilation process and inspect the attributes on every tag in the
+Facelet page with minimal speed performance impact.  If there are no
+attributes in the <http://java.sun.com/jsf> namespace, the custom
+TagDecorator takes no action.  Otherwise, the following actions are taken.
+
+* All attributes declared in the <http://java.sun.com/jsf> namespace get
+  set as proper UIComponent attributes, subject to any existing rules
+  about attribute/property transparency.
+
+* All attributes without a namespace are set as passthrough attributes,
+  in the existing <http://java.sun.com/jsf/passthrough> namespace, in
+  Passthrough Attribute map on UIComponent.
+
+* The localName of the element is saved as a passthrough attribute under
+  a special name given by the value of the symbolic constant
+  Renderer.PASSTHROUGH_RENDERER_LOCALNAME_KEY.
+
+Then, the mapping table is consulted.  If the incoming markup matches an
+entry in the data structure, the internal representation of the tag is
+converted to be as if the page author had typed the tag from the
+<http://java.sun.com/jsf/html> taglibrary (with the above
+modifications).  Otherwise, the internal representation of the tag is
+converted to be as if the page author had typed the jsf:element tag from
+the <http://java.sun.com/jsf> taglibrary (with the above modifications).
+
+The <jsf:element> tag causes a UIInput with a
+javax.faces.passthrough.Input Renderer to be placed in the tree.  Here
+is the spec for this renderer.
+
+Decode Behavior
+
+  Define a data structure that represents the following table.
+
+  localName      submittedValueAttributeName     renderCurrentValue
+  =========      ===========================     ==================
+
+  keygen         name                            false
+
+  <other elements to follow>
+
+  ----------------------------------------------------------------------
+
+  Look in the pass through attribute map for a key given by the value of
+  the symbolic constant Renderer.PASSTHROUGH_RENDERER_LOCALNAME_KEY.  If
+  not found, throw a FacesException.  Use the localName as the key into
+  the preceding table.  Find the submittedValueAttributeName entry for
+  that key.  Look in the passthrough attribute map for a key given by
+  the value of the submittedValueAttributeName entry.  If found, use
+  that value to look in the requestMap.  If the requestMap has a value,
+  set it as the submittedValue of the UIInput.  Aside from the
+  previously mentioned FacesException, if none of the data structure,
+  passthrough attribute map or requestMap lookups yields a value, take
+  no action.
+
+Encode Behavior
+
+  Look in the component's attribute map for an entry under the key given
+  by the value of the constant
+  Renderer.PASSTHROUGH_RENDERER_LOCALNAME_KEY. The value of this key is
+  the element name to render. If the component has a manually declared,
+  not auto-generated clientId, or if the component has behaviors
+  attached to it, render the clientId as the value of the "id"
+  attribute. Render the "name" attribute with the value coming from the
+  clientId. Note that markup authors may set this value directly on the
+  markup and the VDL processing must guarantee that the "name" attribute
+  is set as the component's clientId. If the data structure has an entry
+  for the localName, and the value of the renderCurrentValue is true, or
+  the data structure has no entry for the localName, render the current
+  value of the component as the value of the "value" attribute.
+  Otherwise do not render the value of the component.
+
+SECTION: Open issues:
 
 - Our decision to standardize TagDecorator, but not provide default
   implementations for its helper classes has led to this feature being
   underutilized.
 
-- It may be the case that we need to expose these helper classes as part
+  It may be the case that we need to expose these helper classes as part
   of the work that is being done in 1111-passThroughElement.
 
 - How do we deal with the case when people try to use the feature
   outside the box in which they are allowed to use it?  For example
   using <form method="GET">?
+
+  This is actualy a benefit.  Consider this text based on
+  <http://html5doctor.com/the-output-element/>.
+
+  <form jsf:id="form" oninput="o.value=parseInt(a.value)+parseInt(b.value)">
+
+    <input jsf:id="a" name="a" type="number" step="any"> +
+    <input jsf:id="b" name="b" type="number" step="any"> =
+    <output jsf:id="o" name="o"></output>
+
+  </form>
+
+  The new system will handle this cleanly, and do the "right thing" with
+  respect to the form as well.  That's a win!
 
 - Revisit the contract between DefaultTagDecorator and
   HtmlResponseWriter.
@@ -25,16 +204,7 @@ Open issues:
   Renderer.MARKUP_RENDERER_LOCALNAME_KEY that gets passed in from the
   PassThroughElementHandler.
 
-- On line 127 of DefaultTagDecorator, we convert anything that we
-  already don't understand to an h:panelGroup.  This assumption will not
-  be valid in all cases, so we need a more flexible solution.  Perhaps
-  we can fall back to the javax.faces.passthrough renderer solution.
-
-Test files:
-
-test/agnostic/renderKit/passthrough/src/main/webapp/complex.xhtml 
-test/agnostic/renderKit/passthrough/src/main/webapp/button.xhtml  
-
+END OF PROPOSAL.  Text below this line is scratch text.
 
 SECTION: HTML5 spec section 4.10.2 form-associated elements and the
 Component/Renderer pairings that map to them.

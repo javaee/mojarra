@@ -37,23 +37,6 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  *
- *
- * This file incorporates work covered by the following copyright and
- * permission notice:
- *
- * Copyright 2005-2007 The Apache Software Foundation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
  */
 
 package com.sun.faces.facelets.tag.jsf;
@@ -65,16 +48,28 @@ import javax.faces.view.facelets.ComponentConfig;
 import javax.faces.view.facelets.ComponentHandler;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagAttribute;
+import javax.faces.view.facelets.TagException;
 
 public class PassThroughElementComponentHandler extends ComponentHandler {
     
     private final TagAttribute elementName;
     
+    protected final TagAttribute getRequiredPassthroughAttribute(String localName)
+            throws TagException {
+        TagAttribute attr = this.tag.getAttributes().get(PassThroughAttributeLibrary.Namespace, localName);
+        if (attr == null) {
+            throw new TagException(this.tag, "Attribute '" + localName
+                    + "' is required");
+        }
+        return attr;
+    }
+    
+    
 
     public PassThroughElementComponentHandler(ComponentConfig config) {
         super(config);
         
-        elementName = this.getRequiredAttribute("elementName");
+        elementName = this.getRequiredPassthroughAttribute(Renderer.PASSTHROUGH_RENDERER_LOCALNAME_KEY);
     }
 
     @Override

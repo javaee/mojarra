@@ -280,6 +280,7 @@ public class Issue1111IT {
         
         String pageXml = page.asXml();
         assertTrue(pageXml.matches("(?s).*keygen.*name=\\\"myKeyName\\\".*"));
+        assertTrue(pageXml.matches("(?s).*keygen.*name=\\\"myKeyName2\\\".*"));
 
     }
 

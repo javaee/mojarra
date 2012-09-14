@@ -41,37 +41,22 @@
 -->
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
       xmlns:jsf="http://java.sun.com/jsf" xmlns:p="http://java.sun.com/jsf/passthrough">
 
-<form jsf:id="form" jsf:prependId="false">
+<h:form prependId="false">
+    
+    <h:commandButton id="button" value="submit" />
 
     <p>
-        <span id="lastAction">#{bean.lastAction}</span>
+      <keygen jsf:id="publicKey2" name="myKeyName2" jsf:value="#{bean.publicKey2}" />
     </p>
-    
-    
+
     <p>
         <span id="publicKey1">#{bean.publicKey}</span>
         
     </p>
 
-    <p>
-        <span id="publicKey1">#{bean.publicKey2}</span>
-    </p>
-
-    <button type="submit" jsf:id="fancyButton1" jsf:action="#{bean.action1}">
-        <strong>F</strong>ancy <strong style="color: red;">Button</strong> 1
-    </button>
-
-    <button type="submit" jsf:id="fancyButton2" jsf:action="#{bean.action2}">
-        <strong>F</strong>ancy <strong style="color: blue;">Button</strong> 2
-    </button>
-    
-    <p><jsf:element p:elementName="keygen" id="publickKey1" p:name="myKeyName" value="#{bean.publicKey}" /></p>
-    
-    <p><keygen jsf:id="publicKey2" name="myKeyName2" jsf:value="#{bean.publicKey2}" /></p>
-
-
-</form>
+</h:form>
     
 </html>

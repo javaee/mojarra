@@ -54,6 +54,16 @@ public class Bean implements Serializable {
     private String text2 = "text2";
     
     private String publicKey;
+    
+    private String publicKey2;
+
+    public String getPublicKey2() {
+        return publicKey2;
+    }
+
+    public void setPublicKey2(String publicKey2) {
+        this.publicKey2 = publicKey2;
+    }
 
     public String getPublicKey() {
         return publicKey;

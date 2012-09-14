@@ -50,6 +50,7 @@ import javax.faces.view.facelets.TagAttributes;
 import javax.faces.view.facelets.TagDecorator;
 import java.util.HashMap;
 import java.util.Map;
+import javax.faces.render.Renderer;
 
 /**
  * A simple tag decorator to enable jsf: syntax
@@ -116,7 +117,7 @@ class DefaultTagDecorator implements TagDecorator {
         }
     }
 
-    private ElementConverter defaultElementConverter = new ElementConverter("h:panelGroup");
+    private ElementConverter defaultElementConverter = new ElementConverter("jsf:element");
 
     public Tag decorate(Tag tag) {
         String ns = tag.getNamespace();
@@ -234,7 +235,7 @@ class DefaultTagDecorator implements TagDecorator {
         private TagAttribute createElementName(Tag tag) {
             Location location = tag.getLocation();
             String ns = Namespace.p.uri;
-            String localName = "elementName";
+            String localName = Renderer.PASSTHROUGH_RENDERER_LOCALNAME_KEY;
             String qName = "p:" + localName;
             String value = tag.getLocalName();
 
