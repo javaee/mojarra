@@ -250,8 +250,8 @@ public class Util {
                                   Object fallbackClass)
         throws ClassNotFoundException {
         ClassLoader loader = Util.getCurrentLoader(fallbackClass);
-
-        if (GroovyHelper.isGroovyAvailable(FacesContext.getCurrentInstance())) {
+        FacesContext facesContext = FacesContext.getCurrentInstance();        
+        if (facesContext != null && GroovyHelper.isGroovyAvailable(facesContext)) {
 //        // Where to begin...
 //        // JDK 6 introduced CR 6434149 where one couldn't pass
 //        // in a literal for an array type ([Ljava.lang.String) and
