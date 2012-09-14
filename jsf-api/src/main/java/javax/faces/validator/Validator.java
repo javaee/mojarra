@@ -40,7 +40,6 @@
 
 package javax.faces.validator;
 
-import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import java.util.EventListener;
@@ -70,7 +69,7 @@ import java.util.EventListener;
  * public constructor.  In addition, if the {@link Validator} class
  * wishes to have configuration property values saved and restored with
  * the view, the implementation must also implement {@link
- * StateHolder}.</p>
+ * javax.faces.component.StateHolder}.</p>
 
  * <p class="changed_added_2_0">If the class implementing
  * <code>Validator</code> has a {@link
