@@ -88,8 +88,6 @@ public class FacesFlowCallTagHandler extends TagHandlerImpl {
     }
     
     public static void clearOutboundParameters(FaceletContext ctx) {
-        List<Parameter> result = null;
-
         Map<FacesFlowDefinitionTagHandler.FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
         flowData.remove(FacesFlowDefinitionTagHandler.FlowDataKeys.OutboundParameters);
     }
