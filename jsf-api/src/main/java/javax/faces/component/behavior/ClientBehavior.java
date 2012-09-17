@@ -43,7 +43,6 @@ package javax.faces.component.behavior;
 import java.util.Set;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.render.ClientBehaviorRenderer;
 
 /**
  * <p class="changed_added_2_0"><strong>ClientBehavior</strong> is the
