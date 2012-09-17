@@ -45,8 +45,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
-
-import javax.faces.FacesException;
 import javax.faces.component.UIData;
 
 
@@ -93,7 +91,7 @@ public abstract class DataModel<E> implements Iterable<E> {
      * available at the current <code>rowIndex</code>.  If no
      * <code>wrappedData</code> is available, return <code>false</code>.</p>
      *
-     * @throws FacesException if an error occurs getting the row availability
+     * @throws javax.faces.FacesException if an error occurs getting the row availability
      */
     public abstract boolean isRowAvailable();
 
@@ -103,7 +101,7 @@ public abstract class DataModel<E> implements Iterable<E> {
      * {@link DataModel}.  If the number of rows is unknown, or no
      * <code>wrappedData</code> is available, return -1.</p>
      *
-     * @throws FacesException if an error occurs getting the row count
+     * @throws javax.faces.FacesException if an error occurs getting the row count
      */
     public abstract int getRowCount();
 
@@ -113,7 +111,7 @@ public abstract class DataModel<E> implements Iterable<E> {
      * row index.  If no <code>wrappedData</code> is available, return
      * <code>null</code>.</p>
      *
-     * @throws FacesException if an error occurs getting the row data
+     * @throws javax.faces.FacesException if an error occurs getting the row data
      * @throws IllegalArgumentException if now row data is available
      *  at the currently specified row index
      */
@@ -125,7 +123,7 @@ public abstract class DataModel<E> implements Iterable<E> {
      * we are not currently positioned on a row, or no <code>wrappedData</code>
      * is available, return -1.</p>
      *
-     * @throws FacesException if an error occurs getting the row index
+     * @throws javax.faces.FacesException if an error occurs getting the row index
      */
     public abstract int getRowIndex();
 
@@ -148,7 +146,7 @@ public abstract class DataModel<E> implements Iterable<E> {
      *
      * @param rowIndex The new zero-relative index (must be non-negative)
      *
-     * @throws FacesException if an error occurs setting the row index
+     * @throws javax.faces.FacesException if an error occurs setting the row index
      * @throws IllegalArgumentException if <code>rowIndex</code>
      *  is less than -1
      */
