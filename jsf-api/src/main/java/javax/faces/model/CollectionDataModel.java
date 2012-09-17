@@ -41,7 +41,6 @@
 package javax.faces.model;
 
 import java.util.Collection;
-import javax.faces.FacesException;
 
 
 /**
@@ -98,7 +97,7 @@ public class CollectionDataModel<E> extends DataModel<E> {
      * than or equal to zero, and less than the size of the list.  Otherwise,
      * return <code>false</code>.</p>
      *
-     * @throws FacesException if an error occurs getting the row availability
+     * @throws javax.faces.FacesException if an error occurs getting the row availability
      */
     public boolean isRowAvailable() {
 
@@ -117,7 +116,7 @@ public class CollectionDataModel<E> extends DataModel<E> {
      * length of the list.  If no <code>wrappedData</code> is available,
      * return -1.</p>
      *
-     * @throws FacesException if an error occurs getting the row count
+     * @throws javax.faces.FacesException if an error occurs getting the row count
      */
     public int getRowCount() {
 
@@ -134,7 +133,7 @@ public class CollectionDataModel<E> extends DataModel<E> {
      * specified by <code>rowIndex</code>.  If no wrapped data is available,
      * return <code>null</code>.</p>
      *
-     * @throws FacesException if an error occurs getting the row data
+     * @throws javax.faces.FacesException if an error occurs getting the row data
      * @throws IllegalArgumentException if now row data is available
      *  at the currently specified row index
      */
@@ -151,7 +150,7 @@ public class CollectionDataModel<E> extends DataModel<E> {
     }
     
     /**
-     * @throws FacesException {@inheritDoc}     
+     * @throws javax.faces.FacesException {@inheritDoc}     
      */ 
     public int getRowIndex() {
 
@@ -161,7 +160,7 @@ public class CollectionDataModel<E> extends DataModel<E> {
 
 
     /**
-     * @throws FacesException {@inheritDoc}
+     * @throws javax.faces.FacesException {@inheritDoc}
      * @throws IllegalArgumentException {@inheritDoc}
      */ 
     public void setRowIndex(int rowIndex) {
