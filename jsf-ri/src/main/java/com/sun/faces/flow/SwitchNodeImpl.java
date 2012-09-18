@@ -38,75 +38,79 @@
  * holder.
 
  */
-package javax.faces.flow;
+package com.sun.faces.flow;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import javax.el.ValueExpression;
+import com.sun.faces.facelets.flow.FlowNavigationCase;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import javax.faces.application.NavigationCase;
 import javax.faces.context.FacesContext;
+import javax.faces.flow.SwitchNode;
 
-public class FacesFlowCallNode extends FlowNode {
+public class SwitchNodeImpl extends SwitchNode implements Serializable {
     
-    private static final long serialVersionUID = -8867834379603617593L;
+    private static final long serialVersionUID = -8002653834253367883L;
     
-    private String id;
-    
-    private String calledFlowId;
-    private ValueExpression calledFlowIdVE;
-    
-    private String calledFlowDocumentId;
-    private ValueExpression calledFlowDocumentIdVE;
-    
-    private ConcurrentHashMap<String, Parameter> outboundParameters = new ConcurrentHashMap<String, Parameter>();
-    
-    // PENDING(edburns): move setters to impl, use proper el utils.
+    private final String id;
+    private final NavigationCase defaultCase;
+    private List<NavigationCase> cases;
 
-    public Map<String, Parameter> getOutboundParameters() {
-        return outboundParameters;
-    }
-
-    public String getCalledFlowDocumentId(FacesContext context) {
-        if (null != calledFlowDocumentIdVE) {
-            return (String) calledFlowDocumentIdVE.getValue(context.getELContext());
-        } else {
-            return calledFlowDocumentId;
-        }
-
-    }
-
-    public void setCalledFlowDocumentId(FacesContext context, String calledFlowDocumentId) {
-        if (null != calledFlowDocumentId && calledFlowDocumentId.startsWith("#{")) {
-            this.calledFlowDocumentIdVE = context.getApplication().getExpressionFactory().createValueExpression(context.getELContext(), calledFlowDocumentId, String.class);
-        } else {
-            this.calledFlowDocumentId = calledFlowDocumentId;
-        }
-    }
-
-    public String getCalledFlowId(FacesContext context) {
-        if (null != calledFlowIdVE) {
-            return (String) calledFlowIdVE.getValue(context.getELContext());
-        } else {
-            return calledFlowId;
-        }
-    }
-
-    public void setCalledFlowId(FacesContext context, String calledFlowId) {
-        if (null != calledFlowId && calledFlowId.startsWith("#{")) {
-            this.calledFlowIdVE = context.getApplication().getExpressionFactory().createValueExpression(context.getELContext(), calledFlowId, String.class);
-        } else {
-            this.calledFlowId = calledFlowId;
-        }
+    public SwitchNodeImpl(String id, FlowNavigationCase defaultCase) {
+        this.id = id;
+        FacesContext context = FacesContext.getCurrentInstance();
         
+        this.defaultCase = defaultCase;
+        cases = Collections.synchronizedList(new ArrayList<NavigationCase>());
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final SwitchNodeImpl other = (SwitchNodeImpl) obj;
+        if ((this.id == null) ? (other.id != null) : !this.id.equals(other.id)) {
+            return false;
+        }
+        if (this.defaultCase != other.defaultCase && (this.defaultCase == null || !this.defaultCase.equals(other.defaultCase))) {
+            return false;
+        }
+        if (this.cases != other.cases && (this.cases == null || !this.cases.equals(other.cases))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 47 * hash + (this.id != null ? this.id.hashCode() : 0);
+        hash = 47 * hash + (this.defaultCase != null ? this.defaultCase.hashCode() : 0);
+        hash = 47 * hash + (this.cases != null ? this.cases.hashCode() : 0);
+        return hash;
+    }
+    
+    @Override
     public String getId() {
         return id;
     }
+        
+    @Override
+    public List<NavigationCase> getCases() {
+        return cases;
+    }
 
-    public void setId(String id) {
-        this.id = id;
+    @Override
+    public NavigationCase getDefaultCase() {
+        return defaultCase;
     }
     
     
+
     
 }

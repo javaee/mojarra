@@ -78,6 +78,10 @@ public class FlowNavigationCase extends NavigationCase {
     public URL getBookmarkableURL(FacesContext context) throws MalformedURLException {
         return super.getBookmarkableURL(context);
     }
+    
+    public ValueExpression getConditionExpression () {
+        return conditionExpr;
+    }
 
     @Override
     public Boolean getCondition(FacesContext context) {
@@ -137,7 +141,7 @@ public class FlowNavigationCase extends NavigationCase {
     public String getToViewId(FacesContext context) {
         return super.getToViewId(context);
     }
-
+    
     @Override
     public boolean hasCondition() {
         return (condition != null);

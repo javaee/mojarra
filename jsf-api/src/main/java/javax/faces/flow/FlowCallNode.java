@@ -40,13 +40,15 @@
  */
 package javax.faces.flow;
 
-import java.util.List;
-import javax.faces.application.NavigationCase;
+import java.util.Map;
+import javax.faces.context.FacesContext;
 
-public abstract class SwitchNode extends FlowNode {
+public abstract class FlowCallNode extends FlowNode {
     
-    public abstract List<NavigationCase> getCases();
+    public abstract Map<String, Parameter> getOutboundParameters();
 
-    public abstract NavigationCase getDefaultCase();
+    public abstract String getCalledFlowDocumentId(FacesContext context);
+
+    public abstract String getCalledFlowId(FacesContext context);
     
 }

@@ -318,20 +318,49 @@ public abstract class FlowHandler {
      * {@code Flow} instances corresponding to the {@code origin} and
      * {@code destination} arguments.  If the {@code origin Flow} is
      * equal to the {@code destination Flow}, take no action and return
-     * {@code null}.  If the {@code destination Flow} is a sub-flow of
-     * the {@code origin Flow} push the {@code destination Flow} onto
-     * the flow data structure and return {@code the destination
-     * Flow}. Otherwise, pop the current {code Flow} from the flow data
-     * structure.  If the {@code destination Flow} is non-{@code null},
-     * make the {@code destination Flow} the current flow, pushing it
-     * onto the data structure.</p>
+     * {@code null}.  Otherwise, if the {@code outboundCallNode}
+     * argument is non-{@code null} save aside the outbound parameters.
+     * For discussion <strong>evaluatedParams</strong> is a data
+     * structure that stores the evaluated values of any outbound
+     * parameters.  It is necessary to evaluate these values before
+     * popping any flow scopes because the values may refer to scoped
+     * instances that need to be passed to the target flow, but will not
+     * be available once the new scope is activated.  Save aside the
+     * outbound parameters using the following algorithm.</p>
+
+     * <div class="changed_added_2_2">
+
+     * <ul>
+
+     * <p>If the {@code outboundParameters} property of {@code
+     * outboundCallNode} is non-{@code null} and not empty, and the
+     * {@code inboundParameters} property of the target flow is
+     * non-{@code null} and not empty, for each entry in the outbound
+     * parameters whose name matches an entry in the inbound parameters,
+     * evaluate the value of the parameter, and put the evaluated value
+     * into <strong>evaluatedParams</strong> under the corresponding
+     * name.  Otherwise, consider <strong>evaluatedParams</strong> to be
+     * empty.</p>
+
+     * </ul>
+
+     * <p>If the {@code destination Flow} is a sub-flow of the {@code
+     * origin Flow} push the {@code destination Flow} onto the flow data
+     * structure and return {@code the destination Flow}. Otherwise, pop
+     * the current {code Flow} from the flow data structure.  If the
+     * {@code destination Flow} is non-{@code null}, make the {@code
+     * destination Flow} the current flow, pushing it onto the data
+     * structure.  If <strong>evaluatedParams</strong> is not empty, for
+     * each entry, find the corresponding parameter in the target flow's
+     * inbound parameters and call its {@code setValue} method, passing
+     * the value from <strong>evaluatedParams</strong>.</p>
      * 
-     *
+     * </div>
      * @since 2.2
      */
             
     public abstract Flow transition(FacesContext context, UIComponent origin, 
-            UIComponent destination, FacesFlowCallNode outboundCallNode);
+            UIComponent destination, FlowCallNode outboundCallNode);
     
 
     /**

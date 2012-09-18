@@ -41,11 +41,11 @@
 package com.sun.faces.facelets.flow;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
+import com.sun.faces.flow.MethodCallNodeImpl;
 import java.io.IOException;
 import javax.el.ExpressionFactory;
 import javax.el.MethodExpression;
 import javax.faces.component.UIComponent;
-import javax.faces.flow.MethodCallNode;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagConfig;
 
@@ -58,10 +58,9 @@ public class MethodTagHandler extends TagHandlerImpl {
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
         this.nextHandler.apply(ctx, parent);
         if (MethodCallTagHandler.isWithinMethodCall(ctx)) {
-            MethodCallNode cur = MethodCallTagHandler.getCurrentMethodCall(ctx);
+            MethodCallNodeImpl cur = MethodCallTagHandler.getCurrentMethodCall(ctx);
             ExpressionFactory expressionFactory = ctx.getFacesContext().getApplication().getExpressionFactory();
             String expressionString = this.nextHandler.toString();
-            // PENDING(edburns) how do parameters work here?
             MethodExpression me = expressionFactory.createMethodExpression(ctx, expressionString, Object.class, new Class [] {});
             cur.setMethodExpression(me);
             

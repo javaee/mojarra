@@ -67,7 +67,7 @@ import javax.faces.application.ConfigurableNavigationHandler;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIViewAction;
 import javax.faces.context.Flash;
-import javax.faces.flow.FacesFlowCallNode;
+import javax.faces.flow.FlowCallNode;
 import javax.faces.flow.Flow;
 import javax.faces.flow.FlowHandler;
 import javax.faces.flow.FlowNode;
@@ -237,7 +237,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                 Flow newFlow = 
                         context.getApplication().getFlowHandler().
                         transition(context, context.getViewRoot(), newRoot, 
-                        (FacesFlowCallNode)
+                        (FlowCallNode)
                         context.getAttributes().get(FACES_FLOW_CALL_ATTR_NAME));
                 // newFlow will only be non-null if a transition occurred from one
                 // flow to another.
@@ -380,7 +380,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     private void initializeNavigationFromFlowThreadSafe(FacesContext context, Flow toInspect) {
         assert(null != navigationMaps);
         synchronized (this) {
-            Map<String, SwitchNode> switches = toInspect.getSwitches(context);
+            Map<String, SwitchNode> switches = toInspect.getSwitches();
             String flowId = toInspect.getId();
             // Is there an existing NavigationMap for this flowId
             if (navigationMaps.containsKey(flowId)) {
@@ -762,7 +762,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             // If this outcome corresponds to an existing flow...
             if (null != flow) {
                 // make a navigation case from its defaultNode.
-                FlowNode node = flow.getNode(context, flow.getStartNodeId());
+                FlowNode node = flow.getNode(flow.getStartNodeId());
                 if (null != node) {
                     if (node instanceof ViewNode) {
                         viewIdToTest = ((ViewNode)node).getVdlDocumentId();
@@ -781,7 +781,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                 if (null != flow) {
                     // If so, see if the outcome is one of this flow's 
                     // faces-flow-return nodes.
-                    NavigationCase navCase = flow.getReturns(context).get(outcome);
+                    NavigationCase navCase = flow.getReturns().get(outcome);
                     if (null != navCase) {
                         String fromOutcome = navCase.getFromOutcome();
                         if (SharedUtils.isExpression(fromOutcome)) {
@@ -869,7 +869,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     private CaseStruct synthesizeCaseStruct(FacesContext context, Flow flow, String fromAction, String outcome) {
         CaseStruct result = null;
         
-        FlowNode node = flow.getNode(context, outcome);
+        FlowNode node = flow.getNode(outcome);
         if (null != node && node instanceof ViewNode) {
             result = new CaseStruct();
             result.viewId = ((ViewNode)node).getVdlDocumentId();
@@ -885,7 +885,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         FlowHandler flowHandler = context.getApplication().getFlowHandler();
         Flow currentFlow = flowHandler.getCurrentFlow(context);
         if (null != currentFlow) {
-            FlowNode node = currentFlow.getNode(context, outcome);
+            FlowNode node = currentFlow.getNode(outcome);
             if (node instanceof MethodCallNode) {
                 MethodCallNode methodCallNode = (MethodCallNode) node;
                 MethodExpression me = methodCallNode.getMethodExpression();
@@ -915,9 +915,9 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         FlowHandler flowHandler = context.getApplication().getFlowHandler();
         Flow currentFlow = flowHandler.getCurrentFlow(context);
         if (null != currentFlow) {
-            FlowNode node = currentFlow.getNode(context, outcome);
-            if (node instanceof FacesFlowCallNode) {
-                FacesFlowCallNode facesFlowCallNode = (FacesFlowCallNode) node;
+            FlowNode node = currentFlow.getNode(outcome);
+            if (node instanceof FlowCallNode) {
+                FlowCallNode facesFlowCallNode = (FlowCallNode) node;
                 String flowId = facesFlowCallNode.getCalledFlowId(context);
                 String flowDocumentId = facesFlowCallNode.getCalledFlowDocumentId(context);
 

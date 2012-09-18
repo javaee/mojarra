@@ -41,6 +41,7 @@
 package com.sun.faces.facelets.flow;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
+import com.sun.faces.flow.FlowCallNodeImpl;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,7 +50,7 @@ import java.util.List;
 import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.flow.FacesFlowCallNode;
+import javax.faces.flow.FlowCallNode;
 import javax.faces.flow.Parameter;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagAttribute;
@@ -61,13 +62,13 @@ public class FacesFlowCallTagHandler extends TagHandlerImpl {
         super(config);
     }
     
-    static Map<String, FacesFlowCallNode> getFacesFlowCalls(FaceletContext ctx) {
-        Map<String, FacesFlowCallNode> result = null;
+    static Map<String, FlowCallNode> getFacesFlowCalls(FaceletContext ctx) {
+        Map<String, FlowCallNode> result = null;
 
         Map<FacesFlowDefinitionTagHandler.FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
-        result = (Map<String, FacesFlowCallNode>) flowData.get(FacesFlowDefinitionTagHandler.FlowDataKeys.FacesFlowCalls);
+        result = (Map<String, FlowCallNode>) flowData.get(FacesFlowDefinitionTagHandler.FlowDataKeys.FacesFlowCalls);
         if (null == result) {
-            result = new HashMap<String, FacesFlowCallNode>();
+            result = new HashMap<String, FlowCallNode>();
             flowData.put(FacesFlowDefinitionTagHandler.FlowDataKeys.FacesFlowCalls, result);
         }
         
@@ -126,17 +127,12 @@ public class FacesFlowCallTagHandler extends TagHandlerImpl {
             
             FacesFlowReference struct = FacesFlowReferenceTagHandler.getCurrentFacesFlowReference(ctx);
 
-            Map<String, FacesFlowCallNode> calls = getFacesFlowCalls(ctx);
-            FacesFlowCallNode toAdd = new FacesFlowCallNode();
-            toAdd.setCalledFlowId(context, struct.getFlowId());
-            toAdd.setCalledFlowDocumentId(context, struct.getFlowDocumentId());
+            Map<String, FlowCallNode> calls = getFacesFlowCalls(ctx);
             List<Parameter> outboundParametersFromConfig = FacesFlowCallTagHandler.getOutboundParameters(ctx);
-            if (null != outboundParametersFromConfig) {
-                Map<String, Parameter> outboundParameters = toAdd.getOutboundParameters();
-                for (Parameter cur : outboundParametersFromConfig) {
-                    outboundParameters.put(cur.getName(), cur);
-                }
-            }
+            FlowCallNodeImpl toAdd = new FlowCallNodeImpl(idStr, 
+                    struct.getFlowId(),
+                    struct.getFlowDocumentId(), 
+                    outboundParametersFromConfig);
             calls.put(idStr, toAdd);
             
             

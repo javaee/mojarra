@@ -40,13 +40,10 @@
  */
 package javax.faces.flow;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import javax.el.MethodExpression;
 import javax.faces.application.NavigationCase;
-import javax.faces.context.FacesContext;
 import javax.faces.lifecycle.ClientWindow;
 
 /**
@@ -60,99 +57,21 @@ import javax.faces.lifecycle.ClientWindow;
  * @since 2.2
  */
 
-public class Flow implements Serializable {
-    
-    public Flow() {
-    }
-    
-    // <editor-fold defaultstate="collapsed" desc="Instance variables">       
-
-    private String id;
-    private String startNodeId;
-    private List<ViewNode> views;
-    private List<MethodCallNode> methodCalls;
-    private ConcurrentHashMap<String, Parameter> inboundParameters = new ConcurrentHashMap<String, Parameter>();
-    private ConcurrentHashMap<String,NavigationCase> returns = new ConcurrentHashMap<String, NavigationCase>();
-    private ConcurrentHashMap<String,SwitchNode> switches = new ConcurrentHashMap<String, SwitchNode>();
-    private ConcurrentHashMap<String,FacesFlowCallNode> facesFlowCalls = new ConcurrentHashMap<String, FacesFlowCallNode>();
-    private ConcurrentHashMap<String,FacesFlowCallNode> facesFlowCallsByTargetFlowId = new ConcurrentHashMap<String, FacesFlowCallNode>();
-    private MethodExpression initializer;
-    private MethodExpression finalizer;
-    private boolean hasBeenInitialized = false;
-    
-    // </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="Object helpers">       
-    
-    private static final long serialVersionUID = -7506626306507232154L;
-    
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Flow other = (Flow) obj;
-        if ((this.id == null) ? (other.id != null) : !this.id.equals(other.id)) {
-            return false;
-        }
-        if ((this.startNodeId == null) ? (other.startNodeId != null) : !this.startNodeId.equals(other.startNodeId)) {
-            return false;
-        }
-        if (this.views != other.views && (this.views == null || !this.views.equals(other.views))) {
-            return false;
-        }
-        if (this.returns != other.returns && (this.returns == null || !this.returns.equals(other.returns))) {
-            return false;
-        }
-        if (this.initializer != other.initializer && (this.initializer == null || !this.initializer.equals(other.initializer))) {
-            return false;
-        }
-        if (this.finalizer != other.finalizer && (this.finalizer == null || !this.finalizer.equals(other.finalizer))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 59 * hash + (this.id != null ? this.id.hashCode() : 0);
-        hash = 59 * hash + (this.startNodeId != null ? this.startNodeId.hashCode() : 0);
-        hash = 59 * hash + (this.views != null ? this.views.hashCode() : 0);
-        hash = 59 * hash + (this.returns != null ? this.returns.hashCode() : 0);
-        hash = 59 * hash + (this.initializer != null ? this.initializer.hashCode() : 0);
-        hash = 59 * hash + (this.finalizer != null ? this.finalizer.hashCode() : 0);
-        return hash;
-    }
-
-    // </editor-fold>
+public abstract class Flow {
     
     // <editor-fold defaultstate="collapsed" desc="Simple properties">       
 
 
     /**
      * <p class="changed_added_2_2">Return the immutable id for this
-     * Flow.  This must be unique within a flow definition, but need not
-     * be unique within the entire application.</p>
+     * Flow.  This must be unique within the defining document (such as
+     * an Application Configuration Resoucres file), but need not be
+     * unique within the entire application.</p>
 
      * @since 2.2
      */
 
-    public String getId() {
-        return id;
-    }
-
-    /**
-     * <p class="changed_added_2_2">This setter will likely be moved
-     * from the public API into the implementation.</p>
-     * @since 2.2
-     */
-    public void setId(String id) {
-        this.id = id;
-    }
+    public abstract String getId();
 
     /**
      * <p class="changed_added_2_2">Return the immutable id for the
@@ -162,115 +81,138 @@ public class Flow implements Serializable {
      * @since 2.2
      */
     
-    public String getStartNodeId() {
-        return startNodeId;
-    }
+    public abstract String getStartNodeId();
 
     /**
-     * <p class="changed_added_2_2">This setter will likely be moved
-     * from the public API into the implementation.</p>
+     * <p class="changed_added_2_2">Return the {@code MethodExpression}
+     * that must be called by the runtime as the last thing that happens
+     * before exiting this flow.  Any {@link FlowScoped} beans declared
+     * for this flow must remain in scope until after control returns
+     * from the method referenced by this {@code MethodExpression}.</p>
+
+     * <div class="changed_added_2_2">
+
+     * </div>
+
      * @since 2.2
      */
-    public void setStartNodeId(String defaultNodeId) {
-        this.startNodeId = defaultNodeId;
-    }
 
-    public MethodExpression getFinalizer(FacesContext context) {
-        return finalizer;
-    }
+    public abstract MethodExpression getFinalizer();
 
-    public void setFinalizer(MethodExpression finalizer) {
-        this.finalizer = finalizer;
-    }
+    /**
+     * <p class="changed_added_2_2">Return the {@code MethodExpression}
+     * that must be called by the runtime immediately after activating
+     * any {@link FlowScoped} beans declared for this flow.</p>
 
-    public MethodExpression getInitializer(FacesContext context) {
-        init(context);
-        return initializer;
-    }
+     * <div class="changed_added_2_2">
 
-    public void setInitializer(MethodExpression initializer) {
-        this.initializer = initializer;
-    }
+     * </div>
+
+     * @since 2.2
+     */
+    public abstract MethodExpression getInitializer();
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Graph properties">       
 
-    public Map<String, Parameter> getInboundParameters() {
-        return inboundParameters;
-    }
+    /**
+     * <p class="changed_added_2_2">Return an immutable data structure
+     * containing the inbound parameters that have been declared for
+     * this flow.  See {@link FlowHandler#transition} for the
+     * specification of how these parameters are used.  Inbound
+     * parameters are associated with a specific flow instance, while
+     * outbound parameters are associated with a {@link FlowCallNode}
+     * that causes the transition to a new flow.</p>
 
-    public List<ViewNode> getViews() {
-        return views;
-    }
+     * <div class="changed_added_2_2">
 
-    public void setViews(List<ViewNode> views) {
-        this.views = views;
-    }
-    
-    public Map<String,NavigationCase> getReturns(FacesContext context) {
-        return returns;
-    }
-    
-    public Map<String,SwitchNode> getSwitches(FacesContext context) {
-        return switches;
-    }
-    
-    public Map<String,FacesFlowCallNode> getFacesFlowCalls(FacesContext context) {
-        return facesFlowCalls;
-    }
-    
-    public FacesFlowCallNode getFacesFlowCallByTargetFlowId(FacesContext context, String targetFlowId) {
-        FacesFlowCallNode result = facesFlowCallsByTargetFlowId.get(targetFlowId);
-        
-        return result;
-    }
+     * </div>
 
-    public List<MethodCallNode> getMethodCalls(FacesContext context) {
-        return methodCalls;
-    }
+     * @since 2.2
+     */
 
-    public void setMethodCalls(List<MethodCallNode> methodCalls) {
-        this.methodCalls = methodCalls;
-    }
+    public abstract Map<String, Parameter> getInboundParameters();
+
+    /**
+     * <p class="changed_added_2_2">Return an immutable data structure
+     * containing all of the view nodes declared for this flow.</p>
+
+     * <div class="changed_added_2_2">
+
+     * </div>
+
+     * @since 2.2
+     */
+    public abstract List<ViewNode> getViews();
+
+    /**
+     * <p class="changed_added_2_2">Return an immutable data structure
+     * containing all of the return nodes declared for this flow.</p>
+
+     * <div class="changed_added_2_2">
+
+     * </div>
+
+     * @since 2.2
+     */
+    public abstract Map<String,NavigationCase> getReturns();
     
+    /**
+     * <p class="changed_added_2_2">Return an immutable data structure
+     * containing all of the switch nodes declared for this flow.</p>
+
+     * <div class="changed_added_2_2">
+
+     * </div>
+
+     * @since 2.2
+     */
+    public abstract Map<String,SwitchNode> getSwitches();
+    
+    /**
+     * <p class="changed_added_2_2">Return an immutable data structure
+     * containing all the flow call nodes declared for this flow.</p>
+
+     * <div class="changed_added_2_2">
+
+     * </div>
+
+     * @since 2.2
+     */
+    public abstract Map<String,FlowCallNode> getFlowCalls();
+    
+    /**
+     * <p class="changed_added_2_2">Return the {@link FlowCallNode} that
+     * represents calling the {@code targetFlow} from this flow, or
+     * {@code null} if {@code targetFlow} cannot be reached from this
+     * flow.</p>
+
+     * <div class="changed_added_2_2">
+
+     * </div>
+
+     * @since 2.2
+     */
+    public abstract FlowCallNode getFlowCall(Flow targetFlow);
+
+    /**
+     * <p class="changed_added_2_2">Return an immutable data structure
+     * containing all the method call nodes declared for this flow.</p>
+
+     * <div class="changed_added_2_2">
+
+     * </div>
+
+     * @since 2.2
+     */
+    public abstract List<MethodCallNode> getMethodCalls();
+
     // </editor-fold>
     
-    // <editor-fold defaultstate="collapsed" desc="Graph navigation">       
+    // <editor-fold defaultstate="collapsed" desc="Graph navigation">
     
-    public FlowNode getNode(FacesContext context, String nodeId) {
-        List<ViewNode> myViews = getViews();
-        FlowNode result = null;
-        
-        if (null != myViews) {
-            for (ViewNode cur : myViews) {
-                if (nodeId.equals(cur.getId())) {
-                    result = cur;
-                    break;
-                }
-            }
-        }
-        if (null == result) {
-            Map<String, SwitchNode> mySwitches = getSwitches(context);
-            result = mySwitches.get(nodeId);
-        }
-        if (null == result) {
-            List<MethodCallNode> myMethods = getMethodCalls(context);
-            for (MethodCallNode cur : myMethods) {
-                if (nodeId.equals(cur.getId())) {
-                    result = cur;
-                    break;
-                }
-            }
-        }
-        if (null == result) {
-            Map<String, FacesFlowCallNode> myCalls = getFacesFlowCalls(context);
-            result = myCalls.get(nodeId);
-        }
-        
-        return result;
-        
-    }
+    public abstract FlowNode getNode(String nodeId);
     
     // </editor-fold>
     
@@ -286,33 +228,7 @@ public class Flow implements Serializable {
      * @since 2.2
      */
     
-    public String getClientWindowFlowId(ClientWindow curWindow) {
-        String result = null;
-
-        result = curWindow.getId() + "_" + getId();
-        
-        return result;
-    }
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Helpers">
-    
-    private void init(FacesContext context) {
-        if (hasBeenInitialized) {
-            return;
-        }
-        hasBeenInitialized = true;
-        
-        // Populate lookup data structures.
-        FacesFlowCallNode curNode = null;
-        String curTargetFlowId = null;
-        for (Map.Entry<String,FacesFlowCallNode> cur : facesFlowCalls.entrySet()) {
-            curNode = cur.getValue();
-            curTargetFlowId = curNode.getCalledFlowId(context);
-            facesFlowCallsByTargetFlowId.put(curTargetFlowId, curNode);
-        }
-    }
+    public abstract String getClientWindowFlowId(ClientWindow curWindow);
     
     // </editor-fold>
 

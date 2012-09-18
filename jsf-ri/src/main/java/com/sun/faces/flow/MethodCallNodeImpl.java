@@ -38,15 +38,49 @@
  * holder.
 
  */
-package javax.faces.flow;
+package com.sun.faces.flow;
 
-import java.util.List;
-import javax.faces.application.NavigationCase;
+import java.io.Serializable;
+import javax.el.MethodExpression;
+import javax.el.ValueExpression;
+import javax.faces.flow.MethodCallNode;
 
-public abstract class SwitchNode extends FlowNode {
+public class MethodCallNodeImpl extends MethodCallNode implements Serializable {
     
-    public abstract List<NavigationCase> getCases();
+    private static final long serialVersionUID = 8195277275427127979L;
+    
+    private final String id;
 
-    public abstract NavigationCase getDefaultCase();
+    public MethodCallNodeImpl(String id) {
+        this.id = id;
+    }
+    
+    private MethodExpression methodExpression;
+    
+    private ValueExpression outcome;
+
+    @Override
+    public String getId() {
+        return id;
+    }
+    
+    @Override
+    public MethodExpression getMethodExpression() {
+        return methodExpression;
+    }
+
+    public void setMethodExpression(MethodExpression methodExpression) {
+        this.methodExpression = methodExpression;
+    }
+
+    @Override
+    public ValueExpression getOutcome() {
+        return outcome;
+    }
+
+    public void setOutcome(ValueExpression outcome) {
+        this.outcome = outcome;
+    } 
+    
     
 }

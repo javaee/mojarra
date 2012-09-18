@@ -38,15 +38,42 @@
  * holder.
 
  */
-package javax.faces.flow;
+package com.sun.faces.flow;
 
-import java.util.List;
-import javax.faces.application.NavigationCase;
+import java.io.Serializable;
+import javax.faces.flow.ViewNode;
 
-public abstract class SwitchNode extends FlowNode {
+public class ViewNodeImpl extends ViewNode implements Serializable {
     
-    public abstract List<NavigationCase> getCases();
+    private static final long serialVersionUID = -4601079427409754289L;
+    
+    private final String id;
+    private final String vdlDocumentId;
 
-    public abstract NavigationCase getDefaultCase();
+    public ViewNodeImpl(String id, String vdlDocumentIdIn) {
+        this.id = id;
+        
+        int i = vdlDocumentIdIn.indexOf("META-INF/flows");
+        
+        if (-1 != i) { 
+            vdlDocumentIdIn = vdlDocumentIdIn.substring(i + 14);
+        } else if (vdlDocumentIdIn.startsWith("/WEB-INF")) {
+            vdlDocumentIdIn = vdlDocumentIdIn.substring(8);
+        } else if (vdlDocumentIdIn.startsWith("WEB-INF")) {
+            vdlDocumentIdIn = vdlDocumentIdIn.substring(7);
+        }
+        this.vdlDocumentId = vdlDocumentIdIn;
+        
+    }
+
+    @Override
+    public String getId() {
+        return id;
+    }
+    
+    @Override
+    public String getVdlDocumentId() {
+        return vdlDocumentId;
+    }
     
 }

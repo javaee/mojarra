@@ -42,6 +42,7 @@ package com.sun.faces.facelets.flow;
 
 import com.sun.faces.facelets.flow.FacesFlowDefinitionTagHandler.FlowDataKeys;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
+import com.sun.faces.flow.ViewNodeImpl;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,15 +70,13 @@ public class ViewNodeTagHandler extends TagHandlerImpl {
                 viewsFromTag = new ArrayList<ViewNode>();
                 flowData.put(FlowDataKeys.Views, viewsFromTag);
             }
-            ViewNode view = new ViewNode();
             TagAttribute idAttr = this.getRequiredAttribute("id");
-            view.setId(idAttr.getValue(ctx));
             String vdlDocument = (String) flowData.get(FlowDataKeys.VDLDocument);
             if (null == vdlDocument) {
                 throw new TagException(tag, "View withd id '" + idAttr.getValue(ctx) + 
                         "' does not have the required nested <vdl-document> element.");
             }
-            view.setVdlDocumentId(vdlDocument);
+            ViewNode view = new ViewNodeImpl(idAttr.getValue(ctx), vdlDocument);
             viewsFromTag.add(view);
             
         } finally {
