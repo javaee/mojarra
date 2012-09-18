@@ -40,12 +40,6 @@
 
 package javax.faces.component;
 
-import javax.el.ELException;
-import javax.el.ValueExpression;
-import javax.faces.FacesException;
-import javax.faces.context.FacesContext;
-
-
 /**
  * <p class="changed_added_2_0">This component is paired with the
  * <code>javax.faces.Button</code> or <code>javax.faces.Link</code>
