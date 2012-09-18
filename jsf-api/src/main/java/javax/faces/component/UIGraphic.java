@@ -42,7 +42,6 @@ package javax.faces.component;
 
 
 import javax.el.ValueExpression;
-import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 
 
