@@ -78,7 +78,7 @@
         <description><![CDATA[
 
         ]]></description>
-        <tag-name>faces-flow-return</tag-name>
+        <tag-name>flow-return</tag-name>
         <handler-class>com.sun.faces.facelets.flow.FacesFlowReturnTagHandler</handler-class>
     </tag>
     <tag>
@@ -169,7 +169,7 @@
         <description><![CDATA[
 
         ]]></description>
-        <tag-name>faces-flow-call</tag-name>
+        <tag-name>flow-call</tag-name>
         <handler-class>com.sun.faces.facelets.flow.FacesFlowCallTagHandler</handler-class>
     </tag>
    <tag>

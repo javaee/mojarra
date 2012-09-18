@@ -51,11 +51,11 @@
     <f:metadata>
 
         <j:faces-flow-definition>
-            <j:faces-flow-return id="taskFlowReturn1">
+            <j:flow-return id="taskFlowReturn1">
                 <j:navigation-case>
                     <j:from-outcome>#{flowBean.returnValue}</j:from-outcome>
                 </j:navigation-case>
-            </j:faces-flow-return>
+            </j:flow-return>
             
         </j:faces-flow-definition>
 

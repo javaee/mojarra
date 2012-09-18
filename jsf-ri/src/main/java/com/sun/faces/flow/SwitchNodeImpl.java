@@ -41,7 +41,6 @@
 package com.sun.faces.flow;
 
 import com.sun.faces.facelets.flow.FlowNavigationCase;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -49,10 +48,8 @@ import javax.faces.application.NavigationCase;
 import javax.faces.context.FacesContext;
 import javax.faces.flow.SwitchNode;
 
-public class SwitchNodeImpl extends SwitchNode implements Serializable {
-    
-    private static final long serialVersionUID = -8002653834253367883L;
-    
+public class SwitchNodeImpl extends SwitchNode {
+        
     private final String id;
     private final NavigationCase defaultCase;
     private List<NavigationCase> cases;

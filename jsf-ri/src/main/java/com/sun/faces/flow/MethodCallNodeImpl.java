@@ -40,14 +40,11 @@
  */
 package com.sun.faces.flow;
 
-import java.io.Serializable;
 import javax.el.MethodExpression;
 import javax.el.ValueExpression;
 import javax.faces.flow.MethodCallNode;
 
-public class MethodCallNodeImpl extends MethodCallNode implements Serializable {
-    
-    private static final long serialVersionUID = 8195277275427127979L;
+public class MethodCallNodeImpl extends MethodCallNode {
     
     private final String id;
 
