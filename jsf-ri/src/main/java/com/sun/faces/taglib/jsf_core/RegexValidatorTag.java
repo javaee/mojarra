@@ -41,10 +41,8 @@
 package com.sun.faces.taglib.jsf_core;
 
 import javax.faces.validator.RegexValidator;
-import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.Validator;
-import javax.faces.webapp.ValidatorELTag;
 import javax.el.ValueExpression;
 import javax.el.ExpressionFactory;
 import javax.servlet.jsp.JspException;
