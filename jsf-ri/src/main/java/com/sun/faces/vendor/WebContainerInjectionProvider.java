@@ -40,7 +40,6 @@
 
 package com.sun.faces.vendor;
 
-import com.sun.faces.spi.AnnotationScanner;
 import com.sun.faces.spi.InjectionProvider;
 import com.sun.faces.spi.InjectionProviderException;
 import com.sun.faces.util.FacesLogger;

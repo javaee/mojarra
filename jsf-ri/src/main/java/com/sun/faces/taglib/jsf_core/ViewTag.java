@@ -62,12 +62,10 @@ import javax.servlet.jsp.jstl.core.Config;
 import javax.servlet.jsp.tagext.BodyContent;
 import javax.servlet.jsp.tagext.BodyTag;
 
-import java.io.IOException;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.lang.reflect.Method;
-import java.lang.reflect.InvocationTargetException;
 
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.FacesLogger;
