@@ -78,7 +78,7 @@
         <description><![CDATA[
 
         ]]></description>
-        <tag-name>faces-flow-return</tag-name>
+        <tag-name>flow-return</tag-name>
         <handler-class>com.sun.faces.facelets.flow.FacesFlowReturnTagHandler</handler-class>
     </tag>
     <tag>
@@ -169,7 +169,7 @@
         <description><![CDATA[
 
         ]]></description>
-        <tag-name>faces-flow-call</tag-name>
+        <tag-name>flow-call</tag-name>
         <handler-class>com.sun.faces.facelets.flow.FacesFlowCallTagHandler</handler-class>
     </tag>
    <tag>
@@ -192,5 +192,33 @@
         ]]></description>
         <tag-name>faces-flow-document-id</tag-name>
         <handler-class>com.sun.faces.facelets.flow.FacesFlowDocumentIdTagHandler</handler-class>
+    </tag>
+   <tag>
+        <description><![CDATA[
+
+        ]]></description>
+        <tag-name>inbound-parameter</tag-name>
+        <handler-class>com.sun.faces.facelets.flow.InboundParameterTagHandler</handler-class>
+    </tag>
+   <tag>
+        <description><![CDATA[
+
+        ]]></description>
+        <tag-name>name</tag-name>
+        <handler-class>com.sun.faces.facelets.flow.NameTagHandler</handler-class>
+    </tag>
+   <tag>
+        <description><![CDATA[
+
+        ]]></description>
+        <tag-name>value</tag-name>
+        <handler-class>com.sun.faces.facelets.flow.ValueTagHandler</handler-class>
+    </tag>
+   <tag>
+        <description><![CDATA[
+
+        ]]></description>
+        <tag-name>outbound-parameter</tag-name>
+        <handler-class>com.sun.faces.facelets.flow.OutboundParameterTagHandler</handler-class>
     </tag>
 </facelet-taglib>

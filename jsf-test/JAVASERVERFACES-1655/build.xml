@@ -126,14 +126,14 @@
         <format property="tstamp_AgeComponent" 
                 pattern="yyyyMMddHHmmssSSSS" />
       </tstamp>
-<!--      <updateGroovyFile groovyFile="AgeComponent.groovy"
+      <updateGroovyFile groovyFile="AgeComponent.groovy"
                         tokenValue="${tstamp_AgeComponent}" />
 
-      <jsf.tester request="/?modify.uicomponent"
+      <jsf.tester request="/hello.jsf?modify.uicomponent"
                      context-path="/i_jsf_1655"
                      classpath-refid="html.classpath"
                      test-results-dir="${regression.test.results.dir}"
-                     regexp="(?s).*${tstamp_AgeComponent}.*"/>-->
+                     regexp="(?s).*${tstamp_AgeComponent}.*"/>
 
 
     </target>

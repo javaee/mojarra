@@ -1284,6 +1284,31 @@ passed.</p>
     </xsd:simpleContent>
   </xsd:complexType>
 
+<!-- **************************************************** -->
+
+  <xsd:complexType name="faces-config-faces-flow-definition-parameter-valueType">
+    <xsd:annotation>
+      <xsd:documentation><![CDATA[
+
+        <p class="changed_added_2_2"></p>
+
+<div class="changed_added_2_2">
+
+
+
+</div>
+        
+        
+      ]]></xsd:documentation>
+    </xsd:annotation>
+    <xsd:simpleContent>
+      <xsd:extension base="javaee:faces-config-el-expressionType">
+        <xsd:attribute name="id"
+                       type="xsd:ID"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+
 
 <!-- **************************************************** -->
 
@@ -1672,16 +1697,16 @@ is assumed to be <code>&lt;flowName&gt;.xhtml</code>.</p>
 <li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;faces-flow-definition<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
 <li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;start-node<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>router1<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/start-node<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
 <li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; </div></li>
-<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;faces-flow-return</span> <span style="color: #000066;">id</span>=<span style="color: #ff0000;">&quot;success&quot;</span><span style="color: #000000; font-weight: bold;">&gt;</span></span></div></li>
+<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;flow-return</span> <span style="color: #000066;">id</span>=<span style="color: #ff0000;">&quot;success&quot;</span><span style="color: #000000; font-weight: bold;">&gt;</span></span></div></li>
 <li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;navigation-case<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
 <li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;from-outcome<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>/complete<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/from-outcome<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
 <li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/navigation-case<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
-<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/faces-flow-return<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
-<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;faces-flow-return</span> <span style="color: #000066;">id</span>=<span style="color: #ff0000;">&quot;errorOccurred&quot;</span><span style="color: #000000; font-weight: bold;">&gt;</span></span></div></li>
+<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/flow-return<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
+<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;flow-return</span> <span style="color: #000066;">id</span>=<span style="color: #ff0000;">&quot;errorOccurred&quot;</span><span style="color: #000000; font-weight: bold;">&gt;</span></span></div></li>
 <li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;navigation-case<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
 <li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;from-outcome<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>error<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/from-outcome<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
 <li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/navigation-case<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
-<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/faces-flow-return<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
+<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/flow-return<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
 <li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; </div></li>
 <li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #808080; font-style: italic;">&lt;!-- If a customerId was specified then we'll edit it, otherwise create a new customer. --&gt;</span></div></li>
 <li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;switch</span> <span style="color: #000066;">id</span>=<span style="color: #ff0000;">&quot;router1&quot;</span><span style="color: #000000; font-weight: bold;">&gt;</span></span></div></li>
@@ -1740,8 +1765,16 @@ href="javax/faces/flow/FlowHandler.html">FlowHandler</a></code>.</p>
                    type="javaee:faces-config-faces-flow-definition-switchType"
                    minOccurs="0"
                    maxOccurs="unbounded" />
-      <xsd:element name="faces-flow-return"
-                   type="javaee:faces-config-faces-flow-definition-faces-flow-returnType"
+      <xsd:element name="flow-return"
+                   type="javaee:faces-config-faces-flow-definition-flow-returnType"
+                   minOccurs="0"
+                   maxOccurs="unbounded"/>
+      <xsd:element name="flow-call"
+                   type="javaee:faces-config-faces-flow-definition-flow-callType"
+                   minOccurs="0"
+                   maxOccurs="unbounded"/>
+      <xsd:element name="method-call"
+                   type="javaee:faces-config-faces-flow-definition-faces-method-callType"
                    minOccurs="0"
                    maxOccurs="unbounded"/>
       <xsd:element name="initializer"
@@ -1752,6 +1785,10 @@ href="javax/faces/flow/FlowHandler.html">FlowHandler</a></code>.</p>
                    type="javaee:faces-config-faces-flow-definition-finalizerType"
                    minOccurs="0"
                    maxOccurs="1"/>
+      <xsd:element name="inbound-parameter"
+                   type="javaee:faces-config-faces-flow-definition-inbound-parameterType"
+                   minOccurs="0"
+                   maxOccurs="unbounded"/>
 
     </xsd:sequence>
     <xsd:attribute name="id"
@@ -1771,6 +1808,30 @@ href="javax/faces/flow/FlowHandler.html">FlowHandler</a></code>.</p>
         </xsd:annotation>
 
     </xsd:attribute>
+  </xsd:complexType>
+  
+  <xsd:complexType name="faces-config-faces-flow-definition-faces-method-callType">
+      <xsd:sequence>
+          <xsd:element name="method"
+                       type="javaee:faces-config-faces-flow-definition-faces-method-call-methodType"
+                       minOccurs="1"
+                       maxOccurs="1"/>
+          <xsd:element name="default-outcome"
+                       type="javaee:string"
+                       minOccurs="1"
+                       maxOccurs="1"/>
+          
+      </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="faces-config-faces-flow-definition-faces-method-call-methodType">
+    <xsd:simpleContent>
+      <xsd:extension base="javaee:faces-config-el-expressionType">
+        <xsd:attribute name="id"
+                       type="xsd:ID"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+      
   </xsd:complexType>
 
   <xsd:complexType name="faces-config-faces-flow-definition-viewType">
@@ -1864,8 +1925,8 @@ of the first one whose <code>&lt;if&gt;</code> expression evaluates to
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
-      <xsd:element name="default"
-                   type="javaee:faces-config-faces-flow-definition-switch-defaultType"
+      <xsd:element name="default-outcome"
+                   type="javaee:faces-config-faces-flow-definition-switch-default-outcomeType"
                    minOccurs="0"
                    maxOccurs="1">
         <xsd:annotation>
@@ -1899,7 +1960,7 @@ of the first one whose <code>&lt;if&gt;</code> expression evaluates to
     </xsd:attribute>
   </xsd:complexType>
 
-  <xsd:complexType name="faces-config-faces-flow-definition-switch-defaultType">
+  <xsd:complexType name="faces-config-faces-flow-definition-switch-default-outcomeType">
     <xsd:annotation>
       <xsd:documentation><![CDATA[
 
@@ -1946,7 +2007,7 @@ represents the node id to which control will be passed.</p>
     </xsd:attribute>
   </xsd:complexType>
 
-  <xsd:complexType name="faces-config-faces-flow-definition-faces-flow-returnType">
+  <xsd:complexType name="faces-config-faces-flow-definition-flow-returnType">
     <xsd:annotation>
       <xsd:documentation>
 
@@ -1958,6 +2019,7 @@ represents the node id to which control will be passed.</p>
 
 <p>This element must contain exactly one <code>&lt;navigation-case&gt;</code> element, 
 which must contain exactly one <code>&lt;from-outcome&gt;</code> element.</p>
+</div>
 
 ]]>
 
@@ -1975,7 +2037,7 @@ which must contain exactly one <code>&lt;from-outcome&gt;</code> element.</p>
 
          <p class="changed_added_2_2">Define a navigation case for a
          faces flow.  This element is used within
-         <code>&lt;faces-flow-return&gt;</code> and
+         <code>&lt;flow-return&gt;</code> and
          <code>&lt;switch&gt;</code> elements.<p>
 
 ]]>
@@ -1992,13 +2054,115 @@ which must contain exactly one <code>&lt;from-outcome&gt;</code> element.</p>
           <xsd:documentation>
 <![CDATA[
          
-         <p class="changed_added_2_2">The id of this faces-flow-return.</p>
+         <p class="changed_added_2_2">The id of this flow-return.</p>
 
          ]]>
           </xsd:documentation>
         </xsd:annotation>
     </xsd:attribute>
 
+  </xsd:complexType>
+
+  <xsd:complexType name="faces-config-faces-flow-definition-flow-callType">
+    <xsd:annotation>
+      <xsd:documentation>
+
+        <![CDATA[
+
+<p class="changed_added_2_2">Define a call node in a flow graph.</p>
+
+<div class="changed_added_2_2">
+
+<p>This element must contain exactly one <code>&lt;faces-flow-reference&gt;</code> element, 
+which must contain exactly one <code>&lt;faces-flow-id&gt;</code> element.</p>
+</div>
+
+]]>
+
+      </xsd:documentation>
+    </xsd:annotation>
+
+    <xsd:sequence>
+      <xsd:element name="faces-flow-reference"
+                   type="javaee:faces-config-faces-flow-definition-flow-call-faces-flow-referenceType"
+                   minOccurs="1" maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation>
+
+        <![CDATA[
+
+         <p class="changed_added_2_2">The flow id of the called flow.<p>
+
+]]>
+
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="outbound-parameter"
+                   type="javaee:faces-config-faces-flow-definition-flow-call-outbound-parameterType"
+                   minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>
+
+        <![CDATA[
+
+         <p class="changed_added_2_2">A parameter to pass when calling the flow
+         identified in the "faces-flow-reference" element that is a sibling of this element.<p>
+
+]]>
+
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+
+    <xsd:attribute name="id"
+                   type="xsd:ID"
+                   use="required">
+        <xsd:annotation>
+          <xsd:documentation>
+<![CDATA[
+         
+         <p class="changed_added_2_2">The id of this flow-return.</p>
+
+         ]]>
+          </xsd:documentation>
+        </xsd:annotation>
+    </xsd:attribute>
+
+  </xsd:complexType>
+  
+  <xsd:complexType name="faces-config-faces-flow-definition-flow-call-faces-flow-referenceType">
+    <xsd:annotation>
+      <xsd:documentation>
+
+        <![CDATA[
+
+<p class="changed_added_2_2">Identifiy the called flow.</p>
+
+<div class="changed_added_2_2">
+
+</div>
+]]>
+
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="faces-flow-id"
+                   type="javaee:java-identifierType"
+                   minOccurs="0"
+                   maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation><![CDATA[
+
+           <p>The id of the called flow.</p>
+            
+          ]]></xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+
+        
+    </xsd:sequence>
   </xsd:complexType>
 
   <xsd:complexType name="faces-config-faces-flow-definition-initializerType">
@@ -2041,6 +2205,100 @@ which must contain exactly one <code>&lt;from-outcome&gt;</code> element.</p>
     </xsd:simpleContent>
   </xsd:complexType>
 
+  <xsd:complexType name="faces-config-faces-flow-definition-inbound-parameterType">
+    <xsd:annotation>
+      <xsd:documentation>
+
+        <![CDATA[
+
+         <p class="changed_added_2_2">A named parameter whose value will be populated
+         with a correspondingly named parameter within an "outbound-parameter" element.<p>
+
+]]>
+
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="name"
+                   type="javaee:java-identifierType"
+                   minOccurs="1"
+                   maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation><![CDATA[
+
+           <p class="changed_added_2_2"> The "name" element within an "inbound-parameter"
+            element declares the name of this parameter
+            to be passed into a flow.  There must be 
+            a sibling "value" element in the same parent as this element.</p>
+            
+          ]]></xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="value"
+                   type="javaee:faces-config-faces-flow-definition-parameter-valueType"
+                   minOccurs="1"
+                   maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation><![CDATA[
+
+           <p class="changed_added_2_2"> The "value" element within an "inbound-parameter"
+            must be an EL Expression whose value will be set with the correspondingly
+            named "outbound-parameter" when this flow is entered, if such a 
+            parameter exists.</p>
+            
+          ]]></xsd:documentation>
+        </xsd:annotation>
+                       
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="faces-config-faces-flow-definition-flow-call-outbound-parameterType">
+    <xsd:annotation>
+      <xsd:documentation>
+
+        <![CDATA[
+
+         <p class="changed_added_2_2">A named parameter whose value will be 
+         passed to a correspondingly named parameter within an "inbound-parameter" element
+         on the target flow.<p>
+
+]]>
+
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="name"
+                   type="javaee:java-identifierType"
+                   minOccurs="1"
+                   maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation><![CDATA[
+
+           <p class="changed_added_2_2"> The "name" element within an "outbound-parameter" element 
+            declares the name of this parameter to be passed out of a flow.  There must be 
+            a sibling "value" element in the same parent as this element.</p>
+            
+          ]]></xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="value"
+                   type="javaee:faces-config-faces-flow-definition-parameter-valueType"
+                   minOccurs="1"
+                   maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation><![CDATA[
+
+           <p class="changed_added_2_2"> The "value" element within an "outbound-parameter"
+            must be an EL Expression whose "get" will be called when the "flow-call"
+            containing this element is traversed to go to a new flow.</p>
+            
+          ]]></xsd:documentation>
+        </xsd:annotation>
+                       
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
 
 <!-- **************************************************** -->
 

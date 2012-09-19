@@ -43,43 +43,10 @@ package javax.faces.flow;
 import java.util.List;
 import javax.faces.application.NavigationCase;
 
-public class SwitchNode extends FlowNode {
+public abstract class SwitchNode extends FlowNode {
     
-    private static final long serialVersionUID = -7313685763850287357L;
-    
-    private NavigationCase defaultCase;
-    private List<NavigationCase> cases;
-    private String id;
+    public abstract List<NavigationCase> getCases();
 
-    public SwitchNode(String id, NavigationCase defaultCase, List<NavigationCase> cases) {
-        this.id = id;
-        this.defaultCase = defaultCase;
-        this.cases = cases;
-    }
-    
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public List<NavigationCase> getCases() {
-        return cases;
-    }
-
-    public void setCases(List<NavigationCase> cases) {
-        this.cases = cases;
-    }
-
-    public NavigationCase getDefaultCase() {
-        return defaultCase;
-    }
-
-    public void setDefaultCase(NavigationCase defaultCase) {
-        this.defaultCase = defaultCase;
-    }
-    
+    public abstract NavigationCase getDefaultCase();
     
 }

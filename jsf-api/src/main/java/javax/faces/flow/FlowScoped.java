@@ -57,7 +57,8 @@ import javax.enterprise.context.NormalScope;
  * javax.enterprise.inject.spi.Extension} that implements the semantics
  * such that beans with this annotation are created when the user enters
  * into the specified {@code Flow}, and de-allocated when the user exits
- * the specified {@code Flow}.</p>
+ * the specified {@code Flow}.  See {@link FlowHandler#transition} for
+ * the specification of flow entry and exit.</p>
  * 
  * @since 2.2
  */

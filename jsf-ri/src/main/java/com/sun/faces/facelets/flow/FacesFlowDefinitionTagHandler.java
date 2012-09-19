@@ -42,6 +42,8 @@ package com.sun.faces.facelets.flow;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
+import com.sun.faces.flow.FlowImpl;
+import com.sun.faces.flow.ViewNodeImpl;
 import com.sun.faces.util.Util;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -54,15 +56,17 @@ import javax.el.MethodExpression;
 import javax.faces.application.NavigationCase;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.flow.FacesFlowCallNode;
+import javax.faces.flow.FlowCallNode;
 import javax.faces.flow.Flow;
 import javax.faces.flow.FlowHandler;
 import javax.faces.flow.MethodCallNode;
+import javax.faces.flow.Parameter;
 import javax.faces.flow.SwitchNode;
 import javax.faces.flow.ViewNode;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagConfig;
+import javax.faces.view.facelets.TagException;
 
 public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
     
@@ -83,6 +87,9 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
         CurrentNavigationCase,
         CurrentMethodCall,
         CurrentFacesFlowReference,
+        CurrentParameter,
+        InboundParameters,
+        OutboundParameters,
         MethodCalls,
         SwitchNavigationCases,
         SwitchDefaultCase,
@@ -90,6 +97,38 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
         FacesFlowCalls,
         
     } 
+    
+    public static List<Parameter> getInboundParameters(FaceletContext ctx) {
+        List<Parameter> result = null;
+
+        Map<FacesFlowDefinitionTagHandler.FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
+        result = (List<Parameter>) flowData.get(FacesFlowDefinitionTagHandler.FlowDataKeys.InboundParameters);
+        if (null == result) {
+            result = Collections.synchronizedList(new ArrayList<Parameter>());
+            flowData.put(FacesFlowDefinitionTagHandler.FlowDataKeys.InboundParameters, result);
+        }
+        
+        return result;
+    }
+    
+    public static Parameter getCurrentParameter(FaceletContext ctx) {
+        Parameter result = null;
+
+        Map<FacesFlowDefinitionTagHandler.FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
+        result = (Parameter) flowData.get(FacesFlowDefinitionTagHandler.FlowDataKeys.CurrentParameter);
+        if (null == result) {
+            result = new Parameter();
+            flowData.put(FacesFlowDefinitionTagHandler.FlowDataKeys.CurrentParameter, result);
+        }
+        
+        return result;
+    }
+    
+    public static void clearCurrentParameter(FaceletContext ctx) {
+
+        Map<FacesFlowDefinitionTagHandler.FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
+        flowData.remove(FacesFlowDefinitionTagHandler.FlowDataKeys.CurrentParameter);
+    }
     
     static Map<FlowDataKeys,Object> getFlowData(FaceletContext ctx) {
         Map<Object, Object> attrs = ctx.getFacesContext().getAttributes();
@@ -158,26 +197,37 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
         
         Map<FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
         String flowId = getFlowId(ctx);
-        Flow newFlow = flowHandler.getFlow(context, null, flowId);
+        Flow existingFlow = flowHandler.getFlow(context, null, flowId);
+        FlowImpl newFlow = null;
         boolean addFlow = false;
         
-        if (null == newFlow) {
+        if (null == existingFlow) {
             
             // In the current implementation, this is the only place where a flow 
             // is instantiated.
 
-            newFlow = new Flow();
+            newFlow = new FlowImpl();
             newFlow.setId(flowId);
             addFlow = true;
 
         } else {
             
             // Inspect the flow for a view corresponding to this page.
-            if (null != newFlow.getNode(context, getMyNodeId())) {
+            if (null != existingFlow.getNode(getMyNodeId())) {
                 // If we have one, take no further action.
                 return;
-            } 
-            // else we have a flow, but no view corresponding to this page.
+            } else {
+                // else we have a flow, but no view corresponding to this page.
+                if (existingFlow instanceof FlowImpl) {
+                    newFlow = (FlowImpl) existingFlow;
+                } else {
+                    // we have an existing flow, but we are not able to configure it
+                    // because it was not created by this implementation
+                    throw new TagException(tag, "Unable to configure Flow " + 
+                            existingFlow.getClass().getName());
+                }
+            }
+            
         }
         
         if (flowData.isEmpty()) {
@@ -204,13 +254,12 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
             //
             // <view>s
             //
+            String myNodeId = getMyNodeId();
             if (null == newFlow.getViews()) {
                 viewsInFlow = synthesizeViews();
                 newFlow.setViews(viewsInFlow);
-            } else if (null == newFlow.getNode(context, getMyNodeId())) {
-                ViewNode viewNode = new ViewNode();
-                viewNode.setId(getMyNodeId());
-                viewNode.setVdlDocumentId(this.tag.getLocation().getPath());
+            } else if (null == newFlow.getNode(myNodeId)) {
+                ViewNode viewNode = new ViewNodeImpl(myNodeId, this.tag.getLocation().getPath());
                 newFlow.getViews().add(viewNode);
             }
             
@@ -253,7 +302,7 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
             //
             List<FlowNavigationCase> facesFlowReturns = FacesFlowReturnTagHandler.getNavigationCases(ctx);
             if (null != facesFlowReturns) {
-                Map<String, NavigationCase> returns = newFlow.getReturns(context);
+                Map<String, NavigationCase> returns = newFlow.getReturns();
                 for (FlowNavigationCase cur : facesFlowReturns) {
                     String returnId = cur.getEnclosingId();
                     if (!returns.containsKey(returnId)) {
@@ -263,11 +312,22 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
             }
             
             //
+            // <inbound-parameters>
+            //
+            List<Parameter> inboundParametersFromConfig = FacesFlowDefinitionTagHandler.getInboundParameters(ctx);
+            Map<String, Parameter> inboundParameters = newFlow.getInboundParameters();
+            if (null != inboundParametersFromConfig && !inboundParametersFromConfig.isEmpty()) {
+                for (Parameter cur : inboundParametersFromConfig) {
+                    inboundParameters.put(cur.getName(), cur);
+                }
+            }
+            
+            //
             // <switch>
             //
             Map<String, SwitchNode> switchElement = SwitchNodeTagHandler.getSwitches(ctx);
             if (null != switchElement) {
-                Map<String, SwitchNode> switches = newFlow.getSwitches(context);
+                Map<String, SwitchNode> switches = newFlow.getSwitches();
                 for (Map.Entry<String, SwitchNode> cur : switchElement.entrySet()) {
                     switches.put(cur.getKey(), cur.getValue());
                 }
@@ -282,10 +342,10 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
             //
             // <faces-flow-call>
             //
-            Map<String,FacesFlowCallNode> facesFlowCallElement = FacesFlowCallTagHandler.getFacesFlowCalls(ctx);
+            Map<String,FlowCallNode> facesFlowCallElement = FacesFlowCallTagHandler.getFacesFlowCalls(ctx);
             if (null != facesFlowCallElement) {
-                Map<String,FacesFlowCallNode> facesFlowCalls = newFlow.getFacesFlowCalls(context);
-                for (Map.Entry<String, FacesFlowCallNode> cur : facesFlowCallElement.entrySet()) {
+                Map<String,FlowCallNode> facesFlowCalls = newFlow.getFlowCalls();
+                for (Map.Entry<String, FlowCallNode> cur : facesFlowCallElement.entrySet()) {
                     facesFlowCalls.put(cur.getKey(), cur.getValue());
                 }
             }
@@ -322,6 +382,7 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
 
         // This needs to be done at the end so that the flow is fully populated.
         if (addFlow) {
+            newFlow.init(context);
             flowHandler.addFlow(context, null, newFlow);
 
         }
@@ -330,8 +391,7 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
     
     private List<ViewNode> synthesizeViews() {
         List<ViewNode> viewsInFlow = null;
-        ViewNode viewNode = new ViewNode();
-        viewNode.setId(getMyNodeId());
+        String myNodeId = getMyNodeId();
         
         String path = this.tag.getLocation().getPath();
         if (path.endsWith(RIConstants.FLOW_DEFINITION_ID_SUFFIX)) {
@@ -340,7 +400,7 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
         }
         
         
-        viewNode.setVdlDocumentId(path);
+        ViewNode viewNode = new ViewNodeImpl(myNodeId, path);
         viewsInFlow = Collections.synchronizedList(new ArrayList<ViewNode>());
         viewsInFlow.add(viewNode);
         

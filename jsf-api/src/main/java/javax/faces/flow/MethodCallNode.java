@@ -43,39 +43,10 @@ package javax.faces.flow;
 import javax.el.MethodExpression;
 import javax.el.ValueExpression;
 
-public class MethodCallNode extends FlowNode {
+public abstract class MethodCallNode extends FlowNode {
     
-    private static final long serialVersionUID = 3250474793483848344L;
-    
-    private MethodExpression methodExpression;
-    
-    private ValueExpression outcome;
-    
-    private String id;
-    
-    public MethodExpression getMethodExpression() {
-        return methodExpression;
-    }
+    public abstract MethodExpression getMethodExpression();
 
-    public void setMethodExpression(MethodExpression methodExpression) {
-        this.methodExpression = methodExpression;
-    }
+    public abstract ValueExpression getOutcome();
 
-    public ValueExpression getOutcome() {
-        return outcome;
-    }
-
-    public void setOutcome(ValueExpression outcome) {
-        this.outcome = outcome;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-    
-    
 }

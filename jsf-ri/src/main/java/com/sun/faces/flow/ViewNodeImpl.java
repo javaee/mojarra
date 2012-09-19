@@ -1,8 +1,8 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- *
+ * 
  * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
- *
+ * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -11,20 +11,20 @@
  * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- *
+ * 
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at packager/legal/LICENSE.txt.
- *
+ * 
  * GPL Classpath Exception:
  * Oracle designates this particular file as subject to the "Classpath"
  * exception as provided by Oracle in the GPL Version 2 section of the License
  * file that accompanied this code.
- *
+ * 
  * Modifications:
  * If applicable, add the following below the License Header, with the fields
  * enclosed by brackets [] replaced by your own identifying information:
  * "Portions Copyright [year] [name of copyright owner]"
- *
+ * 
  * Contributor(s):
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
@@ -36,45 +36,41 @@
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
  * holder.
+
  */
-package com.sun.faces.test.agnostic.context.regular;
+package com.sun.faces.flow;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import javax.faces.flow.ViewNode;
 
-/**
- * The constructor tests.
- *
- * @author Manfred Riem (manfred.riem@oracle.com)
- */
-public class ReleaseIT {
+public class ViewNodeImpl extends ViewNode {
+    
+    private final String id;
+    private final String vdlDocumentId;
 
-    private String webUrl;
-    private WebClient webClient;
-
-    @Before
-    public void setUp() {
-        webUrl = System.getProperty("integration.url");
-        webClient = new WebClient();
-        webClient.setThrowExceptionOnFailingStatusCode(true);
+    public ViewNodeImpl(String id, String vdlDocumentIdIn) {
+        this.id = id;
+        
+        int i = vdlDocumentIdIn.indexOf("META-INF/flows");
+        
+        if (-1 != i) { 
+            vdlDocumentIdIn = vdlDocumentIdIn.substring(i + 14);
+        } else if (vdlDocumentIdIn.startsWith("/WEB-INF")) {
+            vdlDocumentIdIn = vdlDocumentIdIn.substring(8);
+        } else if (vdlDocumentIdIn.startsWith("WEB-INF")) {
+            vdlDocumentIdIn = vdlDocumentIdIn.substring(7);
+        }
+        this.vdlDocumentId = vdlDocumentIdIn;
+        
     }
 
-    @After
-    public void tearDown() {
-        webClient.closeAllWindows();
+    @Override
+    public String getId() {
+        return id;
     }
-
-    @Test
-    public void testRelease1() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "/faces/release1.xhtml");
+    
+    @Override
+    public String getVdlDocumentId() {
+        return vdlDocumentId;
     }
-
-    @Test
-    public void testRelease2() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "/faces/release2.xhtml");
-    }
+    
 }

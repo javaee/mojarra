@@ -49,6 +49,7 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 public class FlowACallsFlowBIT {
     /**
@@ -107,6 +108,12 @@ public class FlowACallsFlowBIT {
         assertTrue(pageText.contains("Flow_a_Bean"));
         assertTrue(pageText.matches("(?s).*Has a flow:\\s+true\\..*"));
         
+        String param1Value = page.getElementById("param1FromFlowB").getTextContent();
+        assertEquals("", param1Value);
+        String param2Value = page.getElementById("param2FromFlowB").getTextContent();
+        assertEquals("", param2Value);
+        
+        
         button = (HtmlSubmitInput) page.getElementById("next_a");
         page = button.click();
         pageText = page.asText();
@@ -129,6 +136,12 @@ public class FlowACallsFlowBIT {
         assertTrue(pageText.contains("Flow_B_Bean"));
         assertTrue(!pageText.contains("Flow_A_Bean"));
         
+        param1Value = page.getElementById("param1FromFlowA").getTextContent();
+        assertEquals("param1Value", param1Value);
+        param2Value = page.getElementById("param2FromFlowA").getTextContent();
+        assertEquals("param2Value", param2Value);
+        
+        
         button = (HtmlSubmitInput) page.getElementById("next_a");
         page = button.click();
         pageText = page.asText();
@@ -144,13 +157,28 @@ public class FlowACallsFlowBIT {
         pageText = page.asText();
         assertTrue(pageText.contains(value));
         
-        button = (HtmlSubmitInput) page.getElementById("return");
+        button = (HtmlSubmitInput) page.getElementById("callA");
         page = button.click();
         
+        param1Value = page.getElementById("param1FromFlowB").getTextContent();
+        assertEquals("param1Value", param1Value);
+        param2Value = page.getElementById("param2FromFlowB").getTextContent();
+        assertEquals("param2Value", param2Value);
+        
+        button = (HtmlSubmitInput) page.getElementById("next_a");
+        page = button.click();
+        pageText = page.asText();
+        assertTrue(pageText.contains("Second page in the flow"));
+        
+        button = (HtmlSubmitInput) page.getElementById("next");
+        page = button.click();
+        
+        button = (HtmlSubmitInput) page.getElementById("return");
+        page = button.click();
+
         pageText = page.asText();
         assertTrue(pageText.matches("(?s).*facesFlowScope value,\\s+should be empty:\\s+\\..*"));
         assertTrue(pageText.matches("(?s).*Has a flow:\\s+false\\..*"));
-
         
     }
 }

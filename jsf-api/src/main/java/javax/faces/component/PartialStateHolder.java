@@ -40,8 +40,6 @@
 
 package javax.faces.component;
 
-import java.io.Serializable;
-
 /**
  * <p class="changed_added_2_0">Components that want to leverage the
  * partial state saving feature must implement this interface instead of

@@ -75,7 +75,7 @@ public class ClientWindowImpl extends ClientWindow {
         Map<String, Object> sessionAttrs = extContext.getSessionMap();
         Integer counter = (Integer) sessionAttrs.get(clientWindowCounterKey);
         if (null == counter) {
-            counter = new Integer(0);
+            counter = Integer.valueOf(0);
         }
         char sep = UINamingContainer.getSeparatorChar(context);
         id = extContext.getSessionId(true) + sep +

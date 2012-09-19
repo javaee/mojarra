@@ -513,7 +513,7 @@
             <propertyregex property="testname"
                            input="@{request}"
                            global="true"
-                           regexp="/"
+                           regexp="[/|?]"
                            replace="_" />
             <echo message="writing TEST-${testname}" />
             <junit printsummary="yes"

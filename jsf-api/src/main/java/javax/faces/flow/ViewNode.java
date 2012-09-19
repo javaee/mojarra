@@ -40,8 +40,6 @@
  */
 package javax.faces.flow;
 
-import java.io.Serializable;
-
 /**
  * <p class="changed_added_2_2"><strong>ViewNode</strong> is the class
  * that represents a VDL view in a faces flow graph.</p>
@@ -49,33 +47,9 @@ import java.io.Serializable;
  * @since 2.2
  */
 
-public class ViewNode extends FlowNode implements Serializable {
+public abstract class ViewNode extends FlowNode {
     
-    private static final long serialVersionUID = -8548240128992712331L;
     
-    private String id;
-
-    /**
-     * <p class="changed_added_2_2">Return the immutable id for this
-     * view node.  This must be unique within the flow.</p>
-     * @since 2.2
-     */
-    public String getId() {
-        return id;
-    }
-
-    /**
-     * <p class="changed_added_2_2">This setter will likely be moved
-     * from the public API into the implementation.</p>
-     * @since 2.2
-     */
-
-    public void setId(String id) {
-        this.id = id;
-    }
-    
-    private String vdlDocumentId;
-
     /**
      * <p class="changed_added_2_2">Return the immutable VDL document id
      * for this view node.  This is normally the path to the VDL page
@@ -83,26 +57,6 @@ public class ViewNode extends FlowNode implements Serializable {
      * flow.</p>
      * @since 2.2
      */
-    public String getVdlDocumentId() {
-        return vdlDocumentId;
-    }
+    public abstract String getVdlDocumentId();
 
-    /**
-     * <p class="changed_added_2_2">This setter will likely be moved
-     * from the public API into the implementation.</p>
-     * @since 2.2
-     */
-    public void setVdlDocumentId(String vdlDocumentIdIn) {
-        int i = vdlDocumentIdIn.indexOf("META-INF/flows");
-        
-        if (-1 != i) { 
-            vdlDocumentIdIn = vdlDocumentIdIn.substring(i + 14);
-        } else if (vdlDocumentIdIn.startsWith("/WEB-INF")) {
-            vdlDocumentIdIn = vdlDocumentIdIn.substring(8);
-        } else if (vdlDocumentIdIn.startsWith("WEB-INF")) {
-            vdlDocumentIdIn = vdlDocumentIdIn.substring(7);
-        }
-        this.vdlDocumentId = vdlDocumentIdIn;
-    }
-    
 }

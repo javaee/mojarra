@@ -40,10 +40,6 @@
 
 package javax.faces.model;
 
-
-import javax.faces.FacesException;
-
-
 /**
  * <p><strong>ArrayDataModel</strong> is a convenience implementation of
  * {@link DataModel} that wraps an array of Java objects.</p>
@@ -100,7 +96,7 @@ public class ArrayDataModel<E> extends DataModel<E> {
      * than or equal to zero, and less than the length of the array.  Otherwise,
      * return <code>false</code>.</p>
      *
-     * @throws FacesException if an error occurs getting the row availability
+     * @throws javax.faces.FacesException if an error occurs getting the row availability
      */
     public boolean isRowAvailable() {
 
@@ -120,7 +116,7 @@ public class ArrayDataModel<E> extends DataModel<E> {
      * length of the array.  If no <code>wrappedData</code> is available,
      * return -1.</p>
      *
-     * @throws FacesException if an error occurs getting the row count
+     * @throws javax.faces.FacesException if an error occurs getting the row count
      */
     public int getRowCount() {
 
@@ -137,7 +133,7 @@ public class ArrayDataModel<E> extends DataModel<E> {
      * specified by <code>rowIndex</code>.  If no wrapped data is available,
      * return <code>null</code>.</p>
      *
-     * @throws FacesException if an error occurs getting the row data
+     * @throws javax.faces.FacesException if an error occurs getting the row data
      * @throws IllegalArgumentException if now row data is available
      *  at the currently specified row index
      */
@@ -156,7 +152,7 @@ public class ArrayDataModel<E> extends DataModel<E> {
 
 
     /**
-     * @throws FacesException {@inheritDoc}     
+     * @throws javax.faces.FacesException {@inheritDoc}     
      */ 
     public int getRowIndex() {
 
@@ -166,7 +162,7 @@ public class ArrayDataModel<E> extends DataModel<E> {
 
 
     /**
-     * @throws FacesException {@inheritDoc}
+     * @throws javax.faces.FacesException {@inheritDoc}
      * @throws IllegalArgumentException {@inheritDoc}
      */ 
     public void setRowIndex(int rowIndex) {

@@ -38,66 +38,38 @@
  * holder.
 
  */
-package javax.faces.flow;
+package com.sun.faces.facelets.flow;
 
-import javax.el.ValueExpression;
-import javax.faces.context.FacesContext;
+import com.sun.faces.facelets.tag.TagHandlerImpl;
+import java.io.IOException;
+import java.util.List;
+import javax.faces.component.UIComponent;
+import javax.faces.flow.Parameter;
+import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.TagConfig;
+import javax.faces.view.facelets.TagException;
 
-public class FacesFlowCallNode extends FlowNode {
-    
-    private static final long serialVersionUID = -8867834379603617593L;
-    
-    private String id;
-    
-    private String calledFlowId;
-    private ValueExpression calledFlowIdVE;
-    
-    private String calledFlowDocumentId;
-    private ValueExpression calledFlowDocumentIdVE;
-    
-    // PENDING(edburns): move setters to impl, use proper el utils.
-            
+public class InboundParameterTagHandler extends TagHandlerImpl {
 
-    public String getCalledFlowDocumentId(FacesContext context) {
-        if (null != calledFlowDocumentIdVE) {
-            return (String) calledFlowDocumentIdVE.getValue(context.getELContext());
-        } else {
-            return calledFlowDocumentId;
-        }
-
+    public InboundParameterTagHandler(TagConfig config) {
+        super(config);
     }
-
-    public void setCalledFlowDocumentId(FacesContext context, String calledFlowDocumentId) {
-        if (null != calledFlowDocumentId && calledFlowDocumentId.startsWith("#{")) {
-            this.calledFlowDocumentIdVE = context.getApplication().getExpressionFactory().createValueExpression(context.getELContext(), calledFlowDocumentId, String.class);
+    
+    
+    public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
+        this.nextHandler.apply(ctx, parent);
+        Parameter parameter = FacesFlowDefinitionTagHandler.getCurrentParameter(ctx);
+        FacesFlowDefinitionTagHandler.clearCurrentParameter(ctx);
+        if (null != parameter) {
+            List<Parameter> parameters = FacesFlowDefinitionTagHandler.getInboundParameters(ctx);
+            if (parameter.getValue().isLiteralText()) {
+                throw new TagException(tag, "Flow parameter value must not be literal.  Must be a ValueExpression");
+            }
+            parameters.add(parameter);
         } else {
-            this.calledFlowDocumentId = calledFlowDocumentId;
-        }
-    }
-
-    public String getCalledFlowId(FacesContext context) {
-        if (null != calledFlowIdVE) {
-            return (String) calledFlowIdVE.getValue(context.getELContext());
-        } else {
-            return calledFlowId;
-        }
-    }
-
-    public void setCalledFlowId(FacesContext context, String calledFlowId) {
-        if (null != calledFlowId && calledFlowId.startsWith("#{")) {
-            this.calledFlowIdVE = context.getApplication().getExpressionFactory().createValueExpression(context.getELContext(), calledFlowId, String.class);
-        } else {
-            this.calledFlowId = calledFlowId;
+            throw new TagException(tag, "Within inbound-parameter, must have a name and value");
         }
         
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
     
     

@@ -18,7 +18,7 @@
                 <version>1.6</version>
                 <executions>
                     <execution>
-                        <phase>validate</phase>
+                        <phase>clean</phase>
                         <goals>
                             <goal>run</goal>
                         </goals>

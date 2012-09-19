@@ -40,10 +40,6 @@
 
 package com.sun.faces.spi;
 
-import java.lang.annotation.Annotation;
-import java.util.Map;
-import java.util.Set;
-
 /**
  * <p>This interface defines an integration point for Java EE vendors.
  * Each vendor will need to provide an implementation of this interface

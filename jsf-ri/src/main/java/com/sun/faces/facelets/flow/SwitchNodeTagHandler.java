@@ -41,12 +41,14 @@
 package com.sun.faces.facelets.flow;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
+import com.sun.faces.flow.SwitchNodeImpl;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.faces.application.NavigationCase;
 import javax.faces.component.UIComponent;
 import javax.faces.flow.SwitchNode;
 import javax.faces.view.facelets.FaceletContext;
@@ -136,18 +138,22 @@ public class SwitchNodeTagHandler extends TagHandlerImpl {
             this.nextHandler.apply(ctx, parent);
             TagAttribute id = this.getRequiredAttribute("id");
             
-            List cases = SwitchNodeTagHandler.getSwitchCases(ctx);
+            List casesFromConfig = SwitchNodeTagHandler.getSwitchCases(ctx);
             String idStr = id.getValue(ctx);
-            for (Object cur : cases) {
-                ((FlowNavigationCase)cur).setEnclosingId(idStr);
-            }
+
             FlowNavigationCase defaultSwitchCase = SwitchNodeTagHandler.getDefaultSwitchCase(ctx);
             if (null != defaultSwitchCase) {
-                defaultSwitchCase.setEnclosingId(tagId);
+                defaultSwitchCase.setEnclosingId(idStr);
+            }
+            
+            SwitchNodeImpl toAdd = new SwitchNodeImpl(idStr, defaultSwitchCase);
+            List<NavigationCase> cases = toAdd.getCases();
+            for (Object cur : casesFromConfig) {
+                ((FlowNavigationCase)cur).setEnclosingId(idStr);
+                cases.add((NavigationCase)cur);
             }
             
             Map<String, SwitchNode> switches = getSwitches(ctx);
-            SwitchNode toAdd = new SwitchNode(idStr, defaultSwitchCase, cases);
             switches.put(idStr, toAdd);
             
         } finally {

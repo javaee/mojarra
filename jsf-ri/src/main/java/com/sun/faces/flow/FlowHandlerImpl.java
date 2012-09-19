@@ -44,16 +44,21 @@ import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.util.Util;
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import javax.el.ELContext;
 import javax.el.MethodExpression;
+import javax.el.ValueExpression;
 import javax.faces.application.ConfigurableNavigationHandler;
 import javax.faces.application.NavigationHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.flow.FlowCallNode;
 import javax.faces.flow.Flow;
 import javax.faces.flow.FlowHandler;
+import javax.faces.flow.Parameter;
 import javax.faces.flow.ViewNode;
 
 public class FlowHandlerImpl extends FlowHandler {
@@ -143,7 +148,8 @@ public class FlowHandlerImpl extends FlowHandler {
     
     @Override
     @SuppressWarnings(value="")
-    public Flow transition(FacesContext context, UIComponent src, UIComponent target) {
+    public Flow transition(FacesContext context, UIComponent src, 
+    UIComponent target, FlowCallNode outboundCallNode) {
         Flow newFlow = null;
         if (!flowFeatureIsEnabled) {
             return newFlow;
@@ -155,10 +161,52 @@ public class FlowHandlerImpl extends FlowHandler {
              targetFlow = this.getFlowByNodeId(targetFlowId);
         // there has to be a better way to structure this logic
         if (!flowsEqual(sourceFlow, targetFlow)) {
+            // Do we have an outboundCallNode?
+            Map<String, Object> evaluatedParams = null;
+            if (null != outboundCallNode) {
+                Map<String, Parameter> outboundParameters = outboundCallNode.getOutboundParameters();
+                Map<String, Parameter> inboundParameters = targetFlow.getInboundParameters();
+                // Are we passing parameters?
+                if (null != outboundParameters && !outboundParameters.isEmpty() &&
+                        null != inboundParameters && !inboundParameters.isEmpty()) {
+                    
+                    ELContext elContext = context.getELContext();
+                    String curName;
+                    // for each outbound parameter...
+                    for (Map.Entry<String, Parameter> curOutbound : outboundParameters.entrySet()) {
+                        curName = curOutbound.getKey();
+                        if (inboundParameters.containsKey(curName)) {
+                            if (null == evaluatedParams) {
+                                evaluatedParams = new HashMap<String, Object>();
+                            }
+                            // Evaluate it and put it in the temporary map.
+                            // It is necessary to do this before the flow
+                            // transition because EL expressions may refer to
+                            // things in the current flow scope.
+                            evaluatedParams.put(curName, curOutbound.getValue().getValue().getValue(elContext));
+                        }
+                    }
+                }
+            }
+            
             performPops(context, sourceFlow, targetFlow);
             if (null != targetFlow) {
                 pushFlow(context, targetFlow);
                 newFlow = targetFlow;
+            }
+            // Now the new flow is active, it's time to evaluate the inbound
+            // parameters.
+            if (null != evaluatedParams) {
+                Map<String, Parameter> inboundParameters = targetFlow.getInboundParameters();
+                ELContext elContext = context.getELContext();
+                String curName;
+                ValueExpression toSet;
+                for (Map.Entry<String, Object> curOutbound : evaluatedParams.entrySet()) {
+                    curName = curOutbound.getKey();
+                    assert(inboundParameters.containsKey(curName));
+                    toSet = inboundParameters.get(curName).getValue();
+                    toSet.setValue(elContext, curOutbound.getValue());
+                }
             }
         } 
         return newFlow;
@@ -180,8 +228,7 @@ public class FlowHandlerImpl extends FlowHandler {
         
         // case 2: neither source nor target are null.  If source does not
         // have a call that calls target, we must pop source.
-        String targetFlowId = targetFlow.getId();
-        if (null == sourceFlow.getFacesFlowCallByTargetFlowId(context, targetFlowId)) {
+        if (null == sourceFlow.getFlowCall(targetFlow)) {
             popFlow(context);            
         }
 
@@ -211,7 +258,7 @@ public class FlowHandlerImpl extends FlowHandler {
         Deque<Flow> flowStack = getFlowStack(context);
         flowStack.push(toPush);
         FlowCDIContext.flowEntered();
-        MethodExpression me  = toPush.getInitializer(context);
+        MethodExpression me  = toPush.getInitializer();
         if (null != me) {
             me.invoke(context.getELContext(), null);
         }
@@ -233,7 +280,7 @@ public class FlowHandlerImpl extends FlowHandler {
     }
     
     private void callFinalizer(FacesContext context, Flow currentFlow) {
-        MethodExpression me  = currentFlow.getFinalizer(context);
+        MethodExpression me  = currentFlow.getFinalizer();
         if (null != me) {
             me.invoke(context.getELContext(), null);
         }

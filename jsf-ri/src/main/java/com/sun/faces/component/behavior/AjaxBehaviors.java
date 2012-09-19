@@ -42,7 +42,8 @@ package com.sun.faces.component.behavior;
 
 import java.io.Serializable;
 
-import java.util.LinkedList;
+import java.util.ArrayDeque;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -64,10 +65,10 @@ public class AjaxBehaviors implements Serializable {
 
     private static final String AJAX_BEHAVIORS = "javax.faces.component.AjaxBehaviors";
 
-    private LinkedList<BehaviorInfo> behaviorStack = null;
+    private ArrayDeque<BehaviorInfo> behaviorStack = null;
 
     public AjaxBehaviors() {
-        behaviorStack = new LinkedList<BehaviorInfo>();
+        behaviorStack = new ArrayDeque<BehaviorInfo>();
     }
 
     // Returns the AjaxBehaviors instance, creating it if necessary.
@@ -98,9 +99,9 @@ public class AjaxBehaviors implements Serializable {
         // way the nearest behaviors take precedence.  Behaviors that were
         // pushed earlier won't be added since we'll already have a 
         // submitting behavior attached.
-        int count = behaviorStack.size();
-        for (int i = count - 1; i >= 0; i--) {
-            behaviorStack.get(i).addBehavior(context, behaviorHolder);
+        Iterator<BehaviorInfo> descendingIter = behaviorStack.descendingIterator();
+        while (descendingIter.hasNext()) {
+            descendingIter.next().addBehavior(context, behaviorHolder);
         }
     }
 
@@ -109,7 +110,7 @@ public class AjaxBehaviors implements Serializable {
      * <p>Push the {@link AjaxBehavior} instance onto the <code>List</code>.</p>
      *
      * @param ajaxBehavior the {@link AjaxBehavior} instance
-     * @param eventName the name of the event that the behavior is associated
+     * @param myEventName the name of the event that the behavior is associated
      *     with.
      *
      * @since 2.0
@@ -134,9 +135,10 @@ public class AjaxBehaviors implements Serializable {
 
     // Helper class for storing and creating/applying inherited
     // AjaxBehaviors
-    public static class BehaviorInfo {
+    public static class BehaviorInfo implements Serializable {
         private String eventName;
         private Object behaviorState;
+        private static final long serialVersionUID = -7679229822647712959L;
 
         public BehaviorInfo(FacesContext context,
                             AjaxBehavior ajaxBehavior,
@@ -151,20 +153,20 @@ public class AjaxBehaviors implements Serializable {
         public void addBehavior(FacesContext context,
                                 ClientBehaviorHolder behaviorHolder) {
 
-            String eventName = this.eventName;
-            if (eventName == null) {
-                eventName = behaviorHolder.getDefaultEventName();
+            String myEventName = this.eventName;
+            if (myEventName == null) {
+                myEventName = behaviorHolder.getDefaultEventName();
 
                 // No event name, default or otherwise - we're done
-                if (eventName == null) {
+                if (myEventName == null) {
                     return;
                 }
             }
 
             // We only add the 
-            if (shouldAddBehavior(behaviorHolder, eventName)) {
+            if (shouldAddBehavior(behaviorHolder, myEventName)) {
                 ClientBehavior behavior = createBehavior(context);
-                behaviorHolder.addClientBehavior(eventName, behavior);
+                behaviorHolder.addClientBehavior(myEventName, behavior);
             }
 
         }

@@ -192,13 +192,13 @@ class DefaultTagDecorator implements TagDecorator {
                 // TODO should we throw an exception here?
             }
 
-            String localName = additionalMappings.get(arbiterAttribute.getValue());
+            String myLocalName = additionalMappings.get(arbiterAttribute.getValue());
 
-            if (localName == null) {
-                localName = this.localName;
+            if (myLocalName == null) {
+                myLocalName = this.localName;
             }
 
-            return convertTag(tag, namespace, localName);
+            return convertTag(tag, namespace, myLocalName);
         }
 
         protected Tag convertTag(Tag tag, Namespace namespace, String localName) {
@@ -235,23 +235,23 @@ class DefaultTagDecorator implements TagDecorator {
         private TagAttribute createElementName(Tag tag) {
             Location location = tag.getLocation();
             String ns = Namespace.p.uri;
-            String localName = Renderer.PASSTHROUGH_RENDERER_LOCALNAME_KEY;
-            String qName = "p:" + localName;
+            String myLocalName = Renderer.PASSTHROUGH_RENDERER_LOCALNAME_KEY;
+            String qName = "p:" + myLocalName;
             String value = tag.getLocalName();
 
-            return new TagAttributeImpl(location, ns, localName, qName, value);
+            return new TagAttributeImpl(location, ns, myLocalName, qName, value);
         }
 
         protected TagAttribute convertTagAttribute(TagAttribute attribute) {
             Location location = attribute.getLocation();
             String ns = attribute.getNamespace();
-            String localName = attribute.getLocalName();
+            String myLocalName = attribute.getLocalName();
             String qName;
             String value = attribute.getValue();
 
             if (Namespace.jsf.uri.equals(attribute.getNamespace())) {
                 // make this a component attribute
-                qName = localName;
+                qName = myLocalName;
                 ns = "";
             } else {
                 if (ns.length() != 0 && !ns.equals(attribute.getTag().getNamespace())) {
@@ -261,14 +261,14 @@ class DefaultTagDecorator implements TagDecorator {
                 if (attribute.getLocalName().equals(otherHtmlIdAttribute)) {
                     // special case for input name
                     qName = "id";
-                    localName = "id";
+                    myLocalName = "id";
                 } else {
                     // make this a pass through attribute
-                    qName = "p:" + localName;
+                    qName = "p:" + myLocalName;
                     ns = Namespace.p.uri;
                 }
             }
-            return new TagAttributeImpl(location, ns, localName, qName, value);
+            return new TagAttributeImpl(location, ns, myLocalName, qName, value);
         }
     }
 

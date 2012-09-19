@@ -60,7 +60,6 @@ package javax.faces.component;
 import java.util.Map;
 import javax.el.MethodExpression;
 import javax.faces.FacesException;
-import javax.faces.FactoryFinder;
 import javax.faces.application.NavigationHandler;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextWrapper;
@@ -71,10 +70,7 @@ import javax.faces.event.ActionListener;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PreRenderViewEvent;
-import javax.faces.lifecycle.Lifecycle;
-import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.view.ViewMetadata;
-import javax.faces.webapp.FacesServlet;
 
 /**
 

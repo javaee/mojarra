@@ -1,8 +1,8 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- *
+ * 
  * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
- *
+ * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -11,20 +11,20 @@
  * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- *
+ * 
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at packager/legal/LICENSE.txt.
- *
+ * 
  * GPL Classpath Exception:
  * Oracle designates this particular file as subject to the "Classpath"
  * exception as provided by Oracle in the GPL Version 2 section of the License
  * file that accompanied this code.
- *
+ * 
  * Modifications:
  * If applicable, add the following below the License Header, with the fields
  * enclosed by brackets [] replaced by your own identifying information:
  * "Portions Copyright [year] [name of copyright owner]"
- *
+ * 
  * Contributor(s):
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
@@ -36,45 +36,35 @@
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
  * holder.
+
  */
-package com.sun.faces.test.agnostic.context.regular;
+package javax.faces.flow;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import javax.el.ValueExpression;
 
-/**
- * The constructor tests.
- *
- * @author Manfred Riem (manfred.riem@oracle.com)
- */
-public class ReleaseIT {
+public class Parameter {
+    
+    private static final long serialVersionUID = -5433802753213440653L;
+    
+    private String name;
+    private ValueExpression value;
 
-    private String webUrl;
-    private WebClient webClient;
-
-    @Before
-    public void setUp() {
-        webUrl = System.getProperty("integration.url");
-        webClient = new WebClient();
-        webClient.setThrowExceptionOnFailingStatusCode(true);
+    public String getName() {
+        return name;
     }
 
-    @After
-    public void tearDown() {
-        webClient.closeAllWindows();
+    public void setName(String name) {
+        this.name = name;
     }
 
-    @Test
-    public void testRelease1() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "/faces/release1.xhtml");
+    public ValueExpression getValue() {
+        return value;
     }
 
-    @Test
-    public void testRelease2() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "/faces/release2.xhtml");
+    public void setValue(ValueExpression value) {
+        this.value = value;
     }
+    
+    
+    
 }

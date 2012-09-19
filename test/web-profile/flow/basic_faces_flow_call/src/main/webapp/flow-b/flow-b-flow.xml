@@ -51,17 +51,34 @@
     <f:metadata>
 
         <j:faces-flow-definition>
-            <j:faces-flow-return id="taskFlowReturn1">
+            <j:flow-return id="taskFlowReturn1">
                 <j:navigation-case>
                     <j:from-outcome>#{flow_b_Bean.returnValue}</j:from-outcome>
                 </j:navigation-case>
-            </j:faces-flow-return>
+            </j:flow-return>
+
+            <j:inbound-parameter>
+                <j:name>param1FromFlowA</j:name>
+                <j:value>#{facesFlowScope.param1Value}</j:value>
+            </j:inbound-parameter>
+            <j:inbound-parameter>
+                <j:name>param2FromFlowA</j:name>
+                <j:value>#{facesFlowScope.param2Value}</j:value>
+            </j:inbound-parameter>
             
-            <j:faces-flow-call id="callA">
+            <j:flow-call id="callA">
                 <j:faces-flow-reference>
                     <j:faces-flow-id>flow-a</j:faces-flow-id>
                 </j:faces-flow-reference>
-            </j:faces-flow-call>
+                <j:outbound-parameter>
+                    <j:name>param1FromFlowB</j:name>
+                    <j:value>param1Value</j:value>
+                </j:outbound-parameter>
+                <j:outbound-parameter>
+                    <j:name>param2FromFlowB</j:name>
+                    <j:value>param2Value</j:value>
+                </j:outbound-parameter>
+            </j:flow-call>
                         
         </j:faces-flow-definition>
 
