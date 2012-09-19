@@ -45,7 +45,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.faces.application.NavigationCase;
-import javax.faces.context.FacesContext;
 import javax.faces.flow.SwitchNode;
 
 public class SwitchNodeImpl extends SwitchNode {
@@ -56,7 +55,6 @@ public class SwitchNodeImpl extends SwitchNode {
 
     public SwitchNodeImpl(String id, FlowNavigationCase defaultCase) {
         this.id = id;
-        FacesContext context = FacesContext.getCurrentInstance();
         
         this.defaultCase = defaultCase;
         cases = Collections.synchronizedList(new ArrayList<NavigationCase>());

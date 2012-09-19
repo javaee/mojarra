@@ -40,7 +40,6 @@
  */
 package com.sun.faces.flow;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -56,7 +55,7 @@ import javax.faces.flow.SwitchNode;
 import javax.faces.flow.ViewNode;
 import javax.faces.lifecycle.ClientWindow;
 
-public class FlowImpl extends Flow implements Serializable {
+public class FlowImpl extends Flow {
     
     
     // <editor-fold defaultstate="collapsed" desc="Instance variables">    
@@ -91,9 +90,7 @@ public class FlowImpl extends Flow implements Serializable {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Object helpers">       
-    
-    private static final long serialVersionUID = -7506626306507232154L;
-    
+        
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {

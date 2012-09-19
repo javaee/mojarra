@@ -42,7 +42,6 @@ package com.sun.faces.config;
 
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.config.InitFacesContext;
 
 import javax.faces.application.ResourceDependencies;
 import javax.faces.application.ResourceDependency;
@@ -112,6 +111,9 @@ public class FacesInitializer implements ServletContainerInitializer {
         throws ServletException {
 
         InitFacesContext initFacesContext = new InitFacesContext(servletContext);
+        if (null == initFacesContext) {
+            throw new ServletException("Unable to initialize Mojarra");
+        }
 
         if (shouldCheckMappings(classes, servletContext)) {
 

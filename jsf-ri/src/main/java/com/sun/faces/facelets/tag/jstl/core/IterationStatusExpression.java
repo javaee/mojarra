@@ -144,7 +144,10 @@ public final class IterationStatusExpression extends ValueExpression {
      * @see javax.el.Expression#equals(java.lang.Object)
      */
     public boolean equals(Object obj) {
-        return this.status.equals(obj);
+        if (obj instanceof IterationStatus) {
+            return this.status.equals(obj);
+        }
+        return false;
     }
 
     /*

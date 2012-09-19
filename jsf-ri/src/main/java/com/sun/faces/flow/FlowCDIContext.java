@@ -69,7 +69,7 @@ public class FlowCDIContext implements Context, Serializable {
     
     private static final long serialVersionUID = -7144653402477623609L;
     
-    private Map<Contextual<?>, String> flowIds;
+    private transient Map<Contextual<?>, String> flowIds;
     
     private static final FlowScopeMapKey FLOW_SCOPE_MAP_KEY = new FlowScopeMapKey();
     
@@ -88,7 +88,7 @@ public class FlowCDIContext implements Context, Serializable {
     
     private static Map<Contextual<?>, Object> getFlowScopedBeanMapForCurrentFlow() {
 
-        Map<Contextual<?>, Object> result = Collections.emptyMap();
+        Map<Contextual<?>, Object> result;
         FacesContext context = FacesContext.getCurrentInstance();
         ExternalContext extContext = context.getExternalContext();
         Map<String, Object> sessionMap = extContext.getSessionMap();
@@ -115,7 +115,7 @@ public class FlowCDIContext implements Context, Serializable {
     }
     
     private static Map<Contextual<?>, CreationalContext<?>> getFlowScopedCreationalMapForCurrentFlow() {
-        Map<Contextual<?>, CreationalContext<?>> result = Collections.emptyMap();
+        Map<Contextual<?>, CreationalContext<?>> result;
         FacesContext context = FacesContext.getCurrentInstance();
         ExternalContext extContext = context.getExternalContext();
         Map<String, Object> sessionMap = extContext.getSessionMap();
@@ -274,10 +274,8 @@ public class FlowCDIContext implements Context, Serializable {
     }
     
     static void flowEntered() {
-        Map<Contextual<?>, Object> flowScopedBeanMap = getFlowScopedBeanMapForCurrentFlow();
-        Map<Contextual<?>, CreationalContext<?>> creationalMap = getFlowScopedCreationalMapForCurrentFlow();
-        
-        
+        getFlowScopedBeanMapForCurrentFlow();
+        getFlowScopedCreationalMapForCurrentFlow();
         
         getCurrentFlowScope();
         

@@ -58,7 +58,7 @@ import java.util.logging.Logger;
 
 public abstract class UIComponentTagBase extends Object implements JspTag {
     
-    protected static Logger log = Logger.getLogger("javax.faces.webapp", 
+    protected static final Logger log = Logger.getLogger("javax.faces.webapp", 
             "javax.faces.LogStrings");
 
     /**
