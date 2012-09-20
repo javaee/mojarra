@@ -55,7 +55,6 @@ import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.util.Util;
 import java.util.Map;
 
 /**
