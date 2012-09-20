@@ -51,7 +51,6 @@ import javax.faces.context.ResponseWriter;
 import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
-import com.sun.faces.util.MessageUtils;
 
 /**
  * <B>TextareaRenderer</B> is a class that renders the current value of
