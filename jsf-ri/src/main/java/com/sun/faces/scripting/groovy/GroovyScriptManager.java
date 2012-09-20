@@ -44,7 +44,6 @@ import com.sun.faces.RIConstants;
 import com.sun.faces.scripting.ScriptManager;
 import com.sun.faces.util.FacesLogger;
 
-import javax.faces.context.ExternalContext;
 import javax.servlet.ServletContext;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
