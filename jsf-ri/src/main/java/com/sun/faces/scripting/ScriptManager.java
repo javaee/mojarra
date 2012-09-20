@@ -40,7 +40,6 @@
 
 package com.sun.faces.scripting;
 
-import javax.faces.context.ExternalContext;
 import java.util.Set;
 
 public interface ScriptManager {
