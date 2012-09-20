@@ -47,7 +47,6 @@ import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import java.lang.reflect.Constructor;
 import java.net.URL;
-import java.util.Set;
 
 /**
  * Base class for interfacing with Groovy.
