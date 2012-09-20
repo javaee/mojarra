@@ -188,9 +188,12 @@ class DefaultTagDecorator implements TagDecorator {
                 return convertTag(tag, namespace, localName);
             }
 
+            // PENDING 
+            /**
             if (!arbiterAttribute.isLiteral()) {
                 // TODO should we throw an exception here?
             }
+            **/
 
             String myLocalName = additionalMappings.get(arbiterAttribute.getValue());
 

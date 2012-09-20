@@ -284,6 +284,7 @@
                    deprecation="${compile.deprecation}"
                    source="@{source}"
                    target="@{target}"
+                   includeAntRuntime="false"
                    includes="@{includes}"
                    excludes="@{excludes}">
                 <classpath/>

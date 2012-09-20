@@ -109,7 +109,6 @@ public class PassthroughInputRenderer extends HtmlBasicInputRenderer {
         
         Map<String, Object> attrs = component.getPassThroughAttributes();
         String localName = (String) attrs.get(Renderer.PASSTHROUGH_RENDERER_LOCALNAME_KEY);
-        assert(null != localName);
         if (null == localName) {
             throw new FacesException("Unable to determine localName for component with clientId " + clientId);
         }
