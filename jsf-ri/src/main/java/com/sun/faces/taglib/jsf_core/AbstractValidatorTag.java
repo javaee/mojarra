@@ -40,7 +40,6 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.FacesLogger;
 
