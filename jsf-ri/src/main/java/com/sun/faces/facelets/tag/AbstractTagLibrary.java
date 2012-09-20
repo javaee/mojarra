@@ -551,7 +551,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
      * @param rendererType
      *            rendererType to use
      * @param handlerType
-     *            a Class that extends AbstractComponentHandler
+     *            a Class that extends ComponentHandler
      */
     protected final void addComponent(String name, String componentType,
             String rendererType, Class handlerType) {

@@ -169,8 +169,12 @@ public class ButtonRenderer extends HtmlBasicRenderer {
                                      null,
                                      false);
 
-        writer.endElement("input");
+        // PENDING(edburns): Prior to i_spec_1111, this element 
+        // was rendered unconditionally
 
+        if(component.getChildCount() == 0) {
+            writer.endElement("input");
+        }
     }
 
     @Override
@@ -179,6 +183,12 @@ public class ButtonRenderer extends HtmlBasicRenderer {
 
         rendererParamsNotNull(context, component);
 
+        // PENDING(edburns): Prior to i_spec_1111, this element 
+        // was rendered unconditionally
+
+        if(component.getChildCount() > 0) {
+            context.getResponseWriter().endElement("input");
+        }
     }
 
     // --------------------------------------------------------- Private Methods

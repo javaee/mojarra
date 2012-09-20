@@ -93,24 +93,9 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         ComponentConfig config = owner.getComponentConfig();
         this.componentType = config.getComponentType();
         this.rendererType = config.getRendererType();
-        this.id = getIdAttribute(owner);
+        this.id = owner.getTagAttribute("id");
         this.binding = owner.getTagAttribute("binding");
         
-    }
-    
-    private TagAttribute getIdAttribute(ComponentHandler owner) {
-        TagAttribute result = owner.getTagAttribute("id");
-        if (null == result) {
-            result = owner.getTag().getAttributes().get(JsfPassthroughElementLibrary.Namespace, "id");
-            if (null == result) {
-                String tagNS = owner.getTag().getNamespace();
-                if (null != tagNS && tagNS.equals(JsfPassthroughElementLibrary.Namespace)) {
-                    result = owner.getTagAttribute("name");
-                }
-            }
-        }
-        
-        return result;
     }
 
     /**

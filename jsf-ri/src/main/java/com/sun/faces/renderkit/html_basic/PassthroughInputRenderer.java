@@ -42,10 +42,13 @@ package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.FacesLogger;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
@@ -53,11 +56,90 @@ import javax.faces.render.Renderer;
 public class PassthroughInputRenderer extends HtmlBasicInputRenderer {
     
     private static final Logger LOGGER = FacesLogger.RENDERKIT.getLogger();
+    
+    private Map<String, PassthroughElementInfo> localNameToSubmittedValueAttributeName;
+    
+    public PassthroughInputRenderer() {
+        localNameToSubmittedValueAttributeName = new HashMap<String,PassthroughElementInfo>();
+        localNameToSubmittedValueAttributeName.put("keygen", new PassthroughElementInfo("name", false));
+    }
+    
+    private static class PassthroughElementInfo {
+        
+        private boolean renderValueAttribute;
+        private String submittedValueAttributeName;
+
+        public PassthroughElementInfo(String submittedValueAttributeName, boolean renderValueAttribute) {
+            this.renderValueAttribute = renderValueAttribute;
+            this.submittedValueAttributeName = submittedValueAttributeName;
+        }
+        
+        
+        
+    }
+
+    @Override
+    public void decode(FacesContext context, UIComponent component) {
+        rendererParamsNotNull(context, component);
+
+        if (!shouldDecode(component)) {
+            return;
+        }
+
+        String clientId = decodeBehaviors(context, component);
+
+        if (!(component instanceof UIInput)) {
+            // decode needs to be invoked only for components that are
+            // instances or subclasses of UIInput.
+            if (logger.isLoggable(Level.FINE)) {
+                logger.log(Level.FINE,
+                           "No decoding necessary since the component {0} is not an instance or a sub class of UIInput",
+                           component.getId());
+            }
+            return;
+        }
+
+        if (clientId == null) {
+            clientId = component.getClientId(context);
+        }
+
+        assert(clientId != null);
+        Map<String, String> requestMap =
+              context.getExternalContext().getRequestParameterMap();
+        
+        Map<String, Object> attrs = component.getPassThroughAttributes();
+        String localName = (String) attrs.get(Renderer.PASSTHROUGH_RENDERER_LOCALNAME_KEY);
+        assert(null != localName);
+        if (null == localName) {
+            throw new FacesException("Unable to determine localName for component with clientId " + clientId);
+        }
+        PassthroughElementInfo info = localNameToSubmittedValueAttributeName.get(localName);
+
+        if (null != info) {
+            String submittedValueAttrName = info.submittedValueAttributeName;
+            String submittedValueAttributeValue = (String) attrs.get(submittedValueAttrName);
+            if (null != submittedValueAttributeValue) {
+                String newValue = requestMap.get(submittedValueAttributeValue);
+                if (newValue != null) {
+                    setSubmittedValue(component, newValue);
+                    if (logger.isLoggable(Level.FINE)) {
+                        logger.log(Level.FINE,
+                                "new value after decoding {0}",
+                                newValue);
+                    }
+                }
+            }
+            
+        }
+        
+    }
+    
+    
 
     @Override
     public void encodeBegin(FacesContext context, UIComponent component) throws IOException {
         LOGGER.info("encodeBegin called");
-        Map<String, Object> attrs = component.getAttributes();
+        Map<String, Object> attrs = component.getPassThroughAttributes();
         String localName = (String) attrs.get(Renderer.PASSTHROUGH_RENDERER_LOCALNAME_KEY);
         ResponseWriter writer = context.getResponseWriter();
         writer.startElement(localName, component);
@@ -67,16 +149,25 @@ public class PassthroughInputRenderer extends HtmlBasicInputRenderer {
         writer.writeAttribute("name", (component.getClientId(context)),
                 "clientId");
 
-        String currentValue = getCurrentValue(context, component);
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.log(Level.FINE,
-                       "Value to be rendered {0}",
-                       currentValue);
-        }
-        if (currentValue != null) {
-            writer.writeAttribute("value", currentValue, "value");
+        boolean doWriteValue = true;
+        PassthroughElementInfo info = localNameToSubmittedValueAttributeName.get(localName);
+        
+        if (null != info) {
+            doWriteValue = info.renderValueAttribute;
         }
         
+        if (doWriteValue) {
+
+            String currentValue = getCurrentValue(context, component);
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE,
+                        "Value to be rendered {0}",
+                        currentValue);
+            }
+            if (currentValue != null) {
+                writer.writeAttribute("value", currentValue, "value");
+            }
+        }
     }
 
     @Override
@@ -89,7 +180,7 @@ public class PassthroughInputRenderer extends HtmlBasicInputRenderer {
     public void encodeEnd(FacesContext context, UIComponent component)
           throws IOException {
         LOGGER.info("encodeEnd called");
-        Map<String, Object> attrs = component.getAttributes();
+        Map<String, Object> attrs = component.getPassThroughAttributes();
         String localName = (String) attrs.get(Renderer.PASSTHROUGH_RENDERER_LOCALNAME_KEY);
         context.getResponseWriter().endElement(localName);
     }

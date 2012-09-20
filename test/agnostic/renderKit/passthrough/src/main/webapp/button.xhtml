@@ -41,37 +41,36 @@
 -->
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:jsf="http://java.sun.com/jsf">
+      xmlns:jsf="http://java.sun.com/jsf" xmlns:p="http://java.sun.com/jsf/passthrough">
 
-<form jsf:id="form" jsf:prependId="false" >
+<form jsf:id="form" jsf:prependId="false">
 
     <p>
-        <input jsf:id="inputText" type="text" jsf:value="#{bean.text1}" disabled="disabled" />
+        <span id="lastAction">#{bean.lastAction}</span>
+    </p>
+    
+    
+    <p>
+        <span id="publicKey1">#{bean.publicKey}</span>
+        
     </p>
 
     <p>
-        <input name="textField" type="text" jsf:value="#{bean.text1}" />
+        <span id="publicKey2">#{bean.publicKey2}</span>
     </p>
 
-    <p>
-        <input jsf:id="inputText2" type="text" jsf:value="#{bean.text2}"/>
-    </p>
+    <button type="submit" jsf:id="fancyButton1" jsf:action="#{bean.action1}">
+        <strong>F</strong>ancy <strong style="color: red;">Button</strong> 1
+    </button>
 
-    <p>
-        <input jsf:id="emailField" type="email" jsf:value="#{bean.email}" />
-    </p>
+    <button type="submit" jsf:id="fancyButton2" jsf:action="#{bean.action2}">
+        <strong>F</strong>ancy <strong style="color: blue;">Button</strong> 2
+    </button>
+    
+    <p><jsf:element p:elementName="keygen" id="publickKey1" p:name="myKeyName" value="#{bean.publicKey}" /></p>
+    
+    <p><keygen jsf:id="publicKey2" name="myKeyName2" jsf:value="#{bean.publicKey2}" /></p>
 
-    <p>
-        <input jsf:id="numberField" type="number" jsf:value="#{bean.number}" pattern="[0-9]*" />
-    </p>
-
-    <p>
-        <input jsf:id="checkBox" type="checkbox" jsf:value="#{bean.checkboxValue}" />
-    </p>
-
-    <input type="reset" jsf:id="resetButton" value="reset"/>
-
-    <input type="submit" jsf:id="submitButton" value="submit" />
 
 </form>
     

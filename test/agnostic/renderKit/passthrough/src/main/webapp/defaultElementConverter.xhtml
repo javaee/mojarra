@@ -41,38 +41,22 @@
 -->
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:jsf="http://java.sun.com/jsf">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:jsf="http://java.sun.com/jsf" xmlns:p="http://java.sun.com/jsf/passthrough">
 
-<form jsf:id="form" jsf:prependId="false" >
+<h:form prependId="false">
+    
+    <h:commandButton id="button" value="submit" />
 
     <p>
-        <input jsf:id="inputText" type="text" jsf:value="#{bean.text1}" disabled="disabled" />
+      <keygen jsf:id="publicKey2" name="myKeyName2" jsf:value="#{bean.publicKey2}" />
     </p>
 
     <p>
-        <input name="textField" type="text" jsf:value="#{bean.text1}" />
+        <span id="publicKey1">#{bean.publicKey}</span>
+        
     </p>
 
-    <p>
-        <input jsf:id="inputText2" type="text" jsf:value="#{bean.text2}"/>
-    </p>
-
-    <p>
-        <input jsf:id="emailField" type="email" jsf:value="#{bean.email}" />
-    </p>
-
-    <p>
-        <input jsf:id="numberField" type="number" jsf:value="#{bean.number}" pattern="[0-9]*" />
-    </p>
-
-    <p>
-        <input jsf:id="checkBox" type="checkbox" jsf:value="#{bean.checkboxValue}" />
-    </p>
-
-    <input type="reset" jsf:id="resetButton" value="reset"/>
-
-    <input type="submit" jsf:id="submitButton" value="submit" />
-
-</form>
+</h:form>
     
 </html>

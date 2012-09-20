@@ -36,56 +36,58 @@
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
  * holder.
+
  */
+package com.sun.faces.test.renderKit.passthrough;
 
-package com.sun.faces.facelets.tag.jsf;
+import java.io.Serializable;
+import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ManagedBean;
 
-import com.sun.faces.facelets.tag.AbstractTagLibrary;
-import javax.faces.FacesException;
-import javax.faces.view.facelets.TagConfig;
-import javax.faces.view.facelets.TagHandler;
+@ManagedBean
+@SessionScoped
+public class Complex implements Serializable {
 
+    private String name;
+    private String tel;
+    private String email;
 
-public final class JsfPassthroughElementLibrary extends AbstractTagLibrary {
-
-    public final static String Namespace = "http://java.sun.com/jsf";
-
-    public final static JsfPassthroughElementLibrary Instance = new JsfPassthroughElementLibrary();
-
-    public JsfPassthroughElementLibrary() {
-        super(Namespace);
-        
-        this.addComponent("input", "javax.faces.Input", "javax.faces.passthrough.Input",
-                PassthroughElementHandler.class);
-        
+    public void setName(String name) {
+        this.name = name;
     }
-    
-    @Override
-    public boolean containsTagHandler(String ns, String localName) {
-        if (this.getNamespace().equals(ns)) {
-            return true;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel;
+    }
+
+    public String getTel() {
+        return tel;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getProgress() {
+        int progress = 0;
+        if(name != null) {
+            progress++;
         }
-        return false;
+        if(tel != null) {
+            progress++;
+        }
+        if(email != null) {
+            progress++;
+        }
+        return progress + "";
     }
-    
-    /*
-     * This is only called if one or more attributes in the VDL page are 
-     * namespaced with our Namespace class variable. 
-     */
-    public TagHandler createTagHandler(String ns, String localName,
-            TagConfig tag) throws FacesException {
-        TagHandler result = null;
-        if (this.getNamespace().equals(ns)) {
-            // This is where we look at the localName and decide which of the
-            // small number of tag handlers we know about maps to this
-            // particular markup element.
-            if ("input".equals(localName)) {
-                result = super.createTagHandler(ns, localName, tag);
-            }
-        }        
-        return result;
-    }
-    
-    
     
 }

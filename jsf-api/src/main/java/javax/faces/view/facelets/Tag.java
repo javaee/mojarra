@@ -61,12 +61,11 @@ package javax.faces.view.facelets;
 import javax.faces.view.Location;
 
 /**
- * <p class="changed_added_2_0"><span
- * class="changed_modified_2_2">The</span> runtime must create an
- * instance of this class for each element in the Facelets XHTML view. A
- * {@link TagConfig} subinterface instance is responsible for providing
- * an instance of <code>Tag</code> to the {@link TagHandler} instance
- * that is passed the <code>TagConfig</code> in its constructor.</p>
+ * <p class="changed_added_2_0">The runtime must create an instance of
+ * this class for each element in the Facelets XHTML view. A {@link
+ * TagConfig} subinterface instance is responsible for providing an
+ * instance of <code>Tag</code> to the {@link TagHandler} instance that
+ * is passed the <code>TagConfig</code> in its constructor.</p>
  * 
  * @since 2.0
  */
@@ -75,7 +74,7 @@ public final class Tag {
 
     private final Location location;
 
-    private String namespace;
+    private final String namespace;
 
     private final String localName;
 
@@ -127,18 +126,6 @@ public final class Tag {
      */
     public String getNamespace() {
         return namespace;
-    }
-    
-    /**
-     * <p class="changed_added_2_2">Allow the implementation to change
-     * the namespace of this tag.  This is necessary to enable the 
-     * markup component feature.</p>
-     * 
-     * @param namespace The namespace to set for this tag instance
-     */
-    
-    public void setNamespace(String namespace) {
-        this.namespace = namespace;
     }
 
     /**

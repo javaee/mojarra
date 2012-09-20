@@ -64,7 +64,6 @@ import com.sun.faces.facelets.tag.TagLibrary;
 import com.sun.faces.facelets.tag.composite.CompositeLibrary;
 import com.sun.faces.facelets.tag.composite.ImplementationHandler;
 import com.sun.faces.facelets.tag.composite.InterfaceHandler;
-import com.sun.faces.facelets.tag.jsf.JsfPassthroughElementLibrary;
 import com.sun.faces.facelets.tag.ui.ComponentRefHandler;
 import com.sun.faces.facelets.tag.ui.CompositionHandler;
 import com.sun.faces.facelets.tag.ui.UILibrary;
@@ -252,9 +251,6 @@ final class CompilationManager {
         Tag t = this.tagDecorator.decorate(orig);
         String[] qname = this.determineQName(t);
         t = this.trimAttributes(t);
-        
-        TagAttribute[] componentAttributes = t.getAttributes().getAll(JsfPassthroughElementLibrary.Namespace);
-        boolean hasComponentAttributes = null != componentAttributes && 0 < componentAttributes.length;
 
         boolean handled = false;
 
@@ -296,28 +292,13 @@ final class CompilationManager {
             
         } else if (isRemove(qname[0], qname[1])) {
             this.units.push(new RemoveUnit());
-        } else if (this.tagLibrary.containsTagHandler(qname[0], qname[1]) || hasComponentAttributes) {
+        } else if (this.tagLibrary.containsTagHandler(qname[0], qname[1])) {
             if (isInterface(qname[0], qname[1])) {
                 InterfaceUnit iface = new InterfaceUnit(this.tagLibrary, qname[0], qname[1], t, this.nextTagId());
                 setInterfaceUnit(iface);
                 this.startUnit(iface);
             } else {
-                if (hasComponentAttributes) {
-                    String ns = t.getNamespace();
-                    if (0 == ns.length() || "http://www.w3.org/1999/xhtml".equals(ns)) {
-                        t.setNamespace(JsfPassthroughElementLibrary.Namespace);
-                        this.startUnit(new TagUnit(this.tagLibrary, JsfPassthroughElementLibrary.Namespace, qname[1], t, this.nextTagId()));
-                    } else {
-                        throw new FaceletException("Elements with namespace " +
-                                ns + " may not have attributes in namespace " + 
-                                JsfPassthroughElementLibrary.Namespace + "." + 
-                                " Namespace " + JsfPassthroughElementLibrary.Namespace + 
-                                " is intended for otherwise non-JSF-aware markup, such as <input type=\"text\" jsf:id >" + 
-                                " It is not valid to have <h:commandButton jsf:id=\"button\" />.");
-                    }
-                } else {
-                    this.startUnit(new TagUnit(this.tagLibrary, qname[0], qname[1], t, this.nextTagId()));
-                }
+                this.startUnit(new TagUnit(this.tagLibrary, qname[0], qname[1], t, this.nextTagId()));
             }
         } else if (this.tagLibrary.containsNamespace(qname[0], t)) {
             throw new TagException(orig, "Tag Library supports namespace: "+qname[0]+", but no tag was defined for name: "+qname[1]);
@@ -507,7 +488,7 @@ final class CompilationManager {
     }
 
     private Tag trimNSAttributes(Tag tag) {
-        TagAttribute[] attr = (TagAttribute[]) tag.getAttributes().getAll();
+        TagAttribute[] attr = tag.getAttributes().getAll();
         int remove = 0;
         for (int i = 0; i < attr.length; i++) {
             if (attr[i].getQName().startsWith("xmlns")

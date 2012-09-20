@@ -76,20 +76,15 @@ final class ComponentRule extends MetaRule {
     final static class LiteralAttributeMetadata extends Metadata {
 
         private final String name;
-        private final TagAttribute attr;
+        private final String value;
         
-        public LiteralAttributeMetadata(String name, TagAttribute attr) {
+        public LiteralAttributeMetadata(String name, String value) {
+            this.value = value;
             this.name = name;
-            this.attr = attr;
         }
 
         public void applyMetadata(FaceletContext ctx, Object instance) {
-            String tagNamespace = this.attr.getTag().getNamespace();
-            if (null != tagNamespace && JsfPassthroughElementLibrary.Namespace.equals(tagNamespace)) {
-                ((UIComponent) instance).getPassThroughAttributes(true).put(this.name, this.attr.getValue());
-            } else {
-                ((UIComponent) instance).getAttributes().put(this.name, this.attr.getValue());
-            }
+            ((UIComponent) instance).getAttributes().put(this.name, this.value);
         }
     }
     
@@ -161,7 +156,7 @@ final class ComponentRule extends MetaRule {
                 // this was an attribute literal, but not property
                 warnAttr(attribute, meta.getTargetClass(), name);
 
-                return new LiteralAttributeMetadata(name, attribute);
+                return new LiteralAttributeMetadata(name, attribute.getValue());
             }
         }
         return null;

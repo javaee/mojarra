@@ -41,32 +41,26 @@
 -->
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:jsf="http://java.sun.com/jsf">
+      xmlns:jsf="http://java.sun.com/jsf" xmlns:f="http://java.sun.com/jsf/core">
 
-<form jsf:id="form" jsf:prependId="false" >
+<form jsf:id="form" jsf:prependId="false">
 
     <p>
-        <input jsf:id="inputText" type="text" jsf:value="#{bean.text1}" disabled="disabled" />
+        <select jsf:id="selectOne" size="1" jsf:value="#{bean.selectOne}">
+            <f:selectItems value="#{bean.list}"/>
+        </select>
     </p>
 
     <p>
-        <input name="textField" type="text" jsf:value="#{bean.text1}" />
+        <select jsf:id="selectOneSize2" size="2" jsf:value="#{bean.selectOneSize2}">
+            <f:selectItems value="#{bean.list}"/>
+        </select>
     </p>
 
     <p>
-        <input jsf:id="inputText2" type="text" jsf:value="#{bean.text2}"/>
-    </p>
-
-    <p>
-        <input jsf:id="emailField" type="email" jsf:value="#{bean.email}" />
-    </p>
-
-    <p>
-        <input jsf:id="numberField" type="number" jsf:value="#{bean.number}" pattern="[0-9]*" />
-    </p>
-
-    <p>
-        <input jsf:id="checkBox" type="checkbox" jsf:value="#{bean.checkboxValue}" />
+        <select jsf:id="selectMany" multiple="multiple" jsf:value="#{bean.selectMany}">
+            <f:selectItems value="#{bean.list}"/>
+        </select>
     </p>
 
     <input type="reset" jsf:id="resetButton" value="reset"/>

@@ -1,8 +1,9 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -39,40 +40,46 @@
     holder.
 
 -->
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:jsf="http://java.sun.com/jsf">
 
-<form jsf:id="form" jsf:prependId="false" >
+<taglib xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
+    version="2.1">
 
-    <p>
-        <input jsf:id="inputText" type="text" jsf:value="#{bean.text1}" disabled="disabled" />
-    </p>
 
-    <p>
-        <input name="textField" type="text" jsf:value="#{bean.text1}" />
-    </p>
+    <!-- ========== Tag Library Description Elements ========================= -->
 
-    <p>
-        <input jsf:id="inputText2" type="text" jsf:value="#{bean.text2}"/>
-    </p>
+    <description>
+        <![CDATA[<p class="changed_added_2_2">Facelet tag attributes in 
+        this namespace must be added to the pass through attribute map <br />
+        on the <code>UIComponent</code> corresponding to the facelet 
+        tag.  There are no tags in this tag library.</p>
 
-    <p>
-        <input jsf:id="emailField" type="email" jsf:value="#{bean.email}" />
-    </p>
+ 
+        <div class="changed_added_2_2">
+ 
+        <p>Usage example</p>
 
-    <p>
-        <input jsf:id="numberField" type="number" jsf:value="#{bean.number}" pattern="[0-9]*" />
-    </p>
+        <code><pre>&lt;h:outputText value="Namespaced Attributes" p:foo="bar" /&gt;</pre></code>
 
-    <p>
-        <input jsf:id="checkBox" type="checkbox" jsf:value="#{bean.checkboxValue}" />
-    </p>
+        <p>Would cause <code>&lt;span foo="bar"&gt;Namespaced Attributes&lt;/span&gt;</code> to be rendered.</p>
 
-    <input type="reset" jsf:id="resetButton" value="reset"/>
 
-    <input type="submit" jsf:id="submitButton" value="submit" />
+        </div>
 
-</form>
-    
-</html>
+        ]]>
+
+    </description>
+    <tlib-version>1.2</tlib-version>
+    <display-name>Pass Through Attributes</display-name>
+    <short-name>p</short-name>
+    <uri>http://java.sun.com/jsf/passthrough</uri>
+
+ <tag>
+     <description>_</description>
+     <name>_</name>
+     <body-content>empty</body-content>
+ </tag>
+
+
+</taglib>

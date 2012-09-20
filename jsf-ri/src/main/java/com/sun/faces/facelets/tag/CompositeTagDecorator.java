@@ -75,9 +75,12 @@ public final class CompositeTagDecorator implements TagDecorator {
 
     private final TagDecorator[] decorators;
 
+    private final DefaultTagDecorator defaultTagDecorator;
+
     public CompositeTagDecorator(TagDecorator[] decorators) {
         Util.notNull("decorators", decorators);
         this.decorators = decorators;
+        this.defaultTagDecorator = new DefaultTagDecorator();
     }
 
     /**
@@ -85,6 +88,13 @@ public final class CompositeTagDecorator implements TagDecorator {
      * the TagDecorators return a value other than null.
      */
     public Tag decorate(Tag tag) {
+        // eliminate the jsf: attributes
+        Tag noJsfAttributes = defaultTagDecorator.decorate(tag);
+        if(noJsfAttributes != null) {
+            // pass the converted tag to the other decorators
+            tag = noJsfAttributes;
+        }
+
         Tag t = null;
         for (int i = 0; i < this.decorators.length; i++) {
             t = this.decorators[i].decorate(tag);

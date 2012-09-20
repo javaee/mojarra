@@ -42,6 +42,7 @@ package com.sun.faces.renderkit.html_basic;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -60,6 +61,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.el.ValueExpression;
 import javax.faces.context.ExternalContext;
+import javax.faces.render.Renderer;
 
 
 /**
@@ -176,6 +178,7 @@ public class HtmlResponseWriter extends ResponseWriter {
 
     private char[] charHolder = new char[1];
 
+    private LinkedList<String> elementNames;
 
     private static final String BREAKCDATA = "]]><![CDATA[";
     private static final char[] ESCAPEDSINGLEBRACKET = ("]"+BREAKCDATA).toCharArray();
@@ -571,7 +574,7 @@ public class HtmlResponseWriter extends ResponseWriter {
         }
 
         writer.write("</");
-        writer.write(name);
+        writer.write(popElementName(name));
         writer.write('>');
 
     }
@@ -649,15 +652,16 @@ public class HtmlResponseWriter extends ResponseWriter {
             writingCdata = true;
         }
 
-        writer.write('<');
-        writer.write(name);
-        
         if (null != componentForElement) {
             Map<String, Object> passThroughAttrs = componentForElement.getPassThroughAttributes(false);
             if (null != passThroughAttrs && !passThroughAttrs.isEmpty()) {
                 considerPassThroughAttributes(passThroughAttrs);
             }
         }
+
+        writer.write('<');
+        String elementName = pushElementName(name);
+        writer.write(elementName);
         
         closeStart = true;
 
@@ -1050,6 +1054,10 @@ public class HtmlResponseWriter extends ResponseWriter {
         if (isCdata) {
             return;
         }
+        
+        if (name.equals(Renderer.PASSTHROUGH_RENDERER_LOCALNAME_KEY)) {
+            return;
+        }
 
         if (name.equalsIgnoreCase("src") && isScriptOrStyle()) {
             scriptOrStyleSrc = true;
@@ -1159,14 +1167,10 @@ public class HtmlResponseWriter extends ResponseWriter {
             FacesContext context = FacesContext.getCurrentInstance();
             for (Map.Entry<String, Object> entry : passthroughAttributes.entrySet()) {
                 Object valObj = entry.getValue();
-                String val;
-                if (valObj instanceof ValueExpression) {
-                    val = (String) ((ValueExpression) valObj).getValue(context.getELContext());
-                } else {
-                    val = (String) valObj;
-                }
-                writeURIAttributeIgnoringPassThroughAttributes(entry.getKey(), val, entry.getKey());
-                
+                String val = getAttributeValue(context, valObj);
+                String key = entry.getKey();
+
+                writeURIAttributeIgnoringPassThroughAttributes(key, val, key);
             }
         }
 
@@ -1200,6 +1204,53 @@ public class HtmlResponseWriter extends ResponseWriter {
         
     }
 
+    private String getAttributeValue(FacesContext context, Object valObj) {
+        String val;
+        if (valObj instanceof ValueExpression) {
+            val = (String) ((ValueExpression) valObj).getValue(context.getELContext());
+        } else {
+            val = (String) valObj;
+        }
+        return val;
+    }
+
+    private String pushElementName(String original) {
+        String name = getElementName(original);
+
+        if(passthroughAttributes != null) {
+            passthroughAttributes.remove(Renderer.PASSTHROUGH_RENDERER_LOCALNAME_KEY);
+            if(passthroughAttributes.isEmpty()) {
+                passthroughAttributes = null;
+            }
+        }
+
+        if(!original.equals(name) || elementNames != null) {
+            if(elementNames == null) {
+                elementNames = new LinkedList<String>();
+            }
+            elementNames.push(name);
+        }
+        return name;
+    }
+
+    private String popElementName(String original) {
+        if(elementNames == null || elementNames.isEmpty()) {
+            return original;
+        }
+        return elementNames.pop();
+    }
+
+    private String getElementName(String name) {
+        if(containsPassThroughAttribute(Renderer.PASSTHROUGH_RENDERER_LOCALNAME_KEY)) {
+            FacesContext context = FacesContext.getCurrentInstance();
+
+            String elementName = getAttributeValue(context, passthroughAttributes.get(Renderer.PASSTHROUGH_RENDERER_LOCALNAME_KEY));
+            if(elementName != null && elementName.trim().length() > 0) {
+                return elementName;
+            }
+        }
+        return name;
+    }
 
     private boolean isScriptOrStyle(String name) {
         if ("script".equalsIgnoreCase(name)) {

@@ -41,38 +41,31 @@
 -->
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:jsf="http://java.sun.com/jsf">
+      xmlns:jsf="http://java.sun.com/jsf" xmlns:f="http://java.sun.com/jsf/core">
+    <head jsf:id="head">
+        <title>Putting it all together</title>
+        <script jsf:target="body" jsf:name="js.js"/>
+        <link jsf:name="css.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body jsf:id="body">
+        <form jsf:id="form" jsf:prependId="false">
+            <label jsf:for="name">Name</label>
+            <input jsf:id="name" type="text" jsf:value="#{complex.name}">
+                <f:ajax execute="@this" render="progress"/>
+            </input>
+            <label jsf:for="tel">Tel</label>
+            <input jsf:id="tel" type="tel" jsf:value="#{complex.tel}">
+                <f:ajax execute="@this" render="progress"/>
+            </input>
 
-<form jsf:id="form" jsf:prependId="false" >
+            <label jsf:for="email">Email</label>
+            <input jsf:id="email" type="email" jsf:value="#{complex.email}">
+                <f:ajax execute="@this" render="progress"/>
+            </input>
 
-    <p>
-        <input jsf:id="inputText" type="text" jsf:value="#{bean.text1}" disabled="disabled" />
-    </p>
+            <label for="progress">Progress</label>
+            <progress jsf:id="progress" max="3" value="#{complex.progress}" />
 
-    <p>
-        <input name="textField" type="text" jsf:value="#{bean.text1}" />
-    </p>
-
-    <p>
-        <input jsf:id="inputText2" type="text" jsf:value="#{bean.text2}"/>
-    </p>
-
-    <p>
-        <input jsf:id="emailField" type="email" jsf:value="#{bean.email}" />
-    </p>
-
-    <p>
-        <input jsf:id="numberField" type="number" jsf:value="#{bean.number}" pattern="[0-9]*" />
-    </p>
-
-    <p>
-        <input jsf:id="checkBox" type="checkbox" jsf:value="#{bean.checkboxValue}" />
-    </p>
-
-    <input type="reset" jsf:id="resetButton" value="reset"/>
-
-    <input type="submit" jsf:id="submitButton" value="submit" />
-
-</form>
-    
+        </form>
+    </body>
 </html>
