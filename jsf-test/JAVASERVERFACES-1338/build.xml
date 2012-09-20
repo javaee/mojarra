@@ -71,6 +71,7 @@
     <target name="install">
 
       <start.database />
+      <set.security.properties />
       <echo message="Database started" />
       
       <if>

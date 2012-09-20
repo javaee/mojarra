@@ -43,6 +43,7 @@ package com.sun.faces.regression.i_jsf_1338_htmlunit;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
+import com.gargoylesoftware.htmlunit.html.HtmlPasswordInput;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
@@ -72,7 +73,11 @@ public class ScrumToysTestCase extends HtmlUnitFacesTestCase {
         HtmlPage page = getPage("/");
 
         HtmlTextInput text = (HtmlTextInput) page.getElementById("username");
-        text.setValueAttribute("admin");
+        text.setValueAttribute("user1");
+        
+        HtmlPasswordInput password = (HtmlPasswordInput) page.getElementById("password");
+        password.setValueAttribute("user1");
+        
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("submit");
         page = button.click();
         

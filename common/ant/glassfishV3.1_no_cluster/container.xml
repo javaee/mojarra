@@ -559,6 +559,67 @@
         </sequential>
     </macrodef>
 
+    <macrodef name="set.security.properties">
+        <attribute name="create-virtual-server" default="false"/>
+        <attribute name="failonerror" default="true"/>
+        <sequential>
+            <echo>
+
+"------------ Setting security properties ------------"
+
+            </echo>
+            <mkdir dir="${basedir}/build" />
+            <echo file="${basedir}/build/userpassword.txt">AS_ADMIN_USERPASSWORD=user1</echo>
+            <if>
+                <os family="unix"/>
+                <then>
+                    <exec executable="${container.home}/bin/asadmin"
+                          failonerror="@{failonerror}">
+                        <arg line="set server.security-service.activate-default-principal-to-role-mapping=true"/>
+                    </exec>
+                    <exec executable="${container.home}/bin/asadmin"
+                          failonerror="false">
+                        <arg line="--passwordfile ${basedir}/build/userpassword.txt delete-file-user user1"/>
+                    </exec>
+                    <exec executable="${container.home}/bin/asadmin"
+                          failonerror="@{failonerror}">
+                        <arg line="--passwordfile ${basedir}/build/userpassword.txt create-file-user --groups user user1"/>
+                    </exec>
+                    <waitfor>
+                        <http url="http://${container.host}:${container.port}"/>
+                    </waitfor>
+                </then>
+                <else>
+                  <condition property="exec.name" value="cmd.exe">
+                    <os family="windows"/>
+                  </condition>
+                  <condition property="exec.arg.1"
+                     value="${container.home}/bin/asadmin.bat">
+                     <os family="windows"/>
+                  </condition>
+                  <exec spawn="true" executable="${exec.name}">
+                      <arg value="/c" />
+                      <arg line="${exec.arg.1}" />
+                      <arg line="set server.security-service.activate-default-principal-to-role-mapping=true" />
+                  </exec>                   
+                  <exec spawn="true" failonerror="false" executable="${exec.name}">
+                      <arg value="/c" />
+                      <arg line="${exec.arg.1}" />
+                      <arg line="--passwordfile ${basedir}/build/userpassword.txt delete-file-user user1" />
+                  </exec>                   
+                  <exec spawn="true" executable="${exec.name}">
+                      <arg value="/c" />
+                      <arg line="${exec.arg.1}" />
+                      <arg line="--passwordfile ${basedir}/build/userpassword.txt create-file-user --groups user user1" />
+                  </exec>                   
+                    <waitfor>
+                        <http url="http://${container.host}:${container.port}"/>
+                    </waitfor>
+                </else>
+            </if>
+        </sequential>
+    </macrodef>
+
     <macrodef name="create.virtual.servers">
         <sequential>
                     <for list="${instance.numbers}" param="num" trim="true">
