@@ -60,7 +60,6 @@ import javax.faces.event.PhaseId;
 import javax.faces.render.ClientBehaviorRenderer;
 
 import com.sun.faces.renderkit.RenderKitUtils;
-import javax.el.ValueExpression;
 
 /*
  *<b>AjaxBehaviorRenderer</b> renders Ajax behavior for a component.
