@@ -59,7 +59,6 @@ import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
-import javax.faces.render.Renderer;
 
 /** <B>FormRenderer</B> is a class that renders a <code>UIForm<code> as a Form. */
 
