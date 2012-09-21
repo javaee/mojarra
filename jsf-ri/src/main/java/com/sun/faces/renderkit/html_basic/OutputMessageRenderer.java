@@ -50,7 +50,6 @@ import java.util.List;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIParameter;
-import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
