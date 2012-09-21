@@ -70,9 +70,6 @@ import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.RequestStateManager;
 
-import javax.el.ELContext;
-import javax.el.ValueExpression;
-
 import javax.faces.component.*;
 import javax.faces.component.html.HtmlMessages;
 
