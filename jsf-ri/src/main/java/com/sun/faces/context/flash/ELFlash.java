@@ -604,7 +604,6 @@ public class ELFlash extends Flash {
      */
 
     public void doLastPhaseActions(FacesContext context, boolean outgoingResponseIsRedirect) {
-        ExternalContext extContext = context.getExternalContext();
         Map<Object, Object> contextMap = context.getAttributes();
         PreviousNextFlashInfoManager flashManager = getCurrentFlashManager(contextMap, false);
         if (null == flashManager) {
