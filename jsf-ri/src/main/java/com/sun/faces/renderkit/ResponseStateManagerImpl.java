@@ -43,7 +43,6 @@ package com.sun.faces.renderkit;
 import java.io.IOException;
 
 import javax.faces.FacesException;
-import javax.faces.application.ProtectedViewException;
 import javax.faces.application.StateManager;
 import javax.faces.context.FacesContext;
 import javax.faces.render.ResponseStateManager;
