@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>rebuild</actionName>
+            <goals>
+                <goal>clean</goal>
+                <goal>install</goal>
+            </goals>
+            <properties>
+                <webapp.partialStateSaving>true</webapp.partialStateSaving>
+                <webapp.stateSavingMethod>client</webapp.stateSavingMethod>
+                <webapp.projectStage>Development</webapp.projectStage>
+            </properties>
+        </action>
+        <action>
+            <actionName>run</actionName>
+            <goals>
+                <goal>package</goal>
+            </goals>
+            <properties>
+                <webapp.partialStateSaving>true</webapp.partialStateSaving>
+                <netbeans.deploy>true</netbeans.deploy>
+                <webapp.stateSavingMethod>client</webapp.stateSavingMethod>
+                <webapp.projectStage>Development</webapp.projectStage>
+            </properties>
+        </action>
+    </actions>

@@ -132,7 +132,7 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
     
     static Map<FlowDataKeys,Object> getFlowData(FaceletContext ctx) {
         Map<Object, Object> attrs = ctx.getFacesContext().getAttributes();
-        Map<FlowDataKeys, Object> result = Collections.emptyMap();
+        Map<FlowDataKeys, Object> result = null;
         if (!attrs.containsKey(FLOW_DATA_MAP_ATTR_NAME)) {
             // Because Facelets is single threaded, this need not be concurrent.
             result = new EnumMap<FlowDataKeys, Object>(FlowDataKeys.class);

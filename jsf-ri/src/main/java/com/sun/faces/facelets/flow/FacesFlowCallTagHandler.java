@@ -49,7 +49,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import javax.faces.flow.FlowCallNode;
 import javax.faces.flow.Parameter;
 import javax.faces.view.facelets.FaceletContext;
@@ -120,7 +119,6 @@ public class FacesFlowCallTagHandler extends TagHandlerImpl {
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
         try {
             setWithinFacesFlowCall(ctx, true);
-            FacesContext context = ctx.getFacesContext();
             this.nextHandler.apply(ctx, parent);
             TagAttribute id = this.getRequiredAttribute("id");
             String idStr = id.getValue(ctx);

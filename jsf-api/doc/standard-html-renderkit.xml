@@ -5515,6 +5515,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <ignored-by-renderer>true</ignored-by-renderer>
       </property-extension>
     </property>
+    <property>
+      <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+      <display-name>ARIA role</display-name>
+      <icon/>
+      <property-name>role</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <ignored-by-renderer>true</ignored-by-renderer>
+      </property-extension>
+    </property>
 
 
     <property>
@@ -6149,6 +6173,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <display-name>Advisory Title</display-name>
       <icon/>
       <property-name>title</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <ignored-by-renderer>true</ignored-by-renderer>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+      <display-name>ARIA role</display-name>
+      <icon/>
+      <property-name>role</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
         <ignored-by-renderer>true</ignored-by-renderer>
@@ -6818,6 +6866,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <ignored-by-renderer>true</ignored-by-renderer>
       </property-extension>
     </property>
+    <property>
+      <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+      <display-name>ARIA role</display-name>
+      <icon/>
+      <property-name>role</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <ignored-by-renderer>true</ignored-by-renderer>
+      </property-extension>
+    </property>
 
 
     <property>
@@ -7421,6 +7493,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <ignored-by-renderer>true</ignored-by-renderer>
       </property-extension>
     </property>
+    <property>
+      <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+      <display-name>ARIA role</display-name>
+      <icon/>
+      <property-name>role</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <ignored-by-renderer>true</ignored-by-renderer>
+      </property-extension>
+    </property>
 
 
     <property>
@@ -7882,6 +7978,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <display-name>Advisory Title</display-name>
       <icon/>
       <property-name>title</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <ignored-by-renderer>true</ignored-by-renderer>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+      <display-name>ARIA role</display-name>
+      <icon/>
+      <property-name>role</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
         <ignored-by-renderer>true</ignored-by-renderer>
@@ -8525,6 +8645,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <display-name>Advisory Title</display-name>
       <icon/>
       <property-name>title</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <ignored-by-renderer>true</ignored-by-renderer>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+      <display-name>ARIA role</display-name>
+      <icon/>
+      <property-name>role</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
         <ignored-by-renderer>true</ignored-by-renderer>
@@ -9632,6 +9776,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <ignored-by-renderer>true</ignored-by-renderer>
       </property-extension>
     </property>
+    <property>
+      <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+      <display-name>ARIA role</display-name>
+      <icon/>
+      <property-name>role</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <ignored-by-renderer>true</ignored-by-renderer>
+      </property-extension>
+    </property>
 
 
     <property>
@@ -10394,6 +10562,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <ignored-by-renderer>true</ignored-by-renderer>
       </property-extension>
     </property>
+    <property>
+      <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+      <display-name>ARIA role</display-name>
+      <icon/>
+      <property-name>role</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <ignored-by-renderer>true</ignored-by-renderer>
+      </property-extension>
+    </property>
 
 
     <property>
@@ -11140,6 +11332,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <ignored-by-renderer>true</ignored-by-renderer>
       </property-extension>
     </property>
+    <property>
+      <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+      <display-name>ARIA role</display-name>
+      <icon/>
+      <property-name>role</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <ignored-by-renderer>true</ignored-by-renderer>
+      </property-extension>
+    </property>
 
 
     <property>
@@ -11698,6 +11914,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <ignored-by-renderer>true</ignored-by-renderer>
       </property-extension>
     </property>
+    <property>
+      <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+      <display-name>ARIA role</display-name>
+      <icon/>
+      <property-name>role</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <ignored-by-renderer>true</ignored-by-renderer>
+      </property-extension>
+    </property>
 
 
     <property>
@@ -12061,6 +12301,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <display-name>Advisory Title</display-name>
       <icon/>
       <property-name>title</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <ignored-by-renderer>true</ignored-by-renderer>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+      <display-name>ARIA role</display-name>
+      <icon/>
+      <property-name>role</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
         <ignored-by-renderer>true</ignored-by-renderer>
@@ -12438,6 +12702,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <ignored-by-renderer>true</ignored-by-renderer>
       </property-extension>
     </property>
+    <property>
+      <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+      <display-name>ARIA role</display-name>
+      <icon/>
+      <property-name>role</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <ignored-by-renderer>true</ignored-by-renderer>
+      </property-extension>
+    </property>
 
 
     <property>
@@ -12709,6 +12997,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <display-name>Advisory Title</display-name>
       <icon/>
       <property-name>title</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <ignored-by-renderer>true</ignored-by-renderer>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+      <display-name>ARIA role</display-name>
+      <icon/>
+      <property-name>role</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
         <ignored-by-renderer>true</ignored-by-renderer>
@@ -13197,6 +13509,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <display-name>Advisory Title</display-name>
       <icon/>
       <property-name>title</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <ignored-by-renderer>true</ignored-by-renderer>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+      <display-name>ARIA role</display-name>
+      <icon/>
+      <property-name>role</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
         <ignored-by-renderer>true</ignored-by-renderer>
@@ -13992,6 +14328,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <ignored-by-renderer>true</ignored-by-renderer>
       </property-extension>
     </property>
+    <property>
+      <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+      <display-name>ARIA role</display-name>
+      <icon/>
+      <property-name>role</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <ignored-by-renderer>true</ignored-by-renderer>
+      </property-extension>
+    </property>
 
 
     <property>
@@ -14642,6 +15002,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <ignored-by-renderer>true</ignored-by-renderer>
       </property-extension>
     </property>
+    <property>
+      <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+      <display-name>ARIA role</display-name>
+      <icon/>
+      <property-name>role</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <ignored-by-renderer>true</ignored-by-renderer>
+      </property-extension>
+    </property>
 
 
     <property>
@@ -15154,6 +15538,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <ignored-by-renderer>true</ignored-by-renderer>
       </property-extension>
     </property>
+    <property>
+      <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+      <display-name>ARIA role</display-name>
+      <icon/>
+      <property-name>role</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <ignored-by-renderer>true</ignored-by-renderer>
+      </property-extension>
+    </property>
 
 
     <property>
@@ -15385,6 +15793,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <display-name>Advisory Title</display-name>
       <icon/>
       <property-name>title</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <ignored-by-renderer>true</ignored-by-renderer>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+      <display-name>ARIA role</display-name>
+      <icon/>
+      <property-name>role</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
         <ignored-by-renderer>true</ignored-by-renderer>
@@ -16376,6 +16808,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <ignored-by-renderer>true</ignored-by-renderer>
       </property-extension>
     </property>
+    <property>
+      <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+      <display-name>ARIA role</display-name>
+      <icon/>
+      <property-name>role</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <ignored-by-renderer>true</ignored-by-renderer>
+      </property-extension>
+    </property>
 
 
     <property>
@@ -17081,6 +17537,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <display-name>Advisory Title</display-name>
       <icon/>
       <property-name>title</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <ignored-by-renderer>true</ignored-by-renderer>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+      <display-name>ARIA role</display-name>
+      <icon/>
+      <property-name>role</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
         <ignored-by-renderer>true</ignored-by-renderer>
@@ -17862,6 +18342,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <ignored-by-renderer>true</ignored-by-renderer>
       </property-extension>
     </property>
+    <property>
+      <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+      <display-name>ARIA role</display-name>
+      <icon/>
+      <property-name>role</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <ignored-by-renderer>true</ignored-by-renderer>
+      </property-extension>
+    </property>
 
 
     <property>
@@ -18600,6 +19104,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <ignored-by-renderer>true</ignored-by-renderer>
       </property-extension>
     </property>
+    <property>
+      <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+      <display-name>ARIA role</display-name>
+      <icon/>
+      <property-name>role</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <ignored-by-renderer>true</ignored-by-renderer>
+      </property-extension>
+    </property>
 
 
     <property>
@@ -19310,6 +19838,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <display-name>Advisory Title</display-name>
       <icon/>
       <property-name>title</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <ignored-by-renderer>true</ignored-by-renderer>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+      <display-name>ARIA role</display-name>
+      <icon/>
+      <property-name>role</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
         <ignored-by-renderer>true</ignored-by-renderer>
@@ -20040,6 +20592,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <ignored-by-renderer>true</ignored-by-renderer>
       </property-extension>
     </property>
+    <property>
+      <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+      <display-name>ARIA role</display-name>
+      <icon/>
+      <property-name>role</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <ignored-by-renderer>true</ignored-by-renderer>
+      </property-extension>
+    </property>
 
 
     <property>
@@ -20757,6 +21333,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <ignored-by-renderer>true</ignored-by-renderer>
       </property-extension>
     </property>
+    <property>
+      <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+      <display-name>ARIA role</display-name>
+      <icon/>
+      <property-name>role</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <ignored-by-renderer>true</ignored-by-renderer>
+      </property-extension>
+    </property>
 
 
     <property>
@@ -21307,6 +21907,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <ignored-by-renderer>true</ignored-by-renderer>
       </property-extension>
     </property>
+    <property>
+      <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+      <display-name>ARIA role</display-name>
+      <icon/>
+      <property-name>role</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <ignored-by-renderer>true</ignored-by-renderer>
+      </property-extension>
+    </property>
 
 
     <property>
@@ -21804,6 +22428,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <display-name>Advisory Title</display-name>
         <icon/>
         <attribute-name>title</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <ignored-by-renderer>true</ignored-by-renderer>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+        <display-name>ARIA role</display-name>
+        <icon/>
+        <attribute-name>role</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <ignored-by-renderer>true</ignored-by-renderer>
@@ -22350,6 +22998,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <display-name>Advisory Title</display-name>
         <icon/>
         <attribute-name>title</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <ignored-by-renderer>true</ignored-by-renderer>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+        <display-name>ARIA role</display-name>
+        <icon/>
+        <attribute-name>role</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <ignored-by-renderer>true</ignored-by-renderer>
@@ -22915,6 +23587,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
           <ignored-by-renderer>true</ignored-by-renderer>
         </attribute-extension>
       </attribute>
+      <attribute>
+        <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+        <display-name>ARIA role</display-name>
+        <icon/>
+        <attribute-name>role</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <ignored-by-renderer>true</ignored-by-renderer>
+        </attribute-extension>
+      </attribute>
 
 
       <attribute>
@@ -23411,6 +24107,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
           <ignored-by-renderer>true</ignored-by-renderer>
         </attribute-extension>
       </attribute>
+      <attribute>
+        <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+        <display-name>ARIA role</display-name>
+        <icon/>
+        <attribute-name>role</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <ignored-by-renderer>true</ignored-by-renderer>
+        </attribute-extension>
+      </attribute>
 
 
       <attribute>
@@ -23741,6 +24461,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <display-name>Advisory Title</display-name>
         <icon/>
         <attribute-name>title</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <ignored-by-renderer>true</ignored-by-renderer>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+        <display-name>ARIA role</display-name>
+        <icon/>
+        <attribute-name>role</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <ignored-by-renderer>true</ignored-by-renderer>
@@ -24165,6 +24909,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <display-name>Advisory Title</display-name>
         <icon/>
         <attribute-name>title</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <ignored-by-renderer>true</ignored-by-renderer>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+        <display-name>ARIA role</display-name>
+        <icon/>
+        <attribute-name>role</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <ignored-by-renderer>true</ignored-by-renderer>
@@ -24633,6 +25401,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
           <ignored-by-renderer>true</ignored-by-renderer>
         </attribute-extension>
       </attribute>
+      <attribute>
+        <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+        <display-name>ARIA role</display-name>
+        <icon/>
+        <attribute-name>role</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <ignored-by-renderer>true</ignored-by-renderer>
+        </attribute-extension>
+      </attribute>
 
 
       <attribute>
@@ -25087,6 +25879,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
           <ignored-by-renderer>true</ignored-by-renderer>
         </attribute-extension>
       </attribute>
+      <attribute>
+        <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+        <display-name>ARIA role</display-name>
+        <icon/>
+        <attribute-name>role</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <ignored-by-renderer>true</ignored-by-renderer>
+        </attribute-extension>
+      </attribute>
 
 
       <attribute>
@@ -25508,6 +26324,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <display-name>Advisory Title</display-name>
         <icon/>
         <attribute-name>title</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <ignored-by-renderer>true</ignored-by-renderer>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+        <display-name>ARIA role</display-name>
+        <icon/>
+        <attribute-name>role</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <ignored-by-renderer>true</ignored-by-renderer>
@@ -25945,6 +26785,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
           <ignored-by-renderer>true</ignored-by-renderer>
         </attribute-extension>
       </attribute>
+      <attribute>
+        <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+        <display-name>ARIA role</display-name>
+        <icon/>
+        <attribute-name>role</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <ignored-by-renderer>true</ignored-by-renderer>
+        </attribute-extension>
+      </attribute>
 
 
       <attribute>
@@ -26139,6 +27003,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <display-name>Advisory Title</display-name>
         <icon/>
         <attribute-name>title</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <ignored-by-renderer>true</ignored-by-renderer>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+        <display-name>ARIA role</display-name>
+        <icon/>
+        <attribute-name>role</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <ignored-by-renderer>true</ignored-by-renderer>
@@ -26347,6 +27235,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
           <ignored-by-renderer>true</ignored-by-renderer>
         </attribute-extension>
       </attribute>
+      <attribute>
+        <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+        <display-name>ARIA role</display-name>
+        <icon/>
+        <attribute-name>role</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <ignored-by-renderer>true</ignored-by-renderer>
+        </attribute-extension>
+      </attribute>
 
 
       <attribute>
@@ -26443,6 +27355,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <display-name>Advisory Title</display-name>
         <icon/>
         <attribute-name>title</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <ignored-by-renderer>true</ignored-by-renderer>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+        <display-name>ARIA role</display-name>
+        <icon/>
+        <attribute-name>role</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <ignored-by-renderer>true</ignored-by-renderer>
@@ -26783,6 +27719,30 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <display-name>Advisory Title</display-name>
         <icon/>
         <attribute-name>title</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <ignored-by-renderer>true</ignored-by-renderer>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+        <display-name>ARIA role</display-name>
+        <icon/>
+        <attribute-name>role</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <ignored-by-renderer>true</ignored-by-renderer>
@@ -27371,6 +28331,30 @@ attributes on the "span".</p>
         <display-name>Advisory Title</display-name>
         <icon/>
         <attribute-name>title</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <ignored-by-renderer>true</ignored-by-renderer>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+        <display-name>ARIA role</display-name>
+        <icon/>
+        <attribute-name>role</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <ignored-by-renderer>true</ignored-by-renderer>
@@ -28060,6 +29044,30 @@ this application, and passing the result through the
           <ignored-by-renderer>true</ignored-by-renderer>
         </attribute-extension>
       </attribute>
+      <attribute>
+        <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+        <display-name>ARIA role</display-name>
+        <icon/>
+        <attribute-name>role</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <ignored-by-renderer>true</ignored-by-renderer>
+        </attribute-extension>
+      </attribute>
 
 
       <attribute>
@@ -28423,6 +29431,30 @@ this application, and passing the result through the
           <ignored-by-renderer>true</ignored-by-renderer>
         </attribute-extension>
       </attribute>
+      <attribute>
+        <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+        <display-name>ARIA role</display-name>
+        <icon/>
+        <attribute-name>role</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <ignored-by-renderer>true</ignored-by-renderer>
+        </attribute-extension>
+      </attribute>
 
 
       <attribute>
@@ -28547,6 +29579,30 @@ this application, and passing the result through the
         <display-name>Advisory Title</display-name>
         <icon/>
         <attribute-name>title</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <ignored-by-renderer>true</ignored-by-renderer>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+        <display-name>ARIA role</display-name>
+        <icon/>
+        <attribute-name>role</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <ignored-by-renderer>true</ignored-by-renderer>
@@ -29077,6 +30133,30 @@ this application, and passing the result through the
           <ignored-by-renderer>true</ignored-by-renderer>
         </attribute-extension>
       </attribute>
+      <attribute>
+        <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+        <display-name>ARIA role</display-name>
+        <icon/>
+        <attribute-name>role</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <ignored-by-renderer>true</ignored-by-renderer>
+        </attribute-extension>
+      </attribute>
 
 
       <attribute>
@@ -29506,6 +30586,30 @@ this application, and passing the result through the
         <display-name>Advisory Title</display-name>
         <icon/>
         <attribute-name>title</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <ignored-by-renderer>true</ignored-by-renderer>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+        <display-name>ARIA role</display-name>
+        <icon/>
+        <attribute-name>role</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <ignored-by-renderer>true</ignored-by-renderer>
@@ -30123,6 +31227,30 @@ this application, and passing the result through the
           <ignored-by-renderer>true</ignored-by-renderer>
         </attribute-extension>
       </attribute>
+      <attribute>
+        <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+        <display-name>ARIA role</display-name>
+        <icon/>
+        <attribute-name>role</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <ignored-by-renderer>true</ignored-by-renderer>
+        </attribute-extension>
+      </attribute>
 
 
       <attribute>
@@ -30567,6 +31695,30 @@ this application, and passing the result through the
           <ignored-by-renderer>true</ignored-by-renderer>
         </attribute-extension>
       </attribute>
+      <attribute>
+        <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+        <display-name>ARIA role</display-name>
+        <icon/>
+        <attribute-name>role</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <ignored-by-renderer>true</ignored-by-renderer>
+        </attribute-extension>
+      </attribute>
 
 
       <attribute>
@@ -30999,6 +32151,30 @@ this application, and passing the result through the
           <ignored-by-renderer>true</ignored-by-renderer>
         </attribute-extension>
       </attribute>
+      <attribute>
+        <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+        <display-name>ARIA role</display-name>
+        <icon/>
+        <attribute-name>role</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <ignored-by-renderer>true</ignored-by-renderer>
+        </attribute-extension>
+      </attribute>
 
 
       <attribute>
@@ -31421,6 +32597,30 @@ this application, and passing the result through the
         <display-name>Advisory Title</display-name>
         <icon/>
         <attribute-name>title</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <ignored-by-renderer>true</ignored-by-renderer>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+        <display-name>ARIA role</display-name>
+        <icon/>
+        <attribute-name>role</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <ignored-by-renderer>true</ignored-by-renderer>
@@ -31869,6 +33069,30 @@ this application, and passing the result through the
         <display-name>Advisory Title</display-name>
         <icon/>
         <attribute-name>title</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <ignored-by-renderer>true</ignored-by-renderer>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+        <display-name>ARIA role</display-name>
+        <icon/>
+        <attribute-name>role</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <ignored-by-renderer>true</ignored-by-renderer>
@@ -33000,6 +34224,30 @@ unmodified to the rendered output.</p>
         <display-name>Advisory Title</display-name>
         <icon/>
         <attribute-name>title</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <ignored-by-renderer>true</ignored-by-renderer>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description><![CDATA[
+          <p class="changed_added_2_2">Per the WAI-ARIA spec and its
+          relationship to HTML5 (Section title ARIA Role Attriubute),
+          every HTML element may have a "role" attribute whose value
+          must be passed through unmodified on the element on which it
+          is declared in the final rendered markup.  The attribute, if
+          specified, must have a value that is a string literal that is,
+          or an EL Expression that evaluates to, a set of
+          space-separated tokens representing the various WAI-ARIA roles
+          that the element belongs to.
+          </p>
+
+          <p class="changed_added_2_2">It is the page author's
+          responsibility to ensure that the user agent is capable of
+          correctly interpreting the value of this attribute.</p>]]></description>
+        <display-name>ARIA role</display-name>
+        <icon/>
+        <attribute-name>role</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <ignored-by-renderer>true</ignored-by-renderer>

@@ -73,7 +73,6 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.faces.context.FacesContext;
 import javax.faces.view.facelets.TagAttributeException;
 
 /**
@@ -166,8 +165,6 @@ public final class ViewHandler extends TagHandlerImpl {
                         .getMethodExpression(ctx, null, LISTENER_SIG);
                 root.setAfterPhaseListener(m);
             }
-            FacesContext context = ctx.getFacesContext();
-
             String viewId = root.getViewId();
 
             // At this point in the lifecycle we should have a non-null/empty
