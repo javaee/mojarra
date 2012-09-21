@@ -43,12 +43,10 @@ package com.sun.faces.renderkit;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.Mac;
-import javax.crypto.NullCipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.faces.FacesException;
 
-import java.security.Key;
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.logging.Level;
