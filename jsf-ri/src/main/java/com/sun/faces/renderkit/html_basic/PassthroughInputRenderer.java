@@ -138,15 +138,19 @@ public class PassthroughInputRenderer extends HtmlBasicInputRenderer {
     @Override
     public void encodeBegin(FacesContext context, UIComponent component) throws IOException {
         LOGGER.info("encodeBegin called");
+        String clientId = component.getClientId(context);
         Map<String, Object> attrs = component.getPassThroughAttributes();
         String localName = (String) attrs.get(Renderer.PASSTHROUGH_RENDERER_LOCALNAME_KEY);
+        if (null == localName) {
+            throw new FacesException("Unable to determine localName for component with clientId " + clientId);
+        }
+        
         ResponseWriter writer = context.getResponseWriter();
         writer.startElement(localName, component);
 
         writeIdAttributeIfNecessary(context, writer, component);
         
-        writer.writeAttribute("name", (component.getClientId(context)),
-                "clientId");
+        writer.writeAttribute("name", clientId, "clientId");
 
         boolean doWriteValue = true;
         PassthroughElementInfo info = localNameToSubmittedValueAttributeName.get(localName);

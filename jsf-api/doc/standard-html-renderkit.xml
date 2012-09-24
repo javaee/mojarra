@@ -24782,31 +24782,56 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
 
             <p><a name="decode">Decode Behavior</a></p>
 
-            <p>The decode behavior is identical to that of the
-            <code>javax.faces.Input</code> <code>javax.faces.Text</code>
-            renderer.</p>
+  <p>Define a data structure that represents the following table.</p>
+
+  <table border="1">
+
+    <tr>
+
+<th>localName</th> 
+
+<th>submittedValueAttributeName</th>
+
+<th>renderCurrentValue</th>
+
+    </tr>
+
+<tr>
+
+<td>keygen</td> <td>name</td> <td>false</td>
+
+</tr>
+
+  </table>
+
+  <p>Look in the pass through attribute map for a key given by the value of
+  the symbolic constant Renderer.PASSTHROUGH_RENDERER_LOCALNAME_KEY.  If
+  not found, throw a FacesException.  Use the localName as the key into
+  the preceding table.  Find the submittedValueAttributeName entry for
+  that key.  Look in the passthrough attribute map for a key given by
+  the value of the submittedValueAttributeName entry.  If found, use
+  that value to look in the requestMap.  If the requestMap has a value,
+  set it as the submittedValue of the UIInput.  Aside from the
+  previously mentioned FacesException, if none of the data structure,
+  passthrough attribute map or requestMap lookups yields a value, take
+  no action.</p>
 
             <p><a name="decode">Encode Behavior</a></p>
 
-            <p>Look in the component's attribute map for an entry under
-            the key given by the value of the constant
-            <code>Renderer.PASSTHROUGH_RENDERER_LOCALNAME_KEY</code>.  The
-            value of this key is the element name to render.  If the
-            component has a manually declared, not auto-generated
-            <code>clientId</code>, or if the component has behaviors
-            attached to it, render the <code>clientId</code> as the
-            value of the "id" attribute.  Render the "name" attribute
-            with the value coming from the <code>clientId</code>.  Note
-            that markup authors may set this value directly on the
-            markup and the VDL processing must guarantee that the "name"
-            attribute is set as the component's <code>clientId</code>.
-            Render the current value of the component as the value of
-            the "value" attribute.</p>
-
-            <p>According to the section "Rendering Pass Through
-            Attributes" in the overview of this RenderKit, all of the
-            pass throuh attributes will be rendered exactly as shown on
-            the markup in the VDL page.</p>
+  <p>Look in the component's attribute map for an entry under the key given
+  by the value of the constant
+  Renderer.PASSTHROUGH_RENDERER_LOCALNAME_KEY. The value of this key is
+  the element name to render. If the component has a manually declared,
+  not auto-generated clientId, or if the component has behaviors
+  attached to it, render the clientId as the value of the "id"
+  attribute. Render the "name" attribute with the value coming from the
+  clientId. Note that markup authors may set this value directly on the
+  markup and the VDL processing must guarantee that the "name" attribute
+  is set as the component's clientId. If the data structure has an entry
+  for the localName, and the value of the renderCurrentValue is true, or
+  the data structure has no entry for the localName, render the current
+  value of the component as the value of the "value" attribute.
+  Otherwise do not render the value of the component.</p>
 
             </div>
 
