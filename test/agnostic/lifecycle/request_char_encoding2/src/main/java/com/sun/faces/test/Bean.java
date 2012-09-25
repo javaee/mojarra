@@ -1,8 +1,8 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
- *
+ * 
+ * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -11,20 +11,20 @@
  * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- *
+ * 
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at packager/legal/LICENSE.txt.
- *
+ * 
  * GPL Classpath Exception:
  * Oracle designates this particular file as subject to the "Classpath"
  * exception as provided by Oracle in the GPL Version 2 section of the License
  * file that accompanied this code.
- *
+ * 
  * Modifications:
  * If applicable, add the following below the License Header, with the fields
  * enclosed by brackets [] replaced by your own identifying information:
  * "Portions Copyright [year] [name of copyright owner]"
- *
+ * 
  * Contributor(s):
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
@@ -36,58 +36,57 @@
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
  * holder.
+
  */
+package com.sun.faces.test;
 
-package com.sun.faces.renderkit.html_basic;
-
-import com.sun.faces.renderkit.Attribute;
-import com.sun.faces.renderkit.AttributeManager;
-
-import java.io.IOException;
-import java.util.Map;
-
-import javax.faces.component.UIComponent;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
-import javax.faces.render.Renderer;
 
-public class DoctypeRenderer extends Renderer {
+@ManagedBean
+@ViewScoped
+public class Bean implements Serializable {
+    
+    String valueFromQueryParamAtCtorTime;
+    
+    public Bean() {
+        ExternalContext extContext = FacesContext.getCurrentInstance().getExternalContext();
+        valueFromQueryParamAtCtorTime = extContext.getRequestParameterMap().get("pageWithViewScopedBean");
+        foos = new ArrayList<Foo>();
+        foos.add(new Foo("Shirley"));
+        foos.add(new Foo("Stan"));
+        foos.add(new Foo("Cole"));
 
-    private static final Attribute[] DOCTYPE_ATTRIBUTES =
-          AttributeManager.getAttributes(AttributeManager.Key.OUTPUTDOCTYPE);
+    }
+    
+    
+    public String getBob() { return "Bob created with param " + valueFromQueryParamAtCtorTime; }
+    
+    
+    List<Foo> foos;
 
-    @Override
-    public void decode(FacesContext context, UIComponent component) {
-        // no-op
+    public List<Foo> getFoos() {
+        return foos;
     }
 
-    @Override
-    public void encodeBegin(FacesContext context, UIComponent component)
-          throws IOException {
-        ResponseWriter writer = context.getResponseWriter();
-        Map<String, Object> attrs = component.getAttributes();
-        writer.append("<!DOCTYPE ");
-        writer.append(attrs.get("rootElement").toString());
-        if (attrs.containsKey("public")) {
-            writer.append(" PUBLIC \"").append((String)attrs.get("public")).append("\"");
-        }
-        if (attrs.containsKey("system")) {
-            writer.append(" \"").append((String)attrs.get("system")).append("\"");
-        }
-        writer.append(">");
+    public void setFoos(List<Foo> foos) {
+        this.foos = foos;
+    }
+        
+    private Foo selectedFoo;
+
+    public Foo getSelectedFoo() {
+        return selectedFoo;
     }
 
-    @Override
-    public void encodeChildren(FacesContext context, UIComponent component)
-          throws IOException {
-        // no-op
+    public void setSelectedFoo(Foo selectedFoo) {
+        this.selectedFoo = selectedFoo;
     }
-
-    @Override
-    public void encodeEnd(FacesContext context, UIComponent component)
-          throws IOException {
-        context.getResponseWriter();
-    }
-
+    
     
 }

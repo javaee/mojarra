@@ -58,6 +58,7 @@
 
 package com.sun.faces.facelets.tag.jsf.core;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 
@@ -153,7 +154,7 @@ public final class ViewHandler extends TagHandlerImpl {
             }
             if (this.encoding != null) {
                 String v = this.encoding.getValue(ctx);
-                ctx.getFacesContext().getAttributes().put("facelets.Encoding", v);
+                ctx.getFacesContext().getAttributes().put(RIConstants.FACELETS_ENCODING_KEY, v);
             }
             if (this.beforePhase != null) {
                 MethodExpression m = this.beforePhase

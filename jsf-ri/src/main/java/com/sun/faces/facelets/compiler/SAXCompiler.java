@@ -81,10 +81,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 /**
@@ -142,8 +144,16 @@ public final class SAXCompiler extends Compiler {
         }
 
         protected Location createLocation() {
-            return new Location(this.alias, this.locator.getLineNumber(),
+            Location result = null;
+            if (null != locator) {
+                result = new Location(this.alias, this.locator.getLineNumber(),
                     this.locator.getColumnNumber());
+            } else {
+                if (log.isLoggable(Level.SEVERE)) {
+                    log.log(Level.SEVERE, "Unable to create Location due to null locator instance variable.");
+                }
+            }
+            return result;
         }
 
         public void endCDATA() throws SAXException {
@@ -544,10 +554,10 @@ public final class SAXCompiler extends Compiler {
     throws IOException {
 
         InputStream is = null;
-        String encoding = "UTF-8";
+        String encoding = getEncoding();
         try {
             is = new BufferedInputStream(src.openStream(), 1024);
-            encoding = writeXmlDecl(is, mngr);
+            writeXmlDecl(is, encoding, mngr);
             SAXParser parser = this.createSAXParser(handler);
             parser.parse(is, handler);
         } catch (SAXException e) {
@@ -570,15 +580,27 @@ public final class SAXCompiler extends Compiler {
         return result;
 
     }
+    
+    private String getEncoding() {
+        String result;
+        String encodingFromRequest = null;
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (null != context) {
+            ExternalContext extContext = context.getExternalContext();
+            encodingFromRequest = extContext.getRequestCharacterEncoding();
+        }
+        result = (null != encodingFromRequest) ? encodingFromRequest : RIConstants.CHAR_ENCODING;
+        
+        return result;
+    }
 
-    protected static String writeXmlDecl(InputStream is, CompilationManager mngr)
+    protected static void writeXmlDecl(InputStream is, String encoding, CompilationManager mngr)
             throws IOException {
         is.mark(128);
-        String encoding = RIConstants.CHAR_ENCODING;
         try {
             byte[] b = new byte[128];
             if (is.read(b) > 0) {
-                String r = new String(b, RIConstants.CHAR_ENCODING);
+                String r = new String(b, encoding);
                 Matcher m = XmlDeclaration.matcher(r);
                 if (m.find()) {
                     WebConfiguration config = mngr.getWebConfiguration();
@@ -590,16 +612,12 @@ public final class SAXCompiler extends Compiler {
                     // with the value of XHTML
                     if (currentModeIsXhtml) {
                         mngr.writeInstruction(m.group(0) + "\n");
-                        if (m.group(3) != null) {
-                            encoding = m.group(3);
-                        }
                     }
                 }
             }
         } finally {
             is.reset();
         }
-        return encoding;
     }
 
     private SAXParser createSAXParser(CompilationHandler handler)

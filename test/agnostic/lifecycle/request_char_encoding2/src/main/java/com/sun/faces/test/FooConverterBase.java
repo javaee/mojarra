@@ -1,8 +1,8 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
- *
+ * 
+ * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -11,20 +11,20 @@
  * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- *
+ * 
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at packager/legal/LICENSE.txt.
- *
+ * 
  * GPL Classpath Exception:
  * Oracle designates this particular file as subject to the "Classpath"
  * exception as provided by Oracle in the GPL Version 2 section of the License
  * file that accompanied this code.
- *
+ * 
  * Modifications:
  * If applicable, add the following below the License Header, with the fields
  * enclosed by brackets [] replaced by your own identifying information:
  * "Portions Copyright [year] [name of copyright owner]"
- *
+ * 
  * Contributor(s):
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
@@ -36,58 +36,40 @@
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
  * holder.
+
  */
+package com.sun.faces.test;
 
-package com.sun.faces.renderkit.html_basic;
-
-import com.sun.faces.renderkit.Attribute;
-import com.sun.faces.renderkit.AttributeManager;
-
-import java.io.IOException;
-import java.util.Map;
-
+import java.util.logging.Logger;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
-import javax.faces.render.Renderer;
+import javax.faces.convert.Converter;
 
-public class DoctypeRenderer extends Renderer {
+public class FooConverterBase implements Converter {
+    
+    public static final Logger LOGGER = Logger.getAnonymousLogger();
 
-    private static final Attribute[] DOCTYPE_ATTRIBUTES =
-          AttributeManager.getAttributes(AttributeManager.Key.OUTPUTDOCTYPE);
-
+    public FooConverterBase() {
+        LOGGER.info("FooConverter ctor");        
+    }
+    
     @Override
-    public void decode(FacesContext context, UIComponent component) {
-        // no-op
+    public Object getAsObject(FacesContext context, UIComponent component, String value) {
+        Foo result = new Foo(value);
+        
+        return result;
     }
 
     @Override
-    public void encodeBegin(FacesContext context, UIComponent component)
-          throws IOException {
-        ResponseWriter writer = context.getResponseWriter();
-        Map<String, Object> attrs = component.getAttributes();
-        writer.append("<!DOCTYPE ");
-        writer.append(attrs.get("rootElement").toString());
-        if (attrs.containsKey("public")) {
-            writer.append(" PUBLIC \"").append((String)attrs.get("public")).append("\"");
+    public String getAsString(FacesContext context, UIComponent component, Object value) {
+        String result = "";
+        
+        if (null != value) {
+            result =  ((Foo)value).getName();
         }
-        if (attrs.containsKey("system")) {
-            writer.append(" \"").append((String)attrs.get("system")).append("\"");
-        }
-        writer.append(">");
+        return result;
     }
-
-    @Override
-    public void encodeChildren(FacesContext context, UIComponent component)
-          throws IOException {
-        // no-op
-    }
-
-    @Override
-    public void encodeEnd(FacesContext context, UIComponent component)
-          throws IOException {
-        context.getResponseWriter();
-    }
-
+    
+    
     
 }

@@ -179,7 +179,6 @@ public class PhaseListenerHandler extends TagHandlerImpl {
 
     public PhaseListenerHandler(TagConfig config) {
         super(config);
-        TagAttribute type = this.getAttribute("type");
         this.binding = this.getAttribute("binding");
         this.typeAttribute = this.getAttribute("type");
         if (null != this.typeAttribute) {

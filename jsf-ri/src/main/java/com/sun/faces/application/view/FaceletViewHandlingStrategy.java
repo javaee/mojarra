@@ -988,7 +988,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
         // get the encoding
         String encoding =
-              (String) context.getAttributes().get("facelets.Encoding");
+              (String) context.getAttributes().get(RIConstants.FACELETS_ENCODING_KEY);
 
         // Create a dummy ResponseWriter with a bogus writer,
         // so we can figure out what content type the ReponseWriter
@@ -1101,8 +1101,8 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
 
         // 3. check the request attribute
-        if (ctxAttributes.containsKey("facelets.Encoding")) {
-            encoding = (String) ctxAttributes.get("facelets.Encoding");
+        if (ctxAttributes.containsKey(RIConstants.FACELETS_ENCODING_KEY)) {
+            encoding = (String) ctxAttributes.get(RIConstants.FACELETS_ENCODING_KEY);
             if (LOGGER.isLoggable(Level.FINEST)) {
                 LOGGER.log(Level.FINEST,
                            "Facelet specified alternate encoding {0}",
@@ -1183,9 +1183,9 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
      
     private void doPostBuildActions(FacesContext ctx, UIViewRoot root) {
         StateContext stateCtx = StateContext.getStateContext(ctx);
-        if (stateCtx.isPartialStateSaving(ctx, root.getViewId())) {
+//        if (stateCtx.isPartialStateSaving(ctx, root.getViewId())) {
 	    // lu4242            root.markInitialState();
-        }
+  //      }
         stateCtx.startTrackViewModifications(ctx, root);
     }
 

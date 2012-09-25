@@ -58,6 +58,7 @@
 
 package com.sun.faces.facelets.compiler;
 
+import com.sun.faces.RIConstants;
 import javax.faces.component.UIComponent;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.FaceletHandler;
@@ -86,8 +87,8 @@ public class EncodingHandler implements FaceletHandler {
         this.next.apply(ctx, parent);
         ctxAttributes.remove("facelets.compilationMessages");
         this.messageHolder.processCompilationMessages(ctx.getFacesContext());
-        if (!ctxAttributes.containsKey("facelets.Encoding")) {
-            ctx.getFacesContext().getAttributes().put("facelets.Encoding", this.encoding);
+        if (!ctxAttributes.containsKey(RIConstants.FACELETS_ENCODING_KEY)) {
+            ctx.getFacesContext().getAttributes().put(RIConstants.FACELETS_ENCODING_KEY, this.encoding);
         }
     }
     
