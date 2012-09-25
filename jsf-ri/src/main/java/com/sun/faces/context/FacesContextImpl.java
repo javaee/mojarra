@@ -74,7 +74,6 @@ import com.sun.faces.el.ELContextImpl;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import com.sun.faces.renderkit.RenderKitUtils;
-import javax.faces.FacesException;
 
 public class FacesContextImpl extends FacesContext {
 
