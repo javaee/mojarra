@@ -65,6 +65,7 @@
 
       <jsf.mvn dir="${jsf.build.home}/jsf-demo/sandbox/scrumtoys2009/eclipseProject" goals="clean" />
       <jsf.mvn dir="${basedir}/i_jsf_1338_htmlunit" goals="clean" />
+      <delete dir="${basedir}/build" />
 
     </target>    
 
