@@ -41,7 +41,6 @@
 package javax.faces.view.facelets;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIPanel;
 
 
 /**
