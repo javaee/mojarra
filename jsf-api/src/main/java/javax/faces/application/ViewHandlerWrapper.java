@@ -41,7 +41,6 @@
 package javax.faces.application;
 
 import java.util.List;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIViewRoot;
 import javax.faces.FacesException;
@@ -50,7 +49,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.io.IOException;
 import javax.faces.FacesWrapper;
-import javax.faces.view.AttachedObjectHandler;
 import javax.faces.view.ViewDeclarationLanguage;
 
 /**
