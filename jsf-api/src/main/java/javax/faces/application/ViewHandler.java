@@ -53,15 +53,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.faces.view.ActionSource2AttachedObjectHandler;
-import javax.faces.view.ActionSource2AttachedObjectTarget;
-import javax.faces.view.AttachedObjectHandler;
-import javax.faces.view.AttachedObjectTarget;
-import javax.faces.view.EditableValueHolderAttachedObjectHandler;
-import javax.faces.view.EditableValueHolderAttachedObjectTarget;
 import javax.faces.view.ViewDeclarationLanguage;
-import javax.faces.view.ValueHolderAttachedObjectHandler;
-import javax.faces.view.ValueHolderAttachedObjectTarget;
 
 
 
