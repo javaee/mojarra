@@ -59,8 +59,6 @@
 package com.sun.faces.facelets;
 
 import javax.el.ELException;
-import javax.faces.FacesException;
-import javax.faces.view.facelets.FaceletException;
 import javax.faces.view.facelets.ResourceResolver;
 import java.io.IOException;
 import java.net.URL;
@@ -82,8 +80,8 @@ public abstract class FaceletFactory {
      * @param uri
      * @return
      * @throws IOException
-     * @throws FaceletException
-     * @throws FacesException
+     * @throws javax.faces.view.facelets.FaceletException
+     * @throws javax.faces.FacesException
      * @throws ELException
      */
     public abstract Facelet getFacelet(String uri) throws IOException;
