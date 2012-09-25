@@ -91,6 +91,7 @@ public class RIConstants {
     public static final String TEXT_XML_CONTENT_TYPE = "text/xml";
     public static final String ALL_MEDIA = "*/*";
     public static final String CHAR_ENCODING = "UTF-8";
+    public static final String FACELETS_ENCODING_KEY = "facelets.Encoding";
     public static final String DEFAULT_LIFECYCLE = 
           FACES_PREFIX + "DefaultLifecycle";
     public static final String DEFAULT_STATEMANAGER =
