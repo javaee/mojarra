@@ -76,7 +76,6 @@ import javax.faces.event.ActionListener;
 import javax.faces.view.facelets.*;
 import java.io.IOException;
 import java.io.Serializable;
-import javax.faces.application.Resource;
 import javax.faces.view.ActionSource2AttachedObjectHandler;
 
 public class SetPropertyActionListenerHandler extends TagHandlerImpl implements ActionSource2AttachedObjectHandler {
