@@ -44,7 +44,6 @@ import com.sun.faces.facelets.tag.MetaRulesetImpl;
 import com.sun.faces.util.Util;
 
 import javax.el.ValueExpression;
-import javax.faces.application.Resource;
 import javax.faces.component.UIComponent;
 import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
