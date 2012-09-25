@@ -46,7 +46,6 @@ import javax.faces.component.StateHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.el.EvaluationException;
 import javax.faces.el.PropertyNotFoundException;
-import javax.faces.el.ReferenceSyntaxException;
 import javax.faces.el.ValueBinding;
 
 import javax.el.ValueExpression;
