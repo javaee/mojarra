@@ -69,7 +69,6 @@ import com.sun.faces.facelets.util.DevTools;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.RequestStateManager;
-import com.sun.faces.context.FacesFileNotFoundException;
 
 import javax.faces.component.*;
 import javax.faces.component.html.HtmlMessages;
