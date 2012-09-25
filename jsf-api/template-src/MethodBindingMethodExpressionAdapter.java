@@ -45,7 +45,6 @@ import java.io.Serializable;
 import javax.faces.component.StateHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.el.EvaluationException;
-import javax.faces.el.ReferenceSyntaxException;
 import javax.faces.el.MethodBinding;
 
 import javax.el.MethodExpression;
