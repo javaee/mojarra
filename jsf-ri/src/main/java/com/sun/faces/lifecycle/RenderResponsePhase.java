@@ -47,7 +47,6 @@ import javax.faces.FacesException;
 import javax.faces.view.ViewDeclarationLanguage;
 import javax.faces.application.ViewHandler;
 import javax.faces.context.FacesContext;
-import javax.faces.context.PartialViewContext;
 import javax.faces.event.PhaseId;
 
 import java.io.IOException;
