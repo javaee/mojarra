@@ -62,7 +62,6 @@ import com.sun.faces.facelets.tag.TagHandlerImpl;
 
 import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
-import javax.faces.event.PhaseId;
 import javax.faces.view.facelets.*;
 import java.io.IOException;
 import java.util.Iterator;
