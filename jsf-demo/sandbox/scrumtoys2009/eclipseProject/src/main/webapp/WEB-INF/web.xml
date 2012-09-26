@@ -86,11 +86,14 @@ AS_ADMIN_USERPASSWORD=user1
 These settings assume the following asadmin commands have been run
 before deploying this war.
 
+NOTE: The below text uses dash_dash to mean two consecutive hyphen
+characters.  This is necessary to not bother the XML parser
+
 asadmin set server.security-service.activate-default-principal-to-role-mapping=true
 
-asadmin --passwordfile ${basedir}/build/userpassword.txt delete-file-user user1
+asadmin dash_dashpasswordfile ${basedir}/build/userpassword.txt delete-file-user user1
 
-asadmin --passwordfile ${basedir}/build/userpassword.txt create-file-user --groups user user1
+asadmin dash_dashpasswordfile ${basedir}/build/userpassword.txt create-file-user dash_dashgroups user user1
 
 -->
 
