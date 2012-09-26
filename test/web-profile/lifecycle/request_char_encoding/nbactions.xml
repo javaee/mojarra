@@ -51,10 +51,10 @@
                 <forkMode>once</forkMode>
                 <maven.surefire.debug>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address}</maven.surefire.debug>
                 <jpda.listen>true</jpda.listen>
-                <project.build.finalName>test-agnostic-lifecycle-request_char_encoding</project.build.finalName>
+                <project.build.finalName>test-webprofile-lifecycle-request_char_encoding</project.build.finalName>
                 <integration.serverPort>8080</integration.serverPort>
                 <integration.serverName>localhost</integration.serverName>
-                <integration.url>http://localhost:8080/test-agnostic-lifecycle-request_char_encoding/</integration.url>
+                <integration.url>http://localhost:8080/test-webprofile-lifecycle-request_char_encoding/</integration.url>
             </properties>
         </action>
         <action>
@@ -64,10 +64,10 @@
                 <goal>surefire:test</goal>
             </goals>
             <properties>
-                <project.build.finalName>test-agnostic-lifecycle-request_char_encoding</project.build.finalName>
+                <project.build.finalName>test-webprofile-lifecycle-request_char_encoding</project.build.finalName>
                 <integration.serverPort>8080</integration.serverPort>
                 <integration.serverName>localhost</integration.serverName>
-                <integration.url>http://localhost:8080/test-agnostic-lifecycle-request_char_encoding/</integration.url>
+                <integration.url>http://localhost:8080/test-webprofile-lifecycle-request_char_encoding/</integration.url>
                 <test>${packageClassName}</test>
             </properties>
         </action>

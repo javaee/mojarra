@@ -23,6 +23,7 @@
         <module>el</module>
         <module>flow</module>
         <module>multi_templating</module>
+        <module>lifecycle</module>
     </modules>
     <properties>
         <webapp.projectStage>Production</webapp.projectStage>
