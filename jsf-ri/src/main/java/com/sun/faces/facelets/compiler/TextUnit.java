@@ -251,8 +251,8 @@ final class TextUnit extends CompilationUnit {
 
     protected void flushBufferToConfig(boolean child) {
 
-        // NEW IMPLEMENTATION
-        if (true) {
+//        // NEW IMPLEMENTATION
+//        if (true) {
 
             this.flushTextBuffer(child);
 
@@ -284,37 +284,37 @@ final class TextUnit extends CompilationUnit {
                 }
             }
 
-            // KEEP THESE SEPARATE SO LOGIC DOESN'T GET FUBARED
-        } else if (this.buffer.length() > 0) {
-            String s = this.buffer.toString();
-            if (s.trim().length() > 0) {
-                if (child) {
-                    s = trimRight(s);
-                }
-                if (s.length() > 0) {
-                    try {
-                        ELText txt = ELText.parse(s);
-                        if (txt != null) {
-                            if (txt.isLiteral()) {
-                                this.children.add(new UILiteralTextHandler(txt
-                                        .toString()));
-                            } else {
-                                this.children.add(new UITextHandler(this.alias,
-                                        txt));
-                            }
-                        }
-                    } catch (ELException e) {
-                        if (this.tags.size() > 0) {
-                            throw new TagException((Tag) this.tags.peek(), e
-                                    .getMessage());
-                        } else {
-                            throw new ELException(this.alias + ": "
-                                    + e.getMessage(), e.getCause());
-                        }
-                    }
-                }
-            }
-        }
+//            // KEEP THESE SEPARATE SO LOGIC DOESN'T GET FUBARED
+//        } else if (this.buffer.length() > 0) {
+//            String s = this.buffer.toString();
+//            if (s.trim().length() > 0) {
+//                if (child) {
+//                    s = trimRight(s);
+//                }
+//                if (s.length() > 0) {
+//                    try {
+//                        ELText txt = ELText.parse(s);
+//                        if (txt != null) {
+//                            if (txt.isLiteral()) {
+//                                this.children.add(new UILiteralTextHandler(txt
+//                                        .toString()));
+//                            } else {
+//                                this.children.add(new UITextHandler(this.alias,
+//                                        txt));
+//                            }
+//                        }
+//                    } catch (ELException e) {
+//                        if (this.tags.size() > 0) {
+//                            throw new TagException((Tag) this.tags.peek(), e
+//                                    .getMessage());
+//                        } else {
+//                            throw new ELException(this.alias + ": "
+//                                    + e.getMessage(), e.getCause());
+//                        }
+//                    }
+//                }
+//            }
+//        }
 
         // ALWAYS CLEAR FOR BOTH IMPL
         this.buffer.setLength(0);
