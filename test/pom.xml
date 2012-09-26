@@ -12,7 +12,7 @@
     <modules>
         <module>agnostic</module>
         <module>cluster</module>
-<!-- edburns do not commit        <module>selenium</module> -->
+        <module>selenium</module>
         <module>unit</module>
         <module>util</module>
         <module>virtual</module>
