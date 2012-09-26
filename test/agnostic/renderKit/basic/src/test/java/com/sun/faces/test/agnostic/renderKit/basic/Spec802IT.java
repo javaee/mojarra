@@ -50,6 +50,7 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
+import org.junit.Ignore;
 
 
 public class Spec802IT {
@@ -77,6 +78,7 @@ public class Spec802IT {
 
     // ------------------------------------------------------------ Test Methods
 
+    @Ignore
     @Test
     public void testFileUpload() throws Exception {
 
