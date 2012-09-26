@@ -50,6 +50,7 @@
                 <test>${packageClassName}</test>
                 <forkMode>once</forkMode>
                 <maven.surefire.debug>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address}</maven.surefire.debug>
+                <webapp.enableClientStateDebugging>true</webapp.enableClientStateDebugging>
                 <jpda.listen>true</jpda.listen>
                 <project.build.finalName>test-agnostic-renderKit-basic</project.build.finalName>
                 <webapp.projectStage>Development</webapp.projectStage>
@@ -82,6 +83,7 @@
             <properties>
                 <webapp.projectStage>Development</webapp.projectStage>
                 <webapp.partialStateSaving>false</webapp.partialStateSaving>
+                <webapp.enableClientStateDebugging>true</webapp.enableClientStateDebugging>
                 <webapp.stateSavingMethod>client</webapp.stateSavingMethod>
             </properties>
         </action>
@@ -97,6 +99,8 @@
                 
                 <webapp.projectStage>Development</webapp.projectStage>
                 
+                <webapp.enableClientStateDebugging>true</webapp.enableClientStateDebugging>
+                
                 <webapp.stateSavingMethod>client</webapp.stateSavingMethod>
                 
             </properties>
@@ -110,6 +114,7 @@
             <properties>
                 <webapp.partialStateSaving>false</webapp.partialStateSaving>
                 <webapp.stateSavingMethod>client</webapp.stateSavingMethod>
+                <webapp.enableClientStateDebugging>true</webapp.enableClientStateDebugging>
                 <webapp.projectStage>Development</webapp.projectStage>
             </properties>
         </action>
@@ -121,6 +126,7 @@
             <properties>
                 <webapp.partialStateSaving>false</webapp.partialStateSaving>
                 <netbeans.deploy>true</netbeans.deploy>
+                <webapp.enableClientStateDebugging>true</webapp.enableClientStateDebugging>
                 <webapp.stateSavingMethod>client</webapp.stateSavingMethod>
                 <webapp.projectStage>Development</webapp.projectStage>
             </properties>
@@ -133,6 +139,7 @@
             <properties>
                 <webapp.partialStateSaving>false</webapp.partialStateSaving>
                 <netbeans.deploy>true</netbeans.deploy>
+                <webapp.enableClientStateDebugging>true</webapp.enableClientStateDebugging>
                 <netbeans.deploy.clientUrlPart>${webpagePath}</netbeans.deploy.clientUrlPart>
                 <webapp.stateSavingMethod>client</webapp.stateSavingMethod>
                 <webapp.projectStage>Development</webapp.projectStage>
@@ -146,6 +153,7 @@
             <properties>
                 <webapp.partialStateSaving>false</webapp.partialStateSaving>
                 <netbeans.deploy>true</netbeans.deploy>
+                <webapp.enableClientStateDebugging>true</webapp.enableClientStateDebugging>
                 <netbeans.deploy.debugmode>true</netbeans.deploy.debugmode>
                 <netbeans.deploy.clientUrlPart>${webpagePath}</netbeans.deploy.clientUrlPart>
                 <webapp.stateSavingMethod>client</webapp.stateSavingMethod>

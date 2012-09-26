@@ -44,10 +44,16 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html">
 
-    <h:form id="form" enctype="multipart/form-data">
-       <h:inputFile id="file" value="text value"/> 
+    <h:form id="form" enctype="multipart/form-data" prependId="false">
+        <h:inputFile id="file" value="#{fileUploadBean.uploadedFile}"> 
+           <f:validator validatorId="FileValidator" />           
+       </h:inputFile>
        <br/>
        <h:commandButton id="button" value="submit"/>
+       
+       #{fileUploadBean.fileText}
+       
+       <p><h:messages id="messages" /></p>
     </h:form>
 
 </html>

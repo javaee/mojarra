@@ -87,6 +87,7 @@ public class FileRenderer extends TextRenderer {
             Collection<Part> parts = request.getParts();
             for (Part cur : parts) {
                 if (clientId.equals(cur.getName())) {
+                    component.setTransient(true);
                     setSubmittedValue(component, cur);
                 }
             }
