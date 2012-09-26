@@ -33,6 +33,7 @@
     </dependencies>    
     <modules>
         <module>seam</module>
+        <module>lifecycle</module>
     </modules>
     <properties>
         <webapp.projectStage>Production</webapp.projectStage>

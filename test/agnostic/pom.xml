@@ -80,7 +80,6 @@
         <module>converter</module>
         <module>dynamic</module>
         <module>flash</module>
-        <module>lifecycle</module>
         <module>renderKit</module>
         <module>resource</module>
         <module>shared</module>
