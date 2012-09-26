@@ -2091,7 +2091,7 @@ public class ApplicationImpl extends Application {
     private class ReentrantLisneterInvocationGuard {
 
         public boolean isGuardSet(FacesContext ctx, Class<? extends SystemEvent> systemEventClass) {
-            Boolean result = false;
+            Boolean result;
             Map<Class<? extends SystemEvent>, Boolean> data = getDataStructure(ctx);
             result = data.get(systemEventClass);
 
@@ -2294,7 +2294,6 @@ public class ApplicationImpl extends Application {
         }
         result = new SystemEventListener[i];
         System.arraycopy(temp, 0, result, 0, i);
-        temp = null;
 
         return result;
     }

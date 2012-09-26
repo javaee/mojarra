@@ -3,12 +3,11 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core">
 <h:head>
-  <title>A Simple JavaServer Faces 2.0 View</title>
+  <title>This page is not protected.</title>
 </h:head>
 <h:body>
-  <h:form>
-      First name: #{userBean.firstName} Last name: #{userBean.lastName}
-    <p><h:commandButton value="submit" /></p>
-  </h:form>
+    <p>Non protected page.</p>
+    <p><h:button id="button" value="non-postback navigation to protected view" 
+                 outcome="i_spec_869_war_protected"/></p>
 </h:body>
 </html>

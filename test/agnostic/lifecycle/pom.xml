@@ -18,5 +18,6 @@
         <module>unserializableServerState_positive</module>
         <module>request_char_encoding</module>
         <module>request_char_encoding2</module>
+        <module>csrf</module>
     </modules>
 </project>
