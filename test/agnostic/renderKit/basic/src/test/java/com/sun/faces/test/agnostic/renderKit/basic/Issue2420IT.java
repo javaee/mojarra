@@ -63,8 +63,8 @@ public class Issue2420IT {
     }
 
     @Test
-    public void testHBodyWithGivenId() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/inputFile.xhtml");
+    public void testInputFileRender() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/inputFileRenderTest.xhtml");
         String expectedOutput = "<input id="+'"'+"form:file"+'"'+" type="+'"'+"file"+'"' +
             " name="+'"'+"form:file"+'"'+" value="+'"'+"text value"+'"'+" />";
         assertTrue(page.getWebResponse().getContentAsString().contains(expectedOutput));
