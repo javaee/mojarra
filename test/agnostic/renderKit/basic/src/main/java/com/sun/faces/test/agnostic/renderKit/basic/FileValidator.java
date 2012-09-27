@@ -67,7 +67,7 @@ public class FileValidator implements Validator {
             throw new ValidatorException(new FacesMessage("Invalid file"), ex);
         }
         if (!text.contains("JSR-344")) {
-            throw new ValidatorException(new FacesMessage("Invalid file.  File must contain the string JSR-344"));
+            throw new ValidatorException(new FacesMessage("Invalid file.  File must contain special string"));
         }
         
     }

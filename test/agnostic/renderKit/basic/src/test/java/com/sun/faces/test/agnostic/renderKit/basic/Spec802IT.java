@@ -78,7 +78,6 @@ public class Spec802IT {
 
     // ------------------------------------------------------------ Test Methods
 
-    @Ignore
     @Test
     public void testFileUpload() throws Exception {
 
@@ -104,6 +103,7 @@ public class Spec802IT {
         
         pageText = page.getBody().asText();
         assertFalse(pageText.contains("JSR-344"));
+        assertTrue(pageText.contains("Invalid file"));
         
     }
 
