@@ -50,6 +50,35 @@
     </head>
     <body>
         <h1>Page with link to flow entry</h1>
+
+<pre>
+
+With FacesFlows, it is possible to bundle an entrire flow into a jar
+file.  Then, the mere presence of one or more such jar files in the
+application's classpath (usually by virtue of placing the jar in
+WEB-INF/lib) is sufficient to make those flows accessible to the
+application.
+
+Here is the required arrangement of a flow packaged within a jar.
+
+META-INF/beans.xml
+META-INF/flows/{flowName}/{flowName}-flow.xml
+META-INF/flows/{flowName}/{viewNode}.xhtml
+{javaPackagePath}/{javaClassName}.class
+
+Here is an example of the contents of a jar file conforming to the
+preceding packaging requirements.
+
+META-INF/beans.xml
+META-INF/flows/bounded-task-flow/bounded-task-flow-flow.xml
+META-INF/flows/bounded-task-flow/bounded-task-flow.xhtml
+META-INF/flows/bounded-task-flow/next_a.xhtml
+META-INF/flows/bounded-task-flow/next_b.xhtml
+com/sun/faces/test/webprofile/flow/basic/FlowBean.class
+
+</pre>
+
+
         
     <h:form prependId="false">
         <p><h:commandButton id="start" value="start flow on valid entry node" action="bounded-task-flow" /></p>
