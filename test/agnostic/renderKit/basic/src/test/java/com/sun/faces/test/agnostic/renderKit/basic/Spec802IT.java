@@ -79,6 +79,7 @@ public class Spec802IT {
     // ------------------------------------------------------------ Test Methods
 
     @Test
+    @Ignore
     public void testFileUpload() throws Exception {
 
         webClient = new WebClient();
