@@ -182,7 +182,7 @@ public final class ExpiringConcurrentCache<K, V> extends ConcurrentCache<K, V> {
     
 
 
-    private final ExpiryChecker<K, V> _getExpiryChecker() {
+    private ExpiryChecker<K, V> _getExpiryChecker() {
         return _checker;
     }
     
