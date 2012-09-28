@@ -42,6 +42,7 @@ package com.sun.faces.application;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.InitFacesContext;
+import com.sun.faces.flow.ViewScopedCDIContext;
 import javax.faces.FacesException;
 import javax.faces.application.NavigationCase;
 import javax.faces.application.ViewHandler;
@@ -192,6 +193,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                 viewIdAfter = (null == viewIdAfter) ? "" : viewIdAfter;
                 isUIViewActionBroadcastAndViewdsDiffer = !viewIdBefore.equals(viewIdAfter);
             } 
+            clearViewMapIfNecessary(context.getViewRoot(), caseStruct.viewId);
             if (caseStruct.navCase.isRedirect() || isUIViewActionBroadcastAndViewdsDiffer) {
                 
                 // PENDING(edburns): Flows currently don't work with redirect.
@@ -211,7 +213,6 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                     }
                     // encode the redirect to ensure session state
                     // is maintained
-                    clearViewMapIfNecessary(context.getViewRoot(), caseStruct.viewId);
                     updateRenderTargets(context, caseStruct.viewId);
                     flash.setRedirect(true);
                     extContext.redirect(redirectUrl);
@@ -409,6 +410,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     private void clearViewMapIfNecessary(UIViewRoot root, String newId) {
 
         if (root != null && !root.getViewId().equals(newId)) {
+            ViewScopedCDIContext.clearViewScopedBeans();
             Map<String, Object> viewMap = root.getViewMap(false);
             if (viewMap != null) {
                 viewMap.clear();

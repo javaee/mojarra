@@ -38,40 +38,44 @@
  * holder.
  */
 
-package javax.faces.flow;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import javax.enterprise.context.NormalScope;
+package com.sun.faces.flow;
 
-/**
- * <p class="changed_added_2_2">When this annotation, along with {@code
- * javax.inject.Named} is found on a class, the runtime must place the
- * bean in a CDI scope such that it remains active as long as
- * {@link javax.faces.application.NavigationHandler#handleNavigation} 
- * does not cause a navigation to a view with a viewId that is different
- * than the viewId of the current view. Any injections and notifications required
- * by CDI and the Java EE platform must occur as usual at the expected time.</p>
- * 
- * <div class="changed_added_2_2">
- * 
- * <p>Use of this annotation requires that any beans stored in view scope
- * must be serializable and proxyable as defined in the CDI specification.
- * </p>
- * 
- * 
- * </div>
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
- * @since 2.2
- */
-@NormalScope
-@Inherited
-@Documented
-@Target(ElementType.TYPE)
-@Retention(value = RetentionPolicy.RUNTIME)
-public @interface ViewScoped {
+import javax.enterprise.event.Observes;
+import javax.enterprise.inject.spi.AfterBeanDiscovery;
+import javax.enterprise.inject.spi.Extension;
+import javax.enterprise.inject.spi.ProcessBean;
+import javax.faces.flow.ViewScoped;
+
+public class ViewScopedCDIExtension implements Extension {
+
+
+   // Log instance for this class
+   private static final Logger LOGGER = Logger.getLogger(ViewScopedCDIExtension.class.getName());
+
+
+   public ViewScopedCDIExtension() {
+       if (LOGGER.isLoggable(Level.FINE)) {
+           LOGGER.fine("ctor for ViewScoped CDI Extensions called");
+       }
+
+   }
+   
+   public void processBean(@Observes ProcessBean<?> event) {
+       ViewScoped viewScoped = event.getAnnotated().getAnnotation(ViewScoped.class);
+       if (null != viewScoped) {
+           if (LOGGER.isLoggable(Level.FINE)) {
+               LOGGER.fine("Processing occurrence of @ViewScoped");
+           }
+       }
+       
+   }
+
+   void afterBeanDiscovery(@Observes final AfterBeanDiscovery event) {
+       event.addContext(new ViewScopedCDIContext());
+   }
+
 }

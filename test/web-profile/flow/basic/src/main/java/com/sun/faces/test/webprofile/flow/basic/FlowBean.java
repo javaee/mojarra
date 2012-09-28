@@ -48,6 +48,12 @@ import javax.inject.Named;
 @FlowScoped(id="flow")
 public class FlowBean implements Serializable {
 
+    public FlowBean() {
+        System.out.println("FlowBean ctor");
+    }
+    
+    
+
    public String getName() {
        return "basicFlow";
    }

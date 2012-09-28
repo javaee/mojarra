@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,41 +37,42 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.webprofile.flow.viewScoped;
 
-package javax.faces.flow;
+import java.io.Serializable;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import javax.enterprise.context.NormalScope;
+import java.util.Map;
+import javax.faces.context.FacesContext;
+import javax.faces.flow.ViewScoped;
+import javax.inject.Named;
 
-/**
- * <p class="changed_added_2_2">When this annotation, along with {@code
- * javax.inject.Named} is found on a class, the runtime must place the
- * bean in a CDI scope such that it remains active as long as
- * {@link javax.faces.application.NavigationHandler#handleNavigation} 
- * does not cause a navigation to a view with a viewId that is different
- * than the viewId of the current view. Any injections and notifications required
- * by CDI and the Java EE platform must occur as usual at the expected time.</p>
- * 
- * <div class="changed_added_2_2">
- * 
- * <p>Use of this annotation requires that any beans stored in view scope
- * must be serializable and proxyable as defined in the CDI specification.
- * </p>
- * 
- * 
- * </div>
+@Named
+@ViewScoped
+public class ViewScopedBean implements Serializable {
+    
 
- * @since 2.2
- */
-@NormalScope
-@Inherited
-@Documented
-@Target(ElementType.TYPE)
-@Retention(value = RetentionPolicy.RUNTIME)
-public @interface ViewScoped {
+    private static final String SESSION_KEY = ViewScopedBean.class.getName() + "_KEY";
+    private int myCount = 0;
+
+    public int getMyCount() {
+        return myCount;
+    }
+    
+    private synchronized int increment() {
+        Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
+        Integer result = (Integer) sessionMap.get(SESSION_KEY);
+        if (null == result) {
+            result = new Integer(0);
+            sessionMap.put(SESSION_KEY, result);
+        }
+        sessionMap.put(SESSION_KEY, ++result);
+        return result;
+        
+    }
+
+    public ViewScopedBean() {
+        myCount = increment();
+    }
+    
+
 }
