@@ -48,6 +48,7 @@ import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class Issue1034IT {
     /**
@@ -98,56 +99,60 @@ public class Issue1034IT {
     public void testFlowEntryExit() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
 
+        int previousCount = 0;
         int count = Integer.parseInt(page.getElementById("count").getTextContent());
-        assertEquals(1, count);
+        assertTrue(previousCount < count);
+        previousCount = count;
         
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("stay");
         
         page = button.click();
         count = Integer.parseInt(page.getElementById("count").getTextContent());
-        assertEquals(1, count);        
+        assertEquals(previousCount, count);        
 
         button = (HtmlSubmitInput) page.getElementById("stay");
         
         page = button.click();
         count = Integer.parseInt(page.getElementById("count").getTextContent());
-        assertEquals(1, count);        
+        assertEquals(previousCount, count);        
         
         button = (HtmlSubmitInput) page.getElementById("go");
         
         page = button.click();
         count = Integer.parseInt(page.getElementById("count").getTextContent());
-        assertEquals(2, count);        
+        assertTrue(previousCount < count);
+        previousCount = count;
         
         button = (HtmlSubmitInput) page.getElementById("stay");
         
         page = button.click();
         count = Integer.parseInt(page.getElementById("count").getTextContent());
-        assertEquals(2, count);        
+        assertEquals(previousCount, count);        
         
         button = (HtmlSubmitInput) page.getElementById("stay");
         
         page = button.click();
         count = Integer.parseInt(page.getElementById("count").getTextContent());
-        assertEquals(2, count);        
+        assertEquals(previousCount, count);        
         
         button = (HtmlSubmitInput) page.getElementById("go");
         
         page = button.click();
         count = Integer.parseInt(page.getElementById("count").getTextContent());
-        assertEquals(3, count);        
+        assertTrue(previousCount < count);
+        previousCount = count;
         
         button = (HtmlSubmitInput) page.getElementById("stay");
         
         page = button.click();
         count = Integer.parseInt(page.getElementById("count").getTextContent());
-        assertEquals(3, count);        
+        assertEquals(previousCount, count);        
         
         button = (HtmlSubmitInput) page.getElementById("stay");
         
         page = button.click();
         count = Integer.parseInt(page.getElementById("count").getTextContent());
-        assertEquals(3, count);        
+        assertEquals(previousCount, count);        
         
 
     }

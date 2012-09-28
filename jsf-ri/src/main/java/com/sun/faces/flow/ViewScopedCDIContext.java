@@ -55,8 +55,11 @@ import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.BeforeShutdown;
 import javax.faces.component.UIViewRoot;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.flow.ViewScoped;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSessionEvent;
 
 public class ViewScopedCDIContext implements Context, Serializable {
     
@@ -64,6 +67,9 @@ public class ViewScopedCDIContext implements Context, Serializable {
 
     private static final String VIEW_SCOPE_BEAN_MAP_KEY = ViewScopedCDIContext.class.getName() + "_BEANS";
     private static final String VIEW_SCOPE_CREATIONAL_MAP_KEY = ViewScopedCDIContext.class.getName() + "_CREATIONAL";
+    
+    private static final String PER_SESSION_BEAN_MAP_LIST = ViewScopedCDIContext.class.getPackage().getName() + ".PER_SESSION_BEAN_MAP_LIST";
+    private static final String PER_SESSION_CREATIONAL_LIST = ViewScopedCDIContext.class.getPackage().getName() + ".PER_SESSION_CREATIONAL_LIST";
     
     // This should be vended from a factory for decoration purposes.
     
@@ -82,45 +88,79 @@ public class ViewScopedCDIContext implements Context, Serializable {
 
         Map<Contextual<?>, Object> result = null;
         FacesContext context = FacesContext.getCurrentInstance();
+        if (null == context) {
+            return null;
+        }
+        
         UIViewRoot viewRoot = context.getViewRoot();
         
         if (null != viewRoot) {
+            // We obtain a reference to the sessionMap, but this is not used to
+            // store the bean instances marked with @ViewScoped.  Rather, 
+            // the existence of the sessionMap is used to determine if we have any @ViewScoped beans
+            // in the first place.
             Map<String, Object> viewMap = viewRoot.getViewMap(create);
             if (null != viewMap) { 
-                result = (Map<Contextual<?>, Object>) viewMap.get(VIEW_SCOPE_BEAN_MAP_KEY);
+                // The @ViewScoped bean instances themselves are stored in session scope.
+                ExternalContext extContext = context.getExternalContext();
+                Map<String, Object> sessionMap = extContext.getSessionMap();
+                
+                result = (Map<Contextual<?>, Object>) sessionMap.get(VIEW_SCOPE_BEAN_MAP_KEY);
                 if (null == result && create) {
                     result = new ConcurrentHashMap<Contextual<?>, Object>();
-                    viewMap.put(VIEW_SCOPE_BEAN_MAP_KEY, result);
+                    sessionMap.put(VIEW_SCOPE_BEAN_MAP_KEY, result);
+                    ensureBeanMapCleanupOnSessionDestroyed(sessionMap, VIEW_SCOPE_BEAN_MAP_KEY);
                 }
             }
         }
         
         return result;
     }
-    
+
     private static Map<Contextual<?>, CreationalContext<?>> getViewScopedCreationalMapForCurrentView() {
+        return getViewScopedCreationalMapForCurrentView(true);
+    }    
+
+    private static Map<Contextual<?>, CreationalContext<?>> getViewScopedCreationalMapForCurrentView(boolean create) {
         Map<Contextual<?>, CreationalContext<?>> result;
         FacesContext context = FacesContext.getCurrentInstance();
-        UIViewRoot viewRoot = context.getViewRoot();
-        
-        if (null == viewRoot) {
+        if (null == context) {
             return null;
         }
         
-        Map<String, Object> viewMap = viewRoot.getViewMap(true);
-        if (null == viewMap) { 
-            throw new IllegalStateException("Unable to obtain current view map.");
-        }
+        ExternalContext extContext = context.getExternalContext();
+        Map<String, Object> sessionMap = extContext.getSessionMap();
 
-        result = (Map<Contextual<?>, CreationalContext<?>>) viewMap.get(VIEW_SCOPE_CREATIONAL_MAP_KEY);
-        if (null == result) {
+        result = (Map<Contextual<?>, CreationalContext<?>>) sessionMap.get(VIEW_SCOPE_CREATIONAL_MAP_KEY);
+        if (null == result && create) {
             result = new ConcurrentHashMap<Contextual<?>, CreationalContext<?>>();
-            viewMap.put(VIEW_SCOPE_CREATIONAL_MAP_KEY, result);
+            sessionMap.put(VIEW_SCOPE_CREATIONAL_MAP_KEY, result);
+            ensureCreationalCleanupOnSessionDestroyed(sessionMap, VIEW_SCOPE_CREATIONAL_MAP_KEY);
         }
         
         return result;
 
     }
+    
+    private static void ensureBeanMapCleanupOnSessionDestroyed(Map<String, Object> sessionMap, String flowBeansForClientWindow) {
+        List<String> beanMapList = (List<String>) sessionMap.get(PER_SESSION_BEAN_MAP_LIST);
+        if (null == beanMapList) {
+            beanMapList = new ArrayList<String>();
+            sessionMap.put(PER_SESSION_BEAN_MAP_LIST, beanMapList);
+        }
+        beanMapList.add(flowBeansForClientWindow);
+    }
+    
+    private static void ensureCreationalCleanupOnSessionDestroyed(Map<String, Object> sessionMap, String creationalForClientWindow) {
+        List<String> beanMapList = (List<String>) sessionMap.get(PER_SESSION_CREATIONAL_LIST);
+        if (null == beanMapList) {
+            beanMapList = new ArrayList<String>();
+            sessionMap.put(PER_SESSION_CREATIONAL_LIST, beanMapList);
+        }
+        beanMapList.add(creationalForClientWindow);
+    }
+    
+    
     
     @SuppressWarnings({"FinalPrivateMethod"})
     private final void assertNotReleased() {
@@ -130,6 +170,45 @@ public class ViewScopedCDIContext implements Context, Serializable {
     }
     
     // </editor-fold>    
+    
+    // <editor-fold defaultstate="collapsed" desc="Called from code not related to flow">       
+    
+    /*
+     * Called from WebappLifecycleListener.sessionDestroyed()
+     */
+    
+    public static void sessionDestroyed(HttpSessionEvent hse) {
+        HttpSession session = hse.getSession();
+        clearViewScopedBeans();
+        
+        List<String> beanMapList = (List<String>) session.getAttribute(PER_SESSION_BEAN_MAP_LIST);
+        if (null != beanMapList) {
+            for (String cur : beanMapList) {
+                Map<Contextual<?>, Object> beanMap = 
+                        (Map<Contextual<?>, Object>) session.getAttribute(cur);
+                beanMap.clear();
+                session.removeAttribute(cur);
+            }
+            session.removeAttribute(PER_SESSION_BEAN_MAP_LIST);
+            beanMapList.clear();
+        }
+        
+        List<String> creationalList = (List<String>) session.getAttribute(PER_SESSION_CREATIONAL_LIST);
+        if (null != creationalList) {
+            for (String cur : creationalList) {
+                Map<Contextual<?>, CreationalContext<?>> beanMap = 
+                        (Map<Contextual<?>, CreationalContext<?>>) session.getAttribute(cur);
+                beanMap.clear();
+                session.removeAttribute(cur);
+            }
+            session.removeAttribute(PER_SESSION_CREATIONAL_LIST);
+            creationalList.clear();
+        }
+        
+        
+    }
+    
+    // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Called from code related to flow">  
     
@@ -139,9 +218,11 @@ public class ViewScopedCDIContext implements Context, Serializable {
             return;
         }
         
-        Map<Contextual<?>, CreationalContext<?>> creationalMap = getViewScopedCreationalMapForCurrentView();
-        assert(!viewScopedBeanMap.isEmpty());
-        assert(!creationalMap.isEmpty());
+        Map<Contextual<?>, CreationalContext<?>> creationalMap = getViewScopedCreationalMapForCurrentView(false);
+        if (null == creationalMap) {
+            return;
+        }
+        
         List<Contextual<?>> viewScopedBeansToRemove = new ArrayList<Contextual<?>>();
         
         for (Entry<Contextual<?>, Object> entry : viewScopedBeanMap.entrySet()) {
