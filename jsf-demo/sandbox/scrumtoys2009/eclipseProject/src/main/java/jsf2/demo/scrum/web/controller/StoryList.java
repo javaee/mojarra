@@ -124,7 +124,9 @@ public class StoryList extends AbstractManager implements Serializable{
     }
 
     public String remove() {
-        return storyManager.remove(stories.getRowData());
+        String result = storyManager.remove(stories.getRowData());
+        init();
+        return result;
     }
 
     public String showTasks() {

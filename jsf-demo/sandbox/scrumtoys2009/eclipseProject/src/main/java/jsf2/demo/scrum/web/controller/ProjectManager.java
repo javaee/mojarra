@@ -101,12 +101,13 @@ public class ProjectManager extends AbstractManager implements Serializable {
                 Project merged = doInTransaction(new PersistenceAction<Project>() {
 
                     public Project execute(EntityManager em) {
-                        if (getCurrentProject().isNew()) {
-                            em.persist(getCurrentProject());
+                        Project toSave = getCurrentProject();
+                        if (toSave.isNew()) {
+                            em.persist(toSave);
                         } else if (!em.contains(currentProject)) {
-                            return em.merge(getCurrentProject());
+                            return em.merge(toSave);
                         }
-                        return getCurrentProject();
+                        return toSave;
                     }
                 });
                 if (!currentProject.equals(merged)) {
@@ -144,8 +145,11 @@ public class ProjectManager extends AbstractManager implements Serializable {
                         query = em.createNamedQuery("sprint.remove.ByProject");
                         query.setParameter("project", project);
                         query.executeUpdate();
+                        
+                        Object toRemove = em.find(Project.class, project.getId());
+                        assert(null != toRemove);
 
-                        em.remove(em.find(Project.class, project.getId()));
+                        em.remove(toRemove);
                     }
                 });
             } catch (Exception e) {

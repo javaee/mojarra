@@ -96,7 +96,9 @@ public class TaskList extends AbstractManager implements Serializable {
     }
     
     public String remove() {
-        return taskManager.remove(tasks.getRowData());
+        String result = taskManager.remove(tasks.getRowData());
+        init();
+        return result;
     }
     
     public void setTaskManager(TaskManager taskManager) {

@@ -123,7 +123,9 @@ public class SprintList extends AbstractManager implements Serializable {
     }
     
     public String remove() {
-        return sprintManager.remove(sprints.getRowData());
+        String result = sprintManager.remove(sprints.getRowData());
+        init();
+        return result;
     }
     
     public String showStories() {

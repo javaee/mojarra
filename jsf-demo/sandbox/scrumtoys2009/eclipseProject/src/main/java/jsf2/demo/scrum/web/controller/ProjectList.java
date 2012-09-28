@@ -132,7 +132,9 @@ public class ProjectList extends AbstractManager implements Serializable{
     }
 
     public String remove() {
-        return projectManager.remove(projects.getRowData());
+        String result = projectManager.remove(projects.getRowData());
+        init();
+        return result;
     }
 
     public String showSprints() {
