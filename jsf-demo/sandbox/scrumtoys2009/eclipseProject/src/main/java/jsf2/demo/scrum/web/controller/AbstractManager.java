@@ -65,7 +65,7 @@ public abstract class AbstractManager {
     @Resource
     private UserTransaction userTransaction;
 
-    protected final <T> T doInTransaction(PersistenceAction<T> action) throws ManagerException {
+    protected <T> T doInTransaction(PersistenceAction<T> action) throws ManagerException {
         EntityManager em = emf.createEntityManager();
         try {
             userTransaction.begin();
@@ -85,7 +85,7 @@ public abstract class AbstractManager {
 
     }
 
-    protected final void doInTransaction(PersistenceActionWithoutResult action) throws ManagerException {
+    protected void doInTransaction(PersistenceActionWithoutResult action) throws ManagerException {
         EntityManager em = emf.createEntityManager();
         try {
             userTransaction.begin();

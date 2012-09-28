@@ -43,8 +43,8 @@ package jsf2.demo.scrum.web.controller;
 import java.security.Principal;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.inject.Named;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -53,7 +53,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author Eder Magalhaes
  */
-@ManagedBean(name = "authManager")
+@Named("authManager")
 @RequestScoped
 public class AuthManager {
 

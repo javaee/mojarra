@@ -45,36 +45,35 @@ import jsf2.demo.scrum.model.entities.Story;
 import jsf2.demo.scrum.model.entities.Task;
 
 import javax.annotation.PreDestroy;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.inject.Named;
+import javax.inject.Inject;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.faces.flow.ViewScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import jsf2.demo.scrum.model.entities.TaskStatus;
 
 
-@ManagedBean(name = "dashboardManager")
+@Named("dashboardManager")
 @ViewScoped
 public class DashboardManager extends AbstractManager implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ManagedProperty("#{taskManager}")
+    @Inject
     private TaskManager taskManager;
-    @ManagedProperty("#{sprintManager}")
+    @Inject
     private SprintManager sprintManager;
-    @ManagedProperty("#{storyManager}")
+    @Inject
     private StoryManager storyManager;
-    @ManagedProperty("#{storyList}")
+    @Inject
     private StoryList storyList;
 
     private ListDataModel<Task> toDoTasks;

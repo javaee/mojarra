@@ -46,9 +46,9 @@ import jsf2.demo.scrum.model.entities.Sprint;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
+import javax.inject.Named;
+import javax.inject.Inject;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
@@ -59,19 +59,17 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.context.ExternalContext;
-import jsf2.demo.scrum.model.entities.Story;
-import jsf2.demo.scrum.model.entities.Task;
 
 /**
  * @author Dr. Spock (spock at dev.java.net)
  */
-@ManagedBean(name = "sprintManager")
+@Named("sprintManager")
 @SessionScoped
 public class SprintManager extends AbstractManager implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private Sprint currentSprint;
-    @ManagedProperty("#{projectManager}")
+    @Inject
     private ProjectManager projectManager;
     private Project currentProject;
 

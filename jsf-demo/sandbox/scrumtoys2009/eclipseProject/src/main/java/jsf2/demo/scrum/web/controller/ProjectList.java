@@ -46,9 +46,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.faces.flow.ViewScoped;
+import javax.inject.Named;
+import javax.inject.Inject;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
@@ -60,11 +60,11 @@ import jsf2.demo.scrum.model.entities.Project;
  *
  * @author Eder Magalhaes
  */
-@ManagedBean(name = "projectList")
+@Named("projectList")
 @ViewScoped
 public class ProjectList extends AbstractManager implements Serializable{
 
-    @ManagedProperty("#{projectManager}")
+    @Inject
     private ProjectManager projectManager;
 
     private DataModel<Project> projects;

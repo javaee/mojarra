@@ -46,9 +46,9 @@ import jsf2.demo.scrum.model.entities.Story;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
+import javax.inject.Named;
+import javax.inject.Inject;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
@@ -58,16 +58,16 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.enterprise.context.Conversation;
 import javax.faces.context.ExternalContext;
-import jsf2.demo.scrum.model.entities.Task;
 
 
-@ManagedBean(name = "storyManager")
+@Named("storyManager")
 @SessionScoped
 public class StoryManager extends AbstractManager implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @ManagedProperty("#{sprintManager}")
+    @Inject
     private SprintManager sprintManager;
     private Story currentStory;
 
@@ -192,8 +192,11 @@ public class StoryManager extends AbstractManager implements Serializable {
     public String cancelEdit() {
         return "show";
     }
+    
+    private @Inject Conversation conversation;
 
     public String showTasks(Story story) {
+        conversation.begin();
         setCurrentStory(story);
         return "showTasks";
     }

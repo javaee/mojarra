@@ -56,7 +56,6 @@
           <supported-locale>pt_BR</supported-locale>
         </locale-config>
 
-        <el-resolver>jsf2.demo.scrum.web.scope.TaskScopeResolver</el-resolver>
     </application>
 
     <navigation-rule>

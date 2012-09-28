@@ -41,23 +41,23 @@
 package jsf2.demo.scrum.web.controller;
 
 import java.io.Serializable;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
+import javax.inject.Named;
+import javax.inject.Inject;
+import javax.enterprise.context.RequestScoped;
 
 /**
  *
  * @author eder
  */
-@ManagedBean(name = "skinUrlManager")
+@Named("skinUrlManager")
 @RequestScoped
 public class SkinUrlManager extends AbstractManager implements Serializable {
 
     private String skin;
 
-    @ManagedProperty(value="#{skinManager}")
+    @Inject
     private SkinManager skinManager;
-    @ManagedProperty(value="#{skinValuesManager}")
+    @Inject
     private SkinValuesManager skinValuesManager;
     private static final long serialVersionUID = 7770408832569218016L;
 

@@ -44,9 +44,9 @@ import java.io.Serializable;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
-import javax.faces.bean.ManagedProperty;
+import javax.inject.Named;
+import javax.enterprise.context.SessionScoped;
+import javax.inject.Inject;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
@@ -54,12 +54,12 @@ import javax.faces.context.FacesContext;
  *
  * @author Dr. Spock (spock at dev.java.net)
  */
-@ManagedBean(name = "skinManager")
+@Named("skinManager")
 @SessionScoped
 public class SkinManager extends AbstractManager implements Serializable {
 
     private String selectedSkin;
-    @ManagedProperty(value="#{skinValuesManager}")
+    @Inject
     private SkinValuesManager skinValuesManager;
     private static final long serialVersionUID = 2936693632616580209L;
 

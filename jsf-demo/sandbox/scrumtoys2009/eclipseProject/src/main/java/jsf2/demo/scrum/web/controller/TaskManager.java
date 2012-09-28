@@ -45,39 +45,30 @@ import jsf2.demo.scrum.model.entities.Task;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
+import javax.inject.Named;
+import javax.inject.Inject;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.model.DataModel;
-import javax.faces.model.ListDataModel;
 import javax.faces.validator.ValidatorException;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PreDestroy;
-import javax.faces.bean.CustomScoped;
-import javax.faces.bean.ViewScoped;
-import jsf2.demo.scrum.web.scope.TaskScopeResolver;
+import javax.enterprise.context.ConversationScoped;
 
 /**
  * @author Dr. Spock (spock at dev.java.net)
  */
-@ManagedBean(name = "taskManager")
-@CustomScoped(value="#{taskScope}")
-//@ViewScoped
+@Named("taskManager")
+@ConversationScoped
 public class TaskManager extends AbstractManager implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private Task currentTask;
     
-    @ManagedProperty("#{storyManager}")
+    @Inject
     private StoryManager storyManager;
 
     @PostConstruct
@@ -170,7 +161,7 @@ public class TaskManager extends AbstractManager implements Serializable {
                     return (Long) query.getSingleResult();
                 }
             });
-            if (count != null && count > 0) {
+            if (count != null && count > 1) {
                 throw new ValidatorException(getFacesMessageForKey("task.form.label.name.unique"));
             }
         } catch (ManagerException ex) {

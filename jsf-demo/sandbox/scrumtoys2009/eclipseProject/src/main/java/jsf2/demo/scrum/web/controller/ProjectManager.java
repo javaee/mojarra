@@ -45,8 +45,8 @@ import jsf2.demo.scrum.model.entities.Project;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.inject.Named;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
@@ -57,14 +57,11 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.context.ExternalContext;
-import jsf2.demo.scrum.model.entities.Sprint;
-import jsf2.demo.scrum.model.entities.Story;
-import jsf2.demo.scrum.model.entities.Task;
 
 /**
  * @author Dr. Spock (spock at dev.java.net)
  */
-@ManagedBean(name = "projectManager")
+@Named("projectManager")
 @SessionScoped
 public class ProjectManager extends AbstractManager implements Serializable {
 

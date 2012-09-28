@@ -46,9 +46,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.faces.flow.ViewScoped;
+import javax.inject.Named;
+import javax.inject.Inject;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.persistence.EntityManager;
@@ -60,11 +60,11 @@ import jsf2.demo.scrum.model.entities.Story;
  *
  * @author Eder Magalhaes
  */
-@ManagedBean(name = "storyList")
+@Named("storyList")
 @ViewScoped
 public class StoryList extends AbstractManager implements Serializable{
 
-    @ManagedProperty("#{storyManager}")
+    @Inject
     private StoryManager storyManager;
 
     private DataModel<Story> stories;
