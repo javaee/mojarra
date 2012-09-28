@@ -56,13 +56,13 @@ import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PreDestroy;
-import javax.enterprise.context.ConversationScoped;
+import javax.enterprise.context.SessionScoped;
 
 /**
  * @author Dr. Spock (spock at dev.java.net)
  */
 @Named("taskManager")
-@ConversationScoped
+@SessionScoped
 public class TaskManager extends AbstractManager implements Serializable {
 
     private static final long serialVersionUID = 1L;

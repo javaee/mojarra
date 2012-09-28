@@ -69,7 +69,7 @@ public class TaskList extends AbstractManager implements Serializable {
     
     private DataModel<Task> tasks;
     private List<Task> taskList;
-
+    
     @PostConstruct
     public void init() {
         try {

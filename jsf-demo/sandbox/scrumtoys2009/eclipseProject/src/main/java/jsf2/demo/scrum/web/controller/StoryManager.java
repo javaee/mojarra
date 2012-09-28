@@ -193,10 +193,7 @@ public class StoryManager extends AbstractManager implements Serializable {
         return "show";
     }
     
-    private @Inject Conversation conversation;
-
     public String showTasks(Story story) {
-        conversation.begin();
         setCurrentStory(story);
         return "showTasks";
     }

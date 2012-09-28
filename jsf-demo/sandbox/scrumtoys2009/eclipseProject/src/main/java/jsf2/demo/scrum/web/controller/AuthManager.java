@@ -56,7 +56,7 @@ import javax.servlet.http.HttpServletRequest;
 @Named("authManager")
 @RequestScoped
 public class AuthManager {
-
+    
     public String logout() {
        String result="/home?faces-redirect=true";
        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
