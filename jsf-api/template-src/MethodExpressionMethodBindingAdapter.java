@@ -47,7 +47,6 @@ import javax.el.MethodInfo;
 import javax.faces.el.MethodBinding;
 import javax.faces.context.FacesContext;
 import javax.faces.component.StateHolder;
-import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.el.ValueExpression;
 
