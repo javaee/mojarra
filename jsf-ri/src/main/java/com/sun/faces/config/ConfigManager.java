@@ -50,7 +50,6 @@ import com.sun.faces.spi.AnnotationProvider;
 import com.sun.faces.spi.AnnotationProviderFactory;
 import com.sun.faces.spi.HighAvailabilityEnabler;
 import static com.sun.faces.spi.ConfigurationResourceProviderFactory.ProviderType.*;
-import static com.sun.faces.spi.ConfigurationResourceProviderFactory.ProviderType.FaceletConfig;
 import com.sun.faces.config.configprovider.MetaInfFacesConfigResourceProvider;
 import com.sun.faces.config.configprovider.MojarraFacesConfigResourceProvider;
 import com.sun.faces.config.configprovider.WebFacesConfigResourceProvider;
