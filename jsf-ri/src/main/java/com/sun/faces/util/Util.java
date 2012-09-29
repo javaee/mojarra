@@ -132,6 +132,28 @@ public class Util {
 
         return result;
     }
+    
+    private static final String CDI_AVAILABLE_PER_APP_KEY = Util.class.getName() + "_CDI_AVAILABLE";
+    
+    public static boolean isCDIAvailable(Map<String, Object> appMap) {
+        boolean result = false;
+        final String CDI_CLASS = "javax.enterprise.context.spi.Context";
+        Boolean cachedResult = (Boolean) appMap.get(CDI_AVAILABLE_PER_APP_KEY);
+        if (null == cachedResult) {
+            try {
+                loadClass(CDI_CLASS, CDI_CLASS);
+                result = true;
+            } catch (Throwable t) {
+                if (LOGGER.isLoggable(Level.FINEST)) {
+                    LOGGER.log(Level.FINEST, "Unable to load: " + CDI_CLASS, t);
+                }
+            }
+            appMap.put(CDI_AVAILABLE_PER_APP_KEY, (Boolean) result);
+        } else {
+            result = cachedResult;
+        }
+        return result;
+    }
 
     /**
      * <p>

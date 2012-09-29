@@ -193,7 +193,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                 viewIdAfter = (null == viewIdAfter) ? "" : viewIdAfter;
                 isUIViewActionBroadcastAndViewdsDiffer = !viewIdBefore.equals(viewIdAfter);
             } 
-            clearViewMapIfNecessary(context.getViewRoot(), caseStruct.viewId);
+            clearViewMapIfNecessary(context, caseStruct.viewId);
             if (caseStruct.navCase.isRedirect() || isUIViewActionBroadcastAndViewdsDiffer) {
                 
                 // PENDING(edburns): Flows currently don't work with redirect.
@@ -402,15 +402,19 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
 
         }
     }
-
+    
     /**
      * Calls <code>clear()</code> on the ViewMap (if available) if the view
      * ID of the UIViewRoot differs from <code>newId</code>
      */
-    private void clearViewMapIfNecessary(UIViewRoot root, String newId) {
+    private void clearViewMapIfNecessary(FacesContext context, String newId) {
+        UIViewRoot root = context.getViewRoot();
 
         if (root != null && !root.getViewId().equals(newId)) {
-            ViewScopedCDIContext.clearViewScopedBeans();
+            
+            if (Util.isCDIAvailable(context.getExternalContext().getApplicationMap())) {
+                ViewScopedCDIContext.clearViewScopedBeans();
+            }
             Map<String, Object> viewMap = root.getViewMap(false);
             if (viewMap != null) {
                 viewMap.clear();
@@ -418,8 +422,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         }
 
     }
-
-
+    
     private void updateRenderTargets(FacesContext ctx, String newId) {
 
         if (ctx.getViewRoot() == null || !ctx.getViewRoot().getViewId().equals(newId)) {
