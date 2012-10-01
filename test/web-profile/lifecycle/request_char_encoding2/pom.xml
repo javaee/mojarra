@@ -51,7 +51,7 @@
     <groupId>com.sun.faces.test.webprofile.lifecycle</groupId>
     <artifactId>request_char_encoding2</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra ${project.version} - Test - webprofile - Lifecycle - request_char_encoding2</name>
+    <name>Mojarra ${project.version} - Test - Web-Profile - Lifecycle - Request Character Encoding #2</name>
     <build>
         <finalName>test-webprofile-lifecycle-request_char_encoding2</finalName>
     </build>
