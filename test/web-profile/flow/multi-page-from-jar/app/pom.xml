@@ -59,7 +59,7 @@
       <dependency>
         <groupId>com.sun.faces.test.webprofile.flow</groupId>
         <artifactId>flow_in_jar</artifactId>
-        <version>1.0</version>
+        <version>${project.version}</version>
       </dependency>
     </dependencies>
     <properties>
