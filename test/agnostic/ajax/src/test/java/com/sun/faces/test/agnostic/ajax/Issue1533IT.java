@@ -46,6 +46,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 /**
  * @author Manfred Riem (manfred.riem@oracle.com)
@@ -69,6 +70,7 @@ public class Issue1533IT {
     }
 
     @Test
+    @Ignore
     public void testIssue1533() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/issue1533.xhtml");
         HtmlInput input = (HtmlInput) page.getHtmlElementById("form:vip:0");
