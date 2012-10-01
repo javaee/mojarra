@@ -70,16 +70,15 @@ public class Issue1533IT {
     }
 
     @Test
-    @Ignore
     public void testIssue1533() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/issue1533.xhtml");
         HtmlInput input = (HtmlInput) page.getHtmlElementById("form:vip:0");
         page = input.click();
-        webClient.waitForBackgroundJavaScript(5000);
+        webClient.waitForBackgroundJavaScript(120000);
         assertTrue(page.asText().indexOf("form:vip-true") != -1);
         input = (HtmlInput) page.getHtmlElementById("form:vip:1");
         page = input.click();
-        webClient.waitForBackgroundJavaScript(5000);
+        webClient.waitForBackgroundJavaScript(120000);
         assertTrue(page.asText().indexOf("form:vip-false") != -1);
     }
 }
