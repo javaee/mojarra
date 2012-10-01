@@ -40,8 +40,6 @@
 
 package javax.faces.view.facelets;
 
-import javax.faces.view.facelets.TagConfig;
-
 /**
  * <p class="changed_added_2_0">Convey the id of a behavior declared in
  * a view.</p>
