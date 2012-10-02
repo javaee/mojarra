@@ -88,7 +88,7 @@ public final class FastWriter extends Writer {
         // do nothing
     }
     
-    private final void overflow(int len) {
+    private void overflow(int len) {
         if (this.size + len > this.buff.length) {
             char[] next = new char[(this.size + len) * 2];
             System.arraycopy(this.buff, 0, next, 0, this.size);
