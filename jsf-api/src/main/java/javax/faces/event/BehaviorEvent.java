@@ -42,7 +42,6 @@ package javax.faces.event;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.behavior.Behavior;
-import javax.faces.event.FacesEvent;
 
 /**
  * <p><strong class="changed_added_2_0">BehaviorEvent</strong> is
