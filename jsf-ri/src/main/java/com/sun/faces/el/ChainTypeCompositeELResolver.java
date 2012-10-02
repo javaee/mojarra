@@ -190,7 +190,7 @@ public final class ChainTypeCompositeELResolver extends FacesCompositeELResolver
   }
    
   @Override
-  public final ELResolverChainType getChainType()
+  public ELResolverChainType getChainType()
   {
     return _chainType;
   }
