@@ -1,0 +1,25 @@
+
+
+public class maintain_customer_record {
+    
+    @Produces
+    @ApplicationScoped
+    @Named("maintain-customer-record")
+    Flow customerRecordFlow(FlowBuilder builder) {
+        builder.startNode("router1");
+        builder.flowReturn("success").fromOutcome("/complete");
+        builder.flowReturn("errorOccurred").fromOutcome("error");
+        builder.switchNode("router1").
+            navigationCase().condition("#{facesFlowScope.customerId == null}").
+            fromOutcome("create-customer").
+            defaultOutcome("view-customer");
+        builder.viewNode("create-customer");
+        builder.viewNode("maintain-customer-record");
+        builder.methodCall("upgrade-customer").method("#{maintainCustomerBean.upgradeCustomer}").defaultOutcome("view-customer");
+        builder.initializer("#{maintainCustomerBean.initializeFlow}");
+        builder.finailzer("#{maintainCustomerBean.cleanUpFlow}");
+        return builder.getFlow();
+    }
+    
+
+}
