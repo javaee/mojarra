@@ -1392,7 +1392,7 @@ public class UIData extends UIComponentBase
         FacesContext facesContext = context.getFacesContext();
         // NOTE: that the visitRows local will be obsolete once the
         //       appropriate visit hints have been added to the API
-        boolean visitRows = requiresRowIteration(context);;
+        boolean visitRows = requiresRowIteration(context);
 
         // Clear out the row index is one is set so that
         // we start from a clean slate.
