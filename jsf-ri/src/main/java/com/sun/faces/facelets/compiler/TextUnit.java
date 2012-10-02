@@ -324,7 +324,7 @@ final class TextUnit extends CompilationUnit {
         return this.tags.empty();
     }
 
-    private final static String trimRight(String s) {
+    private static String trimRight(String s) {
         int i = s.length() - 1;
         while (i >= 0) {
             if (Character.isWhitespace(s.charAt(i))) {
