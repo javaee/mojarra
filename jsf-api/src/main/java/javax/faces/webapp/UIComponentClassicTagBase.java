@@ -1558,7 +1558,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      */
     public void doInitBody() throws JspException {
 
-        ; // Default implementation does nothing
+        // Default implementation does nothing
 
     }
 
