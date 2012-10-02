@@ -244,7 +244,7 @@ public final class LegacyELContext extends ELContext {
 
         }
 
-        private final Map resolveScope(String var) {
+        private Map resolveScope(String var) {
             ExternalContext ext = faces.getExternalContext();
 
             // cycle through the scopes to find a match, if no
