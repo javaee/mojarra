@@ -248,42 +248,42 @@ public final class ForEachHandler extends TagHandlerImpl {
         }
     }
 
-    private final ValueExpression capture(String name, VariableMapper vars) {
+    private ValueExpression capture(String name, VariableMapper vars) {
         if (name != null) {
             return vars.setVariable(name, null);
         }
         return null;
     }
 
-    private final int getBegin(FaceletContext ctx) {
+    private int getBegin(FaceletContext ctx) {
         if (this.begin != null) {
             return this.begin.getInt(ctx);
         }
         return 0;
     }
 
-    private final int getEnd(FaceletContext ctx) {
+    private int getEnd(FaceletContext ctx) {
         if (this.end != null) {
             return this.end.getInt(ctx);
         }
         return Integer.MAX_VALUE - 1; //hotspot bug in the JVM
     }
 
-    private final int getStep(FaceletContext ctx) {
+    private int getStep(FaceletContext ctx) {
         if (this.step != null) {
             return this.step.getInt(ctx);
         }
         return 1;
     }
 
-    private final boolean getTransient(FaceletContext ctx) {
+    private boolean getTransient(FaceletContext ctx) {
         if (this.tranzient != null) {
             return this.tranzient.getBoolean(ctx);
         }
         return false;
     }
 
-    private final ValueExpression getVarExpr(ValueExpression ve, Object src,
+    private ValueExpression getVarExpr(ValueExpression ve, Object src,
             Object value, int i) {
         if (src instanceof List || src.getClass().isArray()) {
             return new IndexedValueExpression(ve, i);
@@ -295,21 +295,21 @@ public final class ForEachHandler extends TagHandlerImpl {
         throw new IllegalStateException("Cannot create VE for: " + src);
     }
 
-    private final String getVarName(FaceletContext ctx) {
+    private String getVarName(FaceletContext ctx) {
         if (this.var != null) {
             return this.var.getValue(ctx);
         }
         return null;
     }
 
-    private final String getVarStatusName(FaceletContext ctx) {
+    private String getVarStatusName(FaceletContext ctx) {
         if (this.varStatus != null) {
             return this.varStatus.getValue(ctx);
         }
         return null;
     }
 
-    private final Iterator toIterator(Object src) {
+    private Iterator toIterator(Object src) {
         if (src == null) {
             return null;
         } else if (src instanceof Collection) {
