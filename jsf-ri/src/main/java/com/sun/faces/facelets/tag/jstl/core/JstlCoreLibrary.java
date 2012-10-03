@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -55,36 +55,53 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.sun.faces.facelets.tag.jstl.core;
 
 import com.sun.faces.facelets.tag.AbstractTagLibrary;
 
 /**
+ * The JSTL c library.
+ *
  * @author Jacob Hookom
  */
 public final class JstlCoreLibrary extends AbstractTagLibrary {
 
+    /**
+     * Stores the default namespace.
+     */
     public final static String Namespace = "http://java.sun.com/jsp/jstl/core";
 
-    public final static JstlCoreLibrary Instance = new JstlCoreLibrary();
-
+    /**
+     * Default constructor.
+     */
     public JstlCoreLibrary() {
         super(Namespace);
-
         this.addTagHandler("if", IfHandler.class);
-
         this.addTagHandler("forEach", ForEachHandler.class);
-
         this.addTagHandler("catch", CatchHandler.class);
-        
         this.addTagHandler("choose", ChooseHandler.class);
-        
         this.addTagHandler("when", ChooseWhenHandler.class);
-        
         this.addTagHandler("otherwise", ChooseOtherwiseHandler.class);
-        
         this.addTagHandler("set", SetHandler.class);
     }
 
+    /**
+     * Constructor.
+     *
+     * <p> This constructor is used to allow the namespace
+     * 'http://java.sun.com/jstl/core' to be used as another way to resolve to
+     * the JSTL c library. This is used for backwards compatibility. </p>
+     *
+     * @param namespace the namespace.
+     */
+    public JstlCoreLibrary(String namespace) {
+        super(namespace);
+        this.addTagHandler("if", IfHandler.class);
+        this.addTagHandler("forEach", ForEachHandler.class);
+        this.addTagHandler("catch", CatchHandler.class);
+        this.addTagHandler("choose", ChooseHandler.class);
+        this.addTagHandler("when", ChooseWhenHandler.class);
+        this.addTagHandler("otherwise", ChooseOtherwiseHandler.class);
+        this.addTagHandler("set", SetHandler.class);
+    }
 }

@@ -916,6 +916,7 @@ public class ApplicationAssociate {
         c.addTagLibrary(new HtmlLibrary());
         c.addTagLibrary(new UILibrary());
         c.addTagLibrary(new JstlCoreLibrary());
+        c.addTagLibrary(new JstlCoreLibrary("http://java.sun.com/jstl/core"));
         c.addTagLibrary(new PassThroughAttributeLibrary());
         c.addTagLibrary(new PassThroughElementLibrary());
         c.addTagLibrary(new FunctionLibrary(JstlFunction.class, "http://java.sun.com/jsp/jstl/functions"));
