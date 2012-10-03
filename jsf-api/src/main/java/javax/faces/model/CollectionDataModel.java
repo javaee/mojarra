@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -201,24 +201,22 @@ public class CollectionDataModel<E> extends DataModel<E> {
 
 
     /**
+     * Set the wrapped data.
+     * 
+     * @param data the wrapped data.
      * @throws ClassCastException if <code>data</code> is
      *  non-<code>null</code> and is not a <code>Collection</code>
      */
     public void setWrappedData(Object data) {
-
         if (data == null) {
             inner = null;
             arrayFromInner = null;
             setRowIndex(-1);
         } else {
-            final Collection<E> collection = (Collection<E>) data;
-            arrayFromInner = (E[]) new Object[collection.size()];
-            collection.toArray(arrayFromInner);
-            
+            inner = (Collection<E>) data;            
+            arrayFromInner = (E[]) new Object[inner.size()];
+            inner.toArray(arrayFromInner);
             setRowIndex(0);
         }
-
     }
-
-
 }
