@@ -408,11 +408,11 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         } else {
             writer.writeText(itemLabel, component, "label");
         }
-        if (isSelected(context, component, itemValue, valuesArray, converter)) {
-            
-        } else { // not selected
-            
-        }
+//        if (isSelected(context, component, itemValue, valuesArray, converter)) {
+//            
+//        } else { // not selected
+//            
+//        }
         writer.endElement("label");
         writer.endElement("td");
         writer.writeText("\n", component, null);
