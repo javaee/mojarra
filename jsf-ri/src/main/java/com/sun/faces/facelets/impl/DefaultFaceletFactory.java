@@ -365,10 +365,11 @@ public class DefaultFaceletFactory extends FaceletFactory {
                 }
             }
             if (null != tempFile) {
-                boolean successful = tempFile.delete();
-                if (!successful) {
-                    
-                }
+//                boolean successful = 
+                    tempFile.delete();
+//                if (!successful) {
+//                    
+//                }
             }
         }
         
