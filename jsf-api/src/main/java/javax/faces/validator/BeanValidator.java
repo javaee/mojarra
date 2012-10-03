@@ -340,9 +340,7 @@ public class BeanValidator implements Validator, PartialStateHolder {
                 }
                 throw toThrow;
             }
-        } else {
-        }
-        
+        }        
     }
     
     private boolean isResolvable(ValueReference ref, 
