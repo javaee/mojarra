@@ -922,8 +922,6 @@ public abstract class UIComponentBase extends UIComponent {
             Renderer renderer = this.getRenderer(context);
             if (renderer != null) {
                 renderer.encodeEnd(context, this);
-            } else {
-                // We've already logged for this component
             }
         }
         popComponentFromEL(context);
