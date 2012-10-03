@@ -293,8 +293,7 @@ import javax.faces.lifecycle.ClientWindow;
 
                 // Skip this processing if "none" is specified in the render list,
                 // or there were no render phase client ids.
-                if (renderIds == null || renderIds.isEmpty()) {
-                } else {
+                if (renderIds != null && !renderIds.isEmpty()) {
                     processComponents(viewRoot, phaseId, renderIds, ctx);
                 }
 
