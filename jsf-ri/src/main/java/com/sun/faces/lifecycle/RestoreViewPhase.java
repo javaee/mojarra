@@ -314,11 +314,11 @@ public class RestoreViewPhase extends Phase {
                     }
                 }
                 if (!refererIsInProtectedSet) {
-                    boolean isAbsoluteURI = referer.matches("^[a-z]+://.*");
-                    if (!isAbsoluteURI) {
-                        // PENDING real implementation must make the value of
-                        // referer suitable for passing to the ctor for URI()
-                    }
+//                    boolean isAbsoluteURI = referer.matches("^[a-z]+://.*");
+//                    if (!isAbsoluteURI) {
+//                        // PENDING real implementation must make the value of
+//                        // referer suitable for passing to the ctor for URI()
+//                    }
                     URI uri = null;
                     boolean hostsMatch = false,
                             portsMatch = false,
