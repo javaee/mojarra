@@ -24,6 +24,7 @@
         <module>flow</module>
         <module>multi_templating</module>
         <module>lifecycle</module>
+        <module>stateSaving</module>
     </modules>
     <properties>
         <webapp.projectStage>Production</webapp.projectStage>
