@@ -781,7 +781,7 @@ javax.faces.level=ALL
 
 
     <target name="generate.javadocs">
-        <javadoc packagenames="javax.*"
+<!--        <javadoc packagenames="javax.*"
                  destdir="${build.javadocs.dir}"
                  Overview="${resources.dir}/overview.html"
                  private="${javadoc.private}"
@@ -834,7 +834,7 @@ javax.faces.level=ALL
                 <include name="**/javax/faces/bean/ViewScoped.java" />
             </fileset>
             <classpath refid="compile.classpath"/>
-        </javadoc>
+        </javadoc>-->
     </target>
 
 
