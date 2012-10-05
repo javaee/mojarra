@@ -34,6 +34,7 @@
     <modules>
         <module>seam</module>
         <module>lifecycle</module>
+        <module>stateSaving</module>
     </modules>
     <properties>
         <webapp.projectStage>Production</webapp.projectStage>
