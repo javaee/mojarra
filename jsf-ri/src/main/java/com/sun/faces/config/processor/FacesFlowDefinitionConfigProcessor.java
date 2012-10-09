@@ -149,14 +149,14 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
             AtomicInteger flowCount) {
         for (int i = 0, size = factories.getLength(); i < size; i++) {
             flowCount.incrementAndGet();
-            Node factory = factories.item(i);
-            NodeList children = ((Element) factory)
-                 .getElementsByTagNameNS(namespace, "*");
-            for (int c = 0, csize = children.getLength(); c < csize; c++) {
-                Node n = children.item(c);
+//            Node factory = factories.item(i);
+//            NodeList children = ((Element) factory)
+//                 .getElementsByTagNameNS(namespace, "*");
+//            for (int c = 0, csize = children.getLength(); c < csize; c++) {
+//                Node n = children.item(c);
 //                if (DEFAULT_FLOW_NODE.equals(n.getLocalName())) {
 //                } 
-            }
+//            }
         }
         
     }
