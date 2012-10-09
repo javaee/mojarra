@@ -223,8 +223,6 @@ public class ClasspathResourceHelper extends ResourceHelper {
                     if (!libraryScanner.libraryExists(libraryName, localePrefix)) {
                         return null;
                     }
-                } else {
-                  //  return null;
                 }
             }
         }
