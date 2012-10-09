@@ -154,8 +154,8 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
                  .getElementsByTagNameNS(namespace, "*");
             for (int c = 0, csize = children.getLength(); c < csize; c++) {
                 Node n = children.item(c);
-                if (DEFAULT_FLOW_NODE.equals(n.getLocalName())) {
-                } 
+//                if (DEFAULT_FLOW_NODE.equals(n.getLocalName())) {
+//                } 
             }
         }
         
