@@ -49,8 +49,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
@@ -71,7 +69,7 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
     /**
      * <code>/faces-config/faces-flow-definition/default-flow-node</code>
      */
-    private static final String DEFAULT_FLOW_NODE = "default-flow-node";
+//    private static final String DEFAULT_FLOW_NODE = "default-flow-node";
     
     /**
      * <code>/faces-config/faces-flow-definition/view</code>
@@ -113,7 +111,7 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
                  .getElementsByTagNameNS(namespace, FACES_FLOW_DEFINITION);
             if (flows != null && flows.getLength() > 0) {
                 processFacesFlowDefinitions(flows,
-                                 namespace,
+                                 /* namespace, */
                                  facesFlowDefinitionCount);
             }
         }
@@ -145,7 +143,7 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
         }
     }
     
-    private void processFacesFlowDefinitions(NodeList factories, String namespace,
+    private void processFacesFlowDefinitions(NodeList factories, /*String namespace,*/
             AtomicInteger flowCount) {
         for (int i = 0, size = factories.getLength(); i < size; i++) {
             flowCount.incrementAndGet();
