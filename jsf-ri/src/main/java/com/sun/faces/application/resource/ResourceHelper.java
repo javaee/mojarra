@@ -177,9 +177,10 @@ public abstract class ResourceHelper {
                 }
             }
         
-        } else {
-            // PENDING(edburns): get the input stream from the facelet ResourceInfo.
-        }
+        } 
+//        else {
+//            // PENDING(edburns): get the input stream from the facelet ResourceInfo.
+//        }
         return in;
 
     }
