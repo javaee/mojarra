@@ -124,6 +124,8 @@ import javax.faces.context.FacesContext;
  * </p>
  */
 public final class ContextualCompositeValueExpression extends ValueExpression {
+    
+    private static final long serialVersionUID = -2637560875633456679L;
 
     private ValueExpression originalVE;
     private Location location;

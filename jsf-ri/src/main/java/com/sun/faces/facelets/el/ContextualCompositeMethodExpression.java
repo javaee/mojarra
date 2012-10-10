@@ -131,6 +131,8 @@ import javax.faces.view.Location;
  */
 public class ContextualCompositeMethodExpression extends MethodExpression {
 
+    private static final long serialVersionUID = -6281398928485392830L;
+    
     // Log instance for this class
     private static final Logger LOGGER = FacesLogger.FACELETS_EL.getLogger();
 

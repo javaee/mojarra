@@ -304,8 +304,6 @@ public class Issue1111IT {
 
         tel.setText("4711");
         
-        /*** PENDING figure out why this isn't working with HtmlUnit
-
         waiter.clear();
         
         HtmlTextInput email = (HtmlTextInput)page.getElementById("email");
@@ -324,7 +322,6 @@ public class Issue1111IT {
         waiter.waitForSuccess();
         
         assertEquals("3", page.getElementById("progress").getAttribute("value"));
-         * **/
     }
 
     private static class AjaxWaiter implements StatusHandler {
