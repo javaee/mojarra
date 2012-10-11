@@ -209,36 +209,36 @@ public class ManagedBeanConfigHandler implements ConfigAnnotationHandler {
     }
 
 
-    private void collectAnnotatedMethods(Class<?> baseClass,
-                                         Map<String,Method> annotatedMethods,
-                                         Set<String> annotatedFields) {
-
-        Method[] methods = baseClass.getDeclaredMethods();
-        for (Method method : methods) {
-            ManagedProperty property = method.getAnnotation(ManagedProperty.class);
-            if (property != null) {
-
-                if (!method.getName().startsWith("set")
-                    || method.getParameterTypes().length != 1) {
-                    continue;
-                }
-                StringBuilder sb =
-                      new StringBuilder(method.getName().substring(3));
-                char c = sb.charAt(0);
-                sb.deleteCharAt(0);
-                sb.insert(0, Character.toLowerCase(c));
-                String propName = sb.toString();
-
-                if (!annotatedFields.contains(propName) && !annotatedMethods.containsKey(propName)) {
-                    annotatedMethods.put(propName, method);
-                }
-            }
-        }
-        Class<?> superClass = baseClass.getSuperclass();
-        if (!Object.class.equals(superClass)) {
-            collectAnnotatedMethods(superClass, annotatedMethods, annotatedFields);
-        }
-    }
+//    private void collectAnnotatedMethods(Class<?> baseClass,
+//                                         Map<String,Method> annotatedMethods,
+//                                         Set<String> annotatedFields) {
+//
+//        Method[] methods = baseClass.getDeclaredMethods();
+//        for (Method method : methods) {
+//            ManagedProperty property = method.getAnnotation(ManagedProperty.class);
+//            if (property != null) {
+//
+//                if (!method.getName().startsWith("set")
+//                    || method.getParameterTypes().length != 1) {
+//                    continue;
+//                }
+//                StringBuilder sb =
+//                      new StringBuilder(method.getName().substring(3));
+//                char c = sb.charAt(0);
+//                sb.deleteCharAt(0);
+//                sb.insert(0, Character.toLowerCase(c));
+//                String propName = sb.toString();
+//
+//                if (!annotatedFields.contains(propName) && !annotatedMethods.containsKey(propName)) {
+//                    annotatedMethods.put(propName, method);
+//                }
+//            }
+//        }
+//        Class<?> superClass = baseClass.getSuperclass();
+//        if (!Object.class.equals(superClass)) {
+//            collectAnnotatedMethods(superClass, annotatedMethods, annotatedFields);
+//        }
+//    }
 
 
     private void collectAnnotatedFields(Class<?> baseClass, Map<String,Field> annotatedFields) {
