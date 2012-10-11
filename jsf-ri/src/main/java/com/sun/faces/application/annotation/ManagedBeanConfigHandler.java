@@ -42,7 +42,6 @@ package com.sun.faces.application.annotation;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,11 +49,8 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import java.util.LinkedHashMap;
-import java.util.Set;
-
 import javax.faces.bean.*;
 import javax.faces.context.FacesContext;
-
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.mgbean.ManagedBeanInfo;
