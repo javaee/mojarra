@@ -2377,6 +2377,12 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
             var el = els[i];
             if (!el.disabled) {
                 switch (el.type) {
+                    case 'text':
+                    case 'password':
+                    case 'hidden':
+                    case 'textarea':
+                        addField(el.name, el.value);
+                        break;
                     case 'select-one':
                         if (el.selectedIndex >= 0) {
                             addField(el.name, el.options[el.selectedIndex].value);
@@ -2394,10 +2400,6 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                         if (el.checked) {
                             addField(el.name, el.value || 'on');
                         }
-                        break;
-                    default:
-                        // this is for any input incl.  text', 'password', 'hidden', 'textarea'
-                        addField(el.name, el.value);
                         break;
                 }
             }
