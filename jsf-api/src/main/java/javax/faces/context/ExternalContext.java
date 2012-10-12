@@ -250,23 +250,22 @@ public abstract class ExternalContext {
 
 
     /**
-     * <p>Dispatch a request to the specified resource to create output
+     * <p><span class="changed_modified_2_2">Dispatch</span> a request to the specified resource to create output
      * for this response.</p>
      *
      * <p><em>Servlet:</em> This must be accomplished by calling the
      * <code>javax.servlet.ServletContext</code> method
      * <code>getRequestDispatcher(path)</code>, and calling the
      * <code>forward()</code> method on the resulting object.</p>
+     * <p class="changed_added_2_2">If the call to <code>getRequestDisatcher(path)</code> 
+     * returns <code>null</code>, send a<code>ServletResponse SC_NOT_FOUND</code> 
+     * error code.</p>
      *
      * @param path Context relative path to the specified resource,
      *  which must start with a slash ("/") character
      *
      * @throws javax.faces.FacesException thrown if a <code>ServletException</code> occurs
-     * @throws IllegalArgumentException if no request dispatcher
-     *  can be created for the specified path
      * @throws IOException if an input/output error occurs
-     * @throws NullPointerException if <code>path</code>
-     *  is <code>null</code>
      */
     public abstract void dispatch(String path)
 	throws IOException;
