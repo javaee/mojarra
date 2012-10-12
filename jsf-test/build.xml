@@ -68,7 +68,6 @@
 
     <property name="container-agnostic-applications" 
             value= "JAVASERVERFACES-2067,
-                    JAVASERVERFACES-2035,
                     JAVASERVERFACES-1975,
                     JAVASERVERFACES-2197,
                     JAVASERVERFACES-2195,
