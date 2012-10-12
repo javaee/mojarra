@@ -38,7 +38,7 @@
  * holder.
 
  */
-package com.sun.faces.test.agnostic.renderKit.basic;
+package com.sun.faces.test.webprofile.renderKit.basic;
 
 import java.io.InputStream;
 import java.util.Scanner;

@@ -38,18 +38,17 @@
  * holder.
  */
 
-package com.sun.faces.test.agnostic.renderKit.basic;
+package com.sun.faces.test.webprofile.renderKit.basic;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Named;
 import javax.servlet.http.Part;
 
-@ManagedBean
+@Named
 @RequestScoped
-
 public class FileUploadBean {
 
     public FileUploadBean() {

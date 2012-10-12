@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.test.agnostic.renderKit.basic; 
+package com.sun.faces.test.webprofile.renderKit.basic; 
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlFileInput;
@@ -79,7 +79,6 @@ public class Spec802IT {
     // ------------------------------------------------------------ Test Methods
 
     @Test
-    @Ignore
     public void testFileUpload() throws Exception {
 
         webClient = new WebClient();
@@ -95,6 +94,7 @@ public class Spec802IT {
         String pageText = page.getBody().asText();
         assertTrue(pageText.contains("JSR-344"));
         
+        page = webClient.getPage(webUrl+"faces/inputFile.xhtml");
         
         fileInput = (HtmlFileInput) page.getElementById("file");
         fileInput.setValueAttribute(basedir + File.separator + "inputFileFailure.txt");
