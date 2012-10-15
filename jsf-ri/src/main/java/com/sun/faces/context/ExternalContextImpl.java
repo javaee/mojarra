@@ -649,6 +649,12 @@ public class ExternalContextImpl extends ExternalContext {
      * @see javax.faces.context.ExternalContext#isUserInRole(String)
      */
     public boolean isUserInRole(String role) {
+        if (null == role) {
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "role");
+            throw new NullPointerException(message);
+        }
+
         return ((HttpServletRequest) request).isUserInRole(role);
     }
 
