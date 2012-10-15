@@ -79,6 +79,7 @@ import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParamet
 import com.sun.faces.util.TypedCollections;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.MessageUtils;
 import com.sun.faces.context.flash.ELFlash;
 
 /**
@@ -519,6 +520,11 @@ public class ExternalContextImpl extends ExternalContext {
      * @see ExternalContext#encodeResourceURL(String)
      */
     public String encodeResourceURL(String url) {
+        if (null == url) {
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "url");
+            throw new NullPointerException(message);
+        }
         return ((HttpServletResponse) response).encodeURL(url);
     }
 
