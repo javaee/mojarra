@@ -1021,4 +1021,46 @@ public class Util {
         return result;
     }
 
+    private static final String FACES_CONTEXT_ATTRIBUTES_DOCTYPE_KEY = Util.class.getName() + "_FACES_CONTEXT_ATTRS_DOCTYPE_KEY";
+    
+    public static void saveDOCTYPEToFacesContextAttributes(String DOCTYPE) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (null == context) {
+            return;
+        }
+        Map<Object, Object> attrs = context.getAttributes();
+        attrs.put(FACES_CONTEXT_ATTRIBUTES_DOCTYPE_KEY, DOCTYPE);
+        
+    }
+    
+    public static String getDOCTYPEFromFacesContextAttributes(FacesContext context) {
+        if (null == context) {
+            return null;
+        }
+        Map<Object, Object> attrs = context.getAttributes();
+        return (String) attrs.get(FACES_CONTEXT_ATTRIBUTES_DOCTYPE_KEY);
+    }
+    
+    private static final String FACES_CONTEXT_ATTRIBUTES_XMLDECL_KEY = Util.class.getName() + "_FACES_CONTEXT_ATTRS_XMLDECL_KEY";
+    
+    public static void saveXMLDECLToFacesContextAttributes(String XMLDECL) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (null == context) {
+            return;
+        }
+        Map<Object, Object> attrs = context.getAttributes();
+        attrs.put(FACES_CONTEXT_ATTRIBUTES_XMLDECL_KEY, XMLDECL);
+        
+    }
+    
+    public static String getXMLDECLFromFacesContextAttributes(FacesContext context) {
+        if (null == context) {
+            return null;
+        }
+        Map<Object, Object> attrs = context.getAttributes();
+        return (String) attrs.get(FACES_CONTEXT_ATTRIBUTES_XMLDECL_KEY);
+    }
+    
+
+
 } // end of class Util

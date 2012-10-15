@@ -63,7 +63,6 @@ import com.sun.faces.config.FaceletsConfiguration;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.facelets.tag.TagAttributeImpl;
 import com.sun.faces.facelets.tag.TagAttributesImpl;
-import com.sun.faces.facelets.tag.ui.IncludeHandler;
 import com.sun.faces.util.Util;
 import javax.el.MethodExpression;
 import javax.el.ValueExpression;
@@ -239,28 +238,24 @@ public final class SAXCompiler extends Compiler {
 
 
             if (this.inDocument && processAsXhtml) {
-                // JAVASERVERFACES-2328, perform an additional check
-                boolean isInInclude = IncludeHandler.isInInclude();
-                if (!isInInclude) {
-                    boolean isHtml5 = facelets.isOutputHtml5Doctype(alias);
-                    // If we're in an ajax request, this is unnecessary and bugged
-                    // RELEASE_PENDING - this is a hack, and should probably not be here -
-                    // but the alternative is to somehow figure out how *not* to escape the "<!"
-                    // within the cdata of the ajax response.  Putting the PENDING in here to
-                    // remind me to have rlubke take a look.  But I'm stumped.
-                    StringBuffer sb = new StringBuffer(64);
-                    sb.append("<!DOCTYPE ").append(name);
-                    if (!isHtml5 && publicId != null) {
-                        sb.append(" PUBLIC \"").append(publicId).append("\"");
-                        if (systemId != null) {
-                            sb.append(" \"").append(systemId).append("\"");
-                        }
-                    } else if (!isHtml5 && systemId != null) {
-                        sb.append(" SYSTEM \"").append(systemId).append("\"");
+                boolean isHtml5 = facelets.isOutputHtml5Doctype(alias);
+                // If we're in an ajax request, this is unnecessary and bugged
+                // RELEASE_PENDING - this is a hack, and should probably not be here -
+                // but the alternative is to somehow figure out how *not* to escape the "<!"
+                // within the cdata of the ajax response.  Putting the PENDING in here to
+                // remind me to have rlubke take a look.  But I'm stumped.
+                StringBuffer sb = new StringBuffer(64);
+                sb.append("<!DOCTYPE ").append(name);
+                if (!isHtml5 && publicId != null) {
+                    sb.append(" PUBLIC \"").append(publicId).append("\"");
+                    if (systemId != null) {
+                        sb.append(" \"").append(systemId).append("\"");
                     }
-                    sb.append(">\n");
-                    this.unit.writeInstruction(sb.toString());
+                } else if (!isHtml5 && systemId != null) {
+                    sb.append(" SYSTEM \"").append(systemId).append("\"");
                 }
+                sb.append(">\n");
+                Util.saveDOCTYPEToFacesContextAttributes(sb.toString());
             }
             this.inDocument = false;
         }
@@ -611,7 +606,7 @@ public final class SAXCompiler extends Compiler {
                     // the file extension for the current file has a mapping
                     // with the value of XHTML
                     if (currentModeIsXhtml) {
-                        mngr.writeInstruction(m.group(0) + "\n");
+                        Util.saveXMLDECLToFacesContextAttributes(m.group(0) + "\n");
                     }
                 }
             }
