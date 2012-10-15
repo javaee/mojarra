@@ -155,6 +155,21 @@ public class Util {
         return result;
     }
 
+    public static boolean isCDIAvailable() {
+        boolean result = false;
+        final String CDI_CLASS = "javax.enterprise.context.spi.Context";
+        try {
+            loadClass(CDI_CLASS, CDI_CLASS);
+            result = true;
+        } catch (Throwable t) {
+            if (LOGGER.isLoggable(Level.FINEST)) {
+                LOGGER.log(Level.FINEST, "Unable to load: " + CDI_CLASS, t);
+            }
+        }
+        
+        return result;
+    }
+
     /**
      * <p>
      * Convenience method for determining if the request associated
@@ -435,12 +450,8 @@ public class Util {
         Locale result, temp = Locale.getDefault();
         UIViewRoot root;
         result = temp;
-        if (null != context) {
-            if (null != (root = context.getViewRoot())) {
-                if (null == (result = root.getLocale())) {
-                    result = temp;
-                }
-            }
+        if (null != context && null != (root = context.getViewRoot()) && null == (result = root.getLocale())) {
+            result = temp;
         }
         return result;
     }
@@ -788,12 +799,10 @@ public class Util {
             String pathInfo = extContext.getRequestPathInfo();
 
             mapping = getMappingForRequest(servletPath, pathInfo);
-            if (mapping == null) {
-                if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.log(Level.FINE,
-                               "jsf.faces_servlet_mapping_cannot_be_determined_error",
-                               new Object[]{servletPath});
-                }
+            if (mapping == null && LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE,
+                        "jsf.faces_servlet_mapping_cannot_be_determined_error",
+                        new Object[]{servletPath});
             }
         }
         
@@ -991,7 +1000,7 @@ public class Util {
         Map<Object, Object> contextAttrs = context.getAttributes();
         Integer counter = (Integer) contextAttrs.get(viewStateCounterKey);
         if (null == counter) {
-            counter = new Integer(0);
+            counter = Integer.valueOf(0);
         }
         
         char sep = UINamingContainer.getSeparatorChar(context);
@@ -1010,7 +1019,7 @@ public class Util {
         Map<Object, Object> contextAttrs = context.getAttributes();
         Integer counter = (Integer) contextAttrs.get(clientWindowIdCounterKey);
         if (null == counter) {
-            counter = new Integer(0);
+            counter = Integer.valueOf(0);
         }
         
         char sep = UINamingContainer.getSeparatorChar(context);

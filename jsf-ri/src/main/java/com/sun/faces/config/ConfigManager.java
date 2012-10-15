@@ -70,6 +70,7 @@ import com.sun.faces.config.processor.FaceletTaglibConfigProcessor;
 import com.sun.faces.config.processor.FacesConfigExtensionProcessor;
 import com.sun.faces.config.processor.FacesFlowDefinitionConfigProcessor;
 import com.sun.faces.config.processor.ProtectedViewsConfigProcessor;
+import com.sun.faces.el.ELContextImpl;
 import com.sun.faces.spi.InjectionProvider;
 import com.sun.faces.spi.InjectionProviderFactory;
 import com.sun.faces.util.FacesLogger;
@@ -120,6 +121,10 @@ import java.lang.annotation.Annotation;
 import java.net.URI;
 import java.util.Iterator;
 
+import javax.el.ELContext;
+import javax.el.ELContextEvent;
+import javax.el.ELContextListener;
+import javax.faces.component.UIViewRoot;
 import org.w3c.dom.*;
 import org.xml.sax.SAXParseException;
 
@@ -612,6 +617,21 @@ public class ConfigManager {
 
         FacesContext ctx = FacesContext.getCurrentInstance();
         Application app = ctx.getApplication();
+        ELContext elContext = new ELContextImpl(app.getELResolver());
+        elContext.putContext(FacesContext.class, ctx);
+        UIViewRoot root = ctx.getViewRoot();
+        if (null != root) {
+            elContext.setLocale(root.getLocale());
+        }
+        ELContextListener[] listeners = app.getELContextListeners();
+        if (listeners.length > 0) {
+            ELContextEvent event = new ELContextEvent(elContext);
+            for (ELContextListener listener: listeners) {
+                listener.contextCreated(event);
+            }
+        }
+        ((InitFacesContext)ctx).setELContext(elContext);
+        
         app.publishEvent(ctx,
                          PostConstructApplicationEvent.class,
                          Application.class,

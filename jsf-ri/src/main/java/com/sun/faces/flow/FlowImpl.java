@@ -43,6 +43,7 @@ package com.sun.faces.flow;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import javax.el.MethodExpression;
 import javax.faces.application.NavigationCase;
 import javax.faces.context.FacesContext;
@@ -83,6 +84,8 @@ public class FlowImpl extends Flow {
         switches = new ConcurrentHashMap<String, SwitchNode>();
         facesFlowCalls = new ConcurrentHashMap<String, FlowCallNode>();
         facesFlowCallsByTargetFlowId = new ConcurrentHashMap<String, FlowCallNode>();
+        views = new CopyOnWriteArrayList<ViewNode>();
+        methodCalls = new CopyOnWriteArrayList<MethodCallNode>();
         
         
     }
@@ -193,10 +196,6 @@ public class FlowImpl extends Flow {
         return views;
     }
 
-    public void setViews(List<ViewNode> views) {
-        this.views = views;
-    }
-    
     @Override
     public Map<String,NavigationCase> getReturns() {
         return returns;
@@ -225,10 +224,6 @@ public class FlowImpl extends Flow {
         return methodCalls;
     }
 
-    public void setMethodCalls(List<MethodCallNode> methodCalls) {
-        this.methodCalls = methodCalls;
-    }
-    
     // </editor-fold>
 
     

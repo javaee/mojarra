@@ -41,9 +41,9 @@
 package com.sun.faces.facelets.flow;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
+import com.sun.faces.flow.ParameterImpl;
 import java.io.IOException;
 import javax.faces.component.UIComponent;
-import javax.faces.flow.Parameter;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagConfig;
 
@@ -55,7 +55,7 @@ public class NameTagHandler extends TagHandlerImpl {
     
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
         this.nextHandler.apply(ctx, parent);
-        Parameter p = FacesFlowDefinitionTagHandler.getCurrentParameter(ctx);
+        ParameterImpl p = FacesFlowDefinitionTagHandler.getCurrentParameter(ctx);
         String name = this.nextHandler.toString();
         p.setName(name);
     }

@@ -42,29 +42,10 @@ package javax.faces.flow;
 
 import javax.el.ValueExpression;
 
-public class Parameter {
+public abstract class Parameter {
     
-    private static final long serialVersionUID = -5433802753213440653L;
-    
-    private String name;
-    private ValueExpression value;
+    public abstract String getName();
 
-    public String getName() {
-        return name;
-    }
+    public abstract ValueExpression getValue();
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public ValueExpression getValue() {
-        return value;
-    }
-
-    public void setValue(ValueExpression value) {
-        this.value = value;
-    }
-    
-    
-    
 }

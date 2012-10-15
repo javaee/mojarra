@@ -387,6 +387,7 @@
         <copy todir="${build.classes.dir}/META-INF">
             <fileset dir="${conf.share.dir}">
                 <include name="jsf_core.tld"/>
+                <include name="beans.xml"/>
                 <include name="mojarra_ext.tld"/>
                 <include name="mojarra_ext.taglib.xml"/>
                 <include name="facelet-dev*.xml"/>

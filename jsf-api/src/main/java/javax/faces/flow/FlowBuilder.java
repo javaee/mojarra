@@ -38,32 +38,67 @@
  * holder.
 
  */
-package com.sun.faces.facelets.flow;
+package javax.faces.flow;
 
-import com.sun.faces.facelets.tag.TagHandlerImpl;
-import com.sun.faces.flow.ParameterImpl;
-import java.io.IOException;
-import javax.el.ExpressionFactory;
+import javax.el.MethodExpression;
 import javax.el.ValueExpression;
-import javax.faces.component.UIComponent;
-import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.TagConfig;
 
-public class ValueTagHandler extends TagHandlerImpl {
+public abstract class FlowBuilder {
+    
+    // <editor-fold defaultstate="collapsed" desc="Create Flow Nodes">       
+    
+    public abstract FlowBuilder viewNode(String viewNodeId, String vdlDocumentId);
 
-    public ValueTagHandler(TagConfig config) {
-        super(config);
-    }
+    public abstract FlowBuilder switchNode(String switchNodeId);
     
-    public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
-        this.nextHandler.apply(ctx, parent);
-        ParameterImpl p = FacesFlowDefinitionTagHandler.getCurrentParameter(ctx);
-        String expression = this.nextHandler.toString();
-        ExpressionFactory ef = ctx.getFacesContext().getApplication().getExpressionFactory();
-        ValueExpression ve = ef.createValueExpression(ctx, expression, Object.class);
-        p.setValue(ve);
-    }
+    public abstract FlowBuilder returnNode(String returnNodeId);
     
+    public abstract FlowBuilder methodCallNode(String methodCallNodeId);
     
+    public abstract FlowBuilder flowCallNode(String flowCallNodeId);
+    
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="Operate on a Flow Node">       
+    
+    public abstract FlowBuilder condition(ValueExpression valueExpression);
+    
+    public abstract FlowBuilder fromOutcome(String outcome);
+    
+    public abstract FlowBuilder fromOutcome(ValueExpression outcome);
+        
+    public abstract FlowBuilder defaultOutcome(String outcome);
+    
+    public abstract FlowBuilder defaultOutcome(ValueExpression outcome);
+    
+    public abstract FlowBuilder navigationCase();
+    
+    public abstract FlowBuilder flowReference(String flowId);
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Flow-wide Settings">     
+    
+    public abstract FlowBuilder id(String flowId);
+    
+    public abstract FlowBuilder markAsStartNode(String startNodeId);
+    
+    public abstract FlowBuilder initializer(MethodExpression valueExpression);
+    
+    public abstract FlowBuilder finalizer(MethodExpression valueExpression);
+    
+    public abstract FlowBuilder inboundParameter(String name, ValueExpression value);
+        
+    public abstract FlowBuilder inboundParameter(String name, String value);
+
+    public abstract FlowBuilder outboundParameter(String name, ValueExpression value);
+        
+    public abstract FlowBuilder outboundParameter(String name, String value);
+
+    // </editor-fold>
+        
+    public abstract Flow getFlow();
     
 }
+    
+

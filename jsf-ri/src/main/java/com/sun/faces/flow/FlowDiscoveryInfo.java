@@ -38,32 +38,44 @@
  * holder.
 
  */
-package com.sun.faces.facelets.flow;
+package com.sun.faces.flow;
 
-import com.sun.faces.facelets.tag.TagHandlerImpl;
-import com.sun.faces.flow.ParameterImpl;
-import java.io.IOException;
-import javax.el.ExpressionFactory;
-import javax.el.ValueExpression;
-import javax.faces.component.UIComponent;
-import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.TagConfig;
-
-public class ValueTagHandler extends TagHandlerImpl {
-
-    public ValueTagHandler(TagConfig config) {
-        super(config);
-    }
+public class FlowDiscoveryInfo {
     
-    public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
-        this.nextHandler.apply(ctx, parent);
-        ParameterImpl p = FacesFlowDefinitionTagHandler.getCurrentParameter(ctx);
-        String expression = this.nextHandler.toString();
-        ExpressionFactory ef = ctx.getFacesContext().getApplication().getExpressionFactory();
-        ValueExpression ve = ef.createValueExpression(ctx, expression, Object.class);
-        p.setValue(ve);
+    private Class definingClass;
+    private String id;
+    private String definingDocument;
+
+    public String getDefiningDocument() {
+        return definingDocument;
+    }
+
+    public void setDefiningDocument(String definingDocument) {
+        this.definingDocument = definingDocument;
+    }
+
+    public FlowDiscoveryInfo(Class definingClass, String id, String definingDocument) {
+        this.definingClass = definingClass;
+        this.id = id;
+        this.definingDocument = definingDocument;
     }
     
     
-    
+
+    public Class getDefiningClass() {
+        return definingClass;
+    }
+
+    public void setDefiningClass(Class definingClass) {
+        this.definingClass = definingClass;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
 }

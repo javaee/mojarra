@@ -38,32 +38,37 @@
  * holder.
 
  */
-package com.sun.faces.facelets.flow;
+package com.sun.faces.test.webprofile.flow.basic;
 
-import com.sun.faces.facelets.tag.TagHandlerImpl;
-import com.sun.faces.flow.ParameterImpl;
-import java.io.IOException;
-import javax.el.ExpressionFactory;
-import javax.el.ValueExpression;
-import javax.faces.component.UIComponent;
-import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.TagConfig;
+import java.io.Serializable;
+import javax.faces.context.FacesContext;
+import javax.faces.flow.Flow;
+import javax.faces.flow.FlowBuilder;
+import javax.faces.flow.FlowDefinition;
+import javax.inject.Named;
 
-public class ValueTagHandler extends TagHandlerImpl {
 
-    public ValueTagHandler(TagConfig config) {
-        super(config);
+@Named("FlowA")
+@FlowDefinition
+public class FlowA implements Serializable {
+    
+    private static final long serialVersionUID = -7623501087369765218L;
+
+    public FlowA() {
     }
     
-    public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
-        this.nextHandler.apply(ctx, parent);
-        ParameterImpl p = FacesFlowDefinitionTagHandler.getCurrentParameter(ctx);
-        String expression = this.nextHandler.toString();
-        ExpressionFactory ef = ctx.getFacesContext().getApplication().getExpressionFactory();
-        ValueExpression ve = ef.createValueExpression(ctx, expression, Object.class);
-        p.setValue(ve);
+    public Flow defineFlow(FacesContext context, FlowBuilder flowBuilder) {
+        
+        flowBuilder.id("flow-a");
+        flowBuilder.returnNode("taskFlowReturn1").navigationCase().
+                fromOutcome("#{flow_a_Bean.returnValue}");
+        flowBuilder.inboundParameter("param1FromFlowB", "#{facesFlowScope.param1Value}");
+        flowBuilder.inboundParameter("param2FromFlowB", "#{facesFlowScope.param2Value}");
+        flowBuilder.flowCallNode("callB").flowReference("flow-b").
+                outboundParameter("param1FromFlowA", "param1Value").
+                outboundParameter("param2FromFlowA", "param2Value");
+        
+        return flowBuilder.getFlow();
     }
-    
-    
     
 }

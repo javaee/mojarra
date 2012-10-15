@@ -66,10 +66,8 @@ public class ViewScopedCDIExtension implements Extension {
    
    public void processBean(@Observes ProcessBean<?> event) {
        ViewScoped viewScoped = event.getAnnotated().getAnnotation(ViewScoped.class);
-       if (null != viewScoped) {
-           if (LOGGER.isLoggable(Level.FINE)) {
-               LOGGER.fine("Processing occurrence of @ViewScoped");
-           }
+       if (null != viewScoped && LOGGER.isLoggable(Level.FINE)) {
+           LOGGER.fine("Processing occurrence of @ViewScoped");
        }
        
    }

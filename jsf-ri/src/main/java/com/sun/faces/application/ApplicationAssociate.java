@@ -84,6 +84,7 @@ import com.sun.faces.facelets.PrivateApiFaceletCacheAdapter;
 import com.sun.faces.facelets.tag.jsf.PassThroughAttributeLibrary;
 import com.sun.faces.facelets.tag.jsf.PassThroughElementLibrary;
 import com.sun.faces.facelets.util.Classpath;
+import com.sun.faces.flow.FlowDiscoveryCDIHelper;
 import com.sun.faces.lifecycle.ELResolverInitPhaseListener;
 
 import java.io.IOException;
@@ -113,6 +114,8 @@ import java.util.LinkedHashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.concurrent.ConcurrentHashMap;
+import javax.el.ELContext;
+import javax.el.ValueExpression;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.NavigationCase;
@@ -281,9 +284,11 @@ public class ApplicationAssociate {
             WebConfiguration config = WebConfiguration.getInstance();
             FlowHandlerFactory flowHandlerFactory = (FlowHandlerFactory) FactoryFinder.getFactory(FactoryFinder.FLOW_HANDLER_FACTORY);
             ApplicationAssociate.this.flowHandler = flowHandlerFactory.createFlowHandler(FacesContext.getCurrentInstance());
-            if (config.isHasFlows()) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            
+            if (config.isHasFlows() && Util.isCDIAvailable(context.getExternalContext().getApplicationMap())) {
                 try {
-                    loadFlowsFromJars(ApplicationAssociate.this.flowHandler);
+                    loadFlowsFromJars(context, ApplicationAssociate.this.flowHandler);
                 } catch (IOException ex) {
                     LOGGER.log(Level.SEVERE, null, ex);
                 }
@@ -291,16 +296,24 @@ public class ApplicationAssociate {
 
         }
         
-        private synchronized void loadFlowsFromJars(FlowHandler flowHandler) throws IOException {
+        private synchronized void loadFlowsFromJars(FacesContext context, FlowHandler flowHandler) throws IOException {
             final String flowsPrefix = "META-INF/flows/";
             final int flowsPrefixLength = flowsPrefix.length();
             URL[] flowFiles = Classpath.search(Util.getCurrentLoader(this),
                     flowsPrefix,
                     RIConstants.FLOW_DEFINITION_ID_SUFFIX);
+            
+            ExpressionFactory expressionFactory = context.getApplication().getExpressionFactory();
+            ELContext elContext = context.getELContext();
+            ValueExpression ve = expressionFactory.createValueExpression(elContext, 
+                    "#{" + RIConstants.FLOW_DISCOVERY_CDI_HELPER_BEAN_NAME + "}", 
+                    Object.class);
+            FlowDiscoveryCDIHelper flowHelper = (FlowDiscoveryCDIHelper) ve.getValue(elContext);
+            flowHelper.discoverFlows(context, flowHandler);
+            
             if (null == flowFiles || 0 == flowFiles.length) {
                 return;
             }
-            FacesContext context = FacesContext.getCurrentInstance();
             ViewHandler viewHandler = Util.getViewHandler(context);
             // Hack: the real FDL is not based in Facelets.
             ViewDeclarationLanguage vdl = viewHandler.getViewDeclarationLanguage(context, "index.xhtml");
@@ -443,20 +456,16 @@ public class ApplicationAssociate {
          externalContext) {
         Map applicationMap = externalContext.getApplicationMap();
         ApplicationAssociate me = (ApplicationAssociate) applicationMap.get(ASSOCIATE_KEY);
-        if (null != me) {
-            if (null != me.resourceBundles) {
-                me.resourceBundles.clear();
-            }
+        if (null != me && null != me.resourceBundles) {
+            me.resourceBundles.clear();
         }
         applicationMap.remove(ASSOCIATE_KEY);
     }
 
     public static void clearInstance(ServletContext sc) {
         ApplicationAssociate me = (ApplicationAssociate) sc.getAttribute(ASSOCIATE_KEY);
-        if (null != me) {
-            if (null != me.resourceBundles) {
-                me.resourceBundles.clear();
-            }
+        if (null != me && null != me.resourceBundles) {
+            me.resourceBundles.clear();
         }
         sc.removeAttribute(ASSOCIATE_KEY);    
     }
@@ -677,11 +686,8 @@ public class ApplicationAssociate {
     
     public List<FacesComponentUsage> getComponentsForNamespace(String ns) {
         List<FacesComponentUsage> result = Collections.emptyList();
-        if (null != facesComponentsByNamespace) {
-            if (facesComponentsByNamespace.containsKey(ns)) {
-                result = facesComponentsByNamespace.get(ns);
-            }
-
+        if (null != facesComponentsByNamespace && facesComponentsByNamespace.containsKey(ns)) {
+            result = facesComponentsByNamespace.get(ns);
         }
        
         return result;

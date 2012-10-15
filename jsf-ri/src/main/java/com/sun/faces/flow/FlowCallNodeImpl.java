@@ -40,7 +40,6 @@
  */
 package com.sun.faces.flow;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -77,13 +76,11 @@ public class FlowCallNodeImpl extends FlowCallNode {
             this.calledFlowIdVE = null;
         }
         
+        outboundParameters = new ConcurrentHashMap<String, Parameter>();            
         if (null != outboundParametersFromConfig) {
-            outboundParameters = new ConcurrentHashMap<String, Parameter>();            
             for (Parameter cur : outboundParametersFromConfig) {
                 outboundParameters.put(cur.getName(), cur);
             }
-        } else {
-            outboundParameters = Collections.emptyMap();
         }
         
     }

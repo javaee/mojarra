@@ -75,7 +75,7 @@ public class FlowCDIContext implements Context, Serializable {
     // This should be vended from a factory for decoration purposes.
     
     public FlowCDIContext(Map<Contextual<?>, String> flowIds) {
-        this.flowIds = flowIds;
+        this.flowIds = new ConcurrentHashMap<Contextual<?>, String>(flowIds);
     }
     
     private static final String PER_SESSION_BEAN_MAP_LIST = FlowCDIContext.class.getPackage().getName() + ".PER_SESSION_BEAN_MAP_LIST";

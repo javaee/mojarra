@@ -38,32 +38,37 @@
  * holder.
 
  */
-package com.sun.faces.facelets.flow;
+package javax.faces.flow;
 
-import com.sun.faces.facelets.tag.TagHandlerImpl;
-import com.sun.faces.flow.ParameterImpl;
-import java.io.IOException;
-import javax.el.ExpressionFactory;
-import javax.el.ValueExpression;
-import javax.faces.component.UIComponent;
-import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.TagConfig;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import javax.enterprise.context.NormalScope;
 
-public class ValueTagHandler extends TagHandlerImpl {
 
-    public ValueTagHandler(TagConfig config) {
-        super(config);
-    }
+/**
+ * <p class="changed_added_2_2"></p>
+ * 
+ * @since 2.2
+ */
+
+@NormalScope
+@Inherited
+@Documented
+@Target(ElementType.TYPE)
+@Retention(value = RetentionPolicy.RUNTIME)
+public @interface FlowDefinition {
+
+   
+    /**
+     * <p class="changed_added_2_2"></p>
+     *
+     * @since 2.2
+     */
     
-    public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
-        this.nextHandler.apply(ctx, parent);
-        ParameterImpl p = FacesFlowDefinitionTagHandler.getCurrentParameter(ctx);
-        String expression = this.nextHandler.toString();
-        ExpressionFactory ef = ctx.getFacesContext().getApplication().getExpressionFactory();
-        ValueExpression ve = ef.createValueExpression(ctx, expression, Object.class);
-        p.setValue(ve);
-    }
-    
-    
-    
+    String definingDocumentId() default "";
+
 }

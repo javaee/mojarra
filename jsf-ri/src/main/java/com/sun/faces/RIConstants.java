@@ -131,6 +131,8 @@ public class RIConstants {
     
     public static final int FLOW_IN_JAR_PREFIX_LENGTH = FLOW_IN_JAR_PREFIX.length();
     
+    public static final String FLOW_DISCOVERY_CDI_HELPER_BEAN_NAME = "csfFLOWDISCOVERYCDIHELPER";
+
     private RIConstants() {
 
         throw new IllegalStateException();

@@ -38,30 +38,43 @@
  * holder.
 
  */
-package com.sun.faces.facelets.flow;
+package com.sun.faces.flow;
 
-import com.sun.faces.facelets.tag.TagHandlerImpl;
-import com.sun.faces.flow.ParameterImpl;
-import java.io.IOException;
-import javax.el.ExpressionFactory;
 import javax.el.ValueExpression;
-import javax.faces.component.UIComponent;
-import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.TagConfig;
+import javax.faces.flow.Parameter;
 
-public class ValueTagHandler extends TagHandlerImpl {
+public class ParameterImpl extends Parameter {
+    
+    private static final long serialVersionUID = -5433802753213440653L;
 
-    public ValueTagHandler(TagConfig config) {
-        super(config);
+    private String name;
+    private ValueExpression value;
+    
+    public ParameterImpl() {
+        
+    }
+
+    public ParameterImpl(String name, ValueExpression value) {
+        this.name = name;
+        this.value = value;
     }
     
-    public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
-        this.nextHandler.apply(ctx, parent);
-        ParameterImpl p = FacesFlowDefinitionTagHandler.getCurrentParameter(ctx);
-        String expression = this.nextHandler.toString();
-        ExpressionFactory ef = ctx.getFacesContext().getApplication().getExpressionFactory();
-        ValueExpression ve = ef.createValueExpression(ctx, expression, Object.class);
-        p.setValue(ve);
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public ValueExpression getValue() {
+        return value;
+    }
+
+    public void setValue(ValueExpression value) {
+        this.value = value;
     }
     
     

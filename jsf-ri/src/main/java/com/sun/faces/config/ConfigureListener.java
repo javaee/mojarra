@@ -58,6 +58,7 @@ import com.sun.faces.el.ELContextListenerImpl;
 import com.sun.faces.el.ELUtils;
 import com.sun.faces.el.FacesCompositeELResolver;
 import com.sun.faces.flow.FlowCDIContext;
+import com.sun.faces.flow.FlowDiscoveryCDIContext;
 import com.sun.faces.flow.ViewScopedCDIContext;
 import com.sun.faces.mgbean.BeanBuilder;
 import com.sun.faces.mgbean.BeanManager;
@@ -228,15 +229,13 @@ public class ConfigureListener implements ServletRequestListener,
             // Step 7, verify that all the configured factories are available
             // and optionall that configured objects can be created. 
             Verifier v = Verifier.getCurrentInstance();
-            if (v != null && !v.isApplicationValid()) {
-                if (LOGGER.isLoggable(Level.SEVERE)) {
-                    LOGGER.severe("jsf.config.verifyobjects.failures_detected");
-                    StringBuilder sb = new StringBuilder(128);
-                    for (String m : v.getMessages()) {
-                        sb.append(m).append('\n');
-                    }
-                    LOGGER.severe(sb.toString());
+            if (v != null && !v.isApplicationValid() && LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.severe("jsf.config.verifyobjects.failures_detected");
+                StringBuilder sb = new StringBuilder(128);
+                for (String m : v.getMessages()) {
+                    sb.append(m).append('\n');
                 }
+                LOGGER.severe(sb.toString());
             }
             registerELResolverAndListenerWithJsp(context, false);
             ELContext elctx = new ELContextImpl(initContext.getApplication().getELResolver());
@@ -324,7 +323,10 @@ public class ConfigureListener implements ServletRequestListener,
                            context.getServletContextName());
             }
 
-
+            if (Util.isCDIAvailable(initContext.getExternalContext().getApplicationMap())) {
+                FlowDiscoveryCDIContext.contextDestroyed(sce);
+            }
+            
             ELContext elctx = new ELContextImpl(initContext.getApplication().getELResolver());
             elctx.putContext(FacesContext.class, initContext);
             initContext.setELContext(elctx);
@@ -386,7 +388,9 @@ public class ConfigureListener implements ServletRequestListener,
             webAppListener.sessionDestroyed(event);
         }
         ViewScopedCDIContext.sessionDestroyed(event);
-        FlowCDIContext.sessionDestroyed(event);
+        if (Util.isCDIAvailable()) {
+            FlowCDIContext.sessionDestroyed(event);
+        }
     }
 
 
@@ -626,7 +630,9 @@ public class ConfigureListener implements ServletRequestListener,
         try {
             Class.forName("org.apache.jasper.compiler.JspRuntimeContext");
         } catch (ClassNotFoundException ignored) {
-            // ignored
+            if (LOGGER.isLoggable(Level.FINEST)) {
+                LOGGER.log(Level.FINEST, "Dected JSP 2.1", ignored);
+            }
         }
 
         if (JspFactory.getDefaultFactory() == null) {
@@ -868,7 +874,10 @@ public class ConfigureListener implements ServletRequestListener,
                                 try {
                                     fragmentStream.close();
                                 } catch (IOException ioe) {
-                                    // ignore
+                                    if (LOGGER.isLoggable(Level.WARNING)) {
+                                        LOGGER.log(Level.WARNING,
+                                                "Exception whil scanning for FacesServlet", ioe);                                
+                                    }
                                 }
                             }
                         }
@@ -934,11 +943,9 @@ public class ConfigureListener implements ServletRequestListener,
                                      String qName, Attributes attributes)
                     throws SAXException {
 
-                if (!errorPagePresent) {
-                    if (ERROR_PAGE.equals(localName)) {
-                        errorPagePresent = true;
-                        return;
-                    }
+                if (!errorPagePresent && ERROR_PAGE.equals(localName)) {
+                    errorPagePresent = true;
+                    return;
                 }
                 if (!facesServletPresent) {
                     if (SERVLET_CLASS.equals(localName)) {
@@ -967,10 +974,9 @@ public class ConfigureListener implements ServletRequestListener,
             public void endElement(String uri, String localName, String qName)
                     throws SAXException {
 
-                if (servletClassFound && !facesServletPresent) {
-                    if (FACES_SERVLET.equals(content.toString().trim())) {
-                        facesServletPresent = true;
-                    }
+                if (servletClassFound && !facesServletPresent && 
+                    FACES_SERVLET.equals(content.toString().trim())) {
+                    facesServletPresent = true;
                 }
 
             } // END endElement
@@ -1113,6 +1119,10 @@ public class ConfigureListener implements ServletRequestListener,
                         try {
                             in.close();
                         } catch (IOException ignored) {
+                            if (LOGGER.isLoggable(Level.FINEST)) {
+                                LOGGER.log(Level.FINEST,
+                                        "Exception while closing stream", ignored);
+                            }
                         }
                     }
                 }

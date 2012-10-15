@@ -43,6 +43,7 @@ package com.sun.faces.facelets.flow;
 import com.sun.faces.RIConstants;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
 import com.sun.faces.flow.FlowImpl;
+import com.sun.faces.flow.ParameterImpl;
 import com.sun.faces.flow.ViewNodeImpl;
 import com.sun.faces.util.Util;
 import java.io.IOException;
@@ -111,13 +112,13 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
         return result;
     }
     
-    public static Parameter getCurrentParameter(FaceletContext ctx) {
-        Parameter result = null;
+    public static ParameterImpl getCurrentParameter(FaceletContext ctx) {
+        ParameterImpl result = null;
 
         Map<FacesFlowDefinitionTagHandler.FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
-        result = (Parameter) flowData.get(FacesFlowDefinitionTagHandler.FlowDataKeys.CurrentParameter);
+        result = (ParameterImpl) flowData.get(FacesFlowDefinitionTagHandler.FlowDataKeys.CurrentParameter);
         if (null == result) {
-            result = new Parameter();
+            result = new ParameterImpl();
             flowData.put(FacesFlowDefinitionTagHandler.FlowDataKeys.CurrentParameter, result);
         }
         
@@ -257,7 +258,7 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
             String myNodeId = getMyNodeId();
             if (null == newFlow.getViews()) {
                 viewsInFlow = synthesizeViews();
-                newFlow.setViews(viewsInFlow);
+                newFlow.getViews().addAll(viewsInFlow);
             } else if (null == newFlow.getNode(myNodeId)) {
                 ViewNode viewNode = new ViewNodeImpl(myNodeId, this.tag.getLocation().getPath());
                 newFlow.getViews().add(viewNode);
@@ -291,11 +292,7 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
                 // If not, make one from this view.
                 viewsFromTag = synthesizeViews();
             }
-            if (null == newFlow.getViews()) {            
-                newFlow.setViews(viewsFromTag);
-            } else {
-                newFlow.getViews().addAll(viewsFromTag);
-            }
+            newFlow.getViews().addAll(viewsFromTag);
             
             //
             // <faces-flow-return>
@@ -337,7 +334,7 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
             // <method-call>
             //
             List<MethodCallNode> methodCalls = MethodCallTagHandler.getMethodCalls(ctx);
-            newFlow.setMethodCalls(methodCalls);
+            newFlow.getMethodCalls().addAll(methodCalls);
             
             //
             // <faces-flow-call>
