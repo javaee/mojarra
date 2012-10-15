@@ -1893,17 +1893,6 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     } // END NullWriter
 
     /**
-     * Clear out the dynamic actions.
-     *
-     * @param stateContext the state context.
-     */
-    private void clearDynamicActions(StateContext stateContext) {
-        if (stateContext != null && stateContext.getDynamicActions() != null) {
-            stateContext.getDynamicActions().clear();
-        }
-    }
-
-    /**
      * Find the given component in the component tree.
      *
      * @param context the Faces context.
