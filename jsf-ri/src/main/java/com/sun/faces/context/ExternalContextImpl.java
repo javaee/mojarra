@@ -942,6 +942,11 @@ public class ExternalContextImpl extends ExternalContext {
      */
     @Override
     public String encodePartialActionURL(String url) {
+        if (null == url) {
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "url");
+            throw new NullPointerException(message);
+        }
         UrlBuilder builder = new UrlBuilder(url, getResponseCharacterEncoding());
         return ((HttpServletResponse) response).encodeURL(builder.createUrl());
     }

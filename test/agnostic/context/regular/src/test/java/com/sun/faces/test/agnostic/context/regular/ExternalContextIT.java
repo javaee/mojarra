@@ -75,4 +75,9 @@ public class ExternalContextIT {
         assertTrue(page.asText().contains("PASSED"));
     }
 
+    @Test
+    public void testEncodePartialActionURLNPE() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "/faces/issue2540.xhtml");
+        assertTrue(page.asText().contains("PASSED"));
+    }
 }
