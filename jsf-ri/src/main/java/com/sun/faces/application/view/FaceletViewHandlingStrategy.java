@@ -803,6 +803,22 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         return false;
     }
 
+    /**
+     * Mark the initial state if not already marked.
+     */
+    private void markInitialStateIfNotMarked(UIComponent component) {
+        if (!component.isTransient()) {
+            if (!component.getAttributes().containsKey(RIConstants.DYNAMIC_COMPONENT)) {
+                if (!component.initialStateMarked()) {
+                    component.markInitialState();
+                }
+            }
+            for (Iterator<UIComponent> it = component.getFacetsAndChildren() ; it.hasNext() ; ) {
+                UIComponent child = it.next();
+                markInitialStateIfNotMarked(child);
+            }
+        }
+    }
 
     /**
      * Build the view.
@@ -822,6 +838,9 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             try {
                 stateCtx.setTrackViewModifications(false);
                 f.apply(ctx, view);
+                if (stateCtx.isPartialStateSaving(ctx, view.getViewId())) {
+                    markInitialStateIfNotMarked(view);
+                }
                 reapplyDynamicActions(ctx);
             } finally {
                 stateCtx.setTrackViewModifications(true);
