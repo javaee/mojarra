@@ -102,5 +102,54 @@ public class ExternalContextBean implements Serializable {
 
         return "FAILED";
     }
+    public String getLog1NPE() {
+        try {
+            FacesContext currentContext = FacesContext.getCurrentInstance();
+            ExternalContextImpl externalContext =
+                    new ExternalContextImpl(
+                    (ServletContext) currentContext.getExternalContext().getContext(),
+                    (HttpServletRequest) currentContext.getExternalContext().getRequest(),
+                    (HttpServletResponse) currentContext.getExternalContext().getResponse());
+
+            externalContext.log(null);
+        } catch (NullPointerException exception) {
+            return "PASSED";
+        }
+
+        return "FAILED";
+    }
+    public String getLog2NPE() {
+        try {
+            FacesContext currentContext = FacesContext.getCurrentInstance();
+            ExternalContextImpl externalContext =
+                    new ExternalContextImpl(
+                    (ServletContext) currentContext.getExternalContext().getContext(),
+                    (HttpServletRequest) currentContext.getExternalContext().getRequest(),
+                    (HttpServletResponse) currentContext.getExternalContext().getResponse());
+
+            externalContext.log(null, new RuntimeException("Exception"));
+        } catch (NullPointerException exception) {
+            return "PASSED";
+        }
+
+        return "FAILED";
+    }
+    public String getLog3NPE() {
+        try {
+            FacesContext currentContext = FacesContext.getCurrentInstance();
+            ExternalContextImpl externalContext =
+                    new ExternalContextImpl(
+                    (ServletContext) currentContext.getExternalContext().getContext(),
+                    (HttpServletRequest) currentContext.getExternalContext().getRequest(),
+                    (HttpServletResponse) currentContext.getExternalContext().getResponse());
+
+            String msg = "A message";
+            externalContext.log(msg, null);
+        } catch (NullPointerException exception) {
+            return "PASSED";
+        }
+
+        return "FAILED";
+    }
 
 }
