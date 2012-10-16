@@ -45,10 +45,17 @@
       xmlns:h="http://java.sun.com/jsf/html">
 
     <h:form id="form" enctype="multipart/form-data" prependId="false">
-        <h:inputFile id="file" value="#{fileUploadBean.uploadedFile}"> 
-           <f:validator validatorId="FileValidator" />           
+        
+        <p><h:inputText id="text" value="#{fileUploadBean.text}" /></p>
+        
+        <p><h:inputFile id="file" value="#{fileUploadBean.uploadedFile}"> 
+           <f:validator validatorId="FileValidator" />
        </h:inputFile>
+        </p>
        <br/>
+       
+       <p id="textOutput">Text: #{fileUploadBean.text}</p>
+       
        <h:commandButton id="button" value="submit"/>
        
        #{fileUploadBean.fileText}

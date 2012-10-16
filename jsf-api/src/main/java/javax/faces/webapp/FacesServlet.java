@@ -159,6 +159,10 @@ import javax.servlet.http.HttpServletResponse;
  * </div>
 
  * <div class="changed_added_2_2">
+ * 
+ * <p>This class must be annotated with {@code javax.servlet.annotation.MultipartConfig}.
+ * This causes the Servlet container in which the JSF implementation is running
+ * to correctly handle multipart form data.</p>
 
  * <p><strong>Some security considerations relating to this class</strong></p>
 

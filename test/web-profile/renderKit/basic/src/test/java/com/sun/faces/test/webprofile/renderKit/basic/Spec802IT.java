@@ -40,6 +40,7 @@
 
 package com.sun.faces.test.webprofile.renderKit.basic; 
 
+import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlFileInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -50,7 +51,6 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
-import org.junit.Ignore;
 
 
 public class Spec802IT {
@@ -83,10 +83,16 @@ public class Spec802IT {
 
         webClient = new WebClient();
         HtmlPage page = webClient.getPage(webUrl+"faces/inputFile.xhtml");
+        HtmlTextInput text = null;
         
         String basedir = System.getProperty("basedir");
         HtmlFileInput fileInput = (HtmlFileInput) page.getElementById("file");
         fileInput.setValueAttribute(basedir + File.separator + "inputFileSuccess.txt");
+        
+        text = (HtmlTextInput) page.getElementById("text");
+        String textValue = "" + System.currentTimeMillis();
+        text.setText(textValue);
+        
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button");
         
         page = button.click();
@@ -94,18 +100,27 @@ public class Spec802IT {
         String pageText = page.getBody().asText();
         assertTrue(pageText.contains("JSR-344"));
         
+        pageText = page.getElementById("textOutput").getTextContent();
+        assertTrue(pageText.contains(textValue));
+        
         page = webClient.getPage(webUrl+"faces/inputFile.xhtml");
         
         fileInput = (HtmlFileInput) page.getElementById("file");
         fileInput.setValueAttribute(basedir + File.separator + "inputFileFailure.txt");
         button = (HtmlSubmitInput) page.getElementById("button");
         
+        text = (HtmlTextInput) page.getElementById("text");
+        textValue = "" + System.currentTimeMillis();
+        text.setText(textValue);
+        
         page = button.click();
         
         pageText = page.getBody().asText();
         assertFalse(pageText.contains("JSR-344"));
         assertTrue(pageText.contains("Invalid file"));
-        
+
+        pageText = page.getElementById("textOutput").getTextContent();
+        assertTrue(!pageText.contains(textValue));
     }
 
 }
