@@ -267,6 +267,7 @@ public class ConfigureListener implements ServletRequestListener,
                     webAppListener);
 
             webConfig.doPostBringupActions();
+            configManager.publishPostConfigEvent();
 
         } catch (Throwable t) {
             if (LOGGER.isLoggable(Level.SEVERE)) {

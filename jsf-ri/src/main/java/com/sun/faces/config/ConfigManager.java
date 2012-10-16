@@ -386,7 +386,6 @@ public class ConfigManager {
                                              validating));
                 }
 
-                publishPostConfigEvent();
             } catch (Exception e) {
                 // clear out any configured factories
                 releaseFactories();
@@ -613,24 +612,26 @@ public class ConfigManager {
      * Publishes a {@link javax.faces.event.PostConstructApplicationEvent} event for the current
      * {@link Application} instance.
      */
-    private void publishPostConfigEvent() {
+    void publishPostConfigEvent() {
 
         FacesContext ctx = FacesContext.getCurrentInstance();
         Application app = ctx.getApplication();
-        ELContext elContext = new ELContextImpl(app.getELResolver());
-        elContext.putContext(FacesContext.class, ctx);
-        UIViewRoot root = ctx.getViewRoot();
-        if (null != root) {
-            elContext.setLocale(root.getLocale());
-        }
-        ELContextListener[] listeners = app.getELContextListeners();
-        if (listeners.length > 0) {
-            ELContextEvent event = new ELContextEvent(elContext);
-            for (ELContextListener listener: listeners) {
-                listener.contextCreated(event);
+        if (null == ((InitFacesContext)ctx).getELContext()) {
+            ELContext elContext = new ELContextImpl(app.getELResolver());
+            elContext.putContext(FacesContext.class, ctx);
+            UIViewRoot root = ctx.getViewRoot();
+            if (null != root) {
+                elContext.setLocale(root.getLocale());
             }
+            ELContextListener[] listeners = app.getELContextListeners();
+            if (listeners.length > 0) {
+                ELContextEvent event = new ELContextEvent(elContext);
+                for (ELContextListener listener: listeners) {
+                    listener.contextCreated(event);
+                }
+            }
+            ((InitFacesContext)ctx).setELContext(elContext);
         }
-        ((InitFacesContext)ctx).setELContext(elContext);
         
         app.publishEvent(ctx,
                          PostConstructApplicationEvent.class,
