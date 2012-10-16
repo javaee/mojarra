@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,48 +37,9 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.agnostic.renderKit.basic;
 
-package test;
+import javax.faces.render.ClientBehaviorRenderer;
 
-import java.util.Iterator;
-
-import javax.faces.application.ResourceHandler;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-import javax.faces.context.FacesContext;
-import javax.faces.FactoryFinder;
-import javax.faces.render.RenderKit;
-import javax.faces.render.RenderKitFactory;
-
-@ManagedBean
-@RequestScoped
-public class Bean {
-
-    private RenderKit renderkit = null;
-
-    public Bean() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        RenderKitFactory renderFactory = (RenderKitFactory)
-            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-        renderkit = renderFactory.getRenderKit(
-            facesContext, facesContext.getViewRoot().getRenderKitId());
-        TestBehaviorRenderer testBehaviorRenderer = new TestBehaviorRenderer();
-        renderkit.addClientBehaviorRenderer("test.TestBehavior", testBehaviorRenderer); 
-    }
-	
-    private String clientBehaviorRendererTypes = null;
-
-    public String getClientBehaviorRendererTypes() {
-        String types = "";
-        for (Iterator<String> iter = renderkit.getClientBehaviorRendererTypes(); iter.hasNext();) {
-            types += iter.next() + ";";
-        }
-        return types;
-    }
-
-    public void setClientBehaviorRendererTypes(String clientBehaviorRendererTypes) {
-        this.clientBehaviorRendererTypes = clientBehaviorRendererTypes;
-    }
+public class Issue2065ClientBehaviorRenderer extends ClientBehaviorRenderer {
 }
-
-

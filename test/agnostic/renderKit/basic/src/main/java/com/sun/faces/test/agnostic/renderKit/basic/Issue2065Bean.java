@@ -40,26 +40,33 @@
 package com.sun.faces.test.agnostic.renderKit.basic;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Iterator;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.FactoryFinder;
+import javax.faces.render.RenderKit;
+import javax.faces.render.RenderKitFactory;
 
-@ManagedBean(name = "issue1830Bean")
+@ManagedBean(name = "issue2065Bean")
 @RequestScoped
-public class Issue1830Bean implements Serializable {
-    /**
-     * Get the repeat.
-     */
-    public List<List<String>> getRepeat() {
-        List<List<String>> result = new ArrayList<List<String>>();
-        for (int i=0; i<10; i++) {
-            List<String> subList = new ArrayList<String>();
-            for(int j=0; j<10; j++) {
-                subList.add(Integer.toString(j));
-            }
-            result.add(subList);
+public class Issue2065Bean implements Serializable {
+
+    private RenderKit renderkit;
+
+    public Issue2065Bean() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        RenderKitFactory renderFactory = (RenderKitFactory) FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        renderkit = renderFactory.getRenderKit(facesContext, facesContext.getViewRoot().getRenderKitId());
+        Issue2065ClientBehaviorRenderer clientBehaviorRenderer = new Issue2065ClientBehaviorRenderer();
+        renderkit.addClientBehaviorRenderer("com.sun.faces.test.agnostic.renderKit.basic.Issue2065ClientBehaviorRenderer", clientBehaviorRenderer);
+    }
+
+    public String getClientBehaviorRendererTypes() {
+        String types = "";
+        for (Iterator<String> iter = renderkit.getClientBehaviorRendererTypes(); iter.hasNext();) {
+            types += iter.next() + ";";
         }
-        return result;
+        return types;
     }
 }

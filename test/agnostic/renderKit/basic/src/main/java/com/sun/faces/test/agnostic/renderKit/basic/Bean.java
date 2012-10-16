@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.test.agnostic.renderkit.basic;
+package com.sun.faces.test.agnostic.renderKit.basic;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;

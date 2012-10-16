@@ -1,14 +1,14 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
  * may not use this file except in compliance with the License.  You can
  * obtain a copy of the License at
- * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+ * https://glassfish.dev.java.net/public/CDDLGPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
  *
@@ -37,19 +37,33 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.agnostic.renderKit.basic;
 
-package test;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.junit.*;
+import static org.junit.Assert.*;
 
-import java.util.ArrayList;
-import java.util.List;
+public class Issue2065IT {
 
-import javax.faces.render.ClientBehaviorRenderer;
+    private String webUrl;
+    private WebClient webClient;
 
-public class TestBehaviorRenderer extends ClientBehaviorRenderer {
-
-    public TestBehaviorRenderer() {
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
-	
+
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
+    }
+
+    @Test
+    public void testAddClientBehaviorRenderer() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/issue2065.xhtml");
+        assertTrue(page.asText().contains("javax.faces.behavior.Ajax;"));
+        assertTrue(page.asText().contains("com.sun.faces.test.agnostic.renderKit.basic.Issue2065ClientBehaviorRenderer;"));
+    }
 }
-
-
