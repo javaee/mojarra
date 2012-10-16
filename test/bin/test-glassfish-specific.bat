@@ -22,7 +22,7 @@ if not "%ERRORLEVEL%" == "0" (
 call mvn -Pintegration-failsafe -Dwebapp.projectStage=%1 -Dwebapp.partialStateSaving=%2 -Dwebapp.stateSavingMethod=%3 verify 
 if not "%ERRORLEVEL%" == "0" (
     call mvn -N -Pintegration-glassfish-cargo -Dwebapp.projectStage=%1 -Dwebapp.partialStateSaving=%2 -Dwebapp.stateSavingMethod=%3 cargo:stop 
-    exit
+    exit /b 1
 )
 
 call mvn -N -Pintegration-glassfish-cargo -Dwebapp.projectStage=%1 -Dwebapp.partialStateSaving=%2 -Dwebapp.stateSavingMethod=%3 cargo:stop
