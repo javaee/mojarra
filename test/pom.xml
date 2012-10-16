@@ -463,6 +463,37 @@
                             </execution>
                         </executions>
                     </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.7</version>
+                        <executions>
+                            <execution>
+                                <id>echo-mojarra-version</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <unzip overwrite="true"
+                                               src="${integration.container.home}/glassfish/modules/javax.faces.jar"
+                                               dest="${integration.container.home}">
+                                          <patternset>
+                                            <include name="META-INF/MANIFEST.MF" />
+                                          </patternset>
+                                        </unzip>
+                                        <loadfile srcFile="${integration.container.home}/META-INF/MANIFEST.MF"
+                                                  property="mojarra.manifest" />
+                                        <echo message="${mojarra.manifest}" />
+                                        <delete dir="${integration.container.home}/META-INF"
+                                                failonerror="false"
+                                                quiet="true" />
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>                    
                 </plugins>
             </build>
             <properties>
