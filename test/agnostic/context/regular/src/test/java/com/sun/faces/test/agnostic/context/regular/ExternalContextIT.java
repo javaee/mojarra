@@ -92,4 +92,10 @@ public class ExternalContextIT {
         HtmlPage page = webClient.getPage(webUrl + "/faces/issue2550.xhtml");
         assertTrue(page.asText().contains("PASSEDPASSEDPASSED"));
     }
+
+    @Test
+    public void testGetResourceNPE() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "/faces/issue2543.xhtml");
+        assertTrue(page.asText().contains("PASSED"));
+    }
 }

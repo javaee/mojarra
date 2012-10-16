@@ -527,6 +527,11 @@ public class ExternalContextImpl extends ExternalContext {
      * @see ExternalContext#getResource(String)
      */
     public URL getResource(String path) {
+        if (null == path) {
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "path");
+            throw new NullPointerException(message);
+        }
         URL url;
         try {
             url = servletContext.getResource(path);
