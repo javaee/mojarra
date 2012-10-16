@@ -69,7 +69,6 @@ public class Issue1414IT {
     }
 
     @Test
-    @Ignore
     public void testIssue1414() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/issue1414.xhtml");
         HtmlElement group = page.getElementById("form:movefrom");

@@ -843,10 +843,10 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             try {
                 stateCtx.setTrackViewModifications(false);
                 f.apply(ctx, view);
+                reapplyDynamicActions(ctx);
                 if (stateCtx.isPartialStateSaving(ctx, view.getViewId())) {
                     markInitialStateIfNotMarked(view);
                 }
-                reapplyDynamicActions(ctx);
             } finally {
                 stateCtx.setTrackViewModifications(true);
             }
