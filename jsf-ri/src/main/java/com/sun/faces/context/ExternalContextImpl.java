@@ -590,6 +590,11 @@ public class ExternalContextImpl extends ExternalContext {
      * @see ExternalContext#log(String)
      */
     public void log(String message) {
+        if (null == message) {
+            String msg = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "message");
+            throw new NullPointerException(msg);
+        }
         servletContext.log(message);
     }
 
@@ -598,6 +603,16 @@ public class ExternalContextImpl extends ExternalContext {
      * @see ExternalContext#log(String, Throwable)
      */
     public void log(String message, Throwable throwable) {
+        if (null == message) {
+            String msg = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "message");
+            throw new NullPointerException(msg);
+        }
+        if (null == throwable) {
+            String msg = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "throwable");
+            throw new NullPointerException(msg);
+        }
         servletContext.log(message, throwable);
     }
 
