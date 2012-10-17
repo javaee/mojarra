@@ -53,7 +53,7 @@
     <packaging>pom</packaging>
     <name>Mojarra ${project.version} - Test - Agnostic - Resource</name>
     <modules>
-<!--        <module>basic</module>-->
+        <module>basic</module>
         <module>relocated</module>
     </modules>
     <properties>

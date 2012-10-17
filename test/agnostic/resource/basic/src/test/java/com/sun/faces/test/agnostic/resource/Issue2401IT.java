@@ -37,8 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
-package com.sun.faces.test.agnostic.resource; 
+package com.sun.faces.test.agnostic.resource;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -48,13 +47,7 @@ import static org.junit.Assert.*;
 
 public class Issue2401IT {
 
-    /**
-     * Stores the web URL.
-     */
     private String webUrl;
-    /**
-     * Stores the web client.
-     */
     private WebClient webClient;
 
     @Before
@@ -68,14 +61,11 @@ public class Issue2401IT {
         webClient.closeAllWindows();
     }
 
-
-    // ------------------------------------------------------------ Test Methods
-
     @Test
+    @Ignore
     public void testResourceWithAndWithoutLibrary() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl+"faces/start.xhtml");
+        HtmlPage page = webClient.getPage(webUrl + "faces/start.xhtml");
         assertTrue(page.asText().contains("Resource created with library: /test-agnostic-resource/faces/javax.faces.resource/images/background.png?ln=css"));
         assertTrue(page.asText().contains("Resource created without library: /test-agnostic-resource/faces/javax.faces.resource/css/images/background.png"));
     }
-
 }
