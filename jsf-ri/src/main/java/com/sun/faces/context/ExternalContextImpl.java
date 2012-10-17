@@ -511,6 +511,11 @@ public class ExternalContextImpl extends ExternalContext {
      * @see javax.faces.context.ExternalContext#getResourcePaths(String)
      */
     public Set<String> getResourcePaths(String path) {
+        if (null == path) {
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "path");
+            throw new NullPointerException(message);
+        }
         return TypedCollections.dynamicallyCastSet(servletContext.getResourcePaths(path), String.class);
     }
 
