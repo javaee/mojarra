@@ -5,10 +5,10 @@
    <name>javax.faces-war-archetype</name>
  
 +
-+    <description>
-+        An archetype that creates a war project that depends on JSF 2.2.
-+    </description>
-+    <url>http://java.sun.com/javaee/javaserverfaces/</url>
++    
++    
++    
++    
 +    <licenses>
 +        <license>
 +            <name>
