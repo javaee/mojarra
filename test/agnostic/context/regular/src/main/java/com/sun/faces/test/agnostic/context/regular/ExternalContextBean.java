@@ -167,5 +167,21 @@ public class ExternalContextBean implements Serializable {
 
         return "FAILED";
     }
+    public String getResourceAsStreamNPE() {
+        try {
+            FacesContext currentContext = FacesContext.getCurrentInstance();
+            ExternalContextImpl externalContext =
+                    new ExternalContextImpl(
+                    (ServletContext) currentContext.getExternalContext().getContext(),
+                    (HttpServletRequest) currentContext.getExternalContext().getRequest(),
+                    (HttpServletResponse) currentContext.getExternalContext().getResponse());
+
+            externalContext.getResourceAsStream(null);
+        } catch (NullPointerException exception) {
+            return "PASSED";
+        }
+
+        return "FAILED";
+    }
 
 }

@@ -490,6 +490,11 @@ public class ExternalContextImpl extends ExternalContext {
      * @see javax.faces.context.ExternalContext#getResourceAsStream(String)
      */
     public InputStream getResourceAsStream(String path) {
+        if (null == path) {
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "path");
+            throw new NullPointerException(message);
+        }
         return servletContext.getResourceAsStream(path);
     }
 
