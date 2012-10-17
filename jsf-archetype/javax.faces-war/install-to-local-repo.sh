@@ -1,7 +1,7 @@
 #!/bin/sh
 cd create-from-project-2.2-SNAPSHOT
 
-mvnproxy clean archetype:create-from-project
+mvn clean archetype:create-from-project
 
 patch -p0 < ../apply_to_pom.patch 
 
