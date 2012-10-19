@@ -625,7 +625,9 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
     }
 
 
-    private static Method createMethod(Class type, String signature) throws Exception {
+    private static Method createMethod(Class type, String signatureParam) throws Exception {
+        // formatted XML might cause \n\t characters - make sure we only have space characters left  
+        String signature = signatureParam.replaceAll("\\s+", " "); 
 
         int pos = signature.indexOf(' ');
         if (pos == -1) {
