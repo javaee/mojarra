@@ -389,16 +389,16 @@ final class CompilationManager {
         }
     }
 
-    private CompilationUnit searchUnits(Class type) {
-        CompilationUnit unit = null;
-        int i = this.units.size();
-        while (unit == null && --i >= 0) {
-            if (type.isAssignableFrom(this.units.get(i).getClass())) {
-                unit = (CompilationUnit) this.units.get(i);
-            }
-        }
-        return unit;
-    }
+//    private CompilationUnit searchUnits(Class type) {
+//        CompilationUnit unit = null;
+//        int i = this.units.size();
+//        while (unit == null && --i >= 0) {
+//            if (type.isAssignableFrom(this.units.get(i).getClass())) {
+//                unit = (CompilationUnit) this.units.get(i);
+//            }
+//        }
+//        return unit;
+//    }
 
     private void startUnit(CompilationUnit unit) {
 
