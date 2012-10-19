@@ -110,12 +110,11 @@ public class FacesInitializer implements ServletContainerInitializer {
     public void onStartup(Set<Class<?>> classes, ServletContext servletContext)
         throws ServletException {
 
-        InitFacesContext initFacesContext = new InitFacesContext(servletContext);
-        if (null == initFacesContext) {
-            throw new ServletException("Unable to initialize Mojarra");
-        }
-
         if (shouldCheckMappings(classes, servletContext)) {
+            InitFacesContext initFacesContext = new InitFacesContext(servletContext);
+            if (null == initFacesContext) {
+                throw new ServletException("Unable to initialize Mojarra");
+            }
 
             Map<String,? extends ServletRegistration> existing = servletContext.getServletRegistrations();
             for (ServletRegistration registration : existing.values()) {
