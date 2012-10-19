@@ -85,7 +85,10 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
           "jsf.context.exception.handler.log_after";
     private static final String LOG_KEY =
           "jsf.context.exception.handler.log";
-
+    
+    
+   public static final java.util.logging.Level INCIDENT_ERROR =
+           Level.parse(Integer.toString(Level.SEVERE.intValue() + 100));
     
     private LinkedList<ExceptionQueuedEvent> unhandledExceptions;
     private LinkedList<ExceptionQueuedEvent> handledExceptions;
@@ -145,6 +148,10 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
                                     new FacesException(t.getMessage(), t));
                         }
                     }
+                    if (LOGGER.isLoggable(INCIDENT_ERROR)) {
+                        log(context);
+                    }
+                    
                 } else {
                     log(context);
                 }
@@ -301,16 +308,20 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
         PhaseId phaseId = exceptionContext.getPhaseId();
         Throwable t = exceptionContext.getException();
         String key = getLoggingKey(beforePhase, afterPhase);
-        if (LOGGER.isLoggable(Level.SEVERE)) {
-            LOGGER.log(Level.SEVERE,
+        // If both SEVERE and INCIDENT_ERROR are loggable, just use
+        // INCIDENT ERROR, otherwise just use SEVERE.
+        Level level = LOGGER.isLoggable(INCIDENT_ERROR) && LOGGER.isLoggable(Level.SEVERE) ? INCIDENT_ERROR : Level.SEVERE;
+        
+        if (LOGGER.isLoggable(level)) {
+            LOGGER.log(level,
                        key,
                        new Object[] { t.getClass().getName(),
                                       phaseId.toString(),
                                       ((c != null) ? c.getClientId(exceptionContext.getContext()) : ""),
                                       t.getMessage()});
-            LOGGER.log(Level.SEVERE, t.getMessage(), t);
+            LOGGER.log(level, t.getMessage(), t);
         }
-
+        
     }
 
     private String getLoggingKey(boolean beforePhase, boolean afterPhase) {
