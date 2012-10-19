@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -40,6 +40,7 @@
 
 package com.sun.faces.renderkit;
 
+import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -65,8 +66,11 @@ import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.Clie
 import static com.sun.faces.config.WebConfiguration.WebEnvironmentEntry.ClientStateSavingPassword;
 import com.sun.faces.io.Base64InputStream;
 import com.sun.faces.io.Base64OutputStreamWriter;
+import com.sun.faces.util.DebugObjectOutputStream;
+import com.sun.faces.util.DebugUtil;
 import com.sun.faces.util.FacesLogger;
 import java.io.InvalidClassException;
+import java.util.Map;
 import javax.faces.render.ResponseStateManager;
 
 /**
@@ -129,6 +133,9 @@ public class ClientSideStateHelper extends StateHelper {
      * @see {@link com.sun.faces.config.WebConfiguration.WebContextInitParameter#ClientStateWriteBufferSize}
      */
     private int csBuffSize;
+    
+    
+    private boolean debugSerializedState;
 
 
     // ------------------------------------------------------------ Constructors
@@ -340,8 +347,40 @@ public class ClientSideStateHelper extends StateHelper {
 
             Object[] stateToWrite = (Object[]) state;
 
+            
+            if (debugSerializedState) {
+                ByteArrayOutputStream discard = new ByteArrayOutputStream();
+                DebugObjectOutputStream out =
+                        new DebugObjectOutputStream(discard);
+                try {
+                    out.writeObject(stateToWrite[0]);
+                } catch (Exception e) {
+                    throw new FacesException(
+                            "Serialization error. Path to offending instance: " 
+                            + out.getStack(), e);
+                }            
+                
+            }
+            
             //noinspection NonSerializableObjectPassedToObjectStream
             oos.writeObject(stateToWrite[0]);
+            
+            if (debugSerializedState) {
+                ByteArrayOutputStream discard = new ByteArrayOutputStream();
+
+                DebugObjectOutputStream out =
+                        new DebugObjectOutputStream(discard);
+                try {
+                    out.writeObject(stateToWrite[1]);
+                } catch (Exception e) {
+                    DebugUtil.printState((Map)stateToWrite[1], LOGGER);
+                    throw new FacesException(
+                            "Serialization error. Path to offending instance: " 
+                            + out.getStack(), e);
+                }            
+                
+            }
+            
             //noinspection NonSerializableObjectPassedToObjectStream
             oos.writeObject(stateToWrite[1]);
 
@@ -461,6 +500,8 @@ public class ClientSideStateHelper extends StateHelper {
             }
             csBuffSize = Integer.parseInt(defaultSize);
         }
+
+        debugSerializedState = webConfig.isOptionEnabled(BooleanWebContextInitParameter.EnableClientStateDebugging);
 
     }
 

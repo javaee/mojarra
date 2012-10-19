@@ -61,6 +61,13 @@ import javax.el.ValueExpression;
 
 import com.sun.faces.io.FastStringWriter;
 import com.sun.faces.renderkit.RenderKitUtils;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * <B>DebugUtil</B> is a class ...
@@ -147,6 +154,43 @@ public class DebugUtil {
             }
             out.write(str + "\n");
         } catch (IOException ignored) {}
+    }
+    
+    private static void assertSerializability(StringBuilder builder, Object toPrint) {
+        DebugObjectOutputStream doos = null;
+        try {
+            OutputStream base = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(base);
+            doos = new DebugObjectOutputStream(oos);
+            doos.writeObject(toPrint);
+        }
+        catch (IOException ioe) {
+            List pathToBadObject = doos.getStack();
+            builder.append("Path to non-Serializable Object: \n");
+            for (Object cur : pathToBadObject) {
+                builder.append(cur.toString()).append("\n");
+            }
+        }
+    }
+
+    private static void indentPrintln(Logger out, Object toPrint) {
+        
+        StringBuilder builder = new StringBuilder();
+        String str = (null == toPrint) ? "null" : toPrint.toString();
+
+        // handle indentation
+        for (int i = 0; i < curDepth; i++) {
+            builder.append("  ");
+        }
+        builder.append(str + "\n");
+        
+        if (!(toPrint instanceof String)) {
+            assertSerializability(builder, toPrint);
+        }
+        
+        out.severe(builder.toString());
+        
+        
     }
 
     /**
@@ -301,6 +345,26 @@ public class DebugUtil {
         }
         curDepth--;
     }
+    
+    public static void printState(Map state, Logger out) {
+        Set<Map.Entry> entrySet = state.entrySet();
+        Object key, value;
+        String keyIsSerializable, valueIsSerializable;
+        for (Map.Entry cur : entrySet) {
+            key = cur.getKey();
+            value = cur.getValue();
+            keyIsSerializable = (key instanceof Serializable) ? "true" : "+_+_+_+FALSE+_+_+_+_";
+            valueIsSerializable = (value instanceof Serializable) ? "true" : "+_+_+_+FALSE+_+_+_+_";
+            out.severe("key: " + key.toString() + " class:" + key.getClass() + " Serializable: " + 
+                    keyIsSerializable);
+            out.severe("value: " + value.toString() + " class:" + key.getClass() + " Serializable: " + 
+                    keyIsSerializable);
+            if (value instanceof Object []) {
+                printTree((Object []) value, out);
+            }
+        }
+        
+    }
 
 
 //    /**
@@ -353,35 +417,74 @@ public class DebugUtil {
 //    }
 
     public static void printTree(Object [] root, Writer out) {
+        
         if (null == root) {
             indentPrintln(out, "null");
             return;
         }
-
-/* PENDING
-   indentPrintln(out, "===>Type:" + root.getComponentType());
-*/
-        // drill down to the bottom of the first element in the array
-        boolean foundBottom = false;
-        Object [] myState = root;
-        while (!foundBottom) {
-            Object state = myState[0];
-            foundBottom = !state.getClass().isArray();
-            if (!foundBottom) {
-                myState = (Object []) state;
+        
+        Object obj;
+        for (int i = 0; i < root.length; i++) {
+            obj = root[i];
+            if (null == obj) {
+                indentPrintln(out, "null");
+            } else {
+                if (obj.getClass().isArray()) {
+                    curDepth++;
+                    printTree((Object [])obj, out);
+                    curDepth--;
+                } else {
+                    indentPrintln(out, obj.toString());
+                }
+                
             }
         }
-
-        indentPrintln(out, "type:" + myState[8]);
-
-        curDepth++;
-        root = (Object []) root[1];
-        for (int i = 0; i < root.length; i++) {
-            printTree((Object []) root[i], out);
-        }
-        curDepth--;
+        
+        
     }
-//
+
+    public static void printTree(Object [] root, Logger out) {
+        
+        if (null == root) {
+            indentPrintln(out, "null");
+            return;
+        }
+        
+        Object obj;
+        for (int i = 0; i < root.length; i++) {
+            obj = root[i];
+            if (null == obj) {
+                indentPrintln(out, "null");
+            } else {
+                if (obj.getClass().isArray()) {
+                    curDepth++;
+                    printTree((Object [])obj, out);
+                    curDepth--;
+                } else if (obj instanceof List) {
+                    printList((List) obj, out);
+                } else {
+                    indentPrintln(out, obj);
+                }
+                
+            }
+        }
+        
+        
+    }
+    
+    public static void printList(List list, Logger out) {
+        for (Object cur : list) {
+            if (cur instanceof List) {
+                curDepth++;
+                printList((List)cur, out);
+                curDepth--;
+            } else {
+                indentPrintln(out, cur);
+            }
+        }
+    }
+    
+    //
 // General Methods
 //
 
