@@ -53,6 +53,11 @@
         
         <p>inputText: #{sessionScope.inputText}</p>
         
+        #{notSerializableBean.putBadBeanInViewScope}
+        
+        <p><a id="fail" href="?fail=true">click to cause NotSerializableException.</a> Look in the server log for the string 
+        "Path to offending instance".</p>
+        
         <h:form id="form" prependId="false">
             
             <h:selectBooleanCheckbox id="checkbox" value="#{sessionScope.checkbox}" />

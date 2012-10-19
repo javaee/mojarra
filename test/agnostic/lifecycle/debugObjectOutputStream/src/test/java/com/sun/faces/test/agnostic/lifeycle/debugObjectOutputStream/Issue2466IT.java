@@ -39,9 +39,9 @@
  */
 package com.sun.faces.test.agnostic.lifeycle.debugObjectOutputStream;
 
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
-import com.gargoylesoftware.htmlunit.html.HtmlFileInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
@@ -84,6 +84,19 @@ public class Issue2466IT {
         
         assertTrue(text.contains("checkbox: true"));
         assertTrue(text.contains("inputText: " + textValue));
+        
+        /******
+         * Because this test has no way to run only when the 
+         * state saving mode would always cause serialization, this 
+         * is commented out.  But it is useful when running the test app
+         * interactively.
+         * 
+        webClient.setThrowExceptionOnFailingStatusCode(false);
+        HtmlAnchor fail = (HtmlAnchor) page.getElementById("fail");
+        page = fail.click();
+        
+        assertTrue(page.asText().contains("Intentional failure"));
+         *****/
 
     }
 }
