@@ -55,7 +55,6 @@
     <modules>
         <module>basic</module>
         <module>relocated</module>
-        <module>dependencies</module>
     </modules>
     <properties>
         <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
