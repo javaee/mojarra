@@ -40,6 +40,7 @@
 
 package com.sun.faces.context;
 
+import com.sun.faces.RIConstants;
 import java.io.OutputStream;
 import javax.faces.FacesException;
 import javax.faces.context.ExternalContext;
@@ -1016,8 +1017,13 @@ public class ExternalContextImpl extends ExternalContext {
     @Override
     public String encodeRedirectURL(String baseUrl,
                                     Map<String, List<String>> parameters) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        String encodingFromContext =
+              (String) context.getAttributes().get(RIConstants.FACELETS_ENCODING_KEY);
+        
+        String currentResponseEncoding = (null != encodingFromContext) ? encodingFromContext : getResponseCharacterEncoding();
 
-        UrlBuilder builder = new UrlBuilder(baseUrl, getResponseCharacterEncoding());
+        UrlBuilder builder = new UrlBuilder(baseUrl, currentResponseEncoding);
         builder.addParameters(parameters);
         return builder.createUrl();
         

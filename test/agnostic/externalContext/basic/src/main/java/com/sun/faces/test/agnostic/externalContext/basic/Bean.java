@@ -70,4 +70,10 @@ public class Bean implements Serializable {
         facesContext.getExternalContext().addResponseCookie("csftaebName", "csftaebValue", m);
         return "TestBean";
     }
+    
+    public String submit() {
+        String stringWithSpecialChars = "日א";
+        
+        return "issue2440?param=" + stringWithSpecialChars + "&faces-redirect=true";
+    }
 }
