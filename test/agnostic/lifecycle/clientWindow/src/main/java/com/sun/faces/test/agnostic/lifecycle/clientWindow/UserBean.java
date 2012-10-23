@@ -1,15 +1,15 @@
-package com.sun.faces.test.i_spec_949_war;
+package com.sun.faces.test.agnostic.lifecycle.clientWindow;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
-import javax.inject.Named;
 
-@Named
+@ManagedBean
 @SessionScoped
 public class UserBean implements Serializable {
     

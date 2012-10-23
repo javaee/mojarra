@@ -67,8 +67,7 @@
                      JAVASERVERFACES-2033,
                      GLASSFISH-16847,
                      JAVASERVERFACES-1338,
-                     admingui,
-                     JAVASERVERFACES_SPEC_PUBLIC-949" />
+                     admingui" />
 
 <!-- Need to re-enable this test.  It fails as a result of fix for: JAVASERVERFACES-2491 -->
 <!-- JAVASERVERFACES-1655, --> 

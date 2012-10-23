@@ -17,5 +17,6 @@
         <module>unserializableServerState_negative</module>
         <module>unserializableServerState_positive</module>
         <module>csrf</module>
+        <module>clientWindow</module>
     </modules>
 </project>

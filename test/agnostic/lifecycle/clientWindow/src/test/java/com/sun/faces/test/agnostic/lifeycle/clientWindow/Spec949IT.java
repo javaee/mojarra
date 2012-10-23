@@ -1,14 +1,14 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
  * may not use this file except in compliance with the License.  You can
  * obtain a copy of the License at
- * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+ * https://glassfish.dev.java.net/public/CDDLGPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
  *
@@ -37,52 +37,54 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.agnostic.lifeycle.clientWindow;
 
-package com.sun.faces.test.i_spec_949_htmlunit;
-
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.ClickableElement;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlInput;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
+import java.net.URL;
+import com.gargoylesoftware.htmlunit.html.HtmlInput;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import java.util.List;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertTrue;
 
-public class IssueSpec949TestCase extends HtmlUnitFacesTestCase {
+public class Spec949IT {
 
-    public IssueSpec949TestCase(String name) {
-        super(name);
+    private String webUrl;
+    private WebClient webClient;
+
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(IssueSpec949TestCase.class));
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
     }
 
-
-    // ------------------------------------------------------------ Test Methods
-
+    @Test
     public void testClientWindow() throws Exception {
         String clientWindow1, clientWindow2, window1Session, window2Session;
-        clientWindow1 = doTestAndReturnClientWindow(client, "window0");
-        clientWindow2 = doTestAndReturnClientWindow(client, "window1");
+        clientWindow1 = doTestAndReturnClientWindow(webClient, "window0");
+        clientWindow2 = doTestAndReturnClientWindow(webClient, "window1");
         assertNotSame(clientWindow1, clientWindow2);
         window1Session = clientWindow1.substring(0, clientWindow1.indexOf(':'));
         window2Session = clientWindow2.substring(0, clientWindow2.indexOf(':'));
         assertEquals(window1Session, window2Session);
 
     }
-    
+
+    @Test
     public void testDisableClientWindow() throws Exception {
         doTestClientWindowsDifferent("/faces/disableClientWindow.xhtml", "disableClientWindowEL");
 
@@ -96,12 +98,12 @@ public class IssueSpec949TestCase extends HtmlUnitFacesTestCase {
     public void doTestClientWindowsDifferent(String path, String id) throws Exception {
         HtmlPage page = null;
         List<HtmlElement> clientWindowHiddenFields = null;
-        ClickableElement link = null;
+        HtmlElement link = null;
         String clientWindowBeforeClick, clientWindowAfterClick;
         
         // Click the link and verify the ClientWindow is different on the new page.
-        page = getPage(path);
-        link = (ClickableElement) page.getElementById(id);
+        page = webClient.getPage(webUrl + path);
+        link = (HtmlElement) page.getElementById(id);
         clientWindowHiddenFields = page.getElementsByName("javax.faces.ClientWindow");
         clientWindowBeforeClick = ((HtmlInput)clientWindowHiddenFields.get(0)).getDefaultValue();
         
@@ -119,7 +121,7 @@ public class IssueSpec949TestCase extends HtmlUnitFacesTestCase {
         // 
         // Do some actions on this page
         //
-        HtmlPage page = (HtmlPage) yourClient.openWindow(getURL("/"), windowName).getEnclosedPage();
+        HtmlPage page = (HtmlPage) yourClient.openWindow(new URL(webUrl), windowName).getEnclosedPage();
         HtmlTextInput textField = (HtmlTextInput) page.getElementById("firstName");
         textField.setValueAttribute("ajaxFirstName");
         
@@ -178,7 +180,5 @@ public class IssueSpec949TestCase extends HtmlUnitFacesTestCase {
         
         return clientWindow;
     }
-
     
-
 }

@@ -1,9 +1,9 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -39,51 +39,36 @@
     only if the new code is made subject to such option by the copyright
     holder.
 
--->
-<!-- ************ JSF build file ************************************** -->
-<project name="JAVASERVERFACES-i_spec_949" default="test" basedir=".">
-
-    <property file="../../build.properties"/>
-    <path id="i_spec_949.classpath">  
-        <path refid="html.classpath" />
-        <pathelement location="${basedir}/i_spec_949_htmlunit/target/classes"/>
-    </path>
-
-    <import file="${jsf.build.home}/common/ant/common.xml"/>
-
-    <target name="build">
-        <jsf.mvn dir="${basedir}/i_spec_949_war" goals="install" />
-        <jsf.mvn dir="${basedir}/i_spec_949_htmlunit" goals="install" />
-    </target>    
-
-    <target name="clean">
-        <jsf.mvn dir="${basedir}/i_spec_949_htmlunit" goals="clean" />
-        <jsf.mvn dir="${basedir}/i_spec_949_war" goals="clean" />
-    </target>    
-
-    <target name="install">
-        <deploy.artifact
-              artifact="${basedir}/i_spec_949_war/target/i_spec_949_war.war"
-              appName="i_spec_949_war"/>
-    </target>    
-
-    <target name="remove">
-        <undeploy.artifact
-              artifact="${basedir}/i_spec_949_war/target/i_spec_949_war.war"
-              appName="i_spec_949_war"/>
-    </target>    
-
-    <target name="test" depends="define.scenario.aware.port">
-
-        <jsf.junit context-path="/i_spec_949_war"
-                 classpath-refid="i_spec_949.classpath"    
-                 test-results-dir="${regression.test.results.dir}">
-            <tests>
-                <fileset dir="${basedir}/i_spec_949_htmlunit/target/classes"
-                     includes="com/sun/faces/test/i_spec_949_htmlunit/IssueSpec949TestCase.class"/> 
-            </tests>
-        </jsf.junit>
-
-    </target>    
-
-</project>
+--><actions>
+        <action>
+            <actionName>debug.test.single</actionName>
+            <goals>
+                <goal>test-compile</goal>
+                <goal>surefire:test</goal>
+            </goals>
+            <properties>
+                <test>${packageClassName}</test>
+                <forkMode>once</forkMode>
+                <maven.surefire.debug>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address}</maven.surefire.debug>
+                <jpda.listen>true</jpda.listen>
+                <project.build.finalName>test-agnostic-lifecycle-clientWindow</project.build.finalName>
+                <integration.serverPort>8080</integration.serverPort>
+                <integration.serverName>localhost</integration.serverName>
+                <integration.url>http://localhost:8080/test-agnostic-lifecycle-clientWindow/</integration.url>
+            </properties>
+        </action>
+        <action>
+            <actionName>test.single</actionName>
+            <goals>
+                <goal>test-compile</goal>
+                <goal>surefire:test</goal>
+            </goals>
+            <properties>
+                <project.build.finalName>test-agnostic-lifecycle-clientWindow</project.build.finalName>
+                <integration.serverPort>8080</integration.serverPort>
+                <integration.serverName>localhost</integration.serverName>
+                <integration.url>http://localhost:8080/test-agnostic-lifecycle-clientWindow/</integration.url>
+                <test>${packageClassName}</test>
+            </properties>
+        </action>
+    </actions>

@@ -3,19 +3,16 @@
     <display-name>mojarra-regression-test</display-name>
     <description>A simple regression test to make it easier to get your bug fixed. The only reason we need a web.xml is to set the PROJECT_STAGE to Develoment.  If you have a web.xml, then you need to map the FacesServlet.</description>
     <context-param>
-        <description>
-            Tell the runtime where we are in the project development
-            lifecycle.  Valid values are: 
-            Development, UnitTest, SystemTest, or Production.
-            The runtime will display helpful hints to correct common mistakes
-            when the value is Development.
-        </description>
         <param-name>javax.faces.PROJECT_STAGE</param-name>
-        <param-value>Development</param-value>
+        <param-value>${webapp.projectStage}</param-value>
+    </context-param>
+    <context-param>
+        <param-name>javax.faces.PARTIAL_STATE_SAVING</param-name>
+        <param-value>${webapp.partialStateSaving}</param-value>
     </context-param>
     <context-param>
         <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
-        <param-value>client</param-value>
+        <param-value>${webapp.stateSavingMethod}</param-value>
     </context-param>
     <!-- Faces Servlet -->
     <context-param>
