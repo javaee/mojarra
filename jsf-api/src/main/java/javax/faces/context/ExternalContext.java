@@ -304,16 +304,17 @@ public abstract class ExternalContext {
     
 
     /**
-     * <p>Return the specified name, after prefixing it with a namespace
-     * that ensures that it will be unique within the context of a
-     * particular page.</p>
+     * <p><span class="changed_modified_2_2">Return</span> the specified
+     * name, after prefixing it with a namespace that ensures that it
+     * will be unique within the context of a particular page.</p>
      *
      * <p><em>Servlet:</em> The input value must be returned unchanged.</p>
      *
      * @param name Name to be encoded
      *
-     * @throws NullPointerException if <code>name</code>
-     *  is <code>null</code>
+     * @throws <span class="changed_modified_2_2">NullPointerException
+     * if running in a non-servlet environment and <code>name</code> is
+     * <code>null</code></span>.
      */
     public abstract String encodeNamespace(String name);
 
