@@ -2032,26 +2032,26 @@ public class UIData extends UIComponentBase
         return (!idsToVisit.isEmpty());
     }
 
-    // Performs pre-phase initialization before visiting children
-    // (if necessary).
-    private void preVisitChildren(VisitContext visitContext) {
-
-        // If EXECUTE_LIFECYCLE hint is set, we need to do
-        // lifecycle-related initialization before visiting children
-        if (visitContext.getHints().contains(VisitHint.EXECUTE_LIFECYCLE)) {
-            FacesContext facesContext = visitContext.getFacesContext();
-            PhaseId phaseId = facesContext.getCurrentPhaseId();
-
-            if (phaseId == PhaseId.APPLY_REQUEST_VALUES)
-                preDecode(facesContext);
-            else if (phaseId == PhaseId.PROCESS_VALIDATIONS)
-                preValidate(facesContext);
-            else if (phaseId == PhaseId.UPDATE_MODEL_VALUES)
-                preUpdate(facesContext);
-            else if (phaseId == PhaseId.RENDER_RESPONSE)
-                preEncode(facesContext);
-        }
-    }
+//    // Performs pre-phase initialization before visiting children
+//    // (if necessary).
+//    private void preVisitChildren(VisitContext visitContext) {
+//
+//        // If EXECUTE_LIFECYCLE hint is set, we need to do
+//        // lifecycle-related initialization before visiting children
+//        if (visitContext.getHints().contains(VisitHint.EXECUTE_LIFECYCLE)) {
+//            FacesContext facesContext = visitContext.getFacesContext();
+//            PhaseId phaseId = facesContext.getCurrentPhaseId();
+//
+//            if (phaseId == PhaseId.APPLY_REQUEST_VALUES)
+//                preDecode(facesContext);
+//            else if (phaseId == PhaseId.PROCESS_VALIDATIONS)
+//                preValidate(facesContext);
+//            else if (phaseId == PhaseId.UPDATE_MODEL_VALUES)
+//                preUpdate(facesContext);
+//            else if (phaseId == PhaseId.RENDER_RESPONSE)
+//                preEncode(facesContext);
+//        }
+//    }
 
     // Visit each facet of this component exactly once.
     private boolean visitFacets(VisitContext context,
