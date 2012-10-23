@@ -527,6 +527,7 @@
                                         <exec executable="sh" osfamily="unix">
                                             <arg line='-c "chmod a+x ${integration.container.root}/glassfish3/glassfish/bin/*"'/>
                                         </exec>
+                                        <delete file="${integration.container.zipFile}"/>
                                     </target>
                                 </configuration>
                                 <goals>
