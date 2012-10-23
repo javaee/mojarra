@@ -170,7 +170,7 @@ public class UISelectManyTestCase extends UIInputTestCase {
         selectMany.setValue(values);
         assertEquals(values, selectMany.getSelectedValues());
         assertEquals(values, selectMany.getValue());
-        selectMany.setValue(null);
+        selectMany.resetValue();
         assertNull(selectMany.getSelectedValues());
         assertNull(selectMany.getValue());
 
@@ -502,14 +502,14 @@ public class UISelectManyTestCase extends UIInputTestCase {
 
 	// "value" property
 	request.setAttribute("foo", "bar");
-	test.setValue(null);
+	test.resetValue();
 	assertNull(test.getValue());
 	test.setValueBinding("value", application.createValueBinding("#{foo}"));
 	assertNotNull(test.getValueBinding("value"));
 	assertEquals("bar", test.getValue());
 	test.setValue("baz");
 	assertEquals("baz", test.getValue());
-	test.setValue(null);
+	test.resetValue();
 	assertEquals("bar", test.getValue());
 	test.setValueBinding("value", null);
 	assertNull(test.getValueBinding("value"));

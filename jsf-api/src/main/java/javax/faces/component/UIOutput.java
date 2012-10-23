@@ -47,7 +47,7 @@ import javax.faces.convert.Converter;
 
 
 /**
- * <p><strong class="changed_modified_2_0_rev_a">UIOutput</strong> is a
+ * <p><strong class="changed_modified_2_0_rev_a changed_modified_2_2">UIOutput</strong> is a
  * {@link UIComponent} that has a value, optionally retrieved from a
  * model tier bean via a value expression, that is displayed to the
  * user.  The user cannot directly modify the rendered value; it is for
@@ -172,9 +172,19 @@ public class UIOutput extends UIComponentBase
 
 
     public void setValue(Object value) {
-
         getStateHelper().put(PropertyKeys.value, value);
 
+    }
+    
+    /**
+     * <p class="changed_added_2_2">Convenience method to reset this component's value to the
+     * un-initialized state.</p>
+     * 
+     * @since 2.2
+     */
+
+    public void resetValue() {
+        this.setValue(null);
     }
 
 

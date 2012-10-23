@@ -279,6 +279,18 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
     }
 
+    /**
+     * <p class="changed_added_2_2">If there is a local value, return it,
+     * otherwise return the result of calling {@code super.getVaue()}.</p>
+     * 
+     * @since 2.2
+     */
+
+    @Override
+    public Object getValue() {
+        return isLocalValueSet() ? getLocalValue() : super.getValue();
+    }
+    
     public void setValue(Object value) {
         super.setValue(value);
         // Mark the local value as set.
@@ -286,10 +298,11 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     }
 
     /**
-     * <p>Convenience method to reset this component's value to the
+     * <p><span class="changed_modified_2_2">Convenience</span> method to reset 
+     * this component's value to the
      * un-initialized state.  This method does the following:</p>
      * <p/>
-     * <p>Call {@link #setValue} passing <code>null</code>.</p>
+     * <p class="changed_modified_2_2">Call {@link UIOutput#setValue}.</p>
      * <p/>
      * <p>Call {@link #setSubmittedValue} passing <code>null</code>.</p>
      * <p/>
@@ -305,7 +318,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      */
 
     public void resetValue() {
-        this.setValue(null);
+        super.resetValue();
         this.setSubmittedValue(null);
         this.setLocalValueSet(false);
         this.setValid(true);

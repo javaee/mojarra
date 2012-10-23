@@ -45,7 +45,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.junit.*;
 import static org.junit.Assert.*;
 
-public class Issue533IT {
+public class Spec533IT {
 
     private String webUrl;
     private WebClient webClient;

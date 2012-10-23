@@ -152,7 +152,7 @@ public class UISelectBooleanTestCase extends UIInputTestCase {
         assertTrue(selectBoolean.isSelected());
         selectBoolean.setValue(Boolean.FALSE);
         assertTrue(!selectBoolean.isSelected());
-        selectBoolean.setValue(null);
+        selectBoolean.resetValue();
         assertTrue(!selectBoolean.isSelected());
 
         // Transparency applies to value bindings as well
@@ -183,14 +183,14 @@ public class UISelectBooleanTestCase extends UIInputTestCase {
 
 	// "value" property
 	request.setAttribute("foo", "bar");
-	test.setValue(null);
+	test.resetValue();
 	assertNull(test.getValue());
 	test.setValueBinding("value", application.createValueBinding("#{foo}"));
 	assertNotNull(test.getValueBinding("value"));
 	assertEquals("bar", test.getValue());
 	test.setValue("baz");
 	assertEquals("baz", test.getValue());
-	test.setValue(null);
+	test.resetValue();
 	assertEquals("bar", test.getValue());
 	test.setValueBinding("value", null);
 	assertNull(test.getValueBinding("value"));

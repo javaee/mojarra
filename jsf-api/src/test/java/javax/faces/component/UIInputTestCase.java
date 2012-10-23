@@ -478,14 +478,14 @@ public class UIInputTestCase extends UIOutputTestCase {
 
         // "value" property
         request.setAttribute("foo", "bar");
-        test.setValue(null);
+        test.resetValue();
         assertNull(test.getValue());
         test.setValueBinding("value", application.createValueBinding("#{foo}"));
         assertNotNull(test.getValueBinding("value"));
         assertEquals("bar", test.getValue());
         test.setValue("baz");
         assertEquals("baz", test.getValue());
-        test.setValue(null);
+        test.resetValue();
         assertEquals("bar", test.getValue());
         test.setValueBinding("value", null);
         assertNull(test.getValueBinding("value"));
