@@ -45,7 +45,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.junit.*;
 import static org.junit.Assert.*;
 
-public class Issue2425IT {
+public class Issue2051IT {
 
     private String webUrl;
     private WebClient webClient;
@@ -62,12 +62,14 @@ public class Issue2425IT {
     }
 
     @Test
-    public void testUIRepeatAttributes() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/uirepeat.xhtml");
-        assertTrue(page.asText().contains("lstr0 lstr1 lstr2 lstr3 lstr4"));
-        assertTrue(page.asText().contains("vstr0 vstr1 vstr2 vstr3 vstr4"));
-        assertTrue(page.asText().contains("pstr0 pstr1 pstr2 pstr3 pstr4"));
-        assertTrue(page.asText().contains("mstr0 mstr1 mstr2 mstr3 mstr4 mstr5 mstr6 mstr7 mstr8 mstr9"));
-        assertTrue(page.asText().contains("ostr2 ostr3 ostr4"));
+    public void testRendered() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/issue2051.xhtml");
+        assertTrue(page.asXml().contains("faceletsDebug"));
+    }
+
+    @Test
+    public void testNotRendered() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/issue2051-notrendered.xhtml");
+        assertFalse(page.asXml().contains("faceletsDebug"));
     }
 }

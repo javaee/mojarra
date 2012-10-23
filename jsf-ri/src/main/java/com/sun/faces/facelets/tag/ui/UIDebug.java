@@ -55,7 +55,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.sun.faces.facelets.tag.ui;
 
 import com.sun.faces.RIConstants;
@@ -91,14 +90,12 @@ public final class UIDebug extends UIComponentBase {
     public final static String DEFAULT_HOTKEY = "D";
     private String hotkey = DEFAULT_HOTKEY;
     private boolean recordStateSize = false;
-
     private static final Logger LOGGER = Logger.getLogger("javax.faces.component",
             "javax.faces.LogStrings");
 
     public UIDebug() {
         super();
         this.setTransient(true);
-        this.setRendered(true);
         this.setRendererType(null);
     }
 
@@ -108,6 +105,7 @@ public final class UIDebug extends UIComponentBase {
 
     public List getChildren() {
         return new ArrayList() {
+
             public boolean add(Object o) {
                 throw new IllegalStateException("<ui:debug> does not support children");
             }
@@ -120,30 +118,31 @@ public final class UIDebug extends UIComponentBase {
 
     public void encodeBegin(FacesContext faces) throws IOException {
 
-        pushComponentToEL(faces, this);
-        String actionId = faces.getApplication().getViewHandler().getActionURL(faces, faces.getViewRoot().getViewId());
+        if (isRendered()) {
+            pushComponentToEL(faces, this);
+            String actionId = faces.getApplication().getViewHandler().getActionURL(faces, faces.getViewRoot().getViewId());
 
-        StringBuffer sb = new StringBuffer(512);
-        sb.append("//<![CDATA[\n");
-        sb.append("function faceletsDebug(URL) { day = new Date(); id = day.getTime(); eval(\"page\" + id + \" = window.open(URL, '\" + id + \"', 'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=800,height=600,left = 240,top = 212');\"); };");
-        sb.append("var faceletsOrigKeyup = document.onkeyup; document.onkeyup = function(e) { if (window.event) e = window.event; if (String.fromCharCode(e.keyCode) == '" + this.getHotkey() + "' & e.shiftKey & e.ctrlKey) faceletsDebug('");
-        sb.append(actionId);
-        sb.append(actionId.indexOf('?')==-1 ? '?' : '&');
-        sb.append(KEY);
-        sb.append('=');
-        sb.append(writeDebugOutput(faces, this));
-        sb.append("'); else if (faceletsOrigKeyup) faceletsOrigKeyup(e); };\n");
-        sb.append("//]]>\n");
+            StringBuffer sb = new StringBuffer(512);
+            sb.append("//<![CDATA[\n");
+            sb.append("function faceletsDebug(URL) { day = new Date(); id = day.getTime(); eval(\"page\" + id + \" = window.open(URL, '\" + id + \"', 'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=800,height=600,left = 240,top = 212');\"); };");
+            sb.append("var faceletsOrigKeyup = document.onkeyup; document.onkeyup = function(e) { if (window.event) e = window.event; if (String.fromCharCode(e.keyCode) == '" + this.getHotkey() + "' & e.shiftKey & e.ctrlKey) faceletsDebug('");
+            sb.append(actionId);
+            sb.append(actionId.indexOf('?') == -1 ? '?' : '&');
+            sb.append(KEY);
+            sb.append('=');
+            sb.append(writeDebugOutput(faces, this));
+            sb.append("'); else if (faceletsOrigKeyup) faceletsOrigKeyup(e); };\n");
+            sb.append("//]]>\n");
 
-        ResponseWriter writer = faces.getResponseWriter();
-        writer.startElement("script", this);
-        writer.writeAttribute("language", "javascript", "language");
-        writer.writeAttribute("type", "text/javascript", "type");
-        writer.writeText(sb.toString(), this, null);
-        writer.endElement("script");
-        
+            ResponseWriter writer = faces.getResponseWriter();
+            writer.startElement("script", this);
+            writer.writeAttribute("language", "javascript", "language");
+            writer.writeAttribute("type", "text/javascript", "type");
+            writer.writeText(sb.toString(), this, null);
+            writer.endElement("script");
+        }
     }
-    
+
     private static String writeDebugOutput(FacesContext faces, UIDebug component) throws IOException {
         FastWriter fw = new FastWriter();
         DevTools.debugHtml(fw, faces);
@@ -152,6 +151,7 @@ public final class UIDebug extends UIComponentBase {
         Map debugs = (Map) session.get(KEY);
         if (debugs == null) {
             debugs = new LinkedHashMap() {
+
                 protected boolean removeEldestEntry(Map.Entry eldest) {
                     return (this.size() > 5);
                 }
@@ -169,10 +169,8 @@ public final class UIDebug extends UIComponentBase {
     }
 
     public static void computeViewStateSize(FacesContext context,
-            Object [] state) throws IOException {
-
+            Object[] state) throws IOException {
     }
-
 
     public static void computeViewStateSize(FacesContext context,
             Map<String, Serializable> state) throws IOException {
@@ -194,7 +192,7 @@ public final class UIDebug extends UIComponentBase {
             objectOutputStream.writeObject(cur.getValue());
             count = cos.getByteCount();
             total += count;
-            sizes.put(cur.getKey(), count );
+            sizes.put(cur.getKey(), count);
         }
         sizes.put("", total);
 
@@ -232,7 +230,6 @@ public final class UIDebug extends UIComponentBase {
 
                             return builder.toString();
                         }
-
                     });
                 } catch (IOException ex) {
                     LOGGER.log(Level.SEVERE, "Unable to write view state", ex);
@@ -240,10 +237,10 @@ public final class UIDebug extends UIComponentBase {
             } else {
                 try {
                     result = DevTools.interpolateViewState(result, new ViewStateRenderer() {
+
                         public String renderViewState() {
                             return "No view state available.  Add recordStateSize=\"true\" to &lt;ui:debug&gt; to see view state size.";
                         }
-
                     });
                 } catch (IOException ex) {
                     LOGGER.log(Level.SEVERE, "Unable to write view state", ex);
@@ -252,13 +249,13 @@ public final class UIDebug extends UIComponentBase {
         }
         return result;
     }
-    
+
     public static boolean debugRequest(FacesContext faces) {
         String id = (String) faces.getExternalContext().getRequestParameterMap().get(KEY);
         if (id != null) {
             Object resp = faces.getExternalContext().getResponse();
             if (!faces.getResponseComplete()
-                && resp instanceof HttpServletResponse) {
+                    && resp instanceof HttpServletResponse) {
                 try {
                     HttpServletResponse httpResp = (HttpServletResponse) resp;
                     String page = fetchDebugOutput(faces, id);
@@ -279,11 +276,11 @@ public final class UIDebug extends UIComponentBase {
         }
         return false;
     }
-    
+
     public String getHotkey() {
         return this.hotkey;
     }
-    
+
     public void setHotkey(String hotkey) {
         this.hotkey = (hotkey != null) ? hotkey.toUpperCase() : "";
     }
@@ -303,6 +300,7 @@ public final class UIDebug extends UIComponentBase {
     private static class CountingOutputStream extends OutputStream {
 
         long bytes;
+
         public Long getByteCount() {
             return bytes;
         }
@@ -311,16 +309,14 @@ public final class UIDebug extends UIComponentBase {
             bytes = 0;
         }
 
-
         @Override
         public void write(int b) throws IOException {
             bytes++;
         }
-
     }
 
     public interface ViewStateRenderer {
+
         public String renderViewState();
     }
-
 }

@@ -1,23 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <actions>
-    <action>
-        <actionName>debug.test.single</actionName>
-        <goals>
-            <goal>test-compile</goal>
-            <goal>surefire:test</goal>
-        </goals>
-        <properties>
-            <test>${packageClassName}</test>
-            <forkMode>once</forkMode>
-            <maven.surefire.debug>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address}</maven.surefire.debug>
-            <jpda.listen>true</jpda.listen>
-            <project.build.finalName>test-agnostic-vdl-facelets-ui</project.build.finalName>
-            <integration.serverPort>8080</integration.serverPort>
-            <integration.serverName>localhost</integration.serverName>
-            <integration.url>http://localhost:8080/test-agnostic-vdl-facelets-ui/</integration.url>
-        </properties>
-    </action>
-    <action>
+        <action>
             <actionName>test.single</actionName>
             <goals>
                 <goal>test-compile</goal>
@@ -25,10 +8,21 @@
             </goals>
             <properties>
                 <test>${packageClassName}</test>
-                <project.build.finalName>test-agnostic-vdl-facelets-ui</project.build.finalName>
-                <integration.serverPort>8080</integration.serverPort>
-                <integration.serverName>localhost</integration.serverName>
                 <integration.url>http://localhost:8080/test-agnostic-vdl-facelets-ui/</integration.url>
             </properties>
         </action>
-</actions>
+        <action>
+            <actionName>debug.test.single</actionName>
+            <goals>
+                <goal>test-compile</goal>
+                <goal>surefire:test</goal>
+            </goals>
+            <properties>
+                <test>${packageClassName}</test>
+                <forkMode>once</forkMode>
+                <maven.surefire.debug>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address}</maven.surefire.debug>
+                <jpda.listen>true</jpda.listen>
+                <integration.url>http://localhost:8080/test-agnostic-vdl-facelets-ui/</integration.url>
+            </properties>
+        </action>
+    </actions>
