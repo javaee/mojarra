@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -55,7 +55,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.sun.faces.facelets.tag.ui;
 
 import com.sun.faces.facelets.util.DevTools;
@@ -82,11 +81,10 @@ public final class UIDebug extends UIComponentBase {
     private final static String KEY = "facelets.ui.DebugOutput";
     public final static String DEFAULT_HOTKEY = "D";
     private String hotkey = DEFAULT_HOTKEY;
-    
+
     public UIDebug() {
         super();
         this.setTransient(true);
-        this.setRendered(true);
         this.setRendererType(null);
     }
 
@@ -96,6 +94,7 @@ public final class UIDebug extends UIComponentBase {
 
     public List getChildren() {
         return new ArrayList() {
+
             public boolean add(Object o) {
                 throw new IllegalStateException("<ui:debug> does not support children");
             }
@@ -108,38 +107,40 @@ public final class UIDebug extends UIComponentBase {
 
     public void encodeBegin(FacesContext faces) throws IOException {
 
-        pushComponentToEL(faces, this);
-        String actionId = faces.getApplication().getViewHandler().getActionURL(faces, faces.getViewRoot().getViewId());
-        
-        StringBuffer sb = new StringBuffer(512);
-        sb.append("//<![CDATA[\n");
-        sb.append("function faceletsDebug(URL) { day = new Date(); id = day.getTime(); eval(\"page\" + id + \" = window.open(URL, '\" + id + \"', 'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=800,height=600,left = 240,top = 212');\"); };");
-        sb.append("var faceletsOrigKeyup = document.onkeyup; document.onkeyup = function(e) { if (window.event) e = window.event; if (String.fromCharCode(e.keyCode) == '" + this.getHotkey() + "' & e.shiftKey & e.ctrlKey) faceletsDebug('");
-        sb.append(actionId);
-        sb.append(actionId.indexOf('?')==-1 ? '?' : '&');
-        sb.append(KEY);
-        sb.append('=');
-        sb.append(writeDebugOutput(faces));
-        sb.append("'); else if (faceletsOrigKeyup) faceletsOrigKeyup(e); };\n");
-        sb.append("//]]>\n");
+        if (isRendered()) {
+            pushComponentToEL(faces, this);
+            String actionId = faces.getApplication().getViewHandler().getActionURL(faces, faces.getViewRoot().getViewId());
 
-        ResponseWriter writer = faces.getResponseWriter();
-        writer.startElement("script", this);
-        writer.writeAttribute("language", "javascript", "language");
-        writer.writeAttribute("type", "text/javascript", "type");
-        writer.writeText(sb.toString(), this, null);
-        writer.endElement("script");
-        
+            StringBuffer sb = new StringBuffer(512);
+            sb.append("//<![CDATA[\n");
+            sb.append("function faceletsDebug(URL) { day = new Date(); id = day.getTime(); eval(\"page\" + id + \" = window.open(URL, '\" + id + \"', 'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=800,height=600,left = 240,top = 212');\"); };");
+            sb.append("var faceletsOrigKeyup = document.onkeyup; document.onkeyup = function(e) { if (window.event) e = window.event; if (String.fromCharCode(e.keyCode) == '" + this.getHotkey() + "' & e.shiftKey & e.ctrlKey) faceletsDebug('");
+            sb.append(actionId);
+            sb.append(actionId.indexOf('?') == -1 ? '?' : '&');
+            sb.append(KEY);
+            sb.append('=');
+            sb.append(writeDebugOutput(faces));
+            sb.append("'); else if (faceletsOrigKeyup) faceletsOrigKeyup(e); };\n");
+            sb.append("//]]>\n");
+
+            ResponseWriter writer = faces.getResponseWriter();
+            writer.startElement("script", this);
+            writer.writeAttribute("language", "javascript", "language");
+            writer.writeAttribute("type", "text/javascript", "type");
+            writer.writeText(sb.toString(), this, null);
+            writer.endElement("script");
+        }
     }
-    
+
     private static String writeDebugOutput(FacesContext faces) throws IOException {
         FastWriter fw = new FastWriter();
         DevTools.debugHtml(fw, faces);
-        
+
         Map session = faces.getExternalContext().getSessionMap();
         Map debugs = (Map) session.get(KEY);
         if (debugs == null) {
             debugs = new LinkedHashMap() {
+
                 protected boolean removeEldestEntry(Map.Entry eldest) {
                     return (this.size() > 5);
                 }
@@ -150,7 +151,7 @@ public final class UIDebug extends UIComponentBase {
         debugs.put(id, fw.toString());
         return id;
     }
-    
+
     private static String fetchDebugOutput(FacesContext faces, String id) {
         Map session = faces.getExternalContext().getSessionMap();
         Map debugs = (Map) session.get(KEY);
@@ -159,13 +160,13 @@ public final class UIDebug extends UIComponentBase {
         }
         return null;
     }
-    
+
     public static boolean debugRequest(FacesContext faces) {
         String id = (String) faces.getExternalContext().getRequestParameterMap().get(KEY);
         if (id != null) {
             Object resp = faces.getExternalContext().getResponse();
             if (!faces.getResponseComplete()
-                && resp instanceof HttpServletResponse) {
+                    && resp instanceof HttpServletResponse) {
                 try {
                     HttpServletResponse httpResp = (HttpServletResponse) resp;
                     String page = fetchDebugOutput(faces, id);
@@ -186,13 +187,12 @@ public final class UIDebug extends UIComponentBase {
         }
         return false;
     }
-    
+
     public String getHotkey() {
         return this.hotkey;
     }
-    
+
     public void setHotkey(String hotkey) {
         this.hotkey = (hotkey != null) ? hotkey.toUpperCase() : "";
     }
-
 }
