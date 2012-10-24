@@ -42,7 +42,7 @@
 
 function buttonpush(target, exec, element, event) {
     try {
-        jsf.ajax.request(element, event, {delay: 'none', execute: exec, render: target});
+        jsf.ajax.request(element, event, {execute: exec, render: target});
     } catch (ex) {
         // Handle errors here
         alert(ex);
@@ -52,7 +52,7 @@ function buttonpush(target, exec, element, event) {
 
 function resetpush(element, event) {
     try {
-        jsf.ajax.request(element, event, {delay: 'none', execute: element.id});
+        jsf.ajax.request(element, event, {execute: element.id});
     } catch (ex) {
         // Handle errors here
         alert(ex);

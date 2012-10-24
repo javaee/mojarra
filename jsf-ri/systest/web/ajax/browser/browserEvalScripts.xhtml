@@ -44,42 +44,42 @@
     <cc:evalTestInline id="evalInline"/>
     <h:form>
         <h:commandButton id="doEval" value="doEval" action="#{evalScriptBean.doEval}">
-            <f:ajax delay="none" execute="@this" render="@none"/>
+            <f:ajax execute="@this" render="@none"/>
         </h:commandButton>
         Works in all browsers except K
         <br/>
         <h:commandButton id="doInline" value="doInline" action="#{evalScriptBean.doInline}">
-            <f:ajax delay="none" execute="@this" render="@none"/>
+            <f:ajax execute="@this" render="@none"/>
         </h:commandButton>
         Works in all browsers
         <br/>
         <h:commandButton id="doInlineCC" value="doInlineCC">
-            <f:ajax delay="none" execute="@none" render=":evalInline"/>
+            <f:ajax execute="@none" render=":evalInline"/>
         </h:commandButton>
         Works in all browsers
         <br/>
         <h:commandButton id="doFile" value="doFile" action="#{evalScriptBean.doInline}">
-            <f:ajax delay="none" execute="@none" render=":evalFile" onevent="evalFileEvent"/>
+            <f:ajax execute="@none" render=":evalFile" onevent="evalFileEvent"/>
         </h:commandButton>
         Works in all browsers
         <br/>
         <h:commandButton id="doUpdateRootAllEval" value="doUpdateRootAllEval" action="#{evalScriptBean.doUpdateRootAllEval}">
-            <f:ajax delay="none" execute="@this" render="@none"/>
+            <f:ajax execute="@this" render="@none"/>
         </h:commandButton>
         Works in all browsers
         <br/>
         <h:commandButton id="doUpdateRootSimpleEval" value="doUpdateRootSimpleEval" action="#{evalScriptBean.doUpdateRootSimpleEval}">
-            <f:ajax delay="none" execute="@this" render="@none"/>
+            <f:ajax execute="@this" render="@none"/>
         </h:commandButton>
         Works in all browsers
         <br/>
         <h:commandButton id="doUpdateBodyTagEval" value="doUpdateBodyTagEval" action="#{evalScriptBean.doUpdateBodyTagEval}">
-            <f:ajax delay="none" execute="@this" render="@none"/>
+            <f:ajax execute="@this" render="@none"/>
         </h:commandButton>
         Works in all browsers
         <br/>
         <h:commandButton id="insertBeforeEval" value="insertBeforeEval" action="#{evalScriptBean.insertBeforeEval}">
-            <f:ajax delay="none" execute="@this" render="@none"/>
+            <f:ajax execute="@this" render="@none"/>
         </h:commandButton>
         Works in all browsers
         <br/>

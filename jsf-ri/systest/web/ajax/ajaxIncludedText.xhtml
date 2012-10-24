@@ -60,7 +60,7 @@
         </h:panelGroup>
         <br/>
         <h:commandButton id="refresh"
-                         onclick="jsf.ajax.request(this,event, {delay: 'none', render: 'form1:outPanel'}); return false;" />
+                         onclick="jsf.ajax.request(this,event, {render: 'form1:outPanel'}); return false;" />
         Explicit parameters:
     </h:form>
     <h:form id="form2" prependId="true">
@@ -70,7 +70,7 @@
         </h:panelGroup>
         <br/>
         <h:commandButton id="refresh"
-                         onclick="jsf.ajax.request(this,event, {delay: 'none', render: 'form2:outPanel'}); return false;" />
+                         onclick="jsf.ajax.request(this,event, {render: 'form2:outPanel'}); return false;" />
         Explicit parameters:
     </h:form>
 </h:body>

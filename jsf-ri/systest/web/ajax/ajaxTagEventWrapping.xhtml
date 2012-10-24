@@ -69,7 +69,7 @@
         <br/>
         <!-- Increment the counter on the server, and the client -->
         <h:commandButton id="button1" value="Count">
-            <f:ajax delay="none" render="out1"/>
+            <f:ajax render="out1"/>
         </h:commandButton>
         <br/>
         <h:commandButton id="button2" value="Say"
@@ -77,7 +77,7 @@
         <br/>
         <h:commandButton id="button3" value="Count and Say"
                 onclick="say();return true;">
-            <f:ajax delay="none" render="out1 paramOut"/>
+            <f:ajax render="out1 paramOut"/>
         </h:commandButton>
         <br/>
         <h:commandButton id="button4" value="Param">
@@ -86,13 +86,13 @@
         <br/>
         <h:commandButton id="button5" value="Count and Param">
             <f:param name="testname" value="testval"/>
-            <f:ajax delay="none" render="out1 paramOut"/>
+            <f:ajax render="out1 paramOut"/>
         </h:commandButton>
         <br/>
         <h:commandButton id="button6" value="Count and Say and Param"
                 onclick="say();return true;">
             <f:param name="testname" value="testval"/>
-            <f:ajax delay="none" render="out1 paramOut"/>
+            <f:ajax render="out1 paramOut"/>
         </h:commandButton>
         <br/>
         <h:commandButton id="button7" value="Say and Param"
@@ -101,13 +101,13 @@
         </h:commandButton>
         <br/>
         <h:selectBooleanCheckbox id="checkbox1" value="#{ajaxtag.checked}">
-            <f:ajax delay="none" render="checkedvalue1"/>
+            <f:ajax render="checkedvalue1"/>
             </h:selectBooleanCheckbox>
         <h:outputText id="checkedvalue1" value="#{ajaxtag.checked}"/>
         <br/>
         <h:selectBooleanCheckbox id="checkbox2" value="#{ajaxtag.checked}"
                 onclick="say();return true;">
-            <f:ajax delay="none" render="checkedvalue2"/>
+            <f:ajax render="checkedvalue2"/>
         </h:selectBooleanCheckbox>
         <h:outputText id="checkedvalue2" value="#{ajaxtag.checked}"/>
         <br/>
@@ -121,7 +121,7 @@
         <br/>
         <!-- Resets the counter, doesn't refresh the page -->
         <h:commandButton id="reset" value="reset" actionListener="#{ajaxtag.reset}">
-            <f:ajax delay="none" execute="reset"/>
+            <f:ajax execute="reset"/>
         </h:commandButton>
         <h:commandButton id="reload" value="reload" />
     </h:form>

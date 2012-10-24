@@ -68,25 +68,25 @@
             <br/>
         </h:panelGroup>
         <h:commandButton id="refresh"
-                         onclick="jsf.ajax.request(this,event, {delay: 'none', render: 'outPanel'}); return false;" />
+                         onclick="jsf.ajax.request(this,event, {render: 'outPanel'}); return false;" />
         Explicit parameters:
         <h:inputText id="edit1" value="#{ajaxrequest.echo1}"
-                            onchange="jsf.ajax.request(this,event, {delay: 'none', execute:'edit1', render: 'edit1'});"
+                            onchange="jsf.ajax.request(this,event, {execute:'edit1', render: 'edit1'});"
                             valueChangeListener="#{ajaxrequest.echoValue}"/>
         <br/>
         Implicit execute:
         <h:inputText id="edit2" value="#{ajaxrequest.echo2}"
-                            onchange="jsf.ajax.request(this,event, {delay: 'none', render: 'edit2'});"
+                            onchange="jsf.ajax.request(this,event, {render: 'edit2'});"
                             valueChangeListener="#{ajaxrequest.echoValue}"/>
         <br/>
         Implicit render:
         <h:inputText id="edit3" value="#{ajaxrequest.echo3}"
-                            onchange="jsf.ajax.request(this,event, {delay: 'none', execute:'edit3'});"
+                            onchange="jsf.ajax.request(this,event, {execute:'edit3'});"
                             valueChangeListener="#{ajaxrequest.echoValue}"/>
         <br/>
         Default Options:
         <h:inputText id="edit4" value="#{ajaxrequest.echo4}"
-                            onchange="jsf.ajax.request(this,event, {delay: 'none'});"
+                            onchange="jsf.ajax.request(this,event);"
                             valueChangeListener="#{ajaxrequest.echoValue}"/>
         <br/>
         <!-- Contained within the form - but still shouldn't update except for full page load -->

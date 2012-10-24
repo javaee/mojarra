@@ -79,7 +79,7 @@
     <h:form id="form">
         <h:commandButton id="nonajax" value="Submit non-ajax" action="#{faceletsBean.action}"/>
         <h:commandButton id="ajax" value="Submit ajax" action="#{faceletsBean.action}">
-            <f:ajax delay="none" render="@all" execute="@all" />
+            <f:ajax render="@all" execute="@all" />
         </h:commandButton>
     </h:form>
 </h:body>

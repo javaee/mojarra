@@ -54,16 +54,16 @@
 <h:body>
     <h:form id="form1">
         <h:commandButton id="before" value="Add Before" action="#{insertDeleteBean.insertBefore}">
-              <f:ajax execute="@this" render="@none" delay="none"/>
+              <f:ajax execute="@this" render="@none"/>
         </h:commandButton>
         <h:commandButton id="removeBefore" value="Remove Before" action="#{insertDeleteBean.removeBefore}">
-            <f:ajax delay="none" execute="@this" render="@none"/>
+            <f:ajax execute="@this" render="@none"/>
         </h:commandButton>
         <h:commandButton id="after" value="Add After" action="#{insertDeleteBean.insertAfter}">
-            <f:ajax delay="none" execute="@this" render="@none" />
+            <f:ajax execute="@this" render="@none" />
         </h:commandButton>
          <h:commandButton id="removeAfter" value="Remove After" action="#{insertDeleteBean.removeAfter}">
-            <f:ajax delay="none" execute="@this" render="@none"/>
+            <f:ajax execute="@this" render="@none"/>
         </h:commandButton>
     </h:form>
     <br/>

@@ -72,16 +72,16 @@
         <br/>
         <!-- Increment the counter on the server, and the client -->
         <h:commandButton id="button1" value="Count">
-            <f:ajax delay="none" render="countForm:out1" onevent="statusUpdate" onerror="statusUpdate"/>
+            <f:ajax render="countForm:out1" onevent="statusUpdate" onerror="statusUpdate"/>
         </h:commandButton>
         <br/>
         <!-- Resets the counter, doesn't refresh the page -->
         <h:commandButton id="reset" value="reset" actionListener="#{ajaxrequest.resetCount}">
-            <f:ajax delay="none" execute="countForm:reset" render="countForm:out1" onevent="statusUpdate" onerror="statusUpdate"/>
+            <f:ajax execute="countForm:reset" render="countForm:out1" onevent="statusUpdate" onerror="statusUpdate"/>
         </h:commandButton>
         <!-- Test all events (begin, complete, success) if applicaton event (generated on server) occurs -->
         <h:commandButton id="error" value="error" listener="#{ajaxrequest.generateError}">
-            <f:ajax delay="none" execute="countForm:error" onevent="statusUpdate" onerror="statusUpdate"/>
+            <f:ajax execute="countForm:error" onevent="statusUpdate" onerror="statusUpdate"/>
         </h:commandButton>
         
     

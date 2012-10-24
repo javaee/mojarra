@@ -63,11 +63,11 @@
         <br/>
         <!-- Increment the counter on the server, and the client -->
         <h:commandButton id="button1" value="Count 1 2 3"
-                         onclick="jsf.ajax.request(this, event, {delay: 'none', execute: this.id, render: 'out1 out2 out3'}); return false;"/>
+                         onclick="jsf.ajax.request(this, event, {execute: this.id, render: 'out1 out2 out3'}); return false;"/>
         <br/>
         <!-- Resets the counter, doesn't refresh the page -->
         <h:commandButton id="reset" value="reset 1 2 3"
-                            onclick="jsf.ajax.request(this, event, {delay: 'none', render: 'out1 out2 out3 out4'}); return false;"
+                            onclick="jsf.ajax.request(this, event, {render: 'out1 out2 out3 out4'}); return false;"
                             actionListener="#{ajaxcount.resetCount}">
         </h:commandButton>
     </h:form>

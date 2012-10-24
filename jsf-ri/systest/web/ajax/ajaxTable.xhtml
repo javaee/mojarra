@@ -78,7 +78,7 @@
                     <h:outputText value="city"/>
                     </f:facet>
                          <h:inputText id="inCity" value="#{item.city}">
-                             <f:ajax delay="none" />
+                             <f:ajax/>
                          </h:inputText>
             </h:column>
 
@@ -87,7 +87,7 @@
                     <h:outputText value="likescheese"/>
                 </f:facet>
                 <h:selectBooleanCheckbox id="cheesecheck" value="#{item.likesCheese}">
-                    <f:ajax delay="none" render="cheesepref"/>
+                    <f:ajax render="cheesepref"/>
                 </h:selectBooleanCheckbox>
             </h:column>
             
@@ -103,7 +103,7 @@
                     <h:outputText value="Count Link"/>
                 </f:facet>
                 <h:commandLink id="countlink" value="Count">
-                    <f:ajax delay="none" render="count :form:count"/>
+                    <f:ajax render="count :form:count"/>
                 </h:commandLink>
             </h:column>
 
@@ -117,7 +117,7 @@
 
         <!-- Submits with out executing the table, so tests the city change -->
         <h:commandButton id="submitButton" value="Submit" type="submit">
-            <f:ajax delay="none" render="form:table"/>
+            <f:ajax render="form:table"/>
         </h:commandButton>
 
         <br/>

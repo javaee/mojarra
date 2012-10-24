@@ -58,16 +58,16 @@
         <br/>
         <!-- Increment the counter on the server, and the client -->
         <h:commandButton id="button1" type="button" value="Disabled Count">
-            <f:ajax delay="none" render="countForm:out1" disabled="true"/>
+            <f:ajax render="countForm:out1" disabled="true"/>
         </h:commandButton>
         <br/>
         <h:commandButton id="button2" type="button" value="Enabled Count">
-            <f:ajax delay="none" render="countForm:out1" disabled="false"/>
+            <f:ajax render="countForm:out1" disabled="false"/>
         </h:commandButton>
         <br/>
         <!-- Resets the counter, doesn't refresh the page -->
         <h:commandButton id="reset" value="reset" actionListener="#{ajaxrequest.resetCount}">
-            <f:ajax delay="none" execute="countForm:reset" render="countForm:out1"/>
+            <f:ajax execute="countForm:reset" render="countForm:out1"/>
         </h:commandButton>
     </h:form>
     <!-- Contained outside the form - shouldn't update except for full page load -->

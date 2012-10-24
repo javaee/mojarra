@@ -315,10 +315,11 @@ public class Issue1111IT {
 
         assertEquals("2", page.getElementById("progress").getAttribute("value"));
 
+        waiter.clear();
+
         email.setText("horst@example.com");
         email.blur();
 
-        waiter.clear();
         waiter.waitForSuccess();
         
         assertEquals("3", page.getElementById("progress").getAttribute("value"));

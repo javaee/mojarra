@@ -58,28 +58,28 @@
         <br/>
         <!-- Increment the counter on the server, and the client -->
         <h:commandButton id="button1" value="Count">
-            <f:ajax delay="none" render="out1"/>
+            <f:ajax render="out1"/>
         </h:commandButton>
         <br/>
         <!-- Resets the counter, doesn't refresh the page-->
         Explicit parameters:
         <h:commandButton id="reset1" value="reset1" actionListener="#{ajaxrequest.resetCount}">
-            <f:ajax delay="none" execute="reset1" render="out1"/>
+            <f:ajax execute="reset1" render="out1"/>
         </h:commandButton>
         <br/>
         Implicit execute:
         <h:commandButton id="reset2" value="reset2" actionListener="#{ajaxrequest.resetCount}">
-            <f:ajax delay="none" render="out1"/>
+            <f:ajax render="out1"/>
         </h:commandButton>
         <br/>
         Implicit render:
         <h:commandButton id="reset3" value="reset3" actionListener="#{ajaxrequest.resetCount}">
-            <f:ajax delay="none" execute="reset3"/>
+            <f:ajax execute="reset3"/>
         </h:commandButton>
         <br/>
         Default Options:
         <h:commandButton id="reset4" value="reset4" actionListener="#{ajaxrequest.resetCount}">
-            <f:ajax delay="none" />
+            <f:ajax/>
         </h:commandButton>
         <br/>
         <!-- Contained within the form - but still shouldn't update except for full page load -->

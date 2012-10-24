@@ -56,7 +56,7 @@
     <h:form id="form" prependId="false">
 
         <!-- Bug #1081 filed against it not using mouseover on outputText -->
-        <f:ajax delay="none" event="mouseover" render="out2">
+        <f:ajax event="mouseover" render="out2">
             <h:outputText id="out1" value="#{ajaxtag.count}"/>
         </f:ajax>
         <br/>
@@ -64,7 +64,7 @@
         <h:outputText id="out2" value="#{ajaxtag.count}"/>
         <br/>
         
-        <f:ajax delay="none" event="valueChange" render="out3">
+        <f:ajax event="valueChange" render="out3">
             <h:inputText id="in1" value="#{ajaxtag.text}"/>
         </f:ajax>
         <br/>
@@ -72,34 +72,34 @@
         <h:outputText id="out3" value="#{ajaxtag.text}"/>
         <br/>
 
-        <f:ajax delay="none" event="action" render="out2">
+        <f:ajax event="action" render="out2">
             <h:commandButton id="button" value="reset" actionListener="#{ajaxtag.reset}"/>
         </f:ajax>
 
 
         <br/>
         <h:selectBooleanCheckbox id="checkbox1" value="#{ajaxtag.checked}">
-            <f:ajax delay="none" render="checkedvalue1"/>
+            <f:ajax render="checkedvalue1"/>
             </h:selectBooleanCheckbox>
         <h:outputText id="checkedvalue1" value="#{ajaxtag.checked}"/>
         <br/>
 
         <h:selectBooleanCheckbox id="checkbox2" value="#{ajaxtag.checked}">
-            <f:ajax delay="none" event="valueChange" render="checkedvalue2"/>
+            <f:ajax event="valueChange" render="checkedvalue2"/>
             </h:selectBooleanCheckbox>
         <h:outputText id="checkedvalue2" value="#{ajaxtag.checked}"/>
         <br/>
 
         <!-- ajax "event" Value Expression -->
         <h:selectBooleanCheckbox id="checkbox3" value="#{ajaxtag.checked}">
-            <f:ajax delay="none" event="#{ajaxtag.ajaxEvent}" render="checkedvalue3"/>
+            <f:ajax event="#{ajaxtag.ajaxEvent}" render="checkedvalue3"/>
         </h:selectBooleanCheckbox>
         <h:outputText id="checkedvalue3" value="#{ajaxtag.checked}"/>
         <br/>
 
         <!-- Resets the counter, doesn't refresh the page -->
         <h:commandButton id="reset" value="reset" actionListener="#{ajaxtag.reset}">
-            <f:ajax delay="none" execute="reset"/>
+            <f:ajax execute="reset"/>
         </h:commandButton>
         <h:commandButton id="reload" value="reload" />
     </h:form>

@@ -68,26 +68,26 @@
         <br/>
         </h:panelGroup>
     <h:commandButton id="refresh" value="refresh">
-            <f:ajax delay="none" render="form1:outPanel"/>
+            <f:ajax render="form1:outPanel"/>
             </h:commandButton>
         Explicit parameters:
             <h:inputText id="edit1" value="#{ajaxrequest.echo1}" valueChangeListener="#{ajaxrequest.echoValue}" >
-                <f:ajax delay="none" execute="form1:edit1" render="form1:edit1" />
+                <f:ajax execute="form1:edit1" render="form1:edit1" />
                 </h:inputText>
             <br/>
             Implicit execute:
             <h:inputText id="edit2" value="#{ajaxrequest.echo2}" valueChangeListener="#{ajaxrequest.echoValue}" >
-                <f:ajax delay="none" render="form1:edit2" />
+                <f:ajax render="form1:edit2" />
             </h:inputText>
             <br/>
             Implicit render:
             <h:inputText id="edit3" value="#{ajaxrequest.echo3}" valueChangeListener="#{ajaxrequest.echoValue}" >
-                <f:ajax delay="none" execute="form1:edit3"/>
+                <f:ajax execute="form1:edit3"/>
                 </h:inputText>
             <br/>
             Default Options:
             <h:inputText id="edit4" value="#{ajaxrequest.echo4}" valueChangeListener="#{ajaxrequest.echoValue}" >
-                <f:ajax delay="none" />
+                <f:ajax/>
                 </h:inputText>
             <br/>
             <!-- Contained within the form - but still shouldn't update except for full page load -->

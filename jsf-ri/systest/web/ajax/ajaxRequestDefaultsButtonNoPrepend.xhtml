@@ -60,28 +60,28 @@
         <br/>
         <!-- Increment the counter on the server, and the client -->
         <h:commandButton id="button1" value="Count"
-                         onclick="jsf.ajax.request(this, event, {delay: 'none', execute: this.id, render: 'out1'}); return false;"/>
+                         onclick="jsf.ajax.request(this, event, {execute: this.id, render: 'out1'}); return false;"/>
         <br/>
         <!-- Resets the counter, doesn't refresh the page-->
         Explicit parameters:
         <h:commandButton id="reset1" value="reset1"
-                            onclick="jsf.ajax.request(this, event, {delay: 'none', execute:'reset1', render: 'out1'}); return false;"
+                            onclick="jsf.ajax.request(this, event, {execute:'reset1', render: 'out1'}); return false;"
                             actionListener="#{ajaxrequest.resetCount}"/>
         <br/>
         Implicit execute:
         <h:commandButton id="reset2" value="reset2"
-                            onclick="jsf.ajax.request(this, event, {delay: 'none', render: 'out1'}); return false;"
+                            onclick="jsf.ajax.request(this, event, {render: 'out1'}); return false;"
                             actionListener="#{ajaxrequest.resetCount}"/>
         <br/>
         Implicit render:
         <h:commandButton id="reset3" value="reset3"
-                            onclick="jsf.ajax.request(this, event, {delay: 'none', execute:'reset3'}); return false;"
+                            onclick="jsf.ajax.request(this, event, {execute:'reset3'}); return false;"
                             actionListener="#{ajaxrequest.resetCount}"/>
         <br/>
         Default Options:
         <h:commandButton id="reset4" value="reset4"
-                            onclick="jsf.ajax.request(this, event, {delay: 'none'}); return false;"
-                            actionListener="#{ ajaxrequest.resetCount}"/>
+                            onclick="jsf.ajax.request(this, event); return false;"
+                            actionListener="#{ajaxrequest.resetCount}"/>
         <br/>
         <!-- Contained within the form - but still shouldn't update except for full page load -->
         <h:outputText id="out2" value="#{ajaxrequest.count}"/>

@@ -53,35 +53,35 @@
     <hr/>
     <h:form id="form">
         <h:selectOneRadio id="s1rad" value="#{selectChange.string}">
-            <f:ajax delay="none" render=":out"/>
+            <f:ajax render=":out"/>
             <f:selectItem itemValue="radio-1" itemLabel="1"/>
             <f:selectItem itemValue="radio-2" itemLabel="2"/>
             <f:selectItem itemValue="radio-2" itemLabel="3"/>
         </h:selectOneRadio>
         <br/>
         <h:selectOneMenu id="s1menu" value="#{selectChange.string}">
-            <f:ajax delay="none" render=":out"/>
+            <f:ajax render=":out"/>
             <f:selectItem itemValue="menu-1" itemLabel="1"/>
             <f:selectItem itemValue="menu-2" itemLabel="2"/>
             <f:selectItem itemValue="menu-3" itemLabel="3"/>
         </h:selectOneMenu>
         <br/>
         <h:selectOneListbox id="s1list" value="#{selectChange.string}">
-            <f:ajax delay="none" render=":out"/>
+            <f:ajax render=":out"/>
             <f:selectItem itemValue="list-1" itemLabel="1"/>
             <f:selectItem itemValue="list-2" itemLabel="2"/>
             <f:selectItem itemValue="list-3" itemLabel="3"/>
         </h:selectOneListbox>
         <br/>
         <h:selectManyListbox id="smlist" value="#{selectChange.sarray}">
-            <f:ajax delay="none" render=":out"/>
+            <f:ajax render=":out"/>
             <f:selectItem itemValue="mlist-1" itemLabel="1"/>
             <f:selectItem itemValue="mlist-2" itemLabel="2"/>
             <f:selectItem itemValue="mlist-3" itemLabel="3"/>
         </h:selectManyListbox>
         <br/>
         <h:selectManyCheckbox id="smcheck" value="#{selectChange.sarray}">
-            <f:ajax delay="none" render=":out"/>
+            <f:ajax render=":out"/>
             <f:selectItem itemValue="mcheck-1" itemLabel="1"/>
             <f:selectItem itemValue="mcheck-2" itemLabel="2"/>
             <f:selectItem itemValue="mcheck-3" itemLabel="3"/>
@@ -89,11 +89,11 @@
         <br/>
         <h:outputLabel for="bool" value="Check me"/>
         <h:selectBooleanCheckbox id="bool" value="#{selectChange.bool}">
-            <f:ajax delay="none" render=":out"/>
+            <f:ajax render=":out"/>
         </h:selectBooleanCheckbox>
         <br/>
         <h:commandButton id="button" value="Click Me">
-            <f:ajax delay="none" render="@all"/>
+            <f:ajax render="@all"/>
         </h:commandButton>
     </h:form>
     </h:body>

@@ -54,7 +54,7 @@
 <body>
     <h:form id="form">
         <h:commandButton id="req" value="Get Request Header Info">
-            <f:ajax delay="none" execute="@this" render="out"/>
+            <f:ajax execute="@this" render="out"/>
         </h:commandButton>
         <h:outputText id="out" value="#{ajaxrequest.contentType}"/>
     </h:form>

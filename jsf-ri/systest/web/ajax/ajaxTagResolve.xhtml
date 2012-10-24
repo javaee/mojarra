@@ -60,28 +60,28 @@
         <br/>
         <!-- Increment the counter on the server, and the client -->
         <h:commandButton id="button1" value="Count 1">
-            <f:ajax delay="none" render="out1"/>
+            <f:ajax render="out1"/>
         </h:commandButton>
         <br/>
         <h:commandButton id="button2" value="Count 2">
-            <f:ajax delay="none" render=":form2:out2"/>
+            <f:ajax render=":form2:out2"/>
         </h:commandButton>
         <br/>
         <h:commandButton id="button3" value="Count 3">
-            <f:ajax delay="none" render=":out3"/>
+            <f:ajax render=":out3"/>
         </h:commandButton>
         <br/>
         <h:commandButton id="button4" value="Count One">
-            <f:ajax delay="none" render="#{ajaxtag.renderOne}"/>
+            <f:ajax render="#{ajaxtag.renderOne}"/>
         </h:commandButton>
         <br/>
         <h:commandButton id="button5" value="Count List">
-            <f:ajax delay="none" render="#{ajaxtag.renderList}"/>
+            <f:ajax render="#{ajaxtag.renderList}"/>
         </h:commandButton>
         <br/>
         <!-- Resets the counter, doesn't refresh the form -->
         <h:commandButton id="reset" value="reset" actionListener="#{ajaxtag.reset}">
-            <f:ajax delay="none" execute="reset" render="form1"/>
+            <f:ajax execute="reset" render="form1"/>
         </h:commandButton>
         <br/>
         <h:commandButton id="reload" value="reload"/>

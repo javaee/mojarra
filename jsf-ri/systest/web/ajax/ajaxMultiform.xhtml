@@ -59,12 +59,12 @@
         <br/>
         <!-- Increment the counter on the server, and the client -->
         <h:commandButton id="button1" value="Count">
-            <f:ajax delay="none" render="countForm1:out1"/>
+            <f:ajax render="countForm1:out1"/>
         </h:commandButton>
         <br/>
         <!-- Resets the counter, doesn't refresh the page -->
         <h:commandButton id="reset" value="reset" actionListener="#{ajaxrequest.resetCount}">
-            <f:ajax delay="none" execute="countForm1:reset" render="countForm1:out1"/>
+            <f:ajax execute="countForm1:reset" render="countForm1:out1"/>
         </h:commandButton>
     </h:form>
     <h:form id="countForm2">
@@ -72,12 +72,12 @@
         <br/>
         <!-- Increment the counter on the server, and the client -->
         <h:commandButton id="button1" value="Count">
-            <f:ajax delay="none" render="countForm2:out1"/>
+            <f:ajax render="countForm2:out1"/>
         </h:commandButton>
         <br/>
         <!-- Resets the counter, doesn't refresh the page -->
         <h:commandButton id="reset" value="reset" actionListener="#{ajaxrequest.resetCount}">
-            <f:ajax delay="none" execute="countForm2:reset" render="countForm2:out1"/>
+            <f:ajax execute="countForm2:reset" render="countForm2:out1"/>
         </h:commandButton>
     </h:form>
     <h:form id="countForm3">
@@ -85,12 +85,12 @@
         <br/>
         <!-- Increment the counter on the server, and the client -->
         <h:commandButton id="button1" value="Count">
-            <f:ajax delay="none" render="countForm3:out1"/>
+            <f:ajax render="countForm3:out1"/>
         </h:commandButton>
         <br/>
         <!-- Resets the counter, doesn't refresh the page -->
         <h:commandButton id="reset" value="reset" actionListener="#{ajaxrequest.resetCount}">
-            <f:ajax delay="none" execute="countForm3:reset" render="countForm3:out1"/>
+            <f:ajax execute="countForm3:reset" render="countForm3:out1"/>
         </h:commandButton>
     </h:form>
     <!-- Contained outside the form - shouldn't update except for full page load -->

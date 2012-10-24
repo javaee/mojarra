@@ -58,11 +58,11 @@
         <br/>
         <!-- Increment the counter on the server, and the client -->
         <h:commandButton id="button1" value="Count"
-                         onclick="jsf.ajax.request(this, event, {delay: 'none', execute: this.id, render: 'countForm:out1'}); return false;"/>
+                         onclick="jsf.ajax.request(this, event, {execute: this.id, render: 'countForm:out1'}); return false;"/>
         <br/>
         <!-- Resets the counter, doesn't refresh the page -->
         <h:commandButton id="reset" value="reset"
-                            onclick="jsf.ajax.request(this, event, {delay: 'none', execute:'countForm:reset', render: 'countForm:out1'}); return false;"
+                            onclick="jsf.ajax.request(this, event, {execute:'countForm:reset', render: 'countForm:out1'}); return false;"
                             actionListener="#{ajaxrequest.resetCount}"/>
     </h:form>
     <!-- Contained outside the form - shouldn't update except for full page load -->

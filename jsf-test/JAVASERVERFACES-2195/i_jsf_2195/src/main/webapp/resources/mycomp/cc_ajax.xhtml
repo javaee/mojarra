@@ -16,7 +16,7 @@ xmlns:composite="http://java.sun.com/jsf/composite"
 <composite:implementation>
 
 	<h:commandButton id="button" value="#{cc.attrs.display}" >
-		<f:ajax delay="none" render="out" listener="#{cc.attrs.ajaxL}" />
+		<f:ajax render="out" listener="#{cc.attrs.ajaxL}" />
 	</h:commandButton>
         <h:outputText id="out" />
 	

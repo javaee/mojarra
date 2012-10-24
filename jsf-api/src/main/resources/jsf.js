@@ -1657,6 +1657,15 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              * <td><code>javax.faces.source</code></td>
              * <td><code>The identifier of the element that triggered this request.</code></td>
              * </tr>
+             * <tr class="changed_added_2_2">
+             * <td><code>javax.faces.ClientWindow</code></td>
+
+             * <td><code>Call jsf.getClientWindow(), passing the current
+             * form.  If the return is non-null, it must be set as the
+             * value of this name/value pair, otherwise, a name/value
+             * pair for client window must not be sent.</code></td>
+
+             * </tr>
              * </table>
              * </li>
              * </ul>
@@ -1694,14 +1703,12 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              * <li class="changed_added_2_2">If
              * <code>options.delay</code> exists let it be the value
              * <em>delay</em>, for this discussion.  If
-             * <code>options.delay</code> does not exist let
-             * <em>delay</em> be 300.  If less than <em>delay</em>
+             * <code>options.delay</code> does not exist, or is the
+             * literal string <code>'none'</code>, without the quotes,
+             * no delay is used.  If less than <em>delay</em>
              * milliseconds elapses between calls to <em>request()</em>
              * only the most recent one is sent and all other requests
-             * are discarded. The default value of this option is 300.
-             * If the value of <em>delay</em> is the literal string
-             * <code>'none'</code> without the quotes, no delay is
-             * used. </li>
+             * are discarded.</li>
 
              * <li>Determine additional arguments (if any) from the <code>event</code>
              * argument.  The following name/value pairs may be used from the
@@ -1802,13 +1809,12 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
 
              * <td><code>delay</code></td>
 
-             * <td><code>If less than <em>delay</em> milliseconds
-             * elapses between calls to <em>request()</em> only the most
-             * recent one is sent and all other requests are
-             * discarded. The default value of this option is
-             * 300.</code> If the value of <em>delay</em> is the literal string
-             * <code>'none'</code> without the quotes, no delay is
-             * used. </td>
+             * <td>If less than <em>delay</em> milliseconds elapses
+             * between calls to <em>request()</em> only the most recent
+             * one is sent and all other requests are discarded. If the
+             * value of <em>delay</em> is the literal string
+             * <code>'none'</code> without the quotes, or no delay is
+             * specified, no delay is used. </td>
 
              * </tr>
 
@@ -1929,13 +1935,10 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                         args["javax.faces.partial.render"] = options.render;
                     }
                 }
-                var defaultDelayValue = 300;
-                var explicitlyDoNotDelay = (typeof options.delay == 'string') &&
-                                           (options.delay.toLowerCase() == 'none');
+                var explicitlyDoNotDelay = ((typeof options.delay == 'undefined') || (typeof options.delay == 'string') &&
+                                            (options.delay.toLowerCase() == 'none'));
                 var delayValue;
-                if (typeof options.delay == 'undefined') {
-                    delayValue = defaultDelayValue;
-                } else if (typeof options.delay == 'number') {
+                if (typeof options.delay == 'number') {
                     delayValue = options.delay;
                 } else if (!explicitlyDoNotDelay) {
                     throw new Error('invalid value for delay option: ' + options.delay);
@@ -2411,8 +2414,6 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
     /**
      * <p class="changed_added_2_2">Return the windowId of the window
      * in which the argument form is rendered.</p>
-
-     * <p>PENDING: edburns implement URL mode.</p>
 
      * @param {optional String|DomNode} node. Determine the nature of
      * the argument.  If not present, search for the windowId within
