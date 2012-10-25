@@ -165,7 +165,7 @@
                    characterCombat"/>
 
     <property name="applications-with-custom-dependencies"
-              value="formOmittedTrinidad"/>
+              value=""/>
 
     <!-- ************ Executable Targets ************************************** -->
 
@@ -301,12 +301,6 @@
         <for list="${applications}" param="app" trim="true">
             <sequential>
                 <undeploy.app appname="@{app}"/>
-                <if>
-                    <contains string="@{app}" substring="Trinidad"/>
-                    <then>
-                        <antcall target="populate-dependency-properties-@{app}"/>
-                    </then>
-                </if>
 
                 <build.app appname="@{app}"
                             base-app-dir="${basedir}/@{app}"/>
@@ -315,11 +309,6 @@
             </sequential>
         </for>
 
-    </target>
-
-    <target name="populate-dependency-properties-formOmittedTrinidad">
-        <copy file="${trinidad-api.jar}" todir="formOmittedTrinidad/web/WEB-INF/lib"/>
-        <copy file="${trinidad-impl.jar}" todir="formOmittedTrinidad/web/WEB-INF/lib"/>       
     </target>
 
 <target name="install-virtual-server" depends="compile.base.sources,define.applications.virtual-server">
@@ -339,12 +328,6 @@
         <for list="${applications}" param="app" trim="true">
             <sequential>
                 <undeploy.app appname="@{app}"/>
-                <if>
-                    <contains string="@{app}" substring="Trinidad"/>
-                    <then>
-                        <antcall target="populate-dependency-properties-@{app}"/>
-                    </then>
-                </if>
                 <build.app appname="@{app}"
                            base-app-dir="${basedir}/@{app}"/>               
                 <deploy.app appname="@{app}" use-virtual-servers="true"
@@ -358,12 +341,6 @@
         
         <for list="${applications}" param="app" trim="true">
             <sequential>
-                <if>
-                    <contains string="@{app}" substring="Trinidad"/>
-                    <then>
-                        <antcall target="populate-dependency-properties-@{app}"/>
-                    </then>
-                </if>
                 <build.app appname="@{app}"
                             base-app-dir="${basedir}/@{app}"/>               
             </sequential>

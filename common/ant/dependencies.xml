@@ -76,7 +76,6 @@
     <property name="annotation.api.version" value="1.0"/>
     <property name="portlet.api.version" value="1.0"/>
     <property name="groovy.version" value="1.6.9"/>
-    <property name="trinidad.version" value="2.0.0-beta-1"/>
     <property name="el.version" value="1.0"/>
     <property name="validation.version" value="1.0.0.GA" />
     <property name="bean-validator.version" value="3.0-JBoss-4.0.0.Beta3"/>
@@ -113,9 +112,6 @@
     <property name="jstl.home" value="${dependency.base.dir}/jstl-${jstl.api.version}"/>
     <property name="annotation.home" value="${dependency.base.dir}/annotation-${annotation.api.version}"/>
     <property name="yuicompressor.home" value="${dependency.base.dir}/yuicompressor-${yuicompressor.version}"/>
-    <property name="trinidad.home" value="${dependency.base.dir}/trinidad-assembly-${trinidad.version}"/>
-    <property name="trinidad.zip" value="${dependency.base.dir}/downloads/trinidad-${trinidad.version}-dist.zip"/>
-
     <property name="junit.jar" value="${dependency.jar.dir}/junit-${junit.version}.jar"/>
     <property name="htmlunit.jar" value="${dependency.jar.dir}/htmlunit-${htmlunit.version}.jar"/>
     <property name="commons-beanutils.jar" value="${dependency.jar.dir}/commons-beanutils-${beanutils.version}.jar"/>
@@ -139,8 +135,6 @@
     <property name="annotation.jar" value="${dependency.jar.dir}/jsr250-api-${annotation.api.version}.jar"/>
     <property name="portlet.jar" value="${dependency.jar.dir}/portlet-api-${portlet.api.version}.jar"/>
     <property name="groovy.jar" value="${dependency.jar.dir}/groovy-all-${groovy.version}.jar"/>
-    <property name="trinidad-api.jar" value="${dependency.base.dir}/trinidad-assembly-${trinidad.version}/lib/trinidad-api-${trinidad.version}.jar"/>
-    <property name="trinidad-impl.jar" value="${dependency.base.dir}/trinidad-assembly-${trinidad.version}/lib/trinidad-impl-${trinidad.version}.jar"/>
     <property name="validation-api.jar" value="${dependency.jar.dir}/validation-api-${validation.version}.jar"/>
     <property name="javax-inject.jar" value="${dependency.jar.dir}/javax.inject-${javax-inject.version}.jar"/>
     <property name="javax-enterprise.jar" value="${dependency.jar.dir}/cdi-api-${javax-enterprise.version}.jar"/>
@@ -539,24 +533,6 @@
                      usetimestamp="true"/>
             </then>
         </if>        
-
-        <!-- Trinidad -->
-        <echo>${trinidad.zip}</echo>
-
-        <if>
-            <not>
-                <available file="${trinidad.zip}" property="ignored"/>
-            </not>
-            <then>
-                <get src="http://myfaces.apache.org/dist/binaries/trinidad-${trinidad.version}-dist.zip"
-                     dest="${trinidad.zip}"
-                     usetimestamp="true"/>
-
-                <unzip
-                        src="${dependency.base.dir}/downloads/trinidad-${trinidad.version}-dist.zip"
-                        dest="${dependency.base.dir}"/>
-            </then>
-        </if>
 
         <!-- JSR 330 -->
         <if>
