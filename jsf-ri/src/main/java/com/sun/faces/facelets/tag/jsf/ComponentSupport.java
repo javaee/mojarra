@@ -502,26 +502,26 @@ public final class ComponentSupport {
     // --------------------------------------------------------- private classes
 
 
-    private static UIViewRoot getViewRoot(FacesContext ctx, UIComponent parent) {
-
-        if (parent instanceof UIViewRoot) {
-            return (UIViewRoot) parent;
-        }
-        UIViewRoot root = ctx.getViewRoot();
-        if (root != null) {
-            return root;
-        }
-        UIComponent c = parent.getParent();
-        while (c != null) {
-            if (c instanceof UIViewRoot) {
-                root = (UIViewRoot) c;
-                break;
-            } else {
-                c = c.getParent();
-            }
-        }
-
-        return root;
-
-    }
+//    private static UIViewRoot getViewRoot(FacesContext ctx, UIComponent parent) {
+//
+//        if (parent instanceof UIViewRoot) {
+//            return (UIViewRoot) parent;
+//        }
+//        UIViewRoot root = ctx.getViewRoot();
+//        if (root != null) {
+//            return root;
+//        }
+//        UIComponent c = parent.getParent();
+//        while (c != null) {
+//            if (c instanceof UIViewRoot) {
+//                root = (UIViewRoot) c;
+//                break;
+//            } else {
+//                c = c.getParent();
+//            }
+//        }
+//
+//        return root;
+//
+//    }
 }
