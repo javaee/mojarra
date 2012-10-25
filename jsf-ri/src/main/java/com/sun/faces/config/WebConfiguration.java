@@ -686,6 +686,11 @@ public class WebConfiguration {
         Context initialContext = null;
         try {
             initialContext = new InitialContext();
+        } catch (NoClassDefFoundError nde) {
+            // on google app engine InitialContext is forbidden to use and GAE throws NoClassDefFoundError 
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE, nde.toString(), nde);
+            }
         } catch (NamingException ne) {
             if (LOGGER.isLoggable(Level.WARNING)) {
                 LOGGER.log(Level.WARNING, ne.toString(), ne);
