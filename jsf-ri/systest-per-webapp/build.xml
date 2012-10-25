@@ -164,9 +164,6 @@
                    bogus-render-kit-id,
                    characterCombat"/>
 
-    <property name="applications-with-custom-dependencies"
-              value=""/>
-
     <!-- ************ Executable Targets ************************************** -->
 
 
@@ -280,20 +277,20 @@
 
     <target name="define.V3.1.applications" if="container.is.V3.1">
        <property name="applications" 
-                 value="${container-agnostic-applications},${applications-for-V3.1-only}, ${applications-with-custom-dependencies}" />
+                 value="${container-agnostic-applications},${applications-for-V3.1-only}" />
     </target>
 
     <target name="define.V3.1_no_cluster.applications.virtual.server" 
             if="container.is.V3.1_no_cluster">
        <property name="applications"
-                 value="${applications-for-V3.1_no_cluster-virtual-server}, ${applications-with-custom-dependencies}" />
+                 value="${applications-for-V3.1_no_cluster-virtual-server}" />
     </target>
 
 
 
     <target name="define.V3.1_no_cluster.applications" if="container.is.V3.1_no_cluster">
        <property name="applications" 
-                 value="${container-agnostic-applications},${applications-for-V3.1_no_cluster-only},${applications-with-custom-dependencies}" />
+                 value="${container-agnostic-applications},${applications-for-V3.1_no_cluster-only}" />
     </target>
 
     <target name="install" depends="compile.base.sources,define.applications">
