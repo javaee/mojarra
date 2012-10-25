@@ -375,6 +375,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
             }
 
             replaceNode(temp, element);            
+            cloneAttributes(temp, element);
             runScripts(scripts);
 
         };
@@ -664,6 +665,44 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                }
         };
 
+        var propertyToAttribute = function propertyToAttribute(name) {
+            if (name === 'className') {
+                return 'class';
+            } else if (name === 'xmllang') {
+                return 'xml:lang';
+            } else {
+                return name.toLowerCase();
+            }
+        };
+
+        var isFunctionNative = function isFunctionNative(func) {
+            return /^\s*function[^{]+{\s*\[native code\]\s*}\s*$/.test(String(func));
+        };
+
+        var detectAttributes = function detectAttributes(element) {
+            //test if 'hasAttribute' method is present and its native code is intact
+            //for example, Prototype can add its own implementation if missing
+            if (element.hasAttribute && isFunctionNative(element.hasAttribute)) {
+                return function(name) {
+                    return element.hasAttribute(name);
+                }
+            } else {
+                try {
+                    //when accessing .getAttribute method without arguments does not throw an error then the method is not available
+                    element.getAttribute;
+
+                    var html = element.outerHTML;
+                    var startTag = html.match(/^<[^>]*>/)[0];
+                    return function(name) {
+                        return startTag.indexOf(name + '=') > -1;
+                    }
+                } catch (ex) {
+                    return function(name) {
+                        return element.getAttribute(name);
+                    }
+                }
+            }
+        };
 
         /**
          * copy all attributes from one element to another - except id
@@ -674,58 +713,99 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
         var cloneAttributes = function cloneAttributes(target, source) {
 
             // enumerate core element attributes - without 'dir' as special case
-            var coreElementAttributes = ['className', 'title', 'lang', 'xml:lang'];
-
-            // Enumerate additional input element attributes
-            var inputElementAttributes =
-                    [   'name', 'value', 'checked', 'disabled', 'readOnly',
-                        'size', 'maxLength', 'src', 'alt', 'useMap', 'isMap',
-                        'tabIndex', 'accessKey', 'accept', 'type'
-                    ];
+            var coreElementProperties = ['className', 'title', 'lang', 'xmllang'];
+            // enumerate additional input element attributes
+            var inputElementProperties = [
+                'name', 'value', 'size', 'maxLength', 'src', 'alt', 'useMap', 'tabIndex', 'accessKey', 'accept', 'type'
+            ];
+            // enumerate additional boolean input attributes
+            var inputElementBooleanProperties = [
+                'checked', 'disabled', 'readOnly'
+            ];
 
             // Enumerate all the names of the event listeners
             var listenerNames =
-                    [ 'onclick', 'ondblclick', 'onmousedown', 'onmousemove', 'onmouseout',
-                        'onmouseover', 'onmouseup', 'onkeydown', 'onkeypress', 'onkeyup',
-                        'onhelp', 'onblur', 'onfocus', 'onchange', 'onload', 'onunload', 'onabort',
-                        'onreset', 'onselect', 'onsubmit'
-                    ];
+                [ 'onclick', 'ondblclick', 'onmousedown', 'onmousemove', 'onmouseout',
+                    'onmouseover', 'onmouseup', 'onkeydown', 'onkeypress', 'onkeyup',
+                    'onhelp', 'onblur', 'onfocus', 'onchange', 'onload', 'onunload', 'onabort',
+                    'onreset', 'onselect', 'onsubmit'
+                ];
 
-            var iIndex, iLength; // for loop variables
-            var attributeName; // name of the attribute to set
-            var newValue, oldValue; // attribute values in each element
+            var sourceAttributeDetector = detectAttributes(source);
+            var targetAttributeDetector = detectAttributes(target);
 
-            // First, copy over core attributes
-            for (iIndex = 0,iLength = coreElementAttributes.length; iIndex < iLength; iIndex++) {
-                attributeName = coreElementAttributes[iIndex];
-                newValue = source.getAttribute(attributeName);
-                oldValue = target.getAttribute(attributeName);
-                if (oldValue != newValue) {
-                    target[attributeName] = newValue;
+            var isInputElement = target.nodeName.toLowerCase() === 'input';
+            var propertyNames = isInputElement ? coreElementProperties.concat(inputElementProperties) : coreElementProperties;
+            var isXML = !source.ownerDocument.contentType || source.ownerDocument.contentType == 'text/xml';
+            for (var iIndex = 0, iLength = propertyNames.length; iIndex < iLength; iIndex++) {
+                var propertyName = propertyNames[iIndex];
+                var attributeName = propertyToAttribute(propertyName);
+                if (sourceAttributeDetector(attributeName)) {
+                
+                    //With IE 7 (quirks or standard mode) and IE 8/9 (quirks mode only), 
+                    //you cannot get the attribute using 'class'. You must use 'className'
+                    //which is the same value you use to get the indexed property. The only 
+                    //reliable way to detect this (without trying to evaluate the browser
+                    //mode and version) is to compare the two return values using 'className' 
+                    //to see if they exactly the same.  If they are, then use the property
+                    //name when using getAttribute.
+                    if( attributeName == 'class'){
+                        if( isIE() && (source.getAttribute(propertyName) === source[propertyName]) ){
+                            attributeName = propertyName;
+                        }
+                    }
+
+                    var newValue = isXML ? source.getAttribute(attributeName) : source[propertyName];
+                    var oldValue = target[propertyName];
+                    if (oldValue != newValue) {
+                        target[propertyName] = newValue;
+                    }
+                } else if (targetAttributeDetector(attributeName)) {
+                    //setting property to '' seems to be the only cross-browser method for removing an attribute
+                    target[propertyName] = '';
                 }
             }
 
-            // Next, if it's an input, copy those over
-            if (target.nodeName.toLowerCase() === 'input') {
-                for (iIndex = 0,iLength = inputElementAttributes.length; iIndex < iLength; iIndex++) {
-                    attributeName = inputElementAttributes[iIndex];
-                    newValue = source.getAttribute(attributeName);
-                    oldValue = target.getAttribute(attributeName);
-                    if (oldValue != newValue) {
-                        target[attributeName] = newValue;
+            var booleanPropertyNames = isInputElement ? inputElementBooleanProperties : [];
+            for (var jIndex = 0, jLength = booleanPropertyNames.length; jIndex < jLength; jIndex++) {
+                var booleanPropertyName = booleanPropertyNames[jIndex];
+                var newBooleanValue = source[booleanPropertyName];
+                var oldBooleanValue = target[booleanPropertyName];
+                if (oldBooleanValue != newBooleanValue) {
+                    target[booleanPropertyName] = newBooleanValue;
+                }
+            }
+
+            //'style' attribute special case
+            if (sourceAttributeDetector('style')) {
+                var newStyle;
+                var oldStyle;
+                if (isIE()) {
+                    newStyle = source.style.cssText;
+                    oldStyle = target.style.cssText;
+                    if (newStyle != oldStyle) {
+                        target.style.cssText = newStyle;
+                    }
+                } else {
+                    newStyle = source.getAttribute('style');
+                    oldStyle = target.getAttribute('style');
+                    if (newStyle != oldStyle) {
+                        target.setAttribute('style', newStyle);
                     }
                 }
+            } else if (targetAttributeDetector('style')){
+                target.removeAttribute('style');
             }
-            //'style' attribute special case
-            var newStyle = source.getAttribute('style');
-            var oldStyle = target.getAttribute('style');
-            if (newStyle != oldStyle) {
-                if (isIE()) {
-                    target.style.setAttribute('cssText', newStyle, 0);
-                } else {
-                    target.setAttribute('style',newStyle);
+
+            // Special case for 'dir' attribute
+            if (!isIE() && source.dir != target.dir) {
+                if (sourceAttributeDetector('dir')) {
+                    target.dir = source.dir;
+                } else if (targetAttributeDetector('dir')) {
+                    target.dir = '';
                 }
             }
+
             for (var lIndex = 0, lLength = listenerNames.length; lIndex < lLength; lIndex++) {
                 var name = listenerNames[lIndex];
                 target[name] = source[name] ? source[name] : null;
@@ -733,9 +813,23 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                     source[name] = null;
                 }
             }
-            // Special case for 'dir' attribute
-            if (!isIE() && source.dir != target.dir) {
-                target.dir = source.dir ? source.dir : null;
+
+            //clone HTML5 data-* attributes
+            try{
+                var targetDataset = target.dataset;
+                var sourceDataset = source.dataset;
+                if (targetDataset || sourceDataset) {
+                    //cleanup the dataset
+                    for (var tp in targetDataset) {
+                        delete targetDataset[tp];
+                    }
+                    //copy dataset's properties
+                    for (var sp in sourceDataset) {
+                        targetDataset[sp] = sourceDataset[sp];
+                    }
+                }
+            } catch (ex) {
+                //most probably dataset properties are not supported
             }
         };
 

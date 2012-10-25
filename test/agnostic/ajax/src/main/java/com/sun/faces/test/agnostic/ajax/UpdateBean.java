@@ -66,7 +66,7 @@ public class UpdateBean {
                 writer.startDocument();
                 writer.startUpdate("javax.faces.ViewBody");
                 writer.startElement("body",null);
-                writer.writeAttribute("className","foo","class");
+                writer.writeAttribute("class","foo","class");
                 writer.writeAttribute("title","fooTitle","title");
                 writer.writeAttribute("lang","fooLang","lang");
                 writer.startElement("span", null);
