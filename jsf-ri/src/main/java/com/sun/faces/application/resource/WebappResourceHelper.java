@@ -250,13 +250,10 @@ public class WebappResourceHelper extends ResourceHelper {
         } else {
             // ok, subdirectories exist, so find the latest 'version' directory
             VersionInfo version = getVersion(resourcePaths, true);
-            if (version == null) {
-                if (LOGGER.isLoggable(Level.WARNING)) {
-                    LOGGER.log(Level.WARNING,
-                               "jsf.application.resource.unable_to_determine_resource_version.",
-                               resourceName);
-                    return null;
-                }
+            if (version == null && LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.log(Level.WARNING,
+                        "jsf.application.resource.unable_to_determine_resource_version.",
+                        resourceName);
             }
             if (library != null) {
                 value = new ClientResourceInfo(library,
