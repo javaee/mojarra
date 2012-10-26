@@ -24780,9 +24780,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
 
             <div class="changed_added_2_2">
 
-            <p><a name="decode">Decode Behavior</a></p>
-
-  <p>Define a data structure that represents the following table.</p>
+  <p>Define a data structure that represents the following table,
+  referred to as <strong>elementData</strong> for discussion.</p>
 
   <table border="1">
 
@@ -24802,36 +24801,63 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
 
 </tr>
 
+<tr>
+
+<td colspan="3">PENDING: other element data</td>
+
+</tr>
+
   </table>
 
-  <p>Look in the pass through attribute map for a key given by the value of
-  the symbolic constant Renderer.PASSTHROUGH_RENDERER_LOCALNAME_KEY.  If
-  not found, throw a FacesException.  Use the localName as the key into
-  the preceding table.  Find the submittedValueAttributeName entry for
-  that key.  Look in the passthrough attribute map for a key given by
-  the value of the submittedValueAttributeName entry.  If found, use
-  that value to look in the requestMap.  If the requestMap has a value,
-  set it as the submittedValue of the UIInput.  Aside from the
-  previously mentioned FacesException, if none of the data structure,
-  passthrough attribute map or requestMap lookups yields a value, take
-  no action.</p>
+<p>The value of <strong>localName</strong> must first be determined for
+both encoding and decoding.  Look in the components's pass through
+attribute map for a value under the key given by the value of the
+symbolic constant
+<code>Renderer.PASSTHROUGH_RENDERER_LOCALNAME_KEY</code>.  If not found,
+throw a <code>FacesException</code>.  If found, let this value be
+<strong>localName</strong>.</p>
 
+
+            <p><a name="decode">Decode Behavior</a></p>
+
+<ul>
+
+<li><p>Look in <strong>elementData</strong> for an entry under the key
+given by the value of <strong>localName</strong>.  If not found, this
+component does not require decoding; take no action and return.  If
+found, let <strong>submittedValueAttributeName</strong> and
+<strong>renderCurrentValue</strong> take their values from the
+entry.</p></li>
+
+<li><p>Look in the component's pass through attribute map for value
+under the key <strong>submittedValueAttributeName</strong>.  If not
+found, this component does not require decoding; take no action and
+return.  If found, let this value be
+<strong>submittedValueName</strong>.</p></li>
+
+<li><p>Look in the request map for a value under
+<strong>submittedValueName</strong>.  If not found, no value was
+submitted for this component, take no action and return.  If found, call
+<code>setSubmittedValue()</code>, passing the value from the request map
+as the argument.</p></li>
+
+</ul>
+  
             <p><a name="decode">Encode Behavior</a></p>
 
-  <p>Look in the component's attribute map for an entry under the key given
-  by the value of the constant
-  Renderer.PASSTHROUGH_RENDERER_LOCALNAME_KEY. The value of this key is
-  the element name to render. If the component has a manually declared,
-  not auto-generated clientId, or if the component has behaviors
-  attached to it, render the clientId as the value of the "id"
-  attribute. Render the "name" attribute with the value coming from the
-  clientId. Note that markup authors may set this value directly on the
-  markup and the VDL processing must guarantee that the "name" attribute
-  is set as the component's clientId. If the data structure has an entry
-  for the localName, and the value of the renderCurrentValue is true, or
-  the data structure has no entry for the localName, render the current
-  value of the component as the value of the "value" attribute.
-  Otherwise do not render the value of the component.</p>
+  <p>If the component has a manually declared, not auto-generated
+  clientId, or if the component has behaviors attached to it, render the
+  clientId as the value of the "id" attribute. Render the "name"
+  attribute with the value coming from the clientId. Note that markup
+  authors may set this value directly on the markup and the VDL
+  processing must guarantee that the "name" attribute is set as the
+  component's clientId. If <strong>elementData</strong> has an entry for
+  the <strong>localName</strong>, and the value of the
+  <strong>renderCurrentValue</strong> is <code>true</code>, or
+  <strong>elementData</strong> has no entry for
+  <strong>localName</strong>, render the current value of the component
+  as the value of the "value" attribute.  Otherwise do not render the
+  value of the component.</p>
 
             </div>
 
@@ -33962,7 +33988,7 @@ the literal string "<code>head</code>" as the last argument.</p>
     <renderer>
       <description><![CDATA[<div class="changed_added_2_1">
 
-<p><span class="changed_added_2_1">Render</span> the markup for
+<p><span class="changed_added_2_1 changed_modified_2_2">Render</span> the markup for
 a <code>&lt;!DOCTYPE&gt;</code> declaration.</p>
 
       <p>Decode Behavior</p>
@@ -33982,6 +34008,24 @@ defined, render the literal text <code>PUBLIC</code> then render the
 value of the attribute inside double quotes.  If the "system" attribute
 is defined, render it next, inside double quotes.  Close the doctype
 declaration with the literal text <code>&gt;</code>.</p>
+
+<div class="changed_added_2_2">
+
+<p>No relocation occurs with the output of this component. It is
+rendered at whatever position in the view hierarchy it happens to be
+encountered when traversing the view to render. Therefore, this
+component must be located in the view hierarchy at the correct location
+so that the final rendered markup has it in the proper place with
+respect to the user agent that consumes the rendered markup. In practice
+this means in front of the &lt;html&gt; or &lt;h:html&gt; element.
+Furthermore, if multiple &lt;h:doctype&gt; components exist,
+<strong>all</strong> of them will be rendered.</p>
+
+<p>If this component is present in a view, any DOCTYPE that would
+otherwise have been rendered by virtue of being present in the VDL page
+must be ignored.</p>
+
+</div>
 
 
 </div>]]></description>

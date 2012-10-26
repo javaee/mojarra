@@ -151,7 +151,7 @@ body {
                  border-top:none; border-bottom:none; border-color:red;
                  text-decoration: line-through; }
 
-a[href^="HTML_BASIC/javax.faces.Outputjavax.faces.resource.Stylesheet.html"], a[href^="HTML_BASIC/javax.faces.OutcomeTargetjavax.faces.Link.html"], a[href^="HTML_BASIC/javax.faces.OutcomeTargetjavax.faces.Button.html"], a[href^="HTML_BASIC/javax.faces.Outputjavax.faces.Head.html"], a[href^="HTML_BASIC/javax.faces.Outputjavax.faces.Body.html"], a[href^="HTML_BASIC/javax.faces.Messagejavax.faces.Message.html"], a[href^="HTML_BASIC/javax.faces.Outputjavax.faces.Link.html"], a[href^="HTML_BASIC/javax.faces.Outputjavax.faces.Text.html"], a[href^="HTML_BASIC/javax.faces.Inputjavax.faces.Text.html"]{ cursor: url(changed_modified_2_2_cursor.cur), auto;
+a[href^="HTML_BASIC/javax.faces.Outputjavax.faces.resource.Stylesheet.html"], a[href^="HTML_BASIC/javax.faces.OutcomeTargetjavax.faces.Link.html"], a[href^="HTML_BASIC/javax.faces.OutcomeTargetjavax.faces.Button.html"], a[href^="HTML_BASIC/javax.faces.Outputjavax.faces.Head.html"], a[href^="HTML_BASIC/javax.faces.Outputjavax.faces.Body.html"], a[href^="HTML_BASIC/javax.faces.Messagejavax.faces.Message.html"], a[href^="HTML_BASIC/javax.faces.Outputjavax.faces.Doctype.html"], a[href^="HTML_BASIC/javax.faces.Outputjavax.faces.Link.html"], a[href^="HTML_BASIC/javax.faces.Outputjavax.faces.Text.html"], a[href^="HTML_BASIC/javax.faces.Inputjavax.faces.Text.html"]{ cursor: url(changed_modified_2_2_cursor.cur), auto;
                  background: url(changed_modified_2_2.png); 
                  padding-left:0.2em; border-left:solid;
                  border-left-width:thin; border-right:none;

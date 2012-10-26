@@ -3805,7 +3805,7 @@ the literal string "<code>head</code>" as the last argument.</p>
 <renderer>
             <description><![CDATA[<div class="changed_added_2_1">
 
-<p><span class="changed_added_2_1">Render</span> the markup for
+<p><span class="changed_added_2_1 changed_modified_2_2">Render</span> the markup for
 a <code>&lt;!DOCTYPE&gt;</code> declaration.</p>
 
       <p>Decode Behavior</p>
@@ -3825,6 +3825,24 @@ defined, render the literal text <code>PUBLIC</code> then render the
 value of the attribute inside double quotes.  If the "system" attribute
 is defined, render it next, inside double quotes.  Close the doctype
 declaration with the literal text <code>&gt;</code>.</p>
+
+<div class="changed_added_2_2">
+
+<p>No relocation occurs with the output of this component. It is
+rendered at whatever position in the view hierarchy it happens to be
+encountered when traversing the view to render. Therefore, this
+component must be located in the view hierarchy at the correct location
+so that the final rendered markup has it in the proper place with
+respect to the user agent that consumes the rendered markup. In practice
+this means in front of the &lt;html&gt; or &lt;h:html&gt; element.
+Furthermore, if multiple &lt;h:doctype&gt; components exist,
+<strong>all</strong> of them will be rendered.</p>
+
+<p>If this component is present in a view, any DOCTYPE that would
+otherwise have been rendered by virtue of being present in the VDL page
+must be ignored.</p>
+
+</div>
 
 
 </div>]]></description>
