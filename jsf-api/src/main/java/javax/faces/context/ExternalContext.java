@@ -312,7 +312,7 @@ public abstract class ExternalContext {
      *
      * @param name Name to be encoded
      *
-     * @throws <span class="changed_modified_2_2">NullPointerException
+     * @throws NullPointerException <span class="changed_modified_2_2">
      * if running in a non-servlet environment and <code>name</code> is
      * <code>null</code></span>.
      */

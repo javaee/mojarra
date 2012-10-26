@@ -53,6 +53,37 @@ import java.lang.annotation.Inherited;
  * <code>&lt;managed-bean-scope&gt;view&lt;managed-bean-scope&gt;</code>
  * element was declared for the corresponding managed bean.</p>
 
+ * <div class="changed_added_2_2">
+
+ * <p>The runtime must ensure that any methods on the bean annotated
+ * with {@code PostConstruct} or {@code PreDestroy} are called when the
+ * scope begins and ends, respectively.  Two circumstances can cause the
+ * scope to end.</p>
+
+ * <ul>
+
+ * <li><p>{@code FacesContext.setViewRoot()} is called with the new
+ * {@code UIViewRoot} being different than the current one.</p></li>
+
+ * <li><p>The session, that happened to be active when the bean was
+ * created, expires.  If no session existed when the bean was created,
+ * then this circumstance does not apply.</p></li>
+
+ * </ul>
+
+ * <p>In the session expiration case, the runtime must ensure that
+ * {@code FacesContext.getCurrentInstance()} returns a valid instance if
+ * it is called during the processing of the {@code @PreDestroy}
+ * annotated method.  The set of methods on {@code FacesContext} that
+ * are valid to call in this circumstance is identical to those
+ * documented as "valid to call this method during application startup
+ * or shutdown". On the {@code ExternalContext} returned from that
+ * {@code FacesContext}, all of the methods documented as "valid to call
+ * this method during application startup or shutdown" are valid to
+ * call.  In addition, the method {@code
+ * ExternalContext.getSessionMap()} is also valid to call.</p>
+
+
  * <p class="changed_added_2_2">The annotations in this package may be
  * deprecated in a future version of this specification because they
  * duplicate functionality provided by other specifications included in
@@ -62,6 +93,8 @@ import java.lang.annotation.Inherited;
  * {@code javax.faces.flow.ViewScoped}.  The functionality of this
  * corresponding annotation is identical to this one, but it is
  * implemented as a CDI custom scope.</p>
+
+ * </div>
 
  *
  * @since 2.0
