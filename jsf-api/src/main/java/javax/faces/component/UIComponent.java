@@ -1221,16 +1221,16 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
     // from a spec version more recent than the version with which the component
     // complies.  Currently this private property is only consulted in the
     // getValueExpression() method.
-    private boolean isUIComponentBase;
-    private boolean isUIComponentBaseIsSet = false;
-
-    private boolean isUIComponentBase() {
-        if (!isUIComponentBaseIsSet) {
-            isUIComponentBase = (this instanceof UIComponentBase);
-        }
-
-        return isUIComponentBase;
-    }
+//    private boolean isUIComponentBase;
+//    private boolean isUIComponentBaseIsSet = false;
+//
+//    private boolean isUIComponentBase() {
+//        if (!isUIComponentBaseIsSet) {
+//            isUIComponentBase = (this instanceof UIComponentBase);
+//        }
+//
+//        return isUIComponentBase;
+//    }
 
 
     // ------------------------------------------------- Tree Management Methods
