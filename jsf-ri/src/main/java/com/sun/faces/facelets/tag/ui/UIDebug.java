@@ -116,11 +116,11 @@ public final class UIDebug extends UIComponentBase {
         };
     }
 
-    public void encodeBegin(FacesContext faces) throws IOException {
+    public void encodeBegin(FacesContext facesContext) throws IOException {
 
         if (isRendered()) {
-            pushComponentToEL(faces, this);
-            String actionId = faces.getApplication().getViewHandler().getActionURL(faces, faces.getViewRoot().getViewId());
+            pushComponentToEL(facesContext, this);
+            String actionId = facesContext.getApplication().getViewHandler().getActionURL(facesContext, facesContext.getViewRoot().getViewId());
 
             StringBuffer sb = new StringBuffer(512);
             sb.append("//<![CDATA[\n");
@@ -130,16 +130,19 @@ public final class UIDebug extends UIComponentBase {
             sb.append(actionId.indexOf('?') == -1 ? '?' : '&');
             sb.append(KEY);
             sb.append('=');
-            sb.append(writeDebugOutput(faces, this));
+            sb.append(writeDebugOutput(facesContext, this));
             sb.append("'); else if (faceletsOrigKeyup) faceletsOrigKeyup(e); };\n");
             sb.append("//]]>\n");
 
-            ResponseWriter writer = faces.getResponseWriter();
+            ResponseWriter writer = facesContext.getResponseWriter();
+            writer.startElement("span", this);
+            writer.writeAttribute("id", getClientId(facesContext), "id");
             writer.startElement("script", this);
             writer.writeAttribute("language", "javascript", "language");
             writer.writeAttribute("type", "text/javascript", "type");
             writer.writeText(sb.toString(), this, null);
             writer.endElement("script");
+            writer.endElement("span");
         }
     }
 
