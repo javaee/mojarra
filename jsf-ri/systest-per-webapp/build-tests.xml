@@ -140,8 +140,6 @@
                value="characterCombat/CharacterCombatTestCase.class" />
     <property  name="cluster-no-agressive-session-dirtying"
                value="com/sun/faces/systest/ClusterNoAgressiveSessionDirtyingTestCase.class" />
-     <property  name="formOmittedTrinidad"
-               value="com/sun/faces/systest/FormOmittedTrinidadTestCase.class" />
 
     <!--
         EXCLUDED APPLICATIONS:

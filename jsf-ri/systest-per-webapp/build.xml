@@ -162,9 +162,6 @@
                    bogus-render-kit-id,
                    characterCombat"/>
 
-    <property name="applications-with-custom-dependencies"
-              value="formOmittedTrinidad"/>
-
     <!-- ************ Executable Targets ************************************** -->
 
 
@@ -278,20 +275,20 @@
 
     <target name="define.V3.1.applications" if="container.is.V3.1">
        <property name="applications" 
-                 value="${container-agnostic-applications},${applications-for-V3.1-only}, ${applications-with-custom-dependencies}" />
+                 value="${container-agnostic-applications},${applications-for-V3.1-only}" />
     </target>
 
     <target name="define.V3.1_no_cluster.applications.virtual.server" 
             if="container.is.V3.1_no_cluster">
        <property name="applications"
-                 value="${applications-for-V3.1_no_cluster-virtual-server}, ${applications-with-custom-dependencies}" />
+                 value="${applications-for-V3.1_no_cluster-virtual-server}" />
     </target>
 
 
 
     <target name="define.V3.1_no_cluster.applications" if="container.is.V3.1_no_cluster">
        <property name="applications" 
-                 value="${container-agnostic-applications},${applications-for-V3.1_no_cluster-only},${applications-with-custom-dependencies}" />
+                 value="${container-agnostic-applications},${applications-for-V3.1_no_cluster-only}" />
     </target>
 
     <target name="install" depends="compile.base.sources,define.applications">
@@ -299,12 +296,6 @@
         <for list="${applications}" param="app" trim="true">
             <sequential>
                 <undeploy.app appname="@{app}"/>
-                <if>
-                    <contains string="@{app}" substring="Trinidad"/>
-                    <then>
-                        <antcall target="populate-dependency-properties-@{app}"/>
-                    </then>
-                </if>
 
                 <build.app appname="@{app}"
                             base-app-dir="${basedir}/@{app}"/>
@@ -313,11 +304,6 @@
             </sequential>
         </for>
 
-    </target>
-
-    <target name="populate-dependency-properties-formOmittedTrinidad">
-        <copy file="${trinidad-api.jar}" todir="formOmittedTrinidad/web/WEB-INF/lib"/>
-        <copy file="${trinidad-impl.jar}" todir="formOmittedTrinidad/web/WEB-INF/lib"/>       
     </target>
 
 <target name="install-virtual-server" depends="compile.base.sources,define.applications.virtual-server">
@@ -337,12 +323,6 @@
         <for list="${applications}" param="app" trim="true">
             <sequential>
                 <undeploy.app appname="@{app}"/>
-                <if>
-                    <contains string="@{app}" substring="Trinidad"/>
-                    <then>
-                        <antcall target="populate-dependency-properties-@{app}"/>
-                    </then>
-                </if>
                 <build.app appname="@{app}"
                            base-app-dir="${basedir}/@{app}"/>               
                 <deploy.app appname="@{app}" use-virtual-servers="true"
@@ -356,12 +336,6 @@
         
         <for list="${applications}" param="app" trim="true">
             <sequential>
-                <if>
-                    <contains string="@{app}" substring="Trinidad"/>
-                    <then>
-                        <antcall target="populate-dependency-properties-@{app}"/>
-                    </then>
-                </if>
                 <build.app appname="@{app}"
                             base-app-dir="${basedir}/@{app}"/>               
             </sequential>

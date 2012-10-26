@@ -38,73 +38,74 @@
  * holder.
  */
 
-package com.sun.faces.systest;
+package com.sun.faces.test.adf.basic;
 
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import com.gargoylesoftware.htmlunit.WebClient;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import static org.junit.Assert.assertTrue;
 
-/**
- * <p>Test Case for checking if form is omitted when there is a button/link in the page.</p>
- */
-
-public class FormOmittedTrinidadTestCase extends HtmlUnitFacesTestCase {
-
-
-    // ------------------------------------------------------------ Constructors
-
+public class FormOmittedTrinidadIT {
+    
+    /**
+     * Stores the web URL.
+     */
+    private String webUrl;
+    /**
+     * Stores the web client.
+     */
+    private WebClient webClient;
 
     /**
-     * Construct a new instance of this test case.
-     *
-     * @param name Name of the test case
+     * Setup before testing.
+     * 
+     * @throws Exception when a serious error occurs.
      */
-    public FormOmittedTrinidadTestCase(String name) {
-        super(name);
+    @BeforeClass
+    public static void setUpClass() throws Exception {
     }
 
-
-    // ------------------------------------------------------ Instance Variables
-
-
-    // ---------------------------------------------------- Overall Test Methods
-
-
     /**
-     * Set up instance variables required by this test case.
+     * Cleanup after testing.
+     * 
+     * @throws Exception when a serious error occurs.
      */
-    public void setUp() throws Exception {
-        super.setUp();
+    @AfterClass
+    public static void tearDownClass() throws Exception {
     }
 
-
     /**
-     * Return the tests included in this test suite.
+     * Setup before testing.
      */
-    public static Test suite() {
-        return (new TestSuite(FormOmittedTrinidadTestCase.class));
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-
     /**
-     * Tear down instance variables required by this test case.
+     * Tear down after testing.
      */
+    @After
     public void tearDown() {
-        super.tearDown();
+        webClient.closeAllWindows();
     }
-
-
-    // ------------------------------------------------- Individual Test Methods
-
-
+    
+    @Test
     public void testFormOmittedTrinidad() throws Exception {
-        HtmlPage page = getPage("/faces/formomitted.xhtml");
+        HtmlPage page = webClient.getPage(webUrl + "/faces/formomitted.xhtml");
 
         String pageAsText = page.asText();
         assertTrue (!pageAsText.contains("The form component needs to have a UIForm in its ancestry. Suggestion: enclose the necessary components within <h:form>"));
 
-        
+        String xml = page.asXml();
+        assertTrue(xml.matches("(?s).*link.*stylesheet.*adf/styles.*css.*"));
+        assertTrue(xml.matches("(?s).*AdfWindowOpenError.*"));
+        assertTrue(xml.matches("(?s).*script.*adf/jsLibs.*"));
     }
 }
