@@ -148,45 +148,45 @@ public class ReflectionUtil {
         return s;
     }
 
-    /*
-     * Get a public method form a public class or interface of a given method.
-     * Note that if the base is an instance of a non-public class that
-     * implements a public interface,  calling Class.getMethod() with the base
-     * will not find the method.  To correct this, a version of the
-     * same method must be found in a superclass or interface.
-     **/
-
-    static private Method getMethod(Class cl, String methodName,
-                                    Class[] paramTypes) {
-
-        Method m = null;
-        try {
-            m = cl.getMethod(methodName, paramTypes);
-        } catch (NoSuchMethodException ex) {
-            return null;
-        }
-
-        Class dclass  = m.getDeclaringClass();
-        if (Modifier.isPublic(dclass.getModifiers())) {
-            return m;
-        }
-
-        Class[] intf = dclass.getInterfaces();
-        for (int i = 0; i < intf.length; i++) {
-            m = getMethod(intf[i], methodName, paramTypes);
-            if (m != null) {
-                return m;
-            }
-        }
-        Class c = dclass.getSuperclass();
-        if (c != null) {
-            m = getMethod(c, methodName, paramTypes);
-            if (m != null) {
-                return m;
-            }
-        }
-        return null;
-    }
+//    /*
+//     * Get a public method form a public class or interface of a given method.
+//     * Note that if the base is an instance of a non-public class that
+//     * implements a public interface,  calling Class.getMethod() with the base
+//     * will not find the method.  To correct this, a version of the
+//     * same method must be found in a superclass or interface.
+//     **/
+//
+//    static private Method getMethod(Class cl, String methodName,
+//                                    Class[] paramTypes) {
+//
+//        Method m = null;
+//        try {
+//            m = cl.getMethod(methodName, paramTypes);
+//        } catch (NoSuchMethodException ex) {
+//            return null;
+//        }
+//
+//        Class dclass  = m.getDeclaringClass();
+//        if (Modifier.isPublic(dclass.getModifiers())) {
+//            return m;
+//        }
+//
+//        Class[] intf = dclass.getInterfaces();
+//        for (int i = 0; i < intf.length; i++) {
+//            m = getMethod(intf[i], methodName, paramTypes);
+//            if (m != null) {
+//                return m;
+//            }
+//        }
+//        Class c = dclass.getSuperclass();
+//        if (c != null) {
+//            m = getMethod(c, methodName, paramTypes);
+//            if (m != null) {
+//                return m;
+//            }
+//        }
+//        return null;
+//    }
 
     protected static final String paramString(Class[] types) {
         if (types != null) {
