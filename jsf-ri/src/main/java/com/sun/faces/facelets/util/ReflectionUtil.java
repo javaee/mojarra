@@ -67,8 +67,6 @@ import com.sun.faces.util.Util;
 import javax.faces.view.facelets.ResourceResolver;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.text.MessageFormat;
 import java.util.Arrays;
 
