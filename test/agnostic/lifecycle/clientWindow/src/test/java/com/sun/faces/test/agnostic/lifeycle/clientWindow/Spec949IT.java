@@ -73,6 +73,7 @@ public class Spec949IT {
     }
 
     @Test
+    @Ignore
     public void testClientWindow() throws Exception {
         String clientWindow1, clientWindow2, window1Session, window2Session;
         clientWindow1 = doTestAndReturnClientWindow(webClient, "window0");
