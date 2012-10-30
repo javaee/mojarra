@@ -39,23 +39,21 @@
  */
 package com.sun.faces.test.agnostic.lifeycle.clientWindow;
 
+import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlInput;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import java.net.URL;
-import com.gargoylesoftware.htmlunit.html.HtmlInput;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
-import org.junit.Ignore;
 
 public class Spec949IT {
 
@@ -66,6 +64,8 @@ public class Spec949IT {
     public void setUp() {
         webUrl = System.getProperty("integration.url");
         webClient = new WebClient();
+        webClient.setJavaScriptEnabled(true);
+        webClient.setJavaScriptTimeout(120000);
     }
 
     @After
@@ -74,7 +74,6 @@ public class Spec949IT {
     }
 
     @Test
-    @Ignore
     public void testClientWindow() throws Exception {
         String clientWindow1, clientWindow2, window1Session, window2Session;
         clientWindow1 = doTestAndReturnClientWindow(webClient, "window0");
@@ -98,9 +97,9 @@ public class Spec949IT {
     }
     
     public void doTestClientWindowsDifferent(String path, String id) throws Exception {
-        HtmlPage page = null;
-        List<HtmlElement> clientWindowHiddenFields = null;
-        HtmlElement link = null;
+        HtmlPage page;
+        List<HtmlElement> clientWindowHiddenFields;
+        HtmlElement link;
         String clientWindowBeforeClick, clientWindowAfterClick;
         
         // Click the link and verify the ClientWindow is different on the new page.
@@ -118,7 +117,7 @@ public class Spec949IT {
     }
     
     public String doTestAndReturnClientWindow(WebClient yourClient, String windowName) throws Exception {
-        String clientWindow = null;
+        String clientWindow;
         
         // 
         // Do some actions on this page
@@ -129,7 +128,7 @@ public class Spec949IT {
         
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("submitAjax");
         page = button.click();
-        Thread.sleep(2000);
+        webClient.waitForBackgroundJavaScript(120000);
         String pageText = page.asText();
         assertTrue(pageText.contains("|ajaxFirstName|"));
 
@@ -143,7 +142,7 @@ public class Spec949IT {
         
         button = (HtmlSubmitInput) page.getElementById("submitNonAjax");
         page = button.click();
-        Thread.sleep(2000);
+        webClient.waitForBackgroundJavaScript(120000);
         pageText = page.asText();
         assertTrue(pageText.contains("|nonAjaxFirstName|"));
         
@@ -155,7 +154,7 @@ public class Spec949IT {
         page = link.click();
         button = (HtmlSubmitInput) page.getElementById("getClientWindow");
         page = button.click();
-        Thread.sleep(2000);
+        webClient.waitForBackgroundJavaScript(120000);
         pageText = page.asText();
         clientWindowLabelIndex = pageText.indexOf(clientWindowLabel);
         String newPageClientWindow = pageText.substring(clientWindowLabelIndex + clientWindowLabel.length());
@@ -174,13 +173,12 @@ public class Spec949IT {
         page = link.click();
         button = (HtmlSubmitInput) page.getElementById("getClientWindow");
         page = button.click();
-        Thread.sleep(2000);
+        webClient.waitForBackgroundJavaScript(120000);
         pageText = page.asText();
         clientWindowLabelIndex = pageText.indexOf(clientWindowLabel);
         newPageClientWindow = pageText.substring(clientWindowLabelIndex + clientWindowLabel.length());
         assertEquals(clientWindow, newPageClientWindow);
         
         return clientWindow;
-    }
-    
+    }    
 }
