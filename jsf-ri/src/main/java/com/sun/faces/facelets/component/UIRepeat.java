@@ -607,6 +607,8 @@ public class UIRepeat extends UINamingContainer {
         if (!isVisitable(context)) {
             return false;
         }
+        
+        this.setDataModel(null);
 
         FacesContext facesContext = context.getFacesContext();
         boolean visitRows = requiresRowIteration(context);
