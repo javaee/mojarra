@@ -339,7 +339,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
     /**
      * <p class="changed_added_2_2">This method has the same specification as 
      * {@link #getPassThroughAttributes() } except that it is allowed to return 
-     * {@code null} if and only if the argument {@code param} is {@code false}
+     * {@code null} if and only if the argument {@code create} is {@code false}
      * and no pass through attribute data structure exists for this instance.</p>
 
      * @param create if <code>true</code>, a new {@code Map}

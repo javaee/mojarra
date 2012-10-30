@@ -24774,99 +24774,32 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     <renderer>
       <description><![CDATA[<p class="changed_added_2_2">This
             renderer is intended to be used with an arbitrary markup
-            element that ultimately produces a name=value pair that will
-            be sent to the server and decoded by the associated
-            <code>javax.faces.component.UIInput</code>.  </p>
+            element that has no decoding.</p>
 
             <div class="changed_added_2_2">
-
-  <p>Define a data structure that represents the following table,
-  referred to as <strong>elementData</strong> for discussion.</p>
-
-  <table border="1">
-
-    <tr>
-
-<th>localName</th> 
-
-<th>submittedValueAttributeName</th>
-
-<th>renderCurrentValue</th>
-
-    </tr>
-
-<tr>
-
-<td>keygen</td> <td>name</td> <td>false</td>
-
-</tr>
-
-<tr>
-
-<td colspan="3">PENDING: other element data</td>
-
-</tr>
-
-  </table>
-
-<p>The value of <strong>localName</strong> must first be determined for
-both encoding and decoding.  Look in the components's pass through
-attribute map for a value under the key given by the value of the
-symbolic constant
-<code>Renderer.PASSTHROUGH_RENDERER_LOCALNAME_KEY</code>.  If not found,
-throw a <code>FacesException</code>.  If found, let this value be
-<strong>localName</strong>.</p>
+            <p>The local name of the rendered element must first be
+             determined for encoding. Look in the components's pass through
+             attribute map for a value under the key given by the value of the
+            symbolic constant
+            <code>Renderer.PASSTHROUGH_RENDERER_LOCALNAME_KEY</code>. If not found,
+            throw a <code>FacesException</code>.  If found, let this value be
+            <strong>localName</strong>.</p>
 
 
-            <p><a name="decode">Decode Behavior</a></p>
-
-<ul>
-
-<li><p>Look in <strong>elementData</strong> for an entry under the key
-given by the value of <strong>localName</strong>.  If not found, this
-component does not require decoding; take no action and return.  If
-found, let <strong>submittedValueAttributeName</strong> and
-<strong>renderCurrentValue</strong> take their values from the
-entry.</p></li>
-
-<li><p>Look in the component's pass through attribute map for value
-under the key <strong>submittedValueAttributeName</strong>.  If not
-found, this component does not require decoding; take no action and
-return.  If found, let this value be
-<strong>submittedValueName</strong>.</p></li>
-
-<li><p>Look in the request map for a value under
-<strong>submittedValueName</strong>.  If not found, no value was
-submitted for this component, take no action and return.  If found, call
-<code>setSubmittedValue()</code>, passing the value from the request map
-as the argument.</p></li>
-
-</ul>
-  
             <p><a name="decode">Encode Behavior</a></p>
 
   <p>If the component has a manually declared, not auto-generated
   clientId, or if the component has behaviors attached to it, render the
-  clientId as the value of the "id" attribute. Render the "name"
-  attribute with the value coming from the clientId. Note that markup
-  authors may set this value directly on the markup and the VDL
-  processing must guarantee that the "name" attribute is set as the
-  component's clientId. If <strong>elementData</strong> has an entry for
-  the <strong>localName</strong>, and the value of the
-  <strong>renderCurrentValue</strong> is <code>true</code>, or
-  <strong>elementData</strong> has no entry for
-  <strong>localName</strong>, render the current value of the component
-  as the value of the "value" attribute.  Otherwise do not render the
-  value of the component.</p>
+  clientId as the value of the "id" attribute.</p>
 
             </div>
 
 
 ]]></description>
-      <component-family>javax.faces.Input</component-family>
-      <renderer-type>javax.faces.passthrough.Input</renderer-type>
+      <component-family>javax.faces.Panel</component-family>
+      <renderer-type>javax.faces.passthrough.Element</renderer-type>
       <renderer-class>
-        com.sun.faces.renderkit.html_basic.PassthroughInputRenderer
+        com.sun.faces.renderkit.html_basic.PassthroughRenderer
     </renderer-class>
       <renderer-extension>
         <renders-children>false</renders-children>

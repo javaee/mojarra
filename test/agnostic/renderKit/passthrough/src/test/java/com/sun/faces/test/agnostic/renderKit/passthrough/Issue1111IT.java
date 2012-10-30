@@ -42,6 +42,7 @@ package com.sun.faces.test.agnostic.renderKit.passthrough;
 import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.StatusHandler;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlOption;
@@ -275,13 +276,24 @@ public class Issue1111IT {
         lastAction = page.getElementById("lastAction").getTextContent();
         assertEquals("action2", lastAction);
         
-        HtmlElement keyGen = page.getElementById("publicKey1");
-        String nameAttr = keyGen.asXml();
+    }
+    
+    @Test
+    public void testLinks() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/links.xhtml");
         
-        String pageXml = page.asXml();
-        assertTrue(pageXml.matches("(?s).*keygen.*name=\\\"myKeyName\\\".*"));
-        assertTrue(pageXml.matches("(?s).*keygen.*name=\\\"myKeyName2\\\".*"));
+        HtmlAnchor link = (HtmlAnchor) page.getElementById("action1");
+        page = link.click();
+        
+        String lastAction = page.getElementById("lastAction").getTextContent();
+        assertEquals("action1", lastAction);
 
+        link = (HtmlAnchor) page.getElementById("action2");
+        page = link.click();
+        
+        lastAction = page.getElementById("lastAction").getTextContent();
+        assertEquals("action2", lastAction);
+        
     }
 
     @Test

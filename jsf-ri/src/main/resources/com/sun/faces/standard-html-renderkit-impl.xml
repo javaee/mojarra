@@ -59,9 +59,9 @@
     <input-file-renderer-class>
         com.sun.faces.renderkit.html_basic.FileRenderer
     </input-file-renderer-class>
-    <passthrough-input-renderer-class>
-        com.sun.faces.renderkit.html_basic.PassthroughInputRenderer
-    </passthrough-input-renderer-class>
+    <passthrough-renderer-class>
+        com.sun.faces.renderkit.html_basic.PassthroughRenderer
+    </passthrough-renderer-class>
     <input-hidden-renderer-class>
         com.sun.faces.renderkit.html_basic.HiddenRenderer
     </input-hidden-renderer-class>

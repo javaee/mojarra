@@ -42,6 +42,8 @@ package com.sun.faces.facelets.tag;
 import com.sun.faces.facelets.tag.jsf.PassThroughAttributeLibrary;
 import com.sun.faces.facelets.tag.jsf.PassThroughElementLibrary;
 import com.sun.faces.facelets.tag.jsf.html.HtmlLibrary;
+
+import javax.faces.render.Renderer;
 import javax.faces.view.Location;
 import javax.faces.view.facelets.FaceletException;
 import javax.faces.view.facelets.Tag;
@@ -50,7 +52,6 @@ import javax.faces.view.facelets.TagAttributes;
 import javax.faces.view.facelets.TagDecorator;
 import java.util.HashMap;
 import java.util.Map;
-import javax.faces.render.Renderer;
 
 /**
  * A simple tag decorator to enable jsf: syntax
@@ -58,7 +59,11 @@ import javax.faces.render.Renderer;
 class DefaultTagDecorator implements TagDecorator {
 
     private static enum Mapper {
-        // TODO can we handle h:commandLink and h:outputLink?
+        a(
+                new ElementConverter("h:commandLink", "jsf:action"),
+                new ElementConverter("h:commandLink", "jsf:actionListener"),
+                new ElementConverter("h:outputLink", "jsf:value")),
+
         img("h:graphicImage"), body("h:body"), head("h:head"), label("h:outputLabel"), script("h:outputScript"),
         link("h:outputStylesheet"),
 
@@ -66,10 +71,9 @@ class DefaultTagDecorator implements TagDecorator {
         // TODO if we want the name of the button to become the id, we have to do .id("name")
         button("h:commandButton"),
 
-        select(new ElementConverter("h:selectOneListbox", "multiple")
+        select(new ElementConverter("h:selectManyListbox", "multiple").id("name"),
                 // TODO this is a little bit ugly to handle the name as if it were jsf:id. we should not support this
-                .id("name")
-                .map("multiple", "selectManyListbox")),
+                new ElementConverter("h:selectOneListbox").id("name")),
 
         input(new ElementConverter("h:inputText", "type")
                 // TODO this is a little bit ugly to handle the name as if it were jsf:id. we should not support this
@@ -96,8 +100,23 @@ class DefaultTagDecorator implements TagDecorator {
 
         private ElementConverter elementConverter;
 
-        private Mapper(ElementConverter elementConverter) {
-            this.elementConverter = elementConverter;
+        private Mapper(final ElementConverter... elementConverters) {
+            if (elementConverters.length == 1) {
+                this.elementConverter = elementConverters[0];
+            } else {
+                this.elementConverter = new ElementConverter() {
+                    @Override
+                    public Tag decorate(Tag tag) {
+                        for (ElementConverter converter : elementConverters) {
+                            Tag decorated = converter.decorate(tag);
+                            if (decorated != null) {
+                                return decorated;
+                            }
+                        }
+                        return null;
+                    }
+                };
+            }
         }
 
         private Mapper(String faceletTag) {
@@ -156,8 +175,13 @@ class DefaultTagDecorator implements TagDecorator {
         private String localName;
         private Namespace namespace;
         private String arbiterAttributeName;
+        private String arbiterAttributeNamespace = "";
         private Map<String, String> additionalMappings = new HashMap<String, String>();
         private String otherHtmlIdAttribute;
+
+        private ElementConverter() {
+            super();
+        }
 
         private ElementConverter(String faceletsTag) {
             this(faceletsTag, null);
@@ -165,9 +189,15 @@ class DefaultTagDecorator implements TagDecorator {
 
         private ElementConverter(String faceletsTag, String arbiterAttributeName) {
             String[] strings = faceletsTag.split(":");
-            namespace = Namespace.valueOf(strings[0]);
-            localName = strings[1];
+            this.namespace = Namespace.valueOf(strings[0]);
+            this.localName = strings[1];
             this.arbiterAttributeName = arbiterAttributeName;
+
+            if (arbiterAttributeName != null && arbiterAttributeName.indexOf(':') > 0) {
+                strings = arbiterAttributeName.split(":");
+                this.arbiterAttributeNamespace = Namespace.valueOf(strings[0]).uri;
+                this.arbiterAttributeName = strings[1];
+            }
         }
 
         private ElementConverter map(String arbiterAttributeValue, String faceletsTagLocalName) {
@@ -181,19 +211,24 @@ class DefaultTagDecorator implements TagDecorator {
         }
 
         public Tag decorate(Tag tag) {
-            TagAttribute arbiterAttribute = tag.getAttributes().get("", arbiterAttributeName);
-
-            if (arbiterAttributeName == null || arbiterAttribute == null) {
+            if (arbiterAttributeName == null) {
                 // no arbiter
                 return convertTag(tag, namespace, localName);
             }
 
+            TagAttribute arbiterAttribute = tag.getAttributes().get(arbiterAttributeNamespace, arbiterAttributeName);
+
+            if (arbiterAttribute == null) {
+                // no arbiter
+                return null;//convertTag(tag, namespace, localName);
+            }
+
             // PENDING 
             /**
-            if (!arbiterAttribute.isLiteral()) {
-                // TODO should we throw an exception here?
-            }
-            **/
+             if (!arbiterAttribute.isLiteral()) {
+             // TODO should we throw an exception here?
+             }
+             **/
 
             String myLocalName = additionalMappings.get(arbiterAttribute.getValue());
 
@@ -244,6 +279,7 @@ class DefaultTagDecorator implements TagDecorator {
 
             return new TagAttributeImpl(location, ns, myLocalName, qName, value);
         }
+
 
         protected TagAttribute convertTagAttribute(TagAttribute attribute) {
             Location location = attribute.getLocation();

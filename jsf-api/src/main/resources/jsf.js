@@ -2475,6 +2475,10 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
             if (!el.disabled) {
                 switch (el.type) {
                     case 'submit':
+                    case 'reset':
+                    case 'button':
+                    case 'image':
+                    case 'file':
                         break;
                     case 'select-one':
                         if (el.selectedIndex >= 0) {

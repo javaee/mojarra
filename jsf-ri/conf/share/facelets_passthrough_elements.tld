@@ -69,7 +69,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlns:h="http://java.sun.com/jsf/html"<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlns:jsf="http://java.sun.com/jsf"<br />
 &nbsp;&nbsp;&lth:form&gt;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;input name="textField" type="text" jsf:value="#{bean.name}" /&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;progress jsf:id="progress" max="3" value="#{bean.progress}" /&gt;<br />
 &nbsp;&nbsp;&lt/h:form&gt;<br />
 &lt;/html&gt;
 </pre></code>
@@ -77,26 +77,10 @@
         <p>When the Facelets runtime detects an attribute from the<br />
         http://java.sun.com/jsf namespace, the entire element must be<br />
         set to be in that namespace by a call to<br />
-        <code>Tag.setNamespace()</code>.  A<br />
-        component-family/renderer-type pairing must be derived based on<br />
-        the XML local name of the element as shown in the following<br />
-        table.</p>
-
-        <table border="1">
- 
-        <tr>
-
-           <th>XML local name</th> <th>component-family</th> <th>renderer-type</th>
-
-        </tr>
-
-        <tr>
-
-          <td>input</td> <td>javax.faces.Input</td> <td>javax.faces.passthrough.Input</td>
-
-        </tr>
- 
-        </table>
+        <code>Tag.setNamespace()</code>. A component with
+        <code>component-type: javax.faces.Panel</code> <br /> and
+        <code>renderer-type: javax.faces.passthrough.Element</code>
+        must be inserted into the tree.</p>
 
         <p>The components's attribute map must be given an entry with<br />
         the key given by the value of the constant<br />
@@ -119,9 +103,7 @@
         <p>If the element has a manually declared, non-namespaced "id"<br />
         attribute, us it as the id.  Otherwise, if the element has an<br />
         "id" attribute in the http://java.sun.com/jsf namespace, use it<br />
-        as the id.  Otherwise, if the element has been set as being in<br />
-        the http://java.sun.com/jsf namespace, and has a "name"<br />
-        attribute, use it as the id.</p>
+        as the id.</p>
 
         </ul>
 
@@ -143,8 +125,8 @@
  <tag>
 
      <description><![CDATA[<p class="changed_added_2_2">Markup element that causes a 
-     component of <code>component-type: javax.faces.Input</code> with
-     <code>renderer-type: javax.faces.passthrough.Input</code> to be inserted
+     component of <code>component-type: javax.faces.Panel</code> with
+     <code>renderer-type: javax.faces.passthrough.Element</code> to be inserted
      in the tree.  This element is primarily intended to be used by the
      default <code>TagDecorator</code>, when no match is found as
      described in the javadoc for that class.</p>

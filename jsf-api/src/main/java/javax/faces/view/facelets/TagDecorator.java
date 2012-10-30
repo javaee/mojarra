@@ -113,6 +113,36 @@ package javax.faces.view.facelets;
 
  * <tr>
 
+ * <td>a</td>
+
+ * <td>jsf:action</td>
+
+ * <td>h:commandLink</td>
+
+ * </tr>
+
+ * <tr>
+
+ * <td>a</td>
+
+ * <td>jsf:actionListener</td>
+
+ * <td>h:commandLink</td>
+
+ * </tr>
+
+ * <tr>
+
+ * <td>a</td>
+
+ * <td>jsf:value</td>
+
+ * <td>h:outputLink</td>
+
+ * </tr>
+
+ * <tr>
+
  * <td>body</td>
 
  * <td></td>
@@ -331,6 +361,15 @@ package javax.faces.view.facelets;
 
  * <tr>
 
+ * <td>input</td>
+
+ * <td>type="*"</td>
+
+ * <td>h:inputText</td>
+
+ * </tr>
+ * <tr>
+
  * <td>label</td>
 
  * <td></td>
@@ -363,9 +402,9 @@ package javax.faces.view.facelets;
 
  * <td>select</td>
 
- * <td></td>
+ * <td>multiple="*"</td>
 
- * <td>h:selectOneListbox</td>
+ * <td>h:selectManyListbox</td>
 
  * </tr>
 
@@ -373,9 +412,9 @@ package javax.faces.view.facelets;
 
  * <td>select</td>
 
- * <td>multiple="multiple"</td>
+ * <td></td>
 
- * <td>h:selectManyListbox</td>
+ * <td>h:selectOneListbox</td>
 
  * </tr>
 
@@ -394,7 +433,10 @@ package javax.faces.view.facelets;
  * <p>In the case where there are multiple rows with the same
  * <strong>localName</strong>, find a matching entry by using the
  * argument {@code tag}'s attributes and the value from the "selector
- * attribute" column in the table.  If no matching entry is found, let
+ * attribute" column in the table in the given order. A selector
+ * attribute value of <strong>*</strong> indicates any value. A selector
+ * attribute name prefixed with <strong>jsf:</strong> means in the {@code
+ * http://java.sun.com/jsf} namespace. If no matching entry is found, let
  * {@code jsf:element} be the value of <strong>targetTag</strong>
 
  * </li>
@@ -403,7 +445,7 @@ package javax.faces.view.facelets;
  * follows.  First, create a new instance of {@link TagAttribute} with
  * the following characteristics: location: from the argument {@code
  * tag}'s location, namespace: {@code
- * http://java.sun.com/jsf/passthrough}, local name: {@link
+ * http://java.sun.com/jsf/passthrough}, local name: value of {@link
  * javax.faces.render.Renderer#PASSTHROUGH_RENDERER_LOCALNAME_KEY},
  * qualified name: same as local name with the "p:" prefix, value: from
  * the argument {@code tag}'s local name.  Let this {@code TagAttribute}
