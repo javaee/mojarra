@@ -39,6 +39,7 @@
  */
 package com.sun.faces.test.agnostic.resource;
 
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
@@ -68,4 +69,22 @@ public class Issue2401IT {
         assertTrue(page.asText().contains("Resource created with library: /test-agnostic-resource/faces/javax.faces.resource/images/background.png?ln=css"));
         assertTrue(page.asText().contains("Resource created without library: /test-agnostic-resource/faces/javax.faces.resource/css/images/background.png"));
     }
+    
+    @Test 
+    public void testResourceVersions() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/issue2565.xhtml");
+                
+        HtmlElement element = page.getElementById("trailingUnderscore");
+        assertEquals("SUCCESS", element.getTextContent());
+
+        element = page.getElementById("noUnderscore");
+        assertEquals("SUCCESS", element.getTextContent());
+    
+        element = page.getElementById("leadingUnderscore");
+        assertEquals("SUCCESS", element.getTextContent());
+
+        element = page.getElementById("validVersion");
+        assertEquals("SUCCESS", element.getTextContent());
+    }
+
 }
