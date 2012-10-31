@@ -22198,6 +22198,11 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
      <p>If the value of the component's "rendered" property is false,
      the component, and its children must not be rendered.</p>
 
+     <p class="changed_added_2_2">For all renderers that are responsible
+     for rendering their own children, the renderer will decide if the
+     end tag is required or not based on the presence or absence of
+     children for the component.</p>
+
      <p>General notes regarding the <code>id</code> attribute</p>
 
      <ul>
@@ -22316,7 +22321,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
 </ul>]]></description>
     <renderer>
       <description><![CDATA[<p><span class="changed_modified_2_0
-            changed_modified_2_0_rev_a">Renders</span> an HTML "input"
+            changed_modified_2_0_rev_a
+            changed_modified_2_2">Renders</span> an HTML "input"
             element.</p>
 
       <p>Decode Behavior</p>
@@ -22385,6 +22391,15 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <code>encodeBegin()</code>, <code>encodeChildren()</code>, and
       <code>encodeEnd()</code> methods called, in order, passing the
       temporary component as the second argument.</p>
+
+      <div class="changed_added_2_2">
+
+        <p>Because this renderer is responsible for rendering its own
+        children, the renderer will decide if the end tag is required or
+        not based on the presence or absence of children for the
+        component.</p>
+
+      </div>
 
       </ul>
             ]]></description>
@@ -28982,7 +28997,18 @@ this application, and passing the result through the
   the "onclick" element and assign the "disabled" attribute a value of
   true.</p>
 
-</div></div>]]></description>
+</div></div>
+
+<div class="changed_added_2_2">
+
+  <p>Because this renderer is responsible for rendering its own
+  children, the renderer will decide if the end tag is required or
+  not based on the presence or absence of children for the
+  component.</p>
+
+</div>
+
+]]></description>
       <component-family>javax.faces.OutcomeTarget</component-family>
       <renderer-type>javax.faces.Button</renderer-type>
       <renderer-class>
