@@ -38,8 +38,10 @@
  * holder.
  */
 
-package com.sun.faces.test.anostic.resource;
+package com.sun.faces.test.agnostic.resource;
 
+import java.io.IOException;
+import java.io.InputStream;
 import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
 import javax.faces.bean.ManagedBean;
@@ -91,4 +93,84 @@ public class ResourceBean {
     public void setResourceWithoutLibrary(String resourceWithoutLibrary) {
         //noop
     }
+    
+    
+    public String getResourceWithTrailingUnderscore() {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        ResourceHandler handler = fc.getApplication().getResourceHandler();
+
+        Resource resource = handler.createResource("trailing.css", "styles");
+        if (null != resource) {
+            try {
+                InputStream is = resource.getInputStream();
+                while (-1 != is.read()) {
+                    
+                }
+            } catch (IOException ex) {
+                return "FAILURE";
+            }
+        }
+        return "SUCCESS";
+        
+    }
+    
+    public String getResourceWithLeadingUnderscore() {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        ResourceHandler handler = fc.getApplication().getResourceHandler();
+
+        Resource resource = handler.createResource("leading.css", "styles");
+        if (null != resource) {
+            try {
+                InputStream is = resource.getInputStream();
+                while (-1 != is.read()) {
+                    
+                }
+            } catch (IOException ex) {
+                return "FAILURE";
+            }
+        }
+        return "SUCCESS";
+        
+    }
+
+    public String getResourceWithInvalidVersion() {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        ResourceHandler handler = fc.getApplication().getResourceHandler();
+
+        Resource resource = handler.createResource("noUnderscore.css", "styles");
+        if (null != resource) {
+            try {
+                InputStream is = resource.getInputStream();
+                while (-1 != is.read()) {
+                    
+                }
+            } catch (IOException ex) {
+                return "FAILURE";
+            }
+        }
+        return "SUCCESS";
+        
+    }
+    
+    public String getResourceWithValidVersion() {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        ResourceHandler handler = fc.getApplication().getResourceHandler();
+
+        Resource resource = handler.createResource("foreground.css", "styles");
+        if (null != resource) {
+            try {
+                InputStream is = resource.getInputStream();
+                if (-1 == is.read()) {
+                    return "FAILURE";
+                }
+                is.close();
+            } catch (IOException ex) {
+                return "FAILURE";
+            }
+        }
+        return "SUCCESS";
+        
+    }
+    
+    
 }

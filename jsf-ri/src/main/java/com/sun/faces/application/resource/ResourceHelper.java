@@ -641,6 +641,10 @@ public abstract class ResourceHelper {
 
         @Override
         public int read() throws IOException {
+            if (null == inner) {
+                return -1;
+            }
+            
             int i;
             char c;
 
