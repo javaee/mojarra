@@ -40,7 +40,6 @@
  */
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.util.FacesLogger;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
@@ -50,7 +49,6 @@ import javax.faces.render.Renderer;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.logging.Logger;
 
 public class PassthroughRenderer extends HtmlBasicRenderer {
 
