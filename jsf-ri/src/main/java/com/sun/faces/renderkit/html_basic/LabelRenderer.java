@@ -115,7 +115,6 @@ public class LabelRenderer extends HtmlBasicInputRenderer {
         if (null != styleClass) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
-        writer.writeText("\n", component, null);
 
         // render the curentValue as label text if specified.
         String value = getCurrentValue(context, component);
