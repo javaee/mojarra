@@ -117,6 +117,18 @@ public abstract class ResponseWriter extends Writer {
      * <code>writeText()</code>, <code>endElement()</code>,
      * <code>endDocument()</code>, <code>close()</code>,
      * <code>flush()</code>, or <code>write()</code>.</p>
+     * 
+     * <div class="changed_added_2_2">
+     * 
+     * <p>If the argument component's pass through attributes 
+     * includes an attribute of the name given by the value of the symbolic
+     * constant {@link javax.faces.render.Renderer#PASSTHROUGH_RENDERER_LOCALNAME_KEY},
+     * use that as the element name, instead of the value passed as the first 
+     * parameter to this method.  Care must be taken so that this value
+     * is not also rendered when any other pass through attributes on this component
+     * are rendered.</p>
+     * 
+     * </div>
      *
      * @param name      Name of the element to be started
 
@@ -136,10 +148,21 @@ public abstract class ResponseWriter extends Writer {
 
 
     /**
-     * <p>Write the end of an element, after closing any open element
+     * <p><span class="changed_modified_2_2">Write</span> the end of an element, 
+     * after closing any open element
      * created by a call to <code>startElement()</code>.  Elements must be
      * closed in the inverse order from which they were opened; it is an
      * error to do otherwise.</p>
+     *
+     * <div class="changed_added_2_2">
+     * 
+     * <p>If the argument component's pass through attributes 
+     * includes an attribute of the name given by the value of the symbolic
+     * constant {@link javax.faces.render.Renderer#PASSTHROUGH_RENDERER_LOCALNAME_KEY},
+     * use that as the element name, instead of the value passed as the first 
+     * parameter to this method.</p>
+     * 
+     * </div>
      *
      * @param name Name of the element to be ended
      * @throws IOException          if an input/output error occurs
