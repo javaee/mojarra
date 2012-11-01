@@ -77,24 +77,6 @@ public class ResourceBean {
         //noop
     }
 
-    public String getResourceWithoutLibrary() {
-        FacesContext fc = FacesContext.getCurrentInstance();
-        ResourceHandler handler = fc.getApplication().getResourceHandler();
-        Resource resource = handler.createResource(COMBINED_NAME);
-        String resourceAsString = null;
-        try {
-            resourceAsString = resource.toString();
-        } catch (Exception e) {
-            resourceAsString = "** could not create resource " + COMBINED_NAME + " **";
-        }
-        return resourceAsString;
-    }
-
-    public void setResourceWithoutLibrary(String resourceWithoutLibrary) {
-        //noop
-    }
-    
-    
     public String getResourceWithTrailingUnderscore() {
         FacesContext fc = FacesContext.getCurrentInstance();
         ResourceHandler handler = fc.getApplication().getResourceHandler();
