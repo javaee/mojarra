@@ -13,5 +13,6 @@
     <name>Mojarra ${project.version} - Test - Webprofile - RenderKit</name>
     <modules>
         <module>basic</module>
+        <module>fileUploadFailure</module>
     </modules>
 </project>

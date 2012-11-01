@@ -24854,6 +24854,10 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <code>getConvertedValue()</code> so that it simply returns the
       <code>submittedValue</code> argument.</p>
 
+      <p>Any exception thrown when interacting with the underlying
+      multi-part API must be wrapped in a <code>FacesException</code>
+      and allowed to reach the <code>ExceptionHandler</code>.</p>
+
       </ul>
 
       <p>Encode Behavior</p>
