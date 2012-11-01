@@ -67,8 +67,88 @@ public class Issue2459IT {
     @Test
     public void testInputFileRender() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/issue2459.xhtml");
-        HtmlForm form = (HtmlForm) page.getElementById("form");
-        String fooValue = form.getAttribute("foo");
-        assertEquals("bar", fooValue);
+        HtmlForm form = (HtmlForm) page.getElementById("form1");
+        String attrValue = form.getAttribute("foo");
+        assertEquals("bar", attrValue);
+        
+        attrValue = form.getAttribute("foo");
+        assertEquals("bar", attrValue);
+        
+        attrValue = form.getAttribute("accept");
+        assertEquals("text/html", attrValue);
+        
+        
+        attrValue = form.getAttribute("dir");
+        assertEquals("LTR", attrValue);
+        
+        
+        attrValue = form.getAttribute("enctype");
+        assertEquals("noneDefault", attrValue);
+        
+        
+        attrValue = form.getAttribute("lang");
+        assertEquals("en", attrValue);
+        
+        
+        attrValue = form.getAttribute("onclick");
+        assertEquals("js1", attrValue);
+        
+        
+        attrValue = form.getAttribute("ondblclick");
+        assertEquals("js2", attrValue);
+        
+        
+        attrValue = form.getAttribute("onkeydown");
+        assertEquals("js3", attrValue);
+        
+        
+        attrValue = form.getAttribute("onkeypress");
+        assertEquals("js4", attrValue);
+        
+        
+        attrValue = form.getAttribute("onkeyup");
+        assertEquals("js5", attrValue);
+        
+        
+        attrValue = form.getAttribute("onmousedown");
+        assertEquals("js6", attrValue);
+        
+        
+        attrValue = form.getAttribute("onmousemove");
+        assertEquals("js7", attrValue);
+        
+        
+        attrValue = form.getAttribute("onmouseout");
+        assertEquals("js8", attrValue);
+        
+
+        attrValue = form.getAttribute("onmouseover");
+        assertEquals("js9", attrValue);
+        
+        
+        attrValue = form.getAttribute("onmouseup");
+        assertEquals("js10", attrValue);
+        
+        
+        attrValue = form.getAttribute("onreset");
+        assertEquals("js11", attrValue);
+        
+        
+        attrValue = form.getAttribute("onsubmit");
+        assertEquals("js12", attrValue);
+        
+        
+        attrValue = form.getAttribute("style");
+        assertEquals("Color: red;", attrValue);
+        
+        
+        attrValue = form.getAttribute("target");
+        assertEquals("frame1", attrValue);
+        
+        
+        attrValue = form.getAttribute("title");
+        assertEquals("FormTitle", attrValue);
+        
+        
     }
 }
