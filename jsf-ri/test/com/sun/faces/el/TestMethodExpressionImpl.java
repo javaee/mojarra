@@ -102,39 +102,28 @@ public class TestMethodExpressionImpl extends ServletFacesTestCase
     
     public void testNullReference() throws Exception
     {
-
-        /*************
-PENDING(edburns): 
-
-http://java.net/jira/browse/JAVASERVERFACES-2268
         try
         {
             create(null, null);
             fail();
         }
-        catch (NullPointerException npe) {}
-        catch (Exception e) { fail("Should have thrown an NPE"); };
-
-        ************/
+        catch (ELException e) {}
+        catch (Exception exception) {
+            fail();
+        }
     }
     
     public void testInvalidMethod() throws Exception
     {
-        /*************
-PENDING(edburns): 
-
-http://java.net/jira/browse/JAVASERVERFACES-2268
-        
         try
         {
             create("${foo > 1}", null);
             fail();
         }
-        catch (ELException ee) {
-            fail("Should have thrown a NullPointerException"); 
+        catch (ELException e) {}
+        catch (Exception exeption) {
+            fail();
         }
-        catch (NullPointerException npe) { }
-         * ****/
     }
     
     public void testLiteralReference() throws Exception
