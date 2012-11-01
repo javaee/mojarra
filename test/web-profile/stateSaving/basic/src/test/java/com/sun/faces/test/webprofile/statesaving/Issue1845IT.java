@@ -57,6 +57,8 @@ public class Issue1845IT {
     public void setUp() {
         webUrl = System.getProperty("integration.url");
         webClient = new WebClient();
+        webClient.setJavaScriptEnabled(true);
+        webClient.setJavaScriptTimeout(120000);
     }
 
     @After
@@ -70,13 +72,17 @@ public class Issue1845IT {
         assertTrue(!page.asText().contains("Click Me"));
         HtmlCheckBoxInput checkbox = (HtmlCheckBoxInput) page.getHtmlElementById("myForm:buttonCheckbox");
         page = checkbox.click();
+        webClient.waitForBackgroundJavaScript(60000);
         HtmlSubmitInput reload = (HtmlSubmitInput) page.getHtmlElementById("myForm:reload");
         page = reload.click();
+        webClient.waitForBackgroundJavaScript(60000);
         assertTrue(page.asText().contains("Click Me"));
         checkbox = (HtmlCheckBoxInput) page.getHtmlElementById("myForm:buttonCheckbox");
         page = checkbox.click();
+        webClient.waitForBackgroundJavaScript(60000);
         reload = (HtmlSubmitInput) page.getHtmlElementById("myForm:reload");
         page = reload.click();
+        webClient.waitForBackgroundJavaScript(60000);
         assertTrue(!page.asText().contains("Click Me"));
     }
 }
