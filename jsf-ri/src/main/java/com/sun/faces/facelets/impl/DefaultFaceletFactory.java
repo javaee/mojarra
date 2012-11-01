@@ -331,7 +331,7 @@ public class DefaultFaceletFactory extends FaceletFactory {
             osw.append("  <j:").append(tagName).append(" ");
             if (!attributes.isEmpty()) {
                 for (Map.Entry<String,Object> attr : attributes.entrySet()) {
-                    osw.append(attr.getKey()).append("=\"").append(attr.getValue().toString()).append("\"");
+                    osw.append(attr.getKey()).append("=\"").append(attr.getValue().toString()).append("\"").append(" ");
                 }
             }
             String tempId = context.getViewRoot().createUniqueId(context, tagName);
