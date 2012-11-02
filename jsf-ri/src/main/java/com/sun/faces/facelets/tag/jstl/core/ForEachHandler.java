@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -187,10 +187,8 @@ public final class ForEachHandler extends TagHandlerImpl {
                 int mi = 0;
                 Object value = null;
                 int count = 0;
-                boolean oldUniqueIds = ComponentSupport.getNeedUniqueIds(ctx);
                 try {
                     boolean first = true;
-                    boolean setUnique = false;
                     while (i <= e && itr.hasNext()) {
                         count++;
                         value = itr.next();
@@ -216,11 +214,6 @@ public final class ForEachHandler extends TagHandlerImpl {
                             }
                         }
 
-                        if (!first && !setUnique) {
-                            ComponentSupport.setNeedUniqueIds(ctx, true);
-                            setUnique = true;
-                        }
-
                         // execute body
                         this.nextHandler.apply(ctx, parent);
 
@@ -242,7 +235,6 @@ public final class ForEachHandler extends TagHandlerImpl {
                     if (vs != null) {
                         vars.setVariable(vs, vsO);
                     }
-                    ComponentSupport.setNeedUniqueIds(ctx, oldUniqueIds);
                 }
             }
         }
