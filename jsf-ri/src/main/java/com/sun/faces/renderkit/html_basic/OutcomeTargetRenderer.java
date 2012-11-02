@@ -176,7 +176,7 @@ public abstract class OutcomeTargetRenderer extends HtmlBasicRenderer {
                 didDisableClientWindowRendering = "true".equalsIgnoreCase(val.toString());
             }
             if (didDisableClientWindowRendering) {
-                ClientWindow.disableClientWindowUrlQueryParameter(context);
+                ClientWindow.disableClientWindowRenderMode(context);
             }
             
             result = Util.getViewHandler(context).getBookmarkableURL(context,
@@ -185,7 +185,7 @@ public abstract class OutcomeTargetRenderer extends HtmlBasicRenderer {
                                                                isIncludeViewParams(component, navCase));
         } finally {
             if (didDisableClientWindowRendering) {
-                ClientWindow.enableClientWindowUrlQueryParameter(context);
+                ClientWindow.enableClientWindowRenderMode(context);
             }
         }
         

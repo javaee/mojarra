@@ -122,9 +122,10 @@ public abstract class ResponseStateManager {
     public static final String CLIENT_WINDOW_PARAM = "javax.faces.ClientWindow";
     
     /**
-     * <p class="changed_added_2_2">The name of the URL query parameter that 
-     * is only used if {@link javax.faces.lifecycle.ClientWindow#CLIENT_WINDOW_MODE_PARAM_NAME}
-     * is "url".  The name of the parameter is given by the constant value 
+     * <p class="changed_added_2_2">The name of the URL query parameter for transmitting
+     * the client window id.  This parameter is only used if 
+     * {@link javax.faces.lifecycle.ClientWindow#CLIENT_WINDOW_MODE_PARAM_NAME}
+     * is not "none".  The name of the parameter is given by the constant value 
      * of this field.  The value of this parameter 
      * is the return from {@link javax.faces.lifecycle.ClientWindow#getId}.
      * </p>

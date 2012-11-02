@@ -558,7 +558,7 @@ public class ExternalContextImpl extends ExternalContext {
      */
     public String encodeActionURL(String url) {
         FacesContext context = FacesContext.getCurrentInstance();
-        boolean appendClientWindow = ClientWindow.isClientWindowUrlQueryParameterEnabled(context);
+        boolean appendClientWindow = ClientWindow.isClientWindowRenderModeEnabled(context);
         if (appendClientWindow && -1 == url.indexOf(ResponseStateManager.CLIENT_WINDOW_URL_PARAM)) {
             ClientWindow  cw = context.getExternalContext().getClientWindow();
             if (null != cw) {
@@ -571,6 +571,15 @@ public class ExternalContextImpl extends ExternalContext {
                     builder.append(UrlBuilder.PARAMETER_PAIR_SEPARATOR);
                 }
                 builder.append(ResponseStateManager.CLIENT_WINDOW_URL_PARAM).append(UrlBuilder.PARAMETER_NAME_VALUE_SEPARATOR).append(clientWindowId);
+    
+                Map<String, String> additionalParams = cw.getQueryURLParameters(context);
+                if (null != additionalParams) {
+                    for (Map.Entry<String, String> cur : additionalParams.entrySet()) {
+                        builder.append(cur.getKey()).
+                                append(UrlBuilder.PARAMETER_NAME_VALUE_SEPARATOR).
+                                append(cur.getValue());                        
+                    }
+                }
                 url = builder.toString();
             }
         }

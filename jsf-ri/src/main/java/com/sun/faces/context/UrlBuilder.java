@@ -250,7 +250,7 @@ class UrlBuilder {
         }
         
         FacesContext context = FacesContext.getCurrentInstance();
-        boolean appendClientWindow = ClientWindow.isClientWindowUrlQueryParameterEnabled(context);
+        boolean appendClientWindow = ClientWindow.isClientWindowRenderModeEnabled(context);
         if (appendClientWindow && -1 == url.indexOf(ResponseStateManager.CLIENT_WINDOW_URL_PARAM)) {
             ClientWindow  cw = context.getExternalContext().getClientWindow();
             if (null != cw) {
@@ -261,6 +261,15 @@ class UrlBuilder {
                     url.append(PARAMETER_PAIR_SEPARATOR);
                 }
                 url.append(ResponseStateManager.CLIENT_WINDOW_URL_PARAM).append(PARAMETER_NAME_VALUE_SEPARATOR).append(clientWindow);
+    
+                Map<String, String> additionalParams = cw.getQueryURLParameters(context);
+                if (null != additionalParams) {
+                    for (Map.Entry<String, String> cur : additionalParams.entrySet()) {
+                        url.append(cur.getKey()).
+                                append(UrlBuilder.PARAMETER_NAME_VALUE_SEPARATOR).
+                                append(cur.getValue());                        
+                    }
+                }
             }
         }
         
