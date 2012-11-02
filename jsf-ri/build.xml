@@ -109,6 +109,9 @@
 
     <target name="prepare" depends="init"
             description="Prepare build directory">
+        <jsf.svninfo />
+        <echo message="Building from |${svn.revision.url}|" /> 
+
         <mkdir dir="${build.dir}"/>
         <mkdir dir="${build.generate.dir}"/>
         <mkdir dir="${build.generate.tld.dir}"/>
@@ -325,7 +328,7 @@
         <!-- Massage the version number into LogStrings.properties -->
         <replace dir="${build.classes.dir}/com/sun/faces/"
                  token="|version.string|"
-                 value="${impl.version.number} (${build.type} ${build.number})">
+                 value="${impl.version.number} (${build.type} ${build.number} ${svn.revision.url})">
             <include name="LogStrings*.properties"/>
         </replace>
 
