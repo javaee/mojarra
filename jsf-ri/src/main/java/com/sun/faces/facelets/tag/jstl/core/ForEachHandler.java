@@ -59,7 +59,6 @@
 package com.sun.faces.facelets.tag.jstl.core;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
-import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 
 import javax.el.ValueExpression;
 import javax.el.VariableMapper;
