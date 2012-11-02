@@ -671,7 +671,7 @@
                  value="${impl.version}"/>
         <replace file="tmp.bnd"
                  token="@full.impl.version@"
-                 value="${full.impl.version}"/>
+                 value="${full.impl.version} ${svn.revision.url}"/>
         <if>
             <equals arg1="${build.type}" arg2=""/>
             <then>
