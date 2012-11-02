@@ -99,32 +99,38 @@ public class TestMethodExpressionImpl extends ServletFacesTestCase
         return (getFacesContext().getApplication().getExpressionFactory().
             createMethodExpression(getFacesContext().getELContext(),ref, null, params));
     }
-    
-    public void testNullReference() throws Exception
-    {
-        try
-        {
-            create(null, null);
-            fail();
-        }
-        catch (ELException e) {}
-        catch (Exception exception) {
-            fail();
-        }
-    }
-    
-    public void testInvalidMethod() throws Exception
-    {
-        try
-        {
-            create("${foo > 1}", null);
-            fail();
-        }
-        catch (ELException e) {}
-        catch (Exception exeption) {
-            fail();
-        }
-    }
+
+//  
+//    Because of a minor change in behavior these particular tests will always 
+//    fail on GF 3.1.1, but not on GF 3.1.2. Disabling the test on the 2.1 
+//    branch. These tests will stil run on 2.2 trunk to assert the proper 
+//    behavior (for GF 3.1.2 and upwards).
+//
+//    public void testNullReference() throws Exception
+//    {
+//        try
+//        {
+//            create(null, null);
+//            fail();
+//        }
+//        catch (ELException e) {}
+//        catch (Exception exception) {
+//            fail();
+//        }
+//    }
+//
+//    public void testInvalidMethod() throws Exception
+//    {
+//        try
+//        {
+//            create("${foo > 1}", null);
+//            fail();
+//        }
+//        catch (ELException e) {}
+//        catch (Exception exeption) {
+//            fail();
+//        }
+//    }
     
     public void testLiteralReference() throws Exception
     {
