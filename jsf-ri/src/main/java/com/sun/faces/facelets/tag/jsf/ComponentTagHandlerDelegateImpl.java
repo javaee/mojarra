@@ -183,21 +183,8 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
             ComponentSupport.setTagForComponent(context, c, this.owner.getTag());
         }
 
-        // If this this a naming container, stop generating unique Ids
-        // for the repeated tags
-        boolean setUniqueIds = false;
-        boolean oldUnique = false;
-        if (c instanceof NamingContainer) {
-            oldUnique = ComponentSupport.setNeedUniqueIds(ctx, false);
-            setUniqueIds = true;
-        }
-        try {
-                // first allow c to get populated
-                owner.applyNextHandler(ctx, c);
-        } finally {
-            if (setUniqueIds)
-                ComponentSupport.setNeedUniqueIds(ctx, oldUnique);
-        }
+        // first allow c to get populated
+        owner.applyNextHandler(ctx, c);
 
         // finish cleaning up orphaned children
         if (componentFound) {
@@ -378,10 +365,7 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
                                   String id,
                                   UIComponent c) {
 
-        // If the id is specified as a literal, and the component is being
-        // repeated (by c:forEach, for example), use generated unique ids
-        // after the first instance
-        if (this.id != null && !(this.id.isLiteral() && ComponentSupport.getNeedUniqueIds(ctx))) {
+        if (this.id != null) {
             c.setId(this.id.getValue(ctx));
         } else {
             UIViewRoot root = ComponentSupport.getViewRoot(ctx, parent);
