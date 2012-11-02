@@ -1842,8 +1842,41 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              * <code>javax.faces.encodedURL</code> is present in the submitting form, use its
              * value as the <code>posting URL</code>.  Otherwise, use the <code>action</code>
              * property of the <code>form</code> element as the <code>URL</code>.</li>
-             * <li>Send the request as an <code>asynchronous POST</code> using the
-             * <code>posting URL</code> that was determined in the previous step.</li>
+
+             * <li> 
+
+             * <p><span class="changed_modified_2_2">Determine whether
+             * or not any of the components in
+             * <code>options.execute</code> (or its effective
+             * equivalent) is a file upload component.  If not, send the
+             * request as an <code>asynchronous POST</code> using the
+             * <code>posting URL</code> that was determined in the
+             * previous step.</span><p>
+
+             * <div class="changed_added_2_2">
+
+             * <p>Otherwise, verify that the <code>enctype</code>
+             * property of the effective form is
+             * <code>multipart/form-data</code> and throw an error if it
+             * is not.  Send the request using a multi-part capable
+             * transport layer, such as a hidden inline frame.  Note
+             * that using a hidden inline frame does
+             * <strong>not</strong> use <code>XMLHttpRequest</code>, but
+             * the request must be sent with all the parameters that a
+             * JSF <code>XMLHttpRequest</code> would have been sent
+             * with.  In this way, the server side processing of the
+             * request will be identical whether or the request is
+             * multipart or not.</p>
+
+             * <p>The <code>begin</code>, <code>complete</code>, and
+             * <code>success</code> events must be emulated when using
+             * the multipart transport.  This allows any listeners to
+             * behave uniformly regardless of the multipart or
+             * <code>XMLHttpRequest</code> nature of the transport.
+
+             * </div>
+
+</li>
              * </ul>
              * Form serialization should occur just before the request is sent to minimize 
              * the amount of time between the creation of the serialized form data and the 
@@ -1916,8 +1949,14 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              * The <code>options</code> argument is optional.
              * @member jsf.ajax
              * @function jsf.ajax.request
-             * @throws Error if first required argument <code>element</code> is not specified
+
+             * @throws Error if first required argument
+             * <code>element</code> is not specified, or if one or more
+             * of the components in the <code>options.execute</code>
+             * list is a file upload component, but the form's enctype
+             * is not set to <code>multipart/form-data</code>
              */
+
             request: function request(source, event, options) {
 
                 var element, form;   //  Element variables
