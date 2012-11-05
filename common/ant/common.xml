@@ -525,40 +525,51 @@
             <property name="svn.cmd" value="svn"/>
           </else>
         </if>
+        <var name="svninfo.result" unset="true" />
         <var name="svninfo.out" unset="true" />
         <var name="svninfo.to.process" unset="true" />
         <var name="svn.revision.url" unset="true" />
 
-        <exec os="SunOS" dir="${jsf.build.home}" failonerror="no"
+        <exec os="SunOS" dir="${jsf.build.home}" failonerror="false"
+              resultproperty="svninfo.result"
               executable="${svn.cmd}" outputproperty="svninfo.out">
           <arg line="info"/>
         </exec>
-        <exec os="Linux" dir="${jsf.build.home}" failonerror="no"
-                  executable="${svn.cmd}" outputproperty="svninfo.out">
+        <exec os="Linux" dir="${jsf.build.home}" failonerror="false"
+              resultproperty="svninfo.result"
+              executable="${svn.cmd}" outputproperty="svninfo.out">
           <arg line="info"/>
           
         </exec>
         <exec osfamily="windows" dir="${jsf.build.home}" executable="${svn.cmd}"
-              failonerror="no" outputproperty="svninfo.out">
+              resultproperty="svninfo.result"
+              failonerror="false" outputproperty="svninfo.out">
           <arg line="info"/>
         </exec>
         <exec os="Mac OS X" dir="${jsf.build.home}" executable="${svn.cmd}"
-              failonerror="no" outputproperty="svninfo.out">
+              resultproperty="svninfo.result"
+              failonerror="false" outputproperty="svninfo.out">
           <arg line="info"/>
         </exec>
 
-        <propertyregex property="svninfo.to.process"
-                       input="${svninfo.out}"
-                       regexp="\s+"
-                       replace=" " />
-
-        <propertyregex property="svn.revision.url"
-                       input="${svninfo.to.process}"
-                       select="\2@\6">
-          <regexp pattern="(?s)(.*URL: )(.+)(\s)(Repository Root:.*)(Revision: )([0-9]+)(.*)"/>
-        </propertyregex>
-
-
+        <if>
+          <equals arg1="${svninfo.result}" arg2="1"/>
+          <then>
+            <property name="svn.revision.url" value="unable to get svn info" />
+          </then>
+          <else>
+            <propertyregex property="svninfo.to.process"
+                           input="${svninfo.out}"
+                           regexp="\s+"
+                           replace=" " />
+            
+            <propertyregex property="svn.revision.url"
+                           input="${svninfo.to.process}"
+                           select="\2@\6">
+              <regexp pattern="(?s)(.*URL: )(.+)(\s)(Repository Root:.*)(Revision: )([0-9]+)(.*)"/>
+            </propertyregex>
+          </else>
+        </if>
       </sequential>
 
     </macrodef>
