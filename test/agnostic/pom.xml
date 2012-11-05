@@ -27,6 +27,7 @@
         <module>context</module>
         <module>converter</module>
         <module>dynamic</module>
+        <module>el</module>
         <module>externalContext</module>
         <module>flash</module>
         <module>lifecycle</module>

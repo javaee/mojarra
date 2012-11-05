@@ -41,16 +41,12 @@
 package com.sun.faces.el;
 
 import com.sun.faces.util.RequestStateManager;
-
 import java.beans.FeatureDescriptor;
 import java.util.Iterator;
 import java.util.Map;
-
 import javax.el.ELContext;
 import javax.el.ELException;
-
 import javax.el.ELResolver;
-
 import javax.faces.context.FacesContext;
 
 /**
@@ -175,16 +171,18 @@ public final class ChainTypeCompositeELResolver extends FacesCompositeELResolver
   public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base)
   {
     FacesContext ctx = getFacesContext(context);
-    Map<String,Object> stateMap =
-	RequestStateManager.getStateMap(ctx);
-
-    stateMap.put(RequestStateManager.EL_RESOLVER_CHAIN_TYPE_NAME,
-		 _chainType);
     Iterator<FeatureDescriptor> result = null;
-    try {
-	result = _wrapped.getFeatureDescriptors(context, base);
-    } finally {
-        stateMap.remove(RequestStateManager.EL_RESOLVER_CHAIN_TYPE_NAME);
+    if (ctx != null) {
+        Map<String,Object> stateMap =
+            RequestStateManager.getStateMap(ctx);
+
+        stateMap.put(RequestStateManager.EL_RESOLVER_CHAIN_TYPE_NAME,
+                     _chainType);
+        try {
+            result = _wrapped.getFeatureDescriptors(context, base);
+        } finally {
+            stateMap.remove(RequestStateManager.EL_RESOLVER_CHAIN_TYPE_NAME);
+        }
     }
     return result;
   }
