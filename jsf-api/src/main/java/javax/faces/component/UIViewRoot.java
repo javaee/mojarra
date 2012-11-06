@@ -45,6 +45,7 @@ import javax.el.MethodExpression;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.ProjectStage;
+import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
@@ -53,6 +54,7 @@ import javax.faces.webapp.FacesServlet;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -63,6 +65,8 @@ import java.util.ListIterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.component.visit.VisitCallback;
+import javax.faces.component.visit.VisitContext;
 import javax.faces.event.*;
 import javax.faces.view.ViewDeclarationLanguage;
 import javax.faces.view.ViewMetadata;
@@ -935,6 +939,33 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
             clearFacesEvents(context);
             notifyAfter(context, PhaseId.APPLY_REQUEST_VALUES);
         }
+    }
+    
+    /**
+     * <p class="changed_added_2_2">Visit the clientIds and, if the component is 
+     * an instance of {@link EditableValueHolder}, 
+     * call its {@link EditableValueHolder#resetValue} method.  
+     * Use {@link #visitTree} to do the visiting.</p>
+     * 
+     * @since 2.2
+
+     * @param context the {@link FacesContext} for the request we are processing.
+     * @param clientIds The client ids to be visited, on which the described action will be taken.
+     */
+    
+    public void resetValues(FacesContext context, Collection<String> clientIds) {
+        this.visitTree(VisitContext.createVisitContext(context, clientIds, null), 
+                new VisitCallback() {
+
+                    @Override
+                    public VisitResult visit(VisitContext context, UIComponent target) {
+                        if (target instanceof EditableValueHolder) {
+                            ((EditableValueHolder)target).resetValue();
+                        }
+                        return VisitResult.ACCEPT;
+                    }
+                    
+                });
     }
 
     /**

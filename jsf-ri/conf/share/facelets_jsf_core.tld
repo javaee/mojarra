@@ -44,7 +44,7 @@
 <taglib xmlns="http://java.sun.com/xml/ns/javaee"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
-    version="2.1">
+    version="2.2">
 
 
     <!-- ========== Tag Library Description Elements ========================= -->
@@ -296,12 +296,30 @@
       <description><![CDATA[ <p class="changed_added_2_2">If less than
       <em>delay</em> milliseconds elapses between calls to
       <em>request()</em> only the most recent one is sent and all other
-      requests are discarded. The default value of this option is
-      300.</code> If the value of <em>delay</em> is the literal string
-      <code>'none'</code> without the quotes, no delay is used. </p>
+      requests are discarded. If this option is not specified, or if the
+      value of <em>delay</em> is the literal string <code>'none'</code>
+      without the quotes, no delay is used. </p>
 
       ]]></description>
       <name>delay</name>
+      <required>false</required>
+      <deferred-value>
+          <type>java.lang.String</type>
+      </deferred-value>
+
+    </attribute>
+
+    <attribute>
+      <description><![CDATA[ <p class="changed_added_2_2">If
+      <code>true</code>, indicate that this particular Ajax transaction
+      is a value reset transaction.  This will cause
+      <code>resetValue()</code> to be called on any
+      <code>EditableValueHolder</code> instances encountered as a result
+      of this ajax transaction.  If not specified, or the value is
+      <code>false</code>, no such indication is made.</p>
+
+      ]]></description>
+      <name>resetInput</name>
       <required>false</required>
       <deferred-value>
           <type>java.lang.String</type>
@@ -2712,5 +2730,57 @@ will not pass validation.</p> ]]>
         </attribute>
     </tag>
 
+    <tag>
+        <description><![CDATA[
+
+            <p class="changed_added_2_2">Reset specific input values.
+            Interpret the value of the <code>render</code> attribute as
+            a space separated list of client identifiers suitable for
+            passing directly to <code>UIViewRoot.resetValues()</code>.
+            The implementation must cause an <code>ActionListener</code>
+            to be attached to the <code>ActionSource2</code> component
+            in which this tag is nested that calls
+            <code>UIViewRoot.resetValues()</code> passing the value of
+            the <code>render</code> attribute as the argument.</p>
+
+        ]]></description>
+        <name>resetInput</name>
+        <tag-class>javax.faces.webapp.UIComponentClassicTagBase</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <description><![CDATA[
+
+                <p class="changed_added_2_2">Evaluates to
+                Collection&lt;String&gt;. The clientIds of components
+                that will be passed to
+                <code>UIViewRoot.resetValues()</code>.  The identifiers
+                must be space delimited.</p>
+
+            ]]></description>
+            <name>render</name>
+            <required>true</required>
+            <deferred-value>
+              <type>java.util.Collection</type>
+            </deferred-value>
+
+        </attribute>
+
+        <attribute>
+          <description><![CDATA[
+          
+          <p class="changed_added_2_0">If present, this attribute refers
+          to the value of one of the exposed attached objects within the
+          composite component inside of which this tag is nested.</p>
+          
+          ]]></description>
+          <name>for</name>
+          <required>false</required>
+          <deferred-value>
+            <type>java.lang.String</type>
+          </deferred-value>         
+          
+        </attribute>
+
+    </tag>
 
 </taglib>

@@ -45,7 +45,7 @@ import java.util.Collection;
 import javax.faces.event.PhaseId;
 
 /**
- * <p><strong class="changed_added_2_0">PartialViewContext</strong>
+ * <p><strong class="changed_added_2_0 changed_modified_2_2">PartialViewContext</strong>
  * contains methods and properties that pertain to partial request
  * processing and partial response rendering on a view.</p> 
  *
@@ -90,6 +90,17 @@ public abstract class PartialViewContext {
      */
     public static final String PARTIAL_EXECUTE_PARAM_NAME =
           "javax.faces.partial.execute";
+
+    /**
+     * <p class="changed_added_2_2">
+     * If the request parameter named by the value of this constant has 
+     * a parameter value of <code>true</code>, the implementation
+     * must return <code>true</code> from {@link #isResetValues}.</p>
+     *
+     * @since 2.0
+     */
+    public static final String RESET_VALUES_PARAM_NAME =
+          "javax.faces.partial.resetInput";
 
     /**
      * <p class="changed_added_2_0">
@@ -210,6 +221,23 @@ public abstract class PartialViewContext {
      * @since 2.0
      */
     public abstract boolean isRenderAll();
+    
+    
+    /**
+     * <p class="chaged_added_2_2">Return <code>true</code> if
+     * the incoming request has a parameter named by the value of {@link #RESET_VALUES_PARAM_NAME}
+     * and that value is <code>true</code>.  To preserve backward compatibility
+     * with custom implementations that may have extended from an earlier
+     * version of this class, an implementation is provided that returns 
+     * <code>false</code>.  A compliant implementation must override this 
+     * method to take the specified action.</p>
+     * 
+     * @since 2.2
+     */
+    public boolean isResetValues() {
+        return false;
+    }
+    
 
     /**
      * <p class="changed_added_2_0">

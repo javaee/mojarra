@@ -164,8 +164,7 @@ import javax.faces.lifecycle.ClientWindow;
         return renderAll;
 
     }
-
-     
+    
     /**
      * @see javax.faces.context.PartialViewContext#setRenderAll(boolean) 
      */
@@ -174,6 +173,12 @@ import javax.faces.lifecycle.ClientWindow;
 
         this.renderAll = renderAll;
 
+    }
+
+    @Override
+    public boolean isResetValues() {
+        Object value = ctx.getExternalContext().getRequestParameterMap().get(RESET_VALUES_PARAM_NAME);
+        return (null != value && "true".equals(value)) ? true : false;
     }
 
     @Override

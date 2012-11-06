@@ -1804,6 +1804,15 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              * only the most recent one is sent and all other requests
              * are discarded.</li>
 
+
+             * <li class="changed_added_2_2">If
+             * <code>options.resetInput</code> exists and its value is
+             * <code>true</code> ensure a post data argument with the
+             * name <code>javax.faces.partial.resetInput</code> and the
+             * value <code>true</code> is sent in addition to the other
+             * post data arguments.</li>
+
+
              * <li>Determine additional arguments (if any) from the <code>event</code>
              * argument.  The following name/value pairs may be used from the
              * <code>event</code> object:
