@@ -954,18 +954,18 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
     
     public void resetValues(FacesContext context, Collection<String> clientIds) {
         this.visitTree(VisitContext.createVisitContext(context, clientIds, null), 
-                new VisitCallback() {
-
-                    @Override
-                    public VisitResult visit(VisitContext context, UIComponent target) {
-                        if (target instanceof EditableValueHolder) {
-                            ((EditableValueHolder)target).resetValue();
-                        }
-                        return VisitResult.ACCEPT;
-                    }
-                    
-                });
+                new DoResetValues());
     }
+
+    private static class DoResetValues implements VisitCallback {
+        @Override
+            public VisitResult visit(VisitContext context, UIComponent target) {
+            if (target instanceof EditableValueHolder) {
+                ((EditableValueHolder)target).resetValue();
+            }
+            return VisitResult.ACCEPT;
+        }
+    }        
 
     /**
      * <p><span class="changed_added_2_0">Override</span> the default
