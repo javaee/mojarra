@@ -165,6 +165,17 @@ public abstract class PartialViewContextWrapper extends PartialViewContext imple
 
      /**
      * <p>The default behavior of this method is to
+     * call {@link PartialViewContext#isResetValues()}
+     * on the wrapped {@link PartialViewContext} object.</p>
+     *
+     * @see PartialViewContext#isResetValues()
+     */
+    public boolean isResetValues() {
+        return getWrapped().isResetValues();
+    }
+
+     /**
+     * <p>The default behavior of this method is to
      * call {@link PartialViewContext#setRenderAll(boolean)}
      * on the wrapped {@link PartialViewContext} object.</p>
      *
