@@ -565,17 +565,16 @@
             <property name="svn.cmd" value="svn"/>
           </else>
         </if>
-        <var name="svninfo.result" unset="true" />
         <var name="svninfo.out" unset="true" />
         <var name="svninfo.to.process" unset="true" />
         <var name="svn.revision.url" unset="true" />
 
-        <exec os="SunOS" dir="${jsf.build.home}" failonerror="false"
+        <exec os="SunOS" dir="${jsf.build.home}" failonerror="false" failifexecutionfails="false"
               resultproperty="svninfo.result"
               executable="${svn.cmd}" outputproperty="svninfo.out">
           <arg line="info"/>
         </exec>
-        <exec os="Linux" dir="${jsf.build.home}" failonerror="false"
+        <exec os="Linux" dir="${jsf.build.home}" failonerror="false" failifexecutionfails="false"
               resultproperty="svninfo.result"
                   executable="${svn.cmd}" outputproperty="svninfo.out">
           <arg line="info"/>
@@ -583,12 +582,12 @@
         </exec>
         <exec osfamily="windows" dir="${jsf.build.home}" executable="${svn.cmd}"
               resultproperty="svninfo.result"
-              failonerror="false" outputproperty="svninfo.out">
+              failonerror="false" failifexecutionfails="false" outputproperty="svninfo.out">
           <arg line="info"/>
         </exec>
         <exec os="Mac OS X" dir="${jsf.build.home}" executable="${svn.cmd}"
               resultproperty="svninfo.result"
-              failonerror="false" outputproperty="svninfo.out">
+              failonerror="false" failifexecutionfails="false" outputproperty="svninfo.out">
           <arg line="info"/>
         </exec>
 
@@ -609,6 +608,15 @@
               <regexp pattern="(?s)(.*URL: )(.+)(\s)(Repository Root:.*)(Revision: )([0-9]+)(.*)"/>
             </propertyregex>
           </else>
+        </if>
+
+        <if>
+          <not>
+            <isset property="svn.revision.url" />
+          </not>
+          <then>
+            <property name="svn.revision.url" value="unable to get svn info" />
+          </then>
         </if>
 
       </sequential>
