@@ -271,6 +271,14 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
             while (!!initialnodes && initialnodes.length > 0) {
                 var scriptStr = [];
                 scriptStr = initialnodes.shift().match(findscript);
+                // check the type - skip if it not javascript type
+                var type = [];
+                type = scriptStr[1].match(findtype); 
+                if ( !!type && type[1]) {
+                    if (type[1] !== "text/javascript") {
+                        continue;
+                    }
+                }
                 var src = [];
                 // check if src specified
                 src = scriptStr[1].match(findsrc);
@@ -369,7 +377,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                     // Get scripts from text
                     scripts = stripScripts(src);
                     // Remove scripts from text
-                    src = src.replace(/<script[^>]*>([\S\s]*?)<\/script>/igm,"");
+                    src = src.replace(/<script[^>]*type="text\/javascript"*>([\S\s]*?)<\/script>/igm,"");
                     temp.innerHTML = src;
                 }
             }
@@ -1049,7 +1057,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                         // Get scripts from text
                         scripts = stripScripts(src);
                         // Remove scripts from text
-                        newsrc = src.replace(/<script[^>]*>([\S\s]*?)<\/script>/igm, "");
+                        newsrc = src.replace(/<script[^>]*type="text\/javascript"*>([\S\s]*?)<\/script>/igm, "");
                         elementReplace(getBodyElement(newsrc), docBody);
                         runScripts(scripts);
                     } catch (e) {
@@ -1100,7 +1108,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                         // Get the scripts from the text
                         scripts = stripScripts(html);
                         // Remove scripts from text
-                        html = html.replace(/<script[^>]*>([\S\s]*?)<\/script>/igm,"");
+                        html = html.replace(/<script[^>]*type="text\/javascript"*>([\S\s]*?)<\/script>/igm,"");
                         parserElement.innerHTML = '<table>' + html + '</table>';
                     }
                     var newElement = parserElement.firstChild;
@@ -1128,7 +1136,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                         // Get the scripts from the text
                         scripts = stripScripts(html);
                         // Remove scripts from text
-                        html = html.replace(/<script[^>]*>([\S\s]*?)<\/script>/igm,"");
+                        html = html.replace(/<script[^>]*type="text\/javascript"*>([\S\s]*?)<\/script>/igm,"");
                         parserElement.innerHTML = html;
                     }
                     replaceNode(parserElement.firstChild, d);
@@ -1166,7 +1174,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 // Get the scripts from the text
                 scripts = stripScripts(html);
                 // Remove scripts from text
-                html = html.replace(/<script[^>]*>([\S\s]*?)<\/script>/igm,"");
+                html = html.replace(/<script[^>]*type="text\/javascript"*>([\S\s]*?)<\/script>/igm,"");
             }
             var tempElement = document.createElement('div');
             var newElement = null;
