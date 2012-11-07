@@ -1115,7 +1115,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 // Get the scripts from the text
                 scripts = stripScripts(html);
                 // Remove scripts from text
-                html = html.replace(/<script[^>]*>([\S\s]*?)<\/script>/igm,"");
+                html = html.replace(/<script[^>]*type="text\/javascript"*>([\S\s]*?)<\/script>/igm,"");
             }
             var tempElement = document.createElement('div');
             var newElement = null;
