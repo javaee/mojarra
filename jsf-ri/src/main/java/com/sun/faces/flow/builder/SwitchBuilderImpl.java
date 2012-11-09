@@ -47,13 +47,7 @@ import javax.faces.flow.builder.SwitchCase;
 
 public class SwitchBuilderImpl extends SwitchBuilder {
     
-    private FlowBuilderImpl root;
-    
-    private String id;
-    
     SwitchBuilderImpl(FlowBuilderImpl root, String id) {
-        this.root = root;
-        this.id = id;
     }
 
     @Override

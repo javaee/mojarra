@@ -47,12 +47,9 @@ import javax.faces.flow.builder.NodeBuilder;
 import javax.faces.flow.builder.SwitchCase;
 
 public class MethodCallBuilderImpl extends MethodCallBuilder {
-    private FlowBuilderImpl root;
-    private String id;
 
     public MethodCallBuilderImpl(FlowBuilderImpl root, String id) {
-        this.root = root;
-        this.id = id;
+        
     }
 
     @Override
