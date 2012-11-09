@@ -38,37 +38,36 @@
  * holder.
 
  */
-package com.sun.faces.test.webprofile.flow.basic;
+package javax.faces.flow.builder;
 
-import java.io.Serializable;
-import javax.faces.context.FacesContext;
+import javax.el.MethodExpression;
+import javax.el.ValueExpression;
 import javax.faces.flow.Flow;
-import javax.faces.flow.builder.FlowBuilder;
-import javax.faces.flow.FlowDefinition;
-import javax.inject.Named;
 
-
-@Named("FlowA")
-@FlowDefinition
-public class FlowA implements Serializable {
+public abstract class FlowBuilder extends NodeBuilder {
     
-    private static final long serialVersionUID = -7623501087369765218L;
-
-    public FlowA() {
-    }
+    public abstract FlowBuilder id(String id);
     
-    public Flow defineFlow(FacesContext context, FlowBuilder flowBuilder) {
+    public abstract FlowBuilder viewNode(String viewNodeId, String vdlDocumentId);
+
+    public abstract SwitchBuilder switchNode(String switchNodeId);
+    
+    public abstract ReturnBuilder returnNode(String returnNodeId);
+    
+    public abstract MethodCallBuilder methodCallNode(String methodCallNodeId);
+    
+    public abstract FlowCallBuilder flowCallNode(String flowCallNodeId);
+    
+    public abstract FlowBuilder initializer(MethodExpression valueExpression);
+    
+    public abstract FlowBuilder finalizer(MethodExpression valueExpression);
+    
+    public abstract FlowBuilder inboundParameter(String name, ValueExpression value);
         
-        flowBuilder.id("flow-a");
-        flowBuilder.returnNode("taskFlowReturn1").
-                fromOutcome("#{flow_a_Bean.returnValue}");
-        flowBuilder.inboundParameter("param1FromFlowB", "#{facesFlowScope.param1Value}");
-        flowBuilder.inboundParameter("param2FromFlowB", "#{facesFlowScope.param2Value}");
-        flowBuilder.flowCallNode("callB").flowReference("flow-b").
-                outboundParameter("param1FromFlowA", "param1Value").
-                outboundParameter("param2FromFlowA", "param2Value");
-        
-        return flowBuilder.getFlow();
-    }
+    public abstract FlowBuilder inboundParameter(String name, String value);
+
+    public abstract Flow getFlow();
     
 }
+    
+

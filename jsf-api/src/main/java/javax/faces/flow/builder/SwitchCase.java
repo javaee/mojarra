@@ -38,37 +38,18 @@
  * holder.
 
  */
-package com.sun.faces.test.webprofile.flow.basic;
+package javax.faces.flow.builder;
 
-import java.io.Serializable;
-import javax.faces.context.FacesContext;
-import javax.faces.flow.Flow;
-import javax.faces.flow.builder.FlowBuilder;
-import javax.faces.flow.FlowDefinition;
-import javax.inject.Named;
+import javax.el.ValueExpression;
 
-
-@Named("FlowA")
-@FlowDefinition
-public class FlowA implements Serializable {
+public abstract class SwitchCase {
     
-    private static final long serialVersionUID = -7623501087369765218L;
-
-    public FlowA() {
-    }
+    public abstract SwitchCase condition(ValueExpression expression);
     
-    public Flow defineFlow(FacesContext context, FlowBuilder flowBuilder) {
-        
-        flowBuilder.id("flow-a");
-        flowBuilder.returnNode("taskFlowReturn1").
-                fromOutcome("#{flow_a_Bean.returnValue}");
-        flowBuilder.inboundParameter("param1FromFlowB", "#{facesFlowScope.param1Value}");
-        flowBuilder.inboundParameter("param2FromFlowB", "#{facesFlowScope.param2Value}");
-        flowBuilder.flowCallNode("callB").flowReference("flow-b").
-                outboundParameter("param1FromFlowA", "param1Value").
-                outboundParameter("param2FromFlowA", "param2Value");
-        
-        return flowBuilder.getFlow();
-    }
+    public abstract SwitchCase fromOutcome(String outcome);
+    
+    public abstract SwitchCase fromOutcome(ValueExpression outcome);
+    
+    public abstract FlowBuilder id(String flowId);
     
 }

@@ -40,6 +40,7 @@
  */
 package com.sun.faces.flow;
 
+import com.sun.faces.flow.builder.FlowBuilderImpl;
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.FacesLogger;
 import java.io.Serializable;
@@ -50,9 +51,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.spi.BeanManager;
+import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.flow.Flow;
-import javax.faces.flow.FlowBuilder;
+import javax.faces.flow.builder.FlowBuilder;
 import javax.faces.flow.FlowDefinition;
 import javax.faces.flow.FlowHandler;
 import javax.inject.Inject;
@@ -125,12 +127,16 @@ public class FlowDiscoveryCDIHelper implements Serializable {
                             }
                         } catch (InstantiationException ex) {
                             LOGGER.log(Level.SEVERE, "Cannot instantiate " + beanClass.getName(), ex);
+                            throw new FacesException(ex);
                         } catch (IllegalAccessException ex) {
                             LOGGER.log(Level.SEVERE, "Cannot instantiate " + beanClass.getName(), ex);
+                            throw new FacesException(ex);
                         } catch (IllegalArgumentException ex) {
                             LOGGER.log(Level.SEVERE, "Cannot invoke " + curMethod.getName(), ex);
+                            throw new FacesException(ex);
                         } catch (InvocationTargetException ex) {
                             LOGGER.log(Level.SEVERE, "Cannot invoke " + curMethod.getName(), ex);
+                            throw new FacesException(ex);
                         }
                         
                     }

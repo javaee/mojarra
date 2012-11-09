@@ -219,13 +219,17 @@ javadoc generation skipped
                              mvnSpecVersion="@{version}"
                              dir="${mvn.pre-maven-rename.api.dir}"
                              goals="@{goal}"/>
-                    <output.jar.contents
+                    <if>
+                      <isset property="mvn.jar.echo" />
+                      <then>
+                        <output.jar.contents
                             locally.deployed.jar="${maven.repo.local}/com/sun/faces/jsf-api/@{version}/jsf-api-@{version}.jar" />
-                    <output.jar.contents
+                        <output.jar.contents
                             locally.deployed.jar="${maven.repo.local}/com/sun/faces/jsf-api/@{version}/jsf-api-@{version}-javadoc.jar" />
-                    <output.jar.contents
+                        <output.jar.contents
                             locally.deployed.jar="${maven.repo.local}/com/sun/faces/jsf-api/@{version}/jsf-api-@{version}-sources.jar" />
-
+                      </then>
+                    </if>
 
                 </then>
                 <else>
@@ -255,13 +259,18 @@ javadoc generation skipped
                              dir="${mvn.pre-maven-rename.impl.dir}"
                              goals="@{goal}"/>
 
-                    <output.jar.contents
+                    <if>
+                      <isset property="mvn.jar.echo" />
+                      <then>
+                        <output.jar.contents
                             locally.deployed.jar="${maven.repo.local}/com/sun/faces/jsf-impl/@{version}/jsf-impl-@{version}.jar" />
-                    <output.jar.contents
+                        <output.jar.contents
                             locally.deployed.jar="${maven.repo.local}/com/sun/faces/jsf-impl/@{version}/jsf-impl-@{version}-javadoc.jar" />
-                    <output.jar.contents
+                        <output.jar.contents
                             locally.deployed.jar="${maven.repo.local}/com/sun/faces/jsf-impl/@{version}/jsf-impl-@{version}-sources.jar" />
-
+                      </then>
+                    </if>
+                    
                 </else>
             </if>
         </sequential>

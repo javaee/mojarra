@@ -38,37 +38,44 @@
  * holder.
 
  */
-package com.sun.faces.test.webprofile.flow.basic;
+package com.sun.faces.flow.builder;
 
-import java.io.Serializable;
-import javax.faces.context.FacesContext;
-import javax.faces.flow.Flow;
-import javax.faces.flow.builder.FlowBuilder;
-import javax.faces.flow.FlowDefinition;
-import javax.inject.Named;
+import javax.el.MethodExpression;
+import javax.el.ValueExpression;
+import javax.faces.flow.builder.MethodCallBuilder;
+import javax.faces.flow.builder.NodeBuilder;
+import javax.faces.flow.builder.SwitchCase;
 
+public class MethodCallBuilderImpl extends MethodCallBuilder {
+    private FlowBuilderImpl root;
+    private String id;
 
-@Named("FlowA")
-@FlowDefinition
-public class FlowA implements Serializable {
-    
-    private static final long serialVersionUID = -7623501087369765218L;
+    public MethodCallBuilderImpl(FlowBuilderImpl root, String id) {
+        this.root = root;
+        this.id = id;
+    }
 
-    public FlowA() {
+    @Override
+    public SwitchCase defaultOutcome(String outcome) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public SwitchCase defaultOutcome(ValueExpression outcome) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public MethodCallBuilder expression(MethodExpression me) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public NodeBuilder markAsStartNode(String startNodeId) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
     
-    public Flow defineFlow(FacesContext context, FlowBuilder flowBuilder) {
-        
-        flowBuilder.id("flow-a");
-        flowBuilder.returnNode("taskFlowReturn1").
-                fromOutcome("#{flow_a_Bean.returnValue}");
-        flowBuilder.inboundParameter("param1FromFlowB", "#{facesFlowScope.param1Value}");
-        flowBuilder.inboundParameter("param2FromFlowB", "#{facesFlowScope.param2Value}");
-        flowBuilder.flowCallNode("callB").flowReference("flow-b").
-                outboundParameter("param1FromFlowA", "param1Value").
-                outboundParameter("param2FromFlowA", "param2Value");
-        
-        return flowBuilder.getFlow();
-    }
+    
+    
     
 }

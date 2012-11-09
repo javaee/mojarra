@@ -38,37 +38,22 @@
  * holder.
 
  */
-package com.sun.faces.test.webprofile.flow.basic;
+package javax.faces.flow.builder;
 
-import java.io.Serializable;
-import javax.faces.context.FacesContext;
-import javax.faces.flow.Flow;
-import javax.faces.flow.builder.FlowBuilder;
-import javax.faces.flow.FlowDefinition;
-import javax.inject.Named;
+import javax.el.ValueExpression;
 
-
-@Named("FlowA")
-@FlowDefinition
-public class FlowA implements Serializable {
+public abstract class FlowCallBuilder extends NodeBuilder {
     
-    private static final long serialVersionUID = -7623501087369765218L;
-
-    public FlowA() {
-    }
+    public abstract FlowCallBuilder flowReference(String flowId);
     
-    public Flow defineFlow(FacesContext context, FlowBuilder flowBuilder) {
+    public abstract FlowCallBuilder inboundParameter(String name, ValueExpression value);
         
-        flowBuilder.id("flow-a");
-        flowBuilder.returnNode("taskFlowReturn1").
-                fromOutcome("#{flow_a_Bean.returnValue}");
-        flowBuilder.inboundParameter("param1FromFlowB", "#{facesFlowScope.param1Value}");
-        flowBuilder.inboundParameter("param2FromFlowB", "#{facesFlowScope.param2Value}");
-        flowBuilder.flowCallNode("callB").flowReference("flow-b").
-                outboundParameter("param1FromFlowA", "param1Value").
-                outboundParameter("param2FromFlowA", "param2Value");
+    public abstract FlowCallBuilder inboundParameter(String name, String value);
+
+    public abstract FlowCallBuilder outboundParameter(String name, ValueExpression value);
         
-        return flowBuilder.getFlow();
-    }
+    public abstract FlowCallBuilder outboundParameter(String name, String value);
+
+    
     
 }

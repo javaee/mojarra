@@ -38,37 +38,55 @@
  * holder.
 
  */
-package com.sun.faces.test.webprofile.flow.basic;
+package com.sun.faces.flow.builder;
 
-import java.io.Serializable;
-import javax.faces.context.FacesContext;
-import javax.faces.flow.Flow;
-import javax.faces.flow.builder.FlowBuilder;
-import javax.faces.flow.FlowDefinition;
-import javax.inject.Named;
+import com.sun.faces.facelets.flow.FlowNavigationCase;
+import javax.el.ValueExpression;
+import javax.faces.flow.builder.NodeBuilder;
+import javax.faces.flow.builder.ReturnBuilder;
 
-
-@Named("FlowA")
-@FlowDefinition
-public class FlowA implements Serializable {
+public class ReturnBuilderImpl extends ReturnBuilder {
     
-    private static final long serialVersionUID = -7623501087369765218L;
+    private FlowBuilderImpl root;
+    String id;
 
-    public FlowA() {
+    public ReturnBuilderImpl(FlowBuilderImpl root, String id) {
+        this.root = root;
+        this.id = id;
+    }
+
+    @Override
+    public NodeBuilder markAsStartNode(String startNodeId) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }    
+    
+    @Override
+    public ReturnBuilder fromOutcome(String outcome) {
+        FlowNavigationCase navCase = new FlowNavigationCase();
+        navCase.setFromOutcome(outcome);
+        root.getFlow().getReturns().put(id, navCase);
+        return this;
+    }
+
+    @Override
+    public ReturnBuilder fromOutcome(ValueExpression outcome) {
+        FlowNavigationCase navCase = new FlowNavigationCase();
+        navCase.setFromOutcome(outcome.getExpressionString());
+        root.getFlow().getReturns().put(id, navCase);
+
+        return this;
+    }
+
+    @Override
+    public ReturnBuilder outboundParameter(String name, ValueExpression value) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public ReturnBuilder outboundParameter(String name, String value) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
     
-    public Flow defineFlow(FacesContext context, FlowBuilder flowBuilder) {
-        
-        flowBuilder.id("flow-a");
-        flowBuilder.returnNode("taskFlowReturn1").
-                fromOutcome("#{flow_a_Bean.returnValue}");
-        flowBuilder.inboundParameter("param1FromFlowB", "#{facesFlowScope.param1Value}");
-        flowBuilder.inboundParameter("param2FromFlowB", "#{facesFlowScope.param2Value}");
-        flowBuilder.flowCallNode("callB").flowReference("flow-b").
-                outboundParameter("param1FromFlowA", "param1Value").
-                outboundParameter("param2FromFlowA", "param2Value");
-        
-        return flowBuilder.getFlow();
-    }
+    
     
 }

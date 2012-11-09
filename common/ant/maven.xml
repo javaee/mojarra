@@ -236,14 +236,17 @@ javadoc generation skipped
                              mvnSpecVersion="@{version}"
                              dir="${mvn.api.dir}"
                              goals="@{goal}" />
-
-                    <output.jar.contents
+                    <if>
+                      <isset property="mvn.jar.echo" />
+                      <then>
+                        <output.jar.contents
                             locally.deployed.jar="${maven.repo.local}/javax/faces/javax.faces-api/@{version}/javax.faces-api-@{version}.jar" />
-                    <output.jar.contents
+                        <output.jar.contents
                             locally.deployed.jar="${maven.repo.local}/javax/faces/javax.faces-api/@{version}/javax.faces-api-@{version}-javadoc.jar" />
-                    <output.jar.contents
+                        <output.jar.contents
                             locally.deployed.jar="${maven.repo.local}/javax/faces/javax.faces-api/@{version}/javax.faces-api-@{version}-sources.jar" />
-
+                      </then>
+                    </if>
 
                 </then>
                 <else>
@@ -294,12 +297,17 @@ javadoc generation skipped
                              dir="${mvn.impl.dir}"
                              goals="@{goal}"/>
 
-                    <output.jar.contents
+                    <if>
+                      <isset property="mvn.jar.echo" />
+                      <then>
+                        <output.jar.contents
                             locally.deployed.jar="${maven.repo.local}/org/glassfish/javax.faces/@{version}/javax.faces-@{version}.jar" />
-                    <output.jar.contents
+                        <output.jar.contents
                             locally.deployed.jar="${maven.repo.local}/org/glassfish/javax.faces/@{version}/javax.faces-@{version}-javadoc.jar" />
-                    <output.jar.contents
+                        <output.jar.contents
                             locally.deployed.jar="${maven.repo.local}/org/glassfish/javax.faces/@{version}/javax.faces-@{version}-sources.jar" />
+                      </then>
+                    </if>
 
 
                 </else>

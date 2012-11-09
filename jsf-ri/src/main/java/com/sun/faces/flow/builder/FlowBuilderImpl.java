@@ -38,20 +38,24 @@
  * holder.
 
  */
-package com.sun.faces.flow;
+package com.sun.faces.flow.builder;
 
-import com.sun.faces.facelets.flow.FlowNavigationCase;
+import com.sun.faces.flow.FlowImpl;
+import com.sun.faces.flow.ParameterImpl;
+import com.sun.faces.flow.ViewNodeImpl;
 import java.util.List;
-import java.util.Map;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.el.MethodExpression;
 import javax.el.ValueExpression;
 import javax.faces.context.FacesContext;
 import javax.faces.flow.Flow;
-import javax.faces.flow.FlowBuilder;
-import javax.faces.flow.FlowCallNode;
+import javax.faces.flow.builder.FlowBuilder;
 import javax.faces.flow.ViewNode;
+import javax.faces.flow.builder.FlowCallBuilder;
+import javax.faces.flow.builder.MethodCallBuilder;
+import javax.faces.flow.builder.ReturnBuilder;
+import javax.faces.flow.builder.SwitchBuilder;
 
 public class FlowBuilderImpl extends FlowBuilder {
     
@@ -59,10 +63,6 @@ public class FlowBuilderImpl extends FlowBuilder {
     private ExpressionFactory expressionFactory;
     private ELContext elContext;
     
-    private String returnNodeId;
-    private String flowCallNodeId;
-    private String flowReference;
-
     public FlowBuilderImpl(FacesContext context) {
         flow = new FlowImpl();
         this.expressionFactory = context.getApplication().getExpressionFactory();
@@ -81,91 +81,27 @@ public class FlowBuilderImpl extends FlowBuilder {
     }
 
     @Override
-    public FlowBuilder switchNode(String switchNodeId) {
-        return this;
+    public SwitchBuilder switchNode(String switchNodeId) {
+        return new SwitchBuilderImpl(this, switchNodeId);
     }
     
     @Override
-    public FlowBuilder returnNode(String returnNodeId) {
-        this.returnNodeId = returnNodeId;
-        return this;
+    public ReturnBuilder returnNode(String returnNodeId) {
+        return new ReturnBuilderImpl(this, returnNodeId);
     }
     
     @Override
-    public FlowBuilder methodCallNode(String methodCallNodeId) {
-        return this;
+    public MethodCallBuilder methodCallNode(String methodCallNodeId) {
+        return new MethodCallBuilderImpl(this, methodCallNodeId);
     }
     
     @Override
-    public FlowBuilder flowCallNode(String flowCallNodeId) {
-        this.flowCallNodeId = flowCallNodeId;
-        this.flowReference = null;
-        return this;
+    public FlowCallBuilder flowCallNode(String flowCallNodeId) {
+        return new FlowCallBuilderImpl(this, flowCallNodeId);
     }
     
     // </editor-fold>
 
-    // <editor-fold defaultstate="collapsed" desc="Operate on a Flow Node">       
-    
-    @Override
-    public FlowBuilder condition(ValueExpression valueExpression) {
-        return this;
-    }
-    
-    @Override
-    public FlowBuilder fromOutcome(String outcome) {
-        if (null == returnNodeId) {
-            throw new IllegalStateException("Attempt to define navigation case without required context.");
-        }
-        FlowNavigationCase navCase = new FlowNavigationCase();
-        navCase.setFromOutcome(outcome);
-        flow.getReturns().put(returnNodeId, navCase);
-        returnNodeId = null;
-
-        return this;
-    }
-
-    @Override
-    public FlowBuilder fromOutcome(ValueExpression outcome) {
-        if (null == returnNodeId) {
-            throw new IllegalStateException("Attempt to define navigation case without required context.");
-        }
-        FlowNavigationCase navCase = new FlowNavigationCase();
-        navCase.setFromOutcome(outcome.getExpressionString());
-        flow.getReturns().put(returnNodeId, navCase);
-        returnNodeId = null;
-
-        return this;
-    }
-            
-    @Override
-    public FlowBuilder defaultOutcome(ValueExpression outcome) {
-        return this;
-    }
-
-    @Override
-    public FlowBuilder defaultOutcome(String outcome) {
-        return this;
-    }
-    
-    @Override
-    public FlowBuilder navigationCase() {
-        if (null == returnNodeId) {
-            throw new IllegalStateException("Attempt to define navigation case without required context: return node or...");
-        }
-        
-        return this;
-    }
-    
-    @Override
-    public FlowBuilder flowReference(String flowReference) {
-        this.flowReference = flowReference;
-        
-        return this;
-    }
-
-    // </editor-fold>
-    
     // <editor-fold defaultstate="collapsed" desc="Flow-wide Settings">     
     
     @Override
@@ -209,41 +145,24 @@ public class FlowBuilderImpl extends FlowBuilder {
         return this;
     }
 
-    @Override
-    public FlowBuilder outboundParameter(String name, ValueExpression value) {
-        if (null == flowCallNodeId) {
-            throw new IllegalStateException("Attempt to define outbound parameter without required context: flow call node.");
-        }
-        if (null == flowReference) {
-            throw new IllegalStateException("Attempt to define outbound parameter without required context: id of called flow.");
-        }
-        ParameterImpl param = new ParameterImpl(name, value);
-        Map<String, FlowCallNode> flowCalls = flow.getFlowCalls();
-        FlowCallNodeImpl flowCall = (FlowCallNodeImpl) flowCalls.get(flowCallNodeId);
-        if (null == flowCall) {
-            flowCall = new FlowCallNodeImpl(flowCallNodeId, flowReference, null, null);
-            flowCalls.put(flowCallNodeId, flowCall);
-        }
-        flowCall.getOutboundParameters().put(name, param);
-        
-        return this;
-    }
-
-    @Override
-    public FlowBuilder outboundParameter(String name, String value) {
-        ValueExpression ve = expressionFactory.createValueExpression(elContext, value, Object.class);
-        outboundParameter(name, ve);
-        return this;
-    }
-    
-    
-    
-        
     // </editor-fold>
         
     @Override
     public Flow getFlow() {
         return flow;
     }
+    
+    // <editor-fold defaultstate="collapsed" desc="Package private helpers">
+    
+    ExpressionFactory getExpressionFactory() {
+        return expressionFactory;
+    }
+    
+    ELContext getELContext() {
+        return elContext;
+    }
+    
+    // </editor-fold>
+
     
 }

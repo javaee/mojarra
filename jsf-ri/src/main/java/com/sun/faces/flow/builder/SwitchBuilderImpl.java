@@ -38,67 +38,44 @@
  * holder.
 
  */
-package javax.faces.flow;
+package com.sun.faces.flow.builder;
 
-import javax.el.MethodExpression;
 import javax.el.ValueExpression;
+import javax.faces.flow.builder.FlowBuilder;
+import javax.faces.flow.builder.SwitchBuilder;
+import javax.faces.flow.builder.SwitchCase;
 
-public abstract class FlowBuilder {
+public class SwitchBuilderImpl extends SwitchBuilder {
     
-    // <editor-fold defaultstate="collapsed" desc="Create Flow Nodes">       
+    private FlowBuilderImpl root;
     
-    public abstract FlowBuilder viewNode(String viewNodeId, String vdlDocumentId);
+    private String id;
+    
+    SwitchBuilderImpl(FlowBuilderImpl root, String id) {
+        this.root = root;
+        this.id = id;
+    }
 
-    public abstract FlowBuilder switchNode(String switchNodeId);
-    
-    public abstract FlowBuilder returnNode(String returnNodeId);
-    
-    public abstract FlowBuilder methodCallNode(String methodCallNodeId);
-    
-    public abstract FlowBuilder flowCallNode(String flowCallNodeId);
-    
-    // </editor-fold>
+    @Override
+    public SwitchCase defaultOutcome(String outcome) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
-    // <editor-fold defaultstate="collapsed" desc="Operate on a Flow Node">       
-    
-    public abstract FlowBuilder condition(ValueExpression valueExpression);
-    
-    public abstract FlowBuilder fromOutcome(String outcome);
-    
-    public abstract FlowBuilder fromOutcome(ValueExpression outcome);
-        
-    public abstract FlowBuilder defaultOutcome(String outcome);
-    
-    public abstract FlowBuilder defaultOutcome(ValueExpression outcome);
-    
-    public abstract FlowBuilder navigationCase();
-    
-    public abstract FlowBuilder flowReference(String flowId);
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Flow-wide Settings">     
-    
-    public abstract FlowBuilder id(String flowId);
-    
-    public abstract FlowBuilder markAsStartNode(String startNodeId);
-    
-    public abstract FlowBuilder initializer(MethodExpression valueExpression);
-    
-    public abstract FlowBuilder finalizer(MethodExpression valueExpression);
-    
-    public abstract FlowBuilder inboundParameter(String name, ValueExpression value);
-        
-    public abstract FlowBuilder inboundParameter(String name, String value);
+    @Override
+    public SwitchCase defaultOutcome(ValueExpression outcome) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
-    public abstract FlowBuilder outboundParameter(String name, ValueExpression value);
-        
-    public abstract FlowBuilder outboundParameter(String name, String value);
+    @Override
+    public FlowBuilder markAsStartNode(String startNodeId) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
-    // </editor-fold>
-        
-    public abstract Flow getFlow();
+    @Override
+    public SwitchCase navigationCase() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
+    
     
 }
-    
-
