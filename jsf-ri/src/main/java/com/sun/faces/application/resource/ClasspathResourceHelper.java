@@ -127,18 +127,30 @@ public class ClasspathResourceHelper extends ResourceHelper {
     /**
      * @see ResourceHelper#getNonCompressedInputStream(com.sun.faces.application.resource.ResourceInfo, javax.faces.context.FacesContext)
      */
-    protected InputStream getNonCompressedInputStream(ResourceInfo resource, FacesContext ctx)
-    throws IOException {
+    protected InputStream getNonCompressedInputStream(ResourceInfo resource, FacesContext ctx) throws IOException {
 
-        ClassLoader loader = Util.getCurrentLoader(this.getClass());
-        String path = resource.getPath();
-        InputStream in = loader.getResourceAsStream(path);
-        if (in == null) {
-            // try using this class' loader (necessary when running in OSGi)
-            in = this.getClass().getClassLoader().getResourceAsStream(path);
+        InputStream in = null;
+        
+        if (ctx.isProjectStage(ProjectStage.Development)) {
+            ClassLoader loader = Util.getCurrentLoader(getClass());
+            String path = resource.getPath();
+            if (loader.getResource(path) != null) {
+                in = loader.getResource(path).openStream();
+            }
+            if (in == null) {
+                if (getClass().getClassLoader().getResource(path) != null) {
+                    in = getClass().getClassLoader().getResource(path).openStream();
+                }
+            }
+        } else {        
+            ClassLoader loader = Util.getCurrentLoader(getClass());
+            String path = resource.getPath();
+            in = loader.getResourceAsStream(path);
+            if (in == null) {
+                in = getClass().getClassLoader().getResourceAsStream(path);
+            }
         }
         return in;
-
     }
 
 
