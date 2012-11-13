@@ -110,10 +110,8 @@ public class ClasspathResourceHelper extends ResourceHelper {
             if (loader.getResource(path) != null) {
                 in = loader.getResource(path).openStream();
             }
-            if (in == null) {
-                if (getClass().getClassLoader().getResource(path) != null) {
-                    in = getClass().getClassLoader().getResource(path).openStream();
-                }
+            if (in == null && getClass().getClassLoader().getResource(path) != null) {
+                in = getClass().getClassLoader().getResource(path).openStream();
             }
         } else {        
             ClassLoader loader = Util.getCurrentLoader(getClass());
