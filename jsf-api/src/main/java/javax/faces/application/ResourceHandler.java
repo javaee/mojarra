@@ -247,8 +247,11 @@ public abstract class ResourceHandler {
      * href="../../../overview-summary.html#prose_document">linked in
      * the overview summary</a> must be executed to create the
      * <code>Resource</code>.  <span class="changed_added_2_2">New
-     * requirements were introduced in version 2.2 of the
-     * specification.</span></p>
+     * requirements were introduced in version 2.2 of the specification.
+     * For historical reasons, this method operate correctly when the
+     * argument {@code resourceName} is of the form
+     * {@code libraryName/resourceName}, even when {@code resourceName}
+     * contains '/' characters.  </span></p>
 
      * </div>
 
