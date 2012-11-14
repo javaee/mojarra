@@ -604,7 +604,34 @@
     <target name="mvn.deploy.promoted">
       <call.modules target="mvn.deploy.promoted" />
     </target>
+    
+    <target name="mvn.pre-maven-rename.deploy.snapshot.local">
 
+      <ant inheritAll="true"
+            antfile="build-pre-maven-rename.xml"
+            target="main"
+               dir="jsf-api">
+        <property name="skip.javadoc.jar"  value="true" />
+      </ant>
+
+      <ant inheritAll="true"
+            antfile="build-pre-maven-rename.xml"
+            target="mvn.pre-maven-rename.deploy.snapshot.local"
+               dir="jsf-api">
+        <property name="skip.javadoc.jar"  value="true" />
+      </ant>
+
+      <ant inheritAll="true"
+            antfile="build-pre-maven-rename.xml"
+            target="main"
+               dir="jsf-ri" />
+
+      <ant inheritAll="true"
+            antfile="build-pre-maven-rename.xml"
+            target="mvn.pre-maven-rename.deploy.snapshot.local"
+               dir="jsf-ri" />
+    </target>
+        
     <target name="hudson.deploy">
 
       <!-- Do not deploy the javax.faces-api jar on this branch. 
