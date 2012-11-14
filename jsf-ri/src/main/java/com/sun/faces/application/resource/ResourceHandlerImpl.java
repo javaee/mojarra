@@ -117,7 +117,28 @@ public class ResourceHandlerImpl extends ResourceHandler {
 
         Util.notNull("resourceName", resourceName);
 
-        return createResource(resourceName, null, null);
+        FacesContext ctx = FacesContext.getCurrentInstance();
+
+        boolean development = ctx.isProjectStage(ProjectStage.Development);
+
+        String ctype = getContentType(ctx, resourceName);
+        ResourceInfo info = manager.findResource(null,
+                                                 resourceName,
+                                                 ctype,
+                                                 true,
+                                                 ctx);
+        if (info == null) {
+            // prevent message from being when we're dealing with
+            // groovy is present and Application.createComponent()
+            // tries to resolve a .groovy file as backing UIComponent.
+            if (!development && "application/x-groovy".equals(ctype)) {
+                return null;
+            }
+            logMissingResource(ctx, resourceName, null, null);
+            return null;
+        } else {
+            return new ResourceImpl(info, ctype, creationTime, maxAge);
+        }
     }
     
     

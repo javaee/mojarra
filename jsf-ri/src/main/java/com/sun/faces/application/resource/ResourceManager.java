@@ -174,6 +174,15 @@ public class ResourceManager {
                                      String contentType,
                                      FacesContext ctx) {
 
+        return findResource(libraryName, resourceName, contentType, false, ctx);
+    }
+    
+    public ResourceInfo findResource(String libraryName,
+                                     String resourceName,
+                                     String contentType,
+                                     boolean isViewResource,
+                                     FacesContext ctx) {
+        
         String localePrefix = getLocalePrefix(ctx);
         ResourceInfo info =
               getFromCache(resourceName, libraryName, localePrefix);
@@ -188,6 +197,7 @@ public class ResourceManager {
                                         resourceName,
                                         localePrefix,
                                         compressable,
+                                        isViewResource,
                                         ctx);
                         if (info != null) {
                             addToCache(info);
@@ -201,6 +211,7 @@ public class ResourceManager {
                                 resourceName,
                                 localePrefix,
                                 compressable,
+                                isViewResource,
                                 ctx);
                 if (info != null) {
                     addToCache(info);
@@ -234,6 +245,7 @@ public class ResourceManager {
                                   String resourceName,
                                   String localePrefix,
                                   boolean compressable,
+                                  boolean isViewResource,
                                   FacesContext ctx) {
         
         LibraryInfo library = null;
@@ -260,11 +272,11 @@ public class ResourceManager {
         }
 
         ResourceInfo info =
-              findResource(library, resourceName, localePrefix, compressable, ctx);
+              findResource(library, resourceName, localePrefix, compressable, isViewResource,ctx);
         if (info == null && localePrefix != null) {
             // no localized resource found, try to find a
             // resource that isn't localized
-            info = findResource(library, resourceName, null, compressable, ctx);
+            info = findResource(library, resourceName, null, compressable, isViewResource, ctx);
         }
 
         // If no resource has been found so far, and we have a library that
@@ -293,11 +305,11 @@ public class ResourceManager {
             }
    
             if (library != null) {
-                info = findResource(library, resourceName, localePrefix, compressable, ctx);
+                info = findResource(library, resourceName, localePrefix, compressable, isViewResource, ctx);
                 if (info == null && localePrefix != null) {
                     // no localized resource found, try to find a
                     // resource that isn't localized
-                    info = findResource(library, resourceName, null, compressable, ctx);
+                    info = findResource(library, resourceName, null, compressable, isViewResource, ctx);
                 }
             }
 
@@ -434,6 +446,7 @@ public class ResourceManager {
                                       String resourceName,
                                       String localePrefix,
                                       boolean compressable,
+                                      boolean skipToFaceletResourceHelper,
                                       FacesContext ctx) {
 
         if (library != null) {
@@ -443,9 +456,6 @@ public class ResourceManager {
                                                     compressable,
                                                     ctx);
         } else {
-            // If the resourceName contains a "/" don't bother consulting 
-            // the other kinds of resourceHelper.
-            boolean skipToFaceletResourceHelper = -1 != resourceName.indexOf("/");
             ResourceInfo resource = null;
             
             if (!skipToFaceletResourceHelper) {
@@ -488,7 +498,7 @@ public class ResourceManager {
         }
         FacesContext context = FacesContext.getCurrentInstance();
         LibraryInfo info = this.findLibrary(libraryName, null, context);
-        ResourceInfo resourceInfo = this.findResource(info, resourceName, libraryName, true, context);
+        ResourceInfo resourceInfo = this.findResource(info, resourceName, libraryName, true, false, context);
         
         return resourceInfo;
     }
