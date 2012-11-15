@@ -79,5 +79,6 @@ public class UIParameterTest {
         parameter.setValueExpression("disable", valueExpression);
         assertTrue(parameter.isDisable());
         verify(elContext, facesContext, valueExpression);
+        method.invoke(null, (FacesContext) null);
     }
 }
