@@ -45,6 +45,7 @@ import java.util.Map;
 import javax.faces.FactoryFinder;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.view.facelets.FaceletFactory;
 
@@ -59,7 +60,7 @@ public class RequestBean {
         attrs.put("pagecontent", "" + System.currentTimeMillis());
         FaceletFactory faceletFactory = (FaceletFactory) FactoryFinder
                 .getFactory(FactoryFinder.FACELET_FACTORY);
-        UIComponent c = faceletFactory.createComponent(
+        UIComponent c = faceletFactory.createComponent(FacesContext.getCurrentInstance(), 
                 "http://java.sun.com/jsf/composite/" + "ezcomp", "ezcomp", attrs);
         
         return null == c ? "FAILURE" : "SUCCESS";
