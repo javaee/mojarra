@@ -289,23 +289,6 @@ public final class DevTools {
 
     }
 
-    public static String interpolateViewState(String input, UIDebug.ViewStateRenderer renderer) throws IOException {
-        StringBuilder builder = new StringBuilder();
-
-        String [] parts = input.split("\\^\\^");
-
-        for (String part : parts) {
-            if ("state".equals(part)) {
-                builder.append(renderer.renderViewState());
-            } else {
-                builder.append(part);
-            }
-        }
-
-
-        return builder.toString();
-    }
-
 
     private static String[] splitTemplate(String rsc) throws IOException {
 
