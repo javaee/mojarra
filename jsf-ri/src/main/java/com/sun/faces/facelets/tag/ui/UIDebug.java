@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -57,22 +57,15 @@
  */
 package com.sun.faces.facelets.tag.ui;
 
-import com.sun.faces.RIConstants;
 import com.sun.faces.facelets.util.DevTools;
 import com.sun.faces.facelets.util.FastWriter;
-import java.io.OutputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.faces.component.UIComponentBase;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -86,12 +79,8 @@ public final class UIDebug extends UIComponentBase {
     public final static String COMPONENT_FAMILY = "facelets";
     private static long nextId = System.currentTimeMillis();
     private final static String KEY = "facelets.ui.DebugOutput";
-    private final static String PER_VIEW_DEBUG = RIConstants.FACES_PREFIX + ".PerViewDebug";
     public final static String DEFAULT_HOTKEY = "D";
     private String hotkey = DEFAULT_HOTKEY;
-    private boolean recordStateSize = false;
-    private static final Logger LOGGER = Logger.getLogger("javax.faces.component",
-            "javax.faces.LogStrings");
 
     public UIDebug() {
         super();
@@ -130,7 +119,7 @@ public final class UIDebug extends UIComponentBase {
             sb.append(actionId.indexOf('?') == -1 ? '?' : '&');
             sb.append(KEY);
             sb.append('=');
-            sb.append(writeDebugOutput(facesContext, this));
+            sb.append(writeDebugOutput(facesContext));
             sb.append("'); else if (faceletsOrigKeyup) faceletsOrigKeyup(e); };\n");
             sb.append("//]]>\n");
 
@@ -146,7 +135,7 @@ public final class UIDebug extends UIComponentBase {
         }
     }
 
-    private static String writeDebugOutput(FacesContext faces, UIDebug component) throws IOException {
+    private static String writeDebugOutput(FacesContext faces) throws IOException {
         FastWriter fw = new FastWriter();
         DevTools.debugHtml(fw, faces);
 
@@ -163,94 +152,16 @@ public final class UIDebug extends UIComponentBase {
         }
         String id = "" + nextId++;
         debugs.put(id, fw.toString());
-
-        if (component.isRecordStateSize()) {
-            faces.getAttributes().put(PER_VIEW_DEBUG, id);
-        }
-
         return id;
-    }
-
-    public static void computeViewStateSize(FacesContext context,
-            Object[] state) throws IOException {
-    }
-
-    public static void computeViewStateSize(FacesContext context,
-            Map<String, Serializable> state) throws IOException {
-        Map<Object, Object> contextMap = context.getAttributes();
-
-        Map<String, Object> sessionMap = context.getExternalContext().getSessionMap();
-        Map debugs = (Map) sessionMap.get(KEY);
-
-        Map<String, Long> sizes = new HashMap<String, Long>();
-        String id = contextMap.get(PER_VIEW_DEBUG).toString() + "_state";
-        debugs.put(id, sizes);
-
-        CountingOutputStream cos = new CountingOutputStream();
-        ObjectOutputStream objectOutputStream = new ObjectOutputStream(cos);
-        long count, total = 0;
-
-        for (Map.Entry<String, Serializable> cur : state.entrySet()) {
-            cos.reset();
-            objectOutputStream.writeObject(cur.getValue());
-            count = cos.getByteCount();
-            total += count;
-            sizes.put(cur.getKey(), count);
-        }
-        sizes.put("", total);
-
     }
 
     private static String fetchDebugOutput(FacesContext faces, String id) {
         Map session = faces.getExternalContext().getSessionMap();
         Map debugs = (Map) session.get(KEY);
-        String result = null;
         if (debugs != null) {
-            result = (String) debugs.get(id);
-            if (null == result) {
-                return "Reload the view to inspect the debug information";
-            }
-            final String viewStateKey = id + "_state";
-
-            if (debugs.containsKey(viewStateKey)) {
-                try {
-                    final Map<String, Long> sizes = (Map<String, Long>) debugs.get(viewStateKey);
-                    result = DevTools.interpolateViewState(result, new ViewStateRenderer() {
-
-                        public String renderViewState() {
-                            StringBuilder builder = new StringBuilder();
-                            builder.append("<table>");
-                            builder.append("<tr><th>Client id</th><th>Size in bytes</th></tr>");
-                            // Go through the map here and render it out, according
-                            // to the encoding in computeViewStateSize
-                            for (Map.Entry<String, Long> cur : sizes.entrySet()) {
-                                if (!"".equals(cur.getKey())) {
-                                    builder.append("<tr><td>").append(cur.getKey()).append("</td><td>").append(cur.getValue()).append("</td></tr>");
-                                }
-                            }
-                            builder.append("<tr><th>Total</th><th>").append(sizes.get("")).append("</th></tr>");
-                            builder.append("</table>");
-
-                            return builder.toString();
-                        }
-                    });
-                } catch (IOException ex) {
-                    LOGGER.log(Level.SEVERE, "Unable to write view state", ex);
-                }
-            } else {
-                try {
-                    result = DevTools.interpolateViewState(result, new ViewStateRenderer() {
-
-                        public String renderViewState() {
-                            return "No view state available.  Add recordStateSize=\"true\" to &lt;ui:debug&gt; to see view state size.";
-                        }
-                    });
-                } catch (IOException ex) {
-                    LOGGER.log(Level.SEVERE, "Unable to write view state", ex);
-                }
-            }
+            return (String) debugs.get(id);
         }
-        return result;
+        return null;
     }
 
     public static boolean debugRequest(FacesContext faces) {
@@ -286,40 +197,5 @@ public final class UIDebug extends UIComponentBase {
 
     public void setHotkey(String hotkey) {
         this.hotkey = (hotkey != null) ? hotkey.toUpperCase() : "";
-    }
-
-    public static boolean isRecordStateSize(FacesContext context) {
-        return context.getAttributes().containsKey(PER_VIEW_DEBUG);
-    }
-
-    public boolean isRecordStateSize() {
-        return recordStateSize;
-    }
-
-    public void setRecordStateSize(boolean recordStateSize) {
-        this.recordStateSize = recordStateSize;
-    }
-
-    private static class CountingOutputStream extends OutputStream {
-
-        long bytes;
-
-        public Long getByteCount() {
-            return bytes;
-        }
-
-        public void reset() {
-            bytes = 0;
-        }
-
-        @Override
-        public void write(int b) throws IOException {
-            bytes++;
-        }
-    }
-
-    public interface ViewStateRenderer {
-
-        public String renderViewState();
     }
 }
