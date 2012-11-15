@@ -81,7 +81,7 @@ public class UIParameter extends UIComponentBase {
     enum PropertyKeys {
         name,
         value,
-        disble
+        disable
     }
 
 
@@ -166,7 +166,7 @@ public class UIParameter extends UIComponentBase {
      */
     public boolean isDisable() {
 
-        return (Boolean) getStateHelper().eval(PropertyKeys.disble, false);
+        return (Boolean) getStateHelper().eval(PropertyKeys.disable, false);
 
     }
 
@@ -177,7 +177,7 @@ public class UIParameter extends UIComponentBase {
      */
     public void setDisable(boolean disable) {
 
-        getStateHelper().put(PropertyKeys.disble, disable);
+        getStateHelper().put(PropertyKeys.disable, disable);
 
     }
 
