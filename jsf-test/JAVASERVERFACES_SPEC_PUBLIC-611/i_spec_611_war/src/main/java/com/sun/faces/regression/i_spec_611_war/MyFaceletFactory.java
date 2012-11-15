@@ -55,15 +55,15 @@ public class MyFaceletFactory extends FaceletFactoryWrapper {
     }
 
     @Override
-    public Facelet getFacelet(URL url) throws IOException {
+        public Facelet getFacelet(FacesContext context, URL url) throws IOException {
         setMessage();
-        return super.getFacelet(url);
+        return super.getFacelet(context, url);
     }
 
     @Override
-    public Facelet getFacelet(String uri) throws IOException {
+    public Facelet getFacelet(FacesContext context, String uri) throws IOException {
         setMessage();
-        return super.getFacelet(uri);
+        return super.getFacelet(context, uri);
     }
     
     private void setMessage() {
