@@ -990,11 +990,7 @@ public class WebConfiguration {
         WebAppResourcesDirectory(
               ResourceHandler.WEBAPP_RESOURCES_DIRECTORY_PARAM_NAME,
               "/resources"
-        ),
-        MultiTemplateName(
-                ResourceHandler.MULTI_TEMPLATE_PARAM_NAME,
-                ResourceHandler.DEFAULT_MULTI_TEMPLATE
-                );
+        );
 
 
 

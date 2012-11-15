@@ -269,6 +269,11 @@ public abstract class Resource {
      * <code>localePrefix</code> for this application, as defined in
      * {@link ResourceHandler#LOCALE_PREFIX}, <code>resourceMetaData</code> must
      * include "loc=" + the <code>localePrefix</code>.</p>
+
+
+     * <p class="changed_added_2_2">If this resource is contained in a
+     * resource library contract, <code>resourceMetaData</code> must
+     * include "con=" + the name of the resource library contract.</p>
      *
      * </ul>
      *

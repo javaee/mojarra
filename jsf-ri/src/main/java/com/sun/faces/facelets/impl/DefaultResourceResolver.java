@@ -62,6 +62,7 @@ import javax.faces.view.facelets.ResourceResolver;
 import java.net.URL;
 import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
+import javax.faces.context.FacesContext;
 
 public class DefaultResourceResolver extends ResourceResolver {
     
@@ -73,7 +74,7 @@ public class DefaultResourceResolver extends ResourceResolver {
     }
 
     public URL resolveUrl(String path) {
-        Resource faceletResource = resourceHandler.createViewResource(path);
+        Resource faceletResource = resourceHandler.createViewResource(FacesContext.getCurrentInstance(), path);
         URL result = null;
         if (null != faceletResource) {
             result = faceletResource.getURL();

@@ -555,6 +555,20 @@
           ]]></xsd:documentation>
         </xsd:annotation>
       </xsd:element>
+      <xsd:element name="resource-library-contracts"
+                   type="javaee:faces-config-application-resource-library-contractsType">
+        <xsd:annotation>
+          <xsd:documentation><![CDATA[
+
+           <p class="changed_added_2_2">The "resource-library-contracts" element
+           specifies the mappings between views in the application and resource
+           library contracts that, if present in the application, must be made
+           available for use as templates of the specified views.
+           </p>
+            
+          ]]></xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
       <xsd:element name="system-event-listener"
                    type="javaee:faces-config-system-event-listenerType"
                    minOccurs="0"
@@ -621,6 +635,85 @@
                    type="xsd:ID"/>
   </xsd:complexType>
 
+  <xsd:complexType name="faces-config-application-resource-library-contractsType">
+    <xsd:annotation>
+      <xsd:documentation><![CDATA[
+
+           <p class="changed_added_2_2">The "resource-library-contracts" element
+           specifies the mappings between views in the application and resource
+           library contracts that, if present in the application, must be made
+           available for use as templates of the specified views.
+           </p>
+        
+      ]]></xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:group ref="javaee:descriptionGroup"/>
+      <xsd:element name="contract-mapping"
+                   type="javaee:faces-config-application-resource-library-contracts-contract-mappingType">
+        <xsd:annotation>
+          <xsd:documentation><![CDATA[
+
+           <p classes="changed_added_2_2">Declare a mapping between a collection
+           of views in the application and the list of contracts (if present in the application)
+           that may be used as a source for templates and resources for those views.</p>
+            
+          ]]></xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="id"
+                   type="xsd:ID"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="faces-config-application-resource-library-contracts-contract-mappingType">
+    <xsd:annotation>
+      <xsd:documentation><![CDATA[
+
+           <p class="changed_added_2_2">The "contract-mapping" element
+           specifies the mappings between a collection of views in the application and resource
+           library contracts that, if present in the application, must be made
+           available for use as templates of the specified views.
+           </p>
+        
+      ]]></xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:group ref="javaee:descriptionGroup"/>
+      <xsd:element name="url-pattern"
+                   type="javaee:url-patternType"
+                   maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation><![CDATA[
+
+           <p class="changed_added_2_2">The "url-pattern" element
+           specifies the collection of views in this application that 
+           are allowed to use the corresponding contracts.
+           </p>
+        
+           ]]></xsd:documentation>
+         </xsd:annotation>
+      </xsd:element>
+
+      <xsd:element name="contracts"
+                   type="javaee:string"
+                   maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation><![CDATA[
+
+           <p class="changed_added_2_2">The "contracts" element
+           is a comma separated list of resource library contracts that,
+           if available to the application, may be used by the views
+           matched by the corresponding "url-pattern"
+           </p>
+        
+           ]]></xsd:documentation>
+         </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="id"
+                   type="xsd:ID"/>
+  </xsd:complexType>
 
 <!-- **************************************************** -->
 

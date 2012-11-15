@@ -264,7 +264,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         Facelet f;
 
         try {
-            f = factory.getFacelet(ccResource.getURL());
+            f = factory.getFacelet(context, ccResource.getURL());
             VariableMapper wrapper = new VariableMapperWrapper(orig) {
 
                 @Override
@@ -837,7 +837,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     throws IOException {
         StateContext stateCtx = StateContext.getStateContext(ctx);
         if (Util.isViewPopulated(ctx, view)) {
-            Facelet f = faceletFactory.getFacelet(view.getViewId());
+            Facelet f = faceletFactory.getFacelet(ctx, view.getViewId());
             // Disable events from being intercepted by the StateContext by
             // virute of re-applying the handlers. 
             try {
@@ -866,7 +866,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         RequestStateManager.set(ctx,
                                 RequestStateManager.FACELET_FACTORY,
                                 faceletFactory);
-        Facelet f = faceletFactory.getFacelet(view.getViewId());
+        Facelet f = faceletFactory.getFacelet(ctx, view.getViewId());
 
         // populate UIViewRoot
         try {
@@ -910,8 +910,8 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         boolean result = false;
         if (handlesViewId(viewId)) {
             ResourceHandler rh = context.getApplication().getResourceHandler();
-            result = null != rh.createViewResource(viewId);
-            }
+            result = null != rh.createViewResource(context, viewId);
+        }
            
         return result;
         }

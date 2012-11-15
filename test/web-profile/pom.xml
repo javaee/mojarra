@@ -22,7 +22,6 @@
     <modules>
         <module>el</module>
         <module>flow</module>
-        <module>multi_templating</module>
         <module>lifecycle</module>
         <module>stateSaving</module>
         <module>renderKit</module>

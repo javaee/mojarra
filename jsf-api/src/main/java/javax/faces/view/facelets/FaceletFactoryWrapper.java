@@ -44,6 +44,7 @@ import java.net.URL;
 import java.util.Map;
 import javax.faces.FacesWrapper;
 import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 
 /**
  * <p class="changed_added_2_2">Provides a simple implementation of 
@@ -72,28 +73,28 @@ public class FaceletFactoryWrapper extends FaceletFactory implements FacesWrappe
     }
 
     @Override
-    public UIComponent createComponent(String taglibURI, String tagName, Map<String, Object> attributes) {
-        return getWrapped().createComponent(taglibURI, tagName, attributes);
+    public UIComponent createComponent(FacesContext context, String taglibURI, String tagName, Map<String, Object> attributes) {
+        return getWrapped().createComponent(context, taglibURI, tagName, attributes);
     }
     
     @Override
-    public Facelet getFacelet(String uri) throws IOException {
-        return getWrapped().getFacelet(uri);
+    public Facelet getFacelet(FacesContext context, String uri) throws IOException {
+        return getWrapped().getFacelet(context, uri);
     }
 
     @Override
-    public Facelet getFacelet(URL url) throws IOException {
-        return getWrapped().getFacelet(url);
+    public Facelet getFacelet(FacesContext context, URL url) throws IOException {
+        return getWrapped().getFacelet(context, url);
     }
 
     @Override
-    public Facelet getMetadataFacelet(String uri) throws IOException {
-        return getWrapped().getMetadataFacelet(uri);
+    public Facelet getMetadataFacelet(FacesContext context, String uri) throws IOException {
+        return getWrapped().getMetadataFacelet(context, uri);
     }
 
     @Override
-    public Facelet getMetadataFacelet(URL url) throws IOException {
-        return getWrapped().getMetadataFacelet(url);
+    public Facelet getMetadataFacelet(FacesContext context, URL url) throws IOException {
+        return getWrapped().getMetadataFacelet(context, url);
     }
 
     @Override

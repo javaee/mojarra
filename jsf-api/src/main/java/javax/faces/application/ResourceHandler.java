@@ -172,25 +172,6 @@ public abstract class ResourceHandler {
 
     public static final String WEBAPP_RESOURCES_DIRECTORY_PARAM_NAME = 
         "javax.faces.WEBAPP_RESOURCES_DIRECTORY";
-    
-    /**
-     * <p class="changed_added_2_2">If a 
-     * <code>&lt;context-param&gt;</code> with the param name equal to
-     * the value of {@link #MULTI_TEMPLATE_PARAM_NAME}
-     * exists, the runtime must interpret its value as the name of a resource
-     * library that conforms to the naming conventions of a multi-template.</p>
-     * @since 2.2
-     */
-    public static final String MULTI_TEMPLATE_PARAM_NAME = 
-            "javax.faces.MULTI_TEMPLATE";
-    
-    /**
-     * <p class="changed_added_2_2">The name of the default multi-template
-     * to look for in the absence of a value for {@link #MULTI_TEMPLATE_PARAM_NAME}.</p>
-     * @since 2.2
-     */
-    public static final String DEFAULT_MULTI_TEMPLATE = 
-            "javax_faces_template";
 
     /**
      * <p class="changed_added_2_0">The name of a key within the
@@ -280,12 +261,36 @@ public abstract class ResourceHandler {
      * before calling this method.  To preserve compatibility with prior revisions of the
      * specification, a default implementation must be provided that calls
      * {@link #createResource(java.lang.String)}. </p>
-     * 
+
+     * <div class="changed_added_2_2">
+
+     * <p>PENDING(edburns): I think we need to put an additional check
+     * in to avoid returning false hits from this method when a
+     * viewResource happens to be named the same as one of the templates
+     * in a resource library contract.  Perhaps we could set some kind
+     * of flag in the tag handler of all facelet tags that are valid for
+     * using resource library contracts (maybe just ui:composition and
+     * ui:decorate) and make it so the getResourceLibraryContracts part
+     * of this method only takes effect if that flag is set?</p>
+     
+     * <p>Call {@link
+     * javax.faces.component.UIViewRoot#getResourceLibraryContracts}.
+     * If the result is non-{@code null} and not empty, for each value
+     * in the list, treat the value as the name of a resource library
+     * contract.  If the argument {@code resoureName} exists as a
+     * resource in the resource library contract, return it.  Otherwise,
+     * return the resource (not in the resource library contract), if
+     * found.  Otherwise, return {@code null}.</p>
+
+     * </div>
+
+     * @param context the {@link FacesContext} for this request.
+
      * @param resourceName the name of the resource to be interpreted as a view
      * by the {@link javax.faces.view.ViewDeclarationLanguage}.
 
      * @throws NullPointerException if <code>resourceName</code> is
-     *  <code>null</code>.
+     *  {@code null}.
 
      * @return a newly created <code>Resource</code> instance, suitable
      * for use by the {@link javax.faces.view.ViewDeclarationLanguage}.
@@ -294,8 +299,8 @@ public abstract class ResourceHandler {
 
      */
     
-    public Resource createViewResource(String resourceName) {
-        return FacesContext.getCurrentInstance().getApplication().getResourceHandler().createResource(resourceName);
+    public Resource createViewResource(FacesContext context, String resourceName) {
+        return context.getApplication().getResourceHandler().createResource(resourceName);
     }
 
     /**

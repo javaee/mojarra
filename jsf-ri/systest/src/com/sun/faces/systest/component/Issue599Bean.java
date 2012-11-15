@@ -49,6 +49,8 @@ import javax.faces.component.UIForm;
 import javax.faces.component.UINamingContainer;
 import javax.faces.view.facelets.FaceletFactory;
 
+import javax.faces.context.FacesContext;
+
 @ManagedBean
 @RequestScoped
 public class Issue599Bean {
@@ -56,11 +58,12 @@ public class Issue599Bean {
     public String getResult() {
         FaceletFactory faceletFactory = (FaceletFactory)
                 FactoryFinder.getFactory(FactoryFinder.FACELET_FACTORY);
+        FacesContext context = FacesContext.getCurrentInstance();
         
         // Can I create a simple h:form with prependId="false"?
         Map<String,Object> attrs = new HashMap<String, Object>();
         attrs.put("prependId", "false");
-        UIForm form = (UIForm) faceletFactory.createComponent("http://java.sun.com/jsf/html",
+        UIForm form = (UIForm) faceletFactory.createComponent(context, "http://java.sun.com/jsf/html",
                 "form", attrs);
         
         if (form.isPrependId()) {
@@ -72,7 +75,7 @@ public class Issue599Bean {
         
         // Can I create a composite component in the default ResourceLibrary?
         UINamingContainer cc = (UINamingContainer) faceletFactory.
-                createComponent("http://java.sun.com/jsf/composite/i_spec_599_composite", 
+                createComponent(context, "http://java.sun.com/jsf/composite/i_spec_599_composite", 
                 "i_spec_599_composite", attrs);
         attrs = cc.getAttributes();
         if (!attrs.containsKey("customAttr")) {
@@ -89,7 +92,7 @@ public class Issue599Bean {
         // Can I create a component coming from a custom taglib?
         attrs = new HashMap<String, Object>();
         UIAddComponent ac = (UIAddComponent) faceletFactory.
-                createComponent("http://testcomponent", "addcomponent", attrs);
+                createComponent(context, "http://testcomponent", "addcomponent", attrs);
         if (!"com.sun.faces.event".equals(ac.getFamily())) {
             throw new IllegalArgumentException("I asked for a component" +
                     " with a known family" + 
@@ -99,7 +102,7 @@ public class Issue599Bean {
         
         // Can I create a composite component coming from a custom
         // taglib?
-        cc = (UINamingContainer) faceletFactory.createComponent("i_spec_599_composite_taglib", 
+        cc = (UINamingContainer) faceletFactory.createComponent(context, "i_spec_599_composite_taglib", 
                 "i_spec_599_composite_taglib", attrs);
         attrs = cc.getAttributes();
         if (!attrs.containsKey("customAttr2")) {

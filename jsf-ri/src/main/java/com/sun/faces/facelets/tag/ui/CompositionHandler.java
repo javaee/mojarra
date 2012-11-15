@@ -71,7 +71,6 @@ import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagAttributeException;
 import javax.faces.view.facelets.TagConfig;
 import java.io.IOException;
-import java.net.URL;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -150,27 +149,18 @@ public final class CompositionHandler extends TagHandlerImpl implements
             }
 
             ctx.extendClient(this);
-            Object pathObj = null;
+            String path = null;
             try {
-                pathObj = this.template.getObject(ctx, Object.class);
-                if (pathObj instanceof String) {
-                    String path = pathObj.toString();
-                    if (path.trim().length() == 0) {
-                        throw new TagAttributeException(this.tag, this.template, "Invalid path : " + path);
-                    }
-                    ctx.includeFacelet(parent, path);
-                } else {
-                    try {
-                        ctx.includeFacelet(parent, (URL) pathObj);
-                    } catch (ClassCastException cce) {
-                        throw new TagAttributeException(this.tag, this.template, "Invalid path : " + pathObj, cce);
-                    }
+                path = this.template.getValue(ctx);
+                if (path.trim().length() == 0) {
+                    throw new TagAttributeException(this.tag, this.template, "Invalid path : " + path);
                 }
+                ctx.includeFacelet(parent, path);
             } catch (IOException e) {
                 if (log.isLoggable(Level.FINE)) {
                     log.log(Level.FINE, e.toString(), e);
                 }
-                throw new TagAttributeException(this.tag, this.template, "Invalid path : " + pathObj);
+                throw new TagAttributeException(this.tag, this.template, "Invalid path : " + path);
             } finally {
                 ctx.popClient(this);
                 ctx.setVariableMapper(orig);

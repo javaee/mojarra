@@ -105,6 +105,11 @@ public abstract class ViewDeclarationLanguageWrapper extends ViewDeclarationLang
     }
 
     @Override
+    public List<String> calculateResourceLibraryContracts(FacesContext context, String viewId) {
+        return getWrapped().calculateResourceLibraryContracts(context, viewId);
+    }
+
+    @Override
     public UIViewRoot createView(FacesContext context, String viewId) {
         return getWrapped().createView(context, viewId);
     }

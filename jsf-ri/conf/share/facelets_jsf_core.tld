@@ -2292,9 +2292,9 @@ will not pass validation.</p> ]]>
 
     <tag>
         <description>
-            <![CDATA[<p><span
-            class="changed_modified_2_0_rev_a">Container</span> for all
-            JavaServer Faces core and custom component actions used on a
+            <![CDATA[<p><span class="changed_modified_2_0_rev_a
+            changed_modified_2_2">Container</span> for all JavaServer
+            Faces core and custom component actions used on a
             page.</p>]]>
         </description>
         <name>view</name>
@@ -2325,6 +2325,34 @@ will not pass validation.</p> ]]>
       </deferred-value>
 
     </attribute>
+
+    <attribute>
+      <description><![CDATA[
+
+      <p class="changed_added_2_2">A comma separated list of
+      resource library contracts that may be used from within
+      the Facelets chain.  If this attribute is present, it
+      must only be on the outer-most file in the chain of
+      files that started ultimately with a call to
+      <code>ViewDeclarationLanguage.createView()</code>.  Any
+      use of this attribute on a non-outer-most file must be
+      silently ignored.</p>
+
+      <p class="changed_added_2_2">If this attribute exists on the tag,
+      empty or not, the tag handler must create a
+      <code>List&lt;String&gt;</code> for the value of the attribute and
+      call <code>UIViewRoot.setResourceLibraryContracts()</code>, passing
+      that list as the argument.</p>
+      
+      ]]></description>
+      <name>contracts</name>
+      <required>false</required>
+      <deferred-value>
+           <type>java.lang.String</type>
+      </deferred-value>
+
+    </attribute>
+
 
     <attribute>
         <description>

@@ -113,7 +113,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
     }
 
     @Override
-    public Resource createViewResource(String resourceName) {
+    public Resource createViewResource(FacesContext context, String resourceName) {
 
         Util.notNull("resourceName", resourceName);
 

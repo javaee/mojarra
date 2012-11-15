@@ -222,17 +222,18 @@ public class DefaultFaceletFactory extends FaceletFactory {
       *
       * @see com.sun.facelets.FaceletFactory#getFacelet(java.lang.String)
       */
-    public Facelet getFacelet(String uri) throws IOException {
+    @Override
+    public Facelet getFacelet(FacesContext context, String uri) throws IOException {
 
-        return this.getFacelet(resolveURL(uri));
+        return this.getFacelet(context, resolveURL(uri));
 
     }
 
 
+    @Override
+    public Facelet getMetadataFacelet(FacesContext context, String uri) throws IOException {
 
-    public Facelet getMetadataFacelet(String uri) throws IOException {
-
-        return this.getMetadataFacelet(resolveURL(uri));
+        return this.getMetadataFacelet(context, resolveURL(uri));
 
     }
 
@@ -278,11 +279,13 @@ public class DefaultFaceletFactory extends FaceletFactory {
      * @throws FacesException
      * @throws ELException
      */
-    public Facelet getFacelet(URL url) throws IOException {
+    @Override
+    public Facelet getFacelet(FacesContext context, URL url) throws IOException {
         return this.cache.getFacelet(url);
     }
 
-    public Facelet getMetadataFacelet(URL url) throws IOException {
+    @Override
+    public Facelet getMetadataFacelet(FacesContext context, URL url) throws IOException {
         return this.cache.getViewMetadataFacelet(url);
     }
 
@@ -308,10 +311,9 @@ public class DefaultFaceletFactory extends FaceletFactory {
     }
 
     @Override
-    public UIComponent createComponent(String taglibURI, String tagName, 
+    public UIComponent createComponent(FacesContext context, String taglibURI, String tagName, 
     Map<String, Object> attributes) {
         UIComponent result = null;
-        FacesContext context = FacesContext.getCurrentInstance();
         Application app = context.getApplication();
         ExternalContext extContext = context.getExternalContext();
         File tmpDir = (File) extContext.getApplicationMap().get("javax.servlet.context.tempdir");

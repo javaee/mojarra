@@ -375,7 +375,7 @@ final class DefaultFacelet extends Facelet implements XMLFrontMatterSaver {
      */
     public void include(DefaultFaceletContext ctx, UIComponent parent, URL url)
     throws IOException {
-        DefaultFacelet f = (DefaultFacelet) this.factory.getFacelet(url);
+        DefaultFacelet f = (DefaultFacelet) this.factory.getFacelet(ctx.getFacesContext(), url);
         f.include(ctx, parent);
     }
 

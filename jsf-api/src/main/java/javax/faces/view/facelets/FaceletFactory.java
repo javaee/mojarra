@@ -62,6 +62,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
 import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 
 /**
  * <p class="changed_added_2_2">FaceletFactory for producing Facelets relative to the context of the
@@ -71,19 +72,21 @@ import javax.faces.component.UIComponent;
  */
 public abstract class FaceletFactory {
 
-    public abstract UIComponent createComponent(String taglibURI, String tagName, 
+    public abstract UIComponent createComponent(FacesContext context, 
+            String taglibURI, String tagName, 
             Map<String, Object> attributes);
     /**
      * Return a Facelet instance as specified by the file at the passed URI.
      * 
      */
-    public abstract Facelet getFacelet(String uri) throws IOException;
+    public abstract Facelet getFacelet(FacesContext context,
+            String uri) throws IOException;
     
-    public abstract Facelet getFacelet(URL url) throws IOException;
+    public abstract Facelet getFacelet(FacesContext context, URL url) throws IOException;
 
-    public abstract Facelet getMetadataFacelet(String uri) throws IOException;
+    public abstract Facelet getMetadataFacelet(FacesContext context, String uri) throws IOException;
 
-    public abstract Facelet getMetadataFacelet(URL url) throws IOException;
+    public abstract Facelet getMetadataFacelet(FacesContext context, URL url) throws IOException;
 
     public abstract long getRefreshPeriod();
 

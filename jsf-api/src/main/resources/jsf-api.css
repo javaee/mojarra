@@ -514,7 +514,7 @@ div.syntax a
 	text-decoration:underline;
 }
 
-a[href^="#type_faces-config-protected-viewsType"], a[href^="#type_faces-config-faces-flow-definitionType"], a[href^="#type_faces-config-faces-flow-definition-switchType"], a[href^="#type_faces-config-faces-flow-definition-switch-defaultType"], a[href^="#type_faces-config-faces-flow-definition-initializerType"], a[href^="#type_faces-config-faces-flow-definition-finalizerType"], a[href^="#type_faces-config-faces-flow-definition-faces-flow-returnType"] { cursor: url(changed_added_2_2_cursor.cur), auto;
+a[href^="#type_faces-config-protected-viewsType"], a[href^="#type_faces-config-faces-flow-definitionType"], a[href^="#type_faces-config-faces-flow-definition-switchType"], a[href^="#type_faces-config-faces-flow-definition-switch-defaultType"], a[href^="#type_faces-config-faces-flow-definition-initializerType"], a[href^="#type_faces-config-faces-flow-definition-finalizerType"], a[href^="#type_faces-config-faces-flow-definition-faces-flow-returnType"], a[href^="#type_faces-config-application-resource-library-contracts-contract-mappingType"], a[href^="#type_faces-config-application-resource-library-contractsType"] { cursor: url(changed_added_2_2_cursor.cur), auto;
                  background: url(changed_added_2_2.png); 
                  padding-left:0.2em; border-left:solid;
                  border-left-width:thin; border-right:none;

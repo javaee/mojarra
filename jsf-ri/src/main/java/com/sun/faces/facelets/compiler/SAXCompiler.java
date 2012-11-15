@@ -64,8 +64,6 @@ import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.facelets.tag.TagAttributeImpl;
 import com.sun.faces.facelets.tag.TagAttributesImpl;
 import com.sun.faces.util.Util;
-import javax.el.MethodExpression;
-import javax.el.ValueExpression;
 import org.xml.sax.*;
 import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.DefaultHandler;
@@ -79,12 +77,9 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.faces.application.Resource;
-import javax.faces.application.ResourceHandler;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
@@ -268,118 +263,6 @@ public final class SAXCompiler extends Compiler {
             tagAttrs.setTag(tag);
             this.unit.pushTag(tag);
             
-            if ("html".equals(localName)) {
-                pushMultiTemplateCompositionIfNecessary();
-            }
-        }
-        
-        private void pushMultiTemplateCompositionIfNecessary() {
-            FacesContext context = FacesContext.getCurrentInstance();
-            Map<Object,Object> attrs = context.getAttributes();
-            final String didPushMultiTemplateComposition = this.getClass().getName() + ".DidPushMultiTemplateComposition";
-            if (!attrs.containsKey(didPushMultiTemplateComposition)) {
-                attrs.put(didPushMultiTemplateComposition, Boolean.TRUE);
-                WebConfiguration config = WebConfiguration.getInstance(context.getExternalContext());
-                String libraryName = 
-                        config.getOptionValue(WebConfiguration.WebContextInitParameter.MultiTemplateName);
-                ResourceHandler rh = context.getApplication().getResourceHandler();
-                if (rh.libraryExists(libraryName)) {
-                    Resource templateResource = rh.createResource("template.xhtml", libraryName);
-                    final URL value = templateResource.getURL();
-                    final Location loc = this.createLocation();
-                    TagAttribute ta[] = new TagAttribute[1];
-                    ta[0] = new TagAttribute() {
-
-                        // <editor-fold defaultstate="collapsed" desc="Dummy attribute to pass the URL to the CompositionHandler">
-
-                        @Override
-                        public String getLocalName() {
-                            return "template";
-                        }
-                        
-                        @Override
-                        public String getQName() {
-                            return "template";
-                        }
-
-                        @Override
-                        public String getNamespace() {
-                            return "";
-                        }
-
-                        @Override
-                        public Location getLocation() {
-                            return loc;
-                        }
-
-                        @Override
-                        public Object getObject(FaceletContext ctx) {
-                            return value;
-                        }
-
-                        @Override
-                        public Object getObject(FaceletContext ctx, Class type) {
-                            return value;
-                        }
-
-                        @Override
-                        public boolean isLiteral() {
-                            return false;
-                        }
-
-                        @Override
-                        public Tag getTag() {
-                            return null;
-                        }
-
-                        @Override
-                        public void setTag(Tag tag) {
-
-                        }
-                        
-                        
-                        // <editor-fold defaultstate="collapsed" desc="Intentionally unsupported">
-
-                        @Override
-                        public boolean getBoolean(FaceletContext ctx) {
-                            throw new UnsupportedOperationException("Not supported yet.");
-                        }
-
-                        @Override
-                        public int getInt(FaceletContext ctx) {
-                            throw new UnsupportedOperationException("Not supported yet.");
-                        }
-
-                        @Override
-                        public MethodExpression getMethodExpression(FaceletContext ctx, Class type, Class[] paramTypes) {
-                            throw new UnsupportedOperationException("Not supported yet.");
-                        }
-
-                        @Override
-                        public String getValue() {
-                            throw new UnsupportedOperationException("Not supported yet.");
-                        }
-
-                        @Override
-                        public String getValue(FaceletContext ctx) {
-                            throw new UnsupportedOperationException("Not supported yet.");
-                        }
-
-                        @Override
-                        public ValueExpression getValueExpression(FaceletContext ctx, Class type) {
-                            throw new UnsupportedOperationException("Not supported yet.");
-                        }
-                        
-                        // </editor-fold>
-                        
-                        // </editor-fold>
-
-                    };
-                    TagAttributesImpl tagAttrs = new TagAttributesImpl(ta);
-                    this.unit.pushTag(new Tag(loc, "http://java.sun.com/jsf/facelets", "composition", "ui:composition", tagAttrs));
-                }
-            }
-                
         }
 
         public void startEntity(String name) throws SAXException {

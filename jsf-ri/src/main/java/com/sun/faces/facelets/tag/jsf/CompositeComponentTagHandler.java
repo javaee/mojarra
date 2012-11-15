@@ -362,7 +362,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
         assert(null != facetComponent);
         
         try {
-            Facelet f = factory.getFacelet(ccResource.getURL());
+            Facelet f = factory.getFacelet(facesContext, ccResource.getURL());
 
             VariableMapper wrapper = new VariableMapperWrapper(orig) {
 

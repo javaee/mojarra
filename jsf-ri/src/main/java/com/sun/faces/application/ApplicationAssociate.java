@@ -334,7 +334,7 @@ public class ApplicationAssociate {
                 
                 if (null != metadata) {
                     
-                    Facelet f = faceletFactory.getMetadataFacelet(url);
+                    Facelet f = faceletFactory.getMetadataFacelet(context, url);
                     
                     f.apply(context, root);
                     

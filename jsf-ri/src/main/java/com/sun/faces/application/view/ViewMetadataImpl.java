@@ -110,7 +110,7 @@ public class ViewMetadataImpl extends ViewMetadata {
             // view. 
             context.getAttributes().put(RIConstants.VIEWID_KEY_NAME, viewId);
 
-            Facelet f = faceletFactory.getMetadataFacelet(result.getViewId());
+            Facelet f = faceletFactory.getMetadataFacelet(context, result.getViewId());
 
             f.apply(context, result);
         } catch (IOException ioe) {
