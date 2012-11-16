@@ -760,9 +760,12 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                     if (oldValue != newValue) {
                         target[propertyName] = newValue;
                     }
-                } else if (targetAttributeDetector(attributeName)) {
+                } else {
                     //setting property to '' seems to be the only cross-browser method for removing an attribute
-                    target[propertyName] = '';
+                    target.removeAttribute(attributeName);
+                    if (attributeName == "value") {
+                        target[propertyName] = '';
+                    }
                 }
             }
 
