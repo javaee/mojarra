@@ -174,6 +174,24 @@ public abstract class ResourceHandler {
         "javax.faces.WEBAPP_RESOURCES_DIRECTORY";
 
     /**
+
+     * <p class="changed_added_2_2">If a
+     * <code>&lt;context-param&gt;</code> with the param name equal to
+     * the value of {@link #WEBAPP_CONTRACTS_DIRECTORY_PARAM_NAME}
+     * exists, the runtime must interpret its value as a path, relative
+     * to the web app root, where resource library contracts are to be located.  This
+     * param value must not start with a "/", though it may contain "/"
+     * characters.  If no such <code>&lt;context-param&gt;</code> exists, or
+     * its value is invalid, the value "contracts", without the quotes,
+     * must be used by the runtime as the value.</p>
+     *
+     * @since 2.2
+     */
+
+    public static final String WEBAPP_CONTRACTS_DIRECTORY_PARAM_NAME = 
+        "javax.faces.WEBAPP_CONTRACTS_DIRECTORY";
+
+    /**
      * <p class="changed_added_2_0">The name of a key within the
      * application message bundle named by the return from {@link
      * Application#getMessageBundle} whose value is the locale prefix
@@ -273,7 +291,8 @@ public abstract class ResourceHandler {
      * ui:decorate) and make it so the getResourceLibraryContracts part
      * of this method only takes effect if that flag is set?</p>
      
-     * <p>Call {@link
+     * <p>If the argument {@code FacesContext} has a non-{@code null} viewRoot,
+     * call {@link
      * javax.faces.component.UIViewRoot#getResourceLibraryContracts}.
      * If the result is non-{@code null} and not empty, for each value
      * in the list, treat the value as the name of a resource library

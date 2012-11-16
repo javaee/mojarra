@@ -210,6 +210,7 @@ public class InitFacesContext extends FacesContext {
         if (viewRoot == null) {
             viewRoot = new UIViewRoot();
             viewRoot.setLocale(Locale.getDefault());
+            viewRoot.setViewId(RIConstants.FACES_PREFIX + "xhtml");
         }
         return viewRoot;
     }

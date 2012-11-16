@@ -41,17 +41,24 @@
 package com.sun.faces.application.resource;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.util.Util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 import javax.faces.FacesException;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 
 public class FaceletWebappResourceHelper extends ResourceHelper {
+    
+    private final String webAppContractsDirectory;
 
     public FaceletWebappResourceHelper() {
+        WebConfiguration webConfig = WebConfiguration.getInstance();
+        webAppContractsDirectory = webConfig.getOptionValue(WebConfiguration.WebContextInitParameter.WebAppContractsDirectory);
     }
 
     @Override
@@ -103,7 +110,17 @@ public class FaceletWebappResourceHelper extends ResourceHelper {
                     path = "/" + path;
                 }
             }
-            URL url = Resource.getResourceUrl(ctx, path);
+            
+            UIViewRoot root = ctx.getViewRoot();
+            List<String> contracts = (null != root) ? 
+                    root.getResourceLibraryContracts() : null;
+            URL url = null;
+            if (null != contracts) {
+                url = findResourceInfoConsideringContracts(ctx, resourceName, contracts);
+            }
+            if (null == url) {
+                url = Resource.getResourceUrl(ctx, path);
+            }
             
             if (null == url) {
                 ClassLoader cl = Util.getCurrentLoader(this);
@@ -119,6 +136,31 @@ public class FaceletWebappResourceHelper extends ResourceHelper {
         
         return result;
     }
+    
+    private URL findResourceInfoConsideringContracts(FacesContext ctx,
+            String baseResourceName,
+            List<String> contracts) throws MalformedURLException {
+        URL url = null;
+        String resourceName;
+        
+        for (String curContract : contracts) {
+            if (baseResourceName.startsWith("/")) {
+                resourceName = webAppContractsDirectory + "/" + curContract + baseResourceName;
+            } else {
+                resourceName = webAppContractsDirectory + "/" + curContract + "/" + baseResourceName;
+            }
+            url = Resource.getResourceUrl(ctx, resourceName);
+            if (null != url) {
+                break;
+            }
+        }
+        
+        return url;
+    }
+    
+    
+
+    
 
     @Override
     public String getBaseResourcePath() {

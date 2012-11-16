@@ -293,6 +293,16 @@ public class ApplicationAssociate {
                     LOGGER.log(Level.SEVERE, null, ex);
                 }
             }
+            
+            // cause the Facelet VDL to be instantiated eagerly, so it can 
+            // become aware of the resource library contracts
+            
+            ViewHandler viewHandler = context.getApplication().getViewHandler();
+
+            // FindBugs: ignore the return value, this is just to get the 
+            // ctor called at this time.
+            viewHandler.getViewDeclarationLanguage(context, 
+                    RIConstants.FACES_PREFIX + "xhtml");
 
         }
         
@@ -417,6 +427,12 @@ public class ApplicationAssociate {
 
     public ResourceManager getResourceManager() {
         return resourceManager;
+    }
+
+    // Return the resource library contracts and mappings from the
+    // application configuration resources
+    public Map<String, List<String>> getResourceLibraryContracts() {
+        return null;
     }
 
     public void setResourceManager(ResourceManager resourceManager) {

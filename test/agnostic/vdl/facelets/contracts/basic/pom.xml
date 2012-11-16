@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -44,20 +45,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.sun.faces.test.agnostic.vdl</groupId>
+        <groupId>com.sun.faces.test.agnostic.vdl.facelets.contracts</groupId>
         <artifactId>pom</artifactId>
         <version>2.2.0-SNAPSHOT</version>
     </parent>
-    <groupId>com.sun.faces.test.agnostic.vdl.facelets</groupId>
-    <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Agnostic - VDL - Facelets</name>
-    <modules>
-        <module>form-omitted-development</module>
-        <module>form-omitted-production</module>
-        <module>replace-vdl</module>
-        <module>ui</module>
-        <module>programmaticCompositeComponent</module>
-        <module>contracts</module>
-    </modules>
+    <groupId>com.sun.faces.test.agnostic.vdl.facelets.contracts.basic</groupId>
+    <artifactId>basic</artifactId>
+    <packaging>war</packaging>
+    <name>Mojarra ${project.version} - Test - Agnostic - VDL - Facelets - Contracts - basic</name>
+    <build>
+        <finalName>test-agnostic-vdl-facelets-contracts-basic</finalName>
+    </build>
+    <properties>
+        <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 </project>

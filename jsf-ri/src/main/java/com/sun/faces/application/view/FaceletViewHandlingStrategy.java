@@ -124,6 +124,8 @@ import javax.faces.component.visit.VisitContext;
 import javax.faces.component.visit.VisitResult;
 import static com.sun.faces.RIConstants.DYNAMIC_COMPONENT;
 import com.sun.faces.facelets.impl.XMLFrontMatterSaver;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import javax.faces.application.ProjectStage;
 
 /**
@@ -147,6 +149,9 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     public static final String IS_BUILDING_METADATA =
           FaceletViewHandlingStrategy.class.getName() + ".IS_BUILDING_METADATA";
     
+    public static final String RESOURCE_LIBRARY_CONTRACT_DATA_STRUCTURE_KEY = 
+              FaceletViewHandlingStrategy.class.getName() + ".RESOURCE_LIBRARY_CONTRACT_DATA_STRUCTURE";
+
     private MethodRetargetHandlerManager retargetHandlerManager =
           new MethodRetargetHandlerManager();
 
@@ -156,6 +161,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     private boolean responseBufferSizeSet;
 
     private Cache<Resource, BeanInfo> metadataCache;
+    private Map<String, List<String>> contractMappings;
 
 
     // ------------------------------------------------------------ Constructors
@@ -756,8 +762,29 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             return root;
         }
 
-        return super.createView(ctx, viewId);
+        UIViewRoot result = super.createView(ctx, viewId);
+        result.setResourceLibraryContracts(calculateResourceLibraryContracts(ctx, viewId));
         
+        return result;
+        
+    }
+
+    @Override
+    public List<String> calculateResourceLibraryContracts(FacesContext context, String viewId) {
+        List<String> result = null;
+        if (null != contractMappings) {
+            assert(!contractMappings.isEmpty());
+            // short cut, see if we have a mapping for "*"
+            result = contractMappings.get("*");
+            
+            if (null == result) {
+                // failing that, do some matching manipulation.
+                // PENDING: Do a proper matching algorithm.
+                result = contractMappings.get(viewId);
+            }
+        }
+        
+        return result;
     }
     
 
@@ -961,6 +988,21 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
         vdlFactory = (ViewDeclarationLanguageFactory) FactoryFinder.getFactory(FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY);
 
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext extContext = context.getExternalContext();
+        Map<String, Object> appMap = extContext.getApplicationMap();
+        Map<String, List<String>> contractDataStructure = 
+                (Map<String, List<String>>) 
+                appMap.remove(RESOURCE_LIBRARY_CONTRACT_DATA_STRUCTURE_KEY);
+        if (null != contractDataStructure && !contractDataStructure.isEmpty()) {
+            contractMappings = new ConcurrentHashMap<String, List<String>>();
+            for (Map.Entry<String, List<String>> cur : contractDataStructure.entrySet()) {
+                contractMappings.put(cur.getKey(), new CopyOnWriteArrayList<String>(cur.getValue()));
+                cur.getValue().clear();
+            }
+            contractDataStructure.clear();
+        }
+        
     }
 
 

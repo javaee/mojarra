@@ -40,6 +40,8 @@
 
 package com.sun.faces.config;
 
+import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.application.view.FaceletViewHandlingStrategy;
 import com.sun.faces.lifecycle.HttpMethodRestrictionsPhaseListener;
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -67,6 +69,7 @@ import java.util.Collections;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.faces.FactoryFinder;
 import javax.faces.application.ProjectStage;
@@ -436,7 +439,79 @@ public class WebConfiguration {
             }
         }
 
+        discoverResourceLibraryContracts();
 
+    }
+    
+    private void discoverResourceLibraryContracts() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext extContex = context.getExternalContext();
+        Set<String> foundContracts = new HashSet<String>();
+        Set<String> candidates;
+        
+        // Scan for "contractMappings" in the web app root
+        String contractsDirName = getOptionValue(WebContextInitParameter.WebAppContractsDirectory);
+        assert(null != contractsDirName);
+        candidates = extContex.getResourcePaths(contractsDirName);
+        if (null != candidates) {
+            int contractsDirNameLen = contractsDirName.length();
+            int end;
+            for (String cur : candidates) {
+                end = cur.length();
+                if (cur.endsWith("/")) {
+                    end--;
+                }
+                foundContracts.add(cur.substring(contractsDirNameLen + 1, end));
+            }
+        }
+        
+        // Scan for "META-INF" contractMappings in the classpath
+        
+        if (foundContracts.isEmpty()) {
+            return;
+        }
+        
+        Map<String, List<String>> contractMappings = new HashMap<String, List<String>>();
+        
+        ApplicationAssociate associate = ApplicationAssociate.getCurrentInstance();
+        Map<String, List<String>> contractsFromConfig = associate.getResourceLibraryContracts();
+        List<String> contractsToExpose;
+        
+        if (null != contractsFromConfig && !contractsFromConfig.isEmpty()) {
+            List<String> contractsFromMapping;
+            for (Map.Entry<String, List<String>> cur : contractsFromConfig.entrySet()) {
+                // Verify that the contractsToExpose in this mapping actually exist
+                // in the application.  If not, log a message.
+                contractsFromMapping = cur.getValue();
+                if (null == contractsFromMapping || contractsFromMapping.isEmpty()) {
+                    if (LOGGER.isLoggable(Level.CONFIG)) {
+                        LOGGER.log(Level.CONFIG, "resource library contract mapping for pattern {0} has no contracts.", cur.getKey());
+                    }
+                } else {
+                    contractsToExpose = new ArrayList<String>();
+                    for (String curContractFromMapping : contractsFromMapping) {
+                        if (foundContracts.contains(curContractFromMapping)) {
+                            contractsToExpose.add(curContractFromMapping);
+                        } else {
+                            if (LOGGER.isLoggable(Level.CONFIG)) {
+                                LOGGER.log(Level.CONFIG, "resource library contract mapping for pattern {0} exposes contract {1}, but that contract is not available to the application.", 
+                                        new String [] { cur.getKey(), curContractFromMapping });
+                            }
+                        }
+                    }
+                    if (!contractsToExpose.isEmpty()) {
+                        contractMappings.put(cur.getKey(), contractsToExpose);
+                    }
+                }
+            }
+        } else {
+            contractsToExpose = new ArrayList<String>();
+            contractsToExpose.addAll(foundContracts);
+            contractMappings.put("*", contractsToExpose);
+        }
+        extContex.getApplicationMap().put(FaceletViewHandlingStrategy.RESOURCE_LIBRARY_CONTRACT_DATA_STRUCTURE_KEY, 
+                contractMappings);
+        
     }
 
 
@@ -990,6 +1065,10 @@ public class WebConfiguration {
         WebAppResourcesDirectory(
               ResourceHandler.WEBAPP_RESOURCES_DIRECTORY_PARAM_NAME,
               "/resources"
+        ),
+        WebAppContractsDirectory(
+              ResourceHandler.WEBAPP_CONTRACTS_DIRECTORY_PARAM_NAME,
+              "/contracts"
         );
 
 
