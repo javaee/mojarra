@@ -296,6 +296,13 @@ public class ResourceImpl extends Resource implements Externalizable {
             uri += ((queryStarted) ? "&loc=" : "?loc=") + localePrefix;
             queryStarted = true;
         }
+        
+        String contract = resourceInfo.getContract();
+        if (contract != null) {
+            uri += ((queryStarted) ? "&con=" : "?con=") + contract;
+            queryStarted = true;
+        }
+        
         if ("jsf.js".equals(getResourceName()) && "javax.faces".equals(getLibraryName())) {
             ProjectStage stage = context.getApplication().getProjectStage();
             switch (stage) {

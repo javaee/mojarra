@@ -54,7 +54,7 @@ import com.sun.faces.util.FacesLogger;
  * pertainant to building a complete resource path using a Library.
  * <p/>
  */
-public class ClientResourceInfo extends ResourceInfo {
+class ClientResourceInfo extends ResourceInfo {
 
     private static final Logger LOGGER = FacesLogger.RESOURCE.getLogger();
     private static final String COMPRESSED_CONTENT_DIRECTORY =
@@ -83,13 +83,14 @@ public class ClientResourceInfo extends ResourceInfo {
      *  when {@link #isDevStage} is <code>true</code>
      */
     public ClientResourceInfo(LibraryInfo library,
+                        ContractInfo contract,
                         String name,
                         VersionInfo version,
                         boolean compressible,
                         boolean supportsEL,
                         boolean isDevStage,
                         boolean cacheTimestamp) {
-        super(library, name, version);
+        super(library, contract, name, version);
         this.compressible = compressible;
         this.supportsEL = supportsEL;
         this.isDevStage = isDevStage;
@@ -111,7 +112,8 @@ public class ClientResourceInfo extends ResourceInfo {
      *  resource should be cached.  The value of this parameter will be ignored
      *  when {@link #isDevStage} is <code>true</code>
      */
-    ClientResourceInfo(String name,
+    ClientResourceInfo(ContractInfo contract,
+                 String name,
                  VersionInfo version,
                  String localePrefix,
                  ResourceHelper helper,
@@ -119,7 +121,7 @@ public class ClientResourceInfo extends ResourceInfo {
                  boolean supportsEL,
                  boolean isDevStage,
                  boolean cacheTimestamp) {
-        super(name, version, helper);
+        super(contract, name, version, helper);
         this.name = name;
         this.version = version;
         this.localePrefix = localePrefix;
@@ -244,7 +246,12 @@ public class ClientResourceInfo extends ResourceInfo {
         if (library != null) {
             sb.append(library.getPath());
         } else {
-            sb.append(helper.getBaseResourcePath());
+            if (null != contract) {
+                sb.append(helper.getBaseContractsPath());
+                sb.append("/").append(contract);
+            } else {
+                sb.append(helper.getBaseResourcePath());
+            }
         }
         if (library == null && localePrefix != null) {
             sb.append('/').append(localePrefix);

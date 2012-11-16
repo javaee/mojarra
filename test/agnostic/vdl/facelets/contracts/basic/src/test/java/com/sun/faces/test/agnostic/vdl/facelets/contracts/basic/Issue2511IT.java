@@ -40,6 +40,12 @@
  */
 package com.sun.faces.test.agnostic.vdl.facelets.contracts.basic;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import com.gargoylesoftware.htmlunit.html.HtmlLink;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.DomNodeList;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -47,6 +53,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class Issue2511IT {
     
@@ -79,6 +86,37 @@ public class Issue2511IT {
         
     }
 
+    @Test
+    public void testResourcesAreRendered() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
+        
+        examineCss(page.getElementsByTagName("link"));
+        
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button");
+        page = button.click();
+        
+        examineCss(page.getElementsByTagName("link"));
+    }
     
-    
+    private void examineCss(DomNodeList<HtmlElement> cssFiles) throws Exception {
+        HtmlLink curLink;
+        String href;
+        String content;
+        for (HtmlElement cur : cssFiles) {
+            curLink = (HtmlLink) cur;
+            href = curLink.getHrefAttribute();
+            assertTrue(href.contains("con=siteLayout"));
+            if (href.contains("default.css")) {
+                content = curLink.getWebResponse(true).getContentAsString("UTF-8");
+                assertTrue(content.contains("#AFAFAF"));
+            } else if (href.contains("cssLayout.css")) {
+                content = curLink.getWebResponse(true).getContentAsString("UTF-8");
+                assertTrue(content.contains("#036fab"));
+            } else {
+                fail();
+            }
+        }
+        
+    }
+
 }

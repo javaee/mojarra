@@ -40,21 +40,43 @@
  */
 package com.sun.faces.application.resource;
 
-import java.net.URL;
+final class ContractInfo {
+    
+    private static final long serialVersionUID = 6585532979916457692L;
+    
+    String contract;
 
-class FaceletResourceInfo extends ResourceInfo {
+    public ContractInfo(String contract) {
+        this.contract = contract;
+    }
 
-    FaceletResourceInfo(ContractInfo contract, String name, VersionInfo version, 
-            ResourceHelper helper, URL url) {
-        super(contract, name, version, helper);
-        this.url = url;
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ContractInfo other = (ContractInfo) obj;
+        if ((this.contract == null) ? (other.contract != null) : !this.contract.equals(other.contract)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 29 * hash + (this.contract != null ? this.contract.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public String toString() {
+        return contract;
     }
     
-    private URL url;
-
-    public URL getUrl() {
-        return url;
-    }
     
     
 }

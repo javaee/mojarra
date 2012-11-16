@@ -52,7 +52,7 @@ import javax.faces.FacesException;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 
-public class FaceletWebappResourceHelper extends ResourceHelper {
+class FaceletWebappResourceHelper extends ResourceHelper {
     
     private final String webAppContractsDirectory;
 
@@ -114,9 +114,14 @@ public class FaceletWebappResourceHelper extends ResourceHelper {
             UIViewRoot root = ctx.getViewRoot();
             List<String> contracts = (null != root) ? 
                     root.getResourceLibraryContracts() : null;
+            ContractInfo [] outContract = new ContractInfo[1];
+            outContract[0] = null;
+
             URL url = null;
             if (null != contracts) {
-                url = findResourceInfoConsideringContracts(ctx, resourceName, contracts);
+                url = findResourceInfoConsideringContracts(ctx, resourceName, 
+                        outContract,
+                        contracts);
             }
             if (null == url) {
                 url = Resource.getResourceUrl(ctx, path);
@@ -128,7 +133,7 @@ public class FaceletWebappResourceHelper extends ResourceHelper {
             }
             
             if (null != url) {
-                result = new FaceletResourceInfo(resourceName, null, this, url);
+                result = new FaceletResourceInfo(outContract[0], resourceName, null, this, url);
             }
         } catch (MalformedURLException ex) {
             throw new FacesException(ex);
@@ -139,6 +144,7 @@ public class FaceletWebappResourceHelper extends ResourceHelper {
     
     private URL findResourceInfoConsideringContracts(FacesContext ctx,
             String baseResourceName,
+            ContractInfo [] outContract,
             List<String> contracts) throws MalformedURLException {
         URL url = null;
         String resourceName;
@@ -151,6 +157,7 @@ public class FaceletWebappResourceHelper extends ResourceHelper {
             }
             url = Resource.getResourceUrl(ctx, resourceName);
             if (null != url) {
+                outContract[0] = new ContractInfo(curContract);
                 break;
             }
         }
@@ -165,6 +172,11 @@ public class FaceletWebappResourceHelper extends ResourceHelper {
     @Override
     public String getBaseResourcePath() {
         return "";
+    }
+
+    @Override
+    public String getBaseContractsPath() {
+        return webAppContractsDirectory;
     }
 
     @Override

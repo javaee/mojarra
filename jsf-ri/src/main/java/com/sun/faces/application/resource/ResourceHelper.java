@@ -82,7 +82,7 @@ import com.sun.faces.util.MessageUtils;
  *
  * @since 2.0
  */
-public abstract class ResourceHelper {
+abstract class ResourceHelper {
 
     private static final Logger LOGGER = FacesLogger.RESOURCE.getLogger();
 
@@ -136,6 +136,8 @@ public abstract class ResourceHelper {
      * @return the base path in which resources will be stored
      */
     public abstract String getBaseResourcePath();
+    
+    public abstract String getBaseContractsPath();
 
 
     /**
@@ -602,6 +604,7 @@ public abstract class ResourceHelper {
         ClientResourceInfo ret;
         if (library != null) {
             ret = new ClientResourceInfo(resource.library,
+                                   resource.contract,
                                    resource.name,
                                    resource.version,
                                    false,
@@ -609,7 +612,8 @@ public abstract class ResourceHelper {
                                    resource.isDevStage,
                                    resource.cacheTimestamp);
         } else {
-            ret = new ClientResourceInfo(resource.name,
+            ret = new ClientResourceInfo(resource.contract, 
+                                   resource.name,
                                    resource.version,
                                    resource.localePrefix,
                                    this,

@@ -40,6 +40,9 @@
 
 package com.sun.faces.application.resource;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.faces.component.UIViewRoot;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -66,11 +69,13 @@ import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParamet
  *
  * @since 2.0
  */
-public class WebappResourceHelper extends ResourceHelper {
+class WebappResourceHelper extends ResourceHelper {
 
     private static final Logger LOGGER = FacesLogger.RESOURCE.getLogger();
 
     private String BASE_RESOURCE_PATH;
+    
+    private String BASE_CONTRACTS_PATH;
 
     private boolean cacheTimestamp;
 
@@ -83,6 +88,7 @@ public class WebappResourceHelper extends ResourceHelper {
         WebConfiguration webconfig = WebConfiguration.getInstance();
         cacheTimestamp = webconfig.isOptionEnabled(CacheResourceModificationTimestamp);
         BASE_RESOURCE_PATH = webconfig.getOptionValue(WebConfiguration.WebContextInitParameter.WebAppResourcesDirectory);
+        BASE_CONTRACTS_PATH = webconfig.getOptionValue(WebConfiguration.WebContextInitParameter.WebAppContractsDirectory);
 
     }
 
@@ -98,6 +104,9 @@ public class WebappResourceHelper extends ResourceHelper {
         if ((this.BASE_RESOURCE_PATH == null) ? (other.BASE_RESOURCE_PATH != null) : !this.BASE_RESOURCE_PATH.equals(other.BASE_RESOURCE_PATH)) {
             return false;
         }
+        if ((this.BASE_CONTRACTS_PATH == null) ? (other.BASE_CONTRACTS_PATH != null) : !this.BASE_CONTRACTS_PATH.equals(other.BASE_CONTRACTS_PATH)) {
+            return false;
+        }
         if (this.cacheTimestamp != other.cacheTimestamp) {
             return false;
         }
@@ -108,6 +117,7 @@ public class WebappResourceHelper extends ResourceHelper {
     public int hashCode() {
         int hash = 5;
         hash = 37 * hash + (this.BASE_RESOURCE_PATH != null ? this.BASE_RESOURCE_PATH.hashCode() : 0);
+        hash = 37 * hash + (this.BASE_CONTRACTS_PATH != null ? this.BASE_CONTRACTS_PATH.hashCode() : 0);
         hash = 37 * hash + (this.cacheTimestamp ? 1 : 0);
         return hash;
     }
@@ -126,7 +136,11 @@ public class WebappResourceHelper extends ResourceHelper {
 
     }
 
-
+    @Override
+    public String getBaseContractsPath() {
+        return BASE_CONTRACTS_PATH;
+    }
+    
     /**
      * @see ResourceHelper#getNonCompressedInputStream(com.sun.faces.application.resource.ResourceInfo, javax.faces.context.FacesContext) 
      */
@@ -195,30 +209,37 @@ public class WebappResourceHelper extends ResourceHelper {
                                      FacesContext ctx) {
         
         resourceName = trimLeadingSlash(resourceName);
-
-        String basePath;
-        if (library != null) {
-            basePath = library.getPath(localePrefix) + '/' + resourceName;
-        } else {
-            if (localePrefix == null) {
-                basePath = getBaseResourcePath() + '/' + resourceName;
+        ContractInfo [] outContract = new ContractInfo[1];
+        outContract[0] = null;
+        
+        String basePath = findPathConsideringContracts(library, resourceName, 
+                localePrefix, outContract, ctx);
+        
+        if (null == basePath) {
+        
+            if (library != null) {
+                basePath = library.getPath(localePrefix) + '/' + resourceName;
             } else {
-                basePath = getBaseResourcePath()
-                           + '/'
-                           + localePrefix
-                           + '/'
-                           + resourceName;
+                if (localePrefix == null) {
+                    basePath = getBaseResourcePath() + '/' + resourceName;
+                } else {
+                    basePath = getBaseResourcePath()
+                            + '/'
+                            + localePrefix
+                            + '/'
+                            + resourceName;
+                }
             }
-        }
-
-        // first check to see if the resource exists, if not, return null.  Let
-        // the caller decide what to do.
-        try {
-            if (ctx.getExternalContext().getResource(basePath) == null) {
-                return null;
+            
+            // first check to see if the resource exists, if not, return null.  Let
+            // the caller decide what to do.
+            try {
+                if (ctx.getExternalContext().getResource(basePath) == null) {
+                    return null;
+                }
+            } catch (MalformedURLException e) {
+                throw new FacesException(e);
             }
-        } catch (MalformedURLException e) {
-            throw new FacesException(e);
         }
 
         // we got to hear, so we know the resource exists (either as a directory
@@ -231,6 +252,7 @@ public class WebappResourceHelper extends ResourceHelper {
         if (resourcePaths == null || resourcePaths.size() == 0) {
             if (library != null) {
                 value = new ClientResourceInfo(library,
+                                         outContract[0],
                                          resourceName,
                                          null,
                                          compressable,
@@ -238,7 +260,8 @@ public class WebappResourceHelper extends ResourceHelper {
                                          ctx.isProjectStage(ProjectStage.Development),
                                          cacheTimestamp);
             } else {
-                value = new ClientResourceInfo(resourceName,
+                value = new ClientResourceInfo(outContract[0], 
+                                         resourceName,
                                          null,
                                          localePrefix,
                                          this,
@@ -257,6 +280,7 @@ public class WebappResourceHelper extends ResourceHelper {
             }
             if (library != null) {
                 value = new ClientResourceInfo(library,
+                                         outContract[0],
                                          resourceName,
                                          version,
                                          compressable,
@@ -264,7 +288,8 @@ public class WebappResourceHelper extends ResourceHelper {
                                          ctx.isProjectStage(ProjectStage.Development),
                                          cacheTimestamp);
             } else {
-                value = new ClientResourceInfo(resourceName,
+                value = new ClientResourceInfo(outContract[0], 
+                                         resourceName,
                                          version,
                                          localePrefix,
                                          this,
@@ -282,5 +307,58 @@ public class WebappResourceHelper extends ResourceHelper {
 
     }
 
+    private String findPathConsideringContracts(LibraryInfo library,
+                                     String resourceName,
+                                     String localePrefix,
+                                     ContractInfo [] outContract,
+                                     FacesContext ctx) {
+        UIViewRoot root = ctx.getViewRoot();
+        List<String> contracts = (null != root) ? 
+                root.getResourceLibraryContracts() : null;
+
+        if (null == contracts) {
+            String contractName = ctx.getExternalContext().getRequestParameterMap()
+                  .get("con");
+            if (null != contractName && 0 < contractName.length()) {
+                contracts = new ArrayList<String>();
+                contracts.add(contractName);
+            } else {
+                return null;
+            }
+        }
+
+        String basePath = null;
+        
+        for (String curContract : contracts) {
+        
+            if (library != null) {
+                basePath = library.getPath(localePrefix) + '/' + curContract + '/' + resourceName;
+            } else {
+                if (localePrefix == null) {
+                    basePath = getBaseContractsPath() + '/' + curContract + '/' + resourceName;
+                } else {
+                    basePath = getBaseContractsPath()
+                            + '/' + curContract 
+                            + '/'
+                            + localePrefix
+                            + '/'
+                            + resourceName;
+                }
+            }
+            
+            try {
+                if (ctx.getExternalContext().getResource(basePath) != null) {
+                    outContract[0] = new ContractInfo(curContract);
+                    break;
+                } else {
+                    basePath = null;
+                }
+            } catch (MalformedURLException e) {
+                throw new FacesException(e);
+            }
+        }
+            
+        return basePath;
+    }
 
 }

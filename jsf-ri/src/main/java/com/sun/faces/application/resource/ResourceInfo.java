@@ -40,10 +40,11 @@
  */
 package com.sun.faces.application.resource;
 
-public class ResourceInfo {
+class ResourceInfo {
     
     ResourceHelper helper;
     LibraryInfo library;
+    ContractInfo contract;
     String libraryName;
     String localePrefix;
     String name;
@@ -51,8 +52,10 @@ public class ResourceInfo {
     VersionInfo version;
 
     public ResourceInfo(LibraryInfo library, 
+            ContractInfo contract,
             String name, 
             VersionInfo version) {
+        this.contract = contract;
         this.library = library;
         this.helper = library.getHelper();
         this.localePrefix = library.getLocalePrefix();
@@ -62,7 +65,8 @@ public class ResourceInfo {
         
     }
     
-    public ResourceInfo(String name, VersionInfo version, ResourceHelper helper) {
+    public ResourceInfo(ContractInfo contract, String name, VersionInfo version, ResourceHelper helper) {
+        this.contract = contract;
         this.name = name;
         this.version = version;
         this.helper = helper;
@@ -173,6 +177,10 @@ public class ResourceInfo {
      */
     public String getPath() {
         return path;
+    }
+    
+    public String getContract() {
+        return (null != contract) ? contract.toString() : null;
     }
 
     /**

@@ -61,10 +61,11 @@ import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParamet
  *
  * @since 2.0
  */
-public class ClasspathResourceHelper extends ResourceHelper {
+class ClasspathResourceHelper extends ResourceHelper {
 
 
     private static final String BASE_RESOURCE_PATH = "META-INF/resources";
+    private static final String BASE_CONTRACTS_PATH = "META-INF/contracts";
     private boolean cacheTimestamp;
     private volatile ZipDirectoryEntryScanner libraryScanner;
     private boolean enableMissingResourceLibraryDetection;
@@ -123,7 +124,11 @@ public class ClasspathResourceHelper extends ResourceHelper {
 
     }
 
-
+    @Override
+    public String getBaseContractsPath() {
+        return BASE_CONTRACTS_PATH;
+    }
+    
     /**
      * @see ResourceHelper#getNonCompressedInputStream(com.sun.faces.application.resource.ResourceInfo, javax.faces.context.FacesContext)
      */
@@ -252,7 +257,9 @@ public class ClasspathResourceHelper extends ResourceHelper {
                                      FacesContext ctx) {
 
         resourceName = trimLeadingSlash(resourceName);
-
+        ContractInfo [] outContract = new ContractInfo[1];
+        outContract[0] = null;
+        
         ClassLoader loader = Util.getCurrentLoader(this);
         String basePath;
         if (library != null) {
@@ -297,6 +304,7 @@ public class ClasspathResourceHelper extends ResourceHelper {
 
         if (library != null) {
             value = new ClientResourceInfo(library,
+                                     outContract[0],
                                      resourceName,
                                      null,
                                      compressable,
@@ -304,7 +312,8 @@ public class ClasspathResourceHelper extends ResourceHelper {
                                      ctx.isProjectStage(ProjectStage.Development),
                                      cacheTimestamp);
         } else {
-            value = new ClientResourceInfo(resourceName,
+            value = new ClientResourceInfo(outContract[0],
+                                     resourceName,
                                      null,
                                      localePrefix,
                                      this,
