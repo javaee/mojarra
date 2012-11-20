@@ -60,6 +60,8 @@ import java.util.Map;
 import java.util.HashMap;
 import static com.sun.faces.RIConstants.DYNAMIC_CHILD_COUNT;
 import static com.sun.faces.RIConstants.DYNAMIC_COMPONENT;
+import com.sun.faces.util.FacesLogger;
+import java.util.logging.Logger;
 import javax.faces.FacesException;
 
 /**
@@ -77,6 +79,7 @@ public class StateContext {
     private ApplicationStateInfo stateInfo;
     private WeakReference<UIViewRoot> viewRootRef = new WeakReference<UIViewRoot>(null);
 
+    private static final Logger LOGGER = FacesLogger.CONTEXT.getLogger();
 
     // ------------------------------------------------------------ Constructors
 
@@ -168,14 +171,16 @@ public class StateContext {
      * to track components added to or removed from the view.
      */
     public void startTrackViewModifications(FacesContext ctx, UIViewRoot root) {
-      
         if (modListener == null) {
-            modListener = new AddRemoveListener(ctx);
-            root.subscribeToViewEvent(PostAddToViewEvent.class, modListener);
-            root.subscribeToViewEvent(PreRemoveFromViewEvent.class, modListener);
+            if (root != null) {
+                modListener = new AddRemoveListener(ctx);
+                root.subscribeToViewEvent(PostAddToViewEvent.class, modListener);
+                root.subscribeToViewEvent(PreRemoveFromViewEvent.class, modListener);
+            } else {
+                LOGGER.warning("Unable to attach AddRemoveListener to UIViewRoot because it is null");
+            }
         }
-        setTrackViewModifications(true);
-        
+        setTrackViewModifications(true);        
     }
 
 
