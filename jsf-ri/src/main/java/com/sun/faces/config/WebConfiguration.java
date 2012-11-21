@@ -492,7 +492,9 @@ public class WebConfiguration {
                 
             }
         } catch (IOException ioe) {
-            
+            if (LOGGER.isLoggable(Level.FINEST)) {
+                LOGGER.log(Level.FINEST, "Unable to scan " + META_INF_CONTRACTS_DIR, ioe);
+            }
         }
         
         

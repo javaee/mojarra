@@ -40,10 +40,8 @@
 
 package com.sun.faces.application.resource;
 
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.faces.FacesException;
 import javax.faces.component.UIViewRoot;
 import java.io.IOException;
 import java.io.InputStream;
