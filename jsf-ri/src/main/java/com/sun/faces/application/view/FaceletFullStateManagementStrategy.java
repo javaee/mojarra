@@ -704,6 +704,7 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
         Object[] tree = treeList.toArray();
 
         result = new Object[]{tree, state};
+        StateContext.release(context);        
         return result;
     }
 
