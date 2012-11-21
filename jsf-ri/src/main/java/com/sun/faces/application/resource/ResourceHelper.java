@@ -82,7 +82,7 @@ import com.sun.faces.util.MessageUtils;
  *
  * @since 2.0
  */
-abstract class ResourceHelper {
+public abstract class ResourceHelper {
 
     private static final Logger LOGGER = FacesLogger.RESOURCE.getLogger();
 
