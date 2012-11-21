@@ -42,6 +42,7 @@ package com.sun.faces.config;
 
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.application.view.FaceletViewHandlingStrategy;
+import com.sun.faces.facelets.util.Classpath;
 import com.sun.faces.lifecycle.HttpMethodRestrictionsPhaseListener;
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -65,6 +66,8 @@ import javax.servlet.ServletContext;
 
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Collections;
 
 import java.util.HashMap;
@@ -98,7 +101,14 @@ public class WebConfiguration {
     // Key under which we store our WebConfiguration instance.
     private static final String WEB_CONFIG_KEY =
           "com.sun.faces.config.WebConfiguration";
-
+    
+    public static final String META_INF_CONTRACTS_DIR = "META-INF" + 
+            WebContextInitParameter.WebAppContractsDirectory.getDefaultValue();
+    
+    private static final int META_INF_CONTRACTS_DIR_LEN = META_INF_CONTRACTS_DIR.length();
+    
+    private static final String RESOURCE_CONTRACT_SUFFIX = "/" + ResourceHandler.RESOURCE_CONTRACT_XML;
+        
     // Logging level.  Defaults to FINE
     private Level loggingLevel = Level.FINE;
 
@@ -466,6 +476,25 @@ public class WebConfiguration {
         }
         
         // Scan for "META-INF" contractMappings in the classpath
+        try {
+            URL[] candidateURLs = Classpath.search(Util.getCurrentLoader(this),
+                                          META_INF_CONTRACTS_DIR,
+                                          RESOURCE_CONTRACT_SUFFIX,
+                    Classpath.SearchAdvice.FirstMatchOnly);
+            for (URL curURL : candidateURLs) {
+                String cur = curURL.toExternalForm();
+                
+                int i = cur.indexOf(META_INF_CONTRACTS_DIR) + META_INF_CONTRACTS_DIR_LEN + 1;
+                int j = cur.indexOf(RESOURCE_CONTRACT_SUFFIX);
+                if (i < j) {
+                    foundContracts.add(cur.substring(i,j));
+                }
+                
+            }
+        } catch (IOException ioe) {
+            
+        }
+        
         
         if (foundContracts.isEmpty()) {
             return;

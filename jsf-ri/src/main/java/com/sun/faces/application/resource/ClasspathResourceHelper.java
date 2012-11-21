@@ -40,6 +40,11 @@
 
 package com.sun.faces.application.resource;
 
+import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.faces.FacesException;
+import javax.faces.component.UIViewRoot;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -65,7 +70,6 @@ class ClasspathResourceHelper extends ResourceHelper {
 
 
     private static final String BASE_RESOURCE_PATH = "META-INF/resources";
-    private static final String BASE_CONTRACTS_PATH = "META-INF/contracts";
     private boolean cacheTimestamp;
     private volatile ZipDirectoryEntryScanner libraryScanner;
     private boolean enableMissingResourceLibraryDetection;
@@ -126,7 +130,7 @@ class ClasspathResourceHelper extends ResourceHelper {
 
     @Override
     public String getBaseContractsPath() {
-        return BASE_CONTRACTS_PATH;
+        return WebConfiguration.META_INF_CONTRACTS_DIR;
     }
     
     /**
@@ -259,25 +263,19 @@ class ClasspathResourceHelper extends ResourceHelper {
         resourceName = trimLeadingSlash(resourceName);
         ContractInfo [] outContract = new ContractInfo[1];
         outContract[0] = null;
+        String [] outBasePath = new String[1];
+        outBasePath[0] = null;
         
         ClassLoader loader = Util.getCurrentLoader(this);
-        String basePath;
-        if (library != null) {
-            basePath = library.getPath(localePrefix) + '/' + resourceName;
-        } else {
-            if (localePrefix == null) {
-                basePath = getBaseResourcePath() + '/' + resourceName;
-            } else {
-                basePath = getBaseResourcePath()
-                           + '/'
-                           + localePrefix
-                           + '/'
-                           + resourceName;
-            }
+        URL basePathURL = findPathConsideringContracts(loader, library, resourceName, 
+                localePrefix, outContract, outBasePath, ctx);
+        String basePath = outBasePath[0];
+        if (null == basePathURL) {
+            basePath = deriveBasePath(library, resourceName, localePrefix);
+            basePathURL = loader.getResource(basePath);
         }
 
-        URL basePathURL = loader.getResource(basePath);
-        if (basePathURL == null) {
+        if (null == basePathURL) {
             // try using this class' loader (necessary when running in OSGi)
             basePathURL = this.getClass().getClassLoader().getResource(basePath);
             if (basePathURL == null) {
@@ -329,6 +327,79 @@ class ClasspathResourceHelper extends ResourceHelper {
         return value;
 
     }
-
     
+    private String deriveBasePath(LibraryInfo library,
+            String resourceName,
+            String localePrefix) {
+        String basePath = null;
+        if (library != null) {
+            basePath = library.getPath(localePrefix) + '/' + resourceName;
+        } else {
+            if (localePrefix == null) {
+                basePath = getBaseResourcePath() + '/' + resourceName;
+            } else {
+                basePath = getBaseResourcePath()
+                        + '/'
+                        + localePrefix
+                        + '/'
+                        + resourceName;
+            }
+        }            
+        return basePath;
+    }
+
+    private URL findPathConsideringContracts(ClassLoader loader, 
+                                     LibraryInfo library,
+                                     String resourceName,
+                                     String localePrefix,
+                                     ContractInfo [] outContract,
+                                     String [] outBasePath,
+                                     FacesContext ctx) {
+        UIViewRoot root = ctx.getViewRoot();
+        List<String> contracts = (null != root) ? 
+                root.getResourceLibraryContracts() : null;
+        URL result = null;
+
+        if (null == contracts) {
+            String contractName = ctx.getExternalContext().getRequestParameterMap()
+                  .get("con");
+            if (null != contractName && 0 < contractName.length()) {
+                contracts = new ArrayList<String>();
+                contracts.add(contractName);
+            } else {
+                return null;
+            }
+        }
+
+        String basePath = null;
+        
+        for (String curContract : contracts) {
+        
+            if (library != null) {
+                basePath = library.getPath(localePrefix) + '/' + curContract + '/' + resourceName;
+            } else {
+                if (localePrefix == null) {
+                    basePath = getBaseContractsPath() + '/' + curContract + '/' + resourceName;
+                } else {
+                    basePath = getBaseContractsPath()
+                            + '/' + curContract 
+                            + '/'
+                            + localePrefix
+                            + '/'
+                            + resourceName;
+                }
+            }
+            
+            if (null != (result = loader.getResource(basePath))) {
+                outContract[0] = new ContractInfo(curContract);
+                outBasePath[0] = basePath;
+                break;
+            } else {
+                basePath = null;
+            }
+        }
+            
+        return result;
+    }
+
 }

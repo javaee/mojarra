@@ -55,6 +55,7 @@ import javax.faces.context.FacesContext;
 class FaceletWebappResourceHelper extends ResourceHelper {
     
     private final String webAppContractsDirectory;
+    private static final String META_INF_CONTRACTS_DIR = WebConfiguration.META_INF_CONTRACTS_DIR;
 
     public FaceletWebappResourceHelper() {
         WebConfiguration webConfig = WebConfiguration.getInstance();
@@ -159,7 +160,19 @@ class FaceletWebappResourceHelper extends ResourceHelper {
             if (null != url) {
                 outContract[0] = new ContractInfo(curContract);
                 break;
+            } else {
+                if (baseResourceName.startsWith("/")) {
+                    resourceName = META_INF_CONTRACTS_DIR + "/" + curContract + baseResourceName;
+                } else {
+                    resourceName = META_INF_CONTRACTS_DIR + "/" + curContract + "/" + baseResourceName;
+                }
+                url = Util.getCurrentLoader(this).getResource(resourceName);
+                if (null != url) {
+                    outContract[0] = new ContractInfo(curContract);
+                    break;
+                }                
             }
+            
         }
         
         return url;

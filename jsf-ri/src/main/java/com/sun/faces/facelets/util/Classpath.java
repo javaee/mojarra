@@ -98,14 +98,25 @@ public final class Classpath {
     public Classpath() {
         super();
     }
+    
+    public enum SearchAdvice {
+        FirstMatchOnly,
+        AllMatches
+    };
 
     public static URL[] search(String prefix, String suffix)
           throws IOException {
         return search(Thread.currentThread().getContextClassLoader(), prefix,
-                      suffix);
+                      suffix, SearchAdvice.AllMatches);
+    }
+    
+    public static URL[] search(ClassLoader cl, String prefix, String suffix) 
+            throws IOException {
+        return search(cl, prefix, suffix, SearchAdvice.AllMatches);
     }
 
-    public static URL[] search(ClassLoader cl, String prefix, String suffix)
+    public static URL[] search(ClassLoader cl, String prefix, String suffix,
+            SearchAdvice advice)
           throws IOException {
         Enumeration[] e = new Enumeration[]{
               cl.getResources(prefix),
@@ -136,7 +147,7 @@ public final class Classpath {
                     jarFile = getAlternativeJarFile(url);
                 }
                 if (jarFile != null) {
-                    searchJar(cl, all, jarFile, prefix, suffix);
+                    searchJar(cl, all, jarFile, prefix, suffix, advice);
                 } else {
                     boolean searchDone =
                           searchDir(all, new File(URLDecoder.decode(url.getFile(), "UTF-8")), suffix);
@@ -316,7 +327,7 @@ public final class Classpath {
     }
 
     private static void searchJar(ClassLoader cl, Set result, JarFile file,
-                                  String prefix, String suffix)
+                                  String prefix, String suffix, SearchAdvice advice)
           throws IOException {
         Enumeration e = file.entries();
         JarEntry entry;
@@ -332,6 +343,9 @@ public final class Classpath {
                 Enumeration e2 = cl.getResources(name);
                 while (e2.hasMoreElements()) {
 					result.add(e2.nextElement());
+                                        if (advice == SearchAdvice.FirstMatchOnly) {
+                                            return;
+                                        }
 				}
 			}
 		}

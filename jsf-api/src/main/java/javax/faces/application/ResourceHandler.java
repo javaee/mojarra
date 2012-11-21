@@ -156,6 +156,18 @@ public abstract class ResourceHandler {
 
 
     /**
+     * <p class="changed_modified_2_2">The name of the marker file that
+     * the implementation must scan for, within sub-directories
+     * <code>META-INF/contracts</code>, to identify the set of available
+     * resource library contracts.</p>
+
+     * @since 2.2
+     */
+
+    public static final String RESOURCE_CONTRACT_XML = "javax.faces.template.xml";
+
+
+    /**
 
      * <p class="changed_added_2_2">If a
      * <code>&lt;context-param&gt;</code> with the param name equal to
