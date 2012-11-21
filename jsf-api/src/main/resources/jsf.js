@@ -2536,7 +2536,6 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 switch (el.type) {
                     case 'submit':
                     case 'reset':
-                    case 'button':
                     case 'image':
                     case 'file':
                         break;
@@ -2560,7 +2559,12 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                         break;
                     default:
                         // this is for any input incl.  text', 'password', 'hidden', 'textarea'
-                        addField(el.name, el.value);
+                        var nodeName = el.nodeName.toLowerCase();
+                        if (nodeName === "input" || nodeName === "select" ||
+                            nodeName === "button" || nodeName === "object" ||
+                            nodeName === "textarea") { 
+                            addField(el.name, el.value);
+                        }
                         break;
                 }
             }
