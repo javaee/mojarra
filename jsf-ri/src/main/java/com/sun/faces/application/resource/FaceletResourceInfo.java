@@ -42,7 +42,7 @@ package com.sun.faces.application.resource;
 
 import java.net.URL;
 
-class FaceletResourceInfo extends ResourceInfo {
+public class FaceletResourceInfo extends ResourceInfo {
 
     FaceletResourceInfo(ContractInfo contract, String name, VersionInfo version, 
             ResourceHelper helper, URL url) {

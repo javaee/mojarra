@@ -69,7 +69,7 @@ import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParamet
  *
  * @since 2.0
  */
-class WebappResourceHelper extends ResourceHelper {
+public class WebappResourceHelper extends ResourceHelper {
 
     private static final Logger LOGGER = FacesLogger.RESOURCE.getLogger();
 

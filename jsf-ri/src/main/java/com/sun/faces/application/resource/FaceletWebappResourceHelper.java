@@ -52,7 +52,7 @@ import javax.faces.FacesException;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 
-class FaceletWebappResourceHelper extends ResourceHelper {
+public class FaceletWebappResourceHelper extends ResourceHelper {
     
     private final String webAppContractsDirectory;
     private static final String META_INF_CONTRACTS_DIR = WebConfiguration.META_INF_CONTRACTS_DIR;

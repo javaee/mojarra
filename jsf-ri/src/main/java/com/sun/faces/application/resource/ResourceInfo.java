@@ -40,7 +40,7 @@
  */
 package com.sun.faces.application.resource;
 
-class ResourceInfo {
+public class ResourceInfo {
     
     ResourceHelper helper;
     LibraryInfo library;

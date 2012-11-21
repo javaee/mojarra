@@ -66,7 +66,7 @@ import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParamet
  *
  * @since 2.0
  */
-class ClasspathResourceHelper extends ResourceHelper {
+public class ClasspathResourceHelper extends ResourceHelper {
 
 
     private static final String BASE_RESOURCE_PATH = "META-INF/resources";

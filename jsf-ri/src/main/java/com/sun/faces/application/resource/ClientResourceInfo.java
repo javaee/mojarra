@@ -54,7 +54,7 @@ import com.sun.faces.util.FacesLogger;
  * pertainant to building a complete resource path using a Library.
  * <p/>
  */
-class ClientResourceInfo extends ResourceInfo {
+public class ClientResourceInfo extends ResourceInfo {
 
     private static final Logger LOGGER = FacesLogger.RESOURCE.getLogger();
     private static final String COMPRESSED_CONTENT_DIRECTORY =
