@@ -164,7 +164,7 @@ public abstract class ResourceHandler {
      * @since 2.2
      */
 
-    public static final String RESOURCE_CONTRACT_XML = "javax.faces.template.xml";
+    public static final String RESOURCE_CONTRACT_XML = "javax.faces.contract.xml";
 
 
     /**
