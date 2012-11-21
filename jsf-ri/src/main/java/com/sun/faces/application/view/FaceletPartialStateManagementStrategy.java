@@ -496,6 +496,7 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
         }
 
         saveDynamicActions(context, stateContext, stateMap);
+        StateContext.release(context);
         return new Object[]{null, stateMap};
     }
 

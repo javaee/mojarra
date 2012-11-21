@@ -93,6 +93,20 @@ public class StateContext {
 
     // ---------------------------------------------------------- Public Methods
 
+    /**
+     * Release the state context.
+     * 
+     * @param facesContext the Faces context.
+     */
+    public static void release(FacesContext facesContext) {
+        StateContext stateContext = (StateContext) facesContext.getAttributes().get(KEY);
+        UIViewRoot viewRoot = facesContext.getViewRoot();
+        if (viewRoot != null && stateContext.modListener != null) {
+            viewRoot.unsubscribeFromViewEvent(PostAddToViewEvent.class, stateContext.modListener);
+            viewRoot.unsubscribeFromViewEvent(PreRemoveFromViewEvent.class, stateContext.modListener);
+        }
+        facesContext.getAttributes().remove(KEY);
+    }
 
     /**
      * @param ctx the <code>FacesContext</code> for the current request
