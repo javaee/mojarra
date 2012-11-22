@@ -42,22 +42,12 @@
 -->
 
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:composition>
 
-    <ui:composition template="/template.xhtml">
-        <f:metadata>
-            <f:viewParam name="skin" value="#{skinUrlManager.skin}" />
-            <f:event type="preRenderView" listener="#{skinUrlManager.update}" />
-        </f:metadata>
-        <ui:insert name="pageTitle">
-            <h:outputText value="#{i18n['template.title']}"></h:outputText>
-        </ui:insert>    
-
-        <ui:define name="content">
-            Welcome
-        </ui:define>
+        <div align="center" style="width: 100%">
+            <h:graphicImage value="/resources/images/SoccerDukeSmall.png" width="59" height="47" title="Developed by: Alberto Lemos (Spock), Andre Frota, Ed Burns, Vinicius Nunes, Vinicius Senger e Yara Senger"></h:graphicImage>
+        </div>
     </ui:composition>
 </html>
-
