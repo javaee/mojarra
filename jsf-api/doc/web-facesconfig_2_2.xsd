@@ -1833,7 +1833,9 @@ is assumed to be <code>&lt;flowName&gt;.xhtml</code>.</p>
     <xsd:sequence>
       <xsd:group ref="javaee:descriptionGroup"/>
       <xsd:element name="start-node"
-                   type="javaee:java-identifierType">
+                   type="javaee:java-identifierType"
+                   minOccurs="0"
+                   maxOccurs="1">
         <xsd:annotation>
           <xsd:documentation>
 
