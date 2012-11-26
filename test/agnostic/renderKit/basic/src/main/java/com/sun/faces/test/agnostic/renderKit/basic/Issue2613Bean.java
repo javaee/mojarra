@@ -57,8 +57,9 @@ public class Issue2613Bean implements Serializable {
 
     public List<String> getParameterNames() {
         FacesContext context = FacesContext.getCurrentInstance();
-        parameterNames = Collections.list((Enumeration<String>)((HttpServletRequest)context.getExternalContext().
-            getRequest()).getParameterNames());
+        parameterNames = Collections.list((Enumeration<String>)((
+            HttpServletRequest)context.getExternalContext().getRequest()).getParameterNames());
+        Collections.sort(parameterNames);
         return parameterNames;
     }
 
