@@ -420,6 +420,19 @@ public class ApplicationImpl extends Application {
         return associate.getFlowHandler();
     }
     
+    @Override
+    public synchronized void setFlowHandler(FlowHandler flowHandler) {
+
+        Util.notNull("flowHandler", flowHandler);
+
+        associate.setFlowHandler(flowHandler);
+
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine(MessageFormat.format("set FlowHandler Instance to ''{0}''",
+                                             flowHandler.getClass().getName()));
+        }
+    }
+
     
 
 

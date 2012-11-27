@@ -661,6 +661,11 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
     public FlowHandler getFlowHandler() {
         return getWrapped().getFlowHandler();
     }
+
+    @Override
+    public void setFlowHandler(FlowHandler newHandler) {
+        super.setFlowHandler(newHandler);
+    }
     
     /**
      * <p class="changed_added_2_0">The default behavior of this method

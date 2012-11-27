@@ -588,6 +588,10 @@ public class ApplicationAssociate {
     public FlowHandler getFlowHandler() {
         return flowHandler;
     }
+    
+    public void setFlowHandler(FlowHandler flowHandler) {
+        this.flowHandler = flowHandler;
+    }
 
     public void setFacesELResolverForJsp(FacesCompositeELResolver celr) {
         facesELResolverForJsp = celr;

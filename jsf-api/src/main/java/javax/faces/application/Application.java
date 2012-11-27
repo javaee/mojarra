@@ -618,6 +618,28 @@ public abstract class Application {
 
     }
 
+    /**
+     * <p class="changed_added_2_2">Set the {@link FlowHandler} instance used by
+     * the {@link NavigationHandler} to satisfy the requirements of the faces
+     * flows feature.</p>
+
+     * @since 2.2
+     * 
+     * @throws NullPounterException if {code newHandler} is {@code null}
+     * 
+     * @throws IllegalStateException if this method is called after at least one 
+     * request has been processed by the {@code Lifecycle} instance for this application. 
+     *
+     */ 
+
+    public void setFlowHandler(FlowHandler newHandler) {
+
+        if (defaultApplication != null) {
+            defaultApplication.setFlowHandler(newHandler);
+        }
+        throw new UnsupportedOperationException();
+
+    }
 
 
     /**
