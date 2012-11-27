@@ -356,6 +356,13 @@ public abstract class FlowHandler {
      * the value from <strong>evaluatedParams</strong>.</p>
      * 
      * </div>
+     * 
+     * @param origin the {@code UIViewRoot} of the origin flow, if any.
+     * 
+     * @param destination  the {@code UIViewRoot} of the destination flow, if any.
+     * 
+     * @param outboundCallNode the flow call node causing this transition, if any.
+     * 
      * @since 2.2
      */
             
