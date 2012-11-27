@@ -58,8 +58,9 @@ public class FlowA implements Serializable {
     }
     
     public Flow defineFlow(FacesContext context, FlowBuilder flowBuilder) {
-        
-        flowBuilder.id("flow-a");
+        String flowId = "flow-a";
+        flowBuilder.id(flowId);
+        flowBuilder.viewNode(flowId, "/" + flowId + "/" + flowId + ".xhtml").markAsStartNode();
         flowBuilder.returnNode("taskFlowReturn1").
                 fromOutcome("#{flow_a_Bean.returnValue}");
         flowBuilder.inboundParameter("param1FromFlowB", "#{facesFlowScope.param1Value}");

@@ -40,68 +40,29 @@
  */
 package com.sun.faces.flow.builder;
 
-import com.sun.faces.flow.FlowCallNodeImpl;
-import com.sun.faces.flow.ParameterImpl;
-import java.util.Map;
-import javax.el.ValueExpression;
-import javax.faces.flow.FlowCallNode;
-import javax.faces.flow.builder.FlowCallBuilder;
+import com.sun.faces.flow.ViewNodeImpl;
+import java.util.List;
+import javax.faces.flow.ViewNode;
 import javax.faces.flow.builder.NodeBuilder;
+import javax.faces.flow.builder.ViewBuilder;
 
-public class FlowCallBuilderImpl extends FlowCallBuilder {
+public class ViewBuilderImpl extends ViewBuilder {
     
     private FlowBuilderImpl root;
-    private String flowCallNodeId;
-    private String flowReference;
-    
+    private ViewNodeImpl viewNode;
 
-    public FlowCallBuilderImpl(FlowBuilderImpl root, String id) {
+    public ViewBuilderImpl(FlowBuilderImpl root, String viewNodeId, String vdlDocumentId) {
         this.root = root;
-        this.flowCallNodeId = id;
-    }
-
-    @Override
-    public FlowCallBuilder flowReference(String flowReference) {
-        this.flowReference = flowReference;
-        return this;
-    }
-
-    @Override
-    public FlowCallBuilder inboundParameter(String name, ValueExpression value) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public FlowCallBuilder inboundParameter(String name, String value) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public FlowCallBuilder outboundParameter(String name, ValueExpression value) {
-        ParameterImpl param = new ParameterImpl(name, value);
-        Map<String, FlowCallNode> flowCalls = root.getFlow().getFlowCalls();
-        FlowCallNodeImpl flowCall = (FlowCallNodeImpl) flowCalls.get(flowCallNodeId);
-        if (null == flowCall) {
-            flowCall = new FlowCallNodeImpl(flowCallNodeId, flowReference, null, null);
-            flowCalls.put(flowCallNodeId, flowCall);
-        }
-        flowCall.getOutboundParameters().put(name, param);
-        return this;
-    }
-
-    @Override
-    public FlowCallBuilder outboundParameter(String name, String value) {
-        ValueExpression ve = root.getExpressionFactory().createValueExpression(root.getELContext(), value, Object.class);
-        outboundParameter(name, ve);
-        return this;
-    }
-
-    @Override
-    public NodeBuilder markAsStartNode() {
-        root._getFlow().setStartNodeId(flowCallNodeId);
-        return this;
+        
+        List<ViewNode> viewNodes = root.getFlow().getViews();
+        viewNode = new ViewNodeImpl(viewNodeId, vdlDocumentId);
+        viewNodes.add(viewNode);
     }
     
+    public NodeBuilder markAsStartNode() {
+        root._getFlow().setStartNodeId(viewNode.getId());
+        return this;
+    }
     
     
 }

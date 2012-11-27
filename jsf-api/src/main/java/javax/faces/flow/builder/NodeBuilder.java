@@ -40,9 +40,9 @@
  */
 package javax.faces.flow.builder;
 
-public abstract class NodeBuilder {
+public interface NodeBuilder {
     
-    public abstract NodeBuilder markAsStartNode(String startNodeId);
+    public NodeBuilder markAsStartNode();
     
     
 }

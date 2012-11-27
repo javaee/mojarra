@@ -56,6 +56,7 @@ import javax.faces.flow.builder.FlowCallBuilder;
 import javax.faces.flow.builder.MethodCallBuilder;
 import javax.faces.flow.builder.ReturnBuilder;
 import javax.faces.flow.builder.SwitchBuilder;
+import javax.faces.flow.builder.ViewBuilder;
 
 public class FlowBuilderImpl extends FlowBuilder {
     
@@ -73,11 +74,9 @@ public class FlowBuilderImpl extends FlowBuilder {
     // <editor-fold defaultstate="collapsed" desc="Create Flow Nodes">       
 
     @Override
-    public FlowBuilder viewNode(String viewNodeId, String vdlDocumentId) {
-        List<ViewNode> viewNodes = flow.getViews();
-        ViewNodeImpl viewNode = new ViewNodeImpl(viewNodeId, vdlDocumentId);
-        viewNodes.add(viewNode);
-        return this;
+    public ViewBuilder viewNode(String viewNodeId, String vdlDocumentId) {
+        ViewBuilder result = new ViewBuilderImpl(this, viewNodeId, vdlDocumentId);
+        return result;
     }
 
     @Override
@@ -107,17 +106,9 @@ public class FlowBuilderImpl extends FlowBuilder {
     @Override
     public FlowBuilder id(String flowId) {
         flow.setId(flowId);
-        flow.setStartNodeId(flowId);
-        viewNode(flowId, "/" + flowId + "/" + flowId + ".xhtml");
         return this;
     }
     
-    @Override
-    public FlowBuilder markAsStartNode(String startNodeId) {
-        flow.setStartNodeId(startNodeId);
-        return this;
-    }
-
     @Override
     public FlowBuilder initializer(MethodExpression methodExpression) {
         flow.setInitializer(methodExpression);
@@ -149,6 +140,10 @@ public class FlowBuilderImpl extends FlowBuilder {
         
     @Override
     public Flow getFlow() {
+        return flow;
+    }
+    
+    FlowImpl _getFlow() {
         return flow;
     }
     

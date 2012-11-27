@@ -43,7 +43,7 @@ package javax.faces.flow.builder;
 import javax.el.MethodExpression;
 import javax.el.ValueExpression;
 
-public abstract class MethodCallBuilder extends NodeBuilder {
+public abstract class MethodCallBuilder implements NodeBuilder {
     
     public abstract MethodCallBuilder expression(MethodExpression me);
     
@@ -51,5 +51,6 @@ public abstract class MethodCallBuilder extends NodeBuilder {
     
     public abstract SwitchCase defaultOutcome(ValueExpression outcome);
     
+    public abstract NodeBuilder markAsStartNode();
     
 }

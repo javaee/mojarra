@@ -51,5 +51,7 @@ public abstract class SwitchCase {
     public abstract SwitchCase fromOutcome(ValueExpression outcome);
     
     public abstract FlowBuilder id(String flowId);
+
+    public abstract NodeBuilder markAsStartNode();
     
 }

@@ -56,9 +56,10 @@ public class ReturnBuilderImpl extends ReturnBuilder {
     }
 
     @Override
-    public NodeBuilder markAsStartNode(String startNodeId) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }    
+    public NodeBuilder markAsStartNode() {
+        root._getFlow().setStartNodeId(id);
+        return this;
+    }
     
     @Override
     public ReturnBuilder fromOutcome(String outcome) {

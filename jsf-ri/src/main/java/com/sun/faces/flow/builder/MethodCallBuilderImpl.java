@@ -47,9 +47,13 @@ import javax.faces.flow.builder.NodeBuilder;
 import javax.faces.flow.builder.SwitchCase;
 
 public class MethodCallBuilderImpl extends MethodCallBuilder {
+    
+    private FlowBuilderImpl root;
+    private String methodCallId;
 
     public MethodCallBuilderImpl(FlowBuilderImpl root, String id) {
-        
+        this.root = root;
+        this.methodCallId = id;
     }
 
     @Override
@@ -68,8 +72,9 @@ public class MethodCallBuilderImpl extends MethodCallBuilder {
     }
 
     @Override
-    public NodeBuilder markAsStartNode(String startNodeId) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public NodeBuilder markAsStartNode() {
+        root._getFlow().setStartNodeId(methodCallId);
+        return this;
     }
     
     

@@ -42,7 +42,7 @@ package javax.faces.flow.builder;
 
 import javax.el.ValueExpression;
 
-public abstract class FlowCallBuilder extends NodeBuilder {
+public abstract class FlowCallBuilder implements NodeBuilder {
     
     public abstract FlowCallBuilder flowReference(String flowId);
     
@@ -53,7 +53,8 @@ public abstract class FlowCallBuilder extends NodeBuilder {
     public abstract FlowCallBuilder outboundParameter(String name, ValueExpression value);
         
     public abstract FlowCallBuilder outboundParameter(String name, String value);
-
+    
+    public abstract NodeBuilder markAsStartNode();
     
     
 }

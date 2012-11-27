@@ -41,13 +41,18 @@
 package com.sun.faces.flow.builder;
 
 import javax.el.ValueExpression;
-import javax.faces.flow.builder.FlowBuilder;
+import javax.faces.flow.builder.NodeBuilder;
 import javax.faces.flow.builder.SwitchBuilder;
 import javax.faces.flow.builder.SwitchCase;
 
 public class SwitchBuilderImpl extends SwitchBuilder {
     
+    private FlowBuilderImpl root;
+    private String switchId;
+    
     SwitchBuilderImpl(FlowBuilderImpl root, String id) {
+        this.root = root;
+        this.switchId = id;
     }
 
     @Override
@@ -61,8 +66,9 @@ public class SwitchBuilderImpl extends SwitchBuilder {
     }
 
     @Override
-    public FlowBuilder markAsStartNode(String startNodeId) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public NodeBuilder markAsStartNode() {
+        root._getFlow().setStartNodeId(switchId);
+        return this;
     }
 
     @Override

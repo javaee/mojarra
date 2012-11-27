@@ -44,11 +44,11 @@ import javax.el.MethodExpression;
 import javax.el.ValueExpression;
 import javax.faces.flow.Flow;
 
-public abstract class FlowBuilder extends NodeBuilder {
+public abstract class FlowBuilder  {
     
     public abstract FlowBuilder id(String id);
     
-    public abstract FlowBuilder viewNode(String viewNodeId, String vdlDocumentId);
+    public abstract ViewBuilder viewNode(String viewNodeId, String vdlDocumentId);
 
     public abstract SwitchBuilder switchNode(String switchNodeId);
     
