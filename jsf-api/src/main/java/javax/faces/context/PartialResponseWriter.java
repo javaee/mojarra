@@ -114,11 +114,6 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
      */
     public void startDocument() throws IOException {
         ResponseWriter writer = getWrapped();
-        String encoding = writer.getCharacterEncoding( );
-        if( encoding == null ) {
-            encoding = "utf-8";
-        }
-        writer.write("<?xml version='1.0' encoding='" + encoding + "'?>\n");
         writer.startElement("partial-response", null);
         FacesContext ctx = FacesContext.getCurrentInstance();
         String id = ctx.getViewRoot().getContainerClientId(ctx);

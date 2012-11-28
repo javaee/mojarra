@@ -290,6 +290,12 @@ import javax.faces.lifecycle.ClientWindow;
                 ExternalContext exContext = ctx.getExternalContext();
                 exContext.setResponseContentType("text/xml");
                 exContext.addResponseHeader("Cache-Control", "no-cache");
+                
+                String encoding = writer.getCharacterEncoding( );
+                if( encoding == null ) {
+                    encoding = "UTF-8";
+                }
+                writer.writePreamble("<?xml version='1.0' encoding='" + encoding + "'?>\n");
                 writer.startDocument();
                 if (isRenderAll()) {
                     renderAll(ctx, viewRoot);

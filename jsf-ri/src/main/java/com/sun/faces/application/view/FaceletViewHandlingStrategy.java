@@ -431,13 +431,13 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                 String XMLDECL = Util.getXMLDECLFromFacesContextAttributes(ctx);
                 if (null != XMLDECL) {
                     // Do not escape.
-                    writer.write(XMLDECL);
+                    writer.writePreamble(XMLDECL);
                 }
 
                 String DOCTYPE = Util.getDOCTYPEFromFacesContextAttributes(ctx);
                 if (null != DOCTYPE) {
                     // Do not escape.
-                    writer.write(DOCTYPE);
+                    writer.writeDoctype(DOCTYPE);
                 }
                 writer.startDocument();
                 viewToRender.encodeAll(ctx);

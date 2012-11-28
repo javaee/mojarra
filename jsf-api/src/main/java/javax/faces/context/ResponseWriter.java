@@ -265,6 +265,51 @@ public abstract class ResponseWriter extends Writer {
      *                              is <code>null</code>
      */
     public abstract void writeComment(Object comment) throws IOException;
+    
+    
+    /**
+     * <p class="changed_added_2_2">Write a string containing the markup specific
+     * preamble.
+     * No escaping is performed. The default 
+     * implementation simply calls through to {@link #write(java.lang.String}.</p>
+     * 
+     * <div class="changed_added_2_2">
+     * 
+     * <p>The implementation makes no checks if this is the correct place
+     * in the response to have a preamble, nor does it prevent the preamble
+     * from being written more than once.</p>
+     * 
+     * </div>
+     * 
+     * @since 2.2
+     * @param preamble Text content of the preamble
+     * @throws IOException if an input/output error occurs
+     */
+    public void writePreamble(String preamble) throws IOException {
+        write(preamble);
+    }
+
+    /**
+     * <p class="changed_added_2_2">Write a string containing the markup specific
+     * doctype.
+     * No escaping is performed. The default 
+     * implementation simply calls through to {@link #write(java.lang.String}.</p>
+     * 
+     * <div class="changed_added_2_2">
+     * 
+     * <p>The implementation makes no checks if this is the correct place
+     * in the response to have a doctype, nor does it prevent the doctype
+     * from being written more than once.</p>
+     * 
+     * </div>
+     * 
+     * @since 2.2
+     * @param doctype Text content of the doctype
+     * @throws IOException if an input/output error occurs
+     */
+    public void writeDoctype(String doctype) throws IOException {
+        write(doctype);
+    }
 
 
     /**

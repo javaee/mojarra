@@ -246,6 +246,31 @@ public abstract class ResponseWriterWrapper extends ResponseWriter implements Fa
 
     }
 
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link ResponseWriter#writeDoctype}
+     * on the wrapped {@link ResponseWriter} object.</p>
+     *
+     * @see ResponseWriter#writeDoctype
+     * @since 2.2
+     */
+    @Override
+    public void writeDoctype(String doctype) throws IOException {
+        getWrapped().writeDoctype(doctype);
+    }
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link ResponseWriter#writePreamble}
+     * on the wrapped {@link ResponseWriter} object.</p>
+     *
+     * @see ResponseWriter#writePreamble
+     * @since 2.2
+     */
+    @Override
+    public void writePreamble(String preamble) throws IOException {
+        getWrapped().writePreamble(preamble);
+    }
 
     /**
      * <p>The default behavior of this method is to
