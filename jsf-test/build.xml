@@ -130,6 +130,7 @@
             </sequential>
         </for>
 
+        <delete failonerror="false" dir="JAVASERVERFACES-1338/build" />
                
     </target>    
 
