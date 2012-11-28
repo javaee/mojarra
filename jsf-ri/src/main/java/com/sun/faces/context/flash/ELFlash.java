@@ -70,7 +70,6 @@ import javax.faces.event.PreClearFlashEvent;
 import javax.faces.event.PreRemoveFlashValueEvent;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * <p>How this implementation works</p>
@@ -966,14 +965,36 @@ public class ELFlash extends Flash {
         // Don't try to write the cookie unless there is data in the flash.
         if ((null != nextFlash && !nextFlash.getFlashMap().isEmpty()) ||
             (null != prevFlash && !prevFlash.getFlashMap().isEmpty())) {
-            HttpServletResponse resp = (HttpServletResponse) extContext.getResponse();
-            if (resp.isCommitted()) {
+            if (extContext.isResponseCommitted()) {
                 if (LOGGER.isLoggable(Level.WARNING)) {
                     LOGGER.log(Level.WARNING,
                             "jsf.externalcontext.flash.response.already.committed");
                 }
             } else {
-                resp.addCookie(toSet);
+                Map<String, Object> properties = new HashMap();
+                Object val;
+                
+                if (null != (val = toSet.getComment())) {
+                    properties.put("comment", val);
+                }
+                if (null != (val = toSet.getDomain())) {
+                    properties.put("domain", val);
+                }
+                if (null != (val = toSet.getMaxAge())) {
+                    properties.put("maxAge", val);
+                }
+                if (null != (val = toSet.getSecure())) {
+                    properties.put("secure", val);
+                }
+                if (null != (val = toSet.getPath())) {
+                    properties.put("path", val);
+                }
+                if (null != (val = toSet.isHttpOnly())) {
+                    properties.put("httpOnly", val);
+                }
+                extContext.addResponseCookie(toSet.getName(), toSet.getValue(), 
+                        !properties.isEmpty() ? properties : null);
+                properties = null;
             }
             contextMap.put(CONSTANTS.DidWriteCookieAttributeName, Boolean.TRUE);
         }
