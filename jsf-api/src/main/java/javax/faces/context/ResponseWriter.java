@@ -271,7 +271,7 @@ public abstract class ResponseWriter extends Writer {
      * <p class="changed_added_2_2">Write a string containing the markup specific
      * preamble.
      * No escaping is performed. The default 
-     * implementation simply calls through to {@link #write(java.lang.String}.</p>
+     * implementation simply calls through to {@link #write(java.lang.String)} .</p>
      * 
      * <div class="changed_added_2_2">
      * 
@@ -293,7 +293,7 @@ public abstract class ResponseWriter extends Writer {
      * <p class="changed_added_2_2">Write a string containing the markup specific
      * doctype.
      * No escaping is performed. The default 
-     * implementation simply calls through to {@link #write(java.lang.String}.</p>
+     * implementation simply calls through to {@link #write(java.lang.String)} .</p>
      * 
      * <div class="changed_added_2_2">
      * 
