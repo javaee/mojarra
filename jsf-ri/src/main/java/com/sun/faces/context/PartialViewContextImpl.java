@@ -40,6 +40,7 @@
 
 package com.sun.faces.context;
 
+import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.visit.VisitCallback;
@@ -250,12 +251,13 @@ import com.sun.faces.util.Util;
 
             try {
                 processComponents(viewRoot, phaseId, executeIds, ctx);
-            } catch (Exception e) {
+            } catch (IOException e) {
                 if (LOGGER.isLoggable(Level.INFO)) {
                     LOGGER.log(Level.INFO,
                            e.toString(),
                            e);
                 }
+                throw new FacesException(e);
             }
 
             // If we have just finished APPLY_REQUEST_VALUES phase, install the
@@ -509,27 +511,12 @@ import com.sun.faces.util.Util;
                 } else if (curPhase == PhaseId.UPDATE_MODEL_VALUES) {
                     comp.processUpdates(ctx);
                 } else if (curPhase == PhaseId.RENDER_RESPONSE) {
-
                     PartialResponseWriter writer = ctx.getPartialViewContext().getPartialResponseWriter();
-
                     writer.startUpdate(comp.getClientId(ctx));
-                    try {
-                        // do the default behavior...
-                        comp.encodeAll(ctx);
-                    }
-                    catch (Exception ce) {
-                        if (LOGGER.isLoggable(Level.SEVERE)) {
-                            LOGGER.severe(ce.toString());
-                        }
-                        if (LOGGER.isLoggable(Level.FINE)) {
-                            LOGGER.log(Level.FINE,
-                            ce.toString(),
-                            ce);
-                        }
-                    }
+                    // do the default behavior...
+                    comp.encodeAll(ctx);          
                     writer.endUpdate();
-                }
-                else {
+                } else {
                     throw new IllegalStateException("I18N: Unexpected " +
                                                     "PhaseId passed to " +
                                               " PhaseAwareContextCallback: " +
@@ -537,7 +524,15 @@ import com.sun.faces.util.Util;
                 }
             }
             catch (IOException ex) {
-                ex.printStackTrace();
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    LOGGER.severe(ex.toString());
+                }
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.log(Level.FINE,
+                    ex.toString(),
+                    ex);
+                }
+                throw new FacesException(ex);
             }
 
             // Once we visit a component, there is no need to visit
