@@ -42,12 +42,10 @@ package com.sun.faces.test.webprofile.renderKit.programmaticCompositeComponent;
 
 import java.util.HashMap;
 import java.util.Map;
-import javax.faces.FactoryFinder;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
-import javax.faces.view.facelets.FaceletFactory;
 
 @ManagedBean
 @RequestScoped
@@ -58,9 +56,8 @@ public class RequestBean {
         Map<String, Object> attrs=new HashMap<String, Object>();
         attrs.put("pi", new Float(3.14));
         attrs.put("pagecontent", "" + System.currentTimeMillis());
-        FaceletFactory faceletFactory = (FaceletFactory) FactoryFinder
-                .getFactory(FactoryFinder.FACELET_FACTORY);
-        UIComponent c = faceletFactory.createComponent(FacesContext.getCurrentInstance(), 
+        FacesContext fc = FacesContext.getCurrentInstance();
+        UIComponent c = fc.getApplication().createComponent(FacesContext.getCurrentInstance(), 
                 "http://java.sun.com/jsf/composite/" + "ezcomp", "ezcomp", attrs);
         
         return null == c ? "FAILURE" : "SUCCESS";

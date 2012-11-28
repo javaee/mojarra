@@ -196,7 +196,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     }
     
     /*
-     * Called by Application.createComponent(Resource).
+     * Called by Application._createComponent(Resource).
      * 
      * This method creates two temporary UIComponent instances to aid in
      * the creation of the compcomp metadata.  These instances no longer

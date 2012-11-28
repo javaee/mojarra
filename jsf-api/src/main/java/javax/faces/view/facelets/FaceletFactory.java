@@ -72,7 +72,7 @@ import javax.faces.context.FacesContext;
  */
 public abstract class FaceletFactory {
 
-    public abstract UIComponent createComponent(FacesContext context, 
+    public abstract UIComponent _createComponent(FacesContext context, 
             String taglibURI, String tagName, 
             Map<String, Object> attributes);
     /**

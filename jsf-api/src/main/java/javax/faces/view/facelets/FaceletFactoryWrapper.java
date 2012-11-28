@@ -73,8 +73,8 @@ public class FaceletFactoryWrapper extends FaceletFactory implements FacesWrappe
     }
 
     @Override
-    public UIComponent createComponent(FacesContext context, String taglibURI, String tagName, Map<String, Object> attributes) {
-        return getWrapped().createComponent(context, taglibURI, tagName, attributes);
+    public UIComponent _createComponent(FacesContext context, String taglibURI, String tagName, Map<String, Object> attributes) {
+        return getWrapped()._createComponent(context, taglibURI, tagName, attributes);
     }
     
     @Override

@@ -125,6 +125,7 @@ import javax.faces.application.Resource;
 import javax.faces.render.RenderKit;
 import javax.faces.render.Renderer;
 import javax.faces.view.ViewDeclarationLanguage;
+import javax.faces.view.facelets.FaceletFactory;
 
 
 /**
@@ -453,7 +454,7 @@ public class ApplicationImpl extends Application {
 
 
     /**
-     * @see javax.faces.application.Application#createComponent(javax.el.ValueExpression, javax.faces.context.FacesContext, String)
+     * @see javax.faces.application.Application#_createComponent(javax.el.ValueExpression, javax.faces.context.FacesContext, String)
      */
     @Override
     public UIComponent createComponent(ValueExpression componentExpression,
@@ -927,7 +928,7 @@ public class ApplicationImpl extends Application {
 
 
     /**
-     * @see javax.faces.application.Application#createComponent(String)
+     * @see javax.faces.application.Application#_createComponent(String)
      */
     public UIComponent createComponent(String componentType) throws FacesException {
 
@@ -942,7 +943,7 @@ public class ApplicationImpl extends Application {
 
 
     /**
-     * @see javax.faces.application.Application#createComponent(javax.faces.context.FacesContext, javax.faces.application.Resource)
+     * @see javax.faces.application.Application#_createComponent(javax.faces.context.FacesContext, javax.faces.application.Resource)
      */
     @Override
     public UIComponent createComponent(FacesContext context, Resource componentResource) throws FacesException {
@@ -1116,7 +1117,7 @@ public class ApplicationImpl extends Application {
         
 
     /**
-     * @see javax.faces.application.Application#createComponent(javax.faces.el.ValueBinding, javax.faces.context.FacesContext, String)
+     * @see javax.faces.application.Application#_createComponent(javax.faces.el.ValueBinding, javax.faces.context.FacesContext, String)
      */
     @SuppressWarnings("deprecation")
     public UIComponent createComponent(ValueBinding componentBinding,
@@ -1153,7 +1154,7 @@ public class ApplicationImpl extends Application {
 
 
     /**
-     * @see javax.faces.application.Application#createComponent(javax.el.ValueExpression, javax.faces.context.FacesContext, String, String)
+     * @see javax.faces.application.Application#_createComponent(javax.el.ValueExpression, javax.faces.context.FacesContext, String, String)
      */
     @Override
     public UIComponent createComponent(ValueExpression componentExpression,
@@ -1175,7 +1176,7 @@ public class ApplicationImpl extends Application {
 
 
     /**
-     * @see javax.faces.application.Application#createComponent(javax.faces.context.FacesContext, String, String)
+     * @see javax.faces.application.Application#_createComponent(javax.faces.context.FacesContext, String, String)
      */
     @Override
     public UIComponent createComponent(FacesContext context,
@@ -1191,6 +1192,26 @@ public class ApplicationImpl extends Application {
                                                true);
 
     }
+
+    @Override
+    public UIComponent createComponent(FacesContext context, String taglibURI, 
+    String tagName, Map<String, Object> attributes) {
+        UIComponent result = null;
+        Util.notNull("context", context);
+        Util.notNull("taglibURI", taglibURI);
+        Util.notNull("tagName", tagName);
+        ViewHandler vh = getViewHandler();
+        ViewDeclarationLanguage vdl = vh.getViewDeclarationLanguage(context, context.getViewRoot().getViewId());
+        
+        if (ViewDeclarationLanguage.FACELETS_VIEW_DECLARATION_LANGUAGE_ID.equals(vdl.getId())) {
+            FaceletFactory ff = associate.getFaceletFactory();
+            result = ff._createComponent(context, taglibURI, tagName, attributes);
+        }
+        
+        return result;
+    }
+    
+    
 
 
     /**
@@ -1925,7 +1946,7 @@ public class ApplicationImpl extends Application {
 
 
     /**
-     * Leveraged by {@link Application#createComponent(String)} and {@link Application#createComponent(javax.faces.context.FacesContext, String, String)}
+     * Leveraged by {@link Application#_createComponent(String)} and {@link Application#_createComponent(javax.faces.context.FacesContext, String, String)}
      * This method will apply any component and render annotations that may be present.
      */
     private UIComponent createComponentApplyAnnotations(FacesContext ctx,
@@ -1969,8 +1990,8 @@ public class ApplicationImpl extends Application {
 
 
     /**
-     * Leveraged by {@link Application#createComponent(javax.el.ValueExpression, javax.faces.context.FacesContext, String)} and
-     * {@link Application#createComponent(javax.el.ValueExpression, javax.faces.context.FacesContext, String, String)}.
+     * Leveraged by {@link Application#_createComponent(javax.el.ValueExpression, javax.faces.context.FacesContext, String)} and
+     * {@link Application#_createComponent(javax.el.ValueExpression, javax.faces.context.FacesContext, String, String)}.
      * This method will apply any component and render annotations that may be present.
      */
     private UIComponent createComponentApplyAnnotations(FacesContext ctx,

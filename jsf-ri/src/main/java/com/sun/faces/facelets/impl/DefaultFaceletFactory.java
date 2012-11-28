@@ -311,7 +311,7 @@ public class DefaultFaceletFactory extends FaceletFactory {
     }
 
     @Override
-    public UIComponent createComponent(FacesContext context, String taglibURI, String tagName, 
+    public UIComponent _createComponent(FacesContext context, String taglibURI, String tagName, 
     Map<String, Object> attributes) {
         UIComponent result = null;
         Application app = context.getApplication();
