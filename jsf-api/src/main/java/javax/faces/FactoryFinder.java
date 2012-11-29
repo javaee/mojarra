@@ -190,16 +190,6 @@ public final class FactoryFinder {
 
     /**
      * <p class="changed_added_2_2">The property name for the
-     * {@link javax.faces.view.facelets.FaceletFactory} class name.</p>
-     *
-     * @since 2.2
-     */
-    public final static String FACELET_FACTORY =
-         "javax.faces.view.facelets.FaceletFactory";
-    
-    
-    /**
-     * <p class="changed_added_2_2">The property name for the
      * {@link javax.faces.context.FlashFactory} class name.</p>
      * 
      * @since 2.2
@@ -295,7 +285,6 @@ public final class FactoryFinder {
             RENDER_KIT_FACTORY,
             VIEW_DECLARATION_LANGUAGE_FACTORY,
             FACELET_CACHE_FACTORY,
-            FACELET_FACTORY,
             TAG_HANDLER_DELEGATE_FACTORY
         };
 
@@ -326,8 +315,6 @@ public final class FactoryFinder {
                  javax.faces.view.ViewDeclarationLanguageFactory.class);
         factoryClasses.put(FACELET_CACHE_FACTORY,
                  javax.faces.view.facelets.FaceletCacheFactory.class);
-        factoryClasses.put(FACELET_FACTORY,
-                 javax.faces.view.facelets.FaceletFactory.class);
         factoryClasses.put(TAG_HANDLER_DELEGATE_FACTORY,
                  javax.faces.view.facelets.TagHandlerDelegateFactory.class);
         factoryClasses.put(FLOW_HANDLER_FACTORY,

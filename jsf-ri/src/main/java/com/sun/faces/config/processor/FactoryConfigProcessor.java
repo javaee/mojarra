@@ -285,9 +285,6 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
                 } else if (FACELET_CACHE_FACTORY.equals(n.getLocalName())) {
                     setFactory(FactoryFinder.FACELET_CACHE_FACTORY,
                                getNodeText(n));
-                } else if (FACELET_FACTORY.equals(n.getLocalName())) {
-                    setFactory(FactoryFinder.FACELET_FACTORY,
-                               getNodeText(n));
                 } else if (EXTERNAL_CONTEXT_FACTORY.equals(n.getLocalName())) {
                     setFactory(FactoryFinder.EXTERNAL_CONTEXT_FACTORY,
                                getNodeText(n));

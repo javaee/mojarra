@@ -58,14 +58,14 @@
 
 package com.sun.faces.facelets.tag.jsf;
 
+import com.sun.faces.application.ApplicationAssociate;
 import javax.faces.view.facelets.Facelet;
-import javax.faces.view.facelets.FaceletFactory;
 import com.sun.faces.facelets.util.ReflectionUtil;
 import com.sun.faces.facelets.el.VariableMapperWrapper;
+import com.sun.faces.facelets.impl.DefaultFaceletFactory;
 import com.sun.faces.facelets.tag.jsf.ComponentTagHandlerDelegateImpl.CreateComponentDelegate;
 import com.sun.faces.facelets.tag.MetaRulesetImpl;
 import com.sun.faces.facelets.tag.MetadataTargetImpl;
-import com.sun.faces.util.RequestStateManager;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
 import java.beans.BeanDescriptor;
@@ -344,8 +344,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
     throws IOException {
 
         FacesContext facesContext = ctx.getFacesContext();
-        FaceletFactory factory = (FaceletFactory)
-              RequestStateManager.get(facesContext, RequestStateManager.FACELET_FACTORY);
+        DefaultFaceletFactory factory = ApplicationAssociate.getInstance(facesContext.getExternalContext()).getFaceletFactory();
         VariableMapper orig = ctx.getVariableMapper();
         
         UIPanel facetComponent;

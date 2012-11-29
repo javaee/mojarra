@@ -89,9 +89,6 @@
     <facelet-cache-factory>
       com.sun.faces.facelets.impl.FaceletCacheFactoryImpl
     </facelet-cache-factory>
-    <facelet-factory>
-      com.sun.faces.facelets.impl.DefaultFaceletFactory
-    </facelet-factory>
     <flow-handler-factory>
       com.sun.faces.flow.FlowHandlerFactoryImpl
     </flow-handler-factory>

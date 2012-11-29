@@ -42,10 +42,10 @@ package com.sun.faces.application.view;
 
 import com.sun.faces.RIConstants;
 import javax.faces.view.facelets.Facelet;
-import javax.faces.view.facelets.FaceletFactory;
 import com.sun.faces.application.ApplicationAssociate;
 
 
+import com.sun.faces.facelets.impl.DefaultFaceletFactory;
 import java.io.IOException;
 import javax.faces.view.ViewMetadata;
 import javax.faces.component.UIViewRoot;
@@ -60,7 +60,7 @@ import javax.faces.application.ViewHandler;
 public class ViewMetadataImpl extends ViewMetadata {
 
     private String viewId;
-    private FaceletFactory faceletFactory;
+    private DefaultFaceletFactory faceletFactory;
     
 
     // ------------------------------------------------------------ Constructors

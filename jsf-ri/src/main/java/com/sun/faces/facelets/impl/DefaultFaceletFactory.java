@@ -64,7 +64,6 @@ import java.net.MalformedURLException;
 import javax.faces.component.UIComponent;
 import javax.faces.view.facelets.Facelet;
 import javax.faces.view.facelets.FaceletCache;
-import javax.faces.view.facelets.FaceletFactory;
 import com.sun.faces.facelets.compiler.Compiler;
 import com.sun.faces.util.Cache;
 import com.sun.faces.util.FacesLogger;
@@ -100,7 +99,7 @@ import javax.faces.context.FacesContext;
  * @version $Id: DefaultFaceletFactory.java,v 1.10 2007/04/09 01:13:17 youngm
  *          Exp $
  */
-public class DefaultFaceletFactory extends FaceletFactory {
+public class DefaultFaceletFactory {
 
     protected final static Logger log = FacesLogger.FACELETS_FACTORY.getLogger();
 
@@ -222,7 +221,6 @@ public class DefaultFaceletFactory extends FaceletFactory {
       *
       * @see com.sun.facelets.FaceletFactory#getFacelet(java.lang.String)
       */
-    @Override
     public Facelet getFacelet(FacesContext context, String uri) throws IOException {
 
         return this.getFacelet(context, resolveURL(uri));
@@ -230,7 +228,6 @@ public class DefaultFaceletFactory extends FaceletFactory {
     }
 
 
-    @Override
     public Facelet getMetadataFacelet(FacesContext context, String uri) throws IOException {
 
         return this.getMetadataFacelet(context, resolveURL(uri));
@@ -279,12 +276,10 @@ public class DefaultFaceletFactory extends FaceletFactory {
      * @throws FacesException
      * @throws ELException
      */
-    @Override
     public Facelet getFacelet(FacesContext context, URL url) throws IOException {
         return this.cache.getFacelet(url);
     }
 
-    @Override
     public Facelet getMetadataFacelet(FacesContext context, URL url) throws IOException {
         return this.cache.getViewMetadataFacelet(url);
     }
@@ -310,7 +305,6 @@ public class DefaultFaceletFactory extends FaceletFactory {
 
     }
 
-    @Override
     public UIComponent _createComponent(FacesContext context, String taglibURI, String tagName, 
     Map<String, Object> attributes) {
         UIComponent result = null;

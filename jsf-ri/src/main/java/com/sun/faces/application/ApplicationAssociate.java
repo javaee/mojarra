@@ -52,7 +52,6 @@ import com.sun.faces.facelets.compiler.Compiler;
 import com.sun.faces.facelets.compiler.SAXCompiler;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.SystemEvent;
-import javax.faces.view.facelets.FaceletFactory;
 import javax.faces.view.facelets.TagDecorator;
 import com.sun.faces.facelets.tag.composite.CompositeLibrary;
 import com.sun.faces.facelets.tag.jstl.core.JstlCoreLibrary;
@@ -129,7 +128,6 @@ import javax.faces.view.ViewDeclarationLanguage;
 import javax.faces.view.ViewMetadata;
 import javax.faces.view.facelets.Facelet;
 import javax.faces.view.facelets.FaceletCacheFactory;
-import javax.faces.view.facelets.FaceletFactoryWrapper;
 import javax.faces.view.facelets.FaceletsResourceResolver;
 
 /**
@@ -212,7 +210,7 @@ public class ApplicationAssociate {
     private AnnotationManager annotationManager;
     private boolean devModeEnabled;
     private Compiler compiler;
-    private FaceletFactory faceletFactory;
+    private DefaultFaceletFactory faceletFactory;
     private ResourceManager resourceManager;
     private ApplicationStateInfo applicationStateInfo;
 
@@ -464,7 +462,7 @@ public class ApplicationAssociate {
         this.errorPagePresent = errorPagePresent;
     }
 
-    public FaceletFactory getFaceletFactory() {
+    public DefaultFaceletFactory getFaceletFactory() {
         return faceletFactory;
     }
 
@@ -817,7 +815,7 @@ public class ApplicationAssociate {
     }
 
 
-    protected FaceletFactory createFaceletFactory(FacesContext ctx,
+    protected DefaultFaceletFactory createFaceletFactory(FacesContext ctx,
             Compiler c, WebConfiguration webConfig) {
 
         // refresh period
@@ -876,25 +874,8 @@ public class ApplicationAssociate {
         }
 
         // Resource.getResourceUrl(ctx,"/")
-        FaceletFactory toReturn = (FaceletFactory) 
-                FactoryFinder.getFactory(FactoryFinder.FACELET_FACTORY);
-        // Seek to initialize the DefaultFaceletFactory.
-        FaceletFactory factory = toReturn;
-        boolean continueSearching = true;
-        do {
-            if (factory instanceof DefaultFaceletFactory) {
-                DefaultFaceletFactory defaultFaceletFactory = 
-                        (DefaultFaceletFactory) factory;
-                defaultFaceletFactory.init(c, resolver, period, cache);
-                continueSearching = false;
-            } else {
-                if (factory instanceof FaceletFactoryWrapper) {
-                    factory = ((FaceletFactoryWrapper)factory).getWrapped();
-                } else {
-                    continueSearching = false;
-                }
-            }
-        } while (continueSearching);
+        DefaultFaceletFactory toReturn = new DefaultFaceletFactory();
+        toReturn.init(c, resolver, period, cache);
                 
         return toReturn;
 

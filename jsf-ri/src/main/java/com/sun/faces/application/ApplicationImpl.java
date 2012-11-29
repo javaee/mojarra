@@ -98,6 +98,7 @@ import com.sun.faces.el.ELUtils;
 import com.sun.faces.el.FacesCompositeELResolver;
 import com.sun.faces.el.PropertyResolverImpl;
 import com.sun.faces.el.VariableResolverImpl;
+import com.sun.faces.facelets.impl.DefaultFaceletFactory;
 import com.sun.faces.spi.InjectionProvider;
 import com.sun.faces.util.Cache;
 import com.sun.faces.util.Cache.Factory;
@@ -125,7 +126,6 @@ import javax.faces.application.Resource;
 import javax.faces.render.RenderKit;
 import javax.faces.render.Renderer;
 import javax.faces.view.ViewDeclarationLanguage;
-import javax.faces.view.facelets.FaceletFactory;
 
 
 /**
@@ -1204,7 +1204,7 @@ public class ApplicationImpl extends Application {
         ViewDeclarationLanguage vdl = vh.getViewDeclarationLanguage(context, context.getViewRoot().getViewId());
         
         if (ViewDeclarationLanguage.FACELETS_VIEW_DECLARATION_LANGUAGE_ID.equals(vdl.getId())) {
-            FaceletFactory ff = associate.getFaceletFactory();
+            DefaultFaceletFactory ff = associate.getFaceletFactory();
             result = ff._createComponent(context, taglibURI, tagName, attributes);
         }
         

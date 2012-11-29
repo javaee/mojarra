@@ -911,21 +911,6 @@
           ]]></xsd:documentation>
         </xsd:annotation>
       </xsd:element>
-      <xsd:element name="facelet-factory"
-                   type="javaee:fully-qualified-classType">
-        <xsd:annotation>
-          <xsd:documentation><![CDATA[
-
-           <p class="changed_added_2_2"> The "facelet-factory" element contains the
-            fully qualified class name of the concrete
-            FaceletFactory implementation class that will
-            be called when
-            FactoryFinder.getFactory(FACELET_FACTORY) is
-            called.</p>
-            
-          ]]></xsd:documentation>
-        </xsd:annotation>
-      </xsd:element>
       <xsd:element name="flash-factory"
                    type="javaee:fully-qualified-classType">
         <xsd:annotation>

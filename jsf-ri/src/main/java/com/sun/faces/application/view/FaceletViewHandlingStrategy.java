@@ -44,7 +44,6 @@ import com.sun.faces.RIConstants;
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.context.StateContext;
 import javax.faces.view.facelets.Facelet;
-import javax.faces.view.facelets.FaceletFactory;
 import com.sun.faces.facelets.el.ContextualCompositeMethodExpression;
 import com.sun.faces.facelets.el.VariableMapperWrapper;
 import com.sun.faces.facelets.impl.DefaultFaceletFactory;
@@ -137,8 +136,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
     private ViewDeclarationLanguageFactory vdlFactory;
 
-    // FaceletFactory singleton for this application
-    private FaceletFactory faceletFactory;
+    private DefaultFaceletFactory faceletFactory;
 
     // Array of viewId extensions that should be handled by Facelets
     private String[] extensionsArray;
@@ -226,7 +224,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     public BeanInfo getComponentMetadata(FacesContext context, 
             Resource ccResource) {
 
-        FaceletFactory factory = (FaceletFactory)
+        DefaultFaceletFactory factory = (DefaultFaceletFactory)
                 RequestStateManager.get(context, RequestStateManager.FACELET_FACTORY);
         assert(factory instanceof DefaultFaceletFactory);
         DefaultFaceletFactory ourFactory = (DefaultFaceletFactory) factory;
@@ -245,7 +243,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         CompositeComponentBeanInfo result;
         FaceletContext ctx = (FaceletContext)
                 context.getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
-        FaceletFactory factory = (FaceletFactory)
+        DefaultFaceletFactory factory = (DefaultFaceletFactory)
               RequestStateManager.get(context, RequestStateManager.FACELET_FACTORY);
         VariableMapper orig = ctx.getVariableMapper();
 
