@@ -41,48 +41,19 @@
     holder.
 
 -->
+
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.sun.faces.test</groupId>
+        <groupId>com.sun.faces.test.agnostic</groupId>
         <artifactId>pom</artifactId>
         <version>2.2.0-SNAPSHOT</version>
     </parent>
-    <groupId>com.sun.faces.test.agnostic</groupId>
+    <groupId>com.sun.faces.test.agnostic.scope</groupId>
     <artifactId>pom</artifactId>
     <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Agnostic</name>
-    <dependencies>
-        <dependency>
-            <groupId>com.sun.faces.test</groupId>
-            <artifactId>util</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+    <name>Mojarra ${project.version} - Test - Agnostic - Scope</name>
     <modules>
-        <module>ajax</module>
-        <module>application</module>
-        <module>composite</module>
-        <module>config</module>
-        <module>context</module>
-        <module>converter</module>
-        <module>dynamic</module>
-        <module>el</module>
-        <module>externalContext</module>
-        <module>flash</module>
-        <module>lifecycle</module>
-        <module>renderKit</module>
-        <module>resource</module>
-        <module>scope</module>
-        <module>shared</module>
-        <module>stateSaving</module>
-        <module>vdl</module>
+        <module>view</module>
     </modules>
-    <properties>
-        <webapp.projectStage>Production</webapp.projectStage>
-        <webapp.partialStateSaving>true</webapp.partialStateSaving>
-        <webapp.stateSavingMethod>server</webapp.stateSavingMethod>
-        <webapp.enableClientStateDebugging>false</webapp.enableClientStateDebugging>
-    </properties>    
 </project>
