@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -65,7 +65,9 @@ import com.sun.faces.el.ELUtils;
 import com.sun.faces.io.FastStringWriter;
 import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.util.FacesLogger;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ExceptionQueuedEvent;
@@ -196,6 +198,24 @@ public class WebappLifecycleListener implements ViewMapListener {
             handleAttributeEvent(beanName, 
                                  session.getAttribute(beanName), 
                                  ELUtils.Scope.SESSION);
+        }
+
+        /*
+         * When the session gets destroyed we need to make sure that each view
+         * scope that was still active cleans up properly.
+         */
+        Map<String, Object> activeViewMaps = (Map<String, Object>) session.getAttribute("com.sun.faces.activeViewMaps");
+        if (activeViewMaps != null) {
+            Iterator<Object> activeViewMapsIterator = activeViewMaps.values().iterator();
+            while(activeViewMapsIterator.hasNext()) {
+                Map<String, Object> viewMap = (Map<String, Object>) activeViewMapsIterator.next();
+                BeanManager beanManager = applicationAssociate.getBeanManager();
+                Iterator<Entry<String, Object>> viewEntries = viewMap.entrySet().iterator();
+                while(viewEntries.hasNext()) {
+                    Entry<String, Object> entry = viewEntries.next();
+                    beanManager.destroy(entry.getKey(), entry.getValue());
+                }
+            }
         }
     }
 
