@@ -51,7 +51,7 @@
     <groupId>com.sun.faces.test.agnostic.vdl.facelets</groupId>
     <artifactId>programmaticCompositeComponent</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra ${project.version} - Test - Agnostic - Facelets - ProgrammaticCompositeComponent Tests</name>
+    <name>Mojarra ${project.version} - Test - Agnostic - VDL - Facelets - ProgrammaticCompositeComponent Tests</name>
     <build>
         <finalName>test-agnostic-vdl-facelets-programmaticCompositeComponent</finalName>
     </build>
