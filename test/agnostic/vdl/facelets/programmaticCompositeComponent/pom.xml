@@ -48,12 +48,12 @@
       <artifactId>pom</artifactId>
       <version>2.2.0-SNAPSHOT</version>
     </parent>
-    <groupId>com.sun.faces.test.webprofile.renderKit</groupId>
+    <groupId>com.sun.faces.test.agnostic.vdl.facelets</groupId>
     <artifactId>programmaticCompositeComponent</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra ${project.version} - Test - webprofile - RenderKit - ProgrammaticCompositeComponent Tests</name>
+    <name>Mojarra ${project.version} - Test - Agnostic - Facelets - ProgrammaticCompositeComponent Tests</name>
     <build>
-        <finalName>test-webprofile-renderKit-programmaticCompositeComponent</finalName>
+        <finalName>test-agnostic-vdl-facelets-programmaticCompositeComponent</finalName>
     </build>
     <properties>
         <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
