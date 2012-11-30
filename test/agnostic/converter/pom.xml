@@ -10,7 +10,7 @@
     <groupId>com.sun.faces.test.agnostic.converter</groupId>
     <artifactId>pom</artifactId>
     <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Agnostic - converter</name>
+    <name>Mojarra ${project.version} - Test - Agnostic - Converter</name>
     <modules>
         <module>basic</module>
     </modules>
