@@ -56,9 +56,6 @@
     <build>
         <finalName>test-agnostic-application-basic</finalName>
     </build>
-    <properties>
-        <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
-    </properties>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -67,4 +64,7 @@
             <scope>compile</scope>
         </dependency>
     </dependencies>
+    <properties>
+        <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
+    </properties>
 </project>
