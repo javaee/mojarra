@@ -20,12 +20,12 @@
         </dependency>
     </dependencies>
     <modules>
+        <module>adf</module>
         <module>el</module>
         <module>flow</module>
         <module>lifecycle</module>
-        <module>stateSaving</module>
         <module>renderKit</module>
-        <module>adf</module>
+        <module>stateSaving</module>
     </modules>
     <properties>
         <webapp.projectStage>Production</webapp.projectStage>
