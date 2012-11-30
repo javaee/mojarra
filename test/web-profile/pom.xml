@@ -27,9 +27,4 @@
         <module>renderKit</module>
         <module>stateSaving</module>
     </modules>
-    <properties>
-        <webapp.projectStage>Production</webapp.projectStage>
-        <webapp.partialStateSaving>true</webapp.partialStateSaving>
-        <webapp.stateSavingMethod>server</webapp.stateSavingMethod>
-    </properties>
 </project>

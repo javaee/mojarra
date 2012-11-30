@@ -36,7 +36,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-failsafe-plugin</artifactId>
-                        <version>2.12</version>
                         <inherited>true</inherited>
                         <executions>
                             <execution>
@@ -64,7 +63,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-report-plugin</artifactId>
-                        <version>2.12</version>
                         <reportSets>
                             <reportSet>
                                 <id>integration-tests</id>

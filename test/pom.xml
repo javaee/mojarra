@@ -786,12 +786,15 @@
         </profile>
     </profiles>
     <properties>
-        <project.build.finalName>${project.build.finalName}</project.build.finalName>
         <integration.serverName>localhost</integration.serverName>
         <integration.serverPort>8080</integration.serverPort>
         <jsf.artifactId>javax.faces</jsf.artifactId>
         <jsf.groupId>org.glassfish</jsf.groupId>
         <jsf.version>${project.version}</jsf.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+        <webapp.enableClientStateDebugging>false</webapp.enableClientStateDebugging>
+        <webapp.partialStateSaving>true</webapp.partialStateSaving>
+        <webapp.projectStage>Production</webapp.projectStage>
+        <webapp.stateSavingMethod>server</webapp.stateSavingMethod>
+    </properties>    
 </project>
