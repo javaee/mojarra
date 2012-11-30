@@ -10,7 +10,7 @@
     <groupId>com.sun.faces.test.agnostic.lifecycle</groupId>
     <artifactId>pom</artifactId>
     <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Agnostic - lifecycle</name>
+    <name>Mojarra ${project.version} - Test - Agnostic - Lifecycle</name>
     <modules>
         <module>basic</module>
         <module>debugObjectOutputStream</module>

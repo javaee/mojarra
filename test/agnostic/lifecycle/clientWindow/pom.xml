@@ -51,7 +51,7 @@
     <groupId>com.sun.faces.test.agnostic.lifecycle</groupId>
     <artifactId>clientWindow</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra ${project.version} - Test - Agnostic - Lifecycle - clientWindow Tests</name>
+    <name>Mojarra ${project.version} - Test - Agnostic - Lifecycle - ClientWindow Tests</name>
     <build>
         <finalName>test-agnostic-lifecycle-clientWindow</finalName>
     </build>

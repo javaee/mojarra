@@ -51,7 +51,7 @@
     <groupId>com.sun.faces.test.agnostic.lifecycle</groupId>
     <artifactId>debugObjectOutputStream</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra ${project.version} - Test - Agnostic - Lifecycle - debugObjectOutputStream Tests</name>
+    <name>Mojarra ${project.version} - Test - Agnostic - Lifecycle - DebugObjectOutputStream Tests</name>
     <build>
         <finalName>test-agnostic-lifecycle-debugObjectOutputStream</finalName>
     </build>

@@ -51,7 +51,7 @@
     <groupId>com.sun.faces.test.agnostic.lifecycle</groupId>
     <artifactId>csrf</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra ${project.version} - Test - Agnostic - Lifecycle - csrf Tests</name>
+    <name>Mojarra ${project.version} - Test - Agnostic - Lifecycle - CSRF Tests</name>
     <build>
         <finalName>test-agnostic-lifecycle-csrf</finalName>
     </build>
