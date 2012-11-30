@@ -55,8 +55,6 @@
     <build>
         <finalName>test-webprofile-flow-basic_faces_flow_call</finalName>
     </build>
-    <dependencies>
-    </dependencies>
     <properties>
         <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
     </properties>
