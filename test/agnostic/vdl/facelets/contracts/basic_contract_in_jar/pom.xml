@@ -49,16 +49,16 @@
         <artifactId>pom</artifactId>
         <version>2.2.0-SNAPSHOT</version>
     </parent>
-    <groupId>com.sun.faces.test.agnostic.vdl.facelets.contracts.basic_contract_in_jar</groupId>
+    <groupId>com.sun.faces.test.agnostic.vdl.facelets.contracts</groupId>
     <artifactId>basic_contract_in_jar</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra ${project.version} - Test - Agnostic - VDL - Facelets - Contracts - basic_contract_in_jar</name>
+    <name>Mojarra ${project.version} - Test - Agnostic - VDL - Facelets - Contracts - Basic_contract_in_jar</name>
     <build>
         <finalName>test-agnostic-vdl-facelets-contracts-basic_contract_in_jar</finalName>
     </build>
     <dependencies>
       <dependency>
-        <groupId>com.sun.faces.test.agnostic.vdl.facelets.contracts.basic</groupId>
+        <groupId>com.sun.faces.test.agnostic.vdl.facelets.contracts</groupId>
         <artifactId>contract_jar</artifactId>
         <version>${project.version}</version>
       </dependency>
