@@ -75,8 +75,8 @@ public class Issue2401IT {
     @Test
     public void testResourceWithAndWithoutLibrary() throws Exception {
         HtmlPage page = webClient.getPage(webUrl+"faces/start.xhtml");
-        assertTrue(page.asText().contains("Resource created with library: /test-agnostic-resource/faces/javax.faces.resource/images/background.png?ln=css"));
-        assertTrue(page.asText().contains("Resource created without library: /test-agnostic-resource/faces/javax.faces.resource/css/images/background.png"));
+        assertTrue(page.asText().contains("Resource created with library: /test-agnostic-resource-basic/faces/javax.faces.resource/images/background.png?ln=css"));
+        assertTrue(page.asText().contains("Resource created without library: /test-agnostic-resource-basic/faces/javax.faces.resource/css/images/background.png"));
     }
     
     @Test 
