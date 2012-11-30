@@ -51,7 +51,7 @@
     <groupId>com.sun.faces.test.agnostic.vdl.facelets.faces-config-extension</groupId>
     <artifactId>pom</artifactId>
     <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Agnostic - VDL - Facelets - faces-config-extension</name>
+    <name>Mojarra ${project.version} - Test - Agnostic - VDL - Facelets - Faces-config-extension</name>
     <modules>
         <module>html5</module>
     </modules>
