@@ -43,7 +43,7 @@ import java.io.Serializable;
 
 import java.util.Map;
 import javax.faces.context.FacesContext;
-import javax.faces.flow.ViewScoped;
+import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
 @Named

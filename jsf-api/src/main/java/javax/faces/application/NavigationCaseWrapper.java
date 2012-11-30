@@ -68,6 +68,21 @@ public abstract class NavigationCaseWrapper extends NavigationCase implements Fa
     }
     
     @Override
+    public boolean equals(Object o) {
+        return getWrapped().equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return getWrapped().hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return getWrapped().toString();
+    }
+
+    @Override
     public abstract NavigationCase getWrapped();
 
     @Override

@@ -57,7 +57,7 @@ import javax.enterprise.inject.spi.BeforeShutdown;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.faces.flow.ViewScoped;
+import javax.faces.view.ViewScoped;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 
