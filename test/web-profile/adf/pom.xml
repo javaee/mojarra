@@ -10,7 +10,7 @@
     <groupId>com.sun.faces.test.webprofile.adf</groupId>
     <artifactId>pom</artifactId>
     <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Web-Profile - adf</name>
+    <name>Mojarra ${project.version} - Test - Web-Profile - ADF</name>
     <modules>
         <module>basic</module>
     </modules>
