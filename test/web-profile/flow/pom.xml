@@ -13,12 +13,12 @@
     <name>Mojarra ${project.version} - Test - Web-Profile - Flow</name>
     <modules>
         <module>basic</module>
+        <module>basic_faces_flow_call</module>
         <module>basic-multi-page</module>
         <module>basic-multi-page-fdl-in-web-inf</module>
         <module>factory</module>
-        <module>multi-page-from-jar</module>
         <module>intermediate</module>
-        <module>basic_faces_flow_call</module>
+        <module>multi-page-from-jar</module>
         <module>viewScoped</module>
     </modules>
 </project>
