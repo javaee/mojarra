@@ -55,8 +55,6 @@
     <build>
         <finalName>test-webprofile-flow-basic_multi_page_fdl_in_web_inf</finalName>
     </build>
-    <dependencies>
-    </dependencies>
     <properties>
         <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
     </properties>
