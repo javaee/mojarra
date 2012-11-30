@@ -85,6 +85,7 @@ public abstract class VisitContextWrapper extends VisitContext implements FacesW
         return getWrapped().invokeVisitCallback(component, callback);
     }
 
+    @Override
     public abstract VisitContext getWrapped();
 
     

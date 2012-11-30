@@ -68,6 +68,7 @@ public abstract class ExceptionHandlerWrapper extends ExceptionHandler implement
      * @return the wrapped {@link ExceptionHandler} instance
      * @see javax.faces.FacesWrapper#getWrapped() 
      */
+    @Override
     public abstract ExceptionHandler getWrapped();
 
 
@@ -81,6 +82,7 @@ public abstract class ExceptionHandlerWrapper extends ExceptionHandler implement
      *
      * @see ExceptionHandler#getHandledExceptionQueuedEvent()
      */
+    @Override
     public ExceptionQueuedEvent getHandledExceptionQueuedEvent() {
         return getWrapped().getHandledExceptionQueuedEvent();
     }
@@ -93,6 +95,7 @@ public abstract class ExceptionHandlerWrapper extends ExceptionHandler implement
      *
      * @see javax.faces.context.ExceptionHandler#handle()
      */
+    @Override
     public void handle() throws FacesException {
         getWrapped().handle();
     }
@@ -105,6 +108,7 @@ public abstract class ExceptionHandlerWrapper extends ExceptionHandler implement
      *
      * @see javax.faces.context.ExceptionHandler#isListenerForSource(Object) ()
      */
+    @Override
     public boolean isListenerForSource(Object source) {
         return getWrapped().isListenerForSource(source);
     }
@@ -117,6 +121,7 @@ public abstract class ExceptionHandlerWrapper extends ExceptionHandler implement
      *
      * @see javax.faces.context.ExceptionHandler#processEvent(javax.faces.event.SystemEvent)
      */
+    @Override
     public void processEvent(SystemEvent event) throws AbortProcessingException {
         getWrapped().processEvent(event);
     }
@@ -129,6 +134,7 @@ public abstract class ExceptionHandlerWrapper extends ExceptionHandler implement
      *
      * @see javax.faces.context.ExceptionHandler#getRootCause(Throwable)
      */
+    @Override
     public Throwable getRootCause(Throwable t) {
         return getWrapped().getRootCause(t);
     }
@@ -141,6 +147,7 @@ public abstract class ExceptionHandlerWrapper extends ExceptionHandler implement
      *
      * @see ExceptionHandler#getHandledExceptionQueuedEvents()
      */
+    @Override
     public Iterable<ExceptionQueuedEvent> getHandledExceptionQueuedEvents() {
         return getWrapped().getHandledExceptionQueuedEvents();
     }
@@ -153,6 +160,7 @@ public abstract class ExceptionHandlerWrapper extends ExceptionHandler implement
      *
      * @see ExceptionHandler#getUnhandledExceptionQueuedEvents()
      */
+    @Override
     public Iterable<ExceptionQueuedEvent> getUnhandledExceptionQueuedEvents() {
         return getWrapped().getUnhandledExceptionQueuedEvents();
     }

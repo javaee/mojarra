@@ -66,6 +66,7 @@ public abstract class ConfigurableNavigationHandlerWrapper extends ConfigurableN
     /**
      * @return the instance that we are wrapping.
      */ 
+    @Override
     public abstract ConfigurableNavigationHandler getWrapped();
     
     

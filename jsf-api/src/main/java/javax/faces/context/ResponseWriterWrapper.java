@@ -65,7 +65,7 @@ public abstract class ResponseWriterWrapper extends ResponseWriter implements Fa
      * <p class="changed_modified_2_0">Return the instance that we are wrapping.
      * As of version 2, this method is public.</p>
      */
-
+    @Override
     public abstract ResponseWriter getWrapped();
 
     // -------------------------- Methods from javax.faces.contxt.ResponseWriter
@@ -79,6 +79,7 @@ public abstract class ResponseWriterWrapper extends ResponseWriter implements Fa
      * @see ResponseWriter#getContentType()
      * @since 1.2
      */
+    @Override
     public String getContentType() {
 
         return getWrapped().getContentType();
@@ -94,6 +95,7 @@ public abstract class ResponseWriterWrapper extends ResponseWriter implements Fa
      * @see ResponseWriter#getCharacterEncoding()
      * @since 1.2
      */
+    @Override
     public String getCharacterEncoding() {
 
         return getWrapped().getCharacterEncoding();
@@ -109,6 +111,7 @@ public abstract class ResponseWriterWrapper extends ResponseWriter implements Fa
      * @see ResponseWriter#flush()
      * @since 1.2
      */
+    @Override
     public void flush() throws IOException {
 
         getWrapped().flush();
@@ -124,6 +127,7 @@ public abstract class ResponseWriterWrapper extends ResponseWriter implements Fa
      * @see ResponseWriter#startDocument()
      * @since 1.2
      */
+    @Override
     public void startDocument() throws IOException {
 
         getWrapped().startDocument();
@@ -139,6 +143,7 @@ public abstract class ResponseWriterWrapper extends ResponseWriter implements Fa
      * @see ResponseWriter#endDocument()
      * @since 1.2
      */
+    @Override
     public void endDocument() throws IOException {
 
         getWrapped().endDocument();
@@ -154,6 +159,7 @@ public abstract class ResponseWriterWrapper extends ResponseWriter implements Fa
      * @see ResponseWriter#startElement(String, javax.faces.component.UIComponent)
      * @since 1.2
      */
+    @Override
     public void startElement(String name, UIComponent component)
             throws IOException {
 
@@ -168,6 +174,7 @@ public abstract class ResponseWriterWrapper extends ResponseWriter implements Fa
      * @since 2.0
      * @throws IOException on any read/write error
      */
+    @Override
     public void startCDATA() throws IOException {
         getWrapped().startCDATA();
     }
@@ -179,6 +186,7 @@ public abstract class ResponseWriterWrapper extends ResponseWriter implements Fa
      * @since 2.0
      * @throws IOException on any read/write error
      */
+    @Override
     public void endCDATA() throws IOException {
         getWrapped().endCDATA();
     }
@@ -193,6 +201,7 @@ public abstract class ResponseWriterWrapper extends ResponseWriter implements Fa
      * @since 1.2
      * @throws IOException on any read/write error
      */
+    @Override
     public void endElement(String name) throws IOException {
 
         getWrapped().endElement(name);
@@ -208,6 +217,7 @@ public abstract class ResponseWriterWrapper extends ResponseWriter implements Fa
      * @see ResponseWriter#writeAttribute(String, Object, String)
      * @since 1.2
      */
+    @Override
     public void writeAttribute(String name, Object value, String property)
             throws IOException {
 
@@ -224,6 +234,7 @@ public abstract class ResponseWriterWrapper extends ResponseWriter implements Fa
      * @see ResponseWriter#writeURIAttribute(String, Object, String)
      * @since 1.2
      */
+    @Override
     public void writeURIAttribute(String name, Object value, String property)
             throws IOException {
 
@@ -240,6 +251,7 @@ public abstract class ResponseWriterWrapper extends ResponseWriter implements Fa
      * @see ResponseWriter#writeComment(Object)
      * @since 1.2
      */
+    @Override
     public void writeComment(Object comment) throws IOException {
 
         getWrapped().writeComment(comment);
@@ -280,6 +292,7 @@ public abstract class ResponseWriterWrapper extends ResponseWriter implements Fa
      * @see ResponseWriter#writeText(Object, String)
      * @since 1.2
      */
+    @Override
     public void writeText(Object text, String property) throws IOException {
 
         getWrapped().writeText(text, property);
@@ -295,6 +308,7 @@ public abstract class ResponseWriterWrapper extends ResponseWriter implements Fa
      * @since 1.2
      */
 
+    @Override
     public void writeText(Object text, UIComponent component, String property)
             throws IOException {
         getWrapped().writeText(text, component, property);
@@ -309,6 +323,7 @@ public abstract class ResponseWriterWrapper extends ResponseWriter implements Fa
      * @see ResponseWriter#writeText(char[], int, int)
      * @since 1.2
      */
+    @Override
     public void writeText(char[] text, int off, int len) throws IOException {
 
         getWrapped().writeText(text, off, len);
@@ -324,6 +339,7 @@ public abstract class ResponseWriterWrapper extends ResponseWriter implements Fa
      * @see ResponseWriter#cloneWithWriter(java.io.Writer)
      * @since 1.2
      */
+    @Override
     public ResponseWriter cloneWithWriter(Writer writer) {
 
         return getWrapped().cloneWithWriter(writer);
@@ -342,6 +358,7 @@ public abstract class ResponseWriterWrapper extends ResponseWriter implements Fa
      * @see ResponseWriter#close()
      * @since 1.2
      */
+    @Override
     public void close() throws IOException {
 
         getWrapped().close();
@@ -357,6 +374,7 @@ public abstract class ResponseWriterWrapper extends ResponseWriter implements Fa
      * @see ResponseWriter#write(char[], int, int)
      * @since 1.2
      */
+    @Override
     public void write(char[] cbuf, int off, int len) throws IOException {
 
         getWrapped().write(cbuf, off, len);

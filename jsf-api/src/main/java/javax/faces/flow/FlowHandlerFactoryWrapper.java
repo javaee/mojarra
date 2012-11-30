@@ -57,14 +57,8 @@ import javax.faces.FacesWrapper;
  *
  * @since 2.2
  */
-public class FlowHandlerFactoryWrapper extends FlowHandlerFactory implements FacesWrapper<FlowHandlerFactory> {
+public abstract class FlowHandlerFactoryWrapper extends FlowHandlerFactory implements FacesWrapper<FlowHandlerFactory> {
     
-    private FlowHandlerFactory wrapped;
-
-    public FlowHandlerFactoryWrapper(FlowHandlerFactory wrapped) {
-        this.wrapped = wrapped;
-    }
-
     /**
      * <p class="changed_added_2_2">A class that implements this
      * interface uses this method to return an instance of the class
@@ -72,10 +66,8 @@ public class FlowHandlerFactoryWrapper extends FlowHandlerFactory implements Fac
      *
      * @since 2.2
      */
-
-    public FlowHandlerFactory getWrapped() {
-        return wrapped;
-    }
+    @Override
+    public abstract FlowHandlerFactory getWrapped();
 
     @Override
     public FlowHandler createFlowHandler(FacesContext context) {

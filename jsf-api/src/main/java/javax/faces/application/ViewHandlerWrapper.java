@@ -70,7 +70,7 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
     /**
      * @return the instance that we are wrapping.
      */ 
-
+    @Override
     public abstract ViewHandler getWrapped();
 
 
@@ -87,6 +87,7 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
      * @since 1.2
      */
 
+    @Override
     public String calculateCharacterEncoding(FacesContext context) {
 
         return getWrapped().calculateCharacterEncoding(context);
@@ -102,6 +103,7 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
      * @see ViewHandler#calculateLocale(javax.faces.context.FacesContext)
      * @since 1.2
      */
+    @Override
     public Locale calculateLocale(FacesContext context) {
 
         return getWrapped().calculateLocale(context);
@@ -149,6 +151,7 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
      * @see ViewHandler#calculateRenderKitId(javax.faces.context.FacesContext)
      * @since 1.2
      */
+    @Override
     public String calculateRenderKitId(FacesContext context) {
 
         return getWrapped().calculateRenderKitId(context);
@@ -164,6 +167,7 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
      * @see ViewHandler#createView(javax.faces.context.FacesContext, String)
      * @since 1.2
      */
+    @Override
     public UIViewRoot createView(FacesContext context, String viewId) {
 
         return getWrapped().createView(context, viewId);
@@ -179,6 +183,7 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
      * @see ViewHandler#getActionURL(javax.faces.context.FacesContext, String)
      * @since 1.2
      */
+    @Override
     public String getActionURL(FacesContext context, String viewId) {
 
         return getWrapped().getActionURL(context, viewId);
@@ -280,6 +285,7 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
      * @see ViewHandler#getResourceURL(javax.faces.context.FacesContext, String)
      * @since 1.2
      */
+    @Override
     public String getResourceURL(FacesContext context, String path) {
 
         return getWrapped().getResourceURL(context, path);
@@ -310,6 +316,7 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
      * @see ViewHandler#initView
      * @since 1.2
      */
+    @Override
     public void initView(FacesContext context) throws FacesException {
         
         getWrapped().initView(context);
@@ -323,6 +330,7 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
      * @see ViewHandler#renderView(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot)
      * @since 1.2
      */
+    @Override
     public void renderView(FacesContext context, UIViewRoot viewToRender)
     throws IOException, FacesException {
 
@@ -339,6 +347,7 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
      * @see ViewHandler#restoreView(javax.faces.context.FacesContext, String)
      * @since 1.2
      */
+    @Override
     public UIViewRoot restoreView(FacesContext context, String viewId) {
 
         return getWrapped().restoreView(context, viewId);
@@ -353,6 +362,7 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
      * @see ViewHandler#writeState(javax.faces.context.FacesContext)
      * @since 1.2
      */
+    @Override
     public void writeState(FacesContext context) throws IOException {
 	getWrapped().writeState(context);
 

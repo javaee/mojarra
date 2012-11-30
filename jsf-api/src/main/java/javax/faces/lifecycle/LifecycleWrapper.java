@@ -64,6 +64,7 @@ import javax.faces.event.PhaseListener;
 
 public abstract class LifecycleWrapper extends Lifecycle implements FacesWrapper<Lifecycle> {
 
+    @Override
     public abstract Lifecycle getWrapped();
 
     @Override

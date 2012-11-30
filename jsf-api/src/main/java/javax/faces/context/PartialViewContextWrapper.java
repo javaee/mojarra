@@ -68,6 +68,7 @@ public abstract class PartialViewContextWrapper extends PartialViewContext imple
      * @return the wrapped {@link PartialViewContext} instance
      * @see javax.faces.FacesWrapper#getWrapped()
      */
+    @Override
     public abstract PartialViewContext getWrapped();
 
 
@@ -81,6 +82,7 @@ public abstract class PartialViewContextWrapper extends PartialViewContext imple
      *
      * @see PartialViewContext#getExecuteIds()
      */
+    @Override
     public Collection<String> getExecuteIds() {
         return getWrapped().getExecuteIds();
     }
@@ -92,6 +94,7 @@ public abstract class PartialViewContextWrapper extends PartialViewContext imple
      *
      * @see PartialViewContext#getRenderIds()
      */
+    @Override
     public Collection<String> getRenderIds() {
         return getWrapped().getRenderIds();
     }
@@ -103,6 +106,7 @@ public abstract class PartialViewContextWrapper extends PartialViewContext imple
      *
      * @see PartialViewContext#getPartialResponseWriter()
      */
+    @Override
     public PartialResponseWriter getPartialResponseWriter() {
         return getWrapped().getPartialResponseWriter();
     }
@@ -126,6 +130,7 @@ public abstract class PartialViewContextWrapper extends PartialViewContext imple
      *
      * @see javax.faces.context.PartialViewContext#isAjaxRequest()
      */
+    @Override
     public boolean isAjaxRequest() {
         return getWrapped().isAjaxRequest();
     }
@@ -137,6 +142,7 @@ public abstract class PartialViewContextWrapper extends PartialViewContext imple
      *
      * @see PartialViewContext#isPartialRequest()
      */
+    @Override
     public boolean isPartialRequest() {
         return getWrapped().isPartialRequest();
     }
@@ -148,6 +154,7 @@ public abstract class PartialViewContextWrapper extends PartialViewContext imple
      *
      * @see PartialViewContext#isExecuteAll()
      */
+    @Override
     public boolean isExecuteAll() {
         return getWrapped().isExecuteAll();
     }
@@ -159,6 +166,7 @@ public abstract class PartialViewContextWrapper extends PartialViewContext imple
      *
      * @see PartialViewContext#isRenderAll()
      */
+    @Override
     public boolean isRenderAll() {
         return getWrapped().isRenderAll();
     }
@@ -170,6 +178,7 @@ public abstract class PartialViewContextWrapper extends PartialViewContext imple
      *
      * @see PartialViewContext#isResetValues()
      */
+    @Override
     public boolean isResetValues() {
         return getWrapped().isResetValues();
     }
@@ -181,6 +190,7 @@ public abstract class PartialViewContextWrapper extends PartialViewContext imple
      *
      * @see PartialViewContext#setRenderAll(boolean)
      */
+    @Override
     public void setRenderAll(boolean renderAll) {
         getWrapped().setRenderAll(renderAll);
     }
@@ -192,6 +202,7 @@ public abstract class PartialViewContextWrapper extends PartialViewContext imple
      *
      * @see PartialViewContext#release()
      */
+    @Override
     public void release() {
         getWrapped().release();
     }
@@ -203,6 +214,7 @@ public abstract class PartialViewContextWrapper extends PartialViewContext imple
      *
      * @see PartialViewContext#processPartial(PhaseId)
      */
+    @Override
     public void processPartial(PhaseId phaseId) {
         getWrapped().processPartial(phaseId);
     }

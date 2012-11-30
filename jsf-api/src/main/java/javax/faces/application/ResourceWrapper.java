@@ -71,6 +71,7 @@ public abstract class ResourceWrapper extends Resource implements FacesWrapper<R
     /**
      * @return the instance that we are wrapping.
      */ 
+    @Override
     public abstract Resource getWrapped();
 
 
@@ -81,6 +82,7 @@ public abstract class ResourceWrapper extends Resource implements FacesWrapper<R
      * is to call {@link Resource#getInputStream} on the wrapped {@link
      * ResourceHandler} object.</p>
      */
+    @Override
     public InputStream getInputStream() throws IOException {
 
         return getWrapped().getInputStream();
@@ -93,6 +95,7 @@ public abstract class ResourceWrapper extends Resource implements FacesWrapper<R
      * is to call {@link Resource#getURL} on the wrapped {@link
      * ResourceHandler} object.</p>
      */
+    @Override
     public URL getURL() {
 
         return getWrapped().getURL();
@@ -105,6 +108,7 @@ public abstract class ResourceWrapper extends Resource implements FacesWrapper<R
      * is to call {@link Resource#getResponseHeaders} on the wrapped {@link
      * ResourceHandler} object.</p>
      */
+    @Override
     public Map<String, String> getResponseHeaders() {
 
         return getWrapped().getResponseHeaders();
@@ -117,6 +121,7 @@ public abstract class ResourceWrapper extends Resource implements FacesWrapper<R
      * is to call {@link Resource#getRequestPath} on the wrapped {@link
      * ResourceHandler} object.</p>
      */
+    @Override
     public String getRequestPath() {
 
         return getWrapped().getRequestPath();
@@ -129,6 +134,7 @@ public abstract class ResourceWrapper extends Resource implements FacesWrapper<R
      * is to call {@link Resource#userAgentNeedsUpdate} on the wrapped {@link
      * ResourceHandler} object.</p>
      */
+    @Override
     public boolean userAgentNeedsUpdate(FacesContext context) {
 
         return getWrapped().userAgentNeedsUpdate(context);

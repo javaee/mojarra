@@ -453,9 +453,6 @@ public class ApplicationImpl extends Application {
     }
 
 
-    /**
-     * @see javax.faces.application.Application#_createComponent(javax.el.ValueExpression, javax.faces.context.FacesContext, String)
-     */
     @Override
     public UIComponent createComponent(ValueExpression componentExpression,
                                        FacesContext context,
@@ -927,9 +924,6 @@ public class ApplicationImpl extends Application {
     }
 
 
-    /**
-     * @see javax.faces.application.Application#_createComponent(String)
-     */
     public UIComponent createComponent(String componentType) throws FacesException {
 
         Util.notNull("componentType", componentType);
@@ -942,9 +936,6 @@ public class ApplicationImpl extends Application {
     }
 
 
-    /**
-     * @see javax.faces.application.Application#_createComponent(javax.faces.context.FacesContext, javax.faces.application.Resource)
-     */
     @Override
     public UIComponent createComponent(FacesContext context, Resource componentResource) throws FacesException {
 
@@ -1116,9 +1107,6 @@ public class ApplicationImpl extends Application {
 
         
 
-    /**
-     * @see javax.faces.application.Application#_createComponent(javax.faces.el.ValueBinding, javax.faces.context.FacesContext, String)
-     */
     @SuppressWarnings("deprecation")
     public UIComponent createComponent(ValueBinding componentBinding,
                                        FacesContext context,
@@ -1153,9 +1141,6 @@ public class ApplicationImpl extends Application {
     }
 
 
-    /**
-     * @see javax.faces.application.Application#_createComponent(javax.el.ValueExpression, javax.faces.context.FacesContext, String, String)
-     */
     @Override
     public UIComponent createComponent(ValueExpression componentExpression,
                                        FacesContext context,
@@ -1175,9 +1160,6 @@ public class ApplicationImpl extends Application {
     }
 
 
-    /**
-     * @see javax.faces.application.Application#_createComponent(javax.faces.context.FacesContext, String, String)
-     */
     @Override
     public UIComponent createComponent(FacesContext context,
                                        String componentType,
@@ -1946,7 +1928,7 @@ public class ApplicationImpl extends Application {
 
 
     /**
-     * Leveraged by {@link Application#_createComponent(String)} and {@link Application#_createComponent(javax.faces.context.FacesContext, String, String)}
+     * Leveraged by {@link Application#createComponent(String)} and {@link Application#createComponent(javax.faces.context.FacesContext, String, String)}
      * This method will apply any component and render annotations that may be present.
      */
     private UIComponent createComponentApplyAnnotations(FacesContext ctx,
@@ -1990,8 +1972,8 @@ public class ApplicationImpl extends Application {
 
 
     /**
-     * Leveraged by {@link Application#_createComponent(javax.el.ValueExpression, javax.faces.context.FacesContext, String)} and
-     * {@link Application#_createComponent(javax.el.ValueExpression, javax.faces.context.FacesContext, String, String)}.
+     * Leveraged by {@link Application#createComponent(javax.el.ValueExpression, javax.faces.context.FacesContext, String)} and
+     * {@link Application#createComponent(javax.el.ValueExpression, javax.faces.context.FacesContext, String, String)}.
      * This method will apply any component and render annotations that may be present.
      */
     private UIComponent createComponentApplyAnnotations(FacesContext ctx,

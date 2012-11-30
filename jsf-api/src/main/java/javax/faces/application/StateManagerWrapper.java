@@ -63,7 +63,7 @@ public abstract class StateManagerWrapper extends StateManager implements FacesW
     /**
      * @return the instance that we are wrapping.
      */ 
-
+    @Override
     public abstract StateManager getWrapped();
 
     // ----------------------- Methods from javax.faces.application.StateManager
@@ -77,6 +77,7 @@ public abstract class StateManagerWrapper extends StateManager implements FacesW
      * @see StateManager#saveSerializedView(javax.faces.context.FacesContext)
      * @since 1.2
      */
+    @Override
     public SerializedView saveSerializedView(FacesContext context) {
 
         return getWrapped().saveSerializedView(context);
@@ -92,6 +93,7 @@ public abstract class StateManagerWrapper extends StateManager implements FacesW
      * @see StateManager#saveView(javax.faces.context.FacesContext)
      * @since 1.2
      */
+    @Override
     public Object saveView(FacesContext context) {
         return getWrapped().saveView(context);
     }
@@ -105,6 +107,7 @@ public abstract class StateManagerWrapper extends StateManager implements FacesW
      * @see StateManager#getTreeStructureToSave(javax.faces.context.FacesContext)
      * @since 1.2
      */
+    @Override
     protected Object getTreeStructureToSave(FacesContext context) {
 
         return getWrapped().getTreeStructureToSave(context);
@@ -120,6 +123,7 @@ public abstract class StateManagerWrapper extends StateManager implements FacesW
      * @see StateManager#getComponentStateToSave(javax.faces.context.FacesContext)
      * @since 1.2
      */
+    @Override
     protected Object getComponentStateToSave(FacesContext context) {
 
         return getWrapped().getComponentStateToSave(context);
@@ -136,6 +140,7 @@ public abstract class StateManagerWrapper extends StateManager implements FacesW
      * java.lang.Object)
      * @since 1.2
      */
+    @Override
     public void writeState(FacesContext context,
                            Object state)
     throws IOException {
@@ -155,6 +160,7 @@ public abstract class StateManagerWrapper extends StateManager implements FacesW
      * @see StateManager#writeState(javax.faces.context.FacesContext, javax.faces.application.StateManager.SerializedView)
      * @since 1.2
      */
+    @Override
     public void writeState(FacesContext context,
                            SerializedView state)
     throws IOException {
@@ -172,6 +178,7 @@ public abstract class StateManagerWrapper extends StateManager implements FacesW
      * @see StateManager#restoreView(javax.faces.context.FacesContext, String, String)
      * @since 1.2
      */
+    @Override
     public UIViewRoot restoreView(FacesContext context, String viewId,
                                   String renderKitId) {
 
@@ -188,6 +195,7 @@ public abstract class StateManagerWrapper extends StateManager implements FacesW
      * @see StateManager#restoreTreeStructure(javax.faces.context.FacesContext, String, String)
      * @since 1.2
      */
+    @Override
     protected UIViewRoot restoreTreeStructure(FacesContext context,
                                               String viewId,
                                               String renderKitId) {
@@ -205,6 +213,7 @@ public abstract class StateManagerWrapper extends StateManager implements FacesW
      * @see StateManager#restoreComponentState(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot, String)
      * @since 1.2
      */
+    @Override
     protected void restoreComponentState(FacesContext context,
                                          UIViewRoot viewRoot,
                                          String renderKitId) {
@@ -222,6 +231,7 @@ public abstract class StateManagerWrapper extends StateManager implements FacesW
      * @see StateManager#isSavingStateInClient(javax.faces.context.FacesContext) 
      * @since 1.2
      */
+    @Override
     public boolean isSavingStateInClient(FacesContext context) {
 
         return getWrapped().isSavingStateInClient(context);

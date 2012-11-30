@@ -66,6 +66,7 @@ public abstract class RenderKitWrapper extends RenderKit implements FacesWrapper
      * @return the wrapped {@link RenderKit} instance
      * @see javax.faces.FacesWrapper#getWrapped()
      */
+    @Override
     public abstract RenderKit getWrapped();
 
 

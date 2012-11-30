@@ -87,6 +87,7 @@ import javax.faces.validator.Validator;
  */
 public abstract class ApplicationWrapper extends Application implements FacesWrapper<Application> {
 
+    @Override
     public abstract Application getWrapped();
 
     /**

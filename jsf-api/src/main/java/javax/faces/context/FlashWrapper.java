@@ -62,8 +62,8 @@ import javax.faces.FacesWrapper;
  * @since 2.2
  */
 public abstract class FlashWrapper extends Flash implements FacesWrapper<Flash> {
-
-	public abstract Flash getWrapped();
+    @Override
+    public abstract Flash getWrapped();
 
     /**
      * <p class="changed_added_2_2">The default behavior of this method
@@ -72,7 +72,7 @@ public abstract class FlashWrapper extends Flash implements FacesWrapper<Flash> 
      * 
      * @since 2.2
      */
-	@Override
+    @Override
     public void doPostPhaseActions(FacesContext ctx) {
         getWrapped().doPostPhaseActions(ctx);
         
@@ -169,6 +169,7 @@ public abstract class FlashWrapper extends Flash implements FacesWrapper<Flash> 
      * 
      * @since 2.2
      */
+    @Override
     public void clear() {
         getWrapped().clear();
     }
@@ -180,6 +181,7 @@ public abstract class FlashWrapper extends Flash implements FacesWrapper<Flash> 
      * 
      * @since 2.2
      */
+    @Override
     public boolean containsKey(Object key) {
         return getWrapped().containsKey(key);
     }
@@ -191,6 +193,7 @@ public abstract class FlashWrapper extends Flash implements FacesWrapper<Flash> 
      * 
      * @since 2.2
      */
+    @Override
     public boolean containsValue(Object value) {
         return getWrapped().containsValue(value);
     }
@@ -202,6 +205,7 @@ public abstract class FlashWrapper extends Flash implements FacesWrapper<Flash> 
      * 
      * @since 2.2
      */
+    @Override
     public Set<Entry<String, Object>> entrySet() {
         return getWrapped().entrySet();
     }
@@ -213,6 +217,7 @@ public abstract class FlashWrapper extends Flash implements FacesWrapper<Flash> 
      * 
      * @since 2.2
      */
+    @Override
     public Object get(Object key) {
         return getWrapped().get(key);
     }
@@ -224,6 +229,7 @@ public abstract class FlashWrapper extends Flash implements FacesWrapper<Flash> 
      * 
      * @since 2.2
      */
+    @Override
     public boolean isEmpty() {
         return getWrapped().isEmpty();
     }
@@ -235,6 +241,7 @@ public abstract class FlashWrapper extends Flash implements FacesWrapper<Flash> 
      * 
      * @since 2.2
      */
+    @Override
     public Set<String> keySet() {
         return getWrapped().keySet();
     }
@@ -246,6 +253,7 @@ public abstract class FlashWrapper extends Flash implements FacesWrapper<Flash> 
      * 
      * @since 2.2
      */
+    @Override
     public Object put(String key, Object value) {
         return getWrapped().put(key, value);
     }
@@ -257,6 +265,7 @@ public abstract class FlashWrapper extends Flash implements FacesWrapper<Flash> 
      * 
      * @since 2.2
      */
+    @Override
     public void putAll(Map<? extends String, ? extends Object> m) {
         getWrapped().putAll(m);
     }
@@ -268,6 +277,7 @@ public abstract class FlashWrapper extends Flash implements FacesWrapper<Flash> 
      * 
      * @since 2.2
      */
+    @Override
     public Object remove(Object key) {
         return getWrapped().remove(key);
     }
@@ -279,6 +289,7 @@ public abstract class FlashWrapper extends Flash implements FacesWrapper<Flash> 
      * 
      * @since 2.2
      */
+    @Override
     public int size() {
         return getWrapped().size();
     }
@@ -290,6 +301,7 @@ public abstract class FlashWrapper extends Flash implements FacesWrapper<Flash> 
      * 
      * @since 2.2
      */
+    @Override
     public Collection<Object> values() {
         return getWrapped().values();
     }

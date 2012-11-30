@@ -74,6 +74,7 @@ public abstract class ViewDeclarationLanguageWrapper extends ViewDeclarationLang
      * @return the wrapped {@link ViewDeclarationLanguage} instance
      * @see javax.faces.FacesWrapper#getWrapped()
      */
+    @Override
     public abstract ViewDeclarationLanguage getWrapped();
 
     // ----------------------------------------------- Methods from ViewDeclarationLanguage
