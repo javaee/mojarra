@@ -51,7 +51,7 @@
     <groupId>com.sun.faces.test.agnostic.vdl.facelets.faces-config-extension</groupId>
     <artifactId>html5</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra ${project.version} - Test - Agnostic - VDL - Facelets - faces-config-extension - HTML5</name>
+    <name>Mojarra ${project.version} - Test - Agnostic - VDL - Facelets - Faces-config-extension - HTML5</name>
     <build>
         <finalName>test-agnostic-vdl-facelets-faces-config-extension-html5</finalName>
     </build>
