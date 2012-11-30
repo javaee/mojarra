@@ -40,6 +40,9 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import com.sun.faces.renderkit.Attribute;
+import com.sun.faces.renderkit.AttributeManager;
+import com.sun.faces.renderkit.RenderKitUtils;
 import java.io.IOException;
 import java.util.Iterator;
 
@@ -54,6 +57,8 @@ import javax.faces.context.ResponseWriter;
  */
 public class GroupRenderer extends HtmlBasicRenderer {
 
+private static final Attribute[] ATTRIBUTES =
+          AttributeManager.getAttributes(AttributeManager.Key.PANELGRID);
     // ---------------------------------------------------------- Public Methods
 
 
@@ -85,6 +90,11 @@ public class GroupRenderer extends HtmlBasicRenderer {
                 writer.writeAttribute("style", style, "style");
             }
         }
+        
+        RenderKitUtils.renderPassThruAttributes(context,
+                                                writer,
+                                                component,
+                                                ATTRIBUTES);
 
     }
 

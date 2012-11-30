@@ -16364,6 +16364,148 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
 
     <property>
       <description>
+          Javascript code executed when a pointer button is
+          clicked over this element.
+        </description>
+      <display-name>Button Click Script</display-name>
+      <icon/>
+      <property-name>onclick</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <ignored-by-renderer>true</ignored-by-renderer>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          double clicked over this element.
+        </description>
+      <display-name>Double Click Script</display-name>
+      <icon/>
+      <property-name>ondblclick</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <ignored-by-renderer>true</ignored-by-renderer>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          pressed down over this element.
+        </description>
+      <display-name>Mouse Down Script</display-name>
+      <icon/>
+      <property-name>onmousedown</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <ignored-by-renderer>true</ignored-by-renderer>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          released over this element.
+        </description>
+      <display-name>Mouse Up Script</display-name>
+      <icon/>
+      <property-name>onmouseup</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <ignored-by-renderer>true</ignored-by-renderer>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          moved onto this element.
+        </description>
+      <display-name>Mouse Over Script</display-name>
+      <icon/>
+      <property-name>onmouseover</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <ignored-by-renderer>true</ignored-by-renderer>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          moved within this element.
+        </description>
+      <display-name>Mouse Move Script</display-name>
+      <icon/>
+      <property-name>onmousemove</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <ignored-by-renderer>true</ignored-by-renderer>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          moved away from this element.
+        </description>
+      <display-name>Mouse Out Script</display-name>
+      <icon/>
+      <property-name>onmouseout</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <ignored-by-renderer>true</ignored-by-renderer>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a key is
+          pressed and released over this element.
+        </description>
+      <display-name>Key Press Script</display-name>
+      <icon/>
+      <property-name>onkeypress</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <ignored-by-renderer>true</ignored-by-renderer>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a key is
+          pressed down over this element.
+        </description>
+      <display-name>Key Down Script</display-name>
+      <icon/>
+      <property-name>onkeydown</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <ignored-by-renderer>true</ignored-by-renderer>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a key is
+          released over this element.
+        </description>
+      <display-name>Key Up Script</display-name>
+      <icon/>
+      <property-name>onkeyup</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <ignored-by-renderer>true</ignored-by-renderer>
+        <behavior/>
+      </property-extension>
+    </property>
+
+
+    <property>
+      <description>
           CSS style(s) to be applied when this component is rendered.
         </description>
       <display-name>CSS Styles</display-name>
@@ -30067,6 +30209,148 @@ this application, and passing the result through the
         <icon/>
         <attribute-name>layout</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          clicked over this element.
+        </description>
+        <display-name>Button Click Script</display-name>
+        <icon/>
+        <attribute-name>onclick</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <ignored-by-renderer>true</ignored-by-renderer>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          double clicked over this element.
+        </description>
+        <display-name>Double Click Script</display-name>
+        <icon/>
+        <attribute-name>ondblclick</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <ignored-by-renderer>true</ignored-by-renderer>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          pressed down over this element.
+        </description>
+        <display-name>Mouse Down Script</display-name>
+        <icon/>
+        <attribute-name>onmousedown</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <ignored-by-renderer>true</ignored-by-renderer>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          released over this element.
+        </description>
+        <display-name>Mouse Up Script</display-name>
+        <icon/>
+        <attribute-name>onmouseup</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <ignored-by-renderer>true</ignored-by-renderer>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          moved onto this element.
+        </description>
+        <display-name>Mouse Over Script</display-name>
+        <icon/>
+        <attribute-name>onmouseover</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <ignored-by-renderer>true</ignored-by-renderer>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          moved within this element.
+        </description>
+        <display-name>Mouse Move Script</display-name>
+        <icon/>
+        <attribute-name>onmousemove</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <ignored-by-renderer>true</ignored-by-renderer>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          moved away from this element.
+        </description>
+        <display-name>Mouse Out Script</display-name>
+        <icon/>
+        <attribute-name>onmouseout</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <ignored-by-renderer>true</ignored-by-renderer>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a key is
+          pressed and released over this element.
+        </description>
+        <display-name>Key Press Script</display-name>
+        <icon/>
+        <attribute-name>onkeypress</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <ignored-by-renderer>true</ignored-by-renderer>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a key is
+          pressed down over this element.
+        </description>
+        <display-name>Key Down Script</display-name>
+        <icon/>
+        <attribute-name>onkeydown</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <ignored-by-renderer>true</ignored-by-renderer>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a key is
+          released over this element.
+        </description>
+        <display-name>Key Up Script</display-name>
+        <icon/>
+        <attribute-name>onkeyup</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <ignored-by-renderer>true</ignored-by-renderer>
+          <behavior/>
+        </attribute-extension>
       </attribute>
 
       <renderer-extension>

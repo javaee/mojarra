@@ -846,6 +846,7 @@
         <component-class>javax.faces.component.html.HtmlPanelGroup</component-class>
 
         <xi:include href="uipanel-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="events-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="panel-group-props.xml" xpointer="xpointer(/root/*)"/>
 
         <component-extension>
@@ -2786,6 +2787,7 @@ this application, and passing the result through the
             </renderer-class>
 
             <xi:include href="panel-group-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="events-attrs.xml" xpointer="xpointer(/root/*)"/>
 
             <renderer-extension>
                 <renders-children>true</renders-children>
