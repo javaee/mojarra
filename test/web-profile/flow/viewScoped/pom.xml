@@ -51,7 +51,7 @@
     <groupId>com.sun.faces.test.webprofile.flow</groupId>
     <artifactId>viewScoped</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra ${project.version} - Test - Web-Profile - Flow - viewScoped Tests</name>
+    <name>Mojarra ${project.version} - Test - Web-Profile - Flow - ViewScoped Tests</name>
     <build>
         <finalName>test-webprofile-flow-viewScoped</finalName>
     </build>
