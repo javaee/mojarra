@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -50,7 +51,7 @@
     <groupId>com.sun.faces.test.agnostic.converter</groupId>
     <artifactId>pom</artifactId>
     <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Agnostic - converter</name>
+    <name>Mojarra ${project.version} - Test - Agnostic - Converter</name>
     <modules>
         <module>basic</module>
     </modules>
