@@ -10,7 +10,7 @@
     <groupId>com.sun.faces.test.agnostic.application</groupId>
     <artifactId>basic</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra ${project.version} - Test - Agnostic - Application - basic</name>
+    <name>Mojarra ${project.version} - Test - Agnostic - Application - Basic</name>
     <build>
         <finalName>test-agnostic-application-basic</finalName>
     </build>
