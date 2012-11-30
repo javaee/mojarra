@@ -11,9 +11,6 @@
     <artifactId>pom</artifactId>
     <packaging>pom</packaging>
     <name>Mojarra ${project.version} - Test - Selenium</name>
-    <modules>
-        <module>agnostic</module>
-    </modules>
     <dependencies>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
@@ -28,6 +25,9 @@
             <scope>test</scope>
         </dependency>
     </dependencies>    
+    <modules>
+        <module>agnostic</module>
+    </modules>
     <profiles>
         <profile>
             <id>integration-selenium</id>

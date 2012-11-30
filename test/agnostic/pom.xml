@@ -52,18 +52,6 @@
     <artifactId>pom</artifactId>
     <packaging>pom</packaging>
     <name>Mojarra ${project.version} - Test - Agnostic</name>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.2</version>
-                <configuration>
-                    <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
-                </configuration>
-            </plugin>
-        </plugins>    
-    </build>
     <dependencies>
         <dependency>
             <groupId>com.sun.faces.test</groupId>
@@ -82,17 +70,12 @@
         <module>dynamic</module>
         <module>el</module>
         <module>flash</module>
+        <module>lifecycle</module>
         <module>renderKit</module>
         <module>resource</module>
         <module>scope</module>
         <module>shared</module>
         <module>stateSaving</module>
         <module>vdl</module>
-        <module>lifecycle</module>
     </modules>
-    <properties>
-        <webapp.projectStage>Production</webapp.projectStage>
-        <webapp.partialStateSaving>true</webapp.partialStateSaving>
-        <webapp.stateSavingMethod>server</webapp.stateSavingMethod>
-    </properties>
 </project>

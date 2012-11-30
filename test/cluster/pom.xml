@@ -13,9 +13,6 @@
     <artifactId>pom</artifactId>
     <packaging>pom</packaging>
     <name>Mojarra ${project.version} - Test - Cluster</name>
-    <modules>
-        <module>shared</module>
-    </modules>
     <dependencies>
         <dependency>
             <groupId>com.sun.faces.test</groupId>
@@ -24,4 +21,7 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <modules>
+        <module>shared</module>
+    </modules>
 </project>
