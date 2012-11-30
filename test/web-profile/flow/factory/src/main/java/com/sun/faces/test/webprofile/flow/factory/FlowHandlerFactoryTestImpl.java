@@ -9,6 +9,8 @@ import javax.faces.flow.FlowHandlerFactoryWrapper;
  * A simple wrapped flow handler factory.
  */
 public class FlowHandlerFactoryTestImpl extends FlowHandlerFactoryWrapper {
+    
+    private FlowHandlerFactory wrapped;
 
     /**
      * Constructor.
@@ -16,7 +18,12 @@ public class FlowHandlerFactoryTestImpl extends FlowHandlerFactoryWrapper {
      * @param wrapped the wrapped flow handler factory.
      */
     public FlowHandlerFactoryTestImpl(FlowHandlerFactory wrapped) {
-        super(wrapped);
+        this.wrapped = wrapped;
+    }
+
+    @Override
+    public FlowHandlerFactory getWrapped() {
+        return this.wrapped;
     }
 
     /**

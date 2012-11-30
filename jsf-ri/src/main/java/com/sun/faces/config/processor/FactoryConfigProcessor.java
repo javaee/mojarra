@@ -110,11 +110,6 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
     private static final String FACELET_CACHE_FACTORY = "facelet-cache-factory";
 
     /**
-     * <code>/faces-config/factory/facelet-factory</code>
-     */
-    private static final String FACELET_FACTORY = "facelet-factory";
-
-    /**
      * <code>/faces-config/factory/faces-context-factory</code>
      */
     private static final String FACES_CONTEXT_FACTORY = "faces-context-factory";
