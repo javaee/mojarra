@@ -53,11 +53,11 @@
     <packaging>pom</packaging>
     <name>Mojarra ${project.version} - Test - Agnostic - VDL - Facelets</name>
     <modules>
+        <module>contracts</module>
         <module>form-omitted-development</module>
         <module>form-omitted-production</module>
+        <module>programmaticCompositeComponent</module>
         <module>replace-vdl</module>
         <module>ui</module>
-        <module>programmaticCompositeComponent</module>
-        <module>contracts</module>
     </modules>
 </project>
