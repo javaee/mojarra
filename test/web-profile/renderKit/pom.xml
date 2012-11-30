@@ -10,7 +10,7 @@
     <groupId>com.sun.faces.test.webprofile.renderKit</groupId>
     <artifactId>pom</artifactId>
     <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Webprofile - RenderKit</name>
+    <name>Mojarra ${project.version} - Test - Web-Profile - RenderKit</name>
     <modules>
         <module>basic</module>
         <module>fileUploadFailure</module>

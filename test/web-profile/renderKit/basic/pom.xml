@@ -51,7 +51,7 @@
     <groupId>com.sun.faces.test.webprofile.renderKit</groupId>
     <artifactId>basic</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra ${project.version} - Test - webprofile - RenderKit - Basic Tests</name>
+    <name>Mojarra ${project.version} - Test - Web-Profile - RenderKit - Basic Tests</name>
     <build>
         <finalName>test-webprofile-renderKit-basic</finalName>
     </build>
