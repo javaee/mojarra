@@ -10,7 +10,7 @@
     <groupId>com.sun.faces.test.agnostic.application</groupId>
     <artifactId>runtimeConfig</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra ${project.version} - Test - Agnostic - Application - runtimeConfig</name>
+    <name>Mojarra ${project.version} - Test - Agnostic - Application - RuntimeConfig</name>
     <build>
         <finalName>test-agnostic-application-runtimeConfig</finalName>
     </build>

@@ -10,7 +10,7 @@
     <groupId>com.sun.faces.test.agnostic.application</groupId>
     <artifactId>navigation</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra ${project.version} - Test - Agnostic - Application - navigation</name>
+    <name>Mojarra ${project.version} - Test - Agnostic - Application - Navigation</name>
     <build>
         <finalName>test-agnostic-application-navigation</finalName>
     </build>
@@ -18,11 +18,11 @@
         <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
     </properties>
     <dependencies>
-    <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>4.10</version>
-        <scope>compile</scope>
-    </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.10</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 </project>

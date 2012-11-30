@@ -10,7 +10,7 @@
     <groupId>com.sun.faces.test.agnostic.application</groupId>
     <artifactId>navigationJSF2</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra ${project.version} - Test - Agnostic - Application - navigationJSF2</name>
+    <name>Mojarra ${project.version} - Test - Agnostic - Application - NavigationJSF2</name>
     <build>
         <finalName>test-agnostic-application-navigationJSF2</finalName>
     </build>
