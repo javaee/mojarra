@@ -1,8 +1,0 @@
-.divWithLibraryBackground{
-    background: url("#{resource['css:images/background.png']}");
-}
-
-.divWithoutLibraryBackground{
-    background: url("#{resource['css/images/background.png']}");
-}
-
