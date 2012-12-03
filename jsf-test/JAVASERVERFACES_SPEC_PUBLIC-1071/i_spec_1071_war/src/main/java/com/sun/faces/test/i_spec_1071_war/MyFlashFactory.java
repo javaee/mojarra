@@ -53,8 +53,8 @@ public class MyFlashFactory extends FlashFactory {
     }
 
     @Override
-    public Flash getFlash(ExternalContext context, boolean create) {
-        return new MyFlashImpl(getWrapped().getFlash(context, create));
+    public Flash getFlash(boolean create) {
+        return new MyFlashImpl(getWrapped().getFlash(create));
     }
     
     @Override

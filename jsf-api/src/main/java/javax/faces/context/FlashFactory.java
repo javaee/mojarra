@@ -86,14 +86,12 @@ public abstract class FlashFactory implements FacesWrapper<FlashFactory> {
      * <p class="changed_added_2_2">Create (if needed) and return a
      * {@link Flash} instance for this web application.</p>
      * 
-     * @param context the <code>ExternalContext</code> for this request.
-     *
      * @param create <code>true</code> to create a new instance for this request if 
      * necessary; <code>false</code> to return <code>null</code> if there's no 
      * instance in the current <code>session</code>.
      * 
      * @since 2.2
      */
-    public abstract Flash getFlash(ExternalContext context, boolean create);
+    public abstract Flash getFlash(boolean create);
     
 }

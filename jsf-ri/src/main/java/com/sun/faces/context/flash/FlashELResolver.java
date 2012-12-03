@@ -216,14 +216,14 @@ public class FlashELResolver extends ELResolver {
         // try to get the flash from the session.
         FlashFactory ff = (FlashFactory) 
                 FactoryFinder.getFactory(FactoryFinder.FLASH_FACTORY);
-        Map<String, Object> flash = ff.getFlash(extCtx, false);
+        Map<String, Object> flash = ff.getFlash(false);
         
         elContext.setPropertyResolved(true);
         
         if (null == flash)
         {
           // create a new one and store it in the session.
-          flash = ff.getFlash(extCtx, true);
+          flash = ff.getFlash(true);
           extCtx.getSessionMap().put(ELFlash.FLASH_ATTRIBUTE_NAME, flash);
         }
         
@@ -240,7 +240,7 @@ public class FlashELResolver extends ELResolver {
       // try to get the flash from the session.
       FlashFactory ff = (FlashFactory) 
               FactoryFinder.getFactory(FactoryFinder.FLASH_FACTORY);
-      Map<String, Object> flash = ff.getFlash(extCtx, false);
+      Map<String, Object> flash = ff.getFlash(false);
 
       if (base == flash)
       {
@@ -256,7 +256,7 @@ public class FlashELResolver extends ELResolver {
           result = base;
           // Set a flag so the flash itself can look in the request
           // and promote the value to the next request
-          ff.getFlash(extCtx, true);
+          ff.getFlash(true);
           ELFlash.setKeepFlag(facesContext);
         }
         // Otherwise, if base is the flash, and property is "now"...

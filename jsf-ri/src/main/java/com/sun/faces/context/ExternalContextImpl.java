@@ -1056,7 +1056,7 @@ public class ExternalContextImpl extends ExternalContext {
     public Flash getFlash() {
         if (null == flash) {
             FlashFactory ff = (FlashFactory) FactoryFinder.getFactory(FactoryFinder.FLASH_FACTORY);
-            flash = ff.getFlash(this, true);
+            flash = ff.getFlash(true);
         }
         return flash;
     }
