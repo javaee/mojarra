@@ -361,11 +361,13 @@ public class DefaultFaceletFactory {
                 }
             }
             if (null != tempFile) {
-//                boolean successful = 
-                    tempFile.delete();
-//                if (!successful) {
-//                    
-//                }
+                boolean successful = 
+                        tempFile.delete();
+                if (!successful) {
+                    if (log.isLoggable(Level.FINEST)) {
+                        log.log(Level.FINEST, "Unable to delete temporary file.");
+                    }
+                }
             }
         }
         
@@ -378,8 +380,10 @@ public class DefaultFaceletFactory {
                         uee);
             }
         }
-               
-        result.setId(null);        
+              
+        if (null != result) {
+            result.setId(null);        
+        }
         return result;
     }
     

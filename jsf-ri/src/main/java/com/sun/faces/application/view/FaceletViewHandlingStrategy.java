@@ -226,7 +226,6 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
         DefaultFaceletFactory factory = (DefaultFaceletFactory)
                 RequestStateManager.get(context, RequestStateManager.FACELET_FACTORY);
-        assert(factory instanceof DefaultFaceletFactory);
         DefaultFaceletFactory ourFactory = (DefaultFaceletFactory) factory;
         if (ourFactory.needsToBeRefreshed(ccResource.getURL())) {
             metadataCache.remove(ccResource);

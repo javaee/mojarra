@@ -122,7 +122,7 @@ public abstract class NavigationCaseWrapper extends NavigationCase implements Fa
 
     @Override
     public URL getRedirectURL(FacesContext context) throws MalformedURLException {
-        return getRedirectURL(context);
+        return getWrapped().getRedirectURL(context);
     }
 
     @Override
