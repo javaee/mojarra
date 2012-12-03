@@ -51,6 +51,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class Issue1034IT {
+
     /**
      * Stores the web URL.
      */
@@ -62,7 +63,7 @@ public class Issue1034IT {
 
     /**
      * Setup before testing.
-     * 
+     *
      * @throws Exception when a serious error occurs.
      */
     @BeforeClass
@@ -71,7 +72,7 @@ public class Issue1034IT {
 
     /**
      * Cleanup after testing.
-     * 
+     *
      * @throws Exception when a serious error occurs.
      */
     @AfterClass
@@ -97,63 +98,61 @@ public class Issue1034IT {
 
     @Test
     public void testFlowEntryExit() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl);
-
+        HtmlPage page = webClient.getPage(webUrl + "faces/viewScoped.xhtml");
         int previousCount = 0;
         int count = Integer.parseInt(page.getElementById("count").getTextContent());
         assertTrue(previousCount < count);
         previousCount = count;
-        
+
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("stay");
-        
         page = button.click();
         count = Integer.parseInt(page.getElementById("count").getTextContent());
-        assertEquals(previousCount, count);        
+        assertEquals(previousCount, count);
 
         button = (HtmlSubmitInput) page.getElementById("stay");
-        
         page = button.click();
         count = Integer.parseInt(page.getElementById("count").getTextContent());
-        assertEquals(previousCount, count);        
-        
+        assertEquals(previousCount, count);
+
         button = (HtmlSubmitInput) page.getElementById("go");
-        
         page = button.click();
         count = Integer.parseInt(page.getElementById("count").getTextContent());
         assertTrue(previousCount < count);
         previousCount = count;
-        
+
         button = (HtmlSubmitInput) page.getElementById("stay");
-        
         page = button.click();
         count = Integer.parseInt(page.getElementById("count").getTextContent());
-        assertEquals(previousCount, count);        
-        
+        assertEquals(previousCount, count);
+
         button = (HtmlSubmitInput) page.getElementById("stay");
-        
         page = button.click();
         count = Integer.parseInt(page.getElementById("count").getTextContent());
-        assertEquals(previousCount, count);        
-        
+        assertEquals(previousCount, count);
+
         button = (HtmlSubmitInput) page.getElementById("go");
-        
         page = button.click();
         count = Integer.parseInt(page.getElementById("count").getTextContent());
         assertTrue(previousCount < count);
         previousCount = count;
-        
-        button = (HtmlSubmitInput) page.getElementById("stay");
-        
-        page = button.click();
-        count = Integer.parseInt(page.getElementById("count").getTextContent());
-        assertEquals(previousCount, count);        
-        
-        button = (HtmlSubmitInput) page.getElementById("stay");
-        
-        page = button.click();
-        count = Integer.parseInt(page.getElementById("count").getTextContent());
-        assertEquals(previousCount, count);        
-        
 
+        button = (HtmlSubmitInput) page.getElementById("stay");
+        page = button.click();
+        count = Integer.parseInt(page.getElementById("count").getTextContent());
+        assertEquals(previousCount, count);
+
+        button = (HtmlSubmitInput) page.getElementById("stay");
+        page = button.click();
+        count = Integer.parseInt(page.getElementById("count").getTextContent());
+        assertEquals(previousCount, count);
+    }
+
+    @Test
+    public void testInvalidatedSession() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/invalidatedSession.xhtml");
+        assertTrue(page.asText().indexOf("This is from the @PostConstruct") != -1);
+        webClient.getPage(webUrl + "faces/invalidatedPerform.xhtml");
+        page = webClient.getPage(webUrl + "faces/invalidatedVerify.xhtml");
+        assertTrue(page.asText().indexOf("true") != -1);
     }
 }

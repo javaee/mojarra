@@ -42,7 +42,7 @@ package com.sun.faces.application;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.InitFacesContext;
-import com.sun.faces.flow.ViewScopedCDIContext;
+import com.sun.faces.application.view.ViewScopedCDIContext;
 import javax.faces.FacesException;
 import javax.faces.application.NavigationCase;
 import javax.faces.application.ViewHandler;

@@ -37,13 +37,10 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
-
-package com.sun.faces.flow;
+package com.sun.faces.application.view;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.AfterBeanDiscovery;
 import javax.enterprise.inject.spi.Extension;
@@ -52,28 +49,25 @@ import javax.faces.view.ViewScoped;
 
 public class ViewScopedCDIExtension implements Extension {
 
+    // Log instance for this class
+    private static final Logger LOGGER = Logger.getLogger(ViewScopedCDIExtension.class.getName());
 
-   // Log instance for this class
-   private static final Logger LOGGER = Logger.getLogger(ViewScopedCDIExtension.class.getName());
+    public ViewScopedCDIExtension() {
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("ctor for ViewScoped CDI Extensions called");
+        }
 
+    }
 
-   public ViewScopedCDIExtension() {
-       if (LOGGER.isLoggable(Level.FINE)) {
-           LOGGER.fine("ctor for ViewScoped CDI Extensions called");
-       }
+    public void processBean(@Observes ProcessBean<?> event) {
+        ViewScoped viewScoped = event.getAnnotated().getAnnotation(ViewScoped.class);
+        if (null != viewScoped && LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("Processing occurrence of @ViewScoped");
+        }
 
-   }
-   
-   public void processBean(@Observes ProcessBean<?> event) {
-       ViewScoped viewScoped = event.getAnnotated().getAnnotation(ViewScoped.class);
-       if (null != viewScoped && LOGGER.isLoggable(Level.FINE)) {
-           LOGGER.fine("Processing occurrence of @ViewScoped");
-       }
-       
-   }
+    }
 
-   void afterBeanDiscovery(@Observes final AfterBeanDiscovery event) {
-       event.addContext(new ViewScopedCDIContext());
-   }
-
+    public void afterBeanDiscovery(@Observes final AfterBeanDiscovery event) {
+        event.addContext(new ViewScopedCDIContext());
+    }
 }

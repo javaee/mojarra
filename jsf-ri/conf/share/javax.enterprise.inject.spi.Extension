@@ -1,3 +1,3 @@
+com.sun.faces.application.view.ViewScopedCDIExtension
 com.sun.faces.flow.FlowCDIExtension
 com.sun.faces.flow.FlowDiscoveryCDIExtension
-com.sun.faces.flow.ViewScopedCDIExtension

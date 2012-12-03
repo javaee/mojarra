@@ -40,6 +40,7 @@
 
 package com.sun.faces.application;
 
+import com.sun.faces.application.view.ViewScopedCDIContext;
 import com.sun.faces.config.InitFacesContext;
 import com.sun.faces.config.WebConfiguration;
 import java.io.PrintWriter;
@@ -62,9 +63,11 @@ import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionEvent;
 
 import com.sun.faces.el.ELUtils;
+import com.sun.faces.flow.FlowCDIContext;
 import com.sun.faces.io.FastStringWriter;
 import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.Util;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -200,6 +203,11 @@ public class WebappLifecycleListener implements ViewMapListener {
                                  ELUtils.Scope.SESSION);
         }
 
+        if (Util.isCDIAvailable()) {
+            ViewScopedCDIContext.sessionDestroyed(event);
+            FlowCDIContext.sessionDestroyed(event);
+        }
+        
         /*
          * When the session gets destroyed we need to make sure that each view
          * scope that was still active cleans up properly.
