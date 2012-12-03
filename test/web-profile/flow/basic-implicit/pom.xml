@@ -49,11 +49,11 @@
         <version>2.2.0-SNAPSHOT</version>
     </parent>
     <groupId>com.sun.faces.test.webprofile.flow</groupId>
-    <artifactId>basic</artifactId>
+    <artifactId>basic-implicit</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra ${project.version} - Test - Web-Profile - Flow - Basic Tests</name>
+    <name>Mojarra ${project.version} - Test - Web-Profile - Flow - Basic-Implicit Tests</name>
     <build>
-        <finalName>test-webprofile-flow-basic</finalName>
+        <finalName>test-webprofile-flow-basic-implicit</finalName>
     </build>
     <properties>
         <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>

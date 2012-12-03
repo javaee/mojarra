@@ -12,7 +12,7 @@
     <packaging>pom</packaging>
     <name>Mojarra ${project.version} - Test - Web-Profile - Flow</name>
     <modules>
-        <module>basic</module>
+        <module>basic-implicit</module>
         <module>basic_faces_flow_call</module>
         <module>basic-multi-page</module>
         <module>basic-multi-page-fdl-in-web-inf</module>
