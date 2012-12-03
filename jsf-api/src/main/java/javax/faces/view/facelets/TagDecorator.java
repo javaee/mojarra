@@ -77,7 +77,7 @@ package javax.faces.view.facelets;
  * javax.faces.application.ViewHandler#FACELETS_DECORATORS_PARAM_NAME}
  * {@code context-param}, if any.  For each entry, call its {@link
  * #decorate} method, passing the argument {@code tag}.  The first such
- * entry that return non-{@code null} from its {@link #decorate} method
+ * entry that returns non-{@code null} from its {@link #decorate} method
  * must cause the iteration to stop.</p></li>
 
  * <li><p>If one or more of the attributes of the {@code tag} argument
@@ -436,8 +436,11 @@ package javax.faces.view.facelets;
  * attribute" column in the table in the given order. A selector
  * attribute value of <strong>*</strong> indicates any value. A selector
  * attribute name prefixed with <strong>jsf:</strong> means in the {@code
- * http://java.sun.com/jsf} namespace. If no matching entry is found, let
- * {@code jsf:element} be the value of <strong>targetTag</strong>
+ * http://java.sun.com/jsf} namespace.</p>
+
+
+ * <p>If no matching entry is found, let
+ * {@code jsf:element} be the value of <strong>targetTag</strong></p>
 
  * </li>
 
