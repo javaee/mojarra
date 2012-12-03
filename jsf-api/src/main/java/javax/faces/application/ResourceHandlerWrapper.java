@@ -167,6 +167,18 @@ public abstract class ResourceHandlerWrapper extends ResourceHandler implements 
 
     }
 
+    /**
+     * <p class="changed_added_2_0">The default behavior of this method
+     * is to call {@link ResourceHandler#isResourceURL} on the
+     * wrapped {@link ResourceHandler} object.</p>
+     */
+    @Override
+    public boolean isResourceURL(String url) {
+        return getWrapped().isResourceURL(url);
+    }
+    
+    
+
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method

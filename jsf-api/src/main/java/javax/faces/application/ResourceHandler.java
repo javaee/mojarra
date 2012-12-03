@@ -581,6 +581,27 @@ public abstract class ResourceHandler {
     public abstract boolean isResourceRequest(FacesContext context);
     
     /**
+     * <p class="changed_added_2_2">Return {@code true} if the argument {@code url}
+     * contains the string given by the value of the constant
+     * {@link ResourceHandler#RESOURCE_IDENTIFIER}, false otherwise.</p>
+     * 
+     * @param url the url to inspect for the presence of {@link ResourceHandler#RESOURCE_IDENTIFIER}.
+
+     * @throws NullPointerException if the argument url is {@code null}.
+     */
+    
+    public boolean isResourceURL(String url) {
+        boolean result = false;
+        if (null == url) {
+            throw new NullPointerException("null url");
+        }
+        result = url.contains(ResourceHandler.RESOURCE_IDENTIFIER);
+        
+        return result;
+        
+    }
+    
+    /**
      * <p class="changed_added_2_0">Return the <code>renderer-type</code> for a 
      * {@link javax.faces.render.Renderer} that is capable of rendering this 
      * resource. The default implementation must return values according to the
