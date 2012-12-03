@@ -39,5 +39,6 @@ public class FlowHandlerFactoryTestImplIT {
         assertTrue(pageText.indexOf("First page in the flow") != -1);
         assertTrue(pageText.contains("basicFlow"));
         assertTrue(pageText.contains("Did we wrap: true"));
+        assertTrue(pageText.contains("Did we inject: MyAppBean"));
     }
 }

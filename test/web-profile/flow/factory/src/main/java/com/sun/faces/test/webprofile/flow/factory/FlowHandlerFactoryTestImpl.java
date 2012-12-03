@@ -1,16 +1,24 @@
 package com.sun.faces.test.webprofile.flow.factory;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.flow.FlowHandler;
 import javax.faces.flow.FlowHandlerFactory;
 import javax.faces.flow.FlowHandlerFactoryWrapper;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * A simple wrapped flow handler factory.
  */
+@Named
+@ApplicationScoped
 public class FlowHandlerFactoryTestImpl extends FlowHandlerFactoryWrapper {
     
     private FlowHandlerFactory wrapped;
+    
+    @Inject
+    private AppBean appBean;
 
     /**
      * Constructor.
@@ -37,6 +45,8 @@ public class FlowHandlerFactoryTestImpl extends FlowHandlerFactoryWrapper {
     public FlowHandler createFlowHandler(FacesContext context) {
         System.out.println("createFlowHandler");
         FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().put("flowHandlerFactoryWrapped", true);
+        String id = (null != appBean) ? appBean.getId() : "null";
+        FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().put("appBean", id);
         return getWrapped().createFlowHandler(context);
     }
 }
