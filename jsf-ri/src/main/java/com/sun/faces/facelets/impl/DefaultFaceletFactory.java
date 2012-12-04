@@ -358,15 +358,15 @@ public class DefaultFaceletFactory {
                 try {
                     osw.close();
                 } catch (IOException ex) {
+                    if (log.isLoggable(Level.SEVERE)) {
+                        log.log(Level.SEVERE, "Unable to close OutputStreamWriter in _createComponent.", ex);
+                    }
                 }
             }
             if (null != tempFile) {
-                boolean successful = 
-                        tempFile.delete();
-                if (!successful) {
-                    if (log.isLoggable(Level.FINEST)) {
-                        log.log(Level.FINEST, "Unable to delete temporary file.");
-                    }
+                boolean successful = tempFile.delete();
+                if (!successful && log.isLoggable(Level.FINEST)) {
+                    log.log(Level.FINEST, "Unable to delete temporary file.");
                 }
             }
         }
