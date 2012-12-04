@@ -47,6 +47,9 @@ import javax.faces.context.FlashFactory;
 
 public class FlashFactoryImpl extends FlashFactory {
 
+    public FlashFactoryImpl() {
+    }
+
     @Override
     public Flash getFlash(boolean create) {
         ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();

@@ -44,6 +44,9 @@ import javax.faces.application.ApplicationFactory;
 import javax.faces.application.Application;
 
 public class ApplicationFactoryWrapper extends ApplicationFactory {
+
+    public ApplicationFactoryWrapper() {
+    }
     
     private ApplicationFactory oldFactory = null;
     

@@ -51,6 +51,8 @@ import javax.faces.context.FacesContext;
  */
 public class PartialViewContextFactoryImpl extends PartialViewContextFactory {
 
+    public PartialViewContextFactoryImpl() {
+    }
 
     // ---------------------------------- Methods from PartialViewContextFactory
 

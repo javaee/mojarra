@@ -50,6 +50,9 @@ import javax.faces.FacesWrapper;
  */
 public abstract class FaceletCacheFactory implements FacesWrapper<FaceletCacheFactory> {
 
+    public FaceletCacheFactory() {
+    }
+
     public FaceletCacheFactory getWrapped() {
         return null;
     }

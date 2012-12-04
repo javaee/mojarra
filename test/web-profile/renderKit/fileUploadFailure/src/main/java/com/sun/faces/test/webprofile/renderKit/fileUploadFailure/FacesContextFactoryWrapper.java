@@ -46,6 +46,9 @@ import javax.faces.context.FacesContextFactory;
 import javax.faces.lifecycle.Lifecycle;
 
 public class FacesContextFactoryWrapper extends FacesContextFactory {
+
+    public FacesContextFactoryWrapper() {
+    }
     
     private FacesContextFactory oldFactory = null;
     

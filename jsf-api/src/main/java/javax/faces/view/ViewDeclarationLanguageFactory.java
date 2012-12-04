@@ -68,6 +68,9 @@ import javax.faces.FacesWrapper;
 
 public abstract class ViewDeclarationLanguageFactory implements FacesWrapper<ViewDeclarationLanguageFactory> {
 
+    public ViewDeclarationLanguageFactory() {
+    }
+
 
     /**
      * <p class="changed_added_2_0">If this factory has been decorated, the 

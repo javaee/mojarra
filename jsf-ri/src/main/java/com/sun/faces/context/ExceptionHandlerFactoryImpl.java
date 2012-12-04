@@ -55,6 +55,9 @@ public class ExceptionHandlerFactoryImpl extends ExceptionHandlerFactory {
 
     // ------------------------------------ Methods from ExceptionHandlerFactory
 
+    public ExceptionHandlerFactoryImpl() {
+    }
+
     
     /**
      * @see javax.faces.context.ExceptionHandlerFactory#getExceptionHandler()

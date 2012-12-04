@@ -67,6 +67,9 @@ import javax.faces.lifecycle.Lifecycle;
 
 public abstract class FacesContextFactory implements FacesWrapper<FacesContextFactory> {
 
+    public FacesContextFactory() {
+    }
+
     /**
      * <p class="changed_added_2_0">If this factory has been decorated, the 
      * implementation doing the decorating may override this method to provide

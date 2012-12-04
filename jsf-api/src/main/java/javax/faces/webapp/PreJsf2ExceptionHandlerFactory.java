@@ -93,6 +93,9 @@ import javax.faces.context.FacesContext;
  */
 public class PreJsf2ExceptionHandlerFactory extends ExceptionHandlerFactory {
 
+    public PreJsf2ExceptionHandlerFactory() {
+    }
+
 
     // ------------------------------------ Methods from ExceptionHandlerFactory
 

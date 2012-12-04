@@ -58,6 +58,9 @@ import javax.faces.FacesWrapper;
  * @since 2.2
  */
 public abstract class FlowHandlerFactoryWrapper extends FlowHandlerFactory implements FacesWrapper<FlowHandlerFactory> {
+
+    public FlowHandlerFactoryWrapper() {
+    }
     
     /**
      * <p class="changed_added_2_2">A class that implements this

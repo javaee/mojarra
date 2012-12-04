@@ -14,6 +14,9 @@ import javax.inject.Named;
 @Named
 @ApplicationScoped
 public class FlowHandlerFactoryTestImpl extends FlowHandlerFactoryWrapper {
+
+    public FlowHandlerFactoryTestImpl() {
+    }
     
     private FlowHandlerFactory wrapped;
     

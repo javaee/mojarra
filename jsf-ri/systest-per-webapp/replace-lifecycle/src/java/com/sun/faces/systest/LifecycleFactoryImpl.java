@@ -54,6 +54,9 @@ import java.util.Iterator;
 
 public class LifecycleFactoryImpl extends LifecycleFactory {
 
+    public LifecycleFactoryImpl() {
+    }
+
     private LifecycleFactory previous = null;
 
     private Lifecycle newLifecycle = null;

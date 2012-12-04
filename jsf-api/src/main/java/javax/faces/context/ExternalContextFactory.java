@@ -61,6 +61,9 @@ import javax.faces.FacesWrapper;
 
 public abstract class ExternalContextFactory implements FacesWrapper<ExternalContextFactory> {
 
+    public ExternalContextFactory() {
+    }
+
     /**
      * <p class="changed_added_2_0">If this factory has been decorated, the 
      * implementation doing the decorating may override this method to provide

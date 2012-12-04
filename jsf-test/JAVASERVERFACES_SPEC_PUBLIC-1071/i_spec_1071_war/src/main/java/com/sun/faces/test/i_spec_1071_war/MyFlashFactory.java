@@ -45,6 +45,9 @@ import javax.faces.context.Flash;
 import javax.faces.context.FlashFactory;
 
 public class MyFlashFactory extends FlashFactory {
+
+    public MyFlashFactory() {
+    }
     
     private FlashFactory parent;
 

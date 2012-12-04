@@ -47,6 +47,9 @@ import javax.faces.FacesException;
 import java.util.Iterator;
 
 public class RenderKitFactoryWrapper extends RenderKitFactory {
+
+    public RenderKitFactoryWrapper() {
+    }
     
     private RenderKitFactory oldFactory = null;
     

@@ -46,6 +46,9 @@ import javax.faces.FacesException;
 import java.util.Iterator;
 
 public class LifecycleFactoryWrapper extends LifecycleFactory {
+
+    public LifecycleFactoryWrapper() {
+    }
     
     private LifecycleFactory oldFactory = null;
     

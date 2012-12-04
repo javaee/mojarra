@@ -44,6 +44,10 @@ import javax.faces.flow.FlowHandler;
 import javax.faces.flow.FlowHandlerFactory;
 
 public class FlowHandlerFactoryImpl extends FlowHandlerFactory {
+
+    public FlowHandlerFactoryImpl() {
+    }
+
     /**
      * Create the flow handler.
      * 

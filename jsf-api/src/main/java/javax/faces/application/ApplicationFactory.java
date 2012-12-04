@@ -60,6 +60,10 @@ import javax.faces.FacesWrapper;
  */
 
 public abstract class ApplicationFactory implements FacesWrapper<ApplicationFactory> {
+    
+    public ApplicationFactory() {
+        
+    }
 
 
     /**

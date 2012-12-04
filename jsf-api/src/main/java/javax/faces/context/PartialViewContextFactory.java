@@ -63,6 +63,9 @@ import javax.faces.FacesWrapper;
  */
 public abstract class PartialViewContextFactory implements FacesWrapper<PartialViewContextFactory> {
 
+    public PartialViewContextFactory() {
+    }
+
 
     // ----------------------------------------------- Methods from FacesWrapper
 

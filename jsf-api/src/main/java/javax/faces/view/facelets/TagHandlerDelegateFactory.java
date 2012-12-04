@@ -47,6 +47,9 @@ package javax.faces.view.facelets;
  * @since 2.0
  */
 public abstract class TagHandlerDelegateFactory {
+
+    public TagHandlerDelegateFactory() {
+    }
     
     /**
      * <p class="changed_added_2_0">Create and return a {@link

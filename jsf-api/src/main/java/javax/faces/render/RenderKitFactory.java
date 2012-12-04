@@ -66,6 +66,9 @@ import javax.faces.context.FacesContext;
  */
 
 public abstract class RenderKitFactory implements FacesWrapper<RenderKitFactory> {
+
+    public RenderKitFactory() {
+    }
     
     /**
      * <p class="changed_added_2_0">If this factory has been decorated, the 

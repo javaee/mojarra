@@ -71,9 +71,11 @@ public class InjectionFacesContextFactory extends FacesContextFactory implements
     private Field defaultExternalContext;
 
 
-    
+
     // ------------------------------------------------------------ Constructors
 
+    public InjectionFacesContextFactory() {
+    }
 
     public InjectionFacesContextFactory(FacesContextFactory delegate) {
 

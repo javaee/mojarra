@@ -46,6 +46,9 @@ import javax.faces.application.ApplicationFactory;
 import javax.faces.application.Application;
 
 public class FacesConfigApplicationFactory extends ApplicationFactory {
+
+    public FacesConfigApplicationFactory() {
+    }
     
     private ApplicationFactory oldFactory = null;
 

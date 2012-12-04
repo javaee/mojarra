@@ -49,6 +49,9 @@ import javax.faces.view.facelets.*;
 
 public class TagHandlerDelegateFactoryImpl extends TagHandlerDelegateFactory {
 
+    public TagHandlerDelegateFactoryImpl() {
+    }
+
     @Override
     public TagHandlerDelegate createComponentHandlerDelegate(ComponentHandler owner) {
         if (owner instanceof StylesheetResourceHandler) {

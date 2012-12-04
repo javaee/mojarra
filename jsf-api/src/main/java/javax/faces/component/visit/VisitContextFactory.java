@@ -54,6 +54,9 @@ import javax.faces.context.FacesContext;
  */
 public abstract class VisitContextFactory implements FacesWrapper<VisitContextFactory> {
 
+    public VisitContextFactory() {
+    }
+    
     /**
      * <p class="changed_added_2_0">If this factory has been decorated, the 
      * implementation doing the decorating may override this method to provide

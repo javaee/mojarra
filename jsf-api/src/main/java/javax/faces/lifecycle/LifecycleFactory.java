@@ -64,6 +64,9 @@ import javax.faces.FacesWrapper;
  */
 
 public abstract class LifecycleFactory implements FacesWrapper<LifecycleFactory> {
+
+    public LifecycleFactory() {
+    }
     
     
     /**

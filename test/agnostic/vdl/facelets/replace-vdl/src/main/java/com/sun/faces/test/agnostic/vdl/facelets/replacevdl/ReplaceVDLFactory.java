@@ -46,6 +46,9 @@ import javax.faces.view.ViewDeclarationLanguageFactory;
 
 public class ReplaceVDLFactory extends ViewDeclarationLanguageFactory {
 
+    public ReplaceVDLFactory() {
+    }
+
     private ViewDeclarationLanguageFactory toWrap;
     private Map<String, ReplaceVDLImpl> vdlImpls;
 

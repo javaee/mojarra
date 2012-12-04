@@ -56,6 +56,9 @@ import javax.faces.context.FacesContext;
  * @since 2.2
  */
 public abstract class FlowHandlerFactory {
+
+    public FlowHandlerFactory() {
+    }
     
     /**
      * <p class="changed_added_2_2">Create the singleton instance of

@@ -48,6 +48,9 @@ public class NewApplicationFactory extends ApplicationFactory {
     private ApplicationFactory oldFactory = null;
 
     private NewApplication newApp = null;
+
+    public NewApplicationFactory() {
+    }
     
     public NewApplicationFactory(ApplicationFactory yourOldFactory) {
 	oldFactory = yourOldFactory;

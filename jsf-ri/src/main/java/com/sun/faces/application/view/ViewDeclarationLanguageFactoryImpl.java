@@ -48,7 +48,9 @@ import javax.faces.view.ViewDeclarationLanguageFactory;
  */
 public class ViewDeclarationLanguageFactoryImpl extends ViewDeclarationLanguageFactory {
 
-    
+    public ViewDeclarationLanguageFactoryImpl() {
+    }
+
     private ViewHandlingStrategyManager viewHandlingStrategy;
 
 

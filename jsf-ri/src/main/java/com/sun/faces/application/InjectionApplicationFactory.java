@@ -73,6 +73,8 @@ public class InjectionApplicationFactory extends ApplicationFactory implements F
 
     // ------------------------------------------------------------ Constructors
 
+    public InjectionApplicationFactory() {
+    }
 
     public InjectionApplicationFactory(ApplicationFactory delegate) {
 

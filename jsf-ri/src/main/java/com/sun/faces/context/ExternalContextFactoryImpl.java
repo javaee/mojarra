@@ -55,7 +55,9 @@ public class ExternalContextFactoryImpl extends ExternalContextFactory {
     public static final String DEFAULT_EXTERNAL_CONTEXT_KEY =
           ExternalContextFactoryImpl.class.getName() + "_KEY";
 
-    
+    public ExternalContextFactoryImpl() {
+    }
+
     // ---------------------------------------- Methods from ExternalContextFactory
 
 

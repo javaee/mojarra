@@ -54,6 +54,9 @@ import javax.faces.context.FacesContext;
  */
 public class VisitContextFactoryImpl extends VisitContextFactory {
 
+    public VisitContextFactoryImpl() {
+    }
+
     @Override
     public VisitContext getVisitContext(FacesContext context, 
             Collection<String> ids, 

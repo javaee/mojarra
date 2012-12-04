@@ -70,6 +70,9 @@ import javax.faces.FacesWrapper;
  */
 public abstract class FlashFactory implements FacesWrapper<FlashFactory> {
 
+    public FlashFactory() {
+    }
+
     /**
      * <p class="changed_added_2_2">If this factory has been decorated, the 
      * implementation doing the decorating may override this method to provide

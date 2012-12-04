@@ -66,7 +66,9 @@ import javax.faces.FacesWrapper;
 
 public abstract class ExceptionHandlerFactory implements FacesWrapper<ExceptionHandlerFactory> {
 
-
+    public ExceptionHandlerFactory() {
+    }
+    
     /**
      * <p class="changed_added_2_0">If this factory has been decorated, the 
      * implementation doing the decorating may override this method to provide

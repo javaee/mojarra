@@ -48,6 +48,9 @@ import javax.faces.view.ViewDeclarationLanguageFactory;
 
 
 public class DecoratedVDLFactory extends ViewDeclarationLanguageFactory {
+
+    public DecoratedVDLFactory() {
+    }
     
     private ViewDeclarationLanguageFactory toWrap;
 
