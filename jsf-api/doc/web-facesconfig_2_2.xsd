@@ -1267,7 +1267,8 @@
     <xsd:annotation>
       <xsd:documentation><![CDATA[
 
-       <p> The value of from-view-id must contain one of the following
+       <p><span class="changed_modified_2_2">The</span>
+       value of from-view-id must contain one of the following
         values:</p>
         
         <ul>
@@ -1275,6 +1276,9 @@
         <li><p>The exact match for a view identifier that is recognized
         by the the ViewHandler implementation being used (such as
         "/index.jsp" if you are using the default ViewHandler).</p></li>
+        
+        <li><p class="changed_added_2_2">The exact match of a flow node id
+        in the current flow, or a flow id of another flow.</p></li>
         
          <li><p> A proper prefix of a view identifier, plus a trailing
          "*" character.  This pattern indicates that all view
@@ -1789,7 +1793,7 @@ is assumed to be <code>&lt;flowName&gt;.xhtml</code>.</p>
 <li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #808080; font-style: italic;">&lt;!-- If a customerId was specified then we'll edit it, otherwise create a new customer. --&gt;</span></div></li>
 <li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;switch</span> <span style="color: #000066;">id</span>=<span style="color: #ff0000;">&quot;router1&quot;</span><span style="color: #000000; font-weight: bold;">&gt;</span></span></div></li>
 <li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;navigation-case<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
-<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;if<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>#{facesFlowScope.customerId == null}<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/if<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
+<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;if<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>#{flowScope.customerId == null}<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/if<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
 <li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;from-outcome<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>create-customer<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/from-outcome<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
 <li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/navigation-case<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
 <li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/switch<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
@@ -1847,6 +1851,10 @@ href="javax/faces/flow/FlowHandler.html">FlowHandler</a></code>.</p>
                    maxOccurs="unbounded" />
       <xsd:element name="flow-return"
                    type="javaee:faces-config-faces-flow-definition-flow-returnType"
+                   minOccurs="0"
+                   maxOccurs="unbounded"/>
+      <xsd:element name="navigation-rule"
+                   type="javaee:faces-config-navigation-ruleType"
                    minOccurs="0"
                    maxOccurs="unbounded"/>
       <xsd:element name="flow-call"
@@ -2627,11 +2635,16 @@ represents the node id to which control will be passed.</p>
         <xsd:annotation>
           <xsd:documentation><![CDATA[
 
-           <p> The "to-view-id" element contains the view identifier
-            of the next view that should be displayed if this
+           <p><span class="changed_modified_2_2">The "to-view-id" element 
+            contains the view identifier (<span class="changed_added_2_2">or 
+            flow node id, or flow id</span>)
+            of the next view (<span class="changed_added_2_2">or flow node or 
+            flow</span>) that should be displayed if this
             navigation rule is matched. If the contents is a
             value expression, it should be resolved by the
-            navigation handler to obtain the view identifier.</p>
+            navigation handler to obtain the view (
+            <span class="changed_added_2_2">or flow node or flow</span>) 
+            identifier.</p>
             
           ]]></xsd:documentation>
         </xsd:annotation>

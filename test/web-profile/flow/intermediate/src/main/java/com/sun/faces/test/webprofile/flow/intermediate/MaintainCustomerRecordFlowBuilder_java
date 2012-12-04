@@ -10,9 +10,9 @@ public class maintain_customer_record {
         builder.flowReturn("success").fromOutcome("/complete");
         builder.flowReturn("errorOccurred").fromOutcome("error");
         builder.switchNode("router1").
-            navigationCase().condition("#{facesFlowScope.customerId == null}").
+            navigationCase().condition("#{flowScope.customerId == null}").
                 fromOutcome("create-customer").
-            navigationCase().condition("#{facesFlowScope.customerId != null}").
+            navigationCase().condition("#{flowScope.customerId != null}").
                 fromOutcome("edit-customer").
             defaultOutcome("view-customer");
         builder.viewNode("create-customer");

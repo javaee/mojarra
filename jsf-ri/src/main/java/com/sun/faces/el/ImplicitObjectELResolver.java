@@ -69,7 +69,7 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
     {
         String[] implictNames = new String[]{
         "application", "applicationScope", "cc", "component", "cookie", "facesContext",
-        "facesFlowScope",
+        "flowScope",
         "header", "headerValues", "initParam", "param", "paramValues",
         "request", "requestScope", "resource", "session", "sessionScope", 
         "view", "viewScope" };

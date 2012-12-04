@@ -59,11 +59,11 @@
 
             <j:inbound-parameter>
                 <j:name>param1FromFlowA</j:name>
-                <j:value>#{facesFlowScope.param1Value}</j:value>
+                <j:value>#{flowScope.param1Value}</j:value>
             </j:inbound-parameter>
             <j:inbound-parameter>
                 <j:name>param2FromFlowA</j:name>
-                <j:value>#{facesFlowScope.param2Value}</j:value>
+                <j:value>#{flowScope.param2Value}</j:value>
             </j:inbound-parameter>
             
             <j:flow-call id="callA">

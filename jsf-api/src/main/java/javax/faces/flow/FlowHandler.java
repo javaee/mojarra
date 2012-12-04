@@ -63,90 +63,10 @@ import javax.faces.context.FacesContext;
  * <code>&lt;faces-flow-definition&gt;</code> element as specified in
  * the <a target="_"
  * href="../../../web-facesconfig.html#type_faces-config-faces-flow-definitionType">Application
- * Configuration Resources XML Schema Definition</a>.  Additional means
+ * Configuration Resources XML Schema Definition</a>, or by using the 
+ * {@link javax.faces.flow.builder.FlowBuilder} API.  Additional means
  * of defining flows may be provided by decorating the {@link
  * FlowHandlerFactory}.</p>
-
- * <p><strong>Where to Discover Flows</strong></p>
-
- * <ul>
-
- * <p>The system must support the following conventions within the web
- * application for discovery of flows.  In each of these cases, when the
- * flow is discovered (see below), it is added to the runtime with a
- * call to {@link #addFlow}.  In this discussion, let
- * <code>flowName</code> be the name of the flow.</p>
-
- *     <ul>
-
- * <li><p><strong>In a jar on the application's classpath</strong></p>
-
- * <p>When packaged in a jar, a flow definition and all of its contents
- * must reside in the path <code>META-INF/flows/&lt;flowName&gt;</code>
- * in the jar.  The flow definition must reside in the path
- * <code>META-INF/flows/&lt;flowName&gt;/&lt;flowName&gt;-flow.xml</code>
- * in the jar.</p>
-
- * <p>If <code>ProjectStage</code> is <code>Development</code>, the
- * runtime must try to detect the case of multiple flows defined with
- * the same <code>flowName</code> and fail to deploy in that case.  A
- * descriptive error including the <code>flowName</code> must be
- * printed.</p>
-
- * </li>
-
- * <li><p><strong>Within a directory in the web application root</strong></p>
-
- * <p>When packaged in a directory in the web application root, a flow
- * definition and all of its contents must reside in the path
- * <code>flowName</code> relative to the web application root.  The flow
- * definition must reside in
- * <code>&lt;flowName&gt;/&lt;flowName&gt;-flow.xml</code>. </p>
-
- * </li>
-
- * <li><p><strong>Directly in the web application
- * root</strong></p>
-
- * <p>When packaged directly in the web application root, a flow
- * definition must reside in <code>&lt;flowName&gt;-flow.xml</code>.</p>
-
- * </li>
-
- * <li><p><strong>In the Application Configuration
- * Resources</strong></p>
-
- * <p>Flow definitions may be included directly in the Application
- * Configuration Resources, such as the
- * <code>WEB-INF/faces-config.xml</code> file.</p>
-
- * </li>
-
- * </ul>
-
- * <p>In all of these cases, an entire flow is discoverable starting
- * with the root <code>&lt;faces-flow-definition&gt;</code> for that
- * flow.</p>
-
- * </ul>
-
- * <p><strong>When to Discover Flows</strong></p>
-
- * <ul>
-
- * <p>Because flows may be defined in several different locations, the
- * timing of when to discover them and add them to the runtime varies.
- * Flows defined in the Application Configuration Resources must be
- * loaded at the same time as the Application Configuration Resources
- * are processed, namely, deployment time.  Flows defined in any of the
- * other places mentioned previously may be discovered and loaded
- * lazily, when a user agent actually traverses a view in the flow.
- * Because the runtime must use the {@link #addFlow} method to make the
- * flow available to the application, it is possible to dynamically add
- * flows using this same API.  The runtime is not required to persist
- * the flow definition for such flows, but may do so.</p>
-
- * </ul>
 
  * <p><strong>Managing Flows</strong></p>
 
@@ -211,16 +131,8 @@ import javax.faces.context.FacesContext;
  * </li>
 
  * </ul>
-
- * <p>This UML diagram shows the relationship of the flow node types to
- * the {@code FlowHandler}.  Non-implemented classes are shaded in
- * gray.</p>
-
- * <img src="FlowHierarchy.jpg" style="display: block; margin-left: auto; margin-right: auto"></img>
-
- * </ul>
-
- * <div class="changed_added_2_2">
+ * 
+ * <p>Edges in the graph are defined by the existing JSF navigation rule system.</p>
 
  * <p><strong>Flows and Model Objects</strong></p>
 
@@ -231,7 +143,7 @@ import javax.faces.context.FacesContext;
  * into the named scope, and must be made available for garbage
  * collection when the user agent leaves the flow.</p>
 
- * <p>The <code>facesFlowScoped</code> EL implicit object is also
+ * <p>The <code>flowScope</code> EL implicit object is also
  * available to store values in the "current" slope.  Values stored in
  * this scope must be made available for garbage collection when the
  * user agent leaves the flow.</p>
@@ -248,7 +160,7 @@ public abstract class FlowHandler {
 
     /**
      * <p class="changed_added_2_2">Return the {@code Map} that backs
-     * the {@code #{facesFlowScope}} EL implicit object or {@code null}
+     * the {@code #{flowScope}} EL implicit object or {@code null}
      * if no flow is currently active. </p>
      *
      * @since 2.2
@@ -347,7 +259,7 @@ public abstract class FlowHandler {
      * <p>If the {@code destination Flow} is a sub-flow of the {@code
      * origin Flow} push the {@code destination Flow} onto the flow data
      * structure and return {@code the destination Flow}. Otherwise, pop
-     * the current {code Flow} from the flow data structure.  If the
+     * the current {@code Flow} from the flow data structure.  If the
      * {@code destination Flow} is non-{@code null}, make the {@code
      * destination Flow} the current flow, pushing it onto the data
      * structure.  If <strong>evaluatedParams</strong> is not empty, for

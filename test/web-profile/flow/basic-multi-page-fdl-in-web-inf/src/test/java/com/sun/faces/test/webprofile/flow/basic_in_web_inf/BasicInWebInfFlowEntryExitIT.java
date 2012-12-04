@@ -144,19 +144,19 @@ public class BasicInWebInfFlowEntryExitIT {
         page = button.click();
         
         HtmlTextInput input = (HtmlTextInput) page.getElementById("input");
-        final String facesFlowScopeValue = "Value in faces flow scope";
-        input.setValueAttribute(facesFlowScopeValue);
+        final String flowScopeValue = "Value in faces flow scope";
+        input.setValueAttribute(flowScopeValue);
         
         button = (HtmlSubmitInput) page.getElementById("next");
         page = button.click();
         
-        assertTrue(page.asText().contains(facesFlowScopeValue));
+        assertTrue(page.asText().contains(flowScopeValue));
         
         button = (HtmlSubmitInput) page.getElementById("return");
         page = button.click();
         
         assertTrue(page.asText().contains("return page"));
-        assertTrue(!page.asText().contains(facesFlowScopeValue));
+        assertTrue(!page.asText().contains(flowScopeValue));
         
         
         

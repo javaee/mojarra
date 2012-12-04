@@ -177,7 +177,7 @@ public class FlowACallsFlowBIT {
         page = button.click();
 
         pageText = page.asText();
-        assertTrue(pageText.matches("(?s).*facesFlowScope value,\\s+should be empty:\\s+\\..*"));
+        assertTrue(pageText.matches("(?s).*flowScope value,\\s+should be empty:\\s+\\..*"));
         assertTrue(pageText.matches("(?s).*Has a flow:\\s+false\\..*"));
         
     }
