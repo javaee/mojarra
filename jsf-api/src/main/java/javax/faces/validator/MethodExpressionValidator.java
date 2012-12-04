@@ -43,7 +43,6 @@ package javax.faces.validator;
 import javax.el.ELContext;
 import javax.el.ELException;
 import javax.el.MethodExpression;
-import javax.faces.application.FacesMessage;
 import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -99,15 +98,11 @@ public class MethodExpressionValidator implements Validator, StateHolder {
                 Throwable e = ee.getCause();
                 if (e instanceof ValidatorException) {
                     throw (ValidatorException) e;
+                } else {
+                    throw ee;
                 }
-                String errInfo = ee.getMessage();
-                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                                                        errInfo,
-                                                        errInfo);
-                throw new ValidatorException(message, ee.getCause());
             }
         }
-
     }
 
     // ----------------------------------------------------- StateHolder Methods
