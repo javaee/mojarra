@@ -197,6 +197,11 @@ public class FlowImpl extends Flow {
     }
 
     @Override
+    public List<NavigationCase> getNavigationCases() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     public Map<String,NavigationCase> getReturns() {
         return returns;
     }

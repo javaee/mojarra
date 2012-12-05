@@ -42,8 +42,6 @@ package com.sun.faces.flow.builder;
 
 import com.sun.faces.flow.FlowImpl;
 import com.sun.faces.flow.ParameterImpl;
-import com.sun.faces.flow.ViewNodeImpl;
-import java.util.List;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.el.MethodExpression;
@@ -51,9 +49,9 @@ import javax.el.ValueExpression;
 import javax.faces.context.FacesContext;
 import javax.faces.flow.Flow;
 import javax.faces.flow.builder.FlowBuilder;
-import javax.faces.flow.ViewNode;
 import javax.faces.flow.builder.FlowCallBuilder;
 import javax.faces.flow.builder.MethodCallBuilder;
+import javax.faces.flow.builder.NodeBuilder;
 import javax.faces.flow.builder.ReturnBuilder;
 import javax.faces.flow.builder.SwitchBuilder;
 import javax.faces.flow.builder.ViewBuilder;
@@ -98,6 +96,13 @@ public class FlowBuilderImpl extends FlowBuilder {
     public FlowCallBuilder flowCallNode(String flowCallNodeId) {
         return new FlowCallBuilderImpl(this, flowCallNodeId);
     }
+
+    @Override
+    public FlowBuilder link(NodeBuilder source, NodeBuilder destination) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
+    
     
     // </editor-fold>
 
