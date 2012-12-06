@@ -60,9 +60,13 @@ import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 import java.util.*;
 
+import java.util.concurrent.CopyOnWriteArraySet;
 import javax.faces.FactoryFinder;
-import javax.faces.component.*;
-import javax.faces.view.*;
+import javax.faces.component.UIViewParameter;
+import javax.faces.component.UIViewRoot;
+import javax.faces.view.ViewDeclarationLanguage;
+import javax.faces.view.ViewDeclarationLanguageFactory;
+import javax.faces.view.ViewMetadata;
 
 /**
  * This {@link ViewHandler} implementation handles both JSP-based and
@@ -91,7 +95,7 @@ public class MultiViewHandler extends ViewHandler {
         extensionsSet = config.isSet(WebConfiguration.WebContextInitParameter.DefaultSuffix);
         vdlFactory = (ViewDeclarationLanguageFactory)
                 FactoryFinder.getFactory(FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY);
-        protectedViews = new HashSet<String>();
+        protectedViews = new CopyOnWriteArraySet<String>();
 
     }
 

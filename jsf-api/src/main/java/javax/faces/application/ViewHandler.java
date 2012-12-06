@@ -463,13 +463,16 @@ public abstract class ViewHandler {
     public abstract String getResourceURL(FacesContext context, String path);
     
     /**
-     * <p class="changed_added_2_2">Return an unmodifiable <code>Set</code> of 
-     * the protected views currently known to this <code>ViewHandler</code>
-     * instance. Compliant implementations must return a <code>Set</code> that 
-     * is the concatenation of the contents of all the <code>&lt;url-pattern&gt;</code>
-     * elements within all the <code>&lt;protected-views&gt;</code> in all of the
-     * application configuration resources in the current application. The 
-     * default implementation returns an unmodifiable empty <code>Set</code>.</p>
+     * <p class="changed_added_2_2">Return an unmodifiable
+     * <code>Set</code> of the protected views currently known to this
+     * <code>ViewHandler</code> instance. Compliant implementations must
+     * return a <code>Set</code> that is the concatenation of the
+     * contents of all the <code>&lt;url-pattern&gt;</code> elements
+     * within all the <code>&lt;protected-views&gt;</code> in all of the
+     * application configuration resources in the current application.
+     * The runtime must support calling this method at any time after
+     * application startup.  The default implementation returns an
+     * unmodifiable empty <code>Set</code>.</p>
      * 
      * @since 2.2 
      */
@@ -478,11 +481,14 @@ public abstract class ViewHandler {
     }
     
     /**
-     * <p class="changed_added_2_2">Add the argument <code>urlPattern</code>
-     * to the <code>Set</code> of protected views for this application. 
-     * Compliant implementations make it so a subsequent call to 
-     * {@link #getProtectedViewsUnmodifiable} contains the argument. The 
-     * default implementation takes no action.</p>
+     * <p class="changed_added_2_2">Add the argument
+     * <code>urlPattern</code> to the thread safe <code>Set</code> of
+     * protected views for this application.  Compliant implementations
+     * make it so a subsequent call to {@link
+     * #getProtectedViewsUnmodifiable} contains the argument. The
+     * runtime must support calling this method at any time after
+     * application startup.  The default implementation takes no
+     * action.</p>
      * 
      * @param urlPattern the url-pattern to add.
      * 
@@ -493,14 +499,18 @@ public abstract class ViewHandler {
     }
     
     /**
-     * <p class="changed_added_2_2">Remove the argument <code>urlPattern</code>
-     * from the <code>Set</code> of protected views for this application, if
-     * present in the <code>Set</code>. If the argument <code>urlPattern</code>
-     * is not present in the <code>Set</code>, this method has no effect.
-     * Compliant implementations must make it so a subsequent call to 
-     * {@link #getProtectedViewsUnmodifiable} does not contain the argument. 
-     * Returns <code>true</code> if this <code>Set</code> contained the argument.
-     * The default implementation takes no action and returns <code>false</code>.</p>
+     * <p class="changed_added_2_2">Remove the argument
+     * <code>urlPattern</code> from the thread safe <code>Set</code> of
+     * protected views for this application, if present in the
+     * <code>Set</code>. If the argument <code>urlPattern</code> is not
+     * present in the <code>Set</code>, this method has no effect.
+     * Compliant implementations must make it so a subsequent call to
+     * {@link #getProtectedViewsUnmodifiable} does not contain the
+     * argument. The runtime must support calling this method at any
+     * time after application startup.  Returns <code>true</code> if
+     * this <code>Set</code> contained the argument.  The default
+     * implementation takes no action and returns
+     * <code>false</code>.</p>
      * 
      * @param urlPattern the url-pattern to remove.
      * 
