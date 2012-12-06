@@ -319,10 +319,10 @@
       <code>false</code>, no such indication is made.</p>
 
       ]]></description>
-      <name>resetInput</name>
+      <name>resetValues</name>
       <required>false</required>
       <deferred-value>
-          <type>java.lang.String</type>
+          <type>java.lang.Boolean</type>
       </deferred-value>
 
     </attribute>

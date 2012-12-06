@@ -157,6 +157,7 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
 
         return immediate;
     }
+
     private static String buildAjaxCommand(ClientBehaviorContext behaviorContext,
                                            AjaxBehavior ajaxBehavior) {
 
@@ -175,6 +176,10 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
         String onerror = ajaxBehavior.getOnerror();
         String sourceId = behaviorContext.getSourceId();
         String delay = ajaxBehavior.getDelay();
+        Boolean resetValues = null;
+        if (ajaxBehavior.isResetValuesSet()) {
+            resetValues = ajaxBehavior.isResetValues();
+        }
         Collection<ClientBehaviorContext.Parameter> params = behaviorContext.getParameters();
 
         // Needed workaround for SelectManyCheckbox - if execute doesn't have sourceId,
@@ -217,7 +222,8 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
         ajaxCommand.append(",");
         appendIds(component, ajaxCommand, render);
 
-        if ((onevent != null) || (onerror != null) || (delay != null) || !params.isEmpty())  {
+        if ((onevent != null) || (onerror != null) || (delay != null) || 
+                (resetValues != null) || !params.isEmpty())  {
 
             ajaxCommand.append(",{");
 
@@ -231,6 +237,10 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
             
             if (delay != null) {
                 RenderKitUtils.appendProperty(ajaxCommand, "delay", delay, true);
+            }
+            
+            if (resetValues != null) {
+                RenderKitUtils.appendProperty(ajaxCommand, "resetValues", resetValues, false);
             }
 
             if (!params.isEmpty()) {

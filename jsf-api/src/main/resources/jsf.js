@@ -1818,9 +1818,9 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
 
 
              * <li class="changed_added_2_2">If
-             * <code>options.resetInput</code> exists and its value is
+             * <code>options.resetValues</code> exists and its value is
              * <code>true</code> ensure a post data argument with the
-             * name <code>javax.faces.partial.resetInput</code> and the
+             * name <code>javax.faces.partial.resetValues</code> and the
              * value <code>true</code> is sent in addition to the other
              * post data arguments.</li>
 
@@ -2046,6 +2046,10 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
 
                 if (event && !!event.type) {
                     args["javax.faces.partial.event"] = event.type;
+                }
+
+                if ("resetValues" in options) {
+                    args["javax.faces.partial.resetValues"] = options.resetValues;
                 }
 
                 // If we have 'execute' identifiers:

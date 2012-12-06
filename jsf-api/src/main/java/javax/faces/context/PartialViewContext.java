@@ -97,10 +97,10 @@ public abstract class PartialViewContext {
      * a parameter value of <code>true</code>, the implementation
      * must return <code>true</code> from {@link #isResetValues}.</p>
      *
-     * @since 2.0
+     * @since 2.2
      */
     public static final String RESET_VALUES_PARAM_NAME =
-          "javax.faces.partial.resetInput";
+          "javax.faces.partial.resetValues";
 
     /**
      * <p class="changed_added_2_0">

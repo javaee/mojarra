@@ -140,6 +140,7 @@ public final class AjaxHandler extends TagHandlerImpl implements BehaviorHolderA
     private final TagAttribute onerror;
     private final TagAttribute disabled;
     private final TagAttribute immediate;
+    private final TagAttribute resetValues;
     private final TagAttribute listener;
     private final TagAttribute delay;
 
@@ -157,6 +158,7 @@ public final class AjaxHandler extends TagHandlerImpl implements BehaviorHolderA
         this.onerror = this.getAttribute("onerror");
         this.disabled = this.getAttribute("disabled");
         this.immediate = this.getAttribute("immediate");
+        this.resetValues = this.getAttribute("resetValues");
         this.listener = this.getAttribute("listener");
         this.delay = this.getAttribute("delay");
 
@@ -349,6 +351,7 @@ public final class AjaxHandler extends TagHandlerImpl implements BehaviorHolderA
         setBehaviorAttribute(ctx, behavior, this.onerror, String.class);
         setBehaviorAttribute(ctx, behavior, this.disabled, Boolean.class);
         setBehaviorAttribute(ctx, behavior, this.immediate, Boolean.class);
+        setBehaviorAttribute(ctx, behavior, this.resetValues, Boolean.class);
         setBehaviorAttribute(ctx, behavior, this.execute, Object.class);
         setBehaviorAttribute(ctx, behavior, this.render, Object.class);
         setBehaviorAttribute(ctx, behavior, this.delay, String.class);

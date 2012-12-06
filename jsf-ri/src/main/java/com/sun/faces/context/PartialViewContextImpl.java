@@ -236,8 +236,8 @@ import javax.faces.lifecycle.ClientWindow;
     public void processPartial(PhaseId phaseId) {
         updateFacesContext();
         PartialViewContext pvc = ctx.getPartialViewContext();
-        Collection <String> executeIds = pvc.getExecuteIds();
-        Collection <String> renderIds = pvc.getRenderIds();
+        Collection <String> myExecuteIds = pvc.getExecuteIds();
+        Collection <String> myRenderIds = pvc.getRenderIds();
         UIViewRoot viewRoot = ctx.getViewRoot();
 
         if (phaseId == PhaseId.APPLY_REQUEST_VALUES ||
@@ -247,7 +247,7 @@ import javax.faces.lifecycle.ClientWindow;
             // Skip this processing if "none" is specified in the render list,
             // or there were no execute phase client ids.
 
-            if (executeIds == null || executeIds.isEmpty()) {
+            if (myExecuteIds == null || myExecuteIds.isEmpty()) {
                 if (LOGGER.isLoggable(Level.FINE)) {
                     LOGGER.log(Level.FINE,
                         "No execute and render identifiers specified.  Skipping component processing.");
@@ -256,7 +256,7 @@ import javax.faces.lifecycle.ClientWindow;
             }
 
             try {
-                processComponents(viewRoot, phaseId, executeIds, ctx);
+                processComponents(viewRoot, phaseId, myExecuteIds, ctx);
             } catch (Exception e) {
                 if (LOGGER.isLoggable(Level.INFO)) {
                     LOGGER.log(Level.INFO,
@@ -297,6 +297,11 @@ import javax.faces.lifecycle.ClientWindow;
                 }
                 writer.writePreamble("<?xml version='1.0' encoding='" + encoding + "'?>\n");
                 writer.startDocument();
+                
+                if (isResetValues()) {
+                    viewRoot.resetValues(ctx, myRenderIds);
+                }
+                
                 if (isRenderAll()) {
                     renderAll(ctx, viewRoot);
                     renderState(ctx);
@@ -306,8 +311,8 @@ import javax.faces.lifecycle.ClientWindow;
 
                 // Skip this processing if "none" is specified in the render list,
                 // or there were no render phase client ids.
-                if (renderIds != null && !renderIds.isEmpty()) {
-                    processComponents(viewRoot, phaseId, renderIds, ctx);
+                if (myRenderIds != null && !myRenderIds.isEmpty()) {
+                    processComponents(viewRoot, phaseId, myRenderIds, ctx);
                 }
 
                 renderState(ctx);

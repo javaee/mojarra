@@ -291,6 +291,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         return isLocalValueSet() ? getLocalValue() : super.getValue();
     }
     
+    @Override
     public void setValue(Object value) {
         super.setValue(value);
         // Mark the local value as set.
@@ -317,6 +318,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * returned from <code>getValue()</code>.</p>
      */
 
+    @Override
     public void resetValue() {
         super.resetValue();
         this.setSubmittedValue(null);

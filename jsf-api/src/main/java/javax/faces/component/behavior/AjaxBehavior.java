@@ -98,6 +98,7 @@ public class AjaxBehavior extends ClientBehaviorBase {
     private List<String> render;
     private Boolean disabled;
     private Boolean immediate;
+    private Boolean resetValues;
 
     private Map<String, ValueExpression> bindings;
     
@@ -284,6 +285,33 @@ public class AjaxBehavior extends ClientBehaviorBase {
 
         clearInitialState();
     }
+    
+    /*
+     * <p class="changed_added_2_2">
+     * Return the resetValues status of this behavior.</p>
+     * 
+     * @since 2.2
+     */
+
+    public boolean isResetValues() {
+        Boolean result = (Boolean) eval(RESET_VALUES, resetValues);
+        return ((result != null) ? result : false);
+    }
+
+    /*
+     * <p class="changed_added_2_2">
+     * Set the resetValues status of this behavior.</p>
+     * 
+     * @since 2.2
+     */
+
+    public void setResetValues(boolean resetValues) {
+        this.resetValues = resetValues;
+        
+        clearInitialState();
+    }
+    
+    
 
     /**
      * <p class="changed_added_2_0">Return the disabled status of this behavior.</p>
@@ -311,7 +339,7 @@ public class AjaxBehavior extends ClientBehaviorBase {
 
     /**
      * <p class="changed_added_2_0">Return the immediate status of this 
-     * behaivor.</p>
+     * behavior.</p>
      *
      * @since 2.0
      */
@@ -347,6 +375,18 @@ public class AjaxBehavior extends ClientBehaviorBase {
      */
     public boolean isImmediateSet() {
         return ((immediate != null) || (getValueExpression(IMMEDIATE) != null));
+    }
+
+    /**
+     * <p class="changed_added_2_2">Tests whether the resetValues attribute
+     * is specified.  Returns true if the resetValues attribute is specified,
+     * either as a locally set property or as a value expression. 
+     * </p>
+     *
+     * @since 2.0
+     */
+    public boolean isResetValuesSet() {
+        return ((resetValues != null) || (getValueExpression(RESET_VALUES) != null));
     }
 
     /**
@@ -467,17 +507,18 @@ public class AjaxBehavior extends ClientBehaviorBase {
                 values = new Object[] { superState };
             }
         } else {
-            values = new Object[9];
+            values = new Object[10];
       
             values[0] = superState;
             values[1] = onerror;
             values[2] = onevent;
             values[3] = disabled;
             values[4] = immediate;
-            values[5] = delay;
-            values[6] = saveList(execute);
-            values[7] = saveList(render);
-            values[8] = saveBindings(context, bindings);
+            values[5] = resetValues;
+            values[6] = delay;
+            values[7] = saveList(execute);
+            values[8] = saveList(render);
+            values[9] = saveBindings(context, bindings);
         }
 
         return values;
@@ -499,10 +540,11 @@ public class AjaxBehavior extends ClientBehaviorBase {
                 onevent = (String)values[2];
                 disabled = (Boolean)values[3];
                 immediate = (Boolean)values[4];
-                delay = (String)values[5];
-                execute = restoreList(EXECUTE, values[6]);
-                render = restoreList(RENDER, values[7]);
-                bindings = restoreBindings(context, values[8]);
+                resetValues = (Boolean)values[5];
+                delay = (String)values[6];
+                execute = restoreList(EXECUTE, values[7]);
+                render = restoreList(RENDER, values[8]);
+                bindings = restoreBindings(context, values[9]);
 
                 // If we saved state last time, save state again next time.
                 clearInitialState();
@@ -666,6 +708,8 @@ public class AjaxBehavior extends ClientBehaviorBase {
             onerror = (String)value;
         } else if (IMMEDIATE.equals(propertyName)) {
             immediate = (Boolean)value;
+        } else if (RESET_VALUES.equals(propertyName)) {
+            resetValues = (Boolean)value;
         } else if (DISABLED.equals(propertyName)) {
             disabled = (Boolean)value;
         } else if (EXECUTE.equals(propertyName)) {
@@ -761,6 +805,7 @@ public class AjaxBehavior extends ClientBehaviorBase {
     private static final String ONEVENT = "onevent";
     private static final String ONERROR = "onerror";
     private static final String IMMEDIATE = "immediate";
+    private static final String RESET_VALUES = "resetValues";
     private static final String DISABLED = "disabled";
     private static final String EXECUTE = "execute";
     private static final String RENDER = "render";
