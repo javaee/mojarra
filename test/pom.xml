@@ -12,6 +12,7 @@
     <modules>
         <module>agnostic</module>
         <module>cluster</module>
+        <module>glassfish</module>
         <module>selenium</module>
         <module>unit</module>
         <module>util</module>
@@ -154,6 +155,7 @@
                                 <integration.serverName>${integration.serverName}</integration.serverName>
                                 <integration.serverProtocol>${integration.serverProtocol}</integration.serverProtocol>
                                 <integration.url>${integration.protocol}://${integration.serverName}:${integration.serverPort}/${project.build.finalName}/</integration.url>
+                                <jsf.version>${jsf.version}</jsf.version>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>                
@@ -367,6 +369,8 @@
                                 <properties>
                                     <cargo.hostname>${integration.serverName}</cargo.hostname>
                                     <cargo.servlet.port>${integration.serverPort}</cargo.servlet.port>
+                                    <cargo.remote.username>admin</cargo.remote.username>
+                                    <cargo.remote.password></cargo.remote.password>
                                 </properties>
                             </configuration>
                         </configuration>
