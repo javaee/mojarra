@@ -112,6 +112,8 @@ public final class CoreLibrary extends AbstractTagLibrary {
 
         this.addTagHandler("loadBundle", LoadBundleHandler.class);
 
+        this.addTagHandler("resetValues", ResetValuesHandler.class);
+
         this.addComponent("viewParam", UIViewParameter.COMPONENT_TYPE, null);
         
         this.addComponent("viewAction", UIViewAction.COMPONENT_TYPE, null);

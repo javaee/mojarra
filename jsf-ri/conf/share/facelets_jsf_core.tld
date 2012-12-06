@@ -2772,7 +2772,7 @@ will not pass validation.</p> ]]>
             the <code>render</code> attribute as the argument.</p>
 
         ]]></description>
-        <name>resetInput</name>
+        <name>resetValues</name>
         <tag-class>javax.faces.webapp.UIComponentClassicTagBase</tag-class>
         <body-content>JSP</body-content>
         <attribute>
@@ -2782,7 +2782,11 @@ will not pass validation.</p> ]]>
                 Collection&lt;String&gt;. The clientIds of components
                 that will be passed to
                 <code>UIViewRoot.resetValues()</code>.  The identifiers
-                must be space delimited.</p>
+                must be space delimited.  Note: do not use any of the
+                <code>@</code> keywords such as <code>@form</code> or
+                <code>@this</code> with this tag because
+                <code>UIViewRoot.resetValues()</code> does not descend
+                into the children of the listed components.</p>
 
             ]]></description>
             <name>render</name>
