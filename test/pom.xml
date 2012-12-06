@@ -362,8 +362,6 @@
                                 <properties>
                                     <cargo.hostname>${integration.serverName}</cargo.hostname>
                                     <cargo.servlet.port>${integration.serverPort}</cargo.servlet.port>
-                                    <cargo.remote.username>${integration.remoteUsername}</cargo.remote.username>
-                                    <cargo.remote.password>${integration.remotePassword}</cargo.remote.password>
                                 </properties>
                             </configuration>
                         </configuration>
@@ -994,8 +992,6 @@
     <properties>
         <integration.serverName>localhost</integration.serverName>
         <integration.serverPort>8080</integration.serverPort>
-        <integration.remoteUsername>admin</integration.remoteUsername>
-        <integration.remotePassword></integration.remotePassword>
         <jsf.artifactId>javax.faces</jsf.artifactId>
         <jsf.groupId>org.glassfish</jsf.groupId>
         <jsf.version>${project.version}</jsf.version>
