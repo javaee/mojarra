@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.renderKit.facesServletAccess;
+package com.sun.faces.test.agnostic.lifecycle.facesServletAccess;
 
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -45,8 +45,9 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import static org.junit.Assert.*;
 
-public class Issue15972283IT {
+public class Issue15973375IT {
 
     private String webUrl;
     private WebClient webClient;
@@ -63,15 +64,44 @@ public class Issue15972283IT {
     }
 
     @Test
-    public void testIssue15792283() throws Exception {
+    public void testWebInfWebXml() throws Exception {
         webClient.setThrowExceptionOnFailingStatusCode(false);
+        HtmlPage page = webClient.getPage(webUrl + "faces/faces/WEB-INF/web.xml");
+        assertEquals(404, page.getWebResponse().getStatusCode());
+    }
 
-        HtmlPage page = webClient.getPage(webUrl);
-        HtmlAnchor link = (HtmlAnchor) page.getHtmlElementById("web_xml");
-        page = link.click();
-        String xml = page.asXml();
-        
-        
+    @Test
+    public void testWebInfYouCantGetMe() throws Exception {
+        webClient.setThrowExceptionOnFailingStatusCode(false);
+        HtmlPage page = webClient.getPage(webUrl + "faces/faces/WEB-INF/youcantgetme.xhtml");
+        assertEquals(404, page.getWebResponse().getStatusCode());
+    }
+
+    @Test
+    public void testWebInfFacesConfig() throws Exception {
+        webClient.setThrowExceptionOnFailingStatusCode(false);
+        HtmlPage page = webClient.getPage(webUrl + "faces/faces/WEB-INF/faces-config.xml");
+        assertEquals(404, page.getWebResponse().getStatusCode());
+    }
+
+    @Test
+    public void testNormalPage() throws Exception {
+        webClient.setThrowExceptionOnFailingStatusCode(false);
+        HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
+        assertEquals(200, page.getWebResponse().getStatusCode());
+    }
+
+    @Test
+    public void testMetaInf() throws Exception {
+        webClient.setThrowExceptionOnFailingStatusCode(false);
+        HtmlPage page = webClient.getPage(webUrl + "faces/META-INF");
+        assertEquals(404, page.getWebResponse().getStatusCode());
+    }
+
+    @Test
+    public void testMetaInfYouCantGetMe() throws Exception {
+        webClient.setThrowExceptionOnFailingStatusCode(false);
+        HtmlPage page = webClient.getPage(webUrl + "faces/META-INF/youcantgetme.xhtml");
+        assertEquals(404, page.getWebResponse().getStatusCode());
     }
 }
-
