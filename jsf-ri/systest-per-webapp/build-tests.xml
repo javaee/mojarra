@@ -121,8 +121,6 @@
                value="com/sun/faces/systest/InjectionTestCase.class" />
     <property  name="suppress-xml-decl"
                value="com/sun/faces/systest/SuppressXmlDeclTestCase.class" />
-    <property  name="replace-vdl"
-               value="com/sun/faces/systest/replacevdl/ReplaceViewDeclarationLanguageTestCase.class" />
     <property  name="myfaces-uidata-component-state-test"
                value="com/sun/faces/systest/myfaces_uidata_component_state_test/MyFacesUIDataTestCase.class" />
     <property  name="process-as-jspx"

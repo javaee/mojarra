@@ -119,7 +119,6 @@
                    flash,
                    jsp-flash,
                    suppress-xml-decl,
-                   replace-vdl,
                    process-as-jspx,
                    request-char-encoding-no-session,
                    bogus-render-kit-id,
@@ -159,7 +158,6 @@
                    write-attribute-script-enabled,
                    wcag-datatable,
                    suppress-xml-decl,
-                   replace-vdl,
                    process-as-jspx,
                    bogus-render-kit-id,
                    characterCombat"/>
