@@ -54,5 +54,6 @@
     <name>Mojarra ${project.version} - Test - Agnostic - Lifecycle</name>
     <modules>
         <module>debugObjectOutputStream</module>
+        <module>facesServletAccess</module>
     </modules>
 </project>
