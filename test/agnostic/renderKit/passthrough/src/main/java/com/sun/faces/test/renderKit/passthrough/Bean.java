@@ -179,4 +179,24 @@ public class Bean implements Serializable {
     public String getLastAction() {
         return lastAction;
     }
+
+    private String min = "100";
+
+    public void setMin(String min) {
+        this.min = min;
+    }
+
+    public String getMin() {
+        return min;
+    }
+
+    private String max = "500";
+
+    public void setMax(String max) {
+        this.max = max;
+    }
+
+    public String getMax() {
+        return max;
+    }
 }
