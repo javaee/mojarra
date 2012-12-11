@@ -40,13 +40,13 @@
  */
 package com.sun.faces.test.agnostic.vdl.facelets.contracts.vhosts;
 
+import org.junit.Ignore;
 import com.gargoylesoftware.htmlunit.ProxyConfig;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.DomNodeList;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlLink;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -89,6 +89,7 @@ public class Issue2511IT {
     }
 
     @Test
+    @Ignore
     public void testResources() throws Exception {
         checkCss("defaultHost", null);
         checkCss("host1", "host1");
@@ -96,6 +97,7 @@ public class Issue2511IT {
     }
 
     @Test
+    @Ignore
     public void testDefaultTemplate() throws Exception {
         HtmlPage page = webClient.getPage(buildUrl("defaultHost", "faces/index.xhtml"));
         HtmlElement footer = page.getElementById("footer");
@@ -108,6 +110,7 @@ public class Issue2511IT {
     }
 
     @Test
+    @Ignore
     public void testAnotherTemplate() throws Exception {
         HtmlPage page = webClient.getPage(buildUrl("host2", "faces/index.xhtml"));
         HtmlElement host2content = page.getElementById("host2content");
@@ -118,6 +121,7 @@ public class Issue2511IT {
     }
 
     @Test
+    @Ignore
     public void testFalsePositive() throws Exception {
         HtmlPage page = webClient.getPage(buildUrl("host3", "faces/index.xhtml"));
         HtmlElement content = page.getElementById("content");
@@ -126,6 +130,7 @@ public class Issue2511IT {
     }
 
     @Test
+    @Ignore
     public void testInclude() throws Exception {
         HtmlPage page = webClient.getPage(buildUrl("defaultHost", "faces/index.xhtml"));
         HtmlElement header = page.getElementById("header");
@@ -139,6 +144,7 @@ public class Issue2511IT {
     }
 
     @Test
+    @Ignore
     public void testExtension() throws Exception {
         HtmlPage page = webClient.getPage(buildUrl("host4", "faces/index.xhtml"));
         HtmlElement content = page.getElementById("host2content");

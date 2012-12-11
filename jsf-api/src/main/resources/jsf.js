@@ -1823,12 +1823,12 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              * name <code>javax.faces.partial.resetValues</code> and the
              * value <code>true</code> is sent in addition to the other
              * post data arguments.  This will cause
-             * <code>UIViewRoot.resetValues() to be called, passing the
-             * value of the "render" attribute.  Note: do not use any of
-             * the <code>@</code> keywords such as <code>@form</code> or
-             * <code>@this</code> with this option because
-             * <code>UIViewRoot.resetValues()</code> does not descend
-             * into the children of the listed components.</li>
+             * <code>UIViewRoot.resetValues()</code> to be called,
+             * passing the value of the "render" attribute.  Note: do
+             * not use any of the <code>@</code> keywords such as
+             * <code>@form</code> or <code>@this</code> with this option
+             * because <code>UIViewRoot.resetValues()</code> does not
+             * descend into the children of the listed components.</li>
 
 
              * <li>Determine additional arguments (if any) from the <code>event</code>
