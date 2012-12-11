@@ -1059,4 +1059,11 @@ javax.faces.level=ALL
         </jsf.junit>
     </target>
 
+    <target name="clean.javadoc.cache">
+
+      <delete failonerror="false" 
+  file="${demo.dir}/dist/mojarra-${spec.version}-SNAPSHOT-documentation.zip" />
+
+    </target>
+
 </project>
