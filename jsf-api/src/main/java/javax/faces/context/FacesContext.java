@@ -473,6 +473,49 @@ public abstract class FacesContext {
      *  this instance has been released
      */
     public abstract boolean getResponseComplete();
+    
+    
+    /**
+     * <p class="changed_added_2_2">Return the list of resource library 
+     * contracts that have been calculated
+     * to be appropriate for use with this view, or {@code null} if there are 
+     * no such resource library contracts.  The list returned by this method
+     * must be immutable.  For backward compatibility with implementations
+     * of the specification prior to when this method was introduced, an
+     * implementation is provided that returns {@code null}.  Implementations
+     * compliant with the version in which this method was introduced must
+     * implement this method as specified.</p>
+     * 
+     * @since 2.2 
+     */
+    public List<String> getResourceLibraryContracts() {
+        return null;
+    }
+    
+    /**
+     * <p class="changed_added_2_2">Set the resource library contracts
+     * calculated as valid to use with this view.  The implementation must 
+     * copy the contents of the incoming {@code List} into an immutable 
+     * {@code List} for return from {@link #getResourceLibraryContracts}.
+     * If the argument is {@code null} or empty, the action taken is the same as if
+     * the argument is {@code null}: a subsequent call to {@code getResourceLibraryContracts}
+     * returns {@code null}.  This method may only be called during the 
+     * processing of {@link javax.faces.view.ViewDeclarationLanguage#createView}
+     * and during the VDL tag handler for the tag corresponding to
+     * an instance of {@code UIViewRoot}.  For backward compatibility with implementations
+     * of the specification prior to when this method was introduced, an
+     * implementation is provided that takes no action.  Implementations
+     * compliant with the version in which this method was introduced must
+     * implement this method as specified.
+     * 
+     * </p>
+     * 
+     * @param contracts The new contracts to be returned, as an immutable 
+     * {@code List}. from a subsequent call to {@link #getResourceLibraryContracts}.
+     */
+    
+    public void setResourceLibraryContracts(List<String> contracts) {
+    }    
 
     /**
      * <p class="changed_added_2_0">Return <code>true</code> if the <code>validationFailed()</code>

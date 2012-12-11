@@ -103,8 +103,6 @@ final class DefaultFacelet extends Facelet implements XMLFrontMatterSaver {
 
     private final long refreshPeriod;
 
-    private final Map<String,URL> relativePaths;
-
     private final FaceletHandler root;
 
     private final URL src;
@@ -129,7 +127,6 @@ final class DefaultFacelet extends Facelet implements XMLFrontMatterSaver {
         this.mapper = factory.idMappers.get(alias);
         this.createTime = System.currentTimeMillis();
         this.refreshPeriod = this.factory.getRefreshPeriod();
-        this.relativePaths = new WeakHashMap<String,URL>();
 
         String DOCTYPE = Util.getDOCTYPEFromFacesContextAttributes(FacesContext.getCurrentInstance());
         if (null != DOCTYPE) {
@@ -283,12 +280,9 @@ final class DefaultFacelet extends Facelet implements XMLFrontMatterSaver {
      *             if there is a problem creating the URL for the path specified
      */
     private URL getRelativePath(String path) throws IOException {
-        URL url = this.relativePaths.get(path);
-        if (url == null) {
-            url = this.factory.resolveURL(this.src, path);
-            this.relativePaths.put(path, url);
-        }
-        return url;
+        return this.factory.resolveURL(this.src, path);
+        // PENDING(FCAPUTO): Deactivated caching for resource library contracts.
+        //         To make contracts work with relative paths, the url should be calculated based on the alias.
     }
 
     /**

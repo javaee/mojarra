@@ -760,7 +760,10 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         }
 
         UIViewRoot result = super.createView(ctx, viewId);
-        result.setResourceLibraryContracts(calculateResourceLibraryContracts(ctx, viewId));
+        ViewHandler viewHandler = ctx.getApplication().getViewHandler();
+        ViewDeclarationLanguage vdl = viewHandler.getViewDeclarationLanguage(ctx, viewId);
+
+        ctx.setResourceLibraryContracts(vdl.calculateResourceLibraryContracts(ctx, viewId));
         
         return result;
         

@@ -182,6 +182,30 @@ public abstract class FacesContextWrapper extends FacesContext implements FacesW
 
     /**
      * <p>The default behavior of this method is to
+     * call {@link FacesContext#getResourceLibraryContracts}
+     * on the wrapped {@link FacesContext} object.</p>
+     *
+     * @see javax.faces.context.FacesContext#getResourceLibraryContracts
+     */
+    @Override
+    public List<String> getResourceLibraryContracts() {
+        return getWrapped().getResourceLibraryContracts();
+    }
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link FacesContext#setResourceLibraryContracts}
+     * on the wrapped {@link FacesContext} object.</p>
+     *
+     * @see javax.faces.context.FacesContext#setResourceLibraryContracts
+     */
+    @Override
+    public void setResourceLibraryContracts(List<String> contracts) {
+        getWrapped().setResourceLibraryContracts(contracts);
+    }
+    
+    /**
+     * <p>The default behavior of this method is to
      * call {@link FacesContext#getResponseComplete()}
      * on the wrapped {@link FacesContext} object.</p>
      *

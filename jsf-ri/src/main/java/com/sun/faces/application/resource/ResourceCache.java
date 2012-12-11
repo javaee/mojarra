@@ -40,6 +40,7 @@
 
 package com.sun.faces.application.resource;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -76,7 +77,7 @@ public class ResourceCache {
     /**
      * The <code>ResourceInfo<code> cache.
      */
-    private MultiKeyConcurrentHashMap<String,ResourceInfoCheckPeriodProxy> resourceCache;
+    private MultiKeyConcurrentHashMap<Object,ResourceInfoCheckPeriodProxy> resourceCache;
 
 
     /**
@@ -98,7 +99,7 @@ public class ResourceCache {
         ServletContext sc = config.getServletContext();
         long period = getCheckPeriod(config);
         checkPeriod = ((period != -1) ? period * 1000L * 60L : -1);
-        resourceCache = new MultiKeyConcurrentHashMap<String,ResourceInfoCheckPeriodProxy>(30);
+        resourceCache = new MultiKeyConcurrentHashMap<Object,ResourceInfoCheckPeriodProxy>(30);
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.log(Level.FINE,
                        "ResourceCache constructed for {0}.  Check period is {1} minutes.",
@@ -116,10 +117,11 @@ public class ResourceCache {
      *
      * @param info resource metadata
      *
+     * @param contracts the contracts
      * @return previous value associated with specified key, or null
      *  if there was no mapping for key
      */
-    public ResourceInfo add(ResourceInfo info) {
+    public ResourceInfo add(ResourceInfo info, List<String> contracts) {
 
         Util.notNull("info", info);
 
@@ -132,6 +134,7 @@ public class ResourceCache {
               resourceCache.putIfAbsent(info.name,
                                         info.libraryName,
                                         info.localePrefix,
+                                        contracts,
                                         new ResourceInfoCheckPeriodProxy(info, checkPeriod));
         return ((proxy != null) ? proxy.getResourceInfo() : null);
 
@@ -142,17 +145,18 @@ public class ResourceCache {
      * @param name the resource name
      * @param libraryName the library name
      * @param localePrefix the locale prefix
+     * @param contracts the contracts
      * @return the {@link ResourceInfo} associated with <code>key<code>
      *  if any.
      */
-    public ResourceInfo get(String name, String libraryName, String localePrefix) {
+    public ResourceInfo get(String name, String libraryName, String localePrefix, List<String> contracts) {
 
         Util.notNull("name", name);
 
         ResourceInfoCheckPeriodProxy proxy =
-              resourceCache.get(name, libraryName, localePrefix);
+              resourceCache.get(name, libraryName, localePrefix, contracts);
         if (proxy != null && proxy.needsRefreshed()) {
-            resourceCache.remove(name, libraryName, localePrefix);
+            resourceCache.remove(name, libraryName, localePrefix, contracts);
             return null;
         } else {
             return ((proxy != null) ? proxy.getResourceInfo() : null);

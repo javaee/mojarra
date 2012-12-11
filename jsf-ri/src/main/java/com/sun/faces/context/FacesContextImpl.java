@@ -87,7 +87,7 @@ public class FacesContextImpl extends FacesContext {
           new ThreadLocal<FacesContext>();
 
     // Log instance for this class
-    private static Logger LOGGER = FacesLogger.CONTEXT.getLogger();
+    private static final Logger LOGGER = FacesLogger.CONTEXT.getLogger();
 
     private boolean released;
 
@@ -106,6 +106,7 @@ public class FacesContextImpl extends FacesContext {
     private boolean responseComplete = false;
     private boolean validationFailed = false;
     private Map<Object, Object> attributes;
+    private List<String> resourceLibraryContracts;
     private PhaseId currentPhaseId;
     private PartialViewContext partialViewContext = null;
     private ExceptionHandler exceptionHandler = null;
@@ -139,6 +140,7 @@ public class FacesContextImpl extends FacesContext {
     /**
      * @see javax.faces.context.FacesContext#getExternalContext()
      */
+    @Override
     public ExternalContext getExternalContext() {
         assertNotReleased();
         return externalContext;
@@ -148,6 +150,7 @@ public class FacesContextImpl extends FacesContext {
     /**
      * @see javax.faces.context.FacesContext#getApplication()
      */
+    @Override
     public Application getApplication() {
         assertNotReleased();
         if (null != application) {
@@ -183,6 +186,7 @@ public class FacesContextImpl extends FacesContext {
     /**
      * @see javax.faces.context.FacesContext#getPartialViewContext()
      */
+    @Override
     public PartialViewContext getPartialViewContext() {
 
         assertNotReleased();
@@ -275,6 +279,7 @@ public class FacesContextImpl extends FacesContext {
     /**
      * @see javax.faces.context.FacesContext#getClientIdsWithMessages()
      */
+    @Override
     public Iterator<String> getClientIdsWithMessages() {
         assertNotReleased();
         return ((componentMessageLists == null)
@@ -286,6 +291,7 @@ public class FacesContextImpl extends FacesContext {
     /**
      * @see javax.faces.context.FacesContext#getMaximumSeverity()
      */
+    @Override
     public Severity getMaximumSeverity() {
         assertNotReleased();
         Severity result = null;
@@ -353,6 +359,7 @@ public class FacesContextImpl extends FacesContext {
     /**
      * @see javax.faces.context.FacesContext#getMessages()
      */
+    @Override
     public Iterator<FacesMessage> getMessages() {
         assertNotReleased();
         if (null == componentMessageLists) {
@@ -371,6 +378,7 @@ public class FacesContextImpl extends FacesContext {
     /**
      * @see FacesContext#getMessages(String)
      */
+    @Override
     public Iterator<FacesMessage> getMessages(String clientId) {
         assertNotReleased();
 
@@ -393,6 +401,7 @@ public class FacesContextImpl extends FacesContext {
     /**
      * @see javax.faces.context.FacesContext#getRenderKit()
      */
+    @Override
     public RenderKit getRenderKit() {
         assertNotReleased();
         UIViewRoot vr = getViewRoot();
@@ -426,6 +435,7 @@ public class FacesContextImpl extends FacesContext {
     /**
      * @see javax.faces.context.FacesContext#getResponseStream()
      */
+    @Override
     public ResponseStream getResponseStream() {
         assertNotReleased();
         return responseStream;
@@ -435,6 +445,7 @@ public class FacesContextImpl extends FacesContext {
     /**
      * @see FacesContext#setResponseStream(javax.faces.context.ResponseStream)
      */
+    @Override
     public void setResponseStream(ResponseStream responseStream) {
         assertNotReleased();
         Util.notNull("responseStrean", responseStream);
@@ -445,6 +456,7 @@ public class FacesContextImpl extends FacesContext {
     /**
      * @see javax.faces.context.FacesContext#getViewRoot()
      */
+    @Override
     public UIViewRoot getViewRoot() {
         assertNotReleased();
         return viewRoot;
@@ -454,6 +466,7 @@ public class FacesContextImpl extends FacesContext {
     /**
      * @see FacesContext#setViewRoot(javax.faces.component.UIViewRoot)
      */
+    @Override
     public void setViewRoot(UIViewRoot root) {
         assertNotReleased();
         Util.notNull("root", root);
@@ -472,6 +485,7 @@ public class FacesContextImpl extends FacesContext {
     /**
      * @see javax.faces.context.FacesContext#getResponseWriter()
      */
+    @Override
     public ResponseWriter getResponseWriter() {
         assertNotReleased();
         return responseWriter;
@@ -481,6 +495,7 @@ public class FacesContextImpl extends FacesContext {
     /**
      * @see FacesContext#setResponseWriter(javax.faces.context.ResponseWriter)
      */
+    @Override
     public void setResponseWriter(ResponseWriter responseWriter) {
         assertNotReleased();
         Util.notNull("responseWriter", responseWriter);
@@ -490,6 +505,7 @@ public class FacesContextImpl extends FacesContext {
     /**
      * @see FacesContext#addMessage(String, javax.faces.application.FacesMessage)
      */
+    @Override
     public void addMessage(String clientId, FacesMessage message) {
         assertNotReleased();
         // Validate our preconditions
@@ -563,6 +579,7 @@ public class FacesContextImpl extends FacesContext {
     /**
      * @see javax.faces.context.FacesContext#release()
      */
+    @Override
     public void release() {
 
         released = true;
@@ -580,6 +597,10 @@ public class FacesContextImpl extends FacesContext {
         if (attributes != null) {
             attributes.clear();
             attributes = null;
+        }
+        if (null != resourceLibraryContracts) {
+            resourceLibraryContracts.clear();
+            resourceLibraryContracts = null;
         }
         partialViewContext = null;
         exceptionHandler = null;
@@ -604,6 +625,7 @@ public class FacesContextImpl extends FacesContext {
     /**
      * @see javax.faces.context.FacesContext#renderResponse()
      */
+    @Override
     public void renderResponse() {
         assertNotReleased();
         renderResponse = true;
@@ -613,6 +635,7 @@ public class FacesContextImpl extends FacesContext {
     /**
      * @see javax.faces.context.FacesContext#responseComplete()
      */
+    @Override
     public void responseComplete() {
         assertNotReleased();
         responseComplete = true;
@@ -621,6 +644,7 @@ public class FacesContextImpl extends FacesContext {
     /**
      * @see javax.faces.context.FacesContext#validationFailed()
      */
+    @Override
     public void validationFailed() {
         assertNotReleased();
         validationFailed = true;
@@ -629,15 +653,36 @@ public class FacesContextImpl extends FacesContext {
     /**
      * @see javax.faces.context.FacesContext#getRenderResponse()
      */
+    @Override
     public boolean getRenderResponse() {
         assertNotReleased();
         return renderResponse;
     }
 
+    @Override
+    public List<String> getResourceLibraryContracts() {
+        return resourceLibraryContracts;
+    }
+
+    @Override
+    public void setResourceLibraryContracts(List<String> contracts) {
+        if (null == contracts || contracts.isEmpty()) {
+            if (null != resourceLibraryContracts) {
+                resourceLibraryContracts.clear();
+                resourceLibraryContracts = null;
+            }
+        } else {
+            resourceLibraryContracts = new ArrayList<String>(contracts);
+        }
+        
+    }
+
+    
 
     /**
      * @see javax.faces.context.FacesContext#getResponseComplete()
      */
+    @Override
     public boolean getResponseComplete() {
         assertNotReleased();
         return responseComplete;
@@ -646,6 +691,7 @@ public class FacesContextImpl extends FacesContext {
     /**
      * @see javax.faces.context.FacesContext#isValidationFailed()
      */
+    @Override
     public boolean isValidationFailed() {
         assertNotReleased();
         return validationFailed;

@@ -156,10 +156,10 @@ public abstract class ViewDeclarationLanguage {
     
     
     /**
-     * <p class="changed_added_2_0">Create a <code>UIViewRoot</code>
-     * from the VDL contained in the artifact referenced by the argument
-     * <code>viewId</code>.  See section JSF.7.7.2 for the specification of
-     * the default implementation.</p>
+     * <p class="changed_added_2_0"><span class="changed_modified_2_2">Create</span>
+     * a <code>UIViewRoot</code> from the VDL contained in the artifact referenced by the argument
+     * <code>viewId</code>.  <span class="changed_modified_2_2">See section JSF.7.7.2 for the specification of
+     * the default implementation.</span></p>
      *
      * @param context the <code>FacesContext</code> for this request.
      * @param viewId the identifier of an artifact that contains the VDL

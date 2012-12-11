@@ -379,7 +379,7 @@ public abstract class ViewHandler {
     /**
      * <p class="changed_added_2_0">Derive and return the viewId from
      * the current request, or the argument input by following the
-     * algorithm defined in specification section JSF.7.5.2.</p>
+     * algorithm defined in specification section JSF.7.6.2.</p>
      *
      * <p>The default implementation of this method simply returns
      * rawViewId unchanged.</p>
@@ -399,7 +399,7 @@ public abstract class ViewHandler {
     /**
      * <p class="changed_added_2_1">Derive and return the viewId from
      * the current request, or the argument input by following the
-     * algorithm defined in specification section JSF.7.5.2.  Note that
+     * algorithm defined in specification section JSF.7.6.2.  Note that
      * unlike <code>deriveViewId()</code>, this method does not require that
      * a physical view be present.</p>
      *
@@ -427,7 +427,7 @@ public abstract class ViewHandler {
      * a client making a request to the <code>toExternalForm()</code> of
      * that <code>URL</code> will select the argument
      * <code>viewId</code> for traversing the JSF lifecycle.  Please see
-     * section JSF.7.5.2 for the complete specification.</p>
+     * section JSF.7.6.2 for the complete specification.</p>
      *
      * @param context {@link FacesContext} for this request
      * @param viewId View identifier of the desired view
@@ -525,7 +525,7 @@ public abstract class ViewHandler {
      * from the <code>viewId</code> argument that is suitable to be used
      * by the {@link NavigationHandler} to issue a redirect request to
      * the URL using a NonFaces request.  Compliant implementations
-     * must implement this method as specified in section JSF.7.5.2.
+     * must implement this method as specified in section JSF.7.6.2.
      * The default implementation simply calls through to {@link
      * #getActionURL}, passing the arguments <code>context</code> and
      * <code>viewId</code>.</p>
@@ -551,7 +551,7 @@ public abstract class ViewHandler {
      * <p class="changed_added_2_0"> Return a JSF action URL derived
      * from the viewId argument that is suitable to be used as the
      * target of a link in a JSF response. Compiliant implementations
-     * must implement this method as specified in section JSF.7.5.2.
+     * must implement this method as specified in section JSF.7.6.2.
      * The default implementation simply calls through to {@link
      * #getActionURL}, passing the arguments <code>context</code> and
      * <code>viewId</code>.</p>

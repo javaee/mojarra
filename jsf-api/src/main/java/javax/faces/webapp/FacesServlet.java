@@ -524,12 +524,12 @@ public final class FacesServlet implements Servlet {
      * <code>HttpServletResponse</code>, respectively, the results of
      * invoking this method are undefined.</p>
      *
-     * <p>This method must respond to requests that start with the
-     * following strings by invoking the <code>sendError</code> method
-     * on the response argument (cast to
-     * <code>HttpServletResponse</code>), passing the code
-     * <code>HttpServletResponse.SC_NOT_FOUND</code> as the
-     * argument. </p>
+     * <p>This method must respond to requests that <span
+     * class="changed_modified_2_2">contain</span> the following
+     * strings by invoking the <code>sendError</code> method on the
+     * response argument (cast to <code>HttpServletResponse</code>),
+     * passing the code <code>HttpServletResponse.SC_NOT_FOUND</code> as
+     * the argument. </p>
      *
      * <ul>
      *

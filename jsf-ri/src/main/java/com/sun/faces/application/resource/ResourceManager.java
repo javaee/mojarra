@@ -41,6 +41,7 @@
 package com.sun.faces.application.resource;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -55,6 +56,7 @@ import java.util.regex.PatternSyntaxException;
 
 import javax.faces.application.ProjectStage;
 import javax.faces.application.ResourceHandler;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 
 import com.sun.faces.util.Util;
@@ -184,14 +186,15 @@ public class ResourceManager {
                                      FacesContext ctx) {
         
         String localePrefix = getLocalePrefix(ctx);
+        List<String> contracts = getResourceLibraryContracts(ctx);
         ResourceInfo info =
-              getFromCache(resourceName, libraryName, localePrefix);
+              getFromCache(resourceName, libraryName, localePrefix, contracts);
         if (info == null) {
             boolean compressable = isCompressable(contentType, ctx);
             if (compressable) {
                 lock.lock();
                 try {
-                    info = getFromCache(resourceName, libraryName, localePrefix);
+                    info = getFromCache(resourceName, libraryName, localePrefix, contracts);
                     if (info == null) {
                         info = doLookup(libraryName,
                                         resourceName,
@@ -200,7 +203,7 @@ public class ResourceManager {
                                         isViewResource,
                                         ctx);
                         if (info != null) {
-                            addToCache(info);
+                            addToCache(info, contracts);
                         }
                     }
                 } finally {
@@ -214,7 +217,7 @@ public class ResourceManager {
                                 isViewResource,
                                 ctx);
                 if (info != null) {
-                    addToCache(info);
+                    addToCache(info, contracts);
                 }
             }
 
@@ -236,7 +239,7 @@ public class ResourceManager {
      * @param localePrefix the locale prefix for this resource (if any)
      * @param compressable if this resource can be compressed
      * @param ctx the {@link javax.faces.context.FacesContext} for the current
-     *  request
+*  request
      *
      * @return a {@link ResourceInfo} if a resource if found matching the
      *  provided arguments, otherwise, return <code>null</code>
@@ -343,20 +346,22 @@ public class ResourceManager {
 
 
     /**
+     *
      * @param name the resource name
      * @param library the library name
      * @param localePrefix the Locale prefix
+     * @param contracts
      * @return the {@link ResourceInfo} from the cache or <code>null</code>
      *  if no cached entry is found
      */
     private ResourceInfo getFromCache(String name,
                                       String library,
-                                      String localePrefix) {
+                                      String localePrefix, List<String> contracts) {
 
         if (cache == null) {
             return null;
         }
-        return cache.get(name, library, localePrefix);
+        return cache.get(name, library, localePrefix, contracts);
 
     }
 
@@ -364,13 +369,14 @@ public class ResourceManager {
     /**
      * Adds the the specified {@link ResourceInfo} to the cache.
      * @param info the @{link ResourceInfo} to add.
+     * @param contracts the contracts
      */
-    private void addToCache(ResourceInfo info) {
+    private void addToCache(ResourceInfo info, List<String> contracts) {
 
         if (cache == null) {
             return;
         }
-        cache.add(info);
+        cache.add(info, contracts);
 
     }
 
@@ -548,6 +554,24 @@ public class ResourceManager {
         }
         return localePrefix;
 
+    }
+
+    private List<String> getResourceLibraryContracts(FacesContext context) {
+        UIViewRoot viewRoot = context.getViewRoot();
+        if(viewRoot == null) {
+
+            if(context.getApplication().getResourceHandler().isResourceRequest(context)) {
+                // it is a resource request. look at the parameter con=.
+
+                String param = context.getExternalContext().getRequestParameterMap().get("con");
+                if(param != null && param.trim().length() > 0) {
+                    return Arrays.asList(param);
+                }
+            }
+            // PENDING(edburns): calculate the contracts!
+            return null;
+        }
+        return context.getResourceLibraryContracts();
     }
 
 

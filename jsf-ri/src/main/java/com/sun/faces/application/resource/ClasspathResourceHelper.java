@@ -355,7 +355,7 @@ public class ClasspathResourceHelper extends ResourceHelper {
                                      FacesContext ctx) {
         UIViewRoot root = ctx.getViewRoot();
         List<String> contracts = (null != root) ? 
-                root.getResourceLibraryContracts() : null;
+                ctx.getResourceLibraryContracts() : null;
         URL result = null;
 
         if (null == contracts) {

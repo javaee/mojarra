@@ -61,7 +61,11 @@ package com.sun.faces.facelets.impl;
 import com.sun.faces.RIConstants;
 import com.sun.faces.context.FacesFileNotFoundException;
 import java.net.MalformedURLException;
+import javax.faces.FactoryFinder;
+import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.view.ViewDeclarationLanguage;
 import javax.faces.view.facelets.Facelet;
 import javax.faces.view.facelets.FaceletCache;
 import com.sun.faces.facelets.compiler.Compiler;
@@ -71,6 +75,7 @@ import com.sun.faces.util.Util;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import javax.faces.view.facelets.FaceletCacheFactory;
 import javax.faces.view.facelets.FaceletHandler;
 import javax.faces.view.facelets.ResourceResolver;
 import java.io.FileNotFoundException;
@@ -81,8 +86,10 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.net.URL;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -105,8 +112,6 @@ public class DefaultFaceletFactory {
 
     private Compiler compiler;
 
-    private Map<String, URL> relativeLocations;
-
     // We continue to use a ResourceResolver just in case someone
     // provides a custom one.  The DefaultResourceResolver simply uses
     // the ResourceHandler to do its work.
@@ -117,6 +122,8 @@ public class DefaultFaceletFactory {
     private long refreshPeriod;
 
     private FaceletCache<DefaultFacelet> cache;
+
+    private ConcurrentMap<List<String>, FaceletCache<DefaultFacelet>> cachePerContract;
 
     Cache<String,IdMapper> idMappers;
     
@@ -161,7 +168,7 @@ public class DefaultFaceletFactory {
         Util.notNull("compiler", compiler);
         Util.notNull("resolver", resolver);
         this.compiler = compiler;
-        this.relativeLocations = new ConcurrentHashMap<String, URL>();
+        this.cachePerContract = new ConcurrentHashMap<List<String>, FaceletCache<DefaultFacelet>>();
         this.resolver = resolver;
         this.baseUrl = resolver.resolveUrl("/");
         this.idMappers = new Cache<String,IdMapper>(new IdMapperFactory());
@@ -176,8 +183,17 @@ public class DefaultFaceletFactory {
         // We can cast to the FaceletCache<DefaultFacelet> here because we know
         // that the Generics information is only used at compile time, and all cache
         // implementations will be using instance factories provided by us and returning DefaultFacelet
-        this.cache = (FaceletCache<DefaultFacelet>)cache;
-        
+        this.cache = initCache((FaceletCache<DefaultFacelet>)cache);
+    }
+
+    private FaceletCache<DefaultFacelet> initCache(FaceletCache<DefaultFacelet> cache) {
+
+        if(cache == null) {
+            FaceletCacheFactory cacheFactory = (FaceletCacheFactory)
+                    FactoryFinder.getFactory(FactoryFinder.FACELET_CACHE_FACTORY);
+            cache = cacheFactory.getFaceletCache();
+        }
+
         // Create instance factories for the  cache, so that the cache can
         // create Facelets and Metadata Facelets
         FaceletCache.MemberFactory<DefaultFacelet> faceletFactory =
@@ -196,14 +212,14 @@ public class DefaultFaceletFactory {
             // We must call this method using reflection because it is protected.
             Method m = FaceletCache.class.getDeclaredMethod("setMemberFactories", FaceletCache.MemberFactory.class, FaceletCache.MemberFactory.class);
             m.setAccessible(true);
-            m.invoke(this.cache, faceletFactory, metadataFaceletFactory);
+            m.invoke(cache, faceletFactory, metadataFaceletFactory);
         } catch (Exception ex) {
             if (log.isLoggable(Level.SEVERE)) {
                 log.log(Level.SEVERE, null, ex);
             }
             throw new FacesException(ex);
-        } 
-        
+        }
+        return cache;
     }
 
     /*
@@ -250,6 +266,7 @@ public class DefaultFaceletFactory {
      * @throws IOException
      */
     public URL resolveURL(URL source, String path) throws IOException {
+        // PENDING(FCAPUTO): always go to the resolver to make resource libary contracts work with relative urls
         if (path.startsWith("/")) {
             URL url = this.resolver.resolveUrl(path);
             if (url == null) {
@@ -277,36 +294,57 @@ public class DefaultFaceletFactory {
      * @throws ELException
      */
     public Facelet getFacelet(FacesContext context, URL url) throws IOException {
-        return this.cache.getFacelet(url);
+        return getCache(context).getFacelet(url);
     }
 
     public Facelet getMetadataFacelet(FacesContext context, URL url) throws IOException {
-        return this.cache.getViewMetadataFacelet(url);
+        return getCache(context).getViewMetadataFacelet(url);
     }
 
     public boolean needsToBeRefreshed(URL url) {
-        return !this.cache.isFaceletCached(url);
-    }
-
-    
-
-    private URL resolveURL(String uri) throws IOException {
-
-        URL url = this.relativeLocations.get(uri);
-        if (url == null) {
-            url = this.resolveURL(this.baseUrl, uri);
-            if (url != null) {
-                this.relativeLocations.put(uri, url);
-            } else {
-                throw new IOException("'" + uri + "' not found.");
+        if(!cache.isFaceletCached(url)) {
+            return true;
+        }
+        if (cachePerContract == null) {
+            return false;
+        }
+        // PENDING(FCAPUTO) not sure, if this is what we want.
+        for (FaceletCache<DefaultFacelet> faceletCache : cachePerContract.values()) {
+            if(!faceletCache.isFaceletCached(url)) {
+                return true;
             }
         }
-        return url;
+        return false;
+    }
 
+    private FaceletCache<DefaultFacelet> getCache(FacesContext context) {
+        List<String> contracts = context.getResourceLibraryContracts();
+        if(contracts != null) {
+            FaceletCache<DefaultFacelet> faceletCache = cachePerContract.get(contracts);
+            if(faceletCache == null) {
+                // PENDING(FCAPUTO) we don't support com.sun.faces.config.WebConfiguration.WebContextInitParameter#FaceletCache for contracts
+                faceletCache = initCache(null);
+                cachePerContract.putIfAbsent(contracts, faceletCache);
+                faceletCache = cachePerContract.get(contracts);
+            }
+            return faceletCache;
+        }
+        return this.cache;
+    }
+
+    private URL resolveURL(String uri) throws IOException {
+        // PENDING(FCAPUTO) Deactivated caching for resource library contracts. If we still want to cache it, we need a cache per contract libraries list.
+        //         But the ResourceHandler caches on his own (using ResourceManager).
+        URL url = this.resolveURL(this.baseUrl, uri);
+        if (url == null) {
+            throw new IOException("'" + uri + "' not found.");
+        }
+        return url;
     }
 
     public UIComponent _createComponent(FacesContext context, String taglibURI, String tagName, 
     Map<String, Object> attributes) {
+        // PENDING(FCAPUTO) does this work for resource library contracts? I think so.
         UIComponent result = null;
         Application app = context.getApplication();
         ExternalContext extContext = context.getExternalContext();

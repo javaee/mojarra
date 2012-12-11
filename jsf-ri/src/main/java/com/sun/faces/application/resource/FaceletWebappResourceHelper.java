@@ -112,9 +112,7 @@ public class FaceletWebappResourceHelper extends ResourceHelper {
                 }
             }
             
-            UIViewRoot root = ctx.getViewRoot();
-            List<String> contracts = (null != root) ? 
-                    root.getResourceLibraryContracts() : null;
+            List<String> contracts = ctx.getResourceLibraryContracts();
             ContractInfo [] outContract = new ContractInfo[1];
             outContract[0] = null;
 

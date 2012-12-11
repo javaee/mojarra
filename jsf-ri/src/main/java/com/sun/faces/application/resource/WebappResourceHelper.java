@@ -314,7 +314,7 @@ public class WebappResourceHelper extends ResourceHelper {
                                      FacesContext ctx) {
         UIViewRoot root = ctx.getViewRoot();
         List<String> contracts = (null != root) ? 
-                root.getResourceLibraryContracts() : null;
+                ctx.getResourceLibraryContracts() : null;
 
         if (null == contracts) {
             String contractName = ctx.getExternalContext().getRequestParameterMap()

@@ -1055,47 +1055,6 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
     }
     
     /**
-     * <p class="changed_added_2_2">Return the list of resource library 
-     * contracts that have been calculated
-     * to be appropriate for use with this view, or {@code null} if there are 
-     * no such resource library contracts.  The list returned by this method
-     * must be immutable.</p>
-     * 
-     * @since 2.2 
-     */
-    public List<String> getResourceLibraryContracts() {
-        return (List<String>) getStateHelper().eval(PropertyKeys.resourceLibraryContracts);
-    }
-    
-    /**
-     * <p class="changed_added_2_2">Set the resource library contracts
-     * calculated as valid to use with this view.  The implementation must 
-     * copy the contents of the incoming {@code List} into an immutable 
-     * {@code List} for return from {@link #getResourceLibraryContracts}.
-     * If the argument is {@code null} or empty, the action taken is the same as if
-     * the argument is {@code null}: a subsequent call to {@code getResourceLibraryContracts}
-     * returns {@code null}.  This method may only be called during the 
-     * processing of {@link javax.faces.view.ViewDeclarationLanguage#createView}
-     * and during the VDL tag handler for the tag corresponding to
-     * an instance of {@code UIViewRoot}.
-     * 
-     * </p>
-     * 
-     * @param contracts The new contracts to be returned, as an immutable 
-     * {@code List}. from a subsequent call to {@link #getResourceLibraryContracts}.
-     */
-    
-    public void setResourceLibraryContracts(List<String> contracts) {
-        if (null == contracts || contracts.isEmpty()) {
-            getStateHelper().remove(PropertyKeys.resourceLibraryContracts);
-        } else {
-            List<String> newContracts = new ArrayList<String>(contracts);
-            getStateHelper().put(PropertyKeys.resourceLibraryContracts, 
-                    Collections.unmodifiableList(newContracts));
-        }
-    }
-
-    /**
      * <p>Utility method that notifies phaseListeners for the given
      * phaseId.  Assumes that either or both the MethodExpression or
      * phaseListeners data structure are non-null.</p>
