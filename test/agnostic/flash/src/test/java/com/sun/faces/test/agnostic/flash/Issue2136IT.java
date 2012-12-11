@@ -68,6 +68,7 @@ public class Issue2136IT {
     }
 
     @Test
+    @Ignore
     public void testFlashChunkingLink1() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/issue2136/issue2136.xhtml");
         HtmlInput input = (HtmlInput) page.getElementById("form:input");
