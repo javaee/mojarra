@@ -62,10 +62,7 @@ import com.sun.faces.RIConstants;
 import com.sun.faces.context.FacesFileNotFoundException;
 import java.net.MalformedURLException;
 import javax.faces.FactoryFinder;
-import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.view.ViewDeclarationLanguage;
 import javax.faces.view.facelets.Facelet;
 import javax.faces.view.facelets.FaceletCache;
 import com.sun.faces.facelets.compiler.Compiler;
@@ -93,10 +90,12 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import javax.el.ELException;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.view.facelets.FaceletException;
 
 
 /**

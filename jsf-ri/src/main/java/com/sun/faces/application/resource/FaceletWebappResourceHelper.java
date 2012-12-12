@@ -49,7 +49,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import javax.faces.FacesException;
-import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 
 public class FaceletWebappResourceHelper extends ResourceHelper {
