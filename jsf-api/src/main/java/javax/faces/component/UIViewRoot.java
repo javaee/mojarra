@@ -1512,7 +1512,8 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
     }
 
     /**
-     * <p class="changed_added_2_0">Returns a <code>Map</code> that acts as the
+     * <p class="changed_added_2_0"><span class="changed_modified_2_2">Returns</span>
+     * a <code>Map</code> that acts as the
      * interface to the data store that is the "view scope", or, if this
      * instance does not have such a <code>Map</code> and the
      * <code>create</code> argument is <code>true</code>, creates one and
@@ -1534,6 +1535,14 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * <code>Serializable</code>.  In general, it is a good idea to
      * ensure that any objects stored in the view map are
      * <code>Serializable</code>.</p>
+     * 
+     * <p class="changed_added_2_2">For reasons made clear in {@link javax.faces.view.ViewScoped},
+     * this map must ultimately be stored in the session.  For this reason, a 
+     * {@code true} value for the {@code create} argument will force the 
+     * session to be created with a call to 
+     * {@link javax.faces.context.ExternalContext#getSession(boolean)}.
+     * 
+     * </p>
      * 
      * <p>See {@link FacesContext#setViewRoot} for the specification of when the
      * <code>clear()</code> method must be called.</p>

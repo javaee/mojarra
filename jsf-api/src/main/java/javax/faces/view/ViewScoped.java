@@ -60,6 +60,9 @@ import javax.enterprise.context.NormalScope;
  * 
  * <div class="changed_added_2_2">
  * 
+ * <p>The bean must be stored in the map returned from 
+ * {@link javax.faces.component.UIViewRoot#getViewMap(boolean)}.</p>
+
  * <p>Use of this annotation requires that any beans stored in view scope
  * must be serializable and proxyable as defined in the CDI specification.
  * </p>

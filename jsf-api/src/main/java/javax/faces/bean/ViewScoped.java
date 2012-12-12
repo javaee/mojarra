@@ -55,6 +55,9 @@ import java.lang.annotation.Inherited;
 
  * <div class="changed_added_2_2">
 
+ * <p>The bean must be stored in the map returned from 
+ * {@link javax.faces.component.UIViewRoot#getViewMap(boolean)}.</p>
+
  * <p>The runtime must ensure that any methods on the bean annotated
  * with {@code PostConstruct} or {@code PreDestroy} are called when the
  * scope begins and ends, respectively.  Two circumstances can cause the
@@ -84,7 +87,7 @@ import java.lang.annotation.Inherited;
  * ExternalContext.getSessionMap()} is also valid to call.</p>
 
 
- * <p class="changed_added_2_2">The annotations in this package may be
+ * <p>The annotations in this package may be
  * deprecated in a future version of this specification because they
  * duplicate functionality provided by other specifications included in
  * JavaEE.  When possible, the corresponding annotations from the
