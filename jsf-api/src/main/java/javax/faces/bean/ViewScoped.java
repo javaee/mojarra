@@ -56,7 +56,7 @@ import java.lang.annotation.Inherited;
  * <div class="changed_added_2_2">
 
  * <p>The bean must be stored in the map returned from 
- * {@link javax.faces.component.UIViewRoot#getViewMap(boolean)}.</p>
+ * {@code javax.faces.component.UIViewRoot.getViewMap(boolean)}.</p>
 
  * <p>The runtime must ensure that any methods on the bean annotated
  * with {@code PostConstruct} or {@code PreDestroy} are called when the

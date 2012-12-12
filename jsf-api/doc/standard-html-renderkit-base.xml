@@ -1968,6 +1968,8 @@
                 <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/passthrough-renderer-class/text())"/>
             </renderer-class>
 
+            <xi:include href="events-attrs.xml" xpointer="xpointer(/root/*)"/>
+
             <renderer-extension>
                 <renders-children>false</renders-children>
             </renderer-extension>

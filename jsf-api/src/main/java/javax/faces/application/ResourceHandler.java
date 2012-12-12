@@ -303,15 +303,13 @@ public abstract class ResourceHandler {
      * ui:decorate) and make it so the getResourceLibraryContracts part
      * of this method only takes effect if that flag is set?</p>
      
-     * <p>If the argument {@code FacesContext} has a non-{@code null} viewRoot,
-     * call {@link
-     * javax.faces.component.UIViewRoot#getResourceLibraryContracts}.
-     * If the result is non-{@code null} and not empty, for each value
-     * in the list, treat the value as the name of a resource library
-     * contract.  If the argument {@code resoureName} exists as a
-     * resource in the resource library contract, return it.  Otherwise,
-     * return the resource (not in the resource library contract), if
-     * found.  Otherwise, return {@code null}.</p>
+     * <p>Call {@link FacesContext#getResourceLibraryContracts}.  If the
+     * result is non-{@code null} and not empty, for each value in the
+     * list, treat the value as the name of a resource library contract.
+     * If the argument {@code resoureName} exists as a resource in the
+     * resource library contract, return it.  Otherwise, return the
+     * resource (not in the resource library contract), if found.
+     * Otherwise, return {@code null}.</p>
 
      * </div>
 

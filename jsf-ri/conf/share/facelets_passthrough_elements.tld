@@ -124,12 +124,19 @@
 
  <tag>
 
-     <description><![CDATA[<p class="changed_added_2_2">Markup element that causes a 
-     component of <code>component-type: javax.faces.Panel</code> with
-     <code>renderer-type: javax.faces.passthrough.Element</code> to be inserted
-     in the tree.  This element is primarily intended to be used by the
-     default <code>TagDecorator</code>, when no match is found as
-     described in the javadoc for that class.</p>
+     <description><![CDATA[<p class="changed_added_2_2">Markup element
+     that causes a component of <code>component-type:
+     javax.faces.Panel</code> with <code>renderer-type:
+     javax.faces.passthrough.Element</code> to be inserted in the tree.
+     This element is primarily intended to be used by the default
+     <code>TagDecorator</code>, when no match is found as described in
+     the javadoc for that class.  The component that backs this element
+     must implement
+     <code>javax.faces.component.behavior.ClientBehaviorHolder</code>
+     and return "click" from its <code>getDefaultEventName()</code>
+     method.  The list of events returned from its
+     <code>getEventNames()</code> method must include the "on*"
+     attributes below, ommitting the leading "on".</p>
 
     ]]></description>
 
@@ -152,6 +159,157 @@
          </deferred-value>         
 
      </attribute>
+
+    <attribute>
+        <description><![CDATA[<p class="changed_added_2_2">
+          Javascript code executed when a pointer button is
+          clicked over this element.
+        ]]></description>
+        
+        
+        <name>onclick</name>
+        <required>false</required>
+        <deferred-value>
+            <type>java.lang.String</type>
+        </deferred-value>         
+        
+    </attribute>
+
+    <attribute>
+        <description><![CDATA[<p class="changed_added_2_2">
+          Javascript code executed when a pointer button is
+          double clicked over this element.
+        ]]></description>
+        
+        
+        <name>ondblclick</name>
+        <required>false</required>
+        <deferred-value>
+            <type>java.lang.String</type>
+        </deferred-value>         
+        
+    </attribute>
+
+    <attribute>
+        <description><![CDATA[<p class="changed_added_2_2">
+          Javascript code executed when a pointer button is
+          pressed down over this element.
+        ]]></description>
+        
+        
+        <name>onmousedown</name>
+        <required>false</required>
+        <deferred-value>
+            <type>java.lang.String</type>
+        </deferred-value>         
+        
+    </attribute>
+
+    <attribute>
+        <description><![CDATA[<p class="changed_added_2_2">
+          Javascript code executed when a pointer button is
+          released over this element.
+        ]]></description>
+        
+        
+        <name>onmouseup</name>
+        <required>false</required>
+        <deferred-value>
+            <type>java.lang.String</type>
+        </deferred-value>         
+        
+    </attribute>
+
+    <attribute>
+        <description><![CDATA[<p class="changed_added_2_2">
+          Javascript code executed when a pointer button is
+          moved onto this element.
+        ]]></description>
+        
+        
+        <name>onmouseover</name>
+        <required>false</required>
+        <deferred-value>
+            <type>java.lang.String</type>
+        </deferred-value>         
+        
+    </attribute>
+
+    <attribute>
+        <description><![CDATA[<p class="changed_added_2_2">
+          Javascript code executed when a pointer button is
+          moved within this element.
+        ]]></description>
+        
+        
+        <name>onmousemove</name>
+        <required>false</required>
+        <deferred-value>
+            <type>java.lang.String</type>
+        </deferred-value>         
+        
+    </attribute>
+
+    <attribute>
+        <description><![CDATA[<p class="changed_added_2_2">
+          Javascript code executed when a pointer button is
+          moved away from this element.
+        ]]></description>
+        
+        
+        <name>onmouseout</name>
+        <required>false</required>
+        <deferred-value>
+            <type>java.lang.String</type>
+        </deferred-value>         
+        
+    </attribute>
+
+    <attribute>
+        <description><![CDATA[<p class="changed_added_2_2">
+          Javascript code executed when a key is
+          pressed and released over this element.
+        ]]></description>
+        
+        
+        <name>onkeypress</name>
+        <required>false</required>
+        <deferred-value>
+            <type>java.lang.String</type>
+        </deferred-value>         
+        
+    </attribute>
+
+    <attribute>
+        <description><![CDATA[<p class="changed_added_2_2">
+          Javascript code executed when a key is
+          pressed down over this element.
+        ]]></description>
+        
+        
+        <name>onkeydown</name>
+        <required>false</required>
+        <deferred-value>
+            <type>java.lang.String</type>
+        </deferred-value>         
+        
+    </attribute>
+
+    <attribute>
+        <description><![CDATA[<p class="changed_added_2_2">
+          Javascript code executed when a key is
+          released over this element.
+        ]]></description>
+        
+        
+        <name>onkeyup</name>
+        <required>false</required>
+        <deferred-value>
+            <type>java.lang.String</type>
+        </deferred-value>         
+        
+    </attribute>
+
 
  </tag>
 
