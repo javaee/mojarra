@@ -247,6 +247,8 @@ public final class SAXCompiler extends Compiler {
                     sb.append(" SYSTEM \"").append(systemId).append("\"");
                 }
                 sb.append(">\n");
+                // It is essential to save the doctype here because this is the 
+                // *only* time we will have access to it.
                 Util.saveDOCTYPEToFacesContextAttributes(sb.toString());
             }
             this.inDocument = false;
