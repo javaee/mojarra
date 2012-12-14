@@ -2756,6 +2756,34 @@ will not pass validation.</p> ]]>
             </deferred-value>
 
         </attribute>
+        <attribute>
+            <description>
+                <![CDATA[<p>
+                
+                MethodExpression representing an action listener method that
+                will be notified when this component is activated by the user.
+                The expression must evaluate to a public method that takes an
+                ActionEvent parameter, with a return type of void, <span
+                class="changed_added_2_0">or to a public method that takes no
+                arguments with a return type of void.  In the latter case, the
+                method has no way of easily knowing where the event came from,
+                but this can be useful in cases where a notification is needed
+                that "some action happened".</span>
+                
+                </p>]]>
+            </description>
+            <name>
+                actionListener
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-method>
+                <method-signature>
+                    void actionListener(javax.faces.event.ActionEvent)
+                </method-signature>
+            </deferred-method>
+        </attribute>
     </tag>
 
     <tag>
