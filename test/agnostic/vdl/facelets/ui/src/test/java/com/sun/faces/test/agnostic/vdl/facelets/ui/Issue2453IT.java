@@ -75,4 +75,16 @@ public class Issue2453IT {
         response = page.getWebResponse().getContentAsString();
         assertTrue(response.contains("<!DOCTYPE html>"));
     }
+    
+    @Test
+    public void testDOCTYPES_Reload() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/Issue2575_templateClient.xhtml");
+        String response = page.getWebResponse().getContentAsString();
+        assertTrue(response.contains("<!DOCTYPE html>"));
+
+        page = webClient.getPage(webUrl + "faces/Issue2575_templateClient.xhtml");
+        response = page.getWebResponse().getContentAsString();
+        assertTrue(response.contains("<!DOCTYPE html>"));
+        
+    }
 }
