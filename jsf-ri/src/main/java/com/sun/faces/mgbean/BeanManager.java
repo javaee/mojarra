@@ -41,7 +41,6 @@
 package com.sun.faces.mgbean;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Locale;
@@ -73,7 +72,7 @@ public class BeanManager implements SystemEventListener {
 
     @SuppressWarnings({"CollectionWithoutInitialCapacity"})
     private Map<String,BeanBuilder> managedBeans =
-         new HashMap<String,BeanBuilder>();
+         new ConcurrentHashMap<String,BeanBuilder>();
     private InjectionProvider injectionProvider;
     private boolean configPreprocessed;
     private boolean lazyBeanValidation;
