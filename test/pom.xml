@@ -921,7 +921,7 @@
             </properties>
         </profile>
         <profile>
-            <id>integration-weblogic12c-cargo</id>
+            <id>integration-weblogic12c-prepare</id>
             <build>
                 <plugins>
                     <plugin>
@@ -930,7 +930,7 @@
                         <executions>
                             <execution>
                                 <id>package</id>
-                                <phase>package</phase>
+                                <phase>validate</phase>
                                 <configuration>
                                     <target>
                                         <delete>
@@ -944,6 +944,56 @@
                             </execution>
                         </executions>
                     </plugin>
+                    <plugin>                 
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy</id>                         
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>copy</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>com.sun.faces</groupId>
+                                            <artifactId>jsf-impl</artifactId>
+                                            <version>${jsf.version}</version>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>                                     
+                                            <outputDirectory>${integration.container.root}/server/modules</outputDirectory>
+                                            <destFileName>glassfish.jsf_1.0.0.0_2-1-5.jar</destFileName>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>com.sun.faces</groupId>
+                                            <artifactId>jsf-api</artifactId>
+                                            <version>${jsf.version}</version>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>                                     
+                                            <outputDirectory>${integration.container.root}/server/modules</outputDirectory>
+                                            <destFileName>javax.jsf_1.0.0.0_2-1.jar</destFileName>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <properties>
+                <integration.container.root>C:/Weblogic12c</integration.container.root>
+                <integration.container.id>weblogic103x</integration.container.id>
+                <integration.container.home>${integration.container.root}/server/wlserver</integration.container.home>
+                <integration.container.runtime>${integration.container.root}/domain</integration.container.runtime>
+                <integration.container.type>existing</integration.container.type>
+                <integration.serverPort>7001</integration.serverPort>
+            </properties>
+        </profile>
+        <profile>
+            <id>integration-weblogic12c-cargo</id>
+            <build>
+                <plugins>
                     <plugin>
                         <groupId>org.codehaus.cargo</groupId>
                         <artifactId>cargo-maven2-plugin</artifactId>
@@ -973,6 +1023,8 @@
                                 <home>${integration.container.runtime}</home>
                                 <properties>
                                     <cargo.servlet.port>${integration.serverPort}</cargo.servlet.port>
+                                    <cargo.weblogic.administrator.user>${integration.remote.username}</cargo.weblogic.administrator.user>
+                                    <cargo.weblogic.administrator.password>${integration.remote.password}</cargo.weblogic.administrator.password>
                                 </properties>
                             </configuration>
                         </configuration>
@@ -982,8 +1034,8 @@
             <properties>
                 <integration.container.root>C:/Weblogic12c</integration.container.root>
                 <integration.container.id>weblogic103x</integration.container.id>
-                <integration.container.home>${integration.container.root}/wlserver</integration.container.home>
-                <integration.container.runtime>${integration.container.root}/user_projects/domains/base_domain</integration.container.runtime>
+                <integration.container.home>${integration.container.root}/server/wlserver</integration.container.home>
+                <integration.container.runtime>${integration.container.root}/domain</integration.container.runtime>
                 <integration.container.type>existing</integration.container.type>
                 <integration.serverPort>7001</integration.serverPort>
             </properties>
@@ -992,6 +1044,8 @@
     <properties>
         <integration.serverName>localhost</integration.serverName>
         <integration.serverPort>8080</integration.serverPort>
+        <integration.remote.username>admin</integration.remote.username>
+        <integration.remote.password>admin1234</integration.remote.password>
         <jsf.artifactId>javax.faces</jsf.artifactId>
         <jsf.groupId>org.glassfish</jsf.groupId>
         <jsf.version>${project.version}</jsf.version>
