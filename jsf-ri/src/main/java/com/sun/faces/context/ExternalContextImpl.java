@@ -956,7 +956,10 @@ public class ExternalContextImpl extends ExternalContext {
      */
     @Override
     public void responseFlushBuffer() throws IOException {
-        doLastPhaseActions(FacesContext.getCurrentInstance(), false);
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        if (facesContext != null) {
+            getELFlash().doLastPhaseActions(facesContext, false);
+        }
 
         response.flushBuffer();
 
