@@ -661,11 +661,13 @@ public class FacesContextImpl extends FacesContext {
 
     @Override
     public List<String> getResourceLibraryContracts() {
+        assertNotReleased();
         return resourceLibraryContracts;
     }
 
     @Override
     public void setResourceLibraryContracts(List<String> contracts) {
+        assertNotReleased();
         if (null == contracts || contracts.isEmpty()) {
             if (null != resourceLibraryContracts) {
                 resourceLibraryContracts.clear();
