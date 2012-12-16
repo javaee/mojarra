@@ -13,6 +13,7 @@
         <module>agnostic</module>
         <module>cluster</module>
         <module>glassfish</module>
+        <module>quality</module>
         <module>selenium</module>
         <module>unit</module>
         <module>util</module>
