@@ -98,6 +98,17 @@
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.12.4</version>
+                <inherited>true</inherited>
+                <configuration>
+                    <systemPropertyVariables>
+                        <jsf.version>${jsf.version}</jsf.version>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <dependencies>
@@ -787,7 +798,7 @@
                 <tomcat.version>7.0.27</tomcat.version>
             </properties>
         </profile>
-                <profile>
+        <profile>
             <id>integration-jboss-cargo</id>
             <build>
                 <plugins>
@@ -887,7 +898,6 @@
                 <integration.container.home>C:/Jboss7.1.1</integration.container.home>
             </properties>
         </profile>
-
     </profiles>
     <properties>
         <integration.serverName>localhost</integration.serverName>
