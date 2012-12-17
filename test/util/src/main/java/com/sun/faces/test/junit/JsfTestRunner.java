@@ -115,6 +115,7 @@ public class JsfTestRunner extends BlockJUnit4ClassRunner {
                              * We could not match up the version, so we are going to
                              * assume you still want to run the tests.
                              */
+                            result.add(method);
                         }
                     }
                 } else {
