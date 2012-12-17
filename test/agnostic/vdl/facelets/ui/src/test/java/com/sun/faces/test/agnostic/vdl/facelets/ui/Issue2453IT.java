@@ -83,7 +83,6 @@ public class Issue2453IT {
     }
 
     @Test
-    @JsfTest(JsfVersion.JSF_2_1_14)
     public void testDOCTYPES_Reload() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/Issue2575_templateClient.xhtml");
         String response = page.getWebResponse().getContentAsString();
