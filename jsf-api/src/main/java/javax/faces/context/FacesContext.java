@@ -486,6 +486,9 @@ public abstract class FacesContext {
      * compliant with the version in which this method was introduced must
      * implement this method as specified.</p>
      * 
+     * @throws IllegalStateException if this method is called after
+     *  this instance has been released
+     *
      * @since 2.2 
      */
     public List<String> getResourceLibraryContracts() {
@@ -512,6 +515,10 @@ public abstract class FacesContext {
      * 
      * @param contracts The new contracts to be returned, as an immutable 
      * {@code List}. from a subsequent call to {@link #getResourceLibraryContracts}.
+     * 
+     * @throws IllegalStateException if this method is called after
+     *  this instance has been released
+     *
      */
     
     public void setResourceLibraryContracts(List<String> contracts) {
