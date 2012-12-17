@@ -192,6 +192,7 @@ public class TestLifecycleImpl extends JspFacesTestCase {
 //                           phaseCalled[i] == 0);
 //            }
 //        }
+
     }
 
 
