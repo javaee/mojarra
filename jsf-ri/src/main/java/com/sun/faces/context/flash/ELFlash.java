@@ -957,9 +957,6 @@ public class ELFlash extends Flash {
                 if (null != (val = toSet.getPath())) {
                     properties.put("path", val);
                 }
-                if (null != (val = toSet.isHttpOnly())) {
-                    properties.put("httpOnly", val);
-                }
                 extContext.addResponseCookie(toSet.getName(), toSet.getValue(), 
                         !properties.isEmpty() ? properties : null);
                 properties = null;

@@ -737,7 +737,12 @@ public class ExternalContextImpl extends ExternalContext {
                         cookie.setSecure((Boolean) v);
                         break;
                     case httpOnly:
-                        cookie.setHttpOnly(true);
+                        // Take no action due to servlet 2.5 requirement.
+                        if (LOGGER.isLoggable(Level.FINEST)) {
+                            LOGGER.log(Level.FINEST,
+                       "Unable to set httpOnly on cookie.  Method not present in Servlet 2.5");
+                        }
+
                         break;
                     default:
                         throw new IllegalStateException(); // shouldn't happen
