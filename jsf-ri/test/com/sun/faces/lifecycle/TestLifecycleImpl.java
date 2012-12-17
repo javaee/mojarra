@@ -56,6 +56,7 @@ import com.sun.faces.context.ExceptionHandlerImpl;
 import org.apache.cactus.WebRequest;
 
 import java.util.Locale;
+import junit.framework.TestCase;
 
 /**
  * <B>TestLifecycleImpl</B> is a class ...
@@ -64,7 +65,9 @@ import java.util.Locale;
  *
  */
 
-public class TestLifecycleImpl extends JspFacesTestCase {
+public class TestLifecycleImpl 
+extends TestCase {
+// extends JspFacesTestCase {
 
 //
 // Protected Constants
@@ -129,25 +132,25 @@ public class TestLifecycleImpl extends JspFacesTestCase {
 
 
     public void setUp() {
-        super.setUp();
-	FacesContext context = getFacesContext();
-        UIViewRoot root = Util.getViewHandler(context).createView(context, null);
-        root.setLocale(Locale.US);
-        root.setViewId(TEST_URI);
-	context.setViewRoot(root);
-	
-
-        UIForm basicForm = new UIForm();
-        basicForm.setId("basicForm");
-        UIInput userName = new UIInput();
-
-        userName.setId("userName");
-        root.getChildren().add(basicForm);
-        basicForm.getChildren().add(userName);
-
-	// here we do what the StateManager does to save the state in
-	// the server.
-	Util.getStateManager(context).saveSerializedView(context);
+//        super.setUp();
+//	FacesContext context = getFacesContext();
+//        UIViewRoot root = Util.getViewHandler(context).createView(context, null);
+//        root.setLocale(Locale.US);
+//        root.setViewId(TEST_URI);
+//	context.setViewRoot(root);
+//	
+//
+//        UIForm basicForm = new UIForm();
+//        basicForm.setId("basicForm");
+//        UIInput userName = new UIInput();
+//
+//        userName.setId("userName");
+//        root.getChildren().add(basicForm);
+//        basicForm.getChildren().add(userName);
+//
+//	// here we do what the StateManager does to save the state in
+//	// the server.
+//	Util.getStateManager(context).saveSerializedView(context);
 
     }
 
