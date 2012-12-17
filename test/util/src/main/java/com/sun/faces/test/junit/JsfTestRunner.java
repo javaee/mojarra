@@ -42,6 +42,8 @@ package com.sun.faces.test.junit;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
@@ -124,5 +126,15 @@ public class JsfTestRunner extends BlockJUnit4ClassRunner {
             }
         }
         return result;
+    }
+
+    /*
+     * Allow for no (active) test methods on the test class.
+     */
+    @Override
+    protected void validateInstanceMethods(List<Throwable> errors) {
+        validatePublicVoidNoArgMethods(After.class, false, errors);
+        validatePublicVoidNoArgMethods(Before.class, false, errors);
+        validateTestMethods(errors);
     }
 }
