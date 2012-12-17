@@ -45,7 +45,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Define an annotation that defines the minimum JSF version of a test (at class-level or method-level).
+ * Define an annotation that defines the minimum JSF version of a test (at
+ * class-level or method-level).
  */
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
