@@ -41,16 +41,11 @@ package com.sun.faces.test.agnostic.vdl.facelets.ui;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.sun.faces.test.junit.JsfTest;
-import com.sun.faces.test.junit.JsfTestRunner;
-import com.sun.faces.test.junit.JsfVersion;
 import org.junit.After;
-import org.junit.runner.RunWith;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-@RunWith(JsfTestRunner.class)
 public class Issue2453IT {
 
     private String webUrl;
