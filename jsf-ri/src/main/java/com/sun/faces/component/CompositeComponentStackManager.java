@@ -81,16 +81,12 @@ public class CompositeComponentStackManager {
 
     private StackHandler treeCreation = new TreeCreationStackHandler();
     private StackHandler runtime = new RuntimeStackHandler();
-    private FacesContext ctx;
 
     
     // ------------------------------------------------------------ Constructors
 
 
-    private CompositeComponentStackManager(FacesContext ctx) {
-
-        this.ctx = ctx;
-
+    private CompositeComponentStackManager() {
     }
 
 
@@ -107,7 +103,7 @@ public class CompositeComponentStackManager {
         CompositeComponentStackManager manager =
               (CompositeComponentStackManager) ctx.getAttributes().get(MANAGER_KEY);
         if (manager == null) {
-            manager = new CompositeComponentStackManager(ctx);
+            manager = new CompositeComponentStackManager();
             ctx.getAttributes().put(MANAGER_KEY, manager);
         }
 
@@ -383,7 +379,7 @@ public class CompositeComponentStackManager {
                         ccp = getCompositeParent(stack.peek());
                     } else {
                         ccp = getCompositeParent((UIComponent
-                              .getCurrentCompositeComponent(ctx)));
+                              .getCurrentCompositeComponent(FacesContext.getCurrentInstance())));
                     }
                 } else {
                     ccp = compositeComponent;
