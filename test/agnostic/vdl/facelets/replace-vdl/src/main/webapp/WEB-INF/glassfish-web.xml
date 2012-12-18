@@ -42,7 +42,7 @@
 
 -->
 <glassfish-web-app error-url="">
-  <context-root>/test-agnostic-vdl-facelets-replace-vdl</context-root>
+  <context-root>/test-agnostic-vdl-facelets-replacevdl</context-root>
   <class-loader delegate="true"/>
   <jsp-config>
     <property name="keepgenerated" value="true">
