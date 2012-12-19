@@ -47,6 +47,8 @@ import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import java.lang.reflect.Constructor;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Base class for interfacing with Groovy.
