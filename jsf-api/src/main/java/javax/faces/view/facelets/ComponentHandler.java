@@ -186,6 +186,8 @@ public class ComponentHandler extends DelegatingMetaTagHandler {
      * so.  A <code>null</code> return from this method will cause the
      * <code>TagHandlerDelegate</code> for instance to create the
      * component instead.</p>
+     *
+     * @since 2.2
      */
     
     public UIComponent createCustomComponent(FaceletContext ctx) {
