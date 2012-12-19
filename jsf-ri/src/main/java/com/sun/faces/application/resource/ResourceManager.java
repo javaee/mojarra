@@ -550,7 +550,11 @@ public class ResourceManager {
                     localePrefix =
                           appBundle
                                 .getString(ResourceHandler.LOCALE_PREFIX);
-                } catch (MissingResourceException ignored) { }
+                } catch (MissingResourceException mre) { 
+                    if (LOGGER.isLoggable(Level.FINEST)) {
+                        LOGGER.log(Level.FINEST, "Ignoring missing resource", mre);
+                    }
+                }
         }
         return localePrefix;
 
