@@ -392,6 +392,9 @@ public class DefaultFaceletFactory {
                 osw.flush();
                 osw.close();
             } catch (IOException ex) {
+                if (log.isLoggable(Level.FINEST)) {
+                    log.log(Level.FINEST, "Flushing and closing stream", ex);
+                }
             }
                   
             URL fabricatedFaceletPage = tempFile.toURI().toURL();
@@ -404,17 +407,21 @@ public class DefaultFaceletFactory {
             tmp.getChildren().clear();
             osw = null;
             
-        } catch (MalformedURLException ex) {
-            
+        } catch (MalformedURLException mue) {
+            if (log.isLoggable(Level.FINEST)) {
+                log.log(Level.FINEST, "Invalid URL", mue);
+            }
         } catch (IOException ioe) {
-            
+            if (log.isLoggable(Level.FINEST)) {
+                log.log(Level.FINEST, "I/O error", ioe);
+            }
         } finally {
             if (null != osw) {
                 try {
                     osw.close();
-                } catch (IOException ex) {
-                    if (log.isLoggable(Level.SEVERE)) {
-                        log.log(Level.SEVERE, "Unable to close OutputStreamWriter in _createComponent.", ex);
+                } catch (IOException ioe) {
+                    if (log.isLoggable(Level.FINEST)) {
+                        log.log(Level.FINEST, "Closing stream", ioe);
                     }
                 }
             }
