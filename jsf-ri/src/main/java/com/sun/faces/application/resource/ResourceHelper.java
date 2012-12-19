@@ -240,12 +240,15 @@ public abstract class ResourceHelper {
                         try {
                             temp.close();
                         } catch (IOException ioe) {
-                            // ignore
+                            if (LOGGER.isLoggable(Level.FINEST)) {
+                                LOGGER.log(Level.FINEST, "Closing stream", ioe);
+                            }
                         }
                     }
                 }
             }
         }
+        
         if (in == null) {
             if (resource.supportsEL()) {
                 return new BufferedInputStream(
@@ -346,7 +349,11 @@ public abstract class ResourceHelper {
             if (input != null) {
                 try {
                     input.close();
-                } catch (IOException ignored) { }
+                } catch (IOException ioe) { 
+                    if (LOGGER.isLoggable(Level.FINEST)) {
+                        LOGGER.log(Level.FINEST, "Closing stream", ioe);
+                    }
+                }
             }
         }
 
@@ -443,7 +450,11 @@ public abstract class ResourceHelper {
             dest.flush();
             try {
                 dest.close();
-            } catch (IOException ignored) { }
+            } catch (IOException ioe) { 
+                if (LOGGER.isLoggable(Level.FINEST)) {
+                    LOGGER.log(Level.FINEST, "Closing stream", ioe);
+                }
+            }
 
             if (baos.size() < totalRead) {
                 String outputFile = info.getCompressedPath()
@@ -459,15 +470,22 @@ public abstract class ResourceHelper {
             if (source != null) {
                 try {
                     source.close();
-                } catch (IOException ignored) { }
+                } catch (IOException ioe) { 
+                    if (LOGGER.isLoggable(Level.FINEST)) {
+                        LOGGER.log(Level.FINEST, "Closing stream", ioe);
+                    }
+                }
             }
             if (dest != null) {
                 try {
                     dest.close();
-                } catch (IOException ignored) { }
+                } catch (IOException ioe) { 
+                    if (LOGGER.isLoggable(Level.FINEST)) {
+                        LOGGER.log(Level.FINEST, "Closing stream", ioe);
+                    }
+                }
             }
         }
-
     }
 
 
