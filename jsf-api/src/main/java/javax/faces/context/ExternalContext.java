@@ -317,10 +317,9 @@ public abstract class ExternalContext {
      * <p><em>Servlet:</em> The input value must be returned unchanged.</p>
      *
      * @param name Name to be encoded
+     * 
+     * <!-- Removed the throws clause in 2.2 -->
      *
-     * @throws NullPointerException <span class="changed_modified_2_2">
-     * if running in a non-servlet environment and <code>name</code> is
-     * <code>null</code></span>.
      */
     public abstract String encodeNamespace(String name);
 
