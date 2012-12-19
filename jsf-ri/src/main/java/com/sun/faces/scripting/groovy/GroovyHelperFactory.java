@@ -75,9 +75,11 @@ public class GroovyHelperFactory {
                     }
                 }
             }
-        } catch (ClassNotFoundException ignored) {
+        } catch (ClassNotFoundException cnfe) {
+            if (LOGGER.isLoggable(Level.FINEST)) {
+                LOGGER.log(Level.FINEST, "Unable to find class", cnfe);
+            }
         }
         return null;
     }
-
 }
