@@ -341,7 +341,9 @@ public class ServerSideStateHelper extends StateHelper {
             try {
                 value = Integer.valueOf(defaultValue);
             } catch (NumberFormatException ne) {
-                // won't occur
+                if (LOGGER.isLoggable(Level.FINEST)) {
+                    LOGGER.log(Level.FINEST, "Unable to convert number", ne);
+                }
             }
         }
 
@@ -375,7 +377,11 @@ public class ServerSideStateHelper extends StateHelper {
                 if (oas != null) {
                     try {
                         oas.close();
-                    } catch (IOException ignored) { }
+                    } catch (IOException ioe) { 
+                        if (LOGGER.isLoggable(Level.FINEST)) {
+                            LOGGER.log(Level.FINEST, "Closing stream", ioe);
+                        }
+                    }
                 }
             }
             return baos.toByteArray();
@@ -409,7 +415,11 @@ public class ServerSideStateHelper extends StateHelper {
                 if (ois != null) {
                     try {
                         ois.close();
-                    } catch (IOException ignored) { }
+                    } catch (IOException ioe) { 
+                        if (LOGGER.isLoggable(Level.FINEST)) {
+                            LOGGER.log(Level.FINEST, "Closing stream", ioe);
+                        }
+                    }
                 }
             }
         } else {
