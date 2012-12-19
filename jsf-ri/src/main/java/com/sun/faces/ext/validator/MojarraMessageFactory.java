@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -61,6 +61,8 @@ import java.util.ResourceBundle;
  */
 class MojarraMessageFactory {
 
+    private static final Logger LOGGER = Logger.getLogger(MojarraMessageFactory.class.getPackage().getName());
+    
     private MojarraMessageFactory() {
     }
 
@@ -158,7 +160,9 @@ class MojarraMessageFactory {
                     summary = bundle.getString(messageId);
                     detail = bundle.getString(messageId + "_detail");
                 } catch (MissingResourceException e) {
-                    // ignore
+                    if (LOGGER.isLoggable(Level.FINEST)) {
+                        LOGGER.log(Level.FINEST, "Unable to get resource", e);
+                    }
                 }
             }
         }
@@ -181,7 +185,9 @@ class MojarraMessageFactory {
                 }
                 detail = bundle.getString(messageId + "_detail");
             } catch (MissingResourceException e) {
-                // ignore
+                if (LOGGER.isLoggable(Level.FINEST)) {
+                    LOGGER.log(Level.FINEST, "Unable to get resource", e);
+                }
             }
         }
         // At this point, we have a summary and a bundle.     
