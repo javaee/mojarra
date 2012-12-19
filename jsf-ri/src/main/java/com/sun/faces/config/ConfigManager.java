@@ -888,7 +888,6 @@ public class ConfigManager {
         throws Exception {
 
             this.documentURI = documentURI;
-            this.factory = DbfFactory.getFactory();
             this.validating = validating;
 
         }
@@ -1124,6 +1123,9 @@ public class ConfigManager {
 
         private DocumentBuilder getBuilderForSchema(DbfFactory.FacesSchema schema)
         throws Exception {
+            schema.initSchema();
+            this.factory = DbfFactory.getFactory();
+
             try {
                 factory.setSchema(schema.getSchema());
             } catch (UnsupportedOperationException upe) {
