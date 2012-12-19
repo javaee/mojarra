@@ -143,8 +143,10 @@ public class GroovyScriptManager implements ScriptManager {
             if (in != null) {
                 try {
                     in.close();
-                } catch (Exception ignore) {
-                    //
+                } catch (Exception e) {
+                    if (LOGGER.isLoggable(Level.FINEST)) {
+                        LOGGER.log(Level.FINEST, "Closing stream", e);
+                    }
                 }
             }
         }
