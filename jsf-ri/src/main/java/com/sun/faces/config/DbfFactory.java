@@ -95,6 +95,12 @@ public class DbfFactory {
         "/com/sun/faces/web-facelettaglibrary_2_0.xsd";
 
     /**
+     * Location of the facelet-taglib 2.2 Schema
+     */
+    private static final String FACELET_TAGLIB_2_2_XSD =
+        "/com/sun/faces/web-facelettaglibrary_2_2.xsd";
+
+    /**
      * Location of the Faces 2.0 Schema
      */
     private static final String FACES_2_0_XSD =
@@ -164,41 +170,6 @@ public class DbfFactory {
 
 
     /**
-     * Our cached 2.0 facelet-taglib Schema object for validation
-     */
-    private static Schema FACELET_TAGLIB_20_SCHEMA;
-
-    /**
-     * Our cached 2.2 facelet-taglib Schema object for validation
-     */
-    private static Schema FACELET_TAGLIB_22_SCHEMA;
-
-    /**
-     * Our cached 2.0 Schema object for validation
-     */
-    private static Schema FACES_20_SCHEMA;
-
-    /**
-     * Our cached 2.1 Schema object for validation
-     */
-    private static Schema FACES_21_SCHEMA;
-
-    /**
-     * Our cached 2.2 Schema object for validation
-     */
-    private static Schema FACES_22_SCHEMA;
-
-    /**
-     * Our cached 1.2 Schema object for validation
-     */
-    private static Schema FACES_12_SCHEMA;
-
-    /**
-     * Our cached 1.1 Schema object for validation
-     */
-    private static Schema FACES_11_SCHEMA;
-
-    /**
      * EntityResolver
      */
     public static final EntityResolver FACES_ENTITY_RESOLVER =
@@ -207,18 +178,147 @@ public class DbfFactory {
 
     public enum FacesSchema {
 
-        FACES_20(FACES_20_SCHEMA),
-        FACES_21(FACES_21_SCHEMA),
-        FACES_22(FACES_22_SCHEMA),
-        FACES_12(FACES_12_SCHEMA),
-        FACES_11(FACES_11_SCHEMA),
-        FACELET_TAGLIB_20(FACELET_TAGLIB_20_SCHEMA),
-        FACELET_TAGLIB_22(FACELET_TAGLIB_22_SCHEMA);
-
+        FACES_20,
+        FACES_21,
+        FACES_22,
+        FACES_12,
+        FACES_11,
+        FACELET_TAGLIB_20,
+        FACELET_TAGLIB_22;
+        
         private Schema schema;
 
-        FacesSchema(Schema schema) {
-            this.schema = schema;
+        public void initSchema() {
+            URL url;
+            URLConnection conn;
+            InputStream in;
+            SchemaFactory factory;
+            File f;
+            if (null != schema) {
+                return;
+            }
+            
+            try {
+                switch (this) {
+                    case FACES_12:
+                        url = DbfFactory.class.getResource(FACES_1_2_XSD);
+                        if (url == null) {
+                            // try to load from the file
+                            f = new File(FACES_1_2_XSD_FILE);
+                            if (!f.exists()) {
+                                throw new IllegalStateException("Unable to find web-facesconfig_1_2.xsd");
+                            }
+                            url = f.toURI().toURL();
+                        }
+                        conn = url.openConnection();
+                        conn.setUseCaches(false);
+                        in = conn.getInputStream();
+                        factory = Util.createSchemaFactory(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+                        factory.setResourceResolver((LSResourceResolver) DbfFactory.FACES_ENTITY_RESOLVER);
+                        schema = factory.newSchema(new StreamSource(in));
+                        break;
+                    case FACES_11:
+                        url = DbfFactory.class.getResource(FACES_1_1_XSD);
+                        conn = url.openConnection();
+                        conn.setUseCaches(false);
+                        in = conn.getInputStream();
+                        factory = Util.createSchemaFactory(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+                        factory.setResourceResolver((LSResourceResolver) DbfFactory.FACES_ENTITY_RESOLVER);
+                        schema = factory.newSchema(new StreamSource(in));
+                        break;
+                    case FACES_21:
+                        url = DbfFactory.class.getResource(FACES_2_1_XSD);
+                        if (url == null) {
+                            // try to load from the file
+                            f = new File(FACES_2_1_XSD_FILE);
+                            if (!f.exists()) {
+                                throw new IllegalStateException("Unable to find web-facesconfig_2_1.xsd");
+                            }
+                            url = f.toURI().toURL();
+                        }
+                        conn = url.openConnection();
+                        conn.setUseCaches(false);
+                        in = conn.getInputStream();
+                        factory = Util.createSchemaFactory(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+                        factory.setResourceResolver((LSResourceResolver) DbfFactory.FACES_ENTITY_RESOLVER);
+                        schema = factory.newSchema(new StreamSource(in));
+                        break;
+                    case FACES_22:
+                        url = DbfFactory.class.getResource(FACES_2_2_XSD);
+                        if (url == null) {
+                            // try to load from the file
+                            f = new File(FACES_2_2_XSD_FILE);
+                            if (!f.exists()) {
+                                throw new IllegalStateException("Unable to find web-facesconfig_2_2.xsd");
+                            }
+                            url = f.toURI().toURL();
+                        }
+                        conn = url.openConnection();
+                        conn.setUseCaches(false);
+                        in = conn.getInputStream();
+                        factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+                        factory.setResourceResolver((LSResourceResolver) DbfFactory.FACES_ENTITY_RESOLVER);
+                        schema = factory.newSchema(new StreamSource(in));
+                        break;
+                    case FACES_20:
+                        url = DbfFactory.class.getResource(FACES_2_0_XSD);
+                        if (url == null) {
+                            // try to load from the file
+                            f = new File(FACES_2_0_XSD_FILE);
+                            if (!f.exists()) {
+                                throw new IllegalStateException("Unable to find web-facesconfig_2_0.xsd");
+                            }
+                            url = f.toURI().toURL();
+                        }
+                        conn = url.openConnection();
+                        conn.setUseCaches(false);
+                        in = conn.getInputStream();
+                        factory = Util.createSchemaFactory(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+                        factory.setResourceResolver((LSResourceResolver) DbfFactory.FACES_ENTITY_RESOLVER);
+                        schema = factory.newSchema(new StreamSource(in));
+                        
+                        break;
+                    case FACELET_TAGLIB_20:
+                        url = DbfFactory.class.getResource(FACELET_TAGLIB_2_0_XSD);
+                        if (url == null) {
+                            // try to load from the file
+                            f = new File(FACELET_TAGLIB_2_0_XSD_FILE);
+                            if (!f.exists()) {
+                                throw new IllegalStateException("Unable to find web-facelettaglibrary_2_0.xsd");
+                            }
+                            url = f.toURI().toURL();
+                        }
+                        conn = url.openConnection();
+                        conn.setUseCaches(false);
+                        in = conn.getInputStream();
+                        factory = Util.createSchemaFactory(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+                        factory.setResourceResolver((LSResourceResolver) DbfFactory.FACES_ENTITY_RESOLVER);
+                        schema = factory.newSchema(new StreamSource(in));
+                        break;
+                    case FACELET_TAGLIB_22:
+                        url = DbfFactory.class.getResource(FACELET_TAGLIB_2_2_XSD);
+                        if (url == null) {
+                            // try to load from the file
+                            f = new File(FACELET_TAGLIB_2_2_XSD_FILE);
+                            if (!f.exists()) {
+                                throw new IllegalStateException("Unable to find web-facelettaglibrary_2_2.xsd");
+                            }
+                            url = f.toURI().toURL();
+                        }
+                        conn = url.openConnection();
+                        conn.setUseCaches(false);
+                        in = conn.getInputStream();
+                        factory = Util.createSchemaFactory(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+                        factory.setResourceResolver((LSResourceResolver) DbfFactory.FACES_ENTITY_RESOLVER);
+                        schema = factory.newSchema(new StreamSource(in));
+                        break;
+                    default:
+                        throw new ConfigurationException("Unrecognized Faces Version: " + this.toString());
+                }
+            }
+            catch (Exception e) {
+                throw new ConfigurationException(e);
+            }
         }
 
         public Schema getSchema() {
@@ -235,12 +335,6 @@ public class DbfFactory {
          new FacesErrorHandler();
 
 
-    static {
-        initStatics();
-    }
-
-
-
     // ---------------------------------------------------------- Public Methods
 
 
@@ -254,107 +348,6 @@ public class DbfFactory {
 
     }   
 
-
-    /**
-     * Init our cache objects.
-     */
-    private static void initStatics() {
-        // First, cache the various files
-        // PENDING_RELEASE (rlubke) clean this up
-        try {
-            URL url = DbfFactory.class.getResource(FACES_1_2_XSD);
-            if (url == null) {
-                // try to load from the file
-                File f = new File(FACES_1_2_XSD_FILE);
-                if (!f.exists()) {
-                    throw new IllegalStateException("Unable to find web-facesconfig_1_2.xsd");
-                }
-                url = f.toURI().toURL();
-            }
-            URLConnection conn = url.openConnection();
-            conn.setUseCaches(false);
-            InputStream in = conn.getInputStream();
-            SchemaFactory factory = Util.createSchemaFactory(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            factory.setResourceResolver((LSResourceResolver) DbfFactory.FACES_ENTITY_RESOLVER);
-            FACES_12_SCHEMA = factory.newSchema(new StreamSource(in));
-
-            url = DbfFactory.class.getResource(FACES_1_1_XSD);
-            conn = url.openConnection();
-            conn.setUseCaches(false);
-            in = conn.getInputStream();
-            factory = Util.createSchemaFactory(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            factory.setResourceResolver((LSResourceResolver) DbfFactory.FACES_ENTITY_RESOLVER);
-            FACES_11_SCHEMA = factory.newSchema(new StreamSource(in));
-
-            url = DbfFactory.class.getResource(FACES_2_2_XSD);
-            if (url == null) {
-                // try to load from the file
-                File f = new File(FACES_2_2_XSD_FILE);
-                if (!f.exists()) {
-                    throw new IllegalStateException("Unable to find web-facesconfig_2_2.xsd");
-                }
-                url = f.toURI().toURL();
-            }
-            conn = url.openConnection();
-            conn.setUseCaches(false);
-            in = conn.getInputStream();
-            factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            factory.setResourceResolver((LSResourceResolver) DbfFactory.FACES_ENTITY_RESOLVER);
-            FACES_22_SCHEMA = factory.newSchema(new StreamSource(in));
-
-            url = DbfFactory.class.getResource(FACES_2_1_XSD);
-            if (url == null) {
-                // try to load from the file
-                File f = new File(FACES_2_1_XSD_FILE);
-                if (!f.exists()) {
-                    throw new IllegalStateException("Unable to find web-facesconfig_2_1.xsd");
-                }
-                url = f.toURI().toURL();
-            }
-            conn = url.openConnection();
-            conn.setUseCaches(false);
-            in = conn.getInputStream();
-            factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            factory.setResourceResolver((LSResourceResolver) DbfFactory.FACES_ENTITY_RESOLVER);
-            FACES_21_SCHEMA = factory.newSchema(new StreamSource(in));
-
-            url = DbfFactory.class.getResource(FACES_2_0_XSD);
-            if (url == null) {
-                // try to load from the file
-                File f = new File(FACES_2_0_XSD_FILE);
-                if (!f.exists()) {
-                    throw new IllegalStateException("Unable to find web-facesconfig_2_0.xsd");
-                }
-                url = f.toURI().toURL();
-            }
-            conn = url.openConnection();
-            conn.setUseCaches(false);
-            in = conn.getInputStream();
-            factory = Util.createSchemaFactory(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            factory.setResourceResolver((LSResourceResolver) DbfFactory.FACES_ENTITY_RESOLVER);
-            FACES_20_SCHEMA = factory.newSchema(new StreamSource(in));
-
-            url = DbfFactory.class.getResource(FACELET_TAGLIB_2_0_XSD);
-            if (url == null) {
-                // try to load from the file
-                File f = new File(FACELET_TAGLIB_2_0_XSD_FILE);
-                if (!f.exists()) {
-                    throw new IllegalStateException("Unable to find web-facelettaglibrary_2_0.xsd");
-                }
-                url = f.toURI().toURL();
-            }
-            conn = url.openConnection();
-            conn.setUseCaches(false);
-            in = conn.getInputStream();
-            factory = Util.createSchemaFactory(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            factory.setResourceResolver((LSResourceResolver) DbfFactory.FACES_ENTITY_RESOLVER);
-            FACELET_TAGLIB_20_SCHEMA = factory.newSchema(new StreamSource(in));
-
-        } catch (Exception e) {
-            throw new ConfigurationException(e);
-        }
-
-    }
 
     // ----------------------------------------------------------- Inner Classes
 
