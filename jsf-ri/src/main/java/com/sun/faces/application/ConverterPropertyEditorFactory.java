@@ -464,6 +464,9 @@ public class ConverterPropertyEditorFactory {
                 try {
                     c = myLoader.loadClass(name);
                 } catch (ClassNotFoundException ignored) {
+                    if (LOGGER.isLoggable(Level.FINEST)) {
+                        LOGGER.log(Level.FINEST, "Ignoring ClassNotFoundException, continuing with parent ClassLoader.", ignored);
+                    }
                 }
             }
             // Otherwise go ahead with the targetLoader and with the dynamic
