@@ -47,12 +47,16 @@ import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import java.lang.reflect.Constructor;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Base class for interfacing with Groovy.
  */
 public abstract class GroovyHelper {
 
+    private static final Logger LOGGER = Logger.getLogger(GroovyHelper.class.getPackage().getName());
+    
     public static boolean isGroovyAvailable(FacesContext ctx) {
 
         return (ctx.getExternalContext().getApplicationMap().get("com.sun.faces.groovyhelper") != null);
@@ -112,7 +116,10 @@ public abstract class GroovyHelper {
         if (root != null) {
             try {
                 return groovyClass.getConstructor(ctorArgument);
-            } catch (Exception ignored) {
+            } catch (Exception e) {
+                if (LOGGER.isLoggable(Level.FINEST)) {
+                    LOGGER.log(Level.FINE, "Unable to get constructor", e);
+                }
             }
         }
         return null;
