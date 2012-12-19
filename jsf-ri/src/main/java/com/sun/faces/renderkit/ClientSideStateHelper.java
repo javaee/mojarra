@@ -309,7 +309,9 @@ public class ClientSideStateHelper extends StateHelper {
                 try {
                     ois.close();
                 } catch (IOException ioe) {
-                    // ignore
+                    if (LOGGER.isLoggable(Level.FINEST)) {
+                        LOGGER.log(Level.FINEST, "Closing stream", ioe);
+                    }
                 }
             }
         }
@@ -412,7 +414,9 @@ public class ClientSideStateHelper extends StateHelper {
                 try {
                     oos.close();
                 } catch (IOException ioe) {
-                    // ignore
+                    if (LOGGER.isLoggable(Level.FINEST)) {
+                        LOGGER.log(Level.FINEST, "Closing stream", ioe);
+                    }
                 }
             }
         }
