@@ -107,11 +107,13 @@ class DelegateToGlassFishAnnotationScanner extends AnnotationScanner {
                     Throwable targetException = ite.getTargetException();
                     System.out.println(targetException);
                 } catch (Exception e) {
+                    if (LOGGER.isLoggable(Level.FINEST)) {
+                        LOGGER.log(Level.FINEST, "Problem getting deployment context information", e);
+                    }
                 }
             }
         
         }
-
 
         return result;
     }
@@ -134,6 +136,9 @@ class DelegateToGlassFishAnnotationScanner extends AnnotationScanner {
                 }
 
             } catch (Exception e) {
+                if (LOGGER.isLoggable(Level.FINEST)) {
+                    LOGGER.log(Level.FINEST, "Problem in getCurrentWebModulePrefix", e);
+                }
             }
         }
         if (null == result && null != deploymentContext) {
@@ -148,6 +153,9 @@ class DelegateToGlassFishAnnotationScanner extends AnnotationScanner {
                 }
 
             } catch (Exception e) {
+                if (LOGGER.isLoggable(Level.FINEST)) {
+                    LOGGER.log(Level.FINEST, "Problem in getCurrentWebModulePrefix", e);
+                }
             }
         }
 
