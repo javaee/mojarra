@@ -74,6 +74,7 @@ import java.io.*;
 import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * <p>
@@ -89,6 +90,8 @@ import java.util.*;
  *
  */
 public final class DevTools {
+    
+    private static final Logger LOGGER = Logger.getLogger(DevTools.class.getPackage().getName());
     
     private final static String TS = "&lt;";
     
@@ -208,7 +211,9 @@ public final class DevTools {
         try {
             flash = ctx.getFlash();
         } catch (UnsupportedOperationException uoe) {
-            // ignore
+            if (LOGGER.isLoggable(Level.FINEST)) {
+                LOGGER.log(Level.FINEST, "Flash not supported", uoe);
+            }
         }
         if (flash != null) {
             writeVariables(writer, flash, "Flash Attributes");
@@ -395,7 +400,9 @@ public final class DevTools {
                             writer.write("\"");
                         }
                     } catch (Exception e) {
-                        // do nothing
+                        if (LOGGER.isLoggable(Level.FINEST)) {
+                            LOGGER.log(Level.FINEST, "Error writing out attribute", e);
+                        }
                     }
                 }
             }
@@ -407,7 +414,9 @@ public final class DevTools {
                 writer.write("\"");
             }
         } catch (Exception e) {
-            // do nothing
+            if (LOGGER.isLoggable(Level.FINEST)) {
+                LOGGER.log(Level.FINEST, "Error writing out attributes", e);
+            }
         }
 
     }
