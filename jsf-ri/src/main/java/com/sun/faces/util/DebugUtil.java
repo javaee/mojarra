@@ -77,6 +77,8 @@ import java.util.Set;
 
 public class DebugUtil {
 
+    private static final Logger LOGGER = Logger.getLogger(DebugUtil.class.getPackage().getName());
+    
 //
 // Protected Constants
 //
@@ -153,7 +155,11 @@ public class DebugUtil {
                 out.write("  ");
             }
             out.write(str + "\n");
-        } catch (IOException ignored) {}
+        } catch (IOException ioe) {
+            if (LOGGER.isLoggable(Level.FINEST)) {
+                LOGGER.log(Level.FINEST, "Unable to write indent", ioe);
+            }
+        }
     }
     
     private static void assertSerializability(StringBuilder builder, Object toPrint) {
