@@ -116,7 +116,7 @@ public abstract class GroovyHelper {
                 return groovyClass.getConstructor(ctorArgument);
             } catch (Exception e) {
                 if (LOGGER.isLoggable(Level.FINEST)) {
-                    LOGGER.log(Level.FINE, "Unable to get constructor", e);
+                    LOGGER.log(Level.FINEST, "Unable to get constructor", e);
                 }
             }
         }
