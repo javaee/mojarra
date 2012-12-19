@@ -192,8 +192,10 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
             try {
                 // And since this is a hack, we now try to remove the param
                 params.remove(foundparam);
-            } catch (UnsupportedOperationException unop) {
-                // nothing we can do about it
+            } catch (UnsupportedOperationException uoe) {
+                if (logger.isLoggable(Level.FINEST)) {
+                    logger.log(Level.FINEST, "Unsupported operation", uoe);
+                }
             }
         }
 
