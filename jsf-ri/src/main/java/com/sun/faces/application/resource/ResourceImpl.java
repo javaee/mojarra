@@ -242,12 +242,19 @@ public class ResourceImpl extends Resource implements Externalizable {
                                     + lastModified
                                     + '"');
                 }
-            } catch (IOException ignored) {
+            } catch (IOException ioe) { 
+                if (LOGGER.isLoggable(Level.FINEST)) {
+                    LOGGER.log(Level.FINEST, "Closing stream", ioe);
+                }
             } finally {
                 if (in != null) {
                     try {
                         in.close();
-                    } catch (IOException ignored) { }
+                    } catch (IOException ioe) { 
+                        if (LOGGER.isLoggable(Level.FINEST)) {
+                            LOGGER.log(Level.FINEST, "Closing stream", ioe);
+                        }
+                    }
                 }
             }
             return responseHeaders;
