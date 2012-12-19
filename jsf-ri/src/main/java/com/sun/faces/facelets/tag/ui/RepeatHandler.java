@@ -58,6 +58,7 @@
 
 package com.sun.faces.facelets.tag.ui;
 
+import com.sun.faces.util.FacesLogger;
 import javax.faces.component.UIComponent;
 import javax.faces.view.facelets.*;
 import java.beans.Introspector;
@@ -65,9 +66,13 @@ import java.beans.PropertyDescriptor;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class RepeatHandler extends ComponentHandler {
 
+    private static final Logger log = FacesLogger.FACELETS_COMPOSITION.getLogger();
+        
     public RepeatHandler(ComponentConfig config) {
         super(config);
     }
@@ -107,7 +112,9 @@ public class RepeatHandler extends ComponentHandler {
                     }
                 }
             } catch (Exception e) {
-                // do nothing
+                if (log.isLoggable(Level.FINEST)) {
+                    log.log(Level.FINEST, "Unable to get bean info", e);
+                }
             }
             this.attrs = (String[]) s.toArray(new String[s.size()]);
         }
