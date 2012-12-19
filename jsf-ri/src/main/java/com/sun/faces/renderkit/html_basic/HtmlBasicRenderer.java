@@ -444,7 +444,9 @@ public abstract class HtmlBasicRenderer extends Renderer {
                       findUIComponentBelow(context.getViewRoot(), forComponent);
             }
         } catch (Exception e) {
-            // ignore - log the warning
+            if (logger.isLoggable(Level.FINEST)) {
+                logger.log(Level.FINEST, "Unable to find for component", e);
+            }
         }
         // log a message if we were unable to find the specified
         // component (probably a misconfigured 'for' attribute
