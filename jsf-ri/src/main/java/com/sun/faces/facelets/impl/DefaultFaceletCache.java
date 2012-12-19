@@ -44,6 +44,7 @@ package com.sun.faces.facelets.impl;
 import javax.faces.view.facelets.FaceletCache;
 import com.sun.faces.util.ConcurrentCache;
 import com.sun.faces.util.ExpiringConcurrentCache;
+import com.sun.faces.util.FacesLogger;
 
 import javax.faces.FacesException;
 import java.io.IOException;
@@ -54,6 +55,8 @@ import java.net.URLConnection;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -61,6 +64,8 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 final class DefaultFaceletCache extends FaceletCache<DefaultFacelet> {
 
+    private final static Logger LOGGER = FacesLogger.FACELETS_FACTORY.getLogger();
+        
     /**
      *Constructor
      * @param refreshPeriod cache refresh period (in seconds).
@@ -179,7 +184,9 @@ final class DefaultFaceletCache extends FaceletCache<DefaultFacelet> {
                 try {
                     is.close();
                 } catch (Exception e) {
-                    // do nothing
+                    if (LOGGER.isLoggable(Level.FINEST)) {
+                        LOGGER.log(Level.FINEST, "Closing stream", e);
+                    }
                 }
             }
         }
