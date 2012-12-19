@@ -837,7 +837,9 @@ public class ConfigureListener implements ServletRequestListener,
                         try {
                             in.close();
                         } catch (Exception ioe) {
-                            // ignored;
+                            if (LOGGER.isLoggable(Level.FINEST)) {
+                                LOGGER.log(Level.FINEST, "Closing stream", ioe);
+                            }
                         }
                     }
                 }
