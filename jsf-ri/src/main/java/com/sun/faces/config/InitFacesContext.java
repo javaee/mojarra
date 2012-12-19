@@ -68,13 +68,18 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.sun.faces.context.ApplicationMap;
 import com.sun.faces.context.InitParameterMap;
+import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * A special, minimal implementation of FacesContext used at application initialization time.
  * The ExternalContext returned by this FacesContext only exposes the ApplicationMap.
  */
 public class InitFacesContext extends FacesContext {
+
+    private static Logger LOGGER = FacesLogger.CONFIG.getLogger();
 
     private ServletContextAdapter ec;
     private UIViewRoot viewRoot;
@@ -540,7 +545,11 @@ public class InitFacesContext extends FacesContext {
             Field threadMap = FacesContext.class.getDeclaredField("threadInitContext");
             threadMap.setAccessible(true);
             threadInitContext = (ConcurrentHashMap)threadMap.get(null);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            if (LOGGER.isLoggable(Level.FINEST)) {
+                LOGGER.log(Level.FINEST, "Unable to get (thread, init context) map", e);
+            }
+        }
         return threadInitContext;
     }
 
@@ -550,7 +559,11 @@ public class InitFacesContext extends FacesContext {
             Field initContextMap = FacesContext.class.getDeclaredField("initContextServletContext");
             initContextMap.setAccessible(true);
             initContextServletContext = (ConcurrentHashMap)initContextMap.get(null);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            if (LOGGER.isLoggable(Level.FINEST)) {
+                LOGGER.log(Level.FINEST, "Unable to get (init context, servlet context) map", e);
+            }
+        }
         return initContextServletContext;
     }
 }
