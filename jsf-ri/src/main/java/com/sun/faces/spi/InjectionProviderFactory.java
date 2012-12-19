@@ -405,13 +405,19 @@ public class InjectionProviderFactory {
                     if (input != null) {
                         try {
                             input.close();
-                        } catch (Exception ignored) {
+                        } catch (Exception e) {
+                            if (LOGGER.isLoggable(Level.FINEST)) {
+                                LOGGER.log(Level.FINEST, "Closing stream", e);
+                            }
                         }
                     }
                     if (reader != null) {
                         try {
                             reader.close();
-                        } catch (Exception ignored) {
+                        } catch (Exception e) {
+                            if (LOGGER.isLoggable(Level.FINEST)) {
+                                LOGGER.log(Level.FINEST, "Closing stream", e);
+                            }
                         }
                     }
                 }
