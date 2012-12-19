@@ -139,8 +139,9 @@ public final class Resource {
                 try {
                     stream.close();
                 } catch (IOException e) {
-                    // Ignore here, since we donnot wanted to read from this
-                    // resource anyway
+                    if (log.isLoggable(Level.FINEST)) {
+                        log.log(Level.FINEST, "Closing stream", e);
+                    }
                 }
                 return true;
             }
