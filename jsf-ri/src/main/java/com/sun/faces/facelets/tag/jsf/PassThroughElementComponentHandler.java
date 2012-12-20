@@ -41,7 +41,9 @@
 
 package com.sun.faces.facelets.tag.jsf;
 
+import com.sun.faces.util.Util;
 import java.util.Map;
+import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.render.Renderer;
 import javax.faces.view.facelets.ComponentConfig;
@@ -70,6 +72,23 @@ public class PassThroughElementComponentHandler extends ComponentHandler {
         super(config);
         
         elementName = this.getRequiredPassthroughAttribute(Renderer.PASSTHROUGH_RENDERER_LOCALNAME_KEY);
+    }
+    
+    @Override
+    public UIComponent createComponent(FaceletContext ctx) {
+        UIComponent result = null;
+        try {
+            Class clazz = Util.loadClass("com.sun.faces.component.PassthroughElement", this);
+            result = (UIComponent)clazz.newInstance();
+        } catch (ClassNotFoundException cnfe) {
+            throw new FacesException(cnfe);
+        } catch (IllegalAccessException iae) {
+            throw new FacesException(iae);
+        } catch (InstantiationException ie) {
+            throw new FacesException(ie);
+        }
+        
+        return result;
     }
 
     @Override

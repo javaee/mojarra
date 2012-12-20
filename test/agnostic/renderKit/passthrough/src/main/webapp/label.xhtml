@@ -45,13 +45,46 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:jsf="http://java.sun.com/jsf">
 
+      <h:head>
+
+      </h:head>
+
+      <h:body>
+
+        <script type="text/javascript">
+         var statusUpdate = function statusUpdate(data) {
+            var statusArea = document.getElementById("statusArea");
+            var text = statusArea.value;
+            text = text + "Name: "+data.source.id;
+            if (data.type === "event") {
+                text = text +" Event: "+data.status+" ";
+            }
+            statusArea.value = text;
+         }
+        </script>
+
       <form jsf:id="form" jsf:prependId="false" >
 
         <p>
         <label jsf:id="label1" form="form" for="input1">Input 1</label>
         <h:inputText id="input1"/>
+
+        <br/>
+
+        <label jsf:id="label2" form="form" for="input2">
+         Input 2
+         <f:ajax event="mouseover" onevent="statusUpdate"/>
+        </label>
+        <h:inputText id="input2"/>
        </p>
 
      </form>
+
+      <p>
+        <h3> Status:</h3>
+        <textarea id="statusArea" cols="40" rows="10" readonly="readonly" />
+      </p>
+
+   </h:body>
 
 </html>

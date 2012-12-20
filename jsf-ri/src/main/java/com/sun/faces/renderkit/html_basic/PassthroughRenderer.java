@@ -41,6 +41,9 @@
 package com.sun.faces.renderkit.html_basic;
 
 
+import com.sun.faces.renderkit.Attribute;
+import com.sun.faces.renderkit.AttributeManager;
+import com.sun.faces.renderkit.RenderKitUtils;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -52,6 +55,10 @@ import java.util.Map;
 
 public class PassthroughRenderer extends HtmlBasicRenderer {
 
+// We are purposely piggy backing off the PANELGROUP attributes since they are 
+// identical for this renderer.
+private static final Attribute[] ATTRIBUTES =
+          AttributeManager.getAttributes(AttributeManager.Key.PANELGROUP);
 
     @Override
     public void encodeBegin(FacesContext context, UIComponent component)
@@ -74,6 +81,11 @@ public class PassthroughRenderer extends HtmlBasicRenderer {
         writer.startElement(localName, component);
 
         writeIdAttributeIfNecessary(context, writer, component);
+        
+        RenderKitUtils.renderPassThruAttributes(context,
+                                                writer,
+                                                component,
+                                                ATTRIBUTES);
 
     }
 
