@@ -190,7 +190,7 @@ public class ComponentHandler extends DelegatingMetaTagHandler {
      * @since 2.2
      */
     
-    public UIComponent createCustomComponent(FaceletContext ctx) {
+    public UIComponent createComponent(FaceletContext ctx) {
         return null;
     }
     
