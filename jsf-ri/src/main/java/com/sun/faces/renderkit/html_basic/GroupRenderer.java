@@ -58,7 +58,7 @@ import javax.faces.context.ResponseWriter;
 public class GroupRenderer extends HtmlBasicRenderer {
 
 private static final Attribute[] ATTRIBUTES =
-          AttributeManager.getAttributes(AttributeManager.Key.PANELGRID);
+          AttributeManager.getAttributes(AttributeManager.Key.PANELGROUP);
     // ---------------------------------------------------------- Public Methods
 
 
