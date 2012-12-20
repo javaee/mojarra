@@ -83,15 +83,6 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <inherited>true</inherited>
-                <configuration>
-                    <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
-                    <failOnMissingWebXml>false</failOnMissingWebXml>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
                 <inherited>true</inherited>
                 <configuration>
@@ -100,18 +91,22 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.12.4</version>
+                <artifactId>maven-war-plugin</artifactId>
                 <inherited>true</inherited>
                 <configuration>
-                    <systemPropertyVariables>
-                        <jsf.version>${jsf.version}</jsf.version>
-                    </systemPropertyVariables>
+                    <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
         </plugins>
     </build>
     <dependencies>
+        <dependency>
+            <groupId>javax.faces</groupId>
+            <artifactId>javax.faces-api</artifactId>
+            <version>2.1</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>org.glassfish</groupId>
             <artifactId>javax.faces</artifactId>
@@ -156,21 +151,21 @@
                         </executions>
                         <configuration>
                             <systemPropertyVariables>
-                                <project.build.finalName>${project.build.finalName}</project.build.finalName>
-                                <integration.serverPort>${integration.serverPort}</integration.serverPort>
                                 <integration.serverName>${integration.serverName}</integration.serverName>
+                                <integration.serverPort>${integration.serverPort}</integration.serverPort>
                                 <integration.serverProtocol>${integration.serverProtocol}</integration.serverProtocol>
                                 <integration.url>${integration.protocol}://${integration.serverName}:${integration.serverPort}/${project.build.finalName}/</integration.url>
                                 <jsf.version>${jsf.version}</jsf.version>
+                                <project.build.finalName>${project.build.finalName}</project.build.finalName>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>                
                 </plugins>
             </build>
             <properties>
-                <integration.serverPort>8080</integration.serverPort>
-                <integration.serverName>localhost</integration.serverName>
                 <integration.protocol>http</integration.protocol>
+                <integration.serverName>localhost</integration.serverName>
+                <integration.serverPort>8080</integration.serverPort>
             </properties>
             <reporting>
                 <plugins>
@@ -216,10 +211,10 @@
             </build>
             <properties>
                 <integration.protocol>http</integration.protocol>
-                <integration.serverPort1>28080</integration.serverPort1>
                 <integration.serverName1>localhost</integration.serverName1>
-                <integration.serverPort2>28081</integration.serverPort2>
                 <integration.serverName2>localhost</integration.serverName2>
+                <integration.serverPort1>28080</integration.serverPort1>
+                <integration.serverPort2>28081</integration.serverPort2>
             </properties>
             <reporting>
                 <plugins>
@@ -255,11 +250,11 @@
                                 </goals>
                                 <configuration>
                                     <systemPropertyVariables>
-                                        <project.build.finalName>${project.build.finalName}</project.build.finalName>
-                                        <integration.serverPort>${integration.serverPort1}</integration.serverPort>
                                         <integration.serverName>${integration.serverName1}</integration.serverName>
+                                        <integration.serverPort>${integration.serverPort1}</integration.serverPort>
                                         <integration.serverProtocol>${integration.serverProtocol}</integration.serverProtocol>
                                         <integration.url>${integration.protocol}://${integration.serverName1}:${integration.serverPort1}/${project.build.finalName}/</integration.url>
+                                        <project.build.finalName>${project.build.finalName}</project.build.finalName>
                                     </systemPropertyVariables>
                                 </configuration>
                             </execution>
@@ -271,11 +266,11 @@
                                 </goals>
                                 <configuration>
                                     <systemPropertyVariables>
-                                        <project.build.finalName>${project.build.finalName}</project.build.finalName>
-                                        <integration.serverPort>${integration.serverPort2}</integration.serverPort>
                                         <integration.serverName>${integration.serverName2}</integration.serverName>
+                                        <integration.serverPort>${integration.serverPort2}</integration.serverPort>
                                         <integration.serverProtocol>${integration.serverProtocol}</integration.serverProtocol>
                                         <integration.url>${integration.protocol}://${integration.serverName2}:${integration.serverPort2}/${project.build.finalName}/</integration.url>
+                                        <project.build.finalName>${project.build.finalName}</project.build.finalName>
                                     </systemPropertyVariables>
                                 </configuration>
                             </execution>
@@ -285,10 +280,10 @@
             </build>
             <properties>
                 <integration.protocol>http</integration.protocol>
-                <integration.serverPort1>18080</integration.serverPort1>
                 <integration.serverName1>localhost</integration.serverName1>
-                <integration.serverPort2>28080</integration.serverPort2>
                 <integration.serverName2>localhost</integration.serverName2>
+                <integration.serverPort1>18080</integration.serverPort1>
+                <integration.serverPort2>28080</integration.serverPort2>
             </properties>
             <reporting>
                 <plugins>
@@ -381,7 +376,7 @@
                 </plugins>
             </build>
             <properties>
-                <integration.container.home>C:/Glassfish3.1.1</integration.container.home>
+                <integration.container.home>C:/Glassfish3.1.2.2</integration.container.home>
                 <integration.container.id>glassfish3x</integration.container.id>
             </properties>
         </profile>
@@ -488,9 +483,9 @@
                 </plugins>
             </build>
             <properties>
-                <integration.container.home>C:/Glassfish3.1.1</integration.container.home>
                 <integration.container.cluster.domain>domain1</integration.container.cluster.domain>
                 <integration.container.cluster.name>cluster1</integration.container.cluster.name>
+                <integration.container.home>C:/Glassfish3.1.2.2</integration.container.home>
             </properties>
         </profile>
         <profile>
@@ -544,7 +539,7 @@
                 </plugins>
             </build>
             <properties>
-                <integration.container.home>C:/Glassfish3.1.1</integration.container.home>
+                <integration.container.home>C:/Glassfish3.1.2.2</integration.container.home>
             </properties>
         </profile>
         <profile>
@@ -590,8 +585,8 @@
                 </plugins>
             </build>
             <properties>
-                <integration.container.root>C:/Glassfish3.1.2</integration.container.root>
-                <integration.container.zipFile>C:/Downloads/Glassfish3.1.2.zip</integration.container.zipFile>
+                <integration.container.root>C:/Glassfish3.1.2.2</integration.container.root>
+                <integration.container.zipFile>C:/Downloads/Glassfish3.1.2.2.zip</integration.container.zipFile>
             </properties>
         </profile>
         <profile>
@@ -627,7 +622,7 @@
                 </plugins>
             </build>
             <properties>
-                <integration.container.home>C:/Glassfish3.1.1</integration.container.home>
+                <integration.container.home>C:/Glassfish3.1.2.2</integration.container.home>
                 <integration.container.id>glassfish3x</integration.container.id>
             </properties>
         </profile>
@@ -776,7 +771,7 @@
                 </plugins>
             </build>
             <properties>
-                <integration.container.home>C:/Glassfish3.1.1</integration.container.home>
+                <integration.container.home>C:/Glassfish3.1.2.2</integration.container.home>
             </properties>
         </profile>
         <profile>
@@ -826,11 +821,11 @@
                 </plugins>
             </build>
             <properties>
-                <integration.container.id>jboss71x</integration.container.id>
-                <integration.container.downloadUrl>http://download.jboss.org/jbossas/7.1/jboss-as-7.1.1.Final/jboss-as-7.1.1.Final.zip</integration.container.downloadUrl>
                 <integration.container.downloadDir>C:/Temp/Cargo/download</integration.container.downloadDir>
+                <integration.container.downloadUrl>http://download.jboss.org/jbossas/7.1/jboss-as-7.1.1.Final/jboss-as-7.1.1.Final.zip</integration.container.downloadUrl>
                 <integration.container.extractDir>C:/Temp/Cargo/extracts</integration.container.extractDir>
                 <integration.container.home>C:/Temp/Cargo/jboss7</integration.container.home>
+                <integration.container.id>jboss71x</integration.container.id>
             </properties>
         </profile>
         <profile>
@@ -924,12 +919,61 @@
                 </plugins>
             </build>
             <properties>
-                <integration.container.id>tomcat7x</integration.container.id>
-                <integration.container.downloadUrl>http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.27/bin/apache-tomcat-7.0.27.zip</integration.container.downloadUrl>
                 <integration.container.downloadDir>C:/Temp/Cargo/download</integration.container.downloadDir>
+                <integration.container.downloadUrl>http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.27/bin/apache-tomcat-7.0.27.zip</integration.container.downloadUrl>
                 <integration.container.extractDir>C:/Temp/Cargo/extracts</integration.container.extractDir>
                 <integration.container.home>C:/Temp/Cargo/tomcat7</integration.container.home>
+                <integration.container.id>tomcat7x</integration.container.id>
                 <tomcat.version>7.0.27</tomcat.version>
+            </properties>
+        </profile>
+        <profile>
+            <id>integration-weblogic12c-cargo</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.cargo</groupId>
+                        <artifactId>cargo-maven2-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>start-container</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>start</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>stop-container</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <container>
+                                <containerId>${integration.container.id}</containerId>
+                                <home>${integration.container.home}</home>
+                            </container>
+                            <configuration>
+                                <type>${integration.container.type}</type>
+                                <home>${integration.container.runtime}</home>
+                                <properties>
+                                    <cargo.servlet.port>${integration.serverPort}</cargo.servlet.port>
+                                    <cargo.weblogic.administrator.password>${integration.container.password}</cargo.weblogic.administrator.password>
+                                    <cargo.weblogic.administrator.user>${integration.container.username}</cargo.weblogic.administrator.user>
+                                </properties>
+                            </configuration>
+                        </configuration>
+                    </plugin>                    
+                </plugins>
+            </build>
+            <properties>
+                <integration.container.home>${integration.container.root}/server/wlserver</integration.container.home>
+                <integration.container.id>weblogic103x</integration.container.id>
+                <integration.container.root>C:/Weblogic12c</integration.container.root>
+                <integration.container.runtime>${integration.container.root}/domain</integration.container.runtime>
+                <integration.container.type>existing</integration.container.type>
             </properties>
         </profile>
         <profile>
@@ -994,76 +1038,23 @@
                 </plugins>
             </build>
             <properties>
-                <integration.container.root>C:/Weblogic12c</integration.container.root>
-                <integration.container.id>weblogic103x</integration.container.id>
                 <integration.container.home>${integration.container.root}/server/wlserver</integration.container.home>
+                <integration.container.id>weblogic103x</integration.container.id>
+                <integration.container.root>C:/Weblogic12c</integration.container.root>
                 <integration.container.runtime>${integration.container.root}/domain</integration.container.runtime>
                 <integration.container.type>existing</integration.container.type>
-                <integration.serverPort>7001</integration.serverPort>
-            </properties>
-        </profile>
-        <profile>
-            <id>integration-weblogic12c-cargo</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.cargo</groupId>
-                        <artifactId>cargo-maven2-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>start-container</id>
-                                <phase>pre-integration-test</phase>
-                                <goals>
-                                    <goal>start</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>stop-container</id>
-                                <phase>post-integration-test</phase>
-                                <goals>
-                                    <goal>stop</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <container>
-                                <containerId>${integration.container.id}</containerId>
-                                <home>${integration.container.home}</home>
-                            </container>
-                            <configuration>
-                                <type>${integration.container.type}</type>
-                                <home>${integration.container.runtime}</home>
-                                <properties>
-                                    <cargo.servlet.port>${integration.serverPort}</cargo.servlet.port>
-                                    <cargo.weblogic.administrator.user>${integration.remote.username}</cargo.weblogic.administrator.user>
-                                    <cargo.weblogic.administrator.password>${integration.remote.password}</cargo.weblogic.administrator.password>
-                                </properties>
-                            </configuration>
-                        </configuration>
-                    </plugin>                    
-                </plugins>
-            </build>
-            <properties>
-                <integration.container.root>C:/Weblogic12c</integration.container.root>
-                <integration.container.id>weblogic103x</integration.container.id>
-                <integration.container.home>${integration.container.root}/server/wlserver</integration.container.home>
-                <integration.container.runtime>${integration.container.root}/domain</integration.container.runtime>
-                <integration.container.type>existing</integration.container.type>
-                <integration.serverPort>7001</integration.serverPort>
             </properties>
         </profile>
     </profiles>
     <properties>
         <integration.serverName>localhost</integration.serverName>
         <integration.serverPort>8080</integration.serverPort>
-        <integration.remote.username>admin</integration.remote.username>
-        <integration.remote.password>admin1234</integration.remote.password>
         <jsf.artifactId>javax.faces</jsf.artifactId>
         <jsf.groupId>org.glassfish</jsf.groupId>
         <jsf.version>${project.version}</jsf.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <webapp.projectStage>Production</webapp.projectStage>
         <webapp.partialStateSaving>true</webapp.partialStateSaving>
+        <webapp.projectStage>Production</webapp.projectStage>
         <webapp.stateSavingMethod>server</webapp.stateSavingMethod>
     </properties>
 </project>
