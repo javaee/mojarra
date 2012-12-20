@@ -58,7 +58,7 @@ public class MyPhaseListener implements PhaseListener {
 
     @Override
     public PhaseId getPhaseId() {
-        PhaseId result = PhaseId.RENDER_RESPONSE;
+        PhaseId result = PhaseId.ANY_PHASE;
         
         return result;
     }

@@ -39,11 +39,13 @@
  */
 package com.sun.faces.test.agnostic.lifeycle.basic;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
-import org.junit.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 public class Spec533IT {
 
@@ -63,9 +65,9 @@ public class Spec533IT {
 
     @Test
     public void testConfigurationEffective() throws Exception {
-        // HtmlPage page = webClient.getPage(webUrl);
-        // String pageText = page.getBody().asText();
+        HtmlPage page = webClient.getPage(webUrl);
+        String pageText = page.getBody().asText();
         // http://java.net/jira/browse/JAVASERVERFACES-2509
-        // assertTrue(pageText.contains("MyPhaseListener called"));
+        assertTrue(pageText.contains("MyPhaseListener called"));
     }
 }

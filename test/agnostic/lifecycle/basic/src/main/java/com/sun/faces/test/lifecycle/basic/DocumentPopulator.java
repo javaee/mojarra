@@ -40,11 +40,12 @@
  */
 package com.sun.faces.test.lifecycle.basic;
 
+import javax.faces.ApplicationConfigurationResourceDocumentPopulator;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-public class DocumentPopulator {
+public class DocumentPopulator extends ApplicationConfigurationResourceDocumentPopulator {
     
     /**
      * <p>/faces-config/lifecycle</p>
@@ -56,8 +57,10 @@ public class DocumentPopulator {
      */
     private static final String PHASE_LISTENER = "phase-listener";
 
-    public void populateDocument(Document document) {
-        String namespace = document.getDocumentElement().getNamespaceURI();
+    @Override
+    public void populateApplicationConfigurationResource(Document document) {
+        Element documentElement = document.getDocumentElement();
+        String namespace = documentElement.getNamespaceURI();
         final String expectedNamespaceURI = "http://java.sun.com/xml/ns/javaee";
         if (!expectedNamespaceURI.equals(namespace)) {
             throw new IllegalStateException("Unexpected namespace");
@@ -67,7 +70,7 @@ public class DocumentPopulator {
         Node phaseListenerNode = document.createTextNode("com.sun.faces.test.lifecycle.basic.MyPhaseListener");
         phaseListenerElement.appendChild(phaseListenerNode);
         lifecycleElement.appendChild(phaseListenerElement);
-        document.appendChild(lifecycleElement);
+        documentElement.appendChild(lifecycleElement);
         
         
         

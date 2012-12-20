@@ -518,8 +518,10 @@ public abstract class ExternalContext {
      * <p class="changed_added_2_2"><em>Servlet:</em>
      * Return the result of calling
      * <code>getContextPath()</code> on the
-     * <code>ServletContext</code> instance for this application.  It is
-     * valid to call this method during application startup or shutdown.</p>
+     * <code>ServletContext</code> instance for this application.</p>
+
+     * <p>It is valid to call this method during application startup or
+     * shutdown.</p>
      *
      * <p>The default implementation throws
      * <code>UnsupportedOperationException</code> and is provided for

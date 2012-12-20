@@ -121,9 +121,11 @@ import java.lang.annotation.Annotation;
 import java.net.URI;
 import java.util.Iterator;
 
+import java.util.ServiceLoader;
 import javax.el.ELContext;
 import javax.el.ELContextEvent;
 import javax.el.ELContextListener;
+import javax.faces.ApplicationConfigurationResourceDocumentPopulator;
 import javax.faces.component.UIViewRoot;
 import org.w3c.dom.*;
 import org.xml.sax.SAXParseException;
@@ -376,6 +378,45 @@ public class ConfigManager {
                 if (containerConnector instanceof HighAvailabilityEnabler) {                   
                     ((HighAvailabilityEnabler)containerConnector).enableHighAvailability(sc);
                 }
+
+                ServiceLoader<ApplicationConfigurationResourceDocumentPopulator> populators = 
+                        ServiceLoader.load(ApplicationConfigurationResourceDocumentPopulator.class);
+                Document newDoc;
+                Element root;
+                DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+                dbf.setNamespaceAware(true);
+                DocumentBuilder builder = dbf.newDocumentBuilder();
+                DOMImplementation domImpl = builder.getDOMImplementation();
+                List<DocumentInfo> programmaticDocuments = new ArrayList<DocumentInfo>();
+                DocumentInfo newDocInfo;
+                for (ApplicationConfigurationResourceDocumentPopulator pop : populators) {
+                    newDoc = domImpl.createDocument("http://java.sun.com/xml/ns/javaee", "faces-config", null);
+                    try {
+                        pop.populateApplicationConfigurationResource(newDoc);
+                        newDocInfo = new DocumentInfo(newDoc, null);
+                        programmaticDocuments.add(newDocInfo);
+                    } catch (Throwable e) {
+                        if (LOGGER.isLoggable(Level.INFO)) {
+                            LOGGER.log(Level.INFO, "{0} thrown when invoking {1}.populateApplicationConfigurationResources: {2}", 
+                                    new String [] {
+                                        e.getClass().getName(),
+                                        pop.getClass().getName(),
+                                        e.getMessage()
+                                    }
+                            );
+                        }
+                    }
+                }
+                if (!programmaticDocuments.isEmpty()) {
+                    DocumentInfo [] newDocumentInfo = new DocumentInfo[facesDocuments.length + programmaticDocuments.size()];
+                    System.arraycopy(facesDocuments, 0, newDocumentInfo, 0, facesDocuments.length);
+                    int i = facesDocuments.length;
+                    for (DocumentInfo cur : programmaticDocuments) {
+                        newDocumentInfo[i] = cur;
+                    }
+                    facesDocuments = newDocumentInfo;
+                }
+                
                 // process the ordered documents
                 FACES_CONFIG_PROCESSOR_CHAIN.process(sc, facesDocuments);
                 if (!isFaceletsDisabled) {
