@@ -166,7 +166,11 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
             componentFound = true;
                 doExistingComponentActions(ctx, id, c);
         } else {
-            c = this.createComponent(ctx);
+            //hook method
+            c = owner.createComponent(ctx);
+            if (c == null) {
+                c = this.createComponent(ctx);
+            }
             
             doNewComponentActions(ctx, id, c);
             assignUniqueId(ctx, parent, id, c);
