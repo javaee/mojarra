@@ -11,7 +11,7 @@
     <artifactId>jsf-api</artifactId>
     <packaging>jar</packaging>
     <name>Mojarra ${project.version} - Test - Weblogic 12c - Repackage API</name>
-    <build>
+<!--    <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -42,5 +42,5 @@
                 </executions>
             </plugin>                    
         </plugins>
-    </build>
+    </build>-->
 </project>
