@@ -13,6 +13,7 @@
     <name>Mojarra ${project.version} - Test - Weblogic 12c - Repackage Impl</name>
     <build>
         <plugins>
+            <!--        
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
@@ -50,6 +51,7 @@
                     </dependency>
                 </dependencies>
             </plugin>            
+            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
