@@ -129,7 +129,7 @@ import javax.faces.component.UIComponent;
  * <ul>
 
  * <li><p>To control the instantiation of the <code>UIComponent</code>
- * instance, subclasses may override {@link #createCustomComponent}.  If
+ * instance, subclasses may override {@link #createComponent}.  If
  * this method is not overridden, the tag handler for which this
  * instance is the delegate will take the necessary action to
  * instantiate the <code>UIComponent</code>.</p></li>
