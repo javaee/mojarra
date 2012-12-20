@@ -18,6 +18,7 @@
         <module>unit</module>
         <module>util</module>
         <module>virtual</module>
+        <module>weblogic12c</module>
         <module>web-profile</module>
     </modules>
     <build>
@@ -1013,7 +1014,7 @@
                                 <configuration>
                                     <artifactItems>
                                         <artifactItem>
-                                            <groupId>com.sun.faces</groupId>
+                                            <groupId>com.sun.faces.test.weblogic12c</groupId>
                                             <artifactId>jsf-impl</artifactId>
                                             <version>${jsf.version}</version>
                                             <type>jar</type>
@@ -1022,7 +1023,7 @@
                                             <destFileName>glassfish.jsf_1.0.0.0_2-1-5.jar</destFileName>
                                         </artifactItem>
                                         <artifactItem>
-                                            <groupId>com.sun.faces</groupId>
+                                            <groupId>com.sun.faces.test.weblogic12c</groupId>
                                             <artifactId>jsf-api</artifactId>
                                             <version>${jsf.version}</version>
                                             <type>jar</type>
