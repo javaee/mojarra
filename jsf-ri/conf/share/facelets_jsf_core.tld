@@ -2341,8 +2341,8 @@ will not pass validation.</p> ]]>
       <p class="changed_added_2_2">If this attribute exists on the tag,
       empty or not, the tag handler must create a
       <code>List&lt;String&gt;</code> for the value of the attribute and
-      call <code>FacesContext.setResourceLibraryContracts()</code>, passing
-      that list as the argument.</p>
+      make it be the value of the <code>resourceLibraryContracts</code>
+      property for this request.</p>
       
       ]]></description>
       <name>contracts</name>
