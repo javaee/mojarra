@@ -41,12 +41,6 @@
                     <location>jsf-ri/src/main/java</location>
                     <encoding>UTF-8</encoding>
                 </source-folder>
-                <source-folder>
-                    <label>jsf-ri/test</label>
-                    <type>java</type>
-                    <location>jsf-ri/test</location>
-                    <encoding>UTF-8</encoding>
-                </source-folder>
             </folders>
             <ide-actions>
                 <action name="build">
@@ -84,10 +78,6 @@
                         <label>jsf-ri/src/main/java</label>
                         <location>jsf-ri/src/main/java</location>
                     </source-folder>
-                    <source-folder style="packages">
-                        <label>jsf-ri/test</label>
-                        <location>jsf-ri/test</location>
-                    </source-folder>
                     <source-file>
                         <location>build.xml</location>
                     </source-file>
@@ -106,10 +96,9 @@
             <compilation-unit>
                 <package-root>jsf-api/src/main/java</package-root>
                 <package-root>jsf-ri/src/main/java</package-root>
-                <package-root>jsf-ri/test</package-root>
                 <package-root>jsf-api/build/generate</package-root>
                 <package-root>jsf-ri/build/generate</package-root>
-                <classpath mode="compile">dependencies/jars/jsp-api-2.1.jar:dependencies/jars/jstl-1.2.jar:dependencies/jars/validation-api-1.0.0.GA.jar:dependencies/jars/servlet-api-3.0.20100224.jar:dependencies/jars/groovy-all-1.6.9.jar:dependencies/jars/junit-3.8.1.jar:lib/jsf-extensions-test-time.jar:lib/cactus-1.7.1-javaee5.jar:dependencies/jars/cdi-api-1.0-SP1.jar:dependencies/jars/javax.inject-1.0-PFD-1.jar:${container.home}/modules/el-impl.jar:${container.home}/modules/bean-validator.jar:${container.home}/modules/javax.servlet.jsp.jar:${container.home}/modules/javax.servlet.jar</classpath>
+                <classpath mode="compile">D:\Glassfish3.1.2.2\glassfish\modules\javax.el-api.jar;D:\Glassfish3.1.2.2\glassfish\modules\javax.servlet-api.jar;D:\Glassfish3.1.2.2\glassfish\modules\javax.servlet.jsp-api.jar;dependencies/jars/jsp-api-2.1.jar;dependencies/jars/jstl-1.2.jar;dependencies/jars/validation-api-1.0.0.GA.jar;dependencies/jars/servlet-api-3.0.20100224.jar;dependencies/jars/groovy-all-1.6.9.jar;dependencies/jars/junit-3.8.1.jar;lib/jsf-extensions-test-time.jar;lib/cactus-1.7.1-javaee5.jar;dependencies/jars/cdi-api-1.0-SP1.jar;dependencies/jars/javax.inject-1.0-PFD-1.jar;D:/Glassfish3.1.2.2/glassfish/modules/bean-validator.jar</classpath>
                 <source-level>1.5</source-level>
             </compilation-unit>
         </java-data>

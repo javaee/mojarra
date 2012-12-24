@@ -198,7 +198,6 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
         beforePhase,
         afterPhase,
         phaseListeners,
-        viewScope  // RELEASE_PENDING
     }
 
 
@@ -242,6 +241,10 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      */
     private ListIterator<PhaseListener> phaseListenerIterator;
 
+    /*
+     * Stores the view map id.
+     */
+    private String viewMapId;
 
     // -------------------------------------------------------------- Properties
 
@@ -1513,7 +1516,6 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      */
     public Map<String, Object> getViewMap(boolean create) {
         Map<String, Object> result = null;
-        String viewMapId = (String) getStateHelper().get(PropertyKeys.viewScope);
         
         if (create && viewMapId == null) {
             ViewMap viewMap = new ViewMap(getFacesContext().getApplication().getProjectStage());
@@ -1529,7 +1531,6 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
                     viewMapId = UUID.randomUUID().toString();
                 }
                 viewMaps.put(viewMapId, viewMap);
-                getStateHelper().put(PropertyKeys.viewScope, viewMapId);
             }
             
             getFacesContext().getApplication()
@@ -1705,9 +1706,9 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
         }
 
         Object superState = super.saveState(context);
-
-        if (superState != null) {
-            values = new Object[] {superState};
+        
+        if (superState != null || viewMapId != null) {
+            values = new Object[] {superState, viewMapId};
         }
 
         return (values);
@@ -1726,6 +1727,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
         
         values = (Object[]) state;
         super.restoreState(context, values[0]);
+        viewMapId = (String) values[1];
     }
 
 
