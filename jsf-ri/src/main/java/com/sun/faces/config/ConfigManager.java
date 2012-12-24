@@ -382,7 +382,6 @@ public class ConfigManager {
                 ServiceLoader<ApplicationConfigurationResourceDocumentPopulator> populators = 
                         ServiceLoader.load(ApplicationConfigurationResourceDocumentPopulator.class);
                 Document newDoc;
-                Element root;
                 DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
                 dbf.setNamespaceAware(true);
                 DocumentBuilder builder = dbf.newDocumentBuilder();
