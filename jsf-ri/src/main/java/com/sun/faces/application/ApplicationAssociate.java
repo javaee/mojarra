@@ -269,6 +269,12 @@ public class ApplicationAssociate {
         appImpl.subscribeToEvent(PostConstructApplicationEvent.class,
                          Application.class, new PostConstructApplicationListener());
     }
+
+    private Map<String, List<String>> resourceLibraryContracts;
+    
+    public void setResourceLibraryContracts(HashMap<String, List<String>> map) {
+        this.resourceLibraryContracts = map;
+    }
     
     private class PostConstructApplicationListener implements SystemEventListener {
 
@@ -430,7 +436,7 @@ public class ApplicationAssociate {
     // Return the resource library contracts and mappings from the
     // application configuration resources
     public Map<String, List<String>> getResourceLibraryContracts() {
-        return null;
+        return resourceLibraryContracts;
     }
 
     public void setResourceManager(ResourceManager resourceManager) {

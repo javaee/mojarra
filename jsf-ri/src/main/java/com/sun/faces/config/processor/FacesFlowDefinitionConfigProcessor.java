@@ -141,6 +141,8 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
             }
             
         }
+        
+        invokeNext(sc, documentInfos);
     }
     
     private void processFacesFlowDefinitions(NodeList factories, /*String namespace,*/
