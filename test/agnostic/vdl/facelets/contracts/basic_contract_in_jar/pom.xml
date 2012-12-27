@@ -52,7 +52,7 @@
     <groupId>com.sun.faces.test.agnostic.vdl.facelets.contracts</groupId>
     <artifactId>basic_contract_in_jar</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra ${project.version} - Test - Agnostic - VDL - Facelets - Contracts - Basic_contract_in_jar</name>
+    <name>Mojarra ${project.version} - Test - Agnostic - VDL - Facelets - Contracts - Basic using contract in JAR</name>
     <build>
         <finalName>test-agnostic-vdl-facelets-contracts-basic_contract_in_jar</finalName>
     </build>
