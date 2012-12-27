@@ -52,7 +52,7 @@
     <groupId>com.sun.faces.test.agnostic.vdl.facelets.contracts</groupId>
     <artifactId>vhosts</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra ${project.version} - Test - Agnostic - VDL - Facelets - Contracts - vhosts</name>
+    <name>Mojarra ${project.version} - Test - Agnostic - VDL - Facelets - Contracts - Virtual Hosts</name>
     <build>
         <finalName>test-agnostic-vdl-facelets-contracts-vhosts</finalName>
     </build>

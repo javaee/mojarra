@@ -36,12 +36,9 @@
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
  * holder.
-
  */
 package com.sun.faces.test.agnostic.vdl.facelets.contracts.vhosts;
 
-import org.junit.Ignore;
-import com.gargoylesoftware.htmlunit.ProxyConfig;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.DomNodeList;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
@@ -50,33 +47,19 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 public class Issue2511IT {
 
-    private String contextRoot;
+    private String webUrl;
     private WebClient webClient;
 
     @Before
     public void setUp() {
-        String webUrl = System.getProperty("integration.url");
-
+        webUrl = System.getProperty("integration.url");
         webClient = new WebClient();
-        try {
-            // the easy way to set the host header with html-unit (works also fine with firefox)
-            URL url = new URL(webUrl);
-            webClient.setProxyConfig(new ProxyConfig(url.getHost(), url.getPort()));
-            contextRoot = url.getPath();
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @After
@@ -84,12 +67,7 @@ public class Issue2511IT {
         webClient.closeAllWindows();
     }
 
-    private String buildUrl(String host, String path) {
-        return "http://" + host + contextRoot + path;
-    }
-
     @Test
-    @Ignore
     public void testResources() throws Exception {
         checkCss("defaultHost", null);
         checkCss("host1", "host1");
@@ -97,22 +75,20 @@ public class Issue2511IT {
     }
 
     @Test
-    @Ignore
     public void testDefaultTemplate() throws Exception {
-        HtmlPage page = webClient.getPage(buildUrl("defaultHost", "faces/index.xhtml"));
+        webClient.removeRequestHeader("Host");
+        HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
         HtmlElement footer = page.getElementById("footer");
         assertThat(footer, nullValue());
-
         HtmlElement content = page.getElementById("content");
         assertThat(content, notNullValue());
-
         assertThat(content.getTextContent().trim(), is("main content"));
     }
 
     @Test
-    @Ignore
     public void testAnotherTemplate() throws Exception {
-        HtmlPage page = webClient.getPage(buildUrl("host2", "faces/index.xhtml"));
+        webClient.addRequestHeader("Host", "host2");
+        HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
         HtmlElement host2content = page.getElementById("host2content");
         assertThat(host2content, notNullValue());
         HtmlElement footer = page.getElementById("footer");
@@ -121,60 +97,52 @@ public class Issue2511IT {
     }
 
     @Test
-    @Ignore
     public void testFalsePositive() throws Exception {
-        HtmlPage page = webClient.getPage(buildUrl("host3", "faces/index.xhtml"));
+        webClient.addRequestHeader("Host", "host3");
+        HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
         HtmlElement content = page.getElementById("content");
         assertThat(content, notNullValue());
         assertThat(content.getTextContent().trim(), is("false positive"));
     }
 
     @Test
-    @Ignore
     public void testInclude() throws Exception {
-        HtmlPage page = webClient.getPage(buildUrl("defaultHost", "faces/index.xhtml"));
+        webClient.removeRequestHeader("Host");
+        HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
         HtmlElement header = page.getElementById("header");
         assertThat(header, notNullValue());
         assertThat(header.getTextContent().trim(), is("header content"));
-
-        page = webClient.getPage(buildUrl("host1", "faces/index.xhtml"));
+        webClient.addRequestHeader("Host", "host1");
+        page = webClient.getPage(webUrl + "faces/index.xhtml");
         header = page.getElementById("header");
-        // host1 has an empty header include!
         assertThat(header, nullValue());
     }
 
     @Test
-    @Ignore
     public void testExtension() throws Exception {
-        HtmlPage page = webClient.getPage(buildUrl("host4", "faces/index.xhtml"));
+        webClient.addRequestHeader("Host", "host4");
+        HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
         HtmlElement content = page.getElementById("host2content");
-        // we use the template of host 2 but insert our content
         assertThat(content, notNullValue());
         assertThat(content.getTextContent().trim(), is("host4 content"));
-
-        // we use the template of host2, but we don't define the footer.
         HtmlElement footer = page.getElementById("footer");
         assertThat(footer, notNullValue());
         assertThat(footer.getTextContent().trim(), is(""));
     }
 
     private void checkCss(String host, String contract) throws IOException {
-        HtmlPage page = webClient.getPage(buildUrl(host, "faces/index.xhtml"));
+        webClient.addRequestHeader("Host", host);
+        HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
         String titleText = page.getTitleText();
         assertThat(titleText, is(host));
-
         DomNodeList<HtmlElement> linkElements = page.getElementsByTagName("link");
-
         for (HtmlElement linkElement : linkElements) {
             HtmlLink link = (HtmlLink) linkElement;
-            // make sure no contract is chosen
             if(contract == null) {
                 assertThat(link.getHrefAttribute(), not(containsString("con=")));
             } else {
                 assertThat(link.getHrefAttribute(), containsString("con=" + contract));
             }
-
         }
     }
-
 }
