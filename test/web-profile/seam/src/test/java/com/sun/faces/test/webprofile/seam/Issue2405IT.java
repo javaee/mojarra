@@ -45,6 +45,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 public class Issue2405IT {
 
@@ -63,7 +64,8 @@ public class Issue2405IT {
     }
 
     @Test
-    public void testReplaceVDL() throws Exception {
+    @Ignore
+    public void testFormOmitted() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/issue2405.xhtml");
         String text = page.asText();
         assertEquals(200, page.getWebResponse().getStatusCode());
