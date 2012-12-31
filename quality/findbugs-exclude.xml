@@ -1,6 +1,0 @@
-<FindBugsFilter>
-  <Match>
-    <Field type="java.util.concurrent.ConcurrentHashMap" />
-    <Bug pattern="SE_BAD_FIELD" />
-  </Match>
-</FindBugsFilter>
