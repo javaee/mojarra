@@ -48,6 +48,7 @@ import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import static org.junit.Assert.assertTrue;
+import org.junit.Ignore;
 
 public class BasicRenderIT {
     /**
@@ -95,6 +96,7 @@ public class BasicRenderIT {
     }
 
     @Test
+    @Ignore
     public void testFlowEntryExit() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
 
