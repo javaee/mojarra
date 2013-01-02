@@ -114,34 +114,43 @@ public final class Classpath {
         Set all = new LinkedHashSet();
         URL url;
         URLConnection conn;
-        JarFile jarFile;
+        JarFile jarFile = null;
         for (int i = 0, s = e.length; i < s; ++i) {
             while (e[i].hasMoreElements()) {
-                url = (URL) e[i].nextElement();
-                // Defensive programming.  Due to issue 13045 this collection
-                // can contain URLs that have their spaces incorrectly escaped
-                // by having %20 replaced with %2520.  This quick conditional 
-                // check catches this particular case and averts it.
-                String str = url.getPath();
-                if (-1 != str.indexOf("%2520")) {
-                    str = url.toExternalForm();
-                    str = str.replace("%2520", "%20");
-                    url = new URL(str);
-                }
-                conn = url.openConnection();
-                conn.setUseCaches(false);
-                if (conn instanceof JarURLConnection) {
-                    jarFile = ((JarURLConnection) conn).getJarFile();
-                } else {
-                    jarFile = getAlternativeJarFile(url);
-                }
-                if (jarFile != null) {
-                    searchJar(cl, all, jarFile, prefix, suffix);
-                } else {
-                    boolean searchDone =
-                          searchDir(all, new File(URLDecoder.decode(url.getFile(), "UTF-8")), suffix);
-                    if (!searchDone) {
-                        searchFromURL(all, prefix, suffix, url);
+                try {
+                    url = (URL) e[i].nextElement();
+                    // Defensive programming.  Due to issue 13045 this collection
+                    // can contain URLs that have their spaces incorrectly escaped
+                    // by having %20 replaced with %2520.  This quick conditional 
+                    // check catches this particular case and averts it.
+                    String str = url.getPath();
+                    if (-1 != str.indexOf("%2520")) {
+                        str = url.toExternalForm();
+                        str = str.replace("%2520", "%20");
+                        url = new URL(str);
+                    }
+                    conn = url.openConnection();
+                    conn.setUseCaches(false);
+                    if (conn instanceof JarURLConnection) {
+                        jarFile = ((JarURLConnection) conn).getJarFile();
+                    } else {
+                        jarFile = getAlternativeJarFile(url);
+                    }
+                    if (jarFile != null) {
+                        searchJar(cl, all, jarFile, prefix, suffix);
+                    } else {
+                        boolean searchDone =
+                              searchDir(all, new File(URLDecoder.decode(url.getFile(), "UTF-8")), suffix);
+                        if (!searchDone) {
+                            searchFromURL(all, prefix, suffix, url);
+                        }
+                    }
+                } finally {
+                    if (jarFile != null) {
+                        try {
+                            jarFile.close();
+                        } catch(IOException exception) {
+                        }
                     }
                 }
             }
