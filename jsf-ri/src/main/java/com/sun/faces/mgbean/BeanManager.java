@@ -546,8 +546,11 @@ public class BeanManager implements SystemEventListener {
 
             public void handle(String name, Object bean, FacesContext context) {
 
-                context.getViewRoot().getViewMap().put(name, bean);
-
+                Map<String, Object> viewMap = context.getViewRoot().getViewMap();
+                
+                if (viewMap != null) {
+                    viewMap.put(name, bean);
+                }
             }
 
             public boolean isInScope(String name, FacesContext context) {
