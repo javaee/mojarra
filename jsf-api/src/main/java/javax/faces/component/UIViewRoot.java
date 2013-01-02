@@ -1563,23 +1563,24 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
         if (create && viewMapId == null) {
             ViewMap viewMap = new ViewMap(getFacesContext().getApplication().getProjectStage());
             
-            Map<String, Object> sessionMap = getFacesContext().getExternalContext().getSessionMap();
-            synchronized(sessionMap) {
-                if (sessionMap.get("com.sun.faces.activeViewMaps") == null) {
-                    sessionMap.put("com.sun.faces.activeViewMaps", new HashMap<String, Object>());
-                }
-                Map<String, Object> viewMaps = (Map<String, Object>) sessionMap.get("com.sun.faces.activeViewMaps");
-                viewMapId = UUID.randomUUID().toString();
-                while(viewMaps.containsKey(viewMapId)) {
+            Object session = getFacesContext().getExternalContext().getSession(create);
+            if (session != null) {
+                Map<String, Object> sessionMap = getFacesContext().getExternalContext().getSessionMap();
+                synchronized(sessionMap) {
+                    if (sessionMap.get("com.sun.faces.activeViewMaps") == null) {
+                        sessionMap.put("com.sun.faces.activeViewMaps", new HashMap<String, Object>());
+                    }
+                    Map<String, Object> viewMaps = (Map<String, Object>) sessionMap.get("com.sun.faces.activeViewMaps");
                     viewMapId = UUID.randomUUID().toString();
+                    while(viewMaps.containsKey(viewMapId)) {
+                        viewMapId = UUID.randomUUID().toString();
+                    }
+                    viewMaps.put(viewMapId, viewMap);
                 }
-                viewMaps.put(viewMapId, viewMap);
+
+                getFacesContext().getApplication().publishEvent(getFacesContext(),
+                    PostConstructViewMapEvent.class, this);
             }
-            
-            getFacesContext().getApplication()
-                  .publishEvent(getFacesContext(),
-                                PostConstructViewMapEvent.class,
-                                this);
         }
         
         Map<String, Object> sessionMap = getFacesContext().getExternalContext().getSessionMap();
