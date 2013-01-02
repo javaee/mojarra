@@ -364,6 +364,7 @@
                                 <containerId>${integration.container.id}</containerId>
                                 <type>installed</type>
                                 <home>${integration.container.home}</home>
+                                <timeout>300000</timeout>
                             </container>
                             <configuration>
                                 <type>standalone</type>
