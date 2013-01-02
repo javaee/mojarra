@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!-- =========== FULL CONFIGURATION FILE ================================== -->
+
+<faces-config version="2.1"
+              xmlns="http://java.sun.com/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd">
+    <application>
+        <system-event-listener>
+            <system-event-listener-class>com.sun.faces.test.agnostic.scope.view.InitFacesListener</system-event-listener-class>
+            <system-event-class>javax.faces.event.PreRenderComponentEvent</system-event-class>
+        </system-event-listener>
+    </application>    
+</faces-config>
