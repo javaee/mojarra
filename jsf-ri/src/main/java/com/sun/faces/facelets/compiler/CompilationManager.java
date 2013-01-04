@@ -71,6 +71,7 @@ import com.sun.faces.util.FacesLogger;
 
 import javax.faces.view.facelets.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 import java.util.logging.Level;
@@ -134,7 +135,7 @@ final class CompilationManager {
         config = WebConfiguration.getInstance();
         
     }
-    
+        
     private InterfaceUnit interfaceUnit;
     private InterfaceUnit getInterfaceUnit() {
         return interfaceUnit;
@@ -258,10 +259,15 @@ final class CompilationManager {
         	if (log.isLoggable(Level.FINE)) {
         		log.fine("Composition Found, Popping Parent Tags");
         	}
+           
+            CompilationUnit viewRootUnit = getViewRootUnitFromStack(units);
             this.units.clear();
             NamespaceUnit nsUnit = this.namespaceManager
                     .toNamespaceUnit(this.tagLibrary);
             this.units.push(nsUnit);
+            if (viewRootUnit != null) {
+                this.currentUnit().addChild(viewRootUnit);
+            }
             this.startUnit(new TrimmedTagUnit(this.tagLibrary, qname[0], qname[1], t, this
                     .nextTagId()));
             if (log.isLoggable(Level.FINE)) {
@@ -516,5 +522,27 @@ final class CompilationManager {
             return new Tag(tag.getLocation(), tag.getNamespace(), tag
                     .getLocalName(), tag.getQName(), new TagAttributesImpl(attr));
         }
+    }
+
+    /**
+     * 
+     * @param units the compilation units.
+     * @return Get the view 
+     */
+    private CompilationUnit getViewRootUnitFromStack(Stack<CompilationUnit> units) {
+        CompilationUnit result = null;
+        Iterator<CompilationUnit> iterator = units.iterator();
+        while(iterator.hasNext()) {
+            CompilationUnit compilationUnit = iterator.next();
+            if (compilationUnit instanceof TagUnit) {
+                TagUnit tagUnit = (TagUnit) compilationUnit;
+                if (tagUnit.getTag().getNamespace().equals("http://java.sun.com/jsf/core") &&
+                        tagUnit.getTag().getLocalName().equals("view")) {
+                    result = tagUnit;
+                    break;
+                }
+            }
+        }
+        return result;
     }
 }

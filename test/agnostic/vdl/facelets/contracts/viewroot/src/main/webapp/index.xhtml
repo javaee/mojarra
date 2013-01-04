@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets" 
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <body>
+        <f:view contracts="#{param['style']}">
+            <ui:composition template="/template.xhtml">
+                <ui:define name="content">
+                    main content
+                </ui:define>
+                <ui:define name="footer">
+                    footer info
+                </ui:define>
+            </ui:composition>
+        </f:view>
+    </body>
+</html>

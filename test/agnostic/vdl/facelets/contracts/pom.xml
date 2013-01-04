@@ -17,5 +17,6 @@
         <module>basic_contract_jar</module>
         <module>simple</module>
         <module>vhosts</module>
+        <module>viewroot</module>
     </modules>
 </project>

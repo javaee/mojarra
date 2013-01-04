@@ -71,6 +71,8 @@ import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagConfig;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -102,6 +104,11 @@ public final class ViewHandler extends TagHandlerImpl {
     private final TagAttribute beforePhase;
 
     private final TagAttribute afterPhase;
+    
+    /**
+     * Stores the contracts tag attribute.
+     */
+    private final TagAttribute contracts;
 
     /**
      * @param config
@@ -118,6 +125,7 @@ public final class ViewHandler extends TagHandlerImpl {
         testForNull = this.getAttribute("afterPhase");
         this.afterPhase = (null == testForNull) ?
                          this.getAttribute("afterPhaseListener") : testForNull;
+        this.contracts = this.getAttribute("contracts");
     }
 
     /**
@@ -166,6 +174,12 @@ public final class ViewHandler extends TagHandlerImpl {
                         .getMethodExpression(ctx, null, LISTENER_SIG);
                 root.setAfterPhaseListener(m);
             }
+            
+            if (this.contracts != null) {
+                List<String> contractList = Arrays.asList(this.contracts.getValue(ctx).split(","));
+                ctx.getFacesContext().setResourceLibraryContracts(contractList);
+            }
+            
             String viewId = root.getViewId();
 
             // At this point in the lifecycle we should have a non-null/empty
