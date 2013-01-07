@@ -196,24 +196,28 @@ public class ViewHandlerImpl extends ViewHandler {
         }
         context.setResponseWriter(newWriter);
 
-        newWriter.startDocument();
+        try {
+            newWriter.startDocument();
 
-        doRenderView(context, viewToRender);
+            doRenderView(context, viewToRender);
 
-        newWriter.endDocument();
+            newWriter.endDocument();
 
-        // replace markers in the body content and write it to response.
+            // replace markers in the body content and write it to response.
 
-        // flush directly to the response
-        if (stateWriter.stateWritten()) {
-            stateWriter.flushToWriter();
+            // flush directly to the response
+            if (stateWriter.stateWritten()) {
+                stateWriter.flushToWriter();
+            }
         }
-
-        // clear the ThreadLocal reference.
-        stateWriter.release();
-
-        if (null != oldWriter) {
-            context.setResponseWriter(oldWriter);
+        finally {
+            
+            // clear the ThreadLocal reference.
+            stateWriter.release();
+            
+            if (null != oldWriter) {
+                context.setResponseWriter(oldWriter);
+            }
         }
 
         // write any AFTER_VIEW_CONTENT to the response
