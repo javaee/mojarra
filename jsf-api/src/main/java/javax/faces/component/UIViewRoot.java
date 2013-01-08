@@ -1545,6 +1545,30 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
             Map<String, Object> viewMaps = (Map<String, Object>) sessionMap.get("com.sun.faces.activeViewMaps");
             result = (Map<String, Object>) viewMaps.get(viewMapId);
         }
+        
+        /*
+         * During application initialization one can call getViewMap as well,
+         * but since we don't have a session we cannot store it there. So the
+         * code below stores the view map in an attribute on the UIViewRoot so 
+         * we can satisfy the getViewMap contract during startup.
+         */
+        if (result == null && FacesContext.getCurrentInstance() != null &&
+                FacesContext.getCurrentInstance().getClass().getName().
+                    equals("com.sun.faces.config.InitFacesContext")) {
+            
+            if (create) {
+                if (getAttributes().get("com.sun.faces.initViewMap") == null) {
+                    getAttributes().put("com.sun.faces.initViewMap", 
+                            new ViewMap(getFacesContext().getApplication().getProjectStage()));
+
+                    getFacesContext().getApplication().publishEvent(getFacesContext(),
+                        PostConstructViewMapEvent.class, this);
+                }
+            }
+
+            result = (Map<String, Object>) getAttributes().get("com.sun.faces.initViewMap");
+        }
+        
         return result;
     }
 
