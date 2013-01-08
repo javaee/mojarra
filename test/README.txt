@@ -150,5 +150,18 @@
        be build up in the following way 
 
         ${integration.protocol}://${integration.serverName}:$integration.serverPort}/${project.build.finalName}/
+
+ Writing tests
+ =============
+
+ To make it easier to write tests and to specify in which version this test is 
+ relevant use the following 2 annotations.
+
+ Eg.
+
+   @RunWith(value=JsfTestRunner.class)
+   @JsfTest(JsfVersion.JSF_2_1_XX)
+   public class IssueXxxIT {
+   }
  
 --END
