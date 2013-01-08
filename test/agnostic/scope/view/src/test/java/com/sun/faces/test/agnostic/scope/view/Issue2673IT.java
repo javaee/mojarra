@@ -39,53 +39,40 @@
  */
 package com.sun.faces.test.agnostic.scope.view;
 
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.SystemEvent;
-import javax.faces.event.SystemEventListener;
-import java.util.Map;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
 
-/**
- * A system event listener that registers as a preRenderComponent event listener.
- */
-public class InitFacesListener implements SystemEventListener {
-    /**
-     * Constructor.
-     */
-    public InitFacesListener() {
-        FacesContext fc = FacesContext.getCurrentInstance();
-        UIViewRoot viewRoot = fc.getViewRoot();
-        if (viewRoot != null) {
-            Map viewMap = viewRoot.getViewMap();
-            if (viewMap != null) {
-                if (FacesContext.getCurrentInstance() != null &&
-                        FacesContext.getCurrentInstance().getClass().getName().equals("com.sun.faces.config.InitFacesContext")) {
-                    FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().put("viewMapCreated", "Yes");
-                }
-            }
-        }
+@RunWith(value=JsfTestRunner.class)
+@JsfTest(JsfVersion.JSF_2_2_0_M09)
+public class Issue2673IT {
+
+    private String webUrl;
+    private WebClient webClient;
+
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
+        webClient.setJavaScriptEnabled(true);
+        webClient.setJavaScriptTimeout(60000);
     }
 
-    /**
-     * Process the event.
-     * 
-     * @param event the system event.
-     * @throws AbortProcessingException when processing needs to be aborted.
-     */
-    public void processEvent(SystemEvent event) throws AbortProcessingException {
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
     }
 
-    /**
-     * Is a listener for source.
-     * 
-     * @param source the source.
-     * @return true or false.
-     */
-    public boolean isListenerForSource(Object source) {
-        if ((source instanceof UIViewRoot)) {
-            return true;
-        }
-        return false;
+    @Test
+    public void testInitFaces() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/initfaces2.xhtml");
+        assertTrue(page.asText().indexOf("Yes") != -1);
     }
 }
