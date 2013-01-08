@@ -152,10 +152,10 @@
 
         ${integration.protocol}://${integration.serverName}:$integration.serverPort}/${project.build.finalName}/
 
-  Example invocation
-  ==================
+ Example invocation
+ ==================
 
-  Consider this entry in a maven ~/.m2/settings.xml <profiles> section:
+ Consider this entry in a maven ~/.m2/settings.xml <profiles> section:
 
     <profile>
       <id>mojarra-trunk</id>
@@ -173,5 +173,17 @@ mvn -Dcargo.remote.password= -Pmojarra-trunk clean install
 mvn -Dcargo.remote.password= -Pmojarra-trunk,integration-glassfish-cargo cargo:redeploy
 mvn -Dcargo.remote.password= -Pmojarra-trunk,integration-failsafe verify 
 
+ Writing tests
+ =============
+
+ To make it easier to write tests and to specify in which version this test is 
+ relevant use the following 2 annotations.
+
+ Eg.
+
+   @RunWith(value=JsfTestRunner.class)
+   @JsfTest(JsfVersion.JSF_2_2_XX)
+   public class IssueXxxIT {
+   }
  
 --END
