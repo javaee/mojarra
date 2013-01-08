@@ -65,6 +65,7 @@ public class MethodCallTagHandler extends TagHandlerImpl {
             flowData.put(FacesFlowDefinitionTagHandler.FlowDataKeys.WithinMethodCall, Boolean.TRUE);
         } else {
             flowData.remove(FacesFlowDefinitionTagHandler.FlowDataKeys.WithinMethodCall);
+            flowData.remove(FacesFlowDefinitionTagHandler.FlowDataKeys.CurrentMethodCall);
         }
     }
     

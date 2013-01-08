@@ -97,13 +97,6 @@ public class FlowBuilderImpl extends FlowBuilder {
         return new FlowCallBuilderImpl(this, flowCallNodeId);
     }
 
-    @Override
-    public FlowBuilder link(NodeBuilder source, NodeBuilder destination) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-    
-    
-    
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Flow-wide Settings">     

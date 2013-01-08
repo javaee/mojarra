@@ -67,16 +67,6 @@ public class FlowCallBuilderImpl extends FlowCallBuilder {
     }
 
     @Override
-    public FlowCallBuilder inboundParameter(String name, ValueExpression value) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public FlowCallBuilder inboundParameter(String name, String value) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     public FlowCallBuilder outboundParameter(String name, ValueExpression value) {
         ParameterImpl param = new ParameterImpl(name, value);
         Map<String, FlowCallNode> flowCalls = root.getFlow().getFlowCalls();

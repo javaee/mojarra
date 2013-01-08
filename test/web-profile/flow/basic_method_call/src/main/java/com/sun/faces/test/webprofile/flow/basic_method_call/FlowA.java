@@ -38,19 +38,35 @@
  * holder.
 
  */
-package javax.faces.flow.builder;
+package com.sun.faces.test.webprofile.flow.basic_method_call;
 
-import javax.el.ValueExpression;
+import java.io.Serializable;
+import javax.faces.context.FacesContext;
+import javax.faces.flow.Flow;
+import javax.faces.flow.builder.FlowBuilder;
+import javax.faces.flow.FlowDefinition;
+import javax.inject.Named;
 
-public abstract class FlowCallBuilder implements NodeBuilder {
+
+@Named("FlowA")
+@FlowDefinition
+public class FlowA implements Serializable {
     
-    public abstract FlowCallBuilder flowReference(String flowId);
+    private static final long serialVersionUID = -7623501087369765218L;
+
+    public FlowA() {
+    }
     
-    public abstract FlowCallBuilder outboundParameter(String name, ValueExpression value);
+    public Flow defineFlow(FacesContext context, FlowBuilder flowBuilder) {
+        String flowId = "flow-a";
+        flowBuilder.id(flowId);
+        flowBuilder.viewNode(flowId, "/" + flowId + "/" + flowId + ".xhtml").markAsStartNode();
+        flowBuilder.returnNode("taskFlowReturn1").
+                fromOutcome("#{flow_a_Bean.returnValue}");
+        flowBuilder.methodCallNode("outcome-from-method").expression("#{flow_a_Bean.methodWithOutcome}").defaultOutcome("taskFlowReturn1");
+        flowBuilder.methodCallNode("outcome-from-markup").expression("#{flow_a_Bean.voidMethod}").defaultOutcome("taskFlowReturn1");
         
-    public abstract FlowCallBuilder outboundParameter(String name, String value);
-    
-    public abstract NodeBuilder markAsStartNode();
-    
+        return flowBuilder.getFlow();
+    }
     
 }

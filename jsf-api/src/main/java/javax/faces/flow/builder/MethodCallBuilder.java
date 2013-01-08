@@ -47,9 +47,11 @@ public abstract class MethodCallBuilder implements NodeBuilder {
     
     public abstract MethodCallBuilder expression(MethodExpression me);
     
-    public abstract SwitchCase defaultOutcome(String outcome);
+    public abstract MethodCallBuilder expression(String methodExpression);
     
-    public abstract SwitchCase defaultOutcome(ValueExpression outcome);
+    public abstract MethodCallBuilder defaultOutcome(String outcome);
+    
+    public abstract MethodCallBuilder defaultOutcome(ValueExpression outcome);
     
     public abstract NodeBuilder markAsStartNode();
     

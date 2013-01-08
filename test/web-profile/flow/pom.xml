@@ -15,6 +15,7 @@
         <module>basic-implicit</module>
         <module>basic_faces_flow_call</module>
         <module>basic-multi-page</module>
+        <module>basic_method_call</module>
         <module>basic-multi-page-fdl-in-web-inf</module>
         <module>factory</module>
         <module>intermediate</module>

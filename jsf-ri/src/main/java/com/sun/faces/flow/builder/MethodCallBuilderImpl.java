@@ -40,35 +40,53 @@
  */
 package com.sun.faces.flow.builder;
 
+import com.sun.faces.flow.MethodCallNodeImpl;
+import javax.el.ELContext;
 import javax.el.MethodExpression;
 import javax.el.ValueExpression;
 import javax.faces.flow.builder.MethodCallBuilder;
 import javax.faces.flow.builder.NodeBuilder;
-import javax.faces.flow.builder.SwitchCase;
 
 public class MethodCallBuilderImpl extends MethodCallBuilder {
     
     private FlowBuilderImpl root;
     private String methodCallId;
+    private MethodCallNodeImpl methodCallNode;
 
     public MethodCallBuilderImpl(FlowBuilderImpl root, String id) {
         this.root = root;
         this.methodCallId = id;
+        this.methodCallNode = new MethodCallNodeImpl(id);
+        this.root.getFlow().getMethodCalls().add(methodCallNode);
+                
     }
 
     @Override
-    public SwitchCase defaultOutcome(String outcome) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public MethodCallBuilder defaultOutcome(String outcome) {
+        ELContext elc = root.getELContext();
+        ValueExpression ve = root.getExpressionFactory().createValueExpression(elc, outcome, String.class);
+        methodCallNode.setOutcome(ve);
+        return this;
     }
 
     @Override
-    public SwitchCase defaultOutcome(ValueExpression outcome) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public MethodCallBuilder defaultOutcome(ValueExpression ve) {
+        methodCallNode.setOutcome(ve);
+        return this;
     }
 
+    @Override
+    public MethodCallBuilder expression(String methodExpression) {
+        ELContext elc = root.getELContext();
+        MethodExpression me = root.getExpressionFactory().createMethodExpression(elc, methodExpression, null, null);
+        methodCallNode.setMethodExpression(me);
+        return this;
+    }
+    
     @Override
     public MethodCallBuilder expression(MethodExpression me) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        methodCallNode.setMethodExpression(me);
+        return this;
     }
 
     @Override

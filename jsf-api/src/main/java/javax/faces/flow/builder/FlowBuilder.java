@@ -58,8 +58,6 @@ public abstract class FlowBuilder  {
     
     public abstract FlowCallBuilder flowCallNode(String flowCallNodeId);
     
-    public abstract FlowBuilder link(NodeBuilder source, NodeBuilder destination);
-    
     public abstract FlowBuilder initializer(MethodExpression valueExpression);
     
     public abstract FlowBuilder finalizer(MethodExpression valueExpression);

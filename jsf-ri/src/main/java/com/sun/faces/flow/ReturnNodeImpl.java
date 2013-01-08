@@ -38,19 +38,34 @@
  * holder.
 
  */
-package javax.faces.flow.builder;
+package com.sun.faces.flow;
 
-import javax.el.ValueExpression;
+import com.sun.faces.facelets.flow.FlowNavigationCase;
+import javax.faces.application.NavigationCase;
+import javax.faces.flow.ReturnNode;
 
-public abstract class FlowCallBuilder implements NodeBuilder {
+public class ReturnNodeImpl extends ReturnNode {
     
-    public abstract FlowCallBuilder flowReference(String flowId);
+    private final String id;
+    private FlowNavigationCase flowNavCase;
+
+    public ReturnNodeImpl(String id, FlowNavigationCase flowNavCase) {
+        this.id = id;
+        this.flowNavCase = flowNavCase;
+    }
+
+    @Override
+    public NavigationCase getNavigationCase() {
+        return flowNavCase;
+    }
+
+    @Override
+    public String getId() {
+        return id;
+    }
     
-    public abstract FlowCallBuilder outboundParameter(String name, ValueExpression value);
-        
-    public abstract FlowCallBuilder outboundParameter(String name, String value);
     
-    public abstract NodeBuilder markAsStartNode();
+    
     
     
 }

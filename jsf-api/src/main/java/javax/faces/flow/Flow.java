@@ -156,7 +156,7 @@ public abstract class Flow {
 
      * @since 2.2
      */
-    public abstract Map<String,NavigationCase> getReturns();
+    public abstract Map<String,ReturnNode> getReturns();
     
     /**
      * <p class="changed_added_2_2">Return an immutable data structure

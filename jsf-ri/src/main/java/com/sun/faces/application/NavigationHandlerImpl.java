@@ -73,6 +73,7 @@ import javax.faces.flow.Flow;
 import javax.faces.flow.FlowHandler;
 import javax.faces.flow.FlowNode;
 import javax.faces.flow.MethodCallNode;
+import javax.faces.flow.ReturnNode;
 import javax.faces.flow.SwitchNode;
 import javax.faces.flow.ViewNode;
 import javax.faces.view.ViewDeclarationLanguage;
@@ -786,23 +787,25 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                 if (null != flow) {
                     // If so, see if the outcome is one of this flow's 
                     // faces-flow-return nodes.
-                    NavigationCase navCase = flow.getReturns().get(outcome);
-                    if (null != navCase) {
-                        String fromOutcome = navCase.getFromOutcome();
-                        if (SharedUtils.isExpression(fromOutcome)) {
-                            Application app = context.getApplication();
-                            fromOutcome = app.evaluateExpressionGet(context, fromOutcome, String.class);
-
+                    ReturnNode returnNode = flow.getReturns().get(outcome);
+                    if (null != returnNode) {
+                        NavigationCase navCase = returnNode.getNavigationCase();
+                        if (null != navCase) {
+                            String fromOutcome = navCase.getFromOutcome();
+                            if (SharedUtils.isExpression(fromOutcome)) {
+                                Application app = context.getApplication();
+                                fromOutcome = app.evaluateExpressionGet(context, fromOutcome, String.class);
+                                
+                            }
+                            CaseStruct result = null;
+                            try {
+                                setDiscerningFlowRouting(context, true);
+                                result = getViewId(context, fromAction, fromOutcome);
+                            } finally {
+                                setDiscerningFlowRouting(context, false);
+                            }
+                            return result;
                         }
-                        CaseStruct result = null;
-                        try {
-                            setDiscerningFlowRouting(context, true);
-                            result = getViewId(context, fromAction, fromOutcome);
-                        } finally {
-                            setDiscerningFlowRouting(context, false);
-                        }
-                        return result;
-
                     }
                 } else {
                     // try a convention.  Create a viewId by treating outcome
@@ -875,12 +878,54 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         CaseStruct result = null;
         
         FlowNode node = flow.getNode(outcome);
-        if (null != node && node instanceof ViewNode) {
-            result = new CaseStruct();
-            result.viewId = ((ViewNode)node).getVdlDocumentId();
-            result.navCase = new NavigationCase(fromAction, 
-                    fromAction, outcome, null, result.viewId, 
-                    null, false, false);
+        if (null != node) {
+            if (node instanceof ViewNode) {
+                result = new CaseStruct();
+                result.viewId = ((ViewNode)node).getVdlDocumentId();
+                result.navCase = new NavigationCase(fromAction, 
+                        fromAction, outcome, null, result.viewId, 
+                        null, false, false);
+            } else if (node instanceof ReturnNode) {
+                NavigationCase navCase = ((ReturnNode)node).getNavigationCase();
+                if (null != navCase) {
+                    String fromOutcome = navCase.getFromOutcome();
+                    if (SharedUtils.isExpression(fromOutcome)) {
+                        Application app = context.getApplication();
+                        fromOutcome = app.evaluateExpressionGet(context, fromOutcome, String.class);
+                    }
+                    try {
+                        setDiscerningFlowRouting(context, true);
+                        result = getViewId(context, fromAction, fromOutcome);
+                    } finally {
+                        setDiscerningFlowRouting(context, false);
+                    }
+                }
+                
+            }
+        } else {
+            // See if there is an implicit match within this flow, using outcome
+            // to derive a view id within this flow.
+            String currentViewId = outcome;
+            // If the viewIdToTest needs an extension, take one from the currentViewId.
+            String currentExtension;
+            int idx = currentViewId.lastIndexOf('.');
+            if (idx != -1) {
+                currentExtension = currentViewId.substring(idx);
+            } else {
+                // PENDING, don't hard code XHTML here, look it up from configuration
+                currentExtension = ".xhtml";
+            }
+            String viewIdToTest = "/" + flow.getId() + "/" + outcome + currentExtension;
+            ViewHandler viewHandler = Util.getViewHandler(context);
+            viewIdToTest = viewHandler.deriveViewId(context, viewIdToTest);
+            if (null != viewIdToTest) {
+                result = new CaseStruct();
+                result.viewId = viewIdToTest;
+                result.navCase = new NavigationCase(fromAction, 
+                        fromAction, outcome, null, result.viewId, 
+                        null, false, false);
+            }
+            
         }
         return result;
     }

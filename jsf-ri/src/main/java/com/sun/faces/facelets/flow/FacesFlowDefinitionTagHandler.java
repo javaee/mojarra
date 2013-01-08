@@ -44,6 +44,7 @@ import com.sun.faces.RIConstants;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
 import com.sun.faces.flow.FlowImpl;
 import com.sun.faces.flow.ParameterImpl;
+import com.sun.faces.flow.ReturnNodeImpl;
 import com.sun.faces.flow.ViewNodeImpl;
 import com.sun.faces.util.Util;
 import java.io.IOException;
@@ -54,7 +55,6 @@ import java.util.List;
 import java.util.Map;
 import javax.el.ExpressionFactory;
 import javax.el.MethodExpression;
-import javax.faces.application.NavigationCase;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.flow.FlowCallNode;
@@ -62,6 +62,7 @@ import javax.faces.flow.Flow;
 import javax.faces.flow.FlowHandler;
 import javax.faces.flow.MethodCallNode;
 import javax.faces.flow.Parameter;
+import javax.faces.flow.ReturnNode;
 import javax.faces.flow.SwitchNode;
 import javax.faces.flow.ViewNode;
 import javax.faces.view.facelets.FaceletContext;
@@ -299,11 +300,12 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
             //
             List<FlowNavigationCase> facesFlowReturns = FacesFlowReturnTagHandler.getNavigationCases(ctx);
             if (null != facesFlowReturns) {
-                Map<String, NavigationCase> returns = newFlow.getReturns();
+                Map<String, ReturnNode> returns = newFlow.getReturns();
                 for (FlowNavigationCase cur : facesFlowReturns) {
                     String returnId = cur.getEnclosingId();
                     if (!returns.containsKey(returnId)) {
-                        returns.put(returnId, cur);
+                        ReturnNodeImpl newReturn = new ReturnNodeImpl(returnId, cur);
+                        returns.put(returnId, newReturn);
                     }
                 }
             }

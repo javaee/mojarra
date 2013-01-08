@@ -38,19 +38,16 @@
  * holder.
 
  */
-package javax.faces.flow.builder;
+package javax.faces.flow;
 
-import javax.el.ValueExpression;
+import javax.faces.application.NavigationCase;
 
-public abstract class FlowCallBuilder implements NodeBuilder {
+/**
+ * 
+ * @since 2.2
+ */
+public abstract class ReturnNode extends FlowNode {
     
-    public abstract FlowCallBuilder flowReference(String flowId);
-    
-    public abstract FlowCallBuilder outboundParameter(String name, ValueExpression value);
-        
-    public abstract FlowCallBuilder outboundParameter(String name, String value);
-    
-    public abstract NodeBuilder markAsStartNode();
-    
+    public abstract NavigationCase getNavigationCase(); 
     
 }

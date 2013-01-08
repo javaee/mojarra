@@ -52,6 +52,7 @@ import javax.faces.flow.Flow;
 import javax.faces.flow.FlowNode;
 import javax.faces.flow.MethodCallNode;
 import javax.faces.flow.Parameter;
+import javax.faces.flow.ReturnNode;
 import javax.faces.flow.SwitchNode;
 import javax.faces.flow.ViewNode;
 import javax.faces.lifecycle.ClientWindow;
@@ -66,10 +67,10 @@ public class FlowImpl extends Flow {
     private List<ViewNode> views;
     private List<MethodCallNode> methodCalls;
     private ConcurrentHashMap<String, Parameter> inboundParameters;
-    private ConcurrentHashMap<String,NavigationCase> returns;
-    private ConcurrentHashMap<String,SwitchNode> switches;
-    private ConcurrentHashMap<String,FlowCallNode> facesFlowCalls;
-    private ConcurrentHashMap<String,FlowCallNode> facesFlowCallsByTargetFlowId;
+    private ConcurrentHashMap<String, ReturnNode> returns;
+    private ConcurrentHashMap<String, SwitchNode> switches;
+    private ConcurrentHashMap<String, FlowCallNode> facesFlowCalls;
+    private ConcurrentHashMap<String, FlowCallNode> facesFlowCallsByTargetFlowId;
     private MethodExpression initializer;
     private MethodExpression finalizer;
     private boolean hasBeenInitialized = false;
@@ -80,7 +81,7 @@ public class FlowImpl extends Flow {
 
     public FlowImpl() {
         inboundParameters = new ConcurrentHashMap<String, Parameter>();
-        returns = new ConcurrentHashMap<String, NavigationCase>();
+        returns = new ConcurrentHashMap<String, ReturnNode>();
         switches = new ConcurrentHashMap<String, SwitchNode>();
         facesFlowCalls = new ConcurrentHashMap<String, FlowCallNode>();
         facesFlowCallsByTargetFlowId = new ConcurrentHashMap<String, FlowCallNode>();
@@ -202,7 +203,7 @@ public class FlowImpl extends Flow {
     }
 
     @Override
-    public Map<String,NavigationCase> getReturns() {
+    public Map<String,ReturnNode> getReturns() {
         return returns;
     }
     
@@ -263,6 +264,11 @@ public class FlowImpl extends Flow {
         if (null == result) {
             Map<String, FlowCallNode> myCalls = getFlowCalls();
             result = myCalls.get(nodeId);
+        }
+        
+        if (null == result) {
+            Map<String, ReturnNode> myReturns = getReturns();
+            result = myReturns.get(nodeId);
         }
         
         return result;
