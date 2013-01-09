@@ -50,6 +50,8 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+//NOTE: This test is not included in JSF 2.2 as the issue does not exist there.
+
 public class Issue2670IT {
 
     private String webUrl;
