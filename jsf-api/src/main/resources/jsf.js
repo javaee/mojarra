@@ -2321,6 +2321,8 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 switch (el.type) {
                     case 'submit':
                         break;
+                    case 'image':
+                        break;
                     case 'select-one':
                         if (el.selectedIndex >= 0) {
                             addField(el.name, el.options[el.selectedIndex].value);
