@@ -42,7 +42,7 @@ package com.sun.faces.application;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.InitFacesContext;
-import com.sun.faces.application.view.ViewScopedCDIContext;
+import com.sun.faces.application.view.ViewScopeContext;
 import javax.faces.FacesException;
 import javax.faces.application.NavigationCase;
 import javax.faces.application.ViewHandler;
@@ -414,7 +414,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         if (root != null && !root.getViewId().equals(newId)) {
             
             if (Util.isCDIAvailable(context.getExternalContext().getApplicationMap())) {
-                ViewScopedCDIContext.clearViewScopedBeans();
+                ViewScopeContext.clearViewScopedBeans();
             }
             Map<String, Object> viewMap = root.getViewMap(false);
             if (viewMap != null) {

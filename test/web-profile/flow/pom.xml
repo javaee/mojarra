@@ -20,6 +20,5 @@
         <module>factory</module>
         <module>intermediate</module>
         <module>multi-page-from-jar</module>
-        <module>viewScoped</module>
     </modules>
 </project>

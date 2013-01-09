@@ -40,7 +40,7 @@
 
 package com.sun.faces.application;
 
-import com.sun.faces.application.view.ViewScopedCDIContext;
+import com.sun.faces.application.view.ViewScopeContext;
 import com.sun.faces.config.InitFacesContext;
 import com.sun.faces.config.WebConfiguration;
 import java.io.PrintWriter;
@@ -204,7 +204,7 @@ public class WebappLifecycleListener implements ViewMapListener {
         }
 
         if (Util.isCDIAvailable()) {
-            ViewScopedCDIContext.sessionDestroyed(event);
+            ViewScopeContext.sessionDestroyed(event);
             FlowCDIContext.sessionDestroyed(event);
         }
         
