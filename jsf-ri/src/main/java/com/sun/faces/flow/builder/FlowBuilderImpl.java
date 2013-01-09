@@ -51,7 +51,6 @@ import javax.faces.flow.Flow;
 import javax.faces.flow.builder.FlowBuilder;
 import javax.faces.flow.builder.FlowCallBuilder;
 import javax.faces.flow.builder.MethodCallBuilder;
-import javax.faces.flow.builder.NodeBuilder;
 import javax.faces.flow.builder.ReturnBuilder;
 import javax.faces.flow.builder.SwitchBuilder;
 import javax.faces.flow.builder.ViewBuilder;
