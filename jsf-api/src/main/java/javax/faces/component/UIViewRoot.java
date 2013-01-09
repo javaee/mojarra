@@ -1599,14 +1599,12 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
                 FacesContext.getCurrentInstance().getClass().getName().
                     equals("com.sun.faces.config.InitFacesContext")) {
             
-            if (create) {
-                if (getAttributes().get("com.sun.faces.initViewMap") == null) {
-                    getAttributes().put("com.sun.faces.initViewMap", 
-                            new ViewMap(getFacesContext().getApplication().getProjectStage()));
+            if (create && getAttributes().get("com.sun.faces.initViewMap") == null) {
+                getAttributes().put("com.sun.faces.initViewMap", 
+                        new ViewMap(getFacesContext().getApplication().getProjectStage()));
 
-                    getFacesContext().getApplication().publishEvent(getFacesContext(),
-                        PostConstructViewMapEvent.class, this);
-                }
+                getFacesContext().getApplication().publishEvent(getFacesContext(),
+                    PostConstructViewMapEvent.class, this);
             }
 
             result = (Map<String, Object>) getAttributes().get("com.sun.faces.initViewMap");
