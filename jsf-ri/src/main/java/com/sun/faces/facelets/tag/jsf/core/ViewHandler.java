@@ -76,6 +76,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.context.FacesContext;
 import javax.faces.view.facelets.TagAttributeException;
 
 /**
@@ -174,12 +175,18 @@ public final class ViewHandler extends TagHandlerImpl {
                         .getMethodExpression(ctx, null, LISTENER_SIG);
                 root.setAfterPhaseListener(m);
             }
-            
+
             if (this.contracts != null) {
-                List<String> contractList = Arrays.asList(this.contracts.getValue(ctx).split(","));
-                ctx.getFacesContext().setResourceLibraryContracts(contractList);
+                if (!FacesContext.getCurrentInstance().getAttributes().containsKey("com.sun.faces.uiCompositionCount")) {
+                    List<String> contractList = Arrays.asList(this.contracts.getValue(ctx).split(","));
+                    ctx.getFacesContext().setResourceLibraryContracts(contractList);
+                } else {
+                    if (LOGGER.isLoggable(Level.INFO)) {
+                        LOGGER.log(Level.INFO, "f:view contracts attribute found, but not used at top level");
+                    }
+                }
             }
-            
+
             String viewId = root.getViewId();
 
             // At this point in the lifecycle we should have a non-null/empty

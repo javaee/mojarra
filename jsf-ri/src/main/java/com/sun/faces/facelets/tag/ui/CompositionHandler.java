@@ -74,6 +74,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.context.FacesContext;
 
 /**
  * @author Jacob Hookom
@@ -139,6 +140,16 @@ public final class CompositionHandler extends TagHandlerImpl implements
         FaceletContextImplBase ctx = (FaceletContextImplBase) ctxObj;
 
         if (this.template != null) {
+
+            FacesContext facesContext = ctx.getFacesContext();
+            Integer compositionCount = (Integer) facesContext.getAttributes().get("com.sun.faces.uiCompositionCount");
+            if (compositionCount == null) {
+                compositionCount = 1;
+            } else {
+                compositionCount++;
+            }
+            facesContext.getAttributes().put("com.sun.faces.uiCompositionCount", compositionCount);
+            
             VariableMapper orig = ctx.getVariableMapper();
             if (this.params != null) {
                 VariableMapper vm = new VariableMapperWrapper(orig);
@@ -164,6 +175,15 @@ public final class CompositionHandler extends TagHandlerImpl implements
             } finally {
                 ctx.popClient(this);
                 ctx.setVariableMapper(orig);
+                
+                compositionCount = (Integer) facesContext.getAttributes().get("com.sun.faces.uiCompositionCount");
+                compositionCount--;
+                
+                if (compositionCount == 0) {
+                    facesContext.getAttributes().remove("com.sun.faces.uiCompositionCount");
+                } else {
+                    facesContext.getAttributes().put("com.sun.faces.uiCompositionCount", compositionCount);
+                }
             }
         } else {
             this.nextHandler.apply(ctx, parent);
