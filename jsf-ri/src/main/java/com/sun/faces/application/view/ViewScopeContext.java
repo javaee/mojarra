@@ -137,10 +137,10 @@ public class ViewScopeContext implements Context, Serializable {
         ArrayList<String> removalNameList = new ArrayList<String>();
 
         if (contextMap != null) {
-            for (Contextual key : contextMap.keySet()) {
-                ViewScopeContextObject contextObject = contextMap.get(key);
+            for (Map.Entry<Contextual, ViewScopeContextObject> entry : contextMap.entrySet()) {
+                Contextual contextual = entry.getKey();
+                ViewScopeContextObject contextObject = entry.getValue();
                 CreationalContext creationalContext = contextObject.getCreationalContext();
-                Contextual contextual = contextObject.getContextual();
                 contextual.destroy(instanceMap.get(contextObject.getName()), creationalContext);
                 removalNameList.add(contextObject.getName());
             }
