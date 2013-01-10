@@ -40,29 +40,35 @@
  */
 package com.sun.faces.flow.builder;
 
-import javax.el.ValueExpression;
+import com.sun.faces.facelets.flow.FlowNavigationCase;
+import com.sun.faces.flow.SwitchNodeImpl;
 import javax.faces.flow.builder.NodeBuilder;
 import javax.faces.flow.builder.SwitchBuilder;
-import javax.faces.flow.builder.SwitchCase;
+import javax.faces.flow.builder.SwitchCaseBuilder;
 
 public class SwitchBuilderImpl extends SwitchBuilder {
     
     private FlowBuilderImpl root;
     private String switchId;
+    private SwitchNodeImpl switchNode;
+    private SwitchCaseBuilderImpl switchCaseBuilder;
+
     
     SwitchBuilderImpl(FlowBuilderImpl root, String id) {
         this.root = root;
         this.switchId = id;
+        this.switchNode = new SwitchNodeImpl(id);
+        root._getFlow()._getSwitches().put(id, switchNode);
+        this.switchCaseBuilder = new SwitchCaseBuilderImpl(this);
     }
 
     @Override
-    public SwitchCase defaultOutcome(String outcome) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public SwitchCase defaultOutcome(ValueExpression outcome) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public SwitchCaseBuilder defaultOutcome(String outcome) {
+        FlowNavigationCase navCase = new FlowNavigationCase();
+        navCase.setEnclosingId(switchId);
+        navCase.setFromOutcome(outcome);
+        switchNode.setDefaultCase(navCase);
+        return switchCaseBuilder;
     }
 
     @Override
@@ -72,10 +78,17 @@ public class SwitchBuilderImpl extends SwitchBuilder {
     }
 
     @Override
-    public SwitchCase navigationCase() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public SwitchCaseBuilder navigationCase() {
+        return switchCaseBuilder.navigationCase();
     }
     
+    FlowBuilderImpl getRoot() {
+        return root;
+    }
+    
+    SwitchNodeImpl getSwitchNode() {
+        return switchNode;
+    }
     
     
 }

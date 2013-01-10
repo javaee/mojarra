@@ -54,7 +54,7 @@ public class ViewBuilderImpl extends ViewBuilder {
     public ViewBuilderImpl(FlowBuilderImpl root, String viewNodeId, String vdlDocumentId) {
         this.root = root;
         
-        List<ViewNode> viewNodes = root.getFlow().getViews();
+        List<ViewNode> viewNodes = root._getFlow()._getViews();
         viewNode = new ViewNodeImpl(viewNodeId, vdlDocumentId);
         viewNodes.add(viewNode);
     }

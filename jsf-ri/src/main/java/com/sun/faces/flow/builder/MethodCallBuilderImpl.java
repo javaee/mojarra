@@ -57,7 +57,7 @@ public class MethodCallBuilderImpl extends MethodCallBuilder {
         this.root = root;
         this.methodCallId = id;
         this.methodCallNode = new MethodCallNodeImpl(id);
-        this.root.getFlow().getMethodCalls().add(methodCallNode);
+        this.root._getFlow()._getMethodCalls().add(methodCallNode);
                 
     }
 

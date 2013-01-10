@@ -40,12 +40,12 @@
  */
 package com.sun.faces.flow;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javax.el.MethodExpression;
-import javax.faces.application.NavigationCase;
 import javax.faces.context.FacesContext;
 import javax.faces.flow.FlowCallNode;
 import javax.faces.flow.Flow;
@@ -64,12 +64,18 @@ public class FlowImpl extends Flow {
     
     private String id;
     private String startNodeId;
+    private CopyOnWriteArrayList<ViewNode> _views;
     private List<ViewNode> views;
+    private CopyOnWriteArrayList<MethodCallNode> _methodCalls;
     private List<MethodCallNode> methodCalls;
-    private ConcurrentHashMap<String, Parameter> inboundParameters;
-    private ConcurrentHashMap<String, ReturnNode> returns;
-    private ConcurrentHashMap<String, SwitchNode> switches;
-    private ConcurrentHashMap<String, FlowCallNode> facesFlowCalls;
+    private ConcurrentHashMap<String, Parameter> _inboundParameters;
+    private Map<String,Parameter> inboundParameters;
+    private ConcurrentHashMap<String, ReturnNode> _returns;
+    private Map<String, ReturnNode> returns;
+    private ConcurrentHashMap<String, SwitchNode> _switches;
+    private Map<String, SwitchNode> switches;
+    private ConcurrentHashMap<String, FlowCallNode> _facesFlowCalls;
+    private Map<String, FlowCallNode> facesFlowCalls;
     private ConcurrentHashMap<String, FlowCallNode> facesFlowCallsByTargetFlowId;
     private MethodExpression initializer;
     private MethodExpression finalizer;
@@ -80,13 +86,19 @@ public class FlowImpl extends Flow {
     // <editor-fold defaultstate="collapsed" desc="Constructors">       
 
     public FlowImpl() {
-        inboundParameters = new ConcurrentHashMap<String, Parameter>();
-        returns = new ConcurrentHashMap<String, ReturnNode>();
-        switches = new ConcurrentHashMap<String, SwitchNode>();
-        facesFlowCalls = new ConcurrentHashMap<String, FlowCallNode>();
+        _inboundParameters = new ConcurrentHashMap<String, Parameter>();
+        inboundParameters = Collections.unmodifiableMap(_inboundParameters);
+        _returns = new ConcurrentHashMap<String, ReturnNode>();
+        returns = Collections.unmodifiableMap(_returns);
+        _switches = new ConcurrentHashMap<String, SwitchNode>();
+        switches = Collections.unmodifiableMap(_switches);
+        _facesFlowCalls = new ConcurrentHashMap<String, FlowCallNode>();
+        facesFlowCalls = Collections.unmodifiableMap(_facesFlowCalls);
         facesFlowCallsByTargetFlowId = new ConcurrentHashMap<String, FlowCallNode>();
-        views = new CopyOnWriteArrayList<ViewNode>();
-        methodCalls = new CopyOnWriteArrayList<MethodCallNode>();
+        _views = new CopyOnWriteArrayList<ViewNode>();
+        views = Collections.unmodifiableList(_views);
+        _methodCalls = new CopyOnWriteArrayList<MethodCallNode>();
+        methodCalls = Collections.unmodifiableList(_methodCalls);
         
         
     }
@@ -110,12 +122,12 @@ public class FlowImpl extends Flow {
         if ((this.startNodeId == null) ? (other.getStartNodeId() != null) : !this.startNodeId.equals(other.getStartNodeId())) {
             return false;
         }
-        if (this.views != other.getViews() && (this.views == null || !this.views.equals(other.getViews()))) {
+        if (this._views != other.getViews() && (this._views == null || !this._views.equals(other.getViews()))) {
             return false;
         }
         FacesContext context = FacesContext.getCurrentInstance();
         if (null != context) {
-            if (this.returns != other.getReturns() && (this.returns == null || !this.returns.equals(other.getReturns()))) {
+            if (this._returns != other.getReturns() && (this._returns == null || !this._returns.equals(other.getReturns()))) {
                 return false;
             }
             if (this.initializer != other.getInitializer() && (this.initializer == null || !this.initializer.equals(other.getInitializer()))) {
@@ -133,8 +145,8 @@ public class FlowImpl extends Flow {
         int hash = 3;
         hash = 59 * hash + (this.id != null ? this.id.hashCode() : 0);
         hash = 59 * hash + (this.startNodeId != null ? this.startNodeId.hashCode() : 0);
-        hash = 59 * hash + (this.views != null ? this.views.hashCode() : 0);
-        hash = 59 * hash + (this.returns != null ? this.returns.hashCode() : 0);
+        hash = 59 * hash + (this._views != null ? this._views.hashCode() : 0);
+        hash = 59 * hash + (this._returns != null ? this._returns.hashCode() : 0);
         hash = 59 * hash + (this.initializer != null ? this.initializer.hashCode() : 0);
         hash = 59 * hash + (this.finalizer != null ? this.finalizer.hashCode() : 0);
         return hash;
@@ -187,6 +199,10 @@ public class FlowImpl extends Flow {
         return inboundParameters;
     }    
     
+    public Map<String, Parameter> _getInboundParameters() {
+        return _inboundParameters;
+    }    
+    
     // </editor-fold>
 
     
@@ -197,9 +213,8 @@ public class FlowImpl extends Flow {
         return views;
     }
 
-    @Override
-    public List<NavigationCase> getNavigationCases() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public List<ViewNode> _getViews() {
+        return _views;
     }
 
     @Override
@@ -207,19 +222,35 @@ public class FlowImpl extends Flow {
         return returns;
     }
     
+    public Map<String,ReturnNode> _getReturns() {
+        return _returns;
+    }
+
     @Override
     public Map<String,SwitchNode> getSwitches() {
         return switches;
     }
     
+    public Map<String,SwitchNode> _getSwitches() {
+        return _switches;
+    }
+
     @Override
     public Map<String,FlowCallNode> getFlowCalls() {
         return facesFlowCalls;
+    }
+
+    public Map<String,FlowCallNode> _getFlowCalls() {
+        return _facesFlowCalls;
     }
     
     @Override
     public FlowCallNode getFlowCall(Flow targetFlow) {
         String targetFlowId = targetFlow.getId();
+        if (!hasBeenInitialized) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            this.init(context);
+        }
         FlowCallNode result = facesFlowCallsByTargetFlowId.get(targetFlowId);
         
         return result;
@@ -228,6 +259,10 @@ public class FlowImpl extends Flow {
     @Override
     public List<MethodCallNode> getMethodCalls() {
         return methodCalls;
+    }
+
+    public List<MethodCallNode> _getMethodCalls() {
+        return _methodCalls;
     }
 
     // </editor-fold>
@@ -304,7 +339,7 @@ public class FlowImpl extends Flow {
         // Populate lookup data structures.
         FlowCallNode curNode = null;
         String curTargetFlowId = null;
-        for (Map.Entry<String,FlowCallNode> cur : facesFlowCalls.entrySet()) {
+        for (Map.Entry<String,FlowCallNode> cur : _facesFlowCalls.entrySet()) {
             curNode = cur.getValue();
             curTargetFlowId = curNode.getCalledFlowId(context);
             facesFlowCallsByTargetFlowId.put(curTargetFlowId, curNode);

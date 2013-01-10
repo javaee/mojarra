@@ -68,7 +68,11 @@ public class NavigationCaseTagHandler extends TagHandlerImpl {
     }
     
     
-    
+    public static void removeCurrentNavigationCase(FaceletContext ctx) {
+        Map<FacesFlowDefinitionTagHandler.FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
+        flowData.remove(FacesFlowDefinitionTagHandler.FlowDataKeys.CurrentNavigationCase);
+        
+    }
     
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
         this.nextHandler.apply(ctx, parent);
@@ -78,7 +82,7 @@ public class NavigationCaseTagHandler extends TagHandlerImpl {
                 List<FlowNavigationCase> cases = SwitchNodeTagHandler.getSwitchCases(ctx);
                 cases.add(navCase);
             }
-            
+            removeCurrentNavigationCase(ctx);
         }
     }
     

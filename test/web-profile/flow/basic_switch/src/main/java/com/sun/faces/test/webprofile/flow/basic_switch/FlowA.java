@@ -38,60 +38,45 @@
  * holder.
 
  */
-package com.sun.faces.flow.builder;
+package com.sun.faces.test.webprofile.flow.basic_switch;
 
-import com.sun.faces.flow.FlowCallNodeImpl;
-import com.sun.faces.flow.ParameterImpl;
-import java.util.Map;
-import javax.el.ValueExpression;
-import javax.faces.flow.FlowCallNode;
-import javax.faces.flow.builder.FlowCallBuilder;
-import javax.faces.flow.builder.NodeBuilder;
+import java.io.Serializable;
+import javax.faces.context.FacesContext;
+import javax.faces.flow.Flow;
+import javax.faces.flow.builder.FlowBuilder;
+import javax.faces.flow.FlowDefinition;
+import javax.inject.Named;
 
-public class FlowCallBuilderImpl extends FlowCallBuilder {
+
+@Named("FlowA")
+@FlowDefinition
+public class FlowA implements Serializable {
     
-    private FlowBuilderImpl root;
-    private String flowCallNodeId;
-    private String flowReference;
-    
+    private static final long serialVersionUID = -7623501087369765218L;
 
-    public FlowCallBuilderImpl(FlowBuilderImpl root, String id) {
-        this.root = root;
-        this.flowCallNodeId = id;
-    }
-
-    @Override
-    public FlowCallBuilder flowReference(String flowReference) {
-        this.flowReference = flowReference;
-        return this;
-    }
-
-    @Override
-    public FlowCallBuilder outboundParameter(String name, ValueExpression value) {
-        ParameterImpl param = new ParameterImpl(name, value);
-        Map<String, FlowCallNode> flowCalls = root._getFlow()._getFlowCalls();
-        FlowCallNodeImpl flowCall = (FlowCallNodeImpl) flowCalls.get(flowCallNodeId);
-        if (null == flowCall) {
-            flowCall = new FlowCallNodeImpl(flowCallNodeId, flowReference, null, null);
-            flowCalls.put(flowCallNodeId, flowCall);
-        }
-        flowCall.getOutboundParameters().put(name, param);
-        return this;
-    }
-
-    @Override
-    public FlowCallBuilder outboundParameter(String name, String value) {
-        ValueExpression ve = root.getExpressionFactory().createValueExpression(root.getELContext(), value, Object.class);
-        outboundParameter(name, ve);
-        return this;
-    }
-
-    @Override
-    public NodeBuilder markAsStartNode() {
-        root._getFlow().setStartNodeId(flowCallNodeId);
-        return this;
+    public FlowA() {
     }
     
-    
+    public Flow defineFlow(FacesContext context, FlowBuilder flowBuilder) {
+        String flowId = "flow-a";
+        flowBuilder.id(flowId);
+        flowBuilder.viewNode(flowId, "/" + flowId + "/" + flowId + ".xhtml").markAsStartNode();
+        flowBuilder.returnNode("taskFlowReturn1").
+                fromOutcome("#{flow_a_Bean.returnValue}");
+        flowBuilder.switchNode("switchA").defaultOutcome("defaultPage").
+                navigationCase().condition("#{flow_a_Bean.switchA_Case01}").fromOutcome("page01").
+                navigationCase().condition("#{flow_a_Bean.switchA_Case02}").fromOutcome("page02").
+                navigationCase().condition("#{flow_a_Bean.switchA_Case03}").fromOutcome("switchA_result");
+        flowBuilder.switchNode("switchB").defaultOutcome("defaultPage").
+                navigationCase().condition("#{flow_a_Bean.switchB_Case01}").fromOutcome("page01").
+                navigationCase().condition("#{flow_a_Bean.switchB_Case02}").fromOutcome("switchB_result").
+                navigationCase().condition("#{flow_a_Bean.switchB_Case03}").fromOutcome("page03");
+        flowBuilder.switchNode("switchC").defaultOutcome("switchC_result").
+                navigationCase().condition("#{flow_a_Bean.switchB_Case01}").fromOutcome("page01").
+                navigationCase().condition("#{flow_a_Bean.switchB_Case02}").fromOutcome("page02").
+                navigationCase().condition("#{flow_a_Bean.switchB_Case03}").fromOutcome("page03");
+        
+        return flowBuilder.getFlow();
+    }
     
 }

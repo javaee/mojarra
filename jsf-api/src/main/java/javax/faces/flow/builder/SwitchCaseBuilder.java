@@ -42,16 +42,14 @@ package javax.faces.flow.builder;
 
 import javax.el.ValueExpression;
 
-public abstract class SwitchCase {
+public abstract class SwitchCaseBuilder {
     
-    public abstract SwitchCase condition(ValueExpression expression);
+    public abstract SwitchCaseBuilder navigationCase();
+        
+    public abstract SwitchCaseBuilder condition(ValueExpression expression);
     
-    public abstract SwitchCase fromOutcome(String outcome);
+    public abstract SwitchCaseBuilder condition(String expression);
     
-    public abstract SwitchCase fromOutcome(ValueExpression outcome);
-    
-    public abstract FlowBuilder id(String flowId);
-
-    public abstract NodeBuilder markAsStartNode();
-    
+    public abstract SwitchCaseBuilder fromOutcome(String outcome);
+        
 }

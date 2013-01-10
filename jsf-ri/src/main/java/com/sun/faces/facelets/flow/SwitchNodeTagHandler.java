@@ -126,6 +126,8 @@ public class SwitchNodeTagHandler extends TagHandlerImpl {
             flowData.put(FacesFlowDefinitionTagHandler.FlowDataKeys.WithinSwitch, Boolean.TRUE);
         } else {
             flowData.remove(FacesFlowDefinitionTagHandler.FlowDataKeys.WithinSwitch);
+            flowData.remove(FacesFlowDefinitionTagHandler.FlowDataKeys.SwitchNavigationCases);
+            flowData.remove(FacesFlowDefinitionTagHandler.FlowDataKeys.SwitchDefaultCase);
         }
     }
     
@@ -147,7 +149,7 @@ public class SwitchNodeTagHandler extends TagHandlerImpl {
             }
             
             SwitchNodeImpl toAdd = new SwitchNodeImpl(idStr, defaultSwitchCase);
-            List<NavigationCase> cases = toAdd.getCases();
+            List<NavigationCase> cases = toAdd._getCases();
             for (Object cur : casesFromConfig) {
                 ((FlowNavigationCase)cur).setEnclosingId(idStr);
                 cases.add((NavigationCase)cur);

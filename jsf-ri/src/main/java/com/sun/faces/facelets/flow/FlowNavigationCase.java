@@ -170,6 +170,9 @@ public class FlowNavigationCase extends NavigationCase {
         this.condition = condition;
     }
 
+    public void setConditionExpression(ValueExpression conditionExpression) {
+        this.conditionExpr = conditionExpression;
+    }
     
     public void setFromAction(String a) {
     }

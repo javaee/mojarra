@@ -50,7 +50,5 @@ public abstract class FlowCallBuilder implements NodeBuilder {
         
     public abstract FlowCallBuilder outboundParameter(String name, String value);
     
-    public abstract NodeBuilder markAsStartNode();
-    
     
 }

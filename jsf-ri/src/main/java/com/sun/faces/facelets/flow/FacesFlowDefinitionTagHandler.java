@@ -257,12 +257,12 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
             // <view>s
             //
             String myNodeId = getMyNodeId();
-            if (null == newFlow.getViews()) {
+            if (null == newFlow._getViews()) {
                 viewsInFlow = synthesizeViews();
-                newFlow.getViews().addAll(viewsInFlow);
+                newFlow._getViews().addAll(viewsInFlow);
             } else if (null == newFlow.getNode(myNodeId)) {
                 ViewNode viewNode = new ViewNodeImpl(myNodeId, this.tag.getLocation().getPath());
-                newFlow.getViews().add(viewNode);
+                newFlow._getViews().add(viewNode);
             }
             
             // </editor-fold>
@@ -293,14 +293,14 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
                 // If not, make one from this view.
                 viewsFromTag = synthesizeViews();
             }
-            newFlow.getViews().addAll(viewsFromTag);
+            newFlow._getViews().addAll(viewsFromTag);
             
             //
             // <faces-flow-return>
             //
             List<FlowNavigationCase> facesFlowReturns = FacesFlowReturnTagHandler.getNavigationCases(ctx);
             if (null != facesFlowReturns) {
-                Map<String, ReturnNode> returns = newFlow.getReturns();
+                Map<String, ReturnNode> returns = newFlow._getReturns();
                 for (FlowNavigationCase cur : facesFlowReturns) {
                     String returnId = cur.getEnclosingId();
                     if (!returns.containsKey(returnId)) {
@@ -314,7 +314,7 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
             // <inbound-parameters>
             //
             List<Parameter> inboundParametersFromConfig = FacesFlowDefinitionTagHandler.getInboundParameters(ctx);
-            Map<String, Parameter> inboundParameters = newFlow.getInboundParameters();
+            Map<String, Parameter> inboundParameters = newFlow._getInboundParameters();
             if (null != inboundParametersFromConfig && !inboundParametersFromConfig.isEmpty()) {
                 for (Parameter cur : inboundParametersFromConfig) {
                     inboundParameters.put(cur.getName(), cur);
@@ -326,7 +326,7 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
             //
             Map<String, SwitchNode> switchElement = SwitchNodeTagHandler.getSwitches(ctx);
             if (null != switchElement) {
-                Map<String, SwitchNode> switches = newFlow.getSwitches();
+                Map<String, SwitchNode> switches = newFlow._getSwitches();
                 for (Map.Entry<String, SwitchNode> cur : switchElement.entrySet()) {
                     switches.put(cur.getKey(), cur.getValue());
                 }
@@ -336,14 +336,14 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
             // <method-call>
             //
             List<MethodCallNode> methodCalls = MethodCallTagHandler.getMethodCalls(ctx);
-            newFlow.getMethodCalls().addAll(methodCalls);
+            newFlow._getMethodCalls().addAll(methodCalls);
             
             //
             // <faces-flow-call>
             //
             Map<String,FlowCallNode> facesFlowCallElement = FacesFlowCallTagHandler.getFacesFlowCalls(ctx);
             if (null != facesFlowCallElement) {
-                Map<String,FlowCallNode> facesFlowCalls = newFlow.getFlowCalls();
+                Map<String,FlowCallNode> facesFlowCalls = newFlow._getFlowCalls();
                 for (Map.Entry<String, FlowCallNode> cur : facesFlowCallElement.entrySet()) {
                     facesFlowCalls.put(cur.getKey(), cur.getValue());
                 }

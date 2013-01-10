@@ -214,8 +214,6 @@ public abstract class Flow {
     
     public abstract FlowNode getNode(String nodeId);
     
-    public abstract List<NavigationCase> getNavigationCases();
-    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Outside interaction">       

@@ -67,7 +67,7 @@ public class ReturnBuilderImpl extends ReturnBuilder {
         FlowNavigationCase navCase = new FlowNavigationCase();
         navCase.setFromOutcome(outcome);
         ReturnNodeImpl returnNode = new ReturnNodeImpl(id, navCase);
-        root.getFlow().getReturns().put(id, returnNode);
+        root._getFlow()._getReturns().put(id, returnNode);
         return this;
     }
 
@@ -76,21 +76,9 @@ public class ReturnBuilderImpl extends ReturnBuilder {
         FlowNavigationCase navCase = new FlowNavigationCase();
         navCase.setFromOutcome(outcome.getExpressionString());
         ReturnNodeImpl returnNode = new ReturnNodeImpl(id, navCase);
-        root.getFlow().getReturns().put(id, returnNode);
+        root._getFlow()._getReturns().put(id, returnNode);
 
         return this;
     }
 
-    @Override
-    public ReturnBuilder outboundParameter(String name, ValueExpression value) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public ReturnBuilder outboundParameter(String name, String value) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-    
-    
-    
 }

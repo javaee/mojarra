@@ -155,7 +155,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     @Override
     public Map<String, Set<NavigationCase>> getNavigationCases() {
 
-        Map<String, Set<NavigationCase>> result = getNavigationMap(FacesContext.getCurrentInstance());
+        Map<String, Set<NavigationCase>> result = getNavigationMap();
 
         return result;
 
@@ -318,7 +318,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     // --------------------------------------------------------- Private Methods
     private static final String ROOT_NAVIGATION_MAP_ID = NavigationHandlerImpl.class.getName() + ".NAVIGATION_MAP";
     
-    private NavigationMap getNavigationMap(FacesContext context) {
+    private NavigationMap getNavigationMap() {
         NavigationMap result = null;
         NavigationInfo info;
         if (null == navigationMaps) {
@@ -357,7 +357,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         ApplicationAssociate associate = ApplicationAssociate.getCurrentInstance();
         if (associate != null) {
             Map<String,Set<NavigationCase>> m = associate.getNavigationCaseListMappings();
-            NavigationMap rootMap = getNavigationMap(FacesContext.getCurrentInstance());
+            NavigationMap rootMap = getNavigationMap();
             if (m != null) {
                 rootMap.putAll(m);
             }
@@ -368,39 +368,43 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     private void initializeNavigationFromFlow(FacesContext context, Flow toInspect) {
         
         if (context instanceof InitFacesContext) {
-            initializeNavigationFromFlowNonThreadSafe(context, toInspect);
+            getNavigationMap();
+            initializeNavigationFromFlowNonThreadSafe(toInspect);
         } else {
-            initializeNavigationFromFlowThreadSafe(context, toInspect);
+            // PENDING: When JAVASERVERFACES-2580 is done, the eager case will
+            // no longer be necessary and can be removed.
+
+            assert(null != navigationMaps);
+            initializeNavigationFromFlowThreadSafe(toInspect);
         }
         
     }
     
-    private void initializeNavigationFromFlowNonThreadSafe(FacesContext context, Flow toInspect) {
+    private void initializeNavigationFromFlowNonThreadSafe(Flow toInspect) {
+        Map<String, SwitchNode> switches = toInspect.getSwitches();
+        String flowId = toInspect.getId();
+        // Is there an existing NavigationMap for this flowId
+        if (navigationMaps.containsKey(flowId)) {
+            if (logger.isLoggable(Level.INFO)) {
+                logger.log(Level.INFO, "PENDING(edburns): merge existing map");
+            }
+            
+        } else {
+            if (!switches.isEmpty()) {
+                NavigationInfo info = new NavigationInfo();
+                info.switches = new ConcurrentHashMap<String, SwitchNode>();
+                for (Map.Entry<String, SwitchNode> cur : switches.entrySet()) {
+                    info.switches.put(cur.getKey(), cur.getValue());
+                }
+                navigationMaps.put(flowId, info);
+            }
+        }
         
     }
     
-    private void initializeNavigationFromFlowThreadSafe(FacesContext context, Flow toInspect) {
-        assert(null != navigationMaps);
+    private void initializeNavigationFromFlowThreadSafe(Flow toInspect) {
         synchronized (this) {
-            Map<String, SwitchNode> switches = toInspect.getSwitches();
-            String flowId = toInspect.getId();
-            // Is there an existing NavigationMap for this flowId
-            if (navigationMaps.containsKey(flowId)) {
-                if (logger.isLoggable(Level.INFO)) {
-                    logger.log(Level.INFO, "PENDING(edburns): merge existing map");
-                }
-                
-            } else {
-                if (!switches.isEmpty()) {
-                    NavigationInfo info = new NavigationInfo();
-                    info.switches = new ConcurrentHashMap<String, SwitchNode>();
-                    for (Map.Entry<String, SwitchNode> cur : switches.entrySet()) {
-                        info.switches.put(cur.getKey(), cur.getValue());
-                    }
-                    navigationMaps.put(flowId, info);
-                }
-            }
-
+            initializeNavigationFromFlowNonThreadSafe(toInspect);
         }
     }
     
@@ -537,7 +541,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                                       String viewId,
                                       String fromAction,
                                       String outcome) {
-        NavigationMap navMap = getNavigationMap(ctx);
+        NavigationMap navMap = getNavigationMap();
 
         Set<NavigationCase> caseSet = navMap.get(viewId);
 
@@ -574,7 +578,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                                          String fromAction,
                                          String outcome) {
         CaseStruct result = null;
-        NavigationMap navMap = getNavigationMap(ctx);
+        NavigationMap navMap = getNavigationMap();
 
 
         for (String fromViewId : navMap.wildcardMatchList) {
@@ -630,7 +634,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     private CaseStruct findDefaultMatch(FacesContext ctx,
                                         String fromAction,
                                         String outcome) {
-        NavigationMap navMap = getNavigationMap(ctx);
+        NavigationMap navMap = getNavigationMap();
         
         Set<NavigationCase> caseSet = navMap.get("*");
 
@@ -853,6 +857,11 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                         // If this outcome corresponds to an existing flow...
                         if (null != flow) {
                             result = synthesizeCaseStruct(context, flow, fromAction, outcome);
+                        } else {
+                            flow = flowHandler.getCurrentFlow(context);
+                            if (null != flow) {
+                                result = synthesizeCaseStruct(context, flow, fromAction, outcome);
+                            }
                         }
                         if (null != result) {
                             break;

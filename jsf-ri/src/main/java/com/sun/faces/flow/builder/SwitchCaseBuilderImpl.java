@@ -40,58 +40,47 @@
  */
 package com.sun.faces.flow.builder;
 
-import com.sun.faces.flow.FlowCallNodeImpl;
-import com.sun.faces.flow.ParameterImpl;
-import java.util.Map;
+import com.sun.faces.facelets.flow.FlowNavigationCase;
 import javax.el.ValueExpression;
-import javax.faces.flow.FlowCallNode;
-import javax.faces.flow.builder.FlowCallBuilder;
-import javax.faces.flow.builder.NodeBuilder;
+import javax.faces.flow.builder.SwitchCaseBuilder;
 
-public class FlowCallBuilderImpl extends FlowCallBuilder {
+public class SwitchCaseBuilderImpl extends SwitchCaseBuilder {
     
-    private FlowBuilderImpl root;
-    private String flowCallNodeId;
-    private String flowReference;
-    
+    private SwitchBuilderImpl root;
+    private FlowNavigationCase myCase;
 
-    public FlowCallBuilderImpl(FlowBuilderImpl root, String id) {
+    public SwitchCaseBuilderImpl(SwitchBuilderImpl root) {
         this.root = root;
-        this.flowCallNodeId = id;
-    }
-
-    @Override
-    public FlowCallBuilder flowReference(String flowReference) {
-        this.flowReference = flowReference;
-        return this;
-    }
-
-    @Override
-    public FlowCallBuilder outboundParameter(String name, ValueExpression value) {
-        ParameterImpl param = new ParameterImpl(name, value);
-        Map<String, FlowCallNode> flowCalls = root._getFlow()._getFlowCalls();
-        FlowCallNodeImpl flowCall = (FlowCallNodeImpl) flowCalls.get(flowCallNodeId);
-        if (null == flowCall) {
-            flowCall = new FlowCallNodeImpl(flowCallNodeId, flowReference, null, null);
-            flowCalls.put(flowCallNodeId, flowCall);
-        }
-        flowCall.getOutboundParameters().put(name, param);
-        return this;
-    }
-
-    @Override
-    public FlowCallBuilder outboundParameter(String name, String value) {
-        ValueExpression ve = root.getExpressionFactory().createValueExpression(root.getELContext(), value, Object.class);
-        outboundParameter(name, ve);
-        return this;
-    }
-
-    @Override
-    public NodeBuilder markAsStartNode() {
-        root._getFlow().setStartNodeId(flowCallNodeId);
-        return this;
     }
     
+    public FlowNavigationCase getNavigationCase() {
+        return myCase;
+    }
+
+    @Override
+    public SwitchCaseBuilder navigationCase() {
+        SwitchCaseBuilderImpl result = new SwitchCaseBuilderImpl(root);
+        result.myCase = new FlowNavigationCase();
+        root.getSwitchNode()._getCases().add(result.myCase);
+        return result;
+    }
     
-    
+    @Override
+    public SwitchCaseBuilder condition(ValueExpression expression) {
+        myCase.setConditionExpression(expression);
+        return this;
+    }
+
+    @Override
+    public SwitchCaseBuilder condition(String expression) {
+        myCase.setCondition(expression);
+        return this;
+    }
+
+    @Override
+    public SwitchCaseBuilder fromOutcome(String outcome) {
+        myCase.setFromOutcome(outcome);
+        return this;
+    }
+
 }

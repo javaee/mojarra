@@ -60,11 +60,15 @@ public class FlowBuilderImpl extends FlowBuilder {
     private FlowImpl flow;
     private ExpressionFactory expressionFactory;
     private ELContext elContext;
+    private FacesContext context;
+    private boolean didInit;
     
     public FlowBuilderImpl(FacesContext context) {
         flow = new FlowImpl();
+        this.context = context;
         this.expressionFactory = context.getApplication().getExpressionFactory();
         this.elContext = context.getELContext();
+        this.didInit = false;
 
     }
     
@@ -121,7 +125,7 @@ public class FlowBuilderImpl extends FlowBuilder {
     @Override
     public FlowBuilder inboundParameter(String name, ValueExpression value) {
         ParameterImpl param = new ParameterImpl(name, value);
-        flow.getInboundParameters().put(name, param);
+        flow._getInboundParameters().put(name, param);
         
         return this;
     }
@@ -137,6 +141,10 @@ public class FlowBuilderImpl extends FlowBuilder {
         
     @Override
     public Flow getFlow() {
+        if (!didInit) {
+            flow.init(context);
+            didInit = true;
+        }
         return flow;
     }
     

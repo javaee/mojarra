@@ -41,23 +41,29 @@
 package com.sun.faces.flow;
 
 import com.sun.faces.facelets.flow.FlowNavigationCase;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import javax.faces.application.NavigationCase;
 import javax.faces.flow.SwitchNode;
 
 public class SwitchNodeImpl extends SwitchNode {
         
     private final String id;
-    private final NavigationCase defaultCase;
+    private NavigationCase defaultCase;
+    private CopyOnWriteArrayList<NavigationCase> _cases;
     private List<NavigationCase> cases;
 
+    public SwitchNodeImpl(String id) {
+        this(id, null);
+    }
+    
     public SwitchNodeImpl(String id, FlowNavigationCase defaultCase) {
         this.id = id;
         
         this.defaultCase = defaultCase;
-        cases = Collections.synchronizedList(new ArrayList<NavigationCase>());
+        _cases = new CopyOnWriteArrayList<NavigationCase>();
+        cases = Collections.unmodifiableList(_cases);
     }
 
     @Override
@@ -75,7 +81,7 @@ public class SwitchNodeImpl extends SwitchNode {
         if (this.defaultCase != other.defaultCase && (this.defaultCase == null || !this.defaultCase.equals(other.defaultCase))) {
             return false;
         }
-        if (this.cases != other.cases && (this.cases == null || !this.cases.equals(other.cases))) {
+        if (this._cases != other._cases && (this._cases == null || !this._cases.equals(other._cases))) {
             return false;
         }
         return true;
@@ -86,7 +92,7 @@ public class SwitchNodeImpl extends SwitchNode {
         int hash = 5;
         hash = 47 * hash + (this.id != null ? this.id.hashCode() : 0);
         hash = 47 * hash + (this.defaultCase != null ? this.defaultCase.hashCode() : 0);
-        hash = 47 * hash + (this.cases != null ? this.cases.hashCode() : 0);
+        hash = 47 * hash + (this._cases != null ? this._cases.hashCode() : 0);
         return hash;
     }
     
@@ -100,12 +106,18 @@ public class SwitchNodeImpl extends SwitchNode {
         return cases;
     }
 
+    public List<NavigationCase> _getCases() {
+        return _cases;
+    }
+
     @Override
     public NavigationCase getDefaultCase() {
         return defaultCase;
     }
     
-    
+    public void setDefaultCase(NavigationCase defaultCase) {
+        this.defaultCase = defaultCase;
+    }
 
     
 }
