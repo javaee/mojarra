@@ -39,6 +39,7 @@
  */
 package com.sun.faces.application.view;
 
+import com.sun.faces.mgbean.BeanManager;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
@@ -381,14 +382,18 @@ public class ViewScopeContext implements Context, Serializable {
 
         HttpSession session = hse.getSession();
 
-        Map<Map<String, Object>, Map<Contextual, ViewScopeContextObject>> activeViewScopeContexts =
-                (Map<Map<String, Object>, Map<Contextual, ViewScopeContextObject>>) session.getAttribute(ACTIVE_VIEW_SCOPE_CONTEXTS);
+        Map<Object, Map<Contextual, ViewScopeContextObject>> activeViewScopeContexts =
+                (Map<Object, Map<Contextual, ViewScopeContextObject>>) session.getAttribute(ACTIVE_VIEW_SCOPE_CONTEXTS);
 
         if (activeViewScopeContexts != null) {
-            for (Map.Entry<Map<String, Object>, Map<Contextual, ViewScopeContextObject>> entry : activeViewScopeContexts.entrySet()) {
-                Map<String, Object> instanceMap = entry.getKey();
-                Map<Contextual, ViewScopeContextObject> contextMap = entry.getValue();
-                destroyViewScopedBeans(instanceMap, contextMap);
+            Map<String, Object> activeViewMaps = (Map<String, Object>) session.getAttribute("com.sun.faces.activeViewMaps");
+            if (activeViewMaps != null) {
+                Iterator<Object> activeViewMapsIterator = activeViewMaps.values().iterator();
+                while(activeViewMapsIterator.hasNext()) {
+                    Map<String, Object> instanceMap = (Map<String, Object>) activeViewMapsIterator.next();
+                    Map<Contextual, ViewScopeContextObject> contextMap = activeViewScopeContexts.get(System.identityHashCode(instanceMap));
+                    destroyViewScopedBeans(instanceMap, contextMap);
+                }
             }
 
             activeViewScopeContexts.clear();
