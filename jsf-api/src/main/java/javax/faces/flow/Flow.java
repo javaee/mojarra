@@ -43,7 +43,6 @@ package javax.faces.flow;
 import java.util.List;
 import java.util.Map;
 import javax.el.MethodExpression;
-import javax.faces.application.NavigationCase;
 import javax.faces.lifecycle.ClientWindow;
 
 /**
