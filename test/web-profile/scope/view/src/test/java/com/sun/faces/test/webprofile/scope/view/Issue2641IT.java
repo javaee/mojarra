@@ -76,7 +76,6 @@ public class Issue2641IT {
     }
 
     @Test
-    @Ignore
     public void testViewScope() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/viewScoped.xhtml");
         int previousCount = 0;
@@ -128,7 +127,6 @@ public class Issue2641IT {
     }
 
     @Test
-    @Ignore
     public void testInvalidatedSession() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/invalidatedSession.xhtml");
         assertTrue(page.asText().indexOf("This is from the @PostConstruct") != -1);

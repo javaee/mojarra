@@ -136,18 +136,20 @@ public class ViewScopeContext implements Context, Serializable {
     private static void destroyViewScopedBeans(Map<String, Object> instanceMap, Map<Contextual, ViewScopeContextObject> contextMap) {
         ArrayList<String> removalNameList = new ArrayList<String>();
 
-        for (String name : instanceMap.keySet()) {
-            ViewScopeContextObject contextObject = contextMap.get(name);
-            CreationalContext creationContext = contextObject.getCreationalContext();
-            Contextual contextual = contextObject.getContextual();
-            contextual.destroy(instanceMap.get(name), creationContext);
-            removalNameList.add(name);
-        }
+        if (contextMap != null) {
+            for (Contextual key : contextMap.keySet()) {
+                ViewScopeContextObject contextObject = contextMap.get(key);
+                CreationalContext creationalContext = contextObject.getCreationalContext();
+                Contextual contextual = contextObject.getContextual();
+                contextual.destroy(instanceMap.get(contextObject.getName()), creationalContext);
+                removalNameList.add(contextObject.getName());
+            }
 
-        Iterator<String> removalNames = removalNameList.iterator();
-        while (removalNames.hasNext()) {
-            String name = removalNames.next();
-            instanceMap.remove(name);
+            Iterator<String> removalNames = removalNameList.iterator();
+            while (removalNames.hasNext()) {
+                String name = removalNames.next();
+                instanceMap.remove(name);
+            }
         }
     }
 
@@ -246,7 +248,7 @@ public class ViewScopeContext implements Context, Serializable {
      * Get the context map.
      *
      * @param instanceMap the instance map.
-     * @param create flag to indicate if we are creating the map.
+     * @param create flag to indicate if we are creating the context map.
      * @return the context map.
      */
     private static Map<Contextual, ViewScopeContextObject> getContextMap(Map<String, Object> instanceMap, boolean create) {
@@ -269,16 +271,18 @@ public class ViewScopeContext implements Context, Serializable {
 
                 if (activeViewScopeContexts != null && create) {
                     synchronized (activeViewScopeContexts) {
-                        if (!activeViewScopeContexts.containsKey(instanceMap) && create) {
-                            activeViewScopeContexts.put(instanceMap, new ConcurrentHashMap<Contextual, ViewScopeContextObject>());
+                        if (!activeViewScopeContexts.containsKey(System.identityHashCode(instanceMap)) && create) {
+                            activeViewScopeContexts.put(System.identityHashCode(instanceMap), new ConcurrentHashMap<Contextual, ViewScopeContextObject>());
                         }
-
-                        result = activeViewScopeContexts.get(instanceMap);
                     }
+                }
+                
+                if (activeViewScopeContexts != null) {
+                    result = activeViewScopeContexts.get(System.identityHashCode(instanceMap));
                 }
             }
         }
-
+        
         return result;
     }
 
@@ -322,7 +326,7 @@ public class ViewScopeContext implements Context, Serializable {
     private String getName(Object object) {
         String name = object.getClass().getSimpleName().substring(0, 1).toLowerCase()
                 + object.getClass().getSimpleName().substring(1);
-        
+
         Named named = object.getClass().getAnnotation(Named.class);
         if (named != null && named.value() != null && !named.value().trim().equals("")) {
             name = named.value();
@@ -381,9 +385,9 @@ public class ViewScopeContext implements Context, Serializable {
                 (Map<Map<String, Object>, Map<Contextual, ViewScopeContextObject>>) session.getAttribute(ACTIVE_VIEW_SCOPE_CONTEXTS);
 
         if (activeViewScopeContexts != null) {
-
-            for (Map<String, Object> instanceMap : activeViewScopeContexts.keySet()) {
-                Map<Contextual, ViewScopeContextObject> contextMap = activeViewScopeContexts.get(instanceMap);
+            for (Map.Entry<Map<String, Object>, Map<Contextual, ViewScopeContextObject>> entry : activeViewScopeContexts.entrySet()) {
+                Map<String, Object> instanceMap = entry.getKey();
+                Map<Contextual, ViewScopeContextObject> contextMap = entry.getValue();
                 destroyViewScopedBeans(instanceMap, contextMap);
             }
 
