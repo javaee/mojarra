@@ -2,7 +2,7 @@
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -41,21 +41,22 @@
 -->
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-xmlns:h="http://java.sun.com/jsf/html"
-xmlns:f="http://java.sun.com/jsf/core"
-xmlns:ui="http://java.sun.com/jsf/facelets">
-<head><title>test page</title></head>
-<body>
-	<ui:repeat value="#{test.strList}" offset="#{test.offset}" var="item">
-		Offset VE:<h:outputText value="#{item}" />
-	</ui:repeat>
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <head>
+        <title>Repeat Offset</title>
+    </head>
+    <body>
+        <ui:repeat value="#{repeatOffsetBean.strList}" offset="#{repeatOffsetBean.offset}" var="item">
+            Offset VE:<h:outputText value="#{item}" />
+        </ui:repeat>
         <br/>
- 
-	<ui:repeat value="#{test.strList}" offset="2" var="item">
-		Offset Literal:<h:outputText value="#{item}" />
-	</ui:repeat>
-</body>
+        <ui:repeat value="#{repeatOffsetBean.strList}" offset="2" var="item">
+            Offset Literal:<h:outputText value="#{item}" />
+        </ui:repeat>
+    </body>
 </html>
