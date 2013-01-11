@@ -581,6 +581,10 @@ public class ExternalContextImpl extends ExternalContext {
         getELFlash().doLastPhaseActions(ctx, true);
 
         if (ctx.getPartialViewContext().isPartialRequest()) {
+            if (getSession(true) instanceof HttpSession &&
+                ctx.getResponseComplete()) {
+                throw new IllegalStateException();
+            }
             PartialResponseWriter pwriter;
             ResponseWriter writer = ctx.getResponseWriter();
             if (writer instanceof PartialResponseWriter) {
