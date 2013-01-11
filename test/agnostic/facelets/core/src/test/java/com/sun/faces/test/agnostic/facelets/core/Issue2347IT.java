@@ -73,8 +73,11 @@ public class Issue2347IT {
     public void testActionListener1() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/actionlistener.xhtml");
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form:buttonParam");
-        page = button.click();
-        assertTrue(page.asText().contains("Listener invoked: true"));
+
+        if ("server".equals(System.getProperty("webapp.stateSavingMethod"))) {
+            page = button.click();
+            assertTrue(page.asText().contains("Listener invoked: true"));
+        }
     }
 
     /**
@@ -88,7 +91,10 @@ public class Issue2347IT {
     public void testActionListener2() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/actionlistener.xhtml");
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form:buttonNoParam");
-        page = button.click();
-        assertTrue(page.asText().contains("Listener invoked: true"));
+
+        if ("server".equals(System.getProperty("webapp.stateSavingMethod"))) {
+            page = button.click();
+            assertTrue(page.asText().contains("Listener invoked: true"));
+        }
     }
 }
