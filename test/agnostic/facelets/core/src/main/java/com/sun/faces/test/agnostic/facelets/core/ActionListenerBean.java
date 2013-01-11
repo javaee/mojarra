@@ -1,14 +1,14 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
  * may not use this file except in compliance with the License.  You can
  * obtain a copy of the License at
- * https://glassfish.dev.java.net/public/CDDLGPL_1_1.html
+ * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
  *
@@ -37,49 +37,25 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.agnostic.facelets.core;
 
-package com.sun.faces.systest;
+import javax.faces.bean.ManagedBean;
+import javax.faces.event.ActionEvent;
 
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+@ManagedBean
+public class ActionListenerBean {
 
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+    private boolean invoked;
 
-
-public class Issue2347TestCase extends HtmlUnitFacesTestCase {
-
-    public Issue2347TestCase(String name) {
-        super(name);
+    public void listenerWithParam(ActionEvent event) {
+        invoked = true;
     }
 
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(Issue2347TestCase.class));
+    public void listener() {
+        invoked = true;
     }
 
-    // ------------------------------------------------------------ Test Methods
-
-    public void testBasicAppFunctionality() throws Exception {
-
-        // Test the action listener with a param. This uses the EL expression
-        // that's defined on the Facelet directly.
-        HtmlPage page = getPage("/faces/actionlistener.xhtml");
-        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form:buttonParam");
-        page = button.click();
-        assertTrue(page.asText().contains("Listener invoked: true"));
-        
-        // Test the action listener without a param. This is the main usecase for issue
-        // 2347, and depends on the new method expresion that's being created based
-        // on the one defined on the Facelet.
-        page = getPage("/faces/actionlistener.xhtml");
-        button = (HtmlSubmitInput) page.getElementById("form:buttonNoParam");
-        page = button.click();
-        assertTrue(page.asText().contains("Listener invoked: true"));
-        
+    public boolean isInvoked() {
+        return invoked;
     }
-
 }
