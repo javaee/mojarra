@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,47 +37,58 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.systest;
+package com.sun.faces.test.agnostic.facelets.html;
 
+import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+public class Issue2111IT {
 
-public class Issue2111TestCase extends HtmlUnitFacesTestCase {
+    private String webUrl;
+    private WebClient webClient;
 
-    public Issue2111TestCase(String name) {
-        super(name);
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-    /**
-     * Set up instance variables required by this test case.
-     */
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(Issue2111TestCase.class));
-    }
-
-    /**
-     * Tear down instance variables required by this test case.
-     */
-    @Override
+    @After
     public void tearDown() {
-        super.tearDown();
+        webClient.closeAllWindows();
     }
-
-    // ------------------------------------------------------------ Test Methods
+    
+    @Test
     public void testOutputFormatMessages() throws Exception {
-
-        HtmlPage page = getPage("/");
+        HtmlPage page = webClient.getPage(webUrl + "faces/outputFormatConverter.xhtml");
         assertTrue(page.asText().contains("MyConverter.getAsString Called: MESSAGE 1 MyConverter.getAsString Called: MESSAGE 2 MYPARAM MESSAGE 3 MESSAGE 4 MYPARAM"));
+    }
+    
+    @Test
+    public void testOutputFormatMessage1() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/outputFormatConverter.xhtml");
+        assertTrue(page.asText().contains("MESSAGE 1 MyConverter.getAsString"));
+    }
+    
+    @Test
+    public void testOutputFormatMessage2() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/outputFormatConverter.xhtml");
+        assertTrue(page.asText().contains("MESSAGE 2 MYPARAM"));
+    }
+    
+    @Test
+    public void testOutputFormatMessage3() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/outputFormatConverter.xhtml");
+        assertTrue(page.asText().contains("MESSAGE 3"));
+    }
+    
+    @Test
+    public void testOutputFormatMessage4() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/outputFormatConverter.xhtml");
+        assertTrue(page.asText().contains("MESSAGE 4 MYPARAM"));
     }
 }

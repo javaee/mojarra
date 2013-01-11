@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,33 +37,33 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.i_jsf_2111;
+package com.sun.faces.test.agnostic.facelets.html;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 
-public class MyConverter implements Converter {
+public class OutputFormatConverter implements Converter {
 
-    public MyConverter() {
+    public OutputFormatConverter() {
     }
 
     public Object getAsObject(FacesContext context,
-        UIComponent component, String param) {
+            UIComponent component, String param) {
         try {
             return " ";
         } catch (Exception e) {
             throw new ConverterException(e);
         }
     }
-    
+
     public String getAsString(FacesContext context,
-        UIComponent component, Object obj) {
+            UIComponent component, Object obj) {
         String returnVal;
         try {
             if (null != obj) {
-                returnVal = "MyConverter.getAsString Called: "+obj.toString();
+                returnVal = "MyConverter.getAsString Called: " + obj.toString();
             } else {
                 returnVal = " ";
             }
@@ -72,5 +72,4 @@ public class MyConverter implements Converter {
             throw new ConverterException(e);
         }
     }
-
 }
