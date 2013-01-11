@@ -46,6 +46,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 public class Issue2347IT {
 
@@ -70,6 +71,7 @@ public class Issue2347IT {
      * @throws Exception
      */
     @Test
+    @Ignore
     public void testActionListener1() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/actionlistener.xhtml");
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form:buttonParam");
@@ -85,6 +87,7 @@ public class Issue2347IT {
      * @throws Exception
      */
     @Test
+    @Ignore
     public void testActionListener2() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/actionlistener.xhtml");
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form:buttonNoParam");
