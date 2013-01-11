@@ -55,6 +55,7 @@
     <name>Mojarra ${project.version} - Test - Agnostic - Facelets</name>
     <modules>
         <module>core</module>
+        <module>html</module>
         <module>ui</module>
     </modules>
 </project>
