@@ -1,14 +1,14 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
  * may not use this file except in compliance with the License.  You can
  * obtain a copy of the License at
- * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+ * https://glassfish.dev.java.net/public/CDDLGPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
  *
@@ -37,27 +37,58 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.agnostic.facelets.core;
 
-package i_jsf_2347;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.event.ActionEvent;
+public class Issue2347IT {
 
-@ManagedBean
-public class ActionListenerBean {
+    private String webUrl;
+    private WebClient webClient;
 
-    private boolean invoked;
-
-    public void listenerWithParam(ActionEvent event) {
-	invoked = true;
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-    public void listener() {
-	invoked = true;
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
     }
 
-    public boolean isInvoked() {
-	return invoked;
+    /**
+     * Test the action listener with a param. This uses the EL expression that
+     * is defined on the Facelet directly.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testActionListener1() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/actionlistener.xhtml");
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form:buttonParam");
+        page = button.click();
+        assertTrue(page.asText().contains("Listener invoked: true"));
     }
 
+    /**
+     * Test the action listener without a param. This is the main use case for
+     * issue 2347, and depends on the new method expression that is being
+     * created based on the one defined on the Facelet.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testActionListener2() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/actionlistener.xhtml");
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form:buttonNoParam");
+        page = button.click();
+        assertTrue(page.asText().contains("Listener invoked: true"));
+    }
 }
