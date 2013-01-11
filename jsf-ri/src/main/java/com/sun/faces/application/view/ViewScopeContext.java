@@ -39,7 +39,6 @@
  */
 package com.sun.faces.application.view;
 
-import com.sun.faces.mgbean.BeanManager;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
