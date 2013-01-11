@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,52 +37,40 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.systest;
+package com.sun.faces.test.agnostic.facelets.ui;
 
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
+public class Issue2209IT {
 
-import javax.faces.component.NamingContainer;
+    private String webUrl;
+    private WebClient webClient;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
-public class Issue2209TestCase extends HtmlUnitFacesTestCase {
-
-    public Issue2209TestCase(String name) {
-        super(name);
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-    /**
-     * Set up instance variables required by this test case.
-     */
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(Issue2209TestCase.class));
-    }
-
-    /**
-     * Tear down instance variables required by this test case.
-     */
-    @Override
+    @After
     public void tearDown() {
-        super.tearDown();
+        webClient.closeAllWindows();
     }
 
-    // ------------------------------------------------------------ Test Methods
+    @Test
     public void testOffset() throws Exception {
-        HtmlPage page = getPage("/faces/Test.xhtml");
+        HtmlPage page = webClient.getPage(webUrl + "faces/repeatOffset.xhtml");
         assertTrue(page.asText().contains("Offset VE:str2 Offset VE:str3 Offset VE:str4 Offset VE:str5 Offset VE:str6 Offset VE:str7 Offset VE:str8 Offset VE:str9"));
+    }
+
+    @Test
+    public void testOffset2() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/repeatOffset.xhtml");
         assertTrue(page.asText().contains("Offset Literal:str2 Offset Literal:str3 Offset Literal:str4 Offset Literal:str5 Offset Literal:str6 Offset Literal:str7 Offset Literal:str8 Offset Literal:str9"));
     }
 }

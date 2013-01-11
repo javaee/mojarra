@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,45 +37,43 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
-package i_jsf_2209;
+package com.sun.faces.test.agnostic.facelets.ui;
 
 import java.io.Serializable;
-
 import javax.faces.bean.ManagedBean;
 
-@ManagedBean(name = "test")
-public class TestBean implements Serializable {
+@ManagedBean(name = "repeatOffsetBean")
+public class RepeatOffsetBean implements Serializable {
 
-	private String[] strList;
-	private int offset= 2;
-        private int step = 2;
+    private String[] strList;
+    private int offset = 2;
+    private int step = 2;
 
-	public String[] getStrList() {
-		strList = new String[10];
-		for (int i = 0; i < 10; i++) {
-			strList[i] = "str" + i;
-		}
-		return strList;
-	}
+    public String[] getStrList() {
+        strList = new String[10];
+        for (int i = 0; i < 10; i++) {
+            strList[i] = "str" + i;
+        }
+        return strList;
+    }
 
-	public int getOffset() {
-		return offset;
-	}
+    public int getOffset() {
+        return offset;
+    }
 
-	public void setOffset(int offset) {
-		this.offset = offset;
-	}
+    public void setOffset(int offset) {
+        this.offset = offset;
+    }
 
-	public int getStep() {
-		return step;
-	}
+    public int getStep() {
+        return step;
+    }
 
-	public void setStep(int step) {
-		this.step= step;
-	}
-	public void setStrList(String[] strList) {
-		this.strList = strList;
-	}
+    public void setStep(int step) {
+        this.step = step;
+    }
 
+    public void setStrList(String[] strList) {
+        this.strList = strList;
+    }
 }
