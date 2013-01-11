@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,17 +37,16 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
-package i_jsf_2258;
+package com.sun.faces.test.agnostic.facelets.ui;
 
 import java.io.Serializable;
-
 import javax.faces.bean.ManagedBean;
 
-@ManagedBean(name = "test")
-public class TestBean implements Serializable {
+@ManagedBean(name = "repeatValueBean")
+public class RepeatValueBean implements Serializable {
 
     private String[] strList;
+    public int size = 5;
 
     public String[] getStrList() {
         strList = new String[10];
@@ -60,8 +59,6 @@ public class TestBean implements Serializable {
     public void setStrList(String[] strList) {
         this.strList = strList;
     }
-
-    public int size = 5;
 
     public int getSize() {
         return size;
