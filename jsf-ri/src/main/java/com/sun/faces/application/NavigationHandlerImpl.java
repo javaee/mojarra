@@ -480,17 +480,6 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             caseStruct = findDefaultMatch(ctx, fromAction, outcome);
         }
         
-        // If the navigation rules do not have a match...
-        if (caseStruct == null && outcome != null && viewId != null) {
-            // Treat empty string equivalent to null outcome.  JSF 2.0 Rev a
-            // Changelog issue C063.
-            if (caseStruct == null && 0 == outcome.length()) {
-                outcome = null;
-            } else {
-                caseStruct = findImplicitMatch(ctx, viewId, fromAction, outcome);
-            }
-        }
-        
         // If we still don't have a match, see if this is a switch
         if (null == caseStruct && null != fromAction && null != outcome) {
             caseStruct = findSwitchMatch(ctx, fromAction, outcome);
@@ -506,6 +495,17 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             caseStruct = findFacesFlowCallMatch(ctx, fromAction, outcome);
         }
 
+        // If the navigation rules do not have a match...
+        if (caseStruct == null && outcome != null && viewId != null) {
+            // Treat empty string equivalent to null outcome.  JSF 2.0 Rev a
+            // Changelog issue C063.
+            if (caseStruct == null && 0 == outcome.length()) {
+                outcome = null;
+            } else {
+                caseStruct = findImplicitMatch(ctx, viewId, fromAction, outcome);
+            }
+        }
+        
         // no navigation case fo
         if (caseStruct == null && outcome != null && development) {
             String key;
