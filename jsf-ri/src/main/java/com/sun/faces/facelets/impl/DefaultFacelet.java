@@ -280,9 +280,13 @@ final class DefaultFacelet extends Facelet implements XMLFrontMatterSaver {
      *             if there is a problem creating the URL for the path specified
      */
     private URL getRelativePath(String path) throws IOException {
+        // PENDING(FCAPUTO): Do we need caching here, as we had before resource library contracts?
+        if(!path.startsWith("/")) {
+            // lastSlash will never be -1, because all aliases are absolute.
+            int lastSlash = alias.lastIndexOf('/');
+            path = alias.substring(0, lastSlash + 1) + path;
+        }
         return this.factory.resolveURL(this.src, path);
-        // PENDING(FCAPUTO): Deactivated caching for resource library contracts.
-        //         To make contracts work with relative paths, the url should be calculated based on the alias.
     }
 
     /**

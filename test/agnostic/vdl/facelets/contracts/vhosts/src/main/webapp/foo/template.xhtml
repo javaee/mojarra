@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' ?> 
-
+<!DOCTYPE html>
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -41,9 +41,6 @@
     holder.
 
 -->
-
-<!DOCTYPE html>
-
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html">
@@ -53,11 +50,13 @@
         <h:outputStylesheet name="/css/layout.css" />
         <title>#{facesContext.externalContext.requestHeaderMap.host}</title>
     </h:head>
+
     <h:body>
-        /template.xhtml
-        <ui:include src="header.xhtml"/>
+        foo/template.xhtml
+        <ui:include src="/header.xhtml"/>
         <div id="content">
             <ui:insert name="content"/>
         </div>
     </h:body>
+
 </html>

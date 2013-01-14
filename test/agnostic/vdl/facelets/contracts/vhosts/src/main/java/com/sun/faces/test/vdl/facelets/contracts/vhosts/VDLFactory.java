@@ -32,7 +32,7 @@ public class VDLFactory extends ViewDeclarationLanguageFactory {
 
     private static class VDL extends ViewDeclarationLanguageWrapper {
 
-        private static final List<String> KNOWN_HOSTS = Arrays.asList("host1", "host2", "host3");
+        private static final List<String> KNOWN_HOSTS = Arrays.asList("host1", "host2", "host3", "host5");
 
         private ViewDeclarationLanguage wrapped;
 
