@@ -98,6 +98,9 @@ public class ViewScopeManager implements ViewMapListener {
         try {
             contextManager = new ViewScopeContextManager();
         } catch (Exception exception) {
+            if (LOGGER.isLoggable(Level.INFO)) {
+                LOGGER.log(Level.INFO, "CDI @ViewScoped manager unavailable", exception);
+            }
         }
     }
 
@@ -138,7 +141,7 @@ public class ViewScopeManager implements ViewMapListener {
 
     /**
      * Destroy the managed beans from the given view map.
-     * 
+     *
      * @param applicationAssociate the application associate.
      * @param viewMap the view map.
      */
@@ -161,7 +164,7 @@ public class ViewScopeManager implements ViewMapListener {
             }
         }
     }
-    
+
     /**
      * Destroy the managed beans from the given view map.
      *
@@ -249,7 +252,7 @@ public class ViewScopeManager implements ViewMapListener {
                 if (sessionMap.get(ACTIVE_VIEW_MAPS) == null) {
                     sessionMap.put(ACTIVE_VIEW_MAPS, (Map<String, Object>) new LRUMap<String, Object>(size));
                 }
-                
+
                 Map<String, Object> viewMaps = (Map<String, Object>) sessionMap.get(ACTIVE_VIEW_MAPS);
                 synchronized (viewMaps) {
                     String viewMapId = UUID.randomUUID().toString();
@@ -300,7 +303,7 @@ public class ViewScopeManager implements ViewMapListener {
         if (LOGGER.isLoggable(Level.FINEST)) {
             LOGGER.log(Level.FINEST, "Cleaning up session for @ViewScoped beans");
         }
-        
+
         if (contextManager != null) {
             contextManager.sessionDestroyed(hse);
         }
@@ -314,7 +317,7 @@ public class ViewScopeManager implements ViewMapListener {
                 Map<String, Object> viewMap = (Map<String, Object>) activeViewMapsIterator.next();
                 destroyBeans(applicationAssociate, viewMap);
             }
-            
+
             activeViewMaps.clear();
             session.removeAttribute(ACTIVE_VIEW_MAPS);
             session.removeAttribute(ACTIVE_VIEW_MAPS_SIZE);
@@ -334,7 +337,7 @@ public class ViewScopeManager implements ViewMapListener {
         if (contextManager != null) {
             contextManager.clear(facesContext, eldestViewMap);
         }
-        
+
         destroyBeans(facesContext, eldestViewMap);
     }
 }
