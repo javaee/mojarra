@@ -37,20 +37,17 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
 package com.sun.faces.config;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.application.WebappLifecycleListener;
-
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableGroovyScripting;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableLazyBeanValidation;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableThreading;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.ForceLoadFacesConfigFiles;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.VerifyFacesConfigObjects;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.JavaxFacesProjectStage;
-
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.el.ChainTypeCompositeELResolver;
 import com.sun.faces.el.ELContextImpl;
@@ -72,18 +69,14 @@ import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.ProjectStage;
-import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
-import javax.faces.event.PostConstructViewMapEvent;
 import javax.faces.event.PreDestroyApplicationEvent;
-import javax.faces.event.PreDestroyViewMapEvent;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextAttributeEvent;
 import javax.servlet.ServletContextAttributeListener;
