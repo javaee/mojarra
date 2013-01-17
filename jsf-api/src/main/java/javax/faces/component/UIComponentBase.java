@@ -142,7 +142,9 @@ public abstract class UIComponentBase extends UIComponent {
 
     private void populateDescriptorsMapIfNecessary() {
         Class<?> clazz = this.getClass();
-        pdMap = descriptors.get(clazz);
+        synchronized(descriptors) {
+            pdMap = descriptors.get(clazz);
+        }
         if (null != pdMap) {
             return;
         }
@@ -161,12 +163,16 @@ public abstract class UIComponentBase extends UIComponent {
             }
 
             // Check again
-            Map<String, PropertyDescriptor> reCheckMap =
-                    descriptors.get(clazz);
+            Map<String, PropertyDescriptor> reCheckMap = null;
+            synchronized(descriptors) {
+                reCheckMap = descriptors.get(clazz);
+            }
             if (null != reCheckMap) {
                 return;
             }
-            descriptors.put(clazz, pdMap);
+            synchronized(descriptors) {
+                descriptors.put(clazz, pdMap);
+            }
         }
 
 
