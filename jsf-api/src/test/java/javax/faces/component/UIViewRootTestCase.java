@@ -968,36 +968,6 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 
     }
 
-    private static final class ViewMapListener implements SystemEventListener {
-
-        private boolean processEventInvoked;
-        private SystemEvent event;
-
-        public void processEvent(SystemEvent event)
-        throws AbortProcessingException {
-            this.event = event;
-            processEventInvoked = true;
-        }
-
-        public boolean isListenerForSource(Object source) {
-            return (source instanceof UIViewRoot);
-        }
-
-        public boolean wasProcessEventInvoked() {
-            return processEventInvoked;
-        }
-
-        public SystemEvent getPassedEvent() {
-            return event;
-        }
-
-        public void reset() {
-            processEventInvoked = false;
-            event = null;
-        }
-
-    }
-
     public static class Container extends UIPanel {
 
         @Override

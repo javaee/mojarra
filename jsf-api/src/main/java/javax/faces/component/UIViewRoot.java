@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,9 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
 package javax.faces.component;
-
 
 import javax.el.MethodExpression;
 import javax.faces.FacesException;
@@ -49,7 +47,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.webapp.FacesServlet;
-
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -60,7 +57,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ListIterator;
-import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -240,11 +236,6 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * meaning between phases.
      */
     private ListIterator<PhaseListener> phaseListenerIterator;
-
-    /*
-     * Stores the view map id.
-     */
-    private String viewMapId;
 
     // -------------------------------------------------------------- Properties
 
@@ -1515,61 +1506,16 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * @since 2.0
      */
     public Map<String, Object> getViewMap(boolean create) {
-        Map<String, Object> result = null;
-        
-        if (create && viewMapId == null) {
-            ViewMap viewMap = new ViewMap(getFacesContext().getApplication().getProjectStage());
+        Map<String, Object> viewMap = (Map<String, Object>) 
+                getTransientStateHelper().getTransient("com.sun.faces.application.view.viewMap");
 
-            Object session = getFacesContext().getExternalContext().getSession(create);
-            if (session != null) {
-                Map<String, Object> sessionMap = getFacesContext().getExternalContext().getSessionMap();
-                synchronized(sessionMap) {
-                    if (sessionMap.get("com.sun.faces.activeViewMaps") == null) {
-                        sessionMap.put("com.sun.faces.activeViewMaps", new HashMap<String, Object>());
-                    }
-                    Map<String, Object> viewMaps = (Map<String, Object>) sessionMap.get("com.sun.faces.activeViewMaps");
-                    viewMapId = UUID.randomUUID().toString();
-                    while(viewMaps.containsKey(viewMapId)) {
-                        viewMapId = UUID.randomUUID().toString();
-                    }
-                    viewMaps.put(viewMapId, viewMap);
-                }
-
-                getFacesContext().getApplication().publishEvent(getFacesContext(),
-                    PostConstructViewMapEvent.class, this);
-            }
+        if (create && viewMap == null) {
+            viewMap = new ViewMap(getFacesContext().getApplication().getProjectStage());
+            getTransientStateHelper().putTransient("com.sun.faces.application.view.viewMap", viewMap);
+            getFacesContext().getApplication().publishEvent(getFacesContext(), PostConstructViewMapEvent.class, this);
         }
         
-        Map<String, Object> sessionMap = getFacesContext().getExternalContext().getSessionMap();
-        if (sessionMap.get("com.sun.faces.activeViewMaps") != null) {
-            Map<String, Object> viewMaps = (Map<String, Object>) sessionMap.get("com.sun.faces.activeViewMaps");
-            result = (Map<String, Object>) viewMaps.get(viewMapId);
-        }
-        
-        /*
-         * During application initialization one can call getViewMap as well,
-         * but since we don't have a session we cannot store it there. So the
-         * code below stores the view map in an attribute on the UIViewRoot so 
-         * we can satisfy the getViewMap contract during startup.
-         */
-        if (result == null && FacesContext.getCurrentInstance() != null &&
-                FacesContext.getCurrentInstance().getClass().getName().
-                    equals("com.sun.faces.config.InitFacesContext")) {
-            
-            if (create) {
-                if (getAttributes().get("com.sun.faces.initViewMap") == null) {
-                    getAttributes().put("com.sun.faces.initViewMap", 
-                            new ViewMap(getFacesContext().getApplication().getProjectStage()));
-
-                    getFacesContext().getApplication().publishEvent(getFacesContext(),
-                        PostConstructViewMapEvent.class, this);
-                }
-            }
-
-            result = (Map<String, Object>) getAttributes().get("com.sun.faces.initViewMap");
-        }
-        
-        return result;
+        return viewMap;
     }
 
     Map<Class<? extends SystemEvent>,List<SystemEventListener>> viewListeners;
@@ -1729,9 +1675,10 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
         if (context == null) {
             throw new NullPointerException();
         }
-
-        Object superState = super.saveState(context);
         
+        String viewMapId = (String) getTransientStateHelper().getTransient("com.sun.faces.application.view.viewMapId");        
+        Object superState = super.saveState(context);
+
         if (superState != null || viewMapId != null) {
             values = new Object[] {superState, viewMapId};
         }
@@ -1751,11 +1698,25 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
         }
         
         values = (Object[]) state;
-        super.restoreState(context, values[0]);
-        viewMapId = (String) values[1];
+        
+        if (!context.getAttributes().containsKey("com.sun.faces.application.view.restoreViewScopeOnly")) {
+            super.restoreState(context, values[0]);
+        }
+        
+        String viewMapId = (String) values[1];
+
+        getTransientStateHelper().putTransient("com.sun.faces.application.view.viewMapId", viewMapId);
+
+        Map<String, Object> viewMaps = (Map<String, Object>) context.getExternalContext().
+                getSessionMap().get("com.sun.faces.application.view.activeViewMaps");
+
+        if (viewMaps != null) {
+            Map<String, Object> viewMap = (Map<String, Object>) viewMaps.get(viewMapId);
+            getTransientStateHelper().putTransient("com.sun.faces.application.view.viewMap", viewMap);
+        }
     }
 
-
+    
     // --------------------------------------------------------- Private Methods
 
 

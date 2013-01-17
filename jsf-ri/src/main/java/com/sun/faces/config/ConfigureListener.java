@@ -259,13 +259,6 @@ public class ConfigureListener implements ServletRequestListener,
                         isErrorPagePresent);
 
             }
-            Application app = initContext.getApplication();
-            app.subscribeToEvent(PostConstructViewMapEvent.class,
-                    UIViewRoot.class,
-                    webAppListener);
-            app.subscribeToEvent(PreDestroyViewMapEvent.class,
-                    UIViewRoot.class,
-                    webAppListener);
 
             webConfig.doPostBringupActions();
 

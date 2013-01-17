@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,9 +37,9 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
 package com.sun.faces.application;
 
+import com.sun.faces.application.view.ViewScopeManager;
 import com.sun.faces.config.InitFacesContext;
 import com.sun.faces.config.WebConfiguration;
 import java.io.PrintWriter;
@@ -48,8 +48,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.faces.event.AbortProcessingException;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextAttributeEvent;
 import javax.servlet.ServletContextEvent;
@@ -60,21 +58,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionEvent;
-
 import com.sun.faces.el.ELUtils;
 import com.sun.faces.io.FastStringWriter;
 import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.util.FacesLogger;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-import javax.faces.component.UIViewRoot;
+import com.sun.faces.util.Util;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.ExceptionQueuedEventContext;
-import javax.faces.event.SystemEvent;
-import javax.faces.event.PreDestroyViewMapEvent;
-import javax.faces.event.ViewMapListener;
 
 /**
  * <p>Central location for web application lifecycle events.<p>  
@@ -82,7 +73,7 @@ import javax.faces.event.ViewMapListener;
  * should be invoking methods marked with the
  * <code>@PreDestroy</code> annotation.</p>
  */
-public class WebappLifecycleListener implements ViewMapListener {
+public class WebappLifecycleListener {
 
     // Log instance for this class
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
@@ -147,25 +138,6 @@ public class WebappLifecycleListener implements ViewMapListener {
         ApplicationAssociate.setCurrentInstance(getAssociate());
     }
 
-    public boolean isListenerForSource(Object component) {
-        return (component instanceof UIViewRoot);
-    }
-
-    public void processEvent(SystemEvent event)
-    throws AbortProcessingException {
-        if (event instanceof PreDestroyViewMapEvent) {
-            Map<String, Object> viewMap =
-                  ((UIViewRoot) event.getSource()).getViewMap(false);
-            if (viewMap != null && viewMap.size() != 0) {
-                for (Map.Entry<String, Object> cur : viewMap.entrySet()) {
-                    handleAttributeEvent(cur.getKey(),
-                                         cur.getValue(),
-                                         ELUtils.Scope.VIEW);
-                }
-            }
-        }
-    }
-
     /**
      * Notfication that a session has been created.
      * @param event the notification event
@@ -193,29 +165,17 @@ public class WebappLifecycleListener implements ViewMapListener {
         if (activeSessions != null) {
             activeSessions.remove(event.getSession());
         }
+
+        ViewScopeManager manager = (ViewScopeManager) servletContext.getAttribute(ViewScopeManager.VIEW_SCOPE_MANAGER);
+        if (manager != null) {
+            manager.sessionDestroyed(event);
+        }
+        
         for (Enumeration e = session.getAttributeNames(); e.hasMoreElements(); ) {
             String beanName = (String)e.nextElement();
             handleAttributeEvent(beanName, 
                                  session.getAttribute(beanName), 
                                  ELUtils.Scope.SESSION);
-        }
-
-        /*
-         * When the session gets destroyed we need to make sure that each view
-         * scope that was still active cleans up properly.
-         */
-        Map<String, Object> activeViewMaps = (Map<String, Object>) session.getAttribute("com.sun.faces.activeViewMaps");
-        if (activeViewMaps != null) {
-            Iterator<Object> activeViewMapsIterator = activeViewMaps.values().iterator();
-            while(activeViewMapsIterator.hasNext()) {
-                Map<String, Object> viewMap = (Map<String, Object>) activeViewMapsIterator.next();
-                BeanManager beanManager = applicationAssociate.getBeanManager();
-                Iterator<Entry<String, Object>> viewEntries = viewMap.entrySet().iterator();
-                while(viewEntries.hasNext()) {
-                    Entry<String, Object> entry = viewEntries.next();
-                    beanManager.destroy(entry.getKey(), entry.getValue());
-                }
-            }
         }
     }
 

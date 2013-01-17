@@ -1,8 +1,8 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- *
+ * 
  * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
- *
+ * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -11,20 +11,20 @@
  * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- *
+ * 
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at packager/legal/LICENSE.txt.
- *
+ * 
  * GPL Classpath Exception:
  * Oracle designates this particular file as subject to the "Classpath"
  * exception as provided by Oracle in the GPL Version 2 section of the License
  * file that accompanied this code.
- *
+ * 
  * Modifications:
  * If applicable, add the following below the License Header, with the fields
  * enclosed by brackets [] replaced by your own identifying information:
  * "Portions Copyright [year] [name of copyright owner]"
- *
+ * 
  * Contributor(s):
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
@@ -37,42 +37,45 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.scope.view;
+package com.sun.faces.application.view;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.SystemEvent;
+import javax.faces.event.ViewMapListener;
 
-public class Issue2638IT {
+/**
+ * The ViewScope event listener.
+ *
+ * <p> To make it so the UIViewRoot.getViewMap is as independent as possible
+ * from implementation specific code we need to get notified when a view map is
+ * created or destroyed. This ViewMapListener is registered so we get notified
+ * of these events. </p>
+ *
+ * <p> See jsf-ri-config.xml for the actual registration of this listener. </p>
+ */
+public class ViewScopeEventListener implements ViewMapListener {
 
-    private String webUrl;
-    private WebClient webClient;
-
-    @Before
-    public void setUp() {
-        webUrl = System.getProperty("integration.url");
-        webClient = new WebClient();
-        webClient.setJavaScriptEnabled(true);
-        webClient.setJavaScriptTimeout(60000);
+    /**
+     * Handle the system event.
+     *
+     * @param se the system event.
+     * @throws AbortProcessingException
+     */
+    @Override
+    public void processEvent(SystemEvent se) throws AbortProcessingException {
+        ViewScopeManager.getInstance(FacesContext.getCurrentInstance()).processEvent(se);
     }
 
-    @After
-    public void tearDown() {
-        webClient.closeAllWindows();
-    }
-
-    @Test
-    public void testInvalidatedSession2() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/invalidatedSession2.xhtml");
-        assertTrue(page.asText().indexOf("Local Count: 0") != -1);
-        assertTrue(page.asText().indexOf("Invalidated: false") != -1);
-        HtmlElement button = page.getElementById("form:button");
-        page = button.click();
-        assertTrue(page.asText().indexOf("Local Count: 0") != -1);
-        assertTrue(page.asText().indexOf("Invalidated: true") != -1);
+    /**
+     * Is listener for.
+     *
+     * @param source the source.
+     * @return true if UIViewRoot, false otherwise.
+     */
+    @Override
+    public boolean isListenerForSource(Object source) {
+        return (source instanceof UIViewRoot);
     }
 }

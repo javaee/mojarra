@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -40,6 +40,7 @@
 
 package com.sun.faces.application;
 
+import com.sun.faces.application.view.ViewScopeManager;
 import javax.faces.FacesException;
 import javax.faces.application.NavigationCase;
 import javax.faces.application.ViewHandler;
@@ -47,13 +48,11 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.PartialViewContext;
-
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
@@ -176,7 +175,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                     }
                     // encode the redirect to ensure session state
                     // is maintained
-                    clearViewMapIfNecessary(context.getViewRoot(), caseStruct.viewId);
+                    clearViewMapIfNecessary(context, caseStruct.viewId);
                     updateRenderTargets(context, caseStruct.viewId);
                     extContext.getFlash().setRedirect(true);
                     extContext.redirect(redirectUrl);
@@ -223,15 +222,16 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
      * Calls <code>clear()</code> on the ViewMap (if available) if the view
      * ID of the UIViewRoot differs from <code>newId</code>
      */
-    private void clearViewMapIfNecessary(UIViewRoot root, String newId) {
+    private void clearViewMapIfNecessary(FacesContext facesContext, String newId) {
+        UIViewRoot root = facesContext.getViewRoot();
 
         if (root != null && !root.getViewId().equals(newId)) {
             Map<String, Object> viewMap = root.getViewMap(false);
             if (viewMap != null) {
-                viewMap.clear();
+                ViewScopeManager manager = ViewScopeManager.getInstance(facesContext);
+                manager.clear(facesContext);
             }
         }
-
     }
 
 
