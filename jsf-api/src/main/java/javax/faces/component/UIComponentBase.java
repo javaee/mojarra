@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -141,7 +141,9 @@ public abstract class UIComponentBase extends UIComponent {
 
     private void populateDescriptorsMapIfNecessary() {
         Class<?> clazz = this.getClass();
-        pdMap = descriptors.get(clazz);
+        synchronized(descriptors) {
+            pdMap = descriptors.get(clazz);
+        }
         if (null != pdMap) {
             return;
         }
@@ -160,12 +162,16 @@ public abstract class UIComponentBase extends UIComponent {
             }
 
             // Check again
-            Map<String, PropertyDescriptor> reCheckMap =
-                    descriptors.get(clazz);
+            Map<String, PropertyDescriptor> reCheckMap = null;
+            synchronized(descriptors) {
+                reCheckMap = descriptors.get(clazz);
+            }
             if (null != reCheckMap) {
                 return;
             }
-            descriptors.put(clazz, pdMap);
+            synchronized(descriptors) {
+                descriptors.put(clazz, pdMap);
+            }
         }
 
 
