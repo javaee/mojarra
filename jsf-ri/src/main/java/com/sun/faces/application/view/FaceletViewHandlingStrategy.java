@@ -123,9 +123,11 @@ import javax.faces.component.visit.VisitContext;
 import javax.faces.component.visit.VisitResult;
 import static com.sun.faces.RIConstants.DYNAMIC_COMPONENT;
 import com.sun.faces.facelets.impl.XMLFrontMatterSaver;
+import com.sun.faces.renderkit.RenderKitUtils;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javax.faces.application.ProjectStage;
+import javax.faces.render.ResponseStateManager;
 
 /**
  * This {@link ViewHandlingStrategy} handles Facelets/PDL-based views.
@@ -524,6 +526,22 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                 ViewDeclarationLanguage vdl = vdlFactory.getViewDeclarationLanguage(viewId);
                 viewRoot = vdl.getViewMetadata(context, viewId).createMetadataView(context);
                 context.setViewRoot(viewRoot);
+                ViewHandler outerViewHandler = context.getApplication().getViewHandler();
+                String renderKitId = outerViewHandler.calculateRenderKitId(context);
+                ResponseStateManager rsm = RenderKitUtils.getResponseStateManager(context, renderKitId);
+                Object[] rawState = (Object[]) rsm.getState(context, viewId);
+                if (rawState != null) {
+                    Map<String, Object> state = (Map<String, Object>) rawState[1];
+                    if (state != null) {
+                        String cid = viewRoot.getClientId(context);
+                        Object stateObj = state.get(cid);
+                        if (stateObj != null) {
+                            context.getAttributes().put("com.sun.faces.application.view.restoreViewScopeOnly", true);
+                            viewRoot.restoreState(context, stateObj);
+                            context.getAttributes().remove("com.sun.faces.application.view.restoreViewScopeOnly");
+                        }
+                    }
+                }
                 context.setProcessingEvents(true);
                 vdl.buildView(context, viewRoot);
             } catch (IOException ioe) {

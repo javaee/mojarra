@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -42,7 +42,7 @@ package com.sun.faces.application;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.InitFacesContext;
-import com.sun.faces.application.view.ViewScopeContext;
+import com.sun.faces.application.view.ViewScopeManager;
 import javax.faces.FacesException;
 import javax.faces.application.NavigationCase;
 import javax.faces.application.ViewHandler;
@@ -50,13 +50,11 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.PartialViewContext;
-
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
@@ -412,20 +410,16 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
      * Calls <code>clear()</code> on the ViewMap (if available) if the view
      * ID of the UIViewRoot differs from <code>newId</code>
      */
-    private void clearViewMapIfNecessary(FacesContext context, String newId) {
-        UIViewRoot root = context.getViewRoot();
+    private void clearViewMapIfNecessary(FacesContext facesContext, String newId) {
+        UIViewRoot root = facesContext.getViewRoot();
 
         if (root != null && !root.getViewId().equals(newId)) {
-            
-            if (Util.isCDIAvailable(context.getExternalContext().getApplicationMap())) {
-                ViewScopeContext.clearViewScopedBeans();
-            }
             Map<String, Object> viewMap = root.getViewMap(false);
             if (viewMap != null) {
-                viewMap.clear();
+                ViewScopeManager manager = ViewScopeManager.getInstance(facesContext);
+                manager.clear(facesContext);
             }
         }
-
     }
     
     private void updateRenderTargets(FacesContext ctx, String newId) {

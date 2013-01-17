@@ -113,6 +113,16 @@
     <resource-handler>
       com.sun.faces.application.resource.ResourceHandlerImpl
     </resource-handler>
+    <system-event-listener>
+        <source-class>javax.faces.component.UIViewRoot</source-class>
+        <system-event-class>javax.faces.event.PostConstructViewMapEvent</system-event-class>
+        <system-event-listener-class>com.sun.faces.application.view.ViewScopeEventListener</system-event-listener-class>
+    </system-event-listener>
+    <system-event-listener>
+        <source-class>javax.faces.component.UIViewRoot</source-class>
+        <system-event-class>javax.faces.event.PreDestroyViewMapEvent</system-event-class>
+        <system-event-listener-class>com.sun.faces.application.view.ViewScopeEventListener</system-event-listener-class>
+    </system-event-listener>
   </application>
 
 

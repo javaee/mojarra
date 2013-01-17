@@ -60,6 +60,8 @@ public class Invalidated2Bean {
      * Constructor.
      */
     public Invalidated2Bean() {
+        FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().remove("com.sun.faces.test.agnostic.scope.view.Invalidated2");
+        FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().put("com.sun.faces.test.agnostic.scope.view.Invalidated2", false);
     }
 
     /**
@@ -69,7 +71,7 @@ public class Invalidated2Bean {
         HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         if (session != null) {
             session.invalidate();
-            FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().put("appCount", ++count);
+            FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().put("com.sun.faces.test.agnostic.scope.view.Invalidated2", true);
         }
         return "";
     }

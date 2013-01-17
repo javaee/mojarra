@@ -41,10 +41,6 @@ package com.sun.faces.application.view;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.ContextNotActiveException;
@@ -52,12 +48,8 @@ import javax.enterprise.context.spi.Context;
 import javax.enterprise.context.spi.Contextual;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.faces.component.UIViewRoot;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
-import javax.inject.Named;
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpSessionEvent;
 
 /**
  * The CDI context for CDI ViewScoped beans.
@@ -72,10 +64,6 @@ public class ViewScopeContext implements Context, Serializable {
      * Stores the serial version UID.
      */
     private static final long serialVersionUID = -6245899073989073951L;
-    /**
-     * Stores the constant to keep track of all the active view scope contexts.
-     */
-    private static final String ACTIVE_VIEW_SCOPE_CONTEXTS = "com.sun.faces.application.view.activeViewScopeContexts";
 
     /**
      * Constructor.
@@ -99,59 +87,6 @@ public class ViewScopeContext implements Context, Serializable {
         }
     }
 
-    /**
-     * Clear the ViewScoped CDI beans.
-     *
-     * <p> This method will remove any ViewScoped CDI bean from the current view
-     * map and cause PreDestroy to be invoked upon each of those beans. </p>
-     *
-     * <p> ASSUMPTION: this method needs to be called before the old style
-     * ViewScoped beans are cleaned up. </p>
-     */
-    public static void clearViewScopedBeans() {
-        if (LOGGER.isLoggable(Level.FINEST)) {
-            LOGGER.log(Level.FINEST, "Clearing @ViewScoped CDI beans");
-        }
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        if (facesContext != null) {
-            UIViewRoot viewRoot = facesContext.getViewRoot();
-            if (viewRoot != null) {
-                Map<String, Object> instanceMap = viewRoot.getViewMap(false);
-                if (instanceMap != null) {
-                    Map<Contextual, ViewScopeContextObject> contextMap = getContextMap(instanceMap, false);
-                    if (contextMap != null) {
-                        destroyViewScopedBeans(instanceMap, contextMap);
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Destroy the view scoped beans for the given instance and context map.
-     *
-     * @param instanceMap the instance map.
-     * @param contextMap the context map.
-     */
-    private static void destroyViewScopedBeans(Map<String, Object> instanceMap, Map<Contextual, ViewScopeContextObject> contextMap) {
-        ArrayList<String> removalNameList = new ArrayList<String>();
-
-        if (contextMap != null) {
-            for (Map.Entry<Contextual, ViewScopeContextObject> entry : contextMap.entrySet()) {
-                Contextual contextual = entry.getKey();
-                ViewScopeContextObject contextObject = entry.getValue();
-                CreationalContext creationalContext = contextObject.getCreationalContext();
-                contextual.destroy(instanceMap.get(contextObject.getName()), creationalContext);
-                removalNameList.add(contextObject.getName());
-            }
-
-            Iterator<String> removalNames = removalNameList.iterator();
-            while (removalNames.hasNext()) {
-                String name = removalNames.next();
-                instanceMap.remove(name);
-            }
-        }
-    }
 
     /**
      * Get the ViewScoped bean for the given contextual.
@@ -165,15 +100,12 @@ public class ViewScopeContext implements Context, Serializable {
         assertNotReleased();
 
         T result = null;
-
+        
         FacesContext facesContext = FacesContext.getCurrentInstance();
         if (facesContext != null) {
-            UIViewRoot viewRoot = facesContext.getViewRoot();
-            if (viewRoot != null) {
-                Map<String, Object> viewMap = viewRoot.getViewMap(false);
-                if (viewMap != null) {
-                    result = getFromInstanceMap(viewMap, contextual);
-                }
+            ViewScopeManager manager = ViewScopeManager.getInstance(facesContext);
+            if (manager != null) {
+                result = manager.getContextManager().getBean(facesContext, contextual);
             }
         }
 
@@ -199,139 +131,15 @@ public class ViewScopeContext implements Context, Serializable {
         if (result == null) {
             FacesContext facesContext = FacesContext.getCurrentInstance();
             if (facesContext != null) {
-                UIViewRoot viewRoot = facesContext.getViewRoot();
-                if (viewRoot != null) {
-                    Map<String, Object> instanceMap = viewRoot.getViewMap();
-                    if (instanceMap != null) {
-                        Map<Contextual, ViewScopeContextObject> contextMap = getContextMap(instanceMap);
-                        synchronized (instanceMap) {
-                            result = getFromInstanceMap(instanceMap, contextual);
-                            if (result == null) {
-                                if (LOGGER.isLoggable(Level.FINEST)) {
-                                    LOGGER.log(Level.FINEST, "Creating bean for @ViewScoped bean with name: {0}",
-                                            contextual.toString());
-                                }
-
-                                result = contextual.create(creational);
-
-                                if (LOGGER.isLoggable(Level.FINEST)) {
-                                    LOGGER.log(Level.FINEST, "Created bean: {0} for @ViewScoped bean with name: {1}",
-                                            new Object[]{result, contextual.toString()});
-                                }
-
-                                if (result != null) {
-                                    String name = getName(result);
-                                    instanceMap.put(name, result);
-                                    contextMap.put(contextual, new ViewScopeContextObject(contextual, creational, name));
-                                }
-                            }
-                        }
-                    }
+                ViewScopeManager manager = ViewScopeManager.getInstance(facesContext);
+                result = (T) manager.getContextManager().getBean(facesContext, contextual);
+                if (result == null) {
+                    result = (T) manager.getContextManager().createBean(facesContext, contextual, creational);
                 }
             }
         }
 
         return result;
-    }
-
-    /**
-     * Get the context map.
-     *
-     * @param instanceMap the instance map.
-     * @return the context map.
-     */
-    private static Map<Contextual, ViewScopeContextObject> getContextMap(Map<String, Object> instanceMap) {
-        return getContextMap(instanceMap, true);
-    }
-
-    /**
-     * Get the context map.
-     *
-     * @param instanceMap the instance map.
-     * @param create flag to indicate if we are creating the context map.
-     * @return the context map.
-     */
-    private static Map<Contextual, ViewScopeContextObject> getContextMap(Map<String, Object> instanceMap, boolean create) {
-        Map<Contextual, ViewScopeContextObject> result = null;
-
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        if (facesContext != null) {
-            ExternalContext externalContext = facesContext.getExternalContext();
-            if (externalContext != null) {
-                Map<String, Object> sessionMap = externalContext.getSessionMap();
-                Map<Object, Map<Contextual, ViewScopeContextObject>> activeViewScopeContexts =
-                        (Map<Object, Map<Contextual, ViewScopeContextObject>>) sessionMap.get(ACTIVE_VIEW_SCOPE_CONTEXTS);
-
-                if (activeViewScopeContexts == null && create) {
-                    synchronized (sessionMap) {
-                        activeViewScopeContexts = new ConcurrentHashMap<Object, Map<Contextual, ViewScopeContextObject>>();
-                        sessionMap.put(ACTIVE_VIEW_SCOPE_CONTEXTS, activeViewScopeContexts);
-                    }
-                }
-
-                if (activeViewScopeContexts != null && create) {
-                    synchronized (activeViewScopeContexts) {
-                        if (!activeViewScopeContexts.containsKey(System.identityHashCode(instanceMap)) && create) {
-                            activeViewScopeContexts.put(System.identityHashCode(instanceMap), new ConcurrentHashMap<Contextual, ViewScopeContextObject>());
-                        }
-                    }
-                }
-                
-                if (activeViewScopeContexts != null) {
-                    result = activeViewScopeContexts.get(System.identityHashCode(instanceMap));
-                }
-            }
-        }
-        
-        return result;
-    }
-
-    /**
-     * Get the value from the instance view map (or null if not found).
-     *
-     * @param <T> the type.
-     * @param instanceMap the instance map.
-     * @param contextual the contextual.
-     * @return the value or null if not found.
-     */
-    private <T> T getFromInstanceMap(Map<String, Object> instanceMap, Contextual<T> contextual) {
-        T result = null;
-
-        if (LOGGER.isLoggable(Level.FINEST)) {
-            LOGGER.log(Level.FINEST, "Getting value for @ViewScoped bean with name: {0}", contextual.toString());
-        }
-
-        Map<Contextual, ViewScopeContextObject> contextMap = getContextMap(instanceMap);
-        if (contextMap != null) {
-            ViewScopeContextObject contextObject = contextMap.get(contextual);
-            if (contextObject != null) {
-                result = (T) instanceMap.get(contextObject.getName());
-            }
-        }
-
-        if (LOGGER.isLoggable(Level.FINEST)) {
-            LOGGER.log(Level.FINEST, "Found value: {0} for @ViewScoped bean with name: {1}",
-                    new Object[]{result, contextual.toString()});
-        }
-
-        return result;
-    }
-
-    /**
-     * Get the name of the bean for the given object.
-     *
-     * @param object the object.
-     * @return the name.
-     */
-    private String getName(Object object) {
-        String name = object.getClass().getSimpleName().substring(0, 1).toLowerCase()
-                + object.getClass().getSimpleName().substring(1);
-
-        Named named = object.getClass().getAnnotation(Named.class);
-        if (named != null && named.value() != null && !named.value().trim().equals("")) {
-            name = named.value();
-        }
-        return name;
     }
 
     /**
@@ -362,41 +170,5 @@ public class ViewScopeContext implements Context, Serializable {
         }
 
         return result;
-    }
-
-    /**
-     * Called as part of session cleanup.
-     *
-     * <p> See WebappLifecycleListener for more information. </p>
-     *
-     * <p> ASSUMPTION: this method needs to be called before the old style
-     * ViewScoped beans are cleaned up as part of the session cleanup. </p>
-     *
-     * @param hse the event.
-     */
-    public static void sessionDestroyed(HttpSessionEvent hse) {
-        if (LOGGER.isLoggable(Level.FINEST)) {
-            LOGGER.log(Level.FINEST, "Cleaning up session for @ViewScoped CDI beans");
-        }
-
-        HttpSession session = hse.getSession();
-
-        Map<Object, Map<Contextual, ViewScopeContextObject>> activeViewScopeContexts =
-                (Map<Object, Map<Contextual, ViewScopeContextObject>>) session.getAttribute(ACTIVE_VIEW_SCOPE_CONTEXTS);
-
-        if (activeViewScopeContexts != null) {
-            Map<String, Object> activeViewMaps = (Map<String, Object>) session.getAttribute("com.sun.faces.activeViewMaps");
-            if (activeViewMaps != null) {
-                Iterator<Object> activeViewMapsIterator = activeViewMaps.values().iterator();
-                while(activeViewMapsIterator.hasNext()) {
-                    Map<String, Object> instanceMap = (Map<String, Object>) activeViewMapsIterator.next();
-                    Map<Contextual, ViewScopeContextObject> contextMap = activeViewScopeContexts.get(System.identityHashCode(instanceMap));
-                    destroyViewScopedBeans(instanceMap, contextMap);
-                }
-            }
-
-            activeViewScopeContexts.clear();
-            session.removeAttribute(ACTIVE_VIEW_SCOPE_CONTEXTS);
-        }
     }
 }

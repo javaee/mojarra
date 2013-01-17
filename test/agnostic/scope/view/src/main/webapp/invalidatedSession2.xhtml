@@ -12,7 +12,7 @@
     <h:body>
         <h:form id="form">
             Local Count: <h:outputText value="#{invalidated2Bean.count}"/> <br/>
-            App Count: <h:outputText value="#{applicationScope['appCount']}"/> <br/>
+            Invalidated: <h:outputText value="#{applicationScope['com.sun.faces.test.agnostic.scope.view.Invalidated2']}"/> <br/>
             <h:commandButton id="button" action="#{invalidated2Bean.doInvalidate}" value="Invalidate session"/>
         </h:form>
     </h:body>
