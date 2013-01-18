@@ -45,6 +45,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.junit.After;
 import org.junit.Before;
 import static org.junit.Assert.*;
+import org.junit.Test;
 
 public class Issue2255IT {
 
@@ -67,6 +68,7 @@ public class Issue2255IT {
     /**
      * Test div.
      */
+    @Test
     public void testBehaviorState() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/divInComposite.xhtml");
         assertTrue(page.asText().contains("false"));
