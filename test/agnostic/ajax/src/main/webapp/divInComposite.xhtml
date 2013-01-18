@@ -2,7 +2,7 @@
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -47,24 +47,20 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:mycomp="http://java.sun.com/jsf/composite/mycomp">
-
+	xmlns:divInComposite="http://java.sun.com/jsf/composite/divInComposite">
     <h:head>
     </h:head>
-
     <h:body>
-        <mycomp:cc id="cc">
+        <divInComposite:component id="cc">
             <h:form id="form" >
                <fieldset>
                    <legend>Test Ajax Composite bug</legend>
-                   <h:selectBooleanCheckbox id="test" value="#{testBean.test}">
+                   <h:selectBooleanCheckbox id="test" value="#{divInCompositeBean.test}">
                       <f:ajax render="output"/>
                    </h:selectBooleanCheckbox>
-
-                   <h:outputText value = "#{testBean.test}" id="output"/>
+                   <h:outputText value = "#{divInCompositeBean.test}" id="output"/>
                </fieldset>
             </h:form>
-        </mycomp:cc>
+        </divInComposite:component>
     </h:body>
-
 </html>
