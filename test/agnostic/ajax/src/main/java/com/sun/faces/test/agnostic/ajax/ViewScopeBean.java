@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -38,19 +38,23 @@
  * holder.
  */
 
-package i_jsf_1975;
+package com.sun.faces.test.agnostic.ajax;
 
 import java.io.Serializable;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 
-public class TestBean1 implements Serializable{
+@ManagedBean
+@ViewScoped
+public class ViewScopeBean implements Serializable{
 
-    public TestBean1() {
+    public ViewScopeBean() {
 
         if (null == System.getProperty("RESULT")) {
-            System.setProperty("RESULT", "TESTBEAN1() CALLED ");
+            System.setProperty("RESULT", "VIEWCOPEBEAN() CALLED ");
         } else {
             String result = System.getProperty("RESULT");
-            result += "TESTBEAN1() CALLED ";
+            result += "VIEWSCOPEBEAN() CALLED ";
             System.setProperty("RESULT", result);
         }
 
@@ -67,7 +71,7 @@ public class TestBean1 implements Serializable{
     // Reset property to the single constructor load so we can determine if the 
     // constructor is called more than once.
     public void reset() {
-        System.setProperty("RESULT", "TESTBEAN1() CALLED ");
+        System.setProperty("RESULT", "VIEWSCOPEBEAN() CALLED ");
     }
     
 }

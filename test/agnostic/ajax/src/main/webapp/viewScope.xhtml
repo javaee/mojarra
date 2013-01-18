@@ -2,7 +2,7 @@
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -40,38 +40,47 @@
 
 -->
 
-<web-app xmlns="http://java.sun.com/xml/ns/javaee" 
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-  <display-name>TestJSFServlet</display-name>
+<html>
+<f:view contentType="text/html" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:composite="http://java.sun.com/jsf/composite/composite">
 
-  <listener>
-    <listener-class>com.sun.faces.config.ConfigureListener</listener-class>
-  </listener>
+    <h:head>
+    </h:head>
 
-  <!-- Faces Servlet -->
-  <servlet>
-    <servlet-name>FacesServlet</servlet-name>
-    <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
-    <load-on-startup>-1</load-on-startup>
-  </servlet>
+    <h:body>
+        <h:form id="form" >
+            <h:commandButton id="ajax" value="Make an Ajax request">
+                <f:ajax execute="form" render="form out"/>
+            </h:commandButton>
 
-  <!-- Faces Servlet Mapping -->
+            <br/>
+            <br/>
 
-  <context-param>
-	<param-name>javax.faces.FACELETS_LIBRARIES</param-name>
-	<param-value>/WEB-INF/composite-behavior.taglib.xml</param-value>
-  </context-param>
+            <composite:cc val="#{viewScopeBean.beanVal}"/>
 
-  <context-param>
-    <param-name>javax.faces.PROJECT_STAGE</param-name>
-    <param-value>Development</param-value>
-  </context-param>
-  
-  <servlet-mapping>
-    <servlet-name>FacesServlet</servlet-name>
-    <url-pattern>/faces/*</url-pattern>
-  </servlet-mapping>
+            <br/>
+            <br/>
 
-</web-app>
+            <composite:ccAttrRequired val="#{viewScopeBean.beanVal}"/>
+
+            <br/>
+            <br/>
+   
+            <h:outputText id="out" />
+
+            <br/>
+            <br/>
+            
+            <h:commandButton id="reset" value="reset" action="#{viewScopeBean.reset}"/>
+
+        </h:form>
+    </h:body>
+
+</f:view>
+</html>
