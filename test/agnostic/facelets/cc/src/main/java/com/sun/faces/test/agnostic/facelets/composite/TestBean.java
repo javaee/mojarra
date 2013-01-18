@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -38,29 +38,42 @@
  * holder.
  */
 
-package i_jsf_2213;
+package com.sun.faces.test.agnostic.facelets.composite;
 
-import javax.faces.component.behavior.ClientBehaviorBase;
-import javax.faces.component.behavior.ClientBehaviorContext;
-import javax.faces.component.behavior.FacesBehavior;
-import javax.faces.component.UIOutput;
-import javax.faces.context.FacesContext;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 
-@FacesBehavior("compositeBehavior")
-public class CompositeBehavior extends ClientBehaviorBase {
+@ManagedBean
+@SessionScoped
+public class TestBean {
+    public String getMyname() {
+        return myname;
+    }
 
-    @Override
-    public String getScript(ClientBehaviorContext behaviorContext) {
-        String result = "";
+    public String getTargets() {
+        return targets;
+    }
 
-        if ("action".equals(behaviorContext.getEventName())) {
-            result = "document.write(\"compositeBehavior script rendered\");";
-        }
+    public String getTargetsEL() {
+        return targetsEL;
+    }
 
-        FacesContext context = FacesContext.getCurrentInstance();
-        UIOutput comp = (UIOutput)context.getViewRoot().findComponent("form:out");
-        comp.setValue(result);
+    public String getEvent() {
+        return event;
+    }
 
-        return result;
+    public boolean isMydefault() {
+        return mydefault;
+    }
+
+    private String myname = "ok";
+    private String targets = "cancel sub:command";
+    private String targetsEL = "cancelEL sub:commandEL";
+    private String event = "action";
+    private boolean mydefault = true;
+
+    public String doAction() {
+        System.out.println("TestBean#doAction");
+        return null;
     }
 }

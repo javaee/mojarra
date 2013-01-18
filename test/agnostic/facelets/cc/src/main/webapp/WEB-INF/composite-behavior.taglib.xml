@@ -2,7 +2,7 @@
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -40,34 +40,17 @@
 
 -->
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<facelet-taglib xmlns="http://java.sun.com/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_0.xsd"
+              version="2.0">
+    <namespace>http://mojarra.dev.java.net/composite-behavior</namespace>
 
-<html xmlns="http://www.w3.org/1999/xhtml"
-xmlns:h="http://java.sun.com/jsf/html"
-xmlns:f="http://java.sun.com/jsf/core"
-xmlns:composite="http://java.sun.com/jsf/composite"
->
+    <tag>
+        <tag-name>behavior</tag-name>
+        <behavior>
+           <behavior-id>compositeBehavior</behavior-id>
+        </behavior>
+    </tag>
 
-<composite:interface name="composite"
-	displayName="BehaviorHandler composite component test">
-	<composite:attribute name="commandAction"
-		method-signature="String f1()">
-	</composite:attribute>
-	<composite:clientBehavior name="#{testBean.myname}"
-		event="#{testBean.event}"
-		targets="#{testBean.targetsEL}" />
-</composite:interface>
-
-<composite:implementation>
-	<h:commandButton id="cancelEL" value="Cancel"/>
-	<f:subview id="sub">
-		<h:panelGroup id="group">
-			<h:commandButton id="commandEL" value="Ok"
-				action="#{cc.attrs.commandAction}">
-			</h:commandButton>
-		</h:panelGroup>
-	</f:subview>
-</composite:implementation>
-
-</html>
+</facelet-taglib>

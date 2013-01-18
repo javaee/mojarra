@@ -2,7 +2,7 @@
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -43,26 +43,31 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html>
-<f:view contentType="text/html" xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:ezb="http://java.sun.com/jsf/composite/ezbehaviors"
-	xmlns:b="http://mojarra.dev.java.net/composite-behavior">
-	<h:form id="form">
-		<ezb:compositeTest id="compositeTest" commandAction="#{testBean.doAction}">
-			<b:behavior event="ok" />
-		</ezb:compositeTest>
-                <br/>
-                <br/>
-		<ezb:compositeTestEL id="compositeTestEL" commandAction="#{testBean.doAction}">
-			<b:behavior event="ok" />
-		</ezb:compositeTestEL>
-                <br/>
-		<h:commandButton action="refresh" value="refresh" id="refresh" />
-                <br/>
-                <h:outputText id="out" />
-	</h:form>
-</f:view>
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:composite="http://java.sun.com/jsf/composite"
+>
+
+<composite:interface name="composite"
+	displayName="BehaviorHandler composite component test">
+	<composite:attribute name="commandAction"
+		method-signature="String f1()">
+	</composite:attribute>
+	<composite:clientBehavior name="#{testBean.myname}"
+		event="action"
+		targets="#{testBean.targets}" />
+</composite:interface>
+
+<composite:implementation>
+	<h:commandButton id="cancel" value="Cancel"/>
+	<f:subview id="sub">
+		<h:panelGroup id="group">
+			<h:commandButton id="command" value="Ok"
+				action="#{cc.attrs.commandAction}">
+			</h:commandButton>
+		</h:panelGroup>
+	</f:subview>
+</composite:implementation>
+
 </html>

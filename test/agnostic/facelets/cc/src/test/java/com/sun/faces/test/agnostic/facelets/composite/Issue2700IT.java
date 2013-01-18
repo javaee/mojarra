@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,43 +37,51 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.agnostic.facelets.composite;
 
-package i_jsf_2213;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-@ManagedBean
-@SessionScoped
-public class TestBean {
-    public String getMyname() {
-        return myname;
+public class Issue2700IT {
+
+    private String webUrl;
+    private WebClient webClient;
+
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-    public String getTargets() {
-        return targets;
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
     }
 
-    public String getTargetsEL() {
-        return targetsEL;
-    }
+    @Test
+    public void testCompositeBehavior() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/clientBehavior.xhtml");
 
-    public String getEvent() {
-        return event;
-    }
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form:compositeTest:cancel");
+        page = button.click();
+        assertTrue(page.asText().contains("compositeBehavior script rendered"));
 
-    public boolean isMydefault() {
-        return mydefault;
-    }
+        button = (HtmlSubmitInput) page.getElementById("form:compositeTest:sub:command");
+        page = button.click();
+        assertTrue(page.asText().contains("compositeBehavior script rendered"));
 
-    private String myname = "ok";
-    private String targets = "cancel sub:command";
-    private String targetsEL = "cancelEL sub:commandEL";
-    private String event = "action";
-    private boolean mydefault = true;
+        button = (HtmlSubmitInput) page.getElementById("form:compositeTestEL:cancelEL");
+        page = button.click();
+        assertTrue(page.asText().contains("compositeBehavior script rendered"));
 
-    public String doAction() {
-        System.out.println("TestBean#doAction");
-        return null;
-    }
+        button = (HtmlSubmitInput) page.getElementById("form:compositeTestEL:sub:commandEL");
+        page = button.click();
+        assertTrue(page.asText().contains("compositeBehavior script rendered"));
+}
 }
