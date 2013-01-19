@@ -63,6 +63,7 @@
     <modules>
         <module>ajax</module>
         <module>application</module>
+        <module>component</module>
         <module>composite</module>
         <module>config</module>
         <module>context</module>
