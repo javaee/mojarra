@@ -64,7 +64,6 @@ public class Issue2405IT {
     }
 
     @Test
-    @Ignore
     public void testFormOmitted() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/issue2405.xhtml");
         String text = page.asText();
