@@ -96,7 +96,6 @@ public class BasicRenderIT {
     }
 
     @Test
-    @Ignore
     public void testFlowEntryExit() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
 
