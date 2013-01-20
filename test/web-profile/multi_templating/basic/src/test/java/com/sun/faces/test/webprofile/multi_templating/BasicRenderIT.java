@@ -96,6 +96,7 @@ public class BasicRenderIT {
     }
 
     @Test
+    @Ignore
     public void testBasicRender() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
 

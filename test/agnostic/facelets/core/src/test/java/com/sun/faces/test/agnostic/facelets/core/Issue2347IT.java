@@ -71,6 +71,7 @@ public class Issue2347IT {
      * @throws Exception
      */
     @Test
+    @Ignore
     public void testActionListener1() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/actionlistener.xhtml");
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form:buttonParam");
@@ -86,6 +87,7 @@ public class Issue2347IT {
      * @throws Exception
      */
     @Test
+    @Ignore
     public void testActionListener2() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/actionlistener.xhtml");
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form:buttonNoParam");
