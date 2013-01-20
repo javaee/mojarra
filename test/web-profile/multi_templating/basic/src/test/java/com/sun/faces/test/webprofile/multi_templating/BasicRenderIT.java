@@ -96,7 +96,7 @@ public class BasicRenderIT {
     }
 
     @Test
-    public void testFlowEntryExit() throws Exception {
+    public void testBasicRender() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
 
         assertTrue(page.getBody().asText().indexOf("Site design by Xoxiety.com") != -1);
