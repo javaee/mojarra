@@ -136,6 +136,11 @@ public abstract class NavigationCaseWrapper extends NavigationCase implements Fa
     }
 
     @Override
+    public String getToFlowDocumentId(FacesContext context) {
+        return getWrapped().getToFlowDocumentId(context);
+    }
+
+    @Override
     public boolean hasCondition() {
         return getWrapped().hasCondition();
     }

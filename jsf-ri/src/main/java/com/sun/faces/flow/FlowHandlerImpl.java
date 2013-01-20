@@ -41,18 +41,18 @@
 package com.sun.faces.flow;
 
 import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.util.Util;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import javax.el.ELContext;
 import javax.el.MethodExpression;
 import javax.el.ValueExpression;
 import javax.faces.application.ConfigurableNavigationHandler;
 import javax.faces.application.NavigationHandler;
-import javax.faces.component.UIComponent;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.flow.FlowCallNode;
@@ -66,11 +66,17 @@ public class FlowHandlerImpl extends FlowHandler {
     public FlowHandlerImpl() {
         WebConfiguration config = WebConfiguration.getInstance();
         flowFeatureIsEnabled = config.isHasFlows();
-        flows = new ConcurrentHashMap<String, Flow>();
+        flows = new ConcurrentHashMap<String, Map<String, Flow>>();
+        flowsByFlowId = new ConcurrentHashMap<String, List<Flow>>();
     }
     
     private boolean flowFeatureIsEnabled;
-    private Map<String, Flow> flows;
+
+    // key: definingDocumentId, value: Map<flowId, Flow>
+    private Map<String, Map<String, Flow>> flows;
+    
+    // key: flowId, List<Flow>
+    private Map<String, List<Flow>> flowsByFlowId;
 
     @Override
     public Map<Object, Object> getCurrentFlowScope() {
@@ -78,8 +84,17 @@ public class FlowHandlerImpl extends FlowHandler {
     }
     
     @Override
-    public Flow getFlow(FacesContext context, Object definingDocument, String id) {
-        Flow result = flows.get(id);
+    public Flow getFlow(FacesContext context, String definingDocumentId, String id) {
+        Flow result = null;
+        Map<String, Flow> mapsForDefiningDocument = flows.get(definingDocumentId);
+        
+        if (null == mapsForDefiningDocument) {
+            mapsForDefiningDocument = flows.get(id);
+        }
+        
+        if (null != mapsForDefiningDocument) {
+            result = mapsForDefiningDocument.get(id);
+        }
         
         return result;
     }
@@ -89,29 +104,45 @@ public class FlowHandlerImpl extends FlowHandler {
             throw new IllegalStateException();
         }
         Flow result = null;
-        for (Flow cur : flows.values()) {
-            for (ViewNode curView : cur.getViews()) {
-                if (id.equals(curView.getId())) {
-                    result = cur;
-                    break;
+        List<Flow> flowsForFlowId = flowsByFlowId.get(id);
+        if (null != flowsForFlowId) {
+            for (Flow cur : flowsForFlowId) {
+                for (ViewNode curView : cur.getViews()) {
+                    if (id.equals(curView.getId())) {
+                        result = cur;
+                    }
                 }
             }
-            if (null != result) {
-                break;
-            }
         }
-        
+
         return result;
     }
     
     
 
     @Override
-    public void addFlow(FacesContext context, Object definingDocument, Flow toAdd) {
-        if (null == toAdd || null == toAdd.getId() || 0 == toAdd.getId().length()) {
+    public void addFlow(FacesContext context, Flow toAdd) {
+        String id = toAdd.getId();
+        if (null == toAdd || null == id || 0 == id.length()) {
             throw new IllegalArgumentException();
         }
-        flows.put(toAdd.getId(), toAdd);
+        Map<String, Flow> mapsForDefiningDocument = flows.get(toAdd.getDefiningDocumentId());
+        if (null == mapsForDefiningDocument) {
+            mapsForDefiningDocument = new ConcurrentHashMap<String, Flow>();
+            flows.put(toAdd.getDefiningDocumentId(), mapsForDefiningDocument);
+        }
+        
+        mapsForDefiningDocument.put(id, toAdd);
+
+        // Make it possible for the "transition" method to map from view nodes
+        // to flow instances.
+        List<Flow> flowsWithId = flowsByFlowId.get(id);
+        if (null == flowsWithId) {
+            flowsWithId = new CopyOnWriteArrayList<Flow>();
+            flowsByFlowId.put(id, flowsWithId);
+        }
+        flowsWithId.add(toAdd);
+        
         NavigationHandler navigationHandler = context.getApplication().getNavigationHandler();
         if (navigationHandler instanceof ConfigurableNavigationHandler) {
             ((ConfigurableNavigationHandler)navigationHandler).inspectFlow(context, toAdd);
@@ -119,11 +150,13 @@ public class FlowHandlerImpl extends FlowHandler {
     }
 
     @Override
-    public boolean isActive(FacesContext context, Object definingDocument, String id) {
+    public boolean isActive(FacesContext context, String definingDocumentId, 
+                            String id) {
         boolean result = false;
         Deque<Flow> flowStack = getFlowStack(context);
         for (Flow cur : flowStack) {
-            if (id.equals(cur.getId())) {
+            if (id.equals(cur.getId()) &&
+                definingDocumentId.equals(cur.getDefiningDocumentId())) {
                 result = true;
                 break;
             }
@@ -148,17 +181,12 @@ public class FlowHandlerImpl extends FlowHandler {
     
     @Override
     @SuppressWarnings(value="")
-    public Flow transition(FacesContext context, UIComponent src, 
-    UIComponent target, FlowCallNode outboundCallNode) {
-        Flow newFlow = null;
+    public void transition(FacesContext context, Flow sourceFlow, 
+                           Flow targetFlow, FlowCallNode outboundCallNode) {
         if (!flowFeatureIsEnabled) {
-            return newFlow;
+           return;
         }
         
-        String  sourceFlowId = Util.getFlowIdFromComponent(context, src),
-                targetFlowId = Util.getFlowIdFromComponent(context, target);
-        Flow sourceFlow = this.getFlowByNodeId(sourceFlowId),
-             targetFlow = this.getFlowByNodeId(targetFlowId);
         // there has to be a better way to structure this logic
         if (!flowsEqual(sourceFlow, targetFlow)) {
             // Do we have an outboundCallNode?
@@ -192,7 +220,6 @@ public class FlowHandlerImpl extends FlowHandler {
             performPops(context, sourceFlow, targetFlow);
             if (null != targetFlow) {
                 pushFlow(context, targetFlow);
-                newFlow = targetFlow;
             }
             // Now the new flow is active, it's time to evaluate the inbound
             // parameters.
@@ -209,8 +236,6 @@ public class FlowHandlerImpl extends FlowHandler {
                 }
             }
         } 
-        return newFlow;
-        
     }
     
     private void performPops(FacesContext context, Flow sourceFlow, Flow targetFlow) {
@@ -222,7 +247,7 @@ public class FlowHandlerImpl extends FlowHandler {
                 
         // case 1: target is null
         if (null == targetFlow) {
-            popAll(context);
+            popFlow(context);
             return;
         } 
         

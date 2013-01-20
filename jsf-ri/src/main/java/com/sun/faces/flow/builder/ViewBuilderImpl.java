@@ -43,7 +43,6 @@ package com.sun.faces.flow.builder;
 import com.sun.faces.flow.ViewNodeImpl;
 import java.util.List;
 import javax.faces.flow.ViewNode;
-import javax.faces.flow.builder.NodeBuilder;
 import javax.faces.flow.builder.ViewBuilder;
 
 public class ViewBuilderImpl extends ViewBuilder {
@@ -59,7 +58,8 @@ public class ViewBuilderImpl extends ViewBuilder {
         viewNodes.add(viewNode);
     }
     
-    public NodeBuilder markAsStartNode() {
+    @Override
+    public ViewBuilder markAsStartNode() {
         root._getFlow().setStartNodeId(viewNode.getId());
         return this;
     }

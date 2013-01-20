@@ -54,18 +54,21 @@ import javax.faces.flow.FlowScoped;
 public class FlowCDIExtension implements Extension {
 
 
-   private Map<Contextual<?>, String> flowScopedBeanFlowIds;
+   private Map<Contextual<?>, FlowCDIContext.FlowBeanInfo> flowScopedBeanFlowIds;
 
 
    public FlowCDIExtension() {
-       flowScopedBeanFlowIds = new ConcurrentHashMap<Contextual<?>, String>();
+       flowScopedBeanFlowIds = new ConcurrentHashMap<Contextual<?>, FlowCDIContext.FlowBeanInfo>();
 
    }
    
    public void processBean(@Observes ProcessBean<?> event) {
        FlowScoped flowScoped = event.getAnnotated().getAnnotation(FlowScoped.class);
        if (null != flowScoped) {
-           flowScopedBeanFlowIds.put(event.getBean(), flowScoped.id());
+           FlowCDIContext.FlowBeanInfo fbi = new FlowCDIContext.FlowBeanInfo();
+           fbi.definingDocumentId = flowScoped.definingDocumentId();
+           fbi.id = flowScoped.id();
+           flowScopedBeanFlowIds.put(event.getBean(), fbi);
        }
    }
 

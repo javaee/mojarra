@@ -42,7 +42,6 @@ package com.sun.faces.flow.builder;
 
 import com.sun.faces.facelets.flow.FlowNavigationCase;
 import com.sun.faces.flow.SwitchNodeImpl;
-import javax.faces.flow.builder.NodeBuilder;
 import javax.faces.flow.builder.SwitchBuilder;
 import javax.faces.flow.builder.SwitchCaseBuilder;
 
@@ -72,7 +71,7 @@ public class SwitchBuilderImpl extends SwitchBuilder {
     }
 
     @Override
-    public NodeBuilder markAsStartNode() {
+    public SwitchBuilderImpl markAsStartNode() {
         root._getFlow().setStartNodeId(switchId);
         return this;
     }

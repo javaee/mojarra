@@ -43,12 +43,8 @@ package com.sun.faces.test.webprofile.flow.intermediate;
 import java.io.Serializable;
 import java.util.Map;
 import javax.faces.context.FacesContext;
-import javax.faces.flow.FlowScoped;
 import javax.faces.flow.FlowHandler;
-import javax.inject.Named;
 
-@Named
-@FlowScoped(id="maintain-customer-record")
 public class MaintainCustomerBean implements Serializable
 {
    public MaintainCustomerBean() {

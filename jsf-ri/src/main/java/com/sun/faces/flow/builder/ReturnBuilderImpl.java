@@ -43,7 +43,6 @@ package com.sun.faces.flow.builder;
 import com.sun.faces.facelets.flow.FlowNavigationCase;
 import com.sun.faces.flow.ReturnNodeImpl;
 import javax.el.ValueExpression;
-import javax.faces.flow.builder.NodeBuilder;
 import javax.faces.flow.builder.ReturnBuilder;
 
 public class ReturnBuilderImpl extends ReturnBuilder {
@@ -57,7 +56,7 @@ public class ReturnBuilderImpl extends ReturnBuilder {
     }
 
     @Override
-    public NodeBuilder markAsStartNode() {
+    public ReturnBuilder markAsStartNode() {
         root._getFlow().setStartNodeId(id);
         return this;
     }

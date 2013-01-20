@@ -40,6 +40,7 @@
  */
 package com.sun.faces.flow;
 
+import com.sun.faces.util.Util;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -63,6 +64,7 @@ public class FlowImpl extends Flow {
     // <editor-fold defaultstate="collapsed" desc="Instance variables">    
     
     private String id;
+    private String definingDocumentId;
     private String startNodeId;
     private CopyOnWriteArrayList<ViewNode> _views;
     private List<ViewNode> views;
@@ -76,7 +78,7 @@ public class FlowImpl extends Flow {
     private Map<String, SwitchNode> switches;
     private ConcurrentHashMap<String, FlowCallNode> _facesFlowCalls;
     private Map<String, FlowCallNode> facesFlowCalls;
-    private ConcurrentHashMap<String, FlowCallNode> facesFlowCallsByTargetFlowId;
+    private ConcurrentHashMap<String, FlowCallNode> _facesFlowCallsByTargetFlowId;
     private MethodExpression initializer;
     private MethodExpression finalizer;
     private boolean hasBeenInitialized = false;
@@ -94,7 +96,7 @@ public class FlowImpl extends Flow {
         switches = Collections.unmodifiableMap(_switches);
         _facesFlowCalls = new ConcurrentHashMap<String, FlowCallNode>();
         facesFlowCalls = Collections.unmodifiableMap(_facesFlowCalls);
-        facesFlowCallsByTargetFlowId = new ConcurrentHashMap<String, FlowCallNode>();
+        _facesFlowCallsByTargetFlowId = new ConcurrentHashMap<String, FlowCallNode>();
         _views = new CopyOnWriteArrayList<ViewNode>();
         views = Collections.unmodifiableList(_views);
         _methodCalls = new CopyOnWriteArrayList<MethodCallNode>();
@@ -163,8 +165,16 @@ public class FlowImpl extends Flow {
         return id;
     }
 
-    public void setId(String id) {
+    @Override
+    public String getDefiningDocumentId() {
+        return definingDocumentId;
+    }
+
+    public void setId(String definingDocumentId, String id) {
+        Util.notNull("definingDocumentId", definingDocumentId);
+        Util.notNull("flowId", id);
         this.id = id;
+        this.definingDocumentId = definingDocumentId;
     }
 
     @Override
@@ -251,7 +261,7 @@ public class FlowImpl extends Flow {
             FacesContext context = FacesContext.getCurrentInstance();
             this.init(context);
         }
-        FlowCallNode result = facesFlowCallsByTargetFlowId.get(targetFlowId);
+        FlowCallNode result = _facesFlowCallsByTargetFlowId.get(targetFlowId);
         
         return result;
     }
@@ -342,7 +352,7 @@ public class FlowImpl extends Flow {
         for (Map.Entry<String,FlowCallNode> cur : _facesFlowCalls.entrySet()) {
             curNode = cur.getValue();
             curTargetFlowId = curNode.getCalledFlowId(context);
-            facesFlowCallsByTargetFlowId.put(curTargetFlowId, curNode);
+            _facesFlowCallsByTargetFlowId.put(curTargetFlowId, curNode);
         }
     }
     

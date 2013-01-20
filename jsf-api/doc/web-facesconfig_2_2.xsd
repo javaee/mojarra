@@ -2236,6 +2236,19 @@ which must contain exactly one <code>&lt;faces-flow-id&gt;</code> element.</p>
       </xsd:documentation>
     </xsd:annotation>
     <xsd:sequence>
+      <xsd:element name="flow-document-id"
+                   type="javaee:java-identifierType"
+                   minOccurs="0"
+                   maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation><![CDATA[
+
+           <p>The document id of the called flow.</p>
+            
+          ]]></xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+
       <xsd:element name="faces-flow-id"
                    type="javaee:java-identifierType"
                    minOccurs="0"
@@ -2248,7 +2261,6 @@ which must contain exactly one <code>&lt;faces-flow-id&gt;</code> element.</p>
           ]]></xsd:documentation>
         </xsd:annotation>
       </xsd:element>
-
         
     </xsd:sequence>
   </xsd:complexType>
@@ -2648,6 +2660,18 @@ represents the node id to which control will be passed.</p>
             
           ]]></xsd:documentation>
         </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="to-flow-document-id"
+                     type="javaee:java-identifierType"
+                     minOccurs="0"
+                     maxOccurs="1">
+          <xsd:annotation>
+            <xsd:documentation><![CDATA[
+
+             <p>The document id of the called flow.</p>
+            
+            ]]></xsd:documentation>
+          </xsd:annotation>
       </xsd:element>
       <xsd:element name="redirect"
                    type="javaee:faces-config-redirectType"

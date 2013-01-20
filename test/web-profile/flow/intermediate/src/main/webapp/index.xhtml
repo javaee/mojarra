@@ -44,7 +44,8 @@
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
     <head>
         <title>Outside of flow</title>
     </head>
@@ -52,7 +53,8 @@
         <h1>Outside of flow</h1>
         
     <h:form prependId="false">
-        <p><h:commandButton id="maintain-customer-record" value="Enter flow" action="maintain-customer-record" /></p>
+        <p style="background-color:red;"><h:commandButton id="maintain-customer-record" value="Enter XML Defined flow" action="maintain-customer-record" /></p>
+        <p style="background-color:blue;"><h:commandButton id="maintain-customer-record-java" value="Enter Java Defined flow" action="maintain-customer-record-java"/></p>
     </h:form>
 </body>
 </html>

@@ -99,6 +99,13 @@ public abstract class NavigationHandler {
     public abstract void handleNavigation(FacesContext context,
                                           String fromAction,
                                           String outcome);
+    
+    public void handleNavigation(FacesContext context,
+            String fromAction,
+            String outcome,
+            String toFlowDocumentId) {
+        this.handleNavigation(context, fromAction, outcome);
+    }
 
 
 }

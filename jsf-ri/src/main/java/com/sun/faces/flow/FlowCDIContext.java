@@ -68,14 +68,19 @@ public class FlowCDIContext implements Context, Serializable {
     
     private static final long serialVersionUID = -7144653402477623609L;
     
-    private transient Map<Contextual<?>, String> flowIds;
+    private transient Map<Contextual<?>, FlowBeanInfo> flowIds;
     
     private static final FlowScopeMapKey FLOW_SCOPE_MAP_KEY = new FlowScopeMapKey();
     
+    static class FlowBeanInfo {
+        String definingDocumentId;
+        String id;
+    }
+    
     // This should be vended from a factory for decoration purposes.
     
-    public FlowCDIContext(Map<Contextual<?>, String> flowIds) {
-        this.flowIds = new ConcurrentHashMap<Contextual<?>, String>(flowIds);
+    public FlowCDIContext(Map<Contextual<?>, FlowBeanInfo> flowIds) {
+        this.flowIds = new ConcurrentHashMap<Contextual<?>, FlowBeanInfo>(flowIds);
     }
     
     private static final String PER_SESSION_BEAN_MAP_LIST = FlowCDIContext.class.getPackage().getName() + ".PER_SESSION_BEAN_MAP_LIST";
@@ -284,6 +289,7 @@ public class FlowCDIContext implements Context, Serializable {
     
     // <editor-fold defaultstate="collapsed" desc="spi.Context implementation">       
     
+    @Override
     public <T> T get(Contextual<T> contextual, CreationalContext<T> creational) {
         assertNotReleased();
         
@@ -299,9 +305,9 @@ public class FlowCDIContext implements Context, Serializable {
                     
                     FacesContext facesContext = FacesContext.getCurrentInstance();
                     FlowHandler flowHandler = facesContext.getApplication().getFlowHandler();
-                    String flowIdForBean = flowIds.get(contextual);
-                    if (!flowHandler.isActive(facesContext, null, flowIdForBean)) {
-                        throw new ContextNotActiveException("Request to activate bean in flow '" + flowIdForBean + "', but that flow is not active.");
+                    FlowBeanInfo fbi = flowIds.get(contextual);
+                    if (!flowHandler.isActive(facesContext, fbi.definingDocumentId, fbi.id)) {
+                        throw new ContextNotActiveException("Request to activate bean in flow '" + fbi + "', but that flow is not active.");
                     }
 
                     
@@ -319,16 +325,19 @@ public class FlowCDIContext implements Context, Serializable {
 
     }
     
+    @Override
     public <T> T get(Contextual<T> contextual) {
         assertNotReleased();
         
         return (T) getFlowScopedBeanMapForCurrentFlow().get(contextual);
     }
     
+    @Override
     public Class<? extends Annotation> getScope() {
         return FlowScoped.class;
     }
     
+    @Override
     public boolean isActive() {
         return null != getCurrentFlow();
     }

@@ -123,7 +123,7 @@ public class FlowDiscoveryCDIHelper implements Serializable {
                                 LOGGER.log(Level.SEVERE, "Flow builder method {0}() on class {1} returned null.  Ignoring.",
                                         new String [] { curMethod.getName(), beanClass.getName() });
                             } else {
-                                flowHandler.addFlow(context, cur.getDefiningDocument(), toAdd);
+                                flowHandler.addFlow(context, toAdd);
                             }
                         } catch (InstantiationException ex) {
                             LOGGER.log(Level.SEVERE, "Cannot instantiate " + beanClass.getName(), ex);

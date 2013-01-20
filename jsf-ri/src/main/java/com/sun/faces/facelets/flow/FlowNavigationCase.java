@@ -55,6 +55,9 @@ public class FlowNavigationCase extends NavigationCase {
     private String condition;
     private ValueExpression conditionExpr;
     
+    private String toFlowDocumentId;
+    private ValueExpression toFlowDocumentIdExpr;
+    
     // This is the id of the <return> or <switch>
     private String enclosingId;
 
@@ -140,6 +143,25 @@ public class FlowNavigationCase extends NavigationCase {
     @Override
     public String getToViewId(FacesContext context) {
         return super.getToViewId(context);
+    }
+
+    @Override
+    public String getToFlowDocumentId(FacesContext context) {
+        if (toFlowDocumentIdExpr == null) {
+            ExpressionFactory factory =
+                  context.getApplication().getExpressionFactory();
+            toFlowDocumentIdExpr = factory.createValueExpression(context.getELContext(),
+                                                         toFlowDocumentId,
+                                                         String.class);
+        }
+        String result = (String) toFlowDocumentIdExpr.getValue(context.getELContext());
+
+        return result;
+        
+    }
+    
+    public void setToFlowDocumentId(String toFlowDocumentId) {
+        this.toFlowDocumentId = toFlowDocumentId;
     }
     
     @Override

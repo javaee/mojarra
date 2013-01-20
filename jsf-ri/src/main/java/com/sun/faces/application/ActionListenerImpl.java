@@ -79,6 +79,7 @@ public class ActionListenerImpl implements ActionListener {
  
 
     @SuppressWarnings("deprecation")
+    @Override
     public void processAction(ActionEvent event) {
 
         if (LOGGER.isLoggable(Level.FINE)) {
@@ -125,11 +126,19 @@ public class ActionListenerImpl implements ActionListener {
         NavigationHandler navHandler = application.getNavigationHandler();
 
         // Invoke nav handling..
-
-        navHandler.handleNavigation(context,
-                                    (null != binding) ?
-                                    binding.getExpressionString() : null,
-                                    outcome);
+        
+        String toFlowDocumentId = (String) source.getAttributes().get("toFlowDocumentId");
+        if (null == toFlowDocumentId) {
+            navHandler.handleNavigation(context,
+                    (null != binding) ?
+                    binding.getExpressionString() : null,
+                    outcome);
+        } else {
+            navHandler.handleNavigation(context,
+                    (null != binding) ?
+                    binding.getExpressionString() : null,
+                    outcome, toFlowDocumentId);
+        }
 
         // Trigger a switch to Render Response if needed
         context.renderResponse();

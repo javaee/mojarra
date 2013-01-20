@@ -58,8 +58,8 @@ public class FlowCallNodeImpl extends FlowCallNode {
     private Map<String, Parameter> outboundParameters;
 
     public FlowCallNodeImpl(String id, 
-            String calledFlowId, 
             String calledFlowDocumentId, 
+            String calledFlowId, 
             List<Parameter> outboundParametersFromConfig) {
         FacesContext context = FacesContext.getCurrentInstance();
         this.id = id;

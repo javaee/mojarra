@@ -42,6 +42,7 @@ package com.sun.faces.flow.builder;
 
 import com.sun.faces.flow.FlowImpl;
 import com.sun.faces.flow.ParameterImpl;
+import com.sun.faces.util.Util;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.el.MethodExpression;
@@ -105,8 +106,10 @@ public class FlowBuilderImpl extends FlowBuilder {
     // <editor-fold defaultstate="collapsed" desc="Flow-wide Settings">     
     
     @Override
-    public FlowBuilder id(String flowId) {
-        flow.setId(flowId);
+    public FlowBuilder id(String definingDocumentId, String flowId) {
+        Util.notNull("definingDocumentId", definingDocumentId);
+        Util.notNull("flowId", flowId);
+        flow.setId(definingDocumentId, flowId);
         return this;
     }
     
@@ -115,10 +118,24 @@ public class FlowBuilderImpl extends FlowBuilder {
         flow.setInitializer(methodExpression);
         return this;
     }
+
+    @Override
+    public FlowBuilder initializer(String methodExpression) {
+        MethodExpression me = expressionFactory.createMethodExpression(elContext, methodExpression, null, null);
+        flow.setInitializer(me);
+        return this;
+    }
     
     @Override
     public FlowBuilder finalizer(MethodExpression methodExpression) {
         flow.setFinalizer(methodExpression);
+        return this;
+    }
+
+    @Override
+    public FlowBuilder finalizer(String methodExpression) {
+        MethodExpression me = expressionFactory.createMethodExpression(elContext, methodExpression, null, null);
+        flow.setFinalizer(me);
         return this;
     }
     

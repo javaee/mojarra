@@ -46,13 +46,13 @@ import java.util.Map;
 import javax.el.ValueExpression;
 import javax.faces.flow.FlowCallNode;
 import javax.faces.flow.builder.FlowCallBuilder;
-import javax.faces.flow.builder.NodeBuilder;
 
 public class FlowCallBuilderImpl extends FlowCallBuilder {
     
     private FlowBuilderImpl root;
     private String flowCallNodeId;
-    private String flowReference;
+    private String flowDocumentId;
+    private String flowId;
     
 
     public FlowCallBuilderImpl(FlowBuilderImpl root, String id) {
@@ -61,8 +61,9 @@ public class FlowCallBuilderImpl extends FlowCallBuilder {
     }
 
     @Override
-    public FlowCallBuilder flowReference(String flowReference) {
-        this.flowReference = flowReference;
+    public FlowCallBuilder flowReference(String flowDocumentId, String flowId) {
+        this.flowDocumentId = flowDocumentId;
+        this.flowId = flowId;
         return this;
     }
 
@@ -72,7 +73,7 @@ public class FlowCallBuilderImpl extends FlowCallBuilder {
         Map<String, FlowCallNode> flowCalls = root._getFlow()._getFlowCalls();
         FlowCallNodeImpl flowCall = (FlowCallNodeImpl) flowCalls.get(flowCallNodeId);
         if (null == flowCall) {
-            flowCall = new FlowCallNodeImpl(flowCallNodeId, flowReference, null, null);
+            flowCall = new FlowCallNodeImpl(flowCallNodeId, flowDocumentId, flowId, null);
             flowCalls.put(flowCallNodeId, flowCall);
         }
         flowCall.getOutboundParameters().put(name, param);
@@ -87,7 +88,7 @@ public class FlowCallBuilderImpl extends FlowCallBuilder {
     }
 
     @Override
-    public NodeBuilder markAsStartNode() {
+    public FlowCallBuilder markAsStartNode() {
         root._getFlow().setStartNodeId(flowCallNodeId);
         return this;
     }

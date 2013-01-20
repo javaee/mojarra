@@ -173,7 +173,7 @@ public abstract class FlowHandler {
      * id} is equivalent to the argument {@code id}, within the scope of
      * the argument {@code definingDocument}. </p>
      *
-     * @param definingDocument An application unique identifier
+     * @param definingDocumentId An application unique identifier
      * for the document in which the returned flow is defined.
 
      * @param id the id of a {@link Flow}, unique within the
@@ -184,16 +184,13 @@ public abstract class FlowHandler {
      * @since 2.2
      */ 
     
-    public abstract Flow getFlow(FacesContext context, Object definingDocument, String id);
+    public abstract Flow getFlow(FacesContext context, String definingDocumentId, String id);
     
     /**
      * <p class="changed_added_2_2">Add the argument {@link Flow} to the
      * collection of {@code Flow}s known to the current
      * application.  The implementation must be thread safe.</p>
      *
-     * @param definingDocument An application unique identifier
-     * for the document in which the argument flow is defined.
-
      * @param toAdd the {@code Flow} to add.
 
      * @throws NullPointerException if any of the parameters are {@code null}
@@ -204,7 +201,7 @@ public abstract class FlowHandler {
      *
      * @since 2.2
      */ 
-    public abstract void addFlow(FacesContext context, Object definingDocument, Flow toAdd);
+    public abstract void addFlow(FacesContext context, Flow toAdd);
     
     /**
      * <p class="changed_added_2_2">Return the currently active {@link
@@ -278,8 +275,9 @@ public abstract class FlowHandler {
      * @since 2.2
      */
             
-    public abstract Flow transition(FacesContext context, UIComponent origin, 
-            UIComponent destination, FlowCallNode outboundCallNode);
+    public abstract void transition(FacesContext context, Flow sourceFlow, 
+                                    Flow targetFlow, 
+                                    FlowCallNode outboundCallNode);
     
 
     /**
@@ -295,6 +293,6 @@ public abstract class FlowHandler {
 
      * @since 2.2
      */
-    public abstract boolean isActive(FacesContext context, Object definingDocument, String id);
+    public abstract boolean isActive(FacesContext context, String definingDocument, String id);
         
 }

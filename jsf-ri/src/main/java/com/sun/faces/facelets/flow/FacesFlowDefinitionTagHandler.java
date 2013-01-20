@@ -187,6 +187,7 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
         super(config);
     }
     
+    @Override
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
         
         // PENDING(edburns): we should explicitly allow or disallow nested <j:faces-flow-definition> handlers.
@@ -199,7 +200,7 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
         
         Map<FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
         String flowId = getFlowId(ctx);
-        Flow existingFlow = flowHandler.getFlow(context, null, flowId);
+        Flow existingFlow = flowHandler.getFlow(context, "", flowId);
         FlowImpl newFlow = null;
         boolean addFlow = false;
         
@@ -209,7 +210,7 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
             // is instantiated.
 
             newFlow = new FlowImpl();
-            newFlow.setId(flowId);
+            newFlow.setId("", flowId);
             addFlow = true;
 
         } else {
@@ -382,7 +383,7 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
         // This needs to be done at the end so that the flow is fully populated.
         if (addFlow) {
             newFlow.init(context);
-            flowHandler.addFlow(context, null, newFlow);
+            flowHandler.addFlow(context, newFlow);
 
         }
         

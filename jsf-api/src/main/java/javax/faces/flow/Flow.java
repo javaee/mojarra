@@ -73,6 +73,15 @@ public abstract class Flow {
     public abstract String getId();
 
     /**
+     * <p class="changed_added_2_2">Return the immutable application unique 
+     * identifier for the document in which the argument flow is defined.</p>
+
+     * @since 2.2
+     */
+
+    public abstract String getDefiningDocumentId();
+
+    /**
      * <p class="changed_added_2_2">Return the immutable id for the
      * default node that should be activated when this flow is
      * entered.</p>
@@ -144,7 +153,7 @@ public abstract class Flow {
      * @since 2.2
      */
     public abstract List<ViewNode> getViews();
-
+    
     /**
      * <p class="changed_added_2_2">Return an immutable data structure
      * containing all of the return nodes declared for this flow.</p>

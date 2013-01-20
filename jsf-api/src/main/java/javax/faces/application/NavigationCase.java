@@ -265,16 +265,34 @@ public class NavigationCase {
                                                          toViewId,
                                                          String.class);
         }
-        String toViewId = (String) toViewIdExpr.getValue(context.getELContext());
-        if (toViewId.charAt(0) != '/') {
-            toViewId = '/' + toViewId;
+        String result = (String) toViewIdExpr.getValue(context.getELContext());
+        if (result.charAt(0) != '/') {
+            result = '/' + result;
         }
 
-        return toViewId;
+        return result;
 
     }
 
 
+    /**
+     * <p class="changed_added_2_2">If this navigation case represents 
+     * a flow invocation, this property is the documentId in which the flow
+     * whose id is given by the return from {@link #getFromOutcome()} is 
+     * defined.  Implementations must override this method to return
+     * the value defined in the corresponding application configuration resources
+     * element.  The base implementation returns the empty string.</p>
+     *
+     * @param context the {@link FacesContext} for the current request
+     *
+     * @since 2.2
+     */
+    public String getToFlowDocumentId(FacesContext context) {
+
+        return "";
+
+    }
+    
     /**
      * <p class="changed_added_2_0">Test if this navigation case has an
      * associated <code>&lt;if&gt;</code> element.

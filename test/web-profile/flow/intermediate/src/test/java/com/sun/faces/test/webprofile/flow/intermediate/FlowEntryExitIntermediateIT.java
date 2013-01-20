@@ -98,18 +98,24 @@ public class FlowEntryExitIntermediateIT {
     }
 
     @Test
-    public void testFacesFlowScope() throws Exception {
-        performTest();
-        performTest();
+    public void testFacesFlowScopeXml() throws Exception {
+        performTest("maintain-customer-record");
+        performTest("maintain-customer-record");
         
     }
     
-    private void performTest() throws Exception {
+    @Test
+    public void testFacesFlowScopeJava() throws Exception {
+        performTest("maintain-customer-record-java");
+        performTest("maintain-customer-record-java");
+        
+    }
+    private void performTest(String startButton) throws Exception {
         quickEnterExit();
         
         HtmlPage page = webClient.getPage(webUrl);
         
-        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("maintain-customer-record");
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById(startButton);
         
         page = button.click();
         

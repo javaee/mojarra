@@ -128,8 +128,8 @@ public class FacesFlowCallTagHandler extends TagHandlerImpl {
             Map<String, FlowCallNode> calls = getFacesFlowCalls(ctx);
             List<Parameter> outboundParametersFromConfig = FacesFlowCallTagHandler.getOutboundParameters(ctx);
             FlowCallNodeImpl toAdd = new FlowCallNodeImpl(idStr, 
-                    struct.getFlowId(),
                     struct.getFlowDocumentId(), 
+                    struct.getFlowId(),
                     outboundParametersFromConfig);
             calls.put(idStr, toAdd);
             

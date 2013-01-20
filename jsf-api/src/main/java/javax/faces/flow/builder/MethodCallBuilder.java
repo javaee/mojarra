@@ -52,5 +52,8 @@ public abstract class MethodCallBuilder implements NodeBuilder {
     public abstract MethodCallBuilder defaultOutcome(String outcome);
     
     public abstract MethodCallBuilder defaultOutcome(ValueExpression outcome);
+
+    @Override
+    public abstract MethodCallBuilder markAsStartNode();
     
 }

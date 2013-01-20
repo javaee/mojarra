@@ -45,7 +45,7 @@ public class FacesFlowReference {
     private static final long serialVersionUID = -4740448140674006767L;
     
     private String flowId;
-    private String flowDocumentId;
+    private String flowDocumentId = "";
 
     public String getFlowDocumentId() {
         return flowDocumentId;

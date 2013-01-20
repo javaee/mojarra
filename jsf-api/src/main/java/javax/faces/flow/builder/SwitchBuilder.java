@@ -45,5 +45,8 @@ public abstract class SwitchBuilder implements NodeBuilder {
     public abstract SwitchCaseBuilder navigationCase();
     
     public abstract SwitchCaseBuilder defaultOutcome(String outcome);
-    
+
+    @Override
+    public abstract SwitchBuilder markAsStartNode();
+
 }

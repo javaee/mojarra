@@ -46,7 +46,7 @@ import javax.faces.flow.Flow;
 
 public abstract class FlowBuilder  {
     
-    public abstract FlowBuilder id(String id);
+    public abstract FlowBuilder id(String definingDocumentId, String id);
     
     public abstract ViewBuilder viewNode(String viewNodeId, String vdlDocumentId);
 
@@ -58,10 +58,14 @@ public abstract class FlowBuilder  {
     
     public abstract FlowCallBuilder flowCallNode(String flowCallNodeId);
     
-    public abstract FlowBuilder initializer(MethodExpression valueExpression);
+    public abstract FlowBuilder initializer(MethodExpression methodExpression);
     
-    public abstract FlowBuilder finalizer(MethodExpression valueExpression);
+    public abstract FlowBuilder initializer(String methodExpression);
     
+    public abstract FlowBuilder finalizer(MethodExpression methodExpression);
+    
+    public abstract FlowBuilder finalizer(String methodExpression);
+
     public abstract FlowBuilder inboundParameter(String name, ValueExpression value);
         
     public abstract FlowBuilder inboundParameter(String name, String value);

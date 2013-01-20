@@ -44,11 +44,14 @@ import javax.el.ValueExpression;
 
 public abstract class FlowCallBuilder implements NodeBuilder {
     
-    public abstract FlowCallBuilder flowReference(String flowId);
+    public abstract FlowCallBuilder flowReference(String flowDocumentId, 
+                                                  String flowId);
     
     public abstract FlowCallBuilder outboundParameter(String name, ValueExpression value);
         
     public abstract FlowCallBuilder outboundParameter(String name, String value);
-    
+
+    @Override
+    public abstract FlowCallBuilder markAsStartNode();
     
 }

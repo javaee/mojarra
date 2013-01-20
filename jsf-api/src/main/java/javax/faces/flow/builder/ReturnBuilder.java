@@ -47,5 +47,8 @@ public abstract class ReturnBuilder implements NodeBuilder {
     public abstract ReturnBuilder fromOutcome(String outcome);
     
     public abstract ReturnBuilder fromOutcome(ValueExpression outcome);
+
+    @Override
+    public abstract ReturnBuilder markAsStartNode();
         
 }

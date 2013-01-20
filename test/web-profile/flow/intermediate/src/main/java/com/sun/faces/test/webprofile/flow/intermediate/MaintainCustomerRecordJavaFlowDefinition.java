@@ -38,7 +38,7 @@
  * holder.
 
  */
-package com.sun.faces.test.webprofile.flow.basic_switch;
+package com.sun.faces.test.webprofile.flow.intermediate;
 
 import java.io.Serializable;
 import javax.faces.context.FacesContext;
@@ -48,33 +48,32 @@ import javax.faces.flow.FlowDefinition;
 import javax.inject.Named;
 
 
-@Named("FlowA")
+@Named("MaintainCustomerRecordJavaFlowDefinition")
 @FlowDefinition
-public class FlowA implements Serializable {
+public class MaintainCustomerRecordJavaFlowDefinition implements Serializable {
     
-    private static final long serialVersionUID = -7623501087369765218L;
+    private static final long serialVersionUID = -5610441904980215032L;
 
-    public FlowA() {
+    public MaintainCustomerRecordJavaFlowDefinition() {
     }
     
     public Flow defineFlow(FacesContext context, FlowBuilder flowBuilder) {
-        String flowId = "flow-a";
+        String flowId = "maintain-customer-record-java";
         flowBuilder.id("", flowId);
-        flowBuilder.viewNode(flowId, "/" + flowId + "/" + flowId + ".xhtml").markAsStartNode();
-        flowBuilder.returnNode("taskFlowReturn1").
-                fromOutcome("#{flow_a_Bean.returnValue}");
-        flowBuilder.switchNode("switchA").defaultOutcome("defaultPage").
-                navigationCase().condition("#{flow_a_Bean.switchA_Case01}").fromOutcome("page01").
-                navigationCase().condition("#{flow_a_Bean.switchA_Case02}").fromOutcome("page02").
-                navigationCase().condition("#{flow_a_Bean.switchA_Case03}").fromOutcome("switchA_result");
-        flowBuilder.switchNode("switchB").defaultOutcome("defaultPage").
-                navigationCase().condition("#{flow_a_Bean.switchB_Case01}").fromOutcome("page01").
-                navigationCase().condition("#{flow_a_Bean.switchB_Case02}").fromOutcome("switchB_result").
-                navigationCase().condition("#{flow_a_Bean.switchB_Case03}").fromOutcome("page03");
-        flowBuilder.switchNode("switchC").defaultOutcome("switchC_result").
-                navigationCase().condition("#{flow_a_Bean.switchB_Case01}").fromOutcome("page01").
-                navigationCase().condition("#{flow_a_Bean.switchB_Case02}").fromOutcome("page02").
-                navigationCase().condition("#{flow_a_Bean.switchB_Case03}").fromOutcome("page03");
+        flowBuilder.viewNode(flowId, "/" + flowId + "/" + flowId + ".xhtml");
+
+        flowBuilder.switchNode("router1").markAsStartNode().defaultOutcome("view-customer").
+                navigationCase().condition("#{flowScope.customerId == null}").
+                fromOutcome("create-customer");
+        flowBuilder.viewNode("create-customer", "/" + flowId + "/" + "create-customer.xhtml");
+        flowBuilder.viewNode("view-customer", "/" + flowId + "/" + "view-customer.xhtml");
+        flowBuilder.viewNode("maintain-customer-record", "/" + flowId + "/" + "maintain-customer-record");
+        flowBuilder.methodCallNode("upgrade-customer").expression("#{maintainCustomerBeanJava.upgradeCustomer}").
+                defaultOutcome("view-customer");
+        flowBuilder.initializer("#{maintainCustomerBeanJava.initializeFlow}");
+        flowBuilder.finalizer("#{maintainCustomerBeanJava.cleanUpFlow}");
+        flowBuilder.returnNode("success").fromOutcome("/complete");
+        flowBuilder.returnNode("errorOccurred").fromOutcome("error");
         
         return flowBuilder.getFlow();
     }
