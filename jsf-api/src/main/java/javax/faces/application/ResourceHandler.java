@@ -388,10 +388,13 @@ public abstract class ResourceHandler {
 
      * @param resourceName the name of the resource.
      *
-     * @param libraryName the name of the library in which this resource
-     * resides, may be <code>null</code>. <span
+     * @param libraryOrContractName <span class="changed_modified_2_2">the
+     * name of the library (or contract) in which this resource
+     * resides, may be <code>null</code>. If there is a conflict between
+     * the name of a resource library and a resource library contract,
+     * the resource library takes precedence.  <span
      * class="changed_modified_2_0_rev_a">May not include relative
-     * paths, such as "../".</span>
+     * paths, such as "../".</span></span>
      *
      * @throws <code>NullPointerException</code> if
      * <code>resourceName</code> is <code>null</code>
@@ -400,7 +403,7 @@ public abstract class ResourceHandler {
      * for use in encoding or decoding the named resource.
      */
     public abstract Resource createResource(String resourceName,
-                                            String libraryName);
+                                            String libraryOrContractName);
 
 
     /**

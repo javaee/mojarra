@@ -817,7 +817,15 @@ public abstract class ResourceHelper {
                     char quoteMark = parts[0].charAt(mark - 1);
                     parts[0] = parts[0].substring(mark, colon);
                     if (parts[0].equals("this")) {
-                        parts[0] = info.getLibraryInfo().getName();
+                        LibraryInfo libInfo = info.getLibraryInfo();
+                        if (null != libInfo) {
+                            parts[0] = libInfo.getName();
+                        } else if (null != info.getContract()) {
+                            parts[0] = info.getContract();
+                        } else {
+                            throw new NullPointerException("Resource expression is not a library or resource library contract");
+                        }
+                        
                         mark = parts[1].indexOf("]") - 1;
                         parts[1] = parts[1].substring(0, mark);
                         expressionBody = "resource[" + quoteMark + parts[0] +

@@ -55,7 +55,7 @@ height: 100%;
 }
 
 body {
-background: #323131 url(images/concert.jpg?ln=images) bottom left repeat-x;
+background: #323131 url(#{resource['this:concert.jpg']}) bottom left repeat-x;
 background-attachment: fixed;
 }
 
@@ -65,18 +65,18 @@ height: 800px;
 left: 0px;
 margin-right: auto;
 margin-left: auto;
-background: transparent url(images/star.png?ln=images) top left no-repeat;
+background: transparent url(#{resource['this:star.png']}) top left no-repeat;
 }
 
 #outerwrapper{
-background: transparent url(images/flourishes.png?ln=images) top center no-repeat;
+background: transparent url(#{resource['this:flourishes.png']}) top center no-repeat;
 }
 
 #header {
 position: relative;
 height: 340px;
 top: 0px;
-background: transparent url(images/banner3.png?ln=images) top left no-repeat;
+background: transparent url(#{resource['this:banner3.png']}) top left no-repeat;
 z-index: 100;
 }
 

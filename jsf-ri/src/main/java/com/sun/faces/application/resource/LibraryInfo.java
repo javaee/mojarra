@@ -42,7 +42,7 @@ package com.sun.faces.application.resource;
 
 /**
  * <p>
- * <code>LibraryInfo</code> is a simple wrapper class for information pertainant to building
+ * <code>LibraryInfo</code> is a simple wrapper class for information pertinent to building
  * a complete resource path using a Library.
  * <p>
  */

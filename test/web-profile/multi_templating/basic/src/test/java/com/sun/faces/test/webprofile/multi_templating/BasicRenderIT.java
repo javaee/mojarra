@@ -39,7 +39,10 @@
  */
 package com.sun.faces.test.webprofile.multi_templating;
 
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.gargoylesoftware.htmlunit.WebResponse;
+import com.gargoylesoftware.htmlunit.html.HtmlLink;
+import com.gargoylesoftware.htmlunit.html.DomNodeList;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -48,7 +51,7 @@ import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import static org.junit.Assert.assertTrue;
-import org.junit.Ignore;
+import static org.junit.Assert.assertEquals;
 
 public class BasicRenderIT {
     /**
@@ -96,11 +99,49 @@ public class BasicRenderIT {
     }
 
     @Test
-    @Ignore
     public void testBasicRender() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
 
         assertTrue(page.getBody().asText().indexOf("Site design by Xoxiety.com") != -1);
+        
+        DomNodeList<HtmlElement> links = page.getElementsByTagName("link");
+        assertEquals(1, links.size());
+        HtmlLink styleLink = (HtmlLink) links.get(0);
+        WebResponse response = styleLink.getWebResponse(true);
+        String css = response.getContentAsString("UTF-8");
+        String contextName = extractContextNameFromWebUrl(webUrl);
+        String resourceRef = synthesizeResourceRef(contextName, "concert.jpg", "basic");
+        assertTrue(css.contains(resourceRef));
 
+        resourceRef = synthesizeResourceRef(contextName, "star.png", "basic");
+        assertTrue(css.contains(resourceRef));
+
+        resourceRef = synthesizeResourceRef(contextName, "flourishes.png", "basic");
+        assertTrue(css.contains(resourceRef));
+
+        resourceRef = synthesizeResourceRef(contextName, "banner3.png", "basic");
+        assertTrue(css.contains(resourceRef));
+
+
+    }
+    
+    private String extractContextNameFromWebUrl(String webUrl) {
+        String str = webUrl;
+        
+        if (str.endsWith("/")) {
+            str = str.substring(0, str.length() - 1);
+        }
+        int i = str.lastIndexOf("/");
+        if (-1 != 1) {
+            str = str.substring(i+1);
+        }
+        
+        return str;
+    }
+    
+    private String synthesizeResourceRef(String contextName, String resourceName, String contractName) {
+        String result = "url(/" + contextName + "/faces/javax.faces.resource/" + 
+                resourceName + "?con=" + contractName + ")";
+        return result;
     }
 }
