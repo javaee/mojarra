@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright 1997-2012 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2013 Sun Microsystems, Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -762,10 +762,12 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                     }
                 } else {
                     //setting property to '' seems to be the only cross-browser method for removing an attribute
-                    target.removeAttribute(attributeName);
-                    if (attributeName == "value") {
-                        target[propertyName] = '';
+                    //avoid setting 'value' property to '' for checkbox and radio input elements because then the
+                    //'value' is used instead of the 'checked' property when the form is serialized by the browser
+                    if (attributeName == "value" && (target.type != 'checkbox' && target.type != 'radio')) {
+                         target[propertyName] = '';
                     }
+                    target.removeAttribute(attributeName);
                 }
             }
 
