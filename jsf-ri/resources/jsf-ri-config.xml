@@ -1,9 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
+
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -108,14 +109,14 @@
       com.sun.faces.application.resource.ResourceHandlerImpl
     </resource-handler>
     <system-event-listener>
-        <source-class>javax.faces.component.UIViewRoot</source-class>
         <system-event-class>javax.faces.event.PostConstructViewMapEvent</system-event-class>
         <system-event-listener-class>com.sun.faces.application.view.ViewScopeEventListener</system-event-listener-class>
+        <source-class>javax.faces.component.UIViewRoot</source-class>
     </system-event-listener>
     <system-event-listener>
-        <source-class>javax.faces.component.UIViewRoot</source-class>
         <system-event-class>javax.faces.event.PreDestroyViewMapEvent</system-event-class>
         <system-event-listener-class>com.sun.faces.application.view.ViewScopeEventListener</system-event-listener-class>
+        <source-class>javax.faces.component.UIViewRoot</source-class>
     </system-event-listener>
   </application>
 
