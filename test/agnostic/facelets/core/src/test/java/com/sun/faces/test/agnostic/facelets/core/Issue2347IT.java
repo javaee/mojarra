@@ -67,6 +67,8 @@ public class Issue2347IT {
     /**
      * Test the action listener with a param. This uses the EL expression that
      * is defined on the Facelet directly.
+     * 
+     * NOTE test is being ignored until GLASSFISH-19523 gets fixed.
      *
      * @throws Exception
      */
@@ -83,6 +85,8 @@ public class Issue2347IT {
      * Test the action listener without a param. This is the main use case for
      * issue 2347, and depends on the new method expression that is being
      * created based on the one defined on the Facelet.
+     * 
+     * NOTE test is being ignored until GLASSFISH-19523 gets fixed.
      *
      * @throws Exception
      */
