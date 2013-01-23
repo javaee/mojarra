@@ -266,9 +266,9 @@ public abstract class FlowHandler {
      * 
      * </div>
      * 
-     * @param origin the {@code UIViewRoot} of the origin flow, if any.
+     * @param sourceFlow the current {@code Flow}, if any.
      * 
-     * @param destination  the {@code UIViewRoot} of the destination flow, if any.
+     * @param targetFlow the destination {@code Flow}, if any.
      * 
      * @param outboundCallNode the flow call node causing this transition, if any.
      * 
