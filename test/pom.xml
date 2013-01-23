@@ -345,7 +345,7 @@
                                     <goal>start</goal>
                                 </goals>
                                 <configuration>
-                                    <timeout>300000</timeout>
+                                    <timeout>600000</timeout>
                                 </configuration>
                             </execution>
                             <execution>
@@ -355,7 +355,7 @@
                                     <goal>stop</goal>
                                 </goals>
                                 <configuration>
-                                    <timeout>300000</timeout>
+                                    <timeout>600000</timeout>
                                 </configuration>
                             </execution>
                         </executions>                        
@@ -364,7 +364,7 @@
                                 <containerId>${integration.container.id}</containerId>
                                 <type>installed</type>
                                 <home>${integration.container.home}</home>
-                                <timeout>300000</timeout>
+                                <timeout>600000</timeout>
                             </container>
                             <configuration>
                                 <type>standalone</type>
@@ -889,6 +889,9 @@
                                 <goals>
                                     <goal>start</goal>
                                 </goals>
+                                <configuration>
+                                    <timeout>600000</timeout>
+                                </configuration>
                             </execution>
                             <execution>
                                 <id>stop-container</id>
@@ -896,6 +899,9 @@
                                 <goals>
                                     <goal>stop</goal>
                                 </goals>
+                                <configuration>
+                                    <timeout>600000</timeout>
+                                </configuration>
                             </execution>
                         </executions>                        
                         <configuration>
@@ -906,6 +912,7 @@
                                     <downloadDir>${integration.container.downloadDir}</downloadDir>
                                     <extractDir>${integration.container.extractDir}</extractDir>
                                 </zipUrlInstaller>
+                                <timeout>600000</timeout>
                                 <type>installed</type>
                             </container>
                             <configuration>
@@ -922,11 +929,11 @@
             </build>
             <properties>
                 <integration.container.downloadDir>C:/Temp/Cargo/download</integration.container.downloadDir>
-                <integration.container.downloadUrl>http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.27/bin/apache-tomcat-7.0.27.zip</integration.container.downloadUrl>
+                <integration.container.downloadUrl>http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.35/bin/apache-tomcat-7.0.35.zip</integration.container.downloadUrl>
                 <integration.container.extractDir>C:/Temp/Cargo/extracts</integration.container.extractDir>
                 <integration.container.home>C:/Temp/Cargo/tomcat7</integration.container.home>
                 <integration.container.id>tomcat7x</integration.container.id>
-                <tomcat.version>7.0.27</tomcat.version>
+                <tomcat.version>7.0.35</tomcat.version>
             </properties>
         </profile>
         <profile>
