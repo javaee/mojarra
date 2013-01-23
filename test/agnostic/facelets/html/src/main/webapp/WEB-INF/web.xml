@@ -57,6 +57,10 @@
         <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
         <param-value>${webapp.stateSavingMethod}</param-value>
     </context-param>
+    <context-param>
+        <param-name>javax.faces.FULL_STATE_SAVING_VIEW_IDS</param-name>
+        <param-value>/dataTableRowState.xhtml</param-value>
+    </context-param>    
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
