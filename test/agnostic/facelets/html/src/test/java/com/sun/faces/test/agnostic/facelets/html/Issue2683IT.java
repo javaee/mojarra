@@ -46,6 +46,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 public class Issue2683IT {
 
@@ -64,6 +65,7 @@ public class Issue2683IT {
     }
     
     @Test
+    @Ignore
     public void testDataTableRowState() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/dataTableRowState.xhtml");
         assertEquals(200, page.getWebResponse().getStatusCode());
