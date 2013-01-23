@@ -217,23 +217,21 @@ public class ResourceManager {
                                 isViewResource,
                                 ctx);
                 
-                if (null == info) {
+                if (null == info && null != contracts) {
                     // If the library name is equal to one of the contracts,
                     // assume the resource to be found is within that contract
-                    if (null != contracts) {
-                        for (String cur : contracts) {
-                            if (cur.equals(libraryName)) {
-                                libraryName = null;
-                                break;
-                            }
+                    for (String cur : contracts) {
+                        if (cur.equals(libraryName)) {
+                            libraryName = null;
+                            break;
                         }
-                        info = doLookup(libraryName,
-                                resourceName,
-                                localePrefix,
-                                compressable,
-                                isViewResource,
-                                ctx);
                     }
+                    info = doLookup(libraryName,
+                            resourceName,
+                            localePrefix,
+                            compressable,
+                            isViewResource,
+                            ctx);
                 }
 
                 if (info != null) {

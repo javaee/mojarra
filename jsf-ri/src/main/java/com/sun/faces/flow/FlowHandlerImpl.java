@@ -59,7 +59,6 @@ import javax.faces.flow.FlowCallNode;
 import javax.faces.flow.Flow;
 import javax.faces.flow.FlowHandler;
 import javax.faces.flow.Parameter;
-import javax.faces.flow.ViewNode;
 
 public class FlowHandlerImpl extends FlowHandler {
 
@@ -98,27 +97,6 @@ public class FlowHandlerImpl extends FlowHandler {
         
         return result;
     }
-
-    private Flow getFlowByNodeId(String id) {
-        if (null == id || 0 == id.length()) {
-            throw new IllegalStateException();
-        }
-        Flow result = null;
-        List<Flow> flowsForFlowId = flowsByFlowId.get(id);
-        if (null != flowsForFlowId) {
-            for (Flow cur : flowsForFlowId) {
-                for (ViewNode curView : cur.getViews()) {
-                    if (id.equals(curView.getId())) {
-                        result = cur;
-                    }
-                }
-            }
-        }
-
-        return result;
-    }
-    
-    
 
     @Override
     public void addFlow(FacesContext context, Flow toAdd) {
@@ -310,15 +288,6 @@ public class FlowHandlerImpl extends FlowHandler {
             me.invoke(context.getELContext(), null);
         }
         FlowCDIContext.flowExited();
-    }
-    
-    private void popAll(FacesContext context) {
-        Deque<Flow> flowStack = getFlowStack(context);
-        Flow currentFlow = peekFlow(context);
-        while  (!flowStack.isEmpty()) {
-            callFinalizer(context, currentFlow);
-            currentFlow = flowStack.pollFirst();
-        }
     }
     
     private Deque<Flow> getFlowStack(FacesContext context) {

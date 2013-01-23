@@ -804,13 +804,11 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             } else {
                 // ... we are in a flow.  \
                 // If we have an implicit match...
-                if (null != viewIdToTest) {
-                    // If the match is not within the current flow...
-                    if (!viewIdToTest.startsWith("/" + currentFlow.getId())) {
+                if (null != viewIdToTest && 
+                    !viewIdToTest.startsWith("/" + currentFlow.getId())) {
                         // ... it must be out of the current flow.  Make sure the 
                         // current flow is marked as abandoned.
-                        newFlow = null;
-                    }
+                    newFlow = null;
                 }
                 // else, we are in a flow, but don't have an implicit match.
             }

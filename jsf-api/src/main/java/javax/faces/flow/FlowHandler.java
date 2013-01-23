@@ -41,7 +41,6 @@
 package javax.faces.flow;
 
 import java.util.Map;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 /**

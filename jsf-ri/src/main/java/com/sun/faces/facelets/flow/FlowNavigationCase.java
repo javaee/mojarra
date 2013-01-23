@@ -113,11 +113,6 @@ public class FlowNavigationCase extends NavigationCase {
     }
 
     @Override
-    public String getFromViewId() {
-        return super.getFromViewId();
-    }
-
-    @Override
     public Map<String, List<String>> getParameters() {
         return super.getParameters();
     }
