@@ -591,17 +591,21 @@ public abstract class Application {
     }
 
     /**
-     * <p class="changed_added_2_2">If this application has flows,
-     * return the thread-safe singleton {@link FlowHandler} for this
-     * application.  This method must never return {@code null}, even if
-     * the application has no flows.  This is necessary to enable
+     * <p class="changed_added_2_2">Return the thread-safe singleton 
+     * {@link FlowHandler} for this application.  For implementations declaring 
+     * compliance with version 2.2 of the specification, this method must never return 
+     * {@code null}, even if the application has no flows.  This is necessary to enable
      * dynamic flow creation during the application's lifetime.</p>
      *
      * <div class="changed_added_2_2">
      *
-     * <p>If the current implementation does not implement this method,
-     * this API method throws
-     * <code>UnsupportedOperationException</code>.</p>
+     * <p>All implementations that declare compliance with version 2.2
+     * of the specification must implement this method.  For the purpose
+     * of backward compatibility with environments that extend {@code
+     * Application} but do not override this method, an implementation is 
+     * provided that returns {@code null}.  Due to the decoratable nature
+     * of {@code Application}, code calling this method should always check
+     * for a {@code null} return.</p>
 
      * </div>
 
@@ -614,7 +618,7 @@ public abstract class Application {
         if (defaultApplication != null) {
             return defaultApplication.getFlowHandler();
         }
-        throw new UnsupportedOperationException();
+        return null;
 
     }
 

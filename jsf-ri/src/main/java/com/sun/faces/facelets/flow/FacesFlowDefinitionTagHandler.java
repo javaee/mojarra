@@ -197,6 +197,9 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
         this.nextHandler.apply(ctx, parent);
         FacesContext context = ctx.getFacesContext();
         FlowHandler flowHandler = context.getApplication().getFlowHandler();
+        if (null == flowHandler) {
+            return;
+        }
         
         Map<FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
         String flowId = getFlowId(ctx);

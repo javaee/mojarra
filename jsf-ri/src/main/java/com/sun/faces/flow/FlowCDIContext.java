@@ -178,6 +178,9 @@ public class FlowCDIContext implements Context, Serializable {
     
     private static Flow getCurrentFlow(FacesContext context) {
         FlowHandler flowHandler = context.getApplication().getFlowHandler();
+        if (null == flowHandler) {
+            return null;
+        }
         
         Flow result = flowHandler.getCurrentFlow(context);
         
@@ -305,6 +308,11 @@ public class FlowCDIContext implements Context, Serializable {
                     
                     FacesContext facesContext = FacesContext.getCurrentInstance();
                     FlowHandler flowHandler = facesContext.getApplication().getFlowHandler();
+                    
+                    if (null == flowHandler) {
+                        return null;
+                    }
+                    
                     FlowBeanInfo fbi = flowIds.get(contextual);
                     if (!flowHandler.isActive(facesContext, fbi.definingDocumentId, fbi.id)) {
                         throw new ContextNotActiveException("Request to activate bean in flow '" + fbi + "', but that flow is not active.");

@@ -206,9 +206,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                                                  caseStruct.navCase.isIncludeViewParams());
                 try {
                     if (logger.isLoggable(Level.FINE)) {
-                        logger.fine("Redirecting to path " + redirectUrl
-                                    + " for outcome " + outcome +
-                                    "and viewId " + caseStruct.viewId);
+                        logger.log(Level.FINE, "Redirecting to path {0} for outcome {1}and viewId {2}", new Object[]{redirectUrl, outcome, caseStruct.viewId});
                     }
                     // encode the redirect to ensure session state
                     // is maintained
@@ -224,7 +222,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                 }
                 context.responseComplete();
                if (logger.isLoggable(Level.FINE)) {
-                   logger.fine("Response complete for " + caseStruct.viewId);
+                   logger.log(Level.FINE, "Response complete for {0}", caseStruct.viewId);
                }
             } else {
                 UIViewRoot newRoot = viewHandler.createView(context,
@@ -232,13 +230,13 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                 updateRenderTargets(context, caseStruct.viewId);
                 context.setViewRoot(newRoot);
                 FlowHandler flowHandler = context.getApplication().getFlowHandler();
-                flowHandler.transition(context, 
-                        caseStruct.currentFlow, caseStruct.newFlow, 
-                        caseStruct.facesFlowCallNode);
-
+                if (null != flowHandler) {
+                    flowHandler.transition(context, 
+                            caseStruct.currentFlow, caseStruct.newFlow, 
+                            caseStruct.facesFlowCallNode);
+                }
                 if (logger.isLoggable(Level.FINE)) {
-                    logger.fine("Set new view in FacesContext for " +
-                                caseStruct.viewId);
+                    logger.log(Level.FINE, "Set new view in FacesContext for {0}", caseStruct.viewId);
                 }
             }
         } 
@@ -538,8 +536,10 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         CaseStruct result = determineViewFromActionOutcome(ctx, caseSet, fromAction, outcome);
         if (null != result) {
             FlowHandler flowHandler = ctx.getApplication().getFlowHandler();
-            result.currentFlow = flowHandler.getCurrentFlow();
-            result.newFlow = result.currentFlow;
+            if (null != flowHandler) {
+                result.currentFlow = flowHandler.getCurrentFlow();
+                result.newFlow = result.currentFlow;
+            }
         }
 
         return result;
@@ -603,8 +603,10 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         }
         if (null != result) {
             FlowHandler flowHandler = ctx.getApplication().getFlowHandler();
-            result.currentFlow = flowHandler.getCurrentFlow();
-            result.newFlow = result.currentFlow;
+            if (null != flowHandler) {
+                result.currentFlow = flowHandler.getCurrentFlow();
+                result.newFlow = result.currentFlow;
+            }
         }
         
         return result;
@@ -643,8 +645,10 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         
         if (null != result) {
             FlowHandler flowHandler = ctx.getApplication().getFlowHandler();
-            result.currentFlow = flowHandler.getCurrentFlow();
-            result.newFlow = result.currentFlow;
+            if (null != flowHandler) {
+                result.currentFlow = flowHandler.getCurrentFlow();
+                result.newFlow = result.currentFlow;
+            }
         }
         
         return result;
@@ -759,51 +763,57 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         viewIdToTest = viewHandler.deriveViewId(context, viewIdToTest);
         
         FlowHandler flowHandler = context.getApplication().getFlowHandler();
-        Flow currentFlow = flowHandler.getCurrentFlow(context);
-        Flow newFlow = currentFlow;
+        Flow currentFlow = null;
+        Flow newFlow = null;
 
-        // If we are not in a flow...
-        if (null == currentFlow) {
-            // ...and we still don't have an implicit match...
-            if (null == viewIdToTest) {
-                // ... see if this is a call to a flow.
-                
-                // If the viewIdToTest needs an extension, take one from the currentViewId.
-                String currentExtension;
-                int idx = currentViewId.lastIndexOf('.');
-                if (idx != -1) {
-                    currentExtension = currentViewId.substring(idx);
-                } else {
-                    // PENDING, don't hard code XHTML here, look it up from configuration
-                    currentExtension = ".xhtml";
-                }
-                
-                viewIdToTest = "/" + outcome + "/" + outcome + currentExtension;
-                viewIdToTest = viewHandler.deriveViewId(context, viewIdToTest);
-                if (null != viewIdToTest) {
-                    loadFlowDefinition(context, viewHandler, viewIdToTest);
-                    newFlow = flowHandler.getFlow(context, 
-                            flowDefiningDocumentId, outcome);
-                    if (null != newFlow) {
-                        String startNodeId = newFlow.getStartNodeId();
-                        result = getViewId(context, fromAction, startNodeId, newFlow.getDefiningDocumentId());
+        if (null != flowHandler) {
+            
+            currentFlow = flowHandler.getCurrentFlow(context);
+            newFlow = currentFlow;
+
+            // If we are not in a flow...
+            if (null == currentFlow) {
+                // ...and we still don't have an implicit match...
+                if (null == viewIdToTest) {
+                    // ... see if this is a call to a flow.
+                    
+                    // If the viewIdToTest needs an extension, take one from the currentViewId.
+                    String currentExtension;
+                    int idx = currentViewId.lastIndexOf('.');
+                    if (idx != -1) {
+                        currentExtension = currentViewId.substring(idx);
+                    } else {
+                        // PENDING, don't hard code XHTML here, look it up from configuration
+                        currentExtension = ".xhtml";
+                    }
+                    
+                    viewIdToTest = "/" + outcome + "/" + outcome + currentExtension;
+                    viewIdToTest = viewHandler.deriveViewId(context, viewIdToTest);
+                    if (null != viewIdToTest) {
+                        loadFlowDefinition(context, viewHandler, viewIdToTest);
+                        newFlow = flowHandler.getFlow(context, 
+                                flowDefiningDocumentId, outcome);
+                        if (null != newFlow) {
+                            String startNodeId = newFlow.getStartNodeId();
+                            result = getViewId(context, fromAction, startNodeId, newFlow.getDefiningDocumentId());
+                        }
+                        
                     }
                     
                 }
-                
-            }
-        } else {
-            // ... we are in a flow.  \
-            // If we have an implicit match...
-            if (null != viewIdToTest) {
-                // If the match is not within the current flow...
-                if (!viewIdToTest.startsWith("/" + currentFlow.getId())) {
-                    // ... it must be out of the current flow.  Make sure the 
-                    // current flow is marked as abandoned.
-                    newFlow = null;
+            } else {
+                // ... we are in a flow.  \
+                // If we have an implicit match...
+                if (null != viewIdToTest) {
+                    // If the match is not within the current flow...
+                    if (!viewIdToTest.startsWith("/" + currentFlow.getId())) {
+                        // ... it must be out of the current flow.  Make sure the 
+                        // current flow is marked as abandoned.
+                        newFlow = null;
+                    }
                 }
+                // else, we are in a flow, but don't have an implicit match.
             }
-            // else, we are in a flow, but don't have an implicit match.
         }
 
         if (null == result && null != viewIdToTest) {
@@ -834,7 +844,8 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         NavigationInfo info = getNavigationInfo(context, fromAction);
         FlowHandler flowHandler = context.getApplication().getFlowHandler();
         
-        if (null != info && null != info.switches && !info.switches.isEmpty()) {
+        if (null != flowHandler && 
+            null != info && null != info.switches && !info.switches.isEmpty()) {
             SwitchNode switchNode = info.switches.get(outcome);
             if (null != switchNode) {
                 List<NavigationCase> cases = switchNode.getCases();
@@ -930,6 +941,9 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     private CaseStruct findMethodCallMatch(FacesContext context, String fromAction, String outcome) {
         CaseStruct result = null;
         FlowHandler flowHandler = context.getApplication().getFlowHandler();
+        if (null == flowHandler) {
+            return null;
+        }
         Flow currentFlow = flowHandler.getCurrentFlow(context);
         if (null != currentFlow) {
             FlowNode node = currentFlow.getNode(outcome);
@@ -963,6 +977,9 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         CaseStruct result = null;
 
         FlowHandler flowHandler = context.getApplication().getFlowHandler();
+        if (null == flowHandler) {
+            return null;
+        }
         Flow currentFlow = flowHandler.getCurrentFlow(context);
         Flow newFlow = null;
         FlowCallNode facesFlowCallNode = null;
@@ -1010,6 +1027,9 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             String fromAction, String outcome, String toFlowDocumentId) {
         CaseStruct result = null;
         FlowHandler flowHandler = context.getApplication().getFlowHandler();
+        if (null == flowHandler) {
+            return null;
+        }
         Flow currentFlow = flowHandler.getCurrentFlow(context);
         if (null != currentFlow) {
             // If so, see if the outcome is one of this flow's 
