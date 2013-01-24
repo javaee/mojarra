@@ -123,10 +123,10 @@ public class ResourceLibraryContractsConfigProcessor extends AbstractConfigProce
         for (int c = 0; c < resourceLibraryContracts.getLength(); c++) {
             Node node = resourceLibraryContracts.item(c);
             try {
-                NodeList mappings = (NodeList) xpath.evaluate("//ns1:contract-mapping", node, XPathConstants.NODESET);
+                NodeList mappings = (NodeList) xpath.evaluate(".//ns1:contract-mapping", node, XPathConstants.NODESET);
                 for (int m = 0; m < mappings.getLength(); m++) {
                     Node contractMapping = mappings.item(m);                    
-                    NodeList urlPatterns = (NodeList) xpath.evaluate("//ns1:url-pattern/text()", contractMapping, XPathConstants.NODESET);
+                    NodeList urlPatterns = (NodeList) xpath.evaluate(".//ns1:url-pattern/text()", contractMapping, XPathConstants.NODESET);
 
                     for(int p = 0; p < urlPatterns.getLength(); p++) {
                         String urlPattern = urlPatterns.item(p).getNodeValue().trim();
@@ -140,7 +140,7 @@ public class ResourceLibraryContractsConfigProcessor extends AbstractConfigProce
                              * If there is no urlPattern then add it to the list,
                              */
                             ArrayList<String> list = new ArrayList<String>();
-                            NodeList contracts = (NodeList) xpath.evaluate("//ns1:contracts/text()", contractMapping, XPathConstants.NODESET);
+                            NodeList contracts = (NodeList) xpath.evaluate(".//ns1:contracts/text()", contractMapping, XPathConstants.NODESET);
                             if (contracts.getLength() > 0) {
                                 for (int j = 0; j < contracts.getLength(); j++) {
                                     String[] contractStrings = contracts.item(j).getNodeValue().trim().split(",");
