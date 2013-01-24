@@ -42,6 +42,7 @@ package com.sun.faces.facelets.flow;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
+import com.sun.faces.flow.SwitchCaseImpl;
 import com.sun.faces.flow.FlowImpl;
 import com.sun.faces.flow.ParameterImpl;
 import com.sun.faces.flow.ReturnNodeImpl;
@@ -302,13 +303,13 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
             //
             // <faces-flow-return>
             //
-            List<FlowNavigationCase> facesFlowReturns = FacesFlowReturnTagHandler.getNavigationCases(ctx);
+            List<SwitchCaseImpl> facesFlowReturns = FacesFlowReturnTagHandler.getNavigationCases(ctx);
             if (null != facesFlowReturns) {
                 Map<String, ReturnNode> returns = newFlow._getReturns();
-                for (FlowNavigationCase cur : facesFlowReturns) {
+                for (SwitchCaseImpl cur : facesFlowReturns) {
                     String returnId = cur.getEnclosingId();
                     if (!returns.containsKey(returnId)) {
-                        ReturnNodeImpl newReturn = new ReturnNodeImpl(returnId, cur);
+                        ReturnNodeImpl newReturn = new ReturnNodeImpl(returnId, cur.getFromOutcome());
                         returns.put(returnId, newReturn);
                     }
                 }

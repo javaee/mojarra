@@ -40,29 +40,28 @@
  */
 package com.sun.faces.flow;
 
-import com.sun.faces.facelets.flow.FlowNavigationCase;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import javax.faces.application.NavigationCase;
+import javax.faces.flow.SwitchCase;
 import javax.faces.flow.SwitchNode;
 
 public class SwitchNodeImpl extends SwitchNode {
         
     private final String id;
-    private NavigationCase defaultCase;
-    private CopyOnWriteArrayList<NavigationCase> _cases;
-    private List<NavigationCase> cases;
+    private SwitchCaseImpl defaultCase;
+    private CopyOnWriteArrayList<SwitchCase> _cases;
+    private List<SwitchCase> cases;
 
     public SwitchNodeImpl(String id) {
         this(id, null);
     }
     
-    public SwitchNodeImpl(String id, FlowNavigationCase defaultCase) {
+    public SwitchNodeImpl(String id, SwitchCaseImpl defaultCase) {
         this.id = id;
         
         this.defaultCase = defaultCase;
-        _cases = new CopyOnWriteArrayList<NavigationCase>();
+        _cases = new CopyOnWriteArrayList<SwitchCase>();
         cases = Collections.unmodifiableList(_cases);
     }
 
@@ -102,20 +101,20 @@ public class SwitchNodeImpl extends SwitchNode {
     }
         
     @Override
-    public List<NavigationCase> getCases() {
+    public List<SwitchCase> getCases() {
         return cases;
     }
 
-    public List<NavigationCase> _getCases() {
+    public List<SwitchCase> _getCases() {
         return _cases;
     }
 
     @Override
-    public NavigationCase getDefaultCase() {
+    public SwitchCase getDefaultCase() {
         return defaultCase;
     }
     
-    public void setDefaultCase(NavigationCase defaultCase) {
+    public void setDefaultCase(SwitchCaseImpl defaultCase) {
         this.defaultCase = defaultCase;
     }
 

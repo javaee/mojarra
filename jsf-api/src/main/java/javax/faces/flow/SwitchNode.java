@@ -41,12 +41,11 @@
 package javax.faces.flow;
 
 import java.util.List;
-import javax.faces.application.NavigationCase;
 
 public abstract class SwitchNode extends FlowNode {
     
-    public abstract List<NavigationCase> getCases();
+    public abstract List<SwitchCase> getCases();
 
-    public abstract NavigationCase getDefaultCase();
+    public abstract SwitchCase getDefaultCase();
     
 }

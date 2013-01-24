@@ -58,10 +58,6 @@ public class FlowNavigationCase extends NavigationCase {
     private String toFlowDocumentId;
     private ValueExpression toFlowDocumentIdExpr;
     
-    // This is the id of the <return> or <switch>
-    private String enclosingId;
-
-    
     public FlowNavigationCase() {
         super(null, null, null, null, null, null, false, false);
         fromOutcome = null;
@@ -125,14 +121,6 @@ public class FlowNavigationCase extends NavigationCase {
     @Override
     public URL getResourceURL(FacesContext context) throws MalformedURLException {
         return super.getResourceURL(context);
-    }
-
-    public String getEnclosingId() {
-        return enclosingId;
-    }
-
-    public void setEnclosingId(String returnId) {
-        this.enclosingId = returnId;
     }
 
     @Override

@@ -40,23 +40,25 @@
  */
 package com.sun.faces.flow;
 
-import com.sun.faces.facelets.flow.FlowNavigationCase;
-import javax.faces.application.NavigationCase;
 import javax.faces.flow.ReturnNode;
 
 public class ReturnNodeImpl extends ReturnNode {
     
     private final String id;
-    private FlowNavigationCase flowNavCase;
+    private String fromOutcome;
 
-    public ReturnNodeImpl(String id, FlowNavigationCase flowNavCase) {
+    public ReturnNodeImpl(String id, String fromOutcome) {
         this.id = id;
-        this.flowNavCase = flowNavCase;
+        this.fromOutcome = fromOutcome;
     }
 
     @Override
-    public NavigationCase getNavigationCase() {
-        return flowNavCase;
+    public String getFromOutcome() {
+        return fromOutcome;
+    }
+    
+    public void setFromOutcome(String fromOutcome) {
+        
     }
 
     @Override

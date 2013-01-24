@@ -38,43 +38,14 @@
  * holder.
 
  */
-package com.sun.faces.facelets.flow;
+package javax.faces.flow;
 
-import com.sun.faces.facelets.tag.TagHandlerImpl;
-import com.sun.faces.flow.SwitchCaseImpl;
-import java.io.IOException;
-import javax.faces.component.UIComponent;
-import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.TagConfig;
-import javax.faces.view.facelets.TagException;
+import javax.faces.context.FacesContext;
 
-public class IfTagHandler extends TagHandlerImpl {
+public abstract class SwitchCase {
+    
+    public abstract String getFromOutcome();
 
-    public IfTagHandler(TagConfig config) {
-        super(config);
-    }
-    
-    @Override
-    public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
-        this.nextHandler.apply(ctx, parent);
-        if (FacesFlowReturnTagHandler.isWithinFacesFlowReturn(ctx)) {
-            SwitchCaseImpl cur = FacesFlowReturnTagHandler.getNavigationCase(ctx);
-            if (null == cur) {
-                throw new TagException(tag, "Unable to determine <navigation-case> for which " +
-                        this.nextHandler.toString() + " is the <from-outcome>.");
-            }
-            cur.setCondition(this.nextHandler.toString());
-        } else if (SwitchNodeTagHandler.isWithinSwitch(ctx)) {
-            SwitchCaseImpl cur = NavigationCaseTagHandler.getCurrentNavigationCase(ctx);
-            if (null == cur) {
-                throw new TagException(tag, "Unable to determine <navigation-case> for which " +
-                        this.nextHandler.toString() + " is the <from-outcome>.");
-            }
-            cur.setCondition(this.nextHandler.toString());
-            
-        }
-    }
-    
-    
+    public abstract Boolean getCondition(FacesContext context);
     
 }

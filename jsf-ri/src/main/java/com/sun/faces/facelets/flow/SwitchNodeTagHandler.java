@@ -41,6 +41,7 @@
 package com.sun.faces.facelets.flow;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
+import com.sun.faces.flow.SwitchCaseImpl;
 import com.sun.faces.flow.SwitchNodeImpl;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,8 +49,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.faces.application.NavigationCase;
 import javax.faces.component.UIComponent;
+import javax.faces.flow.SwitchCase;
 import javax.faces.flow.SwitchNode;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagAttribute;
@@ -61,13 +62,13 @@ public class SwitchNodeTagHandler extends TagHandlerImpl {
         super(config);
     }
     
-    public static List<FlowNavigationCase> getSwitchCases(FaceletContext ctx) {
-        List<FlowNavigationCase> result = null;
+    public static List<SwitchCaseImpl> getSwitchCases(FaceletContext ctx) {
+        List<SwitchCaseImpl> result = null;
 
         Map<FacesFlowDefinitionTagHandler.FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
-        result = (List<FlowNavigationCase>) flowData.get(FacesFlowDefinitionTagHandler.FlowDataKeys.SwitchNavigationCases);
+        result = (List<SwitchCaseImpl>) flowData.get(FacesFlowDefinitionTagHandler.FlowDataKeys.SwitchNavigationCases);
         if (null == result) {
-            result = Collections.synchronizedList(new ArrayList<FlowNavigationCase>());
+            result = Collections.synchronizedList(new ArrayList<SwitchCaseImpl>());
             flowData.put(FacesFlowDefinitionTagHandler.FlowDataKeys.SwitchNavigationCases, result);
         }
         
@@ -87,24 +88,24 @@ public class SwitchNodeTagHandler extends TagHandlerImpl {
         return result;
     }
     
-    public static FlowNavigationCase getDefaultSwitchCase(FaceletContext ctx, boolean create) {
-        FlowNavigationCase result = null;
+    public static SwitchCaseImpl getDefaultSwitchCase(FaceletContext ctx, boolean create) {
+        SwitchCaseImpl result = null;
 
         Map<FacesFlowDefinitionTagHandler.FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
-        result = (FlowNavigationCase) flowData.get(FacesFlowDefinitionTagHandler.FlowDataKeys.SwitchDefaultCase);
+        result = (SwitchCaseImpl) flowData.get(FacesFlowDefinitionTagHandler.FlowDataKeys.SwitchDefaultCase);
         if (null == result && create) {
-            result = new FlowNavigationCase();
+            result = new SwitchCaseImpl();
             flowData.put(FacesFlowDefinitionTagHandler.FlowDataKeys.SwitchDefaultCase, result);
         }
         
         return result;
     }
     
-    public static FlowNavigationCase getDefaultSwitchCase(FaceletContext ctx) {
-        FlowNavigationCase result = null;
+    public static SwitchCaseImpl getDefaultSwitchCase(FaceletContext ctx) {
+        SwitchCaseImpl result = null;
 
         Map<FacesFlowDefinitionTagHandler.FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
-        result = (FlowNavigationCase) flowData.get(FacesFlowDefinitionTagHandler.FlowDataKeys.SwitchDefaultCase);
+        result = (SwitchCaseImpl) flowData.get(FacesFlowDefinitionTagHandler.FlowDataKeys.SwitchDefaultCase);
         
         return result;
     }
@@ -131,28 +132,26 @@ public class SwitchNodeTagHandler extends TagHandlerImpl {
         }
     }
     
-    
-    
-    
+    @Override
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
         try {
             setWithinSwitch(ctx, true);
             this.nextHandler.apply(ctx, parent);
             TagAttribute id = this.getRequiredAttribute("id");
             
-            List casesFromConfig = SwitchNodeTagHandler.getSwitchCases(ctx);
+            List<SwitchCaseImpl> casesFromConfig = SwitchNodeTagHandler.getSwitchCases(ctx);
             String idStr = id.getValue(ctx);
 
-            FlowNavigationCase defaultSwitchCase = SwitchNodeTagHandler.getDefaultSwitchCase(ctx);
+            SwitchCaseImpl defaultSwitchCase = SwitchNodeTagHandler.getDefaultSwitchCase(ctx);
             if (null != defaultSwitchCase) {
                 defaultSwitchCase.setEnclosingId(idStr);
             }
             
             SwitchNodeImpl toAdd = new SwitchNodeImpl(idStr, defaultSwitchCase);
-            List<NavigationCase> cases = toAdd._getCases();
-            for (Object cur : casesFromConfig) {
-                ((FlowNavigationCase)cur).setEnclosingId(idStr);
-                cases.add((NavigationCase)cur);
+            List<SwitchCase> cases = toAdd._getCases();
+            for (SwitchCaseImpl cur : casesFromConfig) {
+                cur.setEnclosingId(idStr);
+                cases.add(cur);
             }
             
             Map<String, SwitchNode> switches = getSwitches(ctx);

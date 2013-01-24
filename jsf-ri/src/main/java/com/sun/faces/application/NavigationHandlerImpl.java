@@ -73,6 +73,7 @@ import javax.faces.flow.FlowHandler;
 import javax.faces.flow.FlowNode;
 import javax.faces.flow.MethodCallNode;
 import javax.faces.flow.ReturnNode;
+import javax.faces.flow.SwitchCase;
 import javax.faces.flow.SwitchNode;
 import javax.faces.flow.ViewNode;
 import javax.faces.view.ViewDeclarationLanguage;
@@ -846,8 +847,8 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             null != info && null != info.switches && !info.switches.isEmpty()) {
             SwitchNode switchNode = info.switches.get(outcome);
             if (null != switchNode) {
-                List<NavigationCase> cases = switchNode.getCases();
-                for (NavigationCase cur : cases) {
+                List<SwitchCase> cases = switchNode.getCases();
+                for (SwitchCase cur : cases) {
                     if (cur.getCondition(context)) {
                         outcome = cur.getFromOutcome();
                         Flow newFlow = flowHandler.getFlow(context, toFlowDocumentId, 
@@ -867,7 +868,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                     }
                 }
                 if (null == result) {
-                    NavigationCase defaultCase = switchNode.getDefaultCase();
+                    SwitchCase defaultCase = switchNode.getDefaultCase();
                     outcome = defaultCase.getFromOutcome();
                     Flow currentFlow = flowHandler.getCurrentFlow(context);
                     if (null != currentFlow) {
@@ -897,15 +898,12 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                         fromAction, outcome, null, result.viewId, 
                         null, false, false);
             } else if (node instanceof ReturnNode) {
-                NavigationCase navCase = ((ReturnNode)node).getNavigationCase();
-                if (null != navCase) {
-                    String fromOutcome = navCase.getFromOutcome();
-                    if (SharedUtils.isExpression(fromOutcome)) {
-                        Application app = context.getApplication();
-                        fromOutcome = app.evaluateExpressionGet(context, fromOutcome, String.class);
-                    }
-                    result = getViewId(context, fromAction, fromOutcome, flow.getDefiningDocumentId());
+                String fromOutcome = ((ReturnNode)node).getFromOutcome();
+                if (SharedUtils.isExpression(fromOutcome)) {
+                    Application app = context.getApplication();
+                    fromOutcome = app.evaluateExpressionGet(context, fromOutcome, String.class);
                 }
+                result = getViewId(context, fromAction, fromOutcome, flow.getDefiningDocumentId());
                 
             }
         } else {
@@ -1034,16 +1032,13 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             // faces-flow-return nodes.
             ReturnNode returnNode = currentFlow.getReturns().get(outcome);
             if (null != returnNode) {
-                NavigationCase navCase = returnNode.getNavigationCase();
-                if (null != navCase) {
-                    String fromOutcome = navCase.getFromOutcome();
-                    if (SharedUtils.isExpression(fromOutcome)) {
-                        Application app = context.getApplication();
-                        fromOutcome = app.evaluateExpressionGet(context, fromOutcome, String.class);
-                        
-                    }
-                    result = getViewId(context, fromAction, fromOutcome, toFlowDocumentId);
+                String fromOutcome = returnNode.getFromOutcome();
+                if (SharedUtils.isExpression(fromOutcome)) {
+                    Application app = context.getApplication();
+                    fromOutcome = app.evaluateExpressionGet(context, fromOutcome, String.class);
+                    
                 }
+                result = getViewId(context, fromAction, fromOutcome, toFlowDocumentId);
             }
         }
         if (null != result) {

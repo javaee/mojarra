@@ -175,7 +175,7 @@
       <xsd:element name="absolute-ordering"
                    type="javaee:faces-config-absoluteOrderingType"
                    minOccurs="0"
-                   maxOccurs="1"/>
+                   />
       <xsd:element name="factory"
                    type="javaee:faces-config-factoryType"/>
       <xsd:element name="component"
@@ -189,7 +189,7 @@
       <xsd:element name="name"
                    type="javaee:java-identifierType"
                    minOccurs="0"
-                   maxOccurs="1">
+                   >
         <xsd:annotation>
           <xsd:documentation><![CDATA[
 
@@ -306,11 +306,11 @@
       <xsd:element name="after"
                    type="javaee:faces-config-ordering-orderingType"
                    minOccurs="0"
-                   maxOccurs="1"/>
+                   />
       <xsd:element name="before"
                    type="javaee:faces-config-ordering-orderingType"
                    minOccurs="0"
-                   maxOccurs="1"/>
+                   />
     </xsd:sequence>
     <xsd:attribute name="id"
                    type="xsd:ID"/>
@@ -339,7 +339,7 @@
       <xsd:element name="others"
                    type="javaee:faces-config-ordering-othersType"
                    minOccurs="0"
-                   maxOccurs="1"/>
+                   />
     </xsd:sequence>
     <xsd:attribute name="id"
                    type="xsd:ID"/>
@@ -385,7 +385,7 @@
       <xsd:element name="others"
                    type="javaee:faces-config-ordering-othersType"
                    minOccurs="0"
-                   maxOccurs="1"/>
+                   />
     </xsd:choice>
     <xsd:attribute name="id"
                    type="xsd:ID"/>
@@ -651,7 +651,7 @@
       <xsd:group ref="javaee:descriptionGroup"/>
       <xsd:element name="contract-mapping"
                    type="javaee:faces-config-application-resource-library-contracts-contract-mappingType"
-                   minOccurs="1"
+                   
                    maxOccurs="unbounded">
         <xsd:annotation>
           <xsd:documentation><![CDATA[
@@ -1826,7 +1826,7 @@ is assumed to be <code>&lt;flowName&gt;.xhtml</code>.</p>
       <xsd:element name="start-node"
                    type="javaee:java-identifierType"
                    minOccurs="0"
-                   maxOccurs="1">
+                   >
         <xsd:annotation>
           <xsd:documentation>
 
@@ -1870,11 +1870,11 @@ href="javax/faces/flow/FlowHandler.html">FlowHandler</a></code>.</p>
       <xsd:element name="initializer"
                    type="javaee:faces-config-faces-flow-definition-initializerType"
                    minOccurs="0"
-                   maxOccurs="1"/>
+                   />
       <xsd:element name="finalizer"
                    type="javaee:faces-config-faces-flow-definition-finalizerType"
                    minOccurs="0"
-                   maxOccurs="1"/>
+                   />
       <xsd:element name="inbound-parameter"
                    type="javaee:faces-config-faces-flow-definition-inbound-parameterType"
                    minOccurs="0"
@@ -1904,12 +1904,12 @@ href="javax/faces/flow/FlowHandler.html">FlowHandler</a></code>.</p>
       <xsd:sequence>
           <xsd:element name="method"
                        type="javaee:faces-config-faces-flow-definition-faces-method-call-methodType"
-                       minOccurs="1"
-                       maxOccurs="1"/>
+                       
+                       />
           <xsd:element name="default-outcome"
                        type="javaee:string"
-                       minOccurs="1"
-                       maxOccurs="1"/>
+                       
+                       />
           
       </xsd:sequence>
   </xsd:complexType>
@@ -1982,9 +1982,7 @@ href="javax/faces/flow/FlowHandler.html">FlowHandler</a></code>.</p>
 <div class="changed_added_2_2">
 
 <p>This element must contain one or more
-<code>&lt;navigation-case&gt;</code> elements, each of which must
-contain exactly one <code>&lt;if&gt;</code> and one
-<code>&lt;from-outcome&gt;</code> element.  When control passes to the
+<code>&lt;case&gt;</code> elements.  When control passes to the
 <code>&lt;switch&gt;</code> node, each of the cases must be considered
 in order and control must past to the <code>&lt;from-outcome&gt;</code>
 of the first one whose <code>&lt;if&gt;</code> expression evaluates to 
@@ -1997,8 +1995,8 @@ of the first one whose <code>&lt;if&gt;</code> expression evaluates to
       </xsd:documentation>
     </xsd:annotation>
     <xsd:sequence>
-      <xsd:element name="navigation-case"
-                   type="javaee:faces-config-navigation-caseType"
+      <xsd:element name="case"
+                   type="javaee:faces-config-faces-flow-definition-switch-caseType"
                    minOccurs="0"
                    maxOccurs="unbounded">
         <xsd:annotation>
@@ -2018,7 +2016,7 @@ of the first one whose <code>&lt;if&gt;</code> expression evaluates to
       <xsd:element name="default-outcome"
                    type="javaee:faces-config-faces-flow-definition-switch-default-outcomeType"
                    minOccurs="0"
-                   maxOccurs="1">
+                   >
         <xsd:annotation>
           <xsd:documentation>
 
@@ -2049,6 +2047,66 @@ of the first one whose <code>&lt;if&gt;</code> expression evaluates to
         </xsd:annotation>
     </xsd:attribute>
   </xsd:complexType>
+  
+  <xsd:complexType name="faces-config-faces-flow-definition-switch-caseType">
+    <xsd:annotation>
+      <xsd:documentation><![CDATA[
+
+         <p class="changed_added_2_2">Defines a case that will
+         be considered in the <code>&lt;switch&gt;</code>.</p>
+
+        
+      ]]></xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:group ref="javaee:descriptionGroup"/>
+      <xsd:element name="if"
+                   type="javaee:faces-config-ifType"
+                   minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation><![CDATA[
+
+           <p class="changed_added_2_2">If this EL expression evaluates to
+           <code>true</code>, the corresponding <code>from-outcome</code> will 
+           be the outcome taken by the enclosing <code>&lt;switch&gt;</code></p>
+            
+          ]]></xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="from-outcome"
+                   type="javaee:string"
+                   minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation><![CDATA[
+
+            <p>The "from-outcome" element contains a logical outcome
+            string returned by the execution of an application
+            action method selected via an "actionRef" property
+            (or a literal value specified by an "action" property)
+            of a UICommand component.  If specified, this rule
+            will be relevant only if the outcome value matches
+            this element's value.  If not specified, this rule
+            will be relevant if the outcome value is non-null
+            or, if the "if" element is present, will be relevant
+            for any outcome value, with the assumption that the
+            condition specified in the "if" element ultimately
+            determines if this rule is a match.</p>
+
+<p class="changed_added_2_2">If used in a faces flow, this element
+represents the node id to which control will be passed.</p>
+
+
+]]>
+            
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="id"
+                   type="xsd:ID">
+    </xsd:attribute>
+  </xsd:complexType>
+  
 
   <xsd:complexType name="faces-config-faces-flow-definition-switch-default-outcomeType">
     <xsd:annotation>
@@ -2107,8 +2165,7 @@ represents the node id to which control will be passed.</p>
 
 <div class="changed_added_2_2">
 
-<p>This element must contain exactly one <code>&lt;navigation-case&gt;</code> element, 
-which must contain exactly one <code>&lt;from-outcome&gt;</code> element.</p>
+<p>This element must contain exactly one <code>&lt;from-outcome&gt;</code> element.</p>
 </div>
 
 ]]>
@@ -2117,21 +2174,18 @@ which must contain exactly one <code>&lt;from-outcome&gt;</code> element.</p>
     </xsd:annotation>
 
     <xsd:sequence>
-      <xsd:element name="navigation-case"
-                   type="javaee:faces-config-navigation-caseType"
-                   minOccurs="1" maxOccurs="1">
+      <xsd:element name="from-outcome"
+                   type="javaee:string"
+                   >
         <xsd:annotation>
-          <xsd:documentation>
+          <xsd:documentation><![CDATA[
 
-        <![CDATA[
+<p class="changed_added_2_2">This element
+represents the node id to which control will be passed.</p>
 
-         <p class="changed_added_2_2">Define a navigation case for a
-         faces flow.  This element is used within
-         <code>&lt;flow-return&gt;</code> and
-         <code>&lt;switch&gt;</code> elements.<p>
 
 ]]>
-
+            
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
@@ -2175,7 +2229,7 @@ which must contain exactly one <code>&lt;faces-flow-id&gt;</code> element.</p>
     <xsd:sequence>
       <xsd:element name="faces-flow-reference"
                    type="javaee:faces-config-faces-flow-definition-flow-call-faces-flow-referenceType"
-                   minOccurs="1" maxOccurs="1">
+                    >
         <xsd:annotation>
           <xsd:documentation>
 
@@ -2241,7 +2295,7 @@ which must contain exactly one <code>&lt;faces-flow-id&gt;</code> element.</p>
       <xsd:element name="flow-document-id"
                    type="javaee:java-identifierType"
                    minOccurs="0"
-                   maxOccurs="1">
+                   >
         <xsd:annotation>
           <xsd:documentation><![CDATA[
 
@@ -2254,7 +2308,7 @@ which must contain exactly one <code>&lt;faces-flow-id&gt;</code> element.</p>
       <xsd:element name="faces-flow-id"
                    type="javaee:java-identifierType"
                    minOccurs="0"
-                   maxOccurs="1">
+                   >
         <xsd:annotation>
           <xsd:documentation><![CDATA[
 
@@ -2323,8 +2377,8 @@ which must contain exactly one <code>&lt;faces-flow-id&gt;</code> element.</p>
     <xsd:sequence>
       <xsd:element name="name"
                    type="javaee:java-identifierType"
-                   minOccurs="1"
-                   maxOccurs="1">
+                   
+                   >
         <xsd:annotation>
           <xsd:documentation><![CDATA[
 
@@ -2338,8 +2392,8 @@ which must contain exactly one <code>&lt;faces-flow-id&gt;</code> element.</p>
       </xsd:element>
       <xsd:element name="value"
                    type="javaee:faces-config-faces-flow-definition-parameter-valueType"
-                   minOccurs="1"
-                   maxOccurs="1">
+                   
+                   >
         <xsd:annotation>
           <xsd:documentation><![CDATA[
 
@@ -2372,8 +2426,8 @@ which must contain exactly one <code>&lt;faces-flow-id&gt;</code> element.</p>
     <xsd:sequence>
       <xsd:element name="name"
                    type="javaee:java-identifierType"
-                   minOccurs="1"
-                   maxOccurs="1">
+                   
+                   >
         <xsd:annotation>
           <xsd:documentation><![CDATA[
 
@@ -2386,8 +2440,8 @@ which must contain exactly one <code>&lt;faces-flow-id&gt;</code> element.</p>
       </xsd:element>
       <xsd:element name="value"
                    type="javaee:faces-config-faces-flow-definition-parameter-valueType"
-                   minOccurs="1"
-                   maxOccurs="1">
+                   
+                   >
         <xsd:annotation>
           <xsd:documentation><![CDATA[
 
@@ -2624,10 +2678,6 @@ which must contain exactly one <code>&lt;faces-flow-id&gt;</code> element.</p>
             condition specified in the "if" element ultimately
             determines if this rule is a match.</p>
 
-<p class="changed_added_2_2">If used in a faces flow, this element
-represents the node id to which control will be passed.</p>
-
-
 ]]>
             
           </xsd:documentation>
@@ -2666,7 +2716,7 @@ represents the node id to which control will be passed.</p>
       <xsd:element name="to-flow-document-id"
                      type="javaee:java-identifierType"
                      minOccurs="0"
-                     maxOccurs="1">
+                     >
           <xsd:annotation>
             <xsd:documentation><![CDATA[
 
@@ -2920,12 +2970,12 @@ represents the node id to which control will be passed.</p>
     <xsd:sequence>
       <xsd:element name="name"
                    type="javaee:string"
-                   minOccurs="1"
-                   maxOccurs="1"/>
+                   
+                   />
       <xsd:element name="value"
                    type="javaee:string"
-                   minOccurs="1"
-                   maxOccurs="1"/>
+                   
+                   />
     </xsd:sequence>
     <xsd:attribute name="id"
                    type="xsd:ID"/>
@@ -2948,12 +2998,12 @@ represents the node id to which control will be passed.</p>
     <xsd:sequence>
       <xsd:element name="name"
                    type="javaee:string"
-                   minOccurs="1"
-                   maxOccurs="1"/>
+                   
+                   />
       <xsd:element name="value"
                    type="javaee:string"
-                   minOccurs="1"
-                   maxOccurs="1"/>
+                   
+                   />
     </xsd:sequence>
     <xsd:attribute name="id"
                    type="xsd:ID"/>

@@ -41,6 +41,7 @@
 package com.sun.faces.facelets.flow;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
+import com.sun.faces.flow.SwitchCaseImpl;
 import java.io.IOException;
 import javax.faces.component.UIComponent;
 import javax.faces.view.facelets.FaceletContext;
@@ -53,17 +54,18 @@ public class FromOutcomeTagHandler extends TagHandlerImpl {
         super(config);
     }
     
+    @Override
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
         this.nextHandler.apply(ctx, parent);
         if (FacesFlowReturnTagHandler.isWithinFacesFlowReturn(ctx)) {
-            FlowNavigationCase cur = FacesFlowReturnTagHandler.getNavigationCase(ctx);
+            SwitchCaseImpl cur = FacesFlowReturnTagHandler.getNavigationCase(ctx);
             if (null == cur) {
                 throw new TagException(tag, "Unable to determine <navigation-case> for which " +
                         this.nextHandler.toString() + " is the <from-outcome>.");
             }
             cur.setFromOutcome(this.nextHandler.toString());
         } else if (SwitchNodeTagHandler.isWithinSwitch(ctx)) {
-            FlowNavigationCase cur = NavigationCaseTagHandler.getCurrentNavigationCase(ctx);
+            SwitchCaseImpl cur = NavigationCaseTagHandler.getCurrentNavigationCase(ctx);
             if (null == cur) {
                 throw new TagException(tag, "Unable to determine <navigation-case> for which " +
                         this.nextHandler.toString() + " is the <from-outcome>.");

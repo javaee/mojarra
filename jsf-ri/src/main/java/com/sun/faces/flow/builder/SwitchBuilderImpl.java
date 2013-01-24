@@ -40,7 +40,7 @@
  */
 package com.sun.faces.flow.builder;
 
-import com.sun.faces.facelets.flow.FlowNavigationCase;
+import com.sun.faces.flow.SwitchCaseImpl;
 import com.sun.faces.flow.SwitchNodeImpl;
 import javax.faces.flow.builder.SwitchBuilder;
 import javax.faces.flow.builder.SwitchCaseBuilder;
@@ -63,7 +63,7 @@ public class SwitchBuilderImpl extends SwitchBuilder {
 
     @Override
     public SwitchCaseBuilder defaultOutcome(String outcome) {
-        FlowNavigationCase navCase = new FlowNavigationCase();
+        SwitchCaseImpl navCase = new SwitchCaseImpl();
         navCase.setEnclosingId(switchId);
         navCase.setFromOutcome(outcome);
         switchNode.setDefaultCase(navCase);

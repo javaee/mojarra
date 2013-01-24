@@ -40,7 +40,6 @@
  */
 package com.sun.faces.flow.builder;
 
-import com.sun.faces.facelets.flow.FlowNavigationCase;
 import com.sun.faces.flow.ReturnNodeImpl;
 import javax.el.ValueExpression;
 import javax.faces.flow.builder.ReturnBuilder;
@@ -63,18 +62,14 @@ public class ReturnBuilderImpl extends ReturnBuilder {
     
     @Override
     public ReturnBuilder fromOutcome(String outcome) {
-        FlowNavigationCase navCase = new FlowNavigationCase();
-        navCase.setFromOutcome(outcome);
-        ReturnNodeImpl returnNode = new ReturnNodeImpl(id, navCase);
+        ReturnNodeImpl returnNode = new ReturnNodeImpl(id, outcome);
         root._getFlow()._getReturns().put(id, returnNode);
         return this;
     }
 
     @Override
     public ReturnBuilder fromOutcome(ValueExpression outcome) {
-        FlowNavigationCase navCase = new FlowNavigationCase();
-        navCase.setFromOutcome(outcome.getExpressionString());
-        ReturnNodeImpl returnNode = new ReturnNodeImpl(id, navCase);
+        ReturnNodeImpl returnNode = new ReturnNodeImpl(id, outcome.getExpressionString());
         root._getFlow()._getReturns().put(id, returnNode);
 
         return this;

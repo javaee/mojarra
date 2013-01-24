@@ -40,14 +40,12 @@
  */
 package javax.faces.flow;
 
-import javax.faces.application.NavigationCase;
-
 /**
  * 
  * @since 2.2
  */
 public abstract class ReturnNode extends FlowNode {
     
-    public abstract NavigationCase getNavigationCase(); 
+    public abstract String getFromOutcome(); 
     
 }

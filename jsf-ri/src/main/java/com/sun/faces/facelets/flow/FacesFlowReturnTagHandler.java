@@ -41,6 +41,7 @@
 package com.sun.faces.facelets.flow;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
+import com.sun.faces.flow.SwitchCaseImpl;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,13 +58,13 @@ public class FacesFlowReturnTagHandler extends TagHandlerImpl {
         super(config);
     }
     
-    public static FlowNavigationCase getNavigationCase(FaceletContext ctx) {
-        FlowNavigationCase result = null;
+    public static SwitchCaseImpl getNavigationCase(FaceletContext ctx) {
+        SwitchCaseImpl result = null;
 
         Map<FacesFlowDefinitionTagHandler.FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
-        result = (FlowNavigationCase) flowData.get(FacesFlowDefinitionTagHandler.FlowDataKeys.FlowReturnNavigationCase);
+        result = (SwitchCaseImpl) flowData.get(FacesFlowDefinitionTagHandler.FlowDataKeys.FlowReturnNavigationCase);
         if (null == result) {
-            result = new FlowNavigationCase();
+            result = new SwitchCaseImpl();
             flowData.put(FacesFlowDefinitionTagHandler.FlowDataKeys.FlowReturnNavigationCase, result);
         }
         
@@ -75,12 +76,12 @@ public class FacesFlowReturnTagHandler extends TagHandlerImpl {
         flowData.remove(FacesFlowDefinitionTagHandler.FlowDataKeys.FlowReturnNavigationCase);
     }
     
-    public static List<FlowNavigationCase> getNavigationCases(FaceletContext ctx) {
-        List<FlowNavigationCase> cases = null;
+    public static List<SwitchCaseImpl> getNavigationCases(FaceletContext ctx) {
+        List<SwitchCaseImpl> cases = null;
         Map<FacesFlowDefinitionTagHandler.FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
-        cases = (List<FlowNavigationCase>) flowData.get(FacesFlowDefinitionTagHandler.FlowDataKeys.NavigationCases);
+        cases = (List<SwitchCaseImpl>) flowData.get(FacesFlowDefinitionTagHandler.FlowDataKeys.NavigationCases);
         if (null == cases) {
-            cases = new ArrayList<FlowNavigationCase>();
+            cases = new ArrayList<SwitchCaseImpl>();
             flowData.put(FacesFlowDefinitionTagHandler.FlowDataKeys.NavigationCases, cases);
         }
         
@@ -106,13 +107,14 @@ public class FacesFlowReturnTagHandler extends TagHandlerImpl {
         }
     }
     
+    @Override
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
         try {
             setWithinFacesFlowReturn(ctx, true);
             this.nextHandler.apply(ctx, parent);
             TagAttribute id = this.getRequiredAttribute("id");
-            List<FlowNavigationCase> taskFlowReturns = getNavigationCases(ctx);        
-            FlowNavigationCase taskFlowReturn = getNavigationCase(ctx);
+            List<SwitchCaseImpl> taskFlowReturns = getNavigationCases(ctx);        
+            SwitchCaseImpl taskFlowReturn = getNavigationCase(ctx);
             if (null == taskFlowReturns) {
                 throw new TagException(tag, "Unable to determine from-outcome for task flow return id " + id.getValue(ctx));
             }

@@ -41,6 +41,7 @@
 package com.sun.faces.flow;
 
 import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.util.Util;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
@@ -100,8 +101,11 @@ public class FlowHandlerImpl extends FlowHandler {
 
     @Override
     public void addFlow(FacesContext context, Flow toAdd) {
+        Util.notNull("context", context);
+        Util.notNull("toAdd", toAdd);
+
         String id = toAdd.getId();
-        if (null == toAdd || null == id || 0 == id.length()) {
+        if (null == id || 0 == id.length()) {
             throw new IllegalArgumentException();
         }
         Map<String, Flow> mapsForDefiningDocument = flows.get(toAdd.getDefiningDocumentId());

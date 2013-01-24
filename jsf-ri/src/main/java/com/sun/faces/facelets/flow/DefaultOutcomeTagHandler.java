@@ -41,6 +41,7 @@
 package com.sun.faces.facelets.flow;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
+import com.sun.faces.flow.SwitchCaseImpl;
 import com.sun.faces.flow.MethodCallNodeImpl;
 import java.io.IOException;
 import javax.el.ExpressionFactory;
@@ -55,10 +56,11 @@ public class DefaultOutcomeTagHandler extends TagHandlerImpl {
         super(config);
     }
     
+    @Override
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
         this.nextHandler.apply(ctx, parent);
         if (SwitchNodeTagHandler.isWithinSwitch(ctx)) {
-            FlowNavigationCase cur = SwitchNodeTagHandler.getDefaultSwitchCase(ctx, true);
+            SwitchCaseImpl cur = SwitchNodeTagHandler.getDefaultSwitchCase(ctx, true);
             cur.setFromOutcome(this.nextHandler.toString());
             
         }

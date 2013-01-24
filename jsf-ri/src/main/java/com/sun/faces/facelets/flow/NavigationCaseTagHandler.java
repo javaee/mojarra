@@ -41,6 +41,7 @@
 package com.sun.faces.facelets.flow;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
+import com.sun.faces.flow.SwitchCaseImpl;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -54,13 +55,13 @@ public class NavigationCaseTagHandler extends TagHandlerImpl {
         super(config);
     }
     
-    public static FlowNavigationCase getCurrentNavigationCase(FaceletContext ctx) {
-        FlowNavigationCase result = null;
+    public static SwitchCaseImpl getCurrentNavigationCase(FaceletContext ctx) {
+        SwitchCaseImpl result = null;
 
         Map<FacesFlowDefinitionTagHandler.FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
-        result = (FlowNavigationCase) flowData.get(FacesFlowDefinitionTagHandler.FlowDataKeys.CurrentNavigationCase);
+        result = (SwitchCaseImpl) flowData.get(FacesFlowDefinitionTagHandler.FlowDataKeys.CurrentNavigationCase);
         if (null == result) {
-            result = new FlowNavigationCase();
+            result = new SwitchCaseImpl();
             flowData.put(FacesFlowDefinitionTagHandler.FlowDataKeys.CurrentNavigationCase, result);
         }
         
@@ -74,12 +75,13 @@ public class NavigationCaseTagHandler extends TagHandlerImpl {
         
     }
     
+    @Override
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
         this.nextHandler.apply(ctx, parent);
         if (SwitchNodeTagHandler.isWithinSwitch(ctx)) {
-            FlowNavigationCase navCase = getCurrentNavigationCase(ctx);
+            SwitchCaseImpl navCase = getCurrentNavigationCase(ctx);
             if (null != navCase) {
-                List<FlowNavigationCase> cases = SwitchNodeTagHandler.getSwitchCases(ctx);
+                List<SwitchCaseImpl> cases = SwitchNodeTagHandler.getSwitchCases(ctx);
                 cases.add(navCase);
             }
             removeCurrentNavigationCase(ctx);

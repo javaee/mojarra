@@ -40,28 +40,28 @@
  */
 package com.sun.faces.flow.builder;
 
-import com.sun.faces.facelets.flow.FlowNavigationCase;
+import com.sun.faces.flow.SwitchCaseImpl;
 import javax.el.ValueExpression;
 import javax.faces.flow.builder.SwitchCaseBuilder;
 
 public class SwitchCaseBuilderImpl extends SwitchCaseBuilder {
     
     private SwitchBuilderImpl root;
-    private FlowNavigationCase myCase;
+    private SwitchCaseImpl myCase;
 
     public SwitchCaseBuilderImpl(SwitchBuilderImpl root) {
         this.root = root;
         this.myCase = null;
     }
     
-    public FlowNavigationCase getNavigationCase() {
+    public SwitchCaseImpl getNavigationCase() {
         return myCase;
     }
 
     @Override
     public SwitchCaseBuilder navigationCase() {
         SwitchCaseBuilderImpl result = new SwitchCaseBuilderImpl(root);
-        result.myCase = new FlowNavigationCase();
+        result.myCase = new SwitchCaseImpl();
         root.getSwitchNode()._getCases().add(result.myCase);
         return result;
     }

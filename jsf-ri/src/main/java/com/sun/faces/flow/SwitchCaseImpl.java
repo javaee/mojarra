@@ -38,43 +38,64 @@
  * holder.
 
  */
-package com.sun.faces.facelets.flow;
+package com.sun.faces.flow;
 
-import com.sun.faces.facelets.tag.TagHandlerImpl;
-import com.sun.faces.flow.SwitchCaseImpl;
-import java.io.IOException;
-import javax.faces.component.UIComponent;
-import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.TagConfig;
-import javax.faces.view.facelets.TagException;
+import javax.el.ExpressionFactory;
+import javax.el.ValueExpression;
+import javax.faces.context.FacesContext;
+import javax.faces.flow.SwitchCase;
 
-public class IfTagHandler extends TagHandlerImpl {
+public class SwitchCaseImpl extends SwitchCase {
 
-    public IfTagHandler(TagConfig config) {
-        super(config);
+    // This is the id of the <return> or <switch>
+    private String enclosingId;
+    private String fromOutcome;
+    private String condition;
+    private ValueExpression conditionExpr;
+
+    public ValueExpression getConditionExpression () {
+        return conditionExpr;
+    }
+
+    @Override
+    public Boolean getCondition(FacesContext context) {
+        if (conditionExpr == null && condition != null) {
+            ExpressionFactory factory =
+                  context.getApplication().getExpressionFactory();
+            conditionExpr = factory.createValueExpression(context.getELContext(),
+                                                          condition,
+                                                          Boolean.class);
+        }
+
+        return ((conditionExpr != null)
+                ? (Boolean) conditionExpr.getValue(context.getELContext())
+                : null);
+    }
+    
+    public void setCondition(String condition) {
+        this.condition = condition;
+    }
+
+    public void setConditionExpression(ValueExpression conditionExpression) {
+        this.conditionExpr = conditionExpression;
     }
     
     @Override
-    public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
-        this.nextHandler.apply(ctx, parent);
-        if (FacesFlowReturnTagHandler.isWithinFacesFlowReturn(ctx)) {
-            SwitchCaseImpl cur = FacesFlowReturnTagHandler.getNavigationCase(ctx);
-            if (null == cur) {
-                throw new TagException(tag, "Unable to determine <navigation-case> for which " +
-                        this.nextHandler.toString() + " is the <from-outcome>.");
-            }
-            cur.setCondition(this.nextHandler.toString());
-        } else if (SwitchNodeTagHandler.isWithinSwitch(ctx)) {
-            SwitchCaseImpl cur = NavigationCaseTagHandler.getCurrentNavigationCase(ctx);
-            if (null == cur) {
-                throw new TagException(tag, "Unable to determine <navigation-case> for which " +
-                        this.nextHandler.toString() + " is the <from-outcome>.");
-            }
-            cur.setCondition(this.nextHandler.toString());
-            
-        }
+    public String getFromOutcome() {
+        return fromOutcome;
     }
     
-    
+    public void setFromOutcome(String fromOutcome) {
+        this.fromOutcome = fromOutcome;
+    }
+
+    public String getEnclosingId() {
+        return enclosingId;
+    }
+
+    public void setEnclosingId(String returnId) {
+        this.enclosingId = returnId;
+    }
+
     
 }
