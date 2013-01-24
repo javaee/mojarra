@@ -56,11 +56,12 @@ import javax.faces.event.SystemEvent;
 import javax.faces.event.ViewMapListener;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
+import javax.servlet.http.HttpSessionListener;
 
 /**
  * The manager that deals with non-CDI and CDI ViewScoped beans.
  */
-public class ViewScopeManager implements ViewMapListener {
+public class ViewScopeManager implements HttpSessionListener, ViewMapListener {
 
     /**
      * Stores the logger.
@@ -263,10 +264,23 @@ public class ViewScopeManager implements ViewMapListener {
     }
 
     /**
+     * Create the associated data in the session (if any).
+     * 
+     * @param se the HTTP session event.
+     */
+    @Override
+    public void sessionCreated(HttpSessionEvent se) {
+        if (LOGGER.isLoggable(Level.FINEST)) {
+            LOGGER.log(Level.FINEST, "Creating session for @ViewScoped beans");
+        }
+    }
+    
+    /**
      * Destroy the associated data in the session.
      *
      * @param hse the HTTP session event.
      */
+    @Override
     public void sessionDestroyed(HttpSessionEvent hse) {
         if (LOGGER.isLoggable(Level.FINEST)) {
             LOGGER.log(Level.FINEST, "Cleaning up session for @ViewScoped beans");
