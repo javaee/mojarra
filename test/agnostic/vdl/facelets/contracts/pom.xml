@@ -15,6 +15,7 @@
         <module>basic</module>
         <module>basic_contract_in_jar</module>
         <module>basic_contract_jar</module>
+        <module>sample</module>
         <module>simple</module>
         <module>vhosts</module>
         <module>viewroot</module>

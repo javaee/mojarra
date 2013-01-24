@@ -790,16 +790,35 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     @Override
     public List<String> calculateResourceLibraryContracts(FacesContext context, String viewId) {
         List<String> result = null;
+        String longestPattern = null;
         if (null != contractMappings) {
-            assert(!contractMappings.isEmpty());
-            // short cut, see if we have a mapping for "*"
-            result = contractMappings.get("*");
-            
-            if (null == result) {
-                // failing that, do some matching manipulation.
-                // PENDING: Do a proper matching algorithm.
-                result = contractMappings.get(viewId);
+            String longestMatch = null;
+            for (Map.Entry<String, List<String>> mappings : contractMappings.entrySet()) {
+                String urlPattern = mappings.getKey();
+                if (urlPattern.endsWith("*")) { 
+                    String prefix = urlPattern.substring(0, urlPattern.length() - 1);
+                    if (viewId.startsWith(prefix)) {
+                        if (longestPattern == null) {
+                            longestPattern = urlPattern;
+                            longestMatch = prefix;
+                        } else if (longestMatch.length() < prefix.length()) {
+                            longestPattern = urlPattern;
+                            longestMatch = prefix;
+                        }
+                    }
+                } else if (viewId.equals(urlPattern)) {
+                    longestPattern = urlPattern;
+                    break;
+                }
             }
+        }
+        
+        if (longestPattern != null) {
+            result = contractMappings.get(longestPattern);
+        }
+        
+        if (result == null) {
+            result = contractMappings.get("*");
         }
         
         return result;
