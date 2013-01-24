@@ -140,7 +140,7 @@ public class ResourceLibraryContractsConfigProcessor extends AbstractConfigProce
                              * If there is no urlPattern then add it to the list,
                              */
                             ArrayList<String> list = new ArrayList<String>();
-                            NodeList contracts = (NodeList) xpath.evaluate("//ns1:contracts/text()", node, XPathConstants.NODESET);
+                            NodeList contracts = (NodeList) xpath.evaluate("//ns1:contracts/text()", contractMapping, XPathConstants.NODESET);
                             if (contracts.getLength() > 0) {
                                 for (int j = 0; j < contracts.getLength(); j++) {
                                     String[] contractStrings = contracts.item(j).getNodeValue().trim().split(",");
