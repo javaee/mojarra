@@ -2319,6 +2319,9 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
         };
         for (var i = 0; i < len; i++) {
             var el = els[i];
+            if (el.name === "") {
+                continue;
+            }
             if (!el.disabled) {
                 switch (el.type) {
                     case 'submit':
