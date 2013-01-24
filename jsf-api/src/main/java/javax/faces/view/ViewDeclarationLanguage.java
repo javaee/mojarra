@@ -458,7 +458,7 @@ public abstract class ViewDeclarationLanguage {
     /**
      * <p class="changed_added_2_2">Return the list of resource library contracts
      * that will be made available for use in the view specified by the argument
-     * {@code viewId}.  See section JSF.7.6.2 for the specification of the default implementation.
+     * {@code viewId}.  See section JSF.7.7.2 for the specification of the default implementation.
      * For backward compatibility with prior implementations, an implementation 
      * is provided that returns {@code null}, but any implementation compliant
      * with the version of the specification in which this method was introduced

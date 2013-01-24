@@ -650,7 +650,9 @@
     <xsd:sequence>
       <xsd:group ref="javaee:descriptionGroup"/>
       <xsd:element name="contract-mapping"
-                   type="javaee:faces-config-application-resource-library-contracts-contract-mappingType">
+                   type="javaee:faces-config-application-resource-library-contracts-contract-mappingType"
+                   minOccurs="1"
+                   maxOccurs="unbounded">
         <xsd:annotation>
           <xsd:documentation><![CDATA[
 
