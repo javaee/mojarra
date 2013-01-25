@@ -1035,12 +1035,12 @@ public class HtmlResponseWriter extends ResponseWriter {
             return;
         }
         writeURIAttributeIgnoringPassThroughAttributes(name, value, 
-                componentPropertyName);
+                componentPropertyName, false);
 
     }
     
     private void writeURIAttributeIgnoringPassThroughAttributes(String name, Object value,
-            String componentPropertyName) throws IOException {
+            String componentPropertyName, boolean isPassthrough) throws IOException {
         
         if (name == null) {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
@@ -1070,7 +1070,7 @@ public class HtmlResponseWriter extends ResponseWriter {
         String stringValue = value.toString();
         ensureTextBufferCapacity(stringValue);
         // Javascript URLs should not be URL-encoded
-        if (stringValue.startsWith("javascript:")) {
+        if (stringValue.startsWith("javascript:") || isPassthrough) {
             HtmlUtils.writeAttribute(attributesBuffer,
                                      escapeUnicode,
                                      escapeIso,
@@ -1170,7 +1170,7 @@ public class HtmlResponseWriter extends ResponseWriter {
                 String val = getAttributeValue(context, valObj);
                 String key = entry.getKey();
 
-                writeURIAttributeIgnoringPassThroughAttributes(key, val, key);
+                writeURIAttributeIgnoringPassThroughAttributes(key, val, key, true);
             }
         }
 
