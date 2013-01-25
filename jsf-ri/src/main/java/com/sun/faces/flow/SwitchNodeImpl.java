@@ -43,13 +43,14 @@ package com.sun.faces.flow;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import javax.faces.context.FacesContext;
 import javax.faces.flow.SwitchCase;
 import javax.faces.flow.SwitchNode;
 
 public class SwitchNodeImpl extends SwitchNode {
         
     private final String id;
-    private SwitchCaseImpl defaultCase;
+    private String defaultOutcome;
     private CopyOnWriteArrayList<SwitchCase> _cases;
     private List<SwitchCase> cases;
 
@@ -57,10 +58,10 @@ public class SwitchNodeImpl extends SwitchNode {
         this(id, null);
     }
     
-    public SwitchNodeImpl(String id, SwitchCaseImpl defaultCase) {
+    public SwitchNodeImpl(String id, String defaultCase) {
         this.id = id;
         
-        this.defaultCase = defaultCase;
+        this.defaultOutcome = defaultCase;
         _cases = new CopyOnWriteArrayList<SwitchCase>();
         cases = Collections.unmodifiableList(_cases);
     }
@@ -77,7 +78,7 @@ public class SwitchNodeImpl extends SwitchNode {
         if ((this.id == null) ? (other.id != null) : !this.id.equals(other.id)) {
             return false;
         }
-        if (this.defaultCase != other.defaultCase && (this.defaultCase == null || !this.defaultCase.equals(other.defaultCase))) {
+        if (this.defaultOutcome != other.defaultOutcome && (this.defaultOutcome == null || !this.defaultOutcome.equals(other.defaultOutcome))) {
             return false;
         }
         if (this._cases != other._cases && (this._cases == null || !this._cases.equals(other._cases))) {
@@ -90,7 +91,7 @@ public class SwitchNodeImpl extends SwitchNode {
     public int hashCode() {
         int hash = 5;
         hash = 47 * hash + (this.id != null ? this.id.hashCode() : 0);
-        hash = 47 * hash + (this.defaultCase != null ? this.defaultCase.hashCode() : 0);
+        hash = 47 * hash + (this.defaultOutcome != null ? this.defaultOutcome.hashCode() : 0);
         hash = 47 * hash + (this._cases != null ? this._cases.hashCode() : 0);
         return hash;
     }
@@ -110,12 +111,12 @@ public class SwitchNodeImpl extends SwitchNode {
     }
 
     @Override
-    public SwitchCase getDefaultCase() {
-        return defaultCase;
+    public String getDefaultOutcome(FacesContext context) {
+        return defaultOutcome;
     }
     
-    public void setDefaultCase(SwitchCaseImpl defaultCase) {
-        this.defaultCase = defaultCase;
+    public void setDefaultOutcome(String defaultCase) {
+        this.defaultOutcome = defaultCase;
     }
 
     

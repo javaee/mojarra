@@ -868,14 +868,15 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                     }
                 }
                 if (null == result) {
-                    SwitchCase defaultCase = switchNode.getDefaultCase();
-                    outcome = defaultCase.getFromOutcome();
-                    Flow currentFlow = flowHandler.getCurrentFlow(context);
-                    if (null != currentFlow) {
-                        result = synthesizeCaseStruct(context, currentFlow, fromAction, outcome);
-                        if (null != result) {
-                            result.currentFlow = currentFlow;
-                            result.newFlow = currentFlow;
+                    outcome = switchNode.getDefaultOutcome(context);
+                    if (null != outcome) {
+                        Flow currentFlow = flowHandler.getCurrentFlow(context);
+                        if (null != currentFlow) {
+                            result = synthesizeCaseStruct(context, currentFlow, fromAction, outcome);
+                            if (null != result) {
+                                result.currentFlow = currentFlow;
+                                result.newFlow = currentFlow;
+                            }
                         }
                     }
                 }

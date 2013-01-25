@@ -88,28 +88,21 @@ public class SwitchNodeTagHandler extends TagHandlerImpl {
         return result;
     }
     
-    public static SwitchCaseImpl getDefaultSwitchCase(FaceletContext ctx, boolean create) {
-        SwitchCaseImpl result = null;
+    public static String getDefaultOutcome(FaceletContext ctx) {
+        String result = null;
 
         Map<FacesFlowDefinitionTagHandler.FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
-        result = (SwitchCaseImpl) flowData.get(FacesFlowDefinitionTagHandler.FlowDataKeys.SwitchDefaultCase);
-        if (null == result && create) {
-            result = new SwitchCaseImpl();
-            flowData.put(FacesFlowDefinitionTagHandler.FlowDataKeys.SwitchDefaultCase, result);
-        }
+        result = (String) flowData.get(FacesFlowDefinitionTagHandler.FlowDataKeys.SwitchDefaultCase);
         
         return result;
     }
     
-    public static SwitchCaseImpl getDefaultSwitchCase(FaceletContext ctx) {
-        SwitchCaseImpl result = null;
+    public static void setDefaultOutcome(FaceletContext ctx, String defaultOutcome) {
 
         Map<FacesFlowDefinitionTagHandler.FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
-        result = (SwitchCaseImpl) flowData.get(FacesFlowDefinitionTagHandler.FlowDataKeys.SwitchDefaultCase);
-        
-        return result;
+        flowData.put(FacesFlowDefinitionTagHandler.FlowDataKeys.SwitchDefaultCase, defaultOutcome);
+
     }
-    
     
     public static boolean isWithinSwitch(FaceletContext ctx) {
         boolean result = false;
@@ -142,12 +135,9 @@ public class SwitchNodeTagHandler extends TagHandlerImpl {
             List<SwitchCaseImpl> casesFromConfig = SwitchNodeTagHandler.getSwitchCases(ctx);
             String idStr = id.getValue(ctx);
 
-            SwitchCaseImpl defaultSwitchCase = SwitchNodeTagHandler.getDefaultSwitchCase(ctx);
-            if (null != defaultSwitchCase) {
-                defaultSwitchCase.setEnclosingId(idStr);
-            }
+            String defaultOutcome = SwitchNodeTagHandler.getDefaultOutcome(ctx);
             
-            SwitchNodeImpl toAdd = new SwitchNodeImpl(idStr, defaultSwitchCase);
+            SwitchNodeImpl toAdd = new SwitchNodeImpl(idStr, defaultOutcome);
             List<SwitchCase> cases = toAdd._getCases();
             for (SwitchCaseImpl cur : casesFromConfig) {
                 cur.setEnclosingId(idStr);

@@ -59,7 +59,7 @@ public class SwitchCaseBuilderImpl extends SwitchCaseBuilder {
     }
 
     @Override
-    public SwitchCaseBuilder navigationCase() {
+    public SwitchCaseBuilder switchCase() {
         SwitchCaseBuilderImpl result = new SwitchCaseBuilderImpl(root);
         result.myCase = new SwitchCaseImpl();
         root.getSwitchNode()._getCases().add(result.myCase);

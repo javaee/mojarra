@@ -44,7 +44,7 @@ import javax.el.ValueExpression;
 
 public abstract class SwitchCaseBuilder {
     
-    public abstract SwitchCaseBuilder navigationCase();
+    public abstract SwitchCaseBuilder switchCase();
         
     public abstract SwitchCaseBuilder condition(ValueExpression expression);
     

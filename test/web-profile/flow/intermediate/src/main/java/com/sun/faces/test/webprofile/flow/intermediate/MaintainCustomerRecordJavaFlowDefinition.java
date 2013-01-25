@@ -63,7 +63,7 @@ public class MaintainCustomerRecordJavaFlowDefinition implements Serializable {
         flowBuilder.viewNode(flowId, "/" + flowId + "/" + flowId + ".xhtml");
 
         flowBuilder.switchNode("router1").markAsStartNode().defaultOutcome("view-customer").
-                navigationCase().condition("#{flowScope.customerId == null}").
+                switchCase().condition("#{flowScope.customerId == null}").
                 fromOutcome("create-customer");
         flowBuilder.viewNode("create-customer", "/" + flowId + "/" + "create-customer.xhtml");
         flowBuilder.viewNode("view-customer", "/" + flowId + "/" + "view-customer.xhtml");

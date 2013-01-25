@@ -42,7 +42,7 @@ package javax.faces.flow.builder;
 
 public abstract class SwitchBuilder implements NodeBuilder {
     
-    public abstract SwitchCaseBuilder navigationCase();
+    public abstract SwitchCaseBuilder switchCase();
     
     public abstract SwitchCaseBuilder defaultOutcome(String outcome);
 
