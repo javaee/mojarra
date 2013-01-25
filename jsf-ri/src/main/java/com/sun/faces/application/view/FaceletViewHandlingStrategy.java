@@ -124,6 +124,7 @@ import javax.faces.component.visit.VisitResult;
 import static com.sun.faces.RIConstants.DYNAMIC_COMPONENT;
 import com.sun.faces.facelets.impl.XMLFrontMatterSaver;
 import com.sun.faces.renderkit.RenderKitUtils;
+import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javax.faces.application.ProjectStage;
@@ -791,6 +792,10 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     public List<String> calculateResourceLibraryContracts(FacesContext context, String viewId) {
         List<String> result = null;
         String longestPattern = null;
+        if (null == contractMappings) {
+            return Collections.emptyList();
+        }
+        
         if (null != contractMappings) {
             String longestMatch = null;
             for (Map.Entry<String, List<String>> mappings : contractMappings.entrySet()) {
