@@ -2259,7 +2259,6 @@ which must contain exactly one <code>&lt;faces-flow-id&gt;</code> element.</p>
 
       <xsd:element name="faces-flow-id"
                    type="javaee:java-identifierType"
-                   minOccurs="0"
                    >
         <xsd:annotation>
           <xsd:documentation><![CDATA[
@@ -2398,7 +2397,7 @@ which must contain exactly one <code>&lt;faces-flow-id&gt;</code> element.</p>
           <xsd:documentation><![CDATA[
 
            <p class="changed_added_2_2"> The "value" element within an "outbound-parameter"
-            must be an EL Expression whose "get" will be called when the "flow-call"
+            must be a literal string or an EL Expression whose "get" will be called when the "flow-call"
             containing this element is traversed to go to a new flow.</p>
             
           ]]></xsd:documentation>
