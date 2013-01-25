@@ -65,10 +65,10 @@
             
             <!-- If a customerId was specified then we'll edit it, otherwise create a new customer. -->
             <j:switch id="router1">
-                <j:navigation-case>
+                <j:case>
                     <j:if>#{flowScope.customerId == null}</j:if>
                     <j:from-outcome>create-customer</j:from-outcome>
-                </j:navigation-case>
+                </j:case>
                 <j:default-outcome>view-customer</j:default-outcome>
             </j:switch>
             
