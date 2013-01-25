@@ -40,12 +40,14 @@
  */
 package javax.faces.flow;
 
+import javax.faces.context.FacesContext;
+
 /**
  * 
  * @since 2.2
  */
 public abstract class ReturnNode extends FlowNode {
     
-    public abstract String getFromOutcome(); 
+    public abstract String getFromOutcome(FacesContext context); 
     
 }

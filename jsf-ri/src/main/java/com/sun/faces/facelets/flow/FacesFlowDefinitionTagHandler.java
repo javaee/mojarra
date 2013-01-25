@@ -148,6 +148,25 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
         
     }
     
+    public static SwitchCaseImpl getCurrentNavigationCase(FaceletContext ctx) {
+        SwitchCaseImpl result = null;
+
+        Map<FacesFlowDefinitionTagHandler.FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
+        result = (SwitchCaseImpl) flowData.get(FacesFlowDefinitionTagHandler.FlowDataKeys.CurrentNavigationCase);
+        if (null == result) {
+            result = new SwitchCaseImpl();
+            flowData.put(FacesFlowDefinitionTagHandler.FlowDataKeys.CurrentNavigationCase, result);
+        }
+        
+        return result;
+    }
+    
+    public static void removeCurrentNavigationCase(FaceletContext ctx) {
+        Map<FacesFlowDefinitionTagHandler.FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
+        flowData.remove(FacesFlowDefinitionTagHandler.FlowDataKeys.CurrentNavigationCase);
+        
+    }
+    
     private String getFlowId(FaceletContext ctx) {
         String id = null;
         
@@ -309,7 +328,8 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
                 for (SwitchCaseImpl cur : facesFlowReturns) {
                     String returnId = cur.getEnclosingId();
                     if (!returns.containsKey(returnId)) {
-                        ReturnNodeImpl newReturn = new ReturnNodeImpl(returnId, cur.getFromOutcome());
+                        ReturnNodeImpl newReturn = new ReturnNodeImpl(returnId);
+                        newReturn.setFromOutcome(cur.getFromOutcome());
                         returns.put(returnId, newReturn);
                     }
                 }

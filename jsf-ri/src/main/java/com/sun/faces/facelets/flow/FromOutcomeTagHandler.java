@@ -65,7 +65,7 @@ public class FromOutcomeTagHandler extends TagHandlerImpl {
             }
             cur.setFromOutcome(this.nextHandler.toString());
         } else if (SwitchNodeTagHandler.isWithinSwitch(ctx)) {
-            SwitchCaseImpl cur = NavigationCaseTagHandler.getCurrentNavigationCase(ctx);
+            SwitchCaseImpl cur = FacesFlowDefinitionTagHandler.getCurrentNavigationCase(ctx);
             if (null == cur) {
                 throw new TagException(tag, "Unable to determine <navigation-case> for which " +
                         this.nextHandler.toString() + " is the <from-outcome>.");

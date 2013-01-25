@@ -62,14 +62,16 @@ public class ReturnBuilderImpl extends ReturnBuilder {
     
     @Override
     public ReturnBuilder fromOutcome(String outcome) {
-        ReturnNodeImpl returnNode = new ReturnNodeImpl(id, outcome);
+        ReturnNodeImpl returnNode = new ReturnNodeImpl(id);
+        returnNode.setFromOutcome(outcome);
         root._getFlow()._getReturns().put(id, returnNode);
         return this;
     }
 
     @Override
     public ReturnBuilder fromOutcome(ValueExpression outcome) {
-        ReturnNodeImpl returnNode = new ReturnNodeImpl(id, outcome.getExpressionString());
+        ReturnNodeImpl returnNode = new ReturnNodeImpl(id);
+        returnNode.setFromOutcome(outcome);
         root._getFlow()._getReturns().put(id, returnNode);
 
         return this;

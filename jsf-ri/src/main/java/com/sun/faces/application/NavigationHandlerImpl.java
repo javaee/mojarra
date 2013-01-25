@@ -899,7 +899,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                         fromAction, outcome, null, result.viewId, 
                         null, false, false);
             } else if (node instanceof ReturnNode) {
-                String fromOutcome = ((ReturnNode)node).getFromOutcome();
+                String fromOutcome = ((ReturnNode)node).getFromOutcome(context);
                 if (SharedUtils.isExpression(fromOutcome)) {
                     Application app = context.getApplication();
                     fromOutcome = app.evaluateExpressionGet(context, fromOutcome, String.class);
@@ -1033,12 +1033,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             // faces-flow-return nodes.
             ReturnNode returnNode = currentFlow.getReturns().get(outcome);
             if (null != returnNode) {
-                String fromOutcome = returnNode.getFromOutcome();
-                if (SharedUtils.isExpression(fromOutcome)) {
-                    Application app = context.getApplication();
-                    fromOutcome = app.evaluateExpressionGet(context, fromOutcome, String.class);
-                    
-                }
+                String fromOutcome = returnNode.getFromOutcome(context);
                 result = getViewId(context, fromAction, fromOutcome, toFlowDocumentId);
             }
         }

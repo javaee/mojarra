@@ -92,13 +92,6 @@
         <description><![CDATA[
 
         ]]></description>
-        <tag-name>navigation-case</tag-name>
-        <handler-class>com.sun.faces.facelets.flow.NavigationCaseTagHandler</handler-class>
-    </tag>
-    <tag>
-        <description><![CDATA[
-
-        ]]></description>
         <tag-name>case</tag-name>
         <handler-class>com.sun.faces.facelets.flow.SwitchCaseTagHandler</handler-class>
     </tag>

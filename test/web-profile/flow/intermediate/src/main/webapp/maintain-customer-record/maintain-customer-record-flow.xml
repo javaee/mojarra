@@ -53,14 +53,10 @@
             <j:start-node>router1</j:start-node>
             
             <j:flow-return id="success">
-                <j:navigation-case>
-                    <j:from-outcome>/complete</j:from-outcome>
-                </j:navigation-case>
+                <j:from-outcome>/complete</j:from-outcome>
             </j:flow-return>
             <j:flow-return id="errorOccurred">
-                <j:navigation-case>
-                    <j:from-outcome>error</j:from-outcome>
-                </j:navigation-case>
+                <j:from-outcome>error</j:from-outcome>
             </j:flow-return>
             
             <!-- If a customerId was specified then we'll edit it, otherwise create a new customer. -->
