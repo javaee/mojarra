@@ -40,11 +40,15 @@
  */
 package javax.faces.flow.builder;
 
+import javax.el.ValueExpression;
+
 public abstract class SwitchBuilder implements NodeBuilder {
     
     public abstract SwitchCaseBuilder switchCase();
     
     public abstract SwitchCaseBuilder defaultOutcome(String outcome);
+    
+    public abstract SwitchCaseBuilder defaultOutcome(ValueExpression outcome);
 
     @Override
     public abstract SwitchBuilder markAsStartNode();

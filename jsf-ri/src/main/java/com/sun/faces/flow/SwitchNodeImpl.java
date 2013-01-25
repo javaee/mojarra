@@ -43,6 +43,8 @@ package com.sun.faces.flow;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import javax.el.ExpressionFactory;
+import javax.el.ValueExpression;
 import javax.faces.context.FacesContext;
 import javax.faces.flow.SwitchCase;
 import javax.faces.flow.SwitchNode;
@@ -50,18 +52,14 @@ import javax.faces.flow.SwitchNode;
 public class SwitchNodeImpl extends SwitchNode {
         
     private final String id;
-    private String defaultOutcome;
+    private ValueExpression defaultOutcome;
     private CopyOnWriteArrayList<SwitchCase> _cases;
     private List<SwitchCase> cases;
 
     public SwitchNodeImpl(String id) {
-        this(id, null);
-    }
-    
-    public SwitchNodeImpl(String id, String defaultCase) {
         this.id = id;
         
-        this.defaultOutcome = defaultCase;
+        this.defaultOutcome = null;
         _cases = new CopyOnWriteArrayList<SwitchCase>();
         cases = Collections.unmodifiableList(_cases);
     }
@@ -112,11 +110,27 @@ public class SwitchNodeImpl extends SwitchNode {
 
     @Override
     public String getDefaultOutcome(FacesContext context) {
-        return defaultOutcome;
+        String result = null;
+        
+        if (null != defaultOutcome) {
+            Object objResult = defaultOutcome.getValue(context.getELContext());
+            result = (null != objResult) ? objResult.toString() : null;
+        }
+        return result;
     }
     
-    public void setDefaultOutcome(String defaultCase) {
-        this.defaultOutcome = defaultCase;
+    public void setDefaultOutcome(String defaultOutcome) {
+        if (null == defaultOutcome) {
+            this.defaultOutcome = null;
+        }
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExpressionFactory eFactory = context.getApplication().getExpressionFactory();
+        this.defaultOutcome = eFactory.createValueExpression(context.getELContext(), 
+                defaultOutcome, Object.class);
+    }
+    
+    public void setDefaultOutcome(ValueExpression defaultOutcome) {
+        this.defaultOutcome = defaultOutcome;
     }
 
     

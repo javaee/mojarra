@@ -102,7 +102,7 @@
                     <j:if>#{flow_b_Bean.switchC_Case03}</j:if>
                     <j:from-outcome>page03</j:from-outcome>
                 </j:case>
-                <j:default-outcome>switchC_result</j:default-outcome>
+                <j:default-outcome>#{flow_b_Bean.defaultOutcome}</j:default-outcome>
             </j:switch>
         </j:faces-flow-definition>
 

@@ -41,6 +41,7 @@
 package com.sun.faces.flow.builder;
 
 import com.sun.faces.flow.SwitchNodeImpl;
+import javax.el.ValueExpression;
 import javax.faces.flow.builder.SwitchBuilder;
 import javax.faces.flow.builder.SwitchCaseBuilder;
 
@@ -62,6 +63,12 @@ public class SwitchBuilderImpl extends SwitchBuilder {
 
     @Override
     public SwitchCaseBuilder defaultOutcome(String outcome) {
+        switchNode.setDefaultOutcome(outcome);
+        return switchCaseBuilder;
+    }
+
+    @Override
+    public SwitchCaseBuilder defaultOutcome(ValueExpression outcome) {
         switchNode.setDefaultOutcome(outcome);
         return switchCaseBuilder;
     }

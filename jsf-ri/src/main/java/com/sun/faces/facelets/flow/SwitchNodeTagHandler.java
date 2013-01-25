@@ -137,7 +137,8 @@ public class SwitchNodeTagHandler extends TagHandlerImpl {
 
             String defaultOutcome = SwitchNodeTagHandler.getDefaultOutcome(ctx);
             
-            SwitchNodeImpl toAdd = new SwitchNodeImpl(idStr, defaultOutcome);
+            SwitchNodeImpl toAdd = new SwitchNodeImpl(idStr);
+            toAdd.setDefaultOutcome(defaultOutcome);
             List<SwitchCase> cases = toAdd._getCases();
             for (SwitchCaseImpl cur : casesFromConfig) {
                 cur.setEnclosingId(idStr);

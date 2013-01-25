@@ -71,7 +71,7 @@ public class FlowA implements Serializable {
                 switchCase().condition("#{flow_a_Bean.switchB_Case01}").fromOutcome("page01").
                 switchCase().condition("#{flow_a_Bean.switchB_Case02}").fromOutcome("switchB_result").
                 switchCase().condition("#{flow_a_Bean.switchB_Case03}").fromOutcome("page03");
-        flowBuilder.switchNode("switchC").defaultOutcome("switchC_result").
+        flowBuilder.switchNode("switchC").defaultOutcome("#{flow_a_Bean.defaultOutcome}").
                 switchCase().condition("#{flow_a_Bean.switchB_Case01}").fromOutcome("page01").
                 switchCase().condition("#{flow_a_Bean.switchB_Case02}").fromOutcome("page02").
                 switchCase().condition("#{flow_a_Bean.switchB_Case03}").fromOutcome("page03");
