@@ -383,49 +383,6 @@
             </properties>
         </profile>
         <profile>
-            <id>integration-glassfish-hudson-remove</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-antrun-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>prepare</id>
-                                <phase>validate</phase>
-                                <configuration>
-                                    <target>
-                                        <delete quiet="true" failonerror="false" dir="${integration.container.zipFile}"/>
-                                        <delete quiet="true" failonerror="false" dir="${integration.container.root}"/>
-                                    </target>
-                                </configuration>
-                                <goals>
-                                    <goal>run</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <dependencies>
-                            <dependency>
-                                <groupId>ant-contrib</groupId>
-                                <artifactId>ant-contrib</artifactId>
-                                <version>1.0b3</version>
-                                <exclusions>
-                                    <exclusion>
-                                        <groupId>ant</groupId>
-                                        <artifactId>ant</artifactId>
-                                    </exclusion>
-                                </exclusions>
-                            </dependency>
-                        </dependencies>
-                    </plugin>                    
-                </plugins>
-            </build>
-            <properties>
-                <integration.container.root>C:/Glassfish3.1.2.2</integration.container.root>
-                <integration.container.zipFile>C:/Downloads/Glassfish3.1.2.2.zip</integration.container.zipFile>
-            </properties>
-        </profile>
-        <profile>
             <id>integration-glassfish-cluster</id>
             <build>
                 <plugins>
@@ -606,6 +563,49 @@
                                         <exec executable="sh" osfamily="unix">
                                             <arg line='-c "chmod a+x ${integration.container.root}/glassfish3/glassfish/bin/*"'/>
                                         </exec>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>ant-contrib</groupId>
+                                <artifactId>ant-contrib</artifactId>
+                                <version>1.0b3</version>
+                                <exclusions>
+                                    <exclusion>
+                                        <groupId>ant</groupId>
+                                        <artifactId>ant</artifactId>
+                                    </exclusion>
+                                </exclusions>
+                            </dependency>
+                        </dependencies>
+                    </plugin>                    
+                </plugins>
+            </build>
+            <properties>
+                <integration.container.root>C:/Glassfish3.1.2.2</integration.container.root>
+                <integration.container.zipFile>C:/Downloads/Glassfish3.1.2.2.zip</integration.container.zipFile>
+            </properties>
+        </profile>
+        <profile>
+            <id>integration-glassfish-hudson-remove</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>prepare</id>
+                                <phase>validate</phase>
+                                <configuration>
+                                    <target>
+                                        <delete failonerror="false" dir="${integration.container.zipFile}"/>
+                                        <delete quiet="true" failonerror="false" dir="${integration.container.root}"/>
                                     </target>
                                 </configuration>
                                 <goals>
