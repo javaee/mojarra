@@ -2014,7 +2014,7 @@ of the first one whose <code>&lt;if&gt;</code> expression evaluates to
         </xsd:annotation>
       </xsd:element>
       <xsd:element name="default-outcome"
-                   type="javaee:faces-config-faces-flow-definition-switch-default-outcomeType"
+                   type="javaee:string"
                    minOccurs="0"
                    >
         <xsd:annotation>
@@ -2107,54 +2107,6 @@ represents the node id to which control will be passed.</p>
     </xsd:attribute>
   </xsd:complexType>
   
-
-  <xsd:complexType name="faces-config-faces-flow-definition-switch-default-outcomeType">
-    <xsd:annotation>
-      <xsd:documentation><![CDATA[
-
-         <p class="changed_added_2_2">Defines the default case that will
-         be taken if none of the other cases the
-         <code>&lt;switch&gt;</code> are taken.</p>
-
-        
-      ]]></xsd:documentation>
-    </xsd:annotation>
-    <xsd:sequence>
-      <xsd:group ref="javaee:descriptionGroup"/>
-      <xsd:element name="from-outcome"
-                   type="javaee:string"
-                   minOccurs="0">
-        <xsd:annotation>
-          <xsd:documentation><![CDATA[
-
-            <p>The "from-outcome" element contains a logical outcome
-            string returned by the execution of an application
-            action method selected via an "actionRef" property
-            (or a literal value specified by an "action" property)
-            of a UICommand component.  If specified, this rule
-            will be relevant only if the outcome value matches
-            this element's value.  If not specified, this rule
-            will be relevant if the outcome value is non-null
-            or, if the "if" element is present, will be relevant
-            for any outcome value, with the assumption that the
-            condition specified in the "if" element ultimately
-            determines if this rule is a match.</p>
-
-<p class="changed_added_2_2">If used in a faces flow, this element
-represents the node id to which control will be passed.</p>
-
-
-]]>
-            
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:element>
-    </xsd:sequence>
-    <xsd:attribute name="id"
-                   type="xsd:ID">
-    </xsd:attribute>
-  </xsd:complexType>
-
   <xsd:complexType name="faces-config-faces-flow-definition-flow-returnType">
     <xsd:annotation>
       <xsd:documentation>
