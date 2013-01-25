@@ -69,7 +69,7 @@ public class SwitchCaseImpl extends SwitchCase {
 
         return ((conditionExpr != null)
                 ? (Boolean) conditionExpr.getValue(context.getELContext())
-                : null);
+                : Boolean.FALSE);
     }
     
     public void setCondition(String condition) {

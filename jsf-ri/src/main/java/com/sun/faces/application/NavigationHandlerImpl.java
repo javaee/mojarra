@@ -476,7 +476,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         if (caseStruct == null && outcome != null && viewId != null) {
             // Treat empty string equivalent to null outcome.  JSF 2.0 Rev a
             // Changelog issue C063.
-            if (caseStruct == null && 0 == outcome.length()) {
+            if (0 == outcome.length()) {
                 outcome = null;
             } else {
                 caseStruct = findImplicitMatch(ctx, viewId, fromAction, outcome,

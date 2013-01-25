@@ -796,25 +796,23 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             return Collections.emptyList();
         }
         
-        if (null != contractMappings) {
-            String longestMatch = null;
-            for (Map.Entry<String, List<String>> mappings : contractMappings.entrySet()) {
-                String urlPattern = mappings.getKey();
-                if (urlPattern.endsWith("*")) { 
-                    String prefix = urlPattern.substring(0, urlPattern.length() - 1);
-                    if (viewId.startsWith(prefix)) {
-                        if (longestPattern == null) {
-                            longestPattern = urlPattern;
-                            longestMatch = prefix;
-                        } else if (longestMatch.length() < prefix.length()) {
-                            longestPattern = urlPattern;
-                            longestMatch = prefix;
-                        }
+        String longestMatch = null;
+        for (Map.Entry<String, List<String>> mappings : contractMappings.entrySet()) {
+            String urlPattern = mappings.getKey();
+            if (urlPattern.endsWith("*")) { 
+                String prefix = urlPattern.substring(0, urlPattern.length() - 1);
+                if (viewId.startsWith(prefix)) {
+                    if (longestPattern == null) {
+                        longestPattern = urlPattern;
+                        longestMatch = prefix;
+                    } else if (longestMatch.length() < prefix.length()) {
+                        longestPattern = urlPattern;
+                        longestMatch = prefix;
                     }
-                } else if (viewId.equals(urlPattern)) {
-                    longestPattern = urlPattern;
-                    break;
                 }
+            } else if (viewId.equals(urlPattern)) {
+                longestPattern = urlPattern;
+                break;
             }
         }
         
