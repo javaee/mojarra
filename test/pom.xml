@@ -395,8 +395,8 @@
                                 <phase>validate</phase>
                                 <configuration>
                                     <target>
-                                        <delete quiet="true" failonerror="false" dir="${integration.container.root}"/>
                                         <delete quiet="true" failonerror="false" dir="${integration.container.zipFile}"/>
+                                        <delete quiet="true" failonerror="false" dir="${integration.container.root}"/>
                                     </target>
                                 </configuration>
                                 <goals>
