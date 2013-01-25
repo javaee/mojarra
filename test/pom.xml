@@ -604,7 +604,7 @@
                                 <phase>validate</phase>
                                 <configuration>
                                     <target>
-                                        <delete failonerror="false" dir="${integration.container.zipFile}"/>
+                                        <delete failonerror="false" file="${integration.container.zipFile}"/>
                                         <delete quiet="true" failonerror="false" dir="${integration.container.root}"/>
                                     </target>
                                 </configuration>
