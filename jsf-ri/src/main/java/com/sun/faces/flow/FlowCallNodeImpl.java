@@ -40,6 +40,7 @@
  */
 package com.sun.faces.flow;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -55,6 +56,7 @@ public class FlowCallNodeImpl extends FlowCallNode {
     
     private final ValueExpression calledFlowDocumentIdVE;
     
+    private Map<String, Parameter> _outboundParameters;
     private Map<String, Parameter> outboundParameters;
 
     public FlowCallNodeImpl(String id, 
@@ -76,12 +78,13 @@ public class FlowCallNodeImpl extends FlowCallNode {
             this.calledFlowIdVE = null;
         }
         
-        outboundParameters = new ConcurrentHashMap<String, Parameter>();            
+        _outboundParameters = new ConcurrentHashMap<String, Parameter>();            
         if (null != outboundParametersFromConfig) {
             for (Parameter cur : outboundParametersFromConfig) {
-                outboundParameters.put(cur.getName(), cur);
+                _outboundParameters.put(cur.getName(), cur);
             }
         }
+        outboundParameters = Collections.unmodifiableMap(_outboundParameters);
         
     }
 
@@ -103,7 +106,7 @@ public class FlowCallNodeImpl extends FlowCallNode {
         if (this.calledFlowDocumentIdVE != other.calledFlowDocumentIdVE && (this.calledFlowDocumentIdVE == null || !this.calledFlowDocumentIdVE.equals(other.calledFlowDocumentIdVE))) {
             return false;
         }
-        if (this.outboundParameters != other.outboundParameters && (this.outboundParameters == null || !this.outboundParameters.equals(other.outboundParameters))) {
+        if (this._outboundParameters != other._outboundParameters && (this._outboundParameters == null || !this._outboundParameters.equals(other._outboundParameters))) {
             return false;
         }
         return true;
@@ -115,7 +118,7 @@ public class FlowCallNodeImpl extends FlowCallNode {
         hash = 59 * hash + (this.id != null ? this.id.hashCode() : 0);
         hash = 59 * hash + (this.calledFlowIdVE != null ? this.calledFlowIdVE.hashCode() : 0);
         hash = 59 * hash + (this.calledFlowDocumentIdVE != null ? this.calledFlowDocumentIdVE.hashCode() : 0);
-        hash = 59 * hash + (this.outboundParameters != null ? this.outboundParameters.hashCode() : 0);
+        hash = 59 * hash + (this._outboundParameters != null ? this._outboundParameters.hashCode() : 0);
         return hash;
     }
     
@@ -149,9 +152,12 @@ public class FlowCallNodeImpl extends FlowCallNode {
         return result;
     }
 
-    @Override
-    public Map<String, Parameter> getOutboundParameters() {
-        return outboundParameters;
+    public Map<String, Parameter> _getOutboundParameters() {
+        return _outboundParameters;
     }
 
+    @Override
+    public Map<String, Parameter> getOutboundParameters() {
+        return _outboundParameters;
+    }
 }

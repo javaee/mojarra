@@ -76,7 +76,7 @@ public class FlowCallBuilderImpl extends FlowCallBuilder {
             flowCall = new FlowCallNodeImpl(flowCallNodeId, flowDocumentId, flowId, null);
             flowCalls.put(flowCallNodeId, flowCall);
         }
-        flowCall.getOutboundParameters().put(name, param);
+        flowCall._getOutboundParameters().put(name, param);
         return this;
     }
 
