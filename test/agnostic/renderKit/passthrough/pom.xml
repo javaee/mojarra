@@ -51,7 +51,7 @@
     <groupId>com.sun.faces.test.agnostic.renderKit</groupId>
     <artifactId>passthrough</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra ${project.version} - Test - Agnostic - RenderKit - Passthrough Element Tests</name>
+    <name>Mojarra ${project.version} - Test - Agnostic - RenderKit - Passthrough Element and Attribute Tests</name>
     <build>
         <finalName>test-agnostic-renderKit-passthrough</finalName>
     </build>
