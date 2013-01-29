@@ -50,7 +50,7 @@
     
     <f:metadata>
 
-        <j:faces-flow-definition>
+        <j:flow-definition>
             <j:flow-return id="taskFlowReturn1">
                 <j:from-outcome>#{flow_b_Bean.returnValue}</j:from-outcome>
             </j:flow-return>
@@ -78,7 +78,7 @@
                 </j:outbound-parameter>
             </j:flow-call>
                         
-        </j:faces-flow-definition>
+        </j:flow-definition>
 
     </f:metadata>
 </html>

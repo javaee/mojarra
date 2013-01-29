@@ -184,8 +184,8 @@
                    type="javaee:faces-config-converterType"/>
       <xsd:element name="managed-bean"
                    type="javaee:faces-config-managed-beanType"/>
-      <xsd:element name="faces-flow-definition"
-                   type="javaee:faces-config-faces-flow-definitionType"/>
+      <xsd:element name="flow-definition"
+                   type="javaee:faces-config-flow-definitionType"/>
       <xsd:element name="name"
                    type="javaee:java-identifierType"
                    minOccurs="0"
@@ -1370,7 +1370,7 @@ passed.</p>
 
 <!-- **************************************************** -->
 
-  <xsd:complexType name="faces-config-faces-flow-definition-parameter-valueType">
+  <xsd:complexType name="faces-config-flow-definition-parameter-valueType">
     <xsd:annotation>
       <xsd:documentation><![CDATA[
 
@@ -1760,7 +1760,7 @@ passed.</p>
 
 <!-- **************************************************** -->
 
-  <xsd:complexType name="faces-config-faces-flow-definitionType">
+  <xsd:complexType name="faces-config-flow-definitionType">
     <xsd:annotation>
       <xsd:documentation>
 <![CDATA[
@@ -1778,7 +1778,7 @@ is assumed to be <code>&lt;flowName&gt;.xhtml</code>.</p>
 <p>Usage example</p>
 
 <div class="xml" style="font-family:monospace;"><ol>
-<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;faces-flow-definition<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
+<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;flow-definition<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
 <li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;start-node<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>router1<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/start-node<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
 <li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; </div></li>
 <li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;flow-return</span> <span style="color: #000066;">id</span>=<span style="color: #ff0000;">&quot;success&quot;</span><span style="color: #000000; font-weight: bold;">&gt;</span></span></div></li>
@@ -1812,7 +1812,7 @@ is assumed to be <code>&lt;flowName&gt;.xhtml</code>.</p>
 <li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;initializer<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>#{maintainCustomerBean.initializeFlow}<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/initializer<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
 <li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;finalizer<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>#{maintainCustomerBean.cleanUpFlow}<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/finalizer<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
 <li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; </div></li>
-<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/faces-flow-definition<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
+<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/flow-definition<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
 <li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li>
 </ol></div>		</div>
 
@@ -1844,15 +1844,15 @@ href="javax/faces/flow/FlowHandler.html">FlowHandler</a></code>.</p>
         </xsd:annotation>
       </xsd:element>
       <xsd:element name="view"
-                   type="javaee:faces-config-faces-flow-definition-viewType"
+                   type="javaee:faces-config-flow-definition-viewType"
                    minOccurs="0"
                    maxOccurs="unbounded" />
       <xsd:element name="switch"
-                   type="javaee:faces-config-faces-flow-definition-switchType"
+                   type="javaee:faces-config-flow-definition-switchType"
                    minOccurs="0"
                    maxOccurs="unbounded" />
       <xsd:element name="flow-return"
-                   type="javaee:faces-config-faces-flow-definition-flow-returnType"
+                   type="javaee:faces-config-flow-definition-flow-returnType"
                    minOccurs="0"
                    maxOccurs="unbounded"/>
       <xsd:element name="navigation-rule"
@@ -1860,23 +1860,23 @@ href="javax/faces/flow/FlowHandler.html">FlowHandler</a></code>.</p>
                    minOccurs="0"
                    maxOccurs="unbounded"/>
       <xsd:element name="flow-call"
-                   type="javaee:faces-config-faces-flow-definition-flow-callType"
+                   type="javaee:faces-config-flow-definition-flow-callType"
                    minOccurs="0"
                    maxOccurs="unbounded"/>
       <xsd:element name="method-call"
-                   type="javaee:faces-config-faces-flow-definition-faces-method-callType"
+                   type="javaee:faces-config-flow-definition-faces-method-callType"
                    minOccurs="0"
                    maxOccurs="unbounded"/>
       <xsd:element name="initializer"
-                   type="javaee:faces-config-faces-flow-definition-initializerType"
+                   type="javaee:faces-config-flow-definition-initializerType"
                    minOccurs="0"
                    />
       <xsd:element name="finalizer"
-                   type="javaee:faces-config-faces-flow-definition-finalizerType"
+                   type="javaee:faces-config-flow-definition-finalizerType"
                    minOccurs="0"
                    />
       <xsd:element name="inbound-parameter"
-                   type="javaee:faces-config-faces-flow-definition-inbound-parameterType"
+                   type="javaee:faces-config-flow-definition-inbound-parameterType"
                    minOccurs="0"
                    maxOccurs="unbounded"/>
 
@@ -1900,10 +1900,10 @@ href="javax/faces/flow/FlowHandler.html">FlowHandler</a></code>.</p>
     </xsd:attribute>
   </xsd:complexType>
   
-  <xsd:complexType name="faces-config-faces-flow-definition-faces-method-callType">
+  <xsd:complexType name="faces-config-flow-definition-faces-method-callType">
       <xsd:sequence>
           <xsd:element name="method"
-                       type="javaee:faces-config-faces-flow-definition-faces-method-call-methodType"
+                       type="javaee:faces-config-flow-definition-faces-method-call-methodType"
                        
                        />
           <xsd:element name="default-outcome"
@@ -1911,7 +1911,7 @@ href="javax/faces/flow/FlowHandler.html">FlowHandler</a></code>.</p>
                        
                        />
           <xsd:element name="parameter"
-                       type="javaee:faces-config-faces-flow-definition-flow-call-parameterType"
+                       type="javaee:faces-config-flow-definition-flow-call-parameterType"
                        minOccurs="0" maxOccurs="unbounded">
             <xsd:annotation>
               <xsd:documentation>
@@ -1929,7 +1929,7 @@ href="javax/faces/flow/FlowHandler.html">FlowHandler</a></code>.</p>
       </xsd:sequence>
   </xsd:complexType>
   
-  <xsd:complexType name="faces-config-faces-flow-definition-faces-method-call-methodType">
+  <xsd:complexType name="faces-config-flow-definition-faces-method-call-methodType">
     <xsd:simpleContent>
       <xsd:extension base="javaee:faces-config-el-expressionType">
         <xsd:attribute name="id"
@@ -1939,7 +1939,7 @@ href="javax/faces/flow/FlowHandler.html">FlowHandler</a></code>.</p>
       
   </xsd:complexType>
 
-  <xsd:complexType name="faces-config-faces-flow-definition-flow-call-parameterType">
+  <xsd:complexType name="faces-config-flow-definition-flow-call-parameterType">
     <xsd:annotation>
       <xsd:documentation>
 
@@ -1968,7 +1968,7 @@ href="javax/faces/flow/FlowHandler.html">FlowHandler</a></code>.</p>
         </xsd:annotation>
       </xsd:element>
       <xsd:element name="value"
-                   type="javaee:faces-config-faces-flow-definition-parameter-valueType"
+                   type="javaee:faces-config-flow-definition-parameter-valueType"
                    
                    >
         <xsd:annotation>
@@ -1986,7 +1986,7 @@ href="javax/faces/flow/FlowHandler.html">FlowHandler</a></code>.</p>
   </xsd:complexType>
 
 
-  <xsd:complexType name="faces-config-faces-flow-definition-viewType">
+  <xsd:complexType name="faces-config-flow-definition-viewType">
     <xsd:annotation>
       <xsd:documentation>
 
@@ -2033,7 +2033,7 @@ href="javax/faces/flow/FlowHandler.html">FlowHandler</a></code>.</p>
     </xsd:attribute>
   </xsd:complexType>
 
-  <xsd:complexType name="faces-config-faces-flow-definition-switchType">
+  <xsd:complexType name="faces-config-flow-definition-switchType">
     <xsd:annotation>
       <xsd:documentation>
 
@@ -2058,7 +2058,7 @@ of the first one whose <code>&lt;if&gt;</code> expression evaluates to
     </xsd:annotation>
     <xsd:sequence>
       <xsd:element name="case"
-                   type="javaee:faces-config-faces-flow-definition-switch-caseType"
+                   type="javaee:faces-config-flow-definition-switch-caseType"
                    minOccurs="0"
                    maxOccurs="unbounded">
         <xsd:annotation>
@@ -2110,7 +2110,7 @@ of the first one whose <code>&lt;if&gt;</code> expression evaluates to
     </xsd:attribute>
   </xsd:complexType>
   
-  <xsd:complexType name="faces-config-faces-flow-definition-switch-caseType">
+  <xsd:complexType name="faces-config-flow-definition-switch-caseType">
     <xsd:annotation>
       <xsd:documentation><![CDATA[
 
@@ -2169,7 +2169,7 @@ represents the node id to which control will be passed.</p>
     </xsd:attribute>
   </xsd:complexType>
   
-  <xsd:complexType name="faces-config-faces-flow-definition-flow-returnType">
+  <xsd:complexType name="faces-config-flow-definition-flow-returnType">
     <xsd:annotation>
       <xsd:documentation>
 
@@ -2221,7 +2221,7 @@ represents the node id to which control will be passed.</p>
 
   </xsd:complexType>
 
-  <xsd:complexType name="faces-config-faces-flow-definition-flow-callType">
+  <xsd:complexType name="faces-config-flow-definition-flow-callType">
     <xsd:annotation>
       <xsd:documentation>
 
@@ -2242,7 +2242,7 @@ which must contain exactly one <code>&lt;faces-flow-id&gt;</code> element.</p>
 
     <xsd:sequence>
       <xsd:element name="faces-flow-reference"
-                   type="javaee:faces-config-faces-flow-definition-flow-call-faces-flow-referenceType"
+                   type="javaee:faces-config-flow-definition-flow-call-faces-flow-referenceType"
                     >
         <xsd:annotation>
           <xsd:documentation>
@@ -2257,7 +2257,7 @@ which must contain exactly one <code>&lt;faces-flow-id&gt;</code> element.</p>
         </xsd:annotation>
       </xsd:element>
       <xsd:element name="outbound-parameter"
-                   type="javaee:faces-config-faces-flow-definition-flow-call-outbound-parameterType"
+                   type="javaee:faces-config-flow-definition-flow-call-outbound-parameterType"
                    minOccurs="0" maxOccurs="unbounded">
         <xsd:annotation>
           <xsd:documentation>
@@ -2290,7 +2290,7 @@ which must contain exactly one <code>&lt;faces-flow-id&gt;</code> element.</p>
 
   </xsd:complexType>
   
-  <xsd:complexType name="faces-config-faces-flow-definition-flow-call-faces-flow-referenceType">
+  <xsd:complexType name="faces-config-flow-definition-flow-call-faces-flow-referenceType">
     <xsd:annotation>
       <xsd:documentation>
 
@@ -2334,7 +2334,7 @@ which must contain exactly one <code>&lt;faces-flow-id&gt;</code> element.</p>
     </xsd:sequence>
   </xsd:complexType>
 
-  <xsd:complexType name="faces-config-faces-flow-definition-initializerType">
+  <xsd:complexType name="faces-config-flow-definition-initializerType">
     <xsd:annotation>
       <xsd:documentation>
 
@@ -2354,7 +2354,7 @@ which must contain exactly one <code>&lt;faces-flow-id&gt;</code> element.</p>
     </xsd:simpleContent>
   </xsd:complexType>
 
-  <xsd:complexType name="faces-config-faces-flow-definition-finalizerType">
+  <xsd:complexType name="faces-config-flow-definition-finalizerType">
     <xsd:annotation>
       <xsd:documentation>
 
@@ -2374,7 +2374,7 @@ which must contain exactly one <code>&lt;faces-flow-id&gt;</code> element.</p>
     </xsd:simpleContent>
   </xsd:complexType>
 
-  <xsd:complexType name="faces-config-faces-flow-definition-inbound-parameterType">
+  <xsd:complexType name="faces-config-flow-definition-inbound-parameterType">
     <xsd:annotation>
       <xsd:documentation>
 
@@ -2404,7 +2404,7 @@ which must contain exactly one <code>&lt;faces-flow-id&gt;</code> element.</p>
         </xsd:annotation>
       </xsd:element>
       <xsd:element name="value"
-                   type="javaee:faces-config-faces-flow-definition-parameter-valueType"
+                   type="javaee:faces-config-flow-definition-parameter-valueType"
                    
                    >
         <xsd:annotation>
@@ -2422,7 +2422,7 @@ which must contain exactly one <code>&lt;faces-flow-id&gt;</code> element.</p>
     </xsd:sequence>
   </xsd:complexType>
 
-  <xsd:complexType name="faces-config-faces-flow-definition-flow-call-outbound-parameterType">
+  <xsd:complexType name="faces-config-flow-definition-flow-call-outbound-parameterType">
     <xsd:annotation>
       <xsd:documentation>
 
@@ -2452,7 +2452,7 @@ which must contain exactly one <code>&lt;faces-flow-id&gt;</code> element.</p>
         </xsd:annotation>
       </xsd:element>
       <xsd:element name="value"
-                   type="javaee:faces-config-faces-flow-definition-parameter-valueType"
+                   type="javaee:faces-config-flow-definition-parameter-valueType"
                    
                    >
         <xsd:annotation>

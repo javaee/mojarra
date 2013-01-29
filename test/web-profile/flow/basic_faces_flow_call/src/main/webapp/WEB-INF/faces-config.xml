@@ -6,8 +6,8 @@
         http://java.sun.com/xml/ns/javaee
         http://java.sun.com/xml/ns/javaee/web-facesconfig_2_2.xsd">
 
-    <faces-flow-definition>
+    <flow-definition>
         
-    </faces-flow-definition>
+    </flow-definition>
 
 </faces-config>

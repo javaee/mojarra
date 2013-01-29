@@ -50,12 +50,12 @@
     
     <f:metadata>
 
-        <j:faces-flow-definition>
+        <j:flow-definition>
             <j:flow-return id="taskFlowReturn1">
                 <j:from-outcome>#{flowBean.returnValue}</j:from-outcome>
             </j:flow-return>
             
-        </j:faces-flow-definition>
+        </j:flow-definition>
 
     </f:metadata>
 </html>

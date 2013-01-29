@@ -211,7 +211,7 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
     @Override
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
         
-        // PENDING(edburns): we should explicitly allow or disallow nested <j:faces-flow-definition> handlers.
+        // PENDING(edburns): we should explicitly allow or disallow nested <j:flow-definition> handlers.
         // I'm leaning toward disallow.
         
         clearFlowData(ctx);
@@ -264,12 +264,12 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
             
             // Create a simple flow like this
             
-            // <faces-flow-definition id=this tag's id attribute>
+            // <flow-definition id=this tag's id attribute>
             //   <default-node>the name of this page without any extension</default-node>
             //   <view id="the name of this page without any extension">
             //     <vdl-document>the name of this page with the extension</vdl-document>
             //   </view>
-            // </faces-flow-definition>
+            // </flow-definition>
             
             //
             // <default-node>

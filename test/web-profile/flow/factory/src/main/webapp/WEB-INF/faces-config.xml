@@ -11,5 +11,5 @@
     <factory>
         <flow-handler-factory>com.sun.faces.test.webprofile.flow.factory.FlowHandlerFactoryTestImpl</flow-handler-factory>
     </factory>
-    <faces-flow-definition></faces-flow-definition>
+    <flow-definition></flow-definition>
 </faces-config>

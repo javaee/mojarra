@@ -55,7 +55,7 @@
         <description><![CDATA[
 
         ]]></description>
-        <tag-name>faces-flow-definition</tag-name>
+        <tag-name>flow-definition</tag-name>
         <handler-class>com.sun.faces.facelets.flow.FacesFlowDefinitionTagHandler</handler-class>
         <attribute>
             <description>

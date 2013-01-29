@@ -54,7 +54,7 @@ import org.w3c.dom.NodeList;
 /**
  * <p>
  *  This <code>ConfigProcessor</code> handles all elements defined under
- *  <code>/faces-config/faces-flow-definition</code>.
+ *  <code>/faces-config/flow-definition</code>.
  * </p>
  */
 public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor {
@@ -62,22 +62,22 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
     private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
     
     /**
-     * <code>/faces-config/faces-flow-definition</code>
+     * <code>/faces-config/flow-definition</code>
      */
-    private static final String FACES_FLOW_DEFINITION = "faces-flow-definition";
+    private static final String FACES_FLOW_DEFINITION = "flow-definition";
     
     /**
-     * <code>/faces-config/faces-flow-definition/default-flow-node</code>
+     * <code>/faces-config/flow-definition/default-flow-node</code>
      */
 //    private static final String DEFAULT_FLOW_NODE = "default-flow-node";
     
     /**
-     * <code>/faces-config/faces-flow-definition/view</code>
+     * <code>/faces-config/flow-definition/view</code>
      */
     private static final String VIEW = "view";
     
     /**
-     * <code>/faces-config/faces-flow-definition/view/page</code>
+     * <code>/faces-config/flow-definition/view/page</code>
      */
     private static final String PAGE = "PAGE";
     
@@ -93,7 +93,7 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
     public void process(ServletContext sc, DocumentInfo[] documentInfos)
     throws Exception {
 
-        // track how many faces-flow-definition instances are being added
+        // track how many flow-definition instances are being added
         // for this application
         AtomicInteger facesFlowDefinitionCount = new AtomicInteger(0);
         

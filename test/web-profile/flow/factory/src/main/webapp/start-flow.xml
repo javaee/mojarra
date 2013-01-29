@@ -49,9 +49,9 @@
       xmlns:j="http://java.sun.com/jsf/flow">
 
     <f:metadata>
-        <j:faces-flow-definition id="flow">
+        <j:flow-definition id="flow">
 
-            <!-- A faces-flow-definition in a facelet page without any other 
+            <!-- A flow-definition in a facelet page without any other 
             children declares a faces flow equivalent to this:
             
               <start-node>the name of this page without any extension</start-node>
@@ -61,6 +61,6 @@
             
             -->
 
-        </j:faces-flow-definition>
+        </j:flow-definition>
     </f:metadata>
 </html>
