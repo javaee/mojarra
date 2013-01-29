@@ -42,6 +42,7 @@ package com.sun.faces.flow;
 
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.util.Util;
+import java.text.MessageFormat;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
@@ -85,12 +86,11 @@ public class FlowHandlerImpl extends FlowHandler {
     
     @Override
     public Flow getFlow(FacesContext context, String definingDocumentId, String id) {
+        Util.notNull("context", context);
+        Util.notNull("definingDocumentId", definingDocumentId);
+        Util.notNull("id", id);
         Flow result = null;
         Map<String, Flow> mapsForDefiningDocument = flows.get(definingDocumentId);
-        
-        if (null == mapsForDefiningDocument) {
-            mapsForDefiningDocument = flows.get(id);
-        }
         
         if (null != mapsForDefiningDocument) {
             result = mapsForDefiningDocument.get(id);
@@ -106,15 +106,24 @@ public class FlowHandlerImpl extends FlowHandler {
 
         String id = toAdd.getId();
         if (null == id || 0 == id.length()) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("The id of the flow may not be null or zero-length.");
         }
-        Map<String, Flow> mapsForDefiningDocument = flows.get(toAdd.getDefiningDocumentId());
+        String definingDocumentId = toAdd.getDefiningDocumentId();
+        if (null == definingDocumentId) {
+            throw new IllegalArgumentException("The definingDocumentId of the flow may not be null.");
+        }
+        Map<String, Flow> mapsForDefiningDocument = flows.get(definingDocumentId);
         if (null == mapsForDefiningDocument) {
             mapsForDefiningDocument = new ConcurrentHashMap<String, Flow>();
             flows.put(toAdd.getDefiningDocumentId(), mapsForDefiningDocument);
         }
         
-        mapsForDefiningDocument.put(id, toAdd);
+        Flow oldFlow = mapsForDefiningDocument.put(id, toAdd);
+        if (null != oldFlow) {
+            String message = MessageFormat.format("Flow with id \"{0}\" and definingDocumentId \"{1}\" already exists.", 
+                    id, definingDocumentId);
+            throw new IllegalStateException(message);
+        }
 
         // Make it possible for the "transition" method to map from view nodes
         // to flow instances.
@@ -134,6 +143,9 @@ public class FlowHandlerImpl extends FlowHandler {
     @Override
     public boolean isActive(FacesContext context, String definingDocumentId, 
                             String id) {
+        Util.notNull("context", context);
+        Util.notNull("definingDocumentId", definingDocumentId);
+        Util.notNull("id", id);
         boolean result = false;
         Deque<Flow> flowStack = getFlowStack(context);
         for (Flow cur : flowStack) {
@@ -152,6 +164,8 @@ public class FlowHandlerImpl extends FlowHandler {
     
     @Override
     public Flow getCurrentFlow(FacesContext context) {
+        Util.notNull("context", context);
+        
         if (!flowFeatureIsEnabled) {
             return null;
         }
@@ -165,6 +179,7 @@ public class FlowHandlerImpl extends FlowHandler {
     @SuppressWarnings(value="")
     public void transition(FacesContext context, Flow sourceFlow, 
                            Flow targetFlow, FlowCallNode outboundCallNode) {
+        Util.notNull("context", context);
         if (!flowFeatureIsEnabled) {
            return;
         }

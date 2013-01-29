@@ -171,7 +171,9 @@ public abstract class FlowHandler {
      * <p class="changed_added_2_2">Return the {@link Flow} whose {@code
      * id} is equivalent to the argument {@code id}, within the scope of
      * the argument {@code definingDocument}. </p>
-     *
+
+     * @param context the {@code FacesContext} for the current request.
+
      * @param definingDocumentId An application unique identifier
      * for the document in which the returned flow is defined.
 
@@ -189,15 +191,23 @@ public abstract class FlowHandler {
      * <p class="changed_added_2_2">Add the argument {@link Flow} to the
      * collection of {@code Flow}s known to the current
      * application.  The implementation must be thread safe.</p>
-     *
+
+     * @param context the {@code FacesContext} for the current request.
+
      * @param toAdd the {@code Flow} to add.
 
      * @throws NullPointerException if any of the parameters are {@code null}
      *
      * @throws IllegalStateException if there is already a flow with the
      * same {@code id} as the argument {@code Flow} within the scope of
-     * the {@code definingDocument}.
-     *
+     * the {@code definingDocument}.  
+
+     * @throws IllegalArgumentException if the {@code id} of the flow to
+     * add is {@code null} or the empty string.
+
+     * @throws IllegalArgumentException if the {@code
+     * definingDocumentId} of the {@code toAdd} is {@code null}.
+
      * @since 2.2
      */ 
     public abstract void addFlow(FacesContext context, Flow toAdd);
@@ -210,6 +220,8 @@ public abstract class FlowHandler {
      * {@code ClientWindow} may have multiple {@code Flow}s.</p>
      *
      * @param context the {@code FacesContext} for the current request.
+     * 
+     * @throws NullPointerException if any of the parameters are {@code null}
      *
      * @since 2.2
      */
@@ -265,12 +277,21 @@ public abstract class FlowHandler {
      * 
      * </div>
      * 
-     * @param sourceFlow the current {@code Flow}, if any.
+     * @param context the {@code FacesContext} for the current request.
+
+     * @param sourceFlow the current {@code Flow}, or {@code null} if
+     * there is no source flow.
      * 
-     * @param targetFlow the destination {@code Flow}, if any.
+     * @param targetFlow the destination {@code Flow}, or {@code null}
+     * if there is no destination flow.
      * 
-     * @param outboundCallNode the flow call node causing this transition, if any.
+     * @param outboundCallNode the flow call node causing this
+     * transition, or {@code null} if this transition is not caused by a
+     * flow call.
      * 
+     * @throws NullPointerException if {@code context} is {@code null}.
+     *
+
      * @since 2.2
      */
             
@@ -284,12 +305,16 @@ public abstract class FlowHandler {
      * the flow referenced by the argument {@code definingDocument} and
      * {@code id} is currently active.</p>
 
+     * @param context the {@code FacesContext} for the current request.
+
      * @param definingDocument An application unique identifier
      * for the document in which the returned flow is defined.
 
      * @param id the id of a {@link Flow}, unique within the
      * scope of the {@code definingDocument}.
 
+     * @throws NullPointerException if any of the parameters are {@code null}
+     *
      * @since 2.2
      */
     public abstract boolean isActive(FacesContext context, String definingDocument, String id);
