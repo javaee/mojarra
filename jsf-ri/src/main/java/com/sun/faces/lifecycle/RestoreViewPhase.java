@@ -244,8 +244,12 @@ public class RestoreViewPhase extends Phase {
                 facesContext.setViewRoot(viewRoot);
                 assert (null != viewRoot);
             }
-        } catch (FacesException fe) {
-            thrownException = fe;
+        } catch (Throwable fe) {
+            if (fe instanceof FacesException) {
+              thrownException = (FacesException) fe;
+            } else {
+              thrownException = new FacesException(fe);
+            }
         } finally {
             if (null == thrownException) {
                 deliverPostRestoreStateEvent(facesContext);
