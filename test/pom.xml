@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.sun.faces.test</groupId>
     <artifactId>pom</artifactId>
-    <version>2.2.0-SNAPSHOT</version>
+    <version>2.1.18-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Mojarra ${project.version} - Test</name>
     <modules>
@@ -33,12 +33,12 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.0</version>
-                </plugin>                
+                </plugin>
                 <plugin>                 
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-dependency-plugin</artifactId>
                     <version>2.6</version>
-                </plugin>                
+                </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-failsafe-plugin</artifactId>
@@ -48,7 +48,7 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
                     <version>2.6</version>
-                </plugin>                
+                </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
@@ -63,12 +63,12 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-war-plugin</artifactId>
                     <version>2.3</version>
-                </plugin>            
+                </plugin>
                 <plugin>
                     <groupId>org.codehaus.cargo</groupId>
                     <artifactId>cargo-maven2-plugin</artifactId>
                     <version>1.2.2</version>
-                </plugin>            
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -77,8 +77,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <inherited>true</inherited>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>1.5</source>
+                    <target>1.5</target>
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
@@ -105,7 +105,7 @@
         <dependency>
             <groupId>javax.faces</groupId>
             <artifactId>javax.faces-api</artifactId>
-            <version>2.2-SNAPSHOT</version>
+            <version>2.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -386,7 +386,7 @@
             <id>integration-glassfish-cluster</id>
             <build>
                 <plugins>
-                    <plugin>
+                    <plugin>                 
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-dependency-plugin</artifactId>
                         <executions>
@@ -563,6 +563,49 @@
                                         <exec executable="sh" osfamily="unix">
                                             <arg line='-c "chmod a+x ${integration.container.root}/glassfish3/glassfish/bin/*"'/>
                                         </exec>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>ant-contrib</groupId>
+                                <artifactId>ant-contrib</artifactId>
+                                <version>1.0b3</version>
+                                <exclusions>
+                                    <exclusion>
+                                        <groupId>ant</groupId>
+                                        <artifactId>ant</artifactId>
+                                    </exclusion>
+                                </exclusions>
+                            </dependency>
+                        </dependencies>
+                    </plugin>                    
+                </plugins>
+            </build>
+            <properties>
+                <integration.container.root>C:/Glassfish3.1.2.2</integration.container.root>
+                <integration.container.zipFile>C:/Downloads/Glassfish3.1.2.2.zip</integration.container.zipFile>
+            </properties>
+        </profile>
+        <profile>
+            <id>integration-glassfish-hudson-remove</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>prepare</id>
+                                <phase>validate</phase>
+                                <configuration>
+                                    <target>
+                                        <delete failonerror="false" file="${integration.container.zipFile}"/>
+                                        <delete quiet="true" failonerror="false" dir="${integration.container.root}"/>
                                     </target>
                                 </configuration>
                                 <goals>
@@ -1046,12 +1089,12 @@
                             </execution>
                         </executions>
                     </plugin>
-                    <plugin>
+                    <plugin>                 
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-dependency-plugin</artifactId>
                         <executions>
                             <execution>
-                                <id>copy</id>
+                                <id>copy</id>                         
                                 <phase>validate</phase>
                                 <goals>
                                     <goal>copy</goal>
@@ -1063,7 +1106,7 @@
                                             <artifactId>jsf-impl</artifactId>
                                             <version>${jsf.version}</version>
                                             <type>jar</type>
-                                            <overWrite>true</overWrite>
+                                            <overWrite>true</overWrite>                                     
                                             <outputDirectory>${integration.container.root}/server/modules</outputDirectory>
                                             <destFileName>glassfish.jsf_1.0.0.0_2-1-5.jar</destFileName>
                                         </artifactItem>
@@ -1072,7 +1115,7 @@
                                             <artifactId>jsf-api</artifactId>
                                             <version>${jsf.version}</version>
                                             <type>jar</type>
-                                            <overWrite>true</overWrite>
+                                            <overWrite>true</overWrite>                                     
                                             <outputDirectory>${integration.container.root}/server/modules</outputDirectory>
                                             <destFileName>javax.jsf_1.0.0.0_2-1.jar</destFileName>
                                         </artifactItem>
@@ -1102,5 +1145,5 @@
         <webapp.partialStateSaving>true</webapp.partialStateSaving>
         <webapp.projectStage>Production</webapp.projectStage>
         <webapp.stateSavingMethod>server</webapp.stateSavingMethod>
-    </properties>    
+    </properties>
 </project>
