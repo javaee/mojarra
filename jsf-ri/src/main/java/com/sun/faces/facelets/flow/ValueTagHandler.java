@@ -41,6 +41,7 @@
 package com.sun.faces.facelets.flow;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
+import com.sun.faces.facelets.util.ReflectionUtil;
 import com.sun.faces.flow.ParameterImpl;
 import java.io.IOException;
 import javax.el.ExpressionFactory;
@@ -60,7 +61,21 @@ public class ValueTagHandler extends TagHandlerImpl {
         ParameterImpl p = FacesFlowDefinitionTagHandler.getCurrentParameter(ctx);
         String expression = this.nextHandler.toString();
         ExpressionFactory ef = ctx.getFacesContext().getApplication().getExpressionFactory();
-        ValueExpression ve = ef.createValueExpression(ctx, expression, Object.class);
+        
+        Class clazz = Object.class;
+        
+        if (MethodCallTagHandler.isWithinMethodCall(ctx)) {
+            String className = p.getName();
+            if (null != className) {
+                try {
+                    clazz = ReflectionUtil.forName(className);
+                } catch (ClassNotFoundException e) {
+                    clazz = Object.class;
+                }
+            }
+        }
+        
+        ValueExpression ve = ef.createValueExpression(ctx, expression, clazz);
         p.setValue(ve);
     }
     

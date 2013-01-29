@@ -60,6 +60,7 @@ import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
 import java.util.concurrent.ConcurrentHashMap;
+import javax.el.ELContext;
 import javax.el.MethodExpression;
 import javax.el.ValueExpression;
 import javax.faces.application.Application;
@@ -72,6 +73,7 @@ import javax.faces.flow.Flow;
 import javax.faces.flow.FlowHandler;
 import javax.faces.flow.FlowNode;
 import javax.faces.flow.MethodCallNode;
+import javax.faces.flow.Parameter;
 import javax.faces.flow.ReturnNode;
 import javax.faces.flow.SwitchCase;
 import javax.faces.flow.SwitchNode;
@@ -900,10 +902,6 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                         null, false, false);
             } else if (node instanceof ReturnNode) {
                 String fromOutcome = ((ReturnNode)node).getFromOutcome(context);
-                if (SharedUtils.isExpression(fromOutcome)) {
-                    Application app = context.getApplication();
-                    fromOutcome = app.evaluateExpressionGet(context, fromOutcome, String.class);
-                }
                 result = getViewId(context, fromAction, fromOutcome, flow.getDefiningDocumentId());
                 
             }
@@ -948,7 +946,18 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                 MethodCallNode methodCallNode = (MethodCallNode) node;
                 MethodExpression me = methodCallNode.getMethodExpression();
                 if (null != me) {
-                    Object invokeResult = me.invoke(context.getELContext(), null);
+                    List<Parameter> paramList= methodCallNode.getParameters();
+                    Object[] params = null;
+                    if (null != paramList) {
+                        params = new Object[paramList.size()];
+                        int i = 0;
+                        ELContext elContext = context.getELContext();
+                        for (Parameter cur : paramList) {
+                            params[i++] = cur.getValue().getValue(elContext);
+                        }
+                    }
+                    
+                    Object invokeResult = me.invoke(context.getELContext(), params);
                     if (null == invokeResult) {
                         ValueExpression ve = methodCallNode.getOutcome();
                         if (null != ve) {

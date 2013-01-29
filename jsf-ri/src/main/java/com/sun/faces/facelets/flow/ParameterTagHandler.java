@@ -38,28 +38,37 @@
  * holder.
 
  */
-package javax.faces.flow.builder;
+package com.sun.faces.facelets.flow;
 
+import com.sun.faces.facelets.tag.TagHandlerImpl;
+import java.io.IOException;
 import java.util.List;
-import javax.el.MethodExpression;
-import javax.el.ValueExpression;
+import javax.faces.component.UIComponent;
 import javax.faces.flow.Parameter;
+import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.TagConfig;
+import javax.faces.view.facelets.TagException;
 
-public abstract class MethodCallBuilder implements NodeBuilder {
-    
-    public abstract MethodCallBuilder expression(MethodExpression me);
-    
-    public abstract MethodCallBuilder expression(String methodExpression);
-    
-    public abstract MethodCallBuilder expression(String methodExpression, Class [] paramTypes);
-    
-    public abstract MethodCallBuilder parameters(List<Parameter> parameters);
-    
-    public abstract MethodCallBuilder defaultOutcome(String outcome);
-    
-    public abstract MethodCallBuilder defaultOutcome(ValueExpression outcome);
+public class ParameterTagHandler extends TagHandlerImpl {
 
-    @Override
-    public abstract MethodCallBuilder markAsStartNode();
+    public ParameterTagHandler(TagConfig config) {
+        super(config);
+    }
+    
+    
+    public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
+        this.nextHandler.apply(ctx, parent);
+        Parameter parameter = FacesFlowDefinitionTagHandler.getCurrentParameter(ctx);
+        FacesFlowDefinitionTagHandler.clearCurrentParameter(ctx);
+        if (null != parameter) {
+            List<Parameter> parameters = MethodCallTagHandler.getParameters(ctx);
+            parameters.add(parameter);
+        } else {
+            throw new TagException(tag, "Within parameter, must have a name and value");
+        }
+        
+    }
+    
+    
     
 }

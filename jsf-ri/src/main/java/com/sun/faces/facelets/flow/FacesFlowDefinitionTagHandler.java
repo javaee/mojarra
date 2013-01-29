@@ -93,6 +93,7 @@ public class FacesFlowDefinitionTagHandler extends TagHandlerImpl {
         CurrentParameter,
         InboundParameters,
         OutboundParameters,
+        Parameters,
         MethodCalls,
         SwitchNavigationCases,
         SwitchDefaultCase,

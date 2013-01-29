@@ -43,11 +43,14 @@ package com.sun.faces.facelets.flow;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
 import com.sun.faces.flow.MethodCallNodeImpl;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javax.faces.component.UIComponent;
 import javax.faces.flow.MethodCallNode;
+import javax.faces.flow.Parameter;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagConfig;
@@ -58,6 +61,26 @@ public class MethodCallTagHandler extends TagHandlerImpl {
         super(config);
     }
     
+    static class MethodCallStruct {
+        String expression;
+        String defaultOutcome;
+        String id;
+    }
+    
+    
+    public static List<Parameter> getParameters(FaceletContext ctx) {
+        List<Parameter> result = null;
+
+        Map<FacesFlowDefinitionTagHandler.FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
+        result = (List<Parameter>) flowData.get(FacesFlowDefinitionTagHandler.FlowDataKeys.Parameters);
+        if (null == result) {
+            result = Collections.synchronizedList(new ArrayList<Parameter>());
+            flowData.put(FacesFlowDefinitionTagHandler.FlowDataKeys.Parameters, result);
+        }
+        
+        return result;
+    }
+        
     private static void setWithinMethodCall(FaceletContext ctx, boolean state) {
         Map<FacesFlowDefinitionTagHandler.FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
 
@@ -66,6 +89,7 @@ public class MethodCallTagHandler extends TagHandlerImpl {
         } else {
             flowData.remove(FacesFlowDefinitionTagHandler.FlowDataKeys.WithinMethodCall);
             flowData.remove(FacesFlowDefinitionTagHandler.FlowDataKeys.CurrentMethodCall);
+            flowData.remove(FacesFlowDefinitionTagHandler.FlowDataKeys.Parameters);
         }
     }
     
@@ -78,24 +102,25 @@ public class MethodCallTagHandler extends TagHandlerImpl {
         return result;
     }
     
-    public static MethodCallNodeImpl getCurrentMethodCall(String id, FaceletContext ctx) {
-        MethodCallNodeImpl result = null;
+    private static MethodCallStruct getCurrentMethodCall(String id, FaceletContext ctx) {
+        MethodCallStruct result = null;
 
         Map<FacesFlowDefinitionTagHandler.FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
-        result = (MethodCallNodeImpl) flowData.get(FacesFlowDefinitionTagHandler.FlowDataKeys.CurrentMethodCall);
+        result = (MethodCallStruct) flowData.get(FacesFlowDefinitionTagHandler.FlowDataKeys.CurrentMethodCall);
         if (null == result) {
-            result = new MethodCallNodeImpl(id);
+            result = new MethodCallStruct();
+            result.id = id;
             flowData.put(FacesFlowDefinitionTagHandler.FlowDataKeys.CurrentMethodCall, result);
         }
         
         return result;
     }
     
-    public static MethodCallNodeImpl getCurrentMethodCall(FaceletContext ctx) {
-        MethodCallNodeImpl result = null;
+    static MethodCallStruct getCurrentMethodCall(FaceletContext ctx) {
+        MethodCallStruct result = null;
 
         Map<FacesFlowDefinitionTagHandler.FlowDataKeys, Object> flowData = FacesFlowDefinitionTagHandler.getFlowData(ctx);
-        result = (MethodCallNodeImpl) flowData.get(FacesFlowDefinitionTagHandler.FlowDataKeys.CurrentMethodCall);
+        result = (MethodCallStruct) flowData.get(FacesFlowDefinitionTagHandler.FlowDataKeys.CurrentMethodCall);
 
         return result;
     }
@@ -120,10 +145,17 @@ public class MethodCallTagHandler extends TagHandlerImpl {
             setWithinMethodCall(ctx, true);
             TagAttribute id = this.getRequiredAttribute("id");
             String idStr = id.getValue(ctx);
-            MethodCallNode cur = MethodCallTagHandler.getCurrentMethodCall(idStr, ctx);
+            MethodCallStruct methodCallStruct = MethodCallTagHandler.getCurrentMethodCall(idStr, ctx);
             this.nextHandler.apply(ctx, parent);
 
             List<MethodCallNode> methodCalls = getMethodCalls(ctx);
+            List<Parameter> params = getParameters(ctx);
+            MethodCallNodeImpl cur = new MethodCallNodeImpl(ctx.getFacesContext(), 
+                    methodCallStruct.id, 
+                    methodCallStruct.expression,
+                    methodCallStruct.defaultOutcome,
+                    params);
+            
             methodCalls.add(cur);
 
         } finally {

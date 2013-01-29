@@ -57,7 +57,14 @@ public class Flow_b_Bean implements Serializable {
        return "/return1";
    }
    
-   public String methodWithOutcome() {
+   public String methodWithOutcome(String strParam, Integer intParam) {
+       if (!strParam.equals("param1Value")) {
+           throw new IllegalArgumentException();
+       }
+       if (!intParam.equals(getInteger())) {
+           throw new IllegalArgumentException();
+       }
+       
        return "next_b";
    }
    
@@ -65,5 +72,9 @@ public class Flow_b_Bean implements Serializable {
        FacesContext context = FacesContext.getCurrentInstance();
        context.getExternalContext().getRequestMap().put("message", "voidMethod called in flow-b");
        
+   }
+   
+   public Integer getInteger() {
+       return Integer.valueOf(Integer.MAX_VALUE);
    }
 }

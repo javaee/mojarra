@@ -41,9 +41,11 @@
 package com.sun.faces.flow.builder;
 
 import com.sun.faces.flow.MethodCallNodeImpl;
+import java.util.List;
 import javax.el.ELContext;
 import javax.el.MethodExpression;
 import javax.el.ValueExpression;
+import javax.faces.flow.Parameter;
 import javax.faces.flow.builder.MethodCallBuilder;
 
 public class MethodCallBuilderImpl extends MethodCallBuilder {
@@ -80,6 +82,20 @@ public class MethodCallBuilderImpl extends MethodCallBuilder {
         ELContext elc = root.getELContext();
         MethodExpression me = root.getExpressionFactory().createMethodExpression(elc, methodExpression, null, EMPTY_ARGS);
         methodCallNode.setMethodExpression(me);
+        return this;
+    }
+
+    @Override
+    public MethodCallBuilder expression(String methodExpression, Class[] paramTypes) {
+        ELContext elc = root.getELContext();
+        MethodExpression me = root.getExpressionFactory().createMethodExpression(elc, methodExpression, null, paramTypes);
+        methodCallNode.setMethodExpression(me);
+        return this;
+    }
+
+    @Override
+    public MethodCallBuilder parameters(List<Parameter> parameters) {
+        methodCallNode._getParameters().addAll(parameters);
         return this;
     }
     

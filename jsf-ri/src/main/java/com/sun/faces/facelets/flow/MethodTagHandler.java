@@ -41,10 +41,7 @@
 package com.sun.faces.facelets.flow;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
-import com.sun.faces.flow.MethodCallNodeImpl;
 import java.io.IOException;
-import javax.el.ExpressionFactory;
-import javax.el.MethodExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagConfig;
@@ -58,11 +55,9 @@ public class MethodTagHandler extends TagHandlerImpl {
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
         this.nextHandler.apply(ctx, parent);
         if (MethodCallTagHandler.isWithinMethodCall(ctx)) {
-            MethodCallNodeImpl cur = MethodCallTagHandler.getCurrentMethodCall(ctx);
-            ExpressionFactory expressionFactory = ctx.getFacesContext().getApplication().getExpressionFactory();
+            MethodCallTagHandler.MethodCallStruct cur = MethodCallTagHandler.getCurrentMethodCall(ctx);
             String expressionString = this.nextHandler.toString();
-            MethodExpression me = expressionFactory.createMethodExpression(ctx, expressionString, Object.class, new Class [] {});
-            cur.setMethodExpression(me);
+            cur.expression = expressionString;
             
         }
     }

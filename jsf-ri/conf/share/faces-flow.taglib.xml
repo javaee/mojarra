@@ -221,4 +221,18 @@
         <tag-name>outbound-parameter</tag-name>
         <handler-class>com.sun.faces.facelets.flow.OutboundParameterTagHandler</handler-class>
     </tag>
+   <tag>
+        <description><![CDATA[
+
+        ]]></description>
+        <tag-name>parameter</tag-name>
+        <handler-class>com.sun.faces.facelets.flow.ParameterTagHandler</handler-class>
+    </tag>
+   <tag>
+        <description><![CDATA[
+
+        ]]></description>
+        <tag-name>class</tag-name>
+        <handler-class>com.sun.faces.facelets.flow.NameTagHandler</handler-class>
+    </tag>
 </facelet-taglib>

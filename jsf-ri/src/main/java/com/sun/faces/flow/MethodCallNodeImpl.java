@@ -40,36 +40,106 @@
  */
 package com.sun.faces.flow;
 
+
+import com.sun.faces.facelets.util.ReflectionUtil;
+import com.sun.faces.util.FacesLogger;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.el.ELContext;
+import javax.el.ExpressionFactory;
 import javax.el.MethodExpression;
 import javax.el.ValueExpression;
+import javax.faces.context.FacesContext;
 import javax.faces.flow.MethodCallNode;
+import javax.faces.flow.Parameter;
 
 public class MethodCallNodeImpl extends MethodCallNode {
     
     private final String id;
-
+    
+    private static final Logger LOGGER = FacesLogger.FLOW.getLogger();
+    
     public MethodCallNodeImpl(String id) {
         this.id = id;
+    }
+    
+    public MethodCallNodeImpl(FacesContext context, String id, 
+            String methodExpressionString,
+            String defaultOutcomeString,
+            List<Parameter> parametersFromConfig) {
+        this(id);
+        _parameters = new CopyOnWriteArrayList<Parameter>();            
+        if (null != parametersFromConfig) {
+            _parameters.addAll(parametersFromConfig);
+        }
+        parameters = Collections.unmodifiableList(_parameters);
+        
+        ExpressionFactory ef = context.getApplication().getExpressionFactory();
+        Class [] paramTypes = new Class[0];
+        if (0 < parameters.size()) {
+            paramTypes = new Class[parameters.size()];
+            int i = 0;
+            for (Parameter cur : parameters) {
+                if (null != cur.getName()) {
+                    try {
+                        paramTypes[i] = ReflectionUtil.forName(cur.getName());
+                    } catch (ClassNotFoundException cnfe) {
+                        if (LOGGER.isLoggable(Level.SEVERE)) {
+                            LOGGER.log(Level.SEVERE, "parameter " + cur.getName() + 
+                                    "incorrect type", cnfe);
+                        }
+                        paramTypes[i] = null;
+                    }
+                } else {
+                    paramTypes[i] = String.class;
+                }
+                i++;
+            }
+        }
+        ELContext elContext = context.getELContext();
+        methodExpression = ef.createMethodExpression(elContext, 
+                methodExpressionString, null, paramTypes);
+        
+        if (null != defaultOutcomeString) {
+            outcome = ef.createValueExpression(elContext, defaultOutcomeString, 
+                    Object.class);
+        }
+        
     }
     
     private MethodExpression methodExpression;
     
     private ValueExpression outcome;
 
+    private List<Parameter> _parameters;
+    private List<Parameter> parameters;
+
     @Override
     public String getId() {
         return id;
     }
+
+    @Override
+    public List<Parameter> getParameters() {
+        return parameters;
+    }
     
+    public List<Parameter> _getParameters() {
+        return _parameters;
+    }
+
     @Override
     public MethodExpression getMethodExpression() {
         return methodExpression;
     }
-
+    
     public void setMethodExpression(MethodExpression methodExpression) {
         this.methodExpression = methodExpression;
     }
-
+    
     @Override
     public ValueExpression getOutcome() {
         return outcome;
@@ -77,7 +147,7 @@ public class MethodCallNodeImpl extends MethodCallNode {
 
     public void setOutcome(ValueExpression outcome) {
         this.outcome = outcome;
-    } 
+    }
     
     
 }

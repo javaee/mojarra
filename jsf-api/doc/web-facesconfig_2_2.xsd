@@ -1910,7 +1910,22 @@ href="javax/faces/flow/FlowHandler.html">FlowHandler</a></code>.</p>
                        type="javaee:string"
                        
                        />
-          
+          <xsd:element name="parameter"
+                       type="javaee:faces-config-faces-flow-definition-flow-call-parameterType"
+                       minOccurs="0" maxOccurs="unbounded">
+            <xsd:annotation>
+              <xsd:documentation>
+
+        <![CDATA[
+
+         <p class="changed_added_2_2">A parameter to pass when calling the method
+         identified in the "method" element that is a sibling of this element.<p>
+
+         ]]>
+
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
       </xsd:sequence>
   </xsd:complexType>
   
@@ -1923,6 +1938,53 @@ href="javax/faces/flow/FlowHandler.html">FlowHandler</a></code>.</p>
     </xsd:simpleContent>
       
   </xsd:complexType>
+
+  <xsd:complexType name="faces-config-faces-flow-definition-flow-call-parameterType">
+    <xsd:annotation>
+      <xsd:documentation>
+
+        <![CDATA[
+
+         <p class="changed_added_2_2">A parameter to pass when calling the method
+         identified in the "method" element that is a sibling of this element.<p>
+
+]]>
+
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="class"
+                   type="javaee:string"
+                   minOccurs="0"
+                   >
+        <xsd:annotation>
+          <xsd:documentation><![CDATA[
+
+           <p class="changed_added_2_2"> The optional "class" element within a "parameter" element 
+            will be interpreted as the fully qualified class name for the type
+            of the "value" element.</p>
+            
+          ]]></xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="value"
+                   type="javaee:faces-config-faces-flow-definition-parameter-valueType"
+                   
+                   >
+        <xsd:annotation>
+          <xsd:documentation><![CDATA[
+
+           <p class="changed_added_2_2"> The "value" element within an "parameter"
+            must be a literal string or an EL Expression whose "get" will be called when the "method"
+            associated with this element is invoked.</p>
+            
+          ]]></xsd:documentation>
+        </xsd:annotation>
+                       
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
 
   <xsd:complexType name="faces-config-faces-flow-definition-viewType">
     <xsd:annotation>
