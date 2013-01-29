@@ -635,6 +635,43 @@
             </properties>
         </profile>
         <profile>
+            <id>integration-glassfish-patch-el</id>
+            <build>
+                <plugins>
+                    <plugin>                 
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy</id>                         
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>copy</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>org.glassfish.web</groupId>
+                                            <artifactId>javax.el</artifactId>
+                                            <version>2.2.5</version>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>                                     
+                                            <outputDirectory>${integration.container.home}/glassfish/modules</outputDirectory>
+                                            <destFileName>javax.el.jar</destFileName>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <properties>
+                <integration.container.home>C:/Glassfish3.1.2.2</integration.container.home>
+                <integration.container.id>glassfish3x</integration.container.id>
+            </properties>
+        </profile>
+        <profile>
             <id>integration-glassfish-prepare</id>
             <build>
                 <plugins>
