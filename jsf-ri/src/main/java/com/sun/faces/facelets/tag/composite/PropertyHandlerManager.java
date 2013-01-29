@@ -58,6 +58,8 @@
 
 package com.sun.faces.facelets.tag.composite;
 
+import com.sun.faces.facelets.el.TagValueExpression;
+import com.sun.faces.util.Util;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagAttribute;
 import javax.faces.component.UIComponent;
@@ -78,7 +80,7 @@ class PropertyHandlerManager {
         ALL_HANDLERS.put("targetAttributeName", new StringValueExpressionPropertyHandler());
         ALL_HANDLERS.put("method-signature", new StringValueExpressionPropertyHandler());
         ALL_HANDLERS.put("type", new StringValueExpressionPropertyHandler());
-        ALL_HANDLERS.put("default", new StringValueExpressionPropertyHandler());
+        ALL_HANDLERS.put("default", new DefaultPropertyHandler());
         ALL_HANDLERS.put("displayName", new DisplayNamePropertyHandler());
         ALL_HANDLERS.put("shortDescription", new ShortDescriptionPropertyHandler());
         ALL_HANDLERS.put("expert", new ExpertPropertyHandler());
@@ -244,6 +246,44 @@ class PropertyHandlerManager {
 
     } // END ObjectValueExpressionPropertyHandler
 
+    /**
+     * This PropertyHandler will apply the default-value of a cc:attribute
+     * tag, taking an eventually provided type into account.
+     */
+    private static class DefaultPropertyHandler
+            implements PropertyHandler {
+
+        public void apply(FaceletContext ctx,
+                String propName,
+                FeatureDescriptor target,
+                TagAttribute attribute) {
+
+            // try to get the type from the 'type'-attribute and default to
+            // Object.class, if no type-attribute was set.
+            Class<?> type = Object.class;
+            Object obj = target.getValue("type");
+            if ((null != obj) && !(obj instanceof Class)) {
+                TagValueExpression typeVE = (TagValueExpression) obj;
+                Object value = typeVE.getValue(ctx);
+                if (value instanceof Class<?>) {
+                    type = (Class<?>) value;
+                } else if (value != null) {
+                    try {
+                        type = Util.loadClass(String.valueOf(value), this);
+                    } catch (ClassNotFoundException ex) {
+                        // Wrap the ClassNotFoundException into a
+                        // RuntimeException, so that it can be unwrapped in the
+                        // caller
+                        throw new IllegalArgumentException(ex);
+                    }
+                }
+            } else {
+                type = null != obj ? (Class) obj : Object.class;
+            }
+            target.setValue(propName, attribute.getValueExpression(ctx, type));
+        }
+        
+    }
 
     private static class ComponentTypePropertyHandler
           extends StringValueExpressionPropertyHandler {
