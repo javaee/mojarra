@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <f:metadata>
+        <f:viewParam name="input1" value="#{viewParam3Bean.text}" />
+    </f:metadata>
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    </h:head>
+    <h:body>
+        <h:form id="form1" prependId="false">
+            <h:outputLabel for="text" value="input1: " />
+            <h:outputText id="text" value="#{viewParam3Bean.text}" />
+        </h:form>
+    </h:body>
+</html>

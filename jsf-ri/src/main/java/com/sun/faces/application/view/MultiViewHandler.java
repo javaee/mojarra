@@ -555,26 +555,31 @@ public class MultiViewHandler extends ViewHandler {
         }
 
         for (UIViewParameter viewParam : toViewParams) {
-            String value;
+            String value = null;
             // don't bother looking at view parameter if it's been overridden
             if (existingParameters.containsKey(viewParam.getName())) {
                 continue;
             }
-            else if (paramHasValueExpression(viewParam)) {
+            
+            if (paramHasValueExpression(viewParam)) {
                 value = viewParam.getStringValueFromModel(ctx);
-            } else {
-                // Anonymous view parameter:
-                // Get string value from UIViewParameter instance stored in current view
+            }
+
+            if (value == null) {
                 if (currentIsSameAsNew) {
+                    /*
+                     * Anonymous view parameter: get string value from UIViewParameter instance stored in current view.
+                     */
                     value = viewParam.getStringValue(ctx);
                 }
-                // ...or transfer string value from matching UIViewParameter instance stored in current view
                 else {
-                    value = getStringValueToTransfer(ctx,
-                                                     viewParam,
-                                                     currentViewParams);
+                    /*
+                     * Or transfer string value from matching UIViewParameter instance stored in current view.
+                     */
+                    value = getStringValueToTransfer(ctx, viewParam, currentViewParams);
                 }
             }
+            
             if (value != null) {
                 List<String> existing = existingParameters.get(viewParam.getName());
                 if (existing == null) {
@@ -583,7 +588,6 @@ public class MultiViewHandler extends ViewHandler {
                 }
                 existing.add(value);
             }
-
         }
     }
 
