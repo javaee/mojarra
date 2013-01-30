@@ -54,9 +54,11 @@ import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.BeforeShutdown;
+import javax.enterprise.inject.spi.Producer;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.faces.flow.FlowDefinition;
+import javax.faces.flow.Flow;
+import javax.faces.flow.builder.FlowDefinition;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 
@@ -65,11 +67,14 @@ public class FlowDiscoveryCDIContext implements Context, Serializable {
     private static final long serialVersionUID = -7144653402477623609L;
     
     private transient Map<Contextual<?>, FlowDiscoveryInfo> flowBuilders;
+    private transient List<Producer<Flow>> flowProducers;
         
     // This should be vended from a factory for decoration purposes.
     
-    public FlowDiscoveryCDIContext(Map<Contextual<?>, FlowDiscoveryInfo> producers) {
-        this.flowBuilders = new ConcurrentHashMap<Contextual<?>, FlowDiscoveryInfo>(producers);
+    public FlowDiscoveryCDIContext(Map<Contextual<?>, FlowDiscoveryInfo> builderMethods,
+            List<Producer<Flow>> flowProducers) {
+        this.flowBuilders = new ConcurrentHashMap<Contextual<?>, FlowDiscoveryInfo>(builderMethods);
+        this.flowProducers = flowProducers;
     }
     
     private static final String FLOW_DEFINITION_SCOPE_BEAN_MAP_KEY = FlowDiscoveryCDIContext.class.getName() + "_BEANS";
@@ -159,6 +164,10 @@ public class FlowDiscoveryCDIContext implements Context, Serializable {
         }
         
         return result;
+    }
+    
+    List<Producer<Flow>> getFlowProducers() {
+        return flowProducers;
     }
     
     // </editor-fold>

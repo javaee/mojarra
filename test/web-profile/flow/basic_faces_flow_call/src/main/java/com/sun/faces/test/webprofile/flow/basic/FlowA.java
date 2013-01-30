@@ -41,15 +41,13 @@
 package com.sun.faces.test.webprofile.flow.basic;
 
 import java.io.Serializable;
-import javax.faces.context.FacesContext;
+import javax.enterprise.inject.Produces;
 import javax.faces.flow.Flow;
 import javax.faces.flow.builder.FlowBuilder;
-import javax.faces.flow.FlowDefinition;
-import javax.inject.Named;
+import javax.faces.flow.builder.FlowDefinition;
+import javax.faces.flow.builder.FlowBuilderParameter;
 
 
-@Named("FlowA")
-@FlowDefinition
 public class FlowA implements Serializable {
     
     private static final long serialVersionUID = -7623501087369765218L;
@@ -57,7 +55,8 @@ public class FlowA implements Serializable {
     public FlowA() {
     }
     
-    public Flow defineFlow(FacesContext context, FlowBuilder flowBuilder) {
+    @Produces @FlowDefinition
+    public Flow buildMyFlow(@FlowBuilderParameter FlowBuilder flowBuilder) {
         String flowId = "flow-a";
         flowBuilder.id("", flowId);
         flowBuilder.viewNode(flowId, "/" + flowId + "/" + flowId + ".xhtml").markAsStartNode();
@@ -71,5 +70,4 @@ public class FlowA implements Serializable {
         
         return flowBuilder.getFlow();
     }
-    
 }

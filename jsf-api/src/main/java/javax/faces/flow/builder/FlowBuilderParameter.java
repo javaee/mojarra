@@ -38,43 +38,22 @@
  * holder.
 
  */
-package com.sun.faces.test.webprofile.flow.intermediate;
+package javax.faces.flow.builder;
 
-import java.io.Serializable;
-import javax.enterprise.inject.Produces;
-import javax.faces.flow.Flow;
-import javax.faces.flow.builder.FlowBuilder;
-import javax.faces.flow.builder.FlowDefinition;
-import javax.faces.flow.builder.FlowBuilderParameter;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+import javax.inject.Qualifier;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-
-public class MaintainCustomerRecordJavaFlowDefinition implements Serializable {
-    
-    private static final long serialVersionUID = -5610441904980215032L;
-
-    public MaintainCustomerRecordJavaFlowDefinition() {
-    }
-    
-    @Produces @FlowDefinition
-    public Flow defineFlow(@FlowBuilderParameter FlowBuilder flowBuilder) {
-        String flowId = "maintain-customer-record-java";
-        flowBuilder.id("", flowId);
-        flowBuilder.viewNode(flowId, "/" + flowId + "/" + flowId + ".xhtml");
-
-        flowBuilder.switchNode("router1").markAsStartNode().defaultOutcome("view-customer").
-                switchCase().condition("#{flowScope.customerId == null}").
-                fromOutcome("create-customer");
-        flowBuilder.viewNode("create-customer", "/" + flowId + "/" + "create-customer.xhtml");
-        flowBuilder.viewNode("view-customer", "/" + flowId + "/" + "view-customer.xhtml");
-        flowBuilder.viewNode("maintain-customer-record", "/" + flowId + "/" + "maintain-customer-record");
-        flowBuilder.methodCallNode("upgrade-customer").expression("#{maintainCustomerBeanJava.upgradeCustomer}").
-                defaultOutcome("view-customer");
-        flowBuilder.initializer("#{maintainCustomerBeanJava.initializeFlow}");
-        flowBuilder.finalizer("#{maintainCustomerBeanJava.cleanUpFlow}");
-        flowBuilder.returnNode("success").fromOutcome("/complete");
-        flowBuilder.returnNode("errorOccurred").fromOutcome("error");
-        
-        return flowBuilder.getFlow();
-    }
+@Qualifier
+@Target({ TYPE, METHOD, PARAMETER, FIELD })
+@Retention(RUNTIME)
+@Documented
+public @interface FlowBuilderParameter {
     
 }

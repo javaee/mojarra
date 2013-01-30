@@ -42,8 +42,10 @@
 package com.sun.faces.flow;
 
 import com.sun.faces.util.FacesLogger;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -54,9 +56,10 @@ import javax.enterprise.inject.spi.AnnotatedType;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.BeforeBeanDiscovery;
 import javax.enterprise.inject.spi.Extension;
-import javax.enterprise.inject.spi.ProcessBean;
-import javax.faces.flow.FlowDefinition;
-import javax.inject.Named;
+import javax.enterprise.inject.spi.ProcessProducer;
+import javax.enterprise.inject.spi.Producer;
+import javax.faces.flow.Flow;
+import javax.faces.flow.builder.FlowDefinition;
 
 /*
  *  This is the hook into the bootstrapping of the entire feature.  
@@ -89,13 +92,19 @@ public class FlowDiscoveryCDIExtension implements Extension {
     // Log instance for this class
     private static final Logger LOGGER = FacesLogger.FLOW.getLogger();
     private Map<Contextual<?>, FlowDiscoveryInfo> flowBuilders;
+    private List<Producer<Flow>> flowProducers;
     
     public FlowDiscoveryCDIExtension() {
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("ctor for Flow CDI Extensions called");
         }
         flowBuilders = new ConcurrentHashMap<Contextual<?>, FlowDiscoveryInfo>();
+        flowProducers = new CopyOnWriteArrayList<Producer<Flow>>();
         
+    }
+    
+    public List<Producer<Flow>> getFlowProducers() {
+        return flowProducers;
     }
     
     void beforeBeanDiscovery(@Observes final BeforeBeanDiscovery event, BeanManager beanManager) {
@@ -105,10 +114,11 @@ public class FlowDiscoveryCDIExtension implements Extension {
     }
     
     void afterBeanDiscovery(@Observes final AfterBeanDiscovery event) {
-        event.addContext(new FlowDiscoveryCDIContext(flowBuilders));
+        event.addContext(new FlowDiscoveryCDIContext(flowBuilders, flowProducers));
         flowBuilders.clear();
     }
     
+    /****
     public void processBean(@Observes ProcessBean<?> event) {
         FlowDefinition flowDefinition = event.getAnnotated().getAnnotation(FlowDefinition.class);
         if (null != flowDefinition) {        
@@ -120,5 +130,15 @@ public class FlowDiscoveryCDIExtension implements Extension {
             flowBuilders.put(event.getBean(), info);
         }
     }
+     * ******/
+    
+    <T> void findFlowDefiners(@Observes ProcessProducer<T, Flow> pp) {
+    	if (pp.getAnnotatedMember().isAnnotationPresent(FlowDefinition.class)) {
+            flowProducers.add(pp.getProducer());
+            System.out.println("have producer");
+
+    	}
+    }
+    
     
 }

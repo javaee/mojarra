@@ -44,19 +44,19 @@ import com.sun.faces.flow.builder.FlowBuilderImpl;
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.FacesLogger;
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.BeanManager;
-import javax.faces.FacesException;
+import javax.enterprise.inject.spi.Producer;
 import javax.faces.context.FacesContext;
 import javax.faces.flow.Flow;
 import javax.faces.flow.builder.FlowBuilder;
-import javax.faces.flow.FlowDefinition;
+import javax.faces.flow.builder.FlowDefinition;
 import javax.faces.flow.FlowHandler;
+import javax.faces.flow.builder.FlowBuilderParameter;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -90,61 +90,27 @@ public class FlowDiscoveryCDIHelper implements Serializable {
     public FlowDiscoveryCDIHelper() {
     }
     
-
     public void discoverFlows(FacesContext context, FlowHandler flowHandler) {
-        
         FlowDiscoveryCDIContext flowDiscoveryContext = (FlowDiscoveryCDIContext) beanManager.getContext(FlowDefinition.class);
-        List<FlowDiscoveryInfo> flowDefinincClasses = flowDiscoveryContext.getFlowDefiningClasses();
-        for (FlowDiscoveryInfo cur : flowDefinincClasses) {
-            Class beanClass = cur.getDefiningClass();
-            Method[] methods = beanClass.getDeclaredMethods();
-            Class<?> returnType = null;
-            Class[] params = null;
-            for (Method curMethod : methods) {
-                returnType = curMethod.getReturnType();
-                if (returnType.isAssignableFrom(Flow.class)) {
-                    params = curMethod.getParameterTypes();
-                    if (2 == params.length && 
-                        params[0].isAssignableFrom(FacesContext.class) &&
-                        params[1].isAssignableFrom(FlowBuilder.class)) {
-                        FlowBuilder builder = new FlowBuilderImpl(context);
-                        try {
-                            
-                            // PENDING(edburns): we really should be instantiating this
-                            // via CDI so injection works.  Unfortunately, I can't
-                            // seem to get that working.  On Mark Struberg's advice
-                            // I'm just using newInstance().
-                            
-                            Object instance = beanClass.newInstance();
-                            Object builderParam [] = new Object [] { context, builder };
-                            LOGGER.log(Level.FINE, "About to discover flow on {0}", beanClass);
-                            Flow toAdd = (Flow) curMethod.invoke(instance, builderParam);
-                            if (null == toAdd) {
-                                LOGGER.log(Level.SEVERE, "Flow builder method {0}() on class {1} returned null.  Ignoring.",
-                                        new String [] { curMethod.getName(), beanClass.getName() });
-                            } else {
-                                flowHandler.addFlow(context, toAdd);
-                            }
-                        } catch (InstantiationException ex) {
-                            LOGGER.log(Level.SEVERE, "Cannot instantiate " + beanClass.getName(), ex);
-                            throw new FacesException(ex);
-                        } catch (IllegalAccessException ex) {
-                            LOGGER.log(Level.SEVERE, "Cannot instantiate " + beanClass.getName(), ex);
-                            throw new FacesException(ex);
-                        } catch (IllegalArgumentException ex) {
-                            LOGGER.log(Level.SEVERE, "Cannot invoke " + curMethod.getName(), ex);
-                            throw new FacesException(ex);
-                        } catch (InvocationTargetException ex) {
-                            LOGGER.log(Level.SEVERE, "Cannot invoke " + curMethod.getName(), ex);
-                            throw new FacesException(ex);
-                        }
-                        
-                    }
-                }
+        List<Producer<Flow>> flowProducers = flowDiscoveryContext.getFlowProducers();
+        
+        for (Producer<Flow> cur : flowProducers) {
+            Flow toAdd = cur.produce(beanManager.<Flow>createCreationalContext(null));
+            if (null == toAdd) {
+                LOGGER.log(Level.SEVERE, "Flow producer method {0}() returned null.  Ignoring.",
+                        new String [] { cur.toString() });
+            } else {
+                flowHandler.addFlow(context, toAdd);
             }
-            
         }
         
+    }
+    
+    @Produces @FlowBuilderParameter
+    FlowBuilder createFlowBuilder() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        FlowBuilder result = new FlowBuilderImpl(context);
+        return result;
     }
     
 }
