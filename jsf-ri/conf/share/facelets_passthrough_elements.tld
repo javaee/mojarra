@@ -62,55 +62,8 @@
 
         <div class="changed_added_2_2">
 
-        <p>Usage example</p>
-
-        <code><pre>
-&lt;html xmlns="http://www.w3.org/1999/xhtml"<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlns:h="http://java.sun.com/jsf/html"<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlns:jsf="http://java.sun.com/jsf"<br />
-&nbsp;&nbsp;&lth:form&gt;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;progress jsf:id="progress" max="3" value="#{bean.progress}" /&gt;<br />
-&nbsp;&nbsp;&lt/h:form&gt;<br />
-&lt;/html&gt;
-</pre></code>
-
-        <p>When the Facelets runtime detects an attribute from the<br />
-        http://java.sun.com/jsf namespace, the entire element must be<br />
-        set to be in that namespace by a call to<br />
-        <code>Tag.setNamespace()</code>. A component with
-        <code>component-type: javax.faces.Panel</code> <br /> and
-        <code>renderer-type: javax.faces.passthrough.Element</code>
-        must be inserted into the tree.</p>
-
-        <p>The components's attribute map must be given an entry with<br />
-        the key given by the value of the constant<br />
-        <code>javax.faces.render.Renderer.PASSTHROUGH_RENDERER_LOCALNAME_KEY</code><br />
-        and the value given by the XML local name.  Any non-namespaced<br />
-        attributes on the markup element must be set exactly as they<br />
-        appear on the pass through attribute map of the component.  Any<br />
-        attributes from namespace http://java.sun.com/jsf must be set as<br />
-        properties on the component in the usual manner for other<br />
-        regular JSF components.</p><br />
-
-        <p>Names and Client Ids</p>
-
-        <ul>
-
-        <p>The following algorithm must be used to set the id (and<br />
-        therefore the clientId) of the component corresponding to this<br />
-        markup.</p>
-
-        <p>If the element has a manually declared, non-namespaced "id"<br />
-        attribute, us it as the id.  Otherwise, if the element has an<br />
-        "id" attribute in the http://java.sun.com/jsf namespace, use it<br />
-        as the id.</p>
-
-        </ul>
-
-        <p>The system must throw a <code>FaceletException</code> if an<br />
-        attribute from this namespace is used on a regular JSF aware<br />
-        markup element.</p>
-
+        <p>Please see the documentation for Java class <code><a
+        href="javadocs/javax/faces/view/facelets/TagDecorator.html">javax.faces.view.facelets.TagDecorator</a></code>.</p>
 
         </div>
 
