@@ -844,12 +844,10 @@ public class ApplicationAssociate {
                     ConfigManager.getAnnotatedClasses(ctx).get(FaceletsResourceResolver.class);
             if ((null != resourceResolvers) && !resourceResolvers.isEmpty()) {
                 Class resolverClass = resourceResolvers.iterator().next();
-                if (1 < resourceResolvers.size()) {
-                    if (LOGGER.isLoggable(Level.SEVERE)) {
-                        LOGGER.log(Level.SEVERE, "Found more than one class " + 
-                                "annotated with FaceletsResourceResolver.  Will " + 
-                                "use {0} and ignore the others", resolverClass);
-                    }
+                if (1 < resourceResolvers.size() && LOGGER.isLoggable(Level.SEVERE)) {
+                    LOGGER.log(Level.SEVERE, "Found more than one class " + 
+                        "annotated with FaceletsResourceResolver.  Will " + 
+                        "use {0} and ignore the others", resolverClass);
                 }
                 resolver = (ResourceResolver) 
                         ReflectionUtil.decorateInstance(resolverClass,
