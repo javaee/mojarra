@@ -2512,12 +2512,10 @@ public class ApplicationImpl extends Application {
                         }
                     }
                 }
-                if (eventConstructor == null) {
-                    if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.log(Level.FINE,
-                                   "Unable to find Constructor within {0} that accepts {1} instances.",
-                                   new Object[] { systemEvent.getName(), sourceClass.getName() });
-                    }
+                if (eventConstructor == null && LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.log(Level.FINE,
+                        "Unable to find Constructor within {0} that accepts {1} instances.",
+                        new Object[] { systemEvent.getName(), sourceClass.getName() });
                 }
             }
             return ctor;
