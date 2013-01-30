@@ -523,12 +523,10 @@ public class ApplicationImpl extends Application {
                 }
             } else {
                 value = webConfig.getOptionValue(WebContextInitParameter.JavaxFacesProjectStage);
-                if (value != null) {
-                    if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.log(Level.FINE,
-                               "ProjectStage configured via servlet context init parameter: {0}", 
-                               value);
-                    }
+                if (value != null && LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.log(Level.FINE,
+                       "ProjectStage configured via servlet context init parameter: {0}", 
+                       value);
                 }
             }
             if (value != null) {
