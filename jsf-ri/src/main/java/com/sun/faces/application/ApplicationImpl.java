@@ -1977,20 +1977,14 @@ public class ApplicationImpl extends Application {
                            .applyRendererAnnotations(ctx, r, c);
                     }
                 }
-                if (rk == null || r == null) {
-                    if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.log(Level.FINE,
-                                   "Unable to create Renderer with rendererType {0} for component with component type of {1}",
-                                   new Object[] { rendererType, c.getFamily() });
-                    }
-
+                if ((rk == null || r == null) && LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.log(Level.FINE,
+                       "Unable to create Renderer with rendererType {0} for component with component type of {1}",
+                       new Object[] { rendererType, c.getFamily() });
                 }
             }
-
         }
-
     }
-
 
     /**
      * @return the SystemEventListeners that should be used for the
