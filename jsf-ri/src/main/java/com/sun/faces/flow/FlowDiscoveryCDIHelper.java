@@ -66,14 +66,8 @@ import javax.inject.Named;
  * uses this class to cause any flows defined in this way to be 
  * built using the FlowBuilder API.
  * 
- * This needs to be a bean so I can @Inject the BeanManager
- * so I can ask it for the FlowDiscoveryCDIContext, so I can ask *that*
- * for the beans annotated with @FlowDefinition so I can inspect each of those beans
- * for a method that takes a FacesContext,FlowBuilder and returns a Flow.
- * 
- * Using a Producer method seems a much cleaner way to do this, but I could
- * not get that working. Perhaps that was a bug in weld+GlassFish.
- * 
+ * A better way is to @Inject the extension directly but this doesn't
+ * seem to work in the version of weld we have.
  */
 
 @Named(RIConstants.FLOW_DISCOVERY_CDI_HELPER_BEAN_NAME)

@@ -43,128 +43,31 @@ package com.sun.faces.flow;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import javax.enterprise.context.spi.Context;
 import javax.enterprise.context.spi.Contextual;
 import javax.enterprise.context.spi.CreationalContext;
-import javax.enterprise.event.Observes;
-import javax.enterprise.inject.spi.BeanManager;
-import javax.enterprise.inject.spi.BeforeShutdown;
 import javax.enterprise.inject.spi.Producer;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
 import javax.faces.flow.Flow;
 import javax.faces.flow.builder.FlowDefinition;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
 
 public class FlowDiscoveryCDIContext implements Context, Serializable {
     
     private static final long serialVersionUID = -7144653402477623609L;
     
-    private transient Map<Contextual<?>, FlowDiscoveryInfo> flowBuilders;
     private transient List<Producer<Flow>> flowProducers;
         
     // This should be vended from a factory for decoration purposes.
     
-    public FlowDiscoveryCDIContext(Map<Contextual<?>, FlowDiscoveryInfo> builderMethods,
-            List<Producer<Flow>> flowProducers) {
-        this.flowBuilders = new ConcurrentHashMap<Contextual<?>, FlowDiscoveryInfo>(builderMethods);
-        this.flowProducers = flowProducers;
+    public FlowDiscoveryCDIContext(List<Producer<Flow>> flowProducers) {
+        this.flowProducers = new CopyOnWriteArrayList<Producer<Flow>>(flowProducers);
     }
-    
-    private static final String FLOW_DEFINITION_SCOPE_BEAN_MAP_KEY = FlowDiscoveryCDIContext.class.getName() + "_BEANS";
-    private static final String FLOW_DEFINITION_SCOPE_CREATIONAL_MAP_KEY = FlowDiscoveryCDIContext.class.getName() + "_CREATIONAL";
-    
-    
-    private static final String PER_CONTEXT_BEAN_MAP_LIST = FlowDiscoveryCDIContext.class.getPackage().getName() + ".PER_CONTEXT_BEAN_MAP_LIST";
-    private static final String PER_CONTEXT_CREATIONAL_LIST = FlowDiscoveryCDIContext.class.getPackage().getName() + ".PER_CONTEXT_CREATIONAL_LIST";
-
+        
     // -------------------------------------------------------- Private Methods
     
-    // <editor-fold defaultstate="collapsed" desc="Private helpers">       
-    
-    private static Map<Contextual<?>, Object> getFlowScopedBeanMapForCurrentFlow() {
-
-        Map<Contextual<?>, Object> result;
-        FacesContext context = FacesContext.getCurrentInstance();
-        ExternalContext extContext = context.getExternalContext();
-        Map<String, Object> appMap = extContext.getApplicationMap();
-        
-        result = (Map<Contextual<?>, Object>) appMap.get(FLOW_DEFINITION_SCOPE_BEAN_MAP_KEY);
-        if (null == result) {
-            result = new ConcurrentHashMap<Contextual<?>, Object>();
-            appMap.put(FLOW_DEFINITION_SCOPE_BEAN_MAP_KEY, result);
-            ensureBeanMapCleanupOnContextDestroyed(appMap, FLOW_DEFINITION_SCOPE_BEAN_MAP_KEY);
-        }
-        
-        return result;
-    }
-    
-    private static Map<Contextual<?>, CreationalContext<?>> getFlowScopedCreationalMapForCurrentFlow() {
-        Map<Contextual<?>, CreationalContext<?>> result;
-        FacesContext context = FacesContext.getCurrentInstance();
-        ExternalContext extContext = context.getExternalContext();
-        Map<String, Object> appMap = extContext.getApplicationMap();
-
-        result = (Map<Contextual<?>, CreationalContext<?>>) appMap.get(FLOW_DEFINITION_SCOPE_CREATIONAL_MAP_KEY);
-        if (null == result) {
-            result = new ConcurrentHashMap<Contextual<?>, CreationalContext<?>>();
-            appMap.put(FLOW_DEFINITION_SCOPE_CREATIONAL_MAP_KEY, result);
-            ensureCreationalCleanupOnContextDestroyed(appMap, FLOW_DEFINITION_SCOPE_CREATIONAL_MAP_KEY);
-        }
-        
-        return result;
-
-    }
-    
-    private static void ensureBeanMapCleanupOnContextDestroyed(Map<String, Object> appMap, String flowBeansForClientWindow) {
-        List<String> beanMapList = (List<String>) appMap.get(PER_CONTEXT_BEAN_MAP_LIST);
-        if (null == beanMapList) {
-            beanMapList = new ArrayList<String>();
-            appMap.put(PER_CONTEXT_BEAN_MAP_LIST, beanMapList);
-        }
-        beanMapList.add(flowBeansForClientWindow);
-    }
-    
-    private static void ensureCreationalCleanupOnContextDestroyed(Map<String, Object> appMap, String creationalForClientWindow) {
-        List<String> beanMapList = (List<String>) appMap.get(PER_CONTEXT_CREATIONAL_LIST);
-        if (null == beanMapList) {
-            beanMapList = new ArrayList<String>();
-            appMap.put(PER_CONTEXT_CREATIONAL_LIST, beanMapList);
-        }
-        beanMapList.add(creationalForClientWindow);
-    }
-    
-    @SuppressWarnings({"FinalPrivateMethod"})
-    private final void assertNotReleased() {
-        if (!isActive()) {
-            throw new IllegalStateException();
-        }
-    }
-    
-    // </editor-fold>    
     
     // <editor-fold defaultstate="collapsed" desc="Called from code related to flow">
-    
-    List<FlowDiscoveryInfo> getFlowDefiningClasses() {
-        List<FlowDiscoveryInfo> result = null;
-        
-        if (null != flowBuilders && !flowBuilders.isEmpty()) {
-            result = new ArrayList<FlowDiscoveryInfo>();
-            for (FlowDiscoveryInfo cur : flowBuilders.values()) {
-                result.add(cur);
-            }
-        } else {
-            result = Collections.emptyList();
-        }
-        
-        return result;
-    }
     
     List<Producer<Flow>> getFlowProducers() {
         return flowProducers;
@@ -173,84 +76,26 @@ public class FlowDiscoveryCDIContext implements Context, Serializable {
     // </editor-fold>
 
 
-    // <editor-fold defaultstate="collapsed" desc="Called from code not related to flow">       
-    
-    public static void contextDestroyed(ServletContextEvent hse) {
-        ServletContext context = hse.getServletContext();
-        
-        List<String> beanMapList = (List<String>) context.getAttribute(PER_CONTEXT_BEAN_MAP_LIST);
-        if (null != beanMapList) {
-            for (String cur : beanMapList) {
-                Map<Contextual<?>, Object> beanMap = 
-                        (Map<Contextual<?>, Object>) context.getAttribute(cur);
-                beanMap.clear();
-                context.removeAttribute(cur);
-            }
-            context.removeAttribute(PER_CONTEXT_BEAN_MAP_LIST);
-            beanMapList.clear();
-        }
-        
-        List<String> creationalList = (List<String>) context.getAttribute(PER_CONTEXT_CREATIONAL_LIST);
-        if (null != creationalList) {
-            for (String cur : creationalList) {
-                Map<Contextual<?>, CreationalContext<?>> beanMap = 
-                        (Map<Contextual<?>, CreationalContext<?>>) context.getAttribute(cur);
-                beanMap.clear();
-                context.removeAttribute(cur);
-            }
-            context.removeAttribute(PER_CONTEXT_CREATIONAL_LIST);
-            creationalList.clear();
-        }
-        
-        
-    }
-    
-    // </editor-fold>
-
-    
     // <editor-fold defaultstate="collapsed" desc="spi.Context implementation">       
     
+    @Override
     public <T> T get(Contextual<T> contextual, CreationalContext<T> creational) {
-        assertNotReleased();
-        
-        T result = get(contextual);
-        
-        if (null == result) {
-            Map<Contextual<?>, Object> flowScopedBeanMap = getFlowScopedBeanMapForCurrentFlow();
-            Map<Contextual<?>, CreationalContext<?>> creationalMap = getFlowScopedCreationalMapForCurrentFlow();
-            
-            synchronized (flowScopedBeanMap) {
-                result = (T) flowScopedBeanMap.get(contextual);
-                if (null == result) {
-                    
-                    result = contextual.create(creational);
-                    if (null != result) {
-                        flowScopedBeanMap.put(contextual, result);
-                        creationalMap.put(contextual, creational);
-                    }
-                }
-            }
-        }
-        
-        return result;
-
+        return null;
     }
     
+    @Override
     public <T> T get(Contextual<T> contextual) {
-        assertNotReleased();
-        
-        return (T) getFlowScopedBeanMapForCurrentFlow().get(contextual);
+        return null;
     }
     
+    @Override
     public Class<? extends Annotation> getScope() {
         return FlowDefinition.class;
     }
     
+    @Override
     public boolean isActive() {
         return true;
-    }
-    
-    void beforeShutdown(@Observes final BeforeShutdown event, BeanManager beanManager) {
     }
     
     // </editor-fold>

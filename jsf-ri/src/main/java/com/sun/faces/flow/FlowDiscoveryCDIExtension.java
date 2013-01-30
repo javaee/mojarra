@@ -91,14 +91,9 @@ public class FlowDiscoveryCDIExtension implements Extension {
 
     // Log instance for this class
     private static final Logger LOGGER = FacesLogger.FLOW.getLogger();
-    private Map<Contextual<?>, FlowDiscoveryInfo> flowBuilders;
     private List<Producer<Flow>> flowProducers;
     
     public FlowDiscoveryCDIExtension() {
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.fine("ctor for Flow CDI Extensions called");
-        }
-        flowBuilders = new ConcurrentHashMap<Contextual<?>, FlowDiscoveryInfo>();
         flowProducers = new CopyOnWriteArrayList<Producer<Flow>>();
         
     }
@@ -114,28 +109,16 @@ public class FlowDiscoveryCDIExtension implements Extension {
     }
     
     void afterBeanDiscovery(@Observes final AfterBeanDiscovery event) {
-        event.addContext(new FlowDiscoveryCDIContext(flowBuilders, flowProducers));
-        flowBuilders.clear();
+        event.addContext(new FlowDiscoveryCDIContext(flowProducers));
+        flowProducers.clear();
     }
-    
-    /****
-    public void processBean(@Observes ProcessBean<?> event) {
-        FlowDefinition flowDefinition = event.getAnnotated().getAnnotation(FlowDefinition.class);
-        if (null != flowDefinition) {        
-            Class<?> definingClass = event.getBean().getBeanClass();
-            
-            Named named = event.getAnnotated().getAnnotation(Named.class);
-            String id = named.value();
-            FlowDiscoveryInfo info = new FlowDiscoveryInfo(definingClass, id, flowDefinition.definingDocumentId());
-            flowBuilders.put(event.getBean(), info);
-        }
-    }
-     * ******/
     
     <T> void findFlowDefiners(@Observes ProcessProducer<T, Flow> pp) {
     	if (pp.getAnnotatedMember().isAnnotationPresent(FlowDefinition.class)) {
             flowProducers.add(pp.getProducer());
-            System.out.println("have producer");
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE, "Discovered Flow Producer {0}", pp.getProducer().toString());
+            }
 
     	}
     }

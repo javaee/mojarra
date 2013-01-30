@@ -307,10 +307,6 @@ public class ConfigureListener implements ServletRequestListener,
                            "ConfigureListener.contextDestroyed({0})",
                            context.getServletContextName());
             }
-
-            if (Util.isCDIAvailable(initContext.getExternalContext().getApplicationMap())) {
-                FlowDiscoveryCDIContext.contextDestroyed(sce);
-            }
             
             ELContext elctx = new ELContextImpl(initContext.getApplication().getELResolver());
             elctx.putContext(FacesContext.class, initContext);
