@@ -552,8 +552,8 @@ public class ViewHandlerImpl extends ViewHandler {
             ResponseStateManager.RENDER_KIT_ID_PARAM);
 
         if (result == null) {
-            if (null ==
-                (result = context.getApplication().getDefaultRenderKitId())) {
+            result = context.getApplication().getDefaultRenderKitId();
+            if (null == result) {
                 result = RenderKitFactory.HTML_BASIC_RENDER_KIT;
             }
         }
