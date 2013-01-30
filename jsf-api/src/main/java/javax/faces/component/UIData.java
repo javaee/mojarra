@@ -964,6 +964,20 @@ public class UIData extends UIComponentBase
             }
         }
 
+        /*
+         * Check if we are looking for a component that is part of the 
+         * actual skeleton.
+         */
+        if (this.getChildCount() > 0) {
+            for (UIComponent column : this.getChildren()) {
+                if (column instanceof UIColumn) {
+                    if (column.invokeOnComponent(context, clientId, callback)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
         int lastSep, newRow, savedRowIndex = this.getRowIndex();
         try {
             char sepChar = UINamingContainer.getSeparatorChar(context);
