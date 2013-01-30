@@ -58,6 +58,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.Set;
 import static com.sun.faces.RIConstants.DYNAMIC_CHILD_COUNT;
 import static com.sun.faces.RIConstants.DYNAMIC_COMPONENT;
 import com.sun.faces.util.FacesLogger;
@@ -410,24 +412,18 @@ public class StateContext {
                     component.setId(id);
                 }
 
-                if (component.getParent().getFacets().containsValue(component)) {
-                    Map facets = component.getParent().getFacets();
-                    Iterator entries = facets.entrySet().iterator();
-                    while (entries.hasNext()) {
-                        Map.Entry entry = (Map.Entry) entries.next();
-                        if (entry.getValue() == component) {
-                            incrementDynamicChildCount(component.getParent());
-                            component.clearInitialState();
-                            component.getAttributes().put(DYNAMIC_COMPONENT, component.getParent().getChildren().indexOf(component));
-                            ComponentStruct struct = new ComponentStruct();
-                            struct.action = ComponentStruct.ADD;
-                            struct.facetName = entry.getKey().toString();
-                            struct.parentClientId = component.getParent().getClientId(context);
-                            struct.clientId = component.getClientId(context);
-                            struct.id = component.getId();
-                            handleAddRemoveWithAutoPrune(component, struct);
-                        }
-                    }
+                String facetName = findFacetNameForComponent(component);
+                if (facetName != null) {
+                    incrementDynamicChildCount(component.getParent());
+                    component.clearInitialState();
+                    component.getAttributes().put(DYNAMIC_COMPONENT, component.getParent().getChildren().indexOf(component));
+                    ComponentStruct struct = new ComponentStruct();
+                    struct.action = ComponentStruct.ADD;
+                    struct.facetName = facetName;
+                    struct.parentClientId = component.getParent().getClientId(context);
+                    struct.clientId = component.getClientId(context);
+                    struct.id = component.getId();
+                    handleAddRemoveWithAutoPrune(component, struct);
                 }
                 else {
                     incrementDynamicChildCount(component.getParent());
@@ -441,6 +437,25 @@ public class StateContext {
                     handleAddRemoveWithAutoPrune(component, struct);
                 }
             }
+        }
+
+        /**
+         * Return the facet name for the given component or null if the
+         * component is not the value of a facets map entry.
+         * 
+         * @param component the component to look for in the facets map entry value.
+         * @return the facet name or null if the component is not the value of a facets map entry.
+         */
+        private String findFacetNameForComponent(UIComponent component) {
+            Set<Entry<String, UIComponent>> entrySet = component.getParent().getFacets().entrySet();
+            Iterator<Entry<String, UIComponent>> entries = entrySet.iterator();
+            while (entries.hasNext()) {
+                Entry<String, UIComponent> candidate = entries.next();
+                if (component == candidate.getValue()) {
+                    return candidate.getKey();
+                }
+            }
+            return null;
         }
         
         /**
