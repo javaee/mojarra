@@ -780,9 +780,10 @@ public class ApplicationAssociate {
         Locale defaultLocale = Locale.getDefault();
         locale = defaultLocale;
         // See if this FacesContext has a ViewRoot
-        if (null != (root = context.getViewRoot())) {
-            // If so, ask it for its Locale
-            if (null == (locale = root.getLocale())) {
+        root = context.getViewRoot();
+        if (null != root) {
+            locale = root.getLocale();
+            if (null == root.getLocale()){
                 // If the ViewRoot has no Locale, fall back to the default.
                 locale = defaultLocale;
             }
