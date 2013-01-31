@@ -56,7 +56,7 @@ public class FaceletsConfiguration {
 
     private static final String ESCAPE_INLINE_TEXT_ATTRIBUTE_NAME = "com.sun.faces.config.EscapeInlineText";
 
-    private static final String CONSUME_COMMENTS_ATTRIBUTE_NAME = "com.sun.faces.config.ConsumeComments";
+//    private static final String CONSUME_COMMENTS_ATTRIBUTE_NAME = "com.sun.faces.config.ConsumeComments";
 
     private WebConfiguration config;
 
