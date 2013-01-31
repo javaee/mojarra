@@ -401,19 +401,14 @@ public class WebConfiguration {
         value = value.trim();
         String oldVal = contextParameters.put(param, value);
         cachedListParams.remove(param);
-        if (oldVal != null) {
-            if (LOGGER.isLoggable(Level.FINE) && !(oldVal.equals(value))) {
-                LOGGER.log(Level.FINE,
-                           "Overriding init parameter {0}.  Changing from {1} to {2}.",
-                           new Object[]{param.getQualifiedName(),
-                                        oldVal,
-                                        value});
-            }
+        if (oldVal != null && LOGGER.isLoggable(Level.FINE) && !(oldVal.equals(value))) {
+            LOGGER.log(Level.FINE,
+                "Overriding init parameter {0}.  Changing from {1} to {2}.",
+                new Object[]{param.getQualifiedName(),
+                             oldVal,
+                             value});
         }
-
-
     }
-
 
     public void doPostBringupActions() {
 
