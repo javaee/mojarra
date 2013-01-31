@@ -220,14 +220,10 @@ public class ResourceCache {
                                             long checkPeriod) {
 
             this.resourceInfo = resourceInfo;
-            if (checkPeriod != -1L) {
-                if (!(resourceInfo.getHelper() instanceof ClasspathResourceHelper)) {
-                    checkTime = System.currentTimeMillis() + checkPeriod;
-                }
+            if (checkPeriod != -1L && (!(resourceInfo.getHelper() instanceof ClasspathResourceHelper))) {
+                checkTime = System.currentTimeMillis() + checkPeriod;
             }
-
         }
-
 
         private boolean needsRefreshed() {
 
