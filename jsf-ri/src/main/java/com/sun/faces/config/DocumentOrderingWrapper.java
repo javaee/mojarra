@@ -322,12 +322,10 @@ public class DocumentOrderingWrapper {
                     break;
                 }
             }
-            if (!found) {
-                if (LOGGER.isLoggable(Level.WARNING)) {
-                    LOGGER.log(Level.WARNING,
-                               "jsf.configuration.absolute.order.missing.document",
-                               new Object[] { name });
-                }
+            if (!found && LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.log(Level.WARNING,
+                    "jsf.configuration.absolute.order.missing.document",
+                    new Object[] { name });
             }
         }
 
