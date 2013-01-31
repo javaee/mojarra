@@ -43,8 +43,6 @@ package com.sun.faces.flow;
 
 import com.sun.faces.util.FacesLogger;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
