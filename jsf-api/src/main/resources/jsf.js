@@ -1974,6 +1974,22 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
 
              * </tr>
 
+             * <tr class="changed_added_2_2">
+
+             * <td><code>resetValues</code></td>
+
+             * <td>If true, ensure a post data argument with the name
+             * javax.faces.partial.resetValues and the value true is
+             * sent in addition to the other post data arguments. This
+             * will cause UIViewRoot.resetValues() to be called, passing
+             * the value of the "render" attribute. Note: do not use any
+             * of the @ keywords such as @form or @this with this option
+             * because UIViewRoot.resetValues() does not descend into
+             * the children of the listed components.</td>
+
+             * </tr>
+
+
              * </table>
              * The <code>options</code> argument is optional.
              * @member jsf.ajax
