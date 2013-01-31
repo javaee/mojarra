@@ -47,6 +47,7 @@ import java.util.List;
 import javax.faces.component.UIViewParameter;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewAction;
 import javax.faces.context.FacesContext;
 
 /**
@@ -93,7 +94,7 @@ public abstract class ViewMetadata {
      * metadata from the provided {@link UIViewRoot}.  </p>
      *
      * @param root the {@link UIViewRoot} from which the metadata will
-     * be extracted from
+     * be extracted.
      *
      * @return a <code>Collection</code> of {@link UIViewParameter}
      * instances.  If the view has no metadata, the collection will be
@@ -120,6 +121,61 @@ public abstract class ViewMetadata {
 
         return params;
 
+    }
+    
+    /**
+     * <p class="changed_added_2_2"> Utility method to extract view
+     * metadata from the provided {@link UIViewRoot}.  </p>
+     *
+     * @param root the {@link UIViewRoot} from which the metadata will
+     * be extracted.
+     *
+     * @return a <code>Collection</code> of {@link UIViewAction}
+     * instances.  If the view has no metadata, the collection will be
+     * empty.
+     */
+    public static Collection<UIViewAction> getViewActions(UIViewRoot root) {
+        Collection<UIViewAction> actions;
+        UIComponent metadataFacet = root.getFacet(UIViewRoot.METADATA_FACET_NAME);
+
+        if (metadataFacet == null) {
+            actions = Collections.emptyList();
+        } else {
+            actions = new ArrayList<UIViewAction>();
+            List<UIComponent> children = metadataFacet.getChildren();
+            int len = children.size();
+            for (int i = 0; i < len; i++) {
+                UIComponent c = children.get(i);
+                if (c instanceof UIViewAction) {
+                    actions.add((UIViewAction) c);
+                }
+            }
+        }
+        
+        return actions;
+    }
+    
+    /**
+     * <p class="changed_added_2_2">Utility method to determine if the 
+     * the provided {@link UIViewRoot} has metadata.  The default implementation will 
+     * return true if the provided {@code UIViewRoot} has a facet 
+     * named {@link UIViewRoot#METADATA_FACET_NAME} and that facet has children.
+     * It will return  false otherwise.</p>
+     *
+     * @param root the {@link UIViewRoot} from which the metadata will
+     * be extracted from
+     *
+     * @return true if the view has metadata, false otherwise.
+     */
+    public static boolean hasMetadata(UIViewRoot root) {
+        boolean result = false;
+        
+        UIComponent metadataFacet = root.getFacet(UIViewRoot.METADATA_FACET_NAME);
+        if (null != metadataFacet) {
+            result = 0 < metadataFacet.getChildCount();
+        }
+        
+        return result;
     }
 
 

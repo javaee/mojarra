@@ -240,14 +240,9 @@ public class RestoreViewPhase extends Phase {
                         // the UIViewRoot and its metadata facet.
                         viewRoot = metadata.createMetadataView(facesContext);
 
-                        // Only skip to render response if there are no view parameters
-                        Collection<UIViewParameter> params =
-                                ViewMetadata.getViewParameters(viewRoot);
-                        if (params.isEmpty()) {
-                            UIComponent metaDataFacet = viewRoot.getFacets().get(UIViewRoot.METADATA_FACET_NAME);
-                            if (null == metaDataFacet || 0 == metaDataFacet.getChildCount()) {
-                                facesContext.renderResponse();
-                            }
+                        // Only skip to render response if there is no metadata
+                        if (!ViewMetadata.hasMetadata(viewRoot)) {
+                            facesContext.renderResponse();
                         }
                     }
                 } else {

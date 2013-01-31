@@ -84,8 +84,18 @@ import javax.faces.context.FacesContext;
  *
  * <p>For the default implementation, resources packaged in the
  * classpath must reside under the JAR entry name</p>
- *
+
  * <p><code>META-INF/resources/&lt;resourceIdentifier&gt;</code></p>
+
+ * <div class="changed_added_2_2">
+
+ * <p>In the case of Faces Flows packaged
+ * within jar files, resources packaged in the classpath must reside
+ * under the jar entry name</p>
+
+ * <p><code>META-INF/flows/&lt;resourceIdentifier&gt;</code></p>
+
+ * </div>
 
  * <p><code>&lt;resourceIdentifier&gt;</code> consists of several
  * segments, specified as follows.</p>
