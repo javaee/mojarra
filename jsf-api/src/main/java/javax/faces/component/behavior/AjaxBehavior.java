@@ -286,7 +286,7 @@ public class AjaxBehavior extends ClientBehaviorBase {
         clearInitialState();
     }
     
-    /*
+    /**
      * <p class="changed_added_2_2">
      * Return the resetValues status of this behavior.</p>
      * 
@@ -298,7 +298,7 @@ public class AjaxBehavior extends ClientBehaviorBase {
         return ((result != null) ? result : false);
     }
 
-    /*
+    /**
      * <p class="changed_added_2_2">
      * Set the resetValues status of this behavior.</p>
      * 
@@ -383,7 +383,7 @@ public class AjaxBehavior extends ClientBehaviorBase {
      * either as a locally set property or as a value expression. 
      * </p>
      *
-     * @since 2.0
+     * @since 2.2
      */
     public boolean isResetValuesSet() {
         return ((resetValues != null) || (getValueExpression(RESET_VALUES) != null));
