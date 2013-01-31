@@ -65,7 +65,6 @@ import javax.faces.application.Resource;
 import javax.faces.component.ActionSource;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionListener;
 import javax.faces.view.ActionSource2AttachedObjectHandler;
 import javax.faces.view.facelets.*;
 import java.io.IOException;
