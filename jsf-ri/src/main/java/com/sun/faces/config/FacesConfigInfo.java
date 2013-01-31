@@ -90,10 +90,8 @@ public class FacesConfigInfo {
         Document document = documentInfo.getDocument();
         isWebInfFacesConfig = isWebinfFacesConfig(document);
         version = getVersion(document);
-        if (isWebInfFacesConfig) {
-            if (isVersionGreaterOrEqual(2.0)) {
-                extractOrdering(document);
-            }
+        if (isWebInfFacesConfig && isVersionGreaterOrEqual(2.0)) {
+            extractOrdering(document);
         }
         metadataComplete = isMetadataComplete(document);
 
