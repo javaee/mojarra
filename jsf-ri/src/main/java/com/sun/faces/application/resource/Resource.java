@@ -107,17 +107,15 @@ public final class Resource {
         if (log.isLoggable(Level.FINE)) {
             log.fine("Resource-Url from external context: " + url);
         }
-        if (url == null) {
-            // This might happen on Servlet container which doesnot return
-            // anything
-            // for getResource() (like weblogic 8.1 for packaged wars) we
-            // are trying
-            // to use an own URL protocol in order to use
-            // ServletContext.getResourceAsStream()
-            // when opening the url
-            if (resourceExist(externalContext, path)) {
-                url = getUrlForResourceAsStream(externalContext, path);
-            }
+        // This might happen on Servlet container which doesnot return
+        // anything
+        // for getResource() (like weblogic 8.1 for packaged wars) we
+        // are trying
+        // to use an own URL protocol in order to use
+        // ServletContext.getResourceAsStream()
+        // when opening the url
+        if (url == null && resourceExist(externalContext, path)) {
+            url = getUrlForResourceAsStream(externalContext, path);
         }
         return url;
     }
