@@ -1172,7 +1172,8 @@ public abstract class Application {
      * @param taglibURI the fully qualified tag library URI that contains the component
      * @param tagName the name of the tag within that library that exposes the component
      * @param attributes any name=value pairs that would otherwise have been 
-     * given on the markup that would cause the creation of this component.
+     * given on the markup that would cause the creation of this component or
+     * {@code null} if no attributes need be given.
      */
     
     public UIComponent createComponent(FacesContext context, 

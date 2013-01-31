@@ -380,7 +380,7 @@ public class DefaultFaceletFactory {
             osw.append("<html xmlns=\"http://www.w3.org/1999/xhtml\"\n");
             osw.append("      xmlns:j=\"").append(taglibURI).append("\">");
             osw.append("  <j:").append(tagName).append(" ");
-            if (!attributes.isEmpty()) {
+            if (null != attributes && !attributes.isEmpty()) {
                 for (Map.Entry<String,Object> attr : attributes.entrySet()) {
                     osw.append(attr.getKey()).append("=\"").append(attr.getValue().toString()).append("\"").append(" ");
                 }
