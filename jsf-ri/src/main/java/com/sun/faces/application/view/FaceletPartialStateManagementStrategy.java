@@ -142,16 +142,15 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
                         if (form.isPrependId() && !clientId.startsWith(form.getClientId(visitContext.getFacesContext()))) {
                             result = VisitResult.REJECT;
                         }
-                    } else if (component instanceof NamingContainer) {
+                    } else if (component instanceof NamingContainer &&
+                        !clientId.startsWith(component.getClientId(visitContext.getFacesContext()))) {
                         /*
                          * If the component is a naming container then assume it
                          * is prepending its id so if our client id we are
                          * looking for does not start with the naming container
                          * id we can skip visiting this tree.
                          */
-                        if (!clientId.startsWith(component.getClientId(visitContext.getFacesContext()))) {
-                            result = VisitResult.REJECT;
-                        }
+                        result = VisitResult.REJECT;
                     }
 
                     return result;
