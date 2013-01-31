@@ -880,10 +880,8 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
      */
     private void markInitialStateIfNotMarked(UIComponent component) {
         if (!component.isTransient()) {
-            if (!component.getAttributes().containsKey(RIConstants.DYNAMIC_COMPONENT)) {
-                if (!component.initialStateMarked()) {
-                    component.markInitialState();
-                }
+            if (!component.getAttributes().containsKey(RIConstants.DYNAMIC_COMPONENT) && !component.initialStateMarked()) {
+                component.markInitialState();
             }
             for (Iterator<UIComponent> it = component.getFacetsAndChildren() ; it.hasNext() ; ) {
                 UIComponent child = it.next();
