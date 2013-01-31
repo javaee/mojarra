@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -71,10 +71,8 @@ import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Collection;
 import java.util.Map;
 import javax.faces.application.ProtectedViewException;
-import javax.faces.component.UIViewParameter;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.context.ExternalContext;
 import javax.faces.event.AbortProcessingException;
