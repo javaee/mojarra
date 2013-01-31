@@ -643,7 +643,6 @@ public class ConfigManager {
         List<FutureTask<DocumentInfo>> docTasks =
              new ArrayList<FutureTask<DocumentInfo>>(providers.size() << 1);
 
-        int i = 0, j = 0;
         for (FutureTask<Collection<URI>> t : urlTasks) {
             try {
                 Collection<URI> l = t.get();
@@ -656,13 +655,11 @@ public class ConfigManager {
                     } else {
                         d.run();
                     }
-                    j++;
                 }
             } catch (InterruptedException ignored) {
             } catch (Exception e) {
                 throw new ConfigurationException(e);
             }
-            i++;
         }
 
         List<DocumentInfo> docs = new ArrayList<DocumentInfo>(docTasks.size());
