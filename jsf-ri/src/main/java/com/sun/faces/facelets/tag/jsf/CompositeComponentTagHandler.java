@@ -315,18 +315,28 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
 
     }
     
+    
+    /**
+     * <p class="changed_added_2_2">The key in the value set of the
+     * <em>composite component <code>BeanDescriptor</code></em>, the
+     * value for which is a
+     * <code>List&lt;AttachedObjectHandler&gt;</code>.</p>
+     */
+    private static final String ATTACHED_OBJECT_HANDLERS_KEY =
+            "javax.faces.view.AttachedObjectHandlers";
+    
 
     @SuppressWarnings({"unchecked"})
     public static List<AttachedObjectHandler> getAttachedObjectHandlers(UIComponent component,
                                                                         boolean create) {
         Map<String, Object> attrs = component.getAttributes();
         List<AttachedObjectHandler> result = (List<AttachedObjectHandler>)
-              attrs.get(AttachedObjectHandler.ATTACHED_OBJECT_HANDLERS_KEY);
+              attrs.get(ATTACHED_OBJECT_HANDLERS_KEY);
 
         if (result == null) {
             if (create) {
                 result = new ArrayList<AttachedObjectHandler>();
-                attrs.put(AttachedObjectHandler.ATTACHED_OBJECT_HANDLERS_KEY, result);
+                attrs.put(ATTACHED_OBJECT_HANDLERS_KEY, result);
             } else {
                 result = Collections.EMPTY_LIST;
             }
