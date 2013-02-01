@@ -78,7 +78,7 @@
  <tag>
 
      <description><![CDATA[<p class="changed_added_2_2">Markup element
-     that causes a component of <code>component-type:
+     that causes a component of <code>component-family:
      javax.faces.Panel</code> with <code>renderer-type:
      javax.faces.passthrough.Element</code> to be inserted in the tree.
      This element is primarily intended to be used by the default
