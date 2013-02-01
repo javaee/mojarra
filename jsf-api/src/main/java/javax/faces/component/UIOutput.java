@@ -239,7 +239,7 @@ public class UIOutput extends UIComponentBase
                  * state saving algorithm. So we are going to ALWAYS force to
                  * do FSS for the converter.
                  */
-                if (getParent().initialStateMarked()) {
+                if (getParent() != null && getParent().initialStateMarked()) {
                     getAttributes().put(FORCE_FULL_CONVERTER_STATE, true);
                     if (converter instanceof PartialStateHolder) {
                         PartialStateHolder psh = (PartialStateHolder) converter;
