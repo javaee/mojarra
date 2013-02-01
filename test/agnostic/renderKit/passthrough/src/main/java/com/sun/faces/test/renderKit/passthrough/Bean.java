@@ -175,6 +175,10 @@ public class Bean implements Serializable {
         lastAction = "action2";
         return null;
     }
+    
+    public String getOutcome1() {
+        return "outcome1";
+    }
 
     public String getLastAction() {
         return lastAction;

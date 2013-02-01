@@ -285,14 +285,20 @@ public class Issue1111IT {
         HtmlAnchor link = (HtmlAnchor) page.getElementById("action1");
         page = link.click();
         
-        String lastAction = page.getElementById("lastAction").getTextContent();
-        assertEquals("action1", lastAction);
+        String lastStr = page.getElementById("lastAction").getTextContent();
+        assertEquals("action1", lastStr);
 
         link = (HtmlAnchor) page.getElementById("action2");
         page = link.click();
         
-        lastAction = page.getElementById("lastAction").getTextContent();
-        assertEquals("action2", lastAction);
+        lastStr = page.getElementById("lastAction").getTextContent();
+        assertEquals("action2", lastStr);
+        
+        link = (HtmlAnchor) page.getElementById("outcome1");
+        page = link.click();
+        lastStr = page.getElementById("lastOutcome").getTextContent();
+        assertEquals("outcome1", lastStr);
+        
         
     }
 

@@ -143,6 +143,16 @@ package javax.faces.view.facelets;
 
  * <tr>
 
+ * <td>a</td>
+
+ * <td>jsf:outcome</td>
+
+ * <td>h:link</td>
+
+ * </tr>
+
+ * <tr>
+
  * <td>body</td>
 
  * <td></td>

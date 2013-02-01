@@ -62,7 +62,8 @@ class DefaultTagDecorator implements TagDecorator {
         a(
                 new ElementConverter("h:commandLink", "jsf:action"),
                 new ElementConverter("h:commandLink", "jsf:actionListener"),
-                new ElementConverter("h:outputLink", "jsf:value")),
+                new ElementConverter("h:outputLink", "jsf:value"),
+                new ElementConverter("h:link", "jsf:outcome")),
 
         img("h:graphicImage"), body("h:body"), head("h:head"), label("h:outputLabel"), script("h:outputScript"),
         link("h:outputStylesheet"),

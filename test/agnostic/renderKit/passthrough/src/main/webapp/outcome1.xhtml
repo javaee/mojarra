@@ -41,20 +41,17 @@
 -->
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:jsf="http://java.sun.com/jsf" xmlns:f="http://java.sun.com/jsf/core">
-    <head jsf:id="head">
-        <title>Testing outputLink and commandLink</title>
-    </head>
-    <body jsf:id="body">
-        <form jsf:id="form" jsf:prependId="false">
-            <input jsf:id="text1" type="text" jsf:value="#{bean.text1}">
-            </input>
-            <p><a href="#" jsf:action="#{bean.action1}" jsf:id="action1">action1</a></p>
-            <p><a href="#" jsf:action="#{bean.action2}" jsf:id="action2">action2</a></p>
-            <p><a jsf:outcome="#{bean.outcome1}" jsf:id="outcome1">link</a></p>
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:jsf="http://java.sun.com/jsf" >
+    <h:head>
+        <title>outcome1</title>
+    </h:head>
+    <h:body>
+        <p><span id="lastOutcome">outcome1</span></p>
+        
+        <p><a jsf:outcome="links" jsf:id="links">back</a></p>
 
-            <p><span id="lastAction">#{bean.lastAction}</span></p>
-            <a  jsf:value="http://javaserverfaces.java.net" jsf:id="jsf">http://javaserverfaces.java.net</a>
-        </form>
-    </body>
+        
+    </h:body>
 </html>
+
