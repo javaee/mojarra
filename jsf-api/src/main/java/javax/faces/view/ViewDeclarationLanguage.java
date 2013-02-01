@@ -197,7 +197,7 @@ public abstract class ViewDeclarationLanguage {
      * {@code null} if no attributes need be given.  
      * 
      * @throws NullPointerException if {@code context}, {@code taglibURI}, or 
-     * @{code tagName} are {@code null}
+     * {@code tagName} are {@code null}
      * 
      * @since 2.2
      */
