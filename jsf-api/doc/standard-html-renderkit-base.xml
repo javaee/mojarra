@@ -737,7 +737,7 @@
     <component>
 
        <description>
-            <![CDATA[<p><span class="changed_modified_2_2">Represents</span> an HTML <code>a</code> (hyperlink) element that may be
+            <![CDATA[<p>Represents an HTML <code>a</code> (hyperlink) element that may be
       used to link to a URL handled by the Faces Servlet resolved preemptively using the logical
       outcome defined by the <code>outcome</code> property.]]></description>
         <display-name>Outcome Target Hyperlink</display-name>
@@ -761,7 +761,7 @@
     <component>
 
        <description>
-            <![CDATA[<p><span class="changed_modified_2_2">Represents</span> an HTML <code>input</code> element of type "button" or image that
+            <![CDATA[<p>Represents an HTML <code>input</code> element of type "button" or image that
             may be used to link to a URL handled by the Faces Servlet resolved preemptively using
             the logical outcome defined by the <code>outcome</code> property. The button behaves like
             a link, so the current form is not submitted when it is activated (the transitive of how

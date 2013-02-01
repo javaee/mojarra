@@ -95,8 +95,6 @@
         </property-extension>
     </property>
 
-    <xi:include href="get-link-props.xml" xpointer="xpointer(/root/*)"/>
-
    
 </root>
 

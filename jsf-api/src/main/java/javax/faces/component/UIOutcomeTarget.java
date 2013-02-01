@@ -41,7 +41,8 @@
 package javax.faces.component;
 
 /**
- * <p class="changed_added_2_0">This component is paired with the
+ * <p class="changed_added_2_0"><span class="changed_modified_2_2">This</span>
+ * component is paired with the
  * <code>javax.faces.Button</code> or <code>javax.faces.Link</code>
  * renderers and encapsulates properties relating to the rendering of
  * outcomes directly to the response.  This enables bookmarkability in
@@ -69,7 +70,8 @@ public class UIOutcomeTarget extends UIOutput {
 
     enum PropertyKeys {
         includeViewParams,
-        outcome
+        outcome,
+        disableClientWindow
     }
 
 
@@ -122,6 +124,31 @@ public class UIOutcomeTarget extends UIOutput {
         getStateHelper().put(PropertyKeys.includeViewParams, includeViewParams);
 
     }
+    
+    /**
+     * <p class="changed_added_2_2">Return whether or not the client window
+     * should be encoded into the target url.</p>
+     *
+     * @since 2.0
+     */
+    public boolean isDisableClientWindow() {
+        return (Boolean) getStateHelper().eval(PropertyKeys.disableClientWindow, false);
+    }
+    
+    /**
+     * <p class="changed_added_2_2">Set whether or not the client window
+     * should be encoded into the target url.</p>
+     * 
+     * @param disableClientWindow if @{code true}, the client window will not be included
+     * in this outcome target.
+     * 
+     * @since 2.2
+     */
+
+    public void setDisableClientWindow(boolean disableClientWindow) {
+        getStateHelper().put(PropertyKeys.disableClientWindow, disableClientWindow);
+    }
+
 
 
     /**

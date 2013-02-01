@@ -2333,17 +2333,6 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <value-expression-enabled>true</value-expression-enabled>
       </property-extension>
     </property>
-    <property>
-      <description><![CDATA[<p class="changed_added_2_2">Disable appending the <code>ClientWindow</code> on the rendering of this element.</p>
-        ]]></description>
-      <display-name>Disable ClientWindow on rendered OutcomeTarget</display-name>
-      <icon/>
-      <property-name>disableClientWindow</property-name>
-      <property-class>java.lang.Boolean</property-class>
-      <property-extension>
-        <default-value>false</default-value>
-      </property-extension>
-    </property>
 
     <component-extension>
       <component-family>javax.faces.OutcomeTarget</component-family>
@@ -14055,7 +14044,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     </component-extension>
   </component>
   <component>
-    <description><![CDATA[<p><span class="changed_modified_2_2">Represents</span> an HTML <code>a</code> (hyperlink) element that may be
+    <description><![CDATA[<p>Represents an HTML <code>a</code> (hyperlink) element that may be
       used to link to a URL handled by the Faces Servlet resolved preemptively using the logical
       outcome defined by the <code>outcome</code> property.]]></description>
     <display-name>Outcome Target Hyperlink</display-name>
@@ -14274,17 +14263,6 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <value-expression-enabled>true</value-expression-enabled>
-      </property-extension>
-    </property>
-    <property>
-      <description><![CDATA[<p class="changed_added_2_2">Disable appending the <code>ClientWindow</code> on the rendering of this element.</p>
-        ]]></description>
-      <display-name>Disable ClientWindow on rendered OutcomeTarget</display-name>
-      <icon/>
-      <property-name>disableClientWindow</property-name>
-      <property-class>java.lang.Boolean</property-class>
-      <property-extension>
-        <default-value>false</default-value>
       </property-extension>
     </property>
 
@@ -14727,7 +14705,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     </component-extension>
   </component>
   <component>
-    <description><![CDATA[<p><span class="changed_modified_2_2">Represents</span> an HTML <code>input</code> element of type "button" or image that
+    <description><![CDATA[<p>Represents an HTML <code>input</code> element of type "button" or image that
             may be used to link to a URL handled by the Faces Servlet resolved preemptively using
             the logical outcome defined by the <code>outcome</code> property. The button behaves like
             a link, so the current form is not submitted when it is activated (the transitive of how
@@ -14948,17 +14926,6 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <value-expression-enabled>true</value-expression-enabled>
-      </property-extension>
-    </property>
-    <property>
-      <description><![CDATA[<p class="changed_added_2_2">Disable appending the <code>ClientWindow</code> on the rendering of this element.</p>
-        ]]></description>
-      <display-name>Disable ClientWindow on rendered OutcomeTarget</display-name>
-      <icon/>
-      <property-name>disableClientWindow</property-name>
-      <property-class>java.lang.Boolean</property-class>
-      <property-extension>
-        <default-value>false</default-value>
       </property-extension>
     </property>
 
