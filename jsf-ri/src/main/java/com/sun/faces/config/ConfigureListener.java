@@ -54,7 +54,6 @@ import com.sun.faces.el.ELContextImpl;
 import com.sun.faces.el.ELContextListenerImpl;
 import com.sun.faces.el.ELUtils;
 import com.sun.faces.el.FacesCompositeELResolver;
-import com.sun.faces.flow.FlowDiscoveryCDIContext;
 import com.sun.faces.mgbean.BeanBuilder;
 import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.scripting.groovy.GroovyHelper;
