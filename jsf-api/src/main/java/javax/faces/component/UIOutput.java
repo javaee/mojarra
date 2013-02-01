@@ -99,6 +99,7 @@ public class UIOutput extends UIComponentBase
      */
     public static final String COMPONENT_FAMILY = "javax.faces.Output";
 
+    private static final String FORCE_FULL_CONVERTER_STATE = "com.sun.faces.component.UIOutput.forceFullConverterState";
 
     enum PropertyKeys {
         value,
@@ -229,11 +230,23 @@ public class UIOutput extends UIComponentBase
         if (context == null) {
             throw new NullPointerException();
         }
-        Object[] values = (Object[]) super.saveState(context);
         Object converterState = null;
         if (converter != null) {
-            if (!initialStateMarked()) {
-                // we saving the full state
+            if (!initialStateMarked() || getAttributes().containsKey(FORCE_FULL_CONVERTER_STATE)) {                
+                /*
+                 * Check if our parent component has its initial state marked
+                 * and we know we don't. That means we are not using the same 
+                 * state saving algorithm. So we are going to ALWAYS force to
+                 * do FSS for the converter.
+                 */
+                if (getParent().initialStateMarked()) {
+                    getAttributes().put(FORCE_FULL_CONVERTER_STATE, true);
+                    if (converter instanceof PartialStateHolder) {
+                        PartialStateHolder psh = (PartialStateHolder) converter;
+                        psh.clearInitialState();
+                    }
+                }
+                
                 converterState = saveAttachedState(context, converter);
             } else {
                 if (converter instanceof StateHolder) {
@@ -244,6 +257,9 @@ public class UIOutput extends UIComponentBase
                 }
             }
         }
+        
+        Object[] values = (Object[]) super.saveState(context);
+        
         if (converterState != null || values != null) {
             return new Object[] { values, converterState };
         }
