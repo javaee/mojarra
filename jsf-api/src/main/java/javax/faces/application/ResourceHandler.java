@@ -166,7 +166,7 @@ public abstract class ResourceHandler {
 
 
     /**
-     * <p class="changed_modified_2_2">The name of the marker file that
+     * <p class="changed_added_2_2">The name of the marker file that
      * the implementation must scan for, within sub-directories
      * <code>META-INF/contracts</code>, to identify the set of available
      * resource library contracts.</p>

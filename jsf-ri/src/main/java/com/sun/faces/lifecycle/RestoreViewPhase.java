@@ -228,22 +228,24 @@ public class RestoreViewPhase extends Phase {
                 ViewDeclarationLanguage vdl = viewHandler.getViewDeclarationLanguage(facesContext, derivedViewId);
                 
                 maybeTakeProtectedViewAction(facesContext, viewHandler, vdl, viewId);
-                                
+                    
+                ViewMetadata metadata  = null;
                 if (vdl != null) {
                     // If we have one, get the ViewMetadata...
-                    ViewMetadata metadata = vdl.getViewMetadata(facesContext, viewId);
-
+                    metadata = vdl.getViewMetadata(facesContext, viewId);
+                    
                     if (metadata != null) { // perhaps it's not supported
                         // and use it to create the ViewRoot.  This will have, at most
                         // the UIViewRoot and its metadata facet.
                         viewRoot = metadata.createMetadataView(facesContext);
-
+                        
                         // Only skip to render response if there is no metadata
                         if (!ViewMetadata.hasMetadata(viewRoot)) {
                             facesContext.renderResponse();
                         }
                     }
-                } else {
+                } 
+                if (null == vdl || null == metadata) {
                     facesContext.renderResponse();
                 }
 

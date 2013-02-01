@@ -1940,7 +1940,9 @@
 
             <description><![CDATA[<p class="changed_added_2_2">This
             renderer is intended to be used with an arbitrary markup
-            element that has no decoding.</p>
+            element whose decoding needs can be entirely described by
+            the section "General notes on decoding" in the RenderKit
+            overview.</p>
 
             <div class="changed_added_2_2">
             <p>The local name of the rendered element must first be
