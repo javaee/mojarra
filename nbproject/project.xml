@@ -104,6 +104,7 @@
         </java-data>
         <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
             <word>Facelet</word>
+            <word>Facelets</word>
             <word>FacesContext</word>
             <word>FaceServlet</word>
             <word>FacesServlet</word>

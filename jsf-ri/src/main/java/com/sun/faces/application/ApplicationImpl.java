@@ -1173,27 +1173,6 @@ public class ApplicationImpl extends Application {
 
     }
 
-    @Override
-    public UIComponent createComponent(FacesContext context, String taglibURI, 
-    String tagName, Map<String, Object> attributes) {
-        UIComponent result = null;
-        Util.notNull("context", context);
-        Util.notNull("taglibURI", taglibURI);
-        Util.notNull("tagName", tagName);
-        ViewHandler vh = getViewHandler();
-        ViewDeclarationLanguage vdl = vh.getViewDeclarationLanguage(context, context.getViewRoot().getViewId());
-        
-        if (ViewDeclarationLanguage.FACELETS_VIEW_DECLARATION_LANGUAGE_ID.equals(vdl.getId())) {
-            DefaultFaceletFactory ff = associate.getFaceletFactory();
-            result = ff._createComponent(context, taglibURI, tagName, attributes);
-        }
-        
-        return result;
-    }
-    
-    
-
-
     /**
      * @see javax.faces.application.Application#getComponentTypes()
      */

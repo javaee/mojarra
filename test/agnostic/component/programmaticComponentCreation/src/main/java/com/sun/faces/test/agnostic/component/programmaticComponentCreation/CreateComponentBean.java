@@ -41,10 +41,12 @@
 package com.sun.faces.test.agnostic.component.programmaticComponentCreation;
 
 import javax.faces.application.Application;
+import javax.faces.application.ViewHandler;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.NoneScoped;
 import javax.faces.component.html.HtmlInputText;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewDeclarationLanguage;
 
 @ManagedBean
 @NoneScoped
@@ -54,8 +56,12 @@ public class CreateComponentBean {
         String result = "FAILED";
         FacesContext context = FacesContext.getCurrentInstance();
         Application application = context.getApplication();
+        
+        ViewHandler vh = application.getViewHandler();
+        ViewDeclarationLanguage vdl = vh.getViewDeclarationLanguage(context, context.getViewRoot().getViewId());
+        
         HtmlInputText inputText = 
-                (HtmlInputText) application.createComponent(context, 
+                (HtmlInputText) vdl.createComponent(context, 
                 "http://java.sun.com/jsf/html", "inputText", null);
         if ("javax.faces.Text".equals(inputText.getRendererType())) {
             result = "SUCCESS";

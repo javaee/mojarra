@@ -43,6 +43,7 @@ package javax.faces.view;
 import java.beans.BeanInfo;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
@@ -173,6 +174,40 @@ public abstract class ViewDeclarationLanguage {
 
     public abstract UIViewRoot createView(FacesContext context,
                                  String viewId);
+    
+    /**
+     * <p class="changed_added_2_2">Create a component given a 
+     * {@link ViewDeclarationLanguage} specific
+     * tag library URI and tag name.  The runtime must support this method operating
+     * for the Facelets VDL.
+     * Other kinds of {@code ViewDeclarationLanguage} may be supported but are not
+     * required to be supported. For backward compatibility
+     * with decorated {@code ViewDeclrationLanguage} implementations that do
+     * not override this method, a default implementation is provided that returns
+     * {@code null}.  However, any implementation that is compliant with the
+     * version of the specification in which this method was introduced must
+     * implement this method.
+     * </p>
+     * 
+     * @param context the {@link FacesContext} for this request
+     * @param taglibURI the fully qualified tag library URI that contains the component
+     * @param tagName the name of the tag within that library that exposes the component
+     * @param attributes any name=value pairs that would otherwise have been 
+     * given on the markup that would cause the creation of this component or
+     * {@code null} if no attributes need be given.  
+     * 
+     * @throws NullPointerException if {@code context}, {@code taglibURI}, or 
+     * @{code tagName} are {@code null}
+     * 
+     * @since 2.2
+     */
+    
+    public UIComponent createComponent(FacesContext context, 
+            String taglibURI, String tagName, 
+            Map<String, Object> attributes) {
+        return null;
+    }
+    
     
     /**
      * <p class="changed_added_2_0">Restore a <code>UIViewRoot</code>

@@ -789,6 +789,19 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     }
 
     @Override
+    public UIComponent createComponent(FacesContext context, String taglibURI, String tagName, Map<String, Object> attributes) {
+        Util.notNull("context", context);
+        Util.notNull("taglibURI", taglibURI);
+        Util.notNull("tagName", tagName);
+        UIComponent result = null;
+        
+        DefaultFaceletFactory ff = associate.getFaceletFactory();
+        result = ff._createComponent(context, taglibURI, tagName, attributes);
+                
+        return result;
+    }
+    
+    @Override
     public List<String> calculateResourceLibraryContracts(FacesContext context, String viewId) {
         List<String> result = null;
         String longestPattern = null;

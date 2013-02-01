@@ -1157,42 +1157,6 @@ public abstract class Application {
     }
     
     /**
-     * <p class="changed_added_2_2">Create a component given a 
-     * {@link ViewDeclarationLanguage} specific
-     * tag library URI and tag name.  Obtain a reference to the 
-     * {@code ViewDeclarationLanguage} for the viewId of the current 
-     * {@code UIViewRoot}.  The runtime must support this method operating
-     * for {@code ViewDeclarationLanguage}s whose {@link ViewDeclarationLanguage#getId}
-     * method returns {@link ViewDeclarationLanguage#FACELETS_VIEW_DECLARATION_LANGUAGE_ID}.
-     * Other kinds of {@code ViewDeclarationLanguage} may be supported but are not
-     * required to be supported.
-     * </p>
-     * 
-     * @param context the {@link FacesContext} for this request
-     * @param taglibURI the fully qualified tag library URI that contains the component
-     * @param tagName the name of the tag within that library that exposes the component
-     * @param attributes any name=value pairs that would otherwise have been 
-     * given on the markup that would cause the creation of this component or
-     * {@code null} if no attributes need be given.
-     */
-    
-    public UIComponent createComponent(FacesContext context, 
-            String taglibURI, String tagName, 
-            Map<String, Object> attributes) {
-
-        if (defaultApplication != null) {
-            return defaultApplication.createComponent(context,
-                                                      taglibURI, tagName, 
-                                                      attributes);
-        }
-
-        throw new UnsupportedOperationException();
-        
-    }
-    
-
-
-    /**
      * <p>Return an <code>Iterator</code> over the set of currently defined
      * component types for this <code>Application</code>.</p>
      */

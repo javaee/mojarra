@@ -42,10 +42,13 @@ package com.sun.faces.test.webprofile.renderKit.programmaticCompositeComponent;
 
 import java.util.HashMap;
 import java.util.Map;
+import javax.faces.application.Application;
+import javax.faces.application.ViewHandler;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
+import javax.faces.view.ViewDeclarationLanguage;
 
 @ManagedBean
 @RequestScoped
@@ -57,7 +60,13 @@ public class RequestBean {
         attrs.put("pi", new Float(3.14));
         attrs.put("pagecontent", "" + System.currentTimeMillis());
         FacesContext fc = FacesContext.getCurrentInstance();
-        UIComponent c = fc.getApplication().createComponent(FacesContext.getCurrentInstance(), 
+        
+        FacesContext context = FacesContext.getCurrentInstance();
+        Application application = context.getApplication();
+        ViewHandler vh = application.getViewHandler();
+        ViewDeclarationLanguage vdl = vh.getViewDeclarationLanguage(context, context.getViewRoot().getViewId());
+        
+        UIComponent c = vdl.createComponent(FacesContext.getCurrentInstance(), 
                 "http://java.sun.com/jsf/composite/" + "ezcomp", "ezcomp", attrs);
         
         return null == c ? "FAILURE" : "SUCCESS";

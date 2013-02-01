@@ -335,11 +335,6 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
         return getWrapped().createComponent(componentType);
     }
 
-    @Override
-    public UIComponent createComponent(FacesContext context, String taglibURI, String tagName, Map<String, Object> attributes) {
-        return getWrapped().createComponent(context, taglibURI, tagName, attributes);
-    }
-
     /**
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link Application#createComponent(javax.faces.el.ValueBinding, javax.faces.context.FacesContext, String)}

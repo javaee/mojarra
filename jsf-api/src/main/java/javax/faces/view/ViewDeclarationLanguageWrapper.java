@@ -44,6 +44,7 @@ package javax.faces.view;
 import java.beans.BeanInfo;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import javax.faces.FacesWrapper;
 import javax.faces.application.Resource;
 import javax.faces.component.UIComponent;
@@ -113,6 +114,11 @@ public abstract class ViewDeclarationLanguageWrapper extends ViewDeclarationLang
     @Override
     public UIViewRoot createView(FacesContext context, String viewId) {
         return getWrapped().createView(context, viewId);
+    }
+
+    @Override
+    public UIComponent createComponent(FacesContext context, String taglibURI, String tagName, Map<String, Object> attributes) {
+        return getWrapped().createComponent(context, taglibURI, tagName, attributes);
     }
 
     @Override
