@@ -70,7 +70,7 @@ class DefaultTagDecorator implements TagDecorator {
 
         form("h:form"), textarea("h:inputTextarea"),
         // TODO if we want the name of the button to become the id, we have to do .id("name")
-        button("h:commandButton"),
+        button(new ElementConverter("h:button", "jsf:outcome"), new ElementConverter("h:commandButton")),
 
         select(new ElementConverter("h:selectManyListbox", "multiple").id("name"),
                 // TODO this is a little bit ugly to handle the name as if it were jsf:id. we should not support this

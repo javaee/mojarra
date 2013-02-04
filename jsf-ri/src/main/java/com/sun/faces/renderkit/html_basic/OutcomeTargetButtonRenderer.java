@@ -111,15 +111,9 @@ public class OutcomeTargetButtonRenderer extends OutcomeTargetRenderer {
 
         renderPassThruAttributes(context, writer, component, ATTRIBUTES, null);
 
-        writer.endElement("input");
-
-    }
-
-
-    @Override
-    public boolean getRendersChildren() {
-
-        return false;
+        if(component.getChildCount() == 0) {
+            writer.endElement("input");
+        }
 
     }
 
@@ -128,7 +122,11 @@ public class OutcomeTargetButtonRenderer extends OutcomeTargetRenderer {
     public void encodeEnd(FacesContext context, UIComponent component)
     throws IOException {
 
-        // no-op
+        rendererParamsNotNull(context, component);
+
+        if(component.getChildCount() > 0) {
+            context.getResponseWriter().endElement("input");
+        }
 
     }
 

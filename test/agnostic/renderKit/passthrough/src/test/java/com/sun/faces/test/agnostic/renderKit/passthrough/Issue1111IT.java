@@ -39,6 +39,7 @@
  */
 package com.sun.faces.test.agnostic.renderKit.passthrough;
 
+import com.gargoylesoftware.htmlunit.html.HtmlButton;
 import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.StatusHandler;
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -52,6 +53,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlSelect;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextArea;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+import com.gargoylesoftware.htmlunit.javascript.host.html.HTMLButtonElement;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.*;
@@ -276,6 +278,11 @@ public class Issue1111IT {
         lastAction = page.getElementById("lastAction").getTextContent();
         assertEquals("action2", lastAction);
         
+        page = webClient.getPage(webUrl + "faces/button.xhtml");
+        HtmlButton button = (HtmlButton) page.getElementById("outcomeButton");
+        page = button.click();
+        String outcome = page.getElementById("lastOutcome").getTextContent();
+        assertEquals("outcome1", outcome);
     }
     
     @Test
