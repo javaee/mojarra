@@ -826,7 +826,7 @@ public class UIRepeat extends UINamingContainer {
         }
 
         public void populate(EditableValueHolder evh) {
-            this.value = evh.getLocalValue();
+            this.value = evh.getValue();
             this.valid = evh.isValid();
             this.submittedValue = evh.getSubmittedValue();
             this.localValueSet = evh.isLocalValueSet();
