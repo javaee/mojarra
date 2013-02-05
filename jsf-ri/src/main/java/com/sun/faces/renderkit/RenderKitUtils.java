@@ -1328,9 +1328,9 @@ public class RenderKitUtils {
     public static String getImageSource(FacesContext context, UIComponent component, String attrName) {
 
         String resName = (String) component.getAttributes().get("name");
+        ResourceHandler handler = context.getApplication().getResourceHandler();
         if (resName != null) {
             String libName = (String) component.getAttributes().get("library");
-            ResourceHandler handler = context.getApplication().getResourceHandler();
             Resource res = handler.createResource(resName, libName);
             if (res == null) {
                 if (context.isProjectStage(ProjectStage.Development)) {
@@ -1351,7 +1351,7 @@ public class RenderKitUtils {
             if (value == null || value.length() == 0) {
                 return "";
             }
-            if (value.contains(ResourceHandler.RESOURCE_IDENTIFIER)) {
+            if (handler.isResourceURL(value)) {
                 return value;
             } else {
                 value = context.getApplication().getViewHandler().
