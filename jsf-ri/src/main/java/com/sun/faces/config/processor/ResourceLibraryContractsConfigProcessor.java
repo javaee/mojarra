@@ -124,72 +124,81 @@ public class ResourceLibraryContractsConfigProcessor extends AbstractConfigProce
             Node node = resourceLibraryContracts.item(c);
             try {
                 NodeList mappings = (NodeList) xpath.evaluate(".//ns1:contract-mapping", node, XPathConstants.NODESET);
-                for (int m = 0; m < mappings.getLength(); m++) {
-                    Node contractMapping = mappings.item(m);                    
-                    NodeList urlPatterns = (NodeList) xpath.evaluate(".//ns1:url-pattern/text()", contractMapping, XPathConstants.NODESET);
+                if (mappings != null) {
+                    for (int m = 0; m < mappings.getLength(); m++) {
+                        Node contractMapping = mappings.item(m);
+                        NodeList urlPatterns = (NodeList) xpath.evaluate(".//ns1:url-pattern/text()", contractMapping, XPathConstants.NODESET);
+                        if (urlPatterns != null) {
+                            for (int p = 0; p < urlPatterns.getLength(); p++) {
+                                String urlPattern = urlPatterns.item(p).getNodeValue().trim();
 
-                    for(int p = 0; p < urlPatterns.getLength(); p++) {
-                        String urlPattern = urlPatterns.item(p).getNodeValue().trim();
-                        
-                        if (LOGGER.isLoggable(Level.INFO)) {
-                            LOGGER.log(Level.INFO, "Processing resource library contract mapping for url-pattern: {0}", urlPattern);
-                        }
+                                if (LOGGER.isLoggable(Level.INFO)) {
+                                    LOGGER.log(Level.INFO, "Processing resource library contract mapping for url-pattern: {0}", urlPattern);
+                                }
 
-                        if (!map.containsKey(urlPattern)) {
-                            /*
-                             * If there is no urlPattern then add it to the list,
-                             */
-                            ArrayList<String> list = new ArrayList<String>();
-                            NodeList contracts = (NodeList) xpath.evaluate(".//ns1:contracts/text()", contractMapping, XPathConstants.NODESET);
-                            if (contracts.getLength() > 0) {
-                                for (int j = 0; j < contracts.getLength(); j++) {
-                                    String[] contractStrings = contracts.item(j).getNodeValue().trim().split(",");
-                                    for (int k = 0; k < contractStrings.length; k++) {
-                                        if (!list.contains(contractStrings[k])) {
-                                            if (LOGGER.isLoggable(Level.INFO)) {
-                                                LOGGER.log(Level.INFO,
-                                                        "Added contract: {0} for url-pattern: {1}",
-                                                        new Object[]{contractStrings[k], urlPattern});
-                                            }
-                                            list.add(contractStrings[k]);
-                                        } else {
-                                            /*
-                                             * We found the contract again in the list for the specified url-pattern.
-                                             */
-                                            if (LOGGER.isLoggable(Level.INFO)) {
-                                                LOGGER.log(Level.INFO,
-                                                        "Duplicate contract: {0} found for url-pattern: {1}",
-                                                        new Object[]{contractStrings[k], urlPattern});
+                                if (!map.containsKey(urlPattern)) {
+                                    /*
+                                     * If there is no urlPattern then add it to the list,
+                                     */
+                                    ArrayList<String> list = new ArrayList<String>();
+                                    NodeList contracts = (NodeList) xpath.evaluate(".//ns1:contracts/text()", contractMapping, XPathConstants.NODESET);
+                                    if (contracts != null && contracts.getLength() > 0) {
+                                        for (int j = 0; j < contracts.getLength(); j++) {
+                                            String[] contractStrings = contracts.item(j).getNodeValue().trim().split(",");
+                                            for (int k = 0; k < contractStrings.length; k++) {
+                                                if (!list.contains(contractStrings[k])) {
+                                                    if (LOGGER.isLoggable(Level.INFO)) {
+                                                        LOGGER.log(Level.INFO,
+                                                                "Added contract: {0} for url-pattern: {1}",
+                                                                new Object[]{contractStrings[k], urlPattern});
+                                                    }
+                                                    list.add(contractStrings[k]);
+                                                } else {
+                                                    /*
+                                                     * We found the contract again in the list for the specified url-pattern.
+                                                     */
+                                                    if (LOGGER.isLoggable(Level.INFO)) {
+                                                        LOGGER.log(Level.INFO,
+                                                                "Duplicate contract: {0} found for url-pattern: {1}",
+                                                                new Object[]{contractStrings[k], urlPattern});
+                                                    }
+                                                }
                                             }
                                         }
                                     }
-                                }
-                            }
 
-                            if (!list.isEmpty()) {
-                                /*
-                                 * Now add the url-pattern and its contracts.
-                                 */
-                                map.put(urlPattern, list);
-                            } else {
-                                /*
-                                 * The list was empty, log there were no contracts specified.
-                                 */
-                                if (LOGGER.isLoggable(Level.INFO)) {
-                                    LOGGER.log(Level.INFO, "No contracts found for url-pattern: {0}", urlPattern);
+                                    if (!list.isEmpty()) {
+                                        /*
+                                         * Now add the url-pattern and its contracts.
+                                         */
+                                        map.put(urlPattern, list);
+                                    } else {
+                                        /*
+                                         * The list was empty, log there were no contracts specified.
+                                         */
+                                        if (LOGGER.isLoggable(Level.INFO)) {
+                                            LOGGER.log(Level.INFO, "No contracts found for url-pattern: {0}", urlPattern);
+                                        }
+                                    }
+                                } else {
+                                    /*
+                                     * Otherwise log there is a duplicate url-pattern found.
+                                     */
+                                    if (LOGGER.isLoggable(Level.INFO)) {
+                                        LOGGER.log(Level.INFO, "Duplicate url-patern found: {0}, ignoring it", urlPattern);
+                                    }
                                 }
-                            }
-                        } else {
-                            /*
-                             * Otherwise log there is a duplicate url-pattern found.
-                             */
-                            if (LOGGER.isLoggable(Level.INFO)) {
-                                LOGGER.log(Level.INFO, "Duplicate url-patern found: {0}, ignoring it", urlPattern);
                             }
                         }
                     }
                 }
             } catch (XPathExpressionException exception) {
+                /*
+                 * This particular exception will never happen since the 
+                 * above valid XPath expressions never change, but the XPath 
+                 * runtime defines it as a checked exception so we have to 
+                 * deal with it.
+                 */
                 if (LOGGER.isLoggable(Level.FINEST)) {
                     LOGGER.log(Level.FINEST, "Unable to parse XPath expression", exception);
                 }
