@@ -49,6 +49,7 @@ import com.sun.faces.util.FacesLogger;
 import javax.faces.FacesException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.JarURLConnection;
 
 import java.net.URL;
 import java.net.URLConnection;
@@ -174,17 +175,33 @@ final class DefaultFaceletCache extends FaceletCache<DefaultFacelet> {
     }
     
     private static long _getLastModified(URL url) {
+        long lastModified;
+        URLConnection conn;
         InputStream is = null;
+
         try {
-            URLConnection conn = url.openConnection();
-            is = conn.getInputStream();
-            return conn.getLastModified();
-        } catch (Exception e) {
-            throw new FacesException("Error Checking Last Modified for " +
-                                       url, e);
+            conn = url.openConnection();
+
+            if (conn instanceof JarURLConnection) { 
+                /*
+                 * Note this is a work around for JarURLConnection since the
+                 * getLastModified method is buggy. See JAVASERVERFACES-2725.
+                 */
+                JarURLConnection jarUrlConnection = (JarURLConnection) conn; 
+                URL jarFileUrl = jarUrlConnection.getJarFileURL(); 
+                URLConnection jarFileConnection = jarFileUrl.openConnection(); 
+                lastModified = jarFileConnection.getLastModified(); 
+                jarFileConnection.getInputStream().close(); 
+            }
+            else { 
+                is = conn.getInputStream(); 
+                lastModified = conn.getLastModified(); 
+            } 
+        } catch (Exception e) { 
+            throw new FacesException("Error Checking Last Modified for " + url, e);
         } finally {
             if (is != null) {
-                try {
+                try { 
                     is.close();
                 } catch (Exception e) {
                     if (LOGGER.isLoggable(Level.FINEST)) {
@@ -193,6 +210,7 @@ final class DefaultFaceletCache extends FaceletCache<DefaultFacelet> {
                 }
             }
         }
+        return lastModified;
     }
 
     private final ConcurrentCache<URL, Record> _faceletCache;
