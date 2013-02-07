@@ -205,22 +205,4 @@ public class ResourceLibraryContractsConfigProcessor extends AbstractConfigProce
             }
         }
     }
-
-    private static class FacesConfigNamespaceContext implements NamespaceContext {
-
-        @Override
-        public String getNamespaceURI(String prefix) {
-            return "http://java.sun.com/xml/ns/javaee";
-        }
-
-        @Override
-        public String getPrefix(String namespaceURI) {
-            return "ns1";
-        }
-
-        @Override
-        public Iterator getPrefixes(String namespaceURI) {
-            return Collections.emptyList().iterator();
-        }
-    }
 }

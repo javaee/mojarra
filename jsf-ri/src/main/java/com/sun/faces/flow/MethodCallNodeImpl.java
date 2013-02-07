@@ -64,6 +64,7 @@ public class MethodCallNodeImpl extends MethodCallNode {
     
     public MethodCallNodeImpl(String id) {
         this.id = id;
+        _parameters = new CopyOnWriteArrayList<Parameter>();            
     }
     
     public MethodCallNodeImpl(FacesContext context, String id, 
@@ -71,7 +72,6 @@ public class MethodCallNodeImpl extends MethodCallNode {
             String defaultOutcomeString,
             List<Parameter> parametersFromConfig) {
         this(id);
-        _parameters = new CopyOnWriteArrayList<Parameter>();            
         if (null != parametersFromConfig) {
             _parameters.addAll(parametersFromConfig);
         }
@@ -128,6 +128,9 @@ public class MethodCallNodeImpl extends MethodCallNode {
     }
     
     public List<Parameter> _getParameters() {
+        if (null == parameters) {
+            parameters = Collections.unmodifiableList(_parameters);
+        }
         return _parameters;
     }
 

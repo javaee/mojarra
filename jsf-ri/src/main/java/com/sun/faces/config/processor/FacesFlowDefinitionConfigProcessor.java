@@ -40,15 +40,46 @@
  */
 package com.sun.faces.config.processor;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.config.DocumentInfo;
 import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.facelets.util.ReflectionUtil;
+import com.sun.faces.flow.FlowImpl;
+import com.sun.faces.flow.ParameterImpl;
+import com.sun.faces.flow.builder.FlowBuilderImpl;
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.Util;
+import java.net.URI;
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.el.ELContext;
+import javax.el.ExpressionFactory;
+import javax.el.ValueExpression;
+import javax.faces.FactoryFinder;
+import javax.faces.application.Application;
+import javax.faces.context.FacesContext;
+import javax.faces.flow.FlowHandler;
+import javax.faces.flow.FlowHandlerFactory;
+import javax.faces.flow.FlowNode;
+import javax.faces.flow.Parameter;
+import javax.faces.flow.builder.FlowBuilder;
+import javax.faces.flow.builder.FlowCallBuilder;
+import javax.faces.flow.builder.MethodCallBuilder;
+import javax.faces.flow.builder.SwitchBuilder;
 import javax.servlet.ServletContext;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
@@ -67,42 +98,29 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
     private static final String FACES_FLOW_DEFINITION = "flow-definition";
     
     /**
-     * <code>/faces-config/flow-definition/default-flow-node</code>
+     * <code>/faces-config/name</code>
      */
-//    private static final String DEFAULT_FLOW_NODE = "default-flow-node";
-    
-    /**
-     * <code>/faces-config/flow-definition/view</code>
-     */
-    private static final String VIEW = "view";
-    
-    /**
-     * <code>/faces-config/flow-definition/view/page</code>
-     */
-    private static final String PAGE = "PAGE";
-    
-    private boolean validateFactories = true;
+    private static final String FACES_CONFIG_NAME = "name";
 
     public FacesFlowDefinitionConfigProcessor() {
     }
 
-    public FacesFlowDefinitionConfigProcessor(boolean validateFactories) {
-        this.validateFactories = validateFactories;
-    }
-
+    @Override
     public void process(ServletContext sc, DocumentInfo[] documentInfos)
     throws Exception {
 
         // track how many flow-definition instances are being added
         // for this application
         AtomicInteger facesFlowDefinitionCount = new AtomicInteger(0);
+        WebConfiguration config = WebConfiguration.getInstance(sc);
         
         for (int i = 0; i < documentInfos.length; i++) {
+            URI definingDocumentURI = documentInfos[i].getSourceURI();
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
                            MessageFormat.format(
                                 "Processing factory elements for document: ''{0}''",
-                                documentInfos[i].getSourceURI()));
+                                definingDocumentURI));
             }
             Document document = documentInfos[i].getDocument();
             String namespace = document.getDocumentElement()
@@ -110,21 +128,23 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
             NodeList flows = document.getDocumentElement()
                  .getElementsByTagNameNS(namespace, FACES_FLOW_DEFINITION);
             if (flows != null && flows.getLength() > 0) {
-                processFacesFlowDefinitions(flows,
-                                 /* namespace, */
+                config.setHasFlows(true);
+                
+                
+                NodeList nameNodeList = document.getDocumentElement()
+                 .getElementsByTagNameNS(namespace, FACES_CONFIG_NAME);
+                String nameStr = "";
+                if (null != nameNodeList && 1 < nameNodeList.getLength()) {
+                    Node nameNode = nameNodeList.item(0);
+                    nameStr = nameNode.getTextContent().trim();
+                }
+                
+                processFacesFlowDefinitions(definingDocumentURI, nameStr, flows,
                                  facesFlowDefinitionCount);
             }
         }
         
         if (0 < facesFlowDefinitionCount.get()) {
-            // The flow feature is effectively disabled if no flows are detected
-            // at startup time.  This is accomplished by adding a simple boolean
-            // property to WebConfiguration that is checked whenever the feature
-            // is implemented.  This causes an otherwise unnecessary ThreadLocal 
-            // lookup.  Once we have the proper bootstrapping implemented,
-            // I expect we can dispense with WebConfiguration.hasFlows.
-            WebConfiguration config = WebConfiguration.getInstance(sc);
-            config.setHasFlows(true);
             String optionValue = config.getOptionValue(WebConfiguration.WebContextInitParameter.ClientWindowMode);
             boolean clientWindowNeedsEnabling = false;
             if ("none".equals(optionValue)) {
@@ -145,20 +165,420 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
         invokeNext(sc, documentInfos);
     }
     
-    private void processFacesFlowDefinitions(NodeList factories, /*String namespace,*/
-            AtomicInteger flowCount) {
-        for (int i = 0, size = factories.getLength(); i < size; i++) {
-            flowCount.incrementAndGet();
-//            Node factory = factories.item(i);
-//            NodeList children = ((Element) factory)
-//                 .getElementsByTagNameNS(namespace, "*");
-//            for (int c = 0, csize = children.getLength(); c < csize; c++) {
-//                Node n = children.item(c);
-//                if (DEFAULT_FLOW_NODE.equals(n.getLocalName())) {
-//                } 
-//            }
+    protected String getAttribute(Node node, String attrName) {
+        // <editor-fold defaultstate="collapsed">
+        Util.notNull("flow definition element", node);
+        String result = null;
+        NamedNodeMap attrs = node.getAttributes();
+        
+        if (null != attrs) {
+            Attr idAttr = (Attr) attrs.getNamedItem(attrName);
+            if (null != idAttr) {
+                result = idAttr.getValue();
+            }
+        } 
+
+        return result;
+        // </editor-fold>
+    }
+    
+    protected String getIdAttribute(Node node) throws XPathExpressionException {
+        // <editor-fold defaultstate="collapsed">
+
+        Util.notNull("flow definition element", node);
+        String result = null;
+        NamedNodeMap attrs = node.getAttributes();
+        String localName = "";
+        boolean throwException = false;
+        
+        if (null != attrs) {
+            Attr idAttr = (Attr) attrs.getNamedItem("id");
+            if (null != idAttr) {
+                result = idAttr.getValue();
+                if (!idAttr.isId()) {
+                    if (LOGGER.isLoggable(Level.FINEST)) {
+                        LOGGER.log(Level.FINEST, "Element {0} has an id attribute, but it is not declared as type xsd:id", node.getLocalName());
+                    }
+                }
+            } else {
+                localName = node.getLocalName();
+                throwException = true;
+            }
+        } else {
+            localName = node.getLocalName();
+            throwException = true;
         }
         
+        if (throwException) {
+            throw new XPathExpressionException("<" + localName + 
+                    "> must have an \"id\" attribute.");
+        }
+        
+        return result;
+        // </editor-fold>
+    }
+
+    private void processFacesFlowDefinitions(URI definingDocumentURI,
+            String nameStr,
+            NodeList flowDefinitions,
+            AtomicInteger flowCount) throws XPathExpressionException {
+        if (0 == flowDefinitions.getLength()) {
+            return;
+        }
+        FacesContext context = FacesContext.getCurrentInstance();
+        Application app = context.getApplication();
+        FlowHandler flowHandler = app.getFlowHandler();
+        if (null == flowHandler) {
+            FlowHandlerFactory flowHandlerFactory = (FlowHandlerFactory) FactoryFinder.getFactory(FactoryFinder.FLOW_HANDLER_FACTORY);
+            app.setFlowHandler(flowHandler = 
+                    flowHandlerFactory.createFlowHandler(context));
+        }
+        
+        XPath xpath = XPathFactory.newInstance().newXPath();
+        xpath.setNamespaceContext(new FacesConfigNamespaceContext());
+        for (int c = 0, size = flowDefinitions.getLength(); c < size; c++) {
+            flowCount.incrementAndGet();
+            Node flowDefinition = flowDefinitions.item(c);
+            String flowId = getIdAttribute(flowDefinition);
+            
+            String uriStr = definingDocumentURI.toASCIIString();
+            if (uriStr.endsWith(RIConstants.FLOW_DEFINITION_ID_SUFFIX)) {
+                nameStr = "";
+            }
+            
+            FlowBuilderImpl flowBuilder = new FlowBuilderImpl(context);
+            flowBuilder.id(nameStr, flowId);
+            
+            processViews(xpath, flowDefinition, flowBuilder);
+            processReturns(xpath, flowDefinition, flowBuilder);
+            processInboundParameters(xpath, flowDefinition, flowBuilder);
+            processFlowCalls(xpath, flowDefinition, flowBuilder);
+            processSwitches(xpath, flowDefinition, flowBuilder);
+            processMethodCalls(context, xpath, flowDefinition, flowBuilder);
+            processInitializerFinalizer(xpath, flowDefinition, flowBuilder);
+            
+            String startNodeId = processStartNode(xpath, flowDefinition, flowBuilder);
+            
+            if (null != startNodeId) {
+                FlowImpl toAdd = flowBuilder._getFlow();
+                FlowNode startNode = toAdd.getNode(startNodeId);
+                if (null == startNode) {
+                    throw new XPathExpressionException("Unable to find flow node with id " + startNodeId + " to mark as start node");
+                } else {
+                    toAdd.setStartNodeId(startNodeId);
+                }
+            } else {
+                flowBuilder.viewNode(flowId, "/" + flowId + "/" + flowId + ".xhtml").markAsStartNode();
+            }
+            flowHandler.addFlow(context, flowBuilder.getFlow());
+            
+        }
+        
+    }
+    
+    private void processViews(XPath xpath, Node flowDefinition, FlowBuilder flowBuilder) throws XPathExpressionException{
+        // <editor-fold defaultstate="collapsed">
+        NodeList views = (NodeList) xpath.evaluate(".//ns1:view", 
+                flowDefinition, XPathConstants.NODESET);
+        for (int i_view = 0; i_view < views.getLength(); i_view++) {
+            Node viewNode = views.item(i_view);
+            String viewNodeId = getIdAttribute(viewNode);
+            NodeList vdlDocumentList = (NodeList) 
+                    xpath.evaluate(".//ns1:vdl-document/text()", viewNode, XPathConstants.NODESET);
+            if (1 != vdlDocumentList.getLength()) {
+                throw new XPathExpressionException("Within <view> exactly one child is allowed, and it must be a <vdl-document>");
+            }
+            String vdlDocumentStr = vdlDocumentList.item(0).getNodeValue().trim();
+            flowBuilder.viewNode(viewNodeId, vdlDocumentStr);
+        }        
+        // </editor-fold>
+    }
+
+    private void processReturns(XPath xpath, Node flowDefinition, FlowBuilder flowBuilder) throws XPathExpressionException{
+        // <editor-fold defaultstate="collapsed">
+
+        NodeList returns = (NodeList) xpath.evaluate(".//ns1:flow-return", 
+                flowDefinition, XPathConstants.NODESET);
+        for (int i_return = 0; i_return < returns.getLength(); i_return++) {
+            Node returnNode = returns.item(i_return);
+            NodeList fromOutcomeList = (NodeList) 
+                    xpath.evaluate(".//ns1:from-outcome/text()", returnNode, XPathConstants.NODESET);
+            String id = getIdAttribute(returnNode);
+            if (1 < fromOutcomeList.getLength()) {
+                throw new XPathExpressionException("Within <flow-return id=\"" + id + "\"> only one child is allowed, and it must be a <from-outcome>");
+            }
+            String fromOutcomeStr = fromOutcomeList.item(0).getNodeValue().trim();
+            flowBuilder.returnNode(id).fromOutcome(fromOutcomeStr);
+            
+        }
+        // </editor-fold>
+    }
+    
+    private void processInboundParameters(XPath xpath, Node flowDefinition, FlowBuilder flowBuilder) throws XPathExpressionException {
+        // <editor-fold defaultstate="collapsed">
+        NodeList inboundParameters = (NodeList) xpath.evaluate(".//ns1:inbound-parameter", 
+                flowDefinition, XPathConstants.NODESET);
+        for (int i_inbound = 0; i_inbound < inboundParameters.getLength(); i_inbound++) {
+            Node inboundParamNode = inboundParameters.item(i_inbound);
+            NodeList nameList = (NodeList) 
+                    xpath.evaluate(".//ns1:name/text()", inboundParamNode, XPathConstants.NODESET);
+            if (1 < nameList.getLength()) {
+                throw new XPathExpressionException("Within <inbound-parameter> only one <name> child is allowed");
+            }
+            String nameStr = nameList.item(0).getNodeValue().trim();
+            
+            NodeList valueList = (NodeList) 
+                    xpath.evaluate(".//ns1:value/text()", inboundParamNode, XPathConstants.NODESET);
+            if (1 < valueList.getLength()) {
+                throw new XPathExpressionException("Within <inbound-parameter> only one <value> child is allowed");
+            }
+            String valueStr = valueList.item(0).getNodeValue().trim();
+            flowBuilder.inboundParameter(nameStr, valueStr);
+        }
+        // </editor-fold>
+    }
+    
+    private void processFlowCalls(XPath xpath, Node flowDefinition, FlowBuilder flowBuilder) throws XPathExpressionException {
+        // <editor-fold defaultstate="collapsed">
+        NodeList flowCalls = (NodeList) xpath.evaluate(".//ns1:flow-call", 
+                flowDefinition, XPathConstants.NODESET);
+        for (int i_flowCall = 0; i_flowCall < flowCalls.getLength(); i_flowCall++) {
+            Node flowCallNode = flowCalls.item(i_flowCall);
+            String flowCallId = getIdAttribute(flowCallNode);
+            NodeList facesFlowRefList = (NodeList) 
+                    xpath.evaluate(".//ns1:faces-flow-reference", 
+                    flowCallNode, XPathConstants.NODESET);
+            if (null == facesFlowRefList || 1 != facesFlowRefList.getLength()) {
+                throw new XPathExpressionException("Within <flow-call> must have exactly one <faces-flow-reference>");
+            }
+            Node facesFlowRefNode = facesFlowRefList.item(0);
+
+            NodeList facesFlowIdList = (NodeList) 
+                    xpath.evaluate(".//ns1:faces-flow-id/text()", 
+                    facesFlowRefNode, XPathConstants.NODESET);
+            if (null == facesFlowIdList || 1 != facesFlowIdList.getLength()) {
+                throw new XPathExpressionException("Within <faces-flow-reference> must have exactly one <faces-flow-id>");
+            }
+            
+            String destinationId = facesFlowIdList.item(0).getNodeValue().trim();
+            
+            NodeList definingDocumentIdList = (NodeList) 
+                    xpath.evaluate(".//ns1:flow-document-id/text()", 
+                    facesFlowRefNode, XPathConstants.NODESET);
+            if (null == definingDocumentIdList && 1 != definingDocumentIdList.getLength()) {
+                throw new XPathExpressionException("Within <faces-flow-reference> must have at most one <flow-document-id>");
+            }
+            String definingDocumentId = "";
+            if (null != definingDocumentIdList && 1 == definingDocumentIdList.getLength()) {
+                definingDocumentId = definingDocumentIdList.item(0).getNodeValue().trim();
+            }
+            
+            FlowCallBuilder flowCallBuilder = flowBuilder.flowCallNode(flowCallId);
+                    
+            flowCallBuilder.flowReference(definingDocumentId, destinationId);
+            
+            NodeList outboundParameters = (NodeList) xpath.evaluate(".//ns1:outbound-parameter", 
+                    flowDefinition, XPathConstants.NODESET);
+            if (null != outboundParameters) {
+                for (int i_outbound = 0; i_outbound < outboundParameters.getLength(); i_outbound++) {
+                    Node outboundParamNode = outboundParameters.item(i_outbound);
+                    NodeList nameList = (NodeList) 
+                            xpath.evaluate(".//ns1:name/text()", outboundParamNode, XPathConstants.NODESET);
+                    if (1 < nameList.getLength()) {
+                        throw new XPathExpressionException("Within <outbound-parameter> only one <name> child is allowed");
+                    }
+                    String nameStr = nameList.item(0).getNodeValue().trim();
+                    
+                    NodeList valueList = (NodeList) 
+                            xpath.evaluate(".//ns1:value/text()", outboundParamNode, XPathConstants.NODESET);
+                    if (1 < valueList.getLength()) {
+                        throw new XPathExpressionException("Within <inbound-parameter> only one <value> child is allowed");
+                    }
+                    String valueStr = valueList.item(0).getNodeValue().trim();
+                    flowCallBuilder.outboundParameter(nameStr, valueStr);
+                }
+            }
+            
+        }
+        // </editor-fold>
+    }
+    
+    private void processSwitches(XPath xpath, Node flowDefinition, FlowBuilder flowBuilder) throws XPathExpressionException {
+        // <editor-fold defaultstate="collapsed">
+        NodeList switches = (NodeList) xpath.evaluate(".//ns1:switch", 
+                flowDefinition, XPathConstants.NODESET);
+        if (null == switches) {
+            return;
+        }
+        for (int i_switch = 0; i_switch < switches.getLength(); i_switch++) {
+            Node switchNode = switches.item(i_switch);
+            String switchId = getIdAttribute(switchNode);
+            SwitchBuilder switchBuilder = flowBuilder.switchNode(switchId);
+            NodeList cases = (NodeList) xpath.evaluate(".//ns1:case", 
+                    switchNode, XPathConstants.NODESET);
+            if (null != cases) {
+                for (int i_case = 0; i_case < cases.getLength(); i_case++) {
+                    Node caseNode = cases.item(i_case);
+                    NodeList ifList = (NodeList) 
+                            xpath.evaluate(".//ns1:if/text()", caseNode, XPathConstants.NODESET);
+                    if (1 < ifList.getLength()) {
+                        throw new XPathExpressionException("Within <case> only one <if> child is allowed");
+                    }
+                    String ifStr = ifList.item(0).getNodeValue().trim();
+
+                    NodeList fromOutcomeList = (NodeList) 
+                            xpath.evaluate(".//ns1:from-outcome/text()", caseNode, XPathConstants.NODESET);
+                    if (1 < fromOutcomeList.getLength()) {
+                        throw new XPathExpressionException("Within <case> only one <from-outcome> child is allowed");
+                    }
+                    String fromOutcomeStr = fromOutcomeList.item(0).getNodeValue().trim();
+                    
+                    switchBuilder.switchCase().condition(ifStr).fromOutcome(fromOutcomeStr);
+                }
+            }
+            
+            NodeList defaultOutcomeList = (NodeList) 
+                    xpath.evaluate(".//ns1:default-outcome/text()", switchNode, XPathConstants.NODESET);
+            if (null != defaultOutcomeList && 1 < defaultOutcomeList.getLength()) {
+                throw new XPathExpressionException("Within <switch> only one <default-outcome> child is allowed");
+            }
+            if (null != defaultOutcomeList) {
+                String defaultOutcomeStr = defaultOutcomeList.item(0).getNodeValue().trim();
+                switchBuilder.defaultOutcome(defaultOutcomeStr);
+            }
+        }
+        
+        
+        // </editor-fold>
+    }
+    
+    private void processMethodCalls(FacesContext context, XPath xpath, Node flowDefinition, FlowBuilder flowBuilder) throws XPathExpressionException {
+        // <editor-fold defaultstate="collapsed">
+        NodeList methodCalls = (NodeList) xpath.evaluate(".//ns1:method-call", 
+                flowDefinition, XPathConstants.NODESET);
+        if (null == methodCalls) {
+            return;
+        }
+        for (int i_methodCall = 0; i_methodCall < methodCalls.getLength(); i_methodCall++) {
+            Node methodCallNode = methodCalls.item(i_methodCall);
+            String methodCallId = getIdAttribute(methodCallNode);
+            MethodCallBuilder methodCallBuilder = flowBuilder.methodCallNode(methodCallId);
+            NodeList methodList = (NodeList) 
+                    xpath.evaluate(".//ns1:method/text()", methodCallNode, XPathConstants.NODESET);
+            if (1 != methodList.getLength()) {
+                throw new XPathExpressionException("Within <method-call> exactly one <method> child is allowed");
+            }
+            String methodStr = methodList.item(0).getNodeValue().trim();
+            
+            NodeList params = (NodeList) xpath.evaluate(".//ns1:parameter", 
+                    methodCallNode, XPathConstants.NODESET);
+            if (null != params) {
+                List<Class> paramTypes = Collections.emptyList();
+                if (0 < params.getLength()) {
+                    paramTypes = new ArrayList<Class>();
+                    List<Parameter> paramList = new ArrayList<Parameter>();
+                    Parameter toAdd = null;
+                    ExpressionFactory ef = context.getApplication().getExpressionFactory();
+                    ELContext elContext = context.getELContext();
+                    ValueExpression ve = null;
+                    
+                    for (int i_param = 0; i_param < params.getLength(); i_param++) {
+                        Node param = params.item(i_param);
+                        NodeList valueList = (NodeList) 
+                                xpath.evaluate(".//ns1:value/text()", param, XPathConstants.NODESET);
+                        if (null == valueList || 1 != valueList.getLength()) {
+                            throw new XPathExpressionException("Within <parameter> exactly one <value> child is allowed");
+                        }
+                        String valueStr = valueList.item(0).getNodeValue().trim();
+                        String classStr = null;
+                        
+                        NodeList classList = (NodeList) 
+                                xpath.evaluate(".//ns1:class/text()", param, XPathConstants.NODESET);
+                        if (null != classList && 1 < classList.getLength()) {
+                            throw new XPathExpressionException("Within <parameter> at most one <class> child is allowed");
+                        }
+                        if (null != classList && 1 == classList.getLength()) {
+                            classStr = classList.item(0).getNodeValue().trim();
+                        }
+                        Class clazz = String.class; 
+                        if (null != classStr) {
+                            try {
+                                clazz = ReflectionUtil.forName(classStr);
+                            } catch (ClassNotFoundException e) {
+                                clazz = Object.class;
+                            }
+                        }
+                        
+                        ve = ef.createValueExpression(elContext, valueStr, clazz);
+                        toAdd = new ParameterImpl(classStr, ve);
+                        paramList.add(toAdd);
+                        paramTypes.add(clazz);
+                    }
+                    methodCallBuilder.parameters(paramList);
+                }
+                Class [] paramArray = new Class[paramTypes.size()];
+                paramTypes.toArray(paramArray);
+                methodCallBuilder.expression(methodStr, paramArray);
+            }
+            
+            NodeList defaultOutcomeList = (NodeList) 
+                    xpath.evaluate(".//ns1:default-outcome/text()", methodCallNode, XPathConstants.NODESET);
+            if (null != defaultOutcomeList && 1 < defaultOutcomeList.getLength()) {
+                throw new XPathExpressionException("Within <method-call> only one <default-outcome> child is allowed");
+            }
+            if (null != defaultOutcomeList) {
+                String defaultOutcomeStr = defaultOutcomeList.item(0).getNodeValue().trim();
+                methodCallBuilder.defaultOutcome(defaultOutcomeStr);
+            }
+            
+        }
+            
+        
+        // </editor-fold>
+    }
+    
+    private void processInitializerFinalizer(XPath xpath, Node flowDefinition, FlowBuilder flowBuilder) throws XPathExpressionException {
+        // <editor-fold defaultstate="collapsed">
+        NodeList initializerNodeList = (NodeList) 
+                xpath.evaluate(".//ns1:initializer/text()", flowDefinition, XPathConstants.NODESET);
+        if (1 < initializerNodeList.getLength()) {
+            throw new XPathExpressionException("At most one <initializer> is allowed.");
+        }
+        
+        if (1 == initializerNodeList.getLength()) {
+            String initializerStr = initializerNodeList.item(0).getNodeValue().trim();
+            flowBuilder.initializer(initializerStr);
+        }
+
+        NodeList finalizerNodeList = (NodeList) 
+                xpath.evaluate(".//ns1:finalizer/text()", flowDefinition, XPathConstants.NODESET);
+        if (1 < finalizerNodeList.getLength()) {
+            throw new XPathExpressionException("At most one <finalizer> is allowed.");
+        }
+        
+        if (1 == finalizerNodeList.getLength()) {
+            String finalizerStr = finalizerNodeList.item(0).getNodeValue().trim();
+            flowBuilder.finalizer(finalizerStr);
+        }
+        
+        // </editor-fold>
+        
+    }
+    
+    private String processStartNode(XPath xpath, Node flowDefinition, FlowBuilder flowBuilder) throws XPathExpressionException {
+        // <editor-fold defaultstate="collapsed">
+        String startNodeId = null;
+        NodeList startNodeList = (NodeList) xpath.evaluate(".//ns1:start-node/text()", 
+                flowDefinition, XPathConstants.NODESET);
+        if (1 < startNodeList.getLength()) {
+            throw new XPathExpressionException("Within <flow-definition> at most one <start-node> is allowed");
+        }
+        if (null != startNodeList && 1 == startNodeList.getLength()) {
+            startNodeId = startNodeList.item(0).getNodeValue().trim();
+        }
+        
+        return startNodeId;
+        // </editor-fold>
     }
     
     

@@ -41,68 +41,64 @@
 
 -->
 
-<!DOCTYPE html>
+<faces-config version="2.2" xmlns="http://java.sun.com/xml/ns/javaee"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="
+        http://java.sun.com/xml/ns/javaee
+        http://java.sun.com/xml/ns/javaee/web-facesconfig_2_2.xsd">
 
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:j="http://java.sun.com/jsf/flow">
+  <flow-definition id="flow-b">
+    <flow-return id="taskFlowReturn1">
+      <from-outcome>#{flow_b_Bean.returnValue}</from-outcome>
+    </flow-return>            
     
-    <f:metadata>
-
-        <j:flow-definition>
-            <j:flow-return id="taskFlowReturn1">
-                <j:from-outcome>#{flow_b_Bean.returnValue}</j:from-outcome>
-            </j:flow-return>            
-            
-            <j:switch id="switchA">
-                <j:case>
-                    <j:if>#{flow_b_Bean.switchA_Case01}</j:if>
-                    <j:from-outcome>page01</j:from-outcome>
-                </j:case>
-                <j:case>
-                    <j:if>#{flow_b_Bean.switchA_Case02}</j:if>
-                    <j:from-outcome>page02</j:from-outcome>
-                </j:case>
-                <j:case>
-                    <j:if>#{flow_b_Bean.switchA_Case03}</j:if>
-                    <j:from-outcome>switchA_result</j:from-outcome>
-                </j:case>
-                <j:default-outcome>defaultPage</j:default-outcome>
-            </j:switch>
-            
-            <j:switch id="switchB">
-                <j:case>
-                    <j:if>#{flow_b_Bean.switchB_Case01}</j:if>
-                    <j:from-outcome>page01</j:from-outcome>
-                </j:case>
-                <j:case>
-                    <j:if>#{flow_b_Bean.switchB_Case02}</j:if>
-                    <j:from-outcome>switchB_result</j:from-outcome>
-                </j:case>
-                <j:case>
-                    <j:if>#{flow_b_Bean.switchB_Case03}</j:if>
-                    <j:from-outcome>page03</j:from-outcome>
-                </j:case>
-                <j:default-outcome>defaultPage</j:default-outcome>
-            </j:switch>
-                        
-            <j:switch id="switchC">
-                <j:case>
-                    <j:if>#{flow_b_Bean.switchC_Case01}</j:if>
-                    <j:from-outcome>page01</j:from-outcome>
-                </j:case>
-                <j:case>
-                    <j:if>#{flow_b_Bean.switchC_Case02}</j:if>
-                    <j:from-outcome>page02</j:from-outcome>
-                </j:case>
-                <j:case>
-                    <j:if>#{flow_b_Bean.switchC_Case03}</j:if>
-                    <j:from-outcome>page03</j:from-outcome>
-                </j:case>
-                <j:default-outcome>#{flow_b_Bean.defaultOutcome}</j:default-outcome>
-            </j:switch>
-        </j:flow-definition>
-
-    </f:metadata>
-</html>
+    <switch id="switchA">
+      <case>
+        <if>#{flow_b_Bean.switchA_Case01}</if>
+        <from-outcome>page01</from-outcome>
+      </case>
+      <case>
+        <if>#{flow_b_Bean.switchA_Case02}</if>
+        <from-outcome>page02</from-outcome>
+      </case>
+      <case>
+        <if>#{flow_b_Bean.switchA_Case03}</if>
+        <from-outcome>switchA_result</from-outcome>
+      </case>
+      <default-outcome>defaultPage</default-outcome>
+    </switch>
+    
+    <switch id="switchB">
+      <case>
+        <if>#{flow_b_Bean.switchB_Case01}</if>
+        <from-outcome>page01</from-outcome>
+      </case>
+      <case>
+        <if>#{flow_b_Bean.switchB_Case02}</if>
+        <from-outcome>switchB_result</from-outcome>
+      </case>
+      <case>
+        <if>#{flow_b_Bean.switchB_Case03}</if>
+        <from-outcome>page03</from-outcome>
+      </case>
+      <default-outcome>defaultPage</default-outcome>
+    </switch>
+    
+    <switch id="switchC">
+      <case>
+        <if>#{flow_b_Bean.switchC_Case01}</if>
+        <from-outcome>page01</from-outcome>
+      </case>
+      <case>
+        <if>#{flow_b_Bean.switchC_Case02}</if>
+        <from-outcome>page02</from-outcome>
+      </case>
+      <case>
+        <if>#{flow_b_Bean.switchC_Case03}</if>
+        <from-outcome>page03</from-outcome>
+      </case>
+      <default-outcome>#{flow_b_Bean.defaultOutcome}</default-outcome>
+    </switch>
+  </flow-definition>
+  
+</faces-config>

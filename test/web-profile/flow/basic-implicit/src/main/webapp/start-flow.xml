@@ -41,14 +41,13 @@
 
 -->
 
-<!DOCTYPE html>
+<faces-config version="2.2" xmlns="http://java.sun.com/xml/ns/javaee"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="
+        http://java.sun.com/xml/ns/javaee
+        http://java.sun.com/xml/ns/javaee/web-facesconfig_2_2.xsd">
 
-<html xmlns="http://www.w3.org/1999/xhtml" 
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:j="http://java.sun.com/jsf/flow">
-    
-    <f:metadata>
-        <j:flow-definition id="flow">
+        <flow-definition id="flow">
             
             <!-- A flow-definition in a facelet page without any other 
             children declares a faces flow equivalent to this:
@@ -60,6 +59,5 @@
             
             -->
 
-        </j:flow-definition>
-    </f:metadata>
-</html>
+        </flow-definition>
+</faces-config>

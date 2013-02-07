@@ -193,11 +193,18 @@
         <xsd:annotation>
           <xsd:documentation><![CDATA[
 
-           <p> The "name" element within the top level "faces-config"
+           <p> <span class="changed_modified_2_2">The</span> "name" element 
+           within the top level "faces-config"
             element declares the name of this application
             configuration resource.  Such names are used
             in the document ordering scheme specified in section
             JSF.11.4.6.</p>
+            
+            <p class="changed_added_2_2">This value is taken to be the 
+            defining document id of any &lt;flow-definition&gt; elements 
+            defined in this Application Configuration Resource file.  If this
+            element is not specified, the runtime must take the empty string 
+            as its value.</p>
             
           ]]></xsd:documentation>
         </xsd:annotation>
@@ -1766,55 +1773,12 @@ passed.</p>
 <![CDATA[
 
         <p class="changed_added_2_2">Top level element for a flow
-        definition.  If an <code>id</code> attribute is present on this
-        element, it must be identical to <code>flowName</code>.</p>
+        definition.</p>
 
 <div class="changed_added_2_2">
 
 <p>If there is no <code>&lt;start-node&gt;</code> element declared, it
 is assumed to be <code>&lt;flowName&gt;.xhtml</code>.</p>
-
-
-<p>Usage example</p>
-
-<div class="xml" style="font-family:monospace;"><ol>
-<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;flow-definition<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
-<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;start-node<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>router1<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/start-node<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
-<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; </div></li>
-<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;flow-return</span> <span style="color: #000066;">id</span>=<span style="color: #ff0000;">&quot;success&quot;</span><span style="color: #000000; font-weight: bold;">&gt;</span></span></div></li>
-<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;navigation-case<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
-<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;from-outcome<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>/complete<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/from-outcome<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
-<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/navigation-case<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
-<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/flow-return<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
-<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;flow-return</span> <span style="color: #000066;">id</span>=<span style="color: #ff0000;">&quot;errorOccurred&quot;</span><span style="color: #000000; font-weight: bold;">&gt;</span></span></div></li>
-<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;navigation-case<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
-<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;from-outcome<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>error<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/from-outcome<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
-<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/navigation-case<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
-<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/flow-return<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
-<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; </div></li>
-<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #808080; font-style: italic;">&lt;!-- If a customerId was specified then we'll edit it, otherwise create a new customer. --&gt;</span></div></li>
-<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;switch</span> <span style="color: #000066;">id</span>=<span style="color: #ff0000;">&quot;router1&quot;</span><span style="color: #000000; font-weight: bold;">&gt;</span></span></div></li>
-<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;navigation-case<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
-<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;if<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>#{flowScope.customerId == null}<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/if<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
-<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;from-outcome<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>create-customer<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/from-outcome<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
-<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/navigation-case<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
-<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/switch<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
-<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; </div></li>
-<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;view</span> <span style="color: #000066;">id</span>=<span style="color: #ff0000;">&quot;create-customer&quot;</span><span style="color: #000000; font-weight: bold;">&gt;</span></span></div></li>
-<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;vdl-document<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>create-customer.xhtml<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/vdl-document<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
-<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/view<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
-<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li>
-<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;view</span> <span style="color: #000066;">id</span>=<span style="color: #ff0000;">&quot;maintain-customer-record&quot;</span><span style="color: #000000; font-weight: bold;">&gt;</span></span></div></li>
-<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;vdl-document<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>maintain-customer-record.xhtml<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/vdl-document<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
-<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/view<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
-<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; </div></li>
-<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; </div></li>
-<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;initializer<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>#{maintainCustomerBean.initializeFlow}<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/initializer<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
-<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;finalizer<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>#{maintainCustomerBean.cleanUpFlow}<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/finalizer<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
-<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; &nbsp; &nbsp; </div></li>
-<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/flow-definition<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li>
-<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li>
-</ol></div>		</div>
 
 </div>
 
@@ -1882,16 +1846,17 @@ href="javax/faces/flow/FlowHandler.html">FlowHandler</a></code>.</p>
 
     </xsd:sequence>
     <xsd:attribute name="id"
-                   type="xsd:ID">
+                   type="xsd:ID" use="required">
         <xsd:annotation>
           <xsd:documentation>
 
         <![CDATA[
 
-         <p class="changed_added_2_2">The id of this flow.  If this flow
-         is defined in the Application Configuration Resources, the id
+         <p class="changed_added_2_2">The id of this flow.  The id
          must be unique within the Application configuration Resource
-         file in which this flow is defined.<p> ]]>
+         file in which this flow is defined.  The value of this attribute, 
+         combined with the value of the &lt;faces-config&gt;&lt;name&gt; element
+         must globally identify the flow within the application.<p> ]]>
 
 
           </xsd:documentation>

@@ -641,7 +641,6 @@ public abstract class Application {
         if (defaultApplication != null) {
             defaultApplication.setFlowHandler(newHandler);
         }
-        throw new UnsupportedOperationException();
 
     }
 

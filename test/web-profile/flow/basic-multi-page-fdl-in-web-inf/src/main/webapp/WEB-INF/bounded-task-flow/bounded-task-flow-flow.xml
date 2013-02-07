@@ -41,21 +41,17 @@
 
 -->
 
-<!DOCTYPE html>
+<faces-config version="2.2" xmlns="http://java.sun.com/xml/ns/javaee"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="
+        http://java.sun.com/xml/ns/javaee
+        http://java.sun.com/xml/ns/javaee/web-facesconfig_2_2.xsd">
 
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:j="http://java.sun.com/jsf/flow">
-    
-    <f:metadata>
+    <flow-definition id="bounded-task-flow">
+        <flow-return id="taskFlowReturn1">
+            <from-outcome>#{flowBean.returnValue}</from-outcome>
+        </flow-return>
+        
+    </flow-definition>
 
-        <j:flow-definition>
-            <j:flow-return id="taskFlowReturn1">
-                    <j:from-outcome>#{flowBean.returnValue}</j:from-outcome>
-            </j:flow-return>
-            
-        </j:flow-definition>
-
-    </f:metadata>
-</html>
+</faces-config>

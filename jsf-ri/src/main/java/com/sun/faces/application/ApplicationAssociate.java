@@ -278,18 +278,22 @@ public class ApplicationAssociate {
     
     private class PostConstructApplicationListener implements SystemEventListener {
 
+        @Override
         public boolean isListenerForSource(Object source) {
             return source instanceof Application;
         }
 
+        @Override
         public void processEvent(SystemEvent event) throws AbortProcessingException {
             ApplicationAssociate.this.initializeFacelets();
             
             WebConfiguration config = WebConfiguration.getInstance();
-            FlowHandlerFactory flowHandlerFactory = (FlowHandlerFactory) FactoryFinder.getFactory(FactoryFinder.FLOW_HANDLER_FACTORY);
-            ApplicationAssociate.this.flowHandler = flowHandlerFactory.createFlowHandler(FacesContext.getCurrentInstance());
+            if (null == ApplicationAssociate.this.flowHandler) {
+                FlowHandlerFactory flowHandlerFactory = (FlowHandlerFactory) FactoryFinder.getFactory(FactoryFinder.FLOW_HANDLER_FACTORY);
+                ApplicationAssociate.this.flowHandler = flowHandlerFactory.createFlowHandler(FacesContext.getCurrentInstance());
+            }
+
             FacesContext context = FacesContext.getCurrentInstance();
-            
             if (config.isHasFlows() && Util.isCDIAvailable(context.getExternalContext().getApplicationMap())) {
                 try {
                     loadFlowsFromJars(context, ApplicationAssociate.this.flowHandler);
@@ -297,7 +301,6 @@ public class ApplicationAssociate {
                     LOGGER.log(Level.SEVERE, null, ex);
                 }
             }
-            
             // cause the Facelet VDL to be instantiated eagerly, so it can 
             // become aware of the resource library contracts
             

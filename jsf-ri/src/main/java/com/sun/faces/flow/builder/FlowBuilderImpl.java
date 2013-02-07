@@ -165,7 +165,7 @@ public class FlowBuilderImpl extends FlowBuilder {
         return flow;
     }
     
-    FlowImpl _getFlow() {
+    public FlowImpl _getFlow() {
         return flow;
     }
     

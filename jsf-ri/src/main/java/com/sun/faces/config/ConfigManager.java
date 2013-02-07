@@ -54,6 +54,7 @@ import com.sun.faces.config.configprovider.MetaInfFacesConfigResourceProvider;
 import com.sun.faces.config.configprovider.MojarraFacesConfigResourceProvider;
 import com.sun.faces.config.configprovider.WebFacesConfigResourceProvider;
 import com.sun.faces.config.configprovider.MetaInfFaceletTaglibraryConfigProvider;
+import com.sun.faces.config.configprovider.WebAppFlowConfigResourceProvider;
 import com.sun.faces.config.configprovider.WebFaceletTaglibResourceProvider;
 import com.sun.faces.config.processor.ApplicationConfigProcessor;
 import com.sun.faces.config.processor.BehaviorConfigProcessor;
@@ -260,6 +261,7 @@ public class ConfigManager {
         facesConfigProviders.add(new MojarraFacesConfigResourceProvider());
         facesConfigProviders.add(new MetaInfFacesConfigResourceProvider());
         facesConfigProviders.add(new WebFacesConfigResourceProvider());
+        facesConfigProviders.add(new WebAppFlowConfigResourceProvider());
         FACES_CONFIG_RESOURCE_PROVIDERS = Collections.unmodifiableList(facesConfigProviders);
 
         // initialize the resource providers for facelet-taglib documents

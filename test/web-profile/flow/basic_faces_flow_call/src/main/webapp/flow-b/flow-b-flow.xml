@@ -41,44 +41,42 @@
 
 -->
 
-<!DOCTYPE html>
+<faces-config version="2.2" xmlns="http://java.sun.com/xml/ns/javaee"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="
+        http://java.sun.com/xml/ns/javaee
+        http://java.sun.com/xml/ns/javaee/web-facesconfig_2_2.xsd">
 
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:j="http://java.sun.com/jsf/flow">
-    
-    <f:metadata>
+    <flow-definition id="flow-b">
+        
+            <flow-return id="taskFlowReturn1">
+                <from-outcome>#{flow_b_Bean.returnValue}</from-outcome>
+            </flow-return>
 
-        <j:flow-definition>
-            <j:flow-return id="taskFlowReturn1">
-                <j:from-outcome>#{flow_b_Bean.returnValue}</j:from-outcome>
-            </j:flow-return>
-
-            <j:inbound-parameter>
-                <j:name>param1FromFlowA</j:name>
-                <j:value>#{flowScope.param1Value}</j:value>
-            </j:inbound-parameter>
-            <j:inbound-parameter>
-                <j:name>param2FromFlowA</j:name>
-                <j:value>#{flowScope.param2Value}</j:value>
-            </j:inbound-parameter>
+            <inbound-parameter>
+                <name>param1FromFlowA</name>
+                <value>#{flowScope.param1Value}</value>
+            </inbound-parameter>
+            <inbound-parameter>
+                <name>param2FromFlowA</name>
+                <value>#{flowScope.param2Value}</value>
+            </inbound-parameter>
             
-            <j:flow-call id="callA">
-                <j:faces-flow-reference>
-                    <j:faces-flow-id>flow-a</j:faces-flow-id>
-                </j:faces-flow-reference>
-                <j:outbound-parameter>
-                    <j:name>param1FromFlowB</j:name>
-                    <j:value>param1Value</j:value>
-                </j:outbound-parameter>
-                <j:outbound-parameter>
-                    <j:name>param2FromFlowB</j:name>
-                    <j:value>param2Value</j:value>
-                </j:outbound-parameter>
-            </j:flow-call>
+            <flow-call id="callA">
+                <faces-flow-reference>
+                    <faces-flow-id>flow-a</faces-flow-id>
+                </faces-flow-reference>
+                <outbound-parameter>
+                    <name>param1FromFlowB</name>
+                    <value>param1Value</value>
+                </outbound-parameter>
+                <outbound-parameter>
+                    <name>param2FromFlowB</name>
+                    <value>param2Value</value>
+                </outbound-parameter>
+            </flow-call>
                         
-        </j:flow-definition>
+        </flow-definition>
 
-    </f:metadata>
-</html>
+</faces-config>
+

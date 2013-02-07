@@ -40,55 +40,50 @@
     holder.
 
 -->
+<faces-config version="2.2" xmlns="http://java.sun.com/xml/ns/javaee"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="
+        http://java.sun.com/xml/ns/javaee
+        http://java.sun.com/xml/ns/javaee/web-facesconfig_2_2.xsd">
 
-<!DOCTYPE html>
-
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:j="http://java.sun.com/jsf/flow">
-    
-    <f:metadata>
-
-        <j:flow-definition>
-            <j:start-node>router1</j:start-node>
-            
-            <j:flow-return id="success">
-                <j:from-outcome>/complete</j:from-outcome>
-            </j:flow-return>
-            <j:flow-return id="errorOccurred">
-                <j:from-outcome>error</j:from-outcome>
-            </j:flow-return>
-            
-            <!-- If a customerId was specified then we'll edit it, otherwise create a new customer. -->
-            <j:switch id="router1">
-                <j:case>
-                    <j:if>#{flowScope.customerId == null}</j:if>
-                    <j:from-outcome>create-customer</j:from-outcome>
-                </j:case>
-                <j:default-outcome>view-customer</j:default-outcome>
-            </j:switch>
-            
-            <j:view id="create-customer">
-                <j:vdl-document>create-customer.xhtml</j:vdl-document>
-            </j:view>
-
-            <j:view id="view-customer">
-                <j:vdl-document>view-customer.xhtml</j:vdl-document>
-            </j:view>
-
-            <j:view id="maintain-customer-record">
-                <j:vdl-document>maintain-customer-record.xhtml</j:vdl-document>
-            </j:view>
-            
-            <j:method-call id="upgrade-customer">
-                <j:method>#{maintainCustomerBean.upgradeCustomer}</j:method>
-                <j:default-outcome>view-customer</j:default-outcome>
-            </j:method-call>
-            
-            <j:initializer>#{maintainCustomerBean.initializeFlow}</j:initializer>
-            <j:finalizer>#{maintainCustomerBean.cleanUpFlow}</j:finalizer>
-            
-        </j:flow-definition>
-
-    </f:metadata>
-</html>
+    <flow-definition id="maintain-customer-record">
+        <start-node>router1</start-node>
+        
+        <flow-return id="success">
+            <from-outcome>/complete</from-outcome>
+        </flow-return>
+        <flow-return id="errorOccurred">
+            <from-outcome>error</from-outcome>
+        </flow-return>
+        
+        <!-- If a customerId was specified then we'll edit it, otherwise create a new customer. -->
+        <switch id="router1">
+          <case>
+              <if>#{flowScope.customerId == null}</if>
+              <from-outcome>create-customer</from-outcome>
+          </case>
+          <default-outcome>view-customer</default-outcome>
+        </switch>
+        
+        <view id="create-customer">
+            <vdl-document>/maintain-customer-record/create-customer.xhtml</vdl-document>
+        </view>
+        
+        <view id="view-customer">
+            <vdl-document>/maintain-customer-record/view-customer.xhtml</vdl-document>
+        </view>
+        
+        <view id="maintain-customer-record">
+            <vdl-document>/maintain-customer-record/maintain-customer-record.xhtml</vdl-document>
+        </view>
+        
+        <method-call id="upgrade-customer">
+            <method>#{maintainCustomerBean.upgradeCustomer}</method>
+            <default-outcome>view-customer</default-outcome>
+        </method-call>
+        
+        <initializer>#{maintainCustomerBean.initializeFlow}</initializer>
+        <finalizer>#{maintainCustomerBean.cleanUpFlow}</finalizer>
+        
+    </flow-definition>
+</faces-config>
