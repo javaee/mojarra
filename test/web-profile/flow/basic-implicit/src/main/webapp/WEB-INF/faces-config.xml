@@ -48,16 +48,11 @@
         http://java.sun.com/xml/ns/javaee/web-facesconfig_2_2.xsd">
 
         <flow-definition id="flow">
+            <start-node>start</start-node>
+            <view id="start">
+                <vdl-document>/start.xhtml</vdl-document>
+            </view>
             
-            <!-- A flow-definition in a facelet page without any other 
-            children declares a faces flow equivalent to this:
-            
-              <start-node>the name of this page without any extension</start-node>
-              <view id="the name of this page without any extension">
-                <vdl-document>the name of this page with the extension</vdl-document>
-              </view>
-            
-            -->
 
         </flow-definition>
 </faces-config>

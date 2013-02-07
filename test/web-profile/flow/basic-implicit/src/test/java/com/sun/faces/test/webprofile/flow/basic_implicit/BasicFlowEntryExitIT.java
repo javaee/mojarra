@@ -95,7 +95,6 @@ public class BasicFlowEntryExitIT {
         webClient.closeAllWindows();
     }
 
-    @Ignore("Resume to running when JAVASERVERFACES-2580 is complete.")
     @Test
     public void testFlowEntryExit() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
