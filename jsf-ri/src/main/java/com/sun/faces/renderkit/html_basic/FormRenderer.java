@@ -211,6 +211,16 @@ public class FormRenderer extends HtmlBasicRenderer {
         if (writeStateAtEnd) {
             context.getApplication().getViewHandler().writeState(context);
         }
+        
+        if (context.getViewRoot().isTransient()) {
+            writer.startElement("input", null);
+            writer.writeAttribute("type", "hidden", "type");
+            writer.writeAttribute("id", "com.sun.faces.StatelessPostback", null);
+            writer.writeAttribute("name", "com.sun.faces.StatelessPostback", null);
+            writer.writeAttribute("value", true, "value");
+            writer.endElement("input");
+        }
+        
         writer.writeText("\n", component, null);
         writer.endElement("form");
 

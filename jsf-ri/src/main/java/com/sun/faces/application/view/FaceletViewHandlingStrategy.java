@@ -514,9 +514,25 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         if (UIDebug.debugRequest(context)) {
             context.getApplication().createComponent(UIViewRoot.COMPONENT_TYPE);
         }
-        
+                        
         UIViewRoot viewRoot;
 
+        /*
+         * Check if we are stateless.
+         */
+        if (!context.getExternalContext().getRequestParameterMap().isEmpty() &&
+            context.getExternalContext().getRequestParameterMap().containsKey("com.sun.faces.StatelessPostback")) {
+            try {
+                ViewDeclarationLanguage vdl = vdlFactory.getViewDeclarationLanguage(viewId);
+                viewRoot = vdl.createView(context, viewId);
+                context.setViewRoot(viewRoot);
+                vdl.buildView(context, viewRoot);
+                return viewRoot;
+            } catch (IOException ioe) {
+                throw new FacesException(ioe);
+            }
+        }
+        
         if (StateContext.getStateContext(context).isPartialStateSaving(context, viewId)) {
             try {
                 context.setProcessingEvents(false);

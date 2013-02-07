@@ -71,9 +71,12 @@ import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagConfig;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.context.FacesContext;
 import javax.faces.view.facelets.TagAttributeException;
 
 /**
@@ -103,6 +106,8 @@ public final class ViewHandler extends TagHandlerImpl {
 
     private final TagAttribute afterPhase;
 
+    private final TagAttribute transientFlag;
+    
     /**
      * @param config
      */
@@ -118,6 +123,7 @@ public final class ViewHandler extends TagHandlerImpl {
         testForNull = this.getAttribute("afterPhase");
         this.afterPhase = (null == testForNull) ?
                          this.getAttribute("afterPhaseListener") : testForNull;
+        this.transientFlag = this.getAttribute("transient");
     }
 
     /**
@@ -165,6 +171,13 @@ public final class ViewHandler extends TagHandlerImpl {
                 MethodExpression m = this.afterPhase
                         .getMethodExpression(ctx, null, LISTENER_SIG);
                 root.setAfterPhaseListener(m);
+            }
+            
+            if (this.transientFlag != null) {
+                Boolean b = Boolean.valueOf(this.transientFlag.getValue(ctx));
+                if (b != null) {
+                    root.setTransient(b);
+                }
             }
 
             String viewId = root.getViewId();
