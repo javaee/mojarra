@@ -1,6 +1,5 @@
 package com.sun.faces.test.webprofile.flow.factory;
 
-import org.junit.Ignore;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
@@ -25,7 +24,6 @@ public class FlowHandlerFactoryTestImplIT {
         webClient.closeAllWindows();
     }
 
-    @Ignore("Resume to running when JAVASERVERFACES-2580 is complete.")
     @Test
     public void testFlowHandlerFactoryWrapping() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
