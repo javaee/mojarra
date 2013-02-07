@@ -395,7 +395,8 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         if (root != null && !root.getViewId().equals(newId)) {
             Map<String, Object> viewMap = root.getViewMap(false);
             if (viewMap != null) {
-                viewMap.clear();
+                ViewScopeManager manager = ViewScopeManager.getInstance(facesContext);
+                manager.clear(facesContext);
             }
         }
     }
