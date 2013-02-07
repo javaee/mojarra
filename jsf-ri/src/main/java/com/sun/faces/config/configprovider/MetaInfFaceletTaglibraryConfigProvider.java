@@ -80,8 +80,7 @@ public class MetaInfFaceletTaglibraryConfigProvider implements
     };
 
     private static final String[] BUILT_IN_TAGLIB_XML_FILES = {
-        "META-INF/mojarra_ext.taglib.xml",
-        "com/sun/faces/metadata/taglib/faces-flow.taglib.xml"
+        "META-INF/mojarra_ext.taglib.xml"
         
     };
 
