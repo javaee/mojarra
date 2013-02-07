@@ -106,6 +106,8 @@ public final class ViewHandler extends TagHandlerImpl {
 
     private final TagAttribute afterPhase;
     
+    private final TagAttribute transientFlag;
+    
     /**
      * Stores the contracts tag attribute.
      */
@@ -127,6 +129,7 @@ public final class ViewHandler extends TagHandlerImpl {
         this.afterPhase = (null == testForNull) ?
                          this.getAttribute("afterPhaseListener") : testForNull;
         this.contracts = this.getAttribute("contracts");
+        this.transientFlag = this.getAttribute("transient");
     }
 
     /**
@@ -184,6 +187,13 @@ public final class ViewHandler extends TagHandlerImpl {
                     if (LOGGER.isLoggable(Level.INFO)) {
                         LOGGER.log(Level.INFO, "f:view contracts attribute found, but not used at top level");
                     }
+                }
+            }
+            
+            if (this.transientFlag != null) {
+                Boolean b = Boolean.valueOf(this.transientFlag.getValue(ctx));
+                if (b != null) {
+                    root.setTransient(b);
                 }
             }
 

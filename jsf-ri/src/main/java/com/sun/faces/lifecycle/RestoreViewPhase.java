@@ -139,7 +139,7 @@ public class RestoreViewPhase extends Phase {
             throw new FacesException(MessageUtils.getExceptionMessageString(
                   MessageUtils.NULL_CONTEXT_ERROR_MESSAGE_ID));
         }
-
+        
         // If an app had explicitely set the tree in the context, use that;
         //
         UIViewRoot viewRoot = facesContext.getViewRoot();
@@ -190,9 +190,11 @@ public class RestoreViewPhase extends Phase {
             ViewHandler viewHandler = Util.getViewHandler(facesContext);
 
             boolean isPostBack = (facesContext.isPostback() && !isErrorPage(facesContext));
-            if (isPostBack) {
+            if (isPostBack || 
+                    (!facesContext.getExternalContext().getRequestParameterMap().isEmpty() &&
+                     facesContext.getExternalContext().getRequestParameterMap().containsKey("com.sun.faces.StatelessPostback"))) {
                 facesContext.setProcessingEvents(false);
-            // try to restore the view
+                // try to restore the view
                 viewRoot = viewHandler.restoreView(facesContext, viewId);
                 if (viewRoot == null) {
                     if (is11CompatEnabled(facesContext)) {

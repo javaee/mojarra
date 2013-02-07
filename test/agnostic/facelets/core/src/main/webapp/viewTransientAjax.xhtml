@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!DOCTYPE html>
+
+<f:view 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    transient="true">
+    <html>
+        <h:head>
+            <title>A transient view</title>
+        </h:head>
+        <h:body>
+            A transient view
+            <h:form id="form">
+                parameter1: [<h:outputText value="#{param['parameter1']}"/>] <br/>
+                <h:commandButton id="ajaxButton" action="viewTransientAjax.xhtml" value="Ajax Submit">
+                    <f:param name="parameter1" value="ajax"/>
+                    <f:ajax execute="@this" render="@form"/>
+                </h:commandButton>
+                <h:commandButton id="submitButton" action="viewTransientAjax.xhtml" value="Submit">
+                    <f:param name="parameter1" value="non-ajax"/>
+                </h:commandButton>
+            </h:form>
+        </h:body>
+    </html>
+</f:view>
