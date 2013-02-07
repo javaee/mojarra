@@ -40,7 +40,6 @@
 
 package com.sun.faces.application;
 
-import com.sun.faces.application.view.ViewScopeManager;
 import javax.faces.FacesException;
 import javax.faces.application.NavigationCase;
 import javax.faces.application.ViewHandler;
