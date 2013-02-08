@@ -753,14 +753,11 @@ public class MultiViewHandler extends ViewHandler {
                 if ((null != candidate.getName() && null != param.getName()) &&
                     candidate.getName().equals(param.getName())) {
                     return candidate.getStringValue(context);
-                } else {
-                    return param.getStringValue(context);
                 }
             }
         }
 
-        return null;
-
+        return param.getStringValue(context);
     }
 
     // Utility method used by viewId conversion.  Appends the extension
