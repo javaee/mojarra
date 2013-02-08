@@ -46,7 +46,7 @@
             targetNamespace="http://java.sun.com/xml/ns/javaee"
             version="2.2"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <xsd:include schemaLocation="javaee_6.xsd"/>
+  <xsd:include schemaLocation="javaee_7.xsd"/>
 
   <xsd:annotation>
     <xsd:documentation>

@@ -414,6 +414,11 @@ public class DbfFactory {
                 AS_SCHEMA_DIR + "javaee_6.xsd"
             },
             {
+                "javaee_7.xsd",
+                "/com/sun/faces/javaee_7.xsd",
+                AS_SCHEMA_DIR + "javaee_7.xsd"
+            },
+            {
                 "javaee_web_services_client_1_2.xsd",
                 "/com/sun/faces/javaee_web_services_client_1_2.xsd",
                 AS_SCHEMA_DIR + "javaee_web_services_client_1_2.xsd"
