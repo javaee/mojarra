@@ -40,7 +40,6 @@
 
 package com.sun.faces.application;
 
-import com.sun.faces.RIConstants;
 import com.sun.faces.config.InitFacesContext;
 import com.sun.faces.application.view.ViewScopeManager;
 import javax.faces.FacesException;
@@ -76,8 +75,6 @@ import javax.faces.flow.ReturnNode;
 import javax.faces.flow.SwitchCase;
 import javax.faces.flow.SwitchNode;
 import javax.faces.flow.ViewNode;
-import javax.faces.view.ViewDeclarationLanguage;
-import javax.faces.view.ViewMetadata;
 
 /**
  * <p><strong>NavigationHandlerImpl</strong> is the class that implements
