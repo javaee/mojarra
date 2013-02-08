@@ -68,13 +68,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.sun.faces.context.ApplicationMap;
 import com.sun.faces.context.InitParameterMap;
-import com.sun.faces.el.ELContextImpl;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.el.ELContextEvent;
-import javax.el.ELContextListener;
 
 /**
  * A special, minimal implementation of FacesContext used at application initialization time.
@@ -88,7 +85,19 @@ public class InitFacesContext extends FacesContext {
     private UIViewRoot viewRoot;
     private FacesContext orig;
     private Map<Object,Object> attributes;
-    private ELContext elContext;
+    private ELContext elContext = new ELContext() {
+        public ELResolver getELResolver() {
+            return null;
+        }
+
+        public FunctionMapper getFunctionMapper() {
+            return null;
+        }
+
+        public VariableMapper getVariableMapper() {
+            return null;
+        }
+    };
 
     public InitFacesContext(ServletContext sc) {
         ec = new ServletContextAdapter(sc);
@@ -252,25 +261,6 @@ public class InitFacesContext extends FacesContext {
 
     @Override
     public ELContext getELContext() {
-        if (null == elContext) {
-            Application app = getApplication();
-            elContext = new ELContextImpl(app.getELResolver());
-            elContext.putContext(FacesContext.class, this);
-            UIViewRoot root = this.getViewRoot();
-            if (null != root) {
-                elContext.setLocale(root.getLocale());
-            }
-            ELContextListener[] listeners = app.getELContextListeners();
-            if (listeners.length > 0) {
-                ELContextEvent event = new ELContextEvent(elContext);
-                for (ELContextListener listener: listeners) {
-                    listener.contextCreated(event);
-                }
-            }
-            
-        }
-        
-        
        return elContext;
     }
 

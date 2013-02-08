@@ -82,12 +82,10 @@ import com.sun.faces.el.VariableResolverChainWrapper;
 import com.sun.faces.facelets.PrivateApiFaceletCacheAdapter;
 import com.sun.faces.facelets.tag.jsf.PassThroughAttributeLibrary;
 import com.sun.faces.facelets.tag.jsf.PassThroughElementLibrary;
-import com.sun.faces.facelets.util.Classpath;
 import com.sun.faces.flow.FlowDiscoveryCDIHelper;
 import com.sun.faces.lifecycle.ELResolverInitPhaseListener;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import javax.el.CompositeELResolver;
 import javax.el.ELResolver;
@@ -124,9 +122,6 @@ import javax.faces.event.PostConstructApplicationEvent;
 import javax.faces.event.SystemEventListener;
 import javax.faces.flow.FlowHandler;
 import javax.faces.flow.FlowHandlerFactory;
-import javax.faces.view.ViewDeclarationLanguage;
-import javax.faces.view.ViewMetadata;
-import javax.faces.view.facelets.Facelet;
 import javax.faces.view.facelets.FaceletCacheFactory;
 import javax.faces.view.facelets.FaceletsResourceResolver;
 
@@ -296,7 +291,7 @@ public class ApplicationAssociate {
             FacesContext context = FacesContext.getCurrentInstance();
             if (config.isHasFlows() && Util.isCDIAvailable(context.getExternalContext().getApplicationMap())) {
                 try {
-                    loadFlowsFromJars(context, ApplicationAssociate.this.flowHandler);
+                    loadFlows(context, ApplicationAssociate.this.flowHandler);
                 } catch (IOException ex) {
                     LOGGER.log(Level.SEVERE, null, ex);
                 }
@@ -313,12 +308,7 @@ public class ApplicationAssociate {
 
         }
         
-        private synchronized void loadFlowsFromJars(FacesContext context, FlowHandler flowHandler) throws IOException {
-            final String flowsPrefix = "META-INF/flows/";
-            final int flowsPrefixLength = flowsPrefix.length();
-            URL[] flowFiles = Classpath.search(Util.getCurrentLoader(this),
-                    flowsPrefix,
-                    RIConstants.FLOW_DEFINITION_ID_SUFFIX);
+        private synchronized void loadFlows(FacesContext context, FlowHandler flowHandler) throws IOException {
             
             ExpressionFactory expressionFactory = context.getApplication().getExpressionFactory();
             ELContext elContext = context.getELContext();
@@ -327,37 +317,7 @@ public class ApplicationAssociate {
                     Object.class);
             FlowDiscoveryCDIHelper flowHelper = (FlowDiscoveryCDIHelper) ve.getValue(elContext);
             flowHelper.discoverFlows(context, flowHandler);
-            
-            if (null == flowFiles || 0 == flowFiles.length) {
-                return;
-            }
-            ViewHandler viewHandler = Util.getViewHandler(context);
-            // Hack: the real FDL is not based in Facelets.
-            ViewDeclarationLanguage vdl = viewHandler.getViewDeclarationLanguage(context, "index.xhtml");
-            String flowDefId = null;
-            int i;
-            UIViewRoot root = null;
-            
-            for (URL url : flowFiles) {
-                flowDefId = url.toExternalForm();
-                LOGGER.log(Level.INFO, "Have flow URL: {0}", flowDefId);
-                i = flowDefId.indexOf(flowsPrefix);
-                assert(-1 != i);
-                flowDefId = flowDefId.substring(i + flowsPrefixLength);
-                root = viewHandler.createView(context, flowDefId);
-                ViewMetadata metadata = null;
-                // Will be null for JSP views
-                metadata = vdl.getViewMetadata(context, flowDefId);
-                
-                if (null != metadata) {
-                    
-                    Facelet f = faceletFactory.getMetadataFacelet(context, url);
-                    
-                    f.apply(context, root);
-                    
-                }
-                
-            }
+
             
         }
     

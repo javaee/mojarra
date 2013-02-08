@@ -260,8 +260,8 @@ public class ConfigManager {
           new ArrayList<ConfigurationResourceProvider>(3);
         facesConfigProviders.add(new MojarraFacesConfigResourceProvider());
         facesConfigProviders.add(new MetaInfFacesConfigResourceProvider());
-        facesConfigProviders.add(new WebFacesConfigResourceProvider());
         facesConfigProviders.add(new WebAppFlowConfigResourceProvider());
+        facesConfigProviders.add(new WebFacesConfigResourceProvider());
         FACES_CONFIG_RESOURCE_PROVIDERS = Collections.unmodifiableList(facesConfigProviders);
 
         // initialize the resource providers for facelet-taglib documents

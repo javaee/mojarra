@@ -54,7 +54,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.el.ELContext;
@@ -63,6 +63,10 @@ import javax.el.ValueExpression;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.PostConstructApplicationEvent;
+import javax.faces.event.SystemEvent;
+import javax.faces.event.SystemEventListener;
 import javax.faces.flow.FlowHandler;
 import javax.faces.flow.FlowHandlerFactory;
 import javax.faces.flow.FlowNode;
@@ -109,10 +113,8 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
     public void process(ServletContext sc, DocumentInfo[] documentInfos)
     throws Exception {
 
-        // track how many flow-definition instances are being added
-        // for this application
-        AtomicInteger facesFlowDefinitionCount = new AtomicInteger(0);
         WebConfiguration config = WebConfiguration.getInstance(sc);
+        FacesContext context = FacesContext.getCurrentInstance();
         
         for (int i = 0; i < documentInfos.length; i++) {
             URI definingDocumentURI = documentInfos[i].getSourceURI();
@@ -125,26 +127,16 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
             Document document = documentInfos[i].getDocument();
             String namespace = document.getDocumentElement()
                  .getNamespaceURI();
-            NodeList flows = document.getDocumentElement()
+            NodeList flowDefinitions = document.getDocumentElement()
                  .getElementsByTagNameNS(namespace, FACES_FLOW_DEFINITION);
-            if (flows != null && flows.getLength() > 0) {
+            if (flowDefinitions != null && flowDefinitions.getLength() > 0) {
                 config.setHasFlows(true);
                 
-                
-                NodeList nameNodeList = document.getDocumentElement()
-                 .getElementsByTagNameNS(namespace, FACES_CONFIG_NAME);
-                String nameStr = "";
-                if (null != nameNodeList && 1 < nameNodeList.getLength()) {
-                    Node nameNode = nameNodeList.item(0);
-                    nameStr = nameNode.getTextContent().trim();
-                }
-                
-                processFacesFlowDefinitions(definingDocumentURI, nameStr, flows,
-                                 facesFlowDefinitionCount);
+                saveFlowDefinition(context, definingDocumentURI, document);
             }
         }
         
-        if (0 < facesFlowDefinitionCount.get()) {
+        if (config.isHasFlows()) {
             String optionValue = config.getOptionValue(WebConfiguration.WebContextInitParameter.ClientWindowMode);
             boolean clientWindowNeedsEnabling = false;
             if ("none".equals(optionValue)) {
@@ -160,68 +152,97 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
                 config.setOptionValue(WebConfiguration.WebContextInitParameter.ClientWindowMode, "url");
             }
             
+            context.getApplication().subscribeToEvent(PostConstructApplicationEvent.class,
+                    Application.class, new PerformDeferredFlowProcessing());
         }
         
         invokeNext(sc, documentInfos);
     }
     
-    protected String getAttribute(Node node, String attrName) {
-        // <editor-fold defaultstate="collapsed">
-        Util.notNull("flow definition element", node);
-        String result = null;
-        NamedNodeMap attrs = node.getAttributes();
-        
-        if (null != attrs) {
-            Attr idAttr = (Attr) attrs.getNamedItem(attrName);
-            if (null != idAttr) {
-                result = idAttr.getValue();
-            }
-        } 
-
-        return result;
-        // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Enable deferred processing of flow definitions">
+    
+    private static final String flowDefinitionListKey = RIConstants.FACES_PREFIX + "FacesFlowDefinitions";
+    
+    private void saveFlowDefinition(FacesContext context, 
+            URI definingDocumentURI,
+            Document flowDefinitions) {
+        Map<String, Object> appMap = context.getExternalContext().getApplicationMap();
+        List<FlowDefinitionDocument> def = (List<FlowDefinitionDocument>) appMap.get(flowDefinitionListKey);
+        if (null == def) {
+            def = new ArrayList<FlowDefinitionDocument>();
+            appMap.put(flowDefinitionListKey, def);
+        }
+        def.add(new FlowDefinitionDocument(definingDocumentURI, flowDefinitions));
     }
     
-    protected String getIdAttribute(Node node) throws XPathExpressionException {
-        // <editor-fold defaultstate="collapsed">
-
-        Util.notNull("flow definition element", node);
-        String result = null;
-        NamedNodeMap attrs = node.getAttributes();
-        String localName = "";
-        boolean throwException = false;
-        
-        if (null != attrs) {
-            Attr idAttr = (Attr) attrs.getNamedItem("id");
-            if (null != idAttr) {
-                result = idAttr.getValue();
-                if (!idAttr.isId()) {
-                    if (LOGGER.isLoggable(Level.FINEST)) {
-                        LOGGER.log(Level.FINEST, "Element {0} has an id attribute, but it is not declared as type xsd:id", node.getLocalName());
-                    }
-                }
-            } else {
-                localName = node.getLocalName();
-                throwException = true;
-            }
-        } else {
-            localName = node.getLocalName();
-            throwException = true;
-        }
-        
-        if (throwException) {
-            throw new XPathExpressionException("<" + localName + 
-                    "> must have an \"id\" attribute.");
-        }
-        
-        return result;
-        // </editor-fold>
+    private List<FlowDefinitionDocument> getSavedFlowDefinitions(FacesContext context) {
+        Map<String, Object> appMap = context.getExternalContext().getApplicationMap();
+        List<FlowDefinitionDocument> def = (List<FlowDefinitionDocument>) appMap.get(flowDefinitionListKey);
+        return (null != def) ? def : Collections.EMPTY_LIST;
     }
+    
+    private void clearSavedFlowDefinitions(FacesContext context) {
+        Map<String, Object> appMap = context.getExternalContext().getApplicationMap();
+        List<FlowDefinitionDocument> def = (List<FlowDefinitionDocument>) appMap.get(flowDefinitionListKey);
+        if (null != def) {
+            for (FlowDefinitionDocument cur : def) {
+                cur.clear();
+            }
+            def.clear();
+            appMap.remove(flowDefinitionListKey);
+        }
+    }
+    
+    private static class FlowDefinitionDocument {
+        URI definingDocumentURI;
+        Document flowDefinitions;
 
+        public FlowDefinitionDocument(URI definingDocumentURI, 
+                Document flowDefinitions) {
+            this.definingDocumentURI = definingDocumentURI;
+            this.flowDefinitions = flowDefinitions;
+        }
+        
+        public void clear() {
+            this.definingDocumentURI = null;
+            this.flowDefinitions = null;
+        }
+        
+    }
+    
+    private class PerformDeferredFlowProcessing implements SystemEventListener {
+
+        @Override
+        public boolean isListenerForSource(Object source) {
+            return source instanceof Application;
+        }
+
+        @Override
+        public void processEvent(SystemEvent event) throws AbortProcessingException {
+            FacesContext context = FacesContext.getCurrentInstance();
+            List<FlowDefinitionDocument> flowDefinitions = 
+                    FacesFlowDefinitionConfigProcessor.this.getSavedFlowDefinitions(context);
+            for (FlowDefinitionDocument cur: flowDefinitions) {
+                try {
+                    FacesFlowDefinitionConfigProcessor.this.
+                            processFacesFlowDefinitions(cur.definingDocumentURI, cur.flowDefinitions);
+                } catch (XPathExpressionException ex) {
+                    throw new AbortProcessingException(ex);
+                }
+            }
+            FacesFlowDefinitionConfigProcessor.this.clearSavedFlowDefinitions(context);
+        }
+    }
+    
+    // </editor-fold>
+    
     private void processFacesFlowDefinitions(URI definingDocumentURI,
-            String nameStr,
-            NodeList flowDefinitions,
-            AtomicInteger flowCount) throws XPathExpressionException {
+            Document document) throws XPathExpressionException {
+        String namespace = document.getDocumentElement()
+                .getNamespaceURI();
+        NodeList flowDefinitions = document.getDocumentElement()
+                .getElementsByTagNameNS(namespace, FACES_FLOW_DEFINITION);
+        
         if (0 == flowDefinitions.getLength()) {
             return;
         }
@@ -236,8 +257,18 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
         
         XPath xpath = XPathFactory.newInstance().newXPath();
         xpath.setNamespaceContext(new FacesConfigNamespaceContext());
+        
+        String nameStr = "";
+        NodeList nameList = (NodeList) xpath.evaluate(".//ns1:faces-config/name/text()", 
+                document.getDocumentElement(), XPathConstants.NODESET);
+        if (null != nameList && 1 < nameList.getLength()) {
+            throw new XPathExpressionException("<faces-config> must have at most one <name> element.");
+        }
+        if (null != nameList && 1 == nameList.getLength()) {
+            nameStr = nameList.item(0).getNodeValue().trim();
+        }
+        
         for (int c = 0, size = flowDefinitions.getLength(); c < size; c++) {
-            flowCount.incrementAndGet();
             Node flowDefinition = flowDefinitions.item(c);
             String flowId = getIdAttribute(flowDefinition);
             
@@ -581,5 +612,58 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
         // </editor-fold>
     }
     
+    protected String getAttribute(Node node, String attrName) {
+        // <editor-fold defaultstate="collapsed">
+        Util.notNull("flow definition element", node);
+        String result = null;
+        NamedNodeMap attrs = node.getAttributes();
+        
+        if (null != attrs) {
+            Attr idAttr = (Attr) attrs.getNamedItem(attrName);
+            if (null != idAttr) {
+                result = idAttr.getValue();
+            }
+        } 
+
+        return result;
+        // </editor-fold>
+    }
+    
+    protected String getIdAttribute(Node node) throws XPathExpressionException {
+        // <editor-fold defaultstate="collapsed">
+
+        Util.notNull("flow definition element", node);
+        String result = null;
+        NamedNodeMap attrs = node.getAttributes();
+        String localName = "";
+        boolean throwException = false;
+        
+        if (null != attrs) {
+            Attr idAttr = (Attr) attrs.getNamedItem("id");
+            if (null != idAttr) {
+                result = idAttr.getValue();
+                if (!idAttr.isId()) {
+                    if (LOGGER.isLoggable(Level.FINEST)) {
+                        LOGGER.log(Level.FINEST, "Element {0} has an id attribute, but it is not declared as type xsd:id", node.getLocalName());
+                    }
+                }
+            } else {
+                localName = node.getLocalName();
+                throwException = true;
+            }
+        } else {
+            localName = node.getLocalName();
+            throwException = true;
+        }
+        
+        if (throwException) {
+            throw new XPathExpressionException("<" + localName + 
+                    "> must have an \"id\" attribute.");
+        }
+        
+        return result;
+        // </editor-fold>
+    }
+
     
 }
