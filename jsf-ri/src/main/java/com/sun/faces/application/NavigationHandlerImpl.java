@@ -243,54 +243,6 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         } 
     }
     
-    private void loadFlowDefinition(FacesContext context, ViewHandler viewHandler,
-            String viewId) {
-        
-        ViewDeclarationLanguage vdl = viewHandler.getViewDeclarationLanguage(context, viewId);
-        
-        if (null != vdl) {
-            
-            String flowDefId = deriveValidFlowDefIdFromViewId(context, 
-                    vdl, viewId);
-            
-            if (null != flowDefId) {
-            
-                ViewMetadata metadata = null;
-                // Will be null for JSP views
-                metadata = vdl.getViewMetadata(context, flowDefId);
-                
-                if (null != metadata) {
-                    metadata.createMetadataView(context);
-                }
-            }
-        } 
-
-    }
-    
-    private String deriveValidFlowDefIdFromViewId(FacesContext context,
-            ViewDeclarationLanguage vdl, String viewId) {
-        // 1. replace the .extension with -flow.xml and see if it exists.
-        int i = viewId.indexOf(".");
-        String flowDefId = null;
-        if (-1 != i) {
-            flowDefId = viewId.substring(0, i) + RIConstants.FLOW_DEFINITION_ID_SUFFIX;
-            if (!vdl.viewExists(context, flowDefId)) {
-                // 2. prepend WEB-INF and try again
-                if (flowDefId.startsWith("/")) {
-                    flowDefId = "WEB-INF" + flowDefId;
-                } else {
-                    flowDefId = "WEB-INF/" + flowDefId;
-                }
-                if (!vdl.viewExists(context, flowDefId)) {
-                    flowDefId = null;
-                } 
-            } 
-            
-        }
-        return flowDefId;
-
-    }
-    
     // --------------------------------------------------------- Private Methods
     private static final String ROOT_NAVIGATION_MAP_ID = NavigationHandlerImpl.class.getName() + ".NAVIGATION_MAP";
     
@@ -773,36 +725,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             newFlow = currentFlow;
 
             // If we are not in a flow...
-            if (null == currentFlow) {
-                // ...and we still don't have an implicit match...
-                if (null == viewIdToTest) {
-                    // ... see if this is a call to a flow.
-                    
-                    // If the viewIdToTest needs an extension, take one from the currentViewId.
-                    String currentExtension;
-                    int idx = currentViewId.lastIndexOf('.');
-                    if (idx != -1) {
-                        currentExtension = currentViewId.substring(idx);
-                    } else {
-                        // PENDING, don't hard code XHTML here, look it up from configuration
-                        currentExtension = ".xhtml";
-                    }
-                    
-                    viewIdToTest = "/" + outcome + "/" + outcome + currentExtension;
-                    viewIdToTest = viewHandler.deriveViewId(context, viewIdToTest);
-                    if (null != viewIdToTest) {
-                        loadFlowDefinition(context, viewHandler, viewIdToTest);
-                        newFlow = flowHandler.getFlow(context, 
-                                flowDefiningDocumentId, outcome);
-                        if (null != newFlow) {
-                            String startNodeId = newFlow.getStartNodeId();
-                            result = getViewId(context, fromAction, startNodeId, newFlow.getDefiningDocumentId());
-                        }
-                        
-                    }
-                    
-                }
-            } else {
+            if (null != currentFlow) {
                 // ... we are in a flow.  \
                 // If we have an implicit match...
                 if (null != viewIdToTest && 
@@ -996,12 +919,6 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
 
                 if (null != flowId) {
                     newFlow = flowHandler.getFlow(context, flowDocumentId, flowId);
-                    if (null == newFlow) {
-                        String potentialFlowDef = flowId + "/" + flowId + ".xhtml";
-                        ViewHandler vh = context.getApplication().getViewHandler();
-                        loadFlowDefinition(context, vh, potentialFlowDef);
-                        newFlow = flowHandler.getFlow(context, flowDocumentId, flowId);
-                    }
                     if (null != newFlow) {
                         result = synthesizeCaseStruct(context, newFlow, fromAction, flowId);
                     }
