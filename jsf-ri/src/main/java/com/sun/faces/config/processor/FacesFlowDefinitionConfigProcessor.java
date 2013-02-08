@@ -377,18 +377,18 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
             Node flowCallNode = flowCalls.item(i_flowCall);
             String flowCallId = getIdAttribute(flowCallNode);
             NodeList facesFlowRefList = (NodeList) 
-                    xpath.evaluate(".//ns1:faces-flow-reference", 
+                    xpath.evaluate(".//ns1:flow-reference", 
                     flowCallNode, XPathConstants.NODESET);
             if (null == facesFlowRefList || 1 != facesFlowRefList.getLength()) {
-                throw new XPathExpressionException("Within <flow-call> must have exactly one <faces-flow-reference>");
+                throw new XPathExpressionException("Within <flow-call> must have exactly one <flow-reference>");
             }
             Node facesFlowRefNode = facesFlowRefList.item(0);
 
             NodeList facesFlowIdList = (NodeList) 
-                    xpath.evaluate(".//ns1:faces-flow-id/text()", 
+                    xpath.evaluate(".//ns1:flow-id/text()", 
                     facesFlowRefNode, XPathConstants.NODESET);
             if (null == facesFlowIdList || 1 != facesFlowIdList.getLength()) {
-                throw new XPathExpressionException("Within <faces-flow-reference> must have exactly one <faces-flow-id>");
+                throw new XPathExpressionException("Within <flow-reference> must have exactly one <flow-id>");
             }
             
             String destinationId = facesFlowIdList.item(0).getNodeValue().trim();
@@ -397,7 +397,7 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
                     xpath.evaluate(".//ns1:flow-document-id/text()", 
                     facesFlowRefNode, XPathConstants.NODESET);
             if (null == definingDocumentIdList && 1 != definingDocumentIdList.getLength()) {
-                throw new XPathExpressionException("Within <faces-flow-reference> must have at most one <flow-document-id>");
+                throw new XPathExpressionException("Within <flow-reference> must have at most one <flow-document-id>");
             }
             String definingDocumentId = "";
             if (null != definingDocumentIdList && 1 == definingDocumentIdList.getLength()) {

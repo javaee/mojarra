@@ -2196,8 +2196,8 @@ represents the node id to which control will be passed.</p>
 
 <div class="changed_added_2_2">
 
-<p>This element must contain exactly one <code>&lt;faces-flow-reference&gt;</code> element, 
-which must contain exactly one <code>&lt;faces-flow-id&gt;</code> element.</p>
+<p>This element must contain exactly one <code>&lt;flow-reference&gt;</code> element, 
+which must contain exactly one <code>&lt;flow-id&gt;</code> element.</p>
 </div>
 
 ]]>
@@ -2206,8 +2206,8 @@ which must contain exactly one <code>&lt;faces-flow-id&gt;</code> element.</p>
     </xsd:annotation>
 
     <xsd:sequence>
-      <xsd:element name="faces-flow-reference"
-                   type="javaee:faces-config-flow-definition-flow-call-faces-flow-referenceType"
+      <xsd:element name="flow-reference"
+                   type="javaee:faces-config-flow-definition-flow-call-flow-referenceType"
                     >
         <xsd:annotation>
           <xsd:documentation>
@@ -2230,7 +2230,7 @@ which must contain exactly one <code>&lt;faces-flow-id&gt;</code> element.</p>
         <![CDATA[
 
          <p class="changed_added_2_2">A parameter to pass when calling the flow
-         identified in the "faces-flow-reference" element that is a sibling of this element.<p>
+         identified in the "flow-reference" element that is a sibling of this element.<p>
 
 ]]>
 
@@ -2255,7 +2255,7 @@ which must contain exactly one <code>&lt;faces-flow-id&gt;</code> element.</p>
 
   </xsd:complexType>
   
-  <xsd:complexType name="faces-config-flow-definition-flow-call-faces-flow-referenceType">
+  <xsd:complexType name="faces-config-flow-definition-flow-call-flow-referenceType">
     <xsd:annotation>
       <xsd:documentation>
 
@@ -2284,7 +2284,7 @@ which must contain exactly one <code>&lt;faces-flow-id&gt;</code> element.</p>
         </xsd:annotation>
       </xsd:element>
 
-      <xsd:element name="faces-flow-id"
+      <xsd:element name="flow-id"
                    type="javaee:java-identifierType"
                    >
         <xsd:annotation>

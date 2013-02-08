@@ -63,9 +63,9 @@
             </inbound-parameter>
             
             <flow-call id="callA">
-                <faces-flow-reference>
-                    <faces-flow-id>flow-a</faces-flow-id>
-                </faces-flow-reference>
+                <flow-reference>
+                    <flow-id>flow-a</flow-id>
+                </flow-reference>
                 <outbound-parameter>
                     <name>param1FromFlowB</name>
                     <value>param1Value</value>
