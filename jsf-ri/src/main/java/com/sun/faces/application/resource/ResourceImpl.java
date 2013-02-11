@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -229,7 +229,7 @@ public class ResourceImpl extends Resource implements Externalizable {
                 conn.setUseCaches(false);
                 conn.connect();
                 in = conn.getInputStream();
-                long lastModified = conn.getLastModified();
+                long lastModified = Util.getLastModified(url);
                 long contentLength = conn.getContentLength();
                 if (lastModified == 0) {
                     lastModified = initialTime;
