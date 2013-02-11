@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2010-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -45,18 +45,15 @@ import javax.faces.view.facelets.FaceletCache;
 import com.sun.faces.util.ConcurrentCache;
 import com.sun.faces.util.ExpiringConcurrentCache;
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.Util;
 
 import javax.faces.FacesException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.JarURLConnection;
 
 import java.net.URL;
-import java.net.URLConnection;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
@@ -85,7 +82,7 @@ final class DefaultFaceletCache extends FaceletCache<DefaultFacelet> {
             public Record newInstance(final URL key) throws IOException {
                 // Make sure that the expensive timestamp retrieval is not done
                 // if no expiry check is going to be performed
-                long lastModified = checkExpiry ? _getLastModified(key) : 0;
+                long lastModified = checkExpiry ? Util.getLastModified(key) : 0;
                 return new Record(System.currentTimeMillis(), lastModified,
                                   getMemberFactory().newInstance(key), refreshPeriod);
             }
@@ -96,7 +93,7 @@ final class DefaultFaceletCache extends FaceletCache<DefaultFacelet> {
             public Record newInstance(final URL key) throws IOException {
                 // Make sure that the expensive timestamp retrieval is not done
                 // if no expiry check is going to be performed
-                long lastModified = checkExpiry ? _getLastModified(key) : 0;
+                long lastModified = checkExpiry ? Util.getLastModified(key) : 0;
                 return new Record(System.currentTimeMillis(), lastModified,
                                   getMetadataMemberFactory().newInstance(key), refreshPeriod);
             }
@@ -174,45 +171,6 @@ final class DefaultFaceletCache extends FaceletCache<DefaultFacelet> {
         throw new FacesException(t);
     }
     
-    private static long _getLastModified(URL url) {
-        long lastModified;
-        URLConnection conn;
-        InputStream is = null;
-
-        try {
-            conn = url.openConnection();
-
-            if (conn instanceof JarURLConnection) { 
-                /*
-                 * Note this is a work around for JarURLConnection since the
-                 * getLastModified method is buggy. See JAVASERVERFACES-2725.
-                 */
-                JarURLConnection jarUrlConnection = (JarURLConnection) conn; 
-                URL jarFileUrl = jarUrlConnection.getJarFileURL(); 
-                URLConnection jarFileConnection = jarFileUrl.openConnection(); 
-                lastModified = jarFileConnection.getLastModified(); 
-                jarFileConnection.getInputStream().close(); 
-            }
-            else { 
-                is = conn.getInputStream(); 
-                lastModified = conn.getLastModified(); 
-            } 
-        } catch (Exception e) { 
-            throw new FacesException("Error Checking Last Modified for " + url, e);
-        } finally {
-            if (is != null) {
-                try { 
-                    is.close();
-                } catch (Exception e) {
-                    if (LOGGER.isLoggable(Level.FINEST)) {
-                        LOGGER.log(Level.FINEST, "Closing stream", e);
-                    }
-                }
-            }
-        }
-        return lastModified;
-    }
-
     private final ConcurrentCache<URL, Record> _faceletCache;
     private final ConcurrentCache<URL, Record> _metadataFaceletCache;
 
@@ -257,7 +215,7 @@ final class DefaultFaceletCache extends FaceletCache<DefaultFacelet> {
             // getNextRefreshTime() incremenets the next refresh time atomically
             long ttl = record.getNextRefreshTime();
             if (System.currentTimeMillis() > ttl) {
-                long lastModified = _getLastModified(url);
+                long lastModified = Util.getLastModified(url);
                 // The record is considered expired if its original last modified time
                 // is older than the URL's current last modified time
                 return (lastModified > record.getLastModified());

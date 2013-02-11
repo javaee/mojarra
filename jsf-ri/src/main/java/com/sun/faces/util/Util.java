@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -60,8 +60,12 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.event.AbortProcessingException;
 import java.beans.FeatureDescriptor;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.net.JarURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -1070,6 +1074,44 @@ public class Util {
         return (String) attrs.get(FACES_CONTEXT_ATTRIBUTES_XMLDECL_KEY);
     }
     
+    public static long getLastModified(URL url) {
+        long lastModified;
+        URLConnection conn;
+        InputStream is = null;
 
+        try {
+            conn = url.openConnection();
+
+            if (conn instanceof JarURLConnection) { 
+                /*
+                 * Note this is a work around for JarURLConnection since the
+                 * getLastModified method is buggy. See JAVASERVERFACES-2725
+                 * and JAVASERVERFACES-2734.
+                 */
+                JarURLConnection jarUrlConnection = (JarURLConnection) conn; 
+                URL jarFileUrl = jarUrlConnection.getJarFileURL(); 
+                URLConnection jarFileConnection = jarFileUrl.openConnection(); 
+                lastModified = jarFileConnection.getLastModified(); 
+                jarFileConnection.getInputStream().close(); 
+            }
+            else { 
+                is = conn.getInputStream(); 
+                lastModified = conn.getLastModified(); 
+            } 
+        } catch (Exception e) { 
+            throw new FacesException("Error Checking Last Modified for " + url, e);
+        } finally {
+            if (is != null) {
+                try { 
+                    is.close();
+                } catch (Exception e) {
+                    if (LOGGER.isLoggable(Level.FINEST)) {
+                        LOGGER.log(Level.FINEST, "Closing stream", e);
+                    }
+                }
+            }
+        }
+        return lastModified;
+    }
 
 } // end of class Util
