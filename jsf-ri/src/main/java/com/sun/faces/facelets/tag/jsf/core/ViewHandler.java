@@ -181,8 +181,11 @@ public final class ViewHandler extends TagHandlerImpl {
 
             if (this.contracts != null) {
                 if (!FacesContext.getCurrentInstance().getAttributes().containsKey("com.sun.faces.uiCompositionCount")) {
-                    List<String> contractList = Arrays.asList(this.contracts.getValue(ctx).split(","));
-                    ctx.getFacesContext().setResourceLibraryContracts(contractList);
+                    String contractsValue = this.contracts.getValue(ctx);
+                    if (contractsValue != null) {
+                        List<String> contractList = Arrays.asList(contractsValue.split(","));
+                        ctx.getFacesContext().setResourceLibraryContracts(contractList);
+                    }
                 } else {
                     if (LOGGER.isLoggable(Level.INFO)) {
                         LOGGER.log(Level.INFO, "f:view contracts attribute found, but not used at top level");
