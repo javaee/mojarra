@@ -362,6 +362,7 @@ public class ResourceManager {
     
     private static boolean nameContainsForbiddenSequence(String name) {
         boolean result = false;
+        if (name != null) {
         name = name.toLowerCase();
 
         result = name.startsWith("..") ||
@@ -380,7 +381,7 @@ public class ResourceManager {
                  name.startsWith("\\u002f") ||
                  name.startsWith("\\u005c")
                  ;
-
+        }
         return result;
     }
 
