@@ -1284,12 +1284,12 @@ public class WebConfiguration {
 
     /**
      * <p>An <code>enum</code> of all environment entries (specified in the
-     * web.xml) recognized by the implemenetation.</p>
+     * web.xml) recognized by the implementation.</p>
      */
     public enum WebEnvironmentEntry {
 
 
-        ClientStateSavingPassword("ClientStateSavingPassword"),
+        ClientStateSavingPassword("com.sun.faces.ClientStateSavingPassword"),
         ProjectStage(javax.faces.application.ProjectStage.PROJECT_STAGE_JNDI_NAME);
 
         private static final String JNDI_PREFIX = "java:comp/env/";

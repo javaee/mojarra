@@ -171,8 +171,8 @@ public final class ByteArrayGuard {
             // verify MAC by regenerating it and comparing it with the received value
             decryptMac.update(iv);
             decryptMac.update(encdata);
-            byte[] macBytesCalculated = decryptMac.doFinal();
-            if (Arrays.equals(macBytes, macBytesCalculated)) {
+            byte[] macBytesCalculated = decryptMac.doFinal();            
+            if (areArrayEqualsConstantTime(macBytes, macBytesCalculated)) {
                 // continue only if the MAC was valid
                 // System.out.println("Valid MAC found!");
                 byte[] plaindata = decryptCipher.doFinal(encdata);
@@ -185,6 +185,16 @@ public final class ByteArrayGuard {
             System.err.println("ERROR: Decrypting:"+e.getCause());
             return null; // Signal to JSF runtime
         }
+    }
+    
+    private boolean areArrayEqualsConstantTime(byte[] array1, byte[] array2) {
+        boolean result = true;
+        for(int i=0; i<array1.length; i++) {
+            if (array1[i] != array2[i]) {
+                result = false;
+            }
+        }
+        return result;
     }
 
     // --------------------------------------------------------- Private Methods
