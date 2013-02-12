@@ -46,12 +46,9 @@ import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.faces.FacesException;
-
 import java.security.SecureRandom;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import com.sun.faces.util.FacesLogger;
 
 /**
