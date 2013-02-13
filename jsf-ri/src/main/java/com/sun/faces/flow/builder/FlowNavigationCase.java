@@ -70,16 +70,6 @@ public class FlowNavigationCase extends NavigationCase {
         this.fromOutcome = fromOutcome;
     }
 
-    @Override
-    public URL getActionURL(FacesContext context) throws MalformedURLException {
-        return super.getActionURL(context);
-    }
-
-    @Override
-    public URL getBookmarkableURL(FacesContext context) throws MalformedURLException {
-        return super.getBookmarkableURL(context);
-    }
-    
     public ValueExpression getConditionExpression () {
         return conditionExpr;
     }
@@ -101,28 +91,8 @@ public class FlowNavigationCase extends NavigationCase {
     }
 
     @Override
-    public String getFromAction() {
-        return super.getFromAction();
-    }
-
-    @Override
     public String getFromOutcome() {
         return fromOutcome;
-    }
-
-    @Override
-    public Map<String, List<String>> getParameters() {
-        return super.getParameters();
-    }
-
-    @Override
-    public URL getRedirectURL(FacesContext context) throws MalformedURLException {
-        return super.getRedirectURL(context);
-    }
-
-    @Override
-    public URL getResourceURL(FacesContext context) throws MalformedURLException {
-        return super.getResourceURL(context);
     }
 
     @Override
@@ -154,17 +124,6 @@ public class FlowNavigationCase extends NavigationCase {
         return (condition != null);
     }
 
-    @Override
-    public boolean isIncludeViewParams() {
-        return super.isIncludeViewParams();
-    }
-
-    @Override
-    public boolean isRedirect() {
-        return super.isRedirect();
-    }
-    
-    
     public void setActionURL(FacesContext context, URL actionURL) throws MalformedURLException {
     }
 
@@ -198,9 +157,6 @@ public class FlowNavigationCase extends NavigationCase {
     public String getFromViewId() {
         return fromViewId;
     }
-    
-    
-
     
     public void setParameters(Map<String, List<String>> a) {
     }

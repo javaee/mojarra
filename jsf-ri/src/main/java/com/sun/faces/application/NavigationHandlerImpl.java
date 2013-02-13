@@ -323,7 +323,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         return result;
     }
 
-    private void initializeNavigationFromAssociate(FacesContext context) {
+    private void initializeNavigationFromAssociate() {
 
         ApplicationAssociate associate = ApplicationAssociate.getCurrentInstance();
         if (associate != null) {
@@ -430,7 +430,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
 
         if (navigationMaps == null) {
             synchronized (this) {
-                initializeNavigationFromAssociate(ctx);
+                initializeNavigationFromAssociate();
             }
         }
 

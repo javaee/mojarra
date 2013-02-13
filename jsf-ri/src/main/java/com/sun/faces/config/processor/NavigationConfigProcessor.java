@@ -178,49 +178,48 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
 
             for (int i = 0, size = navigationRules.getLength(); i < size; i++) {
                 Node navigationRule = navigationRules.item(i);
-                if (!("flow-definition".equals(navigationRule.getParentNode().getLocalName()))) {
-                    if (navigationRule.getNodeType() == Node.ELEMENT_NODE) {
-                        NodeList children = navigationRule.getChildNodes();
-                        String fromViewId = FROM_VIEW_ID_DEFAULT;
-                        List<Node> navigationCases = null;
-                        for (int c = 0, csize = children.getLength();
-                                c < csize;
-                                c++) {
-                            Node n = children.item(c);
-                            if (n.getNodeType() == Node.ELEMENT_NODE) {
-                                if (FROM_VIEW_ID.equals(n.getLocalName())) {
-                                    String t = getNodeText(n);
-                                    fromViewId = ((t == null)
-                                            ? FROM_VIEW_ID_DEFAULT
-                                            : t);
-                                    if (!fromViewId.equals(FROM_VIEW_ID_DEFAULT) && fromViewId.charAt(0) != '/') {
-                                        if (LOGGER.isLoggable(Level.WARNING)) {
-                                            LOGGER.log(Level.WARNING,
-                                                    "jsf.config.navigation.from_view_id_leading_slash",
-                                                    new String[] { fromViewId });
-                                        }
-                                        fromViewId = '/' + fromViewId;
+                if ((!("flow-definition".equals(navigationRule.getParentNode().getLocalName()))) &&
+                    (navigationRule.getNodeType() == Node.ELEMENT_NODE)) {
+                    NodeList children = navigationRule.getChildNodes();
+                    String fromViewId = FROM_VIEW_ID_DEFAULT;
+                    List<Node> navigationCases = null;
+                    for (int c = 0, csize = children.getLength();
+                            c < csize;
+                            c++) {
+                        Node n = children.item(c);
+                        if (n.getNodeType() == Node.ELEMENT_NODE) {
+                            if (FROM_VIEW_ID.equals(n.getLocalName())) {
+                                String t = getNodeText(n);
+                                fromViewId = ((t == null)
+                                        ? FROM_VIEW_ID_DEFAULT
+                                        : t);
+                                if (!fromViewId.equals(FROM_VIEW_ID_DEFAULT) && fromViewId.charAt(0) != '/') {
+                                    if (LOGGER.isLoggable(Level.WARNING)) {
+                                        LOGGER.log(Level.WARNING,
+                                                "jsf.config.navigation.from_view_id_leading_slash",
+                                                new String[] { fromViewId });
                                     }
-                                } else if (NAVIGATION_CASE.equals(n.getLocalName())) {
-                                    if (navigationCases == null) {
-                                        navigationCases = new ArrayList<Node>(csize);
-                                    }
-                                    navigationCases.add(n);
+                                    fromViewId = '/' + fromViewId;
                                 }
+                            } else if (NAVIGATION_CASE.equals(n.getLocalName())) {
+                                if (navigationCases == null) {
+                                    navigationCases = new ArrayList<Node>(csize);
+                                }
+                                navigationCases.add(n);
                             }
                         }
-                        
-                        if (LOGGER.isLoggable(Level.FINE)) {
-                            LOGGER.log(Level.FINE,
-                                    MessageFormat.format(
-                                    "Processing navigation rule with 'from-view-id' of ''{0}''",
-                                    fromViewId));
-                        }
-                        addNavigationCasesForRule(fromViewId,
-                                navigationCases,
-                                navHandler,
-                                sc);
                     }
+                    
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.log(Level.FINE,
+                                MessageFormat.format(
+                                "Processing navigation rule with 'from-view-id' of ''{0}''",
+                                fromViewId));
+                    }
+                    addNavigationCasesForRule(fromViewId,
+                            navigationCases,
+                            navHandler,
+                            sc);
                 }
             }
     }
