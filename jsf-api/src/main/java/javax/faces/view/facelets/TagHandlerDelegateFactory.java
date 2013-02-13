@@ -40,15 +40,31 @@
 
 package javax.faces.view.facelets;
 
+import javax.faces.FacesWrapper;
+
 /**
- * <p class="changed_added_2_0">Abstract factory for creating instances
- * of {@link TagHandlerDelegate}.</p>
+ * <p class="changed_added_2_0"><span class="changed_modified_2_2">Abstract</span>
+ * factory for creating instances of {@link TagHandlerDelegate}.</p>
  *
  * @since 2.0
  */
-public abstract class TagHandlerDelegateFactory {
+public abstract class TagHandlerDelegateFactory implements FacesWrapper<TagHandlerDelegateFactory> {
 
     public TagHandlerDelegateFactory() {
+    }
+
+    /**
+     * <p class="changed_added_2_2">If this factory has been decorated, the 
+     * implementation doing the decorating may override this method to provide
+     * access to the implementation being wrapped.  A default implementation
+     * is provided that returns <code>null</code>.</p>
+     * 
+     * @since 2.2
+     */
+
+    @Override
+    public TagHandlerDelegateFactory getWrapped() {
+        return null;
     }
     
     /**
