@@ -151,8 +151,8 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
      */
     @Override
     public Map<String, Set<NavigationCase>> getNavigationCases() {
-
-        Map<String, Set<NavigationCase>> result = getNavigationMap();
+        FacesContext context = FacesContext.getCurrentInstance();
+        Map<String, Set<NavigationCase>> result = getNavigationMap(context);
 
         return result;
 
@@ -243,33 +243,79 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     // --------------------------------------------------------- Private Methods
     private static final String ROOT_NAVIGATION_MAP_ID = NavigationHandlerImpl.class.getName() + ".NAVIGATION_MAP";
     
-    private NavigationMap getNavigationMap() {
-        NavigationMap result = null;
-        NavigationInfo info;
+    private Map<String, Set<NavigationCase>> getNavigationMap(FacesContext context) {
+        Map<String, Set<NavigationCase>> result = null;
+        NavigationInfo info = null;
         if (null == navigationMaps) {
-            navigationMaps = new ConcurrentHashMap<String, NavigationInfo>();
-            result = new NavigationMap();
-            info = new NavigationInfo();
-            info.ruleSet = result;
-            navigationMaps.put(ROOT_NAVIGATION_MAP_ID, info);
+            createNavigationMaps();
+            result = navigationMaps.get(ROOT_NAVIGATION_MAP_ID).ruleSet;
         } else {
-            info = navigationMaps.get(ROOT_NAVIGATION_MAP_ID);
-            result = info.ruleSet;
+            FlowHandler fh = context.getApplication().getFlowHandler();
+            if (null != fh) {
+                Flow currentFlow = fh.getCurrentFlow(context);
+                if (null != currentFlow) {
+                    info = navigationMaps.get(currentFlow.getDefiningDocumentId() + currentFlow.getId());
+                }
+            }
+            if (null == info) {
+                info = navigationMaps.get(ROOT_NAVIGATION_MAP_ID);
+            }
+            if (null == info.ruleSet) {
+                result = Collections.emptyMap();
+            } else {
+                result = info.ruleSet;
+            }
         }
         
         return result;
     }
     
-    private NavigationInfo getNavigationInfo(FacesContext context, String flowId) {
+    private void createNavigationMaps() {
+        if (null == navigationMaps) {
+            NavigationMap result = null;
+            NavigationInfo info = null;
+            navigationMaps = new ConcurrentHashMap<String, NavigationInfo>();
+            result = new NavigationMap();
+            info = new NavigationInfo();
+            info.ruleSet = result;
+            navigationMaps.put(ROOT_NAVIGATION_MAP_ID, info);
+        }
+    }
+    
+    private Map<String, Set<NavigationCase>> getRootNavigationMap() {
+        createNavigationMaps();
+        return navigationMaps.get(ROOT_NAVIGATION_MAP_ID).ruleSet;
+    }
+    
+    private Set<String> getWildCardMatchList(FacesContext context) {
+        Set<String> result = Collections.emptySet();
+        NavigationInfo info = null;
+        FlowHandler fh = context.getApplication().getFlowHandler();
+        if (null != fh) {
+            Flow currentFlow = fh.getCurrentFlow(context);
+            if (null != currentFlow) {
+                info = navigationMaps.get(currentFlow.getDefiningDocumentId() + currentFlow.getId());
+            }
+        }
+        if (null == info) {
+            info = navigationMaps.get(ROOT_NAVIGATION_MAP_ID);
+        }
+        if (null != info.ruleSet && null != info.ruleSet.wildcardMatchList) {
+            result = info.ruleSet.wildcardMatchList;
+        }
+        return result;
+    }
+    
+    private NavigationInfo getNavigationInfo(FacesContext context, String toFlowDocumentId, String flowId) {
         NavigationInfo result = null;
         assert(null != navigationMaps);
-        result = navigationMaps.get(flowId);
+        result = navigationMaps.get(toFlowDocumentId + flowId);
         if (null == result) {
             FlowHandler fh = context.getApplication().getFlowHandler();
             if (null != fh) {
                 Flow currentFlow = fh.getCurrentFlow(context);
                 if (null != currentFlow) {
-                    result = navigationMaps.get(currentFlow.getId());
+                    result = navigationMaps.get(currentFlow.getDefiningDocumentId() + currentFlow.getId());
                 }
             }
         }
@@ -277,12 +323,12 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         return result;
     }
 
-    private void initializeNavigationFromAssociate() {
+    private void initializeNavigationFromAssociate(FacesContext context) {
 
         ApplicationAssociate associate = ApplicationAssociate.getCurrentInstance();
         if (associate != null) {
             Map<String,Set<NavigationCase>> m = associate.getNavigationCaseListMappings();
-            NavigationMap rootMap = getNavigationMap();
+            Map<String, Set<NavigationCase>> rootMap = getRootNavigationMap();
             if (m != null) {
                 rootMap.putAll(m);
             }
@@ -293,7 +339,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     private void initializeNavigationFromFlow(FacesContext context, Flow toInspect) {
         
         if (context instanceof InitFacesContext) {
-            getNavigationMap();
+            createNavigationMaps();
             initializeNavigationFromFlowNonThreadSafe(toInspect);
         } else {
             // PENDING: When JAVASERVERFACES-2580 is done, the eager case will
@@ -306,22 +352,30 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     }
     
     private void initializeNavigationFromFlowNonThreadSafe(Flow toInspect) {
-        Map<String, SwitchNode> switches = toInspect.getSwitches();
-        String flowId = toInspect.getId();
+        String fullyQualifiedFlowId = toInspect.getDefiningDocumentId() + toInspect.getId();
         // Is there an existing NavigationMap for this flowId
-        if (navigationMaps.containsKey(flowId)) {
+        if (navigationMaps.containsKey(fullyQualifiedFlowId)) {
             if (logger.isLoggable(Level.INFO)) {
                 logger.log(Level.INFO, "PENDING(edburns): merge existing map");
             }
             
         } else {
-            if (!switches.isEmpty()) {
+            Map<String, Set<NavigationCase>> navRules = toInspect.getNavigationCases();
+            Map<String, SwitchNode> switches = toInspect.getSwitches();
+
+            if (!navRules.isEmpty() || !switches.isEmpty()) {
                 NavigationInfo info = new NavigationInfo();
-                info.switches = new ConcurrentHashMap<String, SwitchNode>();
-                for (Map.Entry<String, SwitchNode> cur : switches.entrySet()) {
-                    info.switches.put(cur.getKey(), cur.getValue());
+                if (!switches.isEmpty()) {
+                    info.switches = new ConcurrentHashMap<String, SwitchNode>();
+                    for (Map.Entry<String, SwitchNode> cur : switches.entrySet()) {
+                        info.switches.put(cur.getKey(), cur.getValue());
+                    }
                 }
-                navigationMaps.put(flowId, info);
+                if (!navRules.isEmpty()) {
+                    info.ruleSet = new NavigationMap();
+                    info.ruleSet.putAll(navRules);
+                }
+                navigationMaps.put(fullyQualifiedFlowId, info);
             }
         }
         
@@ -376,7 +430,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
 
         if (navigationMaps == null) {
             synchronized (this) {
-                initializeNavigationFromAssociate();
+                initializeNavigationFromAssociate(ctx);
             }
         }
 
@@ -468,7 +522,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                                       String viewId,
                                       String fromAction,
                                       String outcome) {
-        NavigationMap navMap = getNavigationMap();
+        Map<String, Set<NavigationCase>> navMap = getNavigationMap(ctx);
 
         Set<NavigationCase> caseSet = navMap.get(viewId);
 
@@ -513,10 +567,9 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                                          String fromAction,
                                          String outcome) {
         CaseStruct result = null;
-        NavigationMap navMap = getNavigationMap();
+        Map<String, Set<NavigationCase>> navMap = getNavigationMap(ctx);
 
-
-        for (String fromViewId : navMap.wildcardMatchList) {
+        for (String fromViewId : getWildCardMatchList(ctx)) {
             // See if the entire wildcard string (without the trailing "*" is
             // contained in the incoming viewIdToTest.  
             // Ex: /foobar is contained with /foobarbaz
@@ -577,7 +630,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     private CaseStruct findDefaultMatch(FacesContext ctx,
                                         String fromAction,
                                         String outcome) {
-        NavigationMap navMap = getNavigationMap();
+        Map<String, Set<NavigationCase>> navMap = getNavigationMap(ctx);
         
         Set<NavigationCase> caseSet = navMap.get("*");
 
@@ -760,7 +813,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     private CaseStruct findSwitchMatch(FacesContext context, String fromAction, 
                                        String outcome, String toFlowDocumentId) {
         CaseStruct result = null;
-        NavigationInfo info = getNavigationInfo(context, fromAction);
+        NavigationInfo info = getNavigationInfo(context, toFlowDocumentId, fromAction);
         FlowHandler flowHandler = context.getApplication().getFlowHandler();
         
         if (null != flowHandler && 

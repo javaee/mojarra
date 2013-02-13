@@ -42,7 +42,9 @@ package javax.faces.flow;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.el.MethodExpression;
+import javax.faces.application.NavigationCase;
 import javax.faces.lifecycle.ClientWindow;
 
 /**
@@ -221,6 +223,8 @@ public abstract class Flow {
     // <editor-fold defaultstate="collapsed" desc="Graph navigation">
     
     public abstract FlowNode getNode(String nodeId);
+    
+    public abstract Map<String, Set<NavigationCase>> getNavigationCases();
     
     // </editor-fold>
     

@@ -52,6 +52,7 @@ import javax.faces.flow.Flow;
 import javax.faces.flow.builder.FlowBuilder;
 import javax.faces.flow.builder.FlowCallBuilder;
 import javax.faces.flow.builder.MethodCallBuilder;
+import javax.faces.flow.builder.NavigationCaseBuilder;
 import javax.faces.flow.builder.ReturnBuilder;
 import javax.faces.flow.builder.SwitchBuilder;
 import javax.faces.flow.builder.ViewBuilder;
@@ -73,7 +74,12 @@ public class FlowBuilderImpl extends FlowBuilder {
 
     }
     
-    // <editor-fold defaultstate="collapsed" desc="Create Flow Nodes">       
+    // <editor-fold defaultstate="collapsed" desc="Create Flow Nodes">   
+
+    @Override
+    public NavigationCaseBuilder navigationCase() {
+        return new NavigationCaseBuilderImpl(this);
+    }
 
     @Override
     public ViewBuilder viewNode(String viewNodeId, String vdlDocumentId) {

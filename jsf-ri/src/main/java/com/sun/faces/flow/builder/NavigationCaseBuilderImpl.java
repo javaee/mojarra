@@ -38,42 +38,62 @@
  * holder.
 
  */
-package javax.faces.flow.builder;
+package com.sun.faces.flow.builder;
 
-import javax.el.MethodExpression;
-import javax.el.ValueExpression;
-import javax.faces.flow.Flow;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
+import javax.faces.application.NavigationCase;
+import javax.faces.flow.builder.NavigationCaseBuilder;
 
-public abstract class FlowBuilder  {
+public class NavigationCaseBuilderImpl extends NavigationCaseBuilder {
     
-    public abstract FlowBuilder id(String definingDocumentId, String id);
-    
-    public abstract ViewBuilder viewNode(String viewNodeId, String vdlDocumentId);
-    
-    public abstract NavigationCaseBuilder navigationCase();
+    private FlowBuilderImpl root;
+    private FlowNavigationCase navCase;
 
-    public abstract SwitchBuilder switchNode(String switchNodeId);
+    public NavigationCaseBuilderImpl(FlowBuilderImpl root) {
+        navCase = new FlowNavigationCase();
+        this.root = root;
+    }
     
-    public abstract ReturnBuilder returnNode(String returnNodeId);
-    
-    public abstract MethodCallBuilder methodCallNode(String methodCallNodeId);
-    
-    public abstract FlowCallBuilder flowCallNode(String flowCallNodeId);
-    
-    public abstract FlowBuilder initializer(MethodExpression methodExpression);
-    
-    public abstract FlowBuilder initializer(String methodExpression);
-    
-    public abstract FlowBuilder finalizer(MethodExpression methodExpression);
-    
-    public abstract FlowBuilder finalizer(String methodExpression);
+    @Override
+    public NavigationCaseBuilder toFlowDocumentId(String toFlowDocumentId) {
+        navCase.setToFlowDocumentId(toFlowDocumentId);
+        return this;
+    }
 
-    public abstract FlowBuilder inboundParameter(String name, ValueExpression value);
-        
-    public abstract FlowBuilder inboundParameter(String name, String value);
+    @Override
+    public NavigationCaseBuilder fromAction(String fromAction) {
+        navCase.setFromAction(fromAction);
+        return this;
+    }
 
-    public abstract Flow getFlow();
+    @Override
+    public NavigationCaseBuilder fromOutcome(String fromOutcome) {
+        navCase.setFromOutcome(fromOutcome);
+        return this;
+    }
+
+    @Override
+    public NavigationCaseBuilder fromViewId(String fromViewId) {
+        navCase.setFromViewId(fromViewId);
+        Map<String,Set<NavigationCase>> rules = root._getFlow()._getNavigationCases();
+        Set<NavigationCase> cases = rules.get(fromViewId);
+        if (null == cases) {
+            cases = new CopyOnWriteArraySet<NavigationCase>();
+            rules.put(fromViewId, cases);
+        }
+        cases.add(navCase);
+        return this;
+    }
+
+    @Override
+    public NavigationCaseBuilder toViewId(String toViewId) {
+        navCase.setToViewId(toViewId);
+        return this;
+    }
+    
+    
+    
     
 }
-    
-

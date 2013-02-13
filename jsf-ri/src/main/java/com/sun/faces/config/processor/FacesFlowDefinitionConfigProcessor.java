@@ -281,6 +281,7 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
             flowBuilder.id(nameStr, flowId);
             
             processViews(xpath, flowDefinition, flowBuilder);
+            processNavigationRules(xpath, flowDefinition, flowBuilder);
             processReturns(xpath, flowDefinition, flowBuilder);
             processInboundParameters(xpath, flowDefinition, flowBuilder);
             processFlowCalls(xpath, flowDefinition, flowBuilder);
@@ -305,6 +306,43 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
             
         }
         
+    }
+
+    private void processNavigationRules(XPath xpath, Node flowDefinition, FlowBuilder flowBuilder) throws XPathExpressionException{
+        // <editor-fold defaultstate="collapsed">
+        NodeList navRules = (NodeList) xpath.evaluate(".//ns1:navigation-rule", 
+                flowDefinition, XPathConstants.NODESET);
+        for (int i_navRule = 0; i_navRule < navRules.getLength(); i_navRule++) {
+            Node navRule = navRules.item(i_navRule);
+            NodeList fromViewIdList = (NodeList) 
+                    xpath.evaluate(".//ns1:from-view-id/text()", navRule, XPathConstants.NODESET);
+            if (1 != fromViewIdList.getLength()) {
+                throw new XPathExpressionException("Within <navigation-rule> must have exactly one <from-view-id>");
+            }
+            String fromViewId = fromViewIdList.item(0).getNodeValue().trim();
+            
+            NodeList navCases = (NodeList) 
+                    xpath.evaluate(".//ns1:navigation-case", navRule, XPathConstants.NODESET);
+            for (int i_navCase = 0; i_navCase < navCases.getLength(); i_navCase++) {
+                Node navCase = navCases.item(i_navCase);
+                NodeList fromOutcomeList = (NodeList) 
+                        xpath.evaluate(".//ns1:from-outcome/text()", navCase, XPathConstants.NODESET);
+                if (1 != fromOutcomeList.getLength()) {
+                    throw new XPathExpressionException("Within <navigation-case>, must have exactly one <from-outcome>");
+                }
+                String fromOutcome = fromOutcomeList.item(0).getNodeValue().trim();
+                
+                NodeList toViewIdList = (NodeList) 
+                        xpath.evaluate(".//ns1:to-view-id/text()", navCase, XPathConstants.NODESET);
+                if (1 != toViewIdList.getLength()) {
+                    throw new XPathExpressionException("Within <navigation-case>, must have exactly one <to-view-id>");
+                }
+                String toViewId = toViewIdList.item(0).getNodeValue().trim();
+                
+                flowBuilder.navigationCase().fromViewId(fromViewId).fromOutcome(fromOutcome).toViewId(toViewId);
+            }
+        }
+        // </editor-fold>
     }
     
     private void processViews(XPath xpath, Node flowDefinition, FlowBuilder flowBuilder) throws XPathExpressionException{

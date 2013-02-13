@@ -40,40 +40,16 @@
  */
 package javax.faces.flow.builder;
 
-import javax.el.MethodExpression;
-import javax.el.ValueExpression;
-import javax.faces.flow.Flow;
+public abstract class NavigationCaseBuilder {
+    
+    public abstract NavigationCaseBuilder fromViewId(String fromViewId);
+    
+    public abstract NavigationCaseBuilder fromAction(String fromViewId);
+    
+    public abstract NavigationCaseBuilder fromOutcome(String fromViewId);
+    
+    public abstract NavigationCaseBuilder toViewId(String fromViewId);
 
-public abstract class FlowBuilder  {
-    
-    public abstract FlowBuilder id(String definingDocumentId, String id);
-    
-    public abstract ViewBuilder viewNode(String viewNodeId, String vdlDocumentId);
-    
-    public abstract NavigationCaseBuilder navigationCase();
-
-    public abstract SwitchBuilder switchNode(String switchNodeId);
-    
-    public abstract ReturnBuilder returnNode(String returnNodeId);
-    
-    public abstract MethodCallBuilder methodCallNode(String methodCallNodeId);
-    
-    public abstract FlowCallBuilder flowCallNode(String flowCallNodeId);
-    
-    public abstract FlowBuilder initializer(MethodExpression methodExpression);
-    
-    public abstract FlowBuilder initializer(String methodExpression);
-    
-    public abstract FlowBuilder finalizer(MethodExpression methodExpression);
-    
-    public abstract FlowBuilder finalizer(String methodExpression);
-
-    public abstract FlowBuilder inboundParameter(String name, ValueExpression value);
-        
-    public abstract FlowBuilder inboundParameter(String name, String value);
-
-    public abstract Flow getFlow();
+    public abstract NavigationCaseBuilder toFlowDocumentId(String fromViewId);
     
 }
-    
-

@@ -50,10 +50,11 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 /**
- * <p class="changed_added_2_0"><strong>NavigationCase</strong>
+ * <p class="changed_added_2_0"><strong class="changed_modified_2_2">
+ * NavigationCase</strong>
  * represents a <code>&lt;navigation-case&gt;</code> in the navigation
- * rule base, as well as the <code>&lt;from-view-id&gt;</code> inside
- * which this <code>&lt;navigation-case&gt;</code> is nested.</p>
+ * rule base, as well as the <span class="changed_modified_2_2"><code>&lt;from-view-id&gt;</code> with
+ * which this <code>&lt;navigation-case&gt;</code> is a sibling</span>.</p>
  *
  * @since 2.0
  */

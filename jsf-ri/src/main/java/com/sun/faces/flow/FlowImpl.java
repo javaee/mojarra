@@ -44,9 +44,11 @@ import com.sun.faces.util.Util;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javax.el.MethodExpression;
+import javax.faces.application.NavigationCase;
 import javax.faces.context.FacesContext;
 import javax.faces.flow.FlowCallNode;
 import javax.faces.flow.Flow;
@@ -66,6 +68,8 @@ public class FlowImpl extends Flow {
     private String id;
     private String definingDocumentId;
     private String startNodeId;
+    private ConcurrentHashMap<String, Set<NavigationCase>> _navigationCases;
+    private Map<String, Set<NavigationCase>> navigationCases;
     private CopyOnWriteArrayList<ViewNode> _views;
     private List<ViewNode> views;
     private CopyOnWriteArrayList<MethodCallNode> _methodCalls;
@@ -99,6 +103,8 @@ public class FlowImpl extends Flow {
         _facesFlowCallsByTargetFlowId = new ConcurrentHashMap<String, FlowCallNode>();
         _views = new CopyOnWriteArrayList<ViewNode>();
         views = Collections.unmodifiableList(_views);
+        _navigationCases = new ConcurrentHashMap<String, Set<NavigationCase>>();
+        navigationCases = Collections.unmodifiableMap(_navigationCases);
         _methodCalls = new CopyOnWriteArrayList<MethodCallNode>();
         methodCalls = Collections.unmodifiableList(_methodCalls);
         
@@ -252,6 +258,15 @@ public class FlowImpl extends Flow {
 
     public Map<String,FlowCallNode> _getFlowCalls() {
         return _facesFlowCalls;
+    }
+
+    @Override
+    public Map<String, Set<NavigationCase>> getNavigationCases() {
+        return navigationCases;
+    }
+    
+    public Map<String, Set<NavigationCase>> _getNavigationCases() {
+        return _navigationCases;
     }
     
     @Override

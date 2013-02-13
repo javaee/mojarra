@@ -48,23 +48,15 @@
       xmlns:f="http://java.sun.com/jsf/core">
     
     <head>
-        <title>View customer page</title>
+        <title>pageA</title>
     </head>
     <body bgcolor="red">
         
-        <p>View customer page</p>
+        <p>pageA</p>
         
     <h:form prependId="false">
         
-        <p>Customer Id: #{flowScope.customerId}</p>
-        
-        <p>Customer is upgraded: #{flowScope.customerIdValue.upgraded}</p>
-        
-        <p><h:commandButton id="exit" value="exit flow" action="success" /></p>
-        
-        <p><h:commandButton id="upgrade" value="upgrade customer" action="upgrade-customer" /></p>
-
-        <p><h:commandButton id="pageA" value="pageA" action="pageA" /></p>
+        <p><h:commandButton id="pageB" value="pageB" action="pageB" /></p>
         
     </h:form>
         
