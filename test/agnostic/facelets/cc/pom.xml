@@ -56,6 +56,14 @@
     <build>
         <finalName>test-agnostic-facelets-cc</finalName>
     </build>
+    <dependencies>
+        <dependency>
+            <groupId>com.sun.faces.test.agnostic.facelets</groupId>
+            <artifactId>ccInJar</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
     <properties>
         <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
     </properties>

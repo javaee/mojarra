@@ -1,0 +1,17 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:ccInJar="http://mojarra.java.net/ccInJar">
+    <ui:include src="layoutHead.xhtml" />
+    <h:body>
+        <div>[webappAll.xhtml]</div>
+        <ui:include src="layoutAll.xhtml"/>
+        <ui:remove>Add some request context to the response</ui:remove>
+        <h:outputText value="[request-information]" escape="false"/>
+    </h:body>
+</html>
