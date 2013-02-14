@@ -1,8 +1,8 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- * 
+ *
  * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
- * 
+ *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -11,20 +11,20 @@
  * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- * 
+ *
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at packager/legal/LICENSE.txt.
- * 
+ *
  * GPL Classpath Exception:
  * Oracle designates this particular file as subject to the "Classpath"
  * exception as provided by Oracle in the GPL Version 2 section of the License
  * file that accompanied this code.
- * 
+ *
  * Modifications:
  * If applicable, add the following below the License Header, with the fields
  * enclosed by brackets [] replaced by your own identifying information:
  * "Portions Copyright [year] [name of copyright owner]"
- * 
+ *
  * Contributor(s):
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
@@ -37,19 +37,16 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.vdl.facelets.contracts.vhosts;
+package com.sun.faces.test.agnostic.facelets.composite;
 
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.DomNode;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
-public class Issue2679IT {
+public class Issue2738IT {
 
     private String webUrl;
     private WebClient webClient;
@@ -66,24 +63,8 @@ public class Issue2679IT {
     }
 
     @Test
-    @Ignore
-    public void testRelative() throws Exception {
-        webClient.removeRequestHeader("Host");
-        HtmlPage page = webClient.getPage(webUrl + "faces/foo/index.xhtml");
-        HtmlElement body = page.getBody();
-        
-        // the first child is the text node
-        DomNode firstChild = body.getChildren().iterator().next();
-        String textContent = firstChild.getTextContent().trim();
-        assertThat(textContent, is("foo/template.xhtml"));
-
-        webClient.addRequestHeader("Host", "host5");
-        page = webClient.getPage(webUrl + "faces/foo/index.xhtml");
-        body = page.getBody();
-        
-        // the first child is the text node
-        firstChild = body.getChildren().iterator().next();
-        textContent = firstChild.getTextContent().trim();
-        assertThat(textContent, is("host5: foo/template.xhtml"));
+    public void testValidatorException() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/ccInJar.xhtml");
+        assertEquals(200, page.getWebResponse().getStatusCode());
     }
 }

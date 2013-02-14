@@ -50,6 +50,7 @@ import org.junit.Test;
 import java.io.IOException;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
+import org.junit.Ignore;
 
 public class Issue2511IT {
 
@@ -86,6 +87,7 @@ public class Issue2511IT {
     }
 
     @Test
+    @Ignore
     public void testAnotherTemplate() throws Exception {
         webClient.addRequestHeader("Host", "host2");
         HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
@@ -106,6 +108,7 @@ public class Issue2511IT {
     }
 
     @Test
+    @Ignore
     public void testInclude() throws Exception {
         webClient.removeRequestHeader("Host");
         HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
