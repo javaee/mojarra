@@ -74,6 +74,7 @@ import javax.faces.flow.Parameter;
 import javax.faces.flow.builder.FlowBuilder;
 import javax.faces.flow.builder.FlowCallBuilder;
 import javax.faces.flow.builder.MethodCallBuilder;
+import javax.faces.flow.builder.NavigationCaseBuilder;
 import javax.faces.flow.builder.SwitchBuilder;
 import javax.servlet.ServletContext;
 import javax.xml.xpath.XPath;
@@ -325,13 +326,6 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
                     xpath.evaluate(".//ns1:navigation-case", navRule, XPathConstants.NODESET);
             for (int i_navCase = 0; i_navCase < navCases.getLength(); i_navCase++) {
                 Node navCase = navCases.item(i_navCase);
-                NodeList fromOutcomeList = (NodeList) 
-                        xpath.evaluate(".//ns1:from-outcome/text()", navCase, XPathConstants.NODESET);
-                if (1 != fromOutcomeList.getLength()) {
-                    throw new XPathExpressionException("Within <navigation-case>, must have exactly one <from-outcome>");
-                }
-                String fromOutcome = fromOutcomeList.item(0).getNodeValue().trim();
-                
                 NodeList toViewIdList = (NodeList) 
                         xpath.evaluate(".//ns1:to-view-id/text()", navCase, XPathConstants.NODESET);
                 if (1 != toViewIdList.getLength()) {
@@ -339,7 +333,27 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
                 }
                 String toViewId = toViewIdList.item(0).getNodeValue().trim();
                 
-                flowBuilder.navigationCase().fromViewId(fromViewId).fromOutcome(fromOutcome).toViewId(toViewId);
+                NavigationCaseBuilder ncb = flowBuilder.navigationCase();
+                ncb.fromViewId(fromViewId).toViewId(toViewId);
+                
+                NodeList fromOutcomeList = (NodeList) 
+                        xpath.evaluate(".//ns1:from-outcome/text()", navCase, XPathConstants.NODESET);
+                if (1 > fromOutcomeList.getLength()) {
+                    throw new XPathExpressionException("Within <navigation-case>, must have zero or one <from-outcome>");
+                }
+                if (1 == fromOutcomeList.getLength()) {
+                    String fromOutcome = fromOutcomeList.item(0).getNodeValue().trim();
+                    ncb.fromOutcome(fromOutcome);
+                }
+                NodeList fromActionList = (NodeList) 
+                        xpath.evaluate(".//ns1:from-action/text()", navCase, XPathConstants.NODESET);
+                if (1 > fromActionList.getLength()) {
+                    throw new XPathExpressionException("Within <navigation-case>, must have zero or one <from-action>");
+                }
+                if (1 == fromActionList.getLength()) {
+                    String fromAction = fromActionList.item(0).getNodeValue().trim();
+                    ncb.fromAction(fromAction);
+                }
             }
         }
         // </editor-fold>

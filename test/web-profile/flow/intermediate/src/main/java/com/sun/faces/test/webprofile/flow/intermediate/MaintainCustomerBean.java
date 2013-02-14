@@ -93,4 +93,8 @@ public class MaintainCustomerBean implements Serializable
        Map<String,Object> requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
        requestMap.put("finalizerMessage", "Finalizer called");
    }
+   
+   public String action01() {
+       return "pageB";
+   }
 }

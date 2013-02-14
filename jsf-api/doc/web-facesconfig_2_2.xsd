@@ -2730,7 +2730,7 @@ which must contain exactly one <code>&lt;flow-id&gt;</code> element.</p>
       <xsd:group ref="javaee:descriptionGroup"/>
       <xsd:element name="from-view-id"
                    type="javaee:faces-config-from-view-idType"
-                   minOccurs="0"/>
+                   />
       <xsd:element name="navigation-case"
                    type="javaee:faces-config-navigation-caseType"
                    minOccurs="0"

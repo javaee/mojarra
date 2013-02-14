@@ -89,6 +89,7 @@
             <from-view-id>/maintain-customer-record/pageA.xhtml</from-view-id>
             <navigation-case>
                 <from-outcome>pageB</from-outcome>
+                <from-action>#{maintainCustomerBean.action01}</from-action>
                 <to-view-id>/maintain-customer-record/pageB.xhtml</to-view-id>
             </navigation-case>
         </navigation-rule>

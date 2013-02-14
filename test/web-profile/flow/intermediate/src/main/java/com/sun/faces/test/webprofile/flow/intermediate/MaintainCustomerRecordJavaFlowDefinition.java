@@ -74,6 +74,7 @@ public class MaintainCustomerRecordJavaFlowDefinition implements Serializable {
         flowBuilder.returnNode("success").fromOutcome("/complete");
         flowBuilder.returnNode("errorOccurred").fromOutcome("error");
         flowBuilder.navigationCase().fromViewId("/" + flowId + "/pageA.xhtml").
+                fromAction("#{maintainCustomerBeanJava.action01}").
                 fromOutcome("pageB").
                 toViewId("/" + flowId + "/pageB.xhtml");
         

@@ -51,6 +51,7 @@ import javax.faces.context.FacesContext;
 
 public class FlowNavigationCase extends NavigationCase {
     
+    private String fromAction;
     private String fromOutcome;
     private String condition;
     private String fromViewId;
@@ -140,9 +141,14 @@ public class FlowNavigationCase extends NavigationCase {
         this.conditionExpr = conditionExpression;
     }
     
-    public void setFromAction(String a) {
+    public void setFromAction(String fromAction) {
+        this.fromAction = fromAction;
     }
 
+    @Override
+    public String getFromAction() {
+        return super.getFromAction();
+    }
     
     public void setFromOutcome(String fromOutcome) {
         this.fromOutcome = fromOutcome;
