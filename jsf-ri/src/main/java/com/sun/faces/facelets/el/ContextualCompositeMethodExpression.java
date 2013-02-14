@@ -72,6 +72,7 @@ import javax.el.ELContext;
 import javax.el.ELException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.validator.ValidatorException;
 import javax.faces.view.Location;
 
 /**
@@ -191,6 +192,14 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
                 }
             }
         } catch (ELException ele) {
+            /*
+             * If we got a validator exception it is actually correct to 
+             * immediately bubble it up. 
+             */
+            if (ele.getCause() != null && ele.getCause() instanceof ValidatorException) {
+                throw (ValidatorException) ele.getCause();
+            }
+            
             if (source != null) {
                 // special handling when an ELException handling.  This is necessary
                 // when there are multiple levels of composite component nesting.
