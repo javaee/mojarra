@@ -51,6 +51,7 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class FlowEntryExitIntermediateIT {
     /**
@@ -99,18 +100,22 @@ public class FlowEntryExitIntermediateIT {
 
     @Test
     public void testFacesFlowScopeXml() throws Exception {
-        performTest("maintain-customer-record");
-        performTest("maintain-customer-record");
+        performCustomerUpgradeTest("maintain-customer-record");
+        performCustomerUpgradeTest("maintain-customer-record");
+        performInFlowExplicitNavigationTest("maintain-customer-record");
+        performInFlowExplicitNavigationTest("maintain-customer-record");
         
     }
     
     @Test
     public void testFacesFlowScopeJava() throws Exception {
-        performTest("maintain-customer-record-java");
-        performTest("maintain-customer-record-java");
+        performCustomerUpgradeTest("maintain-customer-record-java");
+        performCustomerUpgradeTest("maintain-customer-record-java");
+        performInFlowExplicitNavigationTest("maintain-customer-record-java");
+        performInFlowExplicitNavigationTest("maintain-customer-record-java");
         
     }
-    private void performTest(String startButton) throws Exception {
+    private void performCustomerUpgradeTest(String startButton) throws Exception {
         quickEnterExit();
         
         HtmlPage page = webClient.getPage(webUrl);
@@ -144,7 +149,39 @@ public class FlowEntryExitIntermediateIT {
         
         assertTrue(pageText.contains("return page"));
         assertTrue(pageText.contains("Finalizer called"));
+        
+        button = (HtmlSubmitInput) page.getElementById("home");
+        page = button.click();
+
+        button = (HtmlSubmitInput) page.getElementById(startButton);
+        assertNotNull(button);
+        
+        
     }
+    
+    private void performInFlowExplicitNavigationTest(String startButton) throws Exception {
+        HtmlPage page = webClient.getPage(webUrl);
+        
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById(startButton);
+        page = button.click();
+        button = (HtmlSubmitInput) page.getElementById("createCustomer");
+        page = button.click();
+        
+        button = (HtmlSubmitInput) page.getElementById("pageA");
+        page = button.click();
+        String pageText = page.asText();
+        assertTrue(pageText.contains("explicit in flow nav 01"));
+        
+        button = (HtmlSubmitInput) page.getElementById("pageB");
+        page = button.click();
+        
+        pageText = page.asText();
+        assertTrue(pageText.contains("explicit in flow nav 02"));
+        
+        
+        
+    }
+    
     
     private void quickEnterExit() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);

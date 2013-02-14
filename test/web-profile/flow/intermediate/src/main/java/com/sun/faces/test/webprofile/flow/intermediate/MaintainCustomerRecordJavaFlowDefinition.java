@@ -73,6 +73,9 @@ public class MaintainCustomerRecordJavaFlowDefinition implements Serializable {
         flowBuilder.finalizer("#{maintainCustomerBeanJava.cleanUpFlow}");
         flowBuilder.returnNode("success").fromOutcome("/complete");
         flowBuilder.returnNode("errorOccurred").fromOutcome("error");
+        flowBuilder.navigationCase().fromViewId("/" + flowId + "/pageA.xhtml").
+                fromOutcome("pageB").
+                toViewId("/" + flowId + "/pageB.xhtml");
         
         return flowBuilder.getFlow();
     }
