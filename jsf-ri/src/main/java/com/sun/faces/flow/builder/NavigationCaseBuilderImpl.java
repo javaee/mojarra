@@ -43,16 +43,17 @@ package com.sun.faces.flow.builder;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
+import javax.el.ValueExpression;
 import javax.faces.application.NavigationCase;
 import javax.faces.flow.builder.NavigationCaseBuilder;
 
 public class NavigationCaseBuilderImpl extends NavigationCaseBuilder {
     
     private FlowBuilderImpl root;
-    private FlowNavigationCase navCase;
+    private MutableNavigationCase navCase;
 
     public NavigationCaseBuilderImpl(FlowBuilderImpl root) {
-        navCase = new FlowNavigationCase();
+        navCase = new MutableNavigationCase();
         this.root = root;
     }
     
@@ -90,6 +91,18 @@ public class NavigationCaseBuilderImpl extends NavigationCaseBuilder {
     @Override
     public NavigationCaseBuilder toViewId(String toViewId) {
         navCase.setToViewId(toViewId);
+        return this;
+    }
+
+    @Override
+    public NavigationCaseBuilder condition(String condition) {
+        navCase.setCondition(condition);
+        return this;
+    }
+
+    @Override
+    public NavigationCaseBuilder condition(ValueExpression condition) {
+        navCase.setConditionExpression(condition);
         return this;
     }
     

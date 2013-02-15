@@ -178,6 +178,21 @@ public class FlowEntryExitIntermediateIT {
         pageText = page.asText();
         assertTrue(pageText.contains("explicit in flow nav 02"));
         
+        button = (HtmlSubmitInput) page.getElementById("pageC_true");
+        page = button.click();
+        
+        pageText = page.asText();
+        assertTrue(pageText.contains("explicit in flow nav 03: if true"));
+        
+        button = (HtmlSubmitInput) page.getElementById("pageB");
+        page = button.click();
+        
+        button = (HtmlSubmitInput) page.getElementById("pageC_false");
+        page = button.click();
+        
+        pageText = page.asText();
+        assertTrue(pageText.contains("explicit in flow nav 03: if false"));
+        
         
         
     }

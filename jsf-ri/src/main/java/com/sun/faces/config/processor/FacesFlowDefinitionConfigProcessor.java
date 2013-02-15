@@ -60,6 +60,7 @@ import java.util.logging.Logger;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.el.ValueExpression;
+import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
@@ -228,7 +229,7 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
                     FacesFlowDefinitionConfigProcessor.this.
                             processFacesFlowDefinitions(cur.definingDocumentURI, cur.flowDefinitions);
                 } catch (XPathExpressionException ex) {
-                    throw new AbortProcessingException(ex);
+                    throw new FacesException(ex);
                 }
             }
             FacesFlowDefinitionConfigProcessor.this.clearSavedFlowDefinitions(context);
@@ -336,23 +337,41 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
                 NavigationCaseBuilder ncb = flowBuilder.navigationCase();
                 ncb.fromViewId(fromViewId).toViewId(toViewId);
                 
-                NodeList fromOutcomeList = (NodeList) 
-                        xpath.evaluate(".//ns1:from-outcome/text()", navCase, XPathConstants.NODESET);
-                if (1 > fromOutcomeList.getLength()) {
-                    throw new XPathExpressionException("Within <navigation-case>, must have zero or one <from-outcome>");
+                {
+                    NodeList fromOutcomeList = (NodeList) 
+                            xpath.evaluate(".//ns1:from-outcome/text()", navCase, XPathConstants.NODESET);
+                    if (null != fromOutcomeList && 1 < fromOutcomeList.getLength()) {
+                        throw new XPathExpressionException("Within <navigation-case>, must have at most one <from-outcome>");
+                    }
+                    if (null != fromOutcomeList && 1 == fromOutcomeList.getLength()) {
+                        String fromOutcome = fromOutcomeList.item(0).getNodeValue().trim();
+                        ncb.fromOutcome(fromOutcome);
+                    }
                 }
-                if (1 == fromOutcomeList.getLength()) {
-                    String fromOutcome = fromOutcomeList.item(0).getNodeValue().trim();
-                    ncb.fromOutcome(fromOutcome);
+                 
+                {
+                    NodeList fromActionList = (NodeList) 
+                            xpath.evaluate(".//ns1:from-action/text()", navCase, XPathConstants.NODESET);
+                    if (null != fromActionList && 1 < fromActionList.getLength()) {
+                        throw new XPathExpressionException("Within <navigation-case>, must have at most one <from-action>");
+                    }
+                    if (null != fromActionList && 1 == fromActionList.getLength()) {
+                        String fromAction = fromActionList.item(0).getNodeValue().trim();
+                        ncb.fromAction(fromAction);
+                    }
                 }
-                NodeList fromActionList = (NodeList) 
-                        xpath.evaluate(".//ns1:from-action/text()", navCase, XPathConstants.NODESET);
-                if (1 > fromActionList.getLength()) {
-                    throw new XPathExpressionException("Within <navigation-case>, must have zero or one <from-action>");
-                }
-                if (1 == fromActionList.getLength()) {
-                    String fromAction = fromActionList.item(0).getNodeValue().trim();
-                    ncb.fromAction(fromAction);
+
+                {
+                    NodeList ifList = (NodeList) 
+                            xpath.evaluate(".//ns1:if/text()", navCase, XPathConstants.NODESET);
+                    if (null != ifList && 1 < ifList.getLength()) {
+                        throw new XPathExpressionException("Within <navigation-case>, must have zero or one <if>");
+                    }
+                    if (null != ifList && 1 == ifList.getLength()) {
+                        String ifStr = ifList.item(0).getNodeValue().trim();
+                        ncb.condition(ifStr);
+                    }
+
                 }
             }
         }
@@ -387,11 +406,13 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
             NodeList fromOutcomeList = (NodeList) 
                     xpath.evaluate(".//ns1:from-outcome/text()", returnNode, XPathConstants.NODESET);
             String id = getIdAttribute(returnNode);
-            if (1 < fromOutcomeList.getLength()) {
+            if (null != fromOutcomeList && 1 < fromOutcomeList.getLength()) {
                 throw new XPathExpressionException("Within <flow-return id=\"" + id + "\"> only one child is allowed, and it must be a <from-outcome>");
+            } 
+            if (null != fromOutcomeList && 1 == fromOutcomeList.getLength()) {
+                String fromOutcomeStr = fromOutcomeList.item(0).getNodeValue().trim();
+                flowBuilder.returnNode(id).fromOutcome(fromOutcomeStr);
             }
-            String fromOutcomeStr = fromOutcomeList.item(0).getNodeValue().trim();
-            flowBuilder.returnNode(id).fromOutcome(fromOutcomeStr);
             
         }
         // </editor-fold>

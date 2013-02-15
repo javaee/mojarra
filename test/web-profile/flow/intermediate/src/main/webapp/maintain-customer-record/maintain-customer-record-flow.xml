@@ -94,6 +94,26 @@
             </navigation-case>
         </navigation-rule>
         
+        <navigation-rule>
+            <from-view-id>/maintain-customer-record/pageB.xhtml</from-view-id>
+            <navigation-case>
+                <from-outcome>pageC</from-outcome>
+                <if>#{param.gotoC != null}</if>
+                <to-view-id>/maintain-customer-record/pageC_true.xhtml</to-view-id>
+            </navigation-case>
+            <navigation-case>
+                <from-outcome>pageC</from-outcome>
+                <if>#{param.gotoC == null}</if>
+                <to-view-id>/maintain-customer-record/pageC_false.xhtml</to-view-id>
+            </navigation-case>
+        </navigation-rule>
+        
+        <navigation-rule>
+            <from-view-id>/maintain-customer-record/pageC*</from-view-id>
+            <navigation-case>
+                <to-view-id>/maintain-customer-record/pageB.xhtml</to-view-id>
+            </navigation-case>
+        </navigation-rule>
         
     </flow-definition>
 </faces-config>

@@ -40,6 +40,8 @@
  */
 package javax.faces.flow.builder;
 
+import javax.el.ValueExpression;
+
 public abstract class NavigationCaseBuilder {
     
     public abstract NavigationCaseBuilder fromViewId(String fromViewId);
@@ -51,5 +53,9 @@ public abstract class NavigationCaseBuilder {
     public abstract NavigationCaseBuilder toViewId(String fromViewId);
 
     public abstract NavigationCaseBuilder toFlowDocumentId(String fromViewId);
+    
+    public abstract NavigationCaseBuilder condition(String condition);
+    
+    public abstract NavigationCaseBuilder condition(ValueExpression condition);
     
 }
