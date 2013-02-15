@@ -112,7 +112,7 @@ public class ScriptRenderer extends ScriptStyleBaseRenderer {
             resourceSrc = resource.getRequestPath();
             if (query != null) {
                 resourceSrc = resourceSrc +
-                        ((resourceSrc.indexOf("?") > -1) ? "+" : "?") +
+                        ((resourceSrc.indexOf("?") > -1) ? "&amp;" : "?") +
                         query;
             }
             resourceSrc = context.getExternalContext().encodeResourceURL(resourceSrc);
