@@ -105,6 +105,12 @@ public class NavigationCaseBuilderImpl extends NavigationCaseBuilder {
         navCase.setConditionExpression(condition);
         return this;
     }
+
+    @Override
+    public NavigationCaseBuilder redirect() {
+        navCase.setRedirect(true);
+        return this;
+    }
     
     
     

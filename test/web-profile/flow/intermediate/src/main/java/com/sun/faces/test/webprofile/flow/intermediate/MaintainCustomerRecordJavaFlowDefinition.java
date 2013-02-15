@@ -81,8 +81,11 @@ public class MaintainCustomerRecordJavaFlowDefinition implements Serializable {
                 fromOutcome("pageC").condition("#{param.gotoC != null}").toViewId("/" + flowId + "/pageC_true.xhtml");
         flowBuilder.navigationCase().fromViewId("/" + flowId + "/pageB.xhtml").
                 fromOutcome("pageC").condition("#{param.gotoC == null}").toViewId("/" + flowId + "/pageC_false.xhtml");
+        flowBuilder.navigationCase().fromViewId("/" + flowId + "/pageB.xhtml").
+                fromOutcome("pageD_redirect").toViewId("/" + flowId + "/pageD_noParams.xhtml").redirect();
         flowBuilder.navigationCase().fromViewId("/" + flowId + "/pageC*").
                 toViewId("/" + flowId + "/pageB.xhtml");
+        flowBuilder.navigationCase().fromViewId("*").fromOutcome("pageB").toViewId("/" + flowId + "/pageB.xhtml");
                 
         return flowBuilder.getFlow();
     }

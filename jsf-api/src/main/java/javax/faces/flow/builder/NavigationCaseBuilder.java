@@ -58,4 +58,6 @@ public abstract class NavigationCaseBuilder {
     
     public abstract NavigationCaseBuilder condition(ValueExpression condition);
     
+    public abstract NavigationCaseBuilder redirect();
+    
 }

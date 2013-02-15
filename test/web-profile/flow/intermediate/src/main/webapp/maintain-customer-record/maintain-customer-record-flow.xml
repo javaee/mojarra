@@ -106,6 +106,12 @@
                 <if>#{param.gotoC == null}</if>
                 <to-view-id>/maintain-customer-record/pageC_false.xhtml</to-view-id>
             </navigation-case>
+            
+            <navigation-case>
+                <from-outcome>pageD_redirect</from-outcome>
+                <to-view-id>/maintain-customer-record/pageD_noParams.xhtml</to-view-id>
+                <redirect />
+            </navigation-case>
         </navigation-rule>
         
         <navigation-rule>
@@ -115,5 +121,13 @@
             </navigation-case>
         </navigation-rule>
         
+        <navigation-rule>
+            <from-view-id>*</from-view-id>
+            <navigation-case>
+                <from-outcome>pageB</from-outcome>
+                <to-view-id>/maintain-customer-record/pageB.xhtml</to-view-id>
+            </navigation-case>
+        </navigation-rule>
+
     </flow-definition>
 </faces-config>

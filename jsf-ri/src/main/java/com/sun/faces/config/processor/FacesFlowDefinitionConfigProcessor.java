@@ -373,6 +373,19 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
                     }
 
                 }
+                
+                {
+                    NodeList redirectList = (NodeList) 
+                            xpath.evaluate(".//ns1:redirect", navCase, XPathConstants.NODESET);
+                    if (null != redirectList && 1 < redirectList.getLength()) {
+                        throw new XPathExpressionException("Within <navigation-case>, must have zero or one <redirect>");
+                    }
+                    if (null != redirectList && 1 == redirectList.getLength()) {
+                        ncb.redirect();
+                    }
+                }
+                
+                
             }
         }
         // </editor-fold>

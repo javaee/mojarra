@@ -193,8 +193,14 @@ public class FlowEntryExitIntermediateIT {
         pageText = page.asText();
         assertTrue(pageText.contains("explicit in flow nav 03: if false"));
         
+        button = (HtmlSubmitInput) page.getElementById("pageB");
+        page = button.click();
         
+        button = (HtmlSubmitInput) page.getElementById("pageD_redirect");
+        page = button.click();
         
+        pageText = page.asText();
+        assertTrue(pageText.contains("explicit in flow nav 04: no params"));
     }
     
     
