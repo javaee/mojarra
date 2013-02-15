@@ -40,11 +40,17 @@
 
 package com.sun.faces.el;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.context.flash.FlashELResolver;
 import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.util.MessageUtils;
 
+import com.sun.faces.util.ReflectionUtils;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.el.ArrayELResolver;
 import javax.el.BeanELResolver;
 import javax.el.CompositeELResolver;
@@ -68,6 +74,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.el.ExpressionFactory;
 
 /**
  * <p>Utility class for EL related methods.</p>
@@ -247,12 +254,34 @@ public class ELUtils {
         composite.addPropertyELResolver(RESOURCE_RESOLVER);
         composite.addPropertyELResolver(BUNDLE_RESOLVER);
         composite.addRootELResolver(FACES_BUNDLE_RESOLVER);
+        addEL3_0_Resolvers(composite, associate);
         composite.addPropertyELResolver(MAP_RESOLVER);
         composite.addPropertyELResolver(LIST_RESOLVER);
         composite.addPropertyELResolver(ARRAY_RESOLVER);
         composite.addPropertyELResolver(BEAN_RESOLVER);
         composite.addRootELResolver(SCOPED_RESOLVER);
 
+    }
+    
+    private static void addEL3_0_Resolvers(FacesCompositeELResolver composite, 
+            ApplicationAssociate associate) {
+        ExpressionFactory ef = associate.getExpressionFactory();
+        Method getStreamELResolverMethod = ReflectionUtils.lookupMethod(ExpressionFactory.class, 
+                "getStreamELResolver", RIConstants.EMPTY_CLASS_ARGS);
+        if (null != getStreamELResolverMethod) {
+            try {
+                ELResolver streamELResolver = (ELResolver) 
+                        getStreamELResolverMethod.invoke(ef, (Object[]) null);
+                composite.addRootELResolver(streamELResolver);
+                // Assume that if we have getStreamELResolver, then we must have
+                // javax.el.staticFieldELResolver
+                composite.addRootELResolver((ELResolver)
+                        ReflectionUtils.newInstance("javax.el.StaticFieldELResolver"));
+                
+            } catch (Throwable t) {
+                // This is normal on containers that do not have these ELResolvers
+            }
+        }
     }
 
 

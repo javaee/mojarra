@@ -281,7 +281,14 @@
                    test-results-dir="${impl.test.results.dir}">
             <tests>
                 <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/facelets/*TestCase.class"/> 
+                         includes="com/sun/faces/facelets/*TestCase.class" />
+
+<!--
+20130215 edburns
+PENDING(edburns): This test doesn't run on GlassFish 4.0. Fix it.
+                         excludes="com/sun/faces/facelets/ImplicitFacetTestCase.class"
+
+-->
             </tests>
         </jsf.junit>
         <jsf.junit context-path="${context.path}"
