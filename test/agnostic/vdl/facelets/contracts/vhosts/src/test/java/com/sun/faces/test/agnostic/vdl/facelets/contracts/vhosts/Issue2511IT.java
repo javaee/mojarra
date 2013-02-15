@@ -76,6 +76,7 @@ public class Issue2511IT {
     }
 
     @Test
+    @Ignore
     public void testDefaultTemplate() throws Exception {
         webClient.removeRequestHeader("Host");
         HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
