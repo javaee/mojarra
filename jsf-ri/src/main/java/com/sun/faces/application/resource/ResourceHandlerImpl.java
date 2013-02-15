@@ -287,7 +287,9 @@ public class ResourceHandlerImpl extends ResourceHandler {
 
                     }
 
-                    extContext.setResponseContentLength(size);
+                    if (!extContext.isResponseCommitted()) {
+                        extContext.setResponseContentLength(size);
+                    }
 
                 } catch (IOException ioe) {
                     send404(context, resourceName, libraryName, ioe, true);
