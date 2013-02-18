@@ -333,7 +333,7 @@ public class DebugUtil {
             return;
         }                     
 
-        if (duplicateId.equals(root.getId())) {
+        if (duplicateId.equals(root.getClientId())) {
             indentPrintln(out, "+id: " + root.getId() + "  <===============");
         } else {
             indentPrintln(out, "+id: " + root.getId());
