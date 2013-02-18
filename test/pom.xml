@@ -561,7 +561,7 @@
                                         <mkdir dir="${integration.container.root}"/>
                                         <unzip src="${integration.container.zipFile}" dest="${integration.container.root}"/>
                                         <exec executable="sh" osfamily="unix">
-                                            <arg line='-c "chmod a+x ${integration.container.root}/glassfish3/glassfish/bin/*"'/>
+                                            <arg line='-c "chmod a+x ${integration.container.home}/glassfish/bin/*"'/>
                                         </exec>
                                     </target>
                                 </configuration>
@@ -587,6 +587,7 @@
                 </plugins>
             </build>
             <properties>
+                <integration.container.home>C:/Glassfish3.1.2.2/glassfish3</integration.container.home>
                 <integration.container.root>C:/Glassfish3.1.2.2</integration.container.root>
                 <integration.container.zipFile>C:/Downloads/Glassfish3.1.2.2.zip</integration.container.zipFile>
             </properties>
