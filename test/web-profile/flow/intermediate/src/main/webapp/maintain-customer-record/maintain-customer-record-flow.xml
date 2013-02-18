@@ -112,6 +112,24 @@
                 <to-view-id>/maintain-customer-record/pageD_noParams.xhtml</to-view-id>
                 <redirect />
             </navigation-case>
+            
+            <navigation-case>
+                <from-outcome>pageD_redirect_params</from-outcome>
+                <to-view-id>/maintain-customer-record/pageD_params.xhtml</to-view-id>
+                <redirect include-view-params="true">
+                    <redirect-param>
+                        <name>id</name>
+                        <value>foo</value>
+                    </redirect-param>
+                    <redirect-param>
+                        <name>baz</name>
+                        <value>bar</value>
+                    </redirect-param>
+                </redirect>
+            </navigation-case>
+            
+            
+            
         </navigation-rule>
         
         <navigation-rule>

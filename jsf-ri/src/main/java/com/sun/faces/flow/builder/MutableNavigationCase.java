@@ -43,6 +43,7 @@ package com.sun.faces.flow.builder;
 import javax.faces.application.*;
 import java.util.Map;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.el.ValueExpression;
 import javax.el.ExpressionFactory;
 import javax.faces.context.FacesContext;
@@ -78,6 +79,7 @@ public class MutableNavigationCase extends NavigationCase {
 
     public MutableNavigationCase() {
         this(null, null, null, null, null, null, false, false);
+        parameters = new ConcurrentHashMap<String, List<String>>();
     }
     
     /**

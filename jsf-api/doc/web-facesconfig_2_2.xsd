@@ -2912,10 +2912,6 @@ which must contain exactly one <code>&lt;flow-id&gt;</code> element.</p>
       ]]></xsd:documentation>
     </xsd:annotation>
     <xsd:sequence>
-      <xsd:element name="view-param"
-                   type="javaee:faces-config-redirect-viewParamType"
-                   minOccurs="0"
-                   maxOccurs="unbounded"/>
       <xsd:element name="redirect-param"
                    type="javaee:faces-config-redirect-redirectParamType"
                    minOccurs="0"

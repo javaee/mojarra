@@ -381,7 +381,33 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
                         throw new XPathExpressionException("Within <navigation-case>, must have zero or one <redirect>");
                     }
                     if (null != redirectList && 1 == redirectList.getLength()) {
-                        ncb.redirect();
+                        NavigationCaseBuilder.RedirectBuilder redirector = ncb.redirect();
+                        Node redirectNode = redirectList.item(0);
+                        String includeViewParams = getAttribute(redirectNode, "include-view-params");
+                        if (null != includeViewParams && "true".equalsIgnoreCase(includeViewParams)) {
+                            redirector.includeViewParams();
+                        }
+                        NodeList viewParamList = (NodeList) 
+                                xpath.evaluate(".//ns1:redirect-param", redirectNode, XPathConstants.NODESET);
+                        if (null != viewParamList) {
+                            for (int i_viewParam = 0; i_viewParam < viewParamList.getLength(); i_viewParam++) {
+                                Node viewParam = viewParamList.item(i_viewParam);
+                                NodeList nameList = (NodeList) 
+                                        xpath.evaluate(".//ns1:name/text()", viewParam, XPathConstants.NODESET);
+                                if (null == nameList || 1 != nameList.getLength()) {
+                                    throw new XPathExpressionException("Within <redirect-param> must have <name>.");
+                                }
+                                String nameStr = nameList.item(0).getNodeValue().trim();
+                                
+                                NodeList valueList = (NodeList) 
+                                        xpath.evaluate(".//ns1:value/text()", viewParam, XPathConstants.NODESET);
+                                if (null == valueList || 1 != valueList.getLength()) {
+                                    throw new XPathExpressionException("Within <redirect-param> must have <value>.");
+                                }
+                                String valueStr = valueList.item(0).getNodeValue().trim();
+                                redirector.parameter(nameStr, valueStr);
+                            }
+                        }
                     }
                 }
                 

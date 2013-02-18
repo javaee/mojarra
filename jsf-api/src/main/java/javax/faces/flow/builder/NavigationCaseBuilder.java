@@ -58,6 +58,14 @@ public abstract class NavigationCaseBuilder {
     
     public abstract NavigationCaseBuilder condition(ValueExpression condition);
     
-    public abstract NavigationCaseBuilder redirect();
+    public abstract RedirectBuilder redirect();
+    
+    public abstract class RedirectBuilder {
+
+        public abstract RedirectBuilder parameter(String name, String value);
+        
+        public abstract RedirectBuilder includeViewParams();
+    
+    }
     
 }

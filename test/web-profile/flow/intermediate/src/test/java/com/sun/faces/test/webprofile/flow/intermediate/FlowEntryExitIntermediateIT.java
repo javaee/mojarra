@@ -39,6 +39,8 @@
  */
 package com.sun.faces.test.webprofile.flow.intermediate;
 
+import com.gargoylesoftware.htmlunit.html.HtmlButtonInput;
+import com.gargoylesoftware.htmlunit.html.HtmlButton;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
@@ -162,45 +164,58 @@ public class FlowEntryExitIntermediateIT {
     private void performInFlowExplicitNavigationTest(String startButton) throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
         
-        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById(startButton);
-        page = button.click();
-        button = (HtmlSubmitInput) page.getElementById("createCustomer");
-        page = button.click();
+        HtmlSubmitInput submit = (HtmlSubmitInput) page.getElementById(startButton);
+        page = submit.click();
+        submit = (HtmlSubmitInput) page.getElementById("createCustomer");
+        page = submit.click();
         
-        button = (HtmlSubmitInput) page.getElementById("pageA");
-        page = button.click();
+        submit = (HtmlSubmitInput) page.getElementById("pageA");
+        page = submit.click();
         String pageText = page.asText();
         assertTrue(pageText.contains("explicit in flow nav 01"));
         
-        button = (HtmlSubmitInput) page.getElementById("pageB");
-        page = button.click();
+        submit = (HtmlSubmitInput) page.getElementById("pageB");
+        page = submit.click();
         
         pageText = page.asText();
         assertTrue(pageText.contains("explicit in flow nav 02"));
         
-        button = (HtmlSubmitInput) page.getElementById("pageC_true");
-        page = button.click();
+        submit = (HtmlSubmitInput) page.getElementById("pageC_true");
+        page = submit.click();
         
         pageText = page.asText();
         assertTrue(pageText.contains("explicit in flow nav 03: if true"));
         
-        button = (HtmlSubmitInput) page.getElementById("pageB");
-        page = button.click();
+        submit = (HtmlSubmitInput) page.getElementById("pageB");
+        page = submit.click();
         
-        button = (HtmlSubmitInput) page.getElementById("pageC_false");
-        page = button.click();
+        submit = (HtmlSubmitInput) page.getElementById("pageC_false");
+        page = submit.click();
         
         pageText = page.asText();
         assertTrue(pageText.contains("explicit in flow nav 03: if false"));
         
-        button = (HtmlSubmitInput) page.getElementById("pageB");
-        page = button.click();
+        submit = (HtmlSubmitInput) page.getElementById("pageB");
+        page = submit.click();
         
-        button = (HtmlSubmitInput) page.getElementById("pageD_redirect");
-        page = button.click();
+        submit = (HtmlSubmitInput) page.getElementById("pageD_redirect");
+        page = submit.click();
         
         pageText = page.asText();
         assertTrue(pageText.contains("explicit in flow nav 04: no params"));
+
+        submit = (HtmlSubmitInput) page.getElementById("pageB");
+        page = submit.click();
+        
+        HtmlButtonInput button = (HtmlButtonInput) page.getElementById("pageD_redirect_params");
+        page = button.click();
+        
+        pageText = page.asText();
+        assertTrue(pageText.contains("explicit in flow nav 05: params"));
+        assertTrue(pageText.contains("id param: foo"));
+        assertTrue(pageText.contains("baz param: bar"));
+        
+        
     }
     
     

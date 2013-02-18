@@ -40,11 +40,14 @@
  */
 package com.sun.faces.flow.builder;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import javax.el.ValueExpression;
 import javax.faces.application.NavigationCase;
+import javax.faces.flow.Parameter;
 import javax.faces.flow.builder.NavigationCaseBuilder;
 
 public class NavigationCaseBuilderImpl extends NavigationCaseBuilder {
@@ -107,12 +110,38 @@ public class NavigationCaseBuilderImpl extends NavigationCaseBuilder {
     }
 
     @Override
-    public NavigationCaseBuilder redirect() {
+    public RedirectBuilder redirect() {
         navCase.setRedirect(true);
-        return this;
+        return new RedirectBuilderImpl();
     }
+
+    private class RedirectBuilderImpl extends NavigationCaseBuilder.RedirectBuilder {
+
+        public RedirectBuilderImpl() {
+        }
+
+        @Override
+        public RedirectBuilder parameter(String name, String value) {
+            Map<String, List<String>> redirectParams = NavigationCaseBuilderImpl.this.navCase.getParameters();
+            List<String> values = redirectParams.get(name);
+            if (null == values) {
+                values = new CopyOnWriteArrayList<String>();
+                redirectParams.put(name, values);
+            }
+            values.add(value);
+            return this;
+        }
+
+        @Override
+        public RedirectBuilder includeViewParams() {
+            NavigationCaseBuilderImpl.this.navCase.isIncludeViewParams();
+            return this;
+        }
     
-    
+        
+        
+        
+    }
     
     
 }
