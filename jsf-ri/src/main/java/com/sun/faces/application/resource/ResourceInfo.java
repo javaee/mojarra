@@ -50,6 +50,7 @@ public class ResourceInfo {
     String name;
     String path;
     VersionInfo version;
+    boolean doNotCache = false;
 
     public ResourceInfo(LibraryInfo library, 
             ContractInfo contract,
@@ -93,7 +94,7 @@ public class ResourceInfo {
         this.path = other.path;
         this.version = other.version;
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
@@ -102,11 +103,11 @@ public class ResourceInfo {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        if (this == obj) {
-            return true;
-        }
         final ResourceInfo other = (ResourceInfo) obj;
-        if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
+        if (this.helper != other.helper && (this.helper == null || !this.helper.equals(other.helper))) {
+            return false;
+        }
+        if (this.library != other.library && (this.library == null || !this.library.equals(other.library))) {
             return false;
         }
         if ((this.libraryName == null) ? (other.libraryName != null) : !this.libraryName.equals(other.libraryName)) {
@@ -115,16 +116,16 @@ public class ResourceInfo {
         if ((this.localePrefix == null) ? (other.localePrefix != null) : !this.localePrefix.equals(other.localePrefix)) {
             return false;
         }
-        if (this.version != other.version && (this.version == null || !this.version.equals(other.version))) {
-            return false;
-        }
-        if (this.library != other.library && (this.library == null || !this.library.equals(other.library))) {
+        if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
             return false;
         }
         if ((this.path == null) ? (other.path != null) : !this.path.equals(other.path)) {
             return false;
         }
-        if ((this.helper == null) ? (other.helper != null) : !this.helper.equals(other.helper)) {
+        if (this.version != other.version && (this.version == null || !this.version.equals(other.version))) {
+            return false;
+        }
+        if (this.doNotCache != other.doNotCache) {
             return false;
         }
         return true;
@@ -133,16 +134,25 @@ public class ResourceInfo {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 97 * hash + (this.name != null ? this.name.hashCode() : 0);
-        hash = 97 * hash + (this.libraryName != null ? this.libraryName.hashCode() : 0);
-        hash = 97 * hash + (this.localePrefix != null ? this.localePrefix.hashCode() : 0);
-        hash = 97 * hash + (this.version != null ? this.version.hashCode() : 0);
-        hash = 97 * hash + (this.library != null ? this.library.hashCode() : 0);
-        hash = 97 * hash + (this.path != null ? this.path.hashCode() : 0);
-        hash = 97 * hash + (this.helper != null ? this.helper.hashCode() : 0);
+        hash = 17 * hash + (this.helper != null ? this.helper.hashCode() : 0);
+        hash = 17 * hash + (this.library != null ? this.library.hashCode() : 0);
+        hash = 17 * hash + (this.libraryName != null ? this.libraryName.hashCode() : 0);
+        hash = 17 * hash + (this.localePrefix != null ? this.localePrefix.hashCode() : 0);
+        hash = 17 * hash + (this.name != null ? this.name.hashCode() : 0);
+        hash = 17 * hash + (this.path != null ? this.path.hashCode() : 0);
+        hash = 17 * hash + (this.version != null ? this.version.hashCode() : 0);
+        hash = 17 * hash + (this.doNotCache ? 1 : 0);
         return hash;
     }
 
+    public boolean isDoNotCache() {
+        return doNotCache;
+    }
+
+    public void setDoNotCache(boolean doNotCache) {
+        this.doNotCache = doNotCache;
+    }
+    
     /**
      * @return return the {@link ResourceHelper} for this resource
      */

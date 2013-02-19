@@ -86,6 +86,7 @@ import com.sun.faces.flow.FlowDiscoveryCDIHelper;
 import com.sun.faces.lifecycle.ELResolverInitPhaseListener;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import javax.el.CompositeELResolver;
 import javax.el.ELResolver;
@@ -113,6 +114,7 @@ import java.util.logging.Logger;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.el.ELContext;
 import javax.el.ValueExpression;
+import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.NavigationCase;
@@ -216,6 +218,8 @@ public class ApplicationAssociate {
     private WebConfiguration webConfig;
     
     private FlowHandler flowHandler;
+    
+    private Map<String, String> definingDocumentIdsToTruncatedJarUrls;
 
     public ApplicationAssociate(ApplicationImpl appImpl) {
         app = appImpl;
@@ -263,6 +267,8 @@ public class ApplicationAssociate {
         
         appImpl.subscribeToEvent(PostConstructApplicationEvent.class,
                          Application.class, new PostConstructApplicationListener());
+        
+        definingDocumentIdsToTruncatedJarUrls = new ConcurrentHashMap<String, String>();
     }
 
     private Map<String, List<String>> resourceLibraryContracts;
@@ -782,6 +788,35 @@ public class ApplicationAssociate {
 
     public boolean isResponseRendered() {
         return responseRendered;
+    }
+    
+    public boolean urlIsRelatedToDefiningDocumentInJar(URL candidateUrl, String definingDocumentId) {
+        boolean result = false;
+        String match = definingDocumentIdsToTruncatedJarUrls.get(definingDocumentId);
+        if (null != match) {
+            String candidate = candidateUrl.toExternalForm();
+            if (null != candidate && null != match) {
+                int i = candidate.lastIndexOf("/META-INF");
+                if (-1 == i) {
+                    throw new FacesException("Invalid url for application configuration resources file with respect to faces flows");
+                }
+                candidate = candidate.substring(0, i);
+                result = candidate.equals(match);
+            }
+        }
+        
+        return result;
+    }
+    
+    public void relateUrlToDefiningDocumentInJar(URL url, String definingDocumentId) {
+        String candidate = url.toExternalForm();
+        int i = candidate.lastIndexOf("/META-INF");
+        if (-1 == i) {
+            return;
+        }
+        candidate = candidate.substring(0, i);
+        
+        definingDocumentIdsToTruncatedJarUrls.put(definingDocumentId, candidate);
     }
 
 

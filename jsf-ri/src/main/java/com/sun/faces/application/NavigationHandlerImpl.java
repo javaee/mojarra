@@ -444,15 +444,23 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         // based soley on the fromAction and outcome
         CaseStruct caseStruct = null;
         if (viewId != null) {
-            caseStruct = findExactMatch(ctx, viewId, fromAction, outcome);
+            caseStruct = findExactMatch(ctx, viewId, fromAction, outcome, toFlowDocumentId);
 
             if (caseStruct == null) {
-                caseStruct = findWildCardMatch(ctx, viewId, fromAction, outcome);
+                caseStruct = findWildCardMatch(ctx, viewId, fromAction, outcome, toFlowDocumentId);
             }
         }
 
         if (caseStruct == null) {
-            caseStruct = findDefaultMatch(ctx, fromAction, outcome);
+            caseStruct = findDefaultMatch(ctx, fromAction, outcome, toFlowDocumentId);
+        }
+        
+        // If the preceding steps found a match, but it was a flow call...
+        if (null != caseStruct && caseStruct.isFlowEntryFromExplicitRule) {
+            // Override the toFlowDocumentId with the value from the navigation-case, if present
+            toFlowDocumentId = (null != caseStruct.navCase.getToFlowDocumentId()) ? caseStruct.navCase.getToFlowDocumentId() : toFlowDocumentId;
+            // and try to call into the flow
+            caseStruct = findFacesFlowCallMatch(ctx, fromAction, outcome, toFlowDocumentId);
         }
         
         // If we still don't have a match, see if this is a switch
@@ -464,7 +472,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         if (null == caseStruct && null != fromAction && null != outcome) {
             caseStruct = findMethodCallMatch(ctx, fromAction, outcome);
         }
-
+        
         // If we still don't have a match, see if this is a faces-flow-call
         if (null == caseStruct && null != fromAction && null != outcome) {
             caseStruct = findFacesFlowCallMatch(ctx, fromAction, outcome, toFlowDocumentId);
@@ -521,7 +529,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     private CaseStruct findExactMatch(FacesContext ctx,
                                       String viewId,
                                       String fromAction,
-                                      String outcome) {
+                                      String outcome, String toFlowDocumentId) {
         Map<String, Set<NavigationCase>> navMap = getNavigationMap(ctx);
 
         Set<NavigationCase> caseSet = navMap.get(viewId);
@@ -537,7 +545,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         // 3) elements specifying only from-action
         // 4) elements where both from-action and from-outcome are null
         
-        CaseStruct result = determineViewFromActionOutcome(ctx, caseSet, fromAction, outcome);
+        CaseStruct result = determineViewFromActionOutcome(ctx, caseSet, fromAction, outcome, toFlowDocumentId);
         if (null != result) {
             FlowHandler flowHandler = ctx.getApplication().getFlowHandler();
             if (null != flowHandler) {
@@ -565,7 +573,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     private CaseStruct findWildCardMatch(FacesContext ctx,
                                          String viewId,
                                          String fromAction,
-                                         String outcome) {
+                                         String outcome, String toFlowDocumentId) {
         CaseStruct result = null;
         Map<String, Set<NavigationCase>> navMap = getNavigationMap(ctx);
 
@@ -599,7 +607,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             result = determineViewFromActionOutcome(ctx,
                                                     ccaseSet,
                                                     fromAction,
-                                                    outcome);
+                                                    outcome, toFlowDocumentId);
             if (result != null) {
                 break;
             }
@@ -629,7 +637,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
 
     private CaseStruct findDefaultMatch(FacesContext ctx,
                                         String fromAction,
-                                        String outcome) {
+                                        String outcome, String toFlowDocumentId) {
         Map<String, Set<NavigationCase>> navMap = getNavigationMap(ctx);
         
         Set<NavigationCase> caseSet = navMap.get("*");
@@ -644,7 +652,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         // 3) elements specifying only from-action
         // 4) elements where both from-action and from-outcome are null
 
-        CaseStruct result = determineViewFromActionOutcome(ctx, caseSet, fromAction, outcome);
+        CaseStruct result = determineViewFromActionOutcome(ctx, caseSet, fromAction, outcome, toFlowDocumentId);
         
         if (null != result) {
             FlowHandler flowHandler = ctx.getApplication().getFlowHandler();
@@ -1032,7 +1040,8 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     private CaseStruct determineViewFromActionOutcome(FacesContext ctx,
                                                       Set<NavigationCase> caseSet,
                                                       String fromAction,
-                                                      String outcome) {
+                                                      String outcome,
+                                                      String toFlowDocumentId) {
 
         CaseStruct result = new CaseStruct();
         boolean match = false;
@@ -1073,6 +1082,11 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                 if (cncHasCondition && Boolean.FALSE.equals(cnc.getCondition(ctx))) {
                     match = false;
                 } else {
+                    toFlowDocumentId = (null != cnc.getToFlowDocumentId()) ? cnc.getToFlowDocumentId() : toFlowDocumentId;
+                    if (null != toFlowDocumentId) {
+                        FlowHandler fh = ctx.getApplication().getFlowHandler();
+                        result.isFlowEntryFromExplicitRule = null != fh.getFlow(ctx, toFlowDocumentId, outcome);
+                    }
                     return result;
                 }
             }
@@ -1090,7 +1104,8 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         NavigationCase navCase;
         Flow currentFlow;
         Flow newFlow;
-        FlowCallNode facesFlowCallNode;        
+        FlowCallNode facesFlowCallNode;
+        boolean isFlowEntryFromExplicitRule = false;
     }
     
     private static final class NavigationInfo {

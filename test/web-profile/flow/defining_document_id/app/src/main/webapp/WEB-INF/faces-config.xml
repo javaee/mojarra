@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!-- =========== FULL CONFIGURATION FILE ================================== -->
+
+<faces-config version="2.0"
+    xmlns="http://java.sun.com/xml/ns/javaee" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_2.xsd">
+        
+   <navigation-rule>
+       <from-view-id>/index.xhtml</from-view-id>
+       <navigation-case>
+           <from-action>#{sessionScopedBean.flow01}</from-action>
+           <from-outcome>bounded-task-flow</from-outcome>
+           <to-view-id>bounded-task-flow</to-view-id>
+           <to-flow-document-id>flow01</to-flow-document-id>
+       </navigation-case>
+       <navigation-case>
+           <from-action>#{sessionScopedBean.flow02}</from-action>
+           <from-outcome>bounded-task-flow</from-outcome>
+           <to-view-id>bounded-task-flow</to-view-id>
+           <to-flow-document-id>flow02</to-flow-document-id>
+       </navigation-case>
+   </navigation-rule>
+
+
+</faces-config>

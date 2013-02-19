@@ -13,6 +13,7 @@
     <name>Mojarra ${project.version} - Test - Web-Profile - Flow</name>
     <modules>
         <module>basic-implicit</module>
+        <module>defining_document_id</module>
         <module>basic_faces_flow_call</module>
         <module>basic-multi-page</module>
         <module>basic_method_call</module>

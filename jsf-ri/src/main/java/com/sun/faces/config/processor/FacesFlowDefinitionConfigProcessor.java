@@ -41,6 +41,7 @@
 package com.sun.faces.config.processor;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.config.DocumentInfo;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.facelets.util.ReflectionUtil;
@@ -49,6 +50,7 @@ import com.sun.faces.flow.ParameterImpl;
 import com.sun.faces.flow.builder.FlowBuilderImpl;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -97,6 +99,11 @@ import org.w3c.dom.NodeList;
 public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor {
 
     private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
+    
+    /**
+     * <code>/faces-config</code>
+     */
+    private static final String FACES_CONFIG = "faces-config";
     
     /**
      * <code>/faces-config/flow-definition</code>
@@ -261,13 +268,21 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
         xpath.setNamespaceContext(new FacesConfigNamespaceContext());
         
         String nameStr = "";
-        NodeList nameList = (NodeList) xpath.evaluate(".//ns1:faces-config/name/text()", 
+        NodeList nameList = (NodeList) xpath.evaluate("./ns1:name/text()", 
                 document.getDocumentElement(), XPathConstants.NODESET);
         if (null != nameList && 1 < nameList.getLength()) {
             throw new XPathExpressionException("<faces-config> must have at most one <name> element.");
         }
         if (null != nameList && 1 == nameList.getLength()) {
             nameStr = nameList.item(0).getNodeValue().trim();
+            if (0 < nameStr.length()) {
+                ApplicationAssociate associate = ApplicationAssociate.getInstance(context.getExternalContext());
+                try {
+                    associate.relateUrlToDefiningDocumentInJar(definingDocumentURI.toURL(), nameStr);
+                } catch (MalformedURLException ex) {
+                    throw new XPathExpressionException(ex);
+                }
+            }
         }
         
         for (int c = 0, size = flowDefinitions.getLength(); c < size; c++) {

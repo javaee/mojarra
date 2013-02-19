@@ -106,6 +106,11 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
     private static final String TO_VIEW_ID = "to-view-id";
 
     /**
+     * <p>/faces-config/navigation-rule/navigation-case/to-flow-document-id</p>
+     */
+    private static final String TO_FLOW_DOCUMENT_ID = "to-flow-document-id";
+
+    /**
      * <p>/faces-config/navigation-rule/navigation-case/redirect</p>
      */
     private static final String REDIRECT = "redirect";
@@ -243,6 +248,7 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
                 String action = null;
                 String condition = null;
                 String toViewId = null;
+                String toFlowDocumentId = null;
                 Map<String,List<String>> parameters = null;
                 boolean redirect = false;
                 boolean includeViewParams = false;
@@ -278,6 +284,8 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
                             } else {
                                 toViewId = toViewIdString;
                             }
+                        } else if (TO_FLOW_DOCUMENT_ID.equals(n.getLocalName())) {
+                            toFlowDocumentId = getNodeText(n);
                         } else if (REDIRECT.equals(n.getLocalName())) {
                             parameters = processParameters(n.getChildNodes());
                             includeViewParams = isIncludeViewParams(n);
@@ -292,6 +300,7 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
                                         outcome,
                                         condition,
                                         toViewId,
+                                        toFlowDocumentId,
                                         parameters,
                                         redirect,
                                         includeViewParams);

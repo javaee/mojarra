@@ -65,6 +65,7 @@ public class NavigationCase {
     private final String fromOutcome;
     private final String condition;
     private final String toViewId;
+    private final String toFlowDocumentId;
     private final Map<String,List<String>> parameters;
     private final boolean redirect;
     private final boolean includeViewParams;
@@ -108,6 +109,46 @@ public class NavigationCase {
         this.fromOutcome = fromOutcome;
         this.condition = condition;
         this.toViewId = toViewId;
+        this.toFlowDocumentId = null;
+        this.parameters = parameters;
+        this.redirect = redirect;
+        this.includeViewParams = includeViewParams;
+
+    }
+
+
+    /**
+     * <p class="changed_added_2_0"> Construct a new
+     * <code>NavigationCase</code> based on the provided arguments.  See
+     * section JSF.7.4.2 for how a <code>NavigationCase</code> is used
+     * by the standard {@link ConfigurableNavigationHandler}</p>
+     *
+     * @param fromViewId return from {@link #getFromViewId}
+     * @param fromAction return from {@link #getFromAction}
+     * @param fromOutcome return from {@link #getFromOutcome}
+     * @param condition A string to be interpreted as a
+     * <code>ValueExpression</code> by a call to {@link #getCondition}
+     * @param toViewId return from {@link #getToViewId}
+     * @param parameters return from {@link #getParameters}
+     * @param redirect return from {@link #isRedirect}
+     * @param includeViewParams return {@link #isIncludeViewParams}
+     */
+    public NavigationCase(String fromViewId,
+                          String fromAction,
+                          String fromOutcome,
+                          String condition,
+                          String toViewId,
+                          String toFlowDocumentId,
+                          Map<String,List<String>> parameters,
+                          boolean redirect,
+                          boolean includeViewParams) {
+
+        this.fromViewId = fromViewId;
+        this.fromAction = fromAction;
+        this.fromOutcome = fromOutcome;
+        this.condition = condition;
+        this.toViewId = toViewId;
+        this.toFlowDocumentId = toFlowDocumentId;
         this.parameters = parameters;
         this.redirect = redirect;
         this.includeViewParams = includeViewParams;
@@ -284,13 +325,11 @@ public class NavigationCase {
      * the value defined in the corresponding application configuration resources
      * element.  The base implementation returns the empty string.</p>
      *
-     * @param context the {@link FacesContext} for the current request
-     *
      * @since 2.2
      */
-    public String getToFlowDocumentId(FacesContext context) {
+    public String getToFlowDocumentId() {
 
-        return "";
+        return toFlowDocumentId;
 
     }
     
@@ -414,6 +453,9 @@ public class NavigationCase {
                && !(toViewId != null
                     ? !toViewId.equals(that.toViewId)
                     : that.toViewId != null)
+               && !(toFlowDocumentId != null
+                    ? !toFlowDocumentId.equals(that.toFlowDocumentId)
+                    : that.toFlowDocumentId != null)
                && !(parameters != null
                     ? !parameters.equals(that.parameters)
                     : that.parameters != null));
@@ -436,6 +478,7 @@ public class NavigationCase {
                                     ? condition.hashCode()
                                     : 0);
             result = 31 * result + (toViewId != null ? toViewId.hashCode() : 0);
+            result = 31 * result + (toFlowDocumentId != null ? toFlowDocumentId.hashCode() : 0);
             result = 31 * result + (redirect ? 1 : 0);
             result = 31 * result + (parameters != null ? parameters.hashCode() : 0);
             hashCode = result;

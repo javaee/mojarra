@@ -78,35 +78,20 @@ public class MutableNavigationCase extends NavigationCase {
     // ------------------------------------------------------------ Constructors
 
     public MutableNavigationCase() {
-        this(null, null, null, null, null, null, false, false);
+        this(null, null, null, null, null, null, null, false, false);
         parameters = new ConcurrentHashMap<String, List<String>>();
     }
     
-    /**
-     * <p class="changed_added_2_0"> Construct a new
-     * <code>NavigationCase</code> based on the provided arguments.  See
-     * section JSF.7.4.2 for how a <code>NavigationCase</code> is used
-     * by the standard {@link ConfigurableNavigationHandler}</p>
-     *
-     * @param fromViewId return from {@link #getFromViewId}
-     * @param fromAction return from {@link #getFromAction}
-     * @param fromOutcome return from {@link #getFromOutcome}
-     * @param condition A string to be interpreted as a
-     * <code>ValueExpression</code> by a call to {@link #getCondition}
-     * @param toViewId return from {@link #getToViewId}
-     * @param parameters return from {@link #getParameters}
-     * @param redirect return from {@link #isRedirect}
-     * @param includeViewParams return {@link #isIncludeViewParams}
-     */
     public MutableNavigationCase(String fromViewId,
                           String fromAction,
                           String fromOutcome,
                           String condition,
                           String toViewId,
+                          String toFlowDocumentId,
                           Map<String,List<String>> parameters,
                           boolean redirect,
                           boolean includeViewParams) {
-        super(fromViewId, fromAction, fromOutcome, condition, toViewId, parameters, redirect, includeViewParams);
+        super(fromViewId, fromAction, fromOutcome, condition, toViewId, toFlowDocumentId, parameters, redirect, includeViewParams);
 
         this.fromViewId = fromViewId;
         this.fromAction = fromAction;
@@ -182,7 +167,7 @@ public class MutableNavigationCase extends NavigationCase {
     }
 
     @Override
-    public String getToFlowDocumentId(FacesContext context) {
+    public String getToFlowDocumentId() {
 
         return toFlowDocumentId;
 

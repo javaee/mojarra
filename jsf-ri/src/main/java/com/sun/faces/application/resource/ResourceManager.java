@@ -234,7 +234,7 @@ public class ResourceManager {
                             ctx);
                 }
 
-                if (info != null) {
+                if (info != null && (!info.isDoNotCache())) {
                     addToCache(info, contracts);
                 }
             }

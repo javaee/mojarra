@@ -2698,7 +2698,11 @@ which must contain exactly one <code>&lt;flow-id&gt;</code> element.</p>
           <xsd:annotation>
             <xsd:documentation><![CDATA[
 
-             <p>The document id of the called flow.</p>
+             <p class="changed_added_2_2">The document id of the called flow.
+             If this element appears in a &lt;navigation-case&gt; nested within 
+             a &lt;flow-definition&gt;, it must be ignored because navigation
+             cases within flows may only navigate among the view nodes of that 
+             flow.</p>
             
             ]]></xsd:documentation>
           </xsd:annotation>

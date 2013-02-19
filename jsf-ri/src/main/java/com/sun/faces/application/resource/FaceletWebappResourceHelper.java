@@ -41,15 +41,22 @@
 package com.sun.faces.application.resource;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.util.Util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.NoSuchElementException;
 import javax.faces.FacesException;
+import javax.faces.application.Application;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.flow.Flow;
+import javax.faces.flow.FlowHandler;
 
 public class FaceletWebappResourceHelper extends ResourceHelper {
     
@@ -114,6 +121,7 @@ public class FaceletWebappResourceHelper extends ResourceHelper {
             List<String> contracts = ctx.getResourceLibraryContracts();
             ContractInfo [] outContract = new ContractInfo[1];
             outContract[0] = null;
+            boolean doNotCache = false;
 
             URL url = null;
             if (null != contracts) {
@@ -127,15 +135,49 @@ public class FaceletWebappResourceHelper extends ResourceHelper {
             
             if (null == url) {
                 ClassLoader cl = Util.getCurrentLoader(this);
-                url = cl.getResource(RIConstants.FLOW_IN_JAR_PREFIX + resourceName);
+                Enumeration<URL> matches = cl.getResources(RIConstants.FLOW_IN_JAR_PREFIX + resourceName);
+                try {
+                    url = matches.nextElement();
+                } catch (NoSuchElementException nsee) {
+                    url = null;
+                }
+                if (null != url && matches.hasMoreElements()) {
+                    boolean keepGoing = true;
+                    FacesContext context = FacesContext.getCurrentInstance();
+                    Application application = context.getApplication();
+                    FlowHandler fh = application.getFlowHandler();
+                    Flow currentFlow = fh.getCurrentFlow();
+                    do {
+                        if (null != currentFlow && 0 < currentFlow.getDefiningDocumentId().length()) {
+                            String definingDocumentId = currentFlow.getDefiningDocumentId();
+                            ExternalContext extContext = context.getExternalContext();
+                            ApplicationAssociate associate = ApplicationAssociate.getInstance(extContext);
+                            if (associate.urlIsRelatedToDefiningDocumentInJar(url, definingDocumentId)) {
+                                keepGoing = false;
+                                doNotCache = true;
+                            } else {
+                                if (matches.hasMoreElements()) {
+                                    url = matches.nextElement();
+                                } else {
+                                    keepGoing = false;
+                                }
+                            }
+                        } else {
+                            keepGoing = false;
+                        }
+                    } while (keepGoing);
+                }
             }
             
             if (null != url) {
                 result = new FaceletResourceInfo(outContract[0], resourceName, null, this, url);
+                if (doNotCache) {
+                    result.setDoNotCache(doNotCache);
+                }
             }
-        } catch (MalformedURLException ex) {
+        } catch (IOException ex) {
             throw new FacesException(ex);
-        }
+        } 
         
         return result;
     }
