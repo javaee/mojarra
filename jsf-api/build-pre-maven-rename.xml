@@ -728,6 +728,11 @@ javax.faces.level=ALL
         <copy todir="${build.javadocs.dir}/javax/faces/view/facelets"
               file="${src.dir}/javax/faces/view/facelets/Facelets.jpg"/>
 
+        <filter token="build.number" value="${build.number}"/>
+        <copy todir="${build.javadocs.dir}/doc-files" filtering="true">
+          <fileset dir="${resources.dir}/doc-files" />
+        </copy>
+
         <copy todir="${build.javadocs.dir}/">
            <fileset dir="${doc.dir}">
              <include name="changed*.png" />
@@ -756,8 +761,8 @@ javax.faces.level=ALL
                  windowtitle="${DocName} (${spec.version})"
                  stylesheetfile="${resources.dir}/jsf-api.css"
                  source="1.5"
-                 doctitle="${DocName} (${spec.version} SNAPSHOT ${build.number})"
-                 bottom="Copyright 2002-2010 Oracle America Inc, Inc. All Rights Reserved.">
+                 doctitle="${DocName} (${spec.version} SNAPSHOT ${build.number})">
+            <bottom><![CDATA[<a href="http://www.oracle.com">Oracle</a> and/or its affiliates. All Rights Reserved. Use is subject to <a href="doc-files/speclicense.html" target="_top">license terms</a>]]></bottom>
             <fileset dir="${src.dir}">
                 <include name="**/*.java"/>
                 <exclude name="**/ApplicationScoped.java" />
