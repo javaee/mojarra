@@ -388,12 +388,16 @@ or a browser, without including extraneous elements such as
                 <![CDATA[
 <div class="changed_added_2_0">
   <p>
+
 <span class="changed_modified_2_2">A</span> URI that points to a
 template, also known as a layout, that inserts pieces of the page
 defined in the composition. <span class="changed_added_2_2">If the URI
 cannot be resolved a <code>TagAttributeException</code> must be thrown,
 including accurate location information to help the page author resolve
-the problem.</span>
+the problem.  When the template is intended to come from a resource
+library contract, the value of this attribute must be an absolute path
+starting with "/".</span>
+
   </p>
 </div>]]>
 
@@ -593,7 +597,9 @@ template, also known as a layout, that inserts pieces of the page
 defined in the decorator. <span class="changed_added_2_2">If the URI
 cannot be resolved a <code>TagAttributeException</code> must be thrown,
 including accurate location information to help the page author resolve
-the problem.</span>
+the problem.  When the template is intended to come from a resource
+library contract, the value of this attribute must be an absolute path
+starting with "/".</span>
 
 </div>]]>
 
@@ -742,9 +748,17 @@ in the same directory as <code>login.xhtml</code>.
             <description>
 
                 <![CDATA[
-<div class="changed_added_2_0">
-The filename of an XHTML page to include. The filename is relative to the XHTML page that was originally loaded.
-</div>]]>
+
+<p>
+
+<span class="changed_added_2_0">The filename of an XHTML page to
+include. The filename is relative to the XHTML page that was originally
+loaded.</span> <span class="changed_added_2_2">When the included file is
+intended to come from a resource library contract, the value of this
+attribute must be an absolute path starting with "/".</span>
+
+</p>
+]]>
 
             </description>
             <name>
