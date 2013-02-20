@@ -762,7 +762,7 @@ javax.faces.level=ALL
                  stylesheetfile="${resources.dir}/jsf-api.css"
                  source="1.5"
                  doctitle="${DocName} (${spec.version} SNAPSHOT ${build.number})">
-            <bottom><![CDATA[<a href="http://www.oracle.com">Oracle</a> and/or its affiliates. All Rights Reserved. Use is subject to <a href="doc-files/speclicense.html" target="_top">license terms</a>]]></bottom>
+            <bottom><![CDATA[<a href="http://www.oracle.com">Oracle</a> and/or its affiliates. All Rights Reserved. Use is subject to <a href="{@docRoot}/doc-files/speclicense.html" target="_top">license terms</a>]]></bottom>
             <fileset dir="${src.dir}">
                 <include name="**/*.java"/>
                 <exclude name="**/ApplicationScoped.java" />
