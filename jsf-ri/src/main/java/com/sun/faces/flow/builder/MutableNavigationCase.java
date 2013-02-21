@@ -81,6 +81,18 @@ public class MutableNavigationCase extends NavigationCase {
         this(null, null, null, null, null, null, null, false, false);
         parameters = new ConcurrentHashMap<String, List<String>>();
     }
+
+    public MutableNavigationCase(String fromViewId,
+                          String fromAction,
+                          String fromOutcome,
+                          String condition,
+                          String toViewId,
+                          Map<String,List<String>> parameters,
+                          boolean redirect,
+                          boolean includeViewParams) {
+        this(fromViewId, fromAction, fromOutcome, condition, toViewId, null, parameters, redirect, includeViewParams);
+        parameters = new ConcurrentHashMap<String, List<String>>();
+    }
     
     public MutableNavigationCase(String fromViewId,
                           String fromAction,

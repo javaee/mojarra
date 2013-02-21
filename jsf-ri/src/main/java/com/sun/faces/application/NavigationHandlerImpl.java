@@ -42,6 +42,7 @@ package com.sun.faces.application;
 
 import com.sun.faces.config.InitFacesContext;
 import com.sun.faces.application.view.ViewScopeManager;
+import com.sun.faces.flow.builder.MutableNavigationCase;
 import javax.faces.FacesException;
 import javax.faces.application.NavigationCase;
 import javax.faces.application.ViewHandler;
@@ -799,7 +800,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         if (null == result && null != viewIdToTest) {
             result = new CaseStruct();
             result.viewId = viewIdToTest;
-            result.navCase = new NavigationCase(currentViewId,
+            result.navCase = new MutableNavigationCase(currentViewId,
                                                     fromAction,
                                                     outcome,
                                                     null,
@@ -876,7 +877,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             if (node instanceof ViewNode) {
                 result = new CaseStruct();
                 result.viewId = ((ViewNode)node).getVdlDocumentId();
-                result.navCase = new NavigationCase(fromAction, 
+                result.navCase = new MutableNavigationCase(fromAction, 
                         fromAction, outcome, null, result.viewId, 
                         null, false, false);
             } else if (node instanceof ReturnNode) {
@@ -903,7 +904,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             if (null != viewIdToTest) {
                 result = new CaseStruct();
                 result.viewId = viewIdToTest;
-                result.navCase = new NavigationCase(fromAction, 
+                result.navCase = new MutableNavigationCase(fromAction, 
                         fromAction, outcome, null, result.viewId, 
                         null, false, false);
             }
