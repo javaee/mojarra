@@ -42,20 +42,20 @@
 
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.sun.faces.test.agnostic</groupId>
-        <artifactId>pom</artifactId>
-        <version>2.2.0-SNAPSHOT</version>
-    </parent>
-    <groupId>com.sun.faces.test.agnostic.component</groupId>
-    <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Agnostic - Component</name>
-    <modules>
-        <module>componentbase</module>
-        <module>custom</module>
-        <module>programmaticComponentCreation</module>
-    </modules>
-</project>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:rendererAnnotation="http://javaserverfaces.java.net/rendererAnnotation">
+    <h:head>
+    </h:head>
+    <h:body> 
+        <h:form id="form">
+            <rendererAnnotation:hello binding="#{rendererAnnotationBean.hello}"/>
+            <div>
+                <h:commandButton id="submit" value="Increment" action="#{rendererAnnotationBean.add}" />
+            </div>
+            <h:outputText value="#{rendererAnnotation.counter}" />
+        </h:form>
+    </h:body>
+</html>

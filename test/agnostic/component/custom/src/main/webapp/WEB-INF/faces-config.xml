@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 
 <!--
 
@@ -42,20 +42,16 @@
 
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.sun.faces.test.agnostic</groupId>
-        <artifactId>pom</artifactId>
-        <version>2.2.0-SNAPSHOT</version>
-    </parent>
-    <groupId>com.sun.faces.test.agnostic.component</groupId>
-    <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Agnostic - Component</name>
-    <modules>
-        <module>componentbase</module>
-        <module>custom</module>
-        <module>programmaticComponentCreation</module>
-    </modules>
-</project>
+<faces-config version="2.1"
+              xmlns="http://java.sun.com/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd">
+
+    <render-kit>
+        <renderer>
+            <component-family>javax.faces.Output</component-family>
+            <renderer-type>com.sun.faces.test.agnostic.component.custom.RendererAnnotationRenderer</renderer-type>
+            <renderer-class>com.sun.faces.test.agnostic.component.custom.RendererAnnotationRenderer</renderer-class>
+        </renderer>
+    </render-kit>
+</faces-config>

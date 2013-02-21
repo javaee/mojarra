@@ -42,20 +42,16 @@
 
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.sun.faces.test.agnostic</groupId>
-        <artifactId>pom</artifactId>
-        <version>2.2.0-SNAPSHOT</version>
-    </parent>
-    <groupId>com.sun.faces.test.agnostic.component</groupId>
-    <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Agnostic - Component</name>
-    <modules>
-        <module>componentbase</module>
-        <module>custom</module>
-        <module>programmaticComponentCreation</module>
-    </modules>
-</project>
+<facelet-taglib xmlns="http://java.sun.com/xml/ns/javaee" version="2.0">
+    <namespace>http://javaserverfaces.java.net/rendererAnnotation</namespace>
+    <tag>
+        <tag-name>hello</tag-name>
+        <description>
+            Writes a hello world.
+        </description>
+        <component>
+            <component-type>javax.faces.Output</component-type>
+            <renderer-type>com.sun.faces.test.agnostic.component.custom.RendererAnnotationRenderer</renderer-type>
+        </component>
+    </tag>
+</facelet-taglib>
