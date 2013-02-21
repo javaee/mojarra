@@ -1939,13 +1939,15 @@ public class ApplicationImpl extends Application {
         try {
             c = (UIComponent) componentExpression
                   .getValue(ctx.getELContext());
-
+            
             if (c == null) {
                 c = this.createComponentApplyAnnotations(ctx,
                                                          componentType,
                                                          rendererType,
                                                          applyAnnotations);
                 componentExpression.setValue((ctx.getELContext()), c);
+            } else if (applyAnnotations) {
+                this.applyAnnotations(ctx, rendererType, c);
             }
         } catch (Exception ex) {
             throw new FacesException(ex);
