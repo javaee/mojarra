@@ -1525,7 +1525,10 @@ determine if the item value is selectable or not.</p> ]]>
             <description>
 
 <![CDATA[ <p class="changed_added_2_0">evaluates to a boolean that will
-determine if the rendered markup for the item receives normal JSF HTML escaping or not.</p> ]]>
+determine if the rendered markup for the item receives normal JSF HTML
+escaping or not.  <span class="changed_added_2_2">If not specified, the
+runtime must behave as if the value were <code>true</code>.</span></p>
+]]>
 
             </description>
             <name>itemLabelEscaped</name>
