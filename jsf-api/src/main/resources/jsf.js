@@ -2202,7 +2202,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              * will be updated.  The contents of the <code>CDATA</code> section is the data that 
              * will be used when updating the contents of the DOM element as specified by the
              * <code>&lt;update&gt;</code> element identifier.
-             * <li>If an <code>update</code> element is found in the response
+             * <li>If an <code>&lt;update&gt;</code> element is found in the response
              * with the identifier <code>javax.faces.ViewRoot</code>:
              * <pre><code>&lt;update id="javax.faces.ViewRoot"&gt;
              *    &lt;![CDATA[...]]&gt;
@@ -2211,8 +2211,8 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              * <code>body</code> sections with the content from the response.</li>
 
              * <li class="changed_modified_2_2">If an
-             * <code>update</code> element is found in the response with
-             * an identifier containing
+             * <code>&lt;update&gt;</code> element is found in the
+             * response with an identifier containing
              * <code>javax.faces.ViewState</code>:
 
              * <pre><code>&lt;update id="&lt;VIEW_ROOT_CONTAINER_CLIENT_ID&gt;&lt;SEP&gt;javax.faces.ViewState&lt;SEP&gt;&lt;UNIQUE_PER_VIEW_NUMBER&gt;"&gt;
@@ -2286,11 +2286,17 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              * the <code>&lt;update&gt;</code> element's <code>CDATA</code> contents.</li>
              * </li>
              * <p><i>Insert Element Processing</i></p>
-             * <li>If an <code>&lt;insert&gt;</code> element is found in the response with the
-             * attribute <code>before</code>:
-             * <pre><code>&lt;insert id="insert id" before="before id"&gt;
-             *    &lt;![CDATA[...]]&gt;
+
+             * <li>If an <code>&lt;insert&gt;</code> element is found in
+             * the response with a nested <code>&lt;before&gt;</code>
+             * element:
+
+             * <pre><code>&lt;insert id="insert id"&gt;
+             *     &lt;before&gt;
+             *        &lt;![CDATA[...]]&gt;
+             *     &lt;/before&gt;
              * &lt;/insert&gt;</code></pre>
+             * 
              * <ul>
              * <li>Extract this <code>&lt;insert&gt;</code> element's <code>CDATA</code> contents
              * from the response.</li>
@@ -2299,11 +2305,17 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              * the DOM element in the document.</li>
              * </ul>
              * </li>
-             * <li>If an <code>&lt;insert&gt;</code> element is found in the response with the
-             * attribute <code>after</code>:
-             * <pre><code>&lt;insert id="insert id" after="after id"&gt;
-             *    &lt;![CDATA[...]]&gt;
+             *
+             * <li>If an <code>&lt;insert&gt;</code> element is found in
+             * the response with a nested <code>&lt;after&gt;</code>
+             * element:
+             *
+             * <pre><code>&lt;insert id="insert id"&gt;
+             *     &lt;after&gt;
+             *        &lt;![CDATA[...]]&gt;
+             *     &lt;/after&gt;
              * &lt;/insert&gt;</code></pre>
+             * 
              * <ul>
              * <li>Extract this <code>&lt;insert&gt;</code> element's <code>CDATA</code> contents
              * from the response.</li>

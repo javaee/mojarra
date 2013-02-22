@@ -50,6 +50,7 @@
      attributeFormDefault="unqualified"
      version="2.2">
 
+    <xsd:include schemaLocation="javaee_7.xsd"/>
     <xsd:annotation>
         <xsd:documentation>
 
@@ -62,8 +63,6 @@
 
         </xsd:documentation>
     </xsd:annotation>
-
-    <xsd:include schemaLocation="javaee_5.xsd"/>
 
     <!-- **************************************************** -->
 
@@ -90,14 +89,12 @@
         <xsd:annotation>
             <xsd:documentation><![CDATA[<p>
 
-                The "partial-response" element is the root of thei
+                The "partial-response" element is the root of the
                 partial response information hierarchy, and contains
                 nested elements for all possible elements that can exist
                 in the response.
 
-                <p>This element must have an "id" attribute whose value
-                is the return from calling getContainerClientId() on the
-                UIViewRoot to which this response pertains.
+                <p>
 
             </p>]]></xsd:documentation>
         </xsd:annotation>
@@ -115,6 +112,21 @@
                          minOccurs="0" 
                          maxOccurs="1"/>
         </xsd:choice>
+        <xsd:attribute name="id"
+                   type="xsd:ID" use="required">
+          <xsd:annotation>
+              <xsd:documentation>
+
+        <![CDATA[
+
+         <p class="changed_added_2_2">This element must have an "id" attribute whose value
+         is the return from calling getContainerClientId() on the
+         UIViewRoot to which this response pertains.<p> ]]>
+
+
+              </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
     </xsd:complexType>
 
     <xsd:complexType name="partial-response-changesType">
@@ -162,11 +174,10 @@
                     
             </p>]]></xsd:documentation>
         </xsd:annotation>
-        <xsd:simpleContent>
-            <xsd:extension base="xsd:string">
-                <xsd:attribute name="id" type="xsd:string" use="required"/>
-            </xsd:extension>
-        </xsd:simpleContent>
+        <xsd:sequence maxOccurs="unbounded">
+            <xsd:any processContents="skip" namespace="##any" />
+        </xsd:sequence>
+        <xsd:attribute name="id" type="xsd:string" use="required"/>
     </xsd:complexType>
 
     <xsd:complexType name="partial-response-insertType">
@@ -182,16 +193,11 @@
         </xsd:annotation>
         <xsd:choice minOccurs="1" maxOccurs="1">
             <xsd:element name="before">
-                <xsd:complexType>
-                    <xsd:attribute name="id" type="xsd:string" use="required"/>
-                </xsd:complexType>
             </xsd:element>
             <xsd:element name="after">
-                <xsd:complexType>
-                    <xsd:attribute name="id" type="xsd:string" use="required"/>
-                </xsd:complexType>
             </xsd:element>
         </xsd:choice>
+        <xsd:attribute name="id" type="xsd:string" use="required"/>
     </xsd:complexType>
 
     <xsd:complexType name="partial-response-deleteType">
@@ -236,7 +242,7 @@
                     
             </p>]]></xsd:documentation>
         </xsd:annotation>
-        <xsd:attribute name="url" type="xsd:anyURI" use="required"/>
+        <xsd:attribute name="url" type="xsd:string" use="required"/>
     </xsd:complexType>
 
     <xsd:complexType name="partial-response-errorType">
