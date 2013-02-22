@@ -45,7 +45,7 @@ import java.io.Serializable;
 import javax.inject.Named;
 
 @Named
-@FlowScoped(id="flow-a")
+@FlowScoped(definingDocumentId="unique", id="flow-a")
 public class Flow_a_Bean implements Serializable {
 
    public String getName() {

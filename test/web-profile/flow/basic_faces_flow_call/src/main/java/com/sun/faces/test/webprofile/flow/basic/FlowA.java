@@ -58,7 +58,7 @@ public class FlowA implements Serializable {
     @Produces @FlowDefinition
     public Flow buildMyFlow(@FlowBuilderParameter FlowBuilder flowBuilder) {
         String flowId = "flow-a";
-        flowBuilder.id("", flowId);
+        flowBuilder.id("unique", flowId);
         flowBuilder.viewNode(flowId, "/" + flowId + "/" + flowId + ".xhtml").markAsStartNode();
         flowBuilder.returnNode("taskFlowReturn1").
                 fromOutcome("#{flow_a_Bean.returnValue}");

@@ -59,6 +59,7 @@ import javax.faces.event.AbortProcessingException;
 import javax.faces.event.PostConstructApplicationEvent;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
+import javax.faces.flow.FlowHandler;
 import javax.faces.lifecycle.ClientWindow;
 
 
@@ -148,6 +149,10 @@ public class LifecycleImpl extends Lifecycle {
             myWindow = new ClientWindowImpl();
             myWindow.decode(context);
             extContext.setClientWindow(myWindow);
+            FlowHandler flowHandler = context.getApplication().getFlowHandler();
+            if (null != flowHandler) {
+                flowHandler.clientWindowTransition(context);
+            }
             
         }
         

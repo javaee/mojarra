@@ -146,7 +146,7 @@ public class FaceletWebappResourceHelper extends ResourceHelper {
                     FacesContext context = FacesContext.getCurrentInstance();
                     Application application = context.getApplication();
                     FlowHandler fh = application.getFlowHandler();
-                    Flow currentFlow = fh.getCurrentFlow();
+                    Flow currentFlow = fh.getCurrentFlow(context);
                     do {
                         if (null != currentFlow && 0 < currentFlow.getDefiningDocumentId().length()) {
                             String definingDocumentId = currentFlow.getDefiningDocumentId();

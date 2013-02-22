@@ -234,6 +234,30 @@ public class FlowHandlerImpl extends FlowHandler {
             }
         } 
     }
+
+    @Override
+    public void clientWindowTransition(FacesContext context) {
+        Map<String, String> requestParamMap = context.getExternalContext().getRequestParameterMap();
+        String toFlowDocumentId = requestParamMap.get(TO_FLOW_DOCUMENT_ID_REQUEST_PARAM_NAME);
+        String flowId = requestParamMap.get(FLOW_ID_REQUEST_PARAM_NAME);
+        if (null != toFlowDocumentId) {
+            // don't use *this*, due to decoration
+            FlowHandler fh = context.getApplication().getFlowHandler();
+            Flow sourceFlow = fh.getCurrentFlow(context);
+            Flow targetFlow = null;            
+            FlowCallNode flowCallNode = null;
+            // if this is not a return...
+            if (null != flowId && !FlowHandler.NULL_FLOW.equals(toFlowDocumentId)) {
+                targetFlow = fh.getFlow(context, toFlowDocumentId, flowId);
+                if (null != targetFlow && null != sourceFlow) {
+                    flowCallNode = sourceFlow.getFlowCall(targetFlow);
+                }
+            }
+            
+            fh.transition(context, sourceFlow, targetFlow, flowCallNode);
+            
+        }
+    }
     
     private void performPops(FacesContext context, Flow sourceFlow, Flow targetFlow) {
         // case 0: sourceFlow is null.  There must be nothing to pop.

@@ -382,7 +382,7 @@ public abstract class ResponseStateManager {
      * previous request to which this request is a postback,
      * <code>false</code> otherwise.</p>
      *
-     * <p>The implementation if this method for the Standard HTML
+     * <p>The implementation of this method for the Standard HTML
      * RenderKit must consult the {@link
      * javax.faces.context.ExternalContext}'s
      * <code>requestParameterMap</code> and return <code>true</code> if

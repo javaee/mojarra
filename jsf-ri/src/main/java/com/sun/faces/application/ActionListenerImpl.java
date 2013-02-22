@@ -127,7 +127,7 @@ public class ActionListenerImpl implements ActionListener {
 
         // Invoke nav handling..
         
-        String toFlowDocumentId = (String) source.getAttributes().get("toFlowDocumentId");
+        String toFlowDocumentId = (String) source.getAttributes().get(ActionListener.TO_FLOW_DOCUMENT_ID_ATTR_NAME);
         if (null == toFlowDocumentId) {
             navHandler.handleNavigation(context,
                     (null != binding) ?

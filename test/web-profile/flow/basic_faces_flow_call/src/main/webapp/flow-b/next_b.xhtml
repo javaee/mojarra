@@ -60,7 +60,12 @@
     <h:form prependId="false">
         <p><h:commandButton id="back" value="back" action="next_a" /></p>
         <p><h:commandButton id="return" value="return" action="taskFlowReturn1" /></p>
+        <p><h:button id="return_GET" value="return via GET" outcome="taskFlowReturn1" /></p>
         <p><h:commandButton id="callA" value="callA" action="callA" /></p>
+        <p><h:button id="callA_GET" value="callA via GET" outcome="callA">
+              <f:attribute name="to-flow-document-id" value="unique"/>
+        </h:button></p>
+        
         
     </h:form>
     </body>

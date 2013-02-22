@@ -64,6 +64,7 @@
             
             <flow-call id="callA">
                 <flow-reference>
+                    <flow-document-id>unique</flow-document-id>
                     <flow-id>flow-a</flow-id>
                 </flow-reference>
                 <outbound-parameter>

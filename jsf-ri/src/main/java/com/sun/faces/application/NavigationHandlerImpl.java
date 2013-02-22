@@ -42,7 +42,6 @@ package com.sun.faces.application;
 
 import com.sun.faces.config.InitFacesContext;
 import com.sun.faces.application.view.ViewScopeManager;
-import com.sun.faces.flow.builder.MutableNavigationCase;
 import javax.faces.FacesException;
 import javax.faces.application.NavigationCase;
 import javax.faces.application.ViewHandler;
@@ -135,9 +134,16 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     @Override
     public NavigationCase getNavigationCase(FacesContext context, String fromAction, String outcome) {
 
+        return getNavigationCase(context, fromAction, outcome, "");
+        
+    }
+
+    @Override
+    public NavigationCase getNavigationCase(FacesContext context, String fromAction, String outcome, String toFlowDocumentId) {
         Util.notNull("context", context);
+        Util.notNull("toFlowDocumentId", toFlowDocumentId);
         NavigationCase result = null;
-        CaseStruct caseStruct = getViewId(context, fromAction, outcome, null);
+        CaseStruct caseStruct = getViewId(context, fromAction, outcome, toFlowDocumentId);
         if (null != caseStruct) {
             result = caseStruct.navCase;
         }
@@ -145,6 +151,8 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         return result;
         
     }
+    
+    
 
 
     /**
@@ -475,12 +483,12 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         }
         
         // If we still don't have a match, see if this is a faces-flow-call
-        if (null == caseStruct && null != fromAction && null != outcome) {
+        if (null == caseStruct && null != outcome) {
             caseStruct = findFacesFlowCallMatch(ctx, fromAction, outcome, toFlowDocumentId);
         }
 
         // If we still don't have a match, see if this is a flow-return
-        if (null == caseStruct && null != fromAction && null != outcome) {
+        if (null == caseStruct && null != outcome) {
             caseStruct = findReturnMatch(ctx, fromAction, outcome, toFlowDocumentId);
         }
 
@@ -550,7 +558,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         if (null != result) {
             FlowHandler flowHandler = ctx.getApplication().getFlowHandler();
             if (null != flowHandler) {
-                result.currentFlow = flowHandler.getCurrentFlow();
+                result.currentFlow = flowHandler.getCurrentFlow(ctx);
                 result.newFlow = result.currentFlow;
             }
         }
@@ -616,7 +624,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         if (null != result) {
             FlowHandler flowHandler = ctx.getApplication().getFlowHandler();
             if (null != flowHandler) {
-                result.currentFlow = flowHandler.getCurrentFlow();
+                result.currentFlow = flowHandler.getCurrentFlow(ctx);
                 result.newFlow = result.currentFlow;
             }
         }
@@ -658,7 +666,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         if (null != result) {
             FlowHandler flowHandler = ctx.getApplication().getFlowHandler();
             if (null != flowHandler) {
-                result.currentFlow = flowHandler.getCurrentFlow();
+                result.currentFlow = flowHandler.getCurrentFlow(ctx);
                 result.newFlow = result.currentFlow;
             }
         }
@@ -800,11 +808,12 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         if (null == result && null != viewIdToTest) {
             result = new CaseStruct();
             result.viewId = viewIdToTest;
-            result.navCase = new MutableNavigationCase(currentViewId,
+            result.navCase = new NavigationCase(currentViewId,
                                                     fromAction,
                                                     outcome,
                                                     null,
                                                     viewIdToTest,
+                                                    flowDefiningDocumentId,
                                                     parameters,
                                                     isRedirect,
                                                     isIncludeViewParams);
@@ -877,9 +886,9 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             if (node instanceof ViewNode) {
                 result = new CaseStruct();
                 result.viewId = ((ViewNode)node).getVdlDocumentId();
-                result.navCase = new MutableNavigationCase(fromAction, 
+                result.navCase = new NavigationCase(fromAction, 
                         fromAction, outcome, null, result.viewId, 
-                        null, false, false);
+                        flow.getDefiningDocumentId(), null, false, false);
             } else if (node instanceof ReturnNode) {
                 String fromOutcome = ((ReturnNode)node).getFromOutcome(context);
                 result = getViewId(context, fromAction, fromOutcome, flow.getDefiningDocumentId());
@@ -904,7 +913,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             if (null != viewIdToTest) {
                 result = new CaseStruct();
                 result.viewId = viewIdToTest;
-                result.navCase = new MutableNavigationCase(fromAction, 
+                result.navCase = new NavigationCase(fromAction, 
                         fromAction, outcome, null, result.viewId, 
                         null, false, false);
             }
@@ -1017,7 +1026,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             ReturnNode returnNode = currentFlow.getReturns().get(outcome);
             if (null != returnNode) {
                 String fromOutcome = returnNode.getFromOutcome(context);
-                result = getViewId(context, fromAction, fromOutcome, toFlowDocumentId);
+                result = getViewId(context, fromAction, fromOutcome, FlowHandler.NULL_FLOW);
             }
         }
         if (null != result) {

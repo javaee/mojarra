@@ -22508,6 +22508,20 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         not based on the presence or absence of children for the
         component.</p>
 
+        <p>To support entering flows that are defined by both a defining
+        document id and a flow id, add a component attribute to this
+        component whose name is given by the value of the symbolic
+        constant
+        <code>javax.faces.event.ActionListener.TO_FLOW_DOCUMENT_ID_ATTR_NAME</code>,
+        and whose value is the defining document id.  For example, when
+        using this component in a facelet page, the following markup
+        would cause such an attribute to be added.</p>
+
+<pre><code>&lt;h:commandButton id="start_a" value="enter flow-a" action="flow-a"&gt;<br />
+&nbsp;&nbsp;&lt;f:attribute name="to-flow-document-id" value="unique"/&gt;<br />
+&lt;/h:commandButton&gt;<br />
+</code></pre>
+
       </div>
 
       </ul>
@@ -22957,7 +22971,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     </renderer>
     <renderer>
       <description><![CDATA[<p><span class="changed_modified_2_0
-            changed_modified_2_0_rev_a">Render</span> an HTML "a" anchor
+            changed_modified_2_0_rev_a changed_modified_2_2">Render</span> an HTML "a" anchor
             element that acts like a form submit button when
             clicked.</p>
 
@@ -23081,7 +23095,27 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <p>Where TARGET is the value of the target attribute on the JSP
       tag.</p>
 
-      </ul>]]></description>
+      </ul>
+
+<div class="changed_added_2_2">
+
+        <p>To support entering flows that are defined by both a defining
+        document id and a flow id, add a component attribute to this
+        component whose name is given by the value of the symbolic
+        constant
+        <code>javax.faces.event.ActionListener.TO_FLOW_DOCUMENT_ID_ATTR_NAME</code>,
+        and whose value is the defining document id.  For example, when
+        using this component in a facelet page, the following markup
+        would cause such an attribute to be added.</p>
+
+<pre><code>&lt;h:commandLink id="start_a" value="enter flow-a" action="flow-a"&gt;<br />
+&nbsp;&nbsp;&lt;f:attribute name="to-flow-document-id" value="unique"/&gt;<br />
+&lt;/h:commandLink&gt;<br />
+</code></pre>
+
+</div>
+
+]]></description>
       <component-family>javax.faces.Command</component-family>
       <renderer-type>javax.faces.Link</renderer-type>
       <renderer-class>
@@ -24898,7 +24932,9 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     <renderer>
       <description><![CDATA[<p class="changed_added_2_2">This
             renderer is intended to be used with an arbitrary markup
-            element that has no decoding.</p>
+            element whose decoding needs can be entirely described by
+            the section "General notes on decoding" in the RenderKit
+            overview.</p>
 
             <div class="changed_added_2_2">
             <p>The local name of the rendered element must first be
@@ -28544,6 +28580,24 @@ the "styleClass" attribute is specified, render its value as the value
 of the "class" attribute on the "span".  Render any ignored-by-renderer
 attributes on the "span".</p>
 
+<div class="changed_added_2_2">
+
+        <p>To support entering flows that are defined by both a defining
+        document id and a flow id, add a component attribute to this
+        component whose name is given by the value of the symbolic
+        constant
+        <code>javax.faces.event.ActionListener.TO_FLOW_DOCUMENT_ID_ATTR_NAME</code>,
+        and whose value is the defining document id.  For example, when
+        using this component in a facelet page, the following markup
+        would cause such an attribute to be added.</p>
+
+<pre><code>&lt;h:link id="start_a" value="enter flow-a" outcome="flow-a"&gt;<br />
+&nbsp;&nbsp;&lt;f:attribute name="to-flow-document-id" value="unique"/&gt;<br />
+&lt;/h:link&gt;<br />
+</code></pre>
+
+</div>
+
 ]]></description>
       <component-family>javax.faces.OutcomeTarget</component-family>
       <renderer-type>javax.faces.Link</renderer-type>
@@ -29173,22 +29227,34 @@ this application, and passing the result through the
   component instance for this <code>Renderer</code>.</p>
 
   <p>Obtain an instance of
-  <code>javax.faces.application.ConfigurableNavigationHandler</code> from
-  the <code>ViewHandler</code>.  If no such instance can be obtained,
-  write the "disabled" attribute on the button.  Otherwise, let
-  <em>outcome</em> be the result of calling <code>getOutcome()</code> on
-  the argument component, which must be an instance of
-  <code>UIOutcomeTarget</code>.  If this result is <code>null</code>, let
-  <em>outcome</em> be the viewId of the current <code>UIViewRoot</code>.
-  Let <em>navCase</em> be the return from calling
+  <code>javax.faces.application.ConfigurableNavigationHandler</code>
+  from the <code>ViewHandler</code>.  If no such instance can be
+  obtained, write the "disabled" attribute on the button.  Otherwise,
+  let <em>outcome</em> be the result of calling
+  <code>getOutcome()</code> on the argument component, which must be an
+  instance of <code>UIOutcomeTarget</code>.  If this result is
+  <code>null</code>, let <em>outcome</em> be the viewId of the current
+  <code>UIViewRoot</code>.  <span class="changed_modified_2_2">Obtain a
+  reference to the <code>NavigationCase</code>, called <em>navCase</em>
+  for discussion.  If the component has a non-<code>null</code>
+  attribute named by the value of the symbolic constant
+  <code>javax.faces.event.ActionListener.TO_FLOW_DOCUMENT_ID_ATTR_NAME</code>,
+  let <em>navCase</em> be the return from calling
   <code>getNavigationCase()</code> on the
   <code>ConfigurableNavigationHandler</code>, passing the current
   <code>FacesContext</code> as the first argument, <code>null</code>, as
-  the second argument, and <em>outcome</em> as the third argument.  If
-  this returns <code>null</code>, log an informative error which includes
-  the component id, and write the "disabled" attribute on the component
-  markup, with the value of <code>true</code>.  Otherwise obtain the
-  encoded target URL using the following algorithm.</p>
+  the second argument, <em>outcome</em> as the third argument, and the
+  value of the <code>TO_FLOW_DOCUMENT_ID_ATTR_NAME</code> attribute as
+  the fourth argument.  Otherwise, let <em>navCase</em> be the return
+  from calling <code>getNavigationCase()</code> on the
+  <code>ConfigurableNavigationHandler</code>, passing the current
+  <code>FacesContext</code> as the first argument, <code>null</code>, as
+  the second argument, and <em>outcome</em> as the third
+  argument.</span> If this returns <code>null</code>, log an informative
+  error which includes the component id, and write the "disabled"
+  attribute on the component markup, with the value of
+  <code>true</code>.  Otherwise obtain the encoded target URL using the
+  following algorithm.</p>
 
   <p>Algorithm to obtain the encoded target URL</p>
 
@@ -29204,7 +29270,7 @@ this application, and passing the result through the
 	  the same name, and appear in the list in the same order as their child
 	  order.</p></li>
 
-	  <li><p>Next, obtain any parameters included within the
+	  <li><p>Obtain any parameters included within the
 	  navigation case.  Call <code>getParameters()</code> on
 	  <em>navCase</em>.  The result will be a <code>Map&lt;String,
 	  List&lt;String&gt;&gt;</code>.  If the result is
@@ -29213,6 +29279,35 @@ this application, and passing the result through the
 	  same name exists in <em>params</em>, set the value from the
 	  current entry as the value in the <em>params</em>
 	  <code>Map</code>.</p></li>
+
+          <li class="changed_added_2_2"><p>If the navigation case has a
+          non-null <code>toFlowDocumentId</code> property, add two
+          parameters as shown in this table.</p>
+
+          <table border="1">
+            <tr>
+              <th>parameter name</th>
+              <th>parameter value</th>
+            </tr>
+
+            <tr>
+               <td>value of <code>FlowHandler.TO_FLOW_DOCUMENT_ID_REQUEST_PARAM_NAME</code></td>
+
+               <td>value of the <code>toFlowDocumentId</code> property
+               of the navigation case</td>
+            </tr>
+            
+            <tr>
+               <td>value of <code>FlowHandler.FLOW_ID_REQUEST_PARAM_NAME</code></td>
+
+               <td>value of the <code>fromOutcome</code> property
+               of the navigation case</td>
+            </tr>
+            
+          </table>
+
+
+          </li>
 
 	  <li><p>Let <em>includeViewParams</em> be the result of a
 	  logical OR of the results from calling
@@ -29260,6 +29355,22 @@ this application, and passing the result through the
   children, the renderer will decide if the end tag is required or
   not based on the presence or absence of children for the
   component.</p>
+
+        <p>To support entering flows that are defined by both a defining
+        document id and a flow id, add a component attribute to this
+        component whose name is given by the value of the symbolic
+        constant
+        <code>javax.faces.event.ActionListener.TO_FLOW_DOCUMENT_ID_ATTR_NAME</code>,
+        and whose value is the defining document id.  For example, when
+        using this component in a facelet page, the following markup
+        would cause such an attribute to be added.</p>
+
+<pre><code>&lt;h:button id="start_a" value="enter flow-a" outcome="flow-a"&gt;<br />
+&nbsp;&nbsp;&lt;f:attribute name="to-flow-document-id" value="unique"/&gt;<br />
+&lt;/h:button&gt;<br />
+</code></pre>
+
+
 
 </div>
 

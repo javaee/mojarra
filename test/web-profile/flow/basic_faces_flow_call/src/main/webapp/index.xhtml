@@ -54,10 +54,14 @@
     <h:form prependId="false">
         <p><h:commandButton id="start_a" value="enter flow-a" 
                             action="flow-a">
-              <f:attribute name="toFlowDocumentId" value=""/>
+              <f:attribute name="to-flow-document-id" value="unique"/>
             </h:commandButton></p>
+        <p><h:button id="start_a_GET" value="enter flow-a via GET" outcome="flow-a">
+              <f:attribute name="to-flow-document-id" value="unique"/>
+            </h:button></p>
         <p><h:commandButton id="start_b" value="enter flow-b" 
                             action="flow-b" /></p>
+        <p><h:button id="start_b_GET" value="enter flow-b via GET" outcome="flow-b" /></p>
         <p><h:commandButton id="stay" value="stay" /></p>
     </h:form>
 </body>

@@ -45,7 +45,7 @@ import javax.faces.component.UIComponent;
 
 
 /**
- * <p><span class="changed_modified_2_0">A</span> listener interface for 
+ * <p><span class="changed_modified_2_0 changed_modified_2_2">A</span> listener interface for 
  * receiving {@link ActionEvent}s.  <span class="changed_added_2_0">An
  * implementation
  * of this interface must be thread-safe.</span>  A class that
@@ -55,7 +55,15 @@ import javax.faces.component.UIComponent;
  */
 
 public interface ActionListener extends FacesListener  {
-
+    
+    /**
+     * <p class="changed_added_2_2">The presence of this component attribute
+     * on an {@link javax.faces.component.ActionSource} component will cause
+     * the default {@code ActionListener} to interpret the value of the 
+     * attribute as the </p>
+     * 
+     */
+    public static final String TO_FLOW_DOCUMENT_ID_ATTR_NAME = "to-flow-document-id";
 
     /**
      * <p>Invoked when the action described by the specified

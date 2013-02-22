@@ -83,6 +83,41 @@ public abstract class ConfigurableNavigationHandler extends NavigationHandler {
             String fromAction, 
             String outcome);
     
+    
+    /**
+     * <p class="changed_added_2_2">Return the {@link NavigationCase}
+     * representing the navigation that would be taken had {@link
+     * NavigationHandler#handleNavigation} been called with the same
+     * arguments or <code>null</code> if there is no such case.  Implementations
+     * that comply the version of the specification in which this method
+     * was introduced must override this method.  For compatibility with 
+     * decorated implementations that comply with an earlier version of the
+     * specification, an implementation is provided that simply calls
+     * through to {@link #getNavigationCase(javax.faces.context.FacesContext, java.lang.String, java.lang.String)},
+     * ignoring the {@code toFlowDocumentId} parameter.</p>
+     * 
+     * @param context The {@link FacesContext} for the current request
+     * @param fromAction The action binding expression that was evaluated
+     *  to retrieve the specified outcome, or <code>null</code> if the
+     *  outcome was acquired by some other means
+     * @param outcome The logical outcome returned by a previous invoked
+     *  application action (which may be <code>null</code>)
+     * @param toFlowDocumentId The value of the <code>toFlowDocumentId</code> property
+     * for the navigation case (which may be <code>null</code>)
+     *
+     * @throws NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     * 
+     * @since 2.2
+     */
+    
+    public NavigationCase getNavigationCase(FacesContext context,
+            String fromAction, 
+            String outcome,
+            String toFlowDocumentId) {
+        return getNavigationCase(context, fromAction, outcome);
+    }
+    
 
     /**
      * <p class="changed_added_2_0">Return a <code>Map&lt;String,

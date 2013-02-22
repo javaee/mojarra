@@ -45,7 +45,7 @@ import javax.faces.context.FacesContext;
 
 
 /**
- * <p><span class="changed_modified_2_0">A</a> 
+ * <p><span class="changed_modified_2_0 changed_modified_2_2">A</a> 
  * <strong>NavigationHandler</strong> is passed the outcome string
  * returned by an application action invoked for this application, and will
  * use this (along with related state information) to choose the view to
@@ -100,6 +100,27 @@ public abstract class NavigationHandler {
                                           String fromAction,
                                           String outcome);
     
+    /**
+     * <p class="changed_added_2_2">Overloaded variant of {@link #handleNavigation(javax.faces.context.FacesContext, java.lang.String, java.lang.String)}
+     * that allows the caller to provide the defining document id for a flow
+     * to be entered by this navigation.  For backward compatibility with 
+     * decorated {@code NavigationHandler} implementations that conform to an 
+     * earlier version of the specification, an implementation is provided that
+     * calls through to {@link #handleNavigation(javax.faces.context.FacesContext, java.lang.String, java.lang.String)},
+     * ignoring the {@code toFlowDocumentId} parameter.</p>
+     * 
+     * @param context The {@link FacesContext} for the current request
+     * @param fromAction The action binding expression that was evaluated
+     *  to retrieve the specified outcome, or <code>null</code> if the
+     *  outcome was acquired by some other means
+     * @param outcome The logical outcome returned by a previous invoked
+     *  application action (which may be <code>null</code>)
+     * @param toFlowDocumentId The defining document id of the flow into which
+     * this navigation will cause entry.
+     *
+     * @throws NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     */
     public void handleNavigation(FacesContext context,
             String fromAction,
             String outcome,

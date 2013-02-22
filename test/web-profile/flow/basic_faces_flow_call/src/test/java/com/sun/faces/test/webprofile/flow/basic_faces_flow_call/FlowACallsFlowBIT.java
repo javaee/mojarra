@@ -39,7 +39,7 @@
  */
 package com.sun.faces.test.webprofile.flow.basic_faces_flow_call;
 
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -97,12 +97,21 @@ public class FlowACallsFlowBIT {
     }
 
     @Test
-    public void testFacesFlowCall() throws Exception {
+    public void testFacesFlowCallPostback() throws Exception {
+        doTestFacesFlowCall("");
+    }
+
+    @Test
+    public void testFacesFlowCallGet() throws Exception {
+        doTestFacesFlowCall("_GET");
+    }
+
+    public void doTestFacesFlowCall(String flowInvocationSuffix) throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
 
         assertTrue(page.getBody().asText().indexOf("Outside of flow") != -1);
         
-        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("start_a");
+        HtmlInput button = (HtmlInput) page.getElementById("start_a");
         page = button.click();
         String pageText = page.asText();
         assertTrue(pageText.contains("Flow_a_Bean"));
@@ -114,7 +123,7 @@ public class FlowACallsFlowBIT {
         assertEquals("", param2Value);
         
         
-        button = (HtmlSubmitInput) page.getElementById("next_a");
+        button = (HtmlInput) page.getElementById("next_a");
         page = button.click();
         pageText = page.asText();
         assertTrue(pageText.contains("Second page in the flow"));
@@ -123,13 +132,13 @@ public class FlowACallsFlowBIT {
         String value = "" + System.currentTimeMillis();
         input.setValueAttribute(value);
         
-        button = (HtmlSubmitInput) page.getElementById("next");
+        button = (HtmlInput) page.getElementById("next");
         page = button.click();
         
         pageText = page.asText();
         assertTrue(pageText.contains(value));
         
-        button = (HtmlSubmitInput) page.getElementById("callB");
+        button = (HtmlInput) page.getElementById("callB" + flowInvocationSuffix);
         page = button.click();
         
         pageText = page.asText();
@@ -142,7 +151,7 @@ public class FlowACallsFlowBIT {
         assertEquals("param2Value", param2Value);
         
         
-        button = (HtmlSubmitInput) page.getElementById("next_a");
+        button = (HtmlInput) page.getElementById("next_a");
         page = button.click();
         pageText = page.asText();
         assertTrue(pageText.contains("Second page in the flow"));
@@ -151,13 +160,13 @@ public class FlowACallsFlowBIT {
         value = "" + System.currentTimeMillis();
         input.setValueAttribute(value);
         
-        button = (HtmlSubmitInput) page.getElementById("next");
+        button = (HtmlInput) page.getElementById("next");
         page = button.click();
         
         pageText = page.asText();
         assertTrue(pageText.contains(value));
         
-        button = (HtmlSubmitInput) page.getElementById("callA");
+        button = (HtmlInput) page.getElementById("callA" + flowInvocationSuffix);
         page = button.click();
         
         param1Value = page.getElementById("param1FromFlowB").getTextContent();
@@ -165,15 +174,15 @@ public class FlowACallsFlowBIT {
         param2Value = page.getElementById("param2FromFlowB").getTextContent();
         assertEquals("param2Value", param2Value);
         
-        button = (HtmlSubmitInput) page.getElementById("next_a");
+        button = (HtmlInput) page.getElementById("next_a");
         page = button.click();
         pageText = page.asText();
         assertTrue(pageText.contains("Second page in the flow"));
         
-        button = (HtmlSubmitInput) page.getElementById("next");
+        button = (HtmlInput) page.getElementById("next");
         page = button.click();
         
-        button = (HtmlSubmitInput) page.getElementById("return");
+        button = (HtmlInput) page.getElementById("return" + flowInvocationSuffix);
         page = button.click();
         
         /**** PENDING(edburns): when the work to complete the navigation rule

@@ -156,6 +156,41 @@ import javax.faces.context.FacesContext;
  */ 
 
 public abstract class FlowHandler {
+    
+    
+    /**
+     * <p class="changed_added_2_2">Components that are rendered by <code>Renderers</code>
+     * of component-family <code>javax.faces.OutcomeTarget</code> must use this
+     * constant as the parameter name for a parameter representing the flow id
+     * of the flow that this component will cause to be entered.</p>
+     * 
+     * <p class="changed_added_2_2"></p>
+     * 
+     * @since 2.2
+     */
+    public static final String FLOW_ID_REQUEST_PARAM_NAME = "jffi";
+    
+    /**
+     * <p class="changed_added_2_2">Components that are rendered by <code>Renderers</code>
+     * of component-family <code>javax.faces.OutcomeTarget</code> must use this
+     * constant as the parameter name for a parameter representing the defining document id
+     * of the flow that this component will cause to be entered.</p>
+     * 
+     * @since 2.2
+     */
+    public static final String TO_FLOW_DOCUMENT_ID_REQUEST_PARAM_NAME = "jftfdi";
+    
+    
+    /**
+     * <p class="changed_added_2_2">Components that are rendered by <code>Renderers</code>
+     * of component-family <code>javax.faces.OutcomeTarget</code> must use this
+     * constant as the value of the parameter named by {@link #TO_FLOW_DOCUMENT_ID_REQUEST_PARAM_NAME}
+     * when returning from a flow (without entering another flow) using such a component. </p>
+
+     * @since 2.2
+     */
+    
+    public static final String NULL_FLOW = "javax.faces.flow.NullFlow";
 
     /**
      * <p class="changed_added_2_2">Return the {@code Map} that backs
@@ -227,6 +262,12 @@ public abstract class FlowHandler {
      */
     public abstract Flow getCurrentFlow(FacesContext context);
     
+    /**
+     * <p class="changed_added_2_2">Convenience overload that calls {@link FacesContext#getCurrentInstance()}
+     * and then calls through to {@link #getCurrentFlow(javax.faces.context.FacesContext)}. </p>
+     * 
+     * @since 2.2
+     */
     public Flow getCurrentFlow() {
         return getCurrentFlow(FacesContext.getCurrentInstance());
     }
@@ -298,6 +339,56 @@ public abstract class FlowHandler {
     public abstract void transition(FacesContext context, Flow sourceFlow, 
                                     Flow targetFlow, 
                                     FlowCallNode outboundCallNode);
+    
+    /**
+     * <p class="changed_added_2_2">Allow for flow transitions in the
+     * case of components rendered by the renderers from
+     * component-family <code>javax.faces.OutcomeTarget</code>.  These
+     * transitions must happen at the front of the request processing
+     * lifecycle due to the HTTP GET based nature of such components.
+     * Therefore, this method is called from {@link
+     * javax.faces.lifecycle.Lifecycle#attachWindow}.</p>
+
+     * <div class="changed_added_2_2">
+
+     * <p>Let <em>flowId</em> be the value in the request parameter map
+     * for the parameter whose name is given by the value of {@link
+     * #FLOW_ID_REQUEST_PARAM_NAME}.  Let <em>toFlowDocumentId</em> be
+     * the value in the request parameter map for the paramater whose
+     * name is given by the value of {@link
+     * #TO_FLOW_DOCUMENT_ID_REQUEST_PARAM_NAME}.  If
+     * <em>toFlowDocumentId</em> is <code>null</code>, take no action
+     * and return.  Otherwise, let <em>sourceFlow</em> be the return
+     * from {@link #getCurrentFlow(javax.faces.context.FacesContext)}. A
+     * <code>null</code> value indicates there is no current flow, which
+     * will be the case if this navigation is trying to enter a flow. If
+     * <em>flowId</em> is not <code>null</code> and
+     * <em>toFlowDocumentId</em> is <strong>not</strong> equal to the
+     * value of {@link #NULL_FLOW}, let <em>targetFlow</em> be the
+     * result of calling {@link
+     * #getFlow(javax.faces.context.FacesContext, java.lang.String,
+     * java.lang.String)}, passing <em>toFlowDocumentId</em> and
+     * <em>flowId</em> as the last two arguments, respectively.  If the
+     * result is non-<code>null</code>, let <em>flowCallNode</em> be the
+     * return from calling {@link Flow#getFlowCall} on the
+     * <em>sourceFlow</em>, passing <em>targetFlow</em> as the argument.
+     * Otherwise, <em>targetFlow</em> and <em>flowCallNode</em> must
+     * remain <code>null</code>, indicating that this is a flow
+     * return.</p>
+
+     * <p>Call, {@link #transition}, passing the arguments gathered in
+     * the preceding algorithm.</p>
+     *
+     * </div>
+
+     * @since 2.2
+     * 
+     * @param context the {@code FacesContext} for the current request.
+
+     * @throws NullPointerException if {@code context} is {@code null}.
+     */
+    
+    public abstract void clientWindowTransition(FacesContext context);
     
 
     /**

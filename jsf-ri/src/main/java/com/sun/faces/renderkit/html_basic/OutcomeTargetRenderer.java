@@ -55,6 +55,8 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutcomeTarget;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+import javax.faces.event.ActionListener;
+import javax.faces.flow.FlowHandler;
 import javax.faces.lifecycle.ClientWindow;
 
 public abstract class OutcomeTargetRenderer extends HtmlBasicRenderer {
@@ -137,7 +139,14 @@ public abstract class OutcomeTargetRenderer extends HtmlBasicRenderer {
             //String viewId = context.getViewRoot().getViewId();
             //return new NavigationCase(viewId, null, null, null, viewId, false, false);
         }
-        NavigationCase navCase = ((ConfigurableNavigationHandler) navHandler).getNavigationCase(context, null, outcome);
+        String toFlowDocumentId = (String) component.getAttributes().get(ActionListener.TO_FLOW_DOCUMENT_ID_ATTR_NAME);
+        NavigationCase navCase = null;
+        if (null == toFlowDocumentId) {
+            navCase = ((ConfigurableNavigationHandler) navHandler).getNavigationCase(context, null, outcome);            
+        } else {
+            navCase = ((ConfigurableNavigationHandler) navHandler).getNavigationCase(context, null, outcome, toFlowDocumentId);            
+        }
+
         if (navCase == null) {
             if (logger.isLoggable(Level.WARNING)) {
                 logger.log(Level.WARNING,
@@ -196,16 +205,33 @@ public abstract class OutcomeTargetRenderer extends HtmlBasicRenderer {
                                        Map<String,List<String>> existingParams) {
 
         Map<String,List<String>> navParams = navCase.getParameters();
-        if (navParams == null || navParams.isEmpty()) {
-            return;
+        if (navParams != null && !navParams.isEmpty()) {
+            for (Map.Entry<String,List<String>> entry : navParams.entrySet()) {
+                String navParamName = entry.getKey();
+                // only add the navigation params to the existing params collection
+                // if the parameter name isn't already present within the existing
+                // collection
+                if (!existingParams.containsKey(navParamName)) {
+                    existingParams.put(navParamName, entry.getValue());
+                }
+            }
         }
-        for (Map.Entry<String,List<String>> entry : navParams.entrySet()) {
-            String navParamName = entry.getKey();
-            // only add the navigation params to the existing params collection
-            // if the parameter name isn't already present within the existing
-            // collection
-            if (!existingParams.containsKey(navParamName)) {
-                existingParams.put(navParamName, entry.getValue());
+        
+        String toFlowDocumentId = navCase.getToFlowDocumentId();
+        if (null != toFlowDocumentId) {
+            if (FlowHandler.NULL_FLOW.equals(toFlowDocumentId)) {
+                List<String> flowDocumentIdValues = new ArrayList<String>();
+                flowDocumentIdValues.add(FlowHandler.NULL_FLOW);
+                existingParams.put(FlowHandler.TO_FLOW_DOCUMENT_ID_REQUEST_PARAM_NAME, flowDocumentIdValues);
+            } else {
+                String flowId = navCase.getFromOutcome();
+                List<String> flowDocumentIdValues = new ArrayList<String>();
+                flowDocumentIdValues.add(toFlowDocumentId);
+                existingParams.put(FlowHandler.TO_FLOW_DOCUMENT_ID_REQUEST_PARAM_NAME, flowDocumentIdValues);
+                
+                List<String> flowIdValues = new ArrayList<String>();
+                flowIdValues.add(flowId);
+                existingParams.put(FlowHandler.FLOW_ID_REQUEST_PARAM_NAME, flowIdValues);
             }
         }
 
