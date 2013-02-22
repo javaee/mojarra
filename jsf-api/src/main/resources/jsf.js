@@ -1875,33 +1875,30 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              * <li> 
 
              * <p><span class="changed_modified_2_2">Determine whether
-             * or not any of the components in
-             * <code>options.execute</code> (or its effective
-             * equivalent) is a file upload component.  If not, send the
-             * request as an <code>asynchronous POST</code> using the
+             * or not the the submitting form is using
+             * <code>multipart/form-data</code> as its
+             * <code>enctype</code> attribute.  If not, send the request
+             * as an <code>asynchronous POST</code> using the
              * <code>posting URL</code> that was determined in the
-             * previous step.</span><p>
+             * previous step.</span> <span
+             * class="changed_added_2_2">Otherwise, send the request
+             * using a multi-part capable transport layer, such as a
+             * hidden inline frame.  Note that using a hidden inline
+             * frame does <strong>not</strong> use
+             * <code>XMLHttpRequest</code>, but the request must be sent
+             * with all the parameters that a JSF
+             * <code>XMLHttpRequest</code> would have been sent with.
+             * In this way, the server side processing of the request
+             * will be identical whether or the request is multipart or
+             * not.</span></p>
 
              * <div class="changed_added_2_2">
-
-             * <p>Otherwise, verify that the <code>enctype</code>
-             * property of the effective form is
-             * <code>multipart/form-data</code> and throw an error if it
-             * is not.  Send the request using a multi-part capable
-             * transport layer, such as a hidden inline frame.  Note
-             * that using a hidden inline frame does
-             * <strong>not</strong> use <code>XMLHttpRequest</code>, but
-             * the request must be sent with all the parameters that a
-             * JSF <code>XMLHttpRequest</code> would have been sent
-             * with.  In this way, the server side processing of the
-             * request will be identical whether or the request is
-             * multipart or not.</p>
 
              * <p>The <code>begin</code>, <code>complete</code>, and
              * <code>success</code> events must be emulated when using
              * the multipart transport.  This allows any listeners to
              * behave uniformly regardless of the multipart or
-             * <code>XMLHttpRequest</code> nature of the transport.
+             * <code>XMLHttpRequest</code> nature of the transport.</p>
 
              * </div>
 
