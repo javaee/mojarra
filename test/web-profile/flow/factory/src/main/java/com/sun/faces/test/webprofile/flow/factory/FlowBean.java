@@ -44,8 +44,8 @@ import java.io.Serializable;
 
 import javax.inject.Named;
 
-@Named(value = "flowBean")
-@FlowScoped(id = "flow")
+@Named("flowBean")
+@FlowScoped("flow")
 public class FlowBean implements Serializable {
 
     public String getName() {

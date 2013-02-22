@@ -67,7 +67,7 @@ public class FlowCDIExtension implements Extension {
        if (null != flowScoped) {
            FlowCDIContext.FlowBeanInfo fbi = new FlowCDIContext.FlowBeanInfo();
            fbi.definingDocumentId = flowScoped.definingDocumentId();
-           fbi.id = flowScoped.id();
+           fbi.id = flowScoped.value();
            flowScopedBeanFlowIds.put(event.getBean(), fbi);
        }
    }

@@ -45,7 +45,7 @@ import javax.inject.Named;
 import javax.faces.flow.FlowScoped;
 
 @Named(value="maintainCustomerBean")
-@FlowScoped(id="maintain-customer-record")
+@FlowScoped("maintain-customer-record")
 public class MaintainCustomerBeanXmlFlow extends MaintainCustomerBean {
     
 }

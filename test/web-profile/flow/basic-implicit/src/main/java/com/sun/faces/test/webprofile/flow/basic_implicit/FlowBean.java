@@ -45,7 +45,7 @@ import java.io.Serializable;
 import javax.inject.Named;
 
 @Named
-@FlowScoped(id="flow")
+@FlowScoped("flow")
 public class FlowBean implements Serializable {
 
     public FlowBean() {

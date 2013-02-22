@@ -78,7 +78,7 @@ public @interface FlowScoped {
      *
      * @since 2.2
      */
-    String id();
+    String value();
 
     /**
      * <p class="changed_added_2_2">If not empty, declare the defining

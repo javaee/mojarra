@@ -46,7 +46,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
 @Named
-@FlowScoped(id="flow-a")
+@FlowScoped("flow-a")
 public class Flow_a_Bean implements Serializable {
 
    public String getName() {

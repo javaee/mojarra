@@ -46,7 +46,7 @@ import java.util.logging.Logger;
 import javax.inject.Named;
 
 @Named
-@FlowScoped(id="bounded-task-flow",
+@FlowScoped(value="bounded-task-flow",
             definingDocumentId="flow02")
 public class FlowBean02 implements Serializable {
 
