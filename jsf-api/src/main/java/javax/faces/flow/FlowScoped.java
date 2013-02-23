@@ -83,7 +83,7 @@ public @interface FlowScoped {
     /**
      * <p class="changed_added_2_2">If not empty, declare the defining
      * document id within which the {@link Flow} referenced by {@link
-     * #id} is unique.  If empty the, the runtime assumes that all flow
+     * #value} is unique.  If empty the, the runtime assumes that all flow
      * ids are unique within the scope of the application.</p>
      *
      * @since 2.2
