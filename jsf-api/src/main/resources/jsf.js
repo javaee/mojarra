@@ -217,6 +217,33 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
             }
             return null;
         };
+        
+        /**
+         * Get the form element which encloses the supplied element
+         * identified by the supplied identifier.
+         * @param id - the element id to act against in search
+         * @returns form element representing enclosing form, or null if not found.
+         * @ignore
+         */
+        var getFormForId = function getFormForId(id) {
+            if (id) {
+                var node = document.getElementById(id);
+                while (node) {
+                    if (node.nodeName && (node.nodeName.toLowerCase() == 'form')) {
+                        return node;
+                    }
+                    if (node.form) {
+                        return node.form;
+                    }
+                    if (node.parentNode) {
+                        node = node.parentNode;
+                    } else {
+                        node = null;
+                    }
+                }
+            }
+            return null;
+        };
 
         /**
          * Check if a value exists in an array
@@ -952,7 +979,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 // Now set the view state from the server into the DOM
                 // but only for the form that submitted the request.
 
-                stateForm = document.getElementById(context.formid);
+                stateForm = getFormForId(context.element.id);
                 if (!stateForm || !stateForm.elements) {
                     // if the form went away for some reason, or it lacks elements 
                     // we're going to just return silently.
@@ -1374,11 +1401,11 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
          * AjaxEngine handles Ajax implementation details.
          * @ignore
          */
-        var AjaxEngine = function AjaxEngine() {
+        var AjaxEngine = function AjaxEngine(context) {
 
             var req = {};                  // Request Object
             req.url = null;                // Request URL
-            req.context = {};              // Context of request and response
+            req.context = context;         // Context of request and response
             req.context.sourceid = null;   // Source of this request
             req.context.onerror = null;    // Error handler for request
             req.context.onevent = null;    // Event handler for request
@@ -2003,6 +2030,8 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
 
                 var element, form;   //  Element variables
                 var all, none;
+                
+                var context = {};
 
                 if (typeof source === 'undefined' || source === null) {
                     throw new Error("jsf.ajax.request: source not set");
@@ -2025,6 +2054,8 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 if (!element.name) {
                     element.name = element.id;
                 }
+                
+                context.element = element;
 
                 if (typeof(options) === 'undefined' || options === null) {
                     options = {};
@@ -2149,7 +2180,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                     args["url"] = encodedUrlField.value;
                 }
                 var sendRequest = function() {
-                    var ajaxEngine = new AjaxEngine();
+                    var ajaxEngine = new AjaxEngine(context);
                     ajaxEngine.setupArguments(args);
                     ajaxEngine.queryString = viewState;
                     ajaxEngine.context.onevent = onevent;
