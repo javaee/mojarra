@@ -166,6 +166,11 @@ public class FlowBuilderImpl extends FlowBuilder {
     public Flow getFlow() {
         if (!didInit) {
             flow.init(context);
+            String startNodeId = flow.getStartNodeId();
+            if (null == startNodeId) {
+                String flowId = flow.getId();
+                this.viewNode(flowId, "/" + flowId + "/" + flowId + ".xhtml").markAsStartNode();
+            }
             didInit = true;
         }
         return flow;
