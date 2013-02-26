@@ -111,6 +111,10 @@ import javax.faces.lifecycle.ClientWindow;
         if (ajaxRequest == null) {
             ajaxRequest = "partial/ajax".equals(ctx.
                 getExternalContext().getRequestHeaderMap().get("Faces-Request"));
+            if (!ajaxRequest) {
+                ajaxRequest = "partial/ajax".equals(ctx.getExternalContext().getRequestParameterMap().
+                    get("Faces-Request"));
+            }
         }
         return ajaxRequest;
 

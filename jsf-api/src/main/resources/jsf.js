@@ -149,7 +149,18 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
         /**
          * @ignore
          */
-        var getTransport = function getTransport() {
+        var getTransport = function getTransport(context) {
+            var returnVal;
+            // Here we check for encoding type for file upload(s).
+            // This is where we would also include a check for the existence of
+            // input file control for the current form (see hasInputFileControl
+            // function) but IE9 (at least) seems to render controls outside of
+            // form.
+            if (typeof context !== 'undefined' && context !== null &&
+                context.form.enctype === "multipart/form-data") {
+                returnVal = new FrameTransport(context);
+                return returnVal;
+            }
             var methods = [
                 function() {
                     return new XMLHttpRequest();
@@ -162,7 +173,6 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 }
             ];
 
-            var returnVal;
             for (var i = 0, len = methods.length; i < len; i++) {
                 try {
                     returnVal = methods[i]();
@@ -173,7 +183,220 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
             }
             throw new Error('Could not create an XHR object.');
         };
+        
+        /**
+         * Used for iframe based communication (instead of XHR).
+         * @ignore
+         */
+        var FrameTransport = function FrameTransport(context) {
+            this.context = context;
+            this.frame = null;
+            this.FRAME_ID = "JSFFrameId";
+            this.FRAME_PARTIAL_ID = "Faces-Request";
+            this.partial = null;
+            this.aborted = false;
+            this.responseText = null;
+            this.responseXML = null;
+            this.readyState = null;
+            this.requestHeader = {};
+            this.status = null;
+            this.method = null;
+            this.url = null;
+            this.requestParams = null;
+        };
+        
+        /**
+         * Extends FrameTransport an adds method functionality.
+         * @ignore
+         */
+        FrameTransport.prototype = {
+            
+            /**
+             *@ignore
+             */
+            setRequestHeader:function(key, value) {
+                if (typeof(value) !== "undefined") {
+                    this.requestHeader[key] = value;  
+                }
+            },
+            
+            /**
+             * Creates the hidden iframe and sets readystate.
+             * @ignore
+             */
+            open:function(method, url, async) {
+                this.method = method;
+                this.url = url;
+                this.async = async;
+                this.frame = document.getElementById(this.FRAME_ID);
+                if (!this.frame) {  
+                    if ((!isIE() && !isIE9Plus())) {
+                        this.frame = document.createElement('iframe');
+                        this.frame.src = "about:blank";
+                        this.frame.id = this.FRAME_ID;
+                        this.frame.name = this.FRAME_ID;
+                        this.frame.type = "content";
+                        this.frame.collapsed = "true";
+                        this.frame.style = "visibility:hidden";   
+                        this.frame.onload = bind(this, this.callback);
+                        document.body.appendChild(this.frame);
+                    } else {
+                        var div = document.createElement("div");
+                        div.id = "frameDiv";
+                        div.innerHTML = "<iframe id='" + this.FRAME_ID + "' name='" + this.FRAME_ID + "' style='display:none;' src='about:blank' type='content' onload='this.onload_cb();'  ></iframe>";
+                        document.body.appendChild(div);
+                        this.frame = document.getElementById(this.FRAME_ID);
+                        this.frame.onload_cb = bind(this, this.callback);
+                    }
+                }
+                // Create to send "Faces-Request" param with value "partial/ajax"
+                // For iframe approach we are sending as request parameter
+                // For non-iframe (xhr ajax) it is sent in the request header
+                this.partial = document.createElement("input");
+                this.partial.setAttribute("type", "hidden");
+                this.partial.setAttribute("id", this.FRAME_PARTIAL_ID);
+                this.partial.setAttribute("name", this.FRAME_PARTIAL_ID);
+                this.partial.setAttribute("value", "partial/ajax");
+                this.context.form.appendChild(this.partial);
+  
+                this.readyState = 1;                         
+            },
+            
+            /**
+             * Sets the form target to iframe, sets up request parameters
+             * and submits the form.
+             * @ignore
+             */
+            send:function(data) {
+                var evt = {};
+                this.context.form.target = this.frame.name;
+                this.context.form.method = this.method;
+                if (this.url) {
+                    this.context.form.action = this.url;
+                }
 
+                this.readyState = 3;
+
+                this.onreadystatechange(evt);
+                
+                var ddata = decodeURIComponent(data);
+                var dataArray = ddata.split("&");
+                var input;
+                this.requestParams = new Array();
+                for (var i=0; i<dataArray.length; i++) {
+                    var nameValue = dataArray[i].split("=");
+                    input = document.createElement("input");
+                    input.setAttribute("type", "hidden");
+                    input.setAttribute("id", nameValue[0]);
+                    input.setAttribute("name", nameValue[0]);
+                    input.setAttribute("value", nameValue[1]);
+                    this.context.form.appendChild(input);
+                    this.requestParams.push(nameValue[0]);
+                }
+                this.context.form.submit();
+            },
+            
+            /**
+             *@ignore
+             */
+            abort:function() {
+                this.aborted = true; 
+            },
+            
+            /**
+             *@ignore
+             */
+            onreadystatechange:function(evt) {
+                
+            },
+            
+            /**
+             * Extracts response from iframe document, sets readystate.
+             * @ignore
+             */
+            callback: function() {
+                if (this.aborted) {
+                    return;
+                }
+                var iFrameDoc;
+                var docBody;
+                try {
+                    var evt = {};
+                    iFrameDoc = this.frame.contentWindow.document || 
+                        this.frame.contentDocument || this.frame.document;
+                    docBody = iFrameDoc.body || iFrameDoc.documentElement;
+                    this.responseText = docBody.innerHTML;
+                    this.responseXML = iFrameDoc.XMLDocument || iFrameDoc;
+                    this.status = 201;
+                    this.readyState = 4;  
+
+                    this.onreadystatechange(evt);                
+                } finally {
+                    this.cleanupReqParams();
+                    this.frame = null;
+                    
+                }               
+            },
+            
+            /**
+             *@ignore
+             */
+            cleanupReqParams: function() {
+                var elements = this.context.form.childNodes;
+                
+                for (var i=0; i<elements.length; i++) {
+                    if (!elements[i].type === "hidden") {
+                        continue;
+                    }
+                    if (contains(this.requestParams, elements[i])) {
+                        var node = elements[i].parentNode.removeChild(elements[i]);
+                        node = null;                           
+                    }   
+                }
+                   
+                function contains(arr, obj) {
+                    var returnVal = false;
+                    for(var i=0; i<arr.length; i++) {
+                        if (arr[i] === obj.id) {
+                            returnVal = true;
+                            break;
+                        } 
+                    } 
+                    return returnVal;
+                }               
+            }
+        };
+        
+       
+        /**
+         *Utility function that binds function to scope.
+         *@ignore
+         */
+        var bind = function(scope, fn) {
+            return function () {
+                fn.apply(scope, arguments);
+            };
+        };
+
+        /**
+         * Utility function that determines if a file control exists
+         * for the form.
+         * @ignore
+         */
+        var hasInputFileControl = function(form) {
+            var returnVal = false;
+            var inputs = form.getElementsByTagName("input");
+            if (inputs !== null && typeof inputs !=="undefined") {
+                for (var i=0; i<inputs.length; i++) {
+                    if (inputs[i].type === "file") {
+                        returnVal = true;
+                        break;
+                    }
+                }    
+            }
+            return returnVal;
+        };
+        
         /**
          * Find instance of passed String via getElementById
          * @ignore
@@ -238,7 +461,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                     if (node.parentNode) {
                         node = node.parentNode;
                     } else {
-                        node = null;
+                        node = null;                     
                     }
                 }
             }
@@ -341,7 +564,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
          * @ignore
          */
         var loadScript = function loadScript(url) {
-            var xhr = getTransport();
+            var xhr = getTransport(null);
             if (xhr === null) {
                 return "";
             }
@@ -1405,11 +1628,10 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
 
             var req = {};                  // Request Object
             req.url = null;                // Request URL
-            req.context = context;         // Context of request and response
+            req.context = context;              // Context of request and response
             req.context.sourceid = null;   // Source of this request
             req.context.onerror = null;    // Error handler for request
             req.context.onevent = null;    // Event handler for request
-            req.context.formid = null;     // Form that's the context for this request
             req.xmlReq = null;             // XMLHttpRequest Object
             req.async = true;              // Default - Asynchronous
             req.parameters = {};           // Parameters For GET or POST
@@ -1421,9 +1643,14 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
             // entering the queue redundantly.
 
             req.que = Queue;
+            
+            // Get a transport Handle
+            // The transport will be an iframe transport if the form
+            // has multipart encoding type.  This is where we could
+            // handle XMLHttpRequest Level2 as well (perhaps 
+            // something like:  if ('upload' in req.xmlReq)'
+            req.xmlReq = getTransport(context);
 
-            // Get an XMLHttpRequest Handle
-            req.xmlReq = getTransport();
             if (req.xmlReq === null) {
                 return null;
             }
@@ -1902,7 +2129,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              * <li> 
 
              * <p><span class="changed_modified_2_2">Determine whether
-             * or not the the submitting form is using
+             * or not the submitting form is using 
              * <code>multipart/form-data</code> as its
              * <code>enctype</code> attribute.  If not, send the request
              * as an <code>asynchronous POST</code> using the
@@ -1917,8 +2144,8 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              * <code>XMLHttpRequest</code> would have been sent with.
              * In this way, the server side processing of the request
              * will be identical whether or the request is multipart or
-             * not.</span></p>
-
+             * not.</span></p  
+            
              * <div class="changed_added_2_2">
 
              * <p>The <code>begin</code>, <code>complete</code>, and
@@ -2083,6 +2310,9 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 if (!form) {
                     throw new Error("jsf.ajax.request: Method must be called within a form");
                 }
+                context.form = form;
+                context.formid = form.id;
+                
                 var viewState = jsf.getViewState(form);
 
                 // Set up additional arguments to be used in the request..
@@ -2186,7 +2416,6 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                     ajaxEngine.context.onevent = onevent;
                     ajaxEngine.context.onerror = onerror;
                     ajaxEngine.context.sourceid = element.id;
-                    ajaxEngine.context.formid = form.id;
                     ajaxEngine.context.render = args["javax.faces.partial.render"];
                     ajaxEngine.sendRequest();
 
@@ -2194,6 +2423,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                     element = null;
                     form = null;
                     sendRequest = null;
+                    context = null;
                 };
 
                 if (explicitlyDoNotDelay) {
@@ -2242,7 +2472,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              * <code>body</code> sections with the content from the response.</li>
 
              * <li class="changed_modified_2_2">If an
-             * <code>&lt;update&gt;</code> element is found in the
+             * <code>&lt;update&gt;</code> element is found in the 
              * response with an identifier containing
              * <code>javax.faces.ViewState</code>:
 
@@ -2317,11 +2547,11 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              * the <code>&lt;update&gt;</code> element's <code>CDATA</code> contents.</li>
              * </li>
              * <p><i>Insert Element Processing</i></p>
-
+    
              * <li>If an <code>&lt;insert&gt;</code> element is found in
              * the response with a nested <code>&lt;before&gt;</code>
              * element:
-
+            
              * <pre><code>&lt;insert id="insert id"&gt;
              *     &lt;before&gt;
              *        &lt;![CDATA[...]]&gt;
@@ -2336,11 +2566,11 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              * the DOM element in the document.</li>
              * </ul>
              * </li>
-             *
-             * <li>If an <code>&lt;insert&gt;</code> element is found in
+             * 
+             * <li>If an <code>&lt;insert&gt;</code> element is found in 
              * the response with a nested <code>&lt;after&gt;</code>
              * element:
-             *
+             * 
              * <pre><code>&lt;insert id="insert id"&gt;
              *     &lt;after&gt;
              *        &lt;![CDATA[...]]&gt;
