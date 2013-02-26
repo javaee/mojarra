@@ -516,12 +516,16 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         }
                         
         UIViewRoot viewRoot;
-
+        
         /*
          * Check if we are stateless.
          */
-        if (!context.getExternalContext().getRequestParameterMap().isEmpty() &&
-            context.getExternalContext().getRequestParameterMap().containsKey("com.sun.faces.StatelessPostback")) {
+        ViewHandler outerViewHandler = context.getApplication().getViewHandler();
+        String renderKitId = outerViewHandler.calculateRenderKitId(context);
+        ResponseStateManager rsm = RenderKitUtils.getResponseStateManager(context, renderKitId);
+        Object incomingState = (Object) rsm.getState(context, viewId);
+        
+        if (incomingState instanceof String && "stateless".equals((String) incomingState))  {
             try {
                 ViewDeclarationLanguage vdl = vdlFactory.getViewDeclarationLanguage(viewId);
                 viewRoot = vdl.createView(context, viewId);
@@ -539,9 +543,9 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                 ViewDeclarationLanguage vdl = vdlFactory.getViewDeclarationLanguage(viewId);
                 viewRoot = vdl.getViewMetadata(context, viewId).createMetadataView(context);
                 context.setViewRoot(viewRoot);
-                ViewHandler outerViewHandler = context.getApplication().getViewHandler();
-                String renderKitId = outerViewHandler.calculateRenderKitId(context);
-                ResponseStateManager rsm = RenderKitUtils.getResponseStateManager(context, renderKitId);
+                outerViewHandler = context.getApplication().getViewHandler();
+                renderKitId = outerViewHandler.calculateRenderKitId(context);
+                rsm = RenderKitUtils.getResponseStateManager(context, renderKitId);
                 Object[] rawState = (Object[]) rsm.getState(context, viewId);
                 if (rawState != null) {
                     Map<String, Object> state = (Map<String, Object>) rawState[1];
