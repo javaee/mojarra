@@ -110,11 +110,6 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
      */
     private static final String FACES_FLOW_DEFINITION = "flow-definition";
     
-    /**
-     * <code>/faces-config/name</code>
-     */
-    private static final String FACES_CONFIG_NAME = "name";
-
     public FacesFlowDefinitionConfigProcessor() {
     }
 

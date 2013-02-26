@@ -489,7 +489,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
 
         // If we still don't have a match, see if this is a flow-return
         if (null == caseStruct && null != outcome) {
-            caseStruct = findReturnMatch(ctx, fromAction, outcome, toFlowDocumentId);
+            caseStruct = findReturnMatch(ctx, fromAction, outcome);
         }
 
         // If the navigation rules do not have a match...
@@ -1013,7 +1013,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     }  
     
     private CaseStruct findReturnMatch(FacesContext context, 
-            String fromAction, String outcome, String toFlowDocumentId) {
+            String fromAction, String outcome) {
         CaseStruct result = null;
         FlowHandler flowHandler = context.getApplication().getFlowHandler();
         if (null == flowHandler) {

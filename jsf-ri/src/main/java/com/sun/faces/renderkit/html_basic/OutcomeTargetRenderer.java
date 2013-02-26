@@ -147,12 +147,10 @@ public abstract class OutcomeTargetRenderer extends HtmlBasicRenderer {
             navCase = ((ConfigurableNavigationHandler) navHandler).getNavigationCase(context, null, outcome, toFlowDocumentId);            
         }
 
-        if (navCase == null) {
-            if (logger.isLoggable(Level.WARNING)) {
-                logger.log(Level.WARNING,
-                           "jsf.outcometarget.navigation.case.not.resolved",
-                           component.getId());
-            }
+        if (navCase == null && logger.isLoggable(Level.WARNING)) {
+            logger.log(Level.WARNING,
+                    "jsf.outcometarget.navigation.case.not.resolved",
+                    component.getId());
         }
         return navCase;
     }
