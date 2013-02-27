@@ -2552,17 +2552,17 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              * the response with a nested <code>&lt;before&gt;</code>
              * element:
             
-             * <pre><code>&lt;insert id="insert id"&gt;
-             *     &lt;before&gt;
+             * <pre><code>&lt;insert&gt;
+             *     &lt;before id="before id"&gt;
              *        &lt;![CDATA[...]]&gt;
              *     &lt;/before&gt;
              * &lt;/insert&gt;</code></pre>
              * 
              * <ul>
-             * <li>Extract this <code>&lt;insert&gt;</code> element's <code>CDATA</code> contents
+             * <li>Extract this <code>&lt;before&gt;</code> element's <code>CDATA</code> contents
              * from the response.</li>
              * <li>Find the DOM element whose identifier matches <code>before id</code> and insert
-             * the <code>&lt;insert&gt;</code> element's <code>CDATA</code> content before
+             * the <code>&lt;before&gt;</code> element's <code>CDATA</code> content before
              * the DOM element in the document.</li>
              * </ul>
              * </li>
@@ -2571,17 +2571,17 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              * the response with a nested <code>&lt;after&gt;</code>
              * element:
              * 
-             * <pre><code>&lt;insert id="insert id"&gt;
-             *     &lt;after&gt;
+             * <pre><code>&lt;insert&gt;
+             *     &lt;after id="after id"&gt;
              *        &lt;![CDATA[...]]&gt;
              *     &lt;/after&gt;
              * &lt;/insert&gt;</code></pre>
              * 
              * <ul>
-             * <li>Extract this <code>&lt;insert&gt;</code> element's <code>CDATA</code> contents
+             * <li>Extract this <code>&lt;after&gt;</code> element's <code>CDATA</code> contents
              * from the response.</li>
              * <li>Find the DOM element whose identifier matches <code>after id</code> and insert
-             * the <code>&lt;insert&gt;</code> element's <code>CDATA</code> content after
+             * the <code>&lt;after&gt;</code> element's <code>CDATA</code> content after
              * the DOM element in the document.</li>
              * </ul>
              * </li>
