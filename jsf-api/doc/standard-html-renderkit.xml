@@ -5589,6 +5589,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
       <display-name>Direction</display-name>
       <icon/>
@@ -6252,6 +6254,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
       <display-name>Direction</display-name>
       <icon/>
@@ -7027,6 +7031,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
       <display-name>Direction</display-name>
       <icon/>
@@ -7654,6 +7660,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
       <display-name>Direction</display-name>
       <icon/>
@@ -8144,6 +8152,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
       <display-name>Direction</display-name>
       <icon/>
@@ -8866,6 +8876,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
       <display-name>Direction</display-name>
       <icon/>
@@ -9992,6 +10004,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
       <display-name>Direction</display-name>
       <icon/>
@@ -10778,6 +10792,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
       <display-name>Direction</display-name>
       <icon/>
@@ -11548,6 +11564,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
       <display-name>Direction</display-name>
       <icon/>
@@ -12025,6 +12043,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
       <display-name>Direction</display-name>
       <icon/>
@@ -12432,6 +12452,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
       <display-name>Direction</display-name>
       <icon/>
@@ -12737,6 +12759,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
       <display-name>Direction</display-name>
       <icon/>
@@ -13218,6 +13242,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
       <display-name>Direction</display-name>
       <icon/>
@@ -13730,6 +13756,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
       <display-name>Direction</display-name>
       <icon/>
@@ -14391,6 +14419,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
       <display-name>Direction</display-name>
       <icon/>
@@ -15054,6 +15084,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
       <display-name>Direction</display-name>
       <icon/>
@@ -15551,6 +15583,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
       <display-name>Direction</display-name>
       <icon/>
@@ -15937,6 +15971,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
       <display-name>Direction</display-name>
       <icon/>
@@ -17130,6 +17166,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
       <display-name>Direction</display-name>
       <icon/>
@@ -17864,6 +17902,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
       <display-name>Direction</display-name>
       <icon/>
@@ -18678,6 +18718,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
       <display-name>Direction</display-name>
       <icon/>
@@ -19440,6 +19482,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
       <display-name>Direction</display-name>
       <icon/>
@@ -20179,6 +20223,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
       <display-name>Direction</display-name>
       <icon/>
@@ -20928,6 +20974,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
       <display-name>Direction</display-name>
       <icon/>
@@ -21655,6 +21703,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
       <display-name>Direction</display-name>
       <icon/>
@@ -21887,6 +21937,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
       <display-name>Direction</display-name>
       <icon/>
@@ -21939,6 +21991,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
       <display-name>Direction</display-name>
       <icon/>
@@ -22656,6 +22710,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
         <display-name>Direction</display-name>
         <icon/>
@@ -23246,6 +23302,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
         <display-name>Direction</display-name>
         <icon/>
@@ -23917,6 +23975,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
         <display-name>Direction</display-name>
         <icon/>
@@ -24437,6 +24497,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
         <display-name>Direction</display-name>
         <icon/>
@@ -24796,6 +24858,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
         <display-name>Direction</display-name>
         <icon/>
@@ -25442,6 +25506,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
         <display-name>Direction</display-name>
         <icon/>
@@ -25929,6 +25995,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
         <display-name>Direction</display-name>
         <icon/>
@@ -26407,6 +26475,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
         <display-name>Direction</display-name>
         <icon/>
@@ -26857,6 +26927,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
         <display-name>Direction</display-name>
         <icon/>
@@ -27208,6 +27280,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
         <display-name>Direction</display-name>
         <icon/>
@@ -27446,6 +27520,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
         <display-name>Direction</display-name>
         <icon/>
@@ -27582,6 +27658,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
         <display-name>Direction</display-name>
         <icon/>
@@ -27888,6 +27966,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
         <display-name>Direction</display-name>
         <icon/>
@@ -28252,6 +28332,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
         <display-name>Direction</display-name>
         <icon/>
@@ -28882,6 +28964,8 @@ attributes on the "span".</p>
         <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
         <display-name>Direction</display-name>
         <icon/>
@@ -29516,6 +29600,8 @@ this application, and passing the result through the
         <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
         <display-name>Direction</display-name>
         <icon/>
@@ -29864,6 +29950,8 @@ this application, and passing the result through the
         <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
         <display-name>Direction</display-name>
         <icon/>
@@ -30143,6 +30231,8 @@ this application, and passing the result through the
         <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
         <display-name>Direction</display-name>
         <icon/>
@@ -30889,6 +30979,8 @@ this application, and passing the result through the
         <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
         <display-name>Direction</display-name>
         <icon/>
@@ -31347,6 +31439,8 @@ this application, and passing the result through the
         <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
         <display-name>Direction</display-name>
         <icon/>
@@ -31983,6 +32077,8 @@ this application, and passing the result through the
         <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
         <display-name>Direction</display-name>
         <icon/>
@@ -32451,6 +32547,8 @@ this application, and passing the result through the
         <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
         <display-name>Direction</display-name>
         <icon/>
@@ -32907,6 +33005,8 @@ this application, and passing the result through the
         <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
         <display-name>Direction</display-name>
         <icon/>
@@ -33358,6 +33458,8 @@ this application, and passing the result through the
         <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
         <display-name>Direction</display-name>
         <icon/>
@@ -33830,6 +33932,8 @@ this application, and passing the result through the
         <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
         <display-name>Direction</display-name>
         <icon/>
@@ -34637,6 +34741,8 @@ unmodified to the rendered output.</p>
         <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
         <display-name>Direction</display-name>
         <icon/>
@@ -34820,6 +34926,8 @@ unmodified to the rendered output.</p>
         <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+          These attributes are case sensitive when rendering to XHTML, so
+          care must be taken to have the correct case.
         </description>
         <display-name>Direction</display-name>
         <icon/>
