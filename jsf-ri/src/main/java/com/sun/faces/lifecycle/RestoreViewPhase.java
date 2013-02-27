@@ -79,6 +79,7 @@ import javax.faces.event.AbortProcessingException;
 import javax.faces.event.PostRestoreStateEvent;
 import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.ExceptionQueuedEventContext;
+import javax.faces.flow.FlowHandler;
 import javax.faces.render.ResponseStateManager;
 import javax.faces.view.ViewDeclarationLanguage;
 import javax.faces.view.ViewMetadata;
@@ -94,7 +95,7 @@ public class RestoreViewPhase extends Phase {
     private static final String WEBAPP_ERROR_PAGE_MARKER =
             "javax.servlet.error.message";
 
-    private static Logger LOGGER = FacesLogger.LIFECYCLE.getLogger();
+    private static final Logger LOGGER = FacesLogger.LIFECYCLE.getLogger();
 
     private WebConfiguration webConfig;
 
@@ -266,6 +267,11 @@ public class RestoreViewPhase extends Phase {
             }
         } finally {
             if (null == thrownException) {
+                FlowHandler flowHandler = facesContext.getApplication().getFlowHandler();
+                if (null != flowHandler) {
+                    flowHandler.clientWindowTransition(facesContext);
+                }
+                
                 deliverPostRestoreStateEvent(facesContext);
             } else {
                 throw thrownException;

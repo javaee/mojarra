@@ -111,7 +111,7 @@ public class FlowACallsFlowBIT {
 
         assertTrue(page.getBody().asText().indexOf("Outside of flow") != -1);
         
-        HtmlInput button = (HtmlInput) page.getElementById("start_a");
+        HtmlInput button = (HtmlInput) page.getElementById("start_a" + flowInvocationSuffix);
         page = button.click();
         String pageText = page.asText();
         assertTrue(pageText.contains("Flow_a_Bean"));
@@ -185,13 +185,33 @@ public class FlowACallsFlowBIT {
         button = (HtmlInput) page.getElementById("return" + flowInvocationSuffix);
         page = button.click();
         
-        /**** PENDING(edburns): when the work to complete the navigation rule
-         * stack is complete, uncomment this.
-
+        pageText = page.asText();
+        assertTrue(pageText.contains("Flow bean name: Flow_B_Bean"));
+        
+        button = (HtmlInput) page.getElementById("next_a");
+        page = button.click();
+        
+        button = (HtmlInput) page.getElementById("next");
+        page = button.click();
+        
+        button = (HtmlInput) page.getElementById("return" + flowInvocationSuffix);
+        page = button.click();
+        
+        pageText = page.asText();
+        assertTrue(pageText.contains("Flow bean name: Flow_a_Bean"));
+        
+        button = (HtmlInput) page.getElementById("next_a");
+        page = button.click();
+        
+        button = (HtmlInput) page.getElementById("next");
+        page = button.click();
+        
+        button = (HtmlInput) page.getElementById("return" + flowInvocationSuffix);
+        page = button.click();
+        
         pageText = page.asText();
         assertTrue(pageText.matches("(?s).*flowScope value,\\s+should be empty:\\s+\\..*"));
         assertTrue(pageText.matches("(?s).*Has a flow:\\s+false\\..*"));
 
-         */ 
     }
 }

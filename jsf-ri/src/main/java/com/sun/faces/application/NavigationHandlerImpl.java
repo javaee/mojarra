@@ -240,7 +240,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                 if (null != flowHandler) {
                     flowHandler.transition(context, 
                             caseStruct.currentFlow, caseStruct.newFlow, 
-                            caseStruct.facesFlowCallNode);
+                            caseStruct.facesFlowCallNode, caseStruct.viewId);
                 }
                 if (logger.isLoggable(Level.FINE)) {
                     logger.log(Level.FINE, "Set new view in FacesContext for {0}", caseStruct.viewId);
@@ -264,6 +264,11 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                 Flow currentFlow = fh.getCurrentFlow(context);
                 if (null != currentFlow) {
                     info = navigationMaps.get(currentFlow.getDefiningDocumentId() + currentFlow.getId());
+                    // We are in a flow, but there are no navigation rules for 
+                    // this flow.
+                    if (null == info) {
+                        return Collections.emptyMap();
+                    }
                 }
             }
             if (null == info) {
@@ -780,8 +785,6 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         }
 
         ViewHandler viewHandler = Util.getViewHandler(context);
-        viewIdToTest = viewHandler.deriveViewId(context, viewIdToTest);
-        
         FlowHandler flowHandler = context.getApplication().getFlowHandler();
         Flow currentFlow = null;
         Flow newFlow = null;
@@ -790,21 +793,21 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             
             currentFlow = flowHandler.getCurrentFlow(context);
             newFlow = currentFlow;
-
-            // If we are not in a flow...
-            if (null != currentFlow) {
-                // ... we are in a flow.  \
-                // If we have an implicit match...
-                if (null != viewIdToTest && 
-                    !viewIdToTest.startsWith("/" + currentFlow.getId())) {
-                        // ... it must be out of the current flow.  Make sure the 
-                        // current flow is marked as abandoned.
-                    newFlow = null;
-                }
-                // else, we are in a flow, but don't have an implicit match.
-            }
+            // If we are in a flow, use the implicit rules to ensure the view 
+            // is within that flow.  This means viewIdToTest must start with
+            // the current flow id
+            if (null != currentFlow && null != viewIdToTest && 
+                !viewIdToTest.startsWith("/" + currentFlow.getId())) {
+                // ... it must be out of the current flow.  Make sure the 
+                // current flow is marked as abandoned.
+                newFlow = null;
+                viewIdToTest = null;
+            }            
         }
-
+        if (null != viewIdToTest) {
+            viewIdToTest = viewHandler.deriveViewId(context, viewIdToTest);
+        }
+        
         if (null == result && null != viewIdToTest) {
             result = new CaseStruct();
             result.viewId = viewIdToTest;
@@ -891,7 +894,36 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                         flow.getDefiningDocumentId(), null, false, false);
             } else if (node instanceof ReturnNode) {
                 String fromOutcome = ((ReturnNode)node).getFromOutcome(context);
-                result = getViewId(context, fromAction, fromOutcome, flow.getDefiningDocumentId());
+                FlowHandler flowHandler = context.getApplication().getFlowHandler();
+                try {
+                    flowHandler.setReturnMode(context, true);
+                    result = getViewId(context, fromAction, fromOutcome, FlowHandler.NULL_FLOW);
+                    // We are in a return node, but no result can be found from that
+                    // node.  Show the last displayed viewId from the preceding flow.
+                    if (null == result) {
+                        Flow precedingFlow = flowHandler.getCurrentFlow(context);
+                        if (null != precedingFlow) {
+                            String toViewId = flowHandler.getLastDisplayedViewId(context);
+                            if (null != toViewId) {
+                                result = new CaseStruct();
+                                result.viewId = toViewId;
+                                result.navCase = new NavigationCase(context.getViewRoot().getViewId(),
+                                        fromAction,
+                                        outcome,
+                                        null,
+                                        toViewId,
+                                        FlowHandler.NULL_FLOW,                            
+                                        null,
+                                        false,
+                                        false);
+                                
+                            }
+                        }
+                    }
+                }
+                finally {
+                    flowHandler.setReturnMode(context, false);
+                }
                 
             }
         } else {
@@ -1026,7 +1058,35 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             ReturnNode returnNode = currentFlow.getReturns().get(outcome);
             if (null != returnNode) {
                 String fromOutcome = returnNode.getFromOutcome(context);
-                result = getViewId(context, fromAction, fromOutcome, FlowHandler.NULL_FLOW);
+                try {
+                    flowHandler.setReturnMode(context, true);
+                    result = getViewId(context, fromAction, fromOutcome, FlowHandler.NULL_FLOW);
+                    // We are in a return node, but no result can be found from that
+                    // node.  Show the last displayed viewId from the preceding flow.
+                    if (null == result) {
+                        Flow precedingFlow = flowHandler.getCurrentFlow(context);
+                        if (null != precedingFlow) {
+                            String toViewId = flowHandler.getLastDisplayedViewId(context);
+                            if (null != toViewId) {
+                                result = new CaseStruct();
+                                result.viewId = toViewId;
+                                result.navCase = new NavigationCase(context.getViewRoot().getViewId(),
+                                        fromAction,
+                                        outcome,
+                                        null,
+                                        toViewId,
+                                        FlowHandler.NULL_FLOW,                            
+                                        null,
+                                        false,
+                                        false);
+                                
+                            }
+                        }
+                    }
+                }
+                finally {
+                    flowHandler.setReturnMode(context, false);
+                }
             }
         }
         if (null != result) {

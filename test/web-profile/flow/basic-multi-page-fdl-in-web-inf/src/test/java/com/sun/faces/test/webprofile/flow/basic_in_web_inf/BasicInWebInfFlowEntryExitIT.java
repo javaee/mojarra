@@ -108,14 +108,6 @@ public class BasicInWebInfFlowEntryExitIT {
         assertTrue(pageText.indexOf("First page in the flow") != -1);
         assertTrue(pageText.contains("basicFlow"));
         
-        button = (HtmlSubmitInput) page.getElementById("nonFlow");
-        webClient.setThrowExceptionOnFailingStatusCode(false);
-        page = button.click();
-        pageText = page.getBody().asXml();
-        
-        assertTrue(pageText.contains("ContextNotActiveException"));
-        assertTrue(pageText.contains("javax.faces.flow.FlowScoped"));
-        
         page = webClient.getPage(webUrl);
 
         assertTrue(page.getBody().asText().indexOf("Page with link to flow entry") != -1);

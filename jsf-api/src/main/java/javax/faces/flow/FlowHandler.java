@@ -253,6 +253,15 @@ public abstract class FlowHandler {
      * no flow is active.  A {@code Flow} must always be associated with
      * exactly one {@link javax.faces.lifecycle.ClientWindow}, but a
      * {@code ClientWindow} may have multiple {@code Flow}s.</p>
+     * 
+     * <div class="changed_added_2_2">
+     * 
+     * <p>If {@link #setReturnMode} had been called with {@code true} as the
+     * argument before invoking this method, return the preceding flow on 
+     * the stack instead of the actual current flow, or {@code null} if there 
+     * is no preceding flow.  Otherwise, return the current flow.</p>
+     * 
+     * </div>
      *
      * @param context the {@code FacesContext} for the current request.
      * 
@@ -271,7 +280,39 @@ public abstract class FlowHandler {
     public Flow getCurrentFlow() {
         return getCurrentFlow(FacesContext.getCurrentInstance());
     }
+    
+    /**
+     * <p class="changed_added_2_2">Return the last displayed viewId for the 
+     * current flow, as returned by {@link #getCurrentFlow(javax.faces.context.FacesContext)}, 
+     * or {@code null} if there is no current flow.</p>
+     * 
+     * @param context the {@code FacesContext} for the current request.
+     * 
+     * @throws NullPointerException if {@code context} is {@code null}
+     * 
+     * @since 2.2
+     */
+    
+    public abstract String getLastDisplayedViewId(FacesContext context);
+    
+    /**
+     * <p class="changed_added_2_2">Enable the correct handling of navigation
+     * when processing a return node.  The default {@link javax.faces.application.NavigationHandler}
+     * specification requires calling this method with {@code true} before processing
+     * the navigation rules for the flow return, and calling this method with
+     * {@code false}, from a {@code finally} block, immediately afterward.</p>
+     * 
+     * @param context the {@code FacesContext} for the current request.
 
+     * @param returnMode the return mode for the current flow.
+     * 
+     * @throws NullPointerException if {@code context} is {@code null}.
+     * 
+     * @since 2.2
+     */
+    
+    public abstract void setReturnMode(FacesContext context, boolean returnMode);
+    
     /**
      * <p class="changed_added_2_2">Perform a transition in the flow
      * graph for the current user's {@link
@@ -330,7 +371,10 @@ public abstract class FlowHandler {
      * transition, or {@code null} if this transition is not caused by a
      * flow call.
      * 
-     * @throws NullPointerException if {@code context} is {@code null}.
+     * @param toViewId the viewId of the view being displayed as a result of 
+     * this transition.  This parameter makes it possible to implement {@link #getLastDisplayedViewId}.
+     * 
+     * @throws NullPointerException if {@code context} or {@code toViewId} is {@code null}.
      *
 
      * @since 2.2
@@ -338,7 +382,7 @@ public abstract class FlowHandler {
             
     public abstract void transition(FacesContext context, Flow sourceFlow, 
                                     Flow targetFlow, 
-                                    FlowCallNode outboundCallNode);
+                                    FlowCallNode outboundCallNode, String toViewId);
     
     /**
      * <p class="changed_added_2_2">Allow for flow transitions in the
@@ -374,7 +418,9 @@ public abstract class FlowHandler {
      * <em>sourceFlow</em>, passing <em>targetFlow</em> as the argument.
      * Otherwise, <em>targetFlow</em> and <em>flowCallNode</em> must
      * remain <code>null</code>, indicating that this is a flow
-     * return.</p>
+     * return. Call {@link FacesContext#getViewRoot()} and let <em>toViewId</em>
+     * be the the return from calling {@link javax.faces.component.UIViewRoot#getViewId}
+     * on it.</p>
 
      * <p>Call, {@link #transition}, passing the arguments gathered in
      * the preceding algorithm.</p>

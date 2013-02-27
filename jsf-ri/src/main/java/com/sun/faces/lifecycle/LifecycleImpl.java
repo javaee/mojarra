@@ -149,11 +149,6 @@ public class LifecycleImpl extends Lifecycle {
             myWindow = new ClientWindowImpl();
             myWindow.decode(context);
             extContext.setClientWindow(myWindow);
-            FlowHandler flowHandler = context.getApplication().getFlowHandler();
-            if (null != flowHandler) {
-                flowHandler.clientWindowTransition(context);
-            }
-            
         }
         
         

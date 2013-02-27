@@ -46,6 +46,7 @@ import java.text.MessageFormat;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -147,7 +148,7 @@ public class FlowHandlerImpl extends FlowHandler {
         Util.notNull("definingDocumentId", definingDocumentId);
         Util.notNull("id", id);
         boolean result = false;
-        Deque<Flow> flowStack = getFlowStack(context);
+        FlowDeque<Flow> flowStack = getFlowStack(context);
         for (Flow cur : flowStack) {
             if (id.equals(cur.getId()) &&
                 definingDocumentId.equals(cur.getDefiningDocumentId())) {
@@ -169,17 +170,51 @@ public class FlowHandlerImpl extends FlowHandler {
         if (!flowFeatureIsEnabled) {
             return null;
         }
-        return getFlowStack(context).peek();
+        Flow result = null;
+        FlowDeque<Flow> flowStack = getFlowStack(context);
+        if (flowStack.isReturnMode()) {
+            Iterator<Flow> stackIter = flowStack.iterator();
+            if (null != stackIter) {
+                if (stackIter.hasNext()) {
+                    stackIter.next();
+                    if (stackIter.hasNext()) {
+                        result = stackIter.next();
+                    }
+                }
+            }
+        } else {
+            result = getFlowStack(context).peekFirst();
+        }
+        return result;
     }
-            
+
+    @Override
+    public String getLastDisplayedViewId(FacesContext context) {
+        Util.notNull("context", context);
+        String result = null;
+        FlowDeque<Flow> flowStack = getFlowStack(context);
+        result = flowStack.peekLastDisplayedViewId();
+        return result;
+    }
+    
+    
+
+    @Override
+    public void setReturnMode(FacesContext context, boolean returnMode) {
+        FlowDeque<Flow> flowStack = getFlowStack(context);
+        flowStack.setReturnMode(returnMode);
+    }
+
     // We need a method that takes a view id of a view that is in a flow
     // and makes the system "enter" the flow.
     
     @Override
     @SuppressWarnings(value="")
     public void transition(FacesContext context, Flow sourceFlow, 
-                           Flow targetFlow, FlowCallNode outboundCallNode) {
+                           Flow targetFlow, FlowCallNode outboundCallNode,
+                           String toViewId) {
         Util.notNull("context", context);
+        Util.notNull("toViewId", toViewId);
         if (!flowFeatureIsEnabled) {
            return;
         }
@@ -216,7 +251,7 @@ public class FlowHandlerImpl extends FlowHandler {
             
             performPops(context, sourceFlow, targetFlow);
             if (null != targetFlow) {
-                pushFlow(context, targetFlow);
+                pushFlow(context, targetFlow, toViewId);
             }
             // Now the new flow is active, it's time to evaluate the inbound
             // parameters.
@@ -254,7 +289,7 @@ public class FlowHandlerImpl extends FlowHandler {
                 }
             }
             
-            fh.transition(context, sourceFlow, targetFlow, flowCallNode);
+            fh.transition(context, sourceFlow, targetFlow, flowCallNode, context.getViewRoot().getViewId());
             
         }
     }
@@ -300,9 +335,9 @@ public class FlowHandlerImpl extends FlowHandler {
     
     // <editor-fold defaultstate="collapsed" desc="Helper Methods">
     
-    private void pushFlow(FacesContext context, Flow toPush) {
-        Deque<Flow> flowStack = getFlowStack(context);
-        flowStack.push(toPush);
+    private void pushFlow(FacesContext context, Flow toPush, String lastDisplayedViewId) {
+        FlowDeque<Flow> flowStack = getFlowStack(context);
+        flowStack.addFirst(toPush, lastDisplayedViewId);
         FlowCDIContext.flowEntered();
         MethodExpression me  = toPush.getInitializer();
         if (null != me) {
@@ -311,12 +346,12 @@ public class FlowHandlerImpl extends FlowHandler {
     }
     
     private Flow peekFlow(FacesContext context) {
-        Deque<Flow> flowStack = getFlowStack(context);
-        return flowStack.peek();
+        FlowDeque<Flow> flowStack = getFlowStack(context);
+        return flowStack.peekFirst();
     }
     
     private Flow popFlow(FacesContext context) {
-        Deque<Flow> flowStack = getFlowStack(context);
+        FlowDeque<Flow> flowStack = getFlowStack(context);
         Flow currentFlow = peekFlow(context);
         if (null != currentFlow) {
             callFinalizer(context, currentFlow);
@@ -333,18 +368,90 @@ public class FlowHandlerImpl extends FlowHandler {
         FlowCDIContext.flowExited();
     }
     
-    private Deque<Flow> getFlowStack(FacesContext context) {
-        Deque<Flow> result = null;
+    private FlowDeque<Flow> getFlowStack(FacesContext context) {
+        FlowDeque<Flow> result = null;
         ExternalContext extContext = context.getExternalContext();
         String sessionKey = extContext.getClientWindow().getId() + "_flowStack";
         Map<String, Object> sessionMap = extContext.getSessionMap();
-        result = (Deque<Flow>) sessionMap.get(sessionKey);
+        result = (FlowDeque<Flow>) sessionMap.get(sessionKey);
         if (null == result) {
-            result = new ArrayDeque<Flow>();
+            result = new FlowDeque<Flow>();
             sessionMap.put(sessionKey, result);
         }
         
         return result;
+    }
+    
+    private static class FlowDeque<E> implements Iterable<E> {
+        
+        private boolean returnMode = false;
+        private ArrayDeque<E> data;
+        private static class RideAlong {
+            String lastDisplayedViewId;
+
+            public RideAlong(String lastDisplayedViewId) {
+                this.lastDisplayedViewId = lastDisplayedViewId;
+            }
+            
+        }
+        private ArrayDeque<RideAlong> rideAlong;
+
+        public FlowDeque() {
+            data = new ArrayDeque<E>();
+            rideAlong = new ArrayDeque<RideAlong>();
+        }
+
+        @Override
+        public Iterator<E> iterator() {
+            return data.iterator();
+        }
+        
+        public void addFirst(E e, String lastDisplayedViewId) {
+            rideAlong.addFirst(new RideAlong(lastDisplayedViewId));
+            data.addFirst(e);
+        }
+        
+        public E pollFirst() {
+            rideAlong.pollFirst();
+            return data.pollFirst();
+        }
+        
+        public E peekFirst() {
+            return data.peekFirst();
+        }
+        
+        public String peekLastDisplayedViewId() {
+            String result = null;
+            RideAlong helper = null;
+            if (this.isReturnMode()) {
+                Iterator<RideAlong> stackIter = rideAlong.iterator();
+                if (null != stackIter) {
+                    if (stackIter.hasNext()) {
+                        stackIter.next();
+                        if (stackIter.hasNext()) {
+                            helper = stackIter.next();
+                        }
+                    }
+                }
+            } else {
+                helper = rideAlong.peekFirst();
+            }
+            
+            if (null != helper) {
+                result = helper.lastDisplayedViewId;
+            }
+            
+            return result;
+        }
+        
+        public boolean isReturnMode() {
+            return returnMode;
+        }
+
+        public void setReturnMode(boolean isReturnMode) {
+            this.returnMode = isReturnMode;
+        }
+
     }
         
     // </editor-fold>

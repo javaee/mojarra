@@ -66,7 +66,7 @@ public abstract class Flow {
     /**
      * <p class="changed_added_2_2">Return the immutable id for this
      * Flow.  This must be unique within the defining document (such as
-     * an Application Configuration Resoucres file), but need not be
+     * an Application Configuration Resources file), but need not be
      * unique within the entire application.</p>
 
      * @since 2.2

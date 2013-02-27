@@ -109,12 +109,7 @@ public abstract class Lifecycle {
      * must take no action.  Otherwise, call {@link javax.faces.context.ExternalContext#getClientWindow()}.
      * If the result is <code>null</code>, create a new instance of <code>ClientWindow</code>
      * and call {@link ClientWindow#decode(javax.faces.context.FacesContext)} on it. 
-     * Store the new <code>ClientWindow</code> by calling 
-     * {@link javax.faces.context.ExternalContext#setClientWindow(javax.faces.lifecycle.ClientWindow)}.
-     * Call {@link javax.faces.context.FacesContext#getApplication()} and then {@link javax.faces.application.Application#getFlowHandler()}
-     * Call {@link javax.faces.flow.FlowHandler#clientWindowTransition(javax.faces.context.FacesContext)}, 
-     * passing the {@code FacesContext} as the argument.
-     * </p>
+     * Store the new <code>ClientWindow</code> by calling {@link javax.faces.context.ExternalContext#setClientWindow(javax.faces.lifecycle.ClientWindow)}.</p>
      * 
      * 
      * @since 2.2
