@@ -59,7 +59,6 @@ import javax.faces.event.AbortProcessingException;
 import javax.faces.event.PostConstructApplicationEvent;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
-import javax.faces.flow.FlowHandler;
 import javax.faces.lifecycle.ClientWindow;
 
 
