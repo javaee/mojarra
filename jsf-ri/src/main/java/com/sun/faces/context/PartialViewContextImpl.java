@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -430,27 +430,23 @@ import javax.faces.lifecycle.ClientWindow;
     }
 
     private void renderState(FacesContext context) throws IOException {
+        // Get the view state and write it to the response..
+        PartialViewContext pvc = context.getPartialViewContext();
+        PartialResponseWriter writer = pvc.getPartialResponseWriter();
+        String viewStateId = Util.getViewStateId(context);
 
-        if (!context.getViewRoot().isTransient()) {
-            // Get the view state and write it to the response..
-            PartialViewContext pvc = context.getPartialViewContext();
-            PartialResponseWriter writer = pvc.getPartialResponseWriter();
-            String viewStateId = Util.getViewStateId(context);
-                            
-            writer.startUpdate(viewStateId);
-            String state = context.getApplication().getStateManager().getViewState(context);
-            writer.write(state);
+        writer.startUpdate(viewStateId);
+        String state = context.getApplication().getStateManager().getViewState(context);
+        writer.write(state);
+        writer.endUpdate();
+
+        ClientWindow window = context.getExternalContext().getClientWindow();
+        if (null != window) {
+            String clientWindowId = Util.getClientWindowId(context);
+            writer.startUpdate(clientWindowId);
+            writer.write(window.getId());
             writer.endUpdate();
-            
-            ClientWindow window = context.getExternalContext().getClientWindow();
-            if (null != window) {
-                String clientWindowId = Util.getClientWindowId(context);
-                writer.startUpdate(clientWindowId);
-                writer.write(window.getId());
-                writer.endUpdate();
-            }
         }
-
     }
 
     private PartialResponseWriter createPartialResponseWriter() {

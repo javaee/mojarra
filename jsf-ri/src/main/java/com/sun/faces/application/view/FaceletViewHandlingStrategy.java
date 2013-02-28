@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -520,12 +520,15 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         }
                         
         UIViewRoot viewRoot;
-
+        
         /*
          * Check if we are stateless.
          */
-        if (!context.getExternalContext().getRequestParameterMap().isEmpty() &&
-            context.getExternalContext().getRequestParameterMap().containsKey("com.sun.faces.StatelessPostback")) {
+        ViewHandler outerViewHandler = context.getApplication().getViewHandler();
+        String renderKitId = outerViewHandler.calculateRenderKitId(context);
+        ResponseStateManager rsm = RenderKitUtils.getResponseStateManager(context, renderKitId);
+                
+        if (rsm.isStateless(context, viewId))  {
             try {
                 ViewDeclarationLanguage vdl = vdlFactory.getViewDeclarationLanguage(viewId);
                 viewRoot = vdl.createView(context, viewId);
@@ -543,9 +546,9 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                 ViewDeclarationLanguage vdl = vdlFactory.getViewDeclarationLanguage(viewId);
                 viewRoot = vdl.getViewMetadata(context, viewId).createMetadataView(context);
                 context.setViewRoot(viewRoot);
-                ViewHandler outerViewHandler = context.getApplication().getViewHandler();
-                String renderKitId = outerViewHandler.calculateRenderKitId(context);
-                ResponseStateManager rsm = RenderKitUtils.getResponseStateManager(context, renderKitId);
+                outerViewHandler = context.getApplication().getViewHandler();
+                renderKitId = outerViewHandler.calculateRenderKitId(context);
+                rsm = RenderKitUtils.getResponseStateManager(context, renderKitId);
                 Object[] rawState = (Object[]) rsm.getState(context, viewId);
                 if (rawState != null) {
                     Map<String, Object> state = (Map<String, Object>) rawState[1];

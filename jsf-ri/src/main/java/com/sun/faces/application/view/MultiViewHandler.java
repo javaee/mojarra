@@ -240,8 +240,7 @@ public class MultiViewHandler extends ViewHandler {
     public void writeState(FacesContext context) throws IOException {
 
         Util.notNull("context", context);
-        if (!context.getPartialViewContext().isAjaxRequest()
-              && !context.getViewRoot().isTransient()) {
+        if (!context.getPartialViewContext().isAjaxRequest()) {
             if (logger.isLoggable(Level.FINE)) {
                 logger.fine("Begin writing marker for viewId " +
                             context.getViewRoot().getViewId());
@@ -259,7 +258,6 @@ public class MultiViewHandler extends ViewHandler {
                             context.getViewRoot().getViewId());
             }
         }
-
     }
 
 

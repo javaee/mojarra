@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -170,86 +170,92 @@ public class ServerSideStateHelper extends StateHelper {
     throws IOException {
 
         Util.notNull("context", ctx);
-        Util.notNull("state", state);
 
-        Object[] stateToWrite = (Object[]) state;
-        ExternalContext externalContext = ctx.getExternalContext();
-        Object sessionObj = externalContext.getSession(true);
-        Map<String, Object> sessionMap = externalContext.getSessionMap();
+        String id;
+        
+        if (!ctx.getViewRoot().isTransient()) {
+            Util.notNull("state", state);
+            Object[] stateToWrite = (Object[]) state;
+            ExternalContext externalContext = ctx.getExternalContext();
+            Object sessionObj = externalContext.getSession(true);
+            Map<String, Object> sessionMap = externalContext.getSessionMap();
 
-        //noinspection SynchronizationOnLocalVariableOrMethodParameter
-        synchronized (sessionObj) {
-            Map<String, Map> logicalMap = TypedCollections.dynamicallyCastMap(
-                  (Map) sessionMap
-                        .get(LOGICAL_VIEW_MAP), String.class, Map.class);
-            if (logicalMap == null) {
-                logicalMap = new LRUMap<String, Map>(numberOfLogicalViews);
+            //noinspection SynchronizationOnLocalVariableOrMethodParameter
+            synchronized (sessionObj) {
+                Map<String, Map> logicalMap = TypedCollections.dynamicallyCastMap(
+                      (Map) sessionMap
+                            .get(LOGICAL_VIEW_MAP), String.class, Map.class);
+                if (logicalMap == null) {
+                    logicalMap = new LRUMap<String, Map>(numberOfLogicalViews);
+                    sessionMap.put(LOGICAL_VIEW_MAP, logicalMap);
+                }
+
+                Object structure = stateToWrite[0];
+                Object savedState = handleSaveState(stateToWrite[1]);
+
+                String idInLogicalMap = (String)
+                          RequestStateManager.get(ctx, RequestStateManager.LOGICAL_VIEW_MAP);
+                if (idInLogicalMap == null) {
+                    idInLogicalMap = ((generateUniqueStateIds)
+                                          ? createRandomId()
+                                          : createIncrementalRequestId(ctx));
+                }
+                String idInActualMap = null;
+                if(ctx.getPartialViewContext().isPartialRequest()){
+                    // If partial request, do not change actual view Id, because page not actually changed.
+                    // Otherwise partial requests will soon overflow cache with values that would be never used.
+                    idInActualMap = (String) RequestStateManager.get(ctx, RequestStateManager.ACTUAL_VIEW_MAP);
+                }
+                if (null == idInActualMap) {
+                        idInActualMap = ((generateUniqueStateIds) ? createRandomId()
+                                                    : createIncrementalRequestId(ctx));
+                }
+                Map<String, Object[]> actualMap =
+                      TypedCollections.dynamicallyCastMap(
+                            logicalMap.get(idInLogicalMap), String.class, Object[].class);
+                if (actualMap == null) {
+                    actualMap = new LRUMap<String, Object[]>(numberOfViews);
+                    logicalMap.put(idInLogicalMap, actualMap);
+                }
+
+                id = idInLogicalMap + ':' + idInActualMap;
+                
+                Object[] stateArray = actualMap.get(idInActualMap);
+                // reuse the array if possible
+                if (stateArray != null) {
+                    stateArray[0] = structure;
+                    stateArray[1] = savedState;
+                } else {
+                    actualMap.put(idInActualMap, new Object[]{ structure, savedState });
+                }
+
+                // always call put/setAttribute as we may be in a clustered environment.
                 sessionMap.put(LOGICAL_VIEW_MAP, logicalMap);
             }
+        } else {
+            id = "stateless";
+        }
+        
+        if (stateCapture != null) {
+            stateCapture.append(id);
+        } else {
+            ResponseWriter writer = ctx.getResponseWriter();
 
-            Object structure = stateToWrite[0];
-            Object savedState = handleSaveState(stateToWrite[1]);
-
-            String idInLogicalMap = (String)
-                      RequestStateManager.get(ctx, RequestStateManager.LOGICAL_VIEW_MAP);
-            if (idInLogicalMap == null) {
-                idInLogicalMap = ((generateUniqueStateIds)
-                                      ? createRandomId()
-                                      : createIncrementalRequestId(ctx));
+            writer.startElement("input", null);
+            writer.writeAttribute("type", "hidden", null);
+            writer.writeAttribute("name", ResponseStateManager.VIEW_STATE_PARAM, null);
+            if (webConfig.isOptionEnabled(EnableViewStateIdRendering)) {
+                String viewStateId = Util.getViewStateId(ctx);
+                writer.writeAttribute("id", viewStateId, null);
             }
-            String idInActualMap = null;
-            if(ctx.getPartialViewContext().isPartialRequest()){
-                // If partial request, do not change actual view Id, because page not actually changed.
-                // Otherwise partial requests will soon overflow cache with values that would be never used.
-                idInActualMap = (String) RequestStateManager.get(ctx, RequestStateManager.ACTUAL_VIEW_MAP);
+            writer.writeAttribute("value", id, null);
+            if (webConfig.isOptionEnabled(AutoCompleteOffOnViewState)) {
+                writer.writeAttribute("autocomplete", "off", null);
             }
-            if (null == idInActualMap) {
-                    idInActualMap = ((generateUniqueStateIds) ? createRandomId()
-                                                : createIncrementalRequestId(ctx));
-            }
-            Map<String, Object[]> actualMap =
-                  TypedCollections.dynamicallyCastMap(
-                        logicalMap.get(idInLogicalMap), String.class, Object[].class);
-            if (actualMap == null) {
-                actualMap = new LRUMap<String, Object[]>(numberOfViews);
-                logicalMap.put(idInLogicalMap, actualMap);
-            }
+            writer.endElement("input");
 
-            String id = idInLogicalMap + ':' + idInActualMap;
-
-            Object[] stateArray = actualMap.get(idInActualMap);
-            // reuse the array if possible
-            if (stateArray != null) {
-                stateArray[0] = structure;
-                stateArray[1] = savedState;
-            } else {
-                actualMap.put(idInActualMap, new Object[]{ structure, savedState });
-            }
-
-            // always call put/setAttribute as we may be in a clustered environment.
-            sessionMap.put(LOGICAL_VIEW_MAP, logicalMap);
-
-             if (stateCapture != null) {
-                stateCapture.append(id);
-             } else {
-                ResponseWriter writer = ctx.getResponseWriter();
-                 
-                writer.startElement("input", null);
-                writer.writeAttribute("type", "hidden", null);
-                writer.writeAttribute("name", ResponseStateManager.VIEW_STATE_PARAM, null);
-                if (webConfig.isOptionEnabled(EnableViewStateIdRendering)) {
-                    String viewStateId = Util.getViewStateId(ctx);
-                    writer.writeAttribute("id", viewStateId, null);
-                }
-                writer.writeAttribute("value", id, null);
-                if (webConfig.isOptionEnabled(AutoCompleteOffOnViewState)) {
-                    writer.writeAttribute("autocomplete", "off", null);
-                }
-                writer.endElement("input");
-                
-                writeClientWindowField(ctx, writer); 
-                writeRenderKitIdField(ctx, writer);
-             }
+            writeClientWindowField(ctx, writer); 
+            writeRenderKitIdField(ctx, writer);
         }
     }
 
@@ -265,8 +271,13 @@ public class ServerSideStateHelper extends StateHelper {
     public Object getState(FacesContext ctx, String viewId) {
 
         String compoundId = getStateParamValue(ctx);
+        
         if (compoundId == null) {
             return null;
+        }
+        
+        if ("stateless".equals(compoundId)) {
+            return "stateless";
         }
 
         int sep = compoundId.indexOf(':');
@@ -459,5 +470,25 @@ public class ServerSideStateHelper extends StateHelper {
 
     }
 
+    /**
+     * Is stateless.
+     * 
+     * @param facesContext the Faces context.
+     * @param viewId the view id.
+     * @return true if stateless, false otherwise.
+     * @throws IllegalStateException when the request was not a postback.
+     */
+    @Override
+    public boolean isStateless(FacesContext facesContext, String viewId) throws IllegalStateException {
+        if (facesContext.isPostback()) {
+            Object stateObject = getState(facesContext, viewId);
+            if (stateObject instanceof String && "stateless".equals((String) stateObject)) {
+                return true;
+            }
 
+            return false;
+        }
+        
+        throw new IllegalStateException("Cannot determine whether or not the request is stateless");
+    }
 }

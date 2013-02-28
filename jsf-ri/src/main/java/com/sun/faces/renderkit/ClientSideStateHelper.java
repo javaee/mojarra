@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -176,10 +176,10 @@ public class ClientSideStateHelper extends StateHelper {
                            StringBuilder stateCapture) throws IOException {
 
         if (stateCapture != null) {
-            doWriteState(state, new StringBuilderWriter(stateCapture));
+            doWriteState(ctx, state, new StringBuilderWriter(stateCapture));
         } else {
             ResponseWriter writer = ctx.getResponseWriter();
-            
+
             writer.startElement("input", null);
             writer.writeAttribute("type", "hidden", null);
             writer.writeAttribute("name", ResponseStateManager.VIEW_STATE_PARAM, null);
@@ -188,7 +188,7 @@ public class ClientSideStateHelper extends StateHelper {
                 writer.writeAttribute("id", viewStateId, null);
             }
             StringBuilder stateBuilder = new StringBuilder();
-            doWriteState(state, new StringBuilderWriter(stateBuilder));
+            doWriteState(ctx, state, new StringBuilderWriter(stateBuilder));
             writer.writeAttribute("value", stateBuilder.toString(), null);
             if (webConfig.isOptionEnabled(AutoCompleteOffOnViewState)) {
                 writer.writeAttribute("autocomplete", "off", null);
@@ -198,7 +198,6 @@ public class ClientSideStateHelper extends StateHelper {
             writeClientWindowField(ctx, writer);
             writeRenderKitIdField(ctx, writer);
         }
-
     }
 
 
@@ -214,13 +213,17 @@ public class ClientSideStateHelper extends StateHelper {
      */
     public Object getState(FacesContext ctx, String viewId) throws IOException {
 
-
         String stateString = getStateParamValue(ctx);
+        
         if (stateString == null) {
             return null;
         }
-        return doGetState(stateString);
+        
+        if ("stateless".equals(stateString)) {
+            return "stateless";
+        }
 
+        return doGetState(stateString);
     }
 
 
@@ -235,6 +238,11 @@ public class ClientSideStateHelper extends StateHelper {
      * @return the view state reconstructed from <code>stateString</code>
      */
     protected Object doGetState(String stateString) {
+        
+        if ("stateless".equals(stateString)) {
+            return null;
+        }
+        
         ObjectInputStream ois = null;
         InputStream bis = new Base64InputStream(stateString);
         try {
@@ -325,12 +333,20 @@ public class ClientSideStateHelper extends StateHelper {
      * Serializes and Base64 encodes the provided <code>state</code> to the
      * provided <code>writer</code>/
      *
+     * @param facesContext the Faces context.
      * @param state view state
      * @param writer the <code>Writer</code> to write the content to
      * @throws IOException if an error occurs writing the state to the client
      */
-    protected void doWriteState(Object state, Writer writer)
+    protected void doWriteState(FacesContext facesContext, Object state, Writer writer)
     throws IOException {
+        
+        if (facesContext.getViewRoot().isTransient()) {
+            writer.write("stateless");
+            writer.flush();
+            return;
+        }
+        
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         OutputStream base = null;
         if (compressViewState) {
@@ -344,7 +360,7 @@ public class ClientSideStateHelper extends StateHelper {
         try {
             oos = serialProvider
                 .createObjectOutputStream(new BufferedOutputStream(base));
-            
+
             if (stateTimeoutEnabled) {
                 oos.writeLong(System.currentTimeMillis());
 
@@ -352,42 +368,42 @@ public class ClientSideStateHelper extends StateHelper {
 
             Object[] stateToWrite = (Object[]) state;
 
-            
+
             if (debugSerializedState) {
                 ByteArrayOutputStream discard = new ByteArrayOutputStream();
                 DebugObjectOutputStream out =
                         new DebugObjectOutputStream(discard);
                 try {
-                    out.writeObject(stateToWrite[0]);
+                        out.writeObject(stateToWrite[0]);
                 } catch (Exception e) {
                     throw new FacesException(
                             "Serialization error. Path to offending instance: " 
                             + out.getStack(), e);
                 }            
-                
+
             }
-            
+
             //noinspection NonSerializableObjectPassedToObjectStream
-            oos.writeObject(stateToWrite[0]);
-            
+                oos.writeObject(stateToWrite[0]);
+
             if (debugSerializedState) {
                 ByteArrayOutputStream discard = new ByteArrayOutputStream();
 
                 DebugObjectOutputStream out =
                         new DebugObjectOutputStream(discard);
                 try {
-                    out.writeObject(stateToWrite[1]);
+                        out.writeObject(stateToWrite[1]);
                 } catch (Exception e) {
                     DebugUtil.printState((Map)stateToWrite[1], LOGGER);
                     throw new FacesException(
                             "Serialization error. Path to offending instance: " 
                             + out.getStack(), e);
                 }            
-                
+
             }
-            
+
             //noinspection NonSerializableObjectPassedToObjectStream
-            oos.writeObject(stateToWrite[1]);
+                oos.writeObject(stateToWrite[1]);
 
             oos.flush();
             oos.close();
@@ -406,7 +422,7 @@ public class ClientSideStateHelper extends StateHelper {
                 new Base64OutputStreamWriter(bytes.length, writer);
             bos.write(bytes, 0, bytes.length);
             bos.finish();
-            
+
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
                            "Client State: total number of characters written: {0}",
@@ -515,6 +531,33 @@ public class ClientSideStateHelper extends StateHelper {
 
     }
 
+    /**
+     * Is stateless.
+     * 
+     * @param facesContext the Faces context.
+     * @param viewId the view id.
+     * @return true if stateless, false otherwise.
+     * @throws IllegalStateException when the request was not a postback.
+     */
+    @Override
+    public boolean isStateless(FacesContext facesContext, String viewId) throws IllegalStateException {
+        if (facesContext.isPostback()) {
+            Object stateObject;
+
+            try {
+                stateObject = getState(facesContext, viewId);
+            } catch(IOException ioe) {
+                throw new IllegalStateException("Cannot determine whether or not the request is stateless", ioe);
+            }
+            if (stateObject instanceof String && "stateless".equals((String) stateObject)) {
+                return true;
+            }
+
+            return false;
+        }
+        
+        throw new IllegalStateException("Cannot determine whether or not the request is stateless");
+    }
 
     // ----------------------------------------------------------- Inner Classes
 

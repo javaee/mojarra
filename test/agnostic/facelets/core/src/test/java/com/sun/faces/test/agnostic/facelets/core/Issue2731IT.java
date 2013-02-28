@@ -72,12 +72,12 @@ public class Issue2731IT {
     @Test
     public void testDefaultStateless() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/viewTransient.xhtml");
-        assertTrue(page.asXml().indexOf("com.sun.faces.StatelessPostback") != -1);
+        assertTrue(page.asXml().indexOf("\"stateless\"") != -1);
         
         HtmlElement button = page.getElementById("form:button");
         page = button.click();
         
-        assertTrue(page.asXml().indexOf("com.sun.faces.StatelessPostback") != -1);
+        assertTrue(page.asXml().indexOf("\"stateless\"") != -1);
     }
 
 
@@ -89,20 +89,20 @@ public class Issue2731IT {
     @Test
     public void testStatelessAjax() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/viewTransientAjax.xhtml");
-        assertTrue(page.asXml().indexOf("com.sun.faces.StatelessPostback") != -1);
+        assertTrue(page.asXml().indexOf("\"stateless\"") != -1);
         assertTrue(page.asXml().indexOf("[]") != -1);
         
         HtmlElement button = page.getElementById("form:ajaxButton");
         page = button.click();
         webClient.waitForBackgroundJavaScript(60000);
         
-        assertTrue(page.asXml().indexOf("com.sun.faces.StatelessPostback") != -1);
+        assertTrue(page.asXml().indexOf("\"stateless\"") != -1);
         assertTrue(page.asXml().indexOf("[ajax]") != -1);
 
         button = page.getElementById("form:submitButton");
         page = button.click();
 
-        assertTrue(page.asXml().indexOf("com.sun.faces.StatelessPostback") != -1);
+        assertTrue(page.asXml().indexOf("\"stateless\"") != -1);
         assertTrue(page.asXml().indexOf("[non-ajax]") != -1);
     }
     

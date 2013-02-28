@@ -47,6 +47,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.application.FacesMessage;
+import javax.faces.application.ProjectStage;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
@@ -237,12 +239,29 @@ public class ViewScopeManager implements HttpSessionListener, ViewMapListener {
      * @param se the system event.
      */
     private void processPostConstructViewMap(SystemEvent se) {
+        if (LOGGER.isLoggable(Level.FINEST)) {
+            LOGGER.log(Level.FINEST, "Handling PostConstructViewMapEvent");
+        }
+        
         UIViewRoot viewRoot = (UIViewRoot) se.getSource();
         Map<String, Object> viewMap = viewRoot.getViewMap(false);
 
-        if (viewMap != null) {
+        if (viewMap != null) {            
             FacesContext facesContext = FacesContext.getCurrentInstance();
+            
+            if (viewRoot.isTransient() && facesContext.isProjectStage(ProjectStage.Development)) {
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN,
+                    "@ViewScoped beans are not supported on stateless views",
+                    "@ViewScoped beans are not supported on stateless views");
+                facesContext.addMessage(viewRoot.getClientId(facesContext), message);                
+
+                if (LOGGER.isLoggable(Level.WARNING)) {
+                    LOGGER.log(Level.WARNING, "@ViewScoped beans are not supported on stateless views");
+                }
+            }
+            
             Object session = facesContext.getExternalContext().getSession(true);
+
             if (session != null) {
                 Map<String, Object> sessionMap = facesContext.getExternalContext().getSessionMap();
                 Integer size = (Integer) sessionMap.get(ACTIVE_VIEW_MAPS_SIZE);
@@ -281,6 +300,10 @@ public class ViewScopeManager implements HttpSessionListener, ViewMapListener {
      * @param se the system event.
      */
     private void processPreDestroyViewMap(SystemEvent se) {
+        if (LOGGER.isLoggable(Level.FINEST)) {
+            LOGGER.log(Level.FINEST, "Handling PreDestroyViewMapEvent");
+        }
+        
         UIViewRoot viewRoot = (UIViewRoot) se.getSource();
         Map<String, Object> viewMap = viewRoot.getViewMap(false);
 

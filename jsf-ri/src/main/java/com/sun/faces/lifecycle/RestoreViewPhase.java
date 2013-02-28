@@ -191,9 +191,7 @@ public class RestoreViewPhase extends Phase {
             ViewHandler viewHandler = Util.getViewHandler(facesContext);
 
             boolean isPostBack = (facesContext.isPostback() && !isErrorPage(facesContext));
-            if (isPostBack || 
-                    (!facesContext.getExternalContext().getRequestParameterMap().isEmpty() &&
-                     facesContext.getExternalContext().getRequestParameterMap().containsKey("com.sun.faces.StatelessPostback"))) {
+            if (isPostBack) {
                 facesContext.setProcessingEvents(false);
                 // try to restore the view
                 viewRoot = viewHandler.restoreView(facesContext, viewId);

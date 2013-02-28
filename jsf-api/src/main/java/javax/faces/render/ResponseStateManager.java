@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -319,6 +319,7 @@ public abstract class ResponseStateManager {
      * </div>
      * 
      * @param context The {@link FacesContext} instance for the current request
+     * @param viewId View identifier of the view to be restored
      * @throws NullPointerException if the argument {@code context} is {@code null}.
      * @throws IllegalStateException if this method is invoked and the statefulness
      * of the preceding call to {@link #writeState(javax.faces.context.FacesContext, java.lang.Object)}
@@ -329,10 +330,10 @@ public abstract class ResponseStateManager {
      *  
      */
     
-    public boolean isStateless(FacesContext context) {
-        return  false;
+    public boolean isStateless(FacesContext context, String viewId) {
+        return false;
     }
-
+    
     /**
      * <p><span class="changed_modified_2_2">The</span> implementation must 
      * inspect the current request and return
@@ -471,5 +472,4 @@ public abstract class ResponseStateManager {
     public String getCryptographicallyStrongTokenFromSession(FacesContext context) {
         return null;
     }
-    
 }
