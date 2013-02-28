@@ -455,7 +455,8 @@ package javax.faces.view.facelets;
  * argument {@code tag}'s attributes and the value from the "selector
  * attribute" column in the table in the given order. A selector
  * attribute value of <strong>*</strong> indicates any value. A selector
- * attribute name prefixed with <strong>jsf:</strong> means in the {@code
+ * attribute name prefixed with <strong>jsf:</strong> means the tag is treated 
+ * as if it were in the {@code
  * http://java.sun.com/jsf} namespace.</p>
 
 
