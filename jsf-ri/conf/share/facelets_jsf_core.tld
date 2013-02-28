@@ -2306,6 +2306,30 @@ will not pass validation.</p> ]]>
 
         <attribute>
             <description>
+                <![CDATA[<p class="changed_added_2_2">If
+                <code>true</code>, this view must not participate in
+                state saving or restoring.  Note that transient views
+                may not be used with <code>@ViewScoped</code> managed
+                beans.  The implementation must call
+                <code>setTransient()</code> on the
+                <code>UIViewRoot</code>, passing the value of the
+                attribute as specified in the markup.</p>]]>
+            </description>
+            <name>
+                transient
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    boolean
+                </type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
                 Locale to use for localizing this page.  Expressions
                 must evaluate to a java.util.Locale or to a String
                 that is converted to a Locale.

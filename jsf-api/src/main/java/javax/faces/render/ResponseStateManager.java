@@ -153,6 +153,12 @@ public abstract class ResponseStateManager {
      * <code>state</code> and write it into the
      * output using the current {@link ResponseWriter}, which must be
      * correctly positioned already.</p>
+     * 
+     * <p class="changed_added_2_2">Call {@link FacesContext#getViewRoot()}.
+     * Call {@link javax.faces.component.UIComponent#isTransient()}
+     * returns {@code true}, take implementation specific action so that the 
+     * following call to {@link #isStateless} returns {@code true} and return.
+     * Otherwise, proceed as follows.</p>
      *
      * <p>If the state is to be written out to hidden fields, the
      * implementation must take care to make all necessary character
@@ -295,6 +301,36 @@ public abstract class ResponseStateManager {
                                              state.getState()});
         }
         
+    }
+    
+    /**
+     * <p class="changed_added_2_2">If the preceding call to {@link #writeState(javax.faces.context.FacesContext, java.lang.Object)}
+     * was stateless, return {@code true}.  If the preceding call to {@code writeState()} was
+     * stateful, return {@code false}.  Otherwise throw {@code IllegalStateException}.</p>
+     * 
+     * <div class="changed_added_2_2">
+     * 
+     * <p>To preserve backward compatibility
+     * with custom implementations that may have extended from an earlier
+     * version of this class, an implementation is provided that returns 
+     * <code>false</code>.  A compliant implementation must override this 
+     * method to take the specified action.</p>
+     * 
+     * </div>
+     * 
+     * @param context The {@link FacesContext} instance for the current request
+     * @throws NullPointerException if the argument {@code context} is {@code null}.
+     * @throws IllegalStateException if this method is invoked and the statefulness
+     * of the preceding call to {@link #writeState(javax.faces.context.FacesContext, java.lang.Object)}
+     * cannot be determined.
+     * 
+     * @since 2.2
+     * 
+     *  
+     */
+    
+    public boolean isStateless(FacesContext context) {
+        return  false;
     }
 
     /**

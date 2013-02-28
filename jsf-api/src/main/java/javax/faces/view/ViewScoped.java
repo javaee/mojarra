@@ -59,7 +59,17 @@ import javax.enterprise.context.NormalScope;
  * time.</p>
  * 
  * <div class="changed_added_2_2">
- * 
+
+ * <p>If <code>ProjectStage</code> is not
+ * <code>ProjectStage.Production</code>, verify that the current {@link
+ * javax.faces.component.UIViewRoot} does not have its {@code transient}
+ * property set to {@code true}.  If so, add a <code>FacesMessage</code>
+ * for the current {@code viewId} to the <code>FacesContext</code>
+ * stating {@code @ViewScoped} beans cannot work if the view is marked
+ * as transient.  If <code>ProjectStage</code> <strong>is</strong>
+ * <code>ProjectStage.Production</code>, do not do this
+ * verification.</p>
+
  * <p>The bean must be stored in the map returned from 
  * {@link javax.faces.component.UIViewRoot#getViewMap(boolean)}.</p>
 
