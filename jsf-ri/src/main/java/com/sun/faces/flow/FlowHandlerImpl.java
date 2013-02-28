@@ -44,7 +44,6 @@ import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.util.Util;
 import java.text.MessageFormat;
 import java.util.ArrayDeque;
-import java.util.Deque;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -174,12 +173,10 @@ public class FlowHandlerImpl extends FlowHandler {
         FlowDeque<Flow> flowStack = getFlowStack(context);
         if (flowStack.isReturnMode()) {
             Iterator<Flow> stackIter = flowStack.iterator();
-            if (null != stackIter) {
+            if (null != stackIter && stackIter.hasNext()) {
+                stackIter.next();
                 if (stackIter.hasNext()) {
-                    stackIter.next();
-                    if (stackIter.hasNext()) {
-                        result = stackIter.next();
-                    }
+                    result = stackIter.next();
                 }
             }
         } else {
@@ -425,12 +422,10 @@ public class FlowHandlerImpl extends FlowHandler {
             RideAlong helper = null;
             if (this.isReturnMode()) {
                 Iterator<RideAlong> stackIter = rideAlong.iterator();
-                if (null != stackIter) {
+                if (null != stackIter && stackIter.hasNext()) {
+                    stackIter.next();
                     if (stackIter.hasNext()) {
-                        stackIter.next();
-                        if (stackIter.hasNext()) {
-                            helper = stackIter.next();
-                        }
+                        helper = stackIter.next();
                     }
                 }
             } else {
