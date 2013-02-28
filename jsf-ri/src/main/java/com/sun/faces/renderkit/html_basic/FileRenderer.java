@@ -42,12 +42,16 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import com.sun.faces.renderkit.RenderKitUtils;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 
 import javax.faces.FacesException;
+import javax.faces.application.FacesMessage;
+import javax.faces.application.ProjectStage;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIForm;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.ConverterException;
@@ -97,6 +101,34 @@ public class FileRenderer extends TextRenderer {
             throw new FacesException(se);
         }
             
+    }
+    
+    // If we are in Project Stage Development mode, the parent form 
+    // must have an enctype of "multipart/form-data" for this component.
+    // If not, produce a message.
+    @Override
+    public void encodeBegin(FacesContext context, UIComponent component)
+          throws IOException {
+        if (context.isProjectStage(ProjectStage.Development)) {
+            boolean produceMessage = false;
+            UIForm form = RenderKitUtils.getForm(component, context);
+            if (null != form) {
+                String encType = (String)form.getAttributes().get("enctype");
+                if (null == encType || !encType.equals("multipart/form-data")) {
+                    produceMessage = true;
+                } 
+            } else {
+                produceMessage = true;
+            }
+            
+            if (produceMessage) {
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN,
+                    "File upload component requires a form with an enctype of multipart/form-data",
+                    "File upload component requires a form with an enctype of multipart/form-data");
+                context.addMessage(component.getClientId(context), message);   
+            }       
+        }
+        super.encodeBegin(context, component);
     }
 
     @Override

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -123,4 +123,12 @@ public class Spec802IT {
         assertTrue(!pageText.contains(textValue));
     }
 
+    @Test
+    public void testFileUploadNoEncType() throws Exception {
+        webClient = new WebClient();
+        HtmlPage page = webClient.getPage(webUrl+"faces/inputFileNoEncTyoe.xhtml");
+System.err.println("PAGETEXT:"+page.asText());
+        assertTrue(page.asText().contains(
+            "File upload component requires a form with an enctype of multipart/form-data"));
+    }
 }

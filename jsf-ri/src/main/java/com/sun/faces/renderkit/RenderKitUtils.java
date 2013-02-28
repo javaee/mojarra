@@ -1266,6 +1266,25 @@ public class RenderKitUtils {
      */
     public static String getFormClientId(UIComponent component,
                                    FacesContext context) {
+        UIForm form = getForm(component, context);
+        if (form != null) {
+            return form.getClientId(context);
+        }
+
+        return null;
+    }
+
+    
+       /**
+     * <p>Utility method to return the client ID of the parent form.</p>
+     *
+     * @param component typically a command component
+     * @param context   the <code>FacesContext</code> for the current request
+     *
+     * @return the parent form, if any
+     */
+    public static UIForm getForm(UIComponent component,
+                                   FacesContext context) {
 
         UIComponent parent = component.getParent();
         while (parent != null) {
@@ -1277,13 +1296,12 @@ public class RenderKitUtils {
         
         UIForm form = (UIForm) parent;
         if (form != null) {
-            return form.getClientId(context);
+            return form;
         }
 
         return null;
     }
-
-
+    
     /**
      * @param context the <code>FacesContext</code> for the current request
      *
