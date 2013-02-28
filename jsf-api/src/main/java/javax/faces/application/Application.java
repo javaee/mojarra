@@ -102,48 +102,14 @@ public abstract class Application {
 
 
     /**
-     * <p>Return the default {@link ActionListener} to be registered for
+     * <p><span class="changed_modified_2_2">Return</span> the default 
+     * {@link ActionListener} to be registered for
      * all {@link javax.faces.component.ActionSource} components in this
-     * appication.  If not explicitly set, a default implementation must
-     * be provided that performs the
-     *
-     * following functions:</p>
-     * <ul>
-     * <li>The <code>processAction()</code> method must first call
-     *     <code>FacesContext.renderResponse()</code> in order to bypass
-     *     any intervening lifecycle phases, once the method returns.</li>
-     * <li>The <code>processAction()</code> method must next determine
-     *     the logical outcome of this event, as follows:
-     *     <ul>
-     *     <li>If the originating component has a non-<code>null</code>
-     *     <code>action</code> property, retrieve the {@link
-     *     MethodBinding} from the property, and call
-     *     <code>invoke()</code> on it.  Convert the returned value (if
-     *     any) to a String, and use it as the logical outcome.</li>
-
-     *     <li>Otherwise, the logical outcome is <code>null</code>.</li>
-     *     </ul></li>
-
-     * <li>The <code>processAction()</code> method must finally retrieve
-     *     the <code>NavigationHandler</code> instance for this
-     *     application and call {@link
-     *     NavigationHandler#handleNavigation} passing: 
-     *
-     *     <ul>
-
-     *     <li>the {@link FacesContext} for the current request</li>
-
-     *     <li>If there is a <code>MethodBinding</code> instance for the
-     *     <code>action</code> property of this component, the result of
-     *     calling {@link MethodBinding#getExpressionString} on it, null
-     *     otherwise</li>
-     *
-     *     <li>the logical outcome as determined above</li>
-     *
-     *     </ul>
-     *
-     *     </li>
-     * </ul>
+     * application.  If not explicitly set, a default implementation must
+     * be provided that performs the <span class="changed_modified_2_2">functions 
+     * as specified in the section
+     * titled "ActionListener Property" in the chapter titled "Application Integration"
+     * of the spec prose document.</span></p>
      *
      * <p>Note that the specification for the default
      * <code>ActionListener</code> contiues to call for the use of a

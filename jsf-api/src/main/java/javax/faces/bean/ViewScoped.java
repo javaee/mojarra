@@ -104,7 +104,7 @@ import java.lang.annotation.Inherited;
  * JavaEE.  When possible, the corresponding annotations from the
  * appropriate Java EE specification should be used in preference to
  * these annotations.  In this case, the corresponding annotation is
- * {@code javax.faces.flow.ViewScoped}.  The functionality of this
+ * {@code javax.faces.view.ViewScoped}.  The functionality of this
  * corresponding annotation is identical to this one, but it is
  * implemented as a CDI custom scope.</p>
 

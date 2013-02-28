@@ -2625,7 +2625,8 @@ which must contain exactly one <code>&lt;flow-id&gt;</code> element.</p>
     <xsd:annotation>
       <xsd:documentation><![CDATA[
 
-       <p> The "navigation-case" element describes a particular
+       <p> <span class="changed_modified_2_2">The</span>
+       "navigation-case" element describes a particular
         combination of conditions that must match for this case to
         be executed, and the view id of the component tree that
         should be selected next.</p>

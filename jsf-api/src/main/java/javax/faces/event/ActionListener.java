@@ -60,7 +60,8 @@ public interface ActionListener extends FacesListener  {
      * <p class="changed_added_2_2">The presence of this component attribute
      * on an {@link javax.faces.component.ActionSource} component will cause
      * the default {@code ActionListener} to interpret the value of the 
-     * attribute as the </p>
+     * attribute as the <em>toFlowDocumentId</em> value to pass to
+     * {@link javax.faces.application.NavigationHandler#handleNavigation(javax.faces.context.FacesContext, java.lang.String, java.lang.String, java.lang.String)}.</p>
      * 
      */
     public static final String TO_FLOW_DOCUMENT_ID_ATTR_NAME = "to-flow-document-id";
