@@ -61,7 +61,8 @@ import java.lang.annotation.Inherited;
  * property set to {@code true}.  If so, add a <code>FacesMessage</code>
  * for the current {@code viewId} to the <code>FacesContext</code>
  * stating {@code @ViewScoped} beans cannot work if the view is marked
- * as transient.  If <code>ProjectStage</code> <strong>is</strong>
+ * as transient.  Also log a <code>Level.WARNING</code> message to the 
+ * log.  If <code>ProjectStage</code> <strong>is</strong>
  * <code>ProjectStage.Production</code>, do not do this
  * verification.</p>
 
