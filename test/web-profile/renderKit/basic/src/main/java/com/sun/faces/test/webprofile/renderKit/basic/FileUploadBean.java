@@ -44,6 +44,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.ProjectStage;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.servlet.http.Part;
 
@@ -86,6 +88,12 @@ public class FileUploadBean {
     public void setText(String text) {
         this.text = text;
     }
-    
-    
+
+    public String getProjectStage() {
+        String projectStage = null;
+        if (FacesContext.getCurrentInstance().isProjectStage(ProjectStage.Development)) {
+            projectStage = "ProjectStage.Development";
+        }
+        return projectStage;
+    }
 }
