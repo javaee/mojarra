@@ -215,12 +215,6 @@ public abstract class UIComponentBase extends UIComponent {
     }
 
     @Override
-    public Map<String, Object> getPassThroughAttributes() {
-        
-        return getPassThroughAttributes(true);
-    }
-    
-    @Override
     public Map<String, Object> getPassThroughAttributes(boolean create) {
         Map<String, Object> result = (Map<String, Object>) 
                 this.getStateHelper().get(PropertyKeys.passThroughAttributes);

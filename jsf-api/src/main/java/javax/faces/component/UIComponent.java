@@ -312,11 +312,25 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
     public abstract Map<String, Object> getAttributes();
     
     /**
-     * <p class="changed_added_2_2">Return a data structure containing the attributes
-     * of this component that should be rendered directly to the output without
-     * interpretation by the {@link javax.faces.render.Renderer}.  This method must
-     * never return {@code null}.  The returned
-     * {@code Map} implementation must support all of the standard and optional 
+     * <p class="changed_added_2_2">This is a convenience method that 
+     * simply calls {@link #getPassThroughAttributes(boolean)}, passing {@code true}
+     * as the argument.  This method must never return {@code null}.</p>
+     * 
+     * @since 2.2
+     */
+
+    public final Map<String, Object> getPassThroughAttributes(){
+        
+        return getPassThroughAttributes(true);
+    }
+    
+    
+    /**
+     * <p class="changed_added_2_2">This method has the same specification as 
+     * {@link #getPassThroughAttributes() } except that it is allowed to return 
+     * {@code null} if and only if the argument {@code create} is {@code false}
+     * and no pass through attribute data structure exists for this instance.  
+     * The returned {@code Map} implementation must support all of the standard and optional 
      * {@code Map} methods, plus support the following additional requirements.</p>
      * 
      * <div class="changed_added_2_2">
@@ -330,18 +344,6 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * 
      * </div>
      *
-     * @since 2.2
-     */
-
-    public abstract Map<String, Object> getPassThroughAttributes();
-    
-    
-    /**
-     * <p class="changed_added_2_2">This method has the same specification as 
-     * {@link #getPassThroughAttributes() } except that it is allowed to return 
-     * {@code null} if and only if the argument {@code create} is {@code false}
-     * and no pass through attribute data structure exists for this instance.</p>
-
      * @param create if <code>true</code>, a new {@code Map}
      * instance will be created if it does not exist already.  If
      * <code>false</code>, and there is no existing
