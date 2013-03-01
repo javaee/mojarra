@@ -47,12 +47,10 @@ import javax.faces.context.FacesContext;
  * <p class="changed_added_2_2"><strong>FlowHandler</strong> is the main
  * entry point that enables the runtime to interact with the faces flows
  * feature.  {@link
- * javax.faces.application.ConfigurableNavigationHandler} uses this
+ * javax.faces.application.NavigationHandler} uses this
  * class when it needs to make navigational decisions related to flows.
  * The faces flow feature entirely depends on the {@link
- * javax.faces.lifecycle.ClientWindow} feature, which itself requires
- * explicit enabling.  Please see the specification for {@code
- * ClientWindow} for the requirements for enabling this feature.</p>
+ * javax.faces.lifecycle.ClientWindow} feature and also on CDI.</p>
  
  * <div class="changed_added_2_2">
 

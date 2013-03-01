@@ -64,6 +64,7 @@ public class FlowBuilderImpl extends FlowBuilder {
     private ELContext elContext;
     private FacesContext context;
     private boolean didInit;
+    private boolean hasId;
     
     public FlowBuilderImpl(FacesContext context) {
         flow = new FlowImpl();
@@ -71,6 +72,7 @@ public class FlowBuilderImpl extends FlowBuilder {
         this.expressionFactory = context.getApplication().getExpressionFactory();
         this.elContext = context.getELContext();
         this.didInit = false;
+        this.hasId = false;
 
     }
     
@@ -83,22 +85,27 @@ public class FlowBuilderImpl extends FlowBuilder {
 
     @Override
     public ViewBuilder viewNode(String viewNodeId, String vdlDocumentId) {
+        Util.notNull("viewNodeId", viewNodeId);
+        Util.notNull("vdlDocumentId", vdlDocumentId);
         ViewBuilder result = new ViewBuilderImpl(this, viewNodeId, vdlDocumentId);
         return result;
     }
 
     @Override
     public SwitchBuilder switchNode(String switchNodeId) {
+        Util.notNull("switchNodeId", switchNodeId);
         return new SwitchBuilderImpl(this, switchNodeId);
     }
     
     @Override
     public ReturnBuilder returnNode(String returnNodeId) {
+        Util.notNull("returnNodeId", returnNodeId);
         return new ReturnBuilderImpl(this, returnNodeId);
     }
     
     @Override
     public MethodCallBuilder methodCallNode(String methodCallNodeId) {
+        Util.notNull("methodCallNodeId", methodCallNodeId);
         return new MethodCallBuilderImpl(this, methodCallNodeId);
     }
     
@@ -116,17 +123,20 @@ public class FlowBuilderImpl extends FlowBuilder {
         Util.notNull("definingDocumentId", definingDocumentId);
         Util.notNull("flowId", flowId);
         flow.setId(definingDocumentId, flowId);
+        this.hasId = true;
         return this;
     }
     
     @Override
     public FlowBuilder initializer(MethodExpression methodExpression) {
+        Util.notNull("methodExpression", methodExpression);
         flow.setInitializer(methodExpression);
         return this;
     }
 
     @Override
     public FlowBuilder initializer(String methodExpression) {
+        Util.notNull("methodExpression", methodExpression);
         MethodExpression me = expressionFactory.createMethodExpression(elContext, methodExpression, null, new Class[] {});
         flow.setInitializer(me);
         return this;
@@ -164,6 +174,9 @@ public class FlowBuilderImpl extends FlowBuilder {
         
     @Override
     public Flow getFlow() {
+        if (!hasId) {
+            throw new IllegalStateException("Flow must have a defining document id and flow id.");
+        }
         if (!didInit) {
             flow.init(context);
             String startNodeId = flow.getStartNodeId();
