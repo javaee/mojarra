@@ -40,6 +40,7 @@
  */
 package com.sun.faces.flow;
 
+import com.sun.faces.util.Util;
 import javax.el.ExpressionFactory;
 import javax.el.ValueExpression;
 import javax.faces.context.FacesContext;
@@ -57,6 +58,7 @@ public class ReturnNodeImpl extends ReturnNode {
 
     @Override
     public String getFromOutcome(FacesContext context) {
+        Util.notNull("context", context);
         String result = null;
         
         if (null != fromOutcome) {

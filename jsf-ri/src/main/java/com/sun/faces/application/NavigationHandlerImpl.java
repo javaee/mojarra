@@ -985,7 +985,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                             invokeResult  = ve.getValue(context.getELContext());
                         }
                     }
-                    outcome = (String) invokeResult;
+                    outcome = invokeResult.toString();
                     result = synthesizeCaseStruct(context, currentFlow, fromAction, outcome);
                     if (null != result) {
                         result.currentFlow = currentFlow;
