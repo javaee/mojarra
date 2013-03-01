@@ -65,6 +65,7 @@ public class Issue2717IT {
         webClient.closeAllWindows();
     }
 
+    @Ignore
     @Test
     public void testIssue2717() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/repeatResetNull.xhtml");
