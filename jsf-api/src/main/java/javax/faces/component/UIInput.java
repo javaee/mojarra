@@ -278,18 +278,6 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         this.submittedValue = submittedValue;
 
     }
-
-    /**
-     * <p class="changed_added_2_2">If there is a local value, return it,
-     * otherwise return the result of calling {@code super.getVaue()}.</p>
-     * 
-     * @since 2.2
-     */
-
-    @Override
-    public Object getValue() {
-        return isLocalValueSet() ? getLocalValue() : super.getValue();
-    }
     
     @Override
     public void setValue(Object value) {
