@@ -47,24 +47,24 @@
   document, using the following conversion rules:
 
   1. Change the <facelet-taglib> element to read as follows:
-     <taglib xmlns="http://java.sun.com/xml/ns/javaee"
+     <taglib xmlns="http://xmlns.jcp.org/xml/ns/javaee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
-         http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_2.xsd">
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+         http://xmlns.jcp.org/xml/ns/javaee/web-facelettaglibrary_2_2.xsd">
   2. Change the namespace of all elements to the default of
-     http://java.sun.com/xml/ns/javaee
+     http://xmlns.jcp.org/xml/ns/javaee
 
 -->
 
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:old="http://java.sun.com/JSF/Facelet">
+                xmlns:old="http://xmlns.jcp.org/JSF/Facelet">
     <xsl:output method="xml"/>
     <xsl:template match="/old:facelet-taglib">
         <xsl:element name="facelet-taglib"
-                     namespace="http://java.sun.com/xml/ns/javaee">
+                     namespace="http://xmlns.jcp.org/xml/ns/javaee">
             <xsl:attribute name="xsi:schemaLocation"
-                           namespace="http://www.w3.org/2001/XMLSchema-instance">http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_2.xsd</xsl:attribute>
+                           namespace="http://www.w3.org/2001/XMLSchema-instance">http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facelettaglibrary_2_2.xsd</xsl:attribute>
             <xsl:attribute name="version">2.2</xsl:attribute>
             <xsl:apply-templates select="*"/>
         </xsl:element>
@@ -75,7 +75,7 @@
     -->
     <xsl:template match="old:*">
         <xsl:element name="{local-name()}"
-                     namespace="http://java.sun.com/xml/ns/javaee">
+                     namespace="http://xmlns.jcp.org/xml/ns/javaee">
             <xsl:copy-of select="@*"/>
             <xsl:apply-templates/>
         </xsl:element>

@@ -42,7 +42,7 @@
 -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-                xmlns:jsf="http://java.sun.com/xml/ns/javaee"
+                xmlns:jsf="http://xmlns.jcp.org/xml/ns/javaee"
                 version="1.0">
     <xsl:output method="xml" indent="yes"/>
 

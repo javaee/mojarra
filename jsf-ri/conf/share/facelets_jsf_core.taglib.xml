@@ -41,15 +41,15 @@
 
 -->
 
-<facelet-taglib xmlns="http://java.sun.com/xml/ns/javaee"
+<facelet-taglib xmlns="http://xmlns.jcp.org/xml/ns/javaee"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_2.xsd"
+                xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facelettaglibrary_2_2.xsd"
                 version="2.2">
     <description><![CDATA[
         The core JavaServer Faces custom actions that are independent of
         any particular RenderKit.
     ]]></description>
-    <namespace>http://java.sun.com/jsf/core</namespace>
+    <namespace>http://xmlns.jcp.org/jsf/core</namespace>
     <tag>
         <description><![CDATA[
 
@@ -749,9 +749,9 @@
             class="li1"><div class="de1"><span class="sc2"><span
             class="kw2">&amp;lt;html</span> xmlns=<span class="st0">&amp;quot;http://www.w3.org/1999/xhtml&amp;quot;</span></div></li>
             <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp;
-            &amp;nbsp; xmlns:ui=<span class="st0">&amp;quot;http://java.sun.com/jsf/facelets&amp;quot;</span></div></li>
+            &amp;nbsp; xmlns:ui=<span class="st0">&amp;quot;http://xmlns.jcp.org/jsf/facelets&amp;quot;</span></div></li>
             <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp;
-            &amp;nbsp; xmlns:f=<span class="st0">&amp;quot;http://java.sun.com/jsf/core&amp;quot;</span></div></li>
+            &amp;nbsp; xmlns:f=<span class="st0">&amp;quot;http://xmlns.jcp.org/jsf/core&amp;quot;</span></div></li>
             <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp;
             &amp;nbsp; xml:<span class="kw3">lang</span>=<span
             class="st0">&amp;quot;en&amp;quot;</span> <span

@@ -61,7 +61,7 @@ public class DocumentPopulator extends ApplicationConfigurationResourceDocumentP
     public void populateApplicationConfigurationResource(Document document) {
         Element documentElement = document.getDocumentElement();
         String namespace = documentElement.getNamespaceURI();
-        final String expectedNamespaceURI = "http://java.sun.com/xml/ns/javaee";
+        final String expectedNamespaceURI = "http://xmlns.jcp.org/xml/ns/javaee";
         if (!expectedNamespaceURI.equals(namespace)) {
             throw new IllegalStateException("Unexpected namespace");
         }

@@ -41,21 +41,21 @@
 
 -->
 
-<facelet-taglib xmlns="http://java.sun.com/xml/ns/javaee"
+<facelet-taglib xmlns="http://xmlns.jcp.org/xml/ns/javaee"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_2.xsd"
+                xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facelettaglibrary_2_2.xsd"
                 version="2.2">
   <description>
 <![CDATA[<p>JSTL 1.2 core library</p>
 
 <p>The pre JSF 2.0 version of Facelets incorrectly declared the taglib
-uri to be <code>http://java.sun.com/jstl/core</code>.  For backwards
+uri to be <code>http://xmlns.jcp.org/jstl/core</code>.  For backwards
 compatibility implementations must correctly handle inclusions with the
 incorrect uri, and the correct uri, declared here.</p>
 ]]>
 </description>
 
-    <namespace>http://java.sun.com/jsp/jstl/core</namespace>
+    <namespace>http://xmlns.jcp.org/jsp/jstl/core</namespace>
     <tag>
         <description><![CDATA[
             Catches any Throwable that occurs in its body and optionally

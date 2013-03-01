@@ -41,9 +41,9 @@
 
 -->
 
-<facelet-taglib xmlns="http://java.sun.com/xml/ns/javaee"
+<facelet-taglib xmlns="http://xmlns.jcp.org/xml/ns/javaee"
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_2.xsd"
+              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facelettaglibrary_2_2.xsd"
               version="2.2">
     <description><![CDATA[
 
@@ -78,7 +78,7 @@
 
         <p>The default XML namespace URI of the taglib that contains the
         composite component, for use in <em>the using page</em>, is
-        <code>http://java.sun.com/jsf/composite/&amp;lt;composite-library-name&amp;gt;</code>,
+        <code>http://xmlns.jcp.org/jsf/composite/&amp;lt;composite-library-name&amp;gt;</code>,
         where <code>&amp;lt;composite-library-name&amp;gt;</code> is
         the name of the
         resource library. For example:</p>
@@ -89,10 +89,10 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&amp;gt;<br
         />
         &amp;lt;html xmlns="http://www.w3.org/1999/xhtml"<br />
-        xmlns:h="http://java.sun.com/jsf/html"<br />
-        xmlns:f="http://java.sun.com/jsf/core"<br />
-        xmlns:ui="http://java.sun.com/jsf/facelets"<br />
-        xmlns:ez="<i>http://java.sun.com/jsf/composite/<b>ezcomp</b></i>"&amp;gt;<br
+        xmlns:h="http://xmlns.jcp.org/jsf/html"<br />
+        xmlns:f="http://xmlns.jcp.org/jsf/core"<br />
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"<br />
+        xmlns:ez="<i>http://xmlns.jcp.org/jsf/composite/<b>ezcomp</b></i>"&amp;gt;<br
         />
         ...<br />
         </code></pre>
@@ -135,9 +135,9 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&amp;gt;<br
         />
         &amp;lt;html xmlns="http://www.w3.org/1999/xhtml"<br />
-        xmlns:h="http://java.sun.com/jsf/html"<br />
-        xmlns:f="http://java.sun.com/jsf/core"<br />
-        xmlns:ui="http://java.sun.com/jsf/facelets"<br />
+        xmlns:h="http://xmlns.jcp.org/jsf/html"<br />
+        xmlns:f="http://xmlns.jcp.org/jsf/core"<br />
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"<br />
         xmlns:ez="<i><b>http://domain.com/path/namespace</b></i>"&amp;gt;<br
         />
         ...<br />
@@ -347,7 +347,7 @@
 
 
     ]]></description>
-    <namespace>http://java.sun.com/jsf/composite</namespace>
+    <namespace>http://xmlns.jcp.org/jsf/composite</namespace>
     <tag>
         <description><![CDATA[
 

@@ -63,7 +63,8 @@ public abstract class ApplicationConfigurationResourceDocumentPopulator {
      * {@link #populateApplicationConfigurationResource} method,
      * the runtime must ensure that the {@code Document} argument is empty aside
      * from being pre-configured to be in the proper namespace for an
-     * Application Configuration Resources file.  Implementations of this service
+     * Application Configuration Resources file: 
+     * {@code http://xmlns.jcp.org/xml/ns/javaee}.  Implementations of this service
      * must ensure that any changes made to the argument
      * {@code Document} conform to that schema <a target="_"
      * href="../../web-facesconfig.html">as defined in the

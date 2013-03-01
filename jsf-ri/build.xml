@@ -704,7 +704,7 @@
               style="conf/xslt/merge-config.xsl">
         </xslt>
         <replace file="${basedir}/merged.xml">
-            <replacetoken><![CDATA[xmlns:jsf="http://java.sun.com/xml/ns/javaee"]]></replacetoken>
+            <replacetoken><![CDATA[xmlns:jsf="http://xmlns.jcp.org/xml/ns/javaee"]]></replacetoken>
             <replacevalue><![CDATA[]]></replacevalue>
         </replace>
         <replace file="${basedir}/merged.xml">
@@ -716,7 +716,7 @@
               style="conf/xslt/prune-tool-data.xsl">
         </xslt>
         <replace file="${build.dir}/classes/com/sun/faces/jsf-ri-runtime.xml">
-            <replacetoken><![CDATA[xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"]]></replacetoken>
+            <replacetoken><![CDATA[xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"]]></replacetoken>
         </replace>
         <replace file="${build.dir}/classes/com/sun/faces/jsf-ri-runtime.xml">
             <replacetoken><![CDATA[ >]]></replacetoken>
@@ -725,9 +725,9 @@
         <replace file="${build.dir}/classes/com/sun/faces/jsf-ri-runtime.xml">
             <replacetoken><![CDATA[<faces-config>]]></replacetoken>
             <replacevalue><![CDATA[
-<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+<faces-config xmlns="http://xmlns.jcp.org/xml/ns/javaee"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_2.xsd"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
     version="2.2">]]>
             </replacevalue>
         </replace>
@@ -826,7 +826,7 @@ ant -Dgpg.passphrase=PASSPHRASE HERE mvn.deploy.snapshot.local
         <javadoc packagenames="javax.*"
                  destdir="${build.javadocs.dir}"
                  private="${javadoc.private}"
-                 link="http://java.sun.com/javase/6/docs/api/"
+                 link="http://xmlns.jcp.org/javase/6/docs/api/"
                  protected="${javadoc.protected}"
                  windowtitle="${DocName} (${spec.version})"
                  source="1.5"

@@ -48,7 +48,7 @@ class FacesConfigNamespaceContext implements NamespaceContext {
 
     @Override
     public String getNamespaceURI(String prefix) {
-        return "http://java.sun.com/xml/ns/javaee";
+        return "http://xmlns.jcp.org/xml/ns/javaee";
     }
 
     @Override

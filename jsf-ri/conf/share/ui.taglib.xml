@@ -41,9 +41,9 @@
 
 -->
 
-<facelet-taglib xmlns="http://java.sun.com/xml/ns/javaee"
+<facelet-taglib xmlns="http://xmlns.jcp.org/xml/ns/javaee"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_2.xsd"
+                xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facelettaglibrary_2_2.xsd"
                 version="2.2">
     <description><![CDATA[
 
@@ -98,7 +98,7 @@
         class="st0">&amp;quot;http://www.w3.org/1999/xhtml&amp;quot;</span></div></li>
         <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp; &amp;nbsp;
         &amp;nbsp; &amp;nbsp; &amp;nbsp; xmlns:<span class="re0">ui</span>=<span
-        class="st0">&amp;quot;http://java.sun.com/jsf/facelets&amp;quot;</span></div></li>
+        class="st0">&amp;quot;http://xmlns.jcp.org/jsf/facelets&amp;quot;</span></div></li>
 
         <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp; <span
         class="sc3"><span class="re1">&amp;lt;head<span class="re2">&amp;gt;</span></span></span></div></li>
@@ -189,7 +189,7 @@
         class="re1">&amp;lt;html</span> <span class="re0">xmlns</span>=<span
         class="st0">&amp;quot;http://www.w3.org/1999/xhtml&amp;quot;</span></div></li>
         <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp;xmlns:<span
-        class="re0">ui</span>=<span class="st0">&amp;quot;http://java.sun.com/jsf/facelets&amp;quot;</span><span
+        class="re0">ui</span>=<span class="st0">&amp;quot;http://xmlns.jcp.org/jsf/facelets&amp;quot;</span><span
         class="re2">&amp;gt;</span></span></div></li>
 
         <li class="li2"><div class="de2">&amp;nbsp;</div></li>
@@ -274,7 +274,7 @@
         class="re1">&amp;lt;html</span> <span class="re0">xmlns</span>=<span
         class="st0">&amp;quot;http://www.w3.org/1999/xhtml&amp;quot;</span></div></li>
         <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp; &amp;nbsp;
-        xmlns:<span class="re0">ui</span>=<span class="st0">&amp;quot;http://java.sun.com/jsf/facelets&amp;quot;</span><span
+        xmlns:<span class="re0">ui</span>=<span class="st0">&amp;quot;http://xmlns.jcp.org/jsf/facelets&amp;quot;</span><span
         class="re2">&amp;gt;</span></span></div></li>
 
         <li class="li2"><div class="de2">&amp;nbsp;</div></li>
@@ -339,7 +339,7 @@
         <pre>
 
     ]]></description>
-    <namespace>http://java.sun.com/jsf/facelets</namespace>
+    <namespace>http://xmlns.jcp.org/jsf/facelets</namespace>
     <tag>
         <description><![CDATA[
 
@@ -426,7 +426,7 @@
             class="re1">&amp;lt;html</span> <span class="re0">xmlns</span>=<span
             class="st0">&amp;quot;http://www.w3.org/1999/xhtml&amp;quot;</span></div></li>
             <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp;xmlns:<span
-            class="re0">ui</span>=<span class="st0">&amp;quot;http://java.sun.com/jsf/facelets&amp;quot;</span><span
+            class="re0">ui</span>=<span class="st0">&amp;quot;http://xmlns.jcp.org/jsf/facelets&amp;quot;</span><span
             class="re2">&amp;gt;</span></span></div></li>
 
             <li class="li2"><div class="de2">&amp;nbsp;</div></li>

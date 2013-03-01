@@ -41,12 +41,12 @@
 
 -->
 
-<facelet-taglib xmlns="http://java.sun.com/xml/ns/javaee"
+<facelet-taglib xmlns="http://xmlns.jcp.org/xml/ns/javaee"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_2.xsd"
+                xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facelettaglibrary_2_2.xsd"
                 version="2.2">
   <description>JSTL 1.1 functions library</description>
-  <namespace>http://java.sun.com/jsp/jstl/functions</namespace>
+  <namespace>http://xmlns.jcp.org/jsp/jstl/functions</namespace>
   <function>
     <description>
       Tests if an input string contains the specified substring.

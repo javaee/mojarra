@@ -2,10 +2,10 @@
 
 <!-- =========== FULL CONFIGURATION FILE ================================== -->
 
-<faces-config version="2.0"
-    xmlns="http://java.sun.com/xml/ns/javaee" 
+<faces-config version="2.2"
+    xmlns="http://xmlns.jcp.org/xml/ns/javaee" 
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_2.xsd">
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
         
    <navigation-rule>
        <from-view-id>/index.xhtml</from-view-id>

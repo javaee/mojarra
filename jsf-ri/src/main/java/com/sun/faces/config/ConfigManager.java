@@ -393,7 +393,7 @@ public class ConfigManager {
                 List<DocumentInfo> programmaticDocuments = new ArrayList<DocumentInfo>();
                 DocumentInfo newDocInfo;
                 for (ApplicationConfigurationResourceDocumentPopulator pop : populators) {
-                    newDoc = domImpl.createDocument("http://java.sun.com/xml/ns/javaee", "faces-config", null);
+                    newDoc = domImpl.createDocument(RIConstants.JAVAEE_XMLNS, "faces-config", null);
                     try {
                         pop.populateApplicationConfigurationResource(newDoc);
                         newDocInfo = new DocumentInfo(newDoc, null);
@@ -940,8 +940,10 @@ public class ConfigManager {
      * </p>
      */
     private static class ParseTask implements Callable<DocumentInfo> {
-        private static final String JAVAEE_SCHEMA_DEFAULT_NS =
+        private static final String JAVAEE_SCHEMA_LEGACY_DEFAULT_NS =
             "http://java.sun.com/xml/ns/javaee";
+        private static final String JAVAEE_SCHEMA_DEFAULT_NS =
+            "http://xmlns.jcp.org/xml/ns/javaee";
         private static final String EMPTY_FACES_CONFIG =
                 "com/sun/faces/empty-faces-config.xml";
         private URI documentURI;
@@ -1055,17 +1057,37 @@ public class ConfigManager {
                     DbfFactory.FacesSchema schema;
                     if (version != null) {
                         String versionStr = version.getValue();
+                        if ("2.2".equals(versionStr)) {
+                            if ("facelet-taglib".equals(documentElement.getLocalName())) {
+                                schema = DbfFactory.FacesSchema.FACELET_TAGLIB_22;
+                            } else {
+                                schema = DbfFactory.FacesSchema.FACES_22;
+                            }
+                        } else {
+                            throw new ConfigurationException("Unknown Schema version: " + versionStr);
+                        }
+                        DocumentBuilder builder = getBuilderForSchema(schema);
+                        if (builder.isValidating()) {
+                            builder.getSchema().newValidator().validate(domSource);
+                            returnDoc = ((Document) domSource.getNode());
+                        } else {
+                            returnDoc = ((Document) domSource.getNode());
+                        }
+                    } else {
+                        // this shouldn't happen, but...
+                        throw new ConfigurationException("No document version available.");
+                    }
+                } else if (JAVAEE_SCHEMA_LEGACY_DEFAULT_NS.equals(documentNS)) {
+                    Attr version = (Attr)
+                            documentElement.getAttributes().getNamedItem("version");
+                    DbfFactory.FacesSchema schema;
+                    if (version != null) {
+                        String versionStr = version.getValue();
                         if ("2.0".equals(versionStr)) {
                             if ("facelet-taglib".equals(documentElement.getLocalName())) {
                                 schema = DbfFactory.FacesSchema.FACELET_TAGLIB_20;
                             } else {
                                 schema = DbfFactory.FacesSchema.FACES_20;
-                            }
-                        } else if ("2.2".equals(versionStr)) {
-                            if ("facelet-taglib".equals(documentElement.getLocalName())) {
-                                schema = DbfFactory.FacesSchema.FACELET_TAGLIB_22;
-                            } else {
-                                schema = DbfFactory.FacesSchema.FACES_22;
                             }
                         } else if ("2.1".equals(versionStr)) {
                             if ("facelet-taglib".equals(documentElement.getLocalName())) {

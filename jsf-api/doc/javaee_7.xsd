@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema targetNamespace="http://java.sun.com/xml/ns/javaee"
-            xmlns:javaee="http://java.sun.com/xml/ns/javaee"
+<xsd:schema targetNamespace="http://xmlns.jcp.org/xml/ns/javaee"
+            xmlns:javaee="http://xmlns.jcp.org/xml/ns/javaee"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
             elementFormDefault="qualified"
             attributeFormDefault="unqualified"
@@ -75,7 +75,7 @@
   <xsd:import namespace="http://www.w3.org/XML/1998/namespace"
               schemaLocation="http://www.w3.org/2001/xml.xsd"/>
 
-  <xsd:include schemaLocation="javaee_web_services_client_1_3.xsd"/>
+  <xsd:include schemaLocation="javaee_web_services_client_1_4.xsd"/>
 
   <xsd:group name="descriptionGroup">
     <xsd:annotation>

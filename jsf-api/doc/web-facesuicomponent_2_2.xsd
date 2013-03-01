@@ -42,8 +42,8 @@
 -->
 
 <xsd:schema
-     targetNamespace="http://java.sun.com/xml/ns/javaee"
-     xmlns:javaee="http://java.sun.com/xml/ns/javaee"
+     targetNamespace="http://xmlns.jcp.org/xml/ns/javaee"
+     xmlns:javaee="http://xmlns.jcp.org/xml/ns/javaee"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema"
      xmlns:xml="http://www.w3.org/XML/1998/namespace"
      elementFormDefault="qualified"
@@ -61,7 +61,7 @@
             a composite component, by pulling in the composite namespace:</p>
 <pre><code>            
 &lt;html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:composite="http://java.sun.com/jsf/composite"&gt;
+      xmlns:composite="http://xmlns.jcp.org/jsf/composite"&gt;
       
       &lt;composite:interface&gt;
          &lt;composite:attribute name="foo" default="bar" /&gt;
@@ -74,10 +74,10 @@
             file in the same manner:</p>
             
 <pre><code>
-&lt;facelet-taglib xmlns="http://java.sun.com/xml/ns/javaee"
+&lt;facelet-taglib xmlns="http://xmlns.jcp.org/xml/ns/javaee"
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xmlns:composite="http://java.sun.com/jsf/composite"
-              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibary_2_0.xsd"
+              xmlns:composite="http://xmlns.jcp.org/jsf/composite"
+              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facelettaglibary_2_0.xsd"
               version="2.0"&gt;
   &lt;namespace&gt;http://domain.com/test_schema&lt;/namespace&gt;
   &lt;tag&gt;
@@ -100,7 +100,7 @@
             version of the schema using xsi:schemaLocation attribute
             for javaee namespace with the following location:</p>
 
-            <p>http://java.sun.com/xml/ns/javaee/web-facesuicomponent_2_2.xsd</p>
+            <p>http://xmlns.jcp.org/xml/ns/javaee/web-facesuicomponent_2_2.xsd</p>
 
             ]]>
 

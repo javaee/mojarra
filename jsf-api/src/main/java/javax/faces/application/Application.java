@@ -1932,7 +1932,7 @@ public abstract class Application {
      * @throws <code>NullPointerException</code> if any combination of
      * <code>context</code>, <code>systemEventClass</code>, or
      * <code>listener</code> are
-     * <code>null</code>.                http://java.sun.com/javaee/javaserverfaces/reference/api/index.html
+     * <code>null</code>.                
      *
      * @since 2.0
      */

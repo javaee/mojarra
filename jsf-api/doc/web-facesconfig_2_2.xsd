@@ -1,9 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<?xml version="1.0" encoding="utf-8" ?>
+<xsd:schema xmlns:javaee="http://xmlns.jcp.org/xml/ns/javaee" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://xmlns.jcp.org/xml/ns/javaee" version="2.2" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:include schemaLocation="javaee_7.xsd" />
+    <xsd:annotation>
+        <xsd:documentation>
 
       DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
       
-      Copyright (c) 2011 - 2012 Oracle and/or its affiliates. All rights reserved.
+      Copyright (c) 2011 - 2013 Oracle and/or its affiliates. All rights reserved.
       
       The contents of this file are subject to the terms of either the GNU
       General Public License Version 2 only ("GPL") or the Common Development
@@ -38,15 +41,9 @@
       and therefore, elected the GPL Version 2 license, then the option applies
       only if the new code is made subject to such option by the copyright
       holder.
-
--->
-<xsd:schema xmlns:javaee="http://java.sun.com/xml/ns/javaee"
-            attributeFormDefault="unqualified"
-            elementFormDefault="qualified"
-            targetNamespace="http://java.sun.com/xml/ns/javaee"
-            version="2.2"
-            xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <xsd:include schemaLocation="javaee_7.xsd"/>
+      
+    </xsd:documentation>
+    </xsd:annotation>
 
   <xsd:annotation>
     <xsd:documentation>
@@ -59,12 +56,12 @@
       the JavaServer Faces schema by indicating the JavaServer
       Faces namespace:</p>
       
-      <p>http://java.sun.com/xml/ns/javaee</p>
+      <p>http://xmlns.jcp.org/xml/ns/javaee</p>
       
       <p>and by indicating the version of the schema by
       using the version element as shown below:</p>
       
-      <pre>&lt;faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+      <pre>&lt;faces-config xmlns="http://xmlns.jcp.org/xml/ns/javaee"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="..."
       version="2.2"&gt;
@@ -75,7 +72,7 @@
       version of the schema using xsi:schemaLocation attribute
       for javaee namespace with the following location:</p>
       
-      <p>http://java.sun.com/xml/ns/javaee/web-facesconfig_2_2.xsd</p>
+      <p>http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd</p>
       
       ]]>
     </xsd:documentation>
