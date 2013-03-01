@@ -166,13 +166,12 @@ public class UIOutput extends UIComponentBase
 
 
     public Object getValue() {
-        if ((Boolean)getStateHelper().eval(UIInput.PropertyKeys.localValueSet, false)) {
-            return getLocalValue();
-        } else {
-            return getStateHelper().eval(PropertyKeys.value);
-        }
+
+        return getStateHelper().eval(PropertyKeys.value);
+
     }
-    
+
+
     public void setValue(Object value) {
         getStateHelper().put(PropertyKeys.value, value);
 
