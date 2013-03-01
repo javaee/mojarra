@@ -40,6 +40,7 @@
  */
 package com.sun.faces.flow.builder;
 
+import com.sun.faces.util.Util;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -47,7 +48,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import javax.el.ValueExpression;
 import javax.faces.application.NavigationCase;
-import javax.faces.flow.Parameter;
 import javax.faces.flow.builder.NavigationCaseBuilder;
 
 public class NavigationCaseBuilderImpl extends NavigationCaseBuilder {
@@ -62,24 +62,28 @@ public class NavigationCaseBuilderImpl extends NavigationCaseBuilder {
     
     @Override
     public NavigationCaseBuilder toFlowDocumentId(String toFlowDocumentId) {
+        Util.notNull("toFlowDocumentId", toFlowDocumentId);
         navCase.setToFlowDocumentId(toFlowDocumentId);
         return this;
     }
 
     @Override
     public NavigationCaseBuilder fromAction(String fromAction) {
+        Util.notNull("fromAction", fromAction);
         navCase.setFromAction(fromAction);
         return this;
     }
 
     @Override
     public NavigationCaseBuilder fromOutcome(String fromOutcome) {
+        Util.notNull("fromOutcome", fromOutcome);
         navCase.setFromOutcome(fromOutcome);
         return this;
     }
 
     @Override
     public NavigationCaseBuilder fromViewId(String fromViewId) {
+        Util.notNull("fromViewId", fromViewId);
         navCase.setFromViewId(fromViewId);
         Map<String,Set<NavigationCase>> rules = root._getFlow()._getNavigationCases();
         Set<NavigationCase> cases = rules.get(fromViewId);
@@ -93,18 +97,21 @@ public class NavigationCaseBuilderImpl extends NavigationCaseBuilder {
 
     @Override
     public NavigationCaseBuilder toViewId(String toViewId) {
+        Util.notNull("toViewId", toViewId);
         navCase.setToViewId(toViewId);
         return this;
     }
 
     @Override
     public NavigationCaseBuilder condition(String condition) {
+        Util.notNull("condition", condition);
         navCase.setCondition(condition);
         return this;
     }
 
     @Override
     public NavigationCaseBuilder condition(ValueExpression condition) {
+        Util.notNull("condition", condition);
         navCase.setConditionExpression(condition);
         return this;
     }
@@ -122,6 +129,8 @@ public class NavigationCaseBuilderImpl extends NavigationCaseBuilder {
 
         @Override
         public RedirectBuilder parameter(String name, String value) {
+            Util.notNull("name", name);
+            Util.notNull("value", value);
             Map<String, List<String>> redirectParams = NavigationCaseBuilderImpl.this.navCase.getParameters();
             List<String> values = redirectParams.get(name);
             if (null == values) {

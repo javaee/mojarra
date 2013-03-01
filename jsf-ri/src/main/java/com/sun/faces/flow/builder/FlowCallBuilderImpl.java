@@ -42,6 +42,7 @@ package com.sun.faces.flow.builder;
 
 import com.sun.faces.flow.FlowCallNodeImpl;
 import com.sun.faces.flow.ParameterImpl;
+import com.sun.faces.util.Util;
 import java.util.Map;
 import javax.el.ValueExpression;
 import javax.faces.flow.FlowCallNode;
@@ -62,6 +63,8 @@ public class FlowCallBuilderImpl extends FlowCallBuilder {
 
     @Override
     public FlowCallBuilder flowReference(String flowDocumentId, String flowId) {
+        Util.notNull("flowDocumentId", flowDocumentId);
+        Util.notNull("flowId", flowId);
         this.flowDocumentId = flowDocumentId;
         this.flowId = flowId;
         return this;
@@ -69,6 +72,8 @@ public class FlowCallBuilderImpl extends FlowCallBuilder {
 
     @Override
     public FlowCallBuilder outboundParameter(String name, ValueExpression value) {
+        Util.notNull("name", name);
+        Util.notNull("value", value);
         ParameterImpl param = new ParameterImpl(name, value);
         Map<String, FlowCallNode> flowCalls = root._getFlow()._getFlowCalls();
         FlowCallNodeImpl flowCall = (FlowCallNodeImpl) flowCalls.get(flowCallNodeId);
@@ -82,6 +87,8 @@ public class FlowCallBuilderImpl extends FlowCallBuilder {
 
     @Override
     public FlowCallBuilder outboundParameter(String name, String value) {
+        Util.notNull("name", name);
+        Util.notNull("value", value);
         ValueExpression ve = root.getExpressionFactory().createValueExpression(root.getELContext(), value, Object.class);
         outboundParameter(name, ve);
         return this;

@@ -40,6 +40,11 @@
  */
 package javax.faces.flow.builder;
 
+/**
+ * <p class="changed_added_2_2">Create a view node in the current {@link javax.faces.flow.Flow}.</p>
+ * 
+ * @since 2.2
+ */
 public abstract class ViewBuilder implements NodeBuilder {
 
     @Override

@@ -49,7 +49,9 @@ import java.lang.annotation.Target;
 import javax.inject.Qualifier;
 
 /**
- * <p class="changed_added_2_2"></p>
+ * <p class="changed_added_2_2">The presence of this annotation on a CDI producer
+ * method indicates that the method will produce a flow.  See {@link FlowBuilder}
+ * for a usage example.</p>
  * 
  * @since 2.2
  */

@@ -42,10 +42,32 @@ package javax.faces.flow.builder;
 
 import javax.el.ValueExpression;
 
+/**
+ * <p class="changed_added_2_2">Create a return node in the current {@link javax.faces.flow.Flow}.</p>
+ * @since 2.2
+ */
 public abstract class ReturnBuilder implements NodeBuilder {
     
+    /**
+     * <p class="changed_added_2_2">Set the outcome of the current return node.</p>
+     * 
+     * @param outcome A {@code ValueExpression} String {@code String} that will be the 
+     * outcome of the return.
+     * @throws NullPointerException if any of the parameters are {@code null}
+     * 
+     * @since 2.2
+     */
     public abstract ReturnBuilder fromOutcome(String outcome);
     
+    /**
+     * <p class="changed_added_2_2">Set the outcome of the current return node.</p>
+     * 
+     * @param outcome A {@code ValueExpression} {@code String} that will be the 
+     * outcome of the return.
+     * @throws NullPointerException if any of the parameters are {@code null}
+     * 
+     * @since 2.2
+     */
     public abstract ReturnBuilder fromOutcome(ValueExpression outcome);
 
     @Override

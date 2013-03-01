@@ -41,6 +41,7 @@
 package com.sun.faces.flow.builder;
 
 import com.sun.faces.flow.SwitchCaseImpl;
+import com.sun.faces.util.Util;
 import javax.el.ValueExpression;
 import javax.faces.flow.builder.SwitchCaseBuilder;
 
@@ -68,18 +69,21 @@ public class SwitchCaseBuilderImpl extends SwitchCaseBuilder {
     
     @Override
     public SwitchCaseBuilder condition(ValueExpression expression) {
+        Util.notNull("expression", expression);
         myCase.setConditionExpression(expression);
         return this;
     }
 
     @Override
     public SwitchCaseBuilder condition(String expression) {
+        Util.notNull("expression", expression);
         myCase.setCondition(expression);
         return this;
     }
 
     @Override
     public SwitchCaseBuilder fromOutcome(String outcome) {
+        Util.notNull("outcome", outcome);
         myCase.setFromOutcome(outcome);
         return this;
     }

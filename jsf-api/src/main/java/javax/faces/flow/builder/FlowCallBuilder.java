@@ -42,13 +42,42 @@ package javax.faces.flow.builder;
 
 import javax.el.ValueExpression;
 
+/**
+ * <p class="changed_added_2_2">Create a flow call node in the current {@link javax.faces.flow.Flow}.</p>
+ * @since 2.2
+ */
 public abstract class FlowCallBuilder implements NodeBuilder {
     
+    /**
+     * <p class="changed_added_2_2">Define the flow reference of the called flow.</p>
+     * 
+     * @param flowDocumentId the document id of the called flow.  May not be {@code null}, 
+     * but may be the empty string.
+     * @param flowId the id of the called flow.  May not be {@code null}
+     * @throws NullPointerException if any of the parameters are {@code null}
+     * @since 2.2
+     */
     public abstract FlowCallBuilder flowReference(String flowDocumentId, 
                                                   String flowId);
     
+    /**
+     * <p class="changed_added_2_2">Define an outbound parameter for the flow call.</p>
+     * 
+     * @param name the name of the parameter
+     * @param value the value of the parameter
+     * @throws NullPointerException if any of the parameters are {@code null}
+     * @since 2.2
+     */
     public abstract FlowCallBuilder outboundParameter(String name, ValueExpression value);
         
+    /**
+     * <p class="changed_added_2_2">Define an outbound parameter for the flow call.</p>
+     * 
+     * @param name the name of the parameter
+     * @param value the value of the parameter
+     * @throws NullPointerException if any of the parameters are {@code null}
+     * @since 2.2
+     */
     public abstract FlowCallBuilder outboundParameter(String name, String value);
 
     @Override

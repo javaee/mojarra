@@ -56,8 +56,8 @@ import javax.faces.flow.Flow;
  * 
  * <p>Usage example:</p><pre><code>public class FlowA implements Serializable {
     
-    &#x40;Produces &#x40;FlowDefinition
-    public Flow buildMyFlow(&#x40;FlowBuilderParameter FlowBuilder flowBuilder) {
+    &#x40;Produces {@link FlowDefinition}
+    public {@link Flow} buildMyFlow(&#x40;{@link FlowBuilderParameter} {@link FlowBuilder} flowBuilder) {
         String flowId = "flow-a";
         flowBuilder.id("unique", flowId);
         flowBuilder.returnNode("taskFlowReturn1").
@@ -72,6 +72,10 @@ import javax.faces.flow.Flow;
     }
 }
 </code></pre>
+ * 
+ * <p>The runtime must discover all such methods at startup time and ensure that
+ * the returned flows are added to the {@link javax.faces.flow.FlowHandler} using
+ * the {@link javax.faces.flow.FlowHandler#addFlow(javax.faces.context.FacesContext, javax.faces.flow.Flow)} method.</p>
  * 
  * </div>
  *

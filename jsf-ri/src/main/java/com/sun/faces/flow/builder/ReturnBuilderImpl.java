@@ -41,6 +41,7 @@
 package com.sun.faces.flow.builder;
 
 import com.sun.faces.flow.ReturnNodeImpl;
+import com.sun.faces.util.Util;
 import javax.el.ValueExpression;
 import javax.faces.flow.builder.ReturnBuilder;
 
@@ -62,6 +63,7 @@ public class ReturnBuilderImpl extends ReturnBuilder {
     
     @Override
     public ReturnBuilder fromOutcome(String outcome) {
+        Util.notNull("outcome", outcome);
         ReturnNodeImpl returnNode = new ReturnNodeImpl(id);
         returnNode.setFromOutcome(outcome);
         root._getFlow()._getReturns().put(id, returnNode);
@@ -70,6 +72,7 @@ public class ReturnBuilderImpl extends ReturnBuilder {
 
     @Override
     public ReturnBuilder fromOutcome(ValueExpression outcome) {
+        Util.notNull("outcome", outcome);
         ReturnNodeImpl returnNode = new ReturnNodeImpl(id);
         returnNode.setFromOutcome(outcome);
         root._getFlow()._getReturns().put(id, returnNode);

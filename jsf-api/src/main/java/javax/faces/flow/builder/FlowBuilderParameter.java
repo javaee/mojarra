@@ -50,6 +50,14 @@ import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+/**
+ * <p class="changed_added_2_2">The presence of this annotation on a CDI producer
+ * method for the {@link FlowDefinition} annotation causes the {@link FlowBuilder}
+ * to be passed to that method.  See {@link FlowBuilder} for a usage example.</p>
+ * 
+ * @since 2.2
+ */
+
 @Qualifier
 @Target({ TYPE, METHOD, PARAMETER, FIELD })
 @Retention(RUNTIME)
