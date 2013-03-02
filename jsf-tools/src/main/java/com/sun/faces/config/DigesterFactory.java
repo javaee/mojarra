@@ -332,12 +332,24 @@ public class DigesterFactory {
                 "/com/sun/faces/web-facesconfig_2_0.xsd"
             },
             {
+                "web-facesconfig_2_2.xsd",
+                "/com/sun/faces/web-facesconfig_2_2.xsd"
+            },
+            {
                 "javaee_5.xsd",
                 "/com/sun/faces/javaee_5.xsd"
             },
             {
+                "javaee_7.xsd",
+                "/com/sun/faces/javaee_7.xsd"
+            },
+            {
                 "javaee_web_services_client_1_2.xsd",
                 "/com/sun/faces/javaee_web_services_client_1_2.xsd"
+            },
+            {
+                "javaee_web_services_client_1_4.xsd",
+                "/com/sun/faces/javaee_web_services_client_1_4.xsd"
             },
             {
                 "xml.xsd",
