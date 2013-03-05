@@ -459,7 +459,6 @@ public class UIInputTestCase extends UIOutputTestCase {
     // Test that appropriate properties are value binding enabled
     public void testValueBindings() {
 
-        super.testValueBindings();
         UIInput test = (UIInput) component;
 
         // "required" property
@@ -482,11 +481,11 @@ public class UIInputTestCase extends UIOutputTestCase {
         assertNull(test.getValue());
         test.setValueBinding("value", application.createValueBinding("#{foo}"));
         assertNotNull(test.getValueBinding("value"));
-        assertEquals("bar", test.getValue());
+        assertNull(test.getValue());
         test.setValue("baz");
         assertEquals("baz", test.getValue());
         test.setValue(null);
-        assertEquals("bar", test.getValue());
+        assertNull(test.getValue());
         test.setValueBinding("value", null);
         assertNull(test.getValueBinding("value"));
         assertNull(test.getValue());

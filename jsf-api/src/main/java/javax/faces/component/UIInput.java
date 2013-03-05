@@ -280,6 +280,10 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
     }
 
+    public Object getValue() {
+        return isLocalValueSet() ? getLocalValue() : super.getValue();
+    }
+        
     public void setValue(Object value) {
         super.setValue(value);
         // Mark the local value as set.

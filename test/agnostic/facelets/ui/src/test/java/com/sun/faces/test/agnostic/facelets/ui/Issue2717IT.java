@@ -48,7 +48,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 
 public class Issue2717IT {
 
@@ -66,7 +65,6 @@ public class Issue2717IT {
         webClient.closeAllWindows();
     }
 
-    @Ignore
     @Test
     public void testIssue2717() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/repeatResetNull.xhtml");
@@ -78,6 +76,7 @@ public class Issue2717IT {
         HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("submit");
         page = button.click();
         webClient.waitForBackgroundJavaScript(120000);
+System.err.println("PAGE:"+page.asText());
         assertTrue(page.asText().contains("isnull? true"));
     }
 }
