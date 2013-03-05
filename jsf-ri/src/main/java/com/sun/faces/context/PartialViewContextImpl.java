@@ -418,15 +418,24 @@ import javax.faces.lifecycle.ClientWindow;
         // this response.
         PartialViewContext pvc = context.getPartialViewContext();
         PartialResponseWriter writer = pvc.getPartialResponseWriter();
-        writer.startUpdate(PartialResponseWriter.RENDER_ALL_MARKER);
-
-        if (viewRoot.getChildCount() > 0) {
-            for (UIComponent uiComponent : viewRoot.getChildren()) {
-                uiComponent.encodeAll(context);
+        
+        if (!Util.isPortletRequest(context)) {
+            writer.startUpdate(PartialResponseWriter.RENDER_ALL_MARKER);
+            if (viewRoot.getChildCount() > 0) {
+                for (UIComponent uiComponent : viewRoot.getChildren()) {
+                    uiComponent.encodeAll(context);
+                }
             }
+            writer.endUpdate();
         }
-
-        writer.endUpdate();
+        else {
+            /*
+             * If we have a portlet request, start rendering at the view root.
+             */
+            writer.startUpdate(viewRoot.getClientId(ctx));
+            viewRoot.encodeAll(ctx);
+            writer.endUpdate();
+        }
     }
 
     private void renderState(FacesContext context) throws IOException {
