@@ -81,6 +81,7 @@ public class AnnotationManager {
     private static final Scanner LISTENER_FOR_SCANNER = new ListenerForScanner();
     private static final Scanner EJB_SCANNER = new DelegatedEJBScanner();
     private static final Scanner RESOURCE_SCANNER = new DelegatedResourceScanner();
+    private static final Scanner WEBSERVICE_REF_SCANNER = new DelegatedWebServiceRefScanner();
 
     /**
      * {@link Scanner} instances to be used against {@link Behavior} classes.
@@ -88,7 +89,8 @@ public class AnnotationManager {
     private static final Scanner[] BEHAVIOR_SCANNERS = {
           RESOURCE_DEPENDENCY_SCANNER,
           EJB_SCANNER,
-          RESOURCE_SCANNER
+          RESOURCE_SCANNER,
+          WEBSERVICE_REF_SCANNER
     };
 
     /**
@@ -97,7 +99,8 @@ public class AnnotationManager {
     private static final Scanner[] CLIENT_BEHAVIOR_RENDERER_SCANNERS = {
           RESOURCE_DEPENDENCY_SCANNER,
           EJB_SCANNER,
-          RESOURCE_SCANNER
+          RESOURCE_SCANNER,
+          WEBSERVICE_REF_SCANNER
     };
 
     /**
@@ -107,7 +110,8 @@ public class AnnotationManager {
           RESOURCE_DEPENDENCY_SCANNER,
           LISTENER_FOR_SCANNER,
           EJB_SCANNER,
-          RESOURCE_SCANNER
+          RESOURCE_SCANNER,
+          WEBSERVICE_REF_SCANNER
     };
 
     /**
@@ -116,7 +120,8 @@ public class AnnotationManager {
     private static final Scanner[] VALIDATOR_SCANNERS = {
           RESOURCE_DEPENDENCY_SCANNER,
           EJB_SCANNER,
-          RESOURCE_SCANNER
+          RESOURCE_SCANNER,
+          WEBSERVICE_REF_SCANNER
     };
 
     /**
@@ -125,7 +130,8 @@ public class AnnotationManager {
     private static final Scanner[] CONVERTER_SCANNERS = {
           RESOURCE_DEPENDENCY_SCANNER,
           EJB_SCANNER,
-          RESOURCE_SCANNER
+          RESOURCE_SCANNER,
+          WEBSERVICE_REF_SCANNER
     };
 
     /**
