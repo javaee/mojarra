@@ -79,19 +79,22 @@ public class AnnotationManager {
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
     private static final Scanner RESOURCE_DEPENDENCY_SCANNER = new ResourceDependencyScanner();
     private static final Scanner LISTENER_FOR_SCANNER = new ListenerForScanner();
+    private static final Scanner EJB_SCANNER = new DelegatedEJBScanner();
 
     /**
      * {@link Scanner} instances to be used against {@link Behavior} classes.
      */
     private static final Scanner[] BEHAVIOR_SCANNERS = {
-          RESOURCE_DEPENDENCY_SCANNER
+          RESOURCE_DEPENDENCY_SCANNER,
+          EJB_SCANNER
     };
 
     /**
      * {@link Scanner} instances to be used against {@link ClientBehaviorRenderer} classes.
      */
     private static final Scanner[] CLIENT_BEHAVIOR_RENDERER_SCANNERS = {
-          RESOURCE_DEPENDENCY_SCANNER
+          RESOURCE_DEPENDENCY_SCANNER,
+          EJB_SCANNER
     };
 
     /**
@@ -99,21 +102,24 @@ public class AnnotationManager {
      */
     private static final Scanner[] UICOMPONENT_SCANNERS = {
           RESOURCE_DEPENDENCY_SCANNER,
-          LISTENER_FOR_SCANNER
+          LISTENER_FOR_SCANNER,
+          EJB_SCANNER
     };
 
     /**
      * {@link Scanner} instances to be used against {@link Validator} classes.
      */
     private static final Scanner[] VALIDATOR_SCANNERS = {
-          RESOURCE_DEPENDENCY_SCANNER
+          RESOURCE_DEPENDENCY_SCANNER,
+          EJB_SCANNER
     };
 
     /**
      * {@link Scanner} instances to be used against {@link Converter} classes.
      */
     private static final Scanner[] CONVERTER_SCANNERS = {
-          RESOURCE_DEPENDENCY_SCANNER
+          RESOURCE_DEPENDENCY_SCANNER,
+          EJB_SCANNER
     };
 
     /**
@@ -125,7 +131,7 @@ public class AnnotationManager {
     };
 
     private static final Scanner[] EVENTS_SCANNERS = {
-        RESOURCE_DEPENDENCY_SCANNER
+          RESOURCE_DEPENDENCY_SCANNER
     };
 
     /**
@@ -432,14 +438,14 @@ public class AnnotationManager {
 
             Map<Class<? extends Annotation>, RuntimeAnnotationHandler> map = null;
             for (Scanner scanner : scanners) {
-                RuntimeAnnotationHandler handler = scanner.scan(clazz);
-                if (handler != null) {
-                    if (map == null) {
-                        map = new HashMap<Class<? extends Annotation>, RuntimeAnnotationHandler>(2, 1.0f);
+                    RuntimeAnnotationHandler handler = scanner.scan(clazz);
+                    if (handler != null) {
+                        if (map == null) {
+                            map = new HashMap<Class<? extends Annotation>, RuntimeAnnotationHandler>(2, 1.0f);
+                        }
+                        map.put(scanner.getAnnotation(), handler);
                     }
-                    map.put(scanner.getAnnotation(), handler);
                 }
-            }
 
             return ((map != null) ? map : EMPTY);
             

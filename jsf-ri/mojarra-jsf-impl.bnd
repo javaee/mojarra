@@ -56,6 +56,7 @@ Import-Package: javax.faces.*,\
   javax.servlet.*,javax.el.*,javax.inject.*,javax.enterprise.inject.*,javax.enterprise.context.*,javax.annotation.*,javax.crypto.*,\
   javax.validation.*;resolution:=optional, \
   javax.enterprise.event;resolution:=optional, \
+  javax.ejb.*;resolution:=optional, \
   javax.xml.*,org.w3c.dom.*, \
   com.sun.enterprise.*;resolution:=optional, \
   groovy.*;resolution:=optional,\
