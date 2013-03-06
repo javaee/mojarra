@@ -40,20 +40,19 @@
 package com.sun.faces.application.annotation;
 
 import java.lang.reflect.Field;
+import javax.annotation.Resource;
 import javax.faces.context.FacesContext;
-import javax.ejb.EJB;
 
 /**
- * {@link RuntimeAnnotationHandler} responsible for processing {@link EJB}
+ * {@link RuntimeAnnotationHandler} responsible for processing {@link Resource}
  * annotations.
  */
-class EJBHandler extends JndiHandler implements RuntimeAnnotationHandler {
+class ResourceHandler extends JndiHandler {
 
-    private static final String JAVA_MODULE = "java:module/";
     private Field[] fields;
-    private EJB[] fieldAnnotations;
+    private Resource[] fieldAnnotations;
 
-    public EJBHandler(Field[] fields, EJB[] fieldAnnotations) {
+    public ResourceHandler(Field[] fields, Resource[] fieldAnnotations) {
         this.fields = fields;
         this.fieldAnnotations = fieldAnnotations;
     }
@@ -67,14 +66,17 @@ class EJBHandler extends JndiHandler implements RuntimeAnnotationHandler {
         }
     }
 
-    private void applyToField(FacesContext facesContext, Field field, EJB ejb, Object instance) {
+    private void applyToField(FacesContext facesContext, Field field, Resource resource, Object instance) {
         Object value;
-        if (ejb.lookup() != null && !"".equals(ejb.lookup().trim())) {
-            value = lookup(facesContext, ejb.lookup());
-        } else if (ejb.name() != null && !"".equals(ejb.name().trim())) {
-            value = lookup(facesContext, JAVA_COMP_ENV + ejb.name());
+        /*
+        if (resource.lookup() != null && !"".equals(resource.lookup().trim())) {
+            value = lookup(facesContext, resource.lookup());
+        } else
+        */
+        if (resource.name() != null && !"".equals(resource.name().trim())) {
+            value = lookup(facesContext, JAVA_COMP_ENV + resource.name());
         } else {
-            value = lookup(facesContext, JAVA_MODULE + field.getType().getSimpleName());
+            value = lookup(facesContext, field.getName());
         }
         setField(facesContext, field, instance, value);
     }

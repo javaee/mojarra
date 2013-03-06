@@ -65,6 +65,7 @@ class EJBScanner implements Scanner {
      *
      * @param clazz the class.
      * @return the runtime annotation handler.
+     * @todo Make sure we get all the fields, handle method and class based injection, handle EJBs.
      */
     @Override
     public RuntimeAnnotationHandler scan(Class<?> clazz) {
@@ -78,9 +79,7 @@ class EJBScanner implements Scanner {
         }
         ArrayList<EJB> fieldAnnotations = new ArrayList<EJB>();
         ArrayList<Field> fields = new ArrayList<Field>();
-        /*
-         * TODO: Make sure we get all the fields.
-         */
+
         for (Field field : clazz.getDeclaredFields()) {
             EJB fieldAnnotation = field.getAnnotation(EJB.class);
             if (fieldAnnotation != null) {
@@ -88,9 +87,7 @@ class EJBScanner implements Scanner {
                 fields.add(field);
             }
         }
-        /*
-         * TODO Handle EJBs
-         */
+        
         if (!classAnnotations.isEmpty() || !fieldAnnotations.isEmpty()) {
             handler = new EJBHandler(fields.toArray(new Field[0]), (EJB[]) fieldAnnotations.toArray(new EJB[0]));
         }

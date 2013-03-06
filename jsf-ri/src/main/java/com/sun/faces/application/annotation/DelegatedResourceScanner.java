@@ -39,43 +39,51 @@
  */
 package com.sun.faces.application.annotation;
 
-import java.lang.reflect.Field;
-import javax.faces.context.FacesContext;
-import javax.ejb.EJB;
+import java.lang.annotation.Annotation;
 
 /**
- * {@link RuntimeAnnotationHandler} responsible for processing {@link EJB}
+ * <code>Scanner</code> implementation responsible for {@link Resource}
  * annotations.
+ *
+ * <p> Note this will delegate down to the ResourceScanner so we can fail
+ * gracefully when JavaEE is not available. </p>
  */
-class EJBHandler extends JndiHandler implements RuntimeAnnotationHandler {
+public class DelegatedResourceScanner implements Scanner {
 
-    private static final String JAVA_MODULE = "java:module/";
-    private Field[] fields;
-    private EJB[] fieldAnnotations;
+    private Scanner delegate;
 
-    public EJBHandler(Field[] fields, EJB[] fieldAnnotations) {
-        this.fields = fields;
-        this.fieldAnnotations = fieldAnnotations;
+    public DelegatedResourceScanner() {
+        try {
+            delegate = new ResourceScanner();
+        } catch (Throwable throwable) {
+            throwable.printStackTrace(System.err);
+        }
     }
 
-    @SuppressWarnings({"UnusedDeclaration"})
+    /**
+     * Delegate to the actual Resource scanner.
+     *
+     * @return the annotation.
+     */
     @Override
-    public void apply(FacesContext ctx, Object... params) {
-        Object object = params[0];
-        for (int i = 0; i < fields.length; i++) {
-            applyToField(ctx, fields[0], fieldAnnotations[0], object);
+    public Class<? extends Annotation> getAnnotation() {
+        if (delegate != null) {
+            return delegate.getAnnotation();
         }
+        return null;
     }
 
-    private void applyToField(FacesContext facesContext, Field field, EJB ejb, Object instance) {
-        Object value;
-        if (ejb.lookup() != null && !"".equals(ejb.lookup().trim())) {
-            value = lookup(facesContext, ejb.lookup());
-        } else if (ejb.name() != null && !"".equals(ejb.name().trim())) {
-            value = lookup(facesContext, JAVA_COMP_ENV + ejb.name());
-        } else {
-            value = lookup(facesContext, JAVA_MODULE + field.getType().getSimpleName());
+    /**
+     * Delegate to the actual EBJ scanner.
+     *
+     * @param clazz the class.
+     * @return the runtime annotation handler.
+     */
+    @Override
+    public RuntimeAnnotationHandler scan(Class<?> clazz) {
+        if (delegate != null) {
+            return delegate.scan(clazz);
         }
-        setField(facesContext, field, instance, value);
+        return null;
     }
 }

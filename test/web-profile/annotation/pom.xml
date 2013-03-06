@@ -13,5 +13,6 @@
     <name>Mojarra ${project.version} - Test - Web-Profile - Annotation</name>
     <modules>
         <module>ejb</module>
+        <module>resource</module>
     </modules>
 </project>

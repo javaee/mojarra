@@ -39,43 +39,53 @@
  */
 package com.sun.faces.application.annotation;
 
+import com.sun.faces.util.Util;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import javax.faces.context.FacesContext;
-import javax.ejb.EJB;
+import java.util.ArrayList;
+import javax.annotation.Resource;
 
 /**
- * {@link RuntimeAnnotationHandler} responsible for processing {@link EJB}
- * annotations.
+ * <code>Scanner</code> implementation responsible for {@link Resource} annotations.
  */
-class EJBHandler extends JndiHandler implements RuntimeAnnotationHandler {
+class ResourceScanner implements Scanner {
 
-    private static final String JAVA_MODULE = "java:module/";
-    private Field[] fields;
-    private EJB[] fieldAnnotations;
-
-    public EJBHandler(Field[] fields, EJB[] fieldAnnotations) {
-        this.fields = fields;
-        this.fieldAnnotations = fieldAnnotations;
-    }
-
-    @SuppressWarnings({"UnusedDeclaration"})
+    /**
+     * Get the annotation we handle.
+     *
+     * @return the annotation we handle.
+     */
     @Override
-    public void apply(FacesContext ctx, Object... params) {
-        Object object = params[0];
-        for (int i = 0; i < fields.length; i++) {
-            applyToField(ctx, fields[0], fieldAnnotations[0], object);
-        }
+    public Class<? extends Annotation> getAnnotation() {
+        return Resource.class;
     }
 
-    private void applyToField(FacesContext facesContext, Field field, EJB ejb, Object instance) {
-        Object value;
-        if (ejb.lookup() != null && !"".equals(ejb.lookup().trim())) {
-            value = lookup(facesContext, ejb.lookup());
-        } else if (ejb.name() != null && !"".equals(ejb.name().trim())) {
-            value = lookup(facesContext, JAVA_COMP_ENV + ejb.name());
-        } else {
-            value = lookup(facesContext, JAVA_MODULE + field.getType().getSimpleName());
+    /**
+     * Scan the specified class for the given annotation.
+     *
+     * @param clazz the class.
+     * @return the runtime annotation handler.
+     * @todo Make sure we get all the fields, handle method and class based injection.
+     */
+    @Override
+    public RuntimeAnnotationHandler scan(Class<?> clazz) {
+        Util.notNull("clazz", clazz);
+        ResourceHandler handler = null;
+
+        ArrayList<Resource> fieldAnnotations = new ArrayList<Resource>();
+        ArrayList<Field> fields = new ArrayList<Field>();
+
+        for (Field field : clazz.getDeclaredFields()) {
+            Resource fieldAnnotation = field.getAnnotation(Resource.class);
+            if (fieldAnnotation != null) {
+                fieldAnnotations.add(fieldAnnotation);
+                fields.add(field);
+            }
         }
-        setField(facesContext, field, instance, value);
+
+        if (!fieldAnnotations.isEmpty()) {
+            handler = new ResourceHandler(fields.toArray(new Field[0]), (Resource[]) fieldAnnotations.toArray(new Resource[0]));
+        }
+        return handler;
     }
 }

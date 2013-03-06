@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -80,13 +80,15 @@ public class AnnotationManager {
     private static final Scanner RESOURCE_DEPENDENCY_SCANNER = new ResourceDependencyScanner();
     private static final Scanner LISTENER_FOR_SCANNER = new ListenerForScanner();
     private static final Scanner EJB_SCANNER = new DelegatedEJBScanner();
+    private static final Scanner RESOURCE_SCANNER = new DelegatedResourceScanner();
 
     /**
      * {@link Scanner} instances to be used against {@link Behavior} classes.
      */
     private static final Scanner[] BEHAVIOR_SCANNERS = {
           RESOURCE_DEPENDENCY_SCANNER,
-          EJB_SCANNER
+          EJB_SCANNER,
+          RESOURCE_SCANNER
     };
 
     /**
@@ -94,7 +96,8 @@ public class AnnotationManager {
      */
     private static final Scanner[] CLIENT_BEHAVIOR_RENDERER_SCANNERS = {
           RESOURCE_DEPENDENCY_SCANNER,
-          EJB_SCANNER
+          EJB_SCANNER,
+          RESOURCE_SCANNER
     };
 
     /**
@@ -103,7 +106,8 @@ public class AnnotationManager {
     private static final Scanner[] UICOMPONENT_SCANNERS = {
           RESOURCE_DEPENDENCY_SCANNER,
           LISTENER_FOR_SCANNER,
-          EJB_SCANNER
+          EJB_SCANNER,
+          RESOURCE_SCANNER
     };
 
     /**
@@ -111,7 +115,8 @@ public class AnnotationManager {
      */
     private static final Scanner[] VALIDATOR_SCANNERS = {
           RESOURCE_DEPENDENCY_SCANNER,
-          EJB_SCANNER
+          EJB_SCANNER,
+          RESOURCE_SCANNER
     };
 
     /**
@@ -119,7 +124,8 @@ public class AnnotationManager {
      */
     private static final Scanner[] CONVERTER_SCANNERS = {
           RESOURCE_DEPENDENCY_SCANNER,
-          EJB_SCANNER
+          EJB_SCANNER,
+          RESOURCE_SCANNER
     };
 
     /**
