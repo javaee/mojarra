@@ -42,7 +42,7 @@ package com.sun.faces.application.annotation;
 import java.lang.annotation.Annotation;
 
 /**
- * <code>Scanner</code> implementation responsible for {@link Resource}
+ * <code>Scanner</code> implementation responsible for link Resource
  * annotations.
  *
  * <p> Note this will delegate down to the ResourceScanner so we can fail
