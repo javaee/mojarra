@@ -73,11 +73,6 @@ class PersistenceUnitScanner implements Scanner {
         Util.notNull("clazz", clazz);
         PersistenceUnitHandler handler = null;
 
-        ArrayList<PersistenceUnit> classAnnotations = new ArrayList<PersistenceUnit>();
-        PersistenceUnit classAnnotation = clazz.getAnnotation(PersistenceUnit.class);
-        if (classAnnotation != null) {
-            classAnnotations.add(classAnnotation);
-        }
         ArrayList<PersistenceUnit> fieldAnnotations = new ArrayList<PersistenceUnit>();
         ArrayList<Field> fields = new ArrayList<Field>();
 
@@ -99,9 +94,8 @@ class PersistenceUnitScanner implements Scanner {
             }
         }
         
-        if (!classAnnotations.isEmpty() || !fieldAnnotations.isEmpty()) {
+        if (!fieldAnnotations.isEmpty() || !methodAnnotations.isEmpty()) {
             handler = new PersistenceUnitHandler(
-                    classAnnotations.toArray(new PersistenceUnit[0]),
                     methods.toArray(new Method[0]), methodAnnotations.toArray(new PersistenceUnit[0]),
                     fields.toArray(new Field[0]), fieldAnnotations.toArray(new PersistenceUnit[0]));
         }

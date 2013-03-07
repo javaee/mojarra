@@ -54,13 +54,10 @@ class PersistenceUnitHandler extends JndiHandler implements RuntimeAnnotationHan
     private PersistenceUnit[] methodAnnotations;
     private Field[] fields;
     private PersistenceUnit[] fieldAnnotations;
-    private PersistenceUnit[] classAnnotations;
 
     public PersistenceUnitHandler(
-            PersistenceUnit[] classAnnotations,
             Method[] methods, PersistenceUnit[] methodAnnotations,
             Field[] fields, PersistenceUnit[] fieldAnnotations) {
-        this.classAnnotations = classAnnotations;
         this.methods = methods;
         this.methodAnnotations = methodAnnotations;
         this.fields = fields;

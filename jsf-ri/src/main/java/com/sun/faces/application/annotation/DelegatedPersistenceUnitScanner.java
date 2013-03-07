@@ -42,7 +42,7 @@ package com.sun.faces.application.annotation;
 import java.lang.annotation.Annotation;
 
 /**
- * <code>Scanner</code> implementation responsible for {@link PersistenceUnit}
+ * <code>Scanner</code> implementation responsible for PersistenceUnit
  * annotations.
  *
  * <p> Note this will delegate down to the PersistenceUnitScanner so we can fail
