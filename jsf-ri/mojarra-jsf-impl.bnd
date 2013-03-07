@@ -57,6 +57,7 @@ Import-Package: javax.faces.*,\
   javax.validation.*;resolution:=optional, \
   javax.enterprise.event;resolution:=optional, \
   javax.ejb.*;resolution:=optional, \
+  javax.persistence.*;resolution:=optional, \
   javax.xml.*,org.w3c.dom.*, \
   com.sun.enterprise.*;resolution:=optional, \
   groovy.*;resolution:=optional,\
