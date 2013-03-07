@@ -40,6 +40,7 @@
 package com.sun.faces.application.annotation;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import javax.faces.context.FacesContext;
 import javax.xml.ws.WebServiceRef;
 
@@ -51,10 +52,16 @@ class WebServiceRefHandler extends JndiHandler implements RuntimeAnnotationHandl
 
     private Field[] fields;
     private WebServiceRef[] fieldAnnotations;
+    private Method[] methods;
+    private WebServiceRef[] methodAnnotations;
 
-    public WebServiceRefHandler(Field[] fields, WebServiceRef[] fieldAnnotations) {
+    public WebServiceRefHandler(
+            Field[] fields, WebServiceRef[] fieldAnnotations,
+            Method[] methods, WebServiceRef[] methodAnnotations) {
         this.fields = fields;
         this.fieldAnnotations = fieldAnnotations;
+        this.methods = methods;
+        this.methodAnnotations = methodAnnotations;
     }
 
     @SuppressWarnings({"UnusedDeclaration"})
@@ -63,6 +70,10 @@ class WebServiceRefHandler extends JndiHandler implements RuntimeAnnotationHandl
         Object object = params[0];
         for (int i = 0; i < fields.length; i++) {
             applyToField(ctx, fields[0], fieldAnnotations[0], object);
+        }
+
+        for (int i=0; i<methods.length; i++) {
+            applyToMethod(ctx, methods[i], methodAnnotations[i], object);
         }
     }
 
@@ -79,5 +90,20 @@ class WebServiceRefHandler extends JndiHandler implements RuntimeAnnotationHandl
             value = lookup(facesContext, field.getName());
         }
         setField(facesContext, field, instance, value);
+    }
+
+    private void applyToMethod(FacesContext facesContext, Method method, WebServiceRef ref, Object instance) {
+        if (method.getName().startsWith("set")) {
+            Object value = null;
+            /*
+            if (ref.lookup() != null && !"".equals(ref.lookup().trim())) {
+                value = lookup(facesContext, ref.lookup());
+            } else 
+            */
+            if (ref.name() != null && !"".equals(ref.name().trim())) {
+                value = lookup(facesContext, JAVA_COMP_ENV + ref.name());
+            }
+            invokeMethod(facesContext, method, instance, value);
+        }
     }
 }

@@ -42,6 +42,7 @@ package com.sun.faces.application.annotation;
 import com.sun.faces.util.Util;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import javax.xml.ws.WebServiceRef;
 
@@ -88,8 +89,20 @@ class WebServiceRefScanner implements Scanner {
             }
         }
         
+        ArrayList<WebServiceRef> methodAnnotations = new ArrayList<WebServiceRef>();
+        ArrayList<Method> methods = new ArrayList<Method>();
+        for (Method method : clazz.getDeclaredMethods()) {
+            WebServiceRef methodAnnotation = method.getAnnotation(WebServiceRef.class);
+            if (methodAnnotation != null) {
+                methodAnnotations.add(methodAnnotation);
+                methods.add(method);
+            }
+        }
+        
         if (!classAnnotations.isEmpty() || !fieldAnnotations.isEmpty()) {
-            handler = new WebServiceRefHandler(fields.toArray(new Field[0]), (WebServiceRef[]) fieldAnnotations.toArray(new WebServiceRef[0]));
+            handler = new WebServiceRefHandler(
+                    fields.toArray(new Field[0]), (WebServiceRef[]) fieldAnnotations.toArray(new WebServiceRef[0]),
+                    methods.toArray(new Method[0]), (WebServiceRef[]) methodAnnotations.toArray(new WebServiceRef[0]));
         }
         return handler;
     }
