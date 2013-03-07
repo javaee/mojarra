@@ -42,7 +42,7 @@ package com.sun.faces.application.annotation;
 import java.lang.annotation.Annotation;
 
 /**
- * <code>Scanner</code> implementation responsible for {@link EJB} annotations.
+ * <code>Scanner</code> implementation responsible for EJB annotations.
  *
  * <p> Note this will delegate down to the EJBScanner so we can fail gracefully
  * when JavaEE is not available. </p>
