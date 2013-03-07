@@ -82,6 +82,7 @@ public class AnnotationManager {
     private static final Scanner EJB_SCANNER = new DelegatedEJBScanner();
     private static final Scanner RESOURCE_SCANNER = new DelegatedResourceScanner();
     private static final Scanner WEBSERVICE_REF_SCANNER = new DelegatedWebServiceRefScanner();
+    private static final Scanner PERSISTENCE_UNIT_SCANNER = new DelegatedPersistenceUnitScanner();
 
     /**
      * {@link Scanner} instances to be used against {@link Behavior} classes.
@@ -90,7 +91,8 @@ public class AnnotationManager {
           RESOURCE_DEPENDENCY_SCANNER,
           EJB_SCANNER,
           RESOURCE_SCANNER,
-          WEBSERVICE_REF_SCANNER
+          WEBSERVICE_REF_SCANNER,
+          PERSISTENCE_UNIT_SCANNER
     };
 
     /**
@@ -100,7 +102,8 @@ public class AnnotationManager {
           RESOURCE_DEPENDENCY_SCANNER,
           EJB_SCANNER,
           RESOURCE_SCANNER,
-          WEBSERVICE_REF_SCANNER
+          WEBSERVICE_REF_SCANNER,
+          PERSISTENCE_UNIT_SCANNER
     };
 
     /**
@@ -111,7 +114,8 @@ public class AnnotationManager {
           LISTENER_FOR_SCANNER,
           EJB_SCANNER,
           RESOURCE_SCANNER,
-          WEBSERVICE_REF_SCANNER
+          WEBSERVICE_REF_SCANNER,
+          PERSISTENCE_UNIT_SCANNER
     };
 
     /**
@@ -121,7 +125,8 @@ public class AnnotationManager {
           RESOURCE_DEPENDENCY_SCANNER,
           EJB_SCANNER,
           RESOURCE_SCANNER,
-          WEBSERVICE_REF_SCANNER
+          WEBSERVICE_REF_SCANNER,
+          PERSISTENCE_UNIT_SCANNER
     };
 
     /**
@@ -131,7 +136,8 @@ public class AnnotationManager {
           RESOURCE_DEPENDENCY_SCANNER,
           EJB_SCANNER,
           RESOURCE_SCANNER,
-          WEBSERVICE_REF_SCANNER
+          WEBSERVICE_REF_SCANNER,
+          PERSISTENCE_UNIT_SCANNER
     };
 
     /**
