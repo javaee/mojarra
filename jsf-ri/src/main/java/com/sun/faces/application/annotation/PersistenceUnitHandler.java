@@ -78,10 +78,6 @@ class PersistenceUnitHandler extends JndiHandler implements RuntimeAnnotationHan
         for (int i=0; i<methods.length; i++) {
             applyToMethod(ctx, methods[i], methodAnnotations[i], object);
         }
-
-        for(int i=0; i<classAnnotations.length; i++) {
-            applyToClass(ctx, classAnnotations[i], object);
-        }
     }
 
     private void applyToMethod(FacesContext facesContext, Method method, PersistenceUnit unit, Object instance) {
@@ -102,8 +98,5 @@ class PersistenceUnitHandler extends JndiHandler implements RuntimeAnnotationHan
             value = lookup(facesContext, field.getType().getSimpleName());
         }
         setField(facesContext, field, instance, value);
-    }
-    
-    private void applyToClass(FacesContext facesContext, PersistenceUnit unit, Object instance) {
     }
 }
