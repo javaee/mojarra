@@ -164,7 +164,11 @@ public class UIOutput extends UIComponentBase
 
     }
 
-
+    /**
+     * <p class="changed_added_2_2">Return the value property.</p>
+     * 
+     * @since 2.2
+     */
     public Object getValue() {
 
         return getStateHelper().eval(PropertyKeys.value);
