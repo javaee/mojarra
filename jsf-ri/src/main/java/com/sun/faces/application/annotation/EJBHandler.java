@@ -40,22 +40,28 @@
 package com.sun.faces.application.annotation;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import javax.faces.context.FacesContext;
 import javax.ejb.EJB;
 
 /**
- * {@link RuntimeAnnotationHandler} responsible for processing {@link EJB}
- * annotations.
+ * {@link RuntimeAnnotationHandler} responsible for processing EJB annotations.
  */
 class EJBHandler extends JndiHandler implements RuntimeAnnotationHandler {
 
     private static final String JAVA_MODULE = "java:module/";
     private Field[] fields;
     private EJB[] fieldAnnotations;
+    private Method[] methods;
+    private EJB[] methodAnnotations;
 
-    public EJBHandler(Field[] fields, EJB[] fieldAnnotations) {
+    public EJBHandler(
+            Field[] fields, EJB[] fieldAnnotations,
+            Method[] methods, EJB[] methodAnnotations) {
         this.fields = fields;
         this.fieldAnnotations = fieldAnnotations;
+        this.methods = methods;
+        this.methodAnnotations = methodAnnotations;
     }
 
     @SuppressWarnings({"UnusedDeclaration"})
@@ -64,6 +70,10 @@ class EJBHandler extends JndiHandler implements RuntimeAnnotationHandler {
         Object object = params[0];
         for (int i = 0; i < fields.length; i++) {
             applyToField(ctx, fields[0], fieldAnnotations[0], object);
+        }
+
+        for (int i = 0; i < methods.length; i++) {
+            applyToMethod(ctx, methods[i], methodAnnotations[i], object);
         }
     }
 
@@ -77,5 +87,17 @@ class EJBHandler extends JndiHandler implements RuntimeAnnotationHandler {
             value = lookup(facesContext, JAVA_MODULE + field.getType().getSimpleName());
         }
         setField(facesContext, field, instance, value);
+    }
+
+    private void applyToMethod(FacesContext facesContext, Method method, EJB ejb, Object instance) {
+        if (method.getName().startsWith("set")) {
+            Object value = null;
+            if (ejb.lookup() != null && !"".equals(ejb.lookup().trim())) {
+                value = lookup(facesContext, ejb.lookup());
+            } else if (ejb.name() != null && !"".equals(ejb.name().trim())) {
+                value = lookup(facesContext, JAVA_COMP_ENV + ejb.name());
+            }
+            invokeMethod(facesContext, method, instance, value);
+        }
     }
 }

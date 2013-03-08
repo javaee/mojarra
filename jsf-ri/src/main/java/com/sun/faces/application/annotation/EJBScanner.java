@@ -42,11 +42,12 @@ package com.sun.faces.application.annotation;
 import com.sun.faces.util.Util;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import javax.ejb.EJB;
 
 /**
- * <code>Scanner</code> implementation responsible for {@link EJB} annotations.
+ * <code>Scanner</code> implementation responsible for EJB annotations.
  */
 class EJBScanner implements Scanner {
 
@@ -72,11 +73,6 @@ class EJBScanner implements Scanner {
         Util.notNull("clazz", clazz);
         EJBHandler handler = null;
 
-        ArrayList<EJB> classAnnotations = new ArrayList<EJB>();
-        EJB classAnnotation = clazz.getAnnotation(EJB.class);
-        if (classAnnotation != null) {
-            classAnnotations.add(classAnnotation);
-        }
         ArrayList<EJB> fieldAnnotations = new ArrayList<EJB>();
         ArrayList<Field> fields = new ArrayList<Field>();
 
@@ -88,8 +84,20 @@ class EJBScanner implements Scanner {
             }
         }
         
-        if (!classAnnotations.isEmpty() || !fieldAnnotations.isEmpty()) {
-            handler = new EJBHandler(fields.toArray(new Field[0]), (EJB[]) fieldAnnotations.toArray(new EJB[0]));
+        ArrayList<EJB> methodAnnotations = new ArrayList<EJB>();
+        ArrayList<Method> methods = new ArrayList<Method>();
+
+        for (Method method : clazz.getDeclaredMethods()) {
+            EJB methodAnnotation = method.getAnnotation(EJB.class);
+            if (methodAnnotation != null) {
+                methodAnnotations.add(methodAnnotation);
+                methods.add(method);
+            }
+        }
+        if (!fieldAnnotations.isEmpty() || !methodAnnotations.isEmpty()) {
+            handler = new EJBHandler(
+                    fields.toArray(new Field[0]), (EJB[]) fieldAnnotations.toArray(new EJB[0]),
+                    methods.toArray(new Method[0]), (EJB[]) methodAnnotations.toArray(new EJB[0]));
         }
         return handler;
     }
