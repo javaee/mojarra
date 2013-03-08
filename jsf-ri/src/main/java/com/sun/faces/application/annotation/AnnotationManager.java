@@ -79,34 +79,38 @@ public class AnnotationManager {
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
     private static final Scanner RESOURCE_DEPENDENCY_SCANNER = new ResourceDependencyScanner();
     private static final Scanner LISTENER_FOR_SCANNER = new ListenerForScanner();
+    /*
+     * This code is the prototype implementation for @EJB, @Resource, ..... support.
+     * 
     private static final Scanner EJB_SCANNER = new DelegatedEJBScanner();
     private static final Scanner RESOURCE_SCANNER = new DelegatedResourceScanner();
     private static final Scanner WEBSERVICE_REF_SCANNER = new DelegatedWebServiceRefScanner();
     private static final Scanner PERSISTENCE_UNIT_SCANNER = new DelegatedPersistenceUnitScanner();
     private static final Scanner PERSISTENCE_CONTEXT_SCANNER = new DelegatedPersistenceContextScanner();
+    */
 
     /**
      * {@link Scanner} instances to be used against {@link Behavior} classes.
      */
     private static final Scanner[] BEHAVIOR_SCANNERS = {
-          RESOURCE_DEPENDENCY_SCANNER,
+          RESOURCE_DEPENDENCY_SCANNER /*,
           EJB_SCANNER,
           RESOURCE_SCANNER,
           WEBSERVICE_REF_SCANNER,
           PERSISTENCE_UNIT_SCANNER,
-          PERSISTENCE_CONTEXT_SCANNER
+          PERSISTENCE_CONTEXT_SCANNER */
     };
 
     /**
      * {@link Scanner} instances to be used against {@link ClientBehaviorRenderer} classes.
      */
     private static final Scanner[] CLIENT_BEHAVIOR_RENDERER_SCANNERS = {
-          RESOURCE_DEPENDENCY_SCANNER,
+          RESOURCE_DEPENDENCY_SCANNER /*,
           EJB_SCANNER,
           RESOURCE_SCANNER,
           WEBSERVICE_REF_SCANNER,
           PERSISTENCE_UNIT_SCANNER,
-          PERSISTENCE_CONTEXT_SCANNER
+          PERSISTENCE_CONTEXT_SCANNER */
     };
 
     /**
@@ -114,36 +118,36 @@ public class AnnotationManager {
      */
     private static final Scanner[] UICOMPONENT_SCANNERS = {
           RESOURCE_DEPENDENCY_SCANNER,
-          LISTENER_FOR_SCANNER,
+          LISTENER_FOR_SCANNER /*,
           EJB_SCANNER,
           RESOURCE_SCANNER,
           WEBSERVICE_REF_SCANNER,
           PERSISTENCE_UNIT_SCANNER,
-          PERSISTENCE_CONTEXT_SCANNER
+          PERSISTENCE_CONTEXT_SCANNER */
     };
 
     /**
      * {@link Scanner} instances to be used against {@link Validator} classes.
      */
     private static final Scanner[] VALIDATOR_SCANNERS = {
-          RESOURCE_DEPENDENCY_SCANNER,
+          RESOURCE_DEPENDENCY_SCANNER /*,
           EJB_SCANNER,
           RESOURCE_SCANNER,
           WEBSERVICE_REF_SCANNER,
           PERSISTENCE_UNIT_SCANNER,
-          PERSISTENCE_CONTEXT_SCANNER
+          PERSISTENCE_CONTEXT_SCANNER */
     };
 
     /**
      * {@link Scanner} instances to be used against {@link Converter} classes.
      */
     private static final Scanner[] CONVERTER_SCANNERS = {
-          RESOURCE_DEPENDENCY_SCANNER,
+          RESOURCE_DEPENDENCY_SCANNER /*,
           EJB_SCANNER,
           RESOURCE_SCANNER,
           WEBSERVICE_REF_SCANNER,
           PERSISTENCE_UNIT_SCANNER,
-          PERSISTENCE_CONTEXT_SCANNER
+          PERSISTENCE_CONTEXT_SCANNER */
     };
 
     /**
@@ -476,11 +480,4 @@ public class AnnotationManager {
         }
 
     } // END ProcessAnnotationsTask
-
-
-
-
-
-    
-
 }
