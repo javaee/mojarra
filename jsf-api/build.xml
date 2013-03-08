@@ -928,7 +928,7 @@ javax.faces.level=ALL
         <!-- path maintenance -->
         <delete failonerror="false" dir="${build.lib.dir}/jsf-api-stripped" />
         <mkdir dir="${build.lib.dir}/jsf-api-stripped" />
-        <!-- windows or unix java exec invocation -->
+<!--         windows or unix java exec invocation 
         <condition property="exec.name" value="cmd.exe">
             <os family="windows"/>
         </condition>
@@ -952,7 +952,7 @@ javax.faces.level=ALL
           <path refid="jsf-spi.path"/>
           <pathelement location="${javaee-api.jar}" />
         </path>
-        <!-- invoke the javac processor to produce stripped .class files -->
+         invoke the javac processor to produce stripped .class files 
         <exec executable="${exec.name}" failonerror="true">
             <arg line="${exec.arg.1}"/>
             <arg line="-XDprocess.packages"/>
@@ -964,13 +964,13 @@ javax.faces.level=ALL
             <arg line="-Acom.sun.tools.javac.sym.Dest=${build.lib.dir}/jsf-api-stripped"/>
             <arg line="${src.paths}"/>
         </exec>
-        <!-- jar up the stripped files into javax.faces-api.jar. -->
-        <!-- Extract the original manifest -->
+         jar up the stripped files into javax.faces-api.jar. 
+         Extract the original manifest -->
         <unjar src="${build.lib.dir}/${name}.jar"
                dest="${build.lib.dir}/jsf-api-stripped">
-          <patternset>
+<!--          <patternset>
             <include name="META-INF/MANIFEST.MF" />
-          </patternset>
+          </patternset>-->
         </unjar>
         <jar destfile="${javax.faces-api.jar}"
              basedir="${build.lib.dir}/jsf-api-stripped"
