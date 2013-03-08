@@ -1,14 +1,14 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
  * may not use this file except in compliance with the License.  You can
  * obtain a copy of the License at
- * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+ * https://glassfish.dev.java.net/public/CDDLGPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
  *
@@ -37,19 +37,44 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.agnostic.renderKit.basic;
 
-package com.sun.faces.facelets.tag.jsf;
+import com.gargoylesoftware.htmlunit.html.HtmlOption;
+import java.util.List;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
-import com.sun.faces.facelets.tag.AbstractTagLibrary;
+import com.gargoylesoftware.htmlunit.html.HtmlSelect;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import org.junit.*;
+import static org.junit.Assert.*;
 
+public class Issue2767IT {
 
-public final class PassThroughAttributeLibrary extends AbstractTagLibrary {
+    private String webUrl;
+    private WebClient webClient;
 
-    public final static String Namespace = "http://xmlns.jcp.org/jsf/passthrough";
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
+    }
 
-    public final static PassThroughAttributeLibrary Instance = new PassThroughAttributeLibrary();
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
+    }
 
-    public PassThroughAttributeLibrary() {
-        super(Namespace);
+    @Test
+    public void testPassThroughAttributes() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/issue2767.xhtml");
+        String pageMarkup = page.getBody().asXml();
+        assertTrue(pageMarkup.contains("elname=\"/issue2767.xhtml\""));
+        assertTrue(pageMarkup.contains("literalname=\"literalValue\""));
+        assertTrue(!pageMarkup.contains("xmlns:p=\"http://xmlns.jcp.org/jsf/passthrough\""));
+        assertTrue(pageMarkup.contains("foo=\"bar\""));
+        assertTrue(page.asText().contains("This should show up"));
+        assertTrue(!page.asText().contains("And this should not"));
+
     }
 }

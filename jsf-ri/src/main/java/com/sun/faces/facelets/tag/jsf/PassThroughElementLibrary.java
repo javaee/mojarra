@@ -45,7 +45,7 @@ import com.sun.faces.facelets.tag.AbstractTagLibrary;
 
 public final class PassThroughElementLibrary extends AbstractTagLibrary {
 
-    public final static String Namespace = "http://java.sun.com/jsf";
+    public final static String Namespace = "http://xmlns.jcp.org/jsf";
 
     public final static PassThroughElementLibrary Instance = new PassThroughElementLibrary();
 

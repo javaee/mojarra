@@ -923,17 +923,24 @@ public class ApplicationAssociate {
                     BooleanWebContextInitParameter.FaceletsSkipComments));
 
         c.addTagLibrary(new CoreLibrary());
+        c.addTagLibrary(new CoreLibrary("http://xmlns.jcp.org/jsf/core"));
         c.addTagLibrary(new HtmlLibrary());
+        c.addTagLibrary(new HtmlLibrary("http://xmlns.jcp.org/jsf/html"));
         c.addTagLibrary(new UILibrary());
+        c.addTagLibrary(new UILibrary("http://xmlns.jcp.org/jsf/facelets"));
         c.addTagLibrary(new JstlCoreLibrary());
         c.addTagLibrary(new JstlCoreLibrary("http://java.sun.com/jstl/core"));
+        c.addTagLibrary(new JstlCoreLibrary("http://xmlns.jcp.org/jsp/jstl/core"));
         c.addTagLibrary(new PassThroughAttributeLibrary());
         c.addTagLibrary(new PassThroughElementLibrary());
         c.addTagLibrary(new FunctionLibrary(JstlFunction.class, "http://java.sun.com/jsp/jstl/functions"));
+        c.addTagLibrary(new FunctionLibrary(JstlFunction.class, "http://xmlns.jcp.org/jsp/jstl/functions"));
         if (isDevModeEnabled()) {
             c.addTagLibrary(new FunctionLibrary(DevTools.class, "http://java.sun.com/mojarra/private/functions"));
+            c.addTagLibrary(new FunctionLibrary(DevTools.class, "http://xmlns.jcp.org/mojarra/private/functions"));
         }
         c.addTagLibrary(new CompositeLibrary());
+        c.addTagLibrary(new CompositeLibrary("http://xmlns.jcp.org/jsf/composite"));
 
         return c;
 

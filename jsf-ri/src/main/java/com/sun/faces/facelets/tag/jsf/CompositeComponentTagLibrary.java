@@ -176,6 +176,8 @@ public class CompositeComponentTagLibrary extends LazyTagLibrary {
     
     private static final String NS_COMPOSITE_COMPONENT_PREFIX = 
             "http://java.sun.com/jsf/composite/";
+    private static final String XMLNS_COMPOSITE_COMPONENT_PREFIX = 
+            "http://xmlns.jcp.org/jsf/composite/";
     
     @Override
     public boolean tagLibraryForNSExists(String toTest) {
@@ -235,6 +237,12 @@ public class CompositeComponentTagLibrary extends LazyTagLibrary {
             int resourceIdIndex;
             if (-1 != (resourceIdIndex = toTest.indexOf(NS_COMPOSITE_COMPONENT_PREFIX))) {
                 resourceIdIndex += NS_COMPOSITE_COMPONENT_PREFIX.length();
+                if (resourceIdIndex < toTest.length()) {
+                    resourceId = toTest.substring(resourceIdIndex);
+                }
+            }
+            if (-1 != (resourceIdIndex = toTest.indexOf(XMLNS_COMPOSITE_COMPONENT_PREFIX))) {
+                resourceIdIndex += XMLNS_COMPOSITE_COMPONENT_PREFIX.length();
                 if (resourceIdIndex < toTest.length()) {
                     resourceId = toTest.substring(resourceIdIndex);
                 }

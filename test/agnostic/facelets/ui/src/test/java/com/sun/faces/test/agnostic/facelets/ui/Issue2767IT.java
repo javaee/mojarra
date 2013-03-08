@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,19 +37,35 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.agnostic.facelets.ui;
 
-package com.sun.faces.facelets.tag.jsf;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-import com.sun.faces.facelets.tag.AbstractTagLibrary;
+public class Issue2767IT {
 
+    private String webUrl;
+    private WebClient webClient;
 
-public final class PassThroughAttributeLibrary extends AbstractTagLibrary {
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
+    }
 
-    public final static String Namespace = "http://xmlns.jcp.org/jsf/passthrough";
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
+    }
 
-    public final static PassThroughAttributeLibrary Instance = new PassThroughAttributeLibrary();
-
-    public PassThroughAttributeLibrary() {
-        super(Namespace);
+    @Test
+    public void testOffset() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/issue2767.xhtml");
+        assertTrue(page.asText().contains("Literal str0 Literal str1 Literal str2 Literal str3 Literal str4"));
+        assertTrue(page.asText().contains("VE str0 VE str1 VE str2 VE str3 VE str4"));
     }
 }

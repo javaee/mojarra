@@ -94,4 +94,29 @@ public final class CompositeLibrary extends AbstractTagLibrary {
         this.addComponent("renderFacet", "javax.faces.Output",
                 "javax.faces.CompositeFacet", RenderFacetHandler.class);
     }
+    
+    public CompositeLibrary(String namespace) {
+        super(namespace);
+
+        // The interface section
+        this.addTagHandler("interface", InterfaceHandler.class);
+        
+        // Things that go insead of the interface section
+        this.addTagHandler("attribute", AttributeHandler.class);
+        this.addTagHandler("extension", ExtensionHandler.class);
+        this.addTagHandler("editableValueHolder", EditableValueHolderAttachedObjectTargetHandler.class);
+        this.addTagHandler("actionSource", ActionSource2AttachedObjectTargetHandler.class);
+        this.addTagHandler("valueHolder", ValueHolderAttachedObjectTargetHandler.class);
+        this.addTagHandler("clientBehavior", BehaviorHolderAttachedObjectTargetHandler.class);
+        this.addTagHandler("facet", DeclareFacetHandler.class);
+        
+        // The implementation section
+        this.addTagHandler("implementation", ImplementationHandler.class);
+        
+        // Things that go inside of the implementation section
+        this.addTagHandler("insertChildren", InsertChildrenHandler.class);
+        this.addTagHandler("insertFacet", InsertFacetHandler.class);
+        this.addComponent("renderFacet", "javax.faces.Output",
+                "javax.faces.CompositeFacet", RenderFacetHandler.class);
+    }
 }
