@@ -81,6 +81,10 @@ public class FaceletsConfiguration {
         if (null == extension) {
             extension = ".xhtml";
         }
+        int j = extension.lastIndexOf(System.getProperty("file.separator"));
+        if (-1 != j) {
+            extension = extension.substring(j);
+        }
         int i = extension.indexOf(".");
         if (-1 != i && 1 < extension.length()) {
             extension = extension.substring(i);
@@ -103,6 +107,10 @@ public class FaceletsConfiguration {
         String extension = alias;
         if (null == extension) {
             extension = ".xhtml";
+        }
+        int j = extension.lastIndexOf(System.getProperty("file.separator"));
+        if (-1 != j) {
+            extension = extension.substring(j);
         }
         int i = extension.indexOf(".");
         if (-1 != i && 1 < extension.length()) {
@@ -127,6 +135,10 @@ public class FaceletsConfiguration {
         if (null == extension) {
             extension = ".xhtml";
         }
+        int j = extension.lastIndexOf(System.getProperty("file.separator"));
+        if (-1 != j) {
+            extension = extension.substring(j);
+        }
         int i = extension.indexOf(".");
         if (-1 != i && 1 < extension.length()) {
             extension = extension.substring(i);
@@ -149,6 +161,10 @@ public class FaceletsConfiguration {
         String extension = alias;
         if (null == extension) {
             extension = ".xhtml";
+        }
+        int j = extension.lastIndexOf(System.getProperty("file.separator"));
+        if (-1 != j) {
+            extension = extension.substring(j);
         }
         int i = extension.indexOf(".");
         if (-1 != i && 1 < extension.length()) {
@@ -175,6 +191,10 @@ public class FaceletsConfiguration {
             String extension = context.getViewRoot().getViewId();
             if (null == extension) {
                 extension = ".xhtml";
+            }
+            int j = extension.lastIndexOf(System.getProperty("file.separator"));
+            if (-1 != j) {
+                extension = extension.substring(j);
             }
             int i = extension.indexOf(".");
             if (-1 != i && 1 < extension.length()) {
