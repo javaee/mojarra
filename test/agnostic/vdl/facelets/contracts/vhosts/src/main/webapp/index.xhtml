@@ -3,10 +3,11 @@
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html">
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:lib="http://java.sun.com/jsf/composite/lib">
     <body>
-        <ui:composition template="template.xhtml">
+        <ui:composition template="/template.xhtml">
             <ui:define name="content">
+                <lib:cc/>
                 main content
             </ui:define>
             <ui:define name="footer">

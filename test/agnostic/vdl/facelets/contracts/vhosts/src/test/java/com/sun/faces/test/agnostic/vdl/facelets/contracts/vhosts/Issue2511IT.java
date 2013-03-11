@@ -46,11 +46,11 @@ import com.gargoylesoftware.htmlunit.html.HtmlLink;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import java.io.IOException;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
-import org.junit.Ignore;
 
 public class Issue2511IT {
 
@@ -76,7 +76,6 @@ public class Issue2511IT {
     }
 
     @Test
-    @Ignore
     public void testDefaultTemplate() throws Exception {
         webClient.removeRequestHeader("Host");
         HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
@@ -84,11 +83,10 @@ public class Issue2511IT {
         assertThat(footer, nullValue());
         HtmlElement content = page.getElementById("content");
         assertThat(content, notNullValue());
-        assertThat(content.getTextContent().trim(), is("main content"));
+        assertThat(content.getTextContent().trim(), containsString("main content"));
     }
 
     @Test
-    @Ignore
     public void testAnotherTemplate() throws Exception {
         webClient.addRequestHeader("Host", "host2");
         HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
@@ -109,7 +107,6 @@ public class Issue2511IT {
     }
 
     @Test
-    @Ignore
     public void testInclude() throws Exception {
         webClient.removeRequestHeader("Host");
         HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
@@ -132,6 +129,31 @@ public class Issue2511IT {
         HtmlElement footer = page.getElementById("footer");
         assertThat(footer, notNullValue());
         assertThat(footer.getTextContent().trim(), is(""));
+    }
+
+    @Ignore("PENDING(FCAPUTO): unignore, when libraries are handled correctly")
+    public void testCompositeComponent() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
+
+        HtmlElement template = page.getElementById("ccTemplate");
+        assertThat(template, notNullValue());
+        assertThat(template.getTextContent().trim(), is("lib/2_3/template.xhtml"));
+
+        HtmlElement content = page.getElementById("ccContent");
+        assertThat(content, notNullValue());
+        assertThat(content.getTextContent().trim(), is("lib/2_3/cc.xhtml"));
+
+        webClient.addRequestHeader("Host", "host1");
+        page = webClient.getPage(webUrl + "faces/index.xhtml");
+
+        template = page.getElementById("ccTemplate");
+        assertThat(template, notNullValue());
+        assertThat(template.getTextContent().trim(), is("lib/2_3/template.xhtml"));
+
+        content = page.getElementById("ccContent");
+        assertThat(content, notNullValue());
+        assertThat(content.getTextContent().trim(), is("host1/lib/cc.xhtml"));
+
     }
 
     private void checkCss(String host, String contract) throws IOException {

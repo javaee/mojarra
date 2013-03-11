@@ -1,5 +1,4 @@
-<?xml version='1.0' encoding='UTF-8' ?> 
-
+<?xml version='1.0' encoding='UTF-8' ?>
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -41,23 +40,11 @@
     holder.
 
 -->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
 
-<!DOCTYPE html>
-
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:h="http://java.sun.com/jsf/html">
-
-    <h:head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <h:outputStylesheet name="/css/layout.css" />
-        <title>#{facesContext.externalContext.requestHeaderMap.host}</title>
-    </h:head>
-    <h:body>
-        /template.xhtml
-        <ui:include src="/header.xhtml"/>
-        <div id="content">
-            <ui:insert name="content"/>
-        </div>
-    </h:body>
-</html>
+<div id="ccTemplate">lib/2_3/template.xhtml</div>
+<div id="ccContent">
+    <ui:insert name="ccContent"/>
+</div>
+</ui:composition>

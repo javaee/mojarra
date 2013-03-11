@@ -281,8 +281,6 @@ final class DefaultFacelet extends Facelet implements XMLFrontMatterSaver {
      */
     private URL getRelativePath(String path) throws IOException {
         return this.factory.resolveURL(this.src, path);
-        // PENDING(FCAPUTO): Deactivated caching for resource library contracts.
-        //         To make contracts work with relative paths, the url should be calculated based on the alias.
     }
 
     /**
