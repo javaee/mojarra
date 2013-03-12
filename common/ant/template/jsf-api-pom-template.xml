@@ -76,12 +76,22 @@
             <roles>
                 <role>project-owner</role>
             </roles>
-            <timezone>-6</timezone>
+            <timezone>-5</timezone>
         </developer>
         <developer>
             <id>rogerk</id>
             <name>Roger Kitain</name>
             <email>roger.kitain@oracle.com</email>
+            <organization>Oracle America, Inc.</organization>
+            <roles>
+                <role>project-owner</role>
+            </roles>
+            <timezone>-5</timezone>
+        </developer>
+        <developer>
+            <id>mriem</id>
+            <name>Manfred Riem</name>
+            <email>manfred.riem@oracle.com</email>
             <organization>Oracle America, Inc.</organization>
             <roles>
                 <role>project-owner</role>
@@ -213,21 +223,24 @@
     </build>
 
     <issueManagement>
-        <system>issueZilla</system>
+        <system>JIRA</system>
         <url>
-            https://javaserverfaces.dev.java.net/servlets/ProjectIssues
+            http://java.net/jira/browse/JAVASERVERFACES_SPEC_PUBLIC
         </url>
     </issueManagement>
     <mailingLists>
         <mailingList>
             <name>JSF 2.2 Specification Comments</name>
-            <post>jsr-314-comments@jcp.org</post>
+            <post>users@javaserverfaces-spec-public.java.net</post>
+            <archive>
+                http://jsf-spec.java.net/lists/
+            </archive>
         </mailingList>
         <mailingList>
             <name>Mojarra Implementation Dev List</name>
-            <post>dev@javaserverfaces.dev.java.net</post>
+            <post>dev@javaserverfaces.java.net</post>
             <archive>
-                https://javaserverfaces.dev.java.net/servlets/SummarizeList?listName=dev
+                http://java.net/projects/javaserverfaces/lists
             </archive>
         </mailingList>
     </mailingLists>
