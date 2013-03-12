@@ -199,7 +199,6 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                 viewIdAfter = (null == viewIdAfter) ? "" : viewIdAfter;
                 isUIViewActionBroadcastAndViewdsDiffer = !viewIdBefore.equals(viewIdAfter);
             } 
-            clearViewMapIfNecessary(context, caseStruct.viewId);
             if (caseStruct.navCase.isRedirect() || isUIViewActionBroadcastAndViewdsDiffer) {
                 
                 // PENDING(edburns): Flows currently don't work with redirect.
@@ -246,6 +245,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                     logger.log(Level.FINE, "Set new view in FacesContext for {0}", caseStruct.viewId);
                 }
             }
+            clearViewMapIfNecessary(context, caseStruct.viewId);
         } 
     }
     
@@ -411,8 +411,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         if (root != null && !root.getViewId().equals(newId)) {
             Map<String, Object> viewMap = root.getViewMap(false);
             if (viewMap != null) {
-                ViewScopeManager manager = ViewScopeManager.getInstance(facesContext);
-                manager.clear(facesContext);
+                viewMap.clear();
             }
         }
     }
