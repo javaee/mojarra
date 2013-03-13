@@ -47,6 +47,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 public class Issue1650IT {
 
@@ -65,6 +66,7 @@ public class Issue1650IT {
     }
 
     @Test
+    @Ignore
     public void testConverterHonorBoth1() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/converterHonorBoth1.xhtml");
         HtmlTextInput textField = (HtmlTextInput) page.getElementById("form:inputText");
@@ -75,6 +77,7 @@ public class Issue1650IT {
     }
 
     @Test
+    @Ignore
     public void testConverterHonorBoth2() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/converterHonorBoth2.xhtml");
         HtmlTextInput textField = (HtmlTextInput) page.getElementById("form:inputText");

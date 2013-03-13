@@ -166,8 +166,7 @@ public class ConverterConfigProcessor extends AbstractConfigProcessor {
                                             Converter.class);
                 }
                 application.addConverter(converterId, converterClass);
-            } 
-            if (converterClass != null && converterForClass != null) {
+            } else if (converterClass != null && converterForClass != null) {
                 try {
                     Class cfcClass = Util.loadClass(converterForClass,
                                                     this.getClass());

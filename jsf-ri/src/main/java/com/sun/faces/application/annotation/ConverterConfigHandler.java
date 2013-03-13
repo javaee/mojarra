@@ -93,14 +93,13 @@ public class ConverterConfigHandler implements ConfigAnnotationHandler {
         }
         Object key = null;
         FacesConverter converterAnnotation = (FacesConverter) annotation;
-        if (converterAnnotation.forClass() != null) {
+        if (0 == converterAnnotation.value().length()) {
             key = converterAnnotation.forClass();
-            converters.put(key, target.getName());
-        } 
-        if (converterAnnotation.value().length() != 0) {
+        } else {
             key = converterAnnotation.value();
-            converters.put(key, target.getName());
         }
+        converters.put(key, target.getName());
+
     }
 
 
