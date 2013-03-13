@@ -558,9 +558,12 @@ public class ExternalContextImpl extends ExternalContext {
      */
     public String encodeActionURL(String url) {
         FacesContext context = FacesContext.getCurrentInstance();
-        boolean appendClientWindow = ClientWindow.isClientWindowRenderModeEnabled(context);
+        ClientWindow  cw = context.getExternalContext().getClientWindow();
+        boolean appendClientWindow = false;
+        if (null != cw) {
+            appendClientWindow = cw.isClientWindowRenderModeEnabled(context);
+        }
         if (appendClientWindow && -1 == url.indexOf(ResponseStateManager.CLIENT_WINDOW_URL_PARAM)) {
-            ClientWindow  cw = context.getExternalContext().getClientWindow();
             if (null != cw) {
                 String clientWindowId = cw.getId();
                 StringBuilder builder = new StringBuilder(url);

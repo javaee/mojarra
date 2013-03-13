@@ -159,6 +159,14 @@ public final class FactoryFinder {
          "javax.faces.application.ApplicationFactory";
 
     /**
+     * <p>The property name for the
+     * {@link javax.faces.lifecycle.ClientWindowFactory} class name.</p>
+     * @since 2.2
+     */
+    public final static String CLIENT_WINDOW_FACTORY =
+         "javax.faces.lifecycle.ClientWindowFactory";
+
+    /**
      * <p class="changed_added_2_0">The property name for the {@link
      * javax.faces.context.ExceptionHandlerFactory} class name.</p>
      */
@@ -281,6 +289,7 @@ public final class FactoryFinder {
             FLASH_FACTORY,
             FLOW_HANDLER_FACTORY,
             PARTIAL_VIEW_CONTEXT_FACTORY,
+            CLIENT_WINDOW_FACTORY,
             LIFECYCLE_FACTORY,
             RENDER_KIT_FACTORY,
             VIEW_DECLARATION_LANGUAGE_FACTORY,
@@ -309,6 +318,8 @@ public final class FactoryFinder {
                  javax.faces.context.PartialViewContextFactory.class);
         factoryClasses.put(LIFECYCLE_FACTORY,
                  javax.faces.lifecycle.LifecycleFactory.class);
+        factoryClasses.put(CLIENT_WINDOW_FACTORY,
+                 javax.faces.lifecycle.ClientWindowFactory.class);
         factoryClasses.put(RENDER_KIT_FACTORY,
                  javax.faces.render.RenderKitFactory.class);
         factoryClasses.put(VIEW_DECLARATION_LANGUAGE_FACTORY,

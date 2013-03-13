@@ -97,28 +97,7 @@ public abstract class Lifecycle {
      *  is <code>null</code>
      */
     public abstract void execute(FacesContext context) throws FacesException;
-    
-    
-    /**
-     * <p class="changed_added_2_2">Create or restore the {@link
-     * ClientWindow} to be used to display the {@link
-     * javax.faces.component.UIViewRoot} for this run through the
-     * lifecycle.  See the class documentation for {@link ClientWindow}
-     * for an overview of the feature.  If the value of the {@link ClientWindow#CLIENT_WINDOW_MODE_PARAM_NAME}
-     * configuration parameter is "none" without the quotes, this method
-     * must take no action.  Otherwise, call {@link javax.faces.context.ExternalContext#getClientWindow()}.
-     * If the result is <code>null</code>, create a new instance of <code>ClientWindow</code>
-     * and call {@link ClientWindow#decode(javax.faces.context.FacesContext)} on it. 
-     * Store the new <code>ClientWindow</code> by calling {@link javax.faces.context.ExternalContext#setClientWindow(javax.faces.lifecycle.ClientWindow)}.</p>
-     * 
-     * 
-     * @since 2.2
-     */
-    
-    public void attachWindow(FacesContext context) {
-    }
-
-
+        
     /**
      * <p>Return the set of registered {@link PhaseListener}s for this
      * {@link Lifecycle} instance.  If there are no registered listeners,

@@ -38,28 +38,32 @@
  * holder.
 
  */
-package com.sun.faces.lifecycle;
+package javax.faces.lifecycle;
 
 import java.util.Map;
+import javax.faces.FacesWrapper;
 import javax.faces.context.FacesContext;
-import javax.faces.lifecycle.ClientWindow;
 
-public class ClientWindowImpl extends ClientWindow {
-    
-    String id;
+/**
+ * <p class="changed_added_2_2">Wrapper for {@link ClientWindow}</p>
+ * 
+ * @since 2.2
+ */
+public abstract class ClientWindowWrapper extends ClientWindow implements FacesWrapper<ClientWindow> {
 
-    ClientWindowImpl(String id) {
-        this.id = id;
+    @Override
+    public abstract ClientWindow getWrapped();
+
+    @Override
+    public String getId() {
+        return getWrapped().getId();
     }
 
     @Override
     public Map<String, String> getQueryURLParameters(FacesContext context) {
-        return null;
+        return getWrapped().getQueryURLParameters(context);
     }
     
-    @Override
-    public String getId() {
-        return id;
-    }
+    
     
 }

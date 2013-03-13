@@ -115,6 +115,11 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
     private static final String FACES_CONTEXT_FACTORY = "faces-context-factory";
 
     /**
+     * <code>/faces-config/factory/client-window-factory</code>
+     */
+    private static final String CLIENT_WINDOW_FACTORY = "client-window-factory";
+
+    /**
      * <code>/faces-config/factory/partial-view-context-factory</code>
      */
     private static final String PARTIAL_VIEW_CONTEXT_FACTORY = "partial-view-context-factory";
@@ -263,6 +268,9 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
                                getNodeText(n));
                 } else if (FLASH_FACTORY.equals(n.getLocalName())) {
                     setFactory(FactoryFinder.FLASH_FACTORY,
+                               getNodeText(n));
+                } else if (CLIENT_WINDOW_FACTORY.equals(n.getLocalName())) {
+                    setFactory(FactoryFinder.CLIENT_WINDOW_FACTORY,
                                getNodeText(n));
                 } else if (FACES_CONTEXT_FACTORY.equals(n.getLocalName())) {
                     fcCount.incrementAndGet();

@@ -131,32 +131,6 @@ public class LifecycleImpl extends Lifecycle {
 
     // ------------------------------------------------------- Lifecycle Methods
 
-    @Override
-    public void attachWindow(FacesContext context) {
-        if (!isClientWindowEnabled) {
-            return;
-        }
-        if (context == null) {
-            throw new NullPointerException
-                (MessageUtils.getExceptionMessageString
-                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
-        }
-
-        ExternalContext extContext = context.getExternalContext();
-        ClientWindow myWindow = extContext.getClientWindow();
-        if (null == myWindow) {
-            myWindow = new ClientWindowImpl();
-            myWindow.decode(context);
-            extContext.setClientWindow(myWindow);
-        }
-        
-        
-        // If you need to do the "send down the HTML" trick, be sure to
-        // mark responseComplete true after doing so.  That way
-        // the remaining lifecycle methods will not execute.
-        
-    }
-    
     // Execute the phases up to but not including Render Response
     public void execute(FacesContext context) throws FacesException {
 

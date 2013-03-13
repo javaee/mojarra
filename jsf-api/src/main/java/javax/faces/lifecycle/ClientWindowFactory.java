@@ -40,57 +40,56 @@
  */
 package javax.faces.lifecycle;
 
-import javax.faces.FacesException;
 import javax.faces.FacesWrapper;
 import javax.faces.context.FacesContext;
-import javax.faces.event.PhaseListener;
 
 /**
- * <p class="changed_added_2_2">Provides a simple implementation of
- * {@link Lifecycle} that can be subclassed by developers wishing to
- * provide specialized behavior to an existing {@link Lifecycle}
- * instance.  The default implementation of all methods is to call
- * through to the wrapped {@link Lifecycle}.</p>
-
- * <div class="changed_added_2_2"> 
-
- * <p>Usage: extend this class and override getWrapped() to return the
- * instance we are wrapping.</p>
-
- * </div>
-
+ * <p class="changed_added_2_2">Create {@link ClientWindow} instances based on 
+ * the incoming request.</p>
+ * 
+ * 
  * @since 2.2
  */
+public abstract class ClientWindowFactory implements FacesWrapper<ClientWindowFactory> {
 
-public abstract class LifecycleWrapper extends Lifecycle implements FacesWrapper<Lifecycle> {
-
+    
+    /**
+     * <p class="changed_added_2_2">If this factory has been decorated, the 
+     * implementation doing the decorating may override this method to provide
+     * access to the implementation being wrapped.  A default implementation
+     * is provided that returns <code>null</code>.</p>
+     * 
+     * @since 2.2
+     */
+    
     @Override
-    public abstract Lifecycle getWrapped();
-
-    @Override
-    public void addPhaseListener(PhaseListener listener) {
-        getWrapped().addPhaseListener(listener);
+    public ClientWindowFactory getWrapped() {
+        return null;
     }
-
-    @Override
-    public void execute(FacesContext context) throws FacesException {
-        getWrapped().execute(context);
-    }
-
-    @Override
-    public PhaseListener[] getPhaseListeners() {
-        return getWrapped().getPhaseListeners();
-    }
-
-    @Override
-    public void removePhaseListener(PhaseListener listener) {
-        getWrapped().removePhaseListener(listener);
-    }
-
-    @Override
-    public void render(FacesContext context) throws FacesException {
-        getWrapped().render(context);
-    }
-
+    
+    /**
+     * <p class="changed_added_2_2">The implementation is responsible
+     * for examining the incoming request and extracting the value that must 
+     * be returned from the {@link ClientWindow#getId} method.  If {@link #CLIENT_WINDOW_MODE_PARAM_NAME}
+     * is "none" this method must return {@code null}.  If {@link #CLIENT_WINDOW_MODE_PARAM_NAME}
+     * is "url" the implementation must first look for a request parameter
+     * under the name given by the value of {@link javax.faces.render.ResponseStateManager#CLIENT_WINDOW_PARAM}.
+     * If no value is found, look for a request parameter under the name given
+     * by the value of {@link javax.faces.render.ResponseStateManager#CLIENT_WINDOW_URL_PARAM}.
+     * If no value is found, fabricate an id that uniquely identifies this
+     * <code>ClientWindow</code> within the scope of the current session.  This
+     * value must be encrypted with a key stored in the http session and made 
+     * available to return from the {@link ClientWindow#getId} method.  The value must be
+     * suitable for inclusion as a hidden field or query parameter.
+     * If a value is found, decrypt it using the key from the session and 
+     * make it available for return from {@link ClientWindow#getId}.</p>
+     * 
+     * @param context the {@link FacesContext} for this request.
+     * @return the {@link ClientWindow} for this request, or {@code null} 
+     * 
+     * @since 2.2
+     */
+    
+    public abstract ClientWindow getClientWindow(FacesContext context);
     
 }

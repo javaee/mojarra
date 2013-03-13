@@ -70,7 +70,7 @@ import javax.faces.render.ResponseStateManager;
 
  * <p>To accomadate the widest possible range of implementation choices
  * to support this feature, explicit names for modes other than "none"
- * are not specified.  However, for all values of {@link
+ * and "url" are not specified.  However, for all values of {@link
  * #CLIENT_WINDOW_MODE_PARAM_NAME}, the lifetime of a
  * <code>ClientWindow</code> starts on the first request made by a
  * particular client window (or tab, or pop-up, etc) to the JSF runtime
@@ -112,10 +112,11 @@ import javax.faces.render.ResponseStateManager;
 public abstract class ClientWindow {
     
     /**
-     * <p class="changed_added_2_2">The context-param that controls the operation
-     * of the <code>ClientWindow</code> feature.  The runtime must support 
-     * the values "none" and "url", without the quotes, but other values
-     * are possible.  If not specified, "none" is assumed.</p>
+     * <p class="changed_added_2_2">The context-param that controls the
+     * operation of the <code>ClientWindow</code> feature.  The runtime
+     * must support the values "none" and "url", without the quotes, but
+     * other values are possible.  If not specified, or the value is not
+     * understood by the implementation, "none" is assumed.</p>
      *
      * @since 2.2
      */
@@ -151,30 +152,6 @@ public abstract class ClientWindow {
     
     public abstract String getId();
     
-    /**
-     * <p class="changed_added_2_2">The implementation is responsible
-     * for examining the incoming request and extracting the value that must 
-     * be returned from the {@link #getId} method.  If {@link #CLIENT_WINDOW_MODE_PARAM_NAME}
-     * is "none" this method must not be invoked.  If {@link #CLIENT_WINDOW_MODE_PARAM_NAME}
-     * is "url" the implementation must first look for a request parameter
-     * under the name given by the value of {@link javax.faces.render.ResponseStateManager#CLIENT_WINDOW_PARAM}.
-     * If no value is found, look for a request parameter under the name given
-     * by the value of {@link javax.faces.render.ResponseStateManager#CLIENT_WINDOW_URL_PARAM}.
-     * If no value is found, fabricate an id that uniquely identifies this
-     * <code>ClientWindow</code> within the scope of the current session.  This
-     * value must be encrypted with a key stored in the http session and made 
-     * available to return from the {@link #getId} method.  The value must be
-     * suitable for inclusion as a hidden field or query parameter.
-     * If a value is found, decrypt it using the key from the session and 
-     * make it available for return from {@link #getId}.</p>
-     * 
-     * @param context the {@link FacesContext} for this request.
-     * 
-     * @since 2.2
-     */
-    
-    public abstract void decode(FacesContext context);
-    
     private static final String PER_USE_CLIENT_WINDOW_URL_QUERY_PARAMETER_DISABLED_KEY = 
             "javax.faces.lifecycle.ClientWindowRenderModeEnablement";
     
@@ -193,7 +170,7 @@ public abstract class ClientWindow {
      * @since 2.2
      */
     
-    public static void disableClientWindowRenderMode(FacesContext context) {
+    public void disableClientWindowRenderMode(FacesContext context) {
         Map<Object, Object> attrMap = context.getAttributes();
         attrMap.put(PER_USE_CLIENT_WINDOW_URL_QUERY_PARAMETER_DISABLED_KEY, Boolean.TRUE);
     }
@@ -212,7 +189,7 @@ public abstract class ClientWindow {
      * @since 2.2
      */
     
-    public static void enableClientWindowRenderMode(FacesContext context) {
+    public void enableClientWindowRenderMode(FacesContext context) {
         Map<Object, Object> attrMap = context.getAttributes();
         attrMap.remove(PER_USE_CLIENT_WINDOW_URL_QUERY_PARAMETER_DISABLED_KEY);
         
@@ -231,7 +208,7 @@ public abstract class ClientWindow {
      * @since 2.2
      */
     
-    public static boolean isClientWindowRenderModeEnabled(FacesContext context) {
+    public boolean isClientWindowRenderModeEnabled(FacesContext context) {
         boolean result = false;
         Map<Object, Object> attrMap = context.getAttributes();
         result = !attrMap.containsKey(PER_USE_CLIENT_WINDOW_URL_QUERY_PARAMETER_DISABLED_KEY);

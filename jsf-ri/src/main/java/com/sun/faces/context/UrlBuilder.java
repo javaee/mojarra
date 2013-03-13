@@ -250,9 +250,12 @@ class UrlBuilder {
         }
         
         FacesContext context = FacesContext.getCurrentInstance();
-        boolean appendClientWindow = ClientWindow.isClientWindowRenderModeEnabled(context);
+        ClientWindow  cw = context.getExternalContext().getClientWindow();
+        boolean appendClientWindow = false;
+        if (null != cw) {
+            appendClientWindow = cw.isClientWindowRenderModeEnabled(context);
+        }
         if (appendClientWindow && -1 == url.indexOf(ResponseStateManager.CLIENT_WINDOW_URL_PARAM)) {
-            ClientWindow  cw = context.getExternalContext().getClientWindow();
             if (null != cw) {
                 String clientWindow = cw.getId();
                 if (!hasQueryString) {

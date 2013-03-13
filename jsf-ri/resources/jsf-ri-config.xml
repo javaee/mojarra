@@ -66,6 +66,9 @@
     <faces-context-factory>
       com.sun.faces.context.FacesContextFactoryImpl
     </faces-context-factory>
+    <client-window-factory>
+      com.sun.faces.lifecycle.ClientWindowFactoryImpl
+    </client-window-factory>
     <flash-factory>
       com.sun.faces.context.flash.FlashFactoryImpl
     </flash-factory>

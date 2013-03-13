@@ -174,6 +174,7 @@ public abstract class OutcomeTargetRenderer extends HtmlBasicRenderer {
         addNavigationParams(navCase, params);
         String result = null;
         boolean didDisableClientWindowRendering = false;
+        ClientWindow cw = null;
 
         
         try {
@@ -183,7 +184,10 @@ public abstract class OutcomeTargetRenderer extends HtmlBasicRenderer {
                 didDisableClientWindowRendering = "true".equalsIgnoreCase(val.toString());
             }
             if (didDisableClientWindowRendering) {
-                ClientWindow.disableClientWindowRenderMode(context);
+                cw = context.getExternalContext().getClientWindow();
+                if (null != cw) {
+                    cw.disableClientWindowRenderMode(context);
+                }
             }
             
             result = Util.getViewHandler(context).getBookmarkableURL(context,
@@ -191,8 +195,8 @@ public abstract class OutcomeTargetRenderer extends HtmlBasicRenderer {
                                                                params,
                                                                isIncludeViewParams(component, navCase));
         } finally {
-            if (didDisableClientWindowRendering) {
-                ClientWindow.enableClientWindowRenderMode(context);
+            if (didDisableClientWindowRendering && null != cw) {
+                cw.enableClientWindowRenderMode(context);
             }
         }
         

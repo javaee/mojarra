@@ -556,9 +556,7 @@ public final class FacesServlet implements Servlet {
      * javax.faces.application.ResourceHandler#isResourceRequest}.  If
      * this returns <code>true</code> call {@link
      * javax.faces.application.ResourceHandler#handleResourceRequest}.
-     * If this returns <code>false</code>, <span
-     * class="changed_added_2_2">call {@link
-     * javax.faces.lifecycle.Lifecycle#attachWindow} followed by </span>
+     * If this returns <code>false</code>, 
      * {@link javax.faces.lifecycle.Lifecycle#execute} followed by
      * {@link javax.faces.lifecycle.Lifecycle#render}.  If a {@link
      * javax.faces.FacesException} is thrown in either case, extract the
@@ -589,6 +587,7 @@ public final class FacesServlet implements Servlet {
      * @throws ServletException if a servlet error occurs during processing
 
      */
+    @Override
     public void service(ServletRequest req,
                         ServletResponse resp)
         throws IOException, ServletException {
@@ -641,7 +640,6 @@ public final class FacesServlet implements Servlet {
             if (handler.isResourceRequest(context)) {
                 handler.handleResourceRequest(context);
             } else {
-                lifecycle.attachWindow(context);
                 lifecycle.execute(context);
                 lifecycle.render(context);
             }

@@ -46,7 +46,7 @@ import javax.faces.lifecycle.Lifecycle;
 
 
 /**
- * <p><strong class="changed_modified_2_0">FacesContextFactory</strong> 
+ * <p><strong class="changed_modified_2_0 changed_modified_2_2">FacesContextFactory</strong> 
  * is a factory object that creates
  * (if needed) and returns new {@link FacesContext} instances, initialized
  * for the processing of the specified request and response objects.
@@ -84,7 +84,7 @@ public abstract class FacesContextFactory implements FacesWrapper<FacesContextFa
     }
 
     /**
-     * <p><span class="changed_modified_2_0">Create</span> (if needed)
+     * <p><span class="changed_modified_2_0 changed_modified_2_2">Create</span> (if needed)
      * and return a {@link FacesContext} instance that is initialized
      * for the processing of the specified request and response objects,
      * utilizing the specified {@link Lifecycle} instance, for this web
@@ -105,6 +105,12 @@ public abstract class FacesContextFactory implements FacesWrapper<FacesContextFa
      * so the return from that method is what gets returned from a call
      * to {@link FacesContext#getExceptionHandler} on the returned
      * <code>FacesContext</code> instance.</p>
+     *
+     * <p class="changed_added_2_2">The default implementation must call
+     * {@link javax.faces.lifecycle.ClientWindowFactory#getClientWindow} and make it
+     * so the return from that method is what gets returned from a call
+     * to {@link ExternalContext#getClientWindow()} on the returned
+     * <code>ExternalContext</code> instance.</p>
      *
      * @param context In servlet environments, the
      * <code>ServletContext</code> that is associated with this web
