@@ -354,6 +354,9 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                     }   
                 }
                    
+                /**
+                 * @ignore
+                 */
                 function contains(arr, obj) {
                     var returnVal = false;
                     for(var i=0; i<arr.length; i++) {
@@ -494,6 +497,9 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
             }
             // We have to wrap the call in an anon function because of a firefox bug, where this is incorrectly set
             // We need to explicitly call window.eval because of a Chrome peculiarity
+            /**
+             * @ignore
+             */
             var fn = function() {
                 window.eval.call(window,src);
             };
@@ -924,6 +930,9 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                }
         };
 
+        /**
+         * @ignore
+         */
         var propertyToAttribute = function propertyToAttribute(name) {
             if (name === 'className') {
                 return 'class';
@@ -934,10 +943,16 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
             }
         };
 
+        /**
+         * @ignore
+         */
         var isFunctionNative = function isFunctionNative(func) {
             return /^\s*function[^{]+{\s*\[native code\]\s*}\s*$/.test(String(func));
         };
 
+        /**
+         * @ignore
+         */
         var detectAttributes = function detectAttributes(element) {
             //test if 'hasAttribute' method is present and its native code is intact
             //for example, Prototype can add its own implementation if missing
@@ -1497,6 +1512,9 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                     } else if (name === 'style') {
                         target.style.setAttribute('cssText', value, 0);
                     } else if (name.substring(0, 2) === 'on') {
+                        /**
+                         * @ignore
+                         */
                         var fn = function(value) {
                             return function() {
                                 window.execScript(value);
@@ -1655,6 +1673,9 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 return null;
             }
 
+            /**
+             * @ignore
+             */
             function noop() {}
             
             // Set up request/response state callbacks
@@ -2914,6 +2935,9 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
             return result;
         }
 
+        /**
+         * @ignore
+         */
         var getChildForms = function (currentElement) {
             //Special condition no element we return document forms
             //as search parameter, ideal would be to
@@ -2945,6 +2969,9 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
             return targetArr;
         }
         
+        /**
+         * @ignore
+         */
         var fetchWindowIdFromURL = function () {
             var href = window.location.href;
             var windowId = "windowId";

@@ -56,7 +56,7 @@
     <tlib-version>2.2</tlib-version>
     <display-name>Faces Core</display-name>
     <short-name>f</short-name>
-    <uri>http://java.sun.com/jsf/core</uri>
+    <uri>http://xmlns.jcp.org/jsf/core</uri>
 
 
 
@@ -1096,8 +1096,8 @@ viewId.</p>
 
 
 <div class="html4strict" style="font-family: monospace;"><ol><li class="li1"><div class="de1"><span class="sc2"><span class="kw2">&lt;html</span> xmlns=<span class="st0">&quot;http://www.w3.org/1999/xhtml&quot;</span></div></li>
-<li class="li2"><div class="de2">&nbsp; &nbsp; &nbsp; xmlns:ui=<span class="st0">&quot;http://java.sun.com/jsf/facelets&quot;</span></div></li>
-<li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; xmlns:f=<span class="st0">&quot;http://java.sun.com/jsf/core&quot;</span></div></li>
+<li class="li2"><div class="de2">&nbsp; &nbsp; &nbsp; xmlns:ui=<span class="st0">&quot;http://xmlns.jcp.org/jsf/facelets&quot;</span></div></li>
+<li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; xmlns:f=<span class="st0">&quot;http://xmlns.jcp.org/jsf/core&quot;</span></div></li>
 <li class="li2"><div class="de2">&nbsp; &nbsp; &nbsp; xml:<span class="kw3">lang</span>=<span class="st0">&quot;en&quot;</span> <span class="kw3">lang</span>=<span class="st0">&quot;en&quot;</span><span class="kw2">&gt;</span></span></div></li>
 <li class="li1"><div class="de1">&nbsp;</div></li>
 <li class="li2"><div class="de2"><span class="sc2"><span class="kw2">&lt;body&gt;</span></span></div></li>

@@ -66,11 +66,11 @@ public class JspToFaceletsTLD21Generator extends JspTLDGenerator {
     private static Map<String,String> TAG_LIB_SCHEMA_ATTRIBUTES = new HashMap<String, String>();
     static {
         TAG_LIB_SCHEMA_ATTRIBUTES.put("xmlns",
-            "http://xmlns.jcp.org/xml/ns/javaee");
+            "http://java.sun.com/xml/ns/javaee");
         TAG_LIB_SCHEMA_ATTRIBUTES.put("xmlns:xsi",
             "http://www.w3.org/2001/XMLSchema-instance");
         TAG_LIB_SCHEMA_ATTRIBUTES.put("xsi:schemaLocation",
-            "http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-jsptaglibrary_2_1.xsd");
+            "http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd");
         TAG_LIB_SCHEMA_ATTRIBUTES.put("version", JSP_VERSION);
     }
 

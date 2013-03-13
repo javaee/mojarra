@@ -454,10 +454,11 @@ package javax.faces.view.facelets;
  * <strong>localName</strong>, find a matching entry by using the
  * argument {@code tag}'s attributes and the value from the "selector
  * attribute" column in the table in the given order. A selector
- * attribute value of <strong>*</strong> indicates any value. A selector
- * attribute name prefixed with <strong>jsf:</strong> means the tag is treated 
- * as if it were in the {@code
- * http://java.sun.com/jsf} namespace.</p>
+ * attribute value of <strong>*</strong> indicates any value. In the
+ * table, a selector attribute name prefixed with <strong>jsf:</strong>
+ * means the tag is treated as if it were in the {@code
+ * http://xmlns.jcp.org/jsf} namespace.  In actual Facelet pages, the
+ * namespace is what matters, not the prefix.</p>
 
 
  * <p>If no matching entry is found, let

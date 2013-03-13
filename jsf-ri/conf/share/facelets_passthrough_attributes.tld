@@ -73,7 +73,7 @@
     <tlib-version>1.2</tlib-version>
     <display-name>Pass Through Attributes</display-name>
     <short-name>p</short-name>
-    <uri>http://java.sun.com/jsf/passthrough</uri>
+    <uri>http://xmlns.jcp.org/jsf/passthrough</uri>
 
  <tag>
      <description>_</description>

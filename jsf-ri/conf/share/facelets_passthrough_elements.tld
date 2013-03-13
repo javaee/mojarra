@@ -73,7 +73,7 @@
     <tlib-version>1.2</tlib-version>
     <display-name>Pass Through Elements</display-name>
     <short-name>jsf</short-name>
-    <uri>http://java.sun.com/jsf</uri>
+    <uri>http://xmlns.jcp.org/jsf</uri>
 
  <tag>
 
