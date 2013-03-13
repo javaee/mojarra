@@ -388,8 +388,8 @@ public abstract class FlowHandler {
      * component-family <code>javax.faces.OutcomeTarget</code>.  These
      * transitions must happen at the front of the request processing
      * lifecycle due to the HTTP GET based nature of such components.
-     * Therefore, this method is called from {@link
-     * javax.faces.lifecycle.Lifecycle#attachWindow}.</p>
+     * Therefore, this method is called from the restore view phase of
+     * the lifecycle.</p>
 
      * <div class="changed_added_2_2">
 

@@ -155,7 +155,7 @@ public abstract class ResponseStateManager {
      * correctly positioned already.</p>
      * 
      * <p class="changed_added_2_2">Call {@link FacesContext#getViewRoot()}.
-     * Call {@link javax.faces.component.UIComponent#isTransient()}
+     * If {@link javax.faces.component.UIComponent#isTransient()}
      * returns {@code true}, take implementation specific action so that the 
      * following call to {@link #isStateless} returns {@code true} and return.
      * Otherwise, proceed as follows.</p>

@@ -304,14 +304,23 @@ public abstract class ResourceHandler {
 
      * <div class="changed_added_2_2">
 
-     * <p>PENDING(edburns): I think we need to put an additional check
-     * in to avoid returning false hits from this method when a
-     * viewResource happens to be named the same as one of the templates
-     * in a resource library contract.  Perhaps we could set some kind
-     * of flag in the tag handler of all facelet tags that are valid for
-     * using resource library contracts (maybe just ui:composition and
-     * ui:decorate) and make it so the getResourceLibraryContracts part
-     * of this method only takes effect if that flag is set?</p>
+     * <p>The default implementation must look for the resource in the
+     * following places, in this order.</p>
+
+     * <ul>
+
+     * <li><p>Considering resource library contracts (at the locations
+     * specified in the spec prose document section <em>Resource Library
+     * Contracts</em> in the <em>Request Processing Lifecycle</em>
+     * chapter).</p></li>
+
+     * <li><p>Considering the web app root.</p></li>
+
+     *  <li><p>Considering faces flows (at the locations specified in
+     * the spec prose document section <em>Faces Flows</em> in the
+     * <em>Using JSF in Web Applications</em> chapter).</p></li>
+
+     * </ul>
      
      * <p>Call {@link FacesContext#getResourceLibraryContracts}.  If the
      * result is non-{@code null} and not empty, for each value in the
