@@ -70,8 +70,8 @@ public abstract class ClientWindowFactory implements FacesWrapper<ClientWindowFa
     /**
      * <p class="changed_added_2_2">The implementation is responsible
      * for examining the incoming request and extracting the value that must 
-     * be returned from the {@link ClientWindow#getId} method.  If {@link #CLIENT_WINDOW_MODE_PARAM_NAME}
-     * is "none" this method must return {@code null}.  If {@link #CLIENT_WINDOW_MODE_PARAM_NAME}
+     * be returned from the {@link ClientWindow#getId} method.  If {@link ClientWindow#CLIENT_WINDOW_MODE_PARAM_NAME}
+     * is "none" this method must return {@code null}.  If {@link ClientWindow#CLIENT_WINDOW_MODE_PARAM_NAME}
      * is "url" the implementation must first look for a request parameter
      * under the name given by the value of {@link javax.faces.render.ResponseStateManager#CLIENT_WINDOW_PARAM}.
      * If no value is found, look for a request parameter under the name given

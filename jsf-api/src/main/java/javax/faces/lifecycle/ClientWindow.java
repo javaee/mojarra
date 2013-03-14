@@ -81,9 +81,10 @@ import javax.faces.render.ResponseStateManager;
  * lifetime.</p>
 
  * <p>The <code>ClientWindow</code> instance is associated with the
- * incoming request during the {@link Lifecycle#attachWindow} method.
- * This method will cause a new instance of <code>ClientWindow</code> to
- * be created, assigned an id, and passed to {@link
+ * incoming request by virtue of action taken in {@link
+ * javax.faces.context.FacesContextFactory#getFacesContext}.  This
+ * method will cause a new instance of <code>ClientWindow</code> to be
+ * created, assigned an id, and passed to {@link
  * javax.faces.context.ExternalContext#setClientWindow}.</p>
 
  * <p>During state saving, regardless of the window id mode, or state
@@ -142,10 +143,10 @@ public abstract class ClientWindow {
     public abstract Map<String, String> getQueryURLParameters(FacesContext context);
     
     /**
-     * <p class="changed_added_2_2">Return a String value that uniquely 
-     * identifies this <code>ClientWindow</code>
-     * within the scope of the current session.  See {@link #decode} for the
-     * specification of how to derive this value.</p>
+     * <p class="changed_added_2_2">Return a String value that uniquely
+     * identifies this <code>ClientWindow</code> within the scope of the
+     * current session.  See {@link ClientWindowFactory#getClientWindow}
+     * for the specification of how to derive this value.</p>
      * 
      * @since 2.2
      */
