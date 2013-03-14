@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -139,5 +139,32 @@ public class UpdateBean {
         }
         return null;
     }
+
+    public String updateClassAsAttributeName() {
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        ExternalContext extContext = ctx.getExternalContext();
+        if (ctx.getPartialViewContext().isAjaxRequest()) {
+            try {
+                Map attrs = new HashMap();
+                attrs.put("class", "myclass");
+                extContext.setResponseContentType("text/xml");
+                extContext.addResponseHeader("Cache-Control", "no-cache");
+                PartialResponseWriter writer =
+                    ctx.getPartialViewContext().getPartialResponseWriter();
+                writer.startDocument();
+                writer.updateAttributes("form1:foo", attrs);
+                writer.startEval();
+                writer.write("document.getElementById('form1:foo').value = document.getElementById('form1:foo').className;");
+                writer.endEval();
+                writer.endDocument();
+                writer.flush();
+                ctx.responseComplete();
+            } catch (Exception e) {
+                throw new FacesException(e);
+            }
+        }
+        return null;
+    }
+
 
 }
