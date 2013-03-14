@@ -433,7 +433,13 @@ import javax.faces.lifecycle.ClientWindow;
              * If we have a portlet request, start rendering at the view root.
              */
             writer.startUpdate(viewRoot.getClientId(ctx));
-            viewRoot.encodeAll(ctx);
+            viewRoot.encodeBegin(context);
+            if (viewRoot.getChildCount() > 0) {
+                for (UIComponent uiComponent : viewRoot.getChildren()) {
+                    uiComponent.encodeAll(context);
+                }
+            }
+            viewRoot.encodeEnd(context);
             writer.endUpdate();
         }
     }
