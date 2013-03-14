@@ -63,6 +63,21 @@ public abstract class ClientWindowWrapper extends ClientWindow implements FacesW
     public Map<String, String> getQueryURLParameters(FacesContext context) {
         return getWrapped().getQueryURLParameters(context);
     }
+
+    @Override
+    public void disableClientWindowRenderMode(FacesContext context) {
+        getWrapped().disableClientWindowRenderMode(context);
+    }
+
+    @Override
+    public void enableClientWindowRenderMode(FacesContext context) {
+        getWrapped().enableClientWindowRenderMode(context);
+    }
+
+    @Override
+    public boolean isClientWindowRenderModeEnabled(FacesContext context) {
+        return getWrapped().isClientWindowRenderModeEnabled(context);
+    }
     
     
     
