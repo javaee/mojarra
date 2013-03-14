@@ -41,6 +41,7 @@
 package com.sun.faces.context;
 
 
+import com.sun.faces.lifecycle.ClientWindowFactoryImpl;
 import com.sun.faces.util.Util;
 
 import javax.faces.FacesException;
@@ -71,8 +72,14 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
               FactoryFinder.getFactory(FactoryFinder.EXCEPTION_HANDLER_FACTORY);
         externalContextFactory = (ExternalContextFactory)
               FactoryFinder.getFactory(FactoryFinder.EXTERNAL_CONTEXT_FACTORY);
-        clientWindowFactory = (ClientWindowFactory)
+        clientWindowFactory = null;
+        
+        if (Util.isUnitTestModeEnabled()) {
+            clientWindowFactory = new ClientWindowFactoryImpl(false);
+        } else {
+            clientWindowFactory = (ClientWindowFactory)
                 FactoryFinder.getFactory(FactoryFinder.CLIENT_WINDOW_FACTORY);
+        }
 
     }
 

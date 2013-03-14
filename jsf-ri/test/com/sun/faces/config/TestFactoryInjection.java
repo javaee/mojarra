@@ -95,6 +95,7 @@ import com.sun.faces.context.ExceptionHandlerFactoryImpl;
 import com.sun.faces.context.ExternalContextFactoryImpl;
 import com.sun.faces.context.InjectionFacesContextFactory;
 import com.sun.faces.context.ExternalContextImpl;
+import com.sun.faces.lifecycle.ClientWindowFactoryImpl;
 import com.sun.faces.lifecycle.LifecycleImpl;
 import com.sun.faces.renderkit.RenderKitFactoryImpl;
 import org.w3c.dom.Document;
@@ -222,6 +223,9 @@ public class TestFactoryInjection extends ServletFacesTestCase {
         Element externalContextFactory = createElement(d, "external-context-factory");
         factory.appendChild(externalContextFactory);
         externalContextFactory.setTextContent(ExternalContextFactoryImpl.class.getName());
+        Element clientWindowFactory = createElement(d, "client-window-factory");
+        factory.appendChild(clientWindowFactory);
+        clientWindowFactory.setTextContent(ClientWindowFactoryImpl.class.getName());
         Element renderKitFactory = createElement(d, "render-"
                                                     + "kit-factory");
         factory.appendChild(renderKitFactory);
@@ -238,6 +242,7 @@ public class TestFactoryInjection extends ServletFacesTestCase {
         InitFacesContext initContext = new InitFacesContext(sc);
         fcp.process(sc, new DocumentInfo[]{new DocumentInfo(d, null)});
         initContext.release();
+        FacesContext.getCurrentInstance().release();
 
         // now get an FacesContext instance from the Factory and ensure
         // no injection occured.

@@ -57,14 +57,16 @@ import javax.faces.render.ResponseStateManager;
 public class ClientWindowFactoryImpl extends ClientWindowFactory {
     
     private boolean isClientWindowEnabled = false;
-    private WebConfiguration config;
+    private WebConfiguration config = null;
 
     public ClientWindowFactoryImpl() {
         FacesContext context = FacesContext.getCurrentInstance();
-        ExternalContext extContext = context.getExternalContext();
-        config = WebConfiguration.getInstance(extContext);
         context.getApplication().subscribeToEvent(PostConstructApplicationEvent.class,
                          Application.class, new PostConstructApplicationListener());
+    }
+    
+    public ClientWindowFactoryImpl(boolean ignored) {
+        isClientWindowEnabled = false;
     }
     
     private class PostConstructApplicationListener implements SystemEventListener {
@@ -82,6 +84,9 @@ public class ClientWindowFactoryImpl extends ClientWindowFactory {
     }
     
     private void postConstructApplicationInitialization() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext extContext = context.getExternalContext();
+        config = WebConfiguration.getInstance(extContext);
         String optionValue = config.getOptionValue(WebConfiguration.WebContextInitParameter.ClientWindowMode);
         isClientWindowEnabled = (null != optionValue) && !optionValue.equals(WebConfiguration.WebContextInitParameter.ClientWindowMode.getDefaultValue());
     }
