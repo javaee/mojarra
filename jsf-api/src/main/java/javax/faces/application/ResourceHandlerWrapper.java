@@ -120,7 +120,7 @@ public abstract class ResourceHandlerWrapper extends ResourceHandler implements 
      */
 
     @Override
-    public Resource createViewResource(FacesContext context, String resourceName) {
+    public ViewResource createViewResource(FacesContext context, String resourceName) {
         return getWrapped().createViewResource(context, resourceName);
     }
 

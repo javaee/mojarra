@@ -62,7 +62,7 @@ import javax.faces.context.FacesContext;
  *
  * @since 2.0
  */
-public abstract class Resource {
+public abstract class Resource extends ViewResource {
     
     /**
      * <p class="changed_added_2_0">This constant is used as the key in the 
@@ -302,6 +302,7 @@ public abstract class Resource {
      * @return Return an actual <code>URL</code> instance that refers to
      * this resource instance.
      */
+    @Override
     public abstract URL getURL();
 
 

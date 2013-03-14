@@ -340,14 +340,14 @@ public abstract class ResourceHandler {
      * @throws NullPointerException if <code>resourceName</code> is
      *  {@code null}.
 
-     * @return a newly created <code>Resource</code> instance, suitable
+     * @return a newly created {@link ViewResource} instance, suitable
      * for use by the {@link javax.faces.view.ViewDeclarationLanguage}.
      * 
      * @since 2.2
 
      */
     
-    public Resource createViewResource(FacesContext context, String resourceName) {
+    public ViewResource createViewResource(FacesContext context, String resourceName) {
         return context.getApplication().getResourceHandler().createResource(resourceName);
     }
 

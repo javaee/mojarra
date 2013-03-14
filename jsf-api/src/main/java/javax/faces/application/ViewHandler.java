@@ -91,7 +91,7 @@ import javax.faces.view.ViewDeclarationLanguage;
 
 public abstract class ViewHandler {
 
-    private static Logger log = Logger.getLogger("javax.faces.application");
+    private static final Logger log = Logger.getLogger("javax.faces.application");
 
 
     // ------------------------------------------------------ Manifest Constants
