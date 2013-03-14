@@ -1504,8 +1504,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                     }
                 } else { // if it's IE, then quite a bit more work is required
                     if (name === 'class') {
-                        name = 'className';
-                        target.setAttribute(name, value, 0);
+                        target.className = value;
                     } else if (name === "for") {
                         name = 'htmlFor';
                         target.setAttribute(name, value, 0);
