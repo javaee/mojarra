@@ -420,14 +420,18 @@ public abstract class ViewHandler {
     
 
     /**
-     * <p class="changed_modified_2_0">If the value returned from this
+     * <p class="changed_modified_2_0"><span class="changed_modified_2_2">If</span>
+     * the value returned from this
      * method is used as the <code>file</code> argument to the
      * four-argument constructor for <code>java.net.URL</code> (assuming
      * appropriate values are used for the first three arguments), then
      * a client making a request to the <code>toExternalForm()</code> of
      * that <code>URL</code> will select the argument
      * <code>viewId</code> for traversing the JSF lifecycle.  Please see
-     * section JSF.7.6.2 for the complete specification.</p>
+     * section JSF.7.6.2 for the complete specification, 
+     * <span class="changed_added_2_2">especially for details related
+     * to view protection using the {@link javax.faces.render.ResponseStateManager#NON_POSTBACK_VIEW_TOKEN_PARAM}
+     * </span>.</p>
      *
      * @param context {@link FacesContext} for this request
      * @param viewId View identifier of the desired view
