@@ -116,7 +116,7 @@ import javax.faces.event.PostPutFlashValueEvent;
  *
 <code><pre>
 &lt;html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:c="http://java.sun.com/jsp/jstl/core"&gt;
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"&gt;
 &lt;!-- extra code removed --&gt;
   &lt;c:set target="#{flash}" property="foo" value="fooValue" /&gt;
 
@@ -126,7 +126,7 @@ import javax.faces.event.PostPutFlashValueEvent;
  *
 <code><pre>
 &lt;html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"&gt;
+      xmlns:h="http://xmlns.jcp.org/jsf/html"&gt;
 &lt;!-- extra code removed --&gt;
   &lt;h:outputText value="#{flash.foo}" /&gt; will be "fooValue"
   without the quotes.
@@ -157,8 +157,8 @@ import javax.faces.event.PostPutFlashValueEvent;
 
 <code><pre>
 &lt;html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html"&gt;
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"&gt;
 &lt;f:metadata&gt;
   &lt;f:viewParam name="foo" id="foo" value="#{flash.now.foo}" /&gt;
 &lt;/f:metadata&gt;
@@ -213,7 +213,7 @@ public abstract class Flash implements Map<String, Object> {
      *
 <code><pre>
 &lt;html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:c="http://java.sun.com/jsp/jstl/core"&gt;
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"&gt;
 &lt;!-- extra code removed --&gt;
   &lt;c:set target="#{flash}" property="keepMessages" value="true" /&gt;
 
@@ -223,7 +223,7 @@ public abstract class Flash implements Map<String, Object> {
      *
 <code><pre>
 &lt;html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"&gt;
+      xmlns:h="http://xmlns.jcp.org/jsf/html"&gt;
 &lt;!-- extra code removed --&gt;
   &lt;h:messages /&gt; Any messages present on the first page must be displayed on 
   this page.
@@ -291,7 +291,7 @@ public abstract class Flash implements Map<String, Object> {
      *
 <code><pre>
 &lt;html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:c="http://java.sun.com/jsp/jstl/core"&gt;
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"&gt;
 &lt;!-- extra code removed --&gt;
   &lt;c:set target="#{flash}" property="redirect" value="true" /&gt;
 
@@ -324,7 +324,7 @@ public abstract class Flash implements Map<String, Object> {
      *
 <code><pre>
 &lt;html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:c="http://java.sun.com/jsp/jstl/core"&gt;
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"&gt;
 &lt;!-- extra code removed --&gt;
   &lt;c:set target="#{flash.now}" property="bar" value="barValue" /&gt;
 

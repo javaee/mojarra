@@ -72,7 +72,7 @@ package javax.faces.view.facelets;
  * 
  * <li><p>Inspect the attributes of the {@code tag} argument.  If none
  * of the attributes are declared to be in the {@code
- * http://java.sun.com/jsf} namespace, iterate through the list of
+ * http://xmlns.jcp.org/jsf} namespace, iterate through the list of
  * {@code TagDecorator} instances created from the values in the {@link
  * javax.faces.application.ViewHandler#FACELETS_DECORATORS_PARAM_NAME}
  * {@code context-param}, if any.  For each entry, call its {@link
@@ -81,7 +81,7 @@ package javax.faces.view.facelets;
  * must cause the iteration to stop.</p></li>
 
  * <li><p>If one or more of the attributes of the {@code tag} argument
- * are in the {@code http://java.sun.com/jsf} namespace, obtain a
+ * are in the {@code http://xmlns.jcp.org/jsf} namespace, obtain a
  * reference to <strong>decoratedTag</strong> as described in the
  * following steps and iterate through the list of {@link TagDecorator}
  * instances as described in the preceding step, but pass
@@ -470,7 +470,7 @@ package javax.faces.view.facelets;
  * follows.  First, create a new instance of {@link TagAttribute} with
  * the following characteristics: location: from the argument {@code
  * tag}'s location, namespace: {@code
- * http://java.sun.com/jsf/passthrough}, local name: value of {@link
+ * http://xmlns.jcp.org/jsf/passthrough}, local name: value of {@link
  * javax.faces.render.Renderer#PASSTHROUGH_RENDERER_LOCALNAME_KEY},
  * qualified name: same as local name with the "p:" prefix, value: from
  * the argument {@code tag}'s local name.  Let this {@code TagAttribute}
@@ -487,7 +487,7 @@ package javax.faces.view.facelets;
  * argument {@code tag}'s location.</p></li>
 
  * <li><p>If the current attribute's namespace is {@code
- * http://java.sun.com/jsf}, <strong>convertedTagAttribute</strong>'s
+ * http://xmlns.jcp.org/jsf}, <strong>convertedTagAttribute</strong>'s
  * qualified name must be the current attribute's local name and
  * <strong>convertedTagAttribute</strong>'s namespace must be the empty
  * string.  This will have the effect of setting the current attribute
@@ -502,11 +502,11 @@ package javax.faces.view.facelets;
  * markup.</p></li>
 
  * <li><p>Otherwise, assume the current attribute's namespace is {@code
- * http://java.sun.com/jsf/passthrough}.
+ * http://xmlns.jcp.org/jsf/passthrough}.
  * <strong>ConvertedTagAttribute</strong>'s qualified name is the
  * current attribute's local name prefixed by "p:".
  * <strong>convertedTagAttribute</strong>'s namespace must be {@code
- * http://java.sun.com/jsf/passthrough}.</p></li>
+ * http://xmlns.jcp.org/jsf/passthrough}.</p></li>
 
  * </ul>
 
@@ -522,8 +522,8 @@ package javax.faces.view.facelets;
  * <p>location: from the argument {@code tag}'s location.</p>
 
  * <p>namespace: if <strong>targetTag</strong>'s prefix is "h", {@code
- * http://java.sun.com/jsf/html}; if <strong>targetTag</strong>'s
- * prefix is "jsf", {@code http://java.sun.com/jsf}.</p>
+ * http://xmlns.jcp.org/jsf/html}; if <strong>targetTag</strong>'s
+ * prefix is "jsf", {@code http://xmlns.jcp.org/jsf}.</p>
 
  * <p>local name: the local name from the target tag column.</p>
 

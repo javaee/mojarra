@@ -86,7 +86,7 @@ public @interface FacesComponent {
      * <code>createTag = true</code> attribute will be placed into this tag
      * namespace if the namespace attribute is omitted.</p>
      */
-    public static final String NAMESPACE = "http://java.sun.com/jsf/component";
+    public static final String NAMESPACE = "http://xmlns.jcp.org/jsf/component";
 
     /**
      * <p class="changed_added_2_0"><span class="changed_modified_2_2">The</span>
