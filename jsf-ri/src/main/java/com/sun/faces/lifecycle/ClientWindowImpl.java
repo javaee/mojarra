@@ -40,6 +40,7 @@
  */
 package com.sun.faces.lifecycle;
 
+import java.util.Collections;
 import java.util.Map;
 import javax.faces.context.FacesContext;
 import javax.faces.lifecycle.ClientWindow;
@@ -54,7 +55,7 @@ public class ClientWindowImpl extends ClientWindow {
 
     @Override
     public Map<String, String> getQueryURLParameters(FacesContext context) {
-        return null;
+        return Collections.emptyMap();
     }
     
     @Override

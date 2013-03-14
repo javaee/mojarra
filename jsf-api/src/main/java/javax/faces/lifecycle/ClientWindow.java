@@ -130,8 +130,8 @@ public abstract class ClientWindow {
      * to be inserted into the URL.  This guarantees custom {@code ClientWindow} implementations
      * that they will have the opportunity to insert any additional client window specific 
      * information in any case where a URL is generated, such as the rendering
-     * of hyperlinks.  The default implementation of this method returns
-     * the {@code null}.</p>
+     * of hyperlinks.  The returned map must be immutable.  The default implementation of this method returns
+     * the empty map.</p>
      * 
      * 
      * @since 2.2
