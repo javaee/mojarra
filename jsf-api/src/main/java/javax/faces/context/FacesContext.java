@@ -57,7 +57,6 @@ import javax.faces.render.RenderKit;
 import javax.el.ELContext;
 import javax.faces.FactoryFinder;
 import javax.faces.component.UINamingContainer;
-import javax.faces.component.visit.ComponentModificationManager;
 import javax.faces.event.PhaseId;
 
 
@@ -793,30 +792,6 @@ public abstract class FacesContext {
         if (!isCreatedFromValidFactory) {
             return this.currentPhaseIdForInvalidFactoryConstruction;
         }
-        throw new UnsupportedOperationException();
-
-    }
-
-    /**
-     * <p class="changed_added_2_2"> Return the {@link
-     * javax.faces.component.visit.ComponentModificationManager} for
-     * this single run through the JSF request processing lifecycle.</p>
-     *
-     * <p class="changed_added_2_2">The default implementation throws
-     * <code>UnsupportedOperationException</code> and is provided
-     * for the sole purpose of not breaking existing applications that extend
-     * this class.</p>
-     * 
-     * @throws IllegalStateException if this method is called after
-     *  this instance has been released
-     *
-     * @since 2.2
-     */
-    public ComponentModificationManager getComponentModificationManager() {
-        if (defaultFacesContext != null) {
-            return defaultFacesContext.getComponentModificationManager();
-        }
-
         throw new UnsupportedOperationException();
 
     }

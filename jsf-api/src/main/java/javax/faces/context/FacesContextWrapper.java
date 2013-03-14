@@ -52,7 +52,6 @@ import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.ProjectStage;
 import javax.el.ELContext;
-import javax.faces.component.visit.ComponentModificationManager;
 
 /**
  * <p><span class="changed_modified_2_1 changed_modified_2_2">Provides</span> a simple
@@ -472,20 +471,6 @@ public abstract class FacesContextWrapper extends FacesContext implements FacesW
     @Override
     public PhaseId getCurrentPhaseId() {
         return getWrapped().getCurrentPhaseId();
-    }
-    
-    /**
-     * <p class="changed_modified_2_2">The default behavior of this method is to
-     * call {@link FacesContext#getComponentModificationManager}
-     * on the wrapped {@link FacesContext} object.</p>
-     *
-     * @see javax.faces.context.FacesContext#getComponentModificationManager
-     */
-
-    @Override
-    public ComponentModificationManager getComponentModificationManager() {
-        return getWrapped().getComponentModificationManager();
-
     }
     
     /**

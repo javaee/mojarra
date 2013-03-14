@@ -40,12 +40,10 @@
 
 package com.sun.faces.context;
 
-import com.sun.faces.component.visit.ComponentModificationManagerImpl;
 import javax.el.ELContext;
 import javax.el.ELContextListener;
 import javax.el.ELContextEvent;
 import javax.faces.FactoryFinder;
-import javax.faces.component.visit.ComponentModificationManager;
 import javax.faces.context.ExceptionHandler;
 import javax.faces.event.PhaseId;
 import javax.faces.application.*;
@@ -117,10 +115,6 @@ public class FacesContextImpl extends FacesContext {
      * associated with a clientId instance.
      */
     private Map<String, List<FacesMessage>> componentMessageLists;
-    
-    private ComponentModificationManager componentModificationManager;
-
-    // ----------------------------------------------------------- Constructors
 
 
     public FacesContextImpl(ExternalContext ec, Lifecycle lifecycle) {
@@ -550,15 +544,6 @@ public class FacesContextImpl extends FacesContext {
         assertNotReleased();
         return currentPhaseId;
 
-    }
-
-    @Override
-    public ComponentModificationManager getComponentModificationManager() {
-        assertNotReleased();
-        if (componentModificationManager == null) {
-            componentModificationManager = new ComponentModificationManagerImpl();
-        }
-        return componentModificationManager;
     }
     
     

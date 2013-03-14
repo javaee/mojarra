@@ -2,7 +2,7 @@
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -43,67 +43,27 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html">
-<h:head>
-</h:head>
+    <h:head></h:head>
 
-     <script type="text/javascript">
-      var onload_cb = function() {}
-      var statusUpdate = function statusUpdate(data) {
-         var statusArea = document.getElementById("statusArea");
-         var text = statusArea.value;
-         text = text + "Name: "+data.source.id;
-         if (data.type === "event") {
-             text = text +" Event: "+data.status+" ";
-         }
-         statusArea.value = text;
-      }
-    </script>
-
-    <h:form id="myform" enctype="multipart/form-data" prependId="false">
+    <h:form id="form" enctype="multipart/form-data" prependId="false">
+        
+        <p><h:inputText id="text" value="#{fileUploadBean.text}">
+           </h:inputText></p>
+        
         <p><h:inputFile id="file" value="#{fileUploadBean.uploadedFile}"> 
-           <f:validator validatorId="FileValidator" />
-       </h:inputFile>
+             <f:validator validatorId="FileValidator" />
+             <f:ajax execute="@this" render="@form"/>
+           </h:inputFile>
         </p>
        <br/>
        
-       <h:commandButton id="button" value="submit">
-          <f:ajax execute="@all" render="@all" onevent="statusUpdate"/>
-       </h:commandButton>
+       <p id="textOutput">Text: #{fileUploadBean.text}</p>
+       
+       <h:commandButton id="button" value="submit"/>
        
        #{fileUploadBean.fileText}
        
        <p><h:messages id="messages" /></p>
     </h:form>
-
-    <p>
-      <h3> Status:</h3>
-      <textarea id="statusArea" cols="40" rows="10" readonly="readonly" />
-    </p>
-
-    <p>
-      <h3>Testing This Page Manually</h3>
-      <ul>
-      <li>Press the <i>Browse...</i> button</li>
-      <li>Navigate to <i>basic</i> directory if not already there.</li>
-      <li>Select <i>inputFileSuccess.txt</i></li>
-      <li>Press the <i>Submit</i> button.</li>
-      <li>You should see the text: <i>This file contains the string JSR-344 and will be successfully set into the model. </i></li>
-      </ul> 
-    </p>
-    <p>
-      <ul>
-      <li>Press the <i>Browse...</i> button</li>
-      <li>Navigate to <i>basic</i> directory if not already there.</li>
-      <li>Select <i>inputFileFailure.txt</i></li>
-      <li>Press the <i>Submit</i> button.</li>
-      <li>You should see the text: <i>Invalid file. File must contain special string .</i></li>
-      </ul> 
-    </p>
-    <p>
-    In both cases, you should end up with a message in the Status box: <i>Name: button Event: success</i><br/>
-    This inicates the Ajax request has gone through the JSF Ajax lifecycle and is receiving the standard<br/>
-    Ajax lifecycle events.
-    </p>
-
 
 </html>
