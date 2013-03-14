@@ -557,6 +557,7 @@ public class ExternalContextImpl extends ExternalContext {
      * @see ExternalContext#encodeActionURL(String)
      */
     public String encodeActionURL(String url) {
+        Util.notNull("url", url);
         FacesContext context = FacesContext.getCurrentInstance();
         ClientWindow  cw = context.getExternalContext().getClientWindow();
         boolean appendClientWindow = false;
