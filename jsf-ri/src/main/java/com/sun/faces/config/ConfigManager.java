@@ -127,7 +127,7 @@ import java.util.ServiceLoader;
 import javax.el.ELContext;
 import javax.el.ELContextEvent;
 import javax.el.ELContextListener;
-import javax.faces.ApplicationConfigurationResourceDocumentPopulator;
+import javax.faces.application.ApplicationConfigurationPopulator;
 import javax.faces.component.UIViewRoot;
 import org.w3c.dom.*;
 import org.xml.sax.SAXParseException;
@@ -383,8 +383,8 @@ public class ConfigManager {
                     ((HighAvailabilityEnabler)containerConnector).enableHighAvailability(sc);
                 }
 
-                ServiceLoader<ApplicationConfigurationResourceDocumentPopulator> populators = 
-                        ServiceLoader.load(ApplicationConfigurationResourceDocumentPopulator.class);
+                ServiceLoader<ApplicationConfigurationPopulator> populators = 
+                        ServiceLoader.load(ApplicationConfigurationPopulator.class);
                 Document newDoc;
                 DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
                 dbf.setNamespaceAware(true);
@@ -392,10 +392,10 @@ public class ConfigManager {
                 DOMImplementation domImpl = builder.getDOMImplementation();
                 List<DocumentInfo> programmaticDocuments = new ArrayList<DocumentInfo>();
                 DocumentInfo newDocInfo;
-                for (ApplicationConfigurationResourceDocumentPopulator pop : populators) {
+                for (ApplicationConfigurationPopulator pop : populators) {
                     newDoc = domImpl.createDocument(RIConstants.JAVAEE_XMLNS, "faces-config", null);
                     try {
-                        pop.populateApplicationConfigurationResource(newDoc);
+                        pop.populateApplicationConfiguration(newDoc);
                         newDocInfo = new DocumentInfo(newDoc, null);
                         programmaticDocuments.add(newDocInfo);
                     } catch (Throwable e) {

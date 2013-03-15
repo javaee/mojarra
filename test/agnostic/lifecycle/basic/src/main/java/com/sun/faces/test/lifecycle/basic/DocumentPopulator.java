@@ -40,12 +40,12 @@
  */
 package com.sun.faces.test.lifecycle.basic;
 
-import javax.faces.ApplicationConfigurationResourceDocumentPopulator;
+import javax.faces.application.ApplicationConfigurationPopulator;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-public class DocumentPopulator extends ApplicationConfigurationResourceDocumentPopulator {
+public class DocumentPopulator extends ApplicationConfigurationPopulator {
     
     /**
      * <p>/faces-config/lifecycle</p>
@@ -58,7 +58,7 @@ public class DocumentPopulator extends ApplicationConfigurationResourceDocumentP
     private static final String PHASE_LISTENER = "phase-listener";
 
     @Override
-    public void populateApplicationConfigurationResource(Document document) {
+    public void populateApplicationConfiguration(Document document) {
         Element documentElement = document.getDocumentElement();
         String namespace = documentElement.getNamespaceURI();
         final String expectedNamespaceURI = "http://xmlns.jcp.org/xml/ns/javaee";

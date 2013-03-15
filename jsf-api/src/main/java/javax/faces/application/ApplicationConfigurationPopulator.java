@@ -38,7 +38,7 @@
  * holder.
 
  */
-package javax.faces;
+package javax.faces.application;
 
 import org.w3c.dom.Document;
 
@@ -53,14 +53,14 @@ import org.w3c.dom.Document;
  * @since 2.2
  * 
  */
-public abstract class ApplicationConfigurationResourceDocumentPopulator {
+public abstract class ApplicationConfigurationPopulator {
     
     /**
      * <p class="changed_added_2_2">Service providers that implement
      * this service must be called by the JSF runtime
      * exactly once for each implementation, at startup, before any requests have 
      * been serviced.  Before calling the 
-     * {@link #populateApplicationConfigurationResource} method,
+     * {@link #populateApplicationConfiguration} method,
      * the runtime must ensure that the {@code Document} argument is empty aside
      * from being pre-configured to be in the proper namespace for an
      * Application Configuration Resources file: 
@@ -92,6 +92,6 @@ public abstract class ApplicationConfigurationResourceDocumentPopulator {
      * @since 2.2
      */
     
-    public abstract void populateApplicationConfigurationResource(Document toPopulate);
+    public abstract void populateApplicationConfiguration(Document toPopulate);
     
 }
