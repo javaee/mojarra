@@ -95,10 +95,9 @@ public abstract class ComponentSystemEvent extends SystemEvent {
     }
 
     /**
-     * <p class="changed_added_2_2">Before calling the corresponding method
-     * on the superclass, verify that there is a current component so
-     * that EL expressions that start with #{component} or #{cc} operate
-     * as expected.</p>
+     * <p class="changed_added_2_2">Broadcast this event instance to 
+     * the specified {@link FacesListener} by calling the superclass's
+     * <code>processListener()</code> implementation.</p>
      *
      * @param listener {@link FacesListener} to evaluate
      * @since 2.2

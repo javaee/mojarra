@@ -149,6 +149,7 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
      */
     private static final String[] FACTORY_NAMES = {
           FactoryFinder.APPLICATION_FACTORY,
+          FactoryFinder.CLIENT_WINDOW_FACTORY,
           FactoryFinder.EXCEPTION_HANDLER_FACTORY,
           FactoryFinder.EXTERNAL_CONTEXT_FACTORY,
           FactoryFinder.FACES_CONTEXT_FACTORY,          

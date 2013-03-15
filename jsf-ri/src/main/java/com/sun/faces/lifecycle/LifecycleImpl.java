@@ -40,6 +40,8 @@
 
 package com.sun.faces.lifecycle;
 
+import com.sun.faces.util.Util;
+
 import com.sun.faces.config.WebConfiguration;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -47,6 +49,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.faces.FacesException;
+import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.Lifecycle;
@@ -60,7 +63,7 @@ import javax.faces.event.PostConstructApplicationEvent;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 import javax.faces.lifecycle.ClientWindow;
-
+import javax.faces.lifecycle.ClientWindowFactory;
 
 /**
  * <p><b>LifecycleImpl</b> is the stock implementation of the standard
@@ -130,6 +133,47 @@ public class LifecycleImpl extends Lifecycle {
     }
 
     // ------------------------------------------------------- Lifecycle Methods
+
+    @Override
+    public void attachWindow(FacesContext context) {
+        if (!isClientWindowEnabled) {
+            return;
+        }
+        if (context == null) {
+            throw new NullPointerException
+                (MessageUtils.getExceptionMessageString
+                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+        }
+
+        ExternalContext extContext = context.getExternalContext();
+        ClientWindow myWindow = extContext.getClientWindow();
+        if (null == myWindow) {
+            myWindow = createClientWindow(context);
+            if (null != myWindow) {
+                myWindow.decode(context);
+                extContext.setClientWindow(myWindow);
+            }
+        }
+        
+        
+        // If you need to do the "send down the HTML" trick, be sure to
+        // mark responseComplete true after doing so.  That way
+        // the remaining lifecycle methods will not execute.
+        
+    }
+
+    private ClientWindow createClientWindow(FacesContext context) {
+        ClientWindowFactory clientWindowFactory = null;
+
+        if (Util.isUnitTestModeEnabled()) {
+            clientWindowFactory = new ClientWindowFactoryImpl(false);
+        } else {
+            clientWindowFactory = (ClientWindowFactory)
+                FactoryFinder.getFactory(FactoryFinder.CLIENT_WINDOW_FACTORY);
+        }
+
+        return clientWindowFactory.getClientWindow(context);
+    }
 
     // Execute the phases up to but not including Render Response
     public void execute(FacesContext context) throws FacesException {

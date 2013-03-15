@@ -579,6 +579,7 @@ public class ExternalContextImpl extends ExternalContext {
                 Map<String, String> additionalParams = cw.getQueryURLParameters(context);
                 if (null != additionalParams) {
                     for (Map.Entry<String, String> cur : additionalParams.entrySet()) {
+                        builder.append(UrlBuilder.PARAMETER_NAME_VALUE_SEPARATOR);
                         builder.append(cur.getKey()).
                                 append(UrlBuilder.PARAMETER_NAME_VALUE_SEPARATOR).
                                 append(cur.getValue());                        

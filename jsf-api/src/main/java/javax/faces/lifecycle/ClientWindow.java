@@ -81,10 +81,9 @@ import javax.faces.render.ResponseStateManager;
  * lifetime.</p>
 
  * <p>The <code>ClientWindow</code> instance is associated with the
- * incoming request by virtue of action taken in {@link
- * javax.faces.context.FacesContextFactory#getFacesContext}.  This
- * method will cause a new instance of <code>ClientWindow</code> to be
- * created, assigned an id, and passed to {@link
+ * incoming request during the {@link Lifecycle#attachWindow} method.
+ * This method will cause a new instance of <code>ClientWindow</code> to
+ * be created, assigned an id, and passed to {@link
  * javax.faces.context.ExternalContext#setClientWindow}.</p>
 
  * <p>During state saving, regardless of the window id mode, or state
@@ -141,17 +140,41 @@ public abstract class ClientWindow {
      */
     
     public abstract Map<String, String> getQueryURLParameters(FacesContext context);
-    
+
     /**
-     * <p class="changed_added_2_2">Return a String value that uniquely
-     * identifies this <code>ClientWindow</code> within the scope of the
-     * current session.  See {@link ClientWindowFactory#getClientWindow}
-     * for the specification of how to derive this value.</p>
+     * <p class="changed_added_2_2">Return a String value that uniquely 
+     * identifies this <code>ClientWindow</code>
+     * within the scope of the current session.  See {@link #decode} for the
+     * specification of how to derive this value.</p>
      * 
      * @since 2.2
      */
     
     public abstract String getId();
+    
+    /**
+     * <p class="changed_added_2_2">The implementation is responsible
+     * for examining the incoming request and extracting the value that must 
+     * be returned from the {@link #getId} method.  If {@link #CLIENT_WINDOW_MODE_PARAM_NAME}
+     * is "none" this method must not be invoked.  If {@link #CLIENT_WINDOW_MODE_PARAM_NAME}
+     * is "url" the implementation must first look for a request parameter
+     * under the name given by the value of {@link javax.faces.render.ResponseStateManager#CLIENT_WINDOW_PARAM}.
+     * If no value is found, look for a request parameter under the name given
+     * by the value of {@link javax.faces.render.ResponseStateManager#CLIENT_WINDOW_URL_PARAM}.
+     * If no value is found, fabricate an id that uniquely identifies this
+     * <code>ClientWindow</code> within the scope of the current session.  This
+     * value must be encrypted with a key stored in the http session and made 
+     * available to return from the {@link #getId} method.  The value must be
+     * suitable for inclusion as a hidden field or query parameter.
+     * If a value is found, decrypt it using the key from the session and 
+     * make it available for return from {@link #getId}.</p>
+     * 
+     * @param context the {@link FacesContext} for this request.
+     * 
+     * @since 2.2
+     */
+    
+    public abstract void decode(FacesContext context);
     
     private static final String PER_USE_CLIENT_WINDOW_URL_QUERY_PARAMETER_DISABLED_KEY = 
             "javax.faces.lifecycle.ClientWindowRenderModeEnablement";

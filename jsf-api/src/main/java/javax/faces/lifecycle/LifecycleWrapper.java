@@ -92,5 +92,8 @@ public abstract class LifecycleWrapper extends Lifecycle implements FacesWrapper
         getWrapped().render(context);
     }
 
-    
+    @Override
+    public void attachWindow(FacesContext context) {
+        getWrapped().attachWindow(context);
+    }
 }

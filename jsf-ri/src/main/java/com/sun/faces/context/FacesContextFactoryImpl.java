@@ -41,7 +41,6 @@
 package com.sun.faces.context;
 
 
-import com.sun.faces.lifecycle.ClientWindowFactoryImpl;
 import com.sun.faces.util.Util;
 
 import javax.faces.FacesException;
@@ -50,8 +49,6 @@ import javax.faces.context.ExceptionHandlerFactory;
 import javax.faces.context.ExternalContextFactory;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
-import javax.faces.lifecycle.ClientWindow;
-import javax.faces.lifecycle.ClientWindowFactory;
 import javax.faces.lifecycle.Lifecycle;
 
 public class FacesContextFactoryImpl extends FacesContextFactory {
@@ -60,7 +57,6 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
 
     private ExceptionHandlerFactory exceptionHandlerFactory;
     private ExternalContextFactory externalContextFactory;
-    private ClientWindowFactory clientWindowFactory;
 
 
     // ------------------------------------------------------------ Constructors
@@ -72,14 +68,6 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
               FactoryFinder.getFactory(FactoryFinder.EXCEPTION_HANDLER_FACTORY);
         externalContextFactory = (ExternalContextFactory)
               FactoryFinder.getFactory(FactoryFinder.EXTERNAL_CONTEXT_FACTORY);
-        clientWindowFactory = null;
-        
-        if (Util.isUnitTestModeEnabled()) {
-            clientWindowFactory = new ClientWindowFactoryImpl(false);
-        } else {
-            clientWindowFactory = (ClientWindowFactory)
-                FactoryFinder.getFactory(FactoryFinder.CLIENT_WINDOW_FACTORY);
-        }
 
     }
 
@@ -105,8 +93,6 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
                   lifecycle);
 
         ctx.setExceptionHandler(exceptionHandlerFactory.getExceptionHandler());
-        ClientWindow cw = clientWindowFactory.getClientWindow(ctx);
-        ctx.getExternalContext().setClientWindow(cw);
 
         return ctx;
         

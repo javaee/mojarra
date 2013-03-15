@@ -79,6 +79,10 @@ public abstract class ClientWindowWrapper extends ClientWindow implements FacesW
         return getWrapped().isClientWindowRenderModeEnabled(context);
     }
     
-    
+    @Override
+    public void decode(FacesContext context) {
+        getWrapped().decode(context);
+    }
+
     
 }
