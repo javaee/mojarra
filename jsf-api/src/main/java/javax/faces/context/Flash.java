@@ -185,7 +185,7 @@ public abstract class Flash implements Map<String, Object> {
     /** <p class="changed_added_2_2">Because <code>null</code>
      * values are not allowed as the source for subclasses of <code>EventObject</code>,
      * such as {@link PostKeepFlashValueEvent} and {@link PostPutFlashValueEvent}, 
-     * this value is substituted for <code>null</code> in the case when a 
+     * this value is substituted for <code>null</code> as the source in the case when a 
      * <code>null</code> value is put to or kept in the flash.
      */
     public static final String NULL_VALUE = "javax.faces.context.Flash.NULL_VALUE";
