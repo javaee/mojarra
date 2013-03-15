@@ -294,81 +294,131 @@ public class RestoreViewPhase extends Phase {
         
         Set<String> urlPatterns = viewHandler.getProtectedViewsUnmodifiable();
         // Implement section 12.1 of the Servlet spec.
-        boolean currentViewIsProtected = false;
-        for (String cur : urlPatterns) {
-            if (cur.equals(viewId)) {
-                currentViewIsProtected = true;
-            }
-            if (currentViewIsProtected) {
-                break;
-            }
-        }
-        
+        boolean currentViewIsProtected = isProtectedView(viewId, urlPatterns);       
         if (currentViewIsProtected) {
             ExternalContext extContext = context.getExternalContext();
             Map<String, String> headers = extContext.getRequestHeaderMap();
+            
+            //Check the token
+            String rkId = viewHandler.calculateRenderKitId(context);
+            ResponseStateManager rsm = RenderKitUtils.getResponseStateManager(context, rkId);
+            String incomingSecretKeyValue = extContext.getRequestParameterMap().
+                get(ResponseStateManager.NON_POSTBACK_VIEW_TOKEN_PARAM);
+            String correctSecretKeyValue = rsm.getCryptographicallyStrongTokenFromSession(context);
+            if (null == incomingSecretKeyValue || 
+                !correctSecretKeyValue.equals(incomingSecretKeyValue)) {
+                throw new ProtectedViewException();
+            }
+            String sep = System.getProperty("file.separator");
+            // Check the referer header
             if (headers.containsKey("Referer")) {
                 String referer = headers.get("Referer");
-                boolean refererIsInProtectedSet = false;
-                for (String cur : urlPatterns) {
-                    if (cur.equals(referer)) {
-                        refererIsInProtectedSet = true;
-                    }
-                    if (refererIsInProtectedSet) {
-                        break;
-                    }
-                }
+                boolean refererIsInProtectedSet = isProtectedView(referer, urlPatterns);
                 if (!refererIsInProtectedSet) {
-//                    boolean isAbsoluteURI = referer.matches("^[a-z]+://.*");
-//                    if (!isAbsoluteURI) {
-//                        // PENDING real implementation must make the value of
-//                        // referer suitable for passing to the ctor for URI()
-//                    }
-                    URI uri = null;
-                    boolean hostsMatch = false,
-                            portsMatch = false,
-                            contextPathsMatch = false,
-                            refererOriginatesInThisWebapp = false;
+                    boolean refererOriginatesInThisWebapp = false;
                     try {
-                        uri = new URI(referer);
-                        hostsMatch = uri.getHost().equals(extContext.getRequestServerName());
-                        portsMatch = uri.getPort() == extContext.getRequestServerPort();
-                        contextPathsMatch = uri.getPath().contains(extContext.getApplicationContextPath());
-
-                    } catch (URISyntaxException use) {
-                        throw new ProtectedViewException(use);
+                        refererOriginatesInThisWebapp = originatesInWebapp(context, referer, vdl);
+                    } catch(URISyntaxException ue) {
+                        throw new ProtectedViewException(ue);    
                     }
-                    refererOriginatesInThisWebapp = hostsMatch && portsMatch && contextPathsMatch;
                     if (!refererOriginatesInThisWebapp) {
                         String message = FacesLogger.LIFECYCLE.interpolateMessage(context, 
-                                "jsf.lifecycle.invalid.referer", new String [] { referer, viewId });
+                            "jsf.lifecycle.invalid.referer", new String [] { referer, viewId });
                         if (LOGGER.isLoggable(Level.SEVERE)) {
                             LOGGER.log(Level.SEVERE, message);
                         }
-                        // PENDING() use vdl.viewExists() to see if the view originates 
-                        // in this app. For now just throw the exception
-                        throw new ProtectedViewException(message);
+                        throw new ProtectedViewException(message);                
                     }
-
                 }
-            } else {
-                // We do not have a Referer header.  Fall
-                // back to inspecting the incoming request
-                String rkId = viewHandler.calculateRenderKitId(context);
-                ResponseStateManager rsm = RenderKitUtils.getResponseStateManager(context, rkId);
-                String incomingSecretKeyValue = extContext.getRequestParameterMap().
-                        get(ResponseStateManager.NON_POSTBACK_VIEW_TOKEN_PARAM);
-                String correctSecretKeyValue = rsm.getCryptographicallyStrongTokenFromSession(context);
-                if (null == incomingSecretKeyValue || 
-                    !correctSecretKeyValue.equals(incomingSecretKeyValue)) {
-                    throw new ProtectedViewException();
-                }
-                
             }
-
+            // Check the origin header
+            if (headers.containsKey("Origin")) {
+                String origin = headers.get("Origin");
+                boolean originIsInProtectedSet = isProtectedView(origin, urlPatterns);
+                if (!originIsInProtectedSet) {
+                    boolean originOriginatesInThisWebapp = false;
+                    try {
+                        originOriginatesInThisWebapp = originatesInWebapp(context, origin, vdl);
+                    } catch(URISyntaxException ue) {
+                        throw new ProtectedViewException(ue);    
+                    }
+                    if (!originOriginatesInThisWebapp) {
+                        String message = FacesLogger.LIFECYCLE.interpolateMessage(context, 
+                            "jsf.lifecycle.invalid.origin", new String [] { origin, viewId });
+                        if (LOGGER.isLoggable(Level.SEVERE)) {
+                            LOGGER.log(Level.SEVERE, message);
+                        }
+                        throw new ProtectedViewException(message);                
+                    }
+                }
+            }
         }
+    }
+    
+    private boolean isProtectedView(String viewToCheck, Set<String>urlPatterns) {
+        boolean isProtected = false;
+        for (String cur : urlPatterns) {
+            if (cur.equals(viewToCheck)) {
+                isProtected = true;
+                break;
+            }
+        }       
+        return isProtected;
+    }
+    
+    private boolean originatesInWebapp(FacesContext context, String view, ViewDeclarationLanguage vdl) throws URISyntaxException {
+        boolean doesOriginate = false;
+        ExternalContext extContext = context.getExternalContext();
+        String sep = System.getProperty("file.separator");
+        URI uri = null;
+        String path = null;
+        boolean isAbsoluteURI = view.matches("^[a-z]+://.*");
+        if (!isAbsoluteURI) {
+            URI absoluteURI = null;
+            URI relativeURI = null;
+            String base = extContext.getRequestScheme() + ":" +
+                sep + sep + extContext.getRequestServerName() +
+                ":" + extContext.getRequestServerPort();
+                absoluteURI = new URI(base);
+                relativeURI = new URI(view);
+                uri = absoluteURI.resolve(relativeURI);  
+        }
+        boolean hostsMatch = false,
+            portsMatch = false,
+            contextPathsMatch = false,
+            originatesInThisWebapp = false;
+            
+        if (null == uri) {
+            uri = new URI(view);
+        }
+        if (null == uri.getHost()) {
+            hostsMatch = false;
+        } else {
+            hostsMatch = uri.getHost().equals(extContext.getRequestServerName());    
+        }
+        if (-1 == uri.getPort()) {
+            portsMatch = false;
+        } else {
+            portsMatch = uri.getPort() == extContext.getRequestServerPort();
+        }
+        path = uri.getPath();
+        contextPathsMatch = path.contains(extContext.getApplicationContextPath());
+            
+        doesOriginate = hostsMatch && portsMatch && contextPathsMatch;
         
-        
+        if (!doesOriginate) {
+            // Last chance view originates in this web app.
+            int idx = path.lastIndexOf(sep);
+            if (-1 != idx) {
+                path = path.substring(idx);
+            } 
+            if (null == path || !vdl.viewExists(context, path)) {
+                doesOriginate = false;
+            }    else {
+                doesOriginate = true;
+            }
+        }
+        return doesOriginate;      
     }
     
     private void deliverPostRestoreStateEvent(FacesContext facesContext) throws FacesException {

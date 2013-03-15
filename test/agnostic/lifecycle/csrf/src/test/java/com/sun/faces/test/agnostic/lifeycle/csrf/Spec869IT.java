@@ -44,7 +44,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.WebRequest;
+import com.gargoylesoftware.htmlunit.WebResponse;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+
+import java.net.URL;
 
 import static org.junit.Assert.assertTrue;
 
@@ -80,4 +84,61 @@ public class Spec869IT {
         assertTrue(pageText.contains("javax.faces.application.ProtectedViewException"));
         
     }
+
+    // Tests a request with an invalid referer header request parameter.
+    @Test
+    public void testBadRefererCSRF() throws Exception {
+        webClient.removeRequestHeader("Referer");
+        webClient.addRequestHeader("Referer", "foobar");
+        webClient.setThrowExceptionOnFailingStatusCode(false);
+        HtmlPage page = webClient.getPage(webUrl);
+        HtmlButtonInput button = (HtmlButtonInput) page.getElementById("button");
+        page = button.click();
+        String pageText = page.getBody().asText();
+        assertTrue(pageText.contains("javax.faces.application.ProtectedViewException"));
+    }
+
+    // Tests a request with an invalid origin header request parameter.
+    @Test
+    public void testBadOriginCSRF() throws Exception {
+        webClient.removeRequestHeader("Origin");
+        webClient.addRequestHeader("Origin", "foobar");
+        webClient.setThrowExceptionOnFailingStatusCode(false);
+        HtmlPage page = webClient.getPage(webUrl);
+        HtmlButtonInput button = (HtmlButtonInput) page.getElementById("button");
+        page = button.click();
+        String pageText = page.getBody().asText();
+        assertTrue(pageText.contains("javax.faces.application.ProtectedViewException"));
+    }
+
+    // Tests a request with a valid referer header request parameter.
+    // In this case the referer is an unprotected page, but it is the originating
+    // page in this webapp (for the protected page).
+    @Test
+    public void testGoodRefererCSRF() throws Exception {
+        webClient.removeRequestHeader("Referer");
+        webClient.addRequestHeader("Referer", "i_spec_869_war.xhtml");
+        webClient.setThrowExceptionOnFailingStatusCode(false);
+        HtmlPage page = webClient.getPage(webUrl);
+        HtmlButtonInput button = (HtmlButtonInput) page.getElementById("button");
+        page = button.click();
+        String pageText = page.getBody().asText();
+        assertTrue(!pageText.contains("javax.faces.application.ProtectedViewException"));
+    }
+
+    // Tests a request with a valid origin header request parameter.
+    // In this case the origin is an unprotected page, but it is the originating
+    // page in this webapp (for the protected page).
+    @Test
+    public void testGoodOriginCSRF() throws Exception {
+        webClient.removeRequestHeader("Origin");
+        webClient.addRequestHeader("Origin", "i_spec_869_war.xhtml");
+        webClient.setThrowExceptionOnFailingStatusCode(false);
+        HtmlPage page = webClient.getPage(webUrl);
+        HtmlButtonInput button = (HtmlButtonInput) page.getElementById("button");
+        page = button.click();
+        String pageText = page.getBody().asText();
+        assertTrue(!pageText.contains("javax.faces.application.ProtectedViewException"));
+    }
+
 }
