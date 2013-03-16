@@ -39,16 +39,14 @@
  */
 package com.sun.faces.test.agnostic.lifeycle.csrf;
 
+import org.junit.Ignore;
 import com.gargoylesoftware.htmlunit.html.HtmlButtonInput;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.WebRequest;
-import com.gargoylesoftware.htmlunit.WebResponse;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
-import java.net.URL;
 
 import static org.junit.Assert.assertTrue;
 
@@ -87,6 +85,7 @@ public class Spec869IT {
 
     // Tests a request with an invalid referer header request parameter.
     @Test
+    @Ignore
     public void testBadRefererCSRF() throws Exception {
         webClient.removeRequestHeader("Referer");
         webClient.addRequestHeader("Referer", "foobar");
@@ -100,6 +99,7 @@ public class Spec869IT {
 
     // Tests a request with an invalid origin header request parameter.
     @Test
+    @Ignore
     public void testBadOriginCSRF() throws Exception {
         webClient.removeRequestHeader("Origin");
         webClient.addRequestHeader("Origin", "foobar");
