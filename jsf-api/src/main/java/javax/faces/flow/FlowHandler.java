@@ -254,7 +254,7 @@ public abstract class FlowHandler {
      * 
      * <div class="changed_added_2_2">
      * 
-     * <p>If {@link #setReturnMode} had been called with {@code true} as the
+     * <p>If {@link #pushReturnMode} had been called with {@code true} as the
      * argument before invoking this method, return the preceding flow on 
      * the stack instead of the actual current flow, or {@code null} if there 
      * is no preceding flow.  Otherwise, return the current flow.</p>
@@ -296,9 +296,9 @@ public abstract class FlowHandler {
     /**
      * <p class="changed_added_2_2">Enable the correct handling of navigation
      * when processing a return node.  The default {@link javax.faces.application.NavigationHandler}
-     * specification requires calling this method with {@code true} before processing
-     * the navigation rules for the flow return, and calling this method with
-     * {@code false}, from a {@code finally} block, immediately afterward.</p>
+     * specification requires calling this method before processing
+     * the navigation rules for the flow return, and calling {@link #popReturnMode}, 
+     * from a {@code finally} block, immediately afterward.</p>
      * 
      * @param context the {@code FacesContext} for the current request.
 
@@ -309,7 +309,25 @@ public abstract class FlowHandler {
      * @since 2.2
      */
     
-    public abstract void setReturnMode(FacesContext context, boolean returnMode);
+    public abstract void pushReturnMode(FacesContext context);
+
+    /**
+     * <p class="changed_added_2_2">Enable the correct handling of navigation
+     * when processing a return node.  The default {@link javax.faces.application.NavigationHandler}
+     * specification requires calling this method from a {@code finally} block, 
+     * immediately attempting to process the navigation rules in the context
+     * of a flow return.</p>
+     * 
+     * @param context the {@code FacesContext} for the current request.
+
+     * @param returnMode the return mode for the current flow.
+     * 
+     * @throws NullPointerException if {@code context} is {@code null}.
+     * 
+     * @since 2.2
+     */
+    
+    public abstract void popReturnMode(FacesContext context);
     
     /**
      * <p class="changed_added_2_2">Perform a transition in the flow

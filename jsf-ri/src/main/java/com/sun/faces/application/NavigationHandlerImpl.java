@@ -895,7 +895,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                 String fromOutcome = ((ReturnNode)node).getFromOutcome(context);
                 FlowHandler flowHandler = context.getApplication().getFlowHandler();
                 try {
-                    flowHandler.setReturnMode(context, true);
+                    flowHandler.pushReturnMode(context);
                     result = getViewId(context, fromAction, fromOutcome, FlowHandler.NULL_FLOW);
                     // We are in a return node, but no result can be found from that
                     // node.  Show the last displayed viewId from the preceding flow.
@@ -921,7 +921,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                     }
                 }
                 finally {
-                    flowHandler.setReturnMode(context, false);
+                    flowHandler.popReturnMode(context);
                 }
                 
             }
@@ -1058,7 +1058,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             if (null != returnNode) {
                 String fromOutcome = returnNode.getFromOutcome(context);
                 try {
-                    flowHandler.setReturnMode(context, true);
+                    flowHandler.pushReturnMode(context);
                     result = getViewId(context, fromAction, fromOutcome, FlowHandler.NULL_FLOW);
                     // We are in a return node, but no result can be found from that
                     // node.  Show the last displayed viewId from the preceding flow.
@@ -1084,7 +1084,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                     }
                 }
                 finally {
-                    flowHandler.setReturnMode(context, false);
+                    flowHandler.popReturnMode(context);
                 }
             }
         }

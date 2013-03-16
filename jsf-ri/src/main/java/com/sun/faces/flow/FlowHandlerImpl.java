@@ -171,13 +171,16 @@ public class FlowHandlerImpl extends FlowHandler {
         }
         Flow result = null;
         FlowDeque<Flow> flowStack = getFlowStack(context);
-        if (flowStack.isReturnMode()) {
+        int returnDepth = flowStack.getReturnDepth();
+        if (0 < returnDepth) {
             Iterator<Flow> stackIter = flowStack.iterator();
-            if (null != stackIter && stackIter.hasNext()) {
-                stackIter.next();
-                if (stackIter.hasNext()) {
+            int i = 0;
+            stackIter.next();
+            if (stackIter.hasNext()) {
+                do {
                     result = stackIter.next();
-                }
+                    i++;
+                } while (i < returnDepth);
             }
         } else {
             result = getFlowStack(context).peekFirst();
@@ -197,11 +200,18 @@ public class FlowHandlerImpl extends FlowHandler {
     
 
     @Override
-    public void setReturnMode(FacesContext context, boolean returnMode) {
+    public void pushReturnMode(FacesContext context) {
+        Util.notNull("context", context);
         FlowDeque<Flow> flowStack = getFlowStack(context);
-        flowStack.setReturnMode(returnMode);
+        flowStack.pushReturnMode();
     }
 
+    @Override
+    public void popReturnMode(FacesContext context) {
+        Util.notNull("context", context);
+        FlowDeque<Flow> flowStack = getFlowStack(context);
+        flowStack.popReturnMode();
+    }
     // We need a method that takes a view id of a view that is in a flow
     // and makes the system "enter" the flow.
     
@@ -381,7 +391,7 @@ public class FlowHandlerImpl extends FlowHandler {
     
     private static class FlowDeque<E> implements Iterable<E> {
         
-        private boolean returnMode = false;
+        private int returnDepth = 0;
         private ArrayDeque<E> data;
         private static class RideAlong {
             String lastDisplayedViewId;
@@ -420,13 +430,16 @@ public class FlowHandlerImpl extends FlowHandler {
         public String peekLastDisplayedViewId() {
             String result = null;
             RideAlong helper = null;
-            if (this.isReturnMode()) {
+            int myReturnDepth = this.getReturnDepth();
+            if (0 < myReturnDepth) {
                 Iterator<RideAlong> stackIter = rideAlong.iterator();
-                if (null != stackIter && stackIter.hasNext()) {
-                    stackIter.next();
-                    if (stackIter.hasNext()) {
+                stackIter.next();
+                int i = 0;
+                if (stackIter.hasNext()) {
+                    do {
                         helper = stackIter.next();
-                    }
+                        i++;
+                    } while (i < myReturnDepth);
                 }
             } else {
                 helper = rideAlong.peekFirst();
@@ -439,12 +452,16 @@ public class FlowHandlerImpl extends FlowHandler {
             return result;
         }
         
-        public boolean isReturnMode() {
-            return returnMode;
+        public int getReturnDepth() {
+            return returnDepth;
         }
 
-        public void setReturnMode(boolean isReturnMode) {
-            this.returnMode = isReturnMode;
+        public void pushReturnMode() {
+            this.returnDepth++;
+        }
+        
+        public void popReturnMode() {
+            this.returnDepth--;
         }
 
     }

@@ -22,5 +22,6 @@
         <module>factory</module>
         <module>intermediate</module>
         <module>multi-page-from-jar</module>
+        <module>nested_flows</module>
     </modules>
 </project>

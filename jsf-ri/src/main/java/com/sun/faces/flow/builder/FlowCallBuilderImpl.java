@@ -67,7 +67,22 @@ public class FlowCallBuilderImpl extends FlowCallBuilder {
         Util.notNull("flowId", flowId);
         this.flowDocumentId = flowDocumentId;
         this.flowId = flowId;
+        getFlowCall();
         return this;
+    }
+    
+    private FlowCallNodeImpl getFlowCall() {
+        Util.notNull("flowCallNodeId", flowCallNodeId);
+        Util.notNull("flowwDocumentId", flowDocumentId);
+        Util.notNull("flowId", flowId);
+        
+        Map<String, FlowCallNode> flowCalls = root._getFlow()._getFlowCalls();
+        FlowCallNodeImpl flowCall = (FlowCallNodeImpl) flowCalls.get(flowCallNodeId);
+        if (null == flowCall) {
+            flowCall = new FlowCallNodeImpl(flowCallNodeId, flowDocumentId, flowId, null);
+            flowCalls.put(flowCallNodeId, flowCall);
+        }
+        return flowCall;
     }
 
     @Override
@@ -75,12 +90,7 @@ public class FlowCallBuilderImpl extends FlowCallBuilder {
         Util.notNull("name", name);
         Util.notNull("value", value);
         ParameterImpl param = new ParameterImpl(name, value);
-        Map<String, FlowCallNode> flowCalls = root._getFlow()._getFlowCalls();
-        FlowCallNodeImpl flowCall = (FlowCallNodeImpl) flowCalls.get(flowCallNodeId);
-        if (null == flowCall) {
-            flowCall = new FlowCallNodeImpl(flowCallNodeId, flowDocumentId, flowId, null);
-            flowCalls.put(flowCallNodeId, flowCall);
-        }
+        FlowCallNodeImpl flowCall = getFlowCall();
         flowCall._getOutboundParameters().put(name, param);
         return this;
     }
