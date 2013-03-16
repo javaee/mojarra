@@ -85,7 +85,6 @@ public class Spec869IT {
 
     // Tests a request with an invalid referer header request parameter.
     @Test
-    @Ignore
     public void testBadRefererCSRF() throws Exception {
         webClient.removeRequestHeader("Referer");
         webClient.addRequestHeader("Referer", "foobar");
@@ -94,12 +93,11 @@ public class Spec869IT {
         HtmlButtonInput button = (HtmlButtonInput) page.getElementById("button");
         page = button.click();
         String pageText = page.getBody().asText();
-        assertTrue(pageText.contains("javax.faces.application.ProtectedViewException"));
+        assertTrue(pageText.contains("Referer [sic] header value foobar does not appear to be a protected view"));
     }
 
     // Tests a request with an invalid origin header request parameter.
     @Test
-    @Ignore
     public void testBadOriginCSRF() throws Exception {
         webClient.removeRequestHeader("Origin");
         webClient.addRequestHeader("Origin", "foobar");
@@ -108,7 +106,7 @@ public class Spec869IT {
         HtmlButtonInput button = (HtmlButtonInput) page.getElementById("button");
         page = button.click();
         String pageText = page.getBody().asText();
-        assertTrue(pageText.contains("javax.faces.application.ProtectedViewException"));
+        assertTrue(pageText.contains("Origin [sic] header value foobar does not appear to be a protected view"));
     }
 
     // Tests a request with a valid referer header request parameter.
