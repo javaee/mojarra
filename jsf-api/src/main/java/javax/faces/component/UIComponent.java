@@ -331,7 +331,8 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * {@code null} if and only if the argument {@code create} is {@code false}
      * and no pass through attribute data structure exists for this instance.  
      * The returned {@code Map} implementation must support all of the standard and optional 
-     * {@code Map} methods, plus support the following additional requirements.</p>
+     * {@code Map} methods, plus support the following additional requirements.
+     * The map must be stored in using {@link #getStateHelper}.</p>
      * 
      * <div class="changed_added_2_2">
      * 
@@ -341,6 +342,10 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * 
      * <p>Any attempt to add a key that is not a {@code String} must
      * throw an {@code IllegalArgumentException}.</p>
+     * 
+     * <p>For backward compatibility with components that extend directly from
+     * this class, a default implementation is provided that returns the empty
+     * map.</p>
      * 
      * </div>
      *
@@ -354,7 +359,9 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * @since 2.2
      */
     
-    public abstract Map<String, Object> getPassThroughAttributes(boolean create);
+    public Map<String, Object> getPassThroughAttributes(boolean create) {
+        return Collections.emptyMap();
+    }
     
     // ---------------------------------------------------------------- Bindings
 
