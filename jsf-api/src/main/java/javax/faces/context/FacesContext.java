@@ -41,6 +41,7 @@
 package javax.faces.context;
 
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -477,11 +478,11 @@ public abstract class FacesContext {
     /**
      * <p class="changed_added_2_2">Return the list of resource library 
      * contracts that have been calculated
-     * to be appropriate for use with this view, or {@code null} if there are 
+     * to be appropriate for use with this view, or an empty list if there are 
      * no such resource library contracts.  The list returned by this method
      * must be immutable.  For backward compatibility with implementations
      * of the specification prior to when this method was introduced, an
-     * implementation is provided that returns {@code null}.  Implementations
+     * implementation is provided that returns an empty list.  Implementations
      * compliant with the version in which this method was introduced must
      * implement this method as specified.</p>
      * 
@@ -491,7 +492,7 @@ public abstract class FacesContext {
      * @since 2.2 
      */
     public List<String> getResourceLibraryContracts() {
-        return null;
+        return Collections.emptyList();
     }
     
     /**

@@ -124,7 +124,7 @@ public class FaceletWebappResourceHelper extends ResourceHelper {
             boolean doNotCache = false;
 
             URL url = null;
-            if (null != contracts) {
+            if (!contracts.isEmpty()) {
                 url = findResourceInfoConsideringContracts(ctx, resourceName, 
                         outContract,
                         contracts);

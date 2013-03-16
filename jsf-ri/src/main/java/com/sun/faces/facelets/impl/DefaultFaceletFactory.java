@@ -334,7 +334,7 @@ public class DefaultFaceletFactory {
 
     private FaceletCache<DefaultFacelet> getCache(FacesContext context) {
         List<String> contracts = context.getResourceLibraryContracts();
-        if(contracts != null) {
+        if(!contracts.isEmpty()) {
             FaceletCache<DefaultFacelet> faceletCache = cachePerContract.get(contracts);
             if(faceletCache == null) {
                 // PENDING(FCAPUTO) we don't support com.sun.faces.config.WebConfiguration.WebContextInitParameter#FaceletCache for contracts

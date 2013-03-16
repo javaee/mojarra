@@ -647,7 +647,7 @@ public class FacesContextImpl extends FacesContext {
     @Override
     public List<String> getResourceLibraryContracts() {
         assertNotReleased();
-        return resourceLibraryContracts;
+        return (null == resourceLibraryContracts) ? Collections.EMPTY_LIST : resourceLibraryContracts;
     }
 
     @Override

@@ -58,6 +58,7 @@ import javax.faces.context.FacesContext;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.util.FacesLogger;
 
+import java.util.Collections;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.CacheResourceModificationTimestamp;
 
 /**
@@ -314,9 +315,9 @@ public class WebappResourceHelper extends ResourceHelper {
                                      FacesContext ctx) {
         UIViewRoot root = ctx.getViewRoot();
         List<String> contracts = (null != root) ? 
-                ctx.getResourceLibraryContracts() : null;
+                ctx.getResourceLibraryContracts() : Collections.EMPTY_LIST;
 
-        if (null == contracts) {
+        if (contracts.isEmpty()) {
             String contractName = ctx.getExternalContext().getRequestParameterMap()
                   .get("con");
             if (null != contractName && 0 < contractName.length()) {
