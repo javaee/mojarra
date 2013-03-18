@@ -302,8 +302,6 @@ public abstract class FlowHandler {
      * 
      * @param context the {@code FacesContext} for the current request.
 
-     * @param returnMode the return mode for the current flow.
-     * 
      * @throws NullPointerException if {@code context} is {@code null}.
      * 
      * @since 2.2
@@ -320,8 +318,6 @@ public abstract class FlowHandler {
      * 
      * @param context the {@code FacesContext} for the current request.
 
-     * @param returnMode the return mode for the current flow.
-     * 
      * @throws NullPointerException if {@code context} is {@code null}.
      * 
      * @since 2.2
