@@ -43,6 +43,7 @@ package com.sun.faces.flow;
 import com.sun.faces.flow.builder.FlowBuilderImpl;
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.Util;
 import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Level;
@@ -57,7 +58,6 @@ import javax.faces.flow.builder.FlowBuilder;
 import javax.faces.flow.builder.FlowDefinition;
 import javax.faces.flow.FlowHandler;
 import javax.faces.flow.builder.FlowBuilderParameter;
-import javax.inject.Inject;
 import javax.inject.Named;
 
 /*
@@ -78,13 +78,12 @@ public class FlowDiscoveryCDIHelper implements Serializable {
     
     private static final Logger LOGGER = FacesLogger.FLOW.getLogger();
     
-    
-    @Inject transient BeanManager beanManager;
-    
     public FlowDiscoveryCDIHelper() {
     }
     
     public void discoverFlows(FacesContext context, FlowHandler flowHandler) {
+        BeanManager beanManager = (BeanManager) Util.getCDIBeanManager(context.getExternalContext().getApplicationMap());
+        
         FlowDiscoveryCDIContext flowDiscoveryContext = (FlowDiscoveryCDIContext) beanManager.getContext(FlowDefinition.class);
         List<Producer<Flow>> flowProducers = flowDiscoveryContext.getFlowProducers();
         

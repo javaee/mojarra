@@ -168,7 +168,7 @@ public class WebappLifecycleListener {
             activeSessions.remove(event.getSession());
         }
                 
-        if (Util.isCDIAvailable()) {
+        if (Util.isCDIAvailable(servletContext)) {
             FlowCDIContext.sessionDestroyed(event);
         }
 

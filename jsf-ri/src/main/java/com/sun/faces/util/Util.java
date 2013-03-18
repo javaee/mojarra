@@ -140,38 +140,22 @@ public class Util {
     private static final String CDI_AVAILABLE_PER_APP_KEY = Util.class.getName() + "_CDI_AVAILABLE";
     
     public static boolean isCDIAvailable(Map<String, Object> appMap) {
-        boolean result = false;
-        final String CDI_CLASS = "javax.enterprise.context.spi.Context";
-        Boolean cachedResult = (Boolean) appMap.get(CDI_AVAILABLE_PER_APP_KEY);
-        if (null == cachedResult) {
-            try {
-                loadClass(CDI_CLASS, CDI_CLASS);
-                result = true;
-            } catch (Throwable t) {
-                if (LOGGER.isLoggable(Level.FINEST)) {
-                    LOGGER.log(Level.FINEST, "Unable to load: " + CDI_CLASS, t);
-                }
-            }
-            appMap.put(CDI_AVAILABLE_PER_APP_KEY, (Boolean) result);
-        } else {
-            result = cachedResult;
-        }
+        boolean result = appMap.containsKey(CDI_AVAILABLE_PER_APP_KEY);
         return result;
     }
 
-    public static boolean isCDIAvailable() {
-        boolean result = false;
-        final String CDI_CLASS = "javax.enterprise.context.spi.Context";
-        try {
-            loadClass(CDI_CLASS, CDI_CLASS);
-            result = true;
-        } catch (Throwable t) {
-            if (LOGGER.isLoggable(Level.FINEST)) {
-                LOGGER.log(Level.FINEST, "Unable to load: " + CDI_CLASS, t);
-            }
-        }
-        
+    public static boolean isCDIAvailable(ServletContext sc) {
+        boolean result = null != sc.getAttribute(CDI_AVAILABLE_PER_APP_KEY);
         return result;
+    }
+    
+    public static Object getCDIBeanManager(Map<String, Object> appMap) {
+        Object beanManager = appMap.get(CDI_AVAILABLE_PER_APP_KEY);
+        return beanManager;
+    }
+    
+    public static void setCDIAvailable(ServletContext sc, Object beanManager) {
+        sc.setAttribute(CDI_AVAILABLE_PER_APP_KEY, beanManager);
     }
 
     /**
