@@ -69,7 +69,7 @@ public class FlowDiscoveryCDIContext implements Context, Serializable {
     
     // <editor-fold defaultstate="collapsed" desc="Called from code related to flow">
     
-    List<Producer<Flow>> getFlowProducers() {
+    public List<Producer<Flow>> getFlowProducers() {
         return flowProducers;
     }
     
