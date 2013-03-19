@@ -309,7 +309,7 @@ public class RestoreViewPhase extends Phase {
                 !correctSecretKeyValue.equals(incomingSecretKeyValue)) {
                 throw new ProtectedViewException();
             }
-            String sep = System.getProperty("file.separator");
+            String sep = "/";
             // Check the referer header
             if (headers.containsKey("Referer")) {
                 String referer = headers.get("Referer");
@@ -369,7 +369,7 @@ public class RestoreViewPhase extends Phase {
     private boolean originatesInWebapp(FacesContext context, String view, ViewDeclarationLanguage vdl) throws URISyntaxException {
         boolean doesOriginate = false;
         ExternalContext extContext = context.getExternalContext();
-        String sep = System.getProperty("file.separator");
+        String sep = "/";
         URI uri = null;
         String path = null;
         boolean isAbsoluteURI = view.matches("^[a-z]+://.*");
