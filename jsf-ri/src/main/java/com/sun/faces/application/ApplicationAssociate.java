@@ -318,22 +318,11 @@ public class ApplicationAssociate {
             
             ExpressionFactory expressionFactory = context.getApplication().getExpressionFactory();
             ELContext elContext = context.getELContext();
-            ValueExpression ve = null;
-            final int maxAttempts = 50;
-            for (int i = 0; i < maxAttempts; i++) {
-                try {
-                    ve = expressionFactory.createValueExpression(elContext, 
-                            "#{" + RIConstants.FLOW_DISCOVERY_CDI_HELPER_BEAN_NAME + "}", 
-                            Object.class);
-                    break;
-                } catch (Exception e) {
-                    ve = null;
-                }
-            }                 
-            if (null != ve) {
-                FlowDiscoveryCDIHelper flowHelper = (FlowDiscoveryCDIHelper) ve.getValue(elContext);
-                flowHelper.discoverFlows(context, flowHandler);
-            }
+            ValueExpression ve = expressionFactory.createValueExpression(elContext, 
+                    "#{" + RIConstants.FLOW_DISCOVERY_CDI_HELPER_BEAN_NAME + "}", 
+                    Object.class);
+            FlowDiscoveryCDIHelper flowHelper = (FlowDiscoveryCDIHelper) ve.getValue(elContext);
+            flowHelper.discoverFlows(context, flowHandler);
 
             
         }
