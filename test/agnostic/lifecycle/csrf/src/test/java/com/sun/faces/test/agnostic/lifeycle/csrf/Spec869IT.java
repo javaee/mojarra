@@ -39,7 +39,7 @@
  */
 package com.sun.faces.test.agnostic.lifeycle.csrf;
 
-import org.junit.Ignore;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlButtonInput;
 import org.junit.After;
 import org.junit.Before;
@@ -82,6 +82,16 @@ public class Spec869IT {
         assertTrue(pageText.contains("javax.faces.application.ProtectedViewException"));
         
     }
+    
+    @Test
+    public void testSimpleCSRFPostback() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl);
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button_postback");
+        page = button.click();
+        
+        String pageText = page.getBody().asText();
+        assertTrue(pageText.contains("protected view"));
+    }    
 
     // Tests a request with an invalid referer header request parameter.
     @Test

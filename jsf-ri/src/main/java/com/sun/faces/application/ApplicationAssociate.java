@@ -82,6 +82,7 @@ import com.sun.faces.el.VariableResolverChainWrapper;
 import com.sun.faces.facelets.PrivateApiFaceletCacheAdapter;
 import com.sun.faces.facelets.tag.jsf.PassThroughAttributeLibrary;
 import com.sun.faces.facelets.tag.jsf.PassThroughElementLibrary;
+import com.sun.faces.flow.FlowDiscoveryCDIContext;
 import com.sun.faces.flow.FlowDiscoveryCDIHelper;
 import com.sun.faces.lifecycle.ELResolverInitPhaseListener;
 
@@ -114,6 +115,7 @@ import java.util.logging.Logger;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.el.ELContext;
 import javax.el.ValueExpression;
+import javax.enterprise.inject.spi.Producer;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
@@ -122,8 +124,10 @@ import javax.faces.application.ViewHandler;
 import javax.faces.component.FacesComponent;
 import javax.faces.event.PostConstructApplicationEvent;
 import javax.faces.event.SystemEventListener;
+import javax.faces.flow.Flow;
 import javax.faces.flow.FlowHandler;
 import javax.faces.flow.FlowHandlerFactory;
+import javax.faces.flow.builder.FlowDefinition;
 import javax.faces.view.facelets.FaceletCacheFactory;
 import javax.faces.view.facelets.FaceletsResourceResolver;
 
@@ -315,15 +319,20 @@ public class ApplicationAssociate {
         }
         
         private synchronized void loadFlows(FacesContext context, FlowHandler flowHandler) throws IOException {
+            javax.enterprise.inject.spi.BeanManager beanManager = (javax.enterprise.inject.spi.BeanManager) 
+                    Util.getCDIBeanManager(context.getExternalContext().getApplicationMap());
+            FlowDiscoveryCDIContext flowDiscoveryContext = (FlowDiscoveryCDIContext) beanManager.getContext(FlowDefinition.class);
+            List<Producer<Flow>> flowProducers = flowDiscoveryContext.getFlowProducers();
             
-            ExpressionFactory expressionFactory = context.getApplication().getExpressionFactory();
-            ELContext elContext = context.getELContext();
-            ValueExpression ve = expressionFactory.createValueExpression(elContext, 
-                    "#{" + RIConstants.FLOW_DISCOVERY_CDI_HELPER_BEAN_NAME + "}", 
-                    Object.class);
-            FlowDiscoveryCDIHelper flowHelper = (FlowDiscoveryCDIHelper) ve.getValue(elContext);
-            flowHelper.discoverFlows(context, flowHandler);
-
+            for (Producer<Flow> cur : flowProducers) {
+                Flow toAdd = cur.produce(beanManager.<Flow>createCreationalContext(null));
+                if (null == toAdd) {
+                    LOGGER.log(Level.SEVERE, "Flow producer method {0}() returned null.  Ignoring.",
+                            new String [] { cur.toString() });
+                } else {
+                    flowHandler.addFlow(context, toAdd);
+                }
+            }
             
         }
     
