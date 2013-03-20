@@ -52,6 +52,7 @@ import javax.faces.application.NavigationCase;
 import javax.faces.context.FacesContext;
 import javax.faces.flow.FlowCallNode;
 import javax.faces.flow.Flow;
+import javax.faces.flow.FlowHandler;
 import javax.faces.flow.FlowNode;
 import javax.faces.flow.MethodCallNode;
 import javax.faces.flow.Parameter;
@@ -62,6 +63,7 @@ import javax.faces.lifecycle.ClientWindow;
 
 public class FlowImpl extends Flow {
     
+    public static final Flow SYNTHESIZED_RETURN_CASE_FLOW = new FlowImpl(FlowHandler.NULL_FLOW);
     
     // <editor-fold defaultstate="collapsed" desc="Instance variables">    
     
@@ -107,9 +109,31 @@ public class FlowImpl extends Flow {
         navigationCases = Collections.unmodifiableMap(_navigationCases);
         _methodCalls = new CopyOnWriteArrayList<MethodCallNode>();
         methodCalls = Collections.unmodifiableList(_methodCalls);
-        
-        
     }
+    
+    private FlowImpl(String id) {
+        this.id = id;
+        definingDocumentId = null;
+        startNodeId = null;
+        _navigationCases = null;
+        navigationCases = null;
+        _views = null;
+        views = null;
+        _methodCalls = null;
+        methodCalls = null;
+        _inboundParameters = null;
+        inboundParameters = null;
+        _returns = null;
+        returns = null;
+        _switches = null;
+        switches = null;
+        _facesFlowCalls = null;
+        facesFlowCalls = null;
+        _facesFlowCallsByTargetFlowId = null;
+        initializer = null;
+        finalizer = null;
+        hasBeenInitialized = true;
+    }    
 
     // </editor-fold>
 
