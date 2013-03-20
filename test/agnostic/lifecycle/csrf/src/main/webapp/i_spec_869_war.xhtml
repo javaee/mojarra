@@ -9,5 +9,10 @@
     <p>Non protected page.</p>
     <p><h:button id="button" value="non-postback navigation to protected view" 
                  outcome="i_spec_869_war_protected"/></p>
+    <h:form prependId="false">
+
+        <p><h:commandButton id="button_postback" value="postback navigation to protected view" 
+                 action="i_spec_869_war_protected"/></p>
+    </h:form>
 </h:body>
 </html>

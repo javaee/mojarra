@@ -42,21 +42,11 @@ package com.sun.faces.flow;
 
 import com.sun.faces.flow.builder.FlowBuilderImpl;
 import com.sun.faces.RIConstants;
-import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.Util;
 import java.io.Serializable;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Produces;
-import javax.enterprise.inject.spi.BeanManager;
-import javax.enterprise.inject.spi.Producer;
 import javax.faces.context.FacesContext;
-import javax.faces.flow.Flow;
 import javax.faces.flow.builder.FlowBuilder;
-import javax.faces.flow.builder.FlowDefinition;
-import javax.faces.flow.FlowHandler;
 import javax.faces.flow.builder.FlowBuilderParameter;
 import javax.inject.Named;
 
@@ -71,32 +61,10 @@ import javax.inject.Named;
  */
 
 @Named(RIConstants.FLOW_DISCOVERY_CDI_HELPER_BEAN_NAME)
-@ApplicationScoped
+@Dependent
 public class FlowDiscoveryCDIHelper implements Serializable {
     
-    private static final long serialVersionUID = 2010898398003809226L;
-    
-    private static final Logger LOGGER = FacesLogger.FLOW.getLogger();
-    
-    public FlowDiscoveryCDIHelper() {
-    }
-    
-    public void discoverFlows(FacesContext context, FlowHandler flowHandler) {
-        BeanManager beanManager = (BeanManager) Util.getCDIBeanManager(context.getExternalContext().getApplicationMap());
-        
-        FlowDiscoveryCDIContext flowDiscoveryContext = (FlowDiscoveryCDIContext) beanManager.getContext(FlowDefinition.class);
-        List<Producer<Flow>> flowProducers = flowDiscoveryContext.getFlowProducers();
-        
-        for (Producer<Flow> cur : flowProducers) {
-            Flow toAdd = cur.produce(beanManager.<Flow>createCreationalContext(null));
-            if (null == toAdd) {
-                LOGGER.log(Level.SEVERE, "Flow producer method {0}() returned null.  Ignoring.",
-                        new String [] { cur.toString() });
-            } else {
-                flowHandler.addFlow(context, toAdd);
-            }
-        }
-        
+public FlowDiscoveryCDIHelper() {
     }
     
     @Produces @FlowBuilderParameter
