@@ -292,14 +292,13 @@ public class ApplicationAssociate {
         public void processEvent(SystemEvent event) throws AbortProcessingException {
             ApplicationAssociate.this.initializeFacelets();
             
-            WebConfiguration config = WebConfiguration.getInstance();
             if (null == ApplicationAssociate.this.flowHandler) {
                 FlowHandlerFactory flowHandlerFactory = (FlowHandlerFactory) FactoryFinder.getFactory(FactoryFinder.FLOW_HANDLER_FACTORY);
                 ApplicationAssociate.this.flowHandler = flowHandlerFactory.createFlowHandler(FacesContext.getCurrentInstance());
             }
 
             FacesContext context = FacesContext.getCurrentInstance();
-            if (config.isHasFlows() && Util.isCDIAvailable(context.getExternalContext().getApplicationMap())) {
+            if (Util.isCDIAvailable(context.getExternalContext().getApplicationMap())) {
                 try {
                     loadFlows(context, ApplicationAssociate.this.flowHandler);
                 } catch (IOException ex) {
@@ -323,6 +322,7 @@ public class ApplicationAssociate {
                     Util.getCDIBeanManager(context.getExternalContext().getApplicationMap());
             FlowDiscoveryCDIContext flowDiscoveryContext = (FlowDiscoveryCDIContext) beanManager.getContext(FlowDefinition.class);
             List<Producer<Flow>> flowProducers = flowDiscoveryContext.getFlowProducers();
+            WebConfiguration config = WebConfiguration.getInstance();
             
             for (Producer<Flow> cur : flowProducers) {
                 Flow toAdd = cur.produce(beanManager.<Flow>createCreationalContext(null));
@@ -331,6 +331,7 @@ public class ApplicationAssociate {
                             new String [] { cur.toString() });
                 } else {
                     flowHandler.addFlow(context, toAdd);
+                    config.setHasFlows(true);
                 }
             }
             

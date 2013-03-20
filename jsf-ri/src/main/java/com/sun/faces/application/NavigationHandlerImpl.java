@@ -42,6 +42,7 @@ package com.sun.faces.application;
 
 import com.sun.faces.config.InitFacesContext;
 import com.sun.faces.application.view.ViewScopeManager;
+import com.sun.faces.flow.FlowImpl;
 import javax.faces.FacesException;
 import javax.faces.application.NavigationCase;
 import javax.faces.application.ViewHandler;
@@ -918,6 +919,8 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                                 
                             }
                         }
+                    } else {
+                        result.newFlow = FlowImpl.SYNTHESIZED_RETURN_CASE_FLOW;
                     }
                 }
                 finally {
@@ -987,8 +990,16 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                     outcome = invokeResult.toString();
                     result = synthesizeCaseStruct(context, currentFlow, fromAction, outcome);
                     if (null != result) {
+                        // Here we need to detect the case when the
+                        // synthesizeCaseStruct() ended up hitting a <flow-return>.
+                        // In this case, we must ensure the new flow of null
+                        // is honored.
                         result.currentFlow = currentFlow;
-                        result.newFlow = currentFlow;
+                        if (result.newFlow == FlowImpl.SYNTHESIZED_RETURN_CASE_FLOW) {
+                            result.newFlow = null;
+                        } else {
+                            result.newFlow = currentFlow;
+                        }
                     }
                 }
             }
