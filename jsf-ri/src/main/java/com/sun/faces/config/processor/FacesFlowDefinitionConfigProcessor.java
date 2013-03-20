@@ -80,12 +80,17 @@ import javax.faces.flow.builder.MethodCallBuilder;
 import javax.faces.flow.builder.NavigationCaseBuilder;
 import javax.faces.flow.builder.SwitchBuilder;
 import javax.servlet.ServletContext;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import org.w3c.dom.Attr;
+import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -99,12 +104,7 @@ import org.w3c.dom.NodeList;
 public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor {
 
     private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
-    
-    /**
-     * <code>/faces-config</code>
-     */
-    private static final String FACES_CONFIG = "faces-config";
-    
+        
     /**
      * <code>/faces-config/flow-definition</code>
      */
@@ -112,6 +112,65 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
     
     public FacesFlowDefinitionConfigProcessor() {
     }
+    
+    public static boolean uriIsFlowDefinition(URI uri) {
+        boolean result = false;
+        String path = uri.getPath();
+        String [] segments = path.split("/");
+        if (1 < segments.length) {
+            String flowName = segments[segments.length-2];
+            String definingName = segments[segments.length-1];
+            result = definingName.equals(flowName + "-flow.xml");
+        }
+        
+        return result;
+    }
+    
+    /*
+     * Implement the requirements of 11.4.3.3
+     * 
+     * @param uri
+     * @param toPopulate
+     * @return 
+     */
+    public static Document synthesizeEmptyFlowDefinition(URI uri) throws ParserConfigurationException {
+        Document newDoc = null;
+
+        String path = uri.getPath();
+        String [] segments = path.split("/");
+        if (segments.length < 2) {
+            return newDoc;
+        }
+        String flowName = segments[segments.length-2];
+        
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setNamespaceAware(true);
+        DocumentBuilder builder = dbf.newDocumentBuilder();
+        DOMImplementation domImpl = builder.getDOMImplementation();
+        newDoc = domImpl.createDocument(RIConstants.JAVAEE_XMLNS, "faces-config", null);
+        Node documentElement = newDoc.getDocumentElement();
+        Attr versionAttribute = newDoc.createAttribute("version");
+        versionAttribute.setValue("2.2");
+        documentElement.getAttributes().setNamedItem(versionAttribute);
+        
+        Node facesConfig = newDoc.getFirstChild();
+        
+        Element flowDefinition = newDoc.createElementNS(RIConstants.JAVAEE_XMLNS, "flow-definition");
+        flowDefinition.setAttribute("id", flowName);
+        facesConfig.appendChild(flowDefinition);
+        final String flowReturnStr = flowName + "-return";
+        
+        Element flowReturn = newDoc.createElementNS(RIConstants.JAVAEE_XMLNS, "flow-return");
+        flowReturn.setAttribute("id", flowReturnStr);
+        flowDefinition.appendChild(flowReturn);
+        
+        Element fromOutcome = newDoc.createElementNS(RIConstants.JAVAEE_XMLNS, "from-outcome");
+        flowReturn.appendChild(fromOutcome);
+        fromOutcome.setTextContent("/" + flowReturnStr);
+        
+        return newDoc;
+    }
+    
 
     @Override
     public void process(ServletContext sc, DocumentInfo[] documentInfos)
