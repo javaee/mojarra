@@ -43,6 +43,7 @@ package com.sun.faces.application;
 import com.sun.faces.config.InitFacesContext;
 import com.sun.faces.application.view.ViewScopeManager;
 import com.sun.faces.flow.FlowImpl;
+import com.sun.faces.flow.builder.MutableNavigationCase;
 import javax.faces.FacesException;
 import javax.faces.application.NavigationCase;
 import javax.faces.application.ViewHandler;
@@ -889,7 +890,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             if (node instanceof ViewNode) {
                 result = new CaseStruct();
                 result.viewId = ((ViewNode)node).getVdlDocumentId();
-                result.navCase = new NavigationCase(fromAction, 
+                result.navCase = new MutableNavigationCase(fromAction, 
                         fromAction, outcome, null, result.viewId, 
                         flow.getDefiningDocumentId(), null, false, false);
             } else if (node instanceof ReturnNode) {
@@ -907,7 +908,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                             if (null != toViewId) {
                                 result = new CaseStruct();
                                 result.viewId = toViewId;
-                                result.navCase = new NavigationCase(context.getViewRoot().getViewId(),
+                                result.navCase = new MutableNavigationCase(context.getViewRoot().getViewId(),
                                         fromAction,
                                         outcome,
                                         null,
@@ -947,7 +948,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             if (null != viewIdToTest) {
                 result = new CaseStruct();
                 result.viewId = viewIdToTest;
-                result.navCase = new NavigationCase(fromAction, 
+                result.navCase = new MutableNavigationCase(fromAction, 
                         fromAction, outcome, null, result.viewId, 
                         null, false, false);
             }
@@ -1042,6 +1043,8 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                 result = synthesizeCaseStruct(context, newFlow, fromAction, startNodeId);
                 if (null == result) {
                     result = getViewId(context, fromAction, startNodeId, toFlowDocumentId);
+                } else if (!outcome.equals(startNodeId) && null != result.navCase) {
+                    ((MutableNavigationCase)result.navCase).setFromOutcome(outcome);
                 }
             } 
         }
