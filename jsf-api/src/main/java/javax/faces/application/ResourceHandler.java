@@ -256,7 +256,7 @@ public abstract class ResourceHandler {
     /**
      * <p class="changed_added_2_0"><span
      * class="changed_modified_2_2">Create</span> an instance of
-     * <code>Resource</code> given the argument
+     * <code>ViewResource</code> given the argument
      * <code>resourceName</code>.  The content-type of the resource is
      * derived by passing the <em>resourceName</em> to {@link
      * javax.faces.context.ExternalContext#getMimeType}</p>

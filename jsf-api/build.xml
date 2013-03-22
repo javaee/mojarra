@@ -436,6 +436,7 @@
     </target>
 
     <target name="test.FactoryFinder" depends="build.test.dir">
+<!-- Doesn't run on Java 7
         <echo message="Running FactoryFinder tests ..."/>
         <mkdir dir="${build.classes.dir}/META-INF/services"/>
         <echo
@@ -449,6 +450,7 @@
             </tests>
         </jsf.junit>
         <delete dir="${build.classes.dir}/META-INF"/>
+-->
     </target>
 
     <target name="test.FactoryFinder2" depends="build.test.dir">
