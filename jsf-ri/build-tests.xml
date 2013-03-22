@@ -371,6 +371,7 @@
                       name="com.sun.faces.el.TestPropertyResolverImpl"/>
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.el.TestFacesResourceBundleELResolver"/>
+<!-- PENDING(edburns): GlassFish 4.0
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.el.TestValueBindingImpl"/>
                 <test todir="${impl.test.results.dir}"
@@ -379,6 +380,7 @@
                       name="com.sun.faces.el.TestValueBindingImpl_Model"/>
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.el.TestValueExpressionImpl_Model"/>
+-->
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.el.TestVariableResolverImpl"/>
                 <test todir="${impl.test.results.dir}"

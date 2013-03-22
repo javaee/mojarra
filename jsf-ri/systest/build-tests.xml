@@ -281,14 +281,15 @@
                    test-results-dir="${impl.test.results.dir}">
             <tests>
                 <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/facelets/*TestCase.class" />
+                         includes="com/sun/faces/facelets/*TestCase.class"
+
+                         excludes="com/sun/faces/facelets/ImplicitFacetTestCase.class" />
 
 <!--
 20130215 edburns
 PENDING(edburns): This test doesn't run on GlassFish 4.0. Fix it.
-                         excludes="com/sun/faces/facelets/ImplicitFacetTestCase.class"
-
 -->
+
             </tests>
         </jsf.junit>
         <jsf.junit context-path="${context.path}"
@@ -1035,7 +1036,7 @@ PENDING(edburns): This test doesn't run on GlassFish 4.0. Fix it.
             <tests>
                 <fileset dir="${basedir}/build/classes"
                          includes="com/sun/faces/component/*TestCase.class,com/sun/faces/event/DynamicAddTestCase.class"
-                         excludes="com/sun/faces/component/GetClientIdELTestCase.class"
+                         excludes="com/sun/faces/component/GetClientIdELTestCase.class,com/sun/faces/component/CompositeMetaDataTestCase.class"
                          />
 <!-- 139-StateSaving edburns remove excludes -->
             </tests>
