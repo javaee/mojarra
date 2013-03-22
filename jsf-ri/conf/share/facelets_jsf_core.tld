@@ -2822,7 +2822,7 @@ will not pass validation.</p> ]]>
             a space separated list of client identifiers suitable for
             passing directly to <code>UIViewRoot.resetValues()</code>.
             The implementation must cause an <code>ActionListener</code>
-            to be attached to the <code>ActionSource2</code> component
+            to be attached to the <code>ActionSource</code> component
             in which this tag is nested that calls
             <code>UIViewRoot.resetValues()</code> passing the value of
             the <code>render</code> attribute as the argument.</p>
