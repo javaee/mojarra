@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -41,6 +41,9 @@
 package com.sun.faces.config;
 
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import javax.faces.context.FacesContext;
 
 
@@ -57,6 +60,8 @@ public class FaceletsConfiguration {
     private static final String ESCAPE_INLINE_TEXT_ATTRIBUTE_NAME = "com.sun.faces.config.EscapeInlineText";
 
 //    private static final String CONSUME_COMMENTS_ATTRIBUTE_NAME = "com.sun.faces.config.ConsumeComments";
+
+    private static Pattern EXTENSION_PATTERN = Pattern.compile("\\.[^/]+$");
 
     private WebConfiguration config;
 
@@ -77,16 +82,8 @@ public class FaceletsConfiguration {
         // and the file extension for the current file has a mapping
         // with the value of XHTML
         boolean currentModeIsXhtml = true;
-        String extension = alias;
-        if (null == extension) {
-            extension = ".xhtml";
-        }
-        int i = extension.indexOf(".");
-        if (-1 != i && 1 < extension.length()) {
-            extension = extension.substring(i);
-        } else {
-            extension = ".xhtml";
-        }
+
+        String extension = getExtension(alias);
 
         assert (null != faceletsProcessingMappings);
         if (faceletsProcessingMappings.containsKey(extension)) {
@@ -100,16 +97,7 @@ public class FaceletsConfiguration {
     public boolean isOutputHtml5Doctype(String alias) {
         boolean currentModeIsHtml5 = true;
         
-        String extension = alias;
-        if (null == extension) {
-            extension = ".xhtml";
-        }
-        int i = extension.indexOf(".");
-        if (-1 != i && 1 < extension.length()) {
-            extension = extension.substring(i);
-        } else {
-            extension = ".xhtml";
-        }
+        String extension = getExtension(alias);
 
         assert (null != faceletsProcessingMappings);
         if (faceletsProcessingMappings.containsKey(extension)) {
@@ -123,16 +111,8 @@ public class FaceletsConfiguration {
 
     public boolean isConsumeComments(String alias) {
         boolean consumeComments = false;
-        String extension = alias;
-        if (null == extension) {
-            extension = ".xhtml";
-        }
-        int i = extension.indexOf(".");
-        if (-1 != i && 1 < extension.length()) {
-            extension = extension.substring(i);
-        } else {
-            extension = ".xhtml";
-        }
+
+        String extension = getExtension(alias);
 
         assert (null != faceletsProcessingMappings);
         if (faceletsProcessingMappings.containsKey(extension)) {
@@ -146,16 +126,8 @@ public class FaceletsConfiguration {
 
     public boolean isConsumeCDATA(String alias) {
         boolean consumeCDATA = false;
-        String extension = alias;
-        if (null == extension) {
-            extension = ".xhtml";
-        }
-        int i = extension.indexOf(".");
-        if (-1 != i && 1 < extension.length()) {
-            extension = extension.substring(i);
-        } else {
-            extension = ".xhtml";
-        }
+
+        String extension = getExtension(alias);
 
         assert (null != faceletsProcessingMappings);
         if (faceletsProcessingMappings.containsKey(extension)) {
@@ -172,16 +144,8 @@ public class FaceletsConfiguration {
 
         result = (Boolean) context.getAttributes().get(ESCAPE_INLINE_TEXT_ATTRIBUTE_NAME);
         if (null == result) {
-            String extension = context.getViewRoot().getViewId();
-            if (null == extension) {
-                extension = ".xhtml";
-            }
-            int i = extension.indexOf(".");
-            if (-1 != i && 1 < extension.length()) {
-                extension = extension.substring(i);
-            } else {
-                extension = ".xhtml";
-            }
+        
+            String extension = getExtension(context.getViewRoot().getViewId());
 
             assert (null != faceletsProcessingMappings);
             if (faceletsProcessingMappings.containsKey(extension)) {
@@ -212,6 +176,19 @@ public class FaceletsConfiguration {
     public static FaceletsConfiguration getInstance() {
         FacesContext context = FacesContext.getCurrentInstance();
         return FaceletsConfiguration.getInstance(context);
+    }
+
+    private static String getExtension(String alias) {
+        String ext = null;
+
+        if (alias != null) {
+            Matcher matcher = EXTENSION_PATTERN.matcher(alias);
+            if (matcher.find()) {
+                ext = alias.substring(matcher.start(), matcher.end());
+            }
+        }
+
+        return (ext == null) ? "xhtml": ext;
     }
 
 
