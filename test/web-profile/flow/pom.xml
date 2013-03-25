@@ -23,6 +23,7 @@
         <module>intermediate</module>
         <module>multi-page-from-jar</module>
         <module>nested_flows</module>
+        <module>view_node_differences</module>
         <module>basic-empty-flow-def</module>
     </modules>
 </project>
