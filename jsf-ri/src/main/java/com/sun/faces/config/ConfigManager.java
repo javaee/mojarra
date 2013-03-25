@@ -78,6 +78,7 @@ import com.sun.faces.spi.InjectionProviderFactory;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Timer;
 import com.sun.faces.util.Util;
+import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.InputSource;
 
 import javax.faces.FacesException;
@@ -394,6 +395,10 @@ public class ConfigManager {
                 DocumentInfo newDocInfo;
                 for (ApplicationConfigurationPopulator pop : populators) {
                     newDoc = domImpl.createDocument(RIConstants.JAVAEE_XMLNS, "faces-config", null);
+                    Attr versionAttribute = newDoc.createAttribute("version");
+                    versionAttribute.setValue("2.2");
+                    newDoc.getDocumentElement().getAttributes().setNamedItem(versionAttribute);
+                    
                     try {
                         pop.populateApplicationConfiguration(newDoc);
                         newDocInfo = new DocumentInfo(newDoc, null);
@@ -447,7 +452,7 @@ public class ConfigManager {
         }
 
     }
-
+    
 
 
 
@@ -1039,7 +1044,17 @@ public class ConfigManager {
                 } 
 
             }
-            String documentNS = doc.getDocumentElement().getNamespaceURI();
+
+            String documentNS = null;
+            if (null == doc) {
+                if (FacesFlowDefinitionConfigProcessor.uriIsFlowDefinition(documentURI)) {
+                    documentNS = RIConstants.JAVAEE_XMLNS;
+                    doc = FacesFlowDefinitionConfigProcessor.synthesizeEmptyFlowDefinition(documentURI);
+                }
+            } else {
+                documentNS = doc.getDocumentElement().getNamespaceURI();
+            }
+            
             if (validating && documentNS != null) {
                 DOMSource domSource
                      = new DOMSource(doc, documentURL.toExternalForm());

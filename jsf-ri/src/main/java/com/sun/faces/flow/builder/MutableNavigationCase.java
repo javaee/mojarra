@@ -40,6 +40,7 @@
 
 package com.sun.faces.flow.builder;
 
+import java.util.Collections;
 import javax.faces.application.*;
 import java.util.Map;
 import java.util.List;
@@ -105,6 +106,22 @@ public class MutableNavigationCase extends NavigationCase {
 
     }
 
+    public MutableNavigationCase(String fromViewId, 
+                        String fromAction, String fromOutcome, String condition, String toViewId, 
+                        String toFlowDocumentId, boolean redirect, boolean includeViewParams) {
+        super(fromViewId, fromAction, fromOutcome, condition, toViewId, toFlowDocumentId, Collections.EMPTY_MAP, redirect, includeViewParams);
+
+        this.fromViewId = fromViewId;
+        this.fromAction = fromAction;
+        this.fromOutcome = fromOutcome;
+        this.condition = condition;
+        this.toViewId = toViewId;
+        this.toFlowDocumentId = toFlowDocumentId;
+        this.parameters = Collections.emptyMap();
+        this.redirect = redirect;
+        this.includeViewParams = includeViewParams;
+        
+    }
 
     // ---------------------------------------------------------- Public Methods
 
