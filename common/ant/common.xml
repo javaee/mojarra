@@ -169,7 +169,7 @@
 
     <artifact:dependencies filesetId="compile.filepath" pathId="compile.path">
         <dependency groupId="javax.el" artifactId="el-api" version="1.0" scope="provided"/>
-        <dependency groupId="org.glassfish" artifactId="javax.servlet" version="3.0-SNAPSHOT" scope="provided"/>
+        <dependency groupId="org.glassfish" artifactId="javax.servlet" version="3.0.1" scope="provided"/>
         <dependency groupId="javax.servlet.jsp" artifactId="jsp-api" version="2.1" scope="provided"/>
         <dependency groupId="javax.annotation" artifactId="jsr250-api" version="1.0" scope="provided"/>
         <dependency groupId="org.codehaus.groovy" artifactId="groovy-all" version="1.6.9" scope="provided"/>
