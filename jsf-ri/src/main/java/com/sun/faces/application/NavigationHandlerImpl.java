@@ -478,6 +478,11 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             caseStruct = findFacesFlowCallMatch(ctx, fromAction, outcome, toFlowDocumentId);
         }
         
+        // If we still don't have a match, see if this is a viewNode
+        if (null == caseStruct && null != fromAction && null != outcome) {
+            caseStruct = findViewNodeMatch(ctx, fromAction, outcome, toFlowDocumentId);
+        }
+
         // If we still don't have a match, see if this is a switch
         if (null == caseStruct && null != fromAction && null != outcome) {
             caseStruct = findSwitchMatch(ctx, fromAction, outcome, toFlowDocumentId);
@@ -1056,6 +1061,34 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         
         return result;
     }  
+    
+    private CaseStruct findViewNodeMatch(FacesContext context, 
+            String fromAction, String outcome, String toFlowDocumentId) {
+        CaseStruct result = null;
+
+        FlowHandler flowHandler = context.getApplication().getFlowHandler();
+        if (null == flowHandler) {
+            return null;
+        }
+        Flow currentFlow = flowHandler.getCurrentFlow(context);
+        if (null != currentFlow) {
+            FlowNode node = currentFlow.getNode(outcome);
+            if (null != node) {
+                if (node instanceof ViewNode) {
+                    result = synthesizeCaseStruct(context, currentFlow, fromAction, outcome);
+                }
+            }
+        }
+        if (null != result) {
+            result.currentFlow = currentFlow;
+            result.newFlow = currentFlow;
+            result.facesFlowCallNode = null;
+        }
+        
+        return result;
+    }  
+    
+    
     
     private CaseStruct findReturnMatch(FacesContext context, 
             String fromAction, String outcome) {
