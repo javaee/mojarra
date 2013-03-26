@@ -55,5 +55,6 @@
     <name>Mojarra ${project.version} - Test - Agnostic - Scope</name>
     <modules>
         <module>view</module>
+        <module>session</module>
     </modules>
 </project>
