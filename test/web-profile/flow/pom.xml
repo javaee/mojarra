@@ -25,5 +25,6 @@
         <module>nested_flows</module>
         <module>view_node_differences</module>
         <module>basic-empty-flow-def</module>
+        <module>param_faces_flow_call</module>
     </modules>
 </project>
