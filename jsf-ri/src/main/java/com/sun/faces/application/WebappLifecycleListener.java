@@ -161,7 +161,6 @@ public class WebappLifecycleListener {
      * @param event the notification event
      */
     public void sessionDestroyed(HttpSessionEvent event) {        
-        HttpSession session = event.getSession();
         if (activeSessions != null) {
             activeSessions.remove(event.getSession());
         }
@@ -170,17 +169,6 @@ public class WebappLifecycleListener {
         if (manager != null) {
             manager.sessionDestroyed(event);
         }
-
-        /*
-         * This is taken care of by the attributeRemoved event.
-         * 
-        for (Enumeration e = session.getAttributeNames(); e.hasMoreElements(); ) {
-            String beanName = (String)e.nextElement();
-            handleAttributeEvent(beanName, 
-                                 session.getAttribute(beanName), 
-                                 ELUtils.Scope.SESSION);
-        }
-        */
     }
 
     /**
