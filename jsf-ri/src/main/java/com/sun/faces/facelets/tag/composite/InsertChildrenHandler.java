@@ -183,7 +183,11 @@ public class InsertChildrenHandler extends TagHandlerImpl {
                 }
             }
 
-            parentChildren.addAll(getIdx(), compositeChildren);
+            if (parentChildren.size() < getIdx()) {
+                parentChildren.addAll(compositeChildren);
+            } else {
+                parentChildren.addAll(getIdx(), compositeChildren);
+            }
 
             
         }
