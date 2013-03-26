@@ -1494,11 +1494,22 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
             for (var i = 0; i < nodes.length; i++) {
                 var name = nodes[i].getAttribute('name');
                 var value = nodes[i].getAttribute('value');
+
+                //boolean attribute handling code for all browsers
+                if (name === 'disabled') {
+                    target.disabled = value === 'disabled' || value === 'true';
+                    return;
+                } else if (name === 'checked') {
+                    target.checked = value === 'checked' || value === 'on' || value === 'true';
+                    return;
+                } else if (name == 'readonly') {
+                    target.readOnly = value === 'readonly' || value === 'true';
+                    return;
+                }
+
                 if (!isIE()) {
                     if (name === 'value') {
                         target.value = value;
-                    } else if (name === 'disabled') {
-                        target.disabled = value;
                     } else {
                         target.setAttribute(name, value);
                     }

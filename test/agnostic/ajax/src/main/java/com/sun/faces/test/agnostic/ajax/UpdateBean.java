@@ -166,5 +166,49 @@ public class UpdateBean {
         return null;
     }
 
+    public String updateCheckedAsAttributeName() {
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        ExternalContext extContext = ctx.getExternalContext();
+        if (ctx.getPartialViewContext().isAjaxRequest()) {
+            try {
+                Map attrs = new HashMap();
+                attrs.put("checked", "true");
+                extContext.setResponseContentType("text/xml");
+                extContext.addResponseHeader("Cache-Control", "no-cache");
+                PartialResponseWriter writer =
+                    ctx.getPartialViewContext().getPartialResponseWriter();
+                writer.startDocument();
+                writer.updateAttributes("form1:foo", attrs);
+                writer.endDocument();
+                writer.flush();
+                ctx.responseComplete();
+            } catch (Exception e) {
+                throw new FacesException(e);
+            }
+        }
+        return null;
+    }
 
+    public String updateReadonlyAsAttributeName() {
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        ExternalContext extContext = ctx.getExternalContext();
+        if (ctx.getPartialViewContext().isAjaxRequest()) {
+            try {
+                Map attrs = new HashMap();
+                attrs.put("readonly", "true");
+                extContext.setResponseContentType("text/xml");
+                extContext.addResponseHeader("Cache-Control", "no-cache");
+                PartialResponseWriter writer =
+                    ctx.getPartialViewContext().getPartialResponseWriter();
+                writer.startDocument();
+                writer.updateAttributes("form1:foo", attrs);
+                writer.endDocument();
+                writer.flush();
+                ctx.responseComplete();
+            } catch (Exception e) {
+                throw new FacesException(e);
+            }
+        }
+        return null;
+    }
 }
