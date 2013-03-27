@@ -50,11 +50,11 @@
         <version>2.2.1-SNAPSHOT</version>
     </parent>
     <groupId>com.sun.faces.test.webprofile.flow</groupId>
-    <artifactId>param_faces_flow_call</artifactId>
+    <artifactId>parameter_faces_flow_call</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra ${project.version} - Test - Web-Profile - Flow - param_faces_flow_call</name>
+    <name>Mojarra ${project.version} - Test - Web-Profile - Flow - parameter_faces_flow_call</name>
     <build>
-        <finalName>test-webprofile-flow-param_faces_flow_call</finalName>
+        <finalName>test-webprofile-flow-parameter_faces_flow_call</finalName>
     </build>
     <properties>
         <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>

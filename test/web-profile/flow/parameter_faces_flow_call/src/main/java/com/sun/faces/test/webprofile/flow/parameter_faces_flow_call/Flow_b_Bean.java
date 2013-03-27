@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.webprofile.flow.param_faces_flow_call;
+package com.sun.faces.test.webprofile.flow.parameter_faces_flow_call;
 
 import javax.faces.flow.FlowScoped;
 import java.io.Serializable;
@@ -45,11 +45,11 @@ import java.io.Serializable;
 import javax.inject.Named;
 
 @Named
-@FlowScoped(definingDocumentId="unique", value="flow-a")
-public class Flow_a_Bean implements Serializable {
+@FlowScoped("flow-b")
+public class Flow_b_Bean implements Serializable {
 
    public String getName() {
-       return "Flow_a_Bean";
+       return "Flow_B_Bean";
    }
    
    public String getReturnValue() {
