@@ -931,22 +931,6 @@ public class TestValueBindingImpl extends ServletFacesTestCase
         exceptionThrown = false;
         try
         {
-            valueBinding = this.create("[]");
-            valueBinding.getValue(getFacesContext());
-        }
-        catch (PropertyNotFoundException e)
-        {
-            exceptionThrown = true;
-        }
-        catch (EvaluationException ee)
-        {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-
-        exceptionThrown = false;
-        try
-        {
             valueBinding = this.create("applicationScope}");
             valueBinding.getValue(getFacesContext());
         }
