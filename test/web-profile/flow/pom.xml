@@ -26,5 +26,7 @@
         <module>view_node_differences</module>
         <module>basic-empty-flow-def</module>
         <module>parameter_faces_flow_call</module>
+        <module>basic_implicit_template_in_jar</module>
+        <module>basic_implicit_template</module>
     </modules>
 </project>
