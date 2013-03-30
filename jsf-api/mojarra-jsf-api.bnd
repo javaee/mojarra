@@ -77,7 +77,7 @@
 Specification-Title: JavaServer Faces
 Specification-Version: @spec.version@
 Implementation-Title: @impl.name@
-Implementation-Version: @spec.version@
+Implementation-Version: @jar.impl.version@
 Implementation-Vendor: Oracle America, Inc.
 Implementation-Vendor-Id: com.sun
 Extension-Name: @extension.name@
@@ -92,7 +92,7 @@ Import-Package: javax.servlet.jsp.jstl.*;version=1.2,\
   javax.el.*;version=2.2.1
 DynamicImport-Package: org.glassfish.flashlight.provider
 Include-Resource: META-INF=build/classes/META-INF,build/classes
-Bundle-Version: @spec.version@
+Bundle-Version: @bundle.version@
 Bundle-Name: JavaServer Faces API @full.impl.version@
 Bundle-Description: Mojarra JSF API (javax.faces/@spec.version@) @full.impl.version@
 Bundle-SymbolicName: javax.faces-api

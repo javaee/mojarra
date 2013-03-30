@@ -630,6 +630,15 @@ javax.faces.level=ALL
     <target name="jars" depends="build">
 
         <copy file="${basedir}/mojarra-jsf-api.bnd" tofile="tmp.bnd"/>
+
+        <replace file="tmp.bnd"
+                 token="@jar.impl.version@"
+                 value="2.2-m13"/>
+
+        <replace file="tmp.bnd"
+                 token="@bundle.version@"
+                 value="2.1.99.m13"/>
+
         <replace file="tmp.bnd"
                  token="@spec.version@"
                  value="${spec.version}"/>
@@ -922,7 +931,7 @@ javax.faces.level=ALL
 
     <target name="mvn.deploy.release.local" depends="strip.api.jar">
         <mvn.deploy.release.local type="api" 
-                                  version="${spec.version}"/>
+                                  version="${spec.version}-m13"/>
     </target>
 
     <target name="strip.api.jar" 
