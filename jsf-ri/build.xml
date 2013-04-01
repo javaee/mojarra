@@ -659,57 +659,32 @@
 
     <target name="jars" depends="compile">
 
-<!-- 
-
-https://wikis.oracle.com/display/GlassFish/Maven+Versioning+Rules
-
-The Maven and OSGi Packaging and Naming Guidelines state that for
-non-final artifacts a value "less than" the final version number
-must be used for all OSGi version numbers.  The inputs to this build
-script take final version numbers.  It would be nice if we could 
-derive the "less than" values programmatically.  
-
-For example, if ${impl.version.number} is 2.2.0-m12, the value should be
-2.1.99.m12.  The Maven and OSGi versioning rules say the numeric value
-should be "less than" the final release version number until the product
-is actually final.  Thus, 2.1.99 is the closest thing 2.2.0 that is
-still less than 2.2.0.  They also say you should not have dashes in the
-value, hence the "-" gets replaced with ".".
-
-Unfortunately, this is difficult to accomplish with ant, so we will hard
-code the values for now.  These values must be updated whenever we release
-a new version.
-
--->
-
         <copy file="${basedir}/mojarra-jsf-impl.bnd" tofile="tmp.bnd"/>
-
-<!-- start of properties that must be update when incrementing version numbers -->
-
-<!-- Spec version is something like 2.2 -->
-
         <replace file="tmp.bnd"
                  token="@spec.version@"
-                 value="2.1.99.13"/>
-
-<!-- osgi.version is based on impl.version.number, which is something like 
-     2.2.0-m12 -->
-
-        <replace file="tmp.bnd"
-                 token="@osgi.version@"
-                 value="2.1.99.m13"/>
-
-<!-- end of properties that must be update when incrementing version numbers -->
-
+                 value="${spec.version}"/>
         <replace file="tmp.bnd"
                  token="@impl.name@"
                  value="${impl.name}"/>
         <replace file="tmp.bnd"
                  token="@impl.version@"
-                 value="${impl.version.number}"/>
+                 value="${impl.version}"/>
         <replace file="tmp.bnd"
                  token="@full.impl.version@"
                  value="${full.impl.version} ${svn.revision.url}"/>
+        <if>
+            <equals arg1="${build.type}" arg2=""/>
+            <then>
+                <replace file="tmp.bnd"
+                         token="@osgi.version@"
+                         value="${impl.version.number}"/>
+            </then>
+            <else>
+                <replace file="tmp.bnd"
+                         token="@osgi.version@"
+                         value="${impl.version.number}${build.type}"/>
+            </else>
+        </if>
         <replace file="tmp.bnd"
                  token="@extension.name@"
                  value="javax.faces"/>
