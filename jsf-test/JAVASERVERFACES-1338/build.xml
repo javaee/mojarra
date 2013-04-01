@@ -56,14 +56,14 @@
 
     <target name="build">
 
-      <jsf.mvn dir="${jsf.build.home}/jsf-demo/sandbox/scrumtoys2009/eclipseProject" goals="install" />
+      <jsf.mvn dir="${jsf.build.home}/jsf-demo/sandbox/scrumtoys2009/eclipseProject/latest" goals="install" />
       <jsf.mvn dir="${basedir}/i_jsf_1338_htmlunit" goals="install" />
 
     </target>    
 
     <target name="clean">
 
-      <jsf.mvn dir="${jsf.build.home}/jsf-demo/sandbox/scrumtoys2009/eclipseProject" goals="clean" />
+      <jsf.mvn dir="${jsf.build.home}/jsf-demo/sandbox/scrumtoys2009/eclipseProject/latest" goals="clean" />
       <jsf.mvn dir="${basedir}/i_jsf_1338_htmlunit" goals="clean" />
       <delete dir="${basedir}/build" />
 
@@ -79,14 +79,14 @@
         <os family="windows"/>
         <then>
           <non.ant.deploy.artifact
-              artifact="${jsf.build.home}/jsf-demo/sandbox/scrumtoys2009/eclipseProject/target/scrumtoys.war"
+              artifact="${jsf.build.home}/jsf-demo/sandbox/scrumtoys2009/eclipseProject/latest/target/scrumtoys.war"
               appName="scrumtoys" />
 <!--          <echo message="sleeping for 2 minutes" />
           <sleep minutes="2"/> -->
         </then>
         <else>
           <deploy.artifact
-              artifact="${jsf.build.home}/jsf-demo/sandbox/scrumtoys2009/eclipseProject/target/scrumtoys.war"
+              artifact="${jsf.build.home}/jsf-demo/sandbox/scrumtoys2009/eclipseProject/latest/target/scrumtoys.war"
               appName="scrumtoys" />
         </else>
       </if>
@@ -111,7 +111,7 @@
       <property name="deployment.host" value="${container.host}" />
       <property name="deployment.port" value="${container.port}" />
       <property name="path.with.leading.slash" value="/scrumtoys/home.jsf" />
-      <property name="page.regexp" value="(?s).*Sign in to ScrumToys.*" />
+      <property name="page.regexp" value="" />
       <property name="deployment.retries" value="5" />
       
       <antcall target="deployment.check" />

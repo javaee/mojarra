@@ -68,25 +68,11 @@ public class ScrumToysTestCase extends HtmlUnitFacesTestCase {
 
     // ------------------------------------------------------------ Test Methods
 
-    public void testLogin() throws Exception {
+    public void testAccess() throws Exception {
 
         HtmlPage page = getPage("/");
 
-        HtmlTextInput text = (HtmlTextInput) page.getElementById("username");
-        text.setValueAttribute("user1");
-        
-        HtmlPasswordInput password = (HtmlPasswordInput) page.getElementById("password");
-        password.setValueAttribute("user1");
-        
-        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("submit");
-        page = button.click();
-        
         assertTrue(page.asXml().contains("javax.faces.ViewState"));
-        
-        HtmlAnchor logoutLink = (HtmlAnchor) page.getElementById("navigationBar:logout");
-        
-        page = logoutLink.click();
-        assertTrue(page.asXml().contains("j_username"));
         
     }
 
