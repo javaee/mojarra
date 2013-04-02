@@ -1,5 +1,5 @@
 #!/bin/sh
-cd create-from-project-2.2-SNAPSHOT
+cd create-from-project-2.2-m12
 
 mvn clean archetype:create-from-project
 
