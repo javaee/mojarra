@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8' ?>
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -39,49 +39,28 @@
     only if the new code is made subject to such option by the copyright
     holder.
 
---><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>com.sun.faces.demo</groupId>
-    <artifactId>demos</artifactId>
-    <packaging>pom</packaging>
-    <version>2.2.0-SNAPSHOT</version>
-    <name>Mojarra JSF Demos</name>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
-                <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
-                    <encoding>${project.build.sourceEncoding}</encoding>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-    <modules>
-        <module>ajax-component</module>
-        <module>basic-ajax</module>
-        <module>basic-ezcomp</module>
-        <module>bean-validator</module>
-        <module>custom-bean-scope</module>
-        <module>custom-tag</module>
-        <module>guessNumber</module>
-        <module>helloworld</module>
-        <module>ifnavigation</module>
-        <module>viewExpired</module>
-    <module>flow_and_contract</module>
-  </modules>
-    <profiles>
-        <profile>
-            <id>sandbox</id>
-            <modules>
-                <module>sandbox</module>
-            </modules>
-        </profile>
-    </profiles>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-</project>
+-->
+<faces-config version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="
+        http://xmlns.jcp.org/xml/ns/javaee
+        http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
+
+    <flow-definition id="flow">
+
+        <start-node>c</start-node>
+        <view id="a">
+            <vdl-document>/cba/a.xhtml</vdl-document>
+        </view>
+        <view id="b">
+            <vdl-document>/cba/b.xhtml</vdl-document>
+        </view>
+        <view id="c">
+            <vdl-document>/cba/c.xhtml</vdl-document>
+        </view>
+        <flow-return id="return">
+            <from-outcome>/main</from-outcome>
+        </flow-return>
+        
+    </flow-definition>
+</faces-config>

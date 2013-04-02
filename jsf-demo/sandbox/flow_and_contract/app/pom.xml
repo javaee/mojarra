@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.sun.faces.flow_and_contract</groupId>
+    <artifactId>flow_and_contract</artifactId>
+    <version>1.0</version>
+    <packaging>war</packaging>
+    <name>${project.artifactId}</name>
+    <description>A simple project with war packaging that depends on JSF 2.2-m12 and 
+        javaee 6, in that order.</description>
+    <url>http://jsf-spec.java.net/</url>
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                  <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+    <properties>
+      <spec.snapshot.version>2.2-m12</spec.snapshot.version>
+        <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
+    </properties>
+    <dependencies>
+        <dependency>
+          <groupId>com.sun.faces.flow_and_contract</groupId>
+          <artifactId>cba</artifactId>
+          <version>1.0</version>
+        </dependency>
+        <dependency>
+          <groupId>com.sun.faces.flow_and_contract</groupId>
+          <artifactId>leftNav</artifactId>
+          <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.faces</groupId>
+            <artifactId>javax.faces-api</artifactId>
+            <version>2.2-m12</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>6.0</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <repositories>
+        <repository>
+            <id>java.net-maven2-SNAPSHOT-repository</id>
+            <name>Java.net SNAPSHOT-Repository for Maven</name>
+            <url>https://maven.java.net/content/repositories/snapshots/</url>
+            <layout>default</layout>
+        </repository>
+        <repository>
+            <id>java.net-maven2-repository</id>
+            <name>Java.net Repository for Maven</name>
+            <url>https://maven.java.net/content/repositories/releases/</url>
+            <layout>default</layout>
+        </repository>
+    </repositories>
+</project>
