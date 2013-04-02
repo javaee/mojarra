@@ -40,6 +40,11 @@
           <version>1.0</version>
         </dependency>
         <dependency>
+          <groupId>com.sun.faces.flow_and_contract</groupId>
+          <artifactId>leftNav</artifactId>
+          <version>1.0</version>
+        </dependency>
+        <dependency>
             <groupId>javax.faces</groupId>
             <artifactId>javax.faces-api</artifactId>
             <version>2.2-m12</version>

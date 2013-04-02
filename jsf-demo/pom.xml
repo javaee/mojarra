@@ -39,10 +39,7 @@
     only if the new code is made subject to such option by the copyright
     holder.
 
--->
-
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+--><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.sun.faces.demo</groupId>
     <artifactId>demos</artifactId>
@@ -74,7 +71,8 @@
         <module>helloworld</module>
         <module>ifnavigation</module>
         <module>viewExpired</module>
-    </modules>
+    <module>flow_and_contract</module>
+  </modules>
     <profiles>
         <profile>
             <id>sandbox</id>

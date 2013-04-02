@@ -8,6 +8,8 @@
     <packaging>pom</packaging>
     <name>flow_and_contract multi-module</name>
     <modules>
+        <module>leftNav</module>
+        <module>topNav</module>
         <module>abc</module>
         <module>cba</module>
         <module>app</module>
