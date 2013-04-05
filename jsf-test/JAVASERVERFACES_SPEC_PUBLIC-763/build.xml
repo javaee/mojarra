@@ -69,13 +69,13 @@
 
     <target name="test" depends="define.scenario.aware.port">
 
-<!--        <jsf.tester request="/faces/i_spec_763_war.xhtml"
+        <jsf.tester request="/faces/i_spec_763_war.xhtml"
                      context-path="/i_spec_763_war"
                      classpath-refid="html.classpath"
                      test-results-dir="${regression.test.results.dir}"
                      regexp="(?s).*.p.\s+FacesConfigApplicationFactory:\s+Injected\s+from\s+value\s+specified\s+in\s+web.xml\s+@PostConstruct\s+called\s+./p.\s+.p.\s+FacesConfigActionListener:\s+Injected\s+from\s+value\s+specified\s+in\s+web.xml\s+@PostConstruct\s+called\s+./p.\s+.p.\s+FacesConfigNavigationHandler:\s+Injected\s+from\s+value\s+specified\s+in\s+web.xml\s+@PostConstruct\s+called\s+./p.\s+.p.\s+FacesConfigViewHandler:\s+Injected\s+from\s+value\s+specified\s+in\s+web.xml\s+@PostConstruct\s+called\s+./p.\s+.p.\s+FacesConfigStateManager:\s+Injected\s+from\s+value\s+specified\s+in\s+web.xml\s+@PostConstruct\s+called\s+./p.\s+.p.\s+FacesConfigELResolver:\s+Injected\s+from\s+value\s+specified\s+in\s+web.xml\s+@PostConstruct\s+called\s+./p.\s+.p.\s+FacesConfigResourceHandler:\s+Injected\s+from\s+value\s+specified\s+in\s+web.xml\s+@PostConstruct\s+called\s+./p.\s+.p.\s+FacesConfigSystemEventListener:\s+Injected\s+from\s+value\s+specified\s+in\s+web.xml\s+@PostConstruct\s+called\s+./p.\s+.p.\s+FacesConfigPhaseListener:\s+Injected\s+from\s+value\s+specified\s+in\s+web.xml\s+@PostConstruct\s+called\s+./p..*"/>
 
-     <antcall target="test.jboss.tck01" />-->
+     <antcall target="test.jboss.tck01" />
 
 
     </target>    
