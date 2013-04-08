@@ -1006,6 +1006,10 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                               String viewId) {
         boolean result = false;
         if (handlesViewId(viewId)) {
+            if (faceletFactory == null) {
+                faceletFactory = associate.getFaceletFactory();
+                assert (faceletFactory != null);
+            }
             result = null != faceletFactory.getResourceResolver().resolveUrl(viewId);
         }
            
