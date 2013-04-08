@@ -36,12 +36,12 @@
     <dependencies>
         <dependency>
           <groupId>com.sun.faces.flow_and_contract</groupId>
-          <artifactId>cba</artifactId>
+          <artifactId>abc</artifactId>
           <version>1.0</version>
         </dependency>
         <dependency>
           <groupId>com.sun.faces.flow_and_contract</groupId>
-          <artifactId>leftNav</artifactId>
+          <artifactId>topNav</artifactId>
           <version>1.0</version>
         </dependency>
         <dependency>

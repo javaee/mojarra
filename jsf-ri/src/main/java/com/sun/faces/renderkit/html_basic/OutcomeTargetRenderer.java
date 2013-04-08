@@ -40,6 +40,7 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.util.Util;
@@ -171,7 +172,7 @@ public abstract class OutcomeTargetRenderer extends HtmlBasicRenderer {
         // FIXME getNavigationCase doesn't resolve the target viewId (it is part of CaseStruct)
         String toViewId = navCase.getToViewId(context);
         Map<String,List<String>> params = getParamOverrides(component);
-        addNavigationParams(navCase, params);
+        addNavigationParams(context, navCase, params);
         String result = null;
         boolean didDisableClientWindowRendering = false;
         ClientWindow cw = null;
@@ -203,7 +204,7 @@ public abstract class OutcomeTargetRenderer extends HtmlBasicRenderer {
         return result;
     }
 
-    protected void addNavigationParams(NavigationCase navCase,
+    private void addNavigationParams(FacesContext context, NavigationCase navCase,
                                        Map<String,List<String>> existingParams) {
 
         Map<String,List<String>> navParams = navCase.getParameters();
@@ -218,25 +219,28 @@ public abstract class OutcomeTargetRenderer extends HtmlBasicRenderer {
                 }
             }
         }
-        
-        String toFlowDocumentId = navCase.getToFlowDocumentId();
-        if (null != toFlowDocumentId) {
-            if (FlowHandler.NULL_FLOW.equals(toFlowDocumentId)) {
-                List<String> flowDocumentIdValues = new ArrayList<String>();
-                flowDocumentIdValues.add(FlowHandler.NULL_FLOW);
-                existingParams.put(FlowHandler.TO_FLOW_DOCUMENT_ID_REQUEST_PARAM_NAME, flowDocumentIdValues);
-            } else {
-                String flowId = navCase.getFromOutcome();
-                List<String> flowDocumentIdValues = new ArrayList<String>();
-                flowDocumentIdValues.add(toFlowDocumentId);
-                existingParams.put(FlowHandler.TO_FLOW_DOCUMENT_ID_REQUEST_PARAM_NAME, flowDocumentIdValues);
-                
-                List<String> flowIdValues = new ArrayList<String>();
-                flowIdValues.add(flowId);
-                existingParams.put(FlowHandler.FLOW_ID_REQUEST_PARAM_NAME, flowIdValues);
+        WebConfiguration config = WebConfiguration.getInstance(context.getExternalContext());
+        if (config.isHasFlows()) {
+            String toFlowDocumentId = navCase.getToFlowDocumentId();
+            if (null != toFlowDocumentId) {
+                if (FlowHandler.NULL_FLOW.equals(toFlowDocumentId)) {
+                    List<String> flowDocumentIdValues = new ArrayList<String>();
+                    flowDocumentIdValues.add(FlowHandler.NULL_FLOW);
+                    existingParams.put(FlowHandler.TO_FLOW_DOCUMENT_ID_REQUEST_PARAM_NAME, flowDocumentIdValues);
+                } else {
+                    String flowId = navCase.getFromOutcome();
+                    if (null != flowId && 0 < flowId.length()) {
+                        List<String> flowDocumentIdValues = new ArrayList<String>();
+                        flowDocumentIdValues.add(toFlowDocumentId);
+                        existingParams.put(FlowHandler.TO_FLOW_DOCUMENT_ID_REQUEST_PARAM_NAME, flowDocumentIdValues);
+                        
+                        List<String> flowIdValues = new ArrayList<String>();
+                        flowIdValues.add(flowId);
+                        existingParams.put(FlowHandler.FLOW_ID_REQUEST_PARAM_NAME, flowIdValues);
+                    }
+                }
             }
         }
-
     }
 
     protected Map<String, List<String>> getParamOverrides(UIComponent component) {

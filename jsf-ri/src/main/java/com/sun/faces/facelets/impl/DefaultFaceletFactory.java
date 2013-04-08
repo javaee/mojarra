@@ -114,6 +114,10 @@ public class DefaultFaceletFactory {
     // the ResourceHandler to do its work.
     private ResourceResolver resolver;
 
+    public ResourceResolver getResolver() {
+        return resolver;
+    }
+
     private  URL baseUrl;
     
     private long refreshPeriod;

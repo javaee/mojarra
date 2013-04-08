@@ -1006,8 +1006,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                               String viewId) {
         boolean result = false;
         if (handlesViewId(viewId)) {
-            ResourceHandler rh = context.getApplication().getResourceHandler();
-            result = null != rh.createViewResource(context, viewId);
+            result = null != faceletFactory.getResourceResolver().resolveUrl(viewId);
         }
            
         return result;
