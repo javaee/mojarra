@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -135,10 +135,10 @@ public final class ViewHandler extends TagHandlerImpl {
     /**
      * See taglib documentation.
      */
+    @Override
     public void apply(FaceletContext ctx, UIComponent parent)
             throws IOException {
         UIViewRoot root = ComponentSupport.getViewRoot(ctx, parent);
-        Object partialStateSavingVal = null;
         if (root != null) {
             if (this.locale != null) {
                 try {
@@ -180,7 +180,7 @@ public final class ViewHandler extends TagHandlerImpl {
             }
 
             if (this.contracts != null) {
-                if (!FacesContext.getCurrentInstance().getAttributes().containsKey("com.sun.faces.uiCompositionCount")) {
+                if (!ctx.getFacesContext().getAttributes().containsKey("com.sun.faces.uiCompositionCount")) {
                     String contractsValue = this.contracts.getValue(ctx);
                     if (contractsValue != null) {
                         List<String> contractList = Arrays.asList(contractsValue.split(","));
@@ -195,9 +195,7 @@ public final class ViewHandler extends TagHandlerImpl {
             
             if (this.transientFlag != null) {
                 Boolean b = Boolean.valueOf(this.transientFlag.getValue(ctx));
-                if (b != null) {
-                    root.setTransient(b);
-                }
+                root.setTransient(b);
             }
 
             String viewId = root.getViewId();
