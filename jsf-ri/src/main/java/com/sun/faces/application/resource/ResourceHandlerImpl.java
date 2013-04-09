@@ -113,20 +113,18 @@ public class ResourceHandlerImpl extends ResourceHandler {
     }
 
     @Override
-    public Resource createViewResource(FacesContext context, String resourceName) {
+    public Resource createViewResource(FacesContext facesContext, String resourceName) {
 
         Util.notNull("resourceName", resourceName);
 
-        FacesContext ctx = FacesContext.getCurrentInstance();
+        boolean development = facesContext.isProjectStage(ProjectStage.Development);
 
-        boolean development = ctx.isProjectStage(ProjectStage.Development);
-
-        String ctype = getContentType(ctx, resourceName);
+        String ctype = getContentType(facesContext, resourceName);
         ResourceInfo info = manager.findResource(null,
                                                  resourceName,
                                                  ctype,
                                                  true,
-                                                 ctx);
+                                                 facesContext);
         if (info == null) {
             // prevent message from being when we're dealing with
             // groovy is present and Application.createComponent()
@@ -134,7 +132,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
             if (!development && "application/x-groovy".equals(ctype)) {
                 return null;
             }
-            logMissingResource(ctx, resourceName, null, null);
+            logMissingResource(facesContext, resourceName, null, null);
             return null;
         } else {
             return new ResourceImpl(info, ctype, creationTime, maxAge);
