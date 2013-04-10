@@ -77,19 +77,20 @@ public class ClientWindowImpl extends ClientWindow {
     }
     
     private String calculateClientWindow(FacesContext context) {
-        final String clientWindowCounterKey = "com.sun.faces.lifecycle.ClientWindowCounterKey";
-        ExternalContext extContext = context.getExternalContext();
-        Map<String, Object> sessionAttrs = extContext.getSessionMap();
-        Integer counter = (Integer) sessionAttrs.get(clientWindowCounterKey);
-        if (null == counter) {
-            counter = Integer.valueOf(0);
+        synchronized(context.getExternalContext().getSession(true)) {
+            final String clientWindowCounterKey = "com.sun.faces.lifecycle.ClientWindowCounterKey";
+            ExternalContext extContext = context.getExternalContext();
+            Map<String, Object> sessionAttrs = extContext.getSessionMap();
+            Integer counter = (Integer) sessionAttrs.get(clientWindowCounterKey);
+            if (null == counter) {
+                counter = Integer.valueOf(0);
+            }
+            char sep = UINamingContainer.getSeparatorChar(context);
+            id = extContext.getSessionId(true) + sep +
+                    + counter;
+
+            sessionAttrs.put(clientWindowCounterKey, ++counter);
         }
-        char sep = UINamingContainer.getSeparatorChar(context);
-        id = extContext.getSessionId(true) + sep +
-                + counter;
-        
-        sessionAttrs.put(clientWindowCounterKey, ++counter);
-        
         return id;
     }
 
