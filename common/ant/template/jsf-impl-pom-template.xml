@@ -274,6 +274,41 @@
     </dependencies>
     <profiles>
       <profile>
+        <id>check-module</id>
+        <build>
+          <plugins>
+            <plugin>
+              <groupId>org.glassfish.build</groupId>
+              <artifactId>spec-version-maven-plugin</artifactId>
+              <version>1.1</version>
+              <executions>
+                <execution>
+                  <goals>
+                    <goal>check-module</goal>
+                  </goals>
+                </execution>
+              </executions>
+              <configuration>
+                <spec>
+                  <nonFinal>true</nonFinal>
+                  <jarType>impl</jarType>
+                  <specVersion>2.1</specVersion>
+                  <newSpecVersion>2.2</newSpecVersion>
+                  <specImplVersion>2.2</specImplVersion>
+                  <implVersion>2.1.21</implVersion>
+                  <newImplVersion>@version@</newImplVersion>
+                  <specBuild>14</specBuild>
+                  <implBuild>14</implBuild>
+                  <apiPackage>javax.faces</apiPackage>
+                  <implNamespace>org.glassfish</implNamespace>
+                </spec>
+                <module>target/javax.faces-@version@.jar</module>
+              </configuration>
+            </plugin>
+          </plugins>
+        </build>
+      </profile>
+      <profile>
         <id>release-sign-artifacts</id>
         <build>
           <plugins>

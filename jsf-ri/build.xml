@@ -784,7 +784,9 @@ ant -Dgpg.passphrase=PASSPHRASE HERE mvn.deploy.snapshot.local
 
 
     <target name="mvn.deploy.release.local">
-        <mvn.deploy.release.local type="impl"/>
+        <var name="build.type" value="" />
+        <var name="impl.version" value="${impl.version.number}${build.type}"/>
+        <mvn.deploy.release.local type="impl" version="${impl.version}-m14"/>
     </target>
 
 
@@ -803,7 +805,9 @@ ant -Dgpg.passphrase=PASSPHRASE HERE mvn.deploy.snapshot.local
 
 
     <target name="mvn.deploy.release">
-        <mvn.deploy.release type="impl"/>
+        <var name="build.type" value="" />
+        <var name="impl.version" value="${impl.version.number}${build.type}"/>
+        <mvn.deploy.release type="impl" version="${impl.version}-m14"/>
     </target>
 
     <target name="javadoc_check">
