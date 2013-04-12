@@ -885,7 +885,8 @@ ant -Dgpg.passphrase=PASSPHRASE HERE mvn.deploy.snapshot.local
 
 
     <target name="mvn.pre-maven-rename.deploy.release.local">
-        <mvn.pre-maven-rename.deploy.release.local type="api"/>
+        <mvn.pre-maven-rename.deploy.release.local type="api"
+                                  version="${spec.version}-m14"/>
     </target>
 
     <target name="strip.api.jar" 
@@ -964,7 +965,10 @@ ant -Dgpg.passphrase=PASSPHRASE HERE mvn.deploy.snapshot.local
         
     <target name="mvn.pre-maven-rename.deploy.api.release.local" depends="strip.api.jar">
 
-        <mvn.pre-maven-rename.deploy.release.local groupId="javax.faces" version="${spec.version}" type="api"/>
+        <mvn.pre-maven-rename.deploy.release.local groupId="javax.faces" 
+                                  type="api"
+                                  version="${spec.version}-m14"/>
+
     </target>
 
 
