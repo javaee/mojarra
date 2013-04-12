@@ -86,6 +86,28 @@
         </component>
         <attribute>
             <description>
+                <![CDATA[<p class="changed_added_2_2">Per the WAI-ARIA spec and its
+                relationship to HTML5 (Section title ARIA Role Attriubute),
+                every HTML element may have a "role" attribute whose value
+                must be passed through unmodified on the element on which it
+                is declared in the final rendered markup.  The attribute, if
+                specified, must have a value that is a string literal that is,
+                or an EL Expression that evaluates to, a set of
+                space-separated tokens representing the various WAI-ARIA roles
+                that the element belongs to.
+                </p>
+                
+                <p class="changed_added_2_2">It is the page author's
+                responsibility to ensure that the user agent is capable of
+                correctly interpreting the value of this attribute.</p>]]>
+            </description>
+            <name>role</name>
+            <required>false</required>
+            <type>javal.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description>
                 <![CDATA[The component identifier for this component.  This value must be
                 unique within the closest parent component that is a naming
                 container.]]>
@@ -521,6 +543,15 @@
                 javax.faces.component.UIComponent
             </type>
         </attribute>
+        <attribute>
+            <description>
+                <![CDATA[<p class="changed_added_2_2">Disable appending the <code>ClientWindow</code> on the rendering of this element.</p>]]>
+            </description>
+            <name>disableClientWindow</name>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
+
     </tag>
     <tag>
         <description>
@@ -555,6 +586,35 @@
             <component-type>javax.faces.HtmlOutcomeTargetLink</component-type>
             <renderer-type>javax.faces.Link</renderer-type>
         </component>
+        <attribute>
+            <description>
+                <![CDATA[<p class="changed_added_2_2">Per the WAI-ARIA spec and its
+                relationship to HTML5 (Section title ARIA Role Attriubute),
+                every HTML element may have a "role" attribute whose value
+                must be passed through unmodified on the element on which it
+                is declared in the final rendered markup.  The attribute, if
+                specified, must have a value that is a string literal that is,
+                or an EL Expression that evaluates to, a set of
+                space-separated tokens representing the various WAI-ARIA roles
+                that the element belongs to.
+                </p>
+                
+                <p class="changed_added_2_2">It is the page author's
+                responsibility to ensure that the user agent is capable of
+                correctly interpreting the value of this attribute.</p>]]>
+            </description>
+            <name>role</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[<p class="changed_added_2_2">Disable appending the <code>ClientWindow</code> on the rendering of this element.</p>]]>
+            </description>
+            <name>disableClientWindow</name>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
         <attribute>
             <description>
                 <![CDATA[The component identifier for this component.  This value must be
@@ -1592,6 +1652,27 @@
         </component>
         <attribute>
             <description>
+                <![CDATA[<p class="changed_added_2_2">Per the WAI-ARIA spec and its
+                relationship to HTML5 (Section title ARIA Role Attriubute),
+                every HTML element may have a "role" attribute whose value
+                must be passed through unmodified on the element on which it
+                is declared in the final rendered markup.  The attribute, if
+                specified, must have a value that is a string literal that is,
+                or an EL Expression that evaluates to, a set of
+                space-separated tokens representing the various WAI-ARIA roles
+                that the element belongs to.
+                </p>
+                
+                <p class="changed_added_2_2">It is the page author's
+                responsibility to ensure that the user agent is capable of
+                correctly interpreting the value of this attribute.</p>]]>
+            </description>
+            <name>role</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
                 MethodExpression representing the application action to invoke
                 when this component is activated by the user. The expression
                 must evaluate to a public method that takes no parameters, and
@@ -1644,7 +1725,7 @@
             </description>
             <name>immediate</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -1654,7 +1735,7 @@
             </description>
             <name>rendered</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -1702,7 +1783,7 @@
             </description>
             <name>disabled</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -1880,7 +1961,7 @@
             </description>
             <name>readonly</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -2064,6 +2145,27 @@
         </component>
         <attribute>
             <description>
+                <![CDATA[<p class="changed_added_2_2">Per the WAI-ARIA spec and its
+                relationship to HTML5 (Section title ARIA Role Attriubute),
+                every HTML element may have a "role" attribute whose value
+                must be passed through unmodified on the element on which it
+                is declared in the final rendered markup.  The attribute, if
+                specified, must have a value that is a string literal that is,
+                or an EL Expression that evaluates to, a set of
+                space-separated tokens representing the various WAI-ARIA roles
+                that the element belongs to.
+                </p>
+                
+                <p class="changed_added_2_2">It is the page author's
+                responsibility to ensure that the user agent is capable of
+                correctly interpreting the value of this attribute.</p>]]>
+            </description>
+            <name>role</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
                 MethodExpression representing the application action to invoke
                 when this component is activated by the user. The expression
                 must evaluate to a public method that takes no parameters, and
@@ -2116,7 +2218,7 @@
             </description>
             <name>immediate</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -2126,7 +2228,7 @@
             </description>
             <name>rendered</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -2182,7 +2284,7 @@
             </description>
             <name>disabled</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -2559,7 +2661,7 @@
             </description>
             <name>rendered</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -3002,7 +3104,7 @@
             </description>
             <name>prependId</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -3012,7 +3114,7 @@
             </description>
             <name>rendered</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -3274,7 +3376,7 @@
             </description>
             <name>rendered</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -3331,7 +3433,7 @@
             </description>
             <name>ismap</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -3572,7 +3674,7 @@
             </description>
             <name>immediate</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -3582,7 +3684,7 @@
             </description>
             <name>rendered</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -3591,7 +3693,7 @@
             </description>
             <name>required</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -3732,7 +3834,7 @@
             </description>
             <name>immediate</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -3742,7 +3844,7 @@
             </description>
             <name>rendered</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -3751,7 +3853,7 @@
             </description>
             <name>required</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -3873,7 +3975,7 @@
             </description>
             <name>disabled</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -4035,7 +4137,7 @@
             </description>
             <name>readonly</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -4047,7 +4149,7 @@
             </description>
             <name>redisplay</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -4173,7 +4275,7 @@
             </description>
             <name>immediate</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -4183,7 +4285,7 @@
             </description>
             <name>rendered</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -4192,7 +4294,7 @@
             </description>
             <name>required</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -4314,7 +4416,7 @@
             </description>
             <name>disabled</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -4476,7 +4578,7 @@
             </description>
             <name>readonly</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -4592,7 +4694,7 @@
             </description>
             <name>immediate</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -4602,7 +4704,7 @@
             </description>
             <name>rendered</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -4611,7 +4713,7 @@
             </description>
             <name>required</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -4717,7 +4819,7 @@
             </description>
             <name>disabled</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -4870,7 +4972,7 @@
             </description>
             <name>readonly</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -5021,7 +5123,7 @@
             </description>
             <name>rendered</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -5030,7 +5132,7 @@
             </description>
             <name>showDetail</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -5040,7 +5142,7 @@
             </description>
             <name>showSummary</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -5150,7 +5252,7 @@
             </description>
             <name>tooltip</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -5238,7 +5340,7 @@
             </description>
             <name>globalOnly</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -5258,7 +5360,7 @@
             </description>
             <name>rendered</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -5267,7 +5369,7 @@
             </description>
             <name>showDetail</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -5277,7 +5379,7 @@
             </description>
             <name>showSummary</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -5398,7 +5500,7 @@
             </description>
             <name>tooltip</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -5487,7 +5589,7 @@
             </description>
             <name>rendered</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -5516,7 +5618,7 @@
             </description>
             <name>escape</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -5607,7 +5709,7 @@
             </description>
             <name>rendered</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -5645,7 +5747,7 @@
             </description>
             <name>escape</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -5880,7 +5982,7 @@
             </description>
             <name>rendered</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -5936,7 +6038,7 @@
             </description>
             <name>disabled</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -6164,6 +6266,173 @@
     </tag>
     <tag>
         <description>
+            <![CDATA[<div class="changed_added_2_0">
+            
+            <p>Render the markup for a <code>&lt;link&gt;</code> element that
+            renders the style <code>Resource</code> specified by the optional
+            <code>name</code> and <code>library</code> attributes.</p>
+            
+            <p>Decode Behavior</p>
+            
+            <ul>
+            
+            <p>No action is required during decode for this renderer.</p>
+            
+            </ul>
+            
+            <p>Encode Behavior</p>
+            
+            <ul>
+            
+            <p>Use the algorithm <em>Common Encode Behavior</em> for
+            <code>encodeBegin()</code>, <code>encodeChildren()</code> and
+            <code>getRendersChildren()</code>.</p>
+            
+            <p>For <code>encodeEnd()</code>, use the algorithm <a
+            href="javax.faces.Outputjavax.faces.resource.Script.html#ResourceCommonGetResource">Common
+            Algorithm for Obtaining A Resource to Render</a> to obtain a
+            reference to the <code>Resource</code> to be encoded.</p>
+            
+            <p>Output a <code>&lt;link&gt;</code> element.  Use the result from
+            calling <code>resource.getRequestPath()</code> as the value of the
+            "href" attribute, the result from calling
+            <code>resource.getContentType()</code> as the value of the "type"
+            attribute, the literal string "stylesheet" as the value of the "rel"
+            attribute, and the literal string "screen" as the value of the "media"
+            attribute.</p>
+            
+            <p>The implementation of this renderer must have a <a target="_"
+            href="../../javadocs/javax/faces/event/ListenerFor.html"><code>@ListenerFor</code></a>
+            annotation attached to it, at the class level, declaring <a target="_"
+            href="../../javadocs/javax/faces/event/PostAddToViewEvent.html"><code>PostAddToViewEvent.class</code></a>
+            as the value of the <code>systemEventClass</code> attribute.  The presence of
+            this annotation on a renderer implies the renderer implements <a target="_"
+            href="../../javadocs/javax/faces/event/ComponentSystemEventListener.html"><code>ComponentSystemEventListener</code></a>,
+            which this renderer must do.  The implementation of
+            <code>processEvent()</code> must extract the <code>UIComponent</code>
+            from the argument event pass it to <a target="_"
+            href="../../javadocs/javax/faces/component/UIViewRoot.html#addComponentResource(javax.faces.context.FacesContext,%20javax.faces.component.UIComponent,%20java.lang.String)"><code>UIViewRoot.addComponentResource()</code></a>, specifying
+            the literal string "<code>head</code>" as the last argument.</p>
+            
+            <p>The stylsheet renderer must ensure that any stylesheets are included in the &lt;head&gt; of the document.
+            </p>
+            
+            </div>]]>
+        </description>
+        <tag-name>
+            outputStylesheet
+        </tag-name>
+        <component>
+            <component-type>javax.faces.Output</component-type>
+            <renderer-type>javax.faces.resource.Stylesheet</renderer-type>
+        </component>
+        <attribute>
+            <description>
+                <![CDATA[Converter instance registered with this component.]]>
+            </description>
+            <name>
+                converter
+            </name>
+            <required>
+                false
+            </required>
+            <type>
+                javax.faces.convert.Converter
+            </type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[The component identifier for this component.  This value must be
+                unique within the closest parent component that is a naming
+                container.]]>
+            </description>
+            <name>
+                id
+            </name>
+            <required>
+                false
+            </required>
+            <type>
+                java.lang.String
+            </type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Flag indicating whether or not this component should be rendered
+                (during Render Response Phase), or processed on any subsequent
+                form submit.  The default value for this property is true.]]>
+            </description>
+            <name>
+                rendered
+            </name>
+            <required>
+                false
+            </required>
+            <type>
+                boolean
+            </type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[The current value of this component.]]>
+            </description>
+            <name>
+                value
+            </name>
+            <required>
+                false
+            </required>
+            <type>
+                java.lang.Object
+            </type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[<div class="changed_added_2_0"><p>The <em>libraryName</em> for this resource.</p></div>]]>
+            </description>
+            <name>
+                library
+            </name>
+            <required>
+                false
+            </required>
+            <type>
+                java.lang.String
+            </type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[<div class="changed_added_2_0"><p>The <em>resourceName</em> for this resource.</p></div>
+                <div class="changed_modified_2_0_rev_a"><p>This attribute is required.</p></div>]]>
+            </description>
+            <name>
+                name
+            </name>
+            <required>
+                false
+            </required>
+            <type>
+                java.lang.String
+            </type>
+        </attribute>
+        <attribute>
+            <description>
+                The ValueExpression linking this component to a property in a
+                backing bean
+            </description>
+            <name>
+                binding
+            </name>
+            <required>
+                false
+            </required>
+            <type>
+                javax.faces.component.UIComponent
+            </type>
+        </attribute>
+    </tag>
+    <tag>
+        <description>
             If the "styleClass", "style", "dir" or "lang"
             attributes are present, render a "span" element. If the
             "styleClass" attribute is present, render its value as the value
@@ -6206,7 +6475,7 @@
             </description>
             <name>rendered</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -6235,7 +6504,7 @@
             </description>
             <name>escape</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -6514,7 +6783,7 @@
                 name
             </name>
             <required>
-                true 
+                false
             </required>
             <type>
                 java.lang.String
@@ -6550,173 +6819,7 @@
             </type>
         </attribute>
     </tag>
-    <tag>
-        <description>
-            <![CDATA[<div class="changed_added_2_0">
-            
-            <p>Render the markup for a <code>&lt;link&gt;</code> element that
-            renders the style <code>Resource</code> specified by the optional
-            <code>name</code> and <code>library</code> attributes.</p>
-            
-            <p>Decode Behavior</p>
-            
-            <ul>
-            
-            <p>No action is required during decode for this renderer.</p>
-            
-            </ul>
-            
-            <p>Encode Behavior</p>
-            
-            <ul>
-            
-            <p>Use the algorithm <em>Common Encode Behavior</em> for
-            <code>encodeBegin()</code>, <code>encodeChildren()</code> and
-            <code>getRendersChildren()</code>.</p>
-            
-            <p>For <code>encodeEnd()</code>, use the algorithm <a
-            href="javax.faces.Outputjavax.faces.resource.Script.html#ResourceCommonGetResource">Common
-            Algorithm for Obtaining A Resource to Render</a> to obtain a
-            reference to the <code>Resource</code> to be encoded.</p>
-            
-            <p>Output a <code>&lt;link&gt;</code> element.  Use the result from
-            calling <code>resource.getRequestPath()</code> as the value of the
-            "href" attribute, the result from calling
-            <code>resource.getContentType()</code> as the value of the "type"
-            attribute, the literal string "stylesheet" as the value of the "rel"
-            attribute, and the literal string "screen" as the value of the "media"
-            attribute.</p>
-            
-            <p>The implementation of this renderer must have a <a target="_"
-            href="../../javadocs/javax/faces/event/ListenerFor.html"><code>@ListenerFor</code></a>
-            annotation attached to it, at the class level, declaring <a target="_"
-            href="../../javadocs/javax/faces/event/PostAddToViewEvent.html"><code>PostAddToViewEvent.class</code></a>
-            as the value of the <code>systemEventClass</code> attribute.  The presence of
-            this annotation on a renderer implies the renderer implements <a target="_"
-            href="../../javadocs/javax/faces/event/ComponentSystemEventListener.html"><code>ComponentSystemEventListener</code></a>,
-            which this renderer must do.  The implementation of
-            <code>processEvent()</code> must extract the <code>UIComponent</code>
-            from the argument event pass it to <a target="_"
-            href="../../javadocs/javax/faces/component/UIViewRoot.html#addComponentResource(javax.faces.context.FacesContext,%20javax.faces.component.UIComponent,%20java.lang.String)"><code>UIViewRoot.addComponentResource()</code></a>, specifying
-            the literal string "<code>head</code>" as the last argument.</p>
-            
-            <p>The stylsheet renderer must ensure that any stylesheets are included in the &lt;head&gt; of the document.
-            </p>
-            
-            </div>]]>
-        </description>
-        <tag-name>
-            outputStylesheet
-        </tag-name>
-        <component>
-            <component-type>javax.faces.Output</component-type>
-            <renderer-type>javax.faces.resource.Stylesheet</renderer-type>
-        </component>
-        <attribute>
-            <description>
-                <![CDATA[Converter instance registered with this component.]]>
-            </description>
-            <name>
-                converter
-            </name>
-            <required>
-                false
-            </required>
-            <type>
-                javax.faces.convert.Converter
-            </type>
-        </attribute>
-        <attribute>
-            <description>
-                <![CDATA[The component identifier for this component.  This value must be
-                unique within the closest parent component that is a naming
-                container.]]>
-            </description>
-            <name>
-                id
-            </name>
-            <required>
-                false
-            </required>
-            <type>
-                java.lang.String
-            </type>
-        </attribute>
-        <attribute>
-            <description>
-                <![CDATA[Flag indicating whether or not this component should be rendered
-                (during Render Response Phase), or processed on any subsequent
-                form submit.  The default value for this property is true.]]>
-            </description>
-            <name>
-                rendered
-            </name>
-            <required>
-                false
-            </required>
-            <type>
-                boolean
-            </type>
-        </attribute>
-        <attribute>
-            <description>
-                <![CDATA[The current value of this component.]]>
-            </description>
-            <name>
-                value
-            </name>
-            <required>
-                false
-            </required>
-            <type>
-                java.lang.Object
-            </type>
-        </attribute>
-        <attribute>
-            <description>
-                <![CDATA[<div class="changed_added_2_0"><p>The <em>libraryName</em> for this resource.</p></div>]]>
-            </description>
-            <name>
-                library
-            </name>
-            <required>
-                false
-            </required>
-            <type>
-                java.lang.String
-            </type>
-        </attribute>
-        <attribute>
-            <description>
-                <![CDATA[<div class="changed_added_2_0"><p>The <em>resourceName</em> for this resource.</p></div>
-                <div class="changed_modified_2_0_rev_a"><p>This attribute is required.</p></div>]]>
-            </description>
-            <name>
-                name
-            </name>
-            <required>
-                true 
-            </required>
-            <type>
-                java.lang.String
-            </type>
-        </attribute>
-        <attribute>
-            <description>
-                The ValueExpression linking this component to a property in a
-                backing bean
-            </description>
-            <name>
-                binding
-            </name>
-            <required>
-                false
-            </required>
-            <type>
-                javax.faces.component.UIComponent
-            </type>
-        </attribute>
-    </tag>
+
     <tag>
         <description>
             Renders an HTML "table" element, conforming to the
@@ -6778,7 +6881,7 @@
             </description>
             <name>rendered</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -7139,7 +7242,7 @@
             </description>
             <name>rendered</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -7253,7 +7356,7 @@
             </description>
             <name>immediate</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -7263,7 +7366,7 @@
             </description>
             <name>rendered</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -7272,7 +7375,7 @@
             </description>
             <name>required</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -7370,7 +7473,7 @@
             </description>
             <name>disabled</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -7523,7 +7626,7 @@
             </description>
             <name>readonly</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -7684,7 +7787,7 @@
             </description>
             <name>immediate</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -7694,7 +7797,7 @@
             </description>
             <name>rendered</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -7703,7 +7806,7 @@
             </description>
             <name>required</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -7824,7 +7927,7 @@
             </description>
             <name>disabled</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -7853,7 +7956,7 @@
             </description>
             <name>hideNoSelectionOption</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -8018,7 +8121,7 @@
             </description>
             <name>readonly</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -8294,7 +8397,7 @@
             </description>
             <name>immediate</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -8304,7 +8407,7 @@
             </description>
             <name>rendered</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -8313,7 +8416,7 @@
             </description>
             <name>required</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -8425,7 +8528,7 @@
             </description>
             <name>disabled</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -8454,7 +8557,7 @@
             </description>
             <name>hideNoSelectionOption</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -8607,7 +8710,7 @@
             </description>
             <name>readonly</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -8735,7 +8838,7 @@
             </description>
             <name>immediate</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -8745,7 +8848,7 @@
             </description>
             <name>rendered</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -8754,7 +8857,7 @@
             </description>
             <name>required</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -8866,7 +8969,7 @@
             </description>
             <name>disabled</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -8895,7 +8998,7 @@
             </description>
             <name>hideNoSelectionOption</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -9048,7 +9151,7 @@
             </description>
             <name>readonly</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -9166,7 +9269,7 @@
             </description>
             <name>immediate</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -9176,7 +9279,7 @@
             </description>
             <name>rendered</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -9185,7 +9288,7 @@
             </description>
             <name>required</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -9283,7 +9386,7 @@
             </description>
             <name>disabled</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -9312,7 +9415,7 @@
             </description>
             <name>hideNoSelectionOption</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -9465,7 +9568,7 @@
             </description>
             <name>readonly</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -9590,7 +9693,7 @@
             </description>
             <name>immediate</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -9600,7 +9703,7 @@
             </description>
             <name>rendered</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -9609,7 +9712,7 @@
             </description>
             <name>required</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -9707,7 +9810,7 @@
             </description>
             <name>disabled</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -9736,7 +9839,7 @@
             </description>
             <name>hideNoSelectionOption</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -9889,7 +9992,7 @@
             </description>
             <name>readonly</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -10036,7 +10139,7 @@
             </description>
             <name>immediate</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -10046,7 +10149,7 @@
             </description>
             <name>rendered</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -10055,7 +10158,7 @@
             </description>
             <name>required</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -10162,7 +10265,7 @@
             </description>
             <name>disabled</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -10191,7 +10294,7 @@
             </description>
             <name>hideNoSelectionOption</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -10356,7 +10459,7 @@
             </description>
             <name>readonly</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description>
@@ -10468,7 +10571,585 @@
             </description>
             <name>rowHeader</name>
             <required>false</required>
-            <type>boolean</type>
+            <type>java.lang.Boolean</type>
         </attribute>
     </tag>
+
+    <tag>
+        <description>
+            <![CDATA[<p class="changed_added_2_2"><span>Renders</span>
+            an HTML "input" element of "type" "file". The standard HTML_BASIC
+            RenderKit specifies behavior that assumes Servlet 3.0 or later.
+            Portlet implementations must override this implementation with a
+            semantically equivalent one that functions under the constraints
+            of the Portlet specification.</p>
+            
+            <div class="changed_added_2_2">
+            
+            <p><a name="decode">Decode Behavior</a></p>
+            
+            <ul>
+            
+            <p>Obtain the <code>Map</code> from the "requestParameterMap"
+            property of the <code>ExternalContext</code>.  If the
+            <code>Map</code> contains an entry for the "clientId" of the
+            component, pass the value of the entry to the
+            <code>setSubmittedValue()</code> method of the component, which
+            must be an instance of <code>EditableValueHolder</code>, and
+            return.  Otherwise, obtain the "request" property from the
+            <code>ExternalContext</code> and cast it to
+            <code>javax.servlet.http.HttpServletRequest</code>.  Call
+            <code>getParts()</code> on the httpServletRequest. Iterate over
+            the parts.  If the "name" property of the current part is equal to
+            the "clientId", pass the current part to the
+            <code>setSubmittedValue()</code> method of the component.  If an
+            exception is thrown during the iteration, log the exception and
+            continue.</p>
+            
+            <p>The standard implementation must override the
+            <code>getConvertedValue()</code> so that it simply returns the
+            <code>submittedValue</code> argument.</p>
+            
+            <p>Any exception thrown when interacting with the underlying
+            multi-part API must be wrapped in a <code>FacesException</code>
+            and allowed to reach the <code>ExceptionHandler</code>.</p>
+            
+            </ul>
+            
+            <p>Encode Behavior</p>
+            
+            <ul>
+            
+            <p> Render the clientId of the component as the value of the
+            "name" attribute.  Do not render the "value" attribute.  If the
+            "styleClass" attribute is specified, render its value as the value
+            of the "class" attribute.  </p>
+            
+            <p>If <code>ProjectStage</code> is not
+            <code>ProjectStage.Production</code>, verify that the enclosing
+            form has an <code>enctype</code> attribute whose value is
+            <code>multipart/form-data</code>.  If not, add a
+            <code>FacesMessage</code> for this component's clientId to the
+            <code>FacesContext</code> stating that file upload requires a form
+            with <code>enctype</code> equal to
+            <code>multipart/form-data</code>.  If <code>ProjectStage</code>
+            <strong>is</strong> <code>ProjectStage.Production</code>, do not
+            do this verification.</p>
+            
+            </ul>
+            
+            </div>]]>
+        </description>
+        <tag-name>inputFile</tag-name>
+        <handler-class></handler-class>
+        <attribute>
+            <description>
+                <![CDATA[Converter instance registered with this component.]]>
+            </description>
+            <name>converter</name>
+            <required>false</required>
+            <type>javax.faces.convert.Converter</type>
+        </attribute>
+
+        <attribute>
+            <description>
+                <![CDATA[A ValueExpression enabled attribute that, if present, will be
+                used as the text of the converter message, replacing any message
+                that comes from the converter.]]>
+            </description>
+            <name>converterMessage</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[The component identifier for this component.  This value must be
+                unique within the closest parent component that is a naming
+                container.]]>
+            </description>
+            <name>id</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Flag indicating that this component's value must be
+                converted and validated immediately (that is, during
+                Apply Request Values phase), rather than waiting
+                until Process Validations phase.]]>
+            </description>
+            <name>immediate</name>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Flag indicating whether or not this component should be rendered
+                (during Render Response Phase), or processed on any subsequent
+                form submit.  The default value for this property is true.]]>
+            </description>
+            <name>rendered</name>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Flag indicating that the user is required to provide a submitted
+                value for this input component.]]>
+            </description>
+            <name>required</name>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[A ValueExpression enabled attribute that, if present, will be
+                used as the text of the validation message for the "required"
+                facility, if the "required" facility is used.]]>
+            </description>
+            <name>requiredMessage</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[MethodExpression representing a validator method that will be called
+                during Process Validations to perform correctness checks on the
+                value of this component.  The expression must evaluate to a public
+                method that takes FacesContext, UIComponent, and Object parameters,
+                with a return type of void.]]>
+            </description>
+            <name>validator</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[The current value of this component.]]>
+            </description>
+            <name>value</name>
+            <required>false</required>
+            <type>java.lang.Object</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[<p>
+                
+                MethodExpression representing a value change listener method
+                that will be notified when a new value has been set for this
+                input component.  The expression must evaluate to a public
+                method that takes a <code>ValueChangeEvent</code> parameter,
+                with a return type of void, <span class="changed_added_2_0">or
+                to a public method that takes no arguments with a return type
+                of void.  In the latter case, the method has no way of easily
+                knowing what the new value is, but this can be useful in cases
+                where a notification is needed that "this value
+                changed".</span>
+                
+                </p>]]>
+            </description>
+            <name>valueChangeListener</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Alternate textual description of the
+                element rendered by this component.]]>
+            </description>
+            <name>alt</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[If the value of this attribute is "off", render "off" as the value
+                of the attribute. This indicates that the  browser should
+                disable its autocomplete feature for this component.  This is
+                useful for components that perform autocompletion and do not
+                want the browser interfering.  If this attribute is not set or the value
+                is "on", render nothing.]]>
+            </description>
+            <name>autocomplete</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Direction indication for text that does not inherit directionality.
+                Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+                These attributes are case sensitive when rendering to XHTML, so
+                care must be taken to have the correct case.]]>
+            </description>
+            <name>dir</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Flag indicating that this element must never receive focus or
+                be included in a subsequent submit.  A value of false causes
+                no attribute to be rendered, while a value of true causes the
+                attribute to be rendered as disabled="disabled".]]>
+            </description>
+            <name>disabled</name>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[A localized user presentable name for this component.]]>
+            </description>
+            <name>label</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Code describing the language used in the generated markup
+                for this component.]]>
+            </description>
+            <name>lang</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[The maximum number of characters that may
+                be entered in this field.]]>
+            </description>
+            <name>maxlength</name>
+            <required>false</required>
+            <type>int</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Javascript code executed when this element loses focus.]]>
+            </description>
+            <name>onblur</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Javascript code executed when this element loses focus
+                and its value has been modified since gaining focus.]]>
+            </description>
+            <name>onchange</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Javascript code executed when a pointer button is
+                clicked over this element.]]>
+            </description>
+            <name>onclick</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Javascript code executed when a pointer button is
+                double clicked over this element.]]>
+            </description>
+            <name>ondblclick</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Javascript code executed when this element receives focus.]]>
+            </description>
+            <name>onfocus</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Javascript code executed when a key is
+                pressed down over this element.]]>
+            </description>
+            <name>onkeydown</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Javascript code executed when a key is
+                pressed and released over this element.]]>
+            </description>
+            <name>onkeypress</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Javascript code executed when a key is
+                released over this element.]]>
+            </description>
+            <name>onkeyup</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Javascript code executed when a pointer button is
+                pressed down over this element.]]>
+            </description>
+            <name>onmousedown</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Javascript code executed when a pointer button is
+                moved within this element.]]>
+            </description>
+            <name>onmousemove</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Javascript code executed when a pointer button is
+                moved away from this element.]]>
+            </description>
+            <name>onmouseout</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Javascript code executed when a pointer button is
+                moved onto this element.]]>
+            </description>
+            <name>onmouseover</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Javascript code executed when a pointer button is
+                released over this element.]]>
+            </description>
+            <name>onmouseup</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Javascript code executed when text within this
+                element is selected by the user.]]>
+            </description>
+            <name>onselect</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Flag indicating that this component will prohibit changes by
+                the user.  The element may receive focus unless it has also
+                been disabled.  A value of false causes
+                no attribute to be rendered, while a value of true causes the
+                attribute to be rendered as readonly="readonly".]]>
+            </description>
+            <name>readonly</name>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[<p class="changed_added_2_2">Per the WAI-ARIA spec and its
+                relationship to HTML5 (Section title ARIA Role Attriubute),
+                every HTML element may have a "role" attribute whose value
+                must be passed through unmodified on the element on which it
+                is declared in the final rendered markup.  The attribute, if
+                specified, must have a value that is a string literal that is,
+                or an EL Expression that evaluates to, a set of
+                space-separated tokens representing the various WAI-ARIA roles
+                that the element belongs to.
+                </p>
+                
+                <p class="changed_added_2_2">It is the page author's
+                responsibility to ensure that the user agent is capable of
+                correctly interpreting the value of this attribute.</p>]]>
+            </description>
+            <name>role</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[The number of characters used to determine
+                the width of this field.]]>
+            </description>
+            <name>size</name>
+            <required>false</required>
+            <type>int</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[CSS style(s) to be applied when this component is rendered.]]>
+            </description>
+            <name>style</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Space-separated list of CSS style class(es) to be applied when
+                this element is rendered.  This value must be passed through
+                as the "class" attribute on generated markup.]]>
+            </description>
+            <name>styleClass</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Position of this element in the tabbing order
+                for the current document.  This value must be
+                an integer between 0 and 32767.]]>
+            </description>
+            <name>tabindex</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Advisory title information about markup elements generated
+                for this component.]]>
+            </description>
+            <name>title</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                The ValueExpression linking this component to a property in a backing bean
+            </description>
+            <name>binding</name>
+            <required>false</required>
+            <type>javax.faces.component.UIComponent</type>
+        </attribute>
+
+    </tag>
+    <tag>
+        <description>
+            <![CDATA[<div class="changed_added_2_1">
+            
+            <p><span class="changed_added_2_1 changed_modified_2_2">Render</span> the markup for
+            a <code>&lt;!DOCTYPE&gt;</code> declaration.</p>
+            
+            <p>Decode Behavior</p>
+            
+            <ul>
+            
+            <p>No action is required during decode for this renderer.</p>
+            
+            </ul>
+            
+            <p>Encode Behavior</p>
+            
+            <p>Output an XML Doctype using the provided attributes.  Output the
+            literal text <code>&lt;!DOCTYPE</code>. The "rootElement" attribute is
+            required and must be rendered next.  If the "public" attribute is
+            defined, render the literal text <code>PUBLIC</code> then render the
+            value of the attribute inside double quotes.  If the "system" attribute
+            is defined, render it next, inside double quotes.  Close the doctype
+            declaration with the literal text <code>&gt;</code>.</p>
+            
+            <div class="changed_added_2_2">
+            
+            <p>No relocation occurs with the output of this component. It is
+            rendered at whatever position in the view hierarchy it happens to be
+            encountered when traversing the view to render. Therefore, this
+            component must be located in the view hierarchy at the correct location
+            so that the final rendered markup has it in the proper place with
+            respect to the user agent that consumes the rendered markup. In practice
+            this means in front of the &lt;html&gt; or &lt;h:html&gt; element.
+            Furthermore, if multiple &lt;h:doctype&gt; components exist,
+            <strong>all</strong> of them will be rendered.</p>
+            
+            <p>If this component is present in a view, any DOCTYPE that would
+            otherwise have been rendered by virtue of being present in the VDL page
+            must be ignored.</p>
+            
+            </div>
+            
+            
+            </div>]]>
+        </description>
+        <tag-name>doctype</tag-name>
+        <handler-class></handler-class>
+        <attribute>
+            <description>
+                <![CDATA[Converter instance registered with this component.]]>
+            </description>
+            <name>converter</name>
+            <required>false</required>
+            <type>javax.faces.convert.Converter</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[The component identifier for this component.  This value must be
+                unique within the closest parent component that is a naming
+                container.]]>
+            </description>
+            <name>id</name>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[The current value of this component.]]>
+            </description>
+            <name>value</name>
+            <required>false</required>
+            <type>java.lang.Object</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[<div class="changed_added_2_1">
+                Will be output as the public part of the DOCTYPE
+                </div>]]>
+            </description>
+            <name>public</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[<div class="changed_added_2_1">
+                The root XML element
+                </div>]]>
+            </description>
+            <name>rootElement</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[<div class="changed_added_2_1">
+                Will be output as the system part of the DOCTYPE
+                </div>]]>
+            </description>
+            <name>system</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                The ValueExpression linking this component to a property in a backing bean
+            </description>
+            <name>binding</name>
+            <required>false</required>
+            <type>javax.faces.component.UIComponent</type>
+        </attribute>
+
+
+    </tag>
+
+
 </facelet-taglib>
