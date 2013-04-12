@@ -774,7 +774,9 @@ ant -Dgpg.passphrase=PASSPHRASE HERE mvn.deploy.snapshot.local
 
 
     <target name="mvn.pre-maven-rename.deploy.release.local">
-        <mvn.pre-maven-rename.deploy.release.local type="impl"/>
+        <var name="build.type" value="" />
+        <var name="impl.version" value="${impl.version.number}${build.type}"/>
+        <mvn.pre-maven-rename.deploy.release.local type="impl" version="${impl.version}-m14"/>
     </target>
 
 
@@ -793,7 +795,9 @@ ant -Dgpg.passphrase=PASSPHRASE HERE mvn.deploy.snapshot.local
 
 
     <target name="mvn.pre-maven-rename.deploy.release">
-        <mvn.pre-maven-rename.deploy.release type="impl"/>
+        <var name="build.type" value="" />
+        <var name="impl.version" value="${impl.version.number}${build.type}"/>
+        <mvn.pre-maven-rename.deploy.release type="impl" version="${impl.version}-m14"/>
     </target>
 
     <target name="javadoc_check">
