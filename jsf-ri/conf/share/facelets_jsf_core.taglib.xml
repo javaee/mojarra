@@ -91,87 +91,6 @@
             <type>java.lang.String</type>
         </attribute>
     </tag>
-
-    <tag>
-        <description><![CDATA[
-
-        <p class="changed_added_2_2">Add an attribute to the 
-            <code>passThroughAttributes Map</code> of the <code>UIComponent</code> 
-            associated with the closest parent <code>UIComponent</code> tag.</p>
-
-        ]]></description>
-        <tag-name>passThroughAttribute</tag-name>
-        <handler-class></handler-class>
-        <attribute>
-            <description><![CDATA[<p class="changed_added_2_2">The name
-            of the pass through attribute.  An attribute with this name,
-            and the corresponding value will appear on the outer most
-            markup element in the rendered markup for the component, as
-            specified in the overview for the HTML_BASIC RenderKit.  If
-            the name of this attribute conflicts with
-            <code>Renderer</code> specific attribute, the value
-            specified here supercedes the one that would otherwise be
-            rendered by the <code>Renderer</code></p>]]></description>
-            <name>name</name>
-            <required>true</required>
-            <type>java.lang.String</type>
-        </attribute>
-
-        <attribute>
-            <description><![CDATA[<p class="changed_added_2_2">The value
-            of the pass through attribute.  </p>]]></description>
-            <name>value</name>
-            <required>true</required>
-            <type>java.lang.Object</type>
-        </attribute>
-    </tag>
-    <tag>
-        <description>
-            <![CDATA[<p class="changed_added_2_2">Add attributes to the 
-            <code>passThroughAttributes Map</code> of the <code>UIComponent</code> 
-            associated with the closest parent <code>UIComponent</code> tag.
-            For each <code>Map.Entry</code> in the <code>Map&lt;String, Object&gt;</code>
-            referenced by the value attribute of this tag, take the following action.
-            Call <code>component.getPassThroughAttributes().put(entry.getKey(), entry.getValue())</code>.</p>
-
-]]>
-        </description>
-        <tag-name>passThroughAttributes</tag-name>
-        <handler-class></handler-class>
-        <attribute>
-            <description><![CDATA[<p class="changed_added_2_2">An EL <code>ValueExpression</code> that evaluates to a <code>Map&lt;String, Object&gt;</code>.</p>]]></description>
-            <name>value</name>
-            <required>true</required>
-            <type>java.util.Map</type>
-        </attribute>
-    </tag>
-
-
-    <tag>
-        <description><![CDATA[<p class="changed_added_2_2">
-            Add attributes to the UIComponent associated with the closest
-            parent UIComponent custom action.  
-            For each <code>Map.Entry</code> in the <code>Map&lt;String, Object&gt;</code>
-            referenced by the value attribute of this tag, take the following action.
-            If <code>parent.getAttributes().containsKey(entry.getKey())</code> returns 
-            <code>true</code>, take no action for this entry.  Otherwise, if 
-            <code>entry.getValue()</code> is a <code>ValueExpression</code> call 
-            <code>parent.setValueExpression(entry.getKey(), entry.getValue())</code>.
-            Otherwise, call <code>parent.getAttributes.put(entry.getKey(), entry.getValue()).</code>
-            </p>
-
-]]>
-        </description>
-        <tag-name>attributes</tag-name>
-        <handler-class></handler-class>
-        <attribute>
-            <description><![CDATA[<p class="changed_added_2_2">An EL <code>ValueExpression</code> that evaluates to a <code>Map&lt;String, Object&gt;</code>.</p>]]></description>
-            <name>value</name>
-            <required>true</required>
-            <type>java.util.Map</type>
-        </attribute>
-    </tag>
-
     <tag>
         <description><![CDATA[
             Add an attribute to the UIComponent associated with the closest
@@ -502,34 +421,6 @@
             <required>false</required>
             <type>java.lang.Boolean</type>
         </attribute>
-        <attribute>
-          <description><![CDATA[ <p class="changed_added_2_2">If less than
-          <em>delay</em> milliseconds elapses between calls to
-          <em>request()</em> only the most recent one is sent and all other
-          requests are discarded. If this option is not specified, or if the
-          value of <em>delay</em> is the literal string <code>'none'</code>
-          without the quotes, no delay is used. </p>
-          
-          ]]></description>
-          <name>delay</name>
-          <required>false</required>
-          <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-          <description><![CDATA[ <p class="changed_added_2_2">If
-          <code>true</code>, indicate that this particular Ajax transaction
-          is a value reset transaction.  This will cause
-          <code>resetValue()</code> to be called on any
-          <code>EditableValueHolder</code> instances encountered as a result
-          of this ajax transaction.  If not specified, or the value is
-          <code>false</code>, no such indication is made.</p>
-          
-          ]]></description>
-          <name>resetValues</name>
-          <required>false</required>
-          <type>java.lang.Boolean</type>
-        </attribute>
-        
         <attribute>
             <description><![CDATA[
                 <p class="changed_added_2_0">A String identifying the type
@@ -1325,40 +1216,6 @@
             <name>binding</name>
             <type>javax.faces.component.UIComponent</type>
         </attribute>
-        <attribute>
-            <description><![CDATA[
-                Flag indicating whether this component (and its
-                children) should be rendered.  Expressions must
-                evaluate to a boolean.
-            ]]></description>
-            <name>rendered</name>
-            <required>false</required>
-            <type>java.lang.Boolean</type>
-        </attribute>
-        <attribute>
-            <description>
-                <![CDATA[<p>
-                
-                MethodExpression representing an action listener method that
-                will be notified when this component is activated by the user.
-                The expression must evaluate to a public method that takes an
-                ActionEvent parameter, with a return type of void, <span
-                class="changed_added_2_0">or to a public method that takes no
-                arguments with a return type of void.  In the latter case, the
-                method has no way of easily knowing where the event came from,
-                but this can be useful in cases where a notification is needed
-                that "some action happened".</span>
-                
-                </p>]]>
-            </description>
-            <name>actionListener</name>
-            <required>false</required>
-            <method-signature>public void
-                actionListener(javax.faces.event.ActionEvent event)
-            </method-signature>
-
-        </attribute>
-
         <attribute>
             <description><![CDATA[
                 Component identifier of the UISelectItems
@@ -2171,46 +2028,6 @@
             <name>locale</name>
             <type>java.lang.Object</type>
         </attribute>
-        <attribute>
-            <description>
-                <![CDATA[<p class="changed_added_2_2">If
-                <code>true</code>, this view must not participate in
-                state saving or restoring.  Note that transient views
-                may not be used with <code>@ViewScoped</code> managed
-                beans.  The implementation must call
-                <code>setTransient()</code> on the
-                <code>UIViewRoot</code>, passing the value of the
-                attribute as specified in the markup.</p>]]>
-            </description>
-            <name>transient</name>
-            <required>false</required>
-            <type>java.lang.Boolean</type>
-        </attribute>
-        <attribute>
-          <description><![CDATA[
-          
-          <p class="changed_added_2_2">A comma separated list of
-          resource library contracts that may be used from within
-          the Facelets chain.  If this attribute is present, it
-          must only be on the outer-most file in the chain of
-          files that started ultimately with a call to
-          <code>ViewDeclarationLanguage.createView()</code>.  Any
-          use of this attribute on a non-outer-most file must be
-          silently ignored.</p>
-          
-          <p class="changed_added_2_2">If this attribute exists on the tag,
-          empty or not, the tag handler must create a
-          <code>List&lt;String&gt;</code> for the value of the attribute and
-          unconditionally call
-          <code>FacesContext.setRresourceLibraryContracts()</code> passing
-          that list value.</p>
-          
-          ]]></description>
-          <name>contracts</name>
-          <required>false</required>
-          <type>java.lang.String</type>
-        </attribute>
-
         <attribute>
             <description><![CDATA[
                 Identifier for the RenderKit to use for
