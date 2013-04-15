@@ -299,17 +299,7 @@ public class FaceletsTestCase extends HtmlUnitFacesTestCase {
      * the default for systest).
      */
     public void testPhaseListenerRegistration() throws Exception {
-
-        HtmlPage page = getPage("/faces/facelets/viewPhaseListeners.xhtml");
-        HtmlSubmitInput submit = (HtmlSubmitInput) getInputContainingGivenId(page, "form:button");
-        assertNotNull(submit);
-
-        for (int i = 0; i < 5; i++) {
-            page = (HtmlPage) submit.click();
-            assertTrue(!page.asText().contains("ERROR"));
-            submit = (HtmlSubmitInput) getInputContainingGivenId(page, "form:button");
-        }
-
+        // moved to new harness, see issue #2848
     }
 
     public void testWhen() throws Exception {
