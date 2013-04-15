@@ -211,14 +211,8 @@ public class PhaseListenerHandler extends TagHandlerImpl {
 
             PhaseListener pl = new LazyPhaseListener(this.listenerType, b);
 
-            // special handling for UIViewRoot since ComponentHandler.isNew()
-            // will always return true
-            if (parent instanceof UIViewRoot) {
-                List<PhaseListener> listeners = root.getPhaseListeners();
-                if (!listeners.contains(pl)) {
-                    root.addPhaseListener(pl);
-                }
-            } else {
+            List<PhaseListener> listeners = root.getPhaseListeners();
+            if (!listeners.contains(pl)) {
                 root.addPhaseListener(pl);
             }
         }
