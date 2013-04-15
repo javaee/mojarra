@@ -458,6 +458,7 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
             return null;
         }
 
+        StateContext.release(context);        
         Util.checkIdUniqueness(context, viewRoot, new HashSet<String>(viewRoot.getChildCount() << 1));
 
         final Map<String, Object> stateMap = new HashMap<String, Object>();
@@ -495,7 +496,6 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
         }
 
         saveDynamicActions(context, stateContext, stateMap);
-        StateContext.release(context);
         return new Object[]{null, stateMap};
     }
 
