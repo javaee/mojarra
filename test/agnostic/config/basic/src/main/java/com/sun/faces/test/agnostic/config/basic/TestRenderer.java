@@ -40,45 +40,13 @@
 
 package com.sun.faces.test.agnostic.config.basic;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
 
-public class ConfigFileIT {
-    
-    /**
-     * Stores the web URL.
-     */
-    private String webUrl;
-    /**
-     * Stores the web client.
-     */
-    private WebClient webClient;
+import javax.faces.render.Renderer;
 
-    /**
-     * Setup before testing.
-     */
-    @Before
-    public void setUp() {
-        webUrl = System.getProperty("integration.url");
-        webClient = new WebClient();
-        webClient.setThrowExceptionOnFailingStatusCode(true);
-    }
 
-    /**
-     * Tear down after testing.
-     */
-    @After
-    public void tearDown() {
-        webClient.closeAllWindows();
-    }
+// Dummy renderer that can be instantiated
 
-    @Test
-    public void testEmbed() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "/faces/extraConfig.xhtml");
-        assertTrue(page.asText().contains("SUCCESS"));
-    }
+public class TestRenderer extends Renderer {
+
+
 }

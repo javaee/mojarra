@@ -119,8 +119,6 @@ import java.util.Map;
 
 import static org.junit.Assert.*;
 
-@ManagedBean
-@SessionScoped
 public class ConfigFileBean {
 
     private String title = "Test Config File";

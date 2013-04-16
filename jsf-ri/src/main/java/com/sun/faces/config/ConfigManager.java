@@ -352,19 +352,25 @@ public class ConfigManager {
                                          executor,
                                          validating);
 
-                FacesConfigInfo webInfFacesConfigInfo =
+                FacesConfigInfo lastFacesConfigInfo =
                       new FacesConfigInfo(facesDocuments[facesDocuments.length - 1]);
 
-                facesDocuments = sortDocuments(facesDocuments, webInfFacesConfigInfo);
+                facesDocuments = sortDocuments(facesDocuments, lastFacesConfigInfo);
                 InitFacesContext context = (InitFacesContext) FacesContext.getCurrentInstance();
 
                 InjectionProvider containerConnector =
                         InjectionProviderFactory.createInstance(context.getExternalContext());
                 context.getAttributes().put(INJECTION_PROVIDER_KEY, containerConnector);
 
-                boolean isFaceletsDisabled =
-                      isFaceletsDisabled(webConfig, webInfFacesConfigInfo);
-                if (!webInfFacesConfigInfo.isWebInfFacesConfig() || !webInfFacesConfigInfo.isMetadataComplete()) {
+                boolean isFaceletsDisabled = false;
+                
+                // Don't perform the check unless lastFacesConfigInfo is indeed
+                // *the* WEB-INF/faces-config.xml
+                if (lastFacesConfigInfo.isWebInfFacesConfig()) {
+                    isFaceletsDisabled = 
+                            isFaceletsDisabled(webConfig, lastFacesConfigInfo);
+                }
+                if (!lastFacesConfigInfo.isWebInfFacesConfig() || !lastFacesConfigInfo.isMetadataComplete()) {
                     // execute the Task responsible for finding annotation classes
                     ProvideMetadataToAnnotationScanTask taskMetadata = new ProvideMetadataToAnnotationScanTask(facesDocuments, containerConnector);
                     Future<Map<Class<? extends Annotation>,Set<Class<?>>>> annotationScan;

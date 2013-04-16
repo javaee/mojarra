@@ -79,15 +79,18 @@ public class ConfigFileIT {
     @Test
     public void testBasic() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/basic.xhtml");
+        assertTrue(page.asText().contains("SUCCESS"));
     }
 
     @Test
     public void testBoolean() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/boolean.xhtml");
+        assertTrue(page.asText().contains("SUCCESS"));
     }
 
     @Test
     public void testDefault() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/default.xhtml");
+        assertTrue(page.asText().contains("SUCCESS"));
     }
 }
