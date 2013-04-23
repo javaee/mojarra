@@ -226,9 +226,11 @@ public class ResourceHandlerImpl extends ResourceHandler {
             return false;
         }
         FacesContext context = FacesContext.getCurrentInstance();
-        LibraryInfo info = manager.findLibrary(libraryName, null, context);
+        // PENDING(fcaputo) do we need to iterate over the contracts here? I don't think so.
+        LibraryInfo info = manager.findLibrary(libraryName, null, null, context);
         if (null == info) {
-            info = manager.findLibraryOnClasspathWithZipDirectoryEntryScan(libraryName, null, context, true);
+            info = manager.findLibraryOnClasspathWithZipDirectoryEntryScan(libraryName, null, null, context, true);
+
         }
         return (info != null);
 
