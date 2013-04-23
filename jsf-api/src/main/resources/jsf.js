@@ -238,6 +238,8 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                         this.frame.type = "content";
                         this.frame.collapsed = "true";
                         this.frame.style = "visibility:hidden";   
+                        this.frame.width = "0";
+                        this.frame.height = "0";
                         this.frame.onload = bind(this, this.callback);
                         document.body.appendChild(this.frame);
                     } else {
