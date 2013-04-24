@@ -259,12 +259,12 @@ public class TestResourceImpl extends ServletFacesTestCase {
         FacesContext context = this.getFacesContext();
 
         LibraryInfo
-                liA = helper.findLibrary("vLibrary-jar", null, null, context),
-                liB = helper.findLibrary("vLibrary-jar", null, null, context),
-                liC = helper.findLibrary("vLibrary-jar", null, null, context);
+                liA = helper.findLibrary("vLibrary-jar", null, context),
+                liB = helper.findLibrary("vLibrary-jar", null, context),
+                liC = helper.findLibrary("vLibrary-jar", null, context);
         this.verifyEqualsContractPositive(liA, liB, liC);
 
-        liB = helper.findLibrary("vLibrary", null, null, context);
+        liB = helper.findLibrary("vLibrary", null, context);
         assertFalse(liA.equals(liB));
 
 

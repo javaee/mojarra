@@ -177,18 +177,18 @@ public class ClasspathResourceHelper extends ResourceHelper {
 
     
     /**
-     * @see ResourceHelper#findLibrary(String, String, String, javax.faces.context.FacesContext)
+     * @see ResourceHelper#findLibrary(String, String, javax.faces.context.FacesContext)
      */
     public LibraryInfo findLibrary(String libraryName,
                                    String localePrefix,
-                                   String contract, FacesContext ctx) {
+                                   FacesContext ctx) {
 
         ClassLoader loader = Util.getCurrentLoader(this);
         String basePath;
         if (localePrefix == null) {
-            basePath = getBasePath(contract) + '/' + libraryName + '/';
+            basePath = getBaseResourcePath() + '/' + libraryName + '/';
         } else {
-            basePath = getBasePath(contract)
+            basePath = getBaseResourcePath()
                        + '/'
                        + localePrefix
                        + '/'
@@ -205,20 +205,20 @@ public class ClasspathResourceHelper extends ResourceHelper {
             }
         }
 
-        return new LibraryInfo(libraryName, null, localePrefix, contract, this);
+        return new LibraryInfo(libraryName, null, localePrefix, this);
         
     }
 
     public LibraryInfo findLibraryWithZipDirectoryEntryScan(String libraryName,
-                                                            String localePrefix,
-                                                            String contract, FacesContext ctx, boolean forceScan) {
+                                   String localePrefix,
+                                   FacesContext ctx, boolean forceScan) {
 
         ClassLoader loader = Util.getCurrentLoader(this);
         String basePath;
         if (localePrefix == null) {
-            basePath = getBasePath(contract) + '/' + libraryName + '/';
+            basePath = getBaseResourcePath() + '/' + libraryName + '/';
         } else {
-            basePath = getBasePath(contract)
+            basePath = getBaseResourcePath()
                        + '/'
                        + localePrefix
                        + '/'
@@ -245,7 +245,7 @@ public class ClasspathResourceHelper extends ResourceHelper {
             }
         }
 
-        return new LibraryInfo(libraryName, null, localePrefix, contract, this);
+        return new LibraryInfo(libraryName, null, localePrefix, this);
     }
 
 
@@ -375,8 +375,7 @@ public class ClasspathResourceHelper extends ResourceHelper {
         for (String curContract : contracts) {
         
             if (library != null) {
-                // PENDING(fcaputo) no need to iterate over the contracts, if we have a library
-                basePath = library.getPath(localePrefix) + '/' + resourceName;
+                basePath = library.getPath(localePrefix) + '/' + curContract + '/' + resourceName;
             } else {
                 if (localePrefix == null) {
                     basePath = getBaseContractsPath() + '/' + curContract + '/' + resourceName;

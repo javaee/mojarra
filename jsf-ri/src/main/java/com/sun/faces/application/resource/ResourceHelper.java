@@ -139,13 +139,6 @@ public abstract class ResourceHelper {
     
     public abstract String getBaseContractsPath();
 
-    protected String getBasePath(String contract) {
-        if(contract == null) {
-            return getBaseResourcePath();
-        }
-        return getBaseContractsPath() + '/' + contract;
-    }
-
 
     /**
      * <p>
@@ -283,17 +276,16 @@ public abstract class ResourceHelper {
     /**
      * Search for the specified library/localPrefix combination in an
      * implementation dependent manner.
-     *
      * @param libraryName the name of the library
      * @param localePrefix the logicial identifier for a locale specific library.
      *  if no localePrefix is configured, pass <code>null</code>
-     * @param contract the name of the contract
-     *@param ctx the {@link javax.faces.context.FacesContext} for the current request  @return a {@link LibraryInfo} if a matching library based off the inputs
+     * @param ctx the {@link FacesContext} for the current request
+     * @return a {@link LibraryInfo} if a matching library based off the inputs
      *  can be found, otherwise returns <code>null</code>
      */
     public abstract LibraryInfo findLibrary(String libraryName,
                                             String localePrefix,
-                                            String contract, FacesContext ctx);
+                                            FacesContext ctx);
 
 
     /**

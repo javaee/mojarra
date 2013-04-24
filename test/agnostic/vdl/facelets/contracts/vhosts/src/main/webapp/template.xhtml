@@ -54,15 +54,10 @@
         <title>#{facesContext.externalContext.requestHeaderMap.host}</title>
     </h:head>
     <h:body>
-        <div style="padding: 8px; margin: 10px 0; border: 1px solid #CCC; background-color: #00ff04;">
-        <p>template from top level web app root</p>
-                
         /template.xhtml
         <ui:include src="/header.xhtml"/>
         <div id="content">
             <ui:insert name="content"/>
-        </div>
-        
         </div>
     </h:body>
 </html>

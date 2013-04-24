@@ -40,9 +40,6 @@
  */
 package com.sun.faces.test.agnostic.vdl.facelets.contracts.basic;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.URL;
 import com.gargoylesoftware.htmlunit.html.HtmlLink;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.DomNodeList;
@@ -53,6 +50,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 public class Issue2511IT {
@@ -83,6 +81,47 @@ public class Issue2511IT {
         
         text = page.asText();
         assertTrue(text.contains("Left Side Navigation Menu"));
+        
+    }
+
+    @Test
+    public void testCompositesAreUsed() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
+        String text = page.asText();
+        
+        examineCompositeComponents(page);        
+        
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button");
+        page = button.click();
+        
+        text = page.asText();
+        assertTrue(text.contains("Left Side Navigation Menu"));
+        
+        HtmlElement element = page.getElementById("ccB");
+        assertEquals(null, element);
+        element = page.getElementById("ccA");
+        assertEquals(null, element);
+        
+    }
+    
+    private void examineCompositeComponents(HtmlPage page) {
+        HtmlElement element = page.getElementById("ccB");
+        assertEquals("ccB", element.asText());
+        
+        element = page.getElementById("ccB_attrA");
+        assertEquals("attrAValue from contract template", element.asText());
+        
+        element = page.getElementById("ccB_attrB");
+        assertEquals("attrBValue", element.asText());
+        
+        element = page.getElementById("ccA");
+        assertEquals("ccA", element.asText());
+
+        element = page.getElementById("ccA_attrA");
+        assertEquals("attrAValue", element.asText());
+        
+        element = page.getElementById("ccA_attrB");
+        assertEquals("attrBValue", element.asText());
         
     }
 

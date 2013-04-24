@@ -1,5 +1,4 @@
-<?xml version='1.0' encoding='UTF-8' ?> 
-<!DOCTYPE html>
+<?xml version='1.0' encoding='UTF-8' ?>
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -41,34 +40,37 @@
     holder.
 
 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ez="http://java.sun.com/jsf/composite/cc">
+      xmlns:composite="http://java.sun.com/jsf/composite">
+<head>
 
-    <h:head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <h:outputStylesheet id="default" name="default.css" />
-        <h:outputStylesheet name="cssLayout.css" />
-        <title><ui:insert name="title"></ui:insert></title>
-    </h:head>
+<title>Not present in rendered output</title>
 
-    <h:body>
+</head>
 
-        <div id="top" class="top">
-            <p>Top Navigation Menu</p>
-            
-            <p>Use Cc: from within contract's template.</p>
-            
-            <ez:ccB attrA="attrAValue from contract template" />
-            
-            <ui:insert name="nav">Nav content</ui:insert>
-        </div>
+<body>
 
-        <div id="content" class="center_content">
-            <ui:insert name="content">Content</ui:insert>
-        </div>
+<composite:interface name="ccB" 
+                     displayName="ccB" 
+                     preferred="true"
+                     expert="false"
+                     shortDescription="An illustration of the composite component feature">
 
-    </h:body>
+  <composite:attribute name="attrA" required="true"/>
+  <composite:attribute name="attrB" default="attrBValue" />
+
+</composite:interface>
+
+<composite:implementation>
+    
+    <p id="ccB">ccB</p>
+    
+    <p id="ccB_attrA">#{cc.attrs.attrA}</p>
+    <p id="ccB_attrB">#{cc.attrs.attrB}</p>
+
+</composite:implementation>
+
+</body>
 
 </html>

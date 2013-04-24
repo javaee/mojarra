@@ -170,18 +170,17 @@ public class WebappResourceHelper extends ResourceHelper {
 
 
     /**
-     * @see ResourceHelper#findLibrary(String, String, String, javax.faces.context.FacesContext)
+     * @see ResourceHelper#findLibrary(String, String, javax.faces.context.FacesContext)
      */
     public LibraryInfo findLibrary(String libraryName,
                                    String localePrefix,
-                                   String contract, FacesContext ctx) {
+                                   FacesContext ctx) {
 
         String path;
-
         if (localePrefix == null) {
-            path = getBasePath(contract) + '/' + libraryName;
+            path = getBaseResourcePath() + '/' + libraryName;
         } else {
-            path = getBasePath(contract)
+            path = getBaseResourcePath()
                    + '/'
                    + localePrefix
                    + '/'
@@ -194,7 +193,7 @@ public class WebappResourceHelper extends ResourceHelper {
         // as non-existant and return null.
         if (resourcePaths != null && !resourcePaths.isEmpty()) {
             VersionInfo version = getVersion(resourcePaths, false);
-                return new LibraryInfo(libraryName, version, localePrefix, contract, this);
+                return new LibraryInfo(libraryName, version, localePrefix, this);
         }
 
         return null;
@@ -220,7 +219,6 @@ public class WebappResourceHelper extends ResourceHelper {
         if (null == basePath) {
         
             if (library != null) {
-                // PENDING(fcaputo) no need to iterate over the contracts, if we have a library
                 basePath = library.getPath(localePrefix) + '/' + resourceName;
             } else {
                 if (localePrefix == null) {
@@ -335,8 +333,7 @@ public class WebappResourceHelper extends ResourceHelper {
         for (String curContract : contracts) {
         
             if (library != null) {
-                // PENDING(fcaputo) no need to iterate over the contracts, if we have a library
-                basePath = library.getPath(localePrefix) + '/' + resourceName;
+                basePath = library.getPath(localePrefix) + '/' + curContract + '/' + resourceName;
             } else {
                 if (localePrefix == null) {
                     basePath = getBaseContractsPath() + '/' + curContract + '/' + resourceName;
