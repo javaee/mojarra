@@ -229,6 +229,10 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 this.url = url;
                 this.async = async;
                 this.frame = document.getElementById(this.FRAME_ID);
+                if (this.frame) {
+                    this.frame.parentNode.removeChild(this.frame);
+                    this.frame = null;
+                }
                 if (!this.frame) {  
                     if ((!isIE() && !isIE9Plus())) {
                         this.frame = document.createElement('iframe');
