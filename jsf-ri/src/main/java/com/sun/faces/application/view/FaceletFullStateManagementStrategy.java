@@ -74,6 +74,7 @@ import javax.faces.render.ResponseStateManager;
 import javax.faces.view.StateManagementStrategy;
 import static com.sun.faces.RIConstants.DYNAMIC_ACTIONS;
 import static com.sun.faces.RIConstants.DYNAMIC_COMPONENT;
+import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 
 /**
  * A state management strategy for FSS.
@@ -322,6 +323,7 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
 
         final StateContext stateContext = StateContext.getStateContext(context);
         final UIViewRoot viewRoot = context.getViewRoot();
+        final ConcurrentHashMap<String, UIComponent> faceletComponentMap = ComponentSupport.getFaceletComponentMap();
 
         try {
             context.getAttributes().put(SKIP_ITERATION_HINT, true);
@@ -350,6 +352,16 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
                         }
                     }
 
+                    /*
+                     * We need to make sure we put the restored component into the facelet component map,
+                     * so the reapply will not try to recreate it because it could not find it. In the FSS
+                     * case this is the time we know if the comments was created by the Facelet runtime 
+                     * (previously).
+                     */
+                    if (component.getAttributes().containsKey("com.sun.faces.facelets.MARK_ID")) {
+                        faceletComponentMap.put(component.getAttributes().get("com.sun.faces.facelets.MARK_ID").toString(), component);
+                    }
+                    
                     return result;
                 }
             });

@@ -79,6 +79,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 
@@ -208,37 +209,20 @@ public final class ComponentSupport {
      * @return the UI component
      */
     public static UIComponent findChildByTagId(UIComponent parent, String id) {
-        Iterator itr = parent.getFacetsAndChildren();
-        UIComponent c = null;
-        String cid = null;
-        while (itr.hasNext()) {
-            c = (UIComponent) itr.next();
-            cid = (String) c.getAttributes().get(MARK_CREATED);
-            if (id.equals(cid)) {
-                return c;
-            }
-            if (c instanceof UIPanel && c.getAttributes().containsKey(IMPLICIT_PANEL)) {
-                for (UIComponent c2 : c.getChildren()) {
-                    cid = (String) c2.getAttributes().get(MARK_CREATED);
-                    if (id.equals(cid)) {
-                        return c2;
-                    }
-                }
-            }
-            /*
-             * Make sure we look for the child recursively it might have moved
-             * into a different parent in the parent hierarchy. Note currently
-             * we are only looking down the tree. Maybe it would be better
-             * to use the VisitTree API instead.
-             */
-            UIComponent foundChild = findChildByTagId(c, id);
-            if (foundChild != null) {
-                return foundChild;
-            }
-        }
-        return null;
+        ConcurrentHashMap<String, UIComponent> componentMap = getFaceletComponentMap();
+        return componentMap.get(id);
     }
 
+    public static ConcurrentHashMap<String, UIComponent> getFaceletComponentMap() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        if (!facesContext.getAttributes().containsKey("com.sun.faces.facelets.FACELET_COMPONENT_MAP")) {
+            facesContext.getAttributes().put("com.sun.faces.facelets.FACELET_COMPONENT_MAP", 
+                new ConcurrentHashMap<String, UIComponent>());
+        }
+        return (ConcurrentHashMap<String, UIComponent>) facesContext.getAttributes().get(
+                "com.sun.faces.facelets.FACELET_COMPONENT_MAP");
+    }
+    
     /**
      * According to JSF 1.2 tag specs, this helper method will use the
      * TagAttribute passed in determining the Locale intended.
