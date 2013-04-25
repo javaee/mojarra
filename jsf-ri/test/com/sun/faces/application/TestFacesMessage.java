@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -104,71 +104,10 @@ public class TestFacesMessage extends ServletFacesTestCase {
 // General Methods
 //
     
-    public void testSerializeable() {
-        FacesMessage message = null;
-        
-        // Case 0 (nothing)
-        message = new FacesMessage();
-        persistAndCheck(message);
+// THIS TEST HAS BEEN MOVED TO THE MAVEN BASED TEST HARNESS UNDER test/unit as
+// FacesMessageTest.java
 
-        // Case 1 (summary)
-        message = new FacesMessage("This is a bad error.");
-        persistAndCheck(message);
-        
-        // Case 2 (summary & detail)
-        message = new FacesMessage("This is a bad error.", "This is a really bad error.");
-        persistAndCheck(message);
-        
-        // Case 3 (severity, summary & detail)
-        message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "This is a bad error.",
-                "This is a really bad error.");
-        persistAndCheck(message);
-    }
-    
-    private void persistAndCheck(FacesMessage message) {
-        FacesMessage message1 = null;
-        String mSummary, mSummary1 = null;
-        String mDetail, mDetail1 = null;
-        String severity, severity1 = null;
-        ByteArrayOutputStream bos = null;
-        ByteArrayInputStream bis = null;
-        
-        mSummary = message.getSummary();
-        mDetail = message.getDetail();
-        severity = message.getSeverity().toString();
-        
-        try {
-            bos = new ByteArrayOutputStream();
-            ObjectOutputStream oos = new ObjectOutputStream(bos);
-            oos.writeObject(message);
-            oos.close();
-            byte[] bytes = bos.toByteArray();
-            InputStream in = new ByteArrayInputStream(bytes);
-            ObjectInputStream ois = new ObjectInputStream(in);
-            message1 = (FacesMessage)ois.readObject();
-            ois.close();
-            mSummary1 = message1.getSummary();
-            mDetail1 = message1.getDetail();
-            severity1 = message1.getSeverity().toString();
-            if (null != mSummary1) {
-                assertTrue(mSummary1.equals(mSummary));
-            } else {
-                assertTrue(mSummary == null);
-            }
-            if (null != mDetail1) {
-                assertTrue(mDetail1.equals(mDetail));
-            } else {
-                assertTrue(mDetail == null);
-            }
-            if (null != severity1) {
-                assertTrue(severity1.equals(severity));
-            } else {
-                assertTrue(severity == null);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            assertTrue(false);
-        } 
+    public void testSerializeable() {
     }
     
 } // end of class TestFacesMessage
