@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -256,10 +256,10 @@ public class FacesMessage implements Serializable {
     // ------------------------------------------------------ Instance Variables
 
 
-    private Severity severity = FacesMessage.SEVERITY_INFO;
-    private String summary = null;
-    private String detail = null;
-    private boolean rendered;
+    private transient Severity severity = FacesMessage.SEVERITY_INFO;
+    private transient String summary = null;
+    private transient String detail = null;
+    private transient boolean rendered;
 
 
     // ---------------------------------------------------------- Public Methods
@@ -373,6 +373,7 @@ public class FacesMessage implements Serializable {
      * including the non serializable <code>Severity</code>.</p>
      */
     private void writeObject(ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
         out.writeInt(getSeverity().getOrdinal());
         out.writeObject(getSummary());
         out.writeObject(getDetail());
@@ -385,6 +386,7 @@ public class FacesMessage implements Serializable {
      */
     private void readObject(ObjectInputStream in)
         throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
         severity = SEVERITY_INFO;
         summary = null;
         detail = null;
