@@ -1147,7 +1147,7 @@ public class WebConfiguration {
         ),
         SendPoweredByHeader(
               "com.sun.faces.sendPoweredByHeader",
-              true
+              false
         ),
         EnableJSStyleHiding(
             "com.sun.faces.enableJSStyleHiding",
