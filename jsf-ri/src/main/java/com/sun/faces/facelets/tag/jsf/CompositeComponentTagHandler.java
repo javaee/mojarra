@@ -343,8 +343,6 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
     throws IOException {
 
         FacesContext facesContext = ctx.getFacesContext();
-        FaceletFactory factory = (FaceletFactory)
-              RequestStateManager.get(facesContext, RequestStateManager.FACELET_FACTORY);
         VariableMapper orig = ctx.getVariableMapper();
         
         UIPanel facetComponent;
@@ -360,26 +358,26 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
         }
         assert(null != facetComponent);
         
-        try {
-            Facelet f = factory.getFacelet(ccResource.getURL());
-
+        try {            
             VariableMapper wrapper = new VariableMapperWrapper(orig) {
 
                 @Override
                 public ValueExpression resolveVariable(String variable) {
                     return super.resolveVariable(variable);
-                }
-                
+            }
+            
             };
             ctx.setVariableMapper(wrapper);
-            f.apply(facesContext, facetComponent);
+            
+            /*
+             * We need to use includeFacelet because our facelet component map
+             * expects each Facelet component to generate a unique id (MARK_ID).
+             */
+            ctx.includeFacelet(facetComponent, ccResource.getURL());
         } finally {
             ctx.setVariableMapper(orig);
         }
-
     }
-
-
 
     // ---------------------------------------------------------- Nested Classes
 

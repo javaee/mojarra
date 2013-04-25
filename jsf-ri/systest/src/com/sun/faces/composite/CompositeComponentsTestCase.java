@@ -73,6 +73,7 @@ public class CompositeComponentsTestCase extends HtmlUnitFacesTestCase {
     /**
      * Set up instance variables required by this test case.
      */
+    @Override
     public void setUp() throws Exception {
         super.setUp();
     }
@@ -89,6 +90,7 @@ public class CompositeComponentsTestCase extends HtmlUnitFacesTestCase {
     /**
      * Tear down instance variables required by this test case.
      */
+    @Override
     public void tearDown() {
         super.tearDown();
     }
@@ -803,7 +805,7 @@ public class CompositeComponentsTestCase extends HtmlUnitFacesTestCase {
 
 
     /**
-     * Added for issue 1256.
+     * Added for issue 1265.
      */
     public void testCompositeComponentResolutionWithinRelocatableResources() throws Exception {
 
@@ -812,15 +814,17 @@ public class CompositeComponentsTestCase extends HtmlUnitFacesTestCase {
         List<HtmlScript> scripts = new ArrayList<HtmlScript>(1);
         getAllElementsOfGivenClass(page, styles, HtmlStyle.class);
         getAllElementsOfGivenClass(page, scripts, HtmlScript.class);
-        assertEquals(4, styles.size());
-        assertEquals(1, scripts.size());
+        assertEquals(5, styles.size());
+        assertEquals(2, scripts.size());
         String[] styleValues = {
               "color:red",
               "color:blue",
               "color:red",
+              "color:red",
               "color:red"
         };
         String[] scriptValues = {
+              "var a = \"ss\";",
               "var a = \"ss\";"
         };
 
@@ -828,6 +832,7 @@ public class CompositeComponentsTestCase extends HtmlUnitFacesTestCase {
             assertTrue(styles.get(i).asXml().contains(styleValues[i]));
         }
         for (int i = 0, len = scripts.size(); i < len; i++) {
+            System.out.println(scripts.get(i).asXml());
             assertTrue(scripts.get(i).asXml().contains(scriptValues[i]));
         }
 
@@ -838,8 +843,8 @@ public class CompositeComponentsTestCase extends HtmlUnitFacesTestCase {
         scripts.clear();
         getAllElementsOfGivenClass(page, styles, HtmlStyle.class);
         getAllElementsOfGivenClass(page, scripts, HtmlScript.class);
-        assertEquals(4, styles.size());
-        assertEquals(1, scripts.size());
+        assertEquals(5, styles.size());
+        assertEquals(2, scripts.size());
         for (int i = 0, len = styles.size(); i < len; i++) {
             assertTrue(styles.get(i).asXml().contains(styleValues[i]));
         }

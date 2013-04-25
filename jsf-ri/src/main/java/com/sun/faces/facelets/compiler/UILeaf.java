@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -58,6 +58,7 @@
 
 package com.sun.faces.facelets.compiler;
 
+import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIComponentBase;
@@ -73,6 +74,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @SuppressWarnings({"deprecation"})
 public class UILeaf extends UIComponentBase {
@@ -117,6 +119,24 @@ public class UILeaf extends UIComponentBase {
 
     public void setParent(UIComponent parent) {
         this.parent = parent;
+
+        if (parent == null) {
+            /*
+             * Make sure we remove the given component from the facelet component map if it is in there.
+             */
+            if (getAttributes().containsKey("com.sun.faces.facelets.MARK_ID")) {
+                ConcurrentHashMap<String, UIComponent> faceletComponentMap = ComponentSupport.getFaceletComponentMap();
+                faceletComponentMap.remove((String) getAttributes().get("com.sun.faces.facelets.MARK_ID"));
+            }
+        } else {
+            /*
+             * Make sure we add a component created by a facelet to the facelet component map.
+             */
+            if (getAttributes().containsKey("com.sun.faces.facelets.MARK_ID")) {
+                ConcurrentHashMap<String, UIComponent> faceletComponentMap = ComponentSupport.getFaceletComponentMap();
+                faceletComponentMap.put(getAttributes().get("com.sun.faces.facelets.MARK_ID").toString(), this);
+            }   
+        }
     }
 
     public String getRendererType() {
