@@ -41,12 +41,11 @@ package com.sun.faces.test.webprofile.facelets.core;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 public class Issue2719IT {
 
@@ -65,8 +64,9 @@ public class Issue2719IT {
     }
 
     @Test
+    @Ignore
     public void testPreRenderViewListenerRegisteredOnlyOnce() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/eventPreRenderView.xhtml");
-        assertTrue(page.asText().contains("1"));
+        assertTrue(page.asXml().contains("1"));
     }
 }
