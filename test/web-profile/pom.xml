@@ -21,6 +21,7 @@
     </dependencies>    
     <modules>
         <module>adf</module>
+        <module>facelets</module>
         <module>lifecycle</module>
         <module>seam</module>
         <module>stateSaving</module>
