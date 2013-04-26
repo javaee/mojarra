@@ -74,7 +74,7 @@ public class Issue2347IT {
         HtmlPage page = webClient.getPage(webUrl + "faces/actionlistener.xhtml");
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form:buttonParam");
         page = button.click();
-        assertTrue(page.asText().contains("Listener invoked: true"));
+        assertTrue(page.asXml().contains("Listener invoked: true"));
     }
 
     /**
@@ -89,6 +89,6 @@ public class Issue2347IT {
         HtmlPage page = webClient.getPage(webUrl + "faces/actionlistener.xhtml");
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form:buttonNoParam");
         page = button.click();
-        assertTrue(page.asText().contains("Listener invoked: true"));
+        assertTrue(page.asXml().contains("Listener invoked: true"));
     }
 }
