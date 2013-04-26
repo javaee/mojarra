@@ -22,6 +22,7 @@
     <modules>
         <module>adf</module>
         <module>el</module>
+        <module>facelets</module>
         <module>flow</module>
         <module>lifecycle</module>
         <module>multi_templating</module>
