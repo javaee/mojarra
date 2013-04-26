@@ -922,7 +922,7 @@ javax.faces.level=ALL
 
     <target name="mvn.deploy.release.local" depends="strip.api.jar">
         <mvn.deploy.release.local type="api" 
-                                  version="${spec.version}-m14"/>
+                                  version="${spec.version}-m15"/>
     </target>
 
     <target name="strip.api.jar" 
@@ -1041,7 +1041,7 @@ ant -Dgpg.passphrase=PASSPHRASE HERE mvn.deploy.snapshot.local
 
     <target name="mvn.deploy.release" depends="strip.api.jar">
         <mvn.deploy.release type="api" 
-                                  version="${spec.version}-m14"/>
+                                  version="${spec.version}-m15"/>
     </target>
 
     <target name="passthru">
