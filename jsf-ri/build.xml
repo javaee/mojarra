@@ -525,7 +525,7 @@
         <java fork="true" jar="${tlddoc.jar}">
             <arg line="-d ${build.dir}/vdldocs/facelets"/>
             <arg line="-windowtitle 'JSF ${spec.version} View Declaration Language: Facelets Variant'"/>
-            <arg line="-doctitle 'JSF ${spec.version} View Declaration Language: Facelets Variant. PENDING: improve formatting by using vdldoc'"/>
+            <arg line="-doctitle 'JSF ${spec.version} View Declaration Language: Facelets Variant.'"/>
             <arg line="-xslt ${conf.share.dir}/tlddoc-resources"/>
             <arg value="${conf.share.dir}/composite.tld"/>
             <arg value="${conf.share.dir}/facelets_jsf_core.tld"/>

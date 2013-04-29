@@ -61,10 +61,15 @@
   component that can be used by tools and users of the composite
   component. In most cases, a composite component can be authored
   without declaring and defining its usage contract with this taglib.
+  </p>
+
+<!--
+
   PENDING: the limit of what one can do without declaring and defining a
   usage contract must be cleary specified and documented.  PENDING: The
   implementation team must help discover these limits.
-  </p>
+
+-->
 
 <h2>Creating a Composite Component</h2>
 
