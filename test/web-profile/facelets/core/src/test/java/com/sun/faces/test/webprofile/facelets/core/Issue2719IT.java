@@ -45,7 +45,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 
 public class Issue2719IT {
 
@@ -64,7 +63,6 @@ public class Issue2719IT {
     }
 
     @Test
-    @Ignore
     public void testPreRenderViewListenerRegisteredOnlyOnce() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/eventPreRenderView.xhtml");
         assertTrue(page.asText().contains("1"));
