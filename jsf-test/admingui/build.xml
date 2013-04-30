@@ -77,7 +77,7 @@
       <property name="deployment.port" value="${glassfish.admin.port}" />
       <property name="path.with.leading.slash" value="/common/index.jsf?bare=true" />
       <property name="page.regexp" value="(?s).*loginform.*" />
-      <property name="deployment.retries" value="5" />
+      <property name="deployment.retries" value="15" />
       
       <antcall target="deployment.check" />
     </target>
