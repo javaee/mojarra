@@ -69,6 +69,7 @@ public abstract class AbstractManager {
         EntityManager em = emf.createEntityManager();
         try {
             userTransaction.begin();
+            em.joinTransaction();
             T result = action.execute(em);
             userTransaction.commit();
             return result;
@@ -89,6 +90,7 @@ public abstract class AbstractManager {
         EntityManager em = emf.createEntityManager();
         try {
             userTransaction.begin();
+            em.joinTransaction();
             action.execute(em);
             userTransaction.commit();
         } catch (Exception e) {

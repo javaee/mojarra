@@ -60,7 +60,7 @@
         </ui:define>
         <ui:define name="content">
             <h:form id="frmListStories">
-                <h:panelGrid columns="#{skinValuesManager.size + 1}" width="990" >
+                <h:panelGrid columns="#{skinValuesManager.size + 2}" width="990" >
                     <h:outputLabel value=""/>
                     <ui:repeat value="#{skinValuesManager.names}" var="name">
                         <td>
@@ -71,6 +71,7 @@
                         </scrum:postitLink>
                         </td>
                     </ui:repeat>
+                    <h:commandButton value="#{i18n['button.save']}" />
                 </h:panelGrid>
             </h:form>
         </ui:define>
