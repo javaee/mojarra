@@ -317,7 +317,7 @@
             <plugin>
               <groupId>org.glassfish.build</groupId>
               <artifactId>spec-version-maven-plugin</artifactId>
-              <version>1.1</version>
+              <version>1.2</version>
               <executions>
                 <execution>
                   <goals>
@@ -329,16 +329,16 @@
                 <spec>
                   <nonFinal>true</nonFinal>
                   <jarType>api</jarType>
-                  <specVersion>2.1</specVersion>
+                  <specVersion>2.2</specVersion>
                   <newSpecVersion>2.2</newSpecVersion>
                   <specImplVersion>2.2</specImplVersion>
                   <implVersion></implVersion>
                   <newImplVersion></newImplVersion>
-                  <specBuild>14</specBuild>
-                  <implBuild>14</implBuild>
+                  <specBuild></specBuild>
+                  <implBuild></implBuild>
                   <apiPackage>javax.faces</apiPackage>
                 </spec>
-                <module>target/javax.faces-api-@version@.jar</module>
+                <module>target/javax.faces-api-2.2.jar</module>
               </configuration>
             </plugin>
           </plugins>

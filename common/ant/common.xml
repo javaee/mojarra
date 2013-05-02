@@ -107,15 +107,15 @@
     <!-- Version -->
     <property name="spec.version" value="2.2"/>
     <property name="spec_version" value="2_2"/>
-    <property name="spec.snapshot.version" value="2.2-SNAPSHOT"/>
+    <property name="spec.snapshot.version" value="2.2"/>
     <property name="patch.version" value="0"/>
     <property name="impl.name" value="Mojarra"/>
     <property name="build.number" value="${DSTAMP}-${TSTAMP}"/>
-    <property name="build.type" value="-SNAPSHOT"/>
+    <property name="build.type" value=""/>
     <property name="impl.version.number" value="${spec.version}.${patch.version}" />
     <property name="impl.version" value="${impl.version.number}${build.type}"/>
     <property name="full.impl.version" value="${impl.version.number} (${build.number}${build.type})"/>
-    <property name="snapshot.version" value="${impl.version.number}-SNAPSHOT"/>
+    <property name="snapshot.version" value="${impl.version.number}"/>
 
     <!-- Environment -->
     <property environment="myenv" />
@@ -211,7 +211,7 @@
 
     <!-- this is hard coded to match the values in ${basedir}/jsf-tools/pom.xml -->
     <property name="jsf-tools.jar" 
-              value="${maven.repo.local}/com/sun/faces/build/jsf-tools/${snapshot.version}/jsf-tools-${snapshot.version}.jar" />
+              value="${maven.repo.local}/com/sun/faces/build/jsf-tools/2.2.0/jsf-tools-2.2.0.jar" />
 
     <!-- Test classpaths that are used in multiple places within the project -->
     <path id="junit.classpath">

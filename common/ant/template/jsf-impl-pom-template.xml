@@ -280,7 +280,7 @@
             <plugin>
               <groupId>org.glassfish.build</groupId>
               <artifactId>spec-version-maven-plugin</artifactId>
-              <version>1.1</version>
+              <version>1.2</version>
               <executions>
                 <execution>
                   <goals>
@@ -290,19 +290,19 @@
               </executions>
               <configuration>
                 <spec>
-                  <nonFinal>true</nonFinal>
+                  <nonFinal>false</nonFinal>
                   <jarType>impl</jarType>
-                  <specVersion>2.1</specVersion>
+                  <specVersion>2.2</specVersion>
                   <newSpecVersion>2.2</newSpecVersion>
                   <specImplVersion>2.2</specImplVersion>
-                  <implVersion>2.1.21</implVersion>
-                  <newImplVersion>@version@</newImplVersion>
-                  <specBuild>14</specBuild>
-                  <implBuild>14</implBuild>
+                  <implVersion>2.2.0</implVersion>
+                  <newImplVersion>2.2.0</newImplVersion>
+                  <specBuild></specBuild>
+                  <implBuild></implBuild>
                   <apiPackage>javax.faces</apiPackage>
                   <implNamespace>org.glassfish</implNamespace>
                 </spec>
-                <module>target/javax.faces-@version@.jar</module>
+                <module>target/javax.faces-2.2.0.jar</module>
               </configuration>
             </plugin>
           </plugins>

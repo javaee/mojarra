@@ -761,7 +761,7 @@ javax.faces.level=ALL
                  windowtitle="${DocName} (${spec.version})"
                  stylesheetfile="${resources.dir}/jsf-api.css"
                  source="1.5"
-                 doctitle="${DocName} (${spec.version} SNAPSHOT ${build.number})">
+                 doctitle="${DocName} (${spec.version} ${build.number})">
             <bottom><![CDATA[<a href="http://www.oracle.com">Oracle</a> and/or its affiliates. All Rights Reserved. Use is subject to <a href="{@docRoot}/doc-files/speclicense.html" target="_top">license terms</a>]]></bottom>
             <fileset dir="${src.dir}">
                 <include name="**/*.java"/>
@@ -886,7 +886,7 @@ ant -Dgpg.passphrase=PASSPHRASE HERE mvn.deploy.snapshot.local
 
     <target name="mvn.pre-maven-rename.deploy.release.local">
         <mvn.pre-maven-rename.deploy.release.local type="api"
-                                  version="2.2.0-m14"/>
+                                  version="2.2"/>
     </target>
 
     <target name="strip.api.jar" 
@@ -967,7 +967,7 @@ ant -Dgpg.passphrase=PASSPHRASE HERE mvn.deploy.snapshot.local
 
         <mvn.pre-maven-rename.deploy.release.local groupId="javax.faces" 
                                   type="api"
-                                  version="2.2.0-m14"/>
+                                  version="2.2"/>
 
     </target>
 
@@ -988,11 +988,11 @@ ant -Dgpg.passphrase=PASSPHRASE HERE mvn.deploy.snapshot.local
 
     <target name="mvn.pre-maven-rename.deploy.release">
         <mvn.pre-maven-rename.deploy.release type="api"
-                                  version="2.2.0-m14" />
+                                  version="2.2" />
     </target>
 
     <target name="mvn.pre-maven-rename.deploy.api.release" depends="strip.api.jar">
-        <mvn.pre-maven-rename.deploy.release groupId="javax.faces" version="2.2.0-m14" type="api"/>
+        <mvn.pre-maven-rename.deploy.release groupId="javax.faces" version="2.2" type="api"/>
     </target>
 
     <target name="passthru">

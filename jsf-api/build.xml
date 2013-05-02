@@ -798,7 +798,7 @@ javax.faces.level=ALL
                  stylesheetfile="${resources.dir}/jsf-api.css"
                  source="1.5"
                  useexternalfile="yes"
-                 doctitle="${DocName} (${spec.version} SNAPSHOT ${build.number})"
+                 doctitle="${DocName} (${spec.version})"
                  >
             <bottom><![CDATA[<a href="http://www.oracle.com">Oracle</a> and/or its affiliates. All Rights Reserved. Use is subject to <a href="{@docRoot}/doc-files/speclicense.html" target="_top">license terms</a>]]></bottom>
             <fileset dir="${src.dir}">
@@ -922,7 +922,7 @@ javax.faces.level=ALL
 
     <target name="mvn.deploy.release.local" depends="strip.api.jar">
         <mvn.deploy.release.local type="api" 
-                                  version="${spec.version}-m14"/>
+                                  version="2.2"/>
     </target>
 
     <target name="strip.api.jar" 
@@ -1041,7 +1041,7 @@ ant -Dgpg.passphrase=PASSPHRASE HERE mvn.deploy.snapshot.local
 
     <target name="mvn.deploy.release" depends="strip.api.jar">
         <mvn.deploy.release type="api" 
-                                  version="${spec.version}-m14"/>
+                                  version="2.2"/>
     </target>
 
     <target name="passthru">
@@ -1070,7 +1070,7 @@ javax.faces.level=ALL
     <target name="clean.javadoc.cache">
 
       <delete failonerror="false" 
-  file="${demo.dir}/dist/mojarra-${spec.version}-SNAPSHOT-documentation.zip" />
+  file="${demo.dir}/dist/mojarra-${spec.version}-documentation.zip" />
 
     </target>
 
