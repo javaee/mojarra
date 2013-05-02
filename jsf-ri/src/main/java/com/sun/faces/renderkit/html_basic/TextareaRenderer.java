@@ -104,7 +104,11 @@ public class TextareaRenderer extends HtmlBasicInputRenderer {
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
 
         RenderKitUtils.renderOnchange(context, component, false);
-        
+
+        if (component.getAttributes().containsKey("com.sun.faces.addNewLineAtStart") &&
+                "true".equalsIgnoreCase((String) component.getAttributes().get("com.sun.faces.addNewLineAtStart"))) {
+            writer.writeText("\n", null);
+        }
 
         // render default text specified
         if (currentValue != null) {
