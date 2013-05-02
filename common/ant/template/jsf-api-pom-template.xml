@@ -327,7 +327,7 @@
               </executions>
               <configuration>
                 <spec>
-                  <nonFinal>true</nonFinal>
+                  <nonFinal>false</nonFinal>
                   <jarType>api</jarType>
                   <specVersion>2.2</specVersion>
                   <newSpecVersion>2.2</newSpecVersion>
