@@ -886,7 +886,7 @@ ant -Dgpg.passphrase=PASSPHRASE HERE mvn.deploy.snapshot.local
 
     <target name="mvn.pre-maven-rename.deploy.release.local">
         <mvn.pre-maven-rename.deploy.release.local type="api"
-                                  version="2.2"/>
+                                  version="2.2.0"/>
     </target>
 
     <target name="strip.api.jar" 
@@ -967,7 +967,7 @@ ant -Dgpg.passphrase=PASSPHRASE HERE mvn.deploy.snapshot.local
 
         <mvn.pre-maven-rename.deploy.release.local groupId="javax.faces" 
                                   type="api"
-                                  version="2.2"/>
+                                  version="2.2.0"/>
 
     </target>
 
@@ -988,11 +988,11 @@ ant -Dgpg.passphrase=PASSPHRASE HERE mvn.deploy.snapshot.local
 
     <target name="mvn.pre-maven-rename.deploy.release">
         <mvn.pre-maven-rename.deploy.release type="api"
-                                  version="2.2" />
+                                  version="2.2.0" />
     </target>
 
     <target name="mvn.pre-maven-rename.deploy.api.release" depends="strip.api.jar">
-        <mvn.pre-maven-rename.deploy.release groupId="javax.faces" version="2.2" type="api"/>
+        <mvn.pre-maven-rename.deploy.release groupId="javax.faces" version="2.2.0" type="api"/>
     </target>
 
     <target name="passthru">
