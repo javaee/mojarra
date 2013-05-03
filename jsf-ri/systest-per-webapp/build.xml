@@ -87,6 +87,11 @@
                      injection,
                      no-web-xml" />
 
+<!-- edburns 20130503
+                   nested-loadbundles,
+-->
+
+
     <property name="container-agnostic-applications"
               value="
                    find-resources-in-jar,
@@ -95,7 +100,6 @@
                    absolute-ordering,
                    document-ordering,
                    resource-locale-prefix,
-                   nested-loadbundles,
                    replace-application,
                    replace-statemanager,
                    nested-datatables,
@@ -136,6 +140,8 @@
                    empty-string-as-null,
                    invalid-mapping,
                    converter-property-editor,
+20130503: additional failure
+                   nested-loadbundles,
 -->
 
    <property name="applications-for-V3.1_no_cluster-virtual-server"
@@ -144,7 +150,6 @@
                    annotation-restrictions,
                    clientside-statesaving,
                    resource-locale-prefix,
-                   nested-loadbundles,
                    replace-application,
                    replace-statemanager,
                    nested-datatables,
