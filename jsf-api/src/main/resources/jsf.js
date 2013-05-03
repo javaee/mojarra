@@ -244,6 +244,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                         this.frame.style = "visibility:hidden";   
                         this.frame.width = "0";
                         this.frame.height = "0";
+                        this.frame.style = "border:0";
                         this.frame.onload = bind(this, this.callback);
                         document.body.appendChild(this.frame);
                     } else {
