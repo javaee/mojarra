@@ -275,8 +275,6 @@ public class Util {
                                   Object fallbackClass)
         throws ClassNotFoundException {
         ClassLoader loader = Util.getCurrentLoader(fallbackClass);
-        FacesContext facesContext = FacesContext.getCurrentInstance();        
-        if (facesContext != null && GroovyHelper.isGroovyAvailable(facesContext)) {
 //        // Where to begin...
 //        // JDK 6 introduced CR 6434149 where one couldn't pass
 //        // in a literal for an array type ([Ljava.lang.String) and
@@ -292,14 +290,23 @@ public class Util {
 //        // as the same adapter in a standalone program works as one might expect.
 //        // So, for now, if the classname starts with '[', then use Class.forName()
 //        // to avoid CR 643419 and for all other cases, use ClassLoader.loadClass().
-            if (name.charAt(0) == '[') {
-                return Class.forName(name, true, loader);
-            } else {
-                return loader.loadClass(name);
+//        if (name.charAt(0) == '[') {
+//            return Class.forName(name, true, loader);
+//        } else {
+//            return loader.loadClass(name);
+//        }
+
+        
+        String[] primitiveNames = { "byte", "short", "int", "long", "float", "double", "boolean", "char" };
+        Class[] primitiveClasses = { byte.class, short.class, int.class, long.class, float.class, double.class, boolean.class, char.class };
+        
+        for(int i=0; i<primitiveNames.length; i++) {
+            if (primitiveNames[i].equals(name)) {
+                return primitiveClasses[i];
             }
-        } else {
-            return Class.forName(name, true, loader);
         }
+                
+        return Class.forName(name, true, loader);
     }
 
 
