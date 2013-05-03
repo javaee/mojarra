@@ -270,6 +270,17 @@ public class Util {
 //        } else {
 //            return loader.loadClass(name);
 //        }
+
+        
+        String[] primitiveNames = { "byte", "short", "int", "long", "float", "double", "boolean", "char" };
+        Class[] primitiveClasses = { byte.class, short.class, int.class, long.class, float.class, double.class, boolean.class, char.class };
+        
+        for(int i=0; i<primitiveNames.length; i++) {
+            if (primitiveNames[i].equals(name)) {
+                return primitiveClasses[i];
+            }
+        }
+                
         return Class.forName(name, true, loader);
     }
 
