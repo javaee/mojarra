@@ -79,5 +79,6 @@ public class ConfigFileIT {
     @Test
     public void testEmbed() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/extraConfig.xhtml");
+        assertTrue(page.asText().contains("SUCCESS"));
     }
 }

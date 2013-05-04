@@ -59,5 +59,6 @@
         <module>programmaticCompositeComponent</module>
         <module>replace-vdl</module>
         <module>ui</module>
+        <module>only_faces_config_in_jar</module>
     </modules>
 </project>

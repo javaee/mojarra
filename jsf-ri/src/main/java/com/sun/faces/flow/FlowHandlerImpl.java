@@ -40,7 +40,6 @@
  */
 package com.sun.faces.flow;
 
-import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.util.Util;
 import java.text.MessageFormat;
 import java.util.ArrayDeque;
@@ -65,8 +64,7 @@ import javax.faces.flow.Parameter;
 public class FlowHandlerImpl extends FlowHandler {
 
     public FlowHandlerImpl() {
-        WebConfiguration config = WebConfiguration.getInstance();
-        flowFeatureIsEnabled = config.isHasFlows();
+        flowFeatureIsEnabled = false;
         flows = new ConcurrentHashMap<String, Map<String, Flow>>();
         flowsByFlowId = new ConcurrentHashMap<String, List<Flow>>();
     }
@@ -138,6 +136,7 @@ public class FlowHandlerImpl extends FlowHandler {
         if (navigationHandler instanceof ConfigurableNavigationHandler) {
             ((ConfigurableNavigationHandler)navigationHandler).inspectFlow(context, toAdd);
         }
+        flowFeatureIsEnabled = true;
     }
 
     @Override
