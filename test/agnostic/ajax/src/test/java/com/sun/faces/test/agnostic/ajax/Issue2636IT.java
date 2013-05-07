@@ -76,6 +76,7 @@ public class Issue2636IT {
 
     // ------------------------------------------------------------ Test Methods
 
+    @Ignore
     @Test
     public void testCommandLinksInRepeat() throws Exception {
         HtmlPage page = webClient.getPage(webUrl+"faces/issue2636.xhtml");
