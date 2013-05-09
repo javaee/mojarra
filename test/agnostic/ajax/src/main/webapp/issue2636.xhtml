@@ -55,14 +55,14 @@
 		
               <ui:repeat value="#{issue2636Bean.values}" var="val">
                   <h:commandLink action="#{issue2636Bean.linkAction1()}" value="#{val}">
-                     <f:ajax execute="@this" render=":topform:content :topform:out" />
+                     <f:ajax execute="@this" render="@this :topform:content :topform:out" />
                   </h:commandLink>
               </ui:repeat>
 		
               <h:panelGroup id="content" layout="block">
                  <ui:repeat value="#{issue2636Bean.values}" var="val">
                      <h:commandLink action="#{issue2636Bean.linkAction2()}" value="#{val}">
-                        <f:ajax execute="@this" render=":topform:content :topform:out" />
+                        <f:ajax execute="@this" render="@this :topform:content :topform:out" />
                      </h:commandLink>
                  </ui:repeat>
               </h:panelGroup>
