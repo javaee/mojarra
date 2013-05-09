@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -90,7 +90,7 @@ final class ActionSourceRule extends MetaRule {
 
         public void applyMetadata(FaceletContext ctx, Object instance) {
             ((ActionSource) instance).setAction(new LegacyMethodBinding(
-                    this.attr.getMethodExpression(ctx, String.class,
+                    this.attr.getMethodExpression(ctx, Object.class,
                             ActionSourceRule.ACTION_SIG)));
         }
     }
@@ -105,7 +105,7 @@ final class ActionSourceRule extends MetaRule {
 
         public void applyMetadata(FaceletContext ctx, Object instance) {
             ((ActionSource2) instance).setActionExpression(this.attr
-                    .getMethodExpression(ctx, String.class,
+                    .getMethodExpression(ctx, Object.class,
                             ActionSourceRule.ACTION_SIG));
         }
 
