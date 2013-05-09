@@ -395,8 +395,8 @@ public class ELText {
             buff.setLength(0);
         }
 
-        if (text.size() == 0) {
-            return null;
+        if (text.isEmpty()) {
+            return new ELText("");
         } else if (text.size() == 1) {
             return (ELText) text.get(0);
         } else {
