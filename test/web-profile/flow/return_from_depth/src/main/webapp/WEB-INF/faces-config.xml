@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!-- =========== FULL CONFIGURATION FILE ================================== -->
+
+<faces-config version="2.2"
+    xmlns="http://xmlns.jcp.org/xml/ns/javaee" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
+    <flow-definition id="flow2">
+      <flow-return id="exit2">
+          <from-outcome>returnFromFlow2</from-outcome>
+      </flow-return>
+    </flow-definition>
+
+    <flow-definition id="flow1">
+      <flow-call id="call_flow2">
+        <flow-reference>
+          <flow-id>flow2</flow-id>
+        </flow-reference>
+      </flow-call>
+
+      <flow-return id="returnFromFlow2">
+        <from-outcome>/index</from-outcome>
+      </flow-return>
+
+    </flow-definition>
+
+</faces-config>

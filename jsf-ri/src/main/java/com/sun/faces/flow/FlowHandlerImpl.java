@@ -40,6 +40,7 @@
  */
 package com.sun.faces.flow;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
 import java.text.MessageFormat;
 import java.util.ArrayDeque;
@@ -171,6 +172,9 @@ public class FlowHandlerImpl extends FlowHandler {
         Flow result = null;
         FlowDeque<Flow> flowStack = getFlowStack(context);
         int returnDepth = flowStack.getReturnDepth();
+        if (flowStack.size() <= returnDepth) {
+            return null;
+        }
         if (0 < returnDepth) {
             Iterator<Flow> stackIter = flowStack.iterator();
             int i = 0;
@@ -196,7 +200,15 @@ public class FlowHandlerImpl extends FlowHandler {
         return result;
     }
     
+    public static final String FLOW_RETURN_DEPTH_PARAM_NAME = "jffrd";
     
+    public int getAndClearReturnModeDepth(FacesContext context) {
+        int result = 0;
+        FlowDeque<Flow> flowStack = getFlowStack(context);
+        result = flowStack.getAndClearMaxReturnDepth(context);
+        
+        return result;
+    }
 
     @Override
     public void pushReturnMode(FacesContext context) {
@@ -293,6 +305,11 @@ public class FlowHandlerImpl extends FlowHandler {
                 if (null != targetFlow && null != sourceFlow) {
                     flowCallNode = sourceFlow.getFlowCall(targetFlow);
                 }
+            } else {
+                String maxReturnDepthStr = requestParamMap.get(FLOW_RETURN_DEPTH_PARAM_NAME);
+                int maxReturnDepth = Integer.valueOf(maxReturnDepthStr).intValue();
+                FlowDeque<Flow> flowStack = getFlowStack(context);
+                flowStack.setMaxReturnDepth(context, maxReturnDepth);
             }
             
             fh.transition(context, sourceFlow, targetFlow, flowCallNode, context.getViewRoot().getViewId());
@@ -309,7 +326,11 @@ public class FlowHandlerImpl extends FlowHandler {
                 
         // case 1: target is null
         if (null == targetFlow) {
-            popFlow(context);
+            FlowDeque<Flow> flowStack = getFlowStack(context);
+            int maxReturns = flowStack.getAndClearMaxReturnDepth(context);
+            for (int i=0; i < maxReturns; i++) {
+                popFlow(context);
+            }
             return;
         } 
         
@@ -406,6 +427,10 @@ public class FlowHandlerImpl extends FlowHandler {
             data = new ArrayDeque<E>();
             rideAlong = new ArrayDeque<RideAlong>();
         }
+        
+        public int size() {
+            return data.size();
+        }
 
         @Override
         public Iterator<E> iterator() {
@@ -454,14 +479,43 @@ public class FlowHandlerImpl extends FlowHandler {
         public int getReturnDepth() {
             return returnDepth;
         }
-
+        
+        private void setMaxReturnDepth(FacesContext context, int value) {
+            Map<Object, Object> attrs = context.getAttributes();
+            attrs.put(FLOW_RETURN_DEPTH_PARAM_NAME, value);
+        }
+        
+        private int getAndClearMaxReturnDepth(FacesContext context) {
+            Map<Object, Object> attrs = context.getAttributes();
+            int result = 0;
+            if (attrs.containsKey(FLOW_RETURN_DEPTH_PARAM_NAME)) {
+              result = ((Integer)attrs.remove(FLOW_RETURN_DEPTH_PARAM_NAME)).intValue();
+            } 
+            return result;
+        }
+        
+        private void incrementMaxReturnDepth() {
+            FacesContext context = FacesContext.getCurrentInstance();
+            Map<Object, Object> attrs = context.getAttributes();
+            if (!attrs.containsKey(FLOW_RETURN_DEPTH_PARAM_NAME)) {
+                attrs.put(FLOW_RETURN_DEPTH_PARAM_NAME, (Integer) 1);
+            } else {
+                Integer cur = (Integer) attrs.get(FLOW_RETURN_DEPTH_PARAM_NAME);
+                attrs.put(FLOW_RETURN_DEPTH_PARAM_NAME, (Integer) cur + 1);
+            }
+            
+        }
+        
         public void pushReturnMode() {
+            this.incrementMaxReturnDepth();
             this.returnDepth++;
         }
         
         public void popReturnMode() {
             this.returnDepth--;
         }
+        
+        
 
     }
         

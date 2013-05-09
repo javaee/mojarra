@@ -28,5 +28,6 @@
         <module>parameter_faces_flow_call</module>
         <module>basic_implicit_in_jar</module>
         <module>basic_implicit_template</module>
+        <module>return_from_depth</module>
     </modules>
 </project>

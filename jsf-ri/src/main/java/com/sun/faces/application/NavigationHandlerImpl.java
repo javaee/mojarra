@@ -203,9 +203,6 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             } 
             if (caseStruct.navCase.isRedirect() || isUIViewActionBroadcastAndViewdsDiffer) {
                 
-                // PENDING(edburns): Flows currently don't work with redirect.
-                // Obviously I have to fix that.
-
                 // perform a 302 redirect.
                 String redirectUrl =
                       viewHandler.getRedirectURL(context,
