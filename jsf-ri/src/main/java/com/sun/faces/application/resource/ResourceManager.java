@@ -42,6 +42,7 @@ package com.sun.faces.application.resource;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -268,23 +269,34 @@ public class ResourceManager {
                                   boolean compressable,
                                   boolean isViewResource,
                                   FacesContext ctx) {
-        
+        // loop over the contracts as described in deriveResourceIdConsideringLocalePrefixAndContracts in the spec
         LibraryInfo library = null;
+        for (String contract : getResourceLibraryContracts(ctx)) {
+            ResourceInfo info = getResourceInfo(libraryName, resourceName, localePrefix, contract, compressable, isViewResource, ctx, library);
+            if(info != null) {
+                return info;
+            }
+        }
+        return getResourceInfo(libraryName, resourceName, localePrefix, null, compressable, isViewResource, ctx, library);
+
+    }
+
+    private ResourceInfo getResourceInfo(String libraryName, String resourceName, String localePrefix, String contract, boolean compressable, boolean isViewResource, FacesContext ctx, LibraryInfo library) {
         if (libraryName != null && !nameContainsForbiddenSequence(libraryName)) {
-            library = findLibrary(libraryName, localePrefix, ctx);
+            library = findLibrary(libraryName, localePrefix, contract, ctx);
             if (library == null && localePrefix != null) {
                 // no localized library found.  Try to find
                 // a library that isn't localized.
-                library = findLibrary(libraryName, null, ctx);
+                library = findLibrary(libraryName, null, contract, ctx);
             }
             if (library == null) {
                 // If we don't have one by now, perhaps it's time to
                 // consider scanning directories.
-                library = findLibraryOnClasspathWithZipDirectoryEntryScan(libraryName, localePrefix, ctx, false);
+                library = findLibraryOnClasspathWithZipDirectoryEntryScan(libraryName, localePrefix, contract, ctx, false);
                 if (library == null && localePrefix != null) {
                     // no localized library found.  Try to find
                     // a library that isn't localized.
-                    library = findLibraryOnClasspathWithZipDirectoryEntryScan(libraryName, null, ctx, false);
+                    library = findLibraryOnClasspathWithZipDirectoryEntryScan(libraryName, null, contract, ctx, false);
                 }
                 if (null == library) {
                     return null;
@@ -298,7 +310,7 @@ public class ResourceManager {
         if (nameContainsForbiddenSequence(resName)) {
             return null;
         }
-        
+
         ResourceInfo info =
               findResource(library, resourceName, localePrefix, compressable, isViewResource,ctx);
         if (info == null && localePrefix != null) {
@@ -314,9 +326,7 @@ public class ResourceManager {
         if (info == null
                 && library != null
                 && library.getHelper() instanceof WebappResourceHelper) {
-            LibraryInfo altLibrary = classpathHelper.findLibrary(libraryName,
-                                                                 localePrefix,
-                                                                 ctx);
+            LibraryInfo altLibrary = classpathHelper.findLibrary(libraryName, localePrefix, contract, ctx);
             if (altLibrary != null) {
                 VersionInfo originalVersion = library.getVersion();
                 VersionInfo altVersion = altLibrary.getVersion();
@@ -331,7 +341,7 @@ public class ResourceManager {
                 }
 
             }
-   
+
             if (library != null) {
                 info = findResource(library, resourceName, localePrefix, compressable, isViewResource, ctx);
                 if (info == null && localePrefix != null) {
@@ -343,7 +353,6 @@ public class ResourceManager {
 
         }
         return info;
-
     }
 
     /**
@@ -435,28 +444,25 @@ public class ResourceManager {
      * LibraryInfo} instance that contains the name, version, and {@link
      * ResourceHelper}.</p>
      *
+     *
      * @param libraryName the library to find
      * @param localePrefix the prefix for the desired locale
-     * @param ctx         the {@link FacesContext} for the current request
-     *
-     * @return the Library instance for the specified library
+     * @param contract the contract to use
+     *@param ctx         the {@link javax.faces.context.FacesContext} for the current request
+     *  @return the Library instance for the specified library
      */
      LibraryInfo findLibrary(String libraryName,
                              String localePrefix,
-                             FacesContext ctx) {
+                             String contract, FacesContext ctx) {
 
-        LibraryInfo library = webappHelper.findLibrary(libraryName,
-                                                       localePrefix,
-                                                       ctx);
+        LibraryInfo library = webappHelper.findLibrary(libraryName, localePrefix, contract, ctx);
         
         if (library == null) {
-            library = classpathHelper.findLibrary(libraryName,
-                                                  localePrefix,
-                                                  ctx);
+            library = classpathHelper.findLibrary(libraryName, localePrefix, contract, ctx);
         }
         
         if (library == null) {
-            library = faceletResourceHelper.findLibrary(libraryName, localePrefix, ctx);
+            library = faceletResourceHelper.findLibrary(libraryName, localePrefix, contract, ctx);
         }
 
         // if not library is found at this point, let the caller deal with it
@@ -464,9 +470,9 @@ public class ResourceManager {
     }
 
      LibraryInfo findLibraryOnClasspathWithZipDirectoryEntryScan(String libraryName,
-                             String localePrefix,
-                             FacesContext ctx, boolean forceScan) {
-         return classpathHelper.findLibraryWithZipDirectoryEntryScan(libraryName, localePrefix, ctx, forceScan);
+                                                                 String localePrefix,
+                                                                 String contract, FacesContext ctx, boolean forceScan) {
+         return classpathHelper.findLibraryWithZipDirectoryEntryScan(libraryName, localePrefix, contract, ctx, forceScan);
      }
 
    /**
@@ -532,6 +538,7 @@ public class ResourceManager {
     }
     
     ResourceInfo findResource(String resourceId) {
+        // PENDING(fcaputo) do we need to handle contracts here?
         String libraryName = null;
         String resourceName = null;
         int end = 0, start = 0;
@@ -544,7 +551,7 @@ public class ResourceManager {
             }
         }
         FacesContext context = FacesContext.getCurrentInstance();
-        LibraryInfo info = this.findLibrary(libraryName, null, context);
+        LibraryInfo info = this.findLibrary(libraryName, null, null, context);
         ResourceInfo resourceInfo = this.findResource(info, resourceName, libraryName, true, false, context);
         
         return resourceInfo;
@@ -614,7 +621,7 @@ public class ResourceManager {
                 }
             }
             // PENDING(edburns): calculate the contracts!
-            return null;
+            return Collections.emptyList();
         }
         return context.getResourceLibraryContracts();
     }

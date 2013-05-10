@@ -81,7 +81,7 @@ public class FaceletWebappResourceHelper extends ResourceHelper {
     
 
     @Override
-    public LibraryInfo findLibrary(String libraryName, String localePrefix, FacesContext ctx) {
+    public LibraryInfo findLibrary(String libraryName, String localePrefix, String contract, FacesContext ctx) {
         LibraryInfo result = null;
 
         try {
@@ -90,11 +90,17 @@ public class FaceletWebappResourceHelper extends ResourceHelper {
             if ('/' != path.charAt(0)) {
                 path = "/" + path;
             }
+            if(contract != null) {
+                path = webAppContractsDirectory + '/' + contract + path;
+            }
+            if ('/' != path.charAt(0)) {
+                path = "/" + path;
+            }
             URL url = Resource.getResourceUrl(ctx, path);
             // By definition, FaceletWebappResourceHelper only deals with files
             // in the web app root, not in the resource directories
             if (null != url && -1 == url.getPath().indexOf("/META-INF/")) {
-                result = new FaceletLibraryInfo(libraryName, null, localePrefix, this, url);
+                result = new FaceletLibraryInfo(libraryName, null, localePrefix, contract, this, url);
             }
         } catch (MalformedURLException ex) {
             throw new FacesException(ex);
@@ -124,8 +130,9 @@ public class FaceletWebappResourceHelper extends ResourceHelper {
             boolean doNotCache = false;
 
             URL url = null;
-            if (!contracts.isEmpty()) {
-                url = findResourceInfoConsideringContracts(ctx, resourceName, 
+            // if the library is not null, we must not consider contracts here!
+            if (library == null && !contracts.isEmpty()) {
+                url = findResourceInfoConsideringContracts(ctx, resourceName,
                         outContract,
                         contracts);
             }
