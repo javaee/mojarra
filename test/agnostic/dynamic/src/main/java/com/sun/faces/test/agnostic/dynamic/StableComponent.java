@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU General
  * Public License Version 2 only ("GPL") or the Common Development and
@@ -32,40 +32,68 @@
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright holder.
  */
+
 package com.sun.faces.test.agnostic.dynamic;
 
 import javax.faces.component.FacesComponent;
-import javax.faces.component.UIComponent;
 import javax.faces.component.UIComponentBase;
 import javax.faces.component.UIViewRoot;
+import javax.faces.component.html.HtmlInputText;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.PreRenderViewEvent;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 
-@FacesComponent(value = "com.sun.faces.test.agnostic.dynamic.ToggleComponent")
-public class ToggleComponent extends UIComponentBase implements SystemEventListener {
+@FacesComponent( value = "com.sun.faces.test.agnostic.dynamic.StableComponent" )
+public class StableComponent extends UIComponentBase implements SystemEventListener {
 
-    public ToggleComponent() {
-        setRendererType("component");
+    //
+    // Constructor - subscribes to PreRenderViewEvent(s)
+    //
+
+    public StableComponent() {
+        setRendererType( "component" );
         FacesContext context = FacesContext.getCurrentInstance();
         UIViewRoot root = context.getViewRoot();
-        root.subscribeToViewEvent(PreRenderViewEvent.class, this);
+        root.subscribeToViewEvent( PreRenderViewEvent.class, this );
     }
+
+    //
+    // Public methods
+    //
 
     @Override
     public String getFamily() {
         return "com.sun.faces.test.agnostic.dynamic";
     }
 
-    public boolean isListenerForSource(Object source) {
-        return (source instanceof UIViewRoot);
+    public boolean isListenerForSource( Object source ) {
+        return ( source instanceof UIViewRoot );
     }
 
+    //
+    // Event processing method: Adds 3 input components.
+    //
+
     @Override
-    public void processEvent(SystemEvent event) throws AbortProcessingException {
-        UIComponent component = getChildren().remove(0);
-        getChildren().add(component);
+    public void processEvent( SystemEvent event )
+        throws AbortProcessingException {
+        if ( FacesContext.getCurrentInstance().getMaximumSeverity() != null ) {
+            return;
+        }
+
+        HtmlInputText inputText1 = new HtmlInputText();
+        inputText1.setValue( "1" );
+        getChildren().add( inputText1 );
+
+        HtmlInputText inputText2 = new HtmlInputText();
+        inputText2.setValue( "2" );
+        getChildren().add( inputText2 );
+
+        HtmlInputText inputText3 = new HtmlInputText();
+        inputText3.setId( "text3" );
+        inputText3.setRequired( true );
+        getChildren().add( inputText3 );
     }
 }
