@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU General
  * Public License Version 2 only ("GPL") or the Common Development and
@@ -34,38 +34,31 @@
  */
 package com.sun.faces.test.agnostic.dynamic;
 
-import javax.faces.component.FacesComponent;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIComponentBase;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.PreRenderViewEvent;
-import javax.faces.event.SystemEvent;
-import javax.faces.event.SystemEventListener;
+import java.util.ArrayList;
+import java.util.List;
 
-@FacesComponent(value = "com.sun.faces.test.agnostic.dynamic.ToggleComponent")
-public class ToggleComponent extends UIComponentBase implements SystemEventListener {
+import javax.faces.bean.ManagedBean;
 
-    public ToggleComponent() {
-        setRendererType("component");
-        FacesContext context = FacesContext.getCurrentInstance();
-        UIViewRoot root = context.getViewRoot();
-        root.subscribeToViewEvent(PreRenderViewEvent.class, this);
+@ManagedBean(name = "addBean")
+public class AddBean {
+
+    private static final List<String>   LIST;
+
+    static {
+        LIST = new ArrayList<String>();
+        LIST.add( "Foo" );
+        LIST.add( "Bar" );
+        LIST.add( "Baz" );
     }
 
-    @Override
-    public String getFamily() {
-        return "com.sun.faces.test.agnostic.dynamic";
+    public List<String> getList() {
+        return LIST;
     }
 
-    public boolean isListenerForSource(Object source) {
-        return (source instanceof UIViewRoot);
-    }
-
-    @Override
-    public void processEvent(SystemEvent event) throws AbortProcessingException {
-        UIComponent component = getChildren().remove(0);
-        getChildren().add(component);
+    /**
+     * Save.
+     */
+    public void save() {
+        // Do nothing - just a way to postback.
     }
 }

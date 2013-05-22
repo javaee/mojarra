@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU General
  * Public License Version 2 only ("GPL") or the Common Development and
@@ -32,40 +32,58 @@
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright holder.
  */
+
 package com.sun.faces.test.agnostic.dynamic;
 
 import javax.faces.component.FacesComponent;
-import javax.faces.component.UIComponent;
 import javax.faces.component.UIComponentBase;
 import javax.faces.component.UIViewRoot;
+import javax.faces.component.html.HtmlOutputText;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.PreRenderViewEvent;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 
-@FacesComponent(value = "com.sun.faces.test.agnostic.dynamic.ToggleComponent")
-public class ToggleComponent extends UIComponentBase implements SystemEventListener {
+@FacesComponent( value = "com.sun.faces.test.agnostic.dynamic.RecursiveComponent" )
+public class RecursiveComponent extends UIComponentBase implements SystemEventListener {
 
-    public ToggleComponent() {
-        setRendererType("component");
+    //
+    // Constructor - subscribes to PreRenderViewEvent(s)
+    //
+
+    public RecursiveComponent() {
+        setRendererType( "component" );
         FacesContext context = FacesContext.getCurrentInstance();
         UIViewRoot root = context.getViewRoot();
-        root.subscribeToViewEvent(PreRenderViewEvent.class, this);
+        root.subscribeToViewEvent( PreRenderViewEvent.class, this );
     }
+
+    //
+    // Public methods
+    //
 
     @Override
     public String getFamily() {
         return "com.sun.faces.test.agnostic.dynamic";
     }
 
-    public boolean isListenerForSource(Object source) {
-        return (source instanceof UIViewRoot);
+    public boolean isListenerForSource( Object source ) {
+        return ( source instanceof UIViewRoot );
     }
 
+    // This event method will add a new nested component for pre-render event.
+
     @Override
-    public void processEvent(SystemEvent event) throws AbortProcessingException {
-        UIComponent component = getChildren().remove(0);
-        getChildren().add(component);
+    public void processEvent( SystemEvent event )
+        throws AbortProcessingException {
+        if ( !FacesContext.getCurrentInstance().isPostback() ) {
+            HtmlOutputText component = new HtmlOutputText();
+            component.setValue( "Dynamically added child" );
+            getChildren().add( component );
+            if ( !( getParent() instanceof RecursiveComponent ) ) {
+                getChildren().add( new RecursiveComponent() );
+            }
+        }
     }
 }

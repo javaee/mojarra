@@ -52,8 +52,18 @@
             <h2>Dynamic Component Tests</h2>
             <ul>
                 <li><a href="#{facesContext.externalContext.requestContextPath}/faces/moveComponent.xhtml">Move a component around</a></li>
-                <li><a href="#{facesContext.externalContext.requestContextPath}/faces/toggle.xhtml">Toggle a component back and forth</a></li>
-                <li><a href="#{facesContext.externalContext.requestContextPath}/faces/removeComponent.xhtml">Remove a component using a PreRenderComponent event</a></li>
+                <br/>
+                <li><a href="#{facesContext.externalContext.requestContextPath}/faces/toggle.xhtml">Toggle a component back and forth using a PreRenderViewEvent Component listener</a></li>
+                <br/>
+                <li><a href="#{facesContext.externalContext.requestContextPath}/faces/removeComponent.xhtml">Remove a component using a PreRenderViewEvent Component listener</a></li>
+                <br/>
+                <li><a href="#{facesContext.externalContext.requestContextPath}/faces/add.xhtml">Add a component using a PreRenderViewEvent Component listener</a></li>
+                <br/>
+                <li><a href="#{facesContext.externalContext.requestContextPath}/faces/stable.xhtml">Adds three input components using a PreRenderViewEvent Component listener and tests for ordering stability after postback</a></li>
+                <br/>
+                <li><a href="#{facesContext.externalContext.requestContextPath}/faces/table.xhtml">Adds a datatable component, followed by the addition of a component to the datatable using a PreRenderViewEvent Component listener </a></li>
+                <br/>
+                <li><a href="#{facesContext.externalContext.requestContextPath}/faces/recursive.xhtml">Adds a component, followed by the addition of a nested component using a PreRenderViewEvent Component listener </a></li>
             </ul>
         </f:view>
     </body>
