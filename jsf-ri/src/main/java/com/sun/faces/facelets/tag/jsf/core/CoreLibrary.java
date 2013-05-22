@@ -84,73 +84,7 @@ public final class CoreLibrary extends AbstractTagLibrary {
     public final static CoreLibrary Instance = new CoreLibrary();
 
     public CoreLibrary() {
-        super(Namespace);
-
-        this.addTagHandler("actionListener", ActionListenerHandler.class);
-
-        this.addTagHandler("ajax", AjaxHandler.class);
-
-        this.addTagHandler("attribute", AttributeHandler.class);
-
-        this.addTagHandler("attributes", AttributesHandler.class);
-
-        this.addTagHandler("passThroughAttribute", PassThroughAttributeHandler.class);
-
-        this.addTagHandler("passThroughAttributes", PassThroughAttributesHandler.class);
-
-        this.addConverter("convertDateTime", DateTimeConverter.CONVERTER_ID, ConvertDateTimeHandler.class);
-
-        this.addConverter("convertNumber", NumberConverter.CONVERTER_ID, ConvertNumberHandler.class);
-
-        this.addConverter("converter", null, ConvertDelegateHandler.class);
-
-        this.addTagHandler("event", EventHandler.class);
-
-        this.addTagHandler("facet", FacetHandler.class);
-
-        this.addTagHandler("metadata", MetadataHandler.class);
-
-        this.addTagHandler("loadBundle", LoadBundleHandler.class);
-
-        this.addTagHandler("resetValues", ResetValuesHandler.class);
-
-        this.addComponent("viewParam", UIViewParameter.COMPONENT_TYPE, null);
-        
-        this.addComponent("viewAction", UIViewAction.COMPONENT_TYPE, null);
-
-        this.addComponent("param", UIParameter.COMPONENT_TYPE, null);
-        
-        this.addTagHandler("phaseListener", PhaseListenerHandler.class);
-
-        this.addComponent("selectItem", UISelectItem.COMPONENT_TYPE, null);
-
-        this.addComponent("selectItems", UISelectItems.COMPONENT_TYPE, null);
-        
-        this.addTagHandler("setPropertyActionListener", SetPropertyActionListenerHandler.class);
-        
-        this.addComponent("subview", "javax.faces.NamingContainer", null);
-        
-        this.addValidator("validateBean", BeanValidator.VALIDATOR_ID);
-        
-        this.addValidator("validateLength", LengthValidator.VALIDATOR_ID);
-        
-        this.addValidator("validateLongRange", LongRangeValidator.VALIDATOR_ID);
-        
-        this.addValidator("validateDoubleRange", DoubleRangeValidator.VALIDATOR_ID);
-
-        this.addValidator("validateRegex", RegexValidator.VALIDATOR_ID);
-        
-        this.addValidator("validateRequired", RequiredValidator.VALIDATOR_ID);
-
-        this.addValidator("validator", null, ValidateDelegateHandler.class);
-
-        this.addTagHandler("valueChangeListener",
-                ValueChangeListenerHandler.class);
-
-        this.addTagHandler("view", ViewHandler.class);
-        
-        this.addComponent("verbatim", "javax.faces.HtmlOutputText",
-                          "javax.faces.Text", VerbatimHandler.class);
+        this(Namespace);
     }
     
     public CoreLibrary(String namespace) {
