@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8' ?>
 
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -42,45 +42,36 @@
 
 -->
 
-<facelet-taglib xmlns="http://java.sun.com/xml/ns/javaee"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_0.xsd" 
-                version="2.0">
-    <namespace>http://www.oracle.com/mojarra/test/dynamic</namespace>
-    <tag>
-        <tag-name>toggleComponent</tag-name>
-        <component>
-            <component-type>com.sun.faces.test.agnostic.dynamic.ToggleComponent</component-type>
-        </component>
-    </tag>
-    <tag>
-        <tag-name>addcomponent</tag-name>
-        <component>
-            <component-type>com.sun.faces.test.agnostic.dynamic.AddComponent</component-type>
-        </component>
-    </tag>
-    <tag>
-        <tag-name>stablecomponent</tag-name>
-        <component>
-            <component-type>com.sun.faces.test.agnostic.dynamic.StableComponent</component-type>
-        </component>
-    </tag>
-    <tag>
-        <tag-name>tablecomponent</tag-name>
-        <component>
-            <component-type>com.sun.faces.test.agnostic.dynamic.TableComponent</component-type>
-        </component>
-    </tag>
-    <tag>
-        <tag-name>recursivecomponent</tag-name>
-        <component>
-            <component-type>com.sun.faces.test.agnostic.dynamic.RecursiveComponent</component-type>
-        </component>
-    </tag>
-    <tag>
-        <tag-name>addcomponent1</tag-name>
-        <component>
-            <component-type>com.sun.faces.test.agnostic.dynamic.AddComponent1</component-type>
-        </component>
-    </tag>
-</facelet-taglib>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "
+    http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:dynamic="http://www.oracle.com/mojarra/test/dynamic">
+
+    <body>
+        <f:view>
+            <h2>Add Test Instructions</h2>
+            <ol>
+                <li>Just before the page is rendered (pre render view event), a custom component should have created a dynamic component (PanelGrid) and added it as a child.</li>
+                <li>Click 'PostBack'. The Action processing for the button will create another dynamic component (OutputText) and add it as a child to the dynamic PanelGrid component.</li>
+                <li>Click 'PostBack' again.  The PanelGrid should still have the OutputText child.</li>
+	    </ol>
+		
+	    <h:messages/>
+		
+	    <h:form prependId="false" id="dynamicForm">
+	
+		<dynamic:addcomponent1/>
+		
+		<br/>
+		
+		<h:commandButton id="button" value="POSTback" action="#{addBean.save}"/>
+		
+	    </h:form>			
+        </f:view>
+    </body>
+</html>
+	
+
