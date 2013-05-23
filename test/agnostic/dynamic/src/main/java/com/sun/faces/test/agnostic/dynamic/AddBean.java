@@ -38,6 +38,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UINamingContainer;
+import javax.faces.component.html.HtmlOutputText;
+import javax.faces.context.FacesContext;
 
 @ManagedBean(name = "addBean")
 public class AddBean {
@@ -61,4 +65,17 @@ public class AddBean {
     public void save() {
         // Do nothing - just a way to postback.
     }
+
+    /**
+     * Appends an OutputText component to another component.
+     */
+    public void addComponent() {
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        UIComponent group = ctx.getViewRoot().findComponent("dynamicForm" +
+            UINamingContainer.getSeparatorChar(ctx) +  "group");
+        HtmlOutputText output = new HtmlOutputText();
+        output.setValue("OUTPUT");
+        group.getChildren().add(output);
+    }
+
 }
