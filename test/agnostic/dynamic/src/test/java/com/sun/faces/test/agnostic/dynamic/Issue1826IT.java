@@ -39,6 +39,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -132,6 +133,7 @@ public class Issue1826IT {
         assertTrue(page.asXml().indexOf("Baz") < page.asXml().indexOf("encodeEnd"));
     }
 
+    @Ignore
     @Test
     public void testRecursive() throws Exception {
         String str = "Component::encodeBegin" + "\n" + "Dynamically added child" + "\n" +
