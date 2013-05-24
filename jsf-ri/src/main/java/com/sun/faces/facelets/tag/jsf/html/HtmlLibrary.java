@@ -74,7 +74,7 @@ public final class HtmlLibrary extends AbstractHtmlLibrary {
     public HtmlLibrary(String namespace) {
         super(namespace);
         
-        this.addHtmlComponent("body", "javax.faces.Output",
+        this.addHtmlComponent("body", "javax.faces.OutputBody",
                 "javax.faces.Body");
 
         this.addHtmlComponent("button", "javax.faces.HtmlOutcomeTargetButton",
