@@ -133,18 +133,16 @@ public class Issue1826IT {
         assertTrue(page.asXml().indexOf("Baz") < page.asXml().indexOf("encodeEnd"));
     }
 
-    @Ignore
     @Test
     public void testRecursive() throws Exception {
-        String str = "Component::encodeBegin" + "\n" + "Dynamically added child" + "\n" +
-            "Component::encodeBegin" + "\n" + "Dynamically added child" + "\n" +
-            "Component::encodeEnd" + "\n" + "Component::encodeEnd";
-
         /*
          * Make sure the added component and nested component is in the proper place. 
          */
         HtmlPage page = webClient.getPage(webUrl + "faces/recursive.xhtml");
-        assertTrue(page.asText().contains(str));
+        String text = page.asText();
+        int first = text.indexOf("Dynamically");
+        int next = text.indexOf("Dynamically", first + ("Dynamically").length());
+        assertTrue(first < next);
 
         /**
          * After clicking make sure the added component and nested component is still in 
@@ -152,7 +150,10 @@ public class Issue1826IT {
          */
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button");
         page = button.click();
-        assertTrue(page.asText().contains(str));
+        text = page.asText();
+        first = text.indexOf("Dynamically");
+        next = text.indexOf("Dynamically", first + ("Dynamically").length());
+        assertTrue(first < next);
     }
 
 
