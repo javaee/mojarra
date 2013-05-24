@@ -430,12 +430,18 @@ public abstract class UIComponentBase extends UIComponent {
 
     private ConcurrentHashMap<String, UIComponent> getFaceletComponentMap() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        if (!facesContext.getAttributes().containsKey("com.sun.faces.facelets.FACELET_COMPONENT_MAP")) {
-            facesContext.getAttributes().put("com.sun.faces.facelets.FACELET_COMPONENT_MAP", 
-                    new ConcurrentHashMap<String, UIComponent>());
+        UIViewRoot viewRoot = facesContext.getViewRoot();
+
+        if (viewRoot != null) {
+            if (viewRoot.getTransientStateHelper().getTransient("com.sun.faces.facelets.FACELET_COMPONENT_MAP") == null) {
+                viewRoot.getTransientStateHelper(true).putTransient("com.sun.faces.facelets.FACELET_COMPONENT_MAP", 
+                        new ConcurrentHashMap<String, UIComponent>());
+            }
+            return (ConcurrentHashMap<String, UIComponent>) viewRoot.getTransientStateHelper().getTransient(
+                    "com.sun.faces.facelets.FACELET_COMPONENT_MAP");
         }
-        return (ConcurrentHashMap<String, UIComponent>) facesContext.getAttributes().get(
-                "com.sun.faces.facelets.FACELET_COMPONENT_MAP");
+        
+        return null;
     }
 
     public void setParent(UIComponent parent) {
@@ -453,7 +459,9 @@ public abstract class UIComponentBase extends UIComponent {
              */
             if (getAttributes().containsKey("com.sun.faces.facelets.MARK_ID")) {
                 ConcurrentHashMap<String, UIComponent> faceletComponentMap = getFaceletComponentMap();
-                faceletComponentMap.remove((String) getAttributes().get("com.sun.faces.facelets.MARK_ID"));
+                if (faceletComponentMap != null) {
+                    faceletComponentMap.remove((String) getAttributes().get("com.sun.faces.facelets.MARK_ID"));
+                }
             }
             
         } else {
@@ -475,7 +483,9 @@ public abstract class UIComponentBase extends UIComponent {
              */
             if (getAttributes().containsKey("com.sun.faces.facelets.MARK_ID")) {
                 ConcurrentHashMap<String, UIComponent> faceletComponentMap = getFaceletComponentMap();
-                faceletComponentMap.put(getAttributes().get("com.sun.faces.facelets.MARK_ID").toString(), this);
+                if (faceletComponentMap != null) {
+                    faceletComponentMap.put(getAttributes().get("com.sun.faces.facelets.MARK_ID").toString(), this);
+                }
             }            
         }
 
