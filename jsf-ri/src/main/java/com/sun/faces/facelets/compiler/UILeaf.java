@@ -126,7 +126,9 @@ public class UILeaf extends UIComponentBase {
              */
             if (getAttributes().containsKey("com.sun.faces.facelets.MARK_ID")) {
                 ConcurrentHashMap<String, UIComponent> faceletComponentMap = ComponentSupport.getFaceletComponentMap();
-                faceletComponentMap.remove((String) getAttributes().get("com.sun.faces.facelets.MARK_ID"));
+                if (faceletComponentMap != null) {
+                    faceletComponentMap.remove((String) getAttributes().get("com.sun.faces.facelets.MARK_ID"));
+                }
             }
         } else {
             /*
@@ -134,7 +136,9 @@ public class UILeaf extends UIComponentBase {
              */
             if (getAttributes().containsKey("com.sun.faces.facelets.MARK_ID")) {
                 ConcurrentHashMap<String, UIComponent> faceletComponentMap = ComponentSupport.getFaceletComponentMap();
-                faceletComponentMap.put(getAttributes().get("com.sun.faces.facelets.MARK_ID").toString(), this);
+                if (faceletComponentMap != null) {
+                    faceletComponentMap.put(getAttributes().get("com.sun.faces.facelets.MARK_ID").toString(), this);
+                }
             }   
         }
     }

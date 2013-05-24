@@ -358,7 +358,7 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
                      * case this is the time we know if the comments was created by the Facelet runtime 
                      * (previously).
                      */
-                    if (component.getAttributes().containsKey("com.sun.faces.facelets.MARK_ID")) {
+                    if (component.getAttributes().containsKey("com.sun.faces.facelets.MARK_ID") && faceletComponentMap != null) {
                         faceletComponentMap.put(component.getAttributes().get("com.sun.faces.facelets.MARK_ID").toString(), component);
                     }
 

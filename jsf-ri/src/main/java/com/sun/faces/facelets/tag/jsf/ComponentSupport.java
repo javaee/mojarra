@@ -84,7 +84,6 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 
  * @author Jacob Hookom
- * @version $Id$
  */
 public final class ComponentSupport {
 
@@ -210,17 +209,27 @@ public final class ComponentSupport {
      */
     public static UIComponent findChildByTagId(UIComponent parent, String id) {
         ConcurrentHashMap<String, UIComponent> componentMap = getFaceletComponentMap();
+        if (componentMap != null) {
         return componentMap.get(id);
+        } else {
+            return null;
+        }
     }
 
     public static ConcurrentHashMap<String, UIComponent> getFaceletComponentMap() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        if (!facesContext.getAttributes().containsKey("com.sun.faces.facelets.FACELET_COMPONENT_MAP")) {
-            facesContext.getAttributes().put("com.sun.faces.facelets.FACELET_COMPONENT_MAP", 
-                new ConcurrentHashMap<String, UIComponent>());
-        }
-        return (ConcurrentHashMap<String, UIComponent>) facesContext.getAttributes().get(
-                "com.sun.faces.facelets.FACELET_COMPONENT_MAP");
+        UIViewRoot viewRoot = facesContext.getViewRoot();
+        
+        if (viewRoot != null) {
+            if (viewRoot.getTransientStateHelper().getTransient("com.sun.faces.facelets.FACELET_COMPONENT_MAP") == null) {
+                viewRoot.getTransientStateHelper().putTransient("com.sun.faces.facelets.FACELET_COMPONENT_MAP", 
+                    new ConcurrentHashMap<String, UIComponent>());
+            }
+            return (ConcurrentHashMap<String, UIComponent>) viewRoot.getTransientStateHelper().getTransient(
+                    "com.sun.faces.facelets.FACELET_COMPONENT_MAP");
+        } 
+        
+        return null;
     }
     
     /**
