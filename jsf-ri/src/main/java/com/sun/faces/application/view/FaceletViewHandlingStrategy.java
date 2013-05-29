@@ -118,14 +118,18 @@ import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.Face
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.StateSavingMethod;
 import com.sun.faces.util.ComponentStruct;
 import static javax.faces.application.StateManager.IS_BUILDING_INITIAL_STATE;
-import javax.faces.component.ContextCallback;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
 import javax.faces.component.visit.VisitResult;
 import static com.sun.faces.RIConstants.DYNAMIC_COMPONENT;
 import com.sun.faces.facelets.impl.XMLFrontMatterSaver;
 import com.sun.faces.renderkit.RenderKitUtils;
+import java.util.EnumSet;
+import java.util.Set;
 import javax.faces.application.ProjectStage;
+import javax.faces.component.NamingContainer;
+import javax.faces.component.UIForm;
+import javax.faces.component.visit.VisitHint;
 import javax.faces.render.ResponseStateManager;
 
 /**
@@ -159,6 +163,10 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
     private Cache<Resource, BeanInfo> metadataCache;
 
+    /**
+     * Stores the skip hint.
+     */
+    private static String SKIP_ITERATION_HINT = "javax.faces.visit.SKIP_ITERATION";
 
     // ------------------------------------------------------------ Constructors
 
@@ -1957,32 +1965,50 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         final List<UIComponent> found = new ArrayList<UIComponent>();
         UIComponent result = null;
 
-        context.getViewRoot().invokeOnComponent(context, clientId, new ContextCallback() {
+        try {
+            context.getAttributes().put(SKIP_ITERATION_HINT, true);
+            Set<VisitHint> hints = EnumSet.of(VisitHint.SKIP_ITERATION);
 
-            public void invokeContextCallback(FacesContext context, UIComponent target) {
-                found.add(target);
-            }
-        });
-
-        /*
-         * Since we did not find it the cheaper way we need to assume there is a
-         * UINamingContainer that does not prepend its ID. So we are going to
-         * walk the tree to find it.
-         */
-        if (found.isEmpty()) {
-            VisitContext visitContext = VisitContext.createVisitContext(context);
+            VisitContext visitContext = VisitContext.createVisitContext(context, null, hints);
             context.getViewRoot().visitTree(visitContext, new VisitCallback() {
 
                 public VisitResult visit(VisitContext visitContext, UIComponent component) {
                     VisitResult result = VisitResult.ACCEPT;
                     if (component.getClientId(visitContext.getFacesContext()).equals(clientId)) {
+                        /*
+                         * If the client id matches up we have found our match.
+                         */
                         found.add(component);
                         result = VisitResult.COMPLETE;
+                    } else if (component instanceof UIForm) {
+                        /*
+                         * If the component is a UIForm and it is prepending its
+                         * id then we can short circuit out of here if the the
+                         * client id of the component we are trying to find does
+                         * not begin with the id of the UIForm.
+                         */
+                        UIForm form = (UIForm) component;
+                        if (form.isPrependId() && !clientId.startsWith(form.getClientId(visitContext.getFacesContext()))) {
+                            result = VisitResult.REJECT;
+                        }
+                    } else if (component instanceof NamingContainer && 
+                        !clientId.startsWith(component.getClientId(visitContext.getFacesContext()))) {
+                        /*
+                         * If the component is a naming container then assume it
+                         * is prepending its id so if our client id we are
+                         * looking for does not start with the naming container
+                         * id we can skip visiting this tree.
+                         */
+                        result = VisitResult.REJECT;
                     }
+
                     return result;
                 }
             });
+        } finally {
+            context.getAttributes().remove(SKIP_ITERATION_HINT);
         }
+
         if (!found.isEmpty()) {
             result = found.get(0);
         }
