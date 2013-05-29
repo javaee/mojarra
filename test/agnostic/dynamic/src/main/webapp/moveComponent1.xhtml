@@ -46,31 +46,32 @@
 -->
 
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:f="http://java.sun.com/jsf/core"      
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:dynamic="http://www.oracle.com/mojarra/test/dynamic">
     <body>
         <f:view>
-            <h2>Dynamic Component Tests</h2>
-            <ul>
-                <li><a href="#{facesContext.externalContext.requestContextPath}/faces/moveComponent.xhtml">ActionEvent Processing: Move a component around</a></li>
+            <h2>Move Test Instructions</h2>
+            <ol>
+                <li>
+                    The component should have dynamically modified the tree so that 
+                    'Foo' appears inside the red box. 
+                </li>
+                <li>
+                    Click 'POSTback'. There should be no errors. 
+                </li>
+            </ol>
+            <h:messages/>
+            <h:form id="form1" prependId="false">
+                <dynamic:movecomponent>
+                    <h:outputText value="Foo"/>
+                    <h:panelGroup style="border: 1px solid red; display: block">
+                       <h:outputText value="Bar"/>
+                    </h:panelGroup>
+                </dynamic:movecomponent>
                 <br/>
-                <li><a href="#{facesContext.externalContext.requestContextPath}/faces/moveComponent1.xhtml">PreRenderViewEvent Processing: Move a component</a></li>
-                <br/>
-                <li><a href="#{facesContext.externalContext.requestContextPath}/faces/toggle.xhtml">PreRenderViewEvent Processing: Toggle components</a></li>
-                <br/>
-                <li><a href="#{facesContext.externalContext.requestContextPath}/faces/removeComponent.xhtml">PreRenderViewEvent Processing: Remove a component</a></li>
-                <br/>
-                <li><a href="#{facesContext.externalContext.requestContextPath}/faces/add.xhtml">PreRenderViewEvent Processing: Creates/adds a component</a></li>
-                <br/>
-                <li><a href="#{facesContext.externalContext.requestContextPath}/faces/stable.xhtml">PreRenderViewEvent Processing: Creates/adds three input components. Tests for ordering stability after postback</a></li>
-                <br/>
-                <li><a href="#{facesContext.externalContext.requestContextPath}/faces/table.xhtml">PreRenderViewEvent Processing: Creates/adds a datatable component, followed by the creation/addition of a component to the datatable</a></li>
-                <br/>
-                <li><a href="#{facesContext.externalContext.requestContextPath}/faces/recursive.xhtml">PreRenderViewEvent Processing: Creates/adds a component, followed by the creation/addition of a nested component</a></li>
-                <br/>
-                <li><a href="#{facesContext.externalContext.requestContextPath}/faces/add1.xhtml">PreRenderViewEvent / PostRestoreStateEvent Processing: Creates/adds components</a></li>
-                <br/>
-                <li><a href="#{facesContext.externalContext.requestContextPath}/faces/add2.xhtml">PreRenderViewEvent Processing: Creates/adds a component to an existing component.  Each subsequent action appends a new component.</a></li>
-            </ul>
+                <h:commandButton id="button" value="POSTback" action="#{addBean.save}"/>
+            </h:form>
         </f:view>
     </body>
 </html>
