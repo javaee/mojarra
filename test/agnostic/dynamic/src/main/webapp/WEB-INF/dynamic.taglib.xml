@@ -83,4 +83,10 @@
             <component-type>com.sun.faces.test.agnostic.dynamic.AddComponent1</component-type>
         </component>
     </tag>
+    <tag>
+        <tag-name>movecomponent</tag-name>
+        <component>
+            <component-type>com.sun.faces.test.agnostic.dynamic.MoveComponent</component-type>
+        </component>
+    </tag>
 </facelet-taglib>
