@@ -45,6 +45,11 @@ if [ "$?" -ne "0" ]; then
 exit $?
 fi
 
+$scriptdir/test-glassfish-specific.sh Development true client 
+if [ "$?" -ne "0" ]; then
+exit $?
+fi
+
 $scriptdir/test-glassfish-specific.sh Development false server
 if [ "$?" -ne "0" ]; then
 exit $?
