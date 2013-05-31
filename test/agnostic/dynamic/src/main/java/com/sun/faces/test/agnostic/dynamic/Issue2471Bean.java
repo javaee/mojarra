@@ -34,8 +34,6 @@
  */
 package com.sun.faces.test.agnostic.dynamic;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
@@ -43,8 +41,6 @@ import javax.faces.context.FacesContext;
 /**
  * The managed bean for issue #2471.
  */
-@ManagedBean(name = "issue2471Bean")
-@RequestScoped
 public class Issue2471Bean {
 
     /**

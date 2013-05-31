@@ -37,13 +37,11 @@ package com.sun.faces.test.agnostic.dynamic;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.faces.bean.ManagedBean;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UINamingContainer;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.context.FacesContext;
 
-@ManagedBean(name = "addBean")
 public class AddBean {
 
     private static final List<String>   LIST;
