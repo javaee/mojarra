@@ -1,9 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
+
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -41,27 +42,16 @@
 
 -->
 
-<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
-    <context-param>
-        <param-name>javax.faces.PARTIAL_STATE_SAVING</param-name>
-        <param-value>${webapp.partialStateSaving}</param-value>
-    </context-param>
-     <context-param>
-         <param-name>javax.faces.FACELETS_LIBRARIES</param-name>
-         <param-value>/WEB-INF/resource.taglib.xml</param-value>
-     </context-param>
-    <servlet>
-        <servlet-name>Faces Servlet</servlet-name>
-        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>Faces Servlet</servlet-name>
-        <url-pattern>/faces/*</url-pattern>
-    </servlet-mapping>
-    <session-config>
-        <session-timeout>30</session-timeout>
-    </session-config>
-</web-app>
+<faces-config version="2.1"
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd">
+
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>POSTback</from-outcome>
+            <to-view-id>/issue2889.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+</faces-config>
