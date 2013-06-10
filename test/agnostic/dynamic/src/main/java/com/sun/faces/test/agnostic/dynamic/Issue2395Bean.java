@@ -37,8 +37,6 @@ package com.sun.faces.test.agnostic.dynamic;
 import com.sun.faces.context.StateContext;
 import javax.faces.FacesException;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGroup;
@@ -48,8 +46,6 @@ import javax.faces.event.ActionEvent;
 /**
  * @author Manfred Riem
  */
-@ManagedBean
-@RequestScoped
 public class Issue2395Bean {
 
     private HtmlPanelGroup panelGroup;

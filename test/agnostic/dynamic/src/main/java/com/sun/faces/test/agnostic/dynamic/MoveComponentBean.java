@@ -34,12 +34,10 @@
  */
 package com.sun.faces.test.agnostic.dynamic;
 
-import javax.faces.bean.ManagedBean;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
-@ManagedBean(name = "moveComponentBean")
 public class MoveComponentBean {
 
     /**
