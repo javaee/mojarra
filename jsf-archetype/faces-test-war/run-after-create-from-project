@@ -1,0 +1,15 @@
+# repair the version numbers in the XML prolog of config files
+find target/generated-sources/archetype/target/classes/archetype-resources/src/main/webapp -name "*.xml" -exec perl -pi.bak -e 's/xml version="..version."/xml version="1.0"/g' {} \; -print
+
+# repair the version numbers in the XML prolog of XHTML files
+find target/generated-sources/archetype/target/classes/archetype-resources/src/main/webapp -name "*.xhtml" -exec perl -pi.bak -e 's/xml version="..version."/xml version="1.0"/g' {} \; -print
+
+# make it so the <context-root> in glassfish-web.xml gets correctly replaced.
+find target/generated-sources/archetype/target/classes/archetype-resources/src/main/webapp/WEB-INF -name "glassfish-web.xml" -exec perl -pi.bak -e 's/.{symbol_dollar}{artifactId}/\${artifactId}/g' {} \; -print
+
+# modify the generated pom that controls deployment of the maven-archetype packaged artifact
+find target/generated-sources/archetype -name pom.xml -maxdepth 1 -exec perl -pi.bak -e 's%<name>faces-test-war-archetype</name>%<name>faces-test-war-archetype</name><distributionManagement><snapshotRepository><id>jvnet-nexus-snapshots</id><name>Java.net Nexus Snapshots Repository</name><url>https://maven.java.net/content/repositories/snapshots/</url></snapshotRepository><repository><id>jvnet-nexus-staging</id><name>Java.net Nexus Staging Repository</name><url>https://maven.java.net/service/local/staging/deploy/maven2/</url></repository></distributionManagement>%g' {} \; -print
+find target/generated-sources/archetype -name pom.xml -maxdepth 1 -exec perl -pi.bak -e 's%</plugins>%<plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-deploy-plugin</artifactId><configuration><updateReleaseInfo>true</updateReleaseInfo></configuration></plugin></plugins>%g' {} \; -print
+
+# remove the backup files
+find . -name "*.bak" -exec rm -f {} \; -print
