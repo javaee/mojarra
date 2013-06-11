@@ -44,30 +44,22 @@
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
     <head>
-        <title>Outside of flow</title>
+        <title>Second page in the flow</title>
     </head>
-    <body>
-        <h1>Outside of flow</h1>
-        
+    <body bgcolor="green">
     <h:form prependId="false">
-        <p><h:commandButton id="start_a" value="enter flow-a" 
-                            action="flow-a">
-              <f:attribute name="to-flow-document-id" value="unique"/>
-            </h:commandButton></p>
-        <p><h:button id="start_a_GET" value="enter flow-a via GET" outcome="flow-a">
-              <f:attribute name="to-flow-document-id" value="unique"/>
-            </h:button></p>
-        <p><h:commandButton id="start_b" value="enter flow-b" 
-                            action="flow-b" /></p>
-        <p><h:button id="start_b_GET" value="enter flow-b via GET" outcome="flow-b" /></p>
-        <p><h:commandButton id="start_c" value="enter flow-c" 
-                            action="flow-c">
-            </h:commandButton></p>
-        <p><h:button id="start_c_GET" value="enter flow-c via GET" outcome="flow-c">
-            </h:button></p>
-        <p><h:commandButton id="stay" value="stay" /></p>
+        <p>Second page in the flow</p>
+        <p>Flow bean name: #{flow_c_Bean.name}</p>
+        
+        <p>value: <h:inputText id="input" value="#{flowScope.value}" /></p>
+        
+        <p><h:commandButton id="start" value="back" action="flow-a" /></p>
+        <p><h:commandButton id="next" value="next" action="next_b" /></p>
+        
     </h:form>
-</body>
+    </body>
 </html>
