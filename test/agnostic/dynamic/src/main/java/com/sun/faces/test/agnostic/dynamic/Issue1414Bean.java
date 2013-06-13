@@ -2,9 +2,13 @@ package com.sun.faces.test.agnostic.dynamic;
 
 import java.io.Serializable;
 
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.event.ActionEvent;
 
+@ManagedBean(name = "issue1414Bean")
+@SessionScoped
 public class Issue1414Bean implements Serializable {
 
     public void temporaryMoveComponent(ActionEvent ae) {
