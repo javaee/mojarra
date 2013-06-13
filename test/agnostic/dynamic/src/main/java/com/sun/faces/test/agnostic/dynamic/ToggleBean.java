@@ -34,6 +34,9 @@
  */
 package com.sun.faces.test.agnostic.dynamic;
 
+import javax.faces.bean.ManagedBean;
+
+@ManagedBean(name = "toggleBean")
 public class ToggleBean {
 
     /**
