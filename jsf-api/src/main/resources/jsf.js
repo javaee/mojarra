@@ -107,6 +107,23 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
         var isIECache;
 
         /**
+         * Determine the version of IE.
+         * @ignore
+         */
+        var getIEVersion = function getIEVersion() {
+            if (typeof IEVersionCache !== "undefined") {
+                return IEVersionCache;
+            }
+            if (/MSIE ([0-9]+)/.test(navigator.userAgent)) {
+                IEVersionCache = parseInt(RegExp.$1);
+            } else {
+                IEVersionCache = -1;
+            }
+            return IEVersionCache;
+        }
+        var IEVersionCache;
+
+        /**
          * Determine if loading scripts into the page executes the script.
          * This is instead of doing a complicated browser detection algorithm.  Some do, some don't.
          * @returns {boolean} does including a script in the dom execute it?
@@ -578,7 +595,12 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
          * @ignore
          */
         var isIE9Plus = function isIE9Plus() {
-            return typeof XDomainRequest !== "undefined" && typeof window.msPerformance !== "undefined";
+            var iev = getIEVersion();
+            if (iev >= 9) {
+                return true;
+            } else {
+                return false;
+            }
         }
         
         /**
