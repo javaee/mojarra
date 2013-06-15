@@ -63,10 +63,11 @@ public class RepeatResetNullBean implements Serializable {
     public boolean isElementNullSet() {
         return element.getValue() == null;
     }
-    public boolean isNullSet() {
-System.err.println("ISNULLSET:"+testList.get(0).getValue());
-        return testList.get(0).getValue() == null;
+    public boolean isNullOrEmptySet() {
+        return (testList.get(0).getValue() == null) ||
+            (testList.get(0).getValue().length() == 0);
     }
+
     public void action(){}
     
     public class TestHolder implements Serializable{
