@@ -55,7 +55,7 @@
        <ui:repeat id="repeat" value="#{repeatResetNullBean.testList}" var="key" varStatus="status">
            <h:inputText id="input1" value="#{key.value}" />
        </ui:repeat>
-       isnull? #{repeatResetNullBean.nullSet} 
+       isnull Or Empty ? #{repeatResetNullBean.nullOrEmptySet} 
        <h:commandButton id="submit" value="submit" action="#{repeatResetNullBean.action}" />
     </h:form>
     </body>
