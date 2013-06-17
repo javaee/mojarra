@@ -65,6 +65,14 @@ public class Issue2719IT {
     @Test
     public void testPreRenderViewListenerRegisteredOnlyOnce() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/eventPreRenderView.xhtml");
-        assertTrue(page.asXml().contains("1"));
+        String serverName = page.getWebResponse().getResponseHeaderValue("Server");
+        
+        /*
+         * This issue is only fixed on GF 3.1.2.2 and later. We won't go back 
+         * and fix this on 3.1.1, hence we are excluding 3.1.1 here.
+         */
+        if (serverName == null || serverName.indexOf("3.1.1") == -1) {
+            assertTrue(page.asText().contains("1"));
+        }
     }
 }
