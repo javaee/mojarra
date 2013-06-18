@@ -1274,14 +1274,15 @@ public class ELFlash extends Flash {
             String value = ((null != previousRequestFlashInfo) ? previousRequestFlashInfo.encode() : "")  + "_" +
                            ((null != nextRequestFlashInfo) ? nextRequestFlashInfo.encode() : "");
             result = new Cookie(FLASH_COOKIE_NAME, value);
+
             if (1 == value.length()) {
                 result.setMaxAge(0);
-                result.setPath(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath());
-            } 
-            else {
-                result.setPath(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath());
+            }            
+            String requestContextPath = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+            if (requestContextPath.isEmpty()) {
+                requestContextPath = "/";
             }
-
+            result.setPath(requestContextPath);
             return result;
         }
 
