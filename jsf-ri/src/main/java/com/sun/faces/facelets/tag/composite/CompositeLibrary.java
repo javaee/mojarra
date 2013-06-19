@@ -67,6 +67,7 @@ import com.sun.faces.facelets.tag.AbstractTagLibrary;
 public final class CompositeLibrary extends AbstractTagLibrary {
 
     public final static String Namespace = "http://java.sun.com/jsf/composite";
+    public final static String XMLNSNamespace = "http://xmlns.jcp.org/jsf/composite";
 
     public final static CompositeLibrary Instance = new CompositeLibrary();
 

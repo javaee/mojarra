@@ -91,6 +91,9 @@ import java.util.logging.Logger;
  *
  */
 public final class DevTools {
+    
+    public final static String Namespace = "http://java.sun.com/mojarra/private/functions";
+    public final static String NewNamespace = "http://xmlns.jcp.org/mojarra/private/functions";
 
     private static final Logger LOGGER = Logger.getLogger(DevTools.class.getPackage().getName());
     

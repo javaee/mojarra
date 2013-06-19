@@ -83,7 +83,6 @@ import com.sun.faces.facelets.PrivateApiFaceletCacheAdapter;
 import com.sun.faces.facelets.tag.jsf.PassThroughAttributeLibrary;
 import com.sun.faces.facelets.tag.jsf.PassThroughElementLibrary;
 import com.sun.faces.flow.FlowDiscoveryCDIContext;
-import com.sun.faces.flow.FlowDiscoveryCDIHelper;
 import com.sun.faces.lifecycle.ELResolverInitPhaseListener;
 
 import java.io.IOException;
@@ -953,24 +952,24 @@ public class ApplicationAssociate {
                     BooleanWebContextInitParameter.FaceletsSkipComments));
 
         c.addTagLibrary(new CoreLibrary());
-        c.addTagLibrary(new CoreLibrary("http://xmlns.jcp.org/jsf/core"));
+        c.addTagLibrary(new CoreLibrary(CoreLibrary.XMLNSNamespace));
         c.addTagLibrary(new HtmlLibrary());
-        c.addTagLibrary(new HtmlLibrary("http://xmlns.jcp.org/jsf/html"));
+        c.addTagLibrary(new HtmlLibrary(HtmlLibrary.XMLNSNamespace));
         c.addTagLibrary(new UILibrary());
-        c.addTagLibrary(new UILibrary("http://xmlns.jcp.org/jsf/facelets"));
+        c.addTagLibrary(new UILibrary(UILibrary.XMLNSNamespace));
         c.addTagLibrary(new JstlCoreLibrary());
-        c.addTagLibrary(new JstlCoreLibrary("http://java.sun.com/jstl/core"));
-        c.addTagLibrary(new JstlCoreLibrary("http://xmlns.jcp.org/jsp/jstl/core"));
+        c.addTagLibrary(new JstlCoreLibrary(JstlCoreLibrary.IncorrectNamespace));
+        c.addTagLibrary(new JstlCoreLibrary(JstlCoreLibrary.XMLNSNamespace));
         c.addTagLibrary(new PassThroughAttributeLibrary());
         c.addTagLibrary(new PassThroughElementLibrary());
-        c.addTagLibrary(new FunctionLibrary(JstlFunction.class, "http://java.sun.com/jsp/jstl/functions"));
-        c.addTagLibrary(new FunctionLibrary(JstlFunction.class, "http://xmlns.jcp.org/jsp/jstl/functions"));
+        c.addTagLibrary(new FunctionLibrary(JstlFunction.class, FunctionLibrary.Namespace));
+        c.addTagLibrary(new FunctionLibrary(JstlFunction.class, FunctionLibrary.XMLNSNamespace));
         if (isDevModeEnabled()) {
-            c.addTagLibrary(new FunctionLibrary(DevTools.class, "http://java.sun.com/mojarra/private/functions"));
-            c.addTagLibrary(new FunctionLibrary(DevTools.class, "http://xmlns.jcp.org/mojarra/private/functions"));
+            c.addTagLibrary(new FunctionLibrary(DevTools.class, DevTools.Namespace));
+            c.addTagLibrary(new FunctionLibrary(DevTools.class, DevTools.NewNamespace));
         }
         c.addTagLibrary(new CompositeLibrary());
-        c.addTagLibrary(new CompositeLibrary("http://xmlns.jcp.org/jsf/composite"));
+        c.addTagLibrary(new CompositeLibrary(CompositeLibrary.XMLNSNamespace));
 
         return c;
 

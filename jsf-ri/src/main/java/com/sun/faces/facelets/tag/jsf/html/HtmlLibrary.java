@@ -64,6 +64,7 @@ package com.sun.faces.facelets.tag.jsf.html;
 public final class HtmlLibrary extends AbstractHtmlLibrary {
 
     public final static String Namespace = "http://java.sun.com/jsf/html";
+    public final static String XMLNSNamespace = "http://xmlns.jcp.org/jsf/html";
 
     public final static HtmlLibrary Instance = new HtmlLibrary();
 

@@ -67,6 +67,7 @@ import com.sun.faces.facelets.tag.AbstractTagLibrary;
 public final class UILibrary extends AbstractTagLibrary {
 
     public final static String Namespace = "http://java.sun.com/jsf/facelets";
+    public final static String XMLNSNamespace = "http://xmlns.jcp.org/jsf/facelets";
 
     public final static UILibrary Instance = new UILibrary();
 

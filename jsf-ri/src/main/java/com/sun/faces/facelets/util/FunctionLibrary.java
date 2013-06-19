@@ -58,8 +58,12 @@ import java.util.Map;
  * as EL functions.</p>
  */
 public class FunctionLibrary implements TagLibrary {
+    
+    public final static String Namespace = "http://java.sun.com/jsp/jstl/functions";
+    public final static String XMLNSNamespace = "http://xmlns.jcp.org/jsp/jstl/functions";
+    
 
-    private String namespace;
+    private String _namespace;
     private Map<String,Method> functions;
 
     // ------------------------------------------------------------ Constructors
@@ -70,7 +74,7 @@ public class FunctionLibrary implements TagLibrary {
         Util.notNull("functionsClass", functionsClass);
         Util.notNull("namespace", namespace);
 
-        this.namespace = namespace;
+        this._namespace = namespace;
 
         try {
             Method[] methods = functionsClass.getMethods();
@@ -90,7 +94,7 @@ public class FunctionLibrary implements TagLibrary {
     // ------------------------------------------------- Methods from TagLibrary
 
     public boolean containsNamespace(String ns, Tag t) {
-        return namespace.equals(ns);
+        return _namespace.equals(ns);
     }
 
     public boolean containsTagHandler(String ns, String localName) {
@@ -103,11 +107,11 @@ public class FunctionLibrary implements TagLibrary {
     }
 
     public boolean containsFunction(String ns, String name) {
-        return namespace.equals(ns) && this.functions.containsKey(name);
+        return _namespace.equals(ns) && this.functions.containsKey(name);
     }
 
     public Method createFunction(String ns, String name) {
-        if (namespace.equals(ns)) {
+        if (_namespace.equals(ns)) {
             return this.functions.get(name);
         }
         return null;

@@ -375,7 +375,10 @@ public final class SAXCompiler extends Compiler {
         throws SAXException {
 
             if (!metadataProcessed) {
-                if (!processingMetadata && RIConstants.CORE_NAMESPACE.equals(uri)) {
+                if (!processingMetadata && 
+                        (RIConstants.CORE_NAMESPACE.equals(uri) ||
+                         RIConstants.CORE_NAMESPACE_NEW.equals(uri)                      
+                        )) {
                     if (METADATA_HANDLER.equals(localName)) {
                         processingMetadata = true;
                     }
@@ -395,7 +398,10 @@ public final class SAXCompiler extends Compiler {
                 if (processingMetadata) {
                     super.endElement(uri, localName, qName);
                 }
-                if (processingMetadata && RIConstants.CORE_NAMESPACE.equals(uri)) {
+                if (processingMetadata && 
+                        (RIConstants.CORE_NAMESPACE.equals(uri) ||
+                         RIConstants.CORE_NAMESPACE_NEW.equals(uri)
+                        )) {
                     if (METADATA_HANDLER.equals(localName)) {
                         processingMetadata = false;
                         metadataProcessed = true;

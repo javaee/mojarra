@@ -79,7 +79,8 @@ import javax.faces.validator.*;
  */
 public final class CoreLibrary extends AbstractTagLibrary {
 
-    public final static String Namespace = "http://java.sun.com/jsf/core";
+    public final static String Namespace =    "http://java.sun.com/jsf/core";
+    public final static String XMLNSNamespace = "http://xmlns.jcp.org/jsf/core";
 
     public final static CoreLibrary Instance = new CoreLibrary();
 

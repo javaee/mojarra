@@ -58,6 +58,7 @@
 
 package com.sun.faces.facelets.compiler;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.facelets.tag.TagAttributesImpl;
 import com.sun.faces.facelets.tag.TagLibrary;
@@ -536,7 +537,8 @@ final class CompilationManager {
             CompilationUnit compilationUnit = iterator.next();
             if (compilationUnit instanceof TagUnit) {
                 TagUnit tagUnit = (TagUnit) compilationUnit;
-                if (tagUnit.getTag().getNamespace().equals("http://java.sun.com/jsf/core") &&
+                String ns = tagUnit.getTag().getNamespace();
+                if ((ns.equals(RIConstants.CORE_NAMESPACE) || ns.equals(RIConstants.CORE_NAMESPACE_NEW)) &&
                         tagUnit.getTag().getLocalName().equals("view")) {
                     result = tagUnit;
                     break;
