@@ -69,9 +69,10 @@ public class Issue2719IT {
         
         /*
          * This issue is only fixed on GF 3.1.2.2 and later. We won't go back 
-         * and fix this on 3.1.1, hence we are excluding 3.1.1 here.
+         * and fix this on 3.1.1 and 3.1.2, hence we are excluding 3.1.1 and 
+         * 3.1.2 here.
          */
-        if (serverName == null || serverName.indexOf("3.1.1") == -1) {
+        if (serverName == null || serverName.indexOf("3.1.1") == -1 || (serverName.indexOf("3.1.2") == -1 || serverName.indexOf("3.1.2.2") != -1)) {
             assertTrue(page.asText().contains("1"));
         }
     }
