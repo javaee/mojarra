@@ -84,7 +84,6 @@
                 test.hello,
                 test.external,
                 test.el,
-                test.flash,
                 test.event,
                 test.resourcelocation,
                 test.managed,
