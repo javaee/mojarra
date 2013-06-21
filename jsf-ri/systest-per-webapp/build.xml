@@ -115,8 +115,6 @@
                    write-attribute-script-disabled,
                    write-attribute-script-enabled,
                    wcag-datatable,
-                   flash,
-                   jsp-flash,
                    suppress-xml-decl,
                    process-as-jspx,
                    request-char-encoding-no-session,
@@ -129,8 +127,6 @@
           core-tags
           el-performance
           command-link-redirect,
-                   flash,
-                   jsp-flash
     -->
 
    <property name="applications-for-V3.1_no_cluster-virtual-server"

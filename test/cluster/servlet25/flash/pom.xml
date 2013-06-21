@@ -12,5 +12,7 @@
     <name>Mojarra ${project.version} - Test - Cluster - Servlet25 - Flash</name>
     <modules>
       <module>reaper</module>
-    </modules>
+      <module>manyPages</module>
+    <module>jspFlash</module>
+  </modules>
 </project>
