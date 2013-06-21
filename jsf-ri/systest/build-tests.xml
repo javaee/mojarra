@@ -316,19 +316,6 @@
         </jsf.junit>
     </target>
 
-    <target name="test.flash">
-        <jsf.junit context-path="${context.path}"
-                   classpath-refid="html.classpath"
-                   test-results-dir="${impl.test.results.dir}">
-            <tests>
-                <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/systest/Flash*TestCase.class"/> 
-            </tests>
-        </jsf.junit>
-    </target>
-
-
-
     <target name="test.event">
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"

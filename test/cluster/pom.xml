@@ -23,5 +23,6 @@
     </dependencies>
     <modules>
         <module>shared</module>
+        <module>servlet25</module>
     </modules>
 </project>
