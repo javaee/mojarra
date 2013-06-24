@@ -76,7 +76,6 @@ public class Issue2636IT {
 
     // ------------------------------------------------------------ Test Methods
 
-    @Ignore
     @Test
     public void testCommandLinksInRepeat() throws Exception {
         HtmlPage page = webClient.getPage(webUrl+"faces/issue2636.xhtml");
@@ -84,17 +83,21 @@ public class Issue2636IT {
         List anchors = page.getAnchors();
 
         HtmlAnchor anchor1 = (HtmlAnchor)anchors.get(0);
-        anchor1.click();
+        page = anchor1.click();
         webClient.waitForBackgroundJavaScript(60000);
         assertTrue(page.asXml().contains("linkAction1"));
 
+        anchors = page.getAnchors();
+
         HtmlAnchor anchor2 = (HtmlAnchor)anchors.get(1);
-        anchor2.click();
+        page = anchor2.click();
         webClient.waitForBackgroundJavaScript(60000);
         assertTrue(page.asXml().contains("linkAction2"));
 
+        anchors = page.getAnchors();
+
         anchor1 = (HtmlAnchor)anchors.get(0);
-        anchor1.click();
+        page = anchor1.click();
         webClient.waitForBackgroundJavaScript(60000);
         assertTrue(page.asXml().contains("linkAction1"));
     }
