@@ -38,52 +38,34 @@
  * holder.
  */
 
-package com.sun.faces.systest;
+package com.sun.faces.test.agnostic.flash.basic;
 
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.gargoylesoftware.htmlunit.html.HtmlButtonInput;
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
+import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 /**
   *
  */
-public class FlashViewParamTestCase extends HtmlUnitFacesTestCase {
+public class FlashMessagesIT {
 
-    /**
-     * Construct a new instance of this test case.
-     *
-     * @param name Name of the test case
-     */
-    public FlashViewParamTestCase(String name) {
-        super(name);
+    private String webUrl;
+    private WebClient webClient;
+
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-
-    /**
-     * Set up instance variables required by this test case.
-     */
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
-
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(FlashViewParamTestCase.class));
-    }
-
-
-    /**
-     * Tear down instance variables required by this test case.
-     */
+    @After
     public void tearDown() {
-        super.tearDown();
+        webClient.closeAllWindows();
     }
 
 
@@ -91,29 +73,18 @@ public class FlashViewParamTestCase extends HtmlUnitFacesTestCase {
 
 
     /**
-     * Added for issue 904.
+     * Added for issue 1476.
      */
+    @Test
     public void testBooleanCheckboxSubmittedValue() throws Exception {
 
-        HtmlPage page = getPage("/faces/flash01.xhtml");
-        HtmlButtonInput button = (HtmlButtonInput) page.getElementById("nextButton");
+        HtmlPage page = webClient.getPage(webUrl + "/faces/flashKeepMessages01.xhtml");
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("nextButton");
         page = button.click();
-        assertTrue(page.asText().contains("foo = bar"));
+        String pageText = page.asText();
+        assertTrue(pageText.contains("Mesage 1 survives redirect"));
+        assertTrue(pageText.contains("Mesage 2 survives redirect"));
 
-        page = getPage("/faces/flash01.xhtml");
-        HtmlAnchor link = (HtmlAnchor) page.getElementById("nextLink");
-        page = link.click();
-        assertTrue(page.asText().contains("foo = bar"));
-
-        page = getPage("/faces/flash01.xhtml");
-        link = (HtmlAnchor) page.getElementById("nextCommandLink");
-        page = link.click();
-        assertTrue(page.asText().contains("foo = bar"));
-
-        page = getPage("/faces/flash01.xhtml");
-        HtmlSubmitInput submitButton = (HtmlSubmitInput) page.getElementById("nextCommandButton");
-        page = submitButton.click();
-        assertTrue(page.asText().contains("foo = bar"));
 
     }
 }

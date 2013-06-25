@@ -38,70 +38,68 @@
  * holder.
  */
 
-package com.sun.faces.facelets;
+package com.sun.faces.test.agnostic.flash.basic;
 
+import org.junit.Test;
+import com.gargoylesoftware.htmlunit.WebClient;
 import java.io.IOException;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
 
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
+import org.junit.After;
+import org.junit.Before;
 
-public class KeepMessagesTestCase extends HtmlUnitFacesTestCase {
+import static org.junit.Assert.assertTrue;
 
+public class KeepMessagesIT {
 
-    // --------------------------------------------------------------- Test Init
+    private String webUrl;
+    private WebClient webClient;
 
-
-    public KeepMessagesTestCase() {
-        this("keepMessagesTestCase");
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-
-    public KeepMessagesTestCase(String name) {
-        super(name);
-    }
-
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(KeepMessagesTestCase.class));
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
     }
 
 
     // ------------------------------------------------------------ Test Methods
 
-
+    @Test
     public void testMessagesAreKeptAfterRedirect() throws Exception {
 
-        HtmlPage page = getPage("/faces/facelets/keepMessages.xhtml") ;
-        HtmlSubmitInput button = (HtmlSubmitInput) getInputContainingGivenId(page, "submit");
+        HtmlPage page = webClient.getPage(webUrl + "/faces/keepMessages.xhtml") ;
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getByXPath("//input[contains(@id, 'submit')]").get(0);
         page = button.click();
 
         assertTrue(-1 != page.asText().indexOf("This is a global message"));
 
         // submit the page again to make sure messages aren't re-displayed since
         // keep messages isn't set to true on this view
-        button = (HtmlSubmitInput) getInputContainingGivenId(page, "button");
+        button = (HtmlSubmitInput) page.getByXPath("//input[contains(@id, 'button')]").get(0);
         page = button.click();
 
         assertTrue(page.asText().indexOf("This is a global message") == -1);
     }
     
+    @Test
     public void testMessagesAreKeptAfterRedirectAfterDoubleValidationError() throws Exception {
     	
-    	HtmlPage page = getPage("/faces/facelets/keepMessages.xhtml") ;
+    	HtmlPage page = webClient.getPage(webUrl + "/faces/keepMessages.xhtml") ;
 		page = submitRequiredForm(page);
     	assertOnPage(page, "first page");
     	
     	page = submitRequiredForm(page);
     	assertOnPage(page, "first page");
     	
-    	HtmlInput requiredInput = getInputContainingGivenId(page, "requiredInput");
+    	HtmlInput requiredInput = (HtmlInput) page.getByXPath("//input[contains(@id, 'requiredInput')]").get(0);
     	requiredInput.setValueAttribute("a value");
     	
     	page = submitRequiredForm(page);
@@ -117,7 +115,7 @@ public class KeepMessagesTestCase extends HtmlUnitFacesTestCase {
 
 
 	private HtmlPage submitRequiredForm(HtmlPage page) throws IOException {
-		HtmlSubmitInput button = (HtmlSubmitInput) getInputContainingGivenId(page, "submitRequired");
+		HtmlSubmitInput button = (HtmlSubmitInput) page.getByXPath("//input[contains(@id, 'submitRequired')]").get(0);
     	return button.click();
 	}
 

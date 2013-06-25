@@ -38,69 +38,19 @@
  * holder.
  */
 
-package com.sun.faces.systest;
+package com.sun.faces.test.agnostic.flash.basic;
 
-import com.gargoylesoftware.htmlunit.html.HtmlButtonInput;
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
 
-/**
-  *
- */
-public class FlashMessagesTestCase extends HtmlUnitFacesTestCase {
+@ManagedBean
+public class AddMessageBean {
 
-    /**
-     * Construct a new instance of this test case.
-     *
-     * @param name Name of the test case
-     */
-    public FlashMessagesTestCase(String name) {
-        super(name);
+    public String addMessage() {
+        FacesContext.getCurrentInstance()
+              .addMessage(null, new FacesMessage("This is a global message"));
+        return "messagePage?faces-redirect=true";
     }
 
-
-    /**
-     * Set up instance variables required by this test case.
-     */
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
-
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(FlashMessagesTestCase.class));
-    }
-
-
-    /**
-     * Tear down instance variables required by this test case.
-     */
-    public void tearDown() {
-        super.tearDown();
-    }
-
-
-    // ------------------------------------------------------------ Test Methods
-
-
-    /**
-     * Added for issue 1476.
-     */
-    public void testBooleanCheckboxSubmittedValue() throws Exception {
-
-        HtmlPage page = getPage("/faces/flash/flashKeepMessages01.xhtml");
-        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("nextButton");
-        page = button.click();
-        String pageText = page.asText();
-        assertTrue(pageText.contains("Mesage 1 survives redirect"));
-        assertTrue(pageText.contains("Mesage 2 survives redirect"));
-
-
-    }
 }

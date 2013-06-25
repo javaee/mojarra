@@ -38,19 +38,75 @@
  * holder.
  */
 
-package com.sun.faces.systest.model;
+package com.sun.faces.test.cluster.servlet25.flash.reaper;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.context.FacesContext;
+import com.sun.faces.test.util.ClusterUtils;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import java.net.URL;
+import java.net.URLConnection;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
-@ManagedBean
-public class AddMessageBean {
+import static org.junit.Assert.assertTrue;
 
-    public String addMessage() {
-        FacesContext.getCurrentInstance()
-              .addMessage(null, new FacesMessage("This is a global message"));
-        return "messagePage?faces-redirect=true";
+/**
+  *
+ */
+public class FlashReaperIT {
+
+    private String webUrl;
+    private WebClient webClient;
+
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
+    }
+
+
+    // ------------------------------------------------------------ Test Methods
+
+
+    @Test
+    public void testFlashesAreReaped() throws Exception {
+        
+        doTestFlashesAreReaped(0);
+        doTestFlashesAreReaped(1);
+                
+    }
+    
+    public void doTestFlashesAreReaped(int instanceNumber) throws Exception {
+        
+        String [] baseUrls = ClusterUtils.getBaseUrls();
+
+        URL makeZombie = new URL(baseUrls[instanceNumber] + "faces/flashReaper.xhtml");
+        URLConnection zombieConnection;
+        HtmlPage page;
+        int numberOfReaps = 0, numberEntriesInInnerMap = 0;
+        boolean didReap = false;
+
+
+        for (int i = 0; i < 50; i++) {
+            zombieConnection = makeZombie.openConnection();
+            zombieConnection.getContent();
+            zombieConnection.getInputStream().close();
+            page = webClient.getPage(baseUrls[instanceNumber] + "faces/flashReaper.xhtml");
+
+            numberEntriesInInnerMap = Integer.parseInt(page.asText().trim());
+            if (numberEntriesInInnerMap <= FlashReaperBean.NUMBER_OF_ZOMBIES) {
+                didReap = true;
+                numberOfReaps++;
+            }
+        }
+
+        assertTrue(didReap);
+        assertTrue(2 < numberOfReaps);
+    }
 }
