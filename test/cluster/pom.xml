@@ -19,7 +19,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    <modules>
-        <module>servlet25</module>
-    </modules>
 </project>
