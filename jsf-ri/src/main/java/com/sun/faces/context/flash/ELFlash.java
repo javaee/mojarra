@@ -43,6 +43,7 @@ package com.sun.faces.context.flash;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.facelets.tag.ui.UIDebug;
+import com.sun.faces.util.ByteArrayGuardAESCTR;
 import com.sun.faces.util.FacesLogger;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -130,7 +131,7 @@ public class ELFlash extends Flash {
     private long numberOfFlashesBetweenFlashReapings = Long.
      parseLong(WebContextInitParameter.NumberOfFlashesBetweenFlashReapings.getDefaultValue());
 
-    private long lastReaping;
+    private ByteArrayGuardAESCTR guard;
 
     // </editor-fold>
 
@@ -228,9 +229,7 @@ public class ELFlash extends Flash {
             numberOfConcurentFlashUsers = Integer.parseInt(value);
         } catch (NumberFormatException nfe) {
 	    if (LOGGER.isLoggable(Level.WARNING)) {
-		LOGGER.log(Level.WARNING,
-			   "Unable to set number of concurrent flash users.  Defaulting to " +
-                           numberOfConcurentFlashUsers);
+		LOGGER.log(Level.WARNING, "Unable to set number of concurrent flash users.  Defaulting to {0}", numberOfConcurentFlashUsers);
 	    }
 
         }
@@ -240,12 +239,11 @@ public class ELFlash extends Flash {
             numberOfFlashesBetweenFlashReapings = Long.parseLong(value);
         } catch (NumberFormatException nfe) {
 	    if (LOGGER.isLoggable(Level.WARNING)) {
-		LOGGER.log(Level.WARNING,
-			   "Unable to set number flashes between flash repaings.  Defaulting to " +
-                           numberOfFlashesBetweenFlashReapings);
+		LOGGER.log(Level.WARNING, "Unable to set number flashes between flash repaings.  Defaulting to {0}", numberOfFlashesBetweenFlashReapings);
 	    }
 
         }
+        guard = new ByteArrayGuardAESCTR();
 
     }
 
@@ -1035,7 +1033,7 @@ public class ELFlash extends Flash {
                 contextMap.get(CONSTANTS.RequestFlashManager);
 
         if (null == result && create) {
-            result = new PreviousNextFlashInfoManager(flashInnerMap);
+            result = new PreviousNextFlashInfoManager(guard, flashInnerMap);
             result.initializeBaseCase(this);
             contextMap.put(CONSTANTS.RequestFlashManager, result);
 
@@ -1055,7 +1053,7 @@ public class ELFlash extends Flash {
                 contextMap.get(CONSTANTS.RequestFlashManager);
 
         if (null == result) {
-            result = new PreviousNextFlashInfoManager(flashInnerMap);
+            result = new PreviousNextFlashInfoManager(guard, flashInnerMap);
             result.decode(context, this, cookie);
             contextMap.put(CONSTANTS.RequestFlashManager, result);
 
@@ -1093,15 +1091,20 @@ public class ELFlash extends Flash {
         private boolean incomingCookieCameFromRedirect = false;
 
         private Map<String,Map<String, Object>> innerMap;
+        
+        private ByteArrayGuardAESCTR guard;
 
-        private PreviousNextFlashInfoManager() {}
+        private PreviousNextFlashInfoManager(ByteArrayGuardAESCTR guard) {
+            this.guard = guard;
+        }
 
-        private PreviousNextFlashInfoManager(Map<String,Map<String, Object>> innerMap) {
+        private PreviousNextFlashInfoManager(ByteArrayGuardAESCTR guard, Map<String,Map<String, Object>> innerMap) {
+            this.guard = guard;
             this.innerMap = innerMap;
         }
 
         protected PreviousNextFlashInfoManager copyWithoutInnerMap() {
-            PreviousNextFlashInfoManager result = new PreviousNextFlashInfoManager();
+            PreviousNextFlashInfoManager result = new PreviousNextFlashInfoManager(guard);
             result.innerMap = Collections.emptyMap();
             if (null != previousRequestFlashInfo) {
                 result.previousRequestFlashInfo = (FlashInfo)
@@ -1200,7 +1203,9 @@ public class ELFlash extends Flash {
 	 */
 
         void decode(FacesContext context, ELFlash flash, Cookie cookie) {
-            String temp, value = cookie.getValue();
+            String temp;
+            String value = guard.decrypt(cookie.getValue());
+            
             try {
                 int i = value.indexOf("_");
 
@@ -1273,7 +1278,8 @@ public class ELFlash extends Flash {
 
             String value = ((null != previousRequestFlashInfo) ? previousRequestFlashInfo.encode() : "")  + "_" +
                            ((null != nextRequestFlashInfo) ? nextRequestFlashInfo.encode() : "");
-            result = new Cookie(FLASH_COOKIE_NAME, value);
+            String encryptedValue = guard.encrypt(value);
+            result = new Cookie(FLASH_COOKIE_NAME, encryptedValue);
 
             if (1 == value.length()) {
                 result.setMaxAge(0);
