@@ -38,81 +38,42 @@
  * holder.
  */
 
-package com.sun.faces.systest;
+package com.sun.faces.test.cluster.servlet25.flash.reaper;
 
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
-import java.net.URL;
-import java.net.URLConnection;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.context.flash.ELFlash;
+import java.lang.reflect.Field;
+import java.util.Map;
+import javax.faces.bean.ApplicationScoped;
+import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
 
-/**
-  *
- */
-public class FlashReaperTestCase extends HtmlUnitFacesTestCase {
+@ManagedBean(eager=true)
+@ApplicationScoped
+public class FlashReaperBean {
 
-    /**
-     * Construct a new instance of this test case.
-     *
-     * @param name Name of the test case
-     */
-    public FlashReaperTestCase(String name) {
-        super(name);
-    }
+    public static final int NUMBER_OF_ZOMBIES = 12;
 
+    public  FlashReaperBean() {
 
-    /**
-     * Set up instance variables required by this test case.
-     */
-    public void setUp() throws Exception {
-        super.setUp();
-    }
+        WebConfiguration config = WebConfiguration.getInstance();
 
-
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(FlashReaperTestCase.class));
-    }
-
-
-    /**
-     * Tear down instance variables required by this test case.
-     */
-    public void tearDown() {
-        super.tearDown();
-    }
-
-
-    // ------------------------------------------------------------ Test Methods
-
-
-    public void testFlashesAreReaped() throws Exception {
-
-        URL makeZombie = getURLSticky("/faces/flashReaper.xhtml");
-        URLConnection zombieConnection;
-        HtmlPage page;
-        int numberOfReaps = 0, numberEntriesInInnerMap = 0;
-        boolean didReap = false;
-
-
-        for (int i = 0; i < 50; i++) {
-            zombieConnection = makeZombie.openConnection();
-            zombieConnection.getContent();
-            zombieConnection.getInputStream().close();
-            page = getPageSticky("/faces/flashReaper.xhtml");
-
-            numberEntriesInInnerMap = Integer.parseInt(page.asText().trim());
-            if (numberEntriesInInnerMap <= FlashReaperBean.NUMBER_OF_ZOMBIES) {
-                didReap = true;
-                numberOfReaps++;
-            }
-        }
-
-        assertTrue(didReap);
-        assertTrue(2 < numberOfReaps);
+        config.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.NumberOfConcurrentFlashUsers, "" + NUMBER_OF_ZOMBIES);
+        config.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.NumberOfFlashesBetweenFlashReapings, "24");
 
     }
+
+    public String getNumberEntriesInInnerMap() throws Exception {
+        String result = null;
+
+        ELFlash flash = (ELFlash) FacesContext.getCurrentInstance().getExternalContext().getFlash();
+        Field innerMapField = ELFlash.class.getDeclaredField("flashInnerMap");
+        innerMapField.setAccessible(true);
+        Map<String,Map<String, Object>> innerMap =
+                (Map<String,Map<String, Object>>) innerMapField.get(flash);
+        result = "" + innerMap.size();
+
+        return result;
+    }
+
 }

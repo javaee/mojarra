@@ -38,42 +38,47 @@
  * holder.
  */
 
-package com.sun.faces.systest;
+package com.sun.faces.test.agnostic.flash.basic;
 
-import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.context.flash.ELFlash;
-import java.lang.reflect.Field;
-import java.util.Map;
-import javax.faces.bean.ApplicationScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 
-@ManagedBean(eager=true)
-@ApplicationScoped
-public class FlashReaperBean {
+@ManagedBean
+@RequestScoped
+public class FlashMessagesBean {
 
-    static final int NUMBER_OF_ZOMBIES = 12;
+    @ManagedProperty(value="#{facesContext}")
+    protected FacesContext facesContext;
 
-    public  FlashReaperBean() {
+    public FacesContext getFacesContext() {
+        return facesContext;
+    }
 
-        WebConfiguration config = WebConfiguration.getInstance();
+    public void setFacesContext(FacesContext facesContext) {
+        this.facesContext = facesContext;
+    }
 
-        config.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.NumberOfConcurrentFlashUsers, "" + NUMBER_OF_ZOMBIES);
-        config.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.NumberOfFlashesBetweenFlashReapings, "24");
+
+    protected String value;
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                "Mesage 1", "survives redirect");
+        getFacesContext().addMessage(null, message);
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                "Mesage 2", "survives redirect");
+        getFacesContext().addMessage(null, message);
+        getFacesContext().getExternalContext().getFlash().setKeepMessages(true);
 
     }
 
-    public String getNumberEntriesInInnerMap() throws Exception {
-        String result = null;
-
-        ELFlash flash = (ELFlash) FacesContext.getCurrentInstance().getExternalContext().getFlash();
-        Field innerMapField = ELFlash.class.getDeclaredField("flashInnerMap");
-        innerMapField.setAccessible(true);
-        Map<String,Map<String, Object>> innerMap =
-                (Map<String,Map<String, Object>>) innerMapField.get(flash);
-        result = "" + innerMap.size();
-
-        return result;
-    }
 
 }

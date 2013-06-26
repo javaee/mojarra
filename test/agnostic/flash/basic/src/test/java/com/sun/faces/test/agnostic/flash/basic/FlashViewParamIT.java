@@ -38,47 +38,67 @@
  * holder.
  */
 
-package com.sun.faces.systest.flash;
+package com.sun.faces.test.agnostic.flash.basic;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
-import javax.faces.context.FacesContext;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.gargoylesoftware.htmlunit.html.HtmlButtonInput;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
-@ManagedBean
-@RequestScoped
-public class FlashMessagesBean {
+import static org.junit.Assert.assertTrue;
 
-    @ManagedProperty(value="#{facesContext}")
-    protected FacesContext facesContext;
+/**
+  *
+ */
+public class FlashViewParamIT {
 
-    public FacesContext getFacesContext() {
-        return facesContext;
+    private String webUrl;
+    private WebClient webClient;
+
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-    public void setFacesContext(FacesContext facesContext) {
-        this.facesContext = facesContext;
-    }
-
-
-    protected String value;
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-                "Mesage 1", "survives redirect");
-        getFacesContext().addMessage(null, message);
-        message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-                "Mesage 2", "survives redirect");
-        getFacesContext().addMessage(null, message);
-        getFacesContext().getExternalContext().getFlash().setKeepMessages(true);
-
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
     }
 
 
+    // ------------------------------------------------------------ Test Methods
+
+
+    /**
+     * Added for issue 904.
+     */
+    @Test
+    public void testBooleanCheckboxSubmittedValue() throws Exception {
+
+        HtmlPage page = webClient.getPage(webUrl + "/faces/flash01.xhtml");
+        HtmlButtonInput button = (HtmlButtonInput) page.getElementById("nextButton");
+        page = button.click();
+        assertTrue(page.asText().contains("foo = bar"));
+
+        page = webClient.getPage(webUrl + "/faces/flash01.xhtml");
+        HtmlAnchor link = (HtmlAnchor) page.getElementById("nextLink");
+        page = link.click();
+        assertTrue(page.asText().contains("foo = bar"));
+
+        page = webClient.getPage(webUrl + "/faces/flash01.xhtml");
+        link = (HtmlAnchor) page.getElementById("nextCommandLink");
+        page = link.click();
+        assertTrue(page.asText().contains("foo = bar"));
+
+        page = webClient.getPage(webUrl + "/faces/flash01.xhtml");
+        HtmlSubmitInput submitButton = (HtmlSubmitInput) page.getElementById("nextCommandButton");
+        page = submitButton.click();
+        assertTrue(page.asText().contains("foo = bar"));
+
+    }
 }

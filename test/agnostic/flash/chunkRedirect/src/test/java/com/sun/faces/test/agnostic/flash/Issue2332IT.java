@@ -1,3 +1,5 @@
+package com.sun.faces.test.agnostic.flash;
+
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
@@ -37,48 +39,52 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.util;
 
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
-public class ClusterUtils {
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlLink;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.junit.*;
+import static org.junit.Assert.*;
 
-    /**
-     * No instantiating me :)
-     */
-    private ClusterUtils() {
+/**
+ * Integration tests for issue #2332
+ *
+ * @author Manfred Riem (manfred.riem@oracle.com)
+ */
+public class Issue2332IT {
+
+    private String webUrl;
+    private WebClient webClient;
+
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-    /**
-     * A utility method that gives you an array of String that contain the base
-     * URLs for the given test scenario.
-     * 
-     * @return the base URLs.
-     */
-    public static String[] getBaseUrls() {
-        List<String> result = new ArrayList<String>();
-        result.add(System.getProperty("integration.url"));
-        for (int i = 1; i < 10; i++) {
-            if (System.getProperty("integration.url" + i) != null
-                    && !System.getProperty("integration.url" + i).trim().equals("")) {
-                result.add(System.getProperty("integration.url" + i));
-            }
-        }
-        return result.toArray(new String[0]);
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
     }
-    
-    /**
-     * A utility method that scrambles the order of the base URLs.
-     * 
-     * @return the randomized base URLs.
-     */
-    public static String[] getRandomizedBaseUrls() {
-        List<String> urls = Arrays.asList(getBaseUrls());
-        Collections.shuffle(urls);
-        return urls.toArray(new String[0]);
+
+    @Test
+    public void testFlashChunkingLink1() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
+        HtmlElement link = page.getElementById("form:link1");
+        assertNotNull("Unable to find form:link1 element", link);
+        page = link.click();
+        webClient.waitForBackgroundJavaScript(60000);
+        assertTrue(page.getBody().asText().indexOf("== Flash value LINK1 ==") != -1);
+    }
+
+    @Test
+    public void testFlashChunkingLink2() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
+        HtmlElement link = page.getElementById("form:link2");
+        assertNotNull("Unable to find form:link2 element", link);
+        page = link.click();
+        assertTrue(page.getBody().asText().indexOf("== Flash value LINK2 ==") != -1);
     }
 }
