@@ -40,6 +40,8 @@
 
 package com.sun.faces.test.agnostic.flash.basic;
 
+import com.gargoylesoftware.htmlunit.util.Cookie;
+import com.sun.faces.test.util.HttpUtils;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlButtonInput;
@@ -80,25 +82,46 @@ public class FlashViewParamIT {
     @Test
     public void testBooleanCheckboxSubmittedValue() throws Exception {
 
-        HtmlPage page = webClient.getPage(webUrl + "/faces/flash01.xhtml");
+        doTestBooleanCheckboxSubmittedValue(webUrl);
+    }
+    
+    @Test 
+    public void testSecure() throws Exception {
+        webClient.getCookieManager().clearCookies();
+        webClient.setUseInsecureSSL(true);
+        String httpsUrl = System.getProperty("integration.https.url");
+
+        doTestBooleanCheckboxSubmittedValue(httpsUrl);
+        
+        HtmlPage page = webClient.getPage(httpsUrl + "/faces/flash01.xhtml");
+        Cookie flashCookie = webClient.getCookieManager().getCookie("csfcfc");
+        assertTrue(flashCookie.isSecure());
+        
+    }
+    
+    
+    public void doTestBooleanCheckboxSubmittedValue(String url) throws Exception {
+
+        HtmlPage page = webClient.getPage(url + "/faces/flash01.xhtml");
         HtmlButtonInput button = (HtmlButtonInput) page.getElementById("nextButton");
         page = button.click();
         assertTrue(page.asText().contains("foo = bar"));
 
-        page = webClient.getPage(webUrl + "/faces/flash01.xhtml");
+        page = webClient.getPage(url + "/faces/flash01.xhtml");
         HtmlAnchor link = (HtmlAnchor) page.getElementById("nextLink");
         page = link.click();
         assertTrue(page.asText().contains("foo = bar"));
 
-        page = webClient.getPage(webUrl + "/faces/flash01.xhtml");
+        page = webClient.getPage(url + "/faces/flash01.xhtml");
         link = (HtmlAnchor) page.getElementById("nextCommandLink");
         page = link.click();
         assertTrue(page.asText().contains("foo = bar"));
 
-        page = webClient.getPage(webUrl + "/faces/flash01.xhtml");
+        page = webClient.getPage(url + "/faces/flash01.xhtml");
         HtmlSubmitInput submitButton = (HtmlSubmitInput) page.getElementById("nextCommandButton");
         page = submitButton.click();
         assertTrue(page.asText().contains("foo = bar"));
 
     }
+    
 }

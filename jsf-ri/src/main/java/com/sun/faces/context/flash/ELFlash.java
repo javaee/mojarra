@@ -64,6 +64,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
 import javax.faces.event.PhaseId;
+import javax.servlet.ServletRequest;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
@@ -949,7 +950,9 @@ public class ELFlash extends Flash {
                 if (null != (val = toSet.getMaxAge())) {
                     properties.put("maxAge", val);
                 }
-                if (null != (val = toSet.getSecure())) {
+                if (((ServletRequest)context.getExternalContext().getRequest()).isSecure()) {
+                    properties.put("secure", Boolean.TRUE);
+                } else if (null != (val = toSet.getSecure())) {
                     properties.put("secure", val);
                 }
                 if (null != (val = toSet.getPath())) {
@@ -1280,6 +1283,7 @@ public class ELFlash extends Flash {
                            ((null != nextRequestFlashInfo) ? nextRequestFlashInfo.encode() : "");
             String encryptedValue = guard.encrypt(value);
             result = new Cookie(FLASH_COOKIE_NAME, encryptedValue);
+            
 
             if (1 == value.length()) {
                 result.setMaxAge(0);
