@@ -20,6 +20,7 @@
         <module>virtual</module>
         <module>weblogic12c</module>
         <module>web-profile</module>
+        <module>protocolaware</module>
     </modules>
     <build>
         <pluginManagement>
@@ -43,11 +44,6 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-failsafe-plugin</artifactId>
                     <version>2.12.4</version>
-                </plugin>                
-                <plugin>
-                    <groupId>org.codehaus.groovy.maven</groupId>
-                    <artifactId>gmaven-plugin</artifactId>
-                    <version>1.0</version>
                 </plugin>                
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -143,23 +139,6 @@
             <id>integration-failsafe</id>
             <build>
                 <plugins>
-                       <plugin> 
-                           <groupId>org.codehaus.groovy.maven</groupId>
-                           <artifactId>gmaven-plugin</artifactId>
-                           <executions>
-                               <execution>
-                                   <phase>pre-integration-test</phase>
-                                   <goals>
-                                       <goal>execute</goal>
-                                 </goals>
-                                  <configuration>
-                                     <source>
-                                     project.properties["integration.hostname"] = InetAddress.getLocalHost().getHostAddress()
-                                    </source>
-                                </configuration>
-                            </execution>
-                         </executions>
-                    </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-failsafe-plugin</artifactId>
@@ -178,8 +157,6 @@
                                 <integration.serverPort>${integration.serverPort}</integration.serverPort>
                                 <integration.serverProtocol>${integration.serverProtocol}</integration.serverProtocol>
                                 <integration.url>${integration.protocol}://${integration.serverName}:${integration.serverPort}/${project.build.finalName}/</integration.url>
-                                <integration.https.url>${integration.https.protocol}://${integration.hostname}:${integration.https.serverPort}/${project.build.finalName}/</integration.https.url>
-
                                 <jsf.version>${jsf.version}</jsf.version>
                                 <project.build.finalName>${project.build.finalName}</project.build.finalName>
                             </systemPropertyVariables>
@@ -189,10 +166,8 @@
             </build>
             <properties>
                 <integration.protocol>http</integration.protocol>
-                <integration.https.protocol>https</integration.https.protocol>
                 <integration.serverName>localhost</integration.serverName>
                 <integration.serverPort>8080</integration.serverPort>
-                <integration.https.serverPort>8181</integration.https.serverPort>
             </properties>
             <reporting>
                 <plugins>
@@ -242,6 +217,56 @@
                 <integration.serverName2>localhost</integration.serverName2>
                 <integration.serverPort1>18080</integration.serverPort1>
                 <integration.serverPort2>28080</integration.serverPort2>
+            </properties>
+            <reporting>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-report-plugin</artifactId>
+                        <reportSets>
+                            <reportSet>
+                                <id>integration-tests</id>
+                                <reports>
+                                    <report>failsafe-report-only</report>
+                                </reports>
+                            </reportSet>
+                        </reportSets>
+                    </plugin>
+                </plugins>
+            </reporting>
+        </profile>
+        <profile>
+            <id>integration-failsafe-protocolaware</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <inherited>true</inherited>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                                <configuration>
+                                    <systemPropertyVariables>
+                                        <integration.url>${integration.protocol}://${integration.serverName1}:${integration.serverPort1}/${project.build.finalName}/</integration.url>
+                                        <integration.url.https>${integration.protocol2}://${integration.serverName2}:${integration.serverPort2}/${project.build.finalName}/</integration.url.https>
+                                    </systemPropertyVariables>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>                
+                </plugins>
+            </build>
+            <properties>
+                <integration.protocol>http</integration.protocol>
+                <integration.protocol2>https</integration.protocol2>
+                <integration.serverName1>localhost</integration.serverName1>
+                <integration.serverName2>127.0.0.1</integration.serverName2>
+                <integration.serverPort1>8080</integration.serverPort1>
+                <integration.serverPort2>8181</integration.serverPort2>
             </properties>
             <reporting>
                 <plugins>
