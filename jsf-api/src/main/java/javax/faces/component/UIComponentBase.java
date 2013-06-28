@@ -386,42 +386,14 @@ public abstract class UIComponentBase extends UIComponent {
         return (this.parent);
     }
 
-    private ConcurrentHashMap<String, UIComponent> getFaceletComponentMap() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        UIViewRoot viewRoot = facesContext.getViewRoot();
-
-        if (viewRoot != null) {
-            if (viewRoot.getTransientStateHelper().getTransient("com.sun.faces.facelets.FACELET_COMPONENT_MAP") == null) {
-                viewRoot.getTransientStateHelper(true).putTransient("com.sun.faces.facelets.FACELET_COMPONENT_MAP", 
-                        new ConcurrentHashMap<String, UIComponent>());
-            }
-            return (ConcurrentHashMap<String, UIComponent>) viewRoot.getTransientStateHelper().getTransient(
-                    "com.sun.faces.facelets.FACELET_COMPONENT_MAP");
-        }
-        
-        return null;
-    }
-
     public void setParent(UIComponent parent) {
-
-
+        
         if (parent == null) {
             if (this.parent != null) {
                 doPreRemoveProcessing(FacesContext.getCurrentInstance(), this);
                 this.parent = parent;
             }
-            compositeParent = null;
-
-            /*
-             * Make sure we remove the given component from the facelet component map if it is in there.
-             */
-            if (getAttributes().containsKey("com.sun.faces.facelets.MARK_ID")) {
-                ConcurrentHashMap<String, UIComponent> faceletComponentMap = getFaceletComponentMap();
-                if (faceletComponentMap != null) {
-                    faceletComponentMap.remove((String) getAttributes().get("com.sun.faces.facelets.MARK_ID"));
-                }
-            }
-            
+            compositeParent = null;            
         } else {
             this.parent = parent;
             if (this.getAttributes().get(ADDED) == null) {
@@ -435,16 +407,6 @@ public abstract class UIComponentBase extends UIComponent {
                 // processing.
                 this.getAttributes().remove(ADDED);                
             }
-            
-            /*
-             * Make sure we add a component created by a facelet to the facelet component map.
-             */
-            if (getAttributes().containsKey("com.sun.faces.facelets.MARK_ID")) {
-                ConcurrentHashMap<String, UIComponent> faceletComponentMap = getFaceletComponentMap();
-                if (faceletComponentMap != null) {
-                    faceletComponentMap.put(getAttributes().get("com.sun.faces.facelets.MARK_ID").toString(), this);
-                }
-            }            
         }
     }
 

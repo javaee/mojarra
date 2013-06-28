@@ -59,6 +59,7 @@ import java.util.MissingResourceException;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.el.ELContext;
@@ -637,9 +638,48 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * @since 2.0
      */
     public void setInView(boolean isInView) {
+        
+        if (isInView) {
+            /*
+             * Make sure we add a component created by a facelet to the facelet component map.
+             */
+            if (getAttributes().containsKey("com.sun.faces.facelets.MARK_ID")) {
+                ConcurrentHashMap<String, UIComponent> faceletComponentMap = getFaceletComponentMap();
+                if (faceletComponentMap != null) {
+                    faceletComponentMap.put(getAttributes().get("com.sun.faces.facelets.MARK_ID").toString(), this);
+                }
+            }            
+            
+        } else {
+            /*
+             * Make sure we remove the given component from the facelet component map if it is in there.
+             */
+            if (getAttributes().containsKey("com.sun.faces.facelets.MARK_ID")) {
+                ConcurrentHashMap<String, UIComponent> faceletComponentMap = getFaceletComponentMap();
+                if (faceletComponentMap != null) {
+                    faceletComponentMap.remove((String) getAttributes().get("com.sun.faces.facelets.MARK_ID"));
+                }
+            }
+        }
+        
         this.isInView = isInView;
     }
 
+    private ConcurrentHashMap<String, UIComponent> getFaceletComponentMap() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        UIViewRoot viewRoot = facesContext.getViewRoot();
+
+        if (viewRoot != null) {
+            if (viewRoot.getTransientStateHelper().getTransient("com.sun.faces.facelets.FACELET_COMPONENT_MAP") == null) {
+                viewRoot.getTransientStateHelper(true).putTransient("com.sun.faces.facelets.FACELET_COMPONENT_MAP", 
+                        new ConcurrentHashMap<String, UIComponent>());
+            }
+            return (ConcurrentHashMap<String, UIComponent>) viewRoot.getTransientStateHelper().getTransient(
+                    "com.sun.faces.facelets.FACELET_COMPONENT_MAP");
+        }
+        
+        return null;
+    }
 
     /**
      * <p class="changed_added_2_0">Enable EL to access the <code>clientId</code>
