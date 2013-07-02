@@ -13,5 +13,6 @@
     <name>Mojarra ${project.version} - Test - Agnostic - Converter</name>
     <modules>
         <module>basic</module>
+        <module>converterThrowsNPE</module>
     </modules>
 </project>
