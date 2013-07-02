@@ -40,6 +40,7 @@
 
 package com.sun.faces.test.agnostic.flash.basic;
 
+import com.gargoylesoftware.htmlunit.util.Cookie;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlButtonInput;
@@ -84,21 +85,29 @@ public class FlashViewParamIT {
         HtmlButtonInput button = (HtmlButtonInput) page.getElementById("nextButton");
         page = button.click();
         assertTrue(page.asText().contains("foo = bar"));
+        Cookie cookie = webClient.getCookieManager().getCookie("csfcfc");
+        assertTrue(cookie.isHttpOnly());
 
         page = webClient.getPage(webUrl + "/faces/flash01.xhtml");
         HtmlAnchor link = (HtmlAnchor) page.getElementById("nextLink");
         page = link.click();
         assertTrue(page.asText().contains("foo = bar"));
+        cookie = webClient.getCookieManager().getCookie("csfcfc");
+        assertTrue(cookie.isHttpOnly());
 
         page = webClient.getPage(webUrl + "/faces/flash01.xhtml");
         link = (HtmlAnchor) page.getElementById("nextCommandLink");
         page = link.click();
         assertTrue(page.asText().contains("foo = bar"));
+        cookie = webClient.getCookieManager().getCookie("csfcfc");
+        assertTrue(cookie.isHttpOnly());
 
         page = webClient.getPage(webUrl + "/faces/flash01.xhtml");
         HtmlSubmitInput submitButton = (HtmlSubmitInput) page.getElementById("nextCommandButton");
         page = submitButton.click();
         assertTrue(page.asText().contains("foo = bar"));
+        cookie = webClient.getCookieManager().getCookie("csfcfc");
+        assertTrue(cookie.isHttpOnly());
 
     }
 }
