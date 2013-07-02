@@ -13,6 +13,7 @@
         <module>agnostic</module>
         <module>cluster</module>
         <module>glassfish</module>
+        <module>protocolaware</module>
         <module>quality</module>
         <module>selenium</module>
         <module>unit</module>
@@ -20,7 +21,6 @@
         <module>virtual</module>
         <module>weblogic12c</module>
         <module>web-profile</module>
-        <module>protocolaware</module>
     </modules>
     <build>
         <pluginManagement>
@@ -106,7 +106,7 @@
         <dependency>
             <groupId>javax.faces</groupId>
             <artifactId>javax.faces-api</artifactId>
-            <version>2.2-SNAPSHOT</version>
+            <version>2.2</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -504,7 +504,6 @@
                 <integration.container.home>C:/Glassfish3.1.2.2</integration.container.home>
             </properties>
         </profile>
-
         <profile>
             <id>integration-glassfish-cluster-start-debug</id>
             <build>
@@ -583,7 +582,6 @@
                 <integration.container.home>C:/Glassfish3.1.2.2</integration.container.home>
             </properties>
         </profile>
-
         <profile>
             <id>integration-glassfish-cluster-deploy</id>
             <build>
@@ -621,7 +619,6 @@
                 <integration.container.home>C:/Glassfish3.1.2.2</integration.container.home>
             </properties>
         </profile>
-
         <profile>
             <id>integration-glassfish-cluster-undeploy</id>
             <build>
@@ -659,7 +656,6 @@
                 <integration.container.home>C:/Glassfish3.1.2.2</integration.container.home>
             </properties>
         </profile>
-
         <profile>
             <id>integration-glassfish-cluster-stop</id>
             <build>
@@ -704,7 +700,6 @@
                 <integration.container.home>C:/Glassfish3.1.2.2</integration.container.home>
             </properties>
         </profile>
-
         <profile>
             <id>integration-glassfish-deploy</id>
             <build>
@@ -821,7 +816,6 @@
                                 <configuration>
                                     <target>
                                         <delete failonerror="false" file="${integration.container.zipFile}"/>
-                                        <delete quiet="true" failonerror="false" dir="${integration.container.root}"/>
                                     </target>
                                 </configuration>
                                 <goals>
