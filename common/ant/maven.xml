@@ -308,11 +308,13 @@ javadoc generation skipped
                        input="${jar.contents.raw}" override="true"
                        regexp="@{locally.deployed.jar}:" replace="" 
                        global="true" />-->
+<!--
         <echo>
 +++++++++++++++++++++++++++++++ START contents of @{locally.deployed.jar}:
 ${jar.contents.raw}
 +++++++++++++++++++++++++++++++ END contents of @{locally.deployed.jar}:
         </echo>
+-->
       </sequential>                    
     </macrodef>
 

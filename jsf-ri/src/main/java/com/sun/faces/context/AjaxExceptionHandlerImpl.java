@@ -61,6 +61,8 @@ import javax.faces.event.ExceptionQueuedEventContext;
 import javax.faces.event.PhaseId;
 
 import com.sun.faces.util.FacesLogger;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 
 /**
@@ -198,15 +200,24 @@ public class AjaxExceptionHandlerImpl extends ExceptionHandlerWrapper {
 
              writer.startDocument();
              writer.startError(t.getClass().toString());
+             String msg = "";
              if (t.getCause() != null) {
-                 String msg = t.getCause().getMessage();
+                 msg = t.getCause().getMessage();
                  writer.write(((msg != null) ? msg : ""));
              } else {
-                 String msg = t.getMessage();
+                 msg = t.getMessage();
                  writer.write(((msg != null) ? msg : ""));
              }
              writer.endError();
              writer.endDocument();
+             
+             if (LOGGER.isLoggable(Level.SEVERE)) {
+                 StringWriter sw = new StringWriter();
+                 PrintWriter pw = new PrintWriter(sw);
+                 t.printStackTrace(pw);
+                 LOGGER.log(Level.SEVERE, sw.toString());
+             }
+             
              context.responseComplete();
          } catch (IOException ioe) {
             if (LOGGER.isLoggable(Level.SEVERE)) {
