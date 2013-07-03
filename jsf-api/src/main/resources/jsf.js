@@ -987,7 +987,11 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 // Now set the view state from the server into the DOM
                 // but only for the form that submitted the request.
 
-                stateForm = getFormForId(context.element.id);
+                if (typeof context.formid !== 'undefined' && context.formid !== null) {
+                    stateForm = getFormForId(context.formid);
+                } else { 
+                    stateForm = getFormForId(context.element.id);
+                }
                 if (!stateForm || !stateForm.elements) {
                     // if the form went away for some reason, or it lacks elements 
                     // we're going to just return silently.
