@@ -21,5 +21,6 @@
     </dependencies>
     <modules>
         <module>servlet25</module>
+        <module>web-profile</module>
     </modules>
 </project>

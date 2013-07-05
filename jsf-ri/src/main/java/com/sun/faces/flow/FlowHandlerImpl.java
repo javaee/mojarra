@@ -40,8 +40,8 @@
  */
 package com.sun.faces.flow;
 
-import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
+import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.ArrayDeque;
 import java.util.HashMap;
@@ -409,7 +409,9 @@ public class FlowHandlerImpl extends FlowHandler {
         return result;
     }
     
-    private static class FlowDeque<E> implements Iterable<E> {
+    private static class FlowDeque<E> implements Iterable<E>, Serializable {
+        
+        private static final long serialVersionUID = 7915803727932706270L;
         
         private int returnDepth = 0;
         private ArrayDeque<E> data;
