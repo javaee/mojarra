@@ -1,0 +1,25 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:attributeType="http://java.sun.com/jsf/composite/attributeType">
+    <h:head>
+        <title>Composite Component Test</title>
+    </h:head>
+    <h:body>
+        <h:form id="form">
+            <attributeType:listBox 
+                source="#{orderPage.availableLines}"
+                target="#{orderPage.order.lines}" 
+                converterId="lineConverter" />
+            <h:commandButton  id="submit" value="try with cc" action="#{orderPage.persist}" />
+        </h:form>
+        <h:form>
+            <h:selectManyListbox value="#{orderPage.order.lines}">
+                <f:converter converterId="lineConverter" />
+                <f:selectItems var="item" value="#{orderPage.availableLines}"
+                               itemLabel="#{item.name}" />
+            </h:selectManyListbox>
+            <h:commandButton value="try without cc" action="#{orderPage.persist}" />
+        </h:form>
+    </h:body>
+</html>
