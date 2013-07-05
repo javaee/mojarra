@@ -59,6 +59,9 @@
 package com.sun.faces.facelets.tag.composite;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
+import com.sun.faces.facelets.util.ReflectionUtil;
+import com.sun.faces.util.FacesLogger;
+import java.lang.reflect.Method;
 
 import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
@@ -68,9 +71,15 @@ import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.el.ELContext;
+import javax.faces.context.FacesContext;
 
 
 public class AttributeHandler extends TagHandlerImpl {
+    
+    private final Logger LOGGER = FacesLogger.TAGLIB.getLogger();    
 
     private static final String[] COMPOSITE_ATTRIBUTE_ATTRIBUTES = {
           "required",
@@ -131,22 +140,99 @@ public class AttributeHandler extends TagHandlerImpl {
 
         PropertyDescriptor propertyDescriptor;
         try {
-            propertyDescriptor = new PropertyDescriptor(strValue, null, null);
+            propertyDescriptor = new CCAttributePropertyDescriptor(strValue, null, null);
             declaredAttributes.add(propertyDescriptor);
         } catch (IntrospectionException ex) {
             throw new  TagException(tag, "Unable to create property descriptor for property " + strValue, ex);
         }
 
+        TagAttribute defaultTagAttribute = null;
+        PropertyHandler defaultHandler = null;
         for (TagAttribute tagAttribute : this.tag.getAttributes().getAll()) {
             String attributeName = tagAttribute.getLocalName();
-            PropertyHandler handler = ATTRIBUTE_MANAGER.getHandler(ctx, attributeName);
-            if (handler != null) {
-                handler.apply(ctx, attributeName, propertyDescriptor, tagAttribute);
+            if("default".equals(attributeName)) {
+                // store the TagAttribute and the PropertyHandler for later
+                // execution, as the handler for the default-attribute requires,
+                // that the PropertyHandler for 'type' - if it exists - has been
+                // applied first.
+                defaultTagAttribute = tagAttribute;
+                defaultHandler = ATTRIBUTE_MANAGER.getHandler(ctx, "default");
+            } else {
+                PropertyHandler handler =
+                        ATTRIBUTE_MANAGER.getHandler(ctx, attributeName);
+                if (handler != null) {
+                    handler.apply(ctx, attributeName, propertyDescriptor,
+                            tagAttribute);
+                }
             }
-
+        }
+        if(defaultHandler!=null) {
+            // If the 'default'-attribute of cc:attribute was set, apply the
+            // previously stored PropertyHandler (see above) now, as now it is
+            // guaranteed that if a 'type'-attribute existed, that its handler
+            // was already applied
+            try {
+                defaultHandler.apply(ctx, "default", propertyDescriptor,
+                        defaultTagAttribute);
+            } catch (IllegalArgumentException ex) {
+                // If the type (according to the type-attribute) can not be
+                // found, the DefaultPropertyHandler will wrapp the
+                // ClassNotFoundException into an IllegalArgumentException,
+                // which is unwrapped into a TagException here.
+                throw new TagException(tag, 
+                        "'type' could not be resolved: " + ex.getCause(),
+                        ex.getCause());
+            }
         }
         
         this.nextHandler.apply(ctx, parent);
+        
+    }
+    
+    private class CCAttributePropertyDescriptor extends PropertyDescriptor {
+
+        public CCAttributePropertyDescriptor(String propertyName, Method readMethod, Method writeMethod) throws IntrospectionException {
+            super(propertyName, readMethod, writeMethod);
+        }
+
+        @Override
+        public Object getValue(String attributeName) {
+            Object result = super.getValue(attributeName);
+            if ("type".equals(attributeName)) {
+                if ((null != result) && !(result instanceof Class)) {
+                    FacesContext context = FacesContext.getCurrentInstance();
+                    ELContext elContext = context.getELContext();
+                    String classStr = (String) ((ValueExpression)result).getValue(elContext);
+                    if (null != classStr) {
+                        try {
+                            result = ReflectionUtil.forName(classStr);
+
+                            this.setValue(attributeName, result);
+                        } catch (ClassNotFoundException ex) {
+                            classStr = "java.lang." + classStr;
+                            boolean throwException = false;
+                            try {
+                                result = ReflectionUtil.forName(classStr);
+                                
+                                this.setValue(attributeName, result);
+                            } catch (ClassNotFoundException ex2) {
+                                throwException = true;
+                            }
+                            if (throwException) {
+                                String message = "Unable to obtain class for " + classStr;
+                                if (LOGGER.isLoggable(Level.INFO)) {
+                                    LOGGER.log(Level.INFO, message, ex);
+                                }
+                                throw new TagAttributeException(tag, name, message, ex);
+                            }
+                        }
+                    }
+                    
+                }
+            }
+            return result;
+        }
+        
         
     }
 

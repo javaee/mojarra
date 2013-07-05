@@ -448,21 +448,26 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
                 PropertyDescriptor compDescriptor = findDescriptor(name);
                 if (compDescriptor != null) {
                     // composite:attribute declaration...
-                    ValueExpression typeVE = (ValueExpression) compDescriptor.getValue("type");
-                    if (typeVE == null) {
-                        return Object.class;
-                    } else {
-                        String className = (String) typeVE.getValue(FacesContext.getCurrentInstance().getELContext());
-                        if (className != null) {
-                            className = prefix(className);
-                            try {
-                                return ReflectionUtil.forName(className);
-                            } catch (ClassNotFoundException cnfe) {
-                                throw new FacesException(cnfe);
-                            }
-                        } else {
+                    Object obj = compDescriptor.getValue("type");
+                    if ((null != obj) && !(obj instanceof Class)) {
+                        ValueExpression typeVE = (ValueExpression) obj;
+                        if (typeVE == null) {
                             return Object.class;
+                        } else {
+                            String className = (String) typeVE.getValue(FacesContext.getCurrentInstance().getELContext());
+                            if (className != null) {
+                                className = prefix(className);
+                                try {
+                                    return ReflectionUtil.forName(className);
+                                } catch (ClassNotFoundException cnfe) {
+                                    throw new FacesException(cnfe);
+                                }
+                            } else {
+                                return Object.class;
+                            }
                         }
+                    } else {
+                        return (Class) obj;
                     }
                 } else {
                     // defer to the default processing which will inspect the
