@@ -169,10 +169,47 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
     public Class<?> getType(ELContext context, Object base, Object property) {
 
         Util.notNull("context", context);
-        return null;
 
+        if (!(base instanceof ExpressionEvalMap && property instanceof String)) {
+            return null;
+        }
+        Class<?> exprType = null;
+        Class<?> metaType = null;
+
+        ExpressionEvalMap evalMap = (ExpressionEvalMap) base;
+        ValueExpression ve = evalMap.getExpression((String) property);
+        if (ve != null) {
+            exprType = ve.getType(context);
+        }
+
+        if (!"".equals(property)) {
+            FacesContext facesContext = (FacesContext) context.getContext(FacesContext.class);
+            UIComponent cc = UIComponent.getCurrentCompositeComponent(facesContext);
+            BeanInfo metadata = (BeanInfo) cc.getAttributes().get(UIComponent.BEANINFO_KEY);
+            assert(null != metadata);
+            PropertyDescriptor[] attributes = metadata.getPropertyDescriptors();
+            if (null != attributes) {
+                for (PropertyDescriptor cur : attributes) {
+                    if (property.equals(cur.getName())) {
+                        Object type = cur.getValue("type");
+                        if (null != type) {
+                            assert(type instanceof Class);
+                            metaType = (Class) type;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        if (metaType != null) {
+            // override exprType only if metaType is narrower:
+            if (exprType == null || exprType.isAssignableFrom(metaType)) {
+                context.setPropertyResolved(true);
+                return metaType;
+            }
+        }
+        return exprType;
     }
-
 
     /**
      * <p>

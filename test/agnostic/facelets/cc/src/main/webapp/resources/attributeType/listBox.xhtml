@@ -1,0 +1,18 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:composite="http://java.sun.com/jsf/composite">
+    <composite:interface>
+        <composite:attribute name="source" required="true" />
+        <composite:attribute name="target" required="true" />
+        <composite:attribute name="converterId" />
+    </composite:interface>
+    <composite:implementation>
+        <h:selectManyListbox value="#{cc.attrs.target}">
+            <f:converter converterId="#{cc.attrs.converterId}"
+                         rendered="#{cc.attrs.converterId != null}" />
+            <f:selectItems var="item" value="#{cc.attrs.source}"
+                           itemLabel="#{item.name}" />
+        </h:selectManyListbox>
+    </composite:implementation>
+</html>
