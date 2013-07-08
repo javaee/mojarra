@@ -75,6 +75,8 @@ import javax.faces.view.StateManagementStrategy;
 import static com.sun.faces.RIConstants.DYNAMIC_ACTIONS;
 import static com.sun.faces.RIConstants.DYNAMIC_COMPONENT;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
+import javax.faces.application.ViewHandler;
+import javax.faces.view.ViewDeclarationLanguage;
 
 /**
  * A state management strategy for FSS.
@@ -593,7 +595,14 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
                 }
             }
         }
-
+        
+        /*
+         * Make sure the library contracts get setup as well.
+         */
+        ViewHandler viewHandler = context.getApplication().getViewHandler();
+        ViewDeclarationLanguage vdl = viewHandler.getViewDeclarationLanguage(context, viewId);
+        context.setResourceLibraryContracts(vdl.calculateResourceLibraryContracts(context, viewId));
+        
         return result;
     }
 
