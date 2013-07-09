@@ -43,7 +43,6 @@ package com.sun.faces.util;
 import java.nio.charset.Charset;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
-import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.faces.FacesException;
