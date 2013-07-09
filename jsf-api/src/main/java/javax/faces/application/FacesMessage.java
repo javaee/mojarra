@@ -374,10 +374,10 @@ public class FacesMessage implements Serializable {
      */
     private void writeObject(ObjectOutputStream out) throws IOException {
         out.defaultWriteObject();
-        out.writeInt(getSeverity().getOrdinal());
-        out.writeObject(getSummary());
-        out.writeObject(getDetail());
-        out.writeObject(isRendered());
+        out.writeInt(severity.getOrdinal());
+        out.writeObject(summary);
+        out.writeObject(detail);
+        out.writeObject(rendered);
     }
 
     /**
@@ -392,17 +392,17 @@ public class FacesMessage implements Serializable {
         detail = null;
         int ordinal = in.readInt();
         if (ordinal == SEVERITY_INFO.getOrdinal()) {
-            setSeverity(FacesMessage.SEVERITY_INFO);
+            severity = FacesMessage.SEVERITY_INFO;
         } else if (ordinal == SEVERITY_WARN.getOrdinal()) {
-            setSeverity(FacesMessage.SEVERITY_WARN);
+            severity = FacesMessage.SEVERITY_WARN;
         } else if (ordinal == SEVERITY_ERROR.getOrdinal()) {
-            setSeverity(FacesMessage.SEVERITY_ERROR);
+            severity = FacesMessage.SEVERITY_ERROR;
         } else if (ordinal == SEVERITY_FATAL.getOrdinal()) {
-            setSeverity(FacesMessage.SEVERITY_FATAL);
+            severity = FacesMessage.SEVERITY_FATAL;
         }
-        setSummary((String)in.readObject());
-        setDetail((String)in.readObject());
-        this.rendered = (Boolean) in.readObject();
+        summary = (String) in.readObject();
+        detail = (String) in.readObject();
+        rendered = (Boolean) in.readObject();
     }
 
     /**
