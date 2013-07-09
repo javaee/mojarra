@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -40,12 +40,15 @@
 
 package com.sun.faces.application.annotation;
 
+import com.sun.faces.util.FacesLogger;
 import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.faces.context.FacesContext;
 import javax.faces.application.Application;
@@ -59,7 +62,10 @@ import javax.faces.convert.FacesConverter;
  */
 public class ConverterConfigHandler implements ConfigAnnotationHandler {
 
+    private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
+    
     private static final Collection<Class<? extends Annotation>> HANDLES;
+    
     static {
         Collection<Class<? extends Annotation>> handles =
               new ArrayList<Class<? extends Annotation>>(1);
@@ -86,13 +92,22 @@ public class ConverterConfigHandler implements ConfigAnnotationHandler {
     /**
      * @see com.sun.faces.application.annotation.ConfigAnnotationHandler#collect(Class, java.lang.annotation.Annotation)
      */
+    @Override
     public void collect(Class<?> target, Annotation annotation) {
 
         if (converters == null) {
             converters = new HashMap<Object,String>();
         }
-        Object key = null;
+        Object key;
         FacesConverter converterAnnotation = (FacesConverter) annotation;
+        
+        if (converterAnnotation.value().length() > 0 &&
+                converterAnnotation.forClass() != null) {
+            if (LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.log(Level.WARNING, "@FacesConverter is using both value and forClass, only value will be applied.");
+            }
+        }
+        
         if (0 == converterAnnotation.value().length()) {
             key = converterAnnotation.forClass();
         } else {
