@@ -426,27 +426,27 @@ final class CompilationManager {
     }
 
     protected static boolean isRemove(String ns, String name) {
-        return UILibrary.Namespace.equals(ns)
+        return (UILibrary.Namespace.equals(ns) || UILibrary.XMLNSNamespace.equals(ns))
                 && "remove".equals(name);
     }
 
     // edburns: This is the magic line that tells the system to trim out the 
     // extra content above and below the tag.
     protected static boolean isTrimmed(String ns, String name) {
-        boolean matchInUILibrary = UILibrary.Namespace.equals(ns) && 
+        boolean matchInUILibrary = (UILibrary.Namespace.equals(ns) || UILibrary.XMLNSNamespace.equals(ns)) && 
                 (CompositionHandler.Name.equals(name) || 
                 ComponentRefHandler.Name.equals(name));
         return matchInUILibrary;
     }
 
     protected static boolean isImplementation(String ns, String name) {
-        boolean matchInCompositeLibrary = CompositeLibrary.Namespace.equals(ns) && 
+        boolean matchInCompositeLibrary = (CompositeLibrary.Namespace.equals(ns) || CompositeLibrary.XMLNSNamespace.equals(ns)) && 
                 (ImplementationHandler.Name.equals(name));
         return matchInCompositeLibrary;
     }
 
     protected static boolean isInterface(String ns, String name) {
-        boolean matchInCompositeLibrary = CompositeLibrary.Namespace.equals(ns) && 
+        boolean matchInCompositeLibrary = (CompositeLibrary.Namespace.equals(ns) || CompositeLibrary.XMLNSNamespace.equals(ns)) && 
                 (InterfaceHandler.Name.equals(name));
         return matchInCompositeLibrary;
     }
