@@ -56,7 +56,4 @@
     <build>
         <finalName>test-agnostic-facelets-html</finalName>
     </build>
-    <properties>
-        <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
-    </properties>
 </project>
