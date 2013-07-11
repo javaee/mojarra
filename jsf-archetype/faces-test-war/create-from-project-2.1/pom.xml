@@ -45,10 +45,10 @@
   <modelVersion>4.0.0</modelVersion>
   
   <groupId>com.sun.faces</groupId>
-  <artifactId>faces-test-war</artifactId>
-  <version>0.1-SNAPSHOT</version>
+  <artifactId>faces-2.1-test-war</artifactId>
+  <version>0.1</version>
   <packaging>war</packaging>
-  <name>Automated Test Depending on JSF</name>
+  <name>Automated Test Depending on JSF 2.1</name>
   
   <build>
     <finalName>test-${project.artifactId}</finalName>
