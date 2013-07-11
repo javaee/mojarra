@@ -410,6 +410,7 @@ public class ELText {
         int len = ca.length;
         char c = 0;
         int str = 0;
+        int nested = 0;
         while (i < len) {
             c = ca[i];
             if ('\\' == c && i<len-1) {
@@ -420,8 +421,14 @@ public class ELText {
                 } else {
                     str = c;
                 }
+            } else if ('{' == c) {
+                nested++;
             } else if (str == 0 && ('}' == c)) {
-                return i - s + 1;
+                if (nested > 1) {
+                    nested--;
+                } else {
+                    return i - s + 1;
+                }
             }
             i++;
         }
