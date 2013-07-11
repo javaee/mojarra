@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -337,7 +337,7 @@ public class MultiKeyConcurrentHashMap<K, V> {
                     if ((e.hash == hash && key1.equals(e.key1))
                         && ((key2 == null && e.key2 == null) || (key2 != null && key2.equals(e.key2)))
                         && ((key3 == null && e.key3 == null) || (key3 != null && key3.equals(e.key3)))
-                        && ((key4 == null && e.key4 == null) || (key4 != null && key4.equals(e.key2)))) {
+                        && ((key4 == null && e.key4 == null) || (key4 != null && key4.equals(e.key4)))) {
                         V v = e.value;
                         if (v != null) {
                             return v;
@@ -361,7 +361,7 @@ public class MultiKeyConcurrentHashMap<K, V> {
                     if ((e.hash == hash && key1.equals(e.key1))
                         && ((key2 == null && e.key2 == null) || (key2 != null && key2.equals(e.key2)))
                         && ((key3 == null && e.key3 == null) || (key3 != null && key3.equals(e.key3)))
-                        && ((key4 == null && e.key4 == null) || (key4 != null && key4.equals(e.key2)))) {
+                        && ((key4 == null && e.key4 == null) || (key4 != null && key4.equals(e.key4)))) {
                         return true;
                     }
                     e = e.next;
