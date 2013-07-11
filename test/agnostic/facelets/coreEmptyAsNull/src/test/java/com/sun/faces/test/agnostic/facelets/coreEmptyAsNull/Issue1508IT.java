@@ -66,22 +66,10 @@ public class Issue1508IT {
     }
 
     @Test
-    @Ignore
     public void testConverterHonorBoth1() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/validateEmptyFields.xhtml");
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form:submitButton");
         page = button.click();
         assertTrue(page.asXml().contains("We got called!"));
-    }
-
-    @Test
-    @Ignore
-    public void testConverterHonorBoth2() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/converterHonorBoth2.xhtml");
-        HtmlTextInput textField = (HtmlTextInput) page.getElementById("form:inputText");
-        textField.setValueAttribute("test");
-        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form:submitButton");
-        page = button.click();
-        assertTrue(page.asXml().contains("HonorBothAsString"));
     }
 }
