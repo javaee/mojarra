@@ -1,5 +1,5 @@
 #!/bin/sh
-cd create-from-project-2.1
+cd create-from-project-2.2
 
 mvn clean archetype:create-from-project
 
