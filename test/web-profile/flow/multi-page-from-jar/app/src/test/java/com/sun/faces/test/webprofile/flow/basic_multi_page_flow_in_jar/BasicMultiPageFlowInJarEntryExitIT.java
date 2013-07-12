@@ -49,6 +49,7 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import static org.junit.Assert.assertTrue;
+import org.junit.Ignore;
 
 public class BasicMultiPageFlowInJarEntryExitIT {
     /**
@@ -96,6 +97,7 @@ public class BasicMultiPageFlowInJarEntryExitIT {
     }
 
     @Test
+    @Ignore
     public void testFlowEntryExit() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
 
@@ -122,6 +124,7 @@ public class BasicMultiPageFlowInJarEntryExitIT {
     }
     
     @Test
+    @Ignore
     public void testFacesFlowScope() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
         
