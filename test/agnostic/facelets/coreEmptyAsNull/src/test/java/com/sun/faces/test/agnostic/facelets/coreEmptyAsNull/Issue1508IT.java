@@ -66,7 +66,8 @@ public class Issue1508IT {
     }
 
     @Test
-    public void testConverterHonorBoth1() throws Exception {
+    @Ignore
+    public void testValidateEmptyFields() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/validateEmptyFields.xhtml");
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form:submitButton");
         page = button.click();
