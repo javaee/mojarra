@@ -211,4 +211,27 @@ public class UpdateBean {
         }
         return null;
     }
+
+    public String updateOnAsAttributeName() {
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        ExternalContext extContext = ctx.getExternalContext();
+        if (ctx.getPartialViewContext().isAjaxRequest()) {
+            try {
+                Map attrs = new HashMap();
+                attrs.put("onclick", "document.getElementById('form1:out').innerHTML='ONCLICK CALLED';return;");
+                extContext.setResponseContentType("text/xml");
+                extContext.addResponseHeader("Cache-Control", "no-cache");
+                PartialResponseWriter writer =
+                    ctx.getPartialViewContext().getPartialResponseWriter();
+                writer.startDocument();
+                writer.updateAttributes("form1:button1", attrs);
+                writer.endDocument();
+                writer.flush();
+                ctx.responseComplete();
+            } catch (Exception e) {
+                throw new FacesException(e);
+            }
+        }
+        return null;
+    }
 }

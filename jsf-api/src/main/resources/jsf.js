@@ -1556,15 +1556,13 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                     } else if (name === 'style') {
                         target.style.setAttribute('cssText', value, 0);
                     } else if (name.substring(0, 2) === 'on') {
-                        /**
-                         * @ignore
-                         */
-                        var fn = function(value) {
-                            return function() {
-                                window.execScript(value);
-                            };
-                        }(value);
-                        target.setAttribute(name, fn, 0);
+                        var c = document.body.appendChild(document.createElement('span'));
+                        try {
+                            c.innerHTML = '<span ' + name + '="' + value + '"/>';
+                            target[name] = c.firstChild[name];
+                        } finally {
+                            document.body.removeChild(c);
+                        }
                     } else if (name === 'dir') {
                         if (jsf.getProjectStage() == 'Development') {
                             throw new Error("Cannot set 'dir' attribute in IE");
