@@ -16,6 +16,7 @@
         <module>protocolaware</module>
         <module>quality</module>
         <module>selenium</module>
+        <module>servlet31</module>
         <module>unit</module>
         <module>util</module>
         <module>virtual</module>

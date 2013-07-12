@@ -37,16 +37,14 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.facelets.html;
+package com.sun.faces.test.servlet31.facelets.html;
 
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 
 public class Issue2891IT {
 
@@ -65,7 +63,6 @@ public class Issue2891IT {
     }
     
     @Test
-    @Ignore
     public void testOutputTextInlineEL3() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/outputTextInlineEL3.xhtml");
         assertEquals(200, page.getWebResponse().getStatusCode());
