@@ -46,6 +46,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 public class ConfigFileIT {
     
@@ -83,12 +84,14 @@ public class ConfigFileIT {
     }
 
     @Test
+    @Ignore
     public void testBoolean() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/boolean.xhtml");
         assertTrue(page.asText().contains("SUCCESS"));
     }
 
     @Test
+    @Ignore
     public void testDefault() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/default.xhtml");
         assertTrue(page.asText().contains("SUCCESS"));
