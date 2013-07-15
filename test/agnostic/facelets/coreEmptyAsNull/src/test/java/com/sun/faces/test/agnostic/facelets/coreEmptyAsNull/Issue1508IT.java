@@ -65,11 +65,20 @@ public class Issue1508IT {
         webClient.closeAllWindows();
     }
 
+    /**
+     * Test to validate empty fields.
+     * 
+     * Note: this test is excluded on Tomcat.
+     */
     @Test
-    public void testConverterHonorBoth1() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/validateEmptyFields.xhtml");
-        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form:submitButton");
-        page = button.click();
-        assertTrue(page.asXml().contains("We got called!"));
+    public void testValidateEmptyFields() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
+        if (page.getWebResponse().getResponseHeaderValue("Server") == null ||
+                !page.getWebResponse().getResponseHeaderValue("Server").startsWith("Apache-Coyote")) {
+            page = webClient.getPage(webUrl + "faces/validateEmptyFields.xhtml");
+            HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form:submitButton");
+            page = button.click();
+            assertTrue(page.asXml().contains("We got called!"));
+        }
     }
 }
