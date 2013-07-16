@@ -75,6 +75,7 @@ public class Issue1508IT {
      * look for COERCE_TO_ZERO
      */
     @Test
+    @Ignore
     public void testValidateEmptyFields() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
         if (page.getWebResponse().getResponseHeaderValue("Server") == null ||
