@@ -419,7 +419,7 @@ public class UIRepeat extends UINamingContainer {
     private boolean hasErrorMessages(FacesContext context) {
 
         FacesMessage.Severity sev = context.getMaximumSeverity();
-        return (sev != null && (FacesMessage.SEVERITY_ERROR.compareTo(sev) >= 0));
+        return (sev != null && (FacesMessage.SEVERITY_ERROR.compareTo(sev) <= 0));
         
     }
 
