@@ -42,12 +42,10 @@ package com.sun.faces.test.agnostic.facelets.coreEmptyAsNull;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 
 public class Issue1508IT {
 
@@ -75,7 +73,6 @@ public class Issue1508IT {
      * look for COERCE_TO_ZERO
      */
     @Test
-    @Ignore
     public void testValidateEmptyFields() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
         if (page.getWebResponse().getResponseHeaderValue("Server") == null ||
