@@ -187,6 +187,8 @@ public class ApplicationAssociate {
     private PropertyEditorHelper propertyEditorHelper;
 
     private NamedEventManager namedEventManager;
+    
+    private long timeOfInstantiation;
 
     public ApplicationAssociate(ApplicationImpl appImpl) {
         app = appImpl;
@@ -236,6 +238,7 @@ public class ApplicationAssociate {
         resourceManager = new ResourceManager(appMap, resourceCache);
         namedEventManager = new NamedEventManager();
         applicationStateInfo = new ApplicationStateInfo();
+        timeOfInstantiation = System.currentTimeMillis();
     }
 
     public static ApplicationAssociate getInstance(ExternalContext
@@ -246,6 +249,10 @@ public class ApplicationAssociate {
         Map applicationMap = externalContext.getApplicationMap();
         return ((ApplicationAssociate)
              applicationMap.get(ASSOCIATE_KEY));
+    }
+    
+    public long getTimeOfInstantiation() {
+        return timeOfInstantiation;
     }
 
     public static ApplicationAssociate getInstance(ServletContext context) {

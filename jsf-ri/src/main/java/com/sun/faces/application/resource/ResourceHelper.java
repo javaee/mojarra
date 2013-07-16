@@ -301,29 +301,7 @@ public abstract class ResourceHelper {
         if (url == null) {
             return 0;
         }
-        long ret;
-        InputStream input = null;
-        try {
-            URLConnection con = url.openConnection();
-            con.setUseCaches(false);
-            con.connect();
-            input = con.getInputStream();
-            ret = con.getLastModified();
-        } catch (IOException ioe) {
-            ret = 0;
-        } finally {
-            if (input != null) {
-                try {
-                    input.close();
-                } catch (IOException ioe) { 
-                    if (LOGGER.isLoggable(Level.FINEST)) {
-                        LOGGER.log(Level.FINEST, "Closing stream", ioe);
-                    }
-                }
-            }
-        }
-
-        return ((ret >= 0) ? ret : 0);
+        return Util.getLastModified(url);
 
     }
 
