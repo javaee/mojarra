@@ -53,7 +53,7 @@
     <artifactId>war</artifactId>
     <packaging>war</packaging>
     <build>
-        <finalName>test-javaee6-resource-cacheLastMode</finalName>
+        <finalName>test-javaee6-resource-cacheLastMod</finalName>
         <plugins>
             <plugin>
                 <groupId>org.codehaus.cargo</groupId>
@@ -68,4 +68,3 @@
         </plugins>
     </build>    
 </project>
-
