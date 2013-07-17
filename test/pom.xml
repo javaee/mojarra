@@ -10,7 +10,6 @@
     <packaging>pom</packaging>
     <name>Mojarra ${project.version} - Test</name>
     <modules>
-        <module>util</module>
         <module>agnostic</module>
         <module>cluster</module>
         <module>glassfish</module>
@@ -19,6 +18,7 @@
         <module>quality</module>
         <module>selenium</module>
         <module>unit</module>
+        <module>util</module>
         <module>virtual</module>
         <module>weblogic12c</module>
         <module>web-profile</module>
@@ -434,7 +434,6 @@
                 <integration.container.id>glassfish3x</integration.container.id>
             </properties>
         </profile>
-
         <profile>
             <id>integration-glassfish-cluster-start</id>
             <build>
@@ -505,7 +504,6 @@
                 <integration.container.home>C:/Glassfish3.1.2.2</integration.container.home>
             </properties>
         </profile>
-
         <profile>
             <id>integration-glassfish-cluster-start-debug</id>
             <build>
@@ -584,7 +582,6 @@
                 <integration.container.home>C:/Glassfish3.1.2.2</integration.container.home>
             </properties>
         </profile>
-
         <profile>
             <id>integration-glassfish-cluster-deploy</id>
             <build>
@@ -622,7 +619,6 @@
                 <integration.container.home>C:/Glassfish3.1.2.2</integration.container.home>
             </properties>
         </profile>
-
         <profile>
             <id>integration-glassfish-cluster-undeploy</id>
             <build>
@@ -660,7 +656,6 @@
                 <integration.container.home>C:/Glassfish3.1.2.2</integration.container.home>
             </properties>
         </profile>
-
         <profile>
             <id>integration-glassfish-cluster-stop</id>
             <build>
@@ -705,7 +700,6 @@
                 <integration.container.home>C:/Glassfish3.1.2.2</integration.container.home>
             </properties>
         </profile>
-
         <profile>
             <id>integration-glassfish-deploy</id>
             <build>
