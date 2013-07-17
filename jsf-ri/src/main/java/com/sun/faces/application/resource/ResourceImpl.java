@@ -367,7 +367,12 @@ public class ResourceImpl extends Resource implements Externalizable {
             initResourceInfo();
             long lastModifiedOfResource = ((ClientResourceInfo)resourceInfo).getLastModified(context);
             long lastModifiedHeader = getIfModifiedHeader(context.getExternalContext());
-            return lastModifiedOfResource > lastModifiedHeader;
+            if (0 == lastModifiedOfResource) {
+                long startupTime = ApplicationAssociate.getInstance(context.getExternalContext()).getTimeOfInstantiation();
+                return startupTime > lastModifiedHeader;
+            } else {
+                return lastModifiedOfResource > lastModifiedHeader;
+            }
         }
         return true;
 

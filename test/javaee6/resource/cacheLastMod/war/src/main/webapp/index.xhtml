@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:gc="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/template.xhtml">
+
+<ui:define name="body">
+    <h:outputText value="This is a test of static resources caching" styleClass="some-style"/>
+    <div class="another-style">
+        To reproduce the issue: after deploying this app and opening this page in a browser, 
+        change JS code or/and some style color - redeploy the app, reload the page (F5) 
+        and you will see that the old styles/JS are still used. 
+    </div>
+    <textarea id="text-area-id"/>
+    <script>doSomething("text-area-id");</script>
+</ui:define>
+
+</ui:composition>
+
+</html>

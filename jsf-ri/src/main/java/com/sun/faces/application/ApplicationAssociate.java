@@ -223,6 +223,8 @@ public class ApplicationAssociate {
     private FlowHandler flowHandler;
     
     private Map<String, String> definingDocumentIdsToTruncatedJarUrls;
+    
+    private long timeOfInstantiation;
 
     public ApplicationAssociate(ApplicationImpl appImpl) {
         app = appImpl;
@@ -272,6 +274,7 @@ public class ApplicationAssociate {
                          Application.class, new PostConstructApplicationListener());
         
         definingDocumentIdsToTruncatedJarUrls = new ConcurrentHashMap<String, String>();
+        timeOfInstantiation = System.currentTimeMillis();
     }
 
     private Map<String, List<String>> resourceLibraryContracts;
@@ -385,6 +388,10 @@ public class ApplicationAssociate {
         Map applicationMap = externalContext.getApplicationMap();
         return ((ApplicationAssociate)
              applicationMap.get(ASSOCIATE_KEY));
+    }
+    
+    public long getTimeOfInstantiation() {
+        return timeOfInstantiation;
     }
 
     public static ApplicationAssociate getInstance(ServletContext context) {
