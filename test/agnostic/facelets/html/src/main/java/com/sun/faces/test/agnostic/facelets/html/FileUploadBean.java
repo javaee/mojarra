@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -43,13 +43,13 @@ package com.sun.faces.test.agnostic.facelets.html;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.application.ProjectStage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
-import javax.inject.Named;
 import javax.servlet.http.Part;
 
-@Named
+@ManagedBean(name = "fileUploadBean")
 @RequestScoped
 public class FileUploadBean {
 
