@@ -48,8 +48,11 @@ import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.Page;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import com.gargoylesoftware.htmlunit.WebRequest;
+import com.gargoylesoftware.htmlunit.util.NameValuePair;
+import java.net.URL;
+import java.util.List;
+import static org.junit.Assert.*;
 
 public class Issue2895IT {
 
@@ -77,45 +80,19 @@ public class Issue2895IT {
 
     @Test
     public void testBuilderDefinedFlowWithMethodCall() throws Exception {
-        webClient.getCache().clear();
-        CookieManager cookieManager = webClient.getCookieManager();
-        cookieManager.setCookiesEnabled(true);
-        
-        HtmlPage page = webClient.getPage(webUrl);
-        assertEquals(200, page.getWebResponse().getStatusCode());
-
-        String jsessionid = webClient.getCookieManager().getCookie("JSESSIONID").getValue();
-        assertTrue("empty jsessionid sent by server", 0 < jsessionid.length());
-        
         String cssUrl = webUrl + "/faces/javax.faces.resource/styles.css";
         Page cssPage = webClient.getPage(cssUrl);
         assertEquals(200, cssPage.getWebResponse().getStatusCode());
         
-        /**  Unable to get this working with version of HtmlUnit 
-         * in place on 20130716
-        
-        cssUrl = cssPage.getUrl().toExternalForm();
-        
-        List<NameValuePair> responseHeaders = page.getWebResponse().getResponseHeaders();
-        String ifModifiedSinceValue = null;
-        for (NameValuePair cur: responseHeaders) {
-            if (cur.getName().equalsIgnoreCase("Last-Modified") || cur.getName().equalsIgnoreCase("Date")) {
-                ifModifiedSinceValue = cur.getValue();
-            }
+        String ifModifiedSinceValue = cssPage.getWebResponse().getResponseHeaderValue("Last-Modified");
+        if (ifModifiedSinceValue == null) {
+            ifModifiedSinceValue = cssPage.getWebResponse().getResponseHeaderValue("Date");
         }
-        assertTrue("empty Last-Modified", 0 < ifModifiedSinceValue.length());
-        
 
-        webClient.removeRequestHeader("If-Modified-Since");
-        webClient.removeRequestHeader("Cache-Control");
-
+        webClient.getCache().clear();
         webClient.addRequestHeader("If-Modified-Since", ifModifiedSinceValue);
         webClient.addRequestHeader(("Cache-Control"), "max-age=0");
         cssPage = webClient.getPage(cssUrl);
         assertEquals(304, cssPage.getWebResponse().getStatusCode());
-
-         * 
-         */ 
-    
     }
 }
