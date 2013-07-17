@@ -15,13 +15,13 @@
         <module>cluster</module>
         <module>glassfish</module>
         <module>javaee6</module>
+        <module>protocolaware</module>
         <module>quality</module>
         <module>selenium</module>
         <module>unit</module>
         <module>virtual</module>
         <module>weblogic12c</module>
         <module>web-profile</module>
-        <module>protocolaware</module>
     </modules>
     <build>
         <pluginManagement>
