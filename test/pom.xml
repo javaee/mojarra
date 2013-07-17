@@ -10,7 +10,6 @@
     <packaging>pom</packaging>
     <name>Mojarra ${project.version} - Test</name>
     <modules>
-        <module>util</module>
         <module>agnostic</module>
         <module>cluster</module>
         <module>glassfish</module>
@@ -19,6 +18,7 @@
         <module>quality</module>
         <module>selenium</module>
         <module>servlet31</module>
+        <module>util</module>
         <module>unit</module>
         <module>virtual</module>
         <module>weblogic12c</module>
@@ -433,6 +433,114 @@
             <properties>
                 <integration.container.home>C:/Glassfish3.1.2.2</integration.container.home>
                 <integration.container.id>glassfish3x</integration.container.id>
+            </properties>
+        </profile>
+        <profile>
+            <id>integration-glassfish-cluster</id>
+            <build>
+                <plugins>
+                    <plugin>                 
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy</id>                         
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>copy</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>${jsf.groupId}</groupId>
+                                            <artifactId>${jsf.artifactId}</artifactId>
+                                            <version>${jsf.version}</version>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>                                     
+                                            <outputDirectory>${integration.container.home}/glassfish/modules</outputDirectory>
+                                            <destFileName>javax.faces.jar</destFileName>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>start-container</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <echo>=== Starting ${integration.container.cluster.domain} ===</echo>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                            <arg line="start-domain ${integration.container.cluster.domain}"/>
+                                        </exec>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
+                                            <arg line="start-domain ${integration.container.cluster.domain}"/>
+                                        </exec>
+                                        <echo>=== Starting ${integration.container.cluster.name} ===</echo>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                            <arg line="start-cluster ${integration.container.cluster.name}"/>
+                                        </exec>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
+                                            <arg line="start-cluster ${integration.container.cluster.name}"/>
+                                        </exec>
+                                        <echo>=== Deploying ${project.build.finalName} to ${integration.container.cluster.name} ===</echo>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                            <arg line="deploy --force --target ${integration.container.cluster.name} ${project.build.directory}/${project.build.finalName}.war"/>
+                                        </exec>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
+                                            <arg line="deploy --force --target ${integration.container.cluster.name} ${project.build.directory}/${project.build.finalName}.war"/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>stop-container</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <echo>=== Undeploying ${project.build.finalName} from ${integration.container.cluster.name} ===</echo>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                            <arg line="undeploy --target ${integration.container.cluster.name} ${project.build.finalName}"/>
+                                        </exec>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
+                                            <arg line="undeploy --target ${integration.container.cluster.name} ${project.build.finalName}"/>
+                                        </exec>
+                                        <echo>=== Stopping ${integration.container.cluster.name} ===</echo>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                            <arg line="stop-cluster ${integration.container.cluster.name}"/>
+                                        </exec>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
+                                            <arg line="stop-cluster ${integration.container.cluster.name}"/>
+                                        </exec>
+                                        <echo>=== Stopping ${integration.container.cluster.domain} ===</echo>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                            <arg line="stop-domain ${integration.container.cluster.domain}"/>
+                                        </exec>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
+                                            <arg line="stop-domain ${integration.container.cluster.domain}"/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>                    
+                </plugins>
+            </build>
+            <properties>
+                <integration.container.cluster.domain>domain1</integration.container.cluster.domain>
+                <integration.container.cluster.name>cluster1</integration.container.cluster.name>
+                <integration.container.home>C:/Glassfish3.1.2.2</integration.container.home>
             </properties>
         </profile>
         <profile>
