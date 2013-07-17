@@ -476,7 +476,7 @@
                                 </goals>
                                 <configuration>
                                     <target>
-                                        <echo>=== Starting ${integration.container.cluster.domain}s ===</echo>
+                                        <echo>=== Starting ${integration.container.cluster.domain} ===</echo>
                                         <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
                                             <arg line="start-domain ${integration.container.cluster.domain}"/>
                                         </exec>
