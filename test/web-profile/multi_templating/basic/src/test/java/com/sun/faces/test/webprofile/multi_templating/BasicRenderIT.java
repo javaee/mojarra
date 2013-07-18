@@ -49,6 +49,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
@@ -104,7 +105,7 @@ public class BasicRenderIT {
 
         assertTrue(page.getBody().asText().indexOf("Site design by Xoxiety.com") != -1);
         
-        DomNodeList<HtmlElement> links = page.getElementsByTagName("link");
+        DomNodeList<DomElement> links = page.getElementsByTagName("link");
         assertEquals(1, links.size());
         HtmlLink styleLink = (HtmlLink) links.get(0);
         WebResponse response = styleLink.getWebResponse(true);
