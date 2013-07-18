@@ -18,8 +18,8 @@
         <module>quality</module>
         <module>selenium</module>
         <module>servlet31</module>
-        <module>util</module>
         <module>unit</module>
+        <module>util</module>
         <module>virtual</module>
         <module>weblogic12c</module>
         <module>web-profile</module>
@@ -132,7 +132,7 @@
         <dependency>
             <groupId>net.sourceforge.htmlunit</groupId>
             <artifactId>htmlunit</artifactId>
-            <version>2.10</version>
+            <version>2.12</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
