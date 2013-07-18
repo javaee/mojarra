@@ -79,7 +79,7 @@ public class Issue2562IT {
 
         webClient = new WebClient();
         HtmlPage page = webClient.getPage(webUrl+"faces/issue2562.xhtml");
-        HtmlElement element = page.getElementById("result");
+        HtmlElement element = page.getHtmlElementById("result");
         assertEquals("SUCCESS", element.getTextContent());
         
     }
