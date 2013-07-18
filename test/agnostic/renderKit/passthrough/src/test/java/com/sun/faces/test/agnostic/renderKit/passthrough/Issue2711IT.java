@@ -86,7 +86,7 @@ public class Issue2711IT {
     @Test
     public void testInputTextPlaceholder() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/input1.xhtml");
-        HtmlElement input1 = page.getElementById("input1");
+        HtmlElement input1 = page.getHtmlElementById("input1");
         String xml = input1.asXml();
         assertTrue(xml.contains("<input"));
         assertTrue(xml.contains("id=\"" + "input1" + "\""));

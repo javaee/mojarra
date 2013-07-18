@@ -41,10 +41,8 @@
 package com.sun.faces.test.agnostic.renderKit.passthrough;
 
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlFieldSet;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import org.junit.After;
 import org.junit.Before;
 import static org.junit.Assert.*;
@@ -86,7 +84,7 @@ public class Issue2608IT {
     @Test
     public void testInputTextPlaceholder() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/input1.xhtml");
-        HtmlElement input = page.getElementById("input1");
+        HtmlElement input = page.getHtmlElementById("input1");
         String xml = input.asXml();
         assertTrue(xml.contains("<input"));
         assertTrue(xml.contains("id=\"" + "input1" + "\""));
@@ -101,7 +99,7 @@ public class Issue2608IT {
     @Test
     public void testInputTextAutocomplete() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/input1.xhtml");
-        HtmlElement input = page.getElementById("input2");
+        HtmlElement input = page.getHtmlElementById("input2");
         String xml = input.asXml();
         assertTrue(xml.contains("<input"));
         assertTrue(xml.contains("id=\"" + "input2" + "\""));
@@ -116,7 +114,7 @@ public class Issue2608IT {
     @Test
     public void testInputTextAutofocus() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/input1.xhtml");
-        HtmlElement input = page.getElementById("input3");
+        HtmlElement input = page.getHtmlElementById("input3");
         String xml = input.asXml();
         assertTrue(xml.contains("<input"));
         assertTrue(xml.contains("id=\"" + "input3" + "\""));
@@ -131,7 +129,7 @@ public class Issue2608IT {
     @Test
     public void testInputTextList() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/input1.xhtml");
-        HtmlElement input = page.getElementById("input4");
+        HtmlElement input = page.getHtmlElementById("input4");
         String xml = input.asXml();
         assertTrue(xml.contains("<input"));
         assertTrue(xml.contains("id=\"" + "input4" + "\""));
@@ -146,7 +144,7 @@ public class Issue2608IT {
     @Test
     public void testInputTextPattern() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/input1.xhtml");
-        HtmlElement input = page.getElementById("input5");
+        HtmlElement input = page.getHtmlElementById("input5");
         String xml = input.asXml();
         assertTrue(xml.contains("<input"));
         assertTrue(xml.contains("id=\"" + "input5" + "\""));
@@ -161,7 +159,7 @@ public class Issue2608IT {
     @Test
     public void testInputTextRequired() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/input1.xhtml");
-        HtmlElement input = page.getElementById("input6");
+        HtmlElement input = page.getHtmlElementById("input6");
         String xml = input.asXml();
         assertTrue(xml.contains("<input"));
         assertTrue(xml.contains("id=\"" + "input6" + "\""));
@@ -176,7 +174,7 @@ public class Issue2608IT {
     @Test
     public void testInputTextDirname() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/input1.xhtml");
-        HtmlElement input = page.getElementById("input7");
+        HtmlElement input = page.getHtmlElementById("input7");
         String xml = input.asXml();
         assertTrue(xml.contains("<input"));
         assertTrue(xml.contains("id=\"" + "input7" + "\""));
