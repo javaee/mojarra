@@ -88,6 +88,7 @@ public class Issue2895IT {
             ifModifiedSinceValue = cssPage.getWebResponse().getResponseHeaderValue("Date");
         }
 
+        webClient.getCache().clear();
         webClient.addRequestHeader("If-Modified-Since", ifModifiedSinceValue);
         
         cssPage = webClient.getPage(cssUrl);
