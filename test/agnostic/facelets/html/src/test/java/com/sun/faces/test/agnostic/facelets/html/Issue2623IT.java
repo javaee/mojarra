@@ -70,7 +70,7 @@ public class Issue2623IT {
         assertFalse(page.asText().contains("two"));
         assertFalse(page.asText().contains("three"));
         assertFalse(page.asText().contains("four"));
-        HtmlElement button = page.getElementById("form:button");
+        HtmlElement button = page.getHtmlElementById("form:button");
         page = button.click();
         assertTrue(page.asText().contains("one"));
         assertTrue(page.asText().contains("two"));

@@ -66,7 +66,7 @@ public class Issue2923IT {
     @Test
     public void testInputFileRequired() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/inputFileRequired.xhtml");
-        HtmlElement button = page.getElementById("form:button");
+        HtmlElement button = page.getHtmlElementById("form:button");
         page = button.click();
         assertTrue(page.asXml().contains("form:file: Validation Error: Value is required."));
     }
