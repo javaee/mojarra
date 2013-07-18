@@ -69,9 +69,9 @@ public class Issue2892IT {
     @Test
     public void testAddElement() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/nestedForEach.xhtml");
-        HtmlElement addButton = page.getElementById("form0:addButton");
+        HtmlElement addButton = page.getHtmlElementById("form0:addButton");
         page = addButton.click();
-        HtmlElement item = page.getElementById("form0:item0_3");
+        HtmlElement item = page.getHtmlElementById("form0:item0_3");
         System.out.println(item.asXml());
         assertTrue(item.asXml().indexOf("item[new3]") != -1);
     }
