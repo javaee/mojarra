@@ -74,12 +74,12 @@
       <br />
       Double nested ui:repeat WITHOUT ajax:<br />
       <ui:repeat var="item" value="#{issue1817Bean.items}">
-          <h:commandLink value="#{item.label}">
+          <h:commandLink id="force" value="#{item.label}">
              <f:setPropertyActionListener target="#{requestScope.output}" value="#{item.label}" />
           </h:commandLink>
           &nbsp;
           <ui:repeat var="subItem" value="#{item.subItems}">
-              <h:commandLink value="#{subItem.label}">
+              <h:commandLink id="force2" value="#{subItem.label}">
                  <f:setPropertyActionListener target="#{requestScope.output}" value="#{subItem.label}" />
               </h:commandLink>
               &nbsp;
@@ -91,14 +91,14 @@
       Double nested h:dataTable WITH ajax:<br />
       <h:dataTable var="item" value="#{issue1817Bean.items}">
          <h:column>
-            <h:commandLink value="#{item.label}">
+            <h:commandLink id="force3" value="#{item.label}">
                <f:setPropertyActionListener target="#{requestScope.output}" value="#{item.label}" />
                <f:ajax render="@form" />
             </h:commandLink>
             &nbsp;
             <h:dataTable var="subItem" value="#{item.subItems}">
                <h:column>
-                  <h:commandLink value="#{subItem.label}">
+                  <h:commandLink id="force4" value="#{subItem.label}">
                      <f:setPropertyActionListener target="#{requestScope.output}" value="#{subItem.label}" />
                      <f:ajax render="@form" />
                   </h:commandLink>
