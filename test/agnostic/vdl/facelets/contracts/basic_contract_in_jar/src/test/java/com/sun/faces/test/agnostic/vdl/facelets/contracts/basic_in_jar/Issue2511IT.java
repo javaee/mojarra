@@ -40,14 +40,12 @@
  */
 package com.sun.faces.test.agnostic.vdl.facelets.contracts.basic_in_jar;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.URL;
 import com.gargoylesoftware.htmlunit.html.HtmlLink;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.DomNodeList;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.junit.After;
 import org.junit.Before;
@@ -98,11 +96,11 @@ public class Issue2511IT {
         examineCss(page.getElementsByTagName("link"));
     }
     
-    private void examineCss(DomNodeList<HtmlElement> cssFiles) throws Exception {
+    private void examineCss(DomNodeList<DomElement> cssFiles) throws Exception {
         HtmlLink curLink;
         String href;
         String content;
-        for (HtmlElement cur : cssFiles) {
+        for (DomElement cur : cssFiles) {
             curLink = (HtmlLink) cur;
             href = curLink.getHrefAttribute();
             assertTrue(href.contains("con=siteLayout"));
