@@ -76,10 +76,10 @@ public class InputIT {
     public void testInput1() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/input/input1.xhtml");
         assertTrue(page.getBody().asText().indexOf("The value of input 1 is []") != -1);
-        HtmlElement element = page.getElementById("form:composite:input");
+        HtmlElement element = page.getHtmlElementById("form:composite:input");
         assertNotNull("Unable to find input element", element);
         element.type("Tester Test");
-        page = page.getElementById("form:submitButton").click();
+        page = page.getHtmlElementById("form:submitButton").click();
         assertTrue(page.getBody().asText().indexOf("The value of input 1 is [Tester Test]") != -1);
     }
 }
