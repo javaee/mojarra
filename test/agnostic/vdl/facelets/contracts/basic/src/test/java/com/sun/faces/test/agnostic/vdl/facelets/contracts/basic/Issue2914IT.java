@@ -67,7 +67,7 @@ public class Issue2914IT {
     @Test
     public void testTemplatesAreUsed() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
-        HtmlElement stayButton = page.getElementById("currentButton");
+        HtmlElement stayButton = page.getHtmlElementById("currentButton");
         page = stayButton.click();
         assertEquals(200, page.getWebResponse().getStatusCode());
     }

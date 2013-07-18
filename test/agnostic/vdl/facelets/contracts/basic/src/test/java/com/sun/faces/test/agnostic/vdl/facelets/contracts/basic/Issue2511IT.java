@@ -48,6 +48,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.DomNodeList;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.junit.After;
 import org.junit.Before;
@@ -98,11 +99,11 @@ public class Issue2511IT {
         examineCss(page.getElementsByTagName("link"));
     }
     
-    private void examineCss(DomNodeList<HtmlElement> cssFiles) throws Exception {
+    private void examineCss(DomNodeList<DomElement> cssFiles) throws Exception {
         HtmlLink curLink;
         String href;
         String content;
-        for (HtmlElement cur : cssFiles) {
+        for (DomElement cur : cssFiles) {
             curLink = (HtmlLink) cur;
             href = curLink.getHrefAttribute();
             assertTrue(href.contains("con=siteLayout"));
