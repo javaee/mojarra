@@ -102,10 +102,10 @@ public class VerifyExceptionThrownIT {
     public void testConverterThrowsNPEViaAjax() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
 
-        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button1");
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("button1");
         page = button.click();
         webClient.waitForBackgroundJavaScript(60000);
-        HtmlElement span = page.getElementById("ajaxResponseOutput");
+        HtmlElement span = page.getHtmlElementById("ajaxResponseOutput");
         
         assertTrue(span.asText().contains("NullPointerException"));
         
@@ -116,7 +116,7 @@ public class VerifyExceptionThrownIT {
         HtmlPage page = webClient.getPage(webUrl);
         webClient.setThrowExceptionOnFailingStatusCode(false);
 
-        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button2");
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("button2");
         page = button.click();
         assertTrue(page.asText().contains("NullPointerException"));
         
