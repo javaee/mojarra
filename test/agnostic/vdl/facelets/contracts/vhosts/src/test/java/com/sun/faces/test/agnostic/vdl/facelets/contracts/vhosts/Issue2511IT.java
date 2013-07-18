@@ -40,13 +40,13 @@
 package com.sun.faces.test.agnostic.vdl.facelets.contracts.vhosts;
 
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.html.DomNodeList;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlLink;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import java.io.IOException;
 import static org.hamcrest.CoreMatchers.*;
@@ -79,9 +79,9 @@ public class Issue2511IT {
     public void testDefaultTemplate() throws Exception {
         webClient.removeRequestHeader("Host");
         HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
-        HtmlElement footer = page.getElementById("footer");
+        HtmlElement footer = page.getHtmlElementById("footer");
         assertThat(footer, nullValue());
-        HtmlElement content = page.getElementById("content");
+        HtmlElement content = page.getHtmlElementById("content");
         assertThat(content, notNullValue());
         assertThat(content.getTextContent().trim(), containsString("main content"));
     }
@@ -90,9 +90,9 @@ public class Issue2511IT {
     public void testAnotherTemplate() throws Exception {
         webClient.addRequestHeader("Host", "host2");
         HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
-        HtmlElement host2content = page.getElementById("host2content");
+        HtmlElement host2content = page.getHtmlElementById("host2content");
         assertThat(host2content, notNullValue());
-        HtmlElement footer = page.getElementById("footer");
+        HtmlElement footer = page.getHtmlElementById("footer");
         assertThat(footer, notNullValue());
         assertThat(footer.getTextContent().trim(), is("footer info"));
     }
@@ -101,7 +101,7 @@ public class Issue2511IT {
     public void testFalsePositive() throws Exception {
         webClient.addRequestHeader("Host", "host3");
         HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
-        HtmlElement content = page.getElementById("content");
+        HtmlElement content = page.getHtmlElementById("content");
         assertThat(content, notNullValue());
         assertThat(content.getTextContent().trim(), is("false positive"));
     }
@@ -110,12 +110,12 @@ public class Issue2511IT {
     public void testInclude() throws Exception {
         webClient.removeRequestHeader("Host");
         HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
-        HtmlElement header = page.getElementById("header");
+        HtmlElement header = page.getHtmlElementById("header");
         assertThat(header, notNullValue());
         assertThat(header.getTextContent().trim(), is("header content"));
         webClient.addRequestHeader("Host", "host1");
         page = webClient.getPage(webUrl + "faces/index.xhtml");
-        header = page.getElementById("header");
+        header = page.getHtmlElementById("header");
         assertThat(header, nullValue());
     }
 
@@ -123,10 +123,10 @@ public class Issue2511IT {
     public void testExtension() throws Exception {
         webClient.addRequestHeader("Host", "host4");
         HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
-        HtmlElement content = page.getElementById("host2content");
+        HtmlElement content = page.getHtmlElementById("host2content");
         assertThat(content, notNullValue());
         assertThat(content.getTextContent().trim(), is("host4 content"));
-        HtmlElement footer = page.getElementById("footer");
+        HtmlElement footer = page.getHtmlElementById("footer");
         assertThat(footer, notNullValue());
         assertThat(footer.getTextContent().trim(), is(""));
     }
@@ -135,18 +135,18 @@ public class Issue2511IT {
     public void testCompositeComponent() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
 
-        HtmlElement template = page.getElementById("ccTemplate");
+        HtmlElement template = page.getHtmlElementById("ccTemplate");
         assertThat(template, notNullValue());
         assertThat(template.getTextContent().trim(), is("lib/2_3/template.xhtml"));
 
-        HtmlElement content = page.getElementById("ccContent");
+        HtmlElement content = page.getHtmlElementById("ccContent");
         assertThat(content, notNullValue());
         assertThat(content.getTextContent().trim(), containsString("lib/2_3/cc.xhtml"));
 
         webClient.addRequestHeader("Host", "host1");
         page = webClient.getPage(webUrl + "faces/index.xhtml");
 
-        content = page.getElementById("ccContent");
+        content = page.getHtmlElementById("ccContent");
         assertThat(content, notNullValue());
         assertThat(content.getTextContent().trim(), containsString("host1/lib/cc.xhtml"));
 
@@ -157,8 +157,8 @@ public class Issue2511IT {
         HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
         String titleText = page.getTitleText();
         assertThat(titleText, is(host));
-        DomNodeList<HtmlElement> linkElements = page.getElementsByTagName("link");
-        for (HtmlElement linkElement : linkElements) {
+        DomNodeList<DomElement> linkElements = page.getElementsByTagName("link");
+        for (DomElement linkElement : linkElements) {
             HtmlLink link = (HtmlLink) linkElement;
             if(contract == null) {
                 assertThat(link.getHrefAttribute(), not(containsString("con=")));
