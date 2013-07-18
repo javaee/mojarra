@@ -83,16 +83,16 @@ public class Issue2401IT {
     public void testResourceVersions() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/issue2565.xhtml");
                 
-        HtmlElement element = page.getElementById("trailingUnderscore");
+        HtmlElement element = page.getHtmlElementById("trailingUnderscore");
         assertEquals("SUCCESS", element.getTextContent());
 
-        element = page.getElementById("noUnderscore");
+        element = page.getHtmlElementById("noUnderscore");
         assertEquals("SUCCESS", element.getTextContent());
     
-        element = page.getElementById("leadingUnderscore");
+        element = page.getHtmlElementById("leadingUnderscore");
         assertEquals("SUCCESS", element.getTextContent());
 
-        element = page.getElementById("validVersion");
+        element = page.getHtmlElementById("validVersion");
         assertEquals("SUCCESS", element.getTextContent());
     }
 
