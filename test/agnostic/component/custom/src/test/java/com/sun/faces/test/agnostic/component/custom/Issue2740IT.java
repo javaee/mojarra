@@ -67,7 +67,7 @@ public class Issue2740IT {
     public void testIssue2544() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/rendererAnnotation.xhtml");
         assertTrue(page.asXml().indexOf("rendererAnnotation.js") != -1);
-        HtmlElement button = page.getElementById("form:submit");
+        HtmlElement button = page.getHtmlElementById("form:submit");
         page = button.click();
         assertTrue(page.asXml().indexOf("rendererAnnotation.js") != -1);
     }
