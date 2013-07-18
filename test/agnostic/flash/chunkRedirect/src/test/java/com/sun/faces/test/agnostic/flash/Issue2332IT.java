@@ -43,10 +43,10 @@ package com.sun.faces.test.agnostic.flash;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlLink;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.junit.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Integration tests for issue #2332
@@ -72,7 +72,7 @@ public class Issue2332IT {
     @Test
     public void testFlashChunkingLink1() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
-        HtmlElement link = page.getElementById("form:link1");
+        HtmlElement link = page.getHtmlElementById("form:link1");
         assertNotNull("Unable to find form:link1 element", link);
         page = link.click();
         webClient.waitForBackgroundJavaScript(60000);
@@ -82,7 +82,7 @@ public class Issue2332IT {
     @Test
     public void testFlashChunkingLink2() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
-        HtmlElement link = page.getElementById("form:link2");
+        HtmlElement link = page.getHtmlElementById("form:link2");
         assertNotNull("Unable to find form:link2 element", link);
         page = link.click();
         assertTrue(page.getBody().asText().indexOf("== Flash value LINK2 ==") != -1);
