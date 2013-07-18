@@ -71,7 +71,7 @@ public class Issue1706IT {
         String text = page.asText();
         text = text.substring(text.indexOf("Hash='") + "Hash='".length());
         text = text.substring(0, text.indexOf("'"));
-        HtmlElement button = page.getElementById("form:button");
+        HtmlElement button = page.getHtmlElementById("form:button");
         page = button.click();
         String text2 = page.asText();
         text2 = text2.substring(text2.indexOf("Hash='") + "Hash='".length());

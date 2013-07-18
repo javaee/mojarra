@@ -70,7 +70,7 @@ public class Issue2638IT {
         HtmlPage page = webClient.getPage(webUrl + "faces/invalidatedSession2.xhtml");
         assertTrue(page.asText().indexOf("Local Count: 0") != -1);
         assertTrue(page.asText().indexOf("Invalidated: false") != -1);
-        HtmlElement button = page.getElementById("form:button");
+        HtmlElement button = page.getHtmlElementById("form:button");
         page = button.click();
         assertTrue(page.asText().indexOf("Local Count: 0") != -1);
         assertTrue(page.asText().indexOf("Invalidated: true") != -1);

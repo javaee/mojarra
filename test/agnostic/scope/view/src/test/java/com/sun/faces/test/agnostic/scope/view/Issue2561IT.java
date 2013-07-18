@@ -81,7 +81,7 @@ public class Issue2561IT {
     public void testNavigate() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/navigate.xhtml");
         assertTrue(page.asText().indexOf("This is from the @PostConstruct") != -1);
-        HtmlElement anchor = page.getElementById("form:submit");
+        HtmlElement anchor = page.getHtmlElementById("form:submit");
         page = anchor.click();
         assertTrue(page.asText().indexOf("This is from the @PostConstruct") != -1);
     }
@@ -90,7 +90,7 @@ public class Issue2561IT {
     public void testNavigateAway() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/navigateAway.xhtml");
         assertTrue(page.asText().indexOf("This is from the @PostConstruct") != -1);
-        HtmlElement anchor = page.getElementById("form:submit");
+        HtmlElement anchor = page.getHtmlElementById("form:submit");
         page = anchor.click();
         assertTrue(page.asText().indexOf("true") != -1);
     }
