@@ -40,6 +40,7 @@
 package com.sun.faces.test.agnostic.lifeycle.clientWindow;
 
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
@@ -98,7 +99,7 @@ public class Spec949IT {
     
     public void doTestClientWindowsDifferent(String path, String id) throws Exception {
         HtmlPage page;
-        List<HtmlElement> clientWindowHiddenFields;
+        List<DomElement> clientWindowHiddenFields;
         HtmlElement link;
         String clientWindowBeforeClick, clientWindowAfterClick;
         
