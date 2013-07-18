@@ -39,14 +39,15 @@
  */
 package com.sun.faces.test.javaee6.resource.cachelastmod.wartest;
 
+import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.Page;
+import com.gargoylesoftware.htmlunit.WebClient;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.Page;
-import static org.junit.Assert.*;
 
 public class Issue2895IT {
 
@@ -64,7 +65,7 @@ public class Issue2895IT {
     @Before
     public void setUp() {
         webUrl = System.getProperty("integration.url");
-        webClient = new WebClient();
+        webClient = new WebClient(BrowserVersion.CHROME);
     }
 
     @After
