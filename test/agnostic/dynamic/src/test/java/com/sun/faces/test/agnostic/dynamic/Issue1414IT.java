@@ -48,13 +48,7 @@ import static org.junit.Assert.*;
 
 public class Issue1414IT {
 
-    /**
-     * Stores the web URL.
-     */
     private String webUrl;
-    /**
-     * Stores the web client.
-     */
     private WebClient webClient;
 
     @Before
@@ -71,34 +65,34 @@ public class Issue1414IT {
     @Test
     public void testIssue1414() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/issue1414.xhtml");
-        HtmlElement group = page.getElementById("form:movefrom");
+        HtmlElement group = page.getHtmlElementById("form:movefrom");
         assertTrue(group.getChildNodes().size() > 0);
-        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form:submit");
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("form:submit");
         page = button.click();
-        group = page.getElementById("form:movefrom");
+        group = page.getHtmlElementById("form:movefrom");
         assertTrue(group.getChildNodes().size() == 0);
-        group = page.getElementById("form:moveto");
+        group = page.getHtmlElementById("form:moveto");
+        assertTrue(group.getChildNodes().size() > 0);
+
+        button = (HtmlSubmitInput) page.getHtmlElementById("form:submit");
+        page = button.click();
+        group = page.getHtmlElementById("form:movefrom");
+        assertTrue(group.getChildNodes().size() > 0);
+        group = page.getHtmlElementById("form:moveto");
+        assertTrue(group.getChildNodes().size() == 0);
+
+        button = (HtmlSubmitInput) page.getElementById("form:submit");
+        page = button.click();
+        group = page.getHtmlElementById("form:movefrom");
+        assertTrue(group.getChildNodes().size() == 0);
+        group = page.getHtmlElementById("form:moveto");
         assertTrue(group.getChildNodes().size() > 0);
 
         button = (HtmlSubmitInput) page.getElementById("form:submit");
         page = button.click();
-        group = page.getElementById("form:movefrom");
+        group = page.getHtmlElementById("form:movefrom");
         assertTrue(group.getChildNodes().size() > 0);
-        group = page.getElementById("form:moveto");
-        assertTrue(group.getChildNodes().size() == 0);
-
-        button = (HtmlSubmitInput) page.getElementById("form:submit");
-        page = button.click();
-        group = page.getElementById("form:movefrom");
-        assertTrue(group.getChildNodes().size() == 0);
-        group = page.getElementById("form:moveto");
-        assertTrue(group.getChildNodes().size() > 0);
-
-        button = (HtmlSubmitInput) page.getElementById("form:submit");
-        page = button.click();
-        group = page.getElementById("form:movefrom");
-        assertTrue(group.getChildNodes().size() > 0);
-        group = page.getElementById("form:moveto");
+        group = page.getHtmlElementById("form:moveto");
         assertTrue(group.getChildNodes().size() == 0);
     }
 }
