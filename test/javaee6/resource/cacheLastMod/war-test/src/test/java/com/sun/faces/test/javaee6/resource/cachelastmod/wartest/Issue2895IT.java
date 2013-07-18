@@ -76,6 +76,10 @@ public class Issue2895IT {
     @Test
     public void testResourceNotModified() throws Exception {
         String cssUrl = webUrl + "faces/javax.faces.resource/styles.css";
+
+        webClient.getCache().clear();
+        webClient.addRequestHeader(("Cache-Control"), "max-age=0");
+        
         Page cssPage = webClient.getPage(cssUrl);
         assertEquals(200, cssPage.getWebResponse().getStatusCode());
         
@@ -84,9 +88,8 @@ public class Issue2895IT {
             ifModifiedSinceValue = cssPage.getWebResponse().getResponseHeaderValue("Date");
         }
 
-        webClient.getCache().clear();
         webClient.addRequestHeader("If-Modified-Since", ifModifiedSinceValue);
-        webClient.addRequestHeader(("Cache-Control"), "max-age=0");
+        
         cssPage = webClient.getPage(cssUrl);
         assertEquals(304, cssPage.getWebResponse().getStatusCode());
     }
