@@ -74,7 +74,7 @@ public class Issue2895IT {
 
     @Test
     public void testResourceNotModified() throws Exception {
-        String cssUrl = webUrl + "/faces/javax.faces.resource/styles.css";
+        String cssUrl = webUrl + "faces/javax.faces.resource/styles.css";
         Page cssPage = webClient.getPage(cssUrl);
         assertEquals(200, cssPage.getWebResponse().getStatusCode());
         
