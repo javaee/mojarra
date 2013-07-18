@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.flash.manyPages;
+package com.sun.faces.test.cluster.servlet25.flash.manyPages;
 
 public class CustomerBean {
     

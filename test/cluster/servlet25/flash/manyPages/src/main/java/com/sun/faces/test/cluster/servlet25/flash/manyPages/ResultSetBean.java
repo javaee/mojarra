@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.test.agnostic.flash.manyPages;
+package com.sun.faces.test.cluster.servlet25.flash.manyPages;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIData;
