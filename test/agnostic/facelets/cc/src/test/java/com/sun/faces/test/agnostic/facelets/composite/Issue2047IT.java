@@ -68,7 +68,7 @@ public class Issue2047IT {
     public void testNoELEvaluation() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/attributeType.xhtml");
         assertEquals(200, page.getWebResponse().getStatusCode());
-        HtmlElement button = page.getElementById("form:submit");
+        HtmlElement button = page.getHtmlElementById("form:submit");
         page = button.click();
         assertEquals(200, page.getWebResponse().getStatusCode());
     }
