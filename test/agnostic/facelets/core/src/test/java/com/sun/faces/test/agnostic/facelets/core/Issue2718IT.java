@@ -72,7 +72,7 @@ public class Issue2718IT {
     public void testDefaultStateless() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/viewParam4.xhtml");
         
-        HtmlElement link = page.getElementById("link");
+        HtmlElement link = page.getHtmlElementById("link");
         page = link.click();
         
         int firstIndex = page.asXml().indexOf("input1=1&amp;input2=2");
@@ -81,7 +81,7 @@ public class Issue2718IT {
         assertTrue(lastIndex != -1);
         assertTrue(firstIndex < lastIndex);
         
-        HtmlElement button = page.getElementById("firstButton");
+        HtmlElement button = page.getHtmlElementById("firstButton");
         page = button.click();
         
         firstIndex = page.asXml().indexOf("input1=1&amp;input2=2");
