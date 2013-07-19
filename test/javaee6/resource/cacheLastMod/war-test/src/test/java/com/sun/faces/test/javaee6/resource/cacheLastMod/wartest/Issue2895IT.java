@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.resource.cache.wartest;
+package com.sun.faces.test.javaee6.resource.cacheLastMod.wartest;
 
 import com.gargoylesoftware.htmlunit.CookieManager;
 import org.junit.After;
