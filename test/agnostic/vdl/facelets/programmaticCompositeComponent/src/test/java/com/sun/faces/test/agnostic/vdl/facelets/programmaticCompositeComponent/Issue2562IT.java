@@ -1,30 +1,30 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- * 
+ *
  * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
- * 
+ *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
  * may not use this file except in compliance with the License.  You can
  * obtain a copy of the License at
- * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+ * https://glassfish.dev.java.net/public/CDDLGPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- * 
+ *
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at packager/legal/LICENSE.txt.
- * 
+ *
  * GPL Classpath Exception:
  * Oracle designates this particular file as subject to the "Classpath"
  * exception as provided by Oracle in the GPL Version 2 section of the License
  * file that accompanied this code.
- * 
+ *
  * Modifications:
  * If applicable, add the following below the License Header, with the fields
  * enclosed by brackets [] replaced by your own identifying information:
  * "Portions Copyright [year] [name of copyright owner]"
- * 
+ *
  * Contributor(s):
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
@@ -36,40 +36,52 @@
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
  * holder.
-
  */
-package com.sun.faces.test.webprofile.renderKit.programmaticCompositeComponent;
 
-import java.util.HashMap;
-import java.util.Map;
-import javax.faces.application.Application;
-import javax.faces.application.ViewHandler;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-import javax.faces.context.FacesContext;
-import javax.faces.component.UIComponent;
-import javax.faces.view.ViewDeclarationLanguage;
+package com.sun.faces.test.agnostic.vdl.facelets.programmaticCompositeComponent; 
 
-@ManagedBean
-@RequestScoped
-public class RequestBean {
-    
-    public String getTest() {
-        
-        Map<String, Object> attrs=new HashMap<String, Object>();
-        attrs.put("pi", new Float(3.14));
-        attrs.put("pagecontent", "" + System.currentTimeMillis());
-        FacesContext fc = FacesContext.getCurrentInstance();
-        
-        FacesContext context = FacesContext.getCurrentInstance();
-        Application application = context.getApplication();
-        ViewHandler vh = application.getViewHandler();
-        ViewDeclarationLanguage vdl = vh.getViewDeclarationLanguage(context, context.getViewRoot().getViewId());
-        
-        UIComponent c = vdl.createComponent(FacesContext.getCurrentInstance(), 
-                "http://java.sun.com/jsf/composite/" + "ezcomp", "ezcomp", attrs);
-        
-        return null == c ? "FAILURE" : "SUCCESS";
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+
+
+public class Issue2562IT {
+
+    /**
+     * Stores the web URL.
+     */
+    private String webUrl;
+    /**
+     * Stores the web client.
+     */
+    private WebClient webClient;
+
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
-    
+
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
+    }
+
+
+    // ------------------------------------------------------------ Test Methods
+
+    @Test
+    public void testFileUpload() throws Exception {
+
+        webClient = new WebClient();
+        HtmlPage page = webClient.getPage(webUrl+"faces/issue2562.xhtml");
+        HtmlElement element = page.getHtmlElementById("result");
+        assertEquals("SUCCESS", element.getTextContent());
+        
+    }
+
 }
