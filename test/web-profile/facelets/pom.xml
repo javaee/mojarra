@@ -52,7 +52,7 @@
     <groupId>com.sun.faces.test.webprofile.facelets</groupId>
     <artifactId>pom</artifactId>
     <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Web-Profile - Facelets - POM</name>
+    <name>Mojarra ${project.version} - Test - Web-Profile - Facelets</name>
     <modules>
         <module>core</module>
     </modules>
