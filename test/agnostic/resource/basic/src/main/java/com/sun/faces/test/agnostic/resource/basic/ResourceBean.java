@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.test.agnostic.resource;
+package com.sun.faces.test.agnostic.resource.basic;
 
 import java.io.IOException;
 import java.io.InputStream;

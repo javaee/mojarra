@@ -8,7 +8,7 @@
  * and Distribution License("CDDL") (collectively, the "License").  You
  * may not use this file except in compliance with the License.  You can
  * obtain a copy of the License at
- * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+ * https://glassfish.dev.java.net/public/CDDLGPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
  *
@@ -38,22 +38,50 @@
  * holder.
  */
 
-package com.sun.faces.test.agnostic.resource;
+package com.sun.faces.test.agnostic.resource.basic; 
 
-import javax.faces.application.ResourceDependencies;
-import javax.faces.component.FacesComponent;
-import javax.faces.component.UIComponentBase;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
-@FacesComponent("com.sun.faces.test.agnostic.resource.ResourceComponent")
-@ResourceDependencies({@javax.faces.application.ResourceDependency(library="js", name="foo.js", target="body")})
-public class ResourceComponent extends UIComponentBase {
+import org.junit.*;
+import static org.junit.Assert.*;
 
-    //
-    // Public methods
-    //
+public class Issue2889IT {
 
-    @Override
-    public String getFamily() {
-        return "com.sun.faces.test.agnostic.resource";
+    /**
+     * Stores the web URL.
+     */
+    private String webUrl;
+    /**
+     * Stores the web client.
+     */
+    private WebClient webClient;
+
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
+
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
+    }
+
+
+    // ------------------------------------------------------------ Test Methods
+
+    // Assert that a resource that is loaded via a component ResourceDepencies annotation
+    // is still there after postback.
+    @Test
+    public void testComponentResourceDependency() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl+"faces/issue2889.xhtml");
+        assertTrue(page.asXml().contains("foo.js"));
+        HtmlAnchor anchor = (HtmlAnchor)page.getElementById("form:link");
+        page = anchor.click();
+        assertTrue(page.asXml().contains("foo.js"));
+    }
+    
 }
