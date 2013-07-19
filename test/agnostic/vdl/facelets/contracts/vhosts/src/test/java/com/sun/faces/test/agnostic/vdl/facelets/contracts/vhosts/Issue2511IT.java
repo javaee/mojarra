@@ -79,9 +79,9 @@ public class Issue2511IT {
     public void testDefaultTemplate() throws Exception {
         webClient.removeRequestHeader("Host");
         HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
-        HtmlElement footer = page.getHtmlElementById("footer");
+        DomElement footer = page.getElementById("footer");
         assertThat(footer, nullValue());
-        HtmlElement content = page.getHtmlElementById("content");
+        DomElement content = page.getElementById("content");
         assertThat(content, notNullValue());
         assertThat(content.getTextContent().trim(), containsString("main content"));
     }
@@ -110,12 +110,12 @@ public class Issue2511IT {
     public void testInclude() throws Exception {
         webClient.removeRequestHeader("Host");
         HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
-        HtmlElement header = page.getHtmlElementById("header");
+        DomElement header = page.getElementById("header");
         assertThat(header, notNullValue());
         assertThat(header.getTextContent().trim(), is("header content"));
         webClient.addRequestHeader("Host", "host1");
         page = webClient.getPage(webUrl + "faces/index.xhtml");
-        header = page.getHtmlElementById("header");
+        header = page.getElementById("header");
         assertThat(header, nullValue());
     }
 
