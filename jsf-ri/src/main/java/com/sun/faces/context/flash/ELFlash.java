@@ -988,7 +988,7 @@ public class ELFlash extends Flash {
                 if (null != (val = toSet.getMaxAge())) {
                     properties.put("maxAge", val);
                 }
-                if (((ServletRequest)context.getExternalContext().getRequest()).isSecure()) {
+                if (context.getExternalContext().isSecure()) {
                     properties.put("secure", Boolean.TRUE);
                 } else if (null != (val = toSet.getSecure())) {
                     properties.put("secure", val);
