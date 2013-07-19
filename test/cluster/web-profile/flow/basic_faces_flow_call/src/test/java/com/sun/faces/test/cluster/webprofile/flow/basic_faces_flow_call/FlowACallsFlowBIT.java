@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.webprofile.flow.basic_faces_flow_call;
+package com.sun.faces.test.cluster.webprofile.flow.basic_faces_flow_call;
 
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import org.junit.After;

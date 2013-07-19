@@ -54,7 +54,7 @@
     <packaging>war</packaging>
     <name>Mojarra ${project.version} - Test - Cluster - Web-Profile - Flow - Basic flow-call test</name>
     <build>
-        <finalName>test-webprofile-cluster-flow-basic_faces_flow_call</finalName>
+        <finalName>test-cluster-webprofile-flow-basic_faces_flow_call</finalName>
     </build>
     <properties>
         <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
