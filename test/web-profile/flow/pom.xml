@@ -12,22 +12,22 @@
     <packaging>pom</packaging>
     <name>Mojarra ${project.version} - Test - Web-Profile - Flow</name>
     <modules>
-        <module>basic-implicit</module>
-        <module>defining_document_id</module>
+        <module>basic-empty-flow-def</module>
         <module>basic_faces_flow_call</module>
+        <module>basic-implicit</module>
+        <module>basic_implicit_in_jar</module>
+        <module>basic_implicit_template</module>
         <module>basic-multi-page</module>
         <module>basic_method_call</module>
-        <module>basic_switch</module>
         <module>basic-multi-page-fdl-in-web-inf</module>
+        <module>basic_switch</module>
+        <module>defining_document_id</module>
         <module>factory</module>
         <module>intermediate</module>
         <module>multi-page-from-jar</module>
         <module>nested_flows</module>
-        <module>view_node_differences</module>
-        <module>basic-empty-flow-def</module>
         <module>parameter_faces_flow_call</module>
-        <module>basic_implicit_in_jar</module>
-        <module>basic_implicit_template</module>
         <module>return_from_depth</module>
+        <module>view_node_differences</module>
     </modules>
 </project>
