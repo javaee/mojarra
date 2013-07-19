@@ -107,7 +107,7 @@
     <!-- Version -->
     <property name="spec.version" value="2.1"/>
     <property name="spec.snapshot.version" value="2.1-SNAPSHOT"/>
-    <property name="patch.version" value="7-01"/>
+    <property name="patch.version" value="7-02"/>
     <property name="impl.name" value="Mojarra"/>
     <property name="build.number" value="${DSTAMP}"/>
     <property name="build.type" value="SNAPSHOT"/>
