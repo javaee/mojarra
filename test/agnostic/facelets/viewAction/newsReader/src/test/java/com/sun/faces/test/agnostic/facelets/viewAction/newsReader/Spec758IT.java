@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.regression.i_spec_758;
+package com.sun.faces.test.agnostic.facelets.viewAction.newsReader;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import java.util.ArrayList;
@@ -57,7 +57,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Test cases for Facelets functionality
  */
-public class ViewParametersIT {
+public class Spec758IT {
 
 
     /**

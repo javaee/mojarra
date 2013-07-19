@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.regression.i_spec_758;
+package com.sun.faces.test.agnostic.facelets.viewAction.newsReader;
 
 import java.util.Map;
 import java.util.TreeMap;
