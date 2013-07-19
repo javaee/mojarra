@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.test.adf.basic;
+package com.sun.faces.test.webprofile.adf.basic;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 
