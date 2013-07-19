@@ -51,7 +51,7 @@
     <packaging>pom</packaging>
     <name>Mojarra ${project.version} - Test - Agnostic - Facelets - ViewAction</name>
     <modules>
-      <module>simple</module>
-      <module>newsReader</module>
+        <module>simple</module>
+        <module>newsReader</module>
     </modules>
 </project>
