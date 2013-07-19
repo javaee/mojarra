@@ -12,7 +12,7 @@
     <groupId>com.sun.faces.test.agnostic.vdl.facelets.only_faces_config_in_jar</groupId>
     <artifactId>only_faces_config_in_jar_jar</artifactId>
     <packaging>jar</packaging>
-    <name>Mojarra ${project.version} - Test - agnostic - vdl - facelets only_faces_config_in_jar, the actual jar</name>
+    <name>Mojarra ${project.version} - Test - Agnostic - VDL - facelets only_faces_config_in_jar, the actual jar</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
