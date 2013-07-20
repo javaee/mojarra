@@ -1,4 +1,3 @@
-<?xml version='1.0' encoding='UTF-8'?>
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -41,23 +40,23 @@
 
 -->
 
-<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
-    version="2.0">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<f:view contentType="text/html"/>
+<h:head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+    <title>issue1948</title>
+</h:head>
 
-  <application>
-    <locale-config>
-        <default-locale>en_US</default-locale>
-        <supported-locale>ps_PS</supported-locale>
-        <supported-locale>fr_FR</supported-locale>
-        <supported-locale>de_DE</supported-locale>
-        <supported-locale>en</supported-locale>
-        <supported-locale>zh-Hans-CN</supported-locale>
-    </locale-config>
-    <resource-bundle>
-        <base-name>com.sun.faces.test.agnostic.application.localeConfig.localized</base-name>
-        <var>msgs</var>
-    </resource-bundle>
-  </application>
-</faces-config>
+<body>
+    <f:view>
+    <h:form>
+        <h:outputText value="#{msgs.value}" />
+    </h:form>
+    </f:view>
+</body>
+</html>

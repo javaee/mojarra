@@ -40,12 +40,9 @@
 
 package com.sun.faces.test.agnostic.application.localeConfig;
 
+import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
-import javax.faces.FacesException;
-import javax.faces.el.MethodNotFoundException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -69,6 +66,8 @@ public class LocaleConfigIT {
     public void setUp() {
         webUrl = System.getProperty("integration.url");
         webClient = new WebClient();
+        webClient = new WebClient(BrowserVersion.CHROME);
+
     }
 
     /**
@@ -83,4 +82,18 @@ public class LocaleConfigIT {
     public void testLocaleConfigPositive() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/localeConfigPositive.xhtml");
     }
+    
+
+    @Test
+    public void testBCP47Support() throws Exception {
+
+        webClient.getCache().clear();
+        webClient.addRequestHeader("Accept-Language", "zh-Hans-CN");
+        
+        HtmlPage page = webClient.getPage(webUrl + "/faces/issue14676641.xhtml");
+        assertEquals(200, page.getWebResponse().getStatusCode());
+        assertTrue(page.asText().contains("chinese"));
+        
+    }
+    
 }

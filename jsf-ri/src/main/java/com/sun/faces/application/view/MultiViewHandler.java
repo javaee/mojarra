@@ -40,6 +40,7 @@
 
 package com.sun.faces.application.view;
 
+import com.sun.faces.util.LocaleBCP47;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -71,6 +72,7 @@ public class MultiViewHandler extends ViewHandler {
 
     // Log instance for this class
     private static final Logger logger = FacesLogger.APPLICATION.getLogger();
+    private static final String DELIMITER = "\\ufffe";
 
     private String[] configuredExtensions;
     private boolean extensionsSet;
@@ -92,6 +94,11 @@ public class MultiViewHandler extends ViewHandler {
 
     }
 
+    MultiViewHandler(boolean throwException) {
+        if (throwException) {
+            throw new IllegalStateException();
+        }
+    }
 
     // ------------------------------------------------ Methods from ViewHandler
 
@@ -173,6 +180,34 @@ public class MultiViewHandler extends ViewHandler {
 
         Util.notNull("context", context);
 
+        Locale result = calculateLocaleWithLanguageTag(context);
+        if (null == result) {
+            result = calculateLocaleWithoutLanguageTag(context);
+        }
+        
+        return result;
+    }
+    
+    private Locale calculateLocaleWithLanguageTag(FacesContext context) {
+        Locale result = null;
+        Iterator<Locale> supportedLocales = context.getApplication().getSupportedLocales();
+        
+        // This is necessary because in Java SE 6, ServletRequest.getLocales() 
+        // doesn't support values that have a script sub-tag.
+        String requestLocale = context.getExternalContext().getRequestHeaderMap().get("ACCEPT-LANGUAGE");
+        if (null == requestLocale) {
+            requestLocale = context.getExternalContext().getRequestHeaderMap().get("Accept-Language");
+        }
+        if (null != requestLocale) {
+            result = findMatchWithLanguageTag(requestLocale, supportedLocales);  
+        }
+    
+        return result;
+    }
+    
+    
+    private Locale calculateLocaleWithoutLanguageTag(FacesContext context) {
+        
         Locale result = null;
         // determine the locales that are acceptable to the client based on the
         // Accept-Language header and the find the best match among the
@@ -646,8 +681,139 @@ public class MultiViewHandler extends ViewHandler {
         return result;
 
     }
+    
+    // This static method looks up the locale from the Java 6 Locale
+    // collecton (where script is not supported) to match the
+    // prioritized list of BCP 47 compliant normal language tags.  Note:
+    // privateuse and grandfathered language tags are not supported
+    // Working down the priority list, it will try to return a locale
+    // from the collection which has the same language and region as the
+    // language tag on the list.  If nothing is found, it will try to
+    // find a locale from the collection which has the same language as
+    // the language tag but has no region/country info.
+    // It returns null if it can not find any locale to match the list.
 
-
+    //Exceptions:
+    //1. Locale("zh", "CN") will be returned for the language tag "zh-Hans" 
+    //2. Locale("zh", "TW") will be returned for the language tag "zh-Hant" 
+    //3. language "nn" and "nb" will fall back to "no"
+    //Examples:
+    //Locale Collection: {Locale("zh","TW"), Locale("en", "US"), Locale("de"), Locale("no", "NO")
+    //1. priorityList = "de-DE; en-US", return Locale("de")
+    //2. priorityList = "zh-Hant, en-US", return Locale("zh", "TW")
+    //3. prorityList = "nb-NO, en", return Locale("no", "NO")
+    private Locale findMatchWithLanguageTag(String priorityList,
+                                  Iterator<Locale> locales) {
+        List<Locale> locs = new ArrayList<Locale>();
+        while (locales.hasNext()) {
+            locs.add(locales.next());
+        }
+        
+        if (priorityList.isEmpty() || locs == null)
+            return null;
+        
+        return findMatchWithLanguageTag(parseAcceptedLang(priorityList), locs);
+    }
+    
+    private Locale findMatchWithLanguageTag(List<String> priorityList,
+                                   Collection<Locale> locales) {
+        if (priorityList.isEmpty()) {
+            return null;
+        }
+        
+        //Convert the collection to a string containing all locale
+        String localesStr = "";
+        Iterator<Locale> it = locales.iterator();
+        while (it.hasNext()) {
+            Locale locale = it.next();
+            if (locale.getLanguage().isEmpty())
+                continue;
+            localesStr += locale.getLanguage();
+            if (!locale.getCountry().isEmpty())
+                localesStr += LocaleBCP47.SEP + locale.getCountry();
+            localesStr += DELIMITER;
+        }
+        
+        for (String langtag : priorityList) {
+            
+            //lookup the collection
+            Locale locale = lookupTag(langtag, localesStr);
+            if (locale != null)
+                return locale;
+        }
+        return null;
+    }
+    
+    
+    
+    //Look up the locale of langtag from the locales in localesStr
+    //Fallback of nn/nb to no
+    //Example:
+    //localesStr = "en-us<DELIMITER>de<DELIMITER> fr<DELIMITER> zh-Hant<DELIMITER>en<DELIMITER>no-NO"
+    //1. langtag="en-us", return "en-us"
+    //2. langtag="de-DE", return "de"
+    //3. langtag="nb-NO", return "no-NO"
+    private  Locale lookupTag(String langtag, String localesStr) {
+        
+        //Convert the language tag to a LocaleBCP47 object
+        LocaleBCP47 tag = LocaleBCP47.parse(langtag);
+        if (tag == null) {
+            return null;
+        }
+        
+        String language = tag.getLanguage();
+        
+        //1. Both language and region(country) match
+        if (localesStr.indexOf(tag.toLangtag() + DELIMITER) != -1)
+            return new Locale(tag.getLanguage(), tag.getRegion());
+        
+        //2. Check only language
+        if (localesStr.indexOf(language + DELIMITER) != -1)
+            return new Locale(language);
+        
+        //3. Handle fallback for Norwegian
+        if (language.matches("n[nb]")) {
+            if (localesStr.indexOf(tag.toLangtag("no") + DELIMITER) != -1) {
+                return new Locale("no", tag.getRegion());
+            }
+            if (localesStr.indexOf("no" + DELIMITER) != -1) {
+                return new Locale("no");
+            }
+        }
+        return null;
+    }
+    
+    
+    //Return a list of proritized languages
+    //Example: 
+    //acceptedLang = "zh-Hant;q=0.7,en-us,fr;q=0.8,en;q=0.6,de"
+    //return {en-us, de, fr, zh-Hant,en}
+    private List<String> parseAcceptedLang(String acceptedLang) {
+        List<Float> qvalues = new ArrayList<Float>();
+        List<String> pList = new ArrayList<String>();
+        
+        String[] strArray = acceptedLang.split(",");
+        for (String str : strArray) {
+            if (str.isEmpty()) {
+                continue;
+            }
+            String[] keyValue = str.split(";");
+            Float qval = 1.0f; //default value
+            if (keyValue.length > 1) {
+                qval = Float.parseFloat(keyValue[1].substring(2));
+            }
+            int index;
+            for (index = 0; index < qvalues.size(); index++) {
+                if (qval > qvalues.get(index))
+                    break;
+            }
+            pList.add(index, keyValue[0]);
+            qvalues.add(index, qval);
+        }
+        
+        return pList;
+    }
+    
     /**
      * <p>
      * Send {@link HttpServletResponse#SC_NOT_FOUND} (404) to the client.
