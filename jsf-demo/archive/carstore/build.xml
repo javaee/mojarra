@@ -125,6 +125,10 @@
                  windowtitle="${example}"
                  doctitle="${example}"
                  bottom="Copyright &#169; 2004 Sun Microsystems, Inc. All Rights Reserved.">
+           <link offline="true"
+                 href="http://java.sun.com/javase/6/docs/api/package-list"
+                 packagelistloc="${jsf.build.home}/common/ant/package-list" />
+                 
             <fileset dir="build/javadoc-src">
                 <include name="**/*.java"/>
             </fileset>
