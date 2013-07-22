@@ -709,8 +709,9 @@ public class MultiViewHandler extends ViewHandler {
             locs.add(locales.next());
         }
         
-        if (priorityList.isEmpty() || locs == null)
+        if (priorityList.isEmpty() || locs.isEmpty()) {
             return null;
+        }
         
         return findMatchWithLanguageTag(parseAcceptedLang(priorityList), locs);
     }
@@ -722,17 +723,20 @@ public class MultiViewHandler extends ViewHandler {
         }
         
         //Convert the collection to a string containing all locale
-        String localesStr = "";
+        StringBuffer localesBuf = new StringBuffer();
         Iterator<Locale> it = locales.iterator();
         while (it.hasNext()) {
             Locale locale = it.next();
-            if (locale.getLanguage().isEmpty())
+            if (locale.getLanguage().isEmpty()) {
                 continue;
-            localesStr += locale.getLanguage();
-            if (!locale.getCountry().isEmpty())
-                localesStr += LocaleBCP47.SEP + locale.getCountry();
-            localesStr += DELIMITER;
+            }
+            localesBuf.append(locale.getLanguage());
+            if (!locale.getCountry().isEmpty()) {
+                localesBuf.append(LocaleBCP47.SEP + locale.getCountry());
+            }
+            localesBuf.append(DELIMITER);
         }
+        String localesStr = localesBuf.toString();
         
         for (String langtag : priorityList) {
             

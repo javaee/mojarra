@@ -483,7 +483,7 @@ public class Util {
                     IllegalArgumentException("Illegal locale String: " +
                                              localeStr);
             }
-            lang = localeStr.toLowerCase();
+            lang = localeStr.toLowerCase(Locale.ENGLISH);
         }
 
         // we have a separator, it must be either '-' or '_'

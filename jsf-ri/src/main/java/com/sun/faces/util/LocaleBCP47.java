@@ -133,9 +133,11 @@ public class LocaleBCP47 {
     }
 
     //Getter method for script subtag field
+    /**** avoid findbugs
     private String getScript() {
         return script;
     }
+     * **/
 
     //Getter method for region subtag field
     public String getRegion() {
