@@ -45,6 +45,9 @@ import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.facelets.tag.ui.UIDebug;
 import com.sun.faces.util.ByteArrayGuardAESCTR;
 import com.sun.faces.util.FacesLogger;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -1206,7 +1209,13 @@ public class ELFlash extends Flash {
 
         void decode(FacesContext context, ELFlash flash, Cookie cookie) {
             String temp;
-            String value = guard.decrypt(cookie.getValue());
+            String value;
+            
+            try {
+                value = guard.decrypt(URLDecoder.decode(cookie.getValue(), "UTF-8"));
+            } catch (UnsupportedEncodingException uee) {
+                value = guard.decrypt(cookie.getValue());
+            }
             
             try {
                 int i = value.indexOf("_");
@@ -1281,9 +1290,12 @@ public class ELFlash extends Flash {
             String value = ((null != previousRequestFlashInfo) ? previousRequestFlashInfo.encode() : "")  + "_" +
                            ((null != nextRequestFlashInfo) ? nextRequestFlashInfo.encode() : "");
             String encryptedValue = guard.encrypt(value);
-            result = new Cookie(FLASH_COOKIE_NAME, encryptedValue);
-            
-
+            try {
+                result = new Cookie(FLASH_COOKIE_NAME, URLEncoder.encode(encryptedValue, "UTF-8"));
+            } catch (UnsupportedEncodingException uee) {
+                result = new Cookie(FLASH_COOKIE_NAME, encryptedValue);
+            }
+                
             if (1 == value.length()) {
                 result.setMaxAge(0);
             }            
