@@ -112,8 +112,6 @@ import java.util.LinkedHashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.concurrent.ConcurrentHashMap;
-import javax.el.ELContext;
-import javax.el.ValueExpression;
 import javax.enterprise.inject.spi.Producer;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
