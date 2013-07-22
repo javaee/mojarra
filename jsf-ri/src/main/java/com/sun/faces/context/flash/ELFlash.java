@@ -69,7 +69,6 @@ import javax.faces.event.PostKeepFlashValueEvent;
 import javax.faces.event.PostPutFlashValueEvent;
 import javax.faces.event.PreClearFlashEvent;
 import javax.faces.event.PreRemoveFlashValueEvent;
-import javax.servlet.ServletRequest;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
