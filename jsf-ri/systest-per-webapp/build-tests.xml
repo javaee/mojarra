@@ -64,8 +64,6 @@
               value="com/sun/faces/systest/clientside/AjaxMultiformTestCase.class"/>
     <property name="document-ordering"
               value="com/sun/faces/systest/DocumentOrderingTestCase.class"/>
-    <property name="empty-string-as-null"
-              value="com/sun/faces/systest/EmptyStringAsNullTestCase.class"/>
     <property name="resource-locale-prefix"
               value="com/sun/faces/systest/ResourceLocalePrefixTestCase.class"/>
     <property name="replace-application"

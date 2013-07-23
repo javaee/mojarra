@@ -93,7 +93,6 @@
                    clientside-statesaving,
                    absolute-ordering,
                    document-ordering,
-                   empty-string-as-null,
                    resource-locale-prefix,
                    nested-loadbundles,
                    replace-application,
@@ -133,7 +132,6 @@
              value="
                    annotation-restrictions,
                    clientside-statesaving,
-                   empty-string-as-null,
                    resource-locale-prefix,
                    nested-loadbundles,
                    replace-application,
