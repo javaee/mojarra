@@ -726,7 +726,7 @@ public class UIRepeat extends UINamingContainer {
                                                        begin,
                                                        end,
                                                        step));
-        while (i <= e && this.isIndexAvailable()) {
+        while (i < e && this.isIndexAvailable()) {
 
             this.setIndex(faces, i);
             this.updateIterationStatus(faces,
