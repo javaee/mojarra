@@ -365,7 +365,12 @@ public class ResourceImpl extends Resource implements Externalizable {
 
         if (requestHeaders.containsKey(IF_MODIFIED_SINCE)) {
             initResourceInfo();
-            long lastModifiedOfResource = ((ClientResourceInfo)resourceInfo).getLastModified(context);
+            /*
+             * Make sure that we strip the milliseconds out of what comes back
+             * from the getLastModified call for a resource as the 
+             * 'If-Modified-Since' header does not use milliseconds.
+             */
+            long lastModifiedOfResource = (((ClientResourceInfo)resourceInfo).getLastModified(context) / 1000) * 1000;
             long lastModifiedHeader = getIfModifiedHeader(context.getExternalContext());
             if (0 == lastModifiedOfResource) {
                 long startupTime = ApplicationAssociate.getInstance(context.getExternalContext()).getTimeOfInstantiation();

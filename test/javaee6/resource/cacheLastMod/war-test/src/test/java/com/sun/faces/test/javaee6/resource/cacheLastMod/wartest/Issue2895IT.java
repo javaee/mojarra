@@ -39,19 +39,13 @@
  */
 package com.sun.faces.test.javaee6.resource.cacheLastMod.wartest;
 
-import com.gargoylesoftware.htmlunit.CookieManager;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.Page;
-import com.gargoylesoftware.htmlunit.WebRequest;
-import com.gargoylesoftware.htmlunit.util.NameValuePair;
-import java.net.URL;
-import java.util.List;
 import static org.junit.Assert.*;
 
 public class Issue2895IT {
