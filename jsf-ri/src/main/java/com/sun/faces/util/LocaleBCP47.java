@@ -42,7 +42,10 @@ package com.sun.faces.util;
 
 import java.util.Locale;
 
-//This class LocaleBVP47 represents a language tag object based on the syntax of BCP47
+/* 
+ * This class LocaleBVP47 represents a language tag object based on the syntax of BCP47
+ * 
+ */
 public class LocaleBCP47 {
     //Language subtag fields
     private String language = ""; //language subtag
@@ -85,7 +88,10 @@ public class LocaleBCP47 {
         return langtag;
     }
 
-    //Return a language tag string in form of "language-region"
+    /*
+     * Return a language tag string in form of "language-region"
+     * 
+     */
     public String toLangtag() {
         return toLangtag(language);
     }
@@ -97,23 +103,23 @@ public class LocaleBCP47 {
         return lang + SEP + region;
     }
 
-    //Setter method for language subtag field
     private void setLanguage(String language) {
         String lang = language.toLowerCase(Locale.US);
         this.language = lang;
     }
 
-    //Setter method for script subtag field
     private void setScript(String script) {
         this.script = script.substring(0, 1).toUpperCase(Locale.US) + script.substring(1).toLowerCase(Locale.US);
     }
 
-    //Setter method for region subtag field
     private void setRegion(String region) {
         this.region = region.toUpperCase(Locale.US);
     }
 
-    //To handle zh-Hant and zh-Hans where there is no region subtag,  region attribute is injected
+    /*
+     * To handle zh-Hant and zh-Hans where there is no region subtag,  region attribute is injected
+     * 
+     */
     private void addRegion() {
         //To handle zh-Hant and zh-Hans
         if (language.equals("zh") && region.isEmpty()) {
@@ -127,7 +133,6 @@ public class LocaleBCP47 {
         }
     }
 
-    //Getter method for language subtag field
     public String getLanguage() {
         return language;
     }
@@ -139,12 +144,14 @@ public class LocaleBCP47 {
     }
      * **/
 
-    //Getter method for region subtag field
     public String getRegion() {
         return region;
     }
 
-    //Language subtag syntax checking methods
+    /*
+     * Language subtag syntax checking methods
+     * 
+     */
     private static boolean isLanguage(String s) {
         // language = 2*3ALPHA                        ; shortest ISO 649 code
         //                       ["-" extlang]                       ; sometimes followed by
@@ -154,27 +161,39 @@ public class LocaleBCP47 {
         return (s.length() >= 2) && (s.length() <= 8) && isAlphaString(s);
     }
 
-    //Verify if the input string is a extended language subtag according to BCP47 definition
+    /*
+     * Verify if the input string is a extended language subtag according to BCP47 definition
+     * 
+     */
     private static boolean isExtlang(String s) {
         //extlang = 3ALPHA                                  ;selected ISO 639 codes
         //                 *2("-" 3ALPHA)                       ;permeanently reserved
         return s.length() == 3 && isAlphaString(s);
     }
 
-    //Verify if the input string is a script subtag according to BCP47 definition
+    /*
+     * Verify if the input string is a script subtag according to BCP47 definition
+     * 
+     */
     private static boolean isScript(String s) {
         //script = 4ALPHA                                      ; ISO 15924 code
         return (s.length() == 4) && isAlphaString(s);
     }
 
-    //Verify if the input string is a region subtag according to BCP47 definition
+    /*
+     * Verify if the input string is a region subtag according to BCP47 definition
+     * 
+     */
     private static boolean isRegion(String s) {
         //region = 2ALPHA                                     ; ISO 3166-1 code
         //             / 3DIGIT                                         ; UN M.49 code
         return ((s.length() == 2) && isAlphaString(s)) || ((s.length() == 3) && isNumericString(s));
     }
 
-    //Verify if the input string is composed of alphabets only
+    /*
+     * Verify if the input string is composed of alphabets only
+     * 
+     */
     private static boolean isAlphaString(String s) {
         int len = s.length();
         for (int i = 0; i < len; i++) {
@@ -185,7 +204,10 @@ public class LocaleBCP47 {
         return true;
     }
 
-    //Verify if the input char is an alphabet
+    /* 
+     * Verify if the input char is an alphabet
+     * 
+     */
     private static boolean isAlpha(char c) {
         return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
     }
@@ -200,11 +222,18 @@ public class LocaleBCP47 {
         return true;
     }
 
-    //Verify if the input string is numeric
+    /* 
+     * Verify if the input string is numeric
+     * 
+     */
     private static boolean isNumeric(char c) {
         return c >= '0' && c <= '9';
     }
-    //Static fields
+
+    /* 
+     * Static fields
+     * 
+     */
     public static final String SEP = "-";
     
 }
