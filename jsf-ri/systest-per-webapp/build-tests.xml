@@ -63,8 +63,6 @@
               value="com/sun/faces/systest/clientside/AjaxMultiformTestCase.class"/>
     <property name="document-ordering"
               value="com/sun/faces/systest/DocumentOrderingTestCase.class"/>
-    <property name="empty-string-as-null"
-              value="com/sun/faces/systest/EmptyStringAsNullTestCase.class"/>
     <property name="flash"
               value="com/sun/faces/systest/FlashTestCase.class"/>
     <property name="jsp-flash"
