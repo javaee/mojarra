@@ -445,27 +445,6 @@ public class Util {
 
     public static Locale getLocaleFromString(String localeStr)
         throws IllegalArgumentException {
-        Locale result = getLocaleFromStringWithLanguageTag(localeStr);
-        if (null == result) {
-            result = getLocaleFromStringWithoutLanguageTag(localeStr);
-        }
-        
-        return result;
-    }
-    
-    public static Locale getLocaleFromStringWithLanguageTag(String localeStr) 
-            throws IllegalArgumentException{
-        Locale result = null;
-        LocaleBCP47 tag = LocaleBCP47.parse(localeStr);
-        if (null != tag) {
-            result = new Locale(tag.getLanguage(), tag.getRegion());
-        }
-                
-        return result;
-    }
-    
-    public static Locale getLocaleFromStringWithoutLanguageTag(String localeStr)
-        throws IllegalArgumentException {
         // length must be at least 2.
         if (null == localeStr || localeStr.length() < 2) {
             throw new IllegalArgumentException("Illegal locale String: " +
