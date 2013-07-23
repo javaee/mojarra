@@ -39,7 +39,6 @@
  */
 package com.sun.faces.test.javaee6.resource.cachelastmod.wartest;
 
-import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.WebClient;
 import org.junit.After;
@@ -65,7 +64,7 @@ public class Issue2895IT {
     @Before
     public void setUp() {
         webUrl = System.getProperty("integration.url");
-        webClient = new WebClient(BrowserVersion.CHROME);
+        webClient = new WebClient();
     }
 
     @After
@@ -79,18 +78,18 @@ public class Issue2895IT {
 
         webClient.getCache().clear();
         webClient.addRequestHeader(("Cache-Control"), "max-age=0");
-        
+
         Page cssPage = webClient.getPage(cssUrl);
         assertEquals(200, cssPage.getWebResponse().getStatusCode());
-        
+
         String ifModifiedSinceValue = cssPage.getWebResponse().getResponseHeaderValue("Last-Modified");
         if (ifModifiedSinceValue == null) {
             ifModifiedSinceValue = cssPage.getWebResponse().getResponseHeaderValue("Date");
         }
-
+        
         webClient.getCache().clear();
         webClient.addRequestHeader("If-Modified-Since", ifModifiedSinceValue);
-        
+
         cssPage = webClient.getPage(cssUrl);
         assertEquals(304, cssPage.getWebResponse().getStatusCode());
     }
