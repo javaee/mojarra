@@ -42,6 +42,8 @@ package javax.faces.component;
 
 import java.util.Collection;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
 import javax.faces.component.visit.VisitResult;
@@ -59,7 +61,9 @@ public class UINamingContainer extends UIComponentBase
 
 
     // ------------------------------------------------------ Manifest Constants
-
+    
+    private static Logger LOGGER = Logger.getLogger("javax.faces.component",
+            "javax.faces.LogStrings");
 
     /**
      * <p>The standard component type for this component.</p>
@@ -124,6 +128,13 @@ public class UINamingContainer extends UIComponentBase
      * @since 2.0
      */
     public static char getSeparatorChar(FacesContext context) {
+        
+        if (null == context) {
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE, "UINamingContainer.getSeparatorChar() called with null FacesContext. This indicates a SEREVER error. Returning {0}", NamingContainer.SEPARATOR_CHAR);
+            }
+            return NamingContainer.SEPARATOR_CHAR;
+        }
 
 
         Character separatorChar =
