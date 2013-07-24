@@ -209,7 +209,7 @@ public final class ForEachHandler extends TagHandlerImpl {
                             if (t || srcVE == null) {
                                 ctx.setAttribute(v, value);
                             } else {
-                                ve = this.getVarExpr(srcVE, src, value, i);
+                                ve = this.getVarExpr(srcVE, src, value, i, s);
                                 vars.setVariable(v, ve);
                             }
                         }
@@ -288,13 +288,13 @@ public final class ForEachHandler extends TagHandlerImpl {
     }
 
     private ValueExpression getVarExpr(ValueExpression ve, Object src,
-            Object value, int i) {
+            Object value, int i, int start) {
         if (src instanceof List || src.getClass().isArray()) {
             return new IndexedValueExpression(ve, i);
         } else if (src instanceof Map && value instanceof Map.Entry) {
             return new MappedValueExpression(ve, (Map.Entry) value);
         } else if (src instanceof Collection) {
-            return new IteratedValueExpression(ve, value);
+            return new IteratedValueExpression(ve, start + i);
         }
         throw new IllegalStateException("Cannot create VE for: " + src);
     }

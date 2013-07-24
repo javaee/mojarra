@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -39,36 +39,57 @@
  */
 package com.sun.faces.test.agnostic.facelets.c;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 
-public class Issue2892IT {
+@ManagedBean(name = "modifiedForEachBean")
+@SessionScoped
+public class ModifiedForEachBean {
 
-    private String webUrl;
-    private WebClient webClient;
+    private boolean toggle;
+    private Set<String> set = new HashSet<String>();
+    private final Set<String> set1;
+    private final Set<String> set2;
+    private String setToShow = "";
 
-    @Before
-    public void setUp() {
-        webUrl = System.getProperty("integration.url");
-        webClient = new WebClient();
+    public ModifiedForEachBean() {
+        toggle = true;
+        setToShow = "SET1 - INIT";
+        set1 = populateSet("-SET1");
+        set2 = populateSet("-SET2");
+        set.addAll(set1);
     }
 
-    @After
-    public void tearDown() {
-        webClient.closeAllWindows();
+    public Set<String> getSet() {
+        return set;
     }
 
-    @Test
-    public void testNestedForEach() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/nestedForEach.xhtml");
-        HtmlElement addButton = page.getHtmlElementById("form0:addButton");
-        page = addButton.click();
-        HtmlElement item = page.getHtmlElementById("form0:item0_3");
-        assertTrue(item.asXml().indexOf("item[new3]") != -1);
+    public String getSetToShow() {
+        return setToShow;
+    }
+
+    public String toggle() {
+        this.toggle = !this.toggle;
+        if (toggle) {
+            setToShow = "SET1";
+            set.clear();
+            set.addAll(set1);
+        } else {
+            setToShow = "SET2";
+            set.clear();
+            set.addAll(set2);
+        }
+        return null;
+    }
+
+    private TreeSet<String> populateSet(String suffix) {
+        TreeSet<String> newSet = new TreeSet<String>();
+        for (int j = 0; j < 3; j++) {
+            newSet.add(j + suffix);
+        }
+        return newSet;
     }
 }

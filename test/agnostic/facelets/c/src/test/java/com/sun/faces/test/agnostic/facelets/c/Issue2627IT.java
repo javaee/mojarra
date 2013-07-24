@@ -47,7 +47,7 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class Issue2892IT {
+public class Issue2627IT {
 
     private String webUrl;
     private WebClient webClient;
@@ -64,11 +64,22 @@ public class Issue2892IT {
     }
 
     @Test
-    public void testNestedForEach() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/nestedForEach.xhtml");
-        HtmlElement addButton = page.getHtmlElementById("form0:addButton");
-        page = addButton.click();
-        HtmlElement item = page.getHtmlElementById("form0:item0_3");
-        assertTrue(item.asXml().indexOf("item[new3]") != -1);
+    public void testModifiedForEach() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/modifiedForEach.xhtml");
+        HtmlElement submit = page.getHtmlElementById("form:submit");
+        page = submit.click();
+        assertTrue(page.asXml().indexOf("2-SET2") != -1);
+        assertTrue(page.asXml().indexOf("1-SET2") != -1);
+        assertTrue(page.asXml().indexOf("0-SET2") != -1);
+        assertTrue(page.asXml().indexOf("2-SET1") == -1);
+        assertTrue(page.asXml().indexOf("1-SET1") == -1);
+        assertTrue(page.asXml().indexOf("0-SET1") == -1);
+        page = submit.click();
+        assertTrue(page.asXml().indexOf("2-SET2") == -1);
+        assertTrue(page.asXml().indexOf("1-SET2") == -1);
+        assertTrue(page.asXml().indexOf("0-SET2") == -1);
+        assertTrue(page.asXml().indexOf("2-SET1") != -1);
+        assertTrue(page.asXml().indexOf("1-SET1") != -1);
+        assertTrue(page.asXml().indexOf("0-SET1") != -1);
     }
 }
