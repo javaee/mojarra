@@ -152,8 +152,15 @@ public class BeanValidator implements Validator, PartialStateHolder {
         }
         
         // only clear cache of validation group classes if value is changing
-        if ((validationGroups == null && this.validationGroups != null) ||
-            (validationGroups != null && !validationGroups.equals(this.validationGroups))) {
+        if (validationGroups == null && this.validationGroups != null) {
+            this.cachedValidationGroups = null;
+        }
+        
+        if (validationGroups != null && this.validationGroups != null && !validationGroups.equals(this.validationGroups)) {
+            this.cachedValidationGroups = null;
+        }
+        
+        if (validationGroups != null && this.validationGroups == null) {
             this.cachedValidationGroups = null;
         }
         
