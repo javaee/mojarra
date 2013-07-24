@@ -299,6 +299,9 @@ public class ResourceManager {
     }
 
     private static boolean nameContainsForbiddenSequence(String name) {
+        if (null == name) {
+            return false;
+        }
         boolean result = false;
         name = name.toLowerCase();
 
