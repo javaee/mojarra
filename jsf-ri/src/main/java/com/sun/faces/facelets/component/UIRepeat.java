@@ -437,11 +437,14 @@ public class UIRepeat extends UINamingContainer {
 
     private void setIndex(FacesContext ctx, int index) {
 
+        DataModel localModel = getDataModel();
+        
         // save child state
-        this.saveChildState(ctx);
+        if (this.index != -1 && localModel.isRowAvailable()) {
+            this.saveChildState(ctx);
+        }
 
         this.index = index;
-        DataModel localModel = getDataModel();
         localModel.setRowIndex(index);
 
         if (this.index != -1 && this.var != null && localModel.isRowAvailable()) {
@@ -450,7 +453,9 @@ public class UIRepeat extends UINamingContainer {
         }
 
         // restore child state
-        this.restoreChildState(ctx);
+        if (this.index != -1 && localModel.isRowAvailable()) {
+            this.restoreChildState(ctx);
+        }
     }
 
     private void updateIterationStatus(FacesContext ctx, IterationStatus status) {
