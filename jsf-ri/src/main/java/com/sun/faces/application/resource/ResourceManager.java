@@ -234,7 +234,7 @@ public class ResourceManager {
                                   FacesContext ctx) {
         
         LibraryInfo library = null;
-        if (libraryName != null && !libraryNameContainsForbiddenSequence(libraryName)) {
+        if (libraryName != null && !nameContainsForbiddenSequence(libraryName)) {
             library = findLibrary(libraryName, localePrefix, ctx);
             if (library == null && localePrefix != null) {
                 // no localized library found.  Try to find
@@ -244,9 +244,15 @@ public class ResourceManager {
             if (library == null) {
                 return null;
             }
+        } else if (nameContainsForbiddenSequence(libraryName)) {
+            return null;
         }
 
         String resName = trimLeadingSlash(resourceName);
+        if (nameContainsForbiddenSequence(resName)) {
+            return null;
+        }
+        
         ResourceInfo info =
               findResource(library, resName, localePrefix, compressable, ctx);
         if (info == null && localePrefix != null) {
@@ -294,24 +300,28 @@ public class ResourceManager {
 
     }
 
-    private static boolean libraryNameContainsForbiddenSequence(String libraryName) {
+    private static boolean nameContainsForbiddenSequence(String name) {
+        if (null == name) {
+            return false;
+        }
         boolean result = false;
-        libraryName = libraryName.toLowerCase();
+        name = name.toLowerCase();
 
-        result = libraryName.contains("../") ||
-                 libraryName.contains("..\\") ||
-                 libraryName.startsWith("/") ||
-                 libraryName.startsWith("\\") ||
+        result = name.startsWith("..") ||
+                 name.contains("../") ||
+                 name.contains("..\\") ||
+                 name.startsWith("/") ||
+                 name.startsWith("\\") ||
 
-                 libraryName.contains("..%2f") ||
-                 libraryName.contains("..%5c") ||
-                 libraryName.startsWith("%2f") ||
-                 libraryName.startsWith("%5c") ||
+                 name.contains("..%2f") ||
+                 name.contains("..%5c") ||
+                 name.startsWith("%2f") ||
+                 name.startsWith("%5c") ||
 
-                 libraryName.contains("..\\u002f") ||
-                 libraryName.contains("..\\u005c") ||
-                 libraryName.startsWith("\\u002f") ||
-                 libraryName.startsWith("\\u005c")
+                 name.contains("..\\u002f") ||
+                 name.contains("..\\u005c") ||
+                 name.startsWith("\\u002f") ||
+                 name.startsWith("\\u005c")
                  ;
 
         return result;
