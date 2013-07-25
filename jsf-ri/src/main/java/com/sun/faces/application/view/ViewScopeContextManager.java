@@ -39,14 +39,20 @@
  */
 package com.sun.faces.application.view;
 
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.Util;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.spi.Contextual;
 import javax.enterprise.context.spi.CreationalContext;
+import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.BeanManager;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
@@ -57,11 +63,23 @@ import javax.servlet.http.HttpSessionEvent;
  * The manager that deals with CDI ViewScoped beans.
  */
 public class ViewScopeContextManager {
-
-    /**
-     * Stores the logger.
-     */
-    private static final Logger LOGGER = Logger.getLogger(ViewScopeContextManager.class.getName());
+    
+    private static final Logger LOGGER = FacesLogger.APPLICATION_VIEW.getLogger();
+    private static boolean isCdiOneOneOrGreater;
+    private static Class viewScopedCDIEventFireHelperImplClass;
+    
+    {
+        isCdiOneOneOrGreater = Util.isCdiOneOneOrGreater();
+        try {
+            viewScopedCDIEventFireHelperImplClass = Class.forName("com.sun.faces.application.view.ViewScopedCDIEventFireHelperImpl");
+        } catch (ClassNotFoundException ex) {
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE, "CDI 1.1 events not enabled", ex);
+            }
+        }
+    }
+    
+    
     /**
      * Stores the constant to keep track of all the active view scope contexts.
      */
@@ -280,4 +298,45 @@ public class ViewScopeContextManager {
             session.removeAttribute(ACTIVE_VIEW_CONTEXTS);
         }
     }
+    
+    public void fireInitializedEvent(FacesContext facesContext, UIViewRoot root) {
+        if (isCdiOneOneOrGreater) {
+            if (null != viewScopedCDIEventFireHelperImplClass) {
+                BeanManager beanManager = (BeanManager) Util.getCDIBeanManager(facesContext.getExternalContext().getApplicationMap());
+                Set<Bean<?>> availableBeans = beanManager.getBeans(viewScopedCDIEventFireHelperImplClass);
+                if (!availableBeans.isEmpty()) {
+                    Bean<?> bean = beanManager.resolve(availableBeans);
+                    CreationalContext<?> creationalContext =
+                            beanManager.createCreationalContext(null);
+                    ViewScopedCDIEventFireHelper eventHelper = 
+                            (ViewScopedCDIEventFireHelper)  beanManager.getReference(bean, bean.getBeanClass(),
+                            creationalContext);
+                    eventHelper.fireInitializedEvent(root);
+                }
+            }
+            
+        }
+        
+    }
+    
+    public void fireDestroyedEvent(FacesContext facesContext, UIViewRoot root) {
+        if (isCdiOneOneOrGreater) {
+            if (null != viewScopedCDIEventFireHelperImplClass) {
+                BeanManager beanManager = (BeanManager) Util.getCDIBeanManager(facesContext.getExternalContext().getApplicationMap());
+                Set<Bean<?>> availableBeans = beanManager.getBeans(viewScopedCDIEventFireHelperImplClass);
+                if (!availableBeans.isEmpty()) {
+                    Bean<?> bean = beanManager.resolve(availableBeans);
+                    CreationalContext<?> creationalContext =
+                            beanManager.createCreationalContext(null);
+                    ViewScopedCDIEventFireHelper eventHelper = 
+                            (ViewScopedCDIEventFireHelper)  beanManager.getReference(bean, bean.getBeanClass(),
+                            creationalContext);
+                    eventHelper.fireDestroyedEvent(root);
+                }
+            }
+            
+        }
+        
+    }
+    
 }

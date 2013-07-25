@@ -290,6 +290,7 @@ public class ViewScopeManager implements HttpSessionListener, ViewMapListener {
                     viewRoot.getTransientStateHelper().putTransient(VIEW_MAP_ID, viewMapId);
                     viewRoot.getTransientStateHelper().putTransient(VIEW_MAP, viewMap);
                 }
+                getContextManager().fireInitializedEvent(facesContext, viewRoot);
             }
         }
     }
@@ -314,7 +315,9 @@ public class ViewScopeManager implements HttpSessionListener, ViewMapListener {
                 contextManager.clear(facesContext, viewMap);
             }
 
+            getContextManager().fireDestroyedEvent(facesContext, viewRoot);
             destroyBeans(facesContext, viewMap);
+
         }
     }
 

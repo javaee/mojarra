@@ -156,6 +156,22 @@ public class Util {
     
     public static void setCDIAvailable(ServletContext sc, Object beanManager) {
         sc.setAttribute(CDI_AVAILABLE_PER_APP_KEY, beanManager);
+        }
+    
+    public static boolean isCdiOneOneOrGreater() {
+
+        // The following try/catch is a hack to discover
+        // if CDI 1.1 or greater is available
+        boolean result = false;
+        try {
+            Class.forName("javax.enterprise.context.Initialized");
+            result = true;
+        } catch (ClassNotFoundException ignored) {
+            if (LOGGER.isLoggable(Level.FINEST)) {
+                LOGGER.log(Level.FINEST, "Dected CDI 1.0", ignored);
+            }
+        }
+        return result;
     }
 
     /**

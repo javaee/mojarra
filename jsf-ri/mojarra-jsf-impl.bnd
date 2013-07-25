@@ -53,7 +53,7 @@ Export-Package: javax.faces.*;version=@spec.version@,\
 Import-Package: javax.faces.*,\
   com.sun.faces.*,\
   javax.servlet.annotation.*;resolution:=optional,\
-  javax.servlet.*,javax.el.*,javax.inject.*,javax.enterprise.inject.*,javax.enterprise.context.*,javax.annotation.*,javax.crypto.*,\
+  javax.servlet.*,javax.el.*,javax.inject.*,javax.enterprise.inject.*,javax.enterprise.util.*,javax.enterprise.context.*,javax.annotation.*,javax.crypto.*,\
   javax.validation.*;resolution:=optional, \
   javax.enterprise.event;resolution:=optional, \
   javax.ejb.*;resolution:=optional, \

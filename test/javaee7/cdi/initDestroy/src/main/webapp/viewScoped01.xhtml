@@ -1,10 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE glassfish-web-app PUBLIC "-//GlassFish.org//DTD GlassFish Application Server 3.1 Servlet 3.0//EN" "http://glassfish.org/dtds/glassfish-web-app_3_0-1.dtd">
+<?xml version="1.0" encoding="UTF-8" ?>
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -41,12 +40,21 @@
     holder.
 
 -->
-<glassfish-web-app error-url="">
-  <context-root>/test-agnostic-facelets-c</context-root>
-  <class-loader delegate="true"/>
-  <jsp-config>
-    <property name="keepgenerated" value="true">
-      <description>Keep a copy of the generated servlet class' java code.</description>
-    </property>
-  </jsp-config>
-</glassfish-web-app>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <h:form prependId="false">
+            <h:commandButton value="submit" id="viewScoped02" action="viewScoped02"/>
+            
+            <p>#{viewScopedBean.value}</p>
+            
+            <p id="initMessage">#{userBean.initViewScopeMesasge}</p>
+            
+        </h:form>
+    </body>
+</html>
+

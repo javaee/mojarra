@@ -173,12 +173,17 @@
         <dependency groupId="org.codehaus.groovy" artifactId="groovy-all" version="1.6.9" scope="provided"/>
         <dependency groupId="javax.validation" artifactId="validation-api" version="1.0.0.GA" scope="provided"/>
         <dependency groupId="javax.inject" artifactId="javax.inject" version="1" scope="provided"/>
-        <dependency groupId="javax.enterprise" artifactId="cdi-api" version="1.0" scope="provided"/>
         <dependency groupId="javax.servlet.jsp.jstl" artifactId="jstl-api" version="1.2" scope="provided" />
         <dependency groupId="javax" artifactId="javaee-web-api" version="6.0" scope="provided"/>
         <dependency groupId="com.sun.el" artifactId="el-ri" version="1.0" scope="provided"/>
         <localRepository refid="local.repository"/>
         <remoteRepository refid="j.n.repo"/>
+    </artifact:dependencies>
+
+    <artifact:dependencies filesetId="cdi.filepath" pathId="cdi.path">
+        <dependency groupId="javax.enterprise" artifactId="cdi-api" version="1.1" scope="provided"/>
+        <localRepository refid="local.repository"/>
+        <remoteRepository refid="ibiblio.repo"/>
     </artifact:dependencies>
     
     <artifact:dependencies filesetId="jsf-spi.filepath" pathId="jsf-spi.path">
@@ -251,6 +256,11 @@
     <path id="compile.classpath">
         <path refid="compile.path"/>
     </path>
+
+    <path id="cdi.classpath">
+        <path refid="cdi.path"/>
+    </path>
+
 
     <path id="api-compile.classpath">
         <path refid="jsf-spi.path"/>

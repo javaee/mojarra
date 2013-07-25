@@ -84,6 +84,27 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.5.1</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                    <showWarnings>true</showWarnings>
+                    <excludes>
+                        <!-- 
+                            
+                            Excluding this class since it brings in a
+                            JavaEE 7 dependency. We recompile here to
+                            verify that we are not relying on JavaEE 7
+                            APIs anywhere.
+                            
+                            -->
+                        <excludes>com/sun/faces/flow/FlowCDIEventFireHelperImpl.java</excludes>
+                    </excludes>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <dependencies>

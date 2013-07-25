@@ -170,6 +170,12 @@ public class FlowHandlerImpl extends FlowHandler {
             return null;
         }
         Flow result = null;
+        // If there is no session, there cannot possibly be a flow, so
+        // don't create one just to check.
+        if (null == context.getExternalContext().getSession(false)) {
+            return null;
+        }
+        
         FlowDeque<Flow> flowStack = getFlowStack(context);
         int returnDepth = flowStack.getReturnDepth();
         if (flowStack.size() <= returnDepth) {

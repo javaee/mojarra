@@ -40,6 +40,8 @@
 
 package com.sun.faces.flow;
 
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.Util;
 import java.io.Serializable;
 import javax.faces.flow.FlowScoped;
 import java.lang.annotation.Annotation;
@@ -48,12 +50,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.enterprise.context.ContextNotActiveException;
 import javax.enterprise.context.spi.Context;
 import javax.enterprise.context.spi.Contextual;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.event.Observes;
+import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.BeforeShutdown;
 import javax.faces.context.ExternalContext;
@@ -67,19 +73,33 @@ import javax.servlet.http.HttpSessionEvent;
 public class FlowCDIContext implements Context, Serializable {
     
     private static final long serialVersionUID = -7144653402477623609L;
+    private static final FlowScopeMapKey FLOW_SCOPE_MAP_KEY = new FlowScopeMapKey();
+    private static final Logger LOGGER = FacesLogger.FLOW.getLogger();
+    private static boolean isCdiOneOneOrGreater;
+    private static Class flowCDIEventFireHelperImplClass;
     
     private transient Map<Contextual<?>, FlowBeanInfo> flowIds;
-    
-    private static final FlowScopeMapKey FLOW_SCOPE_MAP_KEY = new FlowScopeMapKey();
-    
+
     static class FlowBeanInfo {
         String definingDocumentId;
         String id;
     }
     
+    {
+        isCdiOneOneOrGreater = Util.isCdiOneOneOrGreater();
+        try {
+            flowCDIEventFireHelperImplClass = Class.forName("com.sun.faces.flow.FlowCDIEventFireHelperImpl");
+        } catch (ClassNotFoundException ex) {
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE, "CDI 1.1 events not enabled", ex);
+            }
+        }
+    }
+    
+    
     // This should be vended from a factory for decoration purposes.
     
-    public FlowCDIContext(Map<Contextual<?>, FlowBeanInfo> flowIds) {
+    FlowCDIContext(Map<Contextual<?>, FlowBeanInfo> flowIds) {
         this.flowIds = new ConcurrentHashMap<Contextual<?>, FlowBeanInfo>(flowIds);
     }
     
@@ -278,6 +298,22 @@ public class FlowCDIContext implements Context, Serializable {
             creationalMap.remove(cur);
         }
         
+        if (isCdiOneOneOrGreater) {
+            if (null != flowCDIEventFireHelperImplClass) {
+                FacesContext facesContext = FacesContext.getCurrentInstance();
+                BeanManager beanManager = (BeanManager) Util.getCDIBeanManager(facesContext.getExternalContext().getApplicationMap());
+                Set<Bean<?>> availableBeans = beanManager.getBeans(flowCDIEventFireHelperImplClass);
+                if (!availableBeans.isEmpty()) {
+                    Bean<?> bean = beanManager.resolve(availableBeans);
+                    CreationalContext<?> creationalContext =
+                            beanManager.createCreationalContext(null);
+                    FlowCDIEventFireHelper eventHelper = 
+                            (FlowCDIEventFireHelper)  beanManager.getReference(bean, bean.getBeanClass(),
+                            creationalContext);
+                    eventHelper.fireDestroyedEvent(getCurrentFlow(facesContext));
+                }
+            }
+        }
     }
     
     static void flowEntered() {
@@ -286,6 +322,22 @@ public class FlowCDIContext implements Context, Serializable {
         
         getCurrentFlowScope();
         
+        if (isCdiOneOneOrGreater) {
+            if (null != flowCDIEventFireHelperImplClass) {
+                FacesContext facesContext = FacesContext.getCurrentInstance();
+                BeanManager beanManager = (BeanManager) Util.getCDIBeanManager(facesContext.getExternalContext().getApplicationMap());
+                Set<Bean<?>> availableBeans = beanManager.getBeans(flowCDIEventFireHelperImplClass);
+                if (!availableBeans.isEmpty()) {
+                    Bean<?> bean = beanManager.resolve(availableBeans);
+                    CreationalContext<?> creationalContext =
+                            beanManager.createCreationalContext(null);
+                    FlowCDIEventFireHelper eventHelper = 
+                            (FlowCDIEventFireHelper)  beanManager.getReference(bean, bean.getBeanClass(),
+                            creationalContext);
+                    eventHelper.fireInitializedEvent(getCurrentFlow(facesContext));
+                }
+            }
+        }
     }
 
 // </editor-fold>
