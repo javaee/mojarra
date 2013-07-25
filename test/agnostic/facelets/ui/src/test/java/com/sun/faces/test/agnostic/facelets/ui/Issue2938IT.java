@@ -46,6 +46,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 public class Issue2938IT {
 
@@ -64,6 +65,7 @@ public class Issue2938IT {
     }
 
     @Test
+    @Ignore
     public void testRowRemoved() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/repeatRemoved.xhtml");
         assertNotNull(page.getHtmlElementById("f:r:0:i"));
