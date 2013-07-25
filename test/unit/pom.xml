@@ -92,25 +92,14 @@
                     <source>1.6</source>
                     <target>1.6</target>
                     <showWarnings>true</showWarnings>
-                    <excludes>
-                        <!-- 
-                            
-                            Excluding this class since it brings in a
-                            JavaEE 7 dependency. We recompile here to
-                            verify that we are not relying on JavaEE 7
-                            APIs anywhere.
-                            
-                            -->
-                        <excludes>com/sun/faces/flow/FlowCDIEventFireHelperImpl.java</excludes>
-                    </excludes>
                 </configuration>
             </plugin>
         </plugins>
     </build>
     <dependencies>
         <dependency>
-            <groupId>org.codehaus.jettison</groupId>
-            <artifactId>jettison</artifactId>
+            <groupId>javax.enterprise</groupId>
+            <artifactId>cdi-api</artifactId>
             <version>1.1</version>
             <scope>provided</scope>
             <optional>true</optional>
