@@ -65,10 +65,10 @@ import javax.servlet.http.HttpSessionEvent;
 public class ViewScopeContextManager {
     
     private static final Logger LOGGER = FacesLogger.APPLICATION_VIEW.getLogger();
-    private static boolean isCdiOneOneOrGreater;
-    private static Class viewScopedCDIEventFireHelperImplClass;
+    private boolean isCdiOneOneOrGreater;
+    private Class viewScopedCDIEventFireHelperImplClass;
     
-    {
+    public ViewScopeContextManager()  {
         isCdiOneOneOrGreater = Util.isCdiOneOneOrGreater();
         try {
             viewScopedCDIEventFireHelperImplClass = Class.forName("com.sun.faces.application.view.ViewScopedCDIEventFireHelperImpl");

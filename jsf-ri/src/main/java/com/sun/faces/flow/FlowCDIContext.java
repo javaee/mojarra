@@ -75,8 +75,6 @@ public class FlowCDIContext implements Context, Serializable {
     private static final long serialVersionUID = -7144653402477623609L;
     private static final FlowScopeMapKey FLOW_SCOPE_MAP_KEY = new FlowScopeMapKey();
     private static final Logger LOGGER = FacesLogger.FLOW.getLogger();
-    private static boolean isCdiOneOneOrGreater;
-    private static Class flowCDIEventFireHelperImplClass;
     
     private transient Map<Contextual<?>, FlowBeanInfo> flowIds;
 
@@ -84,18 +82,6 @@ public class FlowCDIContext implements Context, Serializable {
         String definingDocumentId;
         String id;
     }
-    
-    {
-        isCdiOneOneOrGreater = Util.isCdiOneOneOrGreater();
-        try {
-            flowCDIEventFireHelperImplClass = Class.forName("com.sun.faces.flow.FlowCDIEventFireHelperImpl");
-        } catch (ClassNotFoundException ex) {
-            if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.log(Level.SEVERE, "CDI 1.1 events not enabled", ex);
-            }
-        }
-    }
-    
     
     // This should be vended from a factory for decoration purposes.
     
@@ -298,7 +284,16 @@ public class FlowCDIContext implements Context, Serializable {
             creationalMap.remove(cur);
         }
         
-        if (isCdiOneOneOrGreater) {
+        if (Util.isCdiOneOneOrGreater()) {
+            Class flowCDIEventFireHelperImplClass = null;
+            try {
+                flowCDIEventFireHelperImplClass = Class.forName("com.sun.faces.flow.FlowCDIEventFireHelperImpl");
+            } catch (ClassNotFoundException ex) {
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    LOGGER.log(Level.SEVERE, "CDI 1.1 events not enabled", ex);
+                }
+            }
+            
             if (null != flowCDIEventFireHelperImplClass) {
                 FacesContext facesContext = FacesContext.getCurrentInstance();
                 BeanManager beanManager = (BeanManager) Util.getCDIBeanManager(facesContext.getExternalContext().getApplicationMap());
@@ -322,7 +317,15 @@ public class FlowCDIContext implements Context, Serializable {
         
         getCurrentFlowScope();
         
-        if (isCdiOneOneOrGreater) {
+        if (Util.isCdiOneOneOrGreater()) {
+            Class flowCDIEventFireHelperImplClass = null;
+            try {
+                flowCDIEventFireHelperImplClass = Class.forName("com.sun.faces.flow.FlowCDIEventFireHelperImpl");
+            } catch (ClassNotFoundException ex) {
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    LOGGER.log(Level.SEVERE, "CDI 1.1 events not enabled", ex);
+                }
+            }
             if (null != flowCDIEventFireHelperImplClass) {
                 FacesContext facesContext = FacesContext.getCurrentInstance();
                 BeanManager beanManager = (BeanManager) Util.getCDIBeanManager(facesContext.getExternalContext().getApplicationMap());

@@ -104,9 +104,17 @@ public class CDIUtil {
        @Override
        public Set<Annotation> getQualifiers() {
            Set<Annotation> qualifiers = new HashSet<Annotation>();
-           qualifiers.add( new AnnotationLiteral<Default>() {} );
-           qualifiers.add( new AnnotationLiteral<Any>() {} );
+           qualifiers.add( new DefaultAnnotationLiteral());
+           qualifiers.add( new AnyAnnotationLiteral());
            return qualifiers;
+       }
+       
+       public static class DefaultAnnotationLiteral extends AnnotationLiteral<Default> {
+           
+       }
+       
+       public static class AnyAnnotationLiteral extends AnnotationLiteral<Any> {
+           
        }
        
        @Override
