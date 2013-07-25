@@ -464,20 +464,16 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
                     Object obj = compDescriptor.getValue("type");
                     if ((null != obj) && !(obj instanceof Class)) {
                         ValueExpression typeVE = (ValueExpression) obj;
-                        if (typeVE == null) {
-                            return Object.class;
-                        } else {
-                            String className = (String) typeVE.getValue(FacesContext.getCurrentInstance().getELContext());
-                            if (className != null) {
-                                className = prefix(className);
-                                try {
-                                    return ReflectionUtil.forName(className);
-                                } catch (ClassNotFoundException cnfe) {
-                                    throw new FacesException(cnfe);
-                                }
-                            } else {
-                                return Object.class;
+                        String className = (String) typeVE.getValue(FacesContext.getCurrentInstance().getELContext());
+                        if (className != null) {
+                            className = prefix(className);
+                            try {
+                                return ReflectionUtil.forName(className);
+                            } catch (ClassNotFoundException cnfe) {
+                                throw new FacesException(cnfe);
                             }
+                        } else {
+                            return Object.class;
                         }
                     } else {
                         return (Class) obj;
