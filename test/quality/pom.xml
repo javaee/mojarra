@@ -105,8 +105,8 @@
                             APIs anywhere.
                             
                             -->
-                        <excludes>com/sun/faces/flow/FlowCDIEventFireHelperImpl.java</excludes>
-                        <excludes>com/sun/faces/application/view/ViewScopedCDIEventFireHelperImpl.java</excludes>
+                        <exclude>com/sun/faces/flow/FlowCDIEventFireHelperImpl.java</exclude>
+                        <exclude>com/sun/faces/application/view/ViewScopedCDIEventFireHelperImpl.java</exclude>
                     </excludes>
                 </configuration>
             </plugin>
