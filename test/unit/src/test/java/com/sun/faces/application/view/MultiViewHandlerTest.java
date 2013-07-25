@@ -40,6 +40,7 @@
  */
 package com.sun.faces.application.view;
 
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Locale;
@@ -54,58 +55,62 @@ import org.junit.Test;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.verify;
 import static org.easymock.EasyMock.replay;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
+import org.junit.runner.RunWith;
+import org.powermock.api.easymock.PowerMock;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
-
+@RunWith(PowerMockRunner.class) 
+@PrepareForTest(MultiViewHandler.class) 
 public class MultiViewHandlerTest {
-    
+
     private FacesContext facesContext;
     private Application application;
     private ExternalContext externalContext;
-    
+
     @Before
     public void setUp() {
         facesContext = EasyMock.createMock(FacesContext.class);
         application = EasyMock.createMock(Application.class);
         externalContext = EasyMock.createMock(ExternalContext.class);
-        
     }
-    
+
     @Test
     public void testBCP47Support() throws Exception {
-        
-        MultiViewHandler viewHandler = new MultiViewHandler(false);
-        assertNotNull("Can't create viewHandler", viewHandler);
-        
-        expect(facesContext.getExternalContext()).andReturn(externalContext).anyTimes();
 
-        Map<String,String> requestHeaders = new HashMap<String,String>();
+        Map<String, String> requestHeaders = new HashMap<String, String>();
         requestHeaders.put("Accept-Language", "zh-Hans-CN");
-        expect(externalContext.getRequestHeaderMap()).andReturn(requestHeaders).anyTimes();
-        
         List<Locale> requestLocales = new ArrayList<Locale>();
         requestLocales.add(new Locale("en-US"));
-        expect(externalContext.getRequestLocales()).andReturn(requestLocales.iterator()).anyTimes();
-        
         List<Locale> supportedLocales = new ArrayList<Locale>();
-        supportedLocales.add(new Locale("zh","CN"));
+        supportedLocales.add(new Locale("zh", "CN"));
         supportedLocales.add(new Locale("en", "US"));
         supportedLocales.add(new Locale("de"));
-        supportedLocales.add(new Locale("no", "NO"));
+        supportedLocales.add(new Locale("no", "NO"));        
+
+        /*
+         * Since we want to just test calculateLocale we need to make it so
+         * that we only mock a method that will not get called by 
+         * calculateLocale, that way we can avoid calling the default 
+         * constructor.
+         */
+        MultiViewHandler viewHandler = PowerMock.createNicePartialMock(MultiViewHandler.class, new String[] { "initView" });
+        
+        expect(facesContext.getExternalContext()).andReturn(externalContext).anyTimes();
+        expect(externalContext.getRequestHeaderMap()).andReturn(requestHeaders).anyTimes();
+        expect(externalContext.getRequestLocales()).andReturn(requestLocales.iterator()).anyTimes();
         expect(facesContext.getApplication()).andReturn(application).anyTimes();
         expect(application.getSupportedLocales()).andReturn(supportedLocales.iterator()).anyTimes();
         expect(application.getDefaultLocale()).andReturn(null).anyTimes();
-        replay(facesContext, application, externalContext);
+        
+        PowerMock.replay(facesContext, application, externalContext, viewHandler);
+
         Locale result = viewHandler.calculateLocale(facesContext);
-        verify(facesContext, application, externalContext);
+        
+        PowerMock.verify(facesContext, application, externalContext, viewHandler);
 
         assertEquals("CN", result.getCountry());
         assertEquals("zh", result.getLanguage());
-        
-        
-        
     }
-    
-    
 }

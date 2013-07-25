@@ -94,12 +94,6 @@ public class MultiViewHandler extends ViewHandler {
 
     }
 
-    MultiViewHandler(boolean throwException) {
-        if (throwException) {
-            throw new IllegalStateException();
-        }
-    }
-
     // ------------------------------------------------ Methods from ViewHandler
 
 
