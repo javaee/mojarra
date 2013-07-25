@@ -79,7 +79,6 @@
                     JAVASERVERFACES-2079,
                     JAVASERVERFACES-2065,
                     JAVASERVERFACES-1845,
-                    JAVASERVERFACES-1995,
                     JAVASERVERFACES-2209,
                     JAVASERVERFACES-2213,
                     JAVASERVERFACES-2247,
@@ -90,6 +89,16 @@
                     GLASSFISH-18007,
                     JAVASERVERFACES-2113,
                     JAVASERVERFACES-1660" />
+
+<!-- 
+
+20130725
+
+ 2.1.7-02
+
+                    JAVASERVERFACES-1995,
+
+--> 
 
     <target name="clean" depends="define.applications"
             description="">
