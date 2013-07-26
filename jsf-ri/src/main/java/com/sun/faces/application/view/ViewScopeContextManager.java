@@ -300,20 +300,18 @@ public class ViewScopeContextManager {
     }
     
     public void fireInitializedEvent(FacesContext facesContext, UIViewRoot root) {
-        if (isCdiOneOneOrGreater) {
-            if (null != viewScopedCDIEventFireHelperImplClass) {
-                BeanManager beanManager = (BeanManager) Util.getCDIBeanManager(facesContext.getExternalContext().getApplicationMap());
-                if (null != beanManager) {
-                    Set<Bean<?>> availableBeans = beanManager.getBeans(viewScopedCDIEventFireHelperImplClass);
-                    if (null != availableBeans && !availableBeans.isEmpty()) {
-                        Bean<?> bean = beanManager.resolve(availableBeans);
-                        CreationalContext<?> creationalContext =
-                                beanManager.createCreationalContext(null);
-                        ViewScopedCDIEventFireHelper eventHelper = 
-                                (ViewScopedCDIEventFireHelper)  beanManager.getReference(bean, bean.getBeanClass(),
-                                creationalContext);
-                        eventHelper.fireInitializedEvent(root);
-                    }
+        if (isCdiOneOneOrGreater&& null != viewScopedCDIEventFireHelperImplClass) {
+            BeanManager beanManager = (BeanManager) Util.getCDIBeanManager(facesContext.getExternalContext().getApplicationMap());
+            if (null != beanManager) {
+                Set<Bean<?>> availableBeans = beanManager.getBeans(viewScopedCDIEventFireHelperImplClass);
+                if (null != availableBeans && !availableBeans.isEmpty()) {
+                    Bean<?> bean = beanManager.resolve(availableBeans);
+                    CreationalContext<?> creationalContext =
+                            beanManager.createCreationalContext(null);
+                    ViewScopedCDIEventFireHelper eventHelper = 
+                            (ViewScopedCDIEventFireHelper)  beanManager.getReference(bean, bean.getBeanClass(),
+                            creationalContext);
+                    eventHelper.fireInitializedEvent(root);
                 }
             }
             
@@ -322,23 +320,20 @@ public class ViewScopeContextManager {
     }
     
     public void fireDestroyedEvent(FacesContext facesContext, UIViewRoot root) {
-        if (isCdiOneOneOrGreater) {
-            if (null != viewScopedCDIEventFireHelperImplClass) {
-                BeanManager beanManager = (BeanManager) Util.getCDIBeanManager(facesContext.getExternalContext().getApplicationMap());
-                if (null != beanManager) {
-                    Set<Bean<?>> availableBeans = beanManager.getBeans(viewScopedCDIEventFireHelperImplClass);
-                    if (null != availableBeans && !availableBeans.isEmpty()) {
-                        Bean<?> bean = beanManager.resolve(availableBeans);
-                        CreationalContext<?> creationalContext =
-                                beanManager.createCreationalContext(null);
-                        ViewScopedCDIEventFireHelper eventHelper = 
-                                (ViewScopedCDIEventFireHelper)  beanManager.getReference(bean, bean.getBeanClass(),
-                                creationalContext);
-                        eventHelper.fireDestroyedEvent(root);
-                    }
+        if (isCdiOneOneOrGreater && null != viewScopedCDIEventFireHelperImplClass) {
+            BeanManager beanManager = (BeanManager) Util.getCDIBeanManager(facesContext.getExternalContext().getApplicationMap());
+            if (null != beanManager) {
+                Set<Bean<?>> availableBeans = beanManager.getBeans(viewScopedCDIEventFireHelperImplClass);
+                if (null != availableBeans && !availableBeans.isEmpty()) {
+                    Bean<?> bean = beanManager.resolve(availableBeans);
+                    CreationalContext<?> creationalContext =
+                            beanManager.createCreationalContext(null);
+                    ViewScopedCDIEventFireHelper eventHelper = 
+                            (ViewScopedCDIEventFireHelper)  beanManager.getReference(bean, bean.getBeanClass(),
+                            creationalContext);
+                    eventHelper.fireDestroyedEvent(root);
                 }
             }
-            
         }
         
     }

@@ -44,8 +44,8 @@ import javax.faces.flow.Flow;
 
 public interface FlowCDIEventFireHelper {
     
-    public void fireInitializedEvent(Flow currentFlow);
-    public void fireDestroyedEvent(Flow currentFlow);
+    void fireInitializedEvent(Flow currentFlow);
+    void fireDestroyedEvent(Flow currentFlow);
     
     
 }
