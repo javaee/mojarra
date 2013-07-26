@@ -843,6 +843,8 @@ public class UIRepeat extends UINamingContainer {
 
     private static final class IndexedEvent extends FacesEvent {
 
+        private static final long serialVersionUID = 1L;
+        
         private final FacesEvent target;
 
         private final int index;
