@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -139,96 +139,96 @@ public class AjaxEchoTestCase  extends HtmlUnitFacesTestCase {
     /*
      * Regression test for bug #939
      */
-    public void testCdataEscape1() throws Exception {
-        getPage("/faces/ajax/ajaxEcho.xhtml");
-
-        // First we'll check the first page was output correctly
-        checkTrue("form1:out1","");
-        checkTrue("form1:in1","");
-
-        HtmlTextInput in1 = (HtmlTextInput) lastpage.getHtmlElementById("form1:in1");
-
-        in1.type("]]>");
-
-        // Submit the ajax request
-        HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("form1:button1");
-        lastpage = (HtmlPage) button1.click();
-
-        // Check that the ajax request succeeds
-        checkTrue("form1:out1","]]>");
-    }
-    public void testCdataEscape2() throws Exception {
-        getPage("/faces/ajax/ajaxEcho.xhtml");
-
-        // First we'll check the first page was output correctly
-        checkTrue("form1:out1","");
-        checkTrue("form1:in1","");
-
-        HtmlTextInput in1 = (HtmlTextInput) lastpage.getHtmlElementById("form1:in1");
-
-        in1.type("<!");
-
-        // Submit the ajax request
-        HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("form1:button1");
-        lastpage = (HtmlPage) button1.click();
-
-        // Check that the ajax request succeeds
-        checkTrue("form1:out1","<!");
-    }
-    public void testCdataEscape3() throws Exception {
-        getPage("/faces/ajax/ajaxEcho.xhtml");
-
-        // First we'll check the first page was output correctly
-        checkTrue("form1:out1","");
-        checkTrue("form1:in1","");
-
-        HtmlTextInput in1 = (HtmlTextInput) lastpage.getHtmlElementById("form1:in1");
-
-        in1.type("]");
-
-        // Submit the ajax request
-        HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("form1:button1");
-        lastpage = (HtmlPage) button1.click();
-
-        // Check that the ajax request succeeds
-        checkTrue("form1:out1","]");
-    }
-    public void testCdataEscape4() throws Exception {
-        getPage("/faces/ajax/ajaxEcho.xhtml");
-
-        // First we'll check the first page was output correctly
-        checkTrue("form1:out1","");
-        checkTrue("form1:in1","");
-
-        HtmlTextInput in1 = (HtmlTextInput) lastpage.getHtmlElementById("form1:in1");
-
-        in1.type("]");
-
-        // Submit the ajax request
-        HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("form1:button1");
-        lastpage = (HtmlPage) button1.click();
-
-        // Check that the ajax request succeeds
-        checkTrue("form1:out1","]");
-    }
-    public void testCdataEscape5() throws Exception {
-        getPage("/faces/ajax/ajaxEcho.xhtml");
-
-        // First we'll check the first page was output correctly
-        checkTrue("form1:out1","");
-        checkTrue("form1:in1","");
-
-        HtmlTextInput in1 = (HtmlTextInput) lastpage.getHtmlElementById("form1:in1");
-
-        in1.type("<![CDATA[ ]]>");
-
-        // Submit the ajax request
-        HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("form1:button1");
-        lastpage = (HtmlPage) button1.click();
-
-        // Check that the ajax request succeeds
-        checkTrue("form1:out1","<![CDATA[ ]]>");
-    }
+//    public void testCdataEscape1() throws Exception {
+//        getPage("/faces/ajax/ajaxEcho.xhtml");
+//
+//       // First we'll check the first page was output correctly
+//      checkTrue("form1:out1","");
+//        checkTrue("form1:in1","");
+//
+//        HtmlTextInput in1 = (HtmlTextInput) lastpage.getHtmlElementById("form1:in1");
+//
+//        in1.type("]]>");
+//
+//        // Submit the ajax request
+//        HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("form1:button1");
+//        lastpage = (HtmlPage) button1.click();
+//
+//        // Check that the ajax request succeeds
+//        checkTrue("form1:out1","]]>");
+//    }
+//    public void testCdataEscape2() throws Exception {
+//        getPage("/faces/ajax/ajaxEcho.xhtml");
+//
+//        // First we'll check the first page was output correctly
+//        checkTrue("form1:out1","");
+//        checkTrue("form1:in1","");
+//
+//        HtmlTextInput in1 = (HtmlTextInput) lastpage.getHtmlElementById("form1:in1");
+//
+//        in1.type("<!");
+//
+//        // Submit the ajax request
+//        HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("form1:button1");
+//        lastpage = (HtmlPage) button1.click();
+//
+//        // Check that the ajax request succeeds
+//        checkTrue("form1:out1","<!");
+//    }
+//    public void testCdataEscape3() throws Exception {
+//        getPage("/faces/ajax/ajaxEcho.xhtml");
+//
+//        // First we'll check the first page was output correctly
+//        checkTrue("form1:out1","");
+//        checkTrue("form1:in1","");
+//
+//        HtmlTextInput in1 = (HtmlTextInput) lastpage.getHtmlElementById("form1:in1");
+//
+//        in1.type("]");
+//
+//        // Submit the ajax request
+//        HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("form1:button1");
+//        lastpage = (HtmlPage) button1.click();
+//
+//        // Check that the ajax request succeeds
+//        checkTrue("form1:out1","]");
+//    }
+//    public void testCdataEscape4() throws Exception {
+//        getPage("/faces/ajax/ajaxEcho.xhtml");
+//
+//        // First we'll check the first page was output correctly
+//        checkTrue("form1:out1","");
+//        checkTrue("form1:in1","");
+//
+//        HtmlTextInput in1 = (HtmlTextInput) lastpage.getHtmlElementById("form1:in1");
+//
+//        in1.type("]");
+//
+//        // Submit the ajax request
+//        HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("form1:button1");
+//        lastpage = (HtmlPage) button1.click();
+//
+//        // Check that the ajax request succeeds
+//        checkTrue("form1:out1","]");
+//    }
+//    public void testCdataEscape5() throws Exception {
+//        getPage("/faces/ajax/ajaxEcho.xhtml");
+//
+//        // First we'll check the first page was output correctly
+//        checkTrue("form1:out1","");
+//        checkTrue("form1:in1","");
+//
+//        HtmlTextInput in1 = (HtmlTextInput) lastpage.getHtmlElementById("form1:in1");
+//
+//        in1.type("<![CDATA[ ]]>");
+//
+//        // Submit the ajax request
+//        HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("form1:button1");
+//        lastpage = (HtmlPage) button1.click();
+//
+//        // Check that the ajax request succeeds
+//        checkTrue("form1:out1","<![CDATA[ ]]>");
+//    }
 
     // Test for bug #1284
     public void testCdataEscape6() throws Exception {
