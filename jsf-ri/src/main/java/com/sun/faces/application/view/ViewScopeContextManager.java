@@ -303,15 +303,17 @@ public class ViewScopeContextManager {
         if (isCdiOneOneOrGreater) {
             if (null != viewScopedCDIEventFireHelperImplClass) {
                 BeanManager beanManager = (BeanManager) Util.getCDIBeanManager(facesContext.getExternalContext().getApplicationMap());
-                Set<Bean<?>> availableBeans = beanManager.getBeans(viewScopedCDIEventFireHelperImplClass);
-                if (!availableBeans.isEmpty()) {
-                    Bean<?> bean = beanManager.resolve(availableBeans);
-                    CreationalContext<?> creationalContext =
-                            beanManager.createCreationalContext(null);
-                    ViewScopedCDIEventFireHelper eventHelper = 
-                            (ViewScopedCDIEventFireHelper)  beanManager.getReference(bean, bean.getBeanClass(),
-                            creationalContext);
-                    eventHelper.fireInitializedEvent(root);
+                if (null != beanManager) {
+                    Set<Bean<?>> availableBeans = beanManager.getBeans(viewScopedCDIEventFireHelperImplClass);
+                    if (null != availableBeans && !availableBeans.isEmpty()) {
+                        Bean<?> bean = beanManager.resolve(availableBeans);
+                        CreationalContext<?> creationalContext =
+                                beanManager.createCreationalContext(null);
+                        ViewScopedCDIEventFireHelper eventHelper = 
+                                (ViewScopedCDIEventFireHelper)  beanManager.getReference(bean, bean.getBeanClass(),
+                                creationalContext);
+                        eventHelper.fireInitializedEvent(root);
+                    }
                 }
             }
             
@@ -323,15 +325,17 @@ public class ViewScopeContextManager {
         if (isCdiOneOneOrGreater) {
             if (null != viewScopedCDIEventFireHelperImplClass) {
                 BeanManager beanManager = (BeanManager) Util.getCDIBeanManager(facesContext.getExternalContext().getApplicationMap());
-                Set<Bean<?>> availableBeans = beanManager.getBeans(viewScopedCDIEventFireHelperImplClass);
-                if (!availableBeans.isEmpty()) {
-                    Bean<?> bean = beanManager.resolve(availableBeans);
-                    CreationalContext<?> creationalContext =
-                            beanManager.createCreationalContext(null);
-                    ViewScopedCDIEventFireHelper eventHelper = 
-                            (ViewScopedCDIEventFireHelper)  beanManager.getReference(bean, bean.getBeanClass(),
-                            creationalContext);
-                    eventHelper.fireDestroyedEvent(root);
+                if (null != beanManager) {
+                    Set<Bean<?>> availableBeans = beanManager.getBeans(viewScopedCDIEventFireHelperImplClass);
+                    if (null != availableBeans && !availableBeans.isEmpty()) {
+                        Bean<?> bean = beanManager.resolve(availableBeans);
+                        CreationalContext<?> creationalContext =
+                                beanManager.createCreationalContext(null);
+                        ViewScopedCDIEventFireHelper eventHelper = 
+                                (ViewScopedCDIEventFireHelper)  beanManager.getReference(bean, bean.getBeanClass(),
+                                creationalContext);
+                        eventHelper.fireDestroyedEvent(root);
+                    }
                 }
             }
             

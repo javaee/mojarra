@@ -298,7 +298,7 @@ public class FlowCDIContext implements Context, Serializable {
                 FacesContext facesContext = FacesContext.getCurrentInstance();
                 BeanManager beanManager = (BeanManager) Util.getCDIBeanManager(facesContext.getExternalContext().getApplicationMap());
                 Set<Bean<?>> availableBeans = beanManager.getBeans(flowCDIEventFireHelperImplClass);
-                if (!availableBeans.isEmpty()) {
+                if (null != availableBeans && !availableBeans.isEmpty()) {
                     Bean<?> bean = beanManager.resolve(availableBeans);
                     CreationalContext<?> creationalContext =
                             beanManager.createCreationalContext(null);
@@ -330,7 +330,7 @@ public class FlowCDIContext implements Context, Serializable {
                 FacesContext facesContext = FacesContext.getCurrentInstance();
                 BeanManager beanManager = (BeanManager) Util.getCDIBeanManager(facesContext.getExternalContext().getApplicationMap());
                 Set<Bean<?>> availableBeans = beanManager.getBeans(flowCDIEventFireHelperImplClass);
-                if (!availableBeans.isEmpty()) {
+                if (null != availableBeans && !availableBeans.isEmpty()) {
                     Bean<?> bean = beanManager.resolve(availableBeans);
                     CreationalContext<?> creationalContext =
                             beanManager.createCreationalContext(null);
