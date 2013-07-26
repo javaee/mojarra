@@ -1958,7 +1958,7 @@ public class UIData extends UIComponentBase
         List<UIColumn> renderedColumns = new ArrayList<UIColumn>(getChildCount());
         if (getChildCount() > 0) {
         	for (UIComponent child : getChildren()) {
-        		if ((child instanceof UIColumn) && child.isRendered()) {
+        		if (child instanceof UIColumn && child.isRendered()) {
         			renderedColumns.add((UIColumn)child);
         		}
         	}
