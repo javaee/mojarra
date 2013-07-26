@@ -110,11 +110,12 @@ public class CDIUtil {
        }
        
        public static class DefaultAnnotationLiteral extends AnnotationLiteral<Default> {
+           private static final long serialVersionUID = -9065007202240742004L;           
            
        }
        
        public static class AnyAnnotationLiteral extends AnnotationLiteral<Any> {
-           
+           private static final long serialVersionUID = -4700109250603725375L;
        }
        
        @Override
