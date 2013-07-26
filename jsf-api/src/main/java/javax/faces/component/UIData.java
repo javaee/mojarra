@@ -1949,25 +1949,30 @@ public class UIData extends UIComponentBase
                 }
             }
         }
+        
+        // collect rendered columns once
+        List<UIColumn> renderedColumns = new ArrayList<UIColumn>(getChildCount());
+        if (getChildCount() > 0) {
+        	for (UIComponent child : getChildren()) {
+        		if ((child instanceof UIColumn) && child.isRendered()) {
+        			renderedColumns.add((UIColumn)child);
+        		}
+        	}
+        }
 
         // Process each facet of our child UIColumn components exactly once
         setRowIndex(-1);
-        if (getChildCount() > 0) {
-            for (UIComponent column : getChildren()) {
-                if (!(column instanceof UIColumn) || !column.isRendered()) {
-                    continue;
-                }
-                if (column.getFacetCount() > 0) {
-                    for (UIComponent columnFacet : column.getFacets().values()) {
-                        if (phaseId == PhaseId.APPLY_REQUEST_VALUES) {
-                            columnFacet.processDecodes(context);
-                        } else if (phaseId == PhaseId.PROCESS_VALIDATIONS) {
-                            columnFacet.processValidators(context);
-                        } else if (phaseId == PhaseId.UPDATE_MODEL_VALUES) {
-                            columnFacet.processUpdates(context);
-                        } else {
-                            throw new IllegalArgumentException();
-                        }
+        for (UIColumn column : renderedColumns) {
+            if (column.getFacetCount() > 0) {
+                for (UIComponent columnFacet : column.getFacets().values()) {
+                    if (phaseId == PhaseId.APPLY_REQUEST_VALUES) {
+                        columnFacet.processDecodes(context);
+                    } else if (phaseId == PhaseId.PROCESS_VALIDATIONS) {
+                        columnFacet.processValidators(context);
+                    } else if (phaseId == PhaseId.UPDATE_MODEL_VALUES) {
+                        columnFacet.processUpdates(context);
+                    } else {
+                        throw new IllegalArgumentException();
                     }
                 }
             }
@@ -1994,25 +1999,20 @@ public class UIData extends UIComponentBase
             // Perform phase-specific processing as required
             // on the *children* of the UIColumn (facets have
             // been done a single time with rowIndex=-1 already)
-            if (getChildCount() > 0) {
-                for (UIComponent kid : getChildren()) {
-                    if (!(kid instanceof UIColumn) || !kid.isRendered()) {
-                        continue;
-                    }
-                    if (kid.getChildCount() > 0) {
-                        for (UIComponent grandkid : kid.getChildren()) {
-                            if (!grandkid.isRendered()) {
-                                continue;
-                            }
-                            if (phaseId == PhaseId.APPLY_REQUEST_VALUES) {
-                                grandkid.processDecodes(context);
-                            } else if (phaseId == PhaseId.PROCESS_VALIDATIONS) {
-                                grandkid.processValidators(context);
-                            } else if (phaseId == PhaseId.UPDATE_MODEL_VALUES) {
-                                grandkid.processUpdates(context);
-                            } else {
-                                throw new IllegalArgumentException();
-                            }
+            for (UIColumn kid : renderedColumns) {
+                if (kid.getChildCount() > 0) {
+                    for (UIComponent grandkid : kid.getChildren()) {
+                        if (!grandkid.isRendered()) {
+                            continue;
+                        }
+                        if (phaseId == PhaseId.APPLY_REQUEST_VALUES) {
+                            grandkid.processDecodes(context);
+                        } else if (phaseId == PhaseId.PROCESS_VALIDATIONS) {
+                            grandkid.processValidators(context);
+                        } else if (phaseId == PhaseId.UPDATE_MODEL_VALUES) {
+                            grandkid.processUpdates(context);
+                        } else {
+                            throw new IllegalArgumentException();
                         }
                     }
                 }
