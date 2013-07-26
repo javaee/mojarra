@@ -219,14 +219,10 @@
               </configuration>
             </plugin>
         </plugins>
-
     </build>
-
     <issueManagement>
         <system>JIRA</system>
-        <url>
-            http://java.net/jira/browse/JAVASERVERFACES_SPEC_PUBLIC
-        </url>
+        <url>http://java.net/jira/browse/JAVASERVERFACES_SPEC_PUBLIC</url>
     </issueManagement>
     <mailingLists>
         <mailingList>
