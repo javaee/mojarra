@@ -40,6 +40,8 @@
 package com.sun.faces.test.agnostic.el;
 
 import java.io.Serializable;
+import javax.el.ELException;
+import javax.el.ValueExpression;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
@@ -119,6 +121,81 @@ public class SetNullBean implements Serializable {
         try {
             valueBinding.setValue(facesContext, null);
         } catch (javax.faces.el.EvaluationException ee) {
+            exceptionThrown = true;
+        }
+        return exceptionThrown ? "SUCCESS" : "FAILED";
+    }
+    
+    public String getTest5() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        SetNullTestBean setNullTestBean = new SetNullTestBean();
+
+        facesContext.getExternalContext().
+                getSessionMap().put("setNullTestBean", setNullTestBean);
+
+        ValueExpression valueExpression = facesContext.getApplication().getExpressionFactory().
+                createValueExpression(facesContext.getELContext(), "#{sessionScope.setNullTestBean.one}", Object.class);
+        valueExpression.setValue(facesContext.getELContext(), null);
+
+        return setNullTestBean.getOne() == null ? "SUCCESS" : "FAILED";
+    }
+
+    public String getTest6() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        SetNullTestBean setNullTestBean = new SetNullTestBean();
+        SetNullInnerTestBean inner = new SetNullInnerTestBean();
+
+        facesContext.getExternalContext().
+                getSessionMap().put("setNullTestBean", setNullTestBean);
+
+        ValueExpression valueExpression = facesContext.getApplication().getExpressionFactory().
+                createValueExpression(facesContext.getELContext(), "#{sessionScope.setNullTestBean.inner}", Object.class);
+        valueExpression.setValue(facesContext.getELContext(), inner);
+
+        return setNullTestBean.getInner() != null ? "SUCCESS" : "FAILED";
+    }
+
+    public String getTest7() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        SetNullTestBean setNullTestBean = new SetNullTestBean();
+        SetNullInnerTestBean inner = new SetNullInnerTestBean();
+
+        facesContext.getExternalContext().
+                getSessionMap().put("setNullTestBean", setNullTestBean);
+
+        ValueExpression valueExpression = facesContext.getApplication().getExpressionFactory().
+                createValueExpression(facesContext.getELContext(), "#{sessionScope.setNullTestBean.inner}", Object.class);
+        valueExpression.setValue(facesContext.getELContext(), inner);
+        
+        valueExpression = facesContext.getApplication().getExpressionFactory().
+                createValueExpression(facesContext.getELContext(), "#{sessionScope.setNullTestBean.inner}", Object.class);
+        valueExpression.setValue(facesContext.getELContext(), null);
+
+        return setNullTestBean.getInner() == null ? "SUCCESS" : "FAILED";
+    }
+
+    public String getTest8() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        SetNullTestBean setNullTestBean = new SetNullTestBean();
+        SetNullInnerTestBean inner = new SetNullInnerTestBean();
+
+        facesContext.getExternalContext().
+                getSessionMap().put("setNullTestBean", setNullTestBean);
+
+        ValueExpression valueExpression = facesContext.getApplication().getExpressionFactory().
+                createValueExpression(facesContext.getELContext(), "#{sessionScope.setNullTestBean.inner}", Object.class);
+        valueExpression.setValue(facesContext.getELContext(), inner);
+
+        valueExpression = facesContext.getApplication().getExpressionFactory().
+                createValueExpression(facesContext.getELContext(), "#{sessionScope.setNullTestBean.inner}", Object.class);
+        valueExpression.setValue(facesContext.getELContext(), inner);
+
+        boolean exceptionThrown = false;
+        valueExpression = facesContext.getApplication().getExpressionFactory().
+                createValueExpression(facesContext.getELContext(), "#{sessionScope.setNullTestBean.inner.test4}", Object.class);
+        try {
+            valueExpression.setValue(facesContext.getELContext(), null);
+        } catch (ELException ee) {
             exceptionThrown = true;
         }
         return exceptionThrown ? "SUCCESS" : "FAILED";
