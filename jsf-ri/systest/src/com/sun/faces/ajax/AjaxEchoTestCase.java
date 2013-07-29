@@ -268,13 +268,13 @@ public class AjaxEchoTestCase  extends HtmlUnitFacesTestCase {
 //        // Check that the ajax request succeeds
 //        checkTrue("form1:out1","var a=[");
 //    }
-
-    public void testProjectStage() throws Exception {
-        getPage("/faces/ajax/ajaxProjectStage.xhtml");
-
-        // First we'll check the first page was output correctly
-        checkTrue("stage","Development");
-    }
+//
+//    public void testProjectStage() throws Exception {
+//        getPage("/faces/ajax/ajaxProjectStage.xhtml");
+//
+//        // First we'll check the first page was output correctly
+//        checkTrue("stage","Development");
+//    }
 
     public void testTextArea() throws Exception {
         getPage("/faces/ajax/ajaxEchoArea.xhtml");
