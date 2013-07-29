@@ -156,9 +156,7 @@
                 <version>2.5.2</version>
                 <configuration>
                     <threshold>High</threshold>
-                    <excludeFilterFile>
-                        exclude-common.xml,findbugs-exclude.xml
-                    </excludeFilterFile>
+                    <excludeFilterFile>findbugs-exclude.xml</excludeFilterFile>
                 </configuration>
             </plugin>
             <plugin>
