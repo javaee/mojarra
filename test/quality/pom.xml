@@ -118,17 +118,8 @@
                 <version>2.5.2</version>
                 <configuration>
                     <threshold>High</threshold>
-                    <excludeFilterFile>
-                        exclude-common.xml,findbugs-exclude.xml
-                    </excludeFilterFile>
+                    <excludeFilterFile>findbugs-exclude.xml</excludeFilterFile>
                 </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.glassfish.findbugs</groupId>
-                        <artifactId>findbugs</artifactId>
-                        <version>1.0</version>
-                    </dependency>
-                </dependencies>
             </plugin>
         </plugins>
     </build>
