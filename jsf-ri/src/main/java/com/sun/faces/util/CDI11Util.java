@@ -54,24 +54,28 @@ import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.enterprise.inject.spi.InjectionTarget;
+import javax.enterprise.inject.spi.InjectionTargetFactory;
 import javax.enterprise.util.AnnotationLiteral;
 
-public class CDIUtil {
+public class CDI11Util {
     
-    private CDIUtil() {
+    private CDI11Util() {
         throw new IllegalStateException();
     }
     
     public static Bean createHelperBean(BeanManager beanManager, Class beanClass) {
-       Bean result = null;
+       BeanWrapper result = null;
        
        AnnotatedType annotatedType = beanManager.createAnnotatedType(
                beanClass );
        
+       InjectionTargetFactory factory = beanManager.getInjectionTargetFactory(annotatedType);
+       
+       result = new BeanWrapper(beanClass);
        //use this to create the class and inject dependencies
        final InjectionTarget injectionTarget =
-               beanManager.createInjectionTarget(annotatedType);
-       result = new BeanWrapper(beanClass, injectionTarget);
+               factory.createInjectionTarget(result);
+       result.setInjectionTarget(injectionTarget);
        
        return result;
    }
@@ -79,10 +83,13 @@ public class CDIUtil {
    
    public static class BeanWrapper implements Bean {
        private Class beanClass;
-       private InjectionTarget injectionTarget;
+       private InjectionTarget injectionTarget = null;
        
-       public BeanWrapper( Class beanClass, InjectionTarget injectionTarget ) {
+       public BeanWrapper( Class beanClass) {
            this.beanClass = beanClass;
+           
+       }
+       private void setInjectionTarget(InjectionTarget injectionTarget) {
            this.injectionTarget = injectionTarget;
        }
        

@@ -39,7 +39,7 @@
  */
 package com.sun.faces.application.view;
 
-import com.sun.faces.util.CDIUtil;
+import com.sun.faces.util.CDI11Util;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import java.util.logging.Level;
@@ -110,7 +110,7 @@ public class ViewScopeExtension implements Extension {
                return;
            }
            
-           Bean bean = CDIUtil.createHelperBean(beanManager, clazz);
+           Bean bean = CDI11Util.createHelperBean(beanManager, clazz);
            event.addBean(bean);
        }
         

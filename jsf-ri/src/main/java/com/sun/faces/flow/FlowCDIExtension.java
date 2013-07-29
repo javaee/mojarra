@@ -41,7 +41,7 @@
 
 package com.sun.faces.flow;
 
-import com.sun.faces.util.CDIUtil;
+import com.sun.faces.util.CDI11Util;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import java.util.Map;
@@ -97,103 +97,10 @@ public class FlowCDIExtension implements Extension {
                return;
            }
            
-           Bean bean = CDIUtil.createHelperBean(beanManager, clazz);
+           Bean bean = CDI11Util.createHelperBean(beanManager, clazz);
            event.addBean(bean);
        }
        
    }
    
-   /***
-   private Bean createHelperBean(BeanManager beanManager, Class beanClass) {
-       Bean result = null;
-       
-       AnnotatedType annotatedType = beanManager.createAnnotatedType(
-               beanClass );
-       
-       //use this to create the class and inject dependencies
-       final InjectionTarget injectionTarget =
-               beanManager.createInjectionTarget(annotatedType);
-       result = new BeanWrapper(beanClass, injectionTarget);
-       
-       return result;
-   }
-   
-   
-   public class BeanWrapper implements Bean {
-       private Class beanClass;
-       private InjectionTarget injectionTarget;
-       
-       public BeanWrapper( Class beanClass, InjectionTarget injectionTarget ) {
-           this.beanClass = beanClass;
-           this.injectionTarget = injectionTarget;
-       }
-       
-       @Override
-       public Class<?> getBeanClass() {
-           return beanClass;
-       }
-       
-       @Override
-       public Set<InjectionPoint> getInjectionPoints() {
-           return injectionTarget.getInjectionPoints();
-       }
-       
-       @Override
-       public String getName() {
-           return null;
-       }
-       
-       @Override
-       public Set<Annotation> getQualifiers() {
-           Set<Annotation> qualifiers = new HashSet<Annotation>();
-           qualifiers.add( new AnnotationLiteral<Default>() {} );
-           qualifiers.add( new AnnotationLiteral<Any>() {} );
-           return qualifiers;
-       }
-       
-       @Override
-       public Class<? extends Annotation> getScope() {
-           return Dependent.class;
-       }
-       
-       @Override
-       public Set<Class<? extends Annotation>> getStereotypes() {
-           return Collections.emptySet();
-       }
-       
-       @Override
-       public Set<Type> getTypes() {
-           Set<Type> types = new HashSet<Type>();
-           types.add( beanClass );
-           types.add( Object.class );
-           return types;
-       }
-       
-       @Override
-       public boolean isAlternative() {
-           return false;
-       }
-       
-       @Override
-       public boolean isNullable() {
-           return false;
-       }
-       
-       @Override
-       public Object create( CreationalContext ctx ) {
-           Object instance = injectionTarget.produce( ctx );
-           injectionTarget.inject( instance, ctx );
-           injectionTarget.postConstruct( instance );
-           return instance;
-       }
-       
-       @Override
-       public void destroy( Object instance, CreationalContext ctx ) {
-           injectionTarget.preDestroy( instance );
-           injectionTarget.dispose( instance );
-           ctx.release();
-       }
-   }   
-   ***/
-
 }

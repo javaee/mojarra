@@ -107,6 +107,7 @@
                             -->
                         <exclude>com/sun/faces/flow/FlowCDIEventFireHelperImpl.java</exclude>
                         <exclude>com/sun/faces/application/view/ViewScopedCDIEventFireHelperImpl.java</exclude>
+                        <exclude>com/sun/faces/util/CDI11Util.java</exclude>
                     </excludes>
                 </configuration>
             </plugin>
