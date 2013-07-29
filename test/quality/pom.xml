@@ -97,16 +97,15 @@
                     <target>1.6</target>
                     <showWarnings>true</showWarnings>
                     <useIncrementalCompilation>false</useIncrementalCompilation>
-                    <verbose>true</verbose>
+                    <!-- 
+
+                        Excluding these classes since they bring in 
+                        JavaEE 7 dependencies. We recompile here to
+                        verify that we are not relying on JavaEE 7
+                        APIs anywhere else.
+
+                        -->
                     <excludes>
-                        <!-- 
-                            
-                            Excluding these class since it brings in a
-                            JavaEE 7 dependency. We recompile here to
-                            verify that we are not relying on JavaEE 7
-                            APIs anywhere else.
-                            
-                            -->
                         <exclude>com/sun/faces/flow/FlowCDIEventFireHelperImpl.java</exclude>
                         <exclude>com/sun/faces/application/view/ViewScopedCDIEventFireHelperImpl.java</exclude>
                         <exclude>com/sun/faces/util/CDI11Util.java</exclude>
