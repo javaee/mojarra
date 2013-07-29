@@ -65,7 +65,6 @@ public class Issue1817IT {
     }
 
     @Test
-    @Ignore
     public void testAjaxUIRepeat() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/issue1817.xhtml");
         final DomNodeList<DomElement> elements = page.getElementsByTagName("a");
