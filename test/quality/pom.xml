@@ -96,17 +96,27 @@
                     <source>1.6</source>
                     <target>1.6</target>
                     <showWarnings>true</showWarnings>
+                    <useIncrementalCompilation>false</useIncrementalCompilation>
+                    <!-- 
+
+                        Excluding this class since it brings in a JavaEE 6 dependency,
+                        it is an added feature to this implementation that does not 
+                        break JavaEE 5 compatibility. We recompile here to verify that
+                        we are not relying on JavaEE 6 APIs anywhere.
+
+                        -->
                     <excludes>
-                        <!-- 
-                            
-                            Excluding this class since it brings in a JavaEE 6 dependency,
-                            it is an added feature to this implementation that does not 
-                            break JavaEE 5 compatibility. We recompile here to verify that
-                            we are not relying on JavaEE 6 APIs anywhere.
-                            
-                            -->
-                        <excludes>com/sun/faces/config/FacesInitializer.java</excludes>
+                        <exclude>com/sun/faces/config/FacesInitializer.java</exclude>
                     </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>2.5.2</version>
+                <configuration>
+                    <threshold>High</threshold>
+                    <excludeFilterFile>findbugs-exclude.xml</excludeFilterFile>
                 </configuration>
             </plugin>
         </plugins>
@@ -139,7 +149,7 @@
             Groovy for your pages. If you do not want to use Groovy
             simply omit this dependency.
         
-            -->
+        -->
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
@@ -158,8 +168,8 @@
                 <artifactId>findbugs-maven-plugin</artifactId>
                 <version>2.5.2</version>
                 <configuration>
-                    <threshold>Low</threshold>
-                    <effort>Max</effort>
+                    <threshold>High</threshold>
+                    <excludeFilterFile>findbugs-exclude.xml</excludeFilterFile>
                 </configuration>
             </plugin>
             <plugin>
