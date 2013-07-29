@@ -97,6 +97,7 @@
                     <target>1.6</target>
                     <showWarnings>true</showWarnings>
                     <useIncrementalCompilation>false</useIncrementalCompilation>
+                    <verbose>true</verbose>
                     <excludes>
                         <!-- 
                             
