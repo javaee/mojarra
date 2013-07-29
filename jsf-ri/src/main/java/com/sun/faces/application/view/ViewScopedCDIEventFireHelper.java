@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -36,16 +36,14 @@
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
  * holder.
-
  */
 package com.sun.faces.application.view;
 
 import javax.faces.component.UIViewRoot;
 
 public interface ViewScopedCDIEventFireHelper {
-    
-    public void fireInitializedEvent(UIViewRoot root);
-    public void fireDestroyedEvent(UIViewRoot root);
-    
-    
+
+    void fireInitializedEvent(UIViewRoot root);
+
+    void fireDestroyedEvent(UIViewRoot root);
 }
