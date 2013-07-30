@@ -41,7 +41,7 @@
 
 package com.sun.faces.flow;
 
-//import com.sun.faces.util.CDI11Util;
+import com.sun.faces.util.CDI11Util;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import java.util.Map;
@@ -97,8 +97,8 @@ public class FlowCDIExtension implements Extension {
                return;
            }
            
-//           Bean bean = CDI11Util.createHelperBean(beanManager, clazz);
-//           event.addBean(bean);
+           Bean bean = CDI11Util.createHelperBean(beanManager, clazz);
+           event.addBean(bean);
        }
        
    }
