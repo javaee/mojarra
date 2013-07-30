@@ -39,9 +39,10 @@
  */
 package com.sun.faces.application.view;
 
-//import com.sun.faces.util.CDI11Util;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.cdi11.CDIUtil;
+import java.util.ServiceLoader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.event.Observes;
@@ -58,6 +59,7 @@ import javax.faces.view.ViewScoped;
 public class ViewScopeExtension implements Extension {
 
    private boolean isCdiOneOneOrGreater = false;
+   private CDIUtil cdiUtil = null;
 
    /**
      * Stores the logger.
@@ -110,8 +112,26 @@ public class ViewScopeExtension implements Extension {
                return;
            }
            
-//           Bean bean = CDI11Util.createHelperBean(beanManager, clazz);
-//           event.addBean(bean);
+           if (null == cdiUtil) {
+               ServiceLoader<CDIUtil> oneCdiUtil = ServiceLoader.load(CDIUtil.class);
+               for (CDIUtil oneAndOnly : oneCdiUtil) {
+                   if (null != cdiUtil) {
+                       String message = "Must only have one implementation of CDIUtil available";
+                       if (LOGGER.isLoggable(Level.SEVERE)) {
+                           LOGGER.log(Level.SEVERE, message);
+                       }
+                       throw new IllegalStateException(message);
+                   }
+                   cdiUtil = oneAndOnly;
+               }
+           }
+           
+           if (null != cdiUtil) {
+               Bean bean = cdiUtil.createHelperBean(beanManager, clazz);
+               event.addBean(bean);
+           } else if (LOGGER.isLoggable(Level.SEVERE)) {
+               LOGGER.log(Level.SEVERE, "Unable to obtain CDI 1.1 utilities for Mojarra");
+           }
        }
         
     }

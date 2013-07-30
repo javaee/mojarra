@@ -38,8 +38,9 @@
  * holder.
 
  */
-package com.sun.faces.util;
+package com.sun.faces.util.cdi11;
 
+import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.util.Collections;
@@ -57,13 +58,16 @@ import javax.enterprise.inject.spi.InjectionTarget;
 import javax.enterprise.inject.spi.InjectionTargetFactory;
 import javax.enterprise.util.AnnotationLiteral;
 
-public class CDI11Util {
+public class CDIUtilImpl implements Serializable, CDIUtil {
     
-    private CDI11Util() {
-        throw new IllegalStateException();
+    private static final long serialVersionUID = -8101770583567814803L;
+    
+    public CDIUtilImpl() {
+        
     }
     
-    public static Bean createHelperBean(BeanManager beanManager, Class beanClass) {
+    @Override
+    public Bean createHelperBean(BeanManager beanManager, Class beanClass) {
        BeanWrapper result = null;
        
        AnnotatedType annotatedType = beanManager.createAnnotatedType(
@@ -81,7 +85,7 @@ public class CDI11Util {
    }
    
    
-   public static class BeanWrapper implements Bean {
+   private static class BeanWrapper implements Bean {
        private Class beanClass;
        private InjectionTarget injectionTarget = null;
        
