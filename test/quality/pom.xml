@@ -121,6 +121,29 @@
                     <excludeFilterFile>findbugs-exclude.xml</excludeFilterFile>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>3.0.1</version>
+                <configuration>
+                    <targetJdk>1.6</targetJdk>
+                    <excludes>
+                        <exclude>com/sun/faces/taglib/html_basic/**/*.java</exclude>
+                        <exclude>javax/faces/component/html/**/*.java</exclude>
+                    </excludes>
+                    <rulesets>
+                        <ruleset>${project.build.directory}/../pmd-ruleset.xml</ruleset>
+                        <ruleset>/rulesets/maven.xml</ruleset>
+                    </rulesets>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>net.sourceforge.pmd</groupId>
+                        <artifactId>pmd</artifactId>
+                        <version>5.0.4</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
         </plugins>
     </build>
     <dependencies>
@@ -169,6 +192,10 @@
                         <exclude>com/sun/faces/taglib/html_basic/**/*.java</exclude>
                         <exclude>javax/faces/component/html/**/*.java</exclude>
                     </excludes>
+                    <rulesets>
+                        <ruleset>${project.build.directory}/../pmd-ruleset.xml</ruleset>
+                        <ruleset>/rulesets/maven.xml</ruleset>
+                    </rulesets>
                 </configuration>
             </plugin>
             <plugin>
