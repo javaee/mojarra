@@ -133,7 +133,6 @@
                     </excludes>
                     <rulesets>
                         <ruleset>${project.build.directory}/../pmd-ruleset.xml</ruleset>
-                        <ruleset>/rulesets/maven.xml</ruleset>
                     </rulesets>
                 </configuration>
                 <dependencies>
@@ -194,7 +193,6 @@
                     </excludes>
                     <rulesets>
                         <ruleset>${project.build.directory}/../pmd-ruleset.xml</ruleset>
-                        <ruleset>/rulesets/maven.xml</ruleset>
                     </rulesets>
                 </configuration>
             </plugin>
