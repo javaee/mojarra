@@ -38,37 +38,32 @@
  * holder.
 
  */
-package com.sun.faces.test.webprofile.cdi.initDestroy;
+package com.sun.faces.test.javaee7.cdi.initDestroy;
 
-import javax.enterprise.context.Dependent;
-import javax.enterprise.event.Observes;
-import javax.enterprise.context.Initialized;
-import javax.enterprise.context.Destroyed;
-import javax.faces.flow.Flow;
-import javax.faces.flow.FlowScoped;
-import javax.inject.Inject;
+import java.io.Serializable;
+import javax.enterprise.context.ApplicationScoped;
+import javax.faces.context.FacesContext;
+import javax.inject.Named;
+import javax.servlet.http.HttpSession;
 
-@Dependent
-public class FlowLogger {
+@Named
+@ApplicationScoped
+public class AppBean implements Serializable {
     
-    @Inject UserBean userBean;
+    private String sessionDestroyedMessage;
 
-    public FlowLogger() {
-        System.out.println("FlowLogger ctor");
+    public String getSessionDestroyedMessage() {
+        return sessionDestroyedMessage;
     }
-        
-    
-    public void observeFlowStart(@Observes
-    @Initialized(FlowScoped.class) Flow currentFlow) {
-        long currentTime = System.currentTimeMillis();
-        userBean.setInitFlowMessage("" + currentTime);
+
+    public void setSessionDestroyedMessage(String sessionDestroyedMessage) {
+        this.sessionDestroyedMessage = sessionDestroyedMessage;
     }
     
-    public void observeFlowEnd(@Observes
-    @Destroyed(FlowScoped.class) Flow currentFlow) {
-        long currentTime = System.currentTimeMillis();
-        userBean.setDestroyFlowMessage("" + currentTime);
-    }    
     
-    
+    public void invalidateSession() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpSession mySession = (HttpSession) context.getExternalContext().getSession(true);
+        mySession.invalidate();
+    }
 }

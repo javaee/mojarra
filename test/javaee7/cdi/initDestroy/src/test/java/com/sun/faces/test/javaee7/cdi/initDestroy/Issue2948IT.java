@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.webprofile.cdi.initDestroy;
+package com.sun.faces.test.javaee7.cdi.initDestroy;
 
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
@@ -98,11 +98,11 @@ public class Issue2948IT {
     @Test
     public void testSessionLogging() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
-        HtmlElement e = page.getElementById("initMessage");
+        HtmlElement e = (HtmlElement) page.getElementById("initMessage");
         long sessionInitTime = Long.valueOf(e.asText()).longValue();
         HtmlSubmitInput invalidateButton = (HtmlSubmitInput) page.getElementById("invalidateSession");
         page = invalidateButton.click();
-        e = page.getElementById("destroyMessage");
+        e = (HtmlElement) page.getElementById("destroyMessage");
         long sessionDestroyTime = Long.valueOf(e.asText()).longValue();
         assertTrue(sessionInitTime < sessionDestroyTime);
 
@@ -113,13 +113,13 @@ public class Issue2948IT {
         HtmlPage page = webClient.getPage(webUrl);
         HtmlSubmitInput enterFlow = (HtmlSubmitInput) page.getElementById("enterFlow");
         page = enterFlow.click();
-        HtmlElement e = page.getElementById("initMessage");
+        HtmlElement e = (HtmlElement) page.getElementById("initMessage");
         long flowInitTime = Long.valueOf(e.asText()).longValue();
         HtmlSubmitInput next = (HtmlSubmitInput) page.getElementById("a");
         page = next.click();
         HtmlSubmitInput returnButton = (HtmlSubmitInput) page.getElementById("return");
         page = returnButton.click();
-        e = page.getElementById("destroyMessage");
+        e = (HtmlElement) page.getElementById("destroyMessage");
         long flowDestroyTime = Long.valueOf(e.asText()).longValue();
         assertTrue(flowInitTime < flowDestroyTime);
         
@@ -129,11 +129,11 @@ public class Issue2948IT {
     @Test
     public void testViewScopedLogging() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/viewScoped01.xhtml");
-        HtmlElement e = page.getElementById("initMessage");
+        HtmlElement e = (HtmlElement) page.getElementById("initMessage");
         long flowInitTime = Long.valueOf(e.asText()).longValue();
         HtmlSubmitInput returnButton = (HtmlSubmitInput) page.getElementById("viewScoped02");
         page = returnButton.click();
-        e = page.getElementById("destroyMessage");
+        e = (HtmlElement) page.getElementById("destroyMessage");
         long flowDestroyTime = Long.valueOf(e.asText()).longValue();
         assertTrue(flowInitTime < flowDestroyTime);
         

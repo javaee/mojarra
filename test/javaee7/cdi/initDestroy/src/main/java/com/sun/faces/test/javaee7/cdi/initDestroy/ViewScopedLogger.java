@@ -38,38 +38,36 @@
  * holder.
 
  */
-package com.sun.faces.test.webprofile.cdi.initDestroy;
+package com.sun.faces.test.javaee7.cdi.initDestroy;
 
-import javax.enterprise.context.SessionScoped;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Observes;
-import javax.servlet.http.HttpSession;
 import javax.enterprise.context.Initialized;
 import javax.enterprise.context.Destroyed;
+import javax.faces.component.UIViewRoot;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 
 @Dependent
-public class SessionLogger {
-    
-    public SessionLogger() {
-        System.out.println("SessionLogger ctor");
-    }
-    
+public class ViewScopedLogger {
     
     @Inject UserBean userBean;
-    @Inject AppBean appBean;
+
+    public ViewScopedLogger() {
+        System.out.println("ViewScopedLogger ctor");
+    }
+        
     
-    
-    public void observeSessionStart(@Observes
-    @Initialized(SessionScoped.class) HttpSession event) {
+    public void observeViewScopedStart(@Observes
+    @Initialized(ViewScoped.class) UIViewRoot root) {
         long currentTime = System.currentTimeMillis();
-        userBean.setInitMessage("" + currentTime);
+        userBean.setInitViewScopeMesasge("" + currentTime);
     }
     
-    public void observeSessionEnd(@Observes
-    @Destroyed(SessionScoped.class) HttpSession event) {
+    public void observeViewScopedEnd(@Observes
+    @Destroyed(ViewScoped.class) UIViewRoot root) {
         long currentTime = System.currentTimeMillis();
-        appBean.setSessionDestroyedMessage("" + currentTime);
+        userBean.setDestroyViewScopeMessage("" + currentTime);
     }    
     
     

@@ -38,7 +38,7 @@
  * holder.
 
  */
-package com.sun.faces.test.webprofile.cdi.initDestroy;
+package com.sun.faces.test.javaee7.cdi.initDestroy;
 
 import java.io.Serializable;
 import javax.faces.flow.FlowScoped;

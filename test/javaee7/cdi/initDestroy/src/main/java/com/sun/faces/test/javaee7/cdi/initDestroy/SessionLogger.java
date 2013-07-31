@@ -38,21 +38,39 @@
  * holder.
 
  */
-package com.sun.faces.test.webprofile.cdi.initDestroy;
+package com.sun.faces.test.javaee7.cdi.initDestroy;
 
-import java.io.Serializable;
-import javax.faces.view.ViewScoped;
-import javax.inject.Named;
+import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.Dependent;
+import javax.enterprise.event.Observes;
+import javax.servlet.http.HttpSession;
+import javax.enterprise.context.Initialized;
+import javax.enterprise.context.Destroyed;
+import javax.inject.Inject;
 
-@Named
-@ViewScoped
-public class ViewScopedBean implements Serializable {
+@Dependent
+public class SessionLogger {
     
-    private static final long serialVersionUID = -6301337067401894253L;
-    
-    private String value = "My View Scoped Value";
-
-    public String getValue() {
-        return value;
+    public SessionLogger() {
+        System.out.println("SessionLogger ctor");
     }
+    
+    
+    @Inject UserBean userBean;
+    @Inject AppBean appBean;
+    
+    
+    public void observeSessionStart(@Observes
+    @Initialized(SessionScoped.class) HttpSession event) {
+        long currentTime = System.currentTimeMillis();
+        userBean.setInitMessage("" + currentTime);
+    }
+    
+    public void observeSessionEnd(@Observes
+    @Destroyed(SessionScoped.class) HttpSession event) {
+        long currentTime = System.currentTimeMillis();
+        appBean.setSessionDestroyedMessage("" + currentTime);
+    }    
+    
+    
 }

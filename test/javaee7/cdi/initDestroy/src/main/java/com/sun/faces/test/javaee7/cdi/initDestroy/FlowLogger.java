@@ -38,36 +38,36 @@
  * holder.
 
  */
-package com.sun.faces.test.webprofile.cdi.initDestroy;
+package com.sun.faces.test.javaee7.cdi.initDestroy;
 
 import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Observes;
 import javax.enterprise.context.Initialized;
 import javax.enterprise.context.Destroyed;
-import javax.faces.component.UIViewRoot;
-import javax.faces.view.ViewScoped;
+import javax.faces.flow.Flow;
+import javax.faces.flow.FlowScoped;
 import javax.inject.Inject;
 
 @Dependent
-public class ViewScopedLogger {
+public class FlowLogger {
     
     @Inject UserBean userBean;
 
-    public ViewScopedLogger() {
-        System.out.println("ViewScopedLogger ctor");
+    public FlowLogger() {
+        System.out.println("FlowLogger ctor");
     }
         
     
-    public void observeViewScopedStart(@Observes
-    @Initialized(ViewScoped.class) UIViewRoot root) {
+    public void observeFlowStart(@Observes
+    @Initialized(FlowScoped.class) Flow currentFlow) {
         long currentTime = System.currentTimeMillis();
-        userBean.setInitViewScopeMesasge("" + currentTime);
+        userBean.setInitFlowMessage("" + currentTime);
     }
     
-    public void observeViewScopedEnd(@Observes
-    @Destroyed(ViewScoped.class) UIViewRoot root) {
+    public void observeFlowEnd(@Observes
+    @Destroyed(FlowScoped.class) Flow currentFlow) {
         long currentTime = System.currentTimeMillis();
-        userBean.setDestroyViewScopeMessage("" + currentTime);
+        userBean.setDestroyFlowMessage("" + currentTime);
     }    
     
     

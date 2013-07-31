@@ -38,32 +38,21 @@
  * holder.
 
  */
-package com.sun.faces.test.webprofile.cdi.initDestroy;
+package com.sun.faces.test.javaee7.cdi.initDestroy;
 
 import java.io.Serializable;
-import javax.enterprise.context.ApplicationScoped;
-import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Named;
-import javax.servlet.http.HttpSession;
 
 @Named
-@ApplicationScoped
-public class AppBean implements Serializable {
+@ViewScoped
+public class ViewScopedBean implements Serializable {
     
-    private String sessionDestroyedMessage;
+    private static final long serialVersionUID = -6301337067401894253L;
+    
+    private String value = "My View Scoped Value";
 
-    public String getSessionDestroyedMessage() {
-        return sessionDestroyedMessage;
-    }
-
-    public void setSessionDestroyedMessage(String sessionDestroyedMessage) {
-        this.sessionDestroyedMessage = sessionDestroyedMessage;
-    }
-    
-    
-    public void invalidateSession() {
-        FacesContext context = FacesContext.getCurrentInstance();
-        HttpSession mySession = (HttpSession) context.getExternalContext().getSession(true);
-        mySession.invalidate();
+    public String getValue() {
+        return value;
     }
 }
