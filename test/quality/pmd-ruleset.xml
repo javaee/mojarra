@@ -7,12 +7,12 @@
     <description>Our ruleset</description>
 
     <rule ref="rulesets/java/basic.xml"/>
-    <rule ref="rulesets/java/unusedcode.xml">
-        <exclude name="UnusedModifier"/>
-    </rule>
     <rule ref="rulesets/java/finalizers.xml"/>
     <rule ref="rulesets/java/imports.xml"/>
     <rule ref="rulesets/java/naming.xml"/>
     <rule ref="rulesets/java/optimizations.xml"/>
     <rule ref="rulesets/java/strings.xml"/>
+    <rule ref="rulesets/java/unusedcode.xml">
+        <exclude name="UnusedModifier"/>
+    </rule>
 </ruleset>
