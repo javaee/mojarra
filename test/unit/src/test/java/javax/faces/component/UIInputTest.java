@@ -47,7 +47,6 @@ import org.easymock.EasyMock;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.easymock.EasyMock.*;
-import org.junit.Ignore;
 
 /**
  * @author Manfred Riem (manfred.riem@oracle.com)
@@ -142,7 +141,6 @@ public class UIInputTest {
     }
 
     @Test
-    @Ignore
     public void testRestoreState5() {
         FacesContext context = EasyMock.createMock(FacesContext.class);
         UIInput input = new UIInput();
@@ -160,7 +158,7 @@ public class UIInputTest {
         assertTrue(!l2.initialStateMarked());
         Object state = input.saveState(context);
         assertTrue(state instanceof Object[]);
-        Object[] validatorState = (Object[]) ((Object[]) state)[3];
+        Object[] validatorState = (Object[]) ((Object[]) state)[1];
         assertNotNull(validatorState);
         assertNull(validatorState[0]);
         assertNotNull(validatorState[1]);
@@ -191,7 +189,7 @@ public class UIInputTest {
         state = input.saveState(context);
         assertNotNull(validatorState);
         assertTrue(state instanceof Object[]);
-        validatorState = (Object[]) ((Object[]) state)[3];
+        validatorState = (Object[]) ((Object[]) state)[1];
         assertNotNull(validatorState);
         assertTrue(validatorState.length == 3);
         assertNotNull(validatorState[0]);
