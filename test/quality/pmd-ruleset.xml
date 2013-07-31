@@ -9,7 +9,11 @@
     <rule ref="rulesets/java/basic.xml"/>
     <rule ref="rulesets/java/finalizers.xml"/>
     <rule ref="rulesets/java/imports.xml"/>
-    <rule ref="rulesets/java/naming.xml"/>
+    <rule ref="rulesets/java/naming.xml">
+        <exclude name="AbstractNaming"/>
+        <exclude name="LongVariable"/>
+        <exclude name="ShortVariable"/>
+    </rule>
     <rule ref="rulesets/java/optimizations.xml">
         <exclude name="LocalVariableCouldBeFinal"/>
         <exclude name="MethodArgumentCouldBeFinal"/>
