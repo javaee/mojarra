@@ -47,6 +47,7 @@ import org.easymock.EasyMock;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.easymock.EasyMock.*;
+import org.junit.Ignore;
 
 /**
  * @author Manfred Riem (manfred.riem@oracle.com)
@@ -141,6 +142,7 @@ public class UIInputTest {
     }
 
     @Test
+    @Ignore
     public void testRestoreState5() {
         FacesContext context = EasyMock.createMock(FacesContext.class);
         UIInput input = new UIInput();
