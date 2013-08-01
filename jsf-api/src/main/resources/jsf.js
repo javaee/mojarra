@@ -309,14 +309,21 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 this.requestParams = new Array();
                 for (var i=0; i<dataArray.length; i++) {
                     var nameValue = dataArray[i].split("=");
-                    input = document.createElement("input");
-                    input.setAttribute("type", "hidden");
-                    input.setAttribute("id", nameValue[0]);
-                    input.setAttribute("name", nameValue[0]);
-                    input.setAttribute("value", nameValue[1]);
-                    this.context.form.appendChild(input);
-                    this.requestParams.push(nameValue[0]);
+                    if (nameValue[0] === "javax.faces.source" ||
+                        nameValue[0] === "javax.faces.partial.event" ||
+                        nameValue[0] === "javax.faces.partial.execute" ||
+                        nameValue[0] === "javax.faces.partial.render" ||
+                        nameValue[0] === "javax.faces.partial.ajax") {
+                        input = document.createElement("input");
+                        input.setAttribute("type", "hidden");
+                        input.setAttribute("id", nameValue[0]);
+                        input.setAttribute("name", nameValue[0]);
+                        input.setAttribute("value", nameValue[1]);
+                        this.context.form.appendChild(input);
+                        this.requestParams.push(nameValue[0]);
+                    }
                 }
+                this.requestParams.push(this.FRAME_PARTIAL_ID);
                 this.context.form.submit();
             },
             
@@ -366,31 +373,19 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              *@ignore
              */
             cleanupReqParams: function() {
-                var elements = this.context.form.childNodes;
-                
-                for (var i=0; i<elements.length; i++) {
-                    if (!elements[i].type === "hidden") {
-                        continue;
-                    }
-                    if (contains(this.requestParams, elements[i])) {
-                        var node = elements[i].parentNode.removeChild(elements[i]);
-                        node = null;                           
+                for (var i=0; i<this.requestParams.length; i++) {
+                    var elements = this.context.form.childNodes;
+                    for (var j=0; j<elements.length; j++) {
+                        if (!elements[j].type === "hidden") {
+                            continue;
+                        }
+                        if (elements[j].name === this.requestParams[i]) {
+                            var node = this.context.form.removeChild(elements[j]);
+                            node = null;                           
+                            break;
+                        }
                     }   
                 }
-                   
-                /**
-                 * @ignore
-                 */
-                function contains(arr, obj) {
-                    var returnVal = false;
-                    for(var i=0; i<arr.length; i++) {
-                        if (arr[i] === obj.id) {
-                            returnVal = true;
-                            break;
-                        } 
-                    } 
-                    return returnVal;
-                }               
             }
         };
         
