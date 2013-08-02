@@ -790,7 +790,6 @@ javax.faces.level=ALL
                  destdir="${build.javadocs.dir}"
                  Overview="${resources.dir}/overview.html"
                  private="${javadoc.private}"
-                 link="http://java.sun.com/javase/6/docs/api/"
                  protected="${javadoc.protected}"
                  windowtitle="${DocName} (${spec.version})"
                  stylesheetfile="${resources.dir}/jsf-api.css"
@@ -799,6 +798,10 @@ javax.faces.level=ALL
                  doctitle="${DocName} (${spec.version} SNAPSHOT ${build.number})"
                  >
             <bottom><![CDATA[<a href="http://www.oracle.com">Oracle</a> and/or its affiliates. All Rights Reserved. Use is subject to <a href="{@docRoot}/doc-files/speclicense.html" target="_top">license terms</a>]]></bottom>
+           <link offline="true"
+                 href="http://java.sun.com/javase/6/docs/api/package-list"
+                 packagelistloc="${jsf.build.home}/common/ant/package-list" />
+                 
             <fileset dir="${src.dir}">
                 <include name="**/*.java"/>
                 <exclude name="**/ApplicationScoped.java" />
@@ -820,7 +823,6 @@ javax.faces.level=ALL
                  destdir="${build.managed-bean-javadocs.dir}"
                  Overview="${resources.dir}/managed-bean-overview.html"
                  private="${javadoc.private}"
-                 link="http://java.sun.com/javase/6/docs/api/"
                  protected="${javadoc.protected}"
                  windowtitle="Faces Managed Bean Annotation Specification (${spec.version})"
                  stylesheetfile="${resources.dir}/jsf-api.css"
@@ -828,6 +830,10 @@ javax.faces.level=ALL
                  useexternalfile="yes"
                  doctitle="Faces Managed Bean Annotation Specification (${spec.version})"
                  bottom="Copyright &#169; 2002-2009 Sun Microsystems, Inc. All Rights Reserved.">
+           <link offline="true"
+                 href="http://java.sun.com/javase/6/docs/api/package-list"
+                 packagelistloc="${jsf.build.home}/common/ant/package-list" />
+                 
             <fileset dir="${src.dir}">
                 <include name="**/ApplicationScoped.java" />
                 <include name="**/CustomScoped.java" />
