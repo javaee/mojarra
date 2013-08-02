@@ -95,10 +95,10 @@
     <property name="DocName" value="Mojarra Implementation Javadoc"/>
 
     <path id="impl.compile.classpath">
+        <path refid="cdi.classpath"/>
         <pathelement location="${jsf-api.jar}"/>
         <path refid="apache.commons.classpath"/>
         <path refid="compile.classpath"/>
-        <path refid="cdi.classpath"/>
         <pathelement location="${jsf-tools.jar}"/>
         <pathelement location="${tools.dir}/build/classes"/>
     </path>
