@@ -12,5 +12,6 @@
     <name>Mojarra ${project.version} - Test - JavaEE 7 - CDI</name>
     <modules>
       <module>initDestroy</module>
+      <module>noBeansXml</module>
     </modules>
 </project>
