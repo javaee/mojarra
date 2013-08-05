@@ -58,11 +58,8 @@
 
 package com.sun.faces.facelets.tag.jsf;
 
-import com.sun.faces.application.ApplicationAssociate;
-import javax.faces.view.facelets.Facelet;
 import com.sun.faces.facelets.util.ReflectionUtil;
 import com.sun.faces.facelets.el.VariableMapperWrapper;
-import com.sun.faces.facelets.impl.DefaultFaceletFactory;
 import com.sun.faces.facelets.tag.jsf.ComponentTagHandlerDelegateImpl.CreateComponentDelegate;
 import com.sun.faces.facelets.tag.MetaRulesetImpl;
 import com.sun.faces.facelets.tag.MetadataTargetImpl;
@@ -156,6 +153,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
             }
             if (cc == null) {
                 cc = context.getApplication().createComponent(context, ccResource);
+                cc.setValueExpression("binding", ve);
                 ve.setValue(ctx, cc);
             }
         } else {
