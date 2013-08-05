@@ -61,5 +61,6 @@
         <module>coreEmptyAsNull</module>
         <module>html</module>
         <module>ui</module>
+        <module>binding</module>
     </modules>
 </project>
