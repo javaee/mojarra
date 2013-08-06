@@ -52,12 +52,12 @@
                 <maven.surefire.debug>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address}</maven.surefire.debug>
                 <webapp.enableClientStateDebugging>true</webapp.enableClientStateDebugging>
                 <jpda.listen>true</jpda.listen>
-                <project.build.finalName>test-agnostic-facelets-binding</project.build.finalName>
+                <project.build.finalName>test-agnostic-facelets-cc</project.build.finalName>
                 <webapp.projectStage>Development</webapp.projectStage>
                 <webapp.stateSavingMethod>client</webapp.stateSavingMethod>
                 <integration.serverPort>8080</integration.serverPort>
                 <integration.serverName>localhost</integration.serverName>
-                <integration.url>http://localhost:8080/test-agnostic-facelets-binding/</integration.url>
+                <integration.url>http://localhost:8080/test-agnostic-facelets-cc/</integration.url>
                 <webapp.partialStateSaving>false</webapp.partialStateSaving>
             </properties>
         </action>
@@ -68,10 +68,10 @@
                 <goal>surefire:test</goal>
             </goals>
             <properties>
-                <project.build.finalName>test-agnostic-facelets-binding</project.build.finalName>
+                <project.build.finalName>test-agnostic-facelets-cc</project.build.finalName>
                 <integration.serverPort>8080</integration.serverPort>
                 <integration.serverName>localhost</integration.serverName>
-                <integration.url>http://localhost:8080/test-agnostic-facelets-binding/</integration.url>
+                <integration.url>http://localhost:8080/test-agnostic-facelets-cc/</integration.url>
                 <test>binding</test>
             </properties>
         </action>

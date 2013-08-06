@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.facelets.binding;
+package com.sun.faces.test.agnostic.facelets.composite;
 
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
@@ -98,7 +98,7 @@ public class Issue2925IT {
 
     @Test
     public void testBuilderDefinedFlowWithMethodCall() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl);
+        HtmlPage page = webClient.getPage(webUrl + "faces/composite.xhtml");
         webClient.waitForBackgroundJavaScript(60000);
         List anchors = page.getAnchors();
 
