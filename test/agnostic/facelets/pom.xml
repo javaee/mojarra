@@ -59,6 +59,5 @@
         <module>html</module>
         <module>ui</module>
         <module>viewAction</module>
-        <module>binding</module>
   </modules>
 </project>

@@ -1,4 +1,4 @@
-package com.sun.faces.test.agnostic.facelets.binding;
+package com.sun.faces.test.agnostic.facelets.composite;
 
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
