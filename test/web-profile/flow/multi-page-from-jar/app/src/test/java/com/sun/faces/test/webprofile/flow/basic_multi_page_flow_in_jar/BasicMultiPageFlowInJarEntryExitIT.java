@@ -97,7 +97,6 @@ public class BasicMultiPageFlowInJarEntryExitIT {
     }
 
     @Test
-    @Ignore
     public void testFlowEntryExit() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
 
@@ -124,7 +123,6 @@ public class BasicMultiPageFlowInJarEntryExitIT {
     }
     
     @Test
-    @Ignore
     public void testFacesFlowScope() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
         

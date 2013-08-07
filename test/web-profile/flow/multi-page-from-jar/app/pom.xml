@@ -53,7 +53,7 @@
     <packaging>war</packaging>
     <name>Mojarra ${project.version} - Test - Web-Profile - Flow - Multi page parent - Basic With Multi Page Flow Stored In Jar, Tests</name>
     <build>
-        <finalName>test-webprofile-flow-multi_from_jar_parent-multi_page_from_jar</finalName>
+        <finalName>test-webprofile-flow-multi_page_from_jar</finalName>
     </build>
     <dependencies>
       <dependency>
