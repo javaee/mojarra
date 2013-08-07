@@ -41,6 +41,9 @@
 package com.sun.faces.util;
 
 import java.nio.charset.Charset;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -50,6 +53,9 @@ import java.security.SecureRandom;
 import java.util.SortedMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.xml.bind.DatatypeConverter;
 
 /**
@@ -132,7 +138,7 @@ public final class ByteArrayGuardAESCTR {
         return securedata;
     }
 
-    public String decrypt(String value) {
+    public String decrypt(String value) throws InvalidKeyException {
         
         byte[] bytes = DatatypeConverter.parseBase64Binary(value);;
         
@@ -141,9 +147,22 @@ public final class ByteArrayGuardAESCTR {
             decryptCipher.init(Cipher.DECRYPT_MODE, sk, ivspec);
 
             byte[] plaindata = decryptCipher.doFinal(bytes);
+            for (byte cur : plaindata) {
+                if (cur < 0 || cur > 255) {
+                    throw new InvalidKeyException("Invalid characters in decrypted value");
+                }
+            }
             return new String(plaindata, utf8);
-        } catch (Exception e) {
-            throw new FacesException(e);
+        } catch (NoSuchAlgorithmException nsae) {
+            throw new InvalidKeyException(nsae);
+        } catch (NoSuchPaddingException nspe) {
+            throw new InvalidKeyException(nspe);
+        } catch (InvalidAlgorithmParameterException iape) {
+            throw new InvalidKeyException(iape);
+        } catch (IllegalBlockSizeException ibse) {
+            throw new InvalidKeyException(ibse);
+        } catch (BadPaddingException bpe) {
+            throw new InvalidKeyException(bpe);
         }
     }
     

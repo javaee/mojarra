@@ -48,6 +48,7 @@ import com.sun.faces.util.FacesLogger;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.security.InvalidKeyException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -1097,8 +1098,18 @@ public class ELFlash extends Flash {
 
         if (null == result) {
             result = new PreviousNextFlashInfoManager(guard, flashInnerMap);
-            result.decode(context, this, cookie);
-            contextMap.put(CONSTANTS.RequestFlashManager, result);
+            try {
+                result.decode(context, this, cookie);
+                contextMap.put(CONSTANTS.RequestFlashManager, result);
+            } catch (InvalidKeyException ike) {
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    result = getCurrentFlashManager(contextMap, true);
+                    LOGGER.log(Level.SEVERE,
+                            "jsf.externalcontext.flash.bad.cookie",
+                            new Object [] { ike.getMessage() });
+                }
+                
+            }
 
         }
         return result;
@@ -1247,22 +1258,26 @@ public class ELFlash extends Flash {
 	 * the system.  When any error occurs, the flash is not usable
 	 * for this request, and a nice error message is logged.</p>
 
-	 * <p>This method is where the LifetimeMarker is incremeted,
+	 * <p>This method is where the LifetimeMarker is incremented,
 	 * UNLESS the incoming request is the GET after the REDIRECT
 	 * after POST, in which case we don't increment it because the
 	 * system will expire the entries in the doLastPhaseActions.</p>
 	 *
 	 */
 
-        void decode(FacesContext context, ELFlash flash, Cookie cookie) {
+        void decode(FacesContext context, ELFlash flash, Cookie cookie) throws InvalidKeyException {
             String temp;
             String value;
             
+            String urlDecodedValue = null;
+            
             try {
-                value = guard.decrypt(URLDecoder.decode(cookie.getValue(), "UTF-8"));
+                urlDecodedValue = URLDecoder.decode(cookie.getValue(), "UTF-8");
             } catch (UnsupportedEncodingException uee) {
-                value = guard.decrypt(cookie.getValue());
+                urlDecodedValue = cookie.getValue();
             }
+            
+            value = guard.decrypt(urlDecodedValue);
             
             try {
                 int i = value.indexOf("_");
