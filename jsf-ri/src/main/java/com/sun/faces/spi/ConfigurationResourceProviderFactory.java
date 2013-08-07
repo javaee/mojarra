@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -89,26 +89,28 @@ public class ConfigurationResourceProviderFactory {
         List<ConfigurationResourceProvider> providers = new ArrayList<ConfigurationResourceProvider>();
         if (serviceEntries.length > 0) {
             for (String serviceEntry : serviceEntries) {
-                ConfigurationResourceProvider provider = (ConfigurationResourceProvider)
-                      ServiceFactoryUtils.getProviderFromEntry(serviceEntry, null, null);
-                if (provider != null) {
-                    if (ProviderType.FacesConfig == providerType) {
-                        if (!(provider instanceof FacesConfigResourceProvider)) {
-                            throw new IllegalStateException("Expected ConfigurationResourceProvider type to be an instance of FacesConfigResourceProvider");
+                try {
+                    ConfigurationResourceProvider provider = (ConfigurationResourceProvider)
+                          ServiceFactoryUtils.getProviderFromEntry(serviceEntry, null, null);
+                    if (provider != null) {
+                        if (ProviderType.FacesConfig == providerType) {
+                            if (!(provider instanceof FacesConfigResourceProvider)) {
+                                throw new IllegalStateException("Expected ConfigurationResourceProvider type to be an instance of FacesConfigResourceProvider");
+                            }
+                        } else {
+                            if (!(provider instanceof FaceletConfigResourceProvider)) {
+                                throw new IllegalStateException("Expected ConfigurationResourceProvider type to be an instance of FaceletConfigResourceProvider");
+                            }
                         }
-                    } else {
-                        if (!(provider instanceof FaceletConfigResourceProvider)) {
-                            throw new IllegalStateException("Expected ConfigurationResourceProvider type to be an instance of FaceletConfigResourceProvider");
-                        }
+                        providers.add(provider);
                     }
-                    providers.add(provider);
+                } catch(ClassCastException cce) {
+                    // we are going to ignore these for now.
                 }
             }
             return providers.toArray(new ConfigurationResourceProvider[providers.size()]);
         } else {
             return new ConfigurationResourceProvider[0];
-        }
-        
+        }        
     }
-    
 }
