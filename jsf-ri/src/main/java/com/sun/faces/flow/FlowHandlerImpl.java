@@ -421,7 +421,7 @@ public class FlowHandlerImpl extends FlowHandler {
         
         private int returnDepth = 0;
         private ArrayDeque<E> data;
-        private static class RideAlong {
+        private static class RideAlong implements Serializable {
             String lastDisplayedViewId;
 
             public RideAlong(String lastDisplayedViewId) {
