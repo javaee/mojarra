@@ -39,6 +39,7 @@
  */
 package com.sun.faces.test.javaee6.resource.cacheLastMod.wartest;
 
+import org.junit.Ignore;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -73,7 +74,8 @@ public class Issue2895IT {
     }
 
     @Test
-    public void testBuilderDefinedFlowWithMethodCall() throws Exception {
+    @Ignore
+    public void testResourceCaching() throws Exception {
         String cssUrl = webUrl + "faces/javax.faces.resource/styles.css";
         Page cssPage = webClient.getPage(cssUrl);
         assertEquals(200, cssPage.getWebResponse().getStatusCode());
