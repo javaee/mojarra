@@ -30,7 +30,7 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.oracle.faces</groupId>
+            <groupId>com.oracle.faces.cdi</groupId>
             <artifactId>cdi</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
