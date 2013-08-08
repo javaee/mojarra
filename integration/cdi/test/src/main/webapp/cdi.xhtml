@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        The following tests should show proper information if CDI is working:
+        <br/>
+        <br/>
+        Text should appear below:
+        <br/>
+        <br/>
+        <h:outputText value="#{cdiBean.text}"/>
+        <br/>
+        <br/>
+        Text from an injected bean should appear below:
+        <br/>
+        <br/>
+        <h:outputText value="#{cdiBean.injectedBean.text}"/>
+        <br/>
+        <br/>
+        The toString on the conversation should appear below:
+        <br/>
+        <br/>
+        <h:outputText value="#{cdiBean.conversation}"/>
+        <br/>
+        <br/>
+        The cid parameter should appear in the URL below:
+        <br/>
+        <br/>
+        <h:outputText value="#{cdiBean.url}"/>
+    </h:body>
+</html>
