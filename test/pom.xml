@@ -1150,6 +1150,12 @@
                                         <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
                                             <arg line="deploy --force --virtualservers server1,server2 ${project.build.directory}/${project.build.finalName}.war"/>
                                         </exec>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                            <arg line="deploy --force --virtualservers server1,server2 ${project.build.directory}/${project.build.finalName}.ear"/>
+                                        </exec>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
+                                            <arg line="deploy --force --virtualservers server1,server2 ${project.build.directory}/${project.build.finalName}.ear"/>
+                                        </exec>
                                     </target>
                                 </configuration>
                             </execution>
