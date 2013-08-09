@@ -335,8 +335,8 @@
                 <integration.protocol>http</integration.protocol>
                 <integration.serverName1>localhost</integration.serverName1>
                 <integration.serverName2>localhost</integration.serverName2>
-                <integration.serverPort1>18080</integration.serverPort1>
-                <integration.serverPort2>28080</integration.serverPort2>
+                <integration.serverPort1>8080</integration.serverPort1>
+                <integration.serverPort2>8081</integration.serverPort2>
             </properties>
             <reporting>
                 <plugins>
@@ -1094,127 +1094,54 @@
                         </executions>
                     </plugin>
                     <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-antrun-plugin</artifactId>
+                        <groupId>org.codehaus.cargo</groupId>
+                        <artifactId>cargo-maven2-plugin</artifactId>
+                        <inherited>true</inherited>
                         <executions>
                             <execution>
                                 <id>start-container</id>
                                 <phase>pre-integration-test</phase>
                                 <goals>
-                                    <goal>run</goal>
+                                    <goal>start</goal>
                                 </goals>
                                 <configuration>
-                                    <target>
-                                        <echo>=== Starting domain1 ===</echo>
-                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
-                                            <arg line="start-domain"/>
-                                        </exec>
-                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
-                                            <arg line="start-domain"/>
-                                        </exec>
-                                        <echo>=== Creating server1 ===</echo>
-                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
-                                            <arg line="create-virtual-server --hosts localhost server1"/>
-                                        </exec>
-                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
-                                            <arg line="create-virtual-server --hosts localhost server1"/>
-                                        </exec>
-                                        <echo>=== Creating server2 ===</echo>
-                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
-                                            <arg line="create-virtual-server --hosts localhost server2"/>
-                                        </exec>
-                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
-                                            <arg line="create-virtual-server --hosts localhost server2"/>
-                                        </exec>
-                                        <echo>=== Creating listener-server1 ===</echo>
-                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
-                                            <arg line="create-http-listener --listeneraddress 0.0.0.0 --listenerport 18080 --default-virtual-server server1 listener-server1"/>
-                                        </exec>
-                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
-                                            <arg line="create-http-listener --listeneraddress 0.0.0.0 --listenerport 18080 --default-virtual-server server1 listener-server1"/>
-                                        </exec>
-                                        <echo>=== Creating listener-server2 ===</echo>
-                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
-                                            <arg line="create-http-listener --listeneraddress 0.0.0.0 --listenerport 28080 --default-virtual-server server2 listener-server2"/>
-                                        </exec>
-                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
-                                            <arg line="create-http-listener --listeneraddress 0.0.0.0 --listenerport 28080 --default-virtual-server server2 listener-server2"/>
-                                        </exec>
-                                        <echo>=== Deploying ${project.build.finalName} to server1 and server2 ===</echo>
-                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
-                                            <arg line="deploy --force --virtualservers server1,server2 ${project.build.directory}/${project.build.finalName}.war"/>
-                                        </exec>
-                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
-                                            <arg line="deploy --force --virtualservers server1,server2 ${project.build.directory}/${project.build.finalName}.war"/>
-                                        </exec>
-                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
-                                            <arg line="deploy --force --virtualservers server1,server2 ${project.build.directory}/${project.build.finalName}.ear"/>
-                                        </exec>
-                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
-                                            <arg line="deploy --force --virtualservers server1,server2 ${project.build.directory}/${project.build.finalName}.ear"/>
-                                        </exec>
-                                    </target>
+                                    <timeout>600000</timeout>
                                 </configuration>
                             </execution>
                             <execution>
                                 <id>stop-container</id>
                                 <phase>post-integration-test</phase>
                                 <goals>
-                                    <goal>run</goal>
+                                    <goal>stop</goal>
                                 </goals>
                                 <configuration>
-                                    <target>
-                                        <echo>=== Undeploying ${project.build.finalName} from server1 and server2 ===</echo>
-                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
-                                            <arg line="undeploy ${project.build.directory}/${project.build.finalName}"/>
-                                        </exec>
-                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
-                                            <arg line="undeploy ${project.build.directory}/${project.build.finalName}"/>
-                                        </exec>
-                                        <echo>=== Deleting listener-server1 ===</echo>
-                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
-                                            <arg line="delete-http-listener listener-server1"/>
-                                        </exec>
-                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
-                                            <arg line="delete-http-listener listener-server1"/>
-                                        </exec>
-                                        <echo>=== Deleting listener-server2 ===</echo>
-                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
-                                            <arg line="delete-http-listener listener-server2"/>
-                                        </exec>
-                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
-                                            <arg line="delete-http-listener listener-server2"/>
-                                        </exec>
-                                        <echo>=== Deleting server2 ===</echo>
-                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
-                                            <arg line="delete-virtual-server server2"/>
-                                        </exec>
-                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
-                                            <arg line="delete-virtual-server server2"/>
-                                        </exec>
-                                        <echo>=== Deleting server1 ===</echo>
-                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
-                                            <arg line="delete-virtual-server server1"/>
-                                        </exec>
-                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
-                                            <arg line="delete-virtual-server server1"/>
-                                        </exec>
-                                        <echo>=== Stopping domain1 ===</echo>
-                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
-                                            <arg line="stop-domain"/>
-                                        </exec>
-                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
-                                            <arg line="stop-domain"/>
-                                        </exec>
-                                    </target>
+                                    <timeout>600000</timeout>
                                 </configuration>
                             </execution>
-                        </executions>
-                    </plugin>                    
+                        </executions>                        
+                        <configuration>
+                            <container>
+                                <containerId>${integration.container.id}</containerId>
+                                <type>installed</type>
+                                <home>${integration.container.home}</home>
+                                <timeout>600000</timeout>
+                            </container>
+                            <configuration>
+                                <type>existing</type>
+                                <home>${integration.container.home}/glassfish/domains</home>
+                                <properties>
+                                    <cargo.glassfish.domain.name>domain1</cargo.glassfish.domain.name>
+                                    <cargo.remote.username>admin</cargo.remote.username>
+                                    <cargo.remote.password>adminadmin</cargo.remote.password>
+                                </properties>
+                            </configuration>
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
             <properties>
-                <integration.container.home>C:/Glassfish3.1.2.2</integration.container.home>
+                <integration.container.home>C:/Glassfish3.1.2.2v</integration.container.home>
+                <integration.container.id>glassfish3x</integration.container.id>
             </properties>
         </profile>
         <profile>
