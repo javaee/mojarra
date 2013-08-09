@@ -863,6 +863,61 @@
             </properties>
         </profile>
         <profile>
+            <id>integration-glassfish-existing</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.cargo</groupId>
+                        <artifactId>cargo-maven2-plugin</artifactId>
+                        <inherited>true</inherited>
+                        <executions>
+                            <execution>
+                                <id>start-container</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>start</goal>
+                                </goals>
+                                <configuration>
+                                    <timeout>600000</timeout>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>stop-container</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                                <configuration>
+                                    <timeout>600000</timeout>
+                                </configuration>
+                            </execution>
+                        </executions>                        
+                        <configuration>
+                            <container>
+                                <containerId>${integration.container.id}</containerId>
+                                <type>installed</type>
+                                <home>${integration.container.home}</home>
+                                <timeout>600000</timeout>
+                            </container>
+                            <configuration>
+                                <type>existing</type>
+                                <home>${integration.container.home}/glassfish/domains</home>
+                                <properties>
+                                    <cargo.glassfish.domain.name>domain1</cargo.glassfish.domain.name>
+                                    <cargo.remote.username>admin</cargo.remote.username>
+                                    <cargo.remote.password>adminadmin</cargo.remote.password>
+                                </properties>
+                            </configuration>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+            <properties>
+                <integration.container.home>C:/Glassfish3.1.2.2</integration.container.home>
+                <integration.container.id>glassfish3x</integration.container.id>
+            </properties>
+        </profile>
+        <profile>
             <id>integration-glassfish-hudson</id>
             <build>
                 <plugins>
@@ -1060,61 +1115,6 @@
             </build>
             <properties>
                 <integration.container.home>C:/Glassfish3.1.2.2</integration.container.home>
-                <integration.container.id>glassfish3x</integration.container.id>
-            </properties>
-        </profile>
-        <profile>
-            <id>integration-glassfish-virtual</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.cargo</groupId>
-                        <artifactId>cargo-maven2-plugin</artifactId>
-                        <inherited>true</inherited>
-                        <executions>
-                            <execution>
-                                <id>start-container</id>
-                                <phase>pre-integration-test</phase>
-                                <goals>
-                                    <goal>start</goal>
-                                </goals>
-                                <configuration>
-                                    <timeout>600000</timeout>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>stop-container</id>
-                                <phase>post-integration-test</phase>
-                                <goals>
-                                    <goal>stop</goal>
-                                </goals>
-                                <configuration>
-                                    <timeout>600000</timeout>
-                                </configuration>
-                            </execution>
-                        </executions>                        
-                        <configuration>
-                            <container>
-                                <containerId>${integration.container.id}</containerId>
-                                <type>installed</type>
-                                <home>${integration.container.home}</home>
-                                <timeout>600000</timeout>
-                            </container>
-                            <configuration>
-                                <type>existing</type>
-                                <home>${integration.container.home}/glassfish/domains</home>
-                                <properties>
-                                    <cargo.glassfish.domain.name>domain1</cargo.glassfish.domain.name>
-                                    <cargo.remote.username>admin</cargo.remote.username>
-                                    <cargo.remote.password>adminadmin</cargo.remote.password>
-                                </properties>
-                            </configuration>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-            <properties>
-                <integration.container.home>C:/Glassfish3.1.2.2v</integration.container.home>
                 <integration.container.id>glassfish3x</integration.container.id>
             </properties>
         </profile>
