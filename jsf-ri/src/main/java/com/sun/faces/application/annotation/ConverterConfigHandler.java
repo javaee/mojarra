@@ -102,7 +102,8 @@ public class ConverterConfigHandler implements ConfigAnnotationHandler {
         FacesConverter converterAnnotation = (FacesConverter) annotation;
         
         if (converterAnnotation.value().length() > 0 &&
-                converterAnnotation.forClass() != null) {
+                converterAnnotation.forClass() != null &&
+                converterAnnotation.forClass() != Object.class) {
             if (LOGGER.isLoggable(Level.WARNING)) {
                 LOGGER.log(Level.WARNING, "@FacesConverter is using both value and forClass, only value will be applied.");
             }
