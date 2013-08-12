@@ -58,6 +58,8 @@
 
 package com.sun.faces.facelets.tag.jstl.core;
 
+import com.sun.faces.facelets.FaceletContextImplBase;
+import com.sun.faces.facelets.TemplateClient;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
 import java.io.IOException;
 import java.lang.reflect.Array;
@@ -69,14 +71,17 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import javax.el.ELException;
 import javax.el.ELResolver;
 import javax.el.ExpressionFactory;
 import javax.el.FunctionMapper;
 import javax.el.ValueExpression;
 import javax.el.VariableMapper;
+import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.FaceletException;
 import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagAttributeException;
 import javax.faces.view.facelets.TagConfig;
@@ -328,15 +333,15 @@ public final class ForEachHandler extends TagHandlerImpl {
         }
     }
 
-    private static class ForEachFaceletContext extends FaceletContext {
+    private static class ForEachFaceletContext extends FaceletContextImplBase {
 
         private String prefix;
         private int index;
-        private FaceletContext faceletContext;
+        private FaceletContextImplBase faceletContext;
         private final Map<String, Integer> ids;
 
         private ForEachFaceletContext(FaceletContext faceletContext, String prefix, int index) {
-            this.faceletContext = faceletContext;
+            this.faceletContext = (FaceletContextImplBase) faceletContext;
             this.prefix = prefix;
             this.index = index;
             this.ids = new HashMap<String, Integer>();
@@ -462,6 +467,26 @@ public final class ForEachHandler extends TagHandlerImpl {
         @Override
         public void setPropertyResolved(boolean resolved) {
             faceletContext.setPropertyResolved(resolved);
+        }
+
+        @Override
+        public void pushClient(TemplateClient client) {
+            faceletContext.pushClient(client);
+        }
+
+        @Override
+        public void popClient(TemplateClient client) {
+            faceletContext.popClient(client);
+        }
+
+        @Override
+        public void extendClient(TemplateClient client) {
+            faceletContext.extendClient(client);
+        }
+
+        @Override
+        public boolean includeDefinition(UIComponent parent, String name) throws IOException, FaceletException, FacesException, ELException {
+            return faceletContext.includeDefinition(parent, name);
         }
     }
 }
