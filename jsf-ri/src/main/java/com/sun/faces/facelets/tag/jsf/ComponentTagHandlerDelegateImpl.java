@@ -70,6 +70,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import static com.sun.faces.RIConstants.DYNAMIC_COMPONENT;
 import static com.sun.faces.component.CompositeComponentStackManager.StackType.TreeCreation;
+import java.util.Collection;
 
 public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
     
@@ -162,9 +163,12 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         }
         
         boolean componentFound = false;
+        boolean parentModified = false;
         if (c != null) {
             componentFound = true;
                 doExistingComponentActions(ctx, id, c);
+        } else if (suppressRemovedChild(parent, id)) {
+            return;
         } else {
             c = this.createComponent(ctx);
             
@@ -188,7 +192,9 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
 
         // finish cleaning up orphaned children
         if (componentFound) {
-               doOrphanedChildCleanup(ctx, parent, c);
+               parentModified = isParentChildrenModified(parent);
+
+               doOrphanedChildCleanup(ctx, parent, c, parentModified);
             }
 
         this.privateOnComponentPopulated(ctx, c);
@@ -196,11 +202,28 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         // add to the tree afterwards
         // this allows children to determine if it's
         // been part of the tree or not yet
-        addComponentToView(ctx, parent, c, componentFound);
+        addComponentToView(ctx, parent, c, componentFound, parentModified);
         adjustIndexOfDynamicChildren(context, c);
         popComponentFromEL(ctx, c, ccStackManager, compcompPushed);
     }
 
+    // Tests whether the component associated with the specified tagId was
+    // a child of the parent component that has been dynamically removed.  If
+    // so, we want to suppress re-creation of this child
+    private boolean suppressRemovedChild(UIComponent parent, String childTagId) {
+        Collection<String> removedChildren = (Collection<String>)
+                parent.getAttributes().get(ComponentSupport.REMOVED_CHILDREN);
+        return ((removedChildren != null) && removedChildren.contains(childTagId));
+    }
+    
+    // Tests whether the specified parent component has had any dynamic 
+    // child additions or removals.  If so, we avoid re-ordering its children
+    // during tag re-execution, since we want to preserve the dynamically
+    // specified order.
+    private boolean isParentChildrenModified(UIComponent parent) {
+        return (parent.getAttributes().get(ComponentSupport.MARK_CHILDREN_MODIFIED) != null);    
+    }
+ 
     private void adjustIndexOfDynamicChildren(FacesContext context, 
             UIComponent parent) {
         StateContext stateContext = StateContext.getStateContext(context);
@@ -283,6 +306,16 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         // ------------------------------------------------------- Protected Methods
 
 
+    private void addComponentToView(FaceletContext ctx,
+                                    UIComponent parent,
+                                    UIComponent c,
+                                    boolean componentFound,
+                                    boolean parentModified) {
+        if (!componentFound || !parentModified) {
+            addComponentToView(ctx, parent, c, componentFound);   
+        }
+    }
+
     protected void addComponentToView(FaceletContext ctx,
                                       UIComponent parent,
                                       UIComponent c,
@@ -332,6 +365,16 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
 
     }
 
+    private void doOrphanedChildCleanup(FaceletContext ctx,
+                                          UIComponent parent,
+                                          UIComponent c,
+                                          boolean parentModified) {
+        if (parentModified) {
+            ComponentSupport.finalizeForDeletion(c);
+        } else {
+            doOrphanedChildCleanup(ctx, parent, c);
+        }
+    }
 
     protected void doOrphanedChildCleanup(FaceletContext ctx,
                                           UIComponent parent,

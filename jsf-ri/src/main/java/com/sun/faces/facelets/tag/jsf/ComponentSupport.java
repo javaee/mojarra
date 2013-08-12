@@ -89,6 +89,15 @@ public final class ComponentSupport {
 
     private final static String MARK_DELETED = "com.sun.faces.facelets.MARK_DELETED";
     public final static String MARK_CREATED = "com.sun.faces.facelets.MARK_ID";
+
+    // Expando boolean attribute used to identify parent components that have had
+    // a dynamic child addition or removal.
+    public final static String MARK_CHILDREN_MODIFIED = "com.sun.faces.facelets.MARK_CHILDREN_MODIFIED";
+    
+    // Expando Collection<String> attribute used to identify tagIds of child components that
+    // have been removed from a parent component.
+    public final static String REMOVED_CHILDREN = "com.sun.faces.facelets.REMOVED_CHILDREN";
+
     private final static String IMPLICIT_PANEL = "com.sun.faces.facelets.IMPLICIT_PANEL";
 
     /**
