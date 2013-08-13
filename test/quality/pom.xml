@@ -248,6 +248,7 @@
                     </reportSet>
                 </reportSets>
             </plugin>            
+            <!--
             <plugin>
                 <groupId>nl.windgazer</groupId>
                 <artifactId>jsdoctk-plugin</artifactId>
@@ -257,6 +258,7 @@
                     <recurse>5</recurse>
                 </configuration>
             </plugin>
+             -->
             <!--
             <plugin>
                 <groupId>com.github.phasebash</groupId>
@@ -272,7 +274,7 @@
             -->
         </plugins>
     </reporting>
-    <pluginRepositories>
+<!--    <pluginRepositories>
         <pluginRepository>
             <id>jsdoctk</id>
             <url>http://jsdoctk-plugin.googlecode.com/svn/repo</url>
@@ -283,5 +285,5 @@
             <id>jsdoctk</id>
             <url>http://jsdoctk-plugin.googlecode.com/svn/repo</url>
         </repository>
-    </repositories>
+    </repositories>-->
 </project>
