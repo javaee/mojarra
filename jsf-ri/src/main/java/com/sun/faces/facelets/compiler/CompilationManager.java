@@ -365,9 +365,10 @@ final class CompilationManager {
             log.fine("Namespace Pushed " + prefix + ": " + uri);
         }
 
+        boolean alreadyPresent = this.namespaceManager.getNamespace(prefix) != null;
         this.namespaceManager.pushNamespace(prefix, uri);
         NamespaceUnit unit;
-        if (this.currentUnit() instanceof NamespaceUnit) {
+        if (this.currentUnit() instanceof NamespaceUnit && !alreadyPresent) {
             unit = (NamespaceUnit) this.currentUnit();
         } else {
             unit = new NamespaceUnit(this.tagLibrary);
