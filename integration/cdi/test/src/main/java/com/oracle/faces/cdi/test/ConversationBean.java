@@ -38,6 +38,10 @@ public class ConversationBean implements Serializable {
         return !conversation.isTransient();
     }
     
+    public boolean isIdNull() {
+        return conversation.getId() == null;
+    }
+    
     public String getId() {
         return conversation.getId();
     }

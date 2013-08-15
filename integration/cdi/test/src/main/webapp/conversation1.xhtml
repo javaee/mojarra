@@ -14,6 +14,7 @@
         <br/>
         <h:form>
             Conversation id: #{conversationBean.id} <br/>
+            Conversation id is null: #{conversationBean.idNull} <br/>
             Conversation non-transient: #{conversationBean.active} <br/>
             <br/>
             <h:commandButton action="#{conversationBean.start()}" value="Start"/>
