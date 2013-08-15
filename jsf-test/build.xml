@@ -64,7 +64,6 @@
                      JAVASERVERFACES-2074,
                      JAVASERVERFACES_SPEC_PUBLIC-915,
                      JAVASERVERFACES-2079,
-                     JAVASERVERFACES-1995,
                      JAVASERVERFACES-2247,
                      JAVASERVERFACES-2255,
                      JAVASERVERFACES-2266,
@@ -73,6 +72,7 @@
 
 <!-- edburns re-enable once working on 2.1 branch
 ,
+                     JAVASERVERFACES-1995,
                      JAVASERVERFACES-2113
 -->
 
