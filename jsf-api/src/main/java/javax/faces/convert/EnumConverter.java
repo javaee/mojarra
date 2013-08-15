@@ -206,7 +206,10 @@ public class EnumConverter implements Converter, PartialStateHolder {
 
         // If the specified value is null, return null
         if (value == null) {
-            return (null);
+            // FIXSPEC even though the Javadoc states that we need to return 
+            // null the master Converter contract states that a null value 
+            // results in a zero-length string (see JAVASERVERFACES_SPEC_PUBLIC-1217)
+            return "";
         }
 
         if (targetClass.isInstance(value)) {
