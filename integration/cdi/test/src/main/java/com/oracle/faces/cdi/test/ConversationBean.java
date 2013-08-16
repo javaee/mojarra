@@ -28,6 +28,10 @@ public class ConversationBean implements Serializable {
         return "conversation2";
     }
     
+    public String contRedirect() {
+        return "conversation2?faces-redirect=true";
+    }
+    
     public String invalidate() {
         HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         session.invalidate();
