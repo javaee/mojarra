@@ -12,6 +12,7 @@
     <modules>
         <module>agnostic</module>
         <module>cluster</module>
+        <module>javaee6</module>
         <module>glassfish</module>
         <module>quality</module>
         <module>selenium</module>
