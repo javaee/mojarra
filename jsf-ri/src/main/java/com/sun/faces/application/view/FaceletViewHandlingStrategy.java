@@ -185,7 +185,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         if (stateCtx.isPartialStateSaving(context, viewId)) {
             result = new FaceletPartialStateManagementStrategy(context);
         } else {
-            result = new FaceletFullStateManagementStrategy(context);
+            result = new JspStateManagementStrategy(context);
         }
         
         return result;

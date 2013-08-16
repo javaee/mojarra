@@ -202,7 +202,9 @@ public class JspStateManagementStrategy extends StateManagementStrategy {
      * @return the view root.
      * @throws FacesException when a serious error occurs.
      */
-    private UIViewRoot restoreTree(String renderKitId, Object[] tree) throws FacesException {
+    private UIViewRoot restoreTree(FacesContext context,
+                                   String renderKitId,
+                                   Object[] tree) throws FacesException {
         if (LOGGER.isLoggable(Level.FINEST)) {
             LOGGER.log(Level.FINEST, "JspStateManagementStrategy.restoreTree", renderKitId);
         }
@@ -228,6 +230,7 @@ public class JspStateManagementStrategy extends StateManagementStrategy {
                 } else {
                     assert (c instanceof UIViewRoot);
                     UIViewRoot viewRoot = (UIViewRoot) c;
+                    context.setViewRoot(viewRoot);
                     viewRoot.setRenderKitId(renderKitId);
                 }
             }
@@ -260,7 +263,7 @@ public class JspStateManagementStrategy extends StateManagementStrategy {
              * Restore the component tree.
              */
             if (state[0] != null) {
-                result = restoreTree(renderKitId, ((Object[]) state[0]).clone());
+                result = restoreTree(context, renderKitId, ((Object[]) state[0]).clone());
                 context.setViewRoot(result);
             }
             /*
