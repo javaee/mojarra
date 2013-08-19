@@ -358,6 +358,32 @@ public class UIRepeat extends UINamingContainer {
         }
     }
 
+    private void removeChildState(FacesContext ctx) {
+        if (this.getChildCount() > 0) {
+
+            for (UIComponent uiComponent : this.getChildren()) {
+                this.removeChildState(ctx, uiComponent);
+            }
+            
+            if (this.childState != null) {
+                this.childState.remove(this.getClientId(ctx));
+            }
+        }
+    }
+
+    private void removeChildState(FacesContext faces, UIComponent c) {
+        String id = c.getId();
+        c.setId(id);        
+        
+        Iterator itr = c.getFacetsAndChildren();
+        while (itr.hasNext()) {
+            removeChildState(faces, (UIComponent) itr.next());
+        }
+        if (this.childState != null) {
+            this.childState.remove(c.getClientId(faces));
+        }
+    }
+    
     private void saveChildState(FacesContext faces, UIComponent c) {
 
         if (c instanceof EditableValueHolder && !c.isTransient()) {
@@ -437,11 +463,16 @@ public class UIRepeat extends UINamingContainer {
 
     private void setIndex(FacesContext ctx, int index) {
 
+        DataModel localModel = getDataModel();
+        
         // save child state
-        this.saveChildState(ctx);
+        if (this.index != -1 && localModel.isRowAvailable()) {
+            this.saveChildState(ctx);
+        } else if (this.index >= 0 && this.childState != null) {
+            this.removeChildState(ctx);
+        }
 
         this.index = index;
-        DataModel localModel = getDataModel();
         localModel.setRowIndex(index);
 
         if (this.index != -1 && this.var != null && localModel.isRowAvailable()) {
@@ -450,7 +481,9 @@ public class UIRepeat extends UINamingContainer {
         }
 
         // restore child state
-        this.restoreChildState(ctx);
+        if (this.index != -1 && localModel.isRowAvailable()) {
+            this.restoreChildState(ctx);
+        }
     }
 
     private void updateIterationStatus(FacesContext ctx, IterationStatus status) {
@@ -552,6 +585,23 @@ public class UIRepeat extends UINamingContainer {
         } finally {
             this.setIndex(faces, -1);
             this.restoreOrigValue(faces);
+        }
+
+        /*
+         * Once rendering is done we need to make sure the child components
+         * are not still having client ids that use an index.
+         */
+        if (PhaseId.RENDER_RESPONSE.equals(phase)) {
+            resetClientIds(this);
+        }
+    }
+    
+    private void resetClientIds(UIComponent component) {
+        Iterator<UIComponent> iterator = component.getFacetsAndChildren();
+        while(iterator.hasNext()) {
+            UIComponent child = iterator.next();
+            resetClientIds(child);
+            child.setId(child.getId());
         }
     }
 
