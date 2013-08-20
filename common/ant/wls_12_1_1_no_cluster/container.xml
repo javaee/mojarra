@@ -55,14 +55,14 @@ The admin console is at http://adc2110030:7001/console weblogic:weblogic1
 
     <property name="wl.username" value="weblogic"/>
     <property name="wl.password" value="weblogic1"/>
-    <property name="wl.home" value="${container.home}/wlserver_12.1" />
+    <property name="wl.home" value="${container.home}/wlserver" />
     <property name="wl.domain.home" value="${container.home}/user_projects/domains" />
     <property name="wl.domain.name" value="base_domain" />
     <property name="wl.admin.server.name" value="AdminServer" />
     <property name="wl.log" value="${wl.domain.home}/${wl.domain.name}/${container.name}-${build.number}-${TSTAMP}.log" />
     <property name="wl.jsf-api.jar_A" value="javax.jsf_1.0.0.0_2-1.jar" />
     <property name="wl.jsf-api.jar_B" value="javax.jsf_1.0.0.0_2-0.jar" />
-    <property name="wl.jsf-impl.jar" value="glassfish.jsf_1.0.0.0_2-0-4.jar" />
+    <property name="wl.jsf-impl.jar" value="glassfish.jsf_1.0.0.0_2-1-5.jar" />
 
     <taskdef name="wlserver" 
              classname="weblogic.ant.taskdefs.management.WLServer">
@@ -192,6 +192,11 @@ The admin console is at http://adc2110030:7001/console weblogic:weblogic1
                    regexp="\." replace="/" global="true" />
     </target>
 
+    <target name="container.deploy.test.dependencies" 
+            depends="container.deploy">
+    </target>
+
+
     <target name="container.deploy" depends="define.wls.properties"
             description="Deploy the JSF Implementation artifacts to the target container.">
 
@@ -217,14 +222,14 @@ The admin console is at http://adc2110030:7001/console weblogic:weblogic1
       <unzip src="${api.dir}/build.pre-maven-rename/lib/jsf-api.jar"
              dest="${container.xml.dir}/target/jsf-api" />
       <delete dir="${container.xml.dir}/target/jsf-api/META-INF" />
-      <unzip src="${container.home}/modules/javax.jsf_1.0.0.0_2-0.jar" 
+      <unzip src="${container.home}/modules/${wl.jsf-api.jar_A}" 
            dest="${container.xml.dir}/target/container.jsf-api" />
       <copy todir="${container.xml.dir}/target/container.jsf-api"
             overwrite="true">
         <fileset dir="${container.xml.dir}/target/jsf-api" />
       </copy>
-      <delete file="${container.home}/modules/javax.jsf_1.0.0.0_2-0.jar" />
-      <jar destfile="${container.home}/modules/javax.jsf_1.0.0.0_2-0.jar"
+      <delete file="${container.home}/modules/${wl.jsf-api.jar_A}" />
+      <jar destfile="${container.home}/modules/${wl.jsf-api.jar_A}"
            basedir="${container.xml.dir}/target/container.jsf-api"
            manifest="${container.xml.dir}/target/container.jsf-api/META-INF/MANIFEST.MF"
            filesetmanifest="skip" />
@@ -236,14 +241,14 @@ The admin console is at http://adc2110030:7001/console weblogic:weblogic1
       <unzip src="${impl.dir}/build.pre-maven-rename/lib/jsf-impl.jar"
              dest="${container.xml.dir}/target/jsf-impl" />
       <delete dir="${container.xml.dir}/target/jsf-impl/META-INF" />
-      <unzip src="${container.home}/modules/glassfish.jsf_1.0.0.0_2-0-4.jar" 
+      <unzip src="${container.home}/modules/${wl.jsf-impl.jar}" 
            dest="${container.xml.dir}/target/container.jsf-impl" />
       <copy todir="${container.xml.dir}/target/container.jsf-impl"
             overwrite="true">
         <fileset dir="${container.xml.dir}/target/jsf-impl" />
       </copy>
-      <delete file="${container.home}/modules/glassfish.jsf_1.0.0.0_2-0-4.jar" />
-      <jar destfile="${container.home}/modules/glassfish.jsf_1.0.0.0_2-0-4.jar"
+      <delete file="${container.home}/modules/${wl.jsf-impl.jar}" />
+      <jar destfile="${container.home}/modules/${wl.jsf-impl.jar}"
            basedir="${container.xml.dir}/target/container.jsf-impl"
            manifest="${container.xml.dir}/target/container.jsf-impl/META-INF/MANIFEST.MF"
            filesetmanifest="skip" />
