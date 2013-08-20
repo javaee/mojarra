@@ -65,7 +65,7 @@ public class Issue2768IT {
     public void testEjbIntoConverter() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/ejbIntoConverter.xhtml");
         assertTrue(page.asXml().indexOf("Value: 1") != -1);
-        HtmlElement submit = page.getElementById("form:submit");
+        HtmlElement submit = page.getHtmlElementById("form:submit");
         page = submit.click();
         assertTrue(page.asXml().indexOf("Value: 3") != -1);
     }
