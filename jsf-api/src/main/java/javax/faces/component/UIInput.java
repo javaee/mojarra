@@ -307,9 +307,9 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * <p/>
      * <p>Call {@link #setSubmittedValue} passing <code>null</code>.</p>
      * <p/>
-     * <p>Call {@link #setLocalValueSet} passing <code>false</code>.</p>
+     * <p>Clear state for property <code>localValueSet</code>.</p>
      * <p/>
-     * <p>Call {@link #setValid} passing <code>true</code>.</p>
+     * <p>Clear state for property <code>valid</code>.</p>
      * <p/>
      * <p>Upon return from this call if the instance had a
      * <code>ValueBinding</code> associated with it for the "value"
@@ -322,8 +322,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     public void resetValue() {
         super.resetValue();
         this.setSubmittedValue(null);
-        this.setLocalValueSet(false);
-        this.setValid(true);
+        getStateHelper().remove(PropertyKeys.localValueSet);
+        getStateHelper().remove(PropertyKeys.valid);
     }
 
 

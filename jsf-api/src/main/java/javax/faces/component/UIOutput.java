@@ -189,7 +189,7 @@ public class UIOutput extends UIComponentBase
      */
 
     public void resetValue() {
-        this.setValue(null);
+        getStateHelper().remove(PropertyKeys.value);
     }
 
 

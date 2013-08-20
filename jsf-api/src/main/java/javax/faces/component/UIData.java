@@ -184,6 +184,9 @@ public class UIData extends UIComponentBase
         rowStatePreserved
     }
 
+    enum TransientKeys {
+    	preparedComponentLists
+    }
 
     /**
      * <p>The {@link DataModel} associated with this component, lazily
@@ -1915,6 +1918,7 @@ public class UIData extends UIComponentBase
             ////noinspection CollectionWithoutInitialCapacity
             //saved = new HashMap<String, SavedState>();
             getStateHelper().remove(PropertyKeys.saved);
+            getTransientStateHelper().putTransient(TransientKeys.preparedComponentLists, null);
         }
     }
 
@@ -2223,14 +2227,15 @@ public class UIData extends UIComponentBase
      * for <code>setRowIndex()</code>.</p>
      */
     private void restoreDescendantState() {
-
+    	
+        PreparedComponentLists lists = getPreparedComponentLists();
+        // reset component id's first to make them available for restoreDescendentState
+        for (UIComponent component : lists.resetIdComponents) {
+        	component.setId(component.getId());
+        }
         FacesContext context = getFacesContext();
-        if (getChildCount() > 0) {
-            for (UIComponent kid : getChildren()) {
-                if (kid instanceof UIColumn) {
-                    restoreDescendantState(kid, context);
-                }
-            }
+        for (UIComponent component : lists.statefulComponents) {
+            restoreDescendantState(component, context);
         }
 
     }
@@ -2256,41 +2261,28 @@ public class UIData extends UIComponentBase
             EditableValueHolder input = (EditableValueHolder) component;
             String clientId = component.getClientId(context);
 
-            SavedState state = saved.get(clientId);
+            SavedState state = (saved == null ? null : saved.get(clientId));
             if (state == null) {
-                state = new SavedState();
+                input.resetValue();
+            } else {
+                input.setValue(state.getValue());
+                input.setValid(state.isValid());
+                input.setSubmittedValue(state.getSubmittedValue());
+                // This *must* be set after the call to setValue(), since
+                // calling setValue() always resets "localValueSet" to true.
+                input.setLocalValueSet(state.isLocalValueSet());
             }
-            input.setValue(state.getValue());
-            input.setValid(state.isValid());
-            input.setSubmittedValue(state.getSubmittedValue());
-            // This *must* be set after the call to setValue(), since
-            // calling setValue() always resets "localValueSet" to true.
-            input.setLocalValueSet(state.isLocalValueSet());
         } else if (component instanceof UIForm) {
             UIForm form = (UIForm) component;
             String clientId = component.getClientId(context);
-            SavedState state = saved.get(clientId);
+            SavedState state = (saved == null ? null : saved.get(clientId));
             if (state == null) {
-                state = new SavedState();
-            }
-            form.setSubmitted(state.getSubmitted());
-            state.setSubmitted(form.isSubmitted());
-        }
-
-        // Restore state for children of this component
-        if (component.getChildCount() > 0) {
-            for (UIComponent kid : component.getChildren()) {
-                restoreDescendantState(kid, context);
+                // submitted is transient state
+                form.setSubmitted(false);
+            } else {
+                form.setSubmitted(state.getSubmitted());
             }
         }
-
-        // Restore state for facets of this component
-        if (component.getFacetCount() > 0) {
-            for (UIComponent facet : component.getFacets().values()) {
-                restoreDescendantState(facet, context);
-            }
-        }
-
     }
 
 
@@ -2299,20 +2291,79 @@ public class UIData extends UIComponentBase
      * <code>setRowIndex()</code>.</p>
      */
     private void saveDescendantState() {
-
+    	
+    		PreparedComponentLists lists = getPreparedComponentLists();
         FacesContext context = getFacesContext();
-        if (getChildCount() > 0) {
-            for (UIComponent kid : getChildren()) {
-                if (kid instanceof UIColumn) {
-                    saveDescendantState(kid, context);
-                }
-            }
+        for (UIComponent component : lists.statefulComponents) {
+          saveDescendantState(component, context);
         }
 
     }
 
+    private PreparedComponentLists getPreparedComponentLists() {
+        PreparedComponentLists lists = (PreparedComponentLists)getTransientStateHelper().getTransient(TransientKeys.preparedComponentLists);
+        if (lists == null) {
+            lists = new PreparedComponentLists();
+            getTransientStateHelper().putTransient(TransientKeys.preparedComponentLists, lists);
+            if (getChildCount() > 0) {
+                for (UIComponent kid : getChildren()) {
+                    if (kid instanceof UIColumn) {
+                        prepareComponentLists(lists, kid);
+                    }
+                }
+            }
+        }
+        return lists;
+    }
 
+    private static void prepareComponentLists(PreparedComponentLists lists, UIComponent component) {
+			if (component.getChildCount() > 0) {
+				for (UIComponent child : component.getChildren()) {
+					if (child instanceof EditableValueHolder || child instanceof UIForm) {
+						lists.statefulComponents.add(child);
+					} else if (needsIdReset(child)) {
+						lists.resetIdComponents.add(child);
+					}
+					prepareComponentLists(lists, child);
+				}
+ 			}
+			if (component.getFacetCount() > 0) {
+				for (Map.Entry<String, UIComponent> facetEntry : component.getFacets().entrySet()) {
+					// ignore header/footer facet on UIColumn components
+					if (!(component instanceof UIColumn) || "header#footer".indexOf(facetEntry.getKey()) == -1) {
+						UIComponent facet = facetEntry.getValue();
+						if (facet instanceof EditableValueHolder || facet instanceof UIForm) {
+							lists.statefulComponents.add(facet);
+						} else if (needsIdReset(facet)) {
+							lists.resetIdComponents.add(facet);
+						}
+						prepareComponentLists(lists, facet);
+					}
+				}
+			}
+		}
+    
     /**
+     * Return true if the id of the given component must be reset when rowIndex changes. This is the case
+     * if one of the following condition is true:
+     * <ul>
+     * <li>the component is an instance of {@link ActionSource}</li>
+     * <li>the component is an instance of {@link NamingContainer}</li>
+     * <li>the component id is not generated by JSF</li>
+     * </ul>
+     *  
+     * @param comp the component to investigate.
+     * @return true if the id of the give component must be reset when rowIndex changes.
+     */
+    private static boolean needsIdReset(UIComponent comp) {
+    	if (comp instanceof ActionSource || comp instanceof NamingContainer) {
+    		return true;
+    	}
+    	String id = comp.getId();
+    	return (id != null && !id.startsWith(UIViewRoot.UNIQUE_ID_PREFIX));
+    }
+
+		/**
      * <p>Save state information for the specified component and its
      * descendants.</p>
      *
@@ -2331,53 +2382,48 @@ public class UIData extends UIComponentBase
             String clientId = component.getClientId(context);
             if (saved == null) {
                 state = new SavedState();
-                getStateHelper().put(PropertyKeys.saved, clientId, state);
             }
             if (state == null) {
                 state = saved.get(clientId);
                 if (state == null) {
                     state = new SavedState();
-                    //saved.put(clientId, state);
-                    getStateHelper().put(PropertyKeys.saved, clientId, state);
                 }
             }
             state.setValue(input.getLocalValue());
             state.setValid(input.isValid());
             state.setSubmittedValue(input.getSubmittedValue());
             state.setLocalValueSet(input.isLocalValueSet());
+            if (state.hasDeltaState()) {
+            	getStateHelper().put(PropertyKeys.saved, clientId, state);
+            } else if (saved != null) {
+            	getStateHelper().remove(PropertyKeys.saved, clientId);
+            }
         } else if (component instanceof UIForm) {
             UIForm form = (UIForm) component;
             String clientId = component.getClientId(context);
             SavedState state = null;
             if (saved == null) {
                 state = new SavedState();
-                getStateHelper().put(PropertyKeys.saved, clientId, state);
             }
             if (state == null) {
                 state = saved.get(clientId);
                 if (state == null) {
                     state = new SavedState();
-                    //saved.put(clientId, state);
-                    getStateHelper().put(PropertyKeys.saved, clientId, state);
                 }
             }
             state.setSubmitted(form.isSubmitted());
-        }
-
-        // Save state for children of this component
-        if (component.getChildCount() > 0) {
-            for (UIComponent uiComponent : component.getChildren()) {
-                saveDescendantState(uiComponent, context);
+            if (state.hasDeltaState()) {
+            	getStateHelper().put(PropertyKeys.saved, clientId, state);
+            } else if (saved != null) {
+            	getStateHelper().remove(PropertyKeys.saved, clientId);
             }
         }
 
-        // Save state for facets of this component
-        if (component.getFacetCount() > 0) {
-            for (UIComponent facet : component.getFacets().values()) {
-                saveDescendantState(facet, context);
-            }
-        }
+    }
 
+    static class PreparedComponentLists {
+    	List<UIComponent> statefulComponents = new ArrayList<UIComponent>();
+    	List<UIComponent> resetIdComponents = new ArrayList<UIComponent>();
     }
 
 }
@@ -2435,6 +2481,11 @@ class SavedState implements Serializable {
         this.submitted = submitted;
     }
 
+	public boolean hasDeltaState() {
+		return submittedValue != null || value != null || localValueSet
+				|| !valid || submitted;
+	}
+    
     public String toString() {
         return ("submittedValue: " + submittedValue +
                 " value: " + value +
@@ -2442,7 +2493,6 @@ class SavedState implements Serializable {
     }
 
 }
-
 
 // Private class to wrap an event with a row index
 class WrapperEvent extends FacesEvent {
