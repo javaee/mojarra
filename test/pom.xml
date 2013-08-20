@@ -10,7 +10,6 @@
     <packaging>pom</packaging>
     <name>Mojarra ${project.version} - Test</name>
     <modules>
-        <module>util</module>
         <module>agnostic</module>
         <module>cluster</module>
         <module>glassfish</module>
@@ -19,11 +18,13 @@
         <module>protocolaware</module>
         <module>quality</module>
         <module>selenium</module>
+        <module>servlet25</module>
         <module>servlet31</module>
         <module>unit</module>
+        <module>util</module>
         <module>virtual</module>
-        <module>weblogic12c</module>
         <module>web-profile</module>
+        <module>weblogic12c</module>
     </modules>
     <build>
         <pluginManagement>

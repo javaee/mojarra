@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -53,9 +54,9 @@
     <packaging>pom</packaging>
     <name>Mojarra ${project.version} - Test - JavaEE 6 - resource - cacheLastMod</name>
     <modules>
+        <module>ear</module>
         <module>jar</module>
         <module>war</module>
         <module>war-test</module>
-        <module>ear</module>
     </modules>
 </project>

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -53,7 +54,7 @@
     <packaging>pom</packaging>
     <name>Mojarra ${project.version} - Test - Agnostic - VDL - only_faces_config_in_jar</name>
     <modules>
-        <module>jar</module>
         <module>app</module> 
+        <module>jar</module>
     </modules>
 </project>

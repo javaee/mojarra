@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -50,10 +51,13 @@
     </parent>  
     <groupId>com.sun.faces.test.agnostic.facelets.viewAction</groupId>
     <artifactId>test-agnostic-facelets-viewAction-simple</artifactId>
-    <version>2.2.3-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>Mojarra ${project.version} - Test - Agnostic - Facelets - ViewAction - Simple ViewAction Test</name>
     <build>
         <finalName>test-agnostic-facelets-viewAction-simple</finalName>
     </build>
+    <properties>
+        <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 </project>

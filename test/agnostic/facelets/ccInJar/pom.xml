@@ -53,4 +53,7 @@
     <artifactId>ccInJar</artifactId>
     <packaging>jar</packaging>
     <name>Mojarra ${project.version} - Test - Agnostic - Facelets - Composite in Jar</name>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 </project>

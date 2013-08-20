@@ -17,6 +17,7 @@
         <module>csrf</module>
         <module>debugObjectOutputStream</module>
         <module>facesServletAccess</module>
+        <module>optionsRequest</module>
         <module>unserializableServerState_negative</module>
         <module>unserializableServerState_positive</module>
     </modules>
