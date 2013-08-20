@@ -39,19 +39,21 @@
     holder.
 
 -->
+
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-      <groupId>com.sun.faces.test.javaee6.resource.cacheLastMod</groupId>
-      <artifactId>pom</artifactId>
-      <version>2.1.26-SNAPSHOT</version>
+        <groupId>com.sun.faces.test.javaee6.resource.cacheLastMod</groupId>
+        <artifactId>pom</artifactId>
+        <version>2.1.26-SNAPSHOT</version>
     </parent>
-
     <name>Mojarra ${project.version} - Test - JavaEE 6 - resource - cacheLastMod - jar</name>
     <groupId>com.sun.faces.test.javaee6.resource.cacheLastMod</groupId>
     <artifactId>jar</artifactId>
     <packaging>jar</packaging>
-
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 </project>
 

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -58,5 +59,6 @@
   </build>
     <properties>
         <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 </project>

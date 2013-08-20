@@ -160,6 +160,7 @@
                                 <integration.url>${integration.protocol}://${integration.serverName}:${integration.serverPort}/${project.build.finalName}/</integration.url>
                                 <jsf.version>${jsf.version}</jsf.version>
                                 <project.build.finalName>${project.build.finalName}</project.build.finalName>
+                                <project.build.sourceEncoding>${project.build.sourceEncoding}</project.build.sourceEncoding>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>                
@@ -205,6 +206,7 @@
                                     <systemPropertyVariables>
                                         <integration.url>${integration.protocol}://${integration.serverName1}:${integration.serverPort1}/${project.build.finalName}/</integration.url>
                                         <integration.url2>${integration.protocol}://${integration.serverName2}:${integration.serverPort2}/${project.build.finalName}/</integration.url2>
+                                        <project.build.sourceEncoding>${project.build.sourceEncoding}</project.build.sourceEncoding>
                                     </systemPropertyVariables>
                                 </configuration>
                             </execution>
@@ -254,6 +256,7 @@
                                     <systemPropertyVariables>
                                         <integration.url>${integration.protocol}://${integration.serverName1}:${integration.serverPort1}/${project.build.finalName}/</integration.url>
                                         <integration.url.https>${integration.protocol2}://${integration.serverName2}:${integration.serverPort2}/${project.build.finalName}/</integration.url.https>
+                                        <project.build.sourceEncoding>${project.build.sourceEncoding}</project.build.sourceEncoding>
                                     </systemPropertyVariables>
                                 </configuration>
                             </execution>
@@ -308,6 +311,7 @@
                                         <integration.serverProtocol>${integration.serverProtocol}</integration.serverProtocol>
                                         <integration.url>${integration.protocol}://${integration.serverName1}:${integration.serverPort1}/${project.build.finalName}/</integration.url>
                                         <project.build.finalName>${project.build.finalName}</project.build.finalName>
+                                        <project.build.sourceEncoding>${project.build.sourceEncoding}</project.build.sourceEncoding>
                                     </systemPropertyVariables>
                                 </configuration>
                             </execution>
@@ -324,6 +328,7 @@
                                         <integration.serverProtocol>${integration.serverProtocol}</integration.serverProtocol>
                                         <integration.url>${integration.protocol}://${integration.serverName2}:${integration.serverPort2}/${project.build.finalName}/</integration.url>
                                         <project.build.finalName>${project.build.finalName}</project.build.finalName>
+                                        <project.build.sourceEncoding>${project.build.sourceEncoding}</project.build.sourceEncoding>
                                     </systemPropertyVariables>
                                 </configuration>
                             </execution>
