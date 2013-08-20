@@ -40,6 +40,8 @@
  */
 package com.sun.faces.test.agnostic.flash.issue2973;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 
@@ -63,6 +65,11 @@ public class Bean {
     public String simulateServerRestart() {
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getApplicationMap().remove("csfcff");
+        try {
+            Thread.currentThread().sleep(3000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         return null;
     }

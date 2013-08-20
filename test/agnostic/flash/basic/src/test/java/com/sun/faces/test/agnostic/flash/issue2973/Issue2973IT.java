@@ -89,7 +89,7 @@ public class Issue2973IT {
         page = webClient.getPage(webUrl + "faces/issue2973/page1.xhtml") ;
         button = (HtmlSubmitInput) page.getElementById("restart");
         page = button.click();
-        Thread.sleep(3000);
+        Thread.currentThread().sleep(3000);
         
         textInput = (HtmlTextInput) page.getElementById("input");
         message = "" + System.currentTimeMillis();
