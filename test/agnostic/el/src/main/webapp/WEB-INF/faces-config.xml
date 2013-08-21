@@ -46,21 +46,16 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd"
               version="2.1">
-
+    <application>
+        <system-event-listener>
+            <system-event-listener-class>com.sun.faces.test.agnostic.el.ViewInitFacesListener</system-event-listener-class>
+            <system-event-class>javax.faces.event.PreRenderComponentEvent</system-event-class>
+        </system-event-listener>
+    </application>    
     <managed-bean>
-        <description>
-            This is a description
-        </description>
-        <managed-bean-name>
-            description
-        </managed-bean-name>
-        <managed-bean-class>
-            java.util.Date
-        </managed-bean-class>
-        <managed-bean-scope>
-            request
-        </managed-bean-scope>
+        <description>This is a description</description>
+        <managed-bean-name>description</managed-bean-name>
+        <managed-bean-class>java.util.Date</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
-
-
 </faces-config>

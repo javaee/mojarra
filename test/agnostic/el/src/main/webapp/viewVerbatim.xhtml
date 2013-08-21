@@ -42,18 +42,26 @@
 
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.sun.faces.test.agnostic</groupId>
-        <artifactId>pom</artifactId>
-        <version>2.1.26-SNAPSHOT</version>
-    </parent>
-    <groupId>com.sun.faces.test.agnostic.scope</groupId>
-    <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Agnostic - Scope</name>
-    <modules>
-        <module>session</module>
-    </modules>
-</project>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:body>
+        <h:form id="form">
+            <h2>Page uses f:verbatim</h2>
+            <h:panelGroup>
+                <f:verbatim>#{viewVerbatimBean.time}</f:verbatim> <br/>
+            </h:panelGroup>
+            <h:panelGroup>
+                Hash='<h:outputText value="#{viewVerbatimBean.beanHash}"/>' <br/>
+            </h:panelGroup>
+            <h:panelGrid columns="1">
+                <h:commandButton id="button"
+                                 value="Trigger action listener"
+                                 actionListener="#{viewVerbatimBean.updateTime}"/>
+            </h:panelGrid>
+        </h:form>
+    </h:body>
+</html>
