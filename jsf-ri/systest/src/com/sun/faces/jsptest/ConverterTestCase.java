@@ -141,7 +141,7 @@ public class ConverterTestCase extends HtmlUnitFacesTestCase {
         assertTrue(-1 != page.asText().indexOf("BigInteger2: 'aaa' must be a number consisting of one or more digits."));
         assertTrue(-1 != page.asText().indexOf("BigInteger2: 'aaa' must be a number consisting of one or more digits. Example: 9876"));
         assertTrue(-1 != page.asText().indexOf("form:byte1: 'aaa' must be a number between -128 and 127. "));
-        assertTrue(-1 != page.asText().indexOf("form:byte1: 'aaa' must be a number between -127 and 127. Example: 254"));
+        assertTrue(-1 != page.asText().indexOf("form:byte1: 'aaa' must be a number between -128 and 127. Example: 254"));
         assertTrue(-1 != page.asText().indexOf("Byte2: 'aaa' must be a number between -128 and 127. "));
         assertTrue(-1 != page.asText().indexOf("Byte2: 'aaa' must be a number between -128 and 127. Example: 254"));
         assertTrue(-1 != page.asText().indexOf("form:date1: 'aaa' could not be understood as a date."));
