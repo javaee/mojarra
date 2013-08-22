@@ -52,6 +52,7 @@ import org.junit.After;
 import org.junit.Before;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class Issue2973IT {
 
@@ -86,19 +87,29 @@ public class Issue2973IT {
         
         assertEquals(message, value.asText());
         
-        page = webClient.getPage(webUrl + "faces/issue2973/page1.xhtml") ;
-        button = (HtmlSubmitInput) page.getElementById("restart");
-        page = button.click();
-        Thread.currentThread().sleep(3000);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+        boolean assertionValue = false;
+        for (int i = 0; i < 3; i++) {
+            page = webClient.getPage(webUrl + "faces/issue2973/page1.xhtml") ;
+            button = (HtmlSubmitInput) page.getElementById("restart");
+            page = button.click();
+            Thread.currentThread().sleep(3000);
+            
+            textInput = (HtmlTextInput) page.getElementById("input");
+            message = "" + System.currentTimeMillis();
+            textInput.setValueAttribute(message);
+            button = (HtmlSubmitInput) page.getElementById("button");
+            page = button.click();
+            value = (HtmlElement) page.getElementById("response");
         
-        textInput = (HtmlTextInput) page.getElementById("input");
-        message = "" + System.currentTimeMillis();
-        textInput.setValueAttribute(message);
-        button = (HtmlSubmitInput) page.getElementById("button");
-        page = button.click();
-        value = (HtmlElement) page.getElementById("response");
-        
-        assertEquals(message, value.asText());
+            if (null != value) {
+                assertionValue = message.equals(value.asText());
+            }
+            if (assertionValue) {
+                break;
+            }
+        }
+        assertTrue(assertionValue);   
         
     }
     
