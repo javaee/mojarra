@@ -10,6 +10,9 @@
 
             <ui:define name="content">
                 Page 01 in the flow
+                
+                <p id="beanMessage">#{issue2997Bean.name}</p>
+                
                 <h:form prependId="false">
                 <h:commandButton action="page02" value="page02" id="page02" />
                 </h:form>

@@ -38,25 +38,41 @@
  * holder.
 
  */
-package com.sun.faces.test.webprofile.flow.issue2997;
+package com.sun.faces.test.javaee7.cdi.initDestroy.issue2997;
 
-import javax.enterprise.context.Dependent;
-import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
+import com.sun.faces.test.javaee7.cdi.initDestroy.UserBean;
+import java.io.Serializable;
+import javax.annotation.PreDestroy;
+import javax.faces.flow.FlowScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 @Named
-@Dependent
-public class Issue2997Bean {
+@FlowScoped("flow-with-templates")
+public class Issue2997Bean implements Serializable {
     
-    public void globalFlowReturn(ActionEvent e) {
-        String id = e.getComponent().getId();
-        FacesContext.getCurrentInstance().getAttributes().put("returnId", id);
+    private static final long serialVersionUID = -7181467406646852183L;
+    
+    private String name;
+    @Inject UserBean userBean;
+    
+    public Issue2997Bean() {
+        name = System.currentTimeMillis() + "issue2997Bean";
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
     
-    public String getGlobalReturnValue() {
-        String result = (String) FacesContext.getCurrentInstance().getAttributes().get("returnId");
-        return "/" + result;
+    @PreDestroy
+    public void preDestroy() {
+        long currentTime = System.currentTimeMillis();
+        userBean.setDestroyIssue2997FlowMessage("" + currentTime + getName());
+        
     }
     
 }

@@ -149,5 +149,17 @@ public class UserBean implements Serializable {
     public void setDestroyViewScopeMessage(String destroyViewScopeMessage) {
         this.destroyViewScopeMessage = destroyViewScopeMessage;
     }
+    
+    
+    private String destroyIssue2997FlowMessage;
+
+    public String getDestroyIssue2997FlowMessage() {
+        return destroyIssue2997FlowMessage;
+    }
+
+    public void setDestroyIssue2997FlowMessage(String destroyIssue2997FlowMessage) {
+        this.destroyIssue2997FlowMessage = destroyIssue2997FlowMessage;
+    }
+    
 }
 

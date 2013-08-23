@@ -63,6 +63,8 @@ import javax.faces.flow.FlowHandler;
 import javax.faces.flow.Parameter;
 
 public class FlowHandlerImpl extends FlowHandler {
+    
+    public static final String ABANDONED_FLOW = "javax.faces.flow.AbandonedFlow";
 
     public FlowHandlerImpl() {
         flowFeatureIsEnabled = false;
@@ -340,7 +342,16 @@ public class FlowHandlerImpl extends FlowHandler {
             return;
         } 
         
-        // case 2: neither source nor target are null.  If source does not
+        if (FlowImpl.ABANDONED_FLOW.equals(targetFlow)) {
+            FlowDeque<Flow> flowStack = getFlowStack(context);
+            int depth = flowStack.size();
+            for (int i=0; i<depth; i++) {
+                popFlow(context);
+            }
+            return;
+        }
+        
+        // case 3: neither source nor target are null.  If source does not
         // have a call that calls target, we must pop source.
         if (null == sourceFlow.getFlowCall(targetFlow)) {
             popFlow(context);            

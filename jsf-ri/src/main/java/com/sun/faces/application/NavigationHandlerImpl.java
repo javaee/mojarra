@@ -41,7 +41,7 @@
 package com.sun.faces.application;
 
 import com.sun.faces.config.InitFacesContext;
-import com.sun.faces.application.view.ViewScopeManager;
+import com.sun.faces.flow.FlowHandlerImpl;
 import com.sun.faces.flow.FlowImpl;
 import com.sun.faces.flow.builder.MutableNavigationCase;
 import javax.faces.FacesException;
@@ -251,6 +251,24 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     // --------------------------------------------------------- Private Methods
     private static final String ROOT_NAVIGATION_MAP_ID = NavigationHandlerImpl.class.getName() + ".NAVIGATION_MAP";
     
+    private Map<String, Set<NavigationCase>> getRootNavigationMap(FacesContext context) {
+        Map<String, Set<NavigationCase>> result = null;
+        NavigationInfo info = null;
+        if (null == navigationMaps) {
+            createNavigationMaps();
+            result = navigationMaps.get(ROOT_NAVIGATION_MAP_ID).ruleSet;
+        } else {
+            info = navigationMaps.get(ROOT_NAVIGATION_MAP_ID);
+            if (null == info.ruleSet) {
+                result = Collections.emptyMap();
+            } else {
+                result = info.ruleSet;
+            }
+            
+        }
+        return result;
+    }
+    
     private Map<String, Set<NavigationCase>> getNavigationMap(FacesContext context) {
         Map<String, Set<NavigationCase>> result = null;
         NavigationInfo info = null;
@@ -455,16 +473,18 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         // a navigation match, otherwise look for a match
         // based soley on the fromAction and outcome
         CaseStruct caseStruct = null;
+        Map<String, Set<NavigationCase>> navMap = getNavigationMap(ctx);
+        
         if (viewId != null) {
-            caseStruct = findExactMatch(ctx, viewId, fromAction, outcome, toFlowDocumentId);
+            caseStruct = findExactMatch(ctx, viewId, fromAction, outcome, toFlowDocumentId, navMap);
 
             if (caseStruct == null) {
-                caseStruct = findWildCardMatch(ctx, viewId, fromAction, outcome, toFlowDocumentId);
+                caseStruct = findWildCardMatch(ctx, viewId, fromAction, outcome, toFlowDocumentId, navMap);
             }
         }
 
         if (caseStruct == null) {
-            caseStruct = findDefaultMatch(ctx, fromAction, outcome, toFlowDocumentId);
+            caseStruct = findDefaultMatch(ctx, fromAction, outcome, toFlowDocumentId, navMap);
         }
         
         // If the preceding steps found a match, but it was a flow call...
@@ -512,7 +532,23 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             }
         }
         
-        // no navigation case fo
+        // If we still don't have a match...
+        if (caseStruct == null && outcome != null && viewId != null) {
+
+            FlowHandler flowHandler = ctx.getApplication().getFlowHandler();
+            if (null != flowHandler) {
+
+                Flow currentFlow = null;
+                Flow newFlow = null;
+                currentFlow = flowHandler.getCurrentFlow(ctx);
+                if (null != currentFlow) {
+                    caseStruct = findRootNavigationMapAbandonedFlowMatch(ctx, viewId, fromAction, outcome, toFlowDocumentId);
+                }
+            }
+            
+        }
+        
+        // no navigation case found
         if (caseStruct == null && outcome != null && development) {
             String key;
             Object[] params;
@@ -546,8 +582,8 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     private CaseStruct findExactMatch(FacesContext ctx,
                                       String viewId,
                                       String fromAction,
-                                      String outcome, String toFlowDocumentId) {
-        Map<String, Set<NavigationCase>> navMap = getNavigationMap(ctx);
+                                      String outcome, String toFlowDocumentId,
+                                      Map<String, Set<NavigationCase>> navMap) {
 
         Set<NavigationCase> caseSet = navMap.get(viewId);
 
@@ -590,9 +626,9 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     private CaseStruct findWildCardMatch(FacesContext ctx,
                                          String viewId,
                                          String fromAction,
-                                         String outcome, String toFlowDocumentId) {
+                                         String outcome, String toFlowDocumentId,
+                                      Map<String, Set<NavigationCase>> navMap) {
         CaseStruct result = null;
-        Map<String, Set<NavigationCase>> navMap = getNavigationMap(ctx);
 
         for (String fromViewId : getWildCardMatchList(ctx)) {
             // See if the entire wildcard string (without the trailing "*" is
@@ -654,8 +690,8 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
 
     private CaseStruct findDefaultMatch(FacesContext ctx,
                                         String fromAction,
-                                        String outcome, String toFlowDocumentId) {
-        Map<String, Set<NavigationCase>> navMap = getNavigationMap(ctx);
+                                        String outcome, String toFlowDocumentId,
+                                      Map<String, Set<NavigationCase>> navMap) {
         
         Set<NavigationCase> caseSet = navMap.get("*");
 
@@ -681,6 +717,33 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         
         return result;
     }
+    
+    private CaseStruct findRootNavigationMapAbandonedFlowMatch(FacesContext ctx,
+                                         String viewId,
+                                         String fromAction,
+                                         String outcome, String toFlowDocumentId) {
+        CaseStruct caseStruct = null;
+        Map<String, Set<NavigationCase>> navMap = getRootNavigationMap(ctx);
+        
+        if (viewId != null) {
+            caseStruct = findExactMatch(ctx, viewId, fromAction, outcome, toFlowDocumentId, navMap);
+            
+            if (caseStruct == null) {
+                caseStruct = findWildCardMatch(ctx, viewId, fromAction, outcome, toFlowDocumentId, navMap);
+            }
+        }
+        
+        if (caseStruct == null) {
+            caseStruct = findDefaultMatch(ctx, fromAction, outcome, toFlowDocumentId, navMap);
+        }
+        
+        if (null != caseStruct) {
+            caseStruct.newFlow = FlowImpl.ABANDONED_FLOW;
+        }
+        
+        return caseStruct;
+    }
+    
 
     /**
      * <p>
@@ -801,10 +864,17 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             // the current flow id
             if (null != currentFlow && null != viewIdToTest && 
                 !viewIdToTest.startsWith("/" + currentFlow.getId())) {
-                // ... it must be out of the current flow.  Make sure the 
-                // current flow is marked as abandoned.
-                newFlow = null;
-                viewIdToTest = null;
+                // ... it must be out of the current flow.  
+                // If this is a flow return...
+                if (FlowHandlerImpl.NULL_FLOW.equals(flowDefiningDocumentId)) {
+                    // treat it as such
+                    newFlow = null;
+                    viewIdToTest = null;
+                } else {
+                    // otherwise Make sure the current flow is marked as abandoned.
+                    newFlow = FlowImpl.ABANDONED_FLOW;
+                }
+
             }            
         }
         if (null != viewIdToTest) {

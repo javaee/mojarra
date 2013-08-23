@@ -65,6 +65,8 @@ public class FlowImpl extends Flow {
     
     public static final Flow SYNTHESIZED_RETURN_CASE_FLOW = new FlowImpl(FlowHandler.NULL_FLOW);
     
+    public static final Flow ABANDONED_FLOW = new FlowImpl(FlowHandlerImpl.ABANDONED_FLOW);
+
     // <editor-fold defaultstate="collapsed" desc="Instance variables">    
     
     private String id;
