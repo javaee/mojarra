@@ -276,7 +276,7 @@ public class FlowHandlerImpl extends FlowHandler {
             }
             
             performPops(context, sourceFlow, targetFlow);
-            if (null != targetFlow) {
+            if (null != targetFlow && !targetFlow.equals(FlowImpl.ABANDONED_FLOW)) {
                 pushFlow(context, targetFlow, toViewId);
             }
             // Now the new flow is active, it's time to evaluate the inbound
