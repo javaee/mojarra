@@ -110,6 +110,16 @@ public class UserBean implements Serializable {
         this.destroyMessage = destroyMessage;
     }
     
+    private String flowId;
+
+    public String getFlowId() {
+        return flowId;
+    }
+
+    public void setFlowId(String flowId) {
+        this.flowId = flowId;
+    }
+    
     private String initFlowMessage;
 
     public String getInitFlowMessage() {

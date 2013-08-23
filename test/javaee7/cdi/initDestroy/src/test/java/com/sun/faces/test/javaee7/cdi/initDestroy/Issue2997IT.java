@@ -111,7 +111,7 @@ public class Issue2997IT {
         
         pageText = page.getBody().asText();
         assertTrue(pageText.indexOf("Issue2997Home") != -1);
-        assertTrue(pageText.indexOf("flow-with-templates") != -1);
+        assertTrue(pageText.indexOf("AbandonedFlow") != -1);
         assertTrue(pageText.indexOf("issue2997Bean") != -1);
 
         page = webClient.getPage(webUrl);
@@ -127,7 +127,7 @@ public class Issue2997IT {
         
         pageText = page.getBody().asText();
         assertTrue(pageText.indexOf("Issue2997UserList") != -1);
-        assertTrue(pageText.indexOf("flow-with-templates") != -1);
+        assertTrue(pageText.indexOf("AbandonedFlow") != -1);
         assertTrue(pageText.indexOf("issue2997Bean") != -1);
         
         page = webClient.getPage(webUrl);
@@ -143,7 +143,7 @@ public class Issue2997IT {
         
         pageText = page.getBody().asText();
         assertTrue(pageText.indexOf("Issue2997PageInFacesConfig") != -1);
-        assertTrue(pageText.indexOf("flow-with-templates") != -1);
+        assertTrue(pageText.indexOf("AbandonedFlow") != -1);
         assertTrue(pageText.indexOf("issue2997Bean") != -1);
         
         

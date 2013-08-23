@@ -61,13 +61,15 @@ public class FlowLogger {
     public void observeFlowStart(@Observes
     @Initialized(FlowScoped.class) Flow currentFlow) {
         long currentTime = System.currentTimeMillis();
-        userBean.setInitFlowMessage("" + currentTime + " " + currentFlow.getId());
+        userBean.setInitFlowMessage("" + currentTime);
+        userBean.setFlowId(currentFlow.getId());
     }
     
     public void observeFlowEnd(@Observes
     @Destroyed(FlowScoped.class) Flow currentFlow) {
         long currentTime = System.currentTimeMillis();
-        userBean.setDestroyFlowMessage("" + currentTime + " " + currentFlow.getId());
+        userBean.setDestroyFlowMessage("" + currentTime);
+        userBean.setFlowId(currentFlow.getId());
     }    
     
     
