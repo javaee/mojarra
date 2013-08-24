@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,63 +37,74 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.scripting.groovy;
 
-package com.sun.faces.systest;
-
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
-import java.io.File;
-import java.io.FileWriter;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+public class Issue1655IT {
+    /**
+     * Stores the web URL.
+     */
+    private String webUrl;
+    /**
+     * Stores the web client.
+     */
+    private WebClient webClient;
 
-import java.util.List;
-
-public class InitialTestCase extends HtmlUnitFacesTestCase {
-
-    public InitialTestCase(String name) {
-        super(name);
+    /**
+     * Setup before testing.
+     * 
+     * @throws Exception when a serious error occurs.
+     */
+    @BeforeClass
+    public static void setUpClass() throws Exception {
     }
 
     /**
-     * Set up instance variables required by this test case.
+     * Cleanup after testing.
+     * 
+     * @throws Exception when a serious error occurs.
      */
-    public void setUp() throws Exception {
-        super.setUp();
+    @AfterClass
+    public static void tearDownClass() throws Exception {
     }
 
-
     /**
-     * Return the tests included in this test suite.
+     * Setup before testing.
      */
-    public static Test suite() {
-        return (new TestSuite(InitialTestCase.class));
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-
     /**
-     * Tear down instance variables required by this test case.
+     * Tear down after testing.
      */
+    @After
     public void tearDown() {
-        super.tearDown();
+        webClient.closeAllWindows();
     }
 
-
-    // ------------------------------------------------------------ Test Methods
-
+    @Test
     public void testBasicAppFunctionality() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl);
 
-        HtmlPage page = getPage("/hello.jsf");
         HtmlTextInput inputText = (HtmlTextInput) page.getElementById("form:name");
         String val = "" + System.currentTimeMillis();
         inputText.setValueAttribute(val);
 
-        List list = getAllElementsOfGivenClass(page, null,
-                HtmlSubmitInput.class);
-        HtmlSubmitInput button = (HtmlSubmitInput) list.get(0);
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form:command");
         page = (HtmlPage) button.click();
         String pageAsText = page.asText();
         assertTrue(pageAsText.contains("Hello " + val));
@@ -102,19 +113,18 @@ public class InitialTestCase extends HtmlUnitFacesTestCase {
         String pageText = page.asXml();
         assertTrue(pageText.contains("<input type=\"hidden\" name=\"javax.faces.ViewState\" id="));
     }
-
+    
+    @Test
     public void testBasicAppFunctionalityNegative() throws Exception {
-
-        HtmlPage page = getPage("/hello.jsf");
+        HtmlPage page = webClient.getPage(webUrl);
+        
         HtmlTextInput inputText = (HtmlTextInput) page.getElementById("form:name");
         String val = "" + System.currentTimeMillis();
         inputText.setValueAttribute(val);
         inputText = (HtmlTextInput) page.getElementById("form:age");
         inputText.setValueAttribute("-12");
 
-        List list = getAllElementsOfGivenClass(page, null,
-                HtmlSubmitInput.class);
-        HtmlSubmitInput button = (HtmlSubmitInput) list.get(0);
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form:command");
         page = (HtmlPage) button.click();
         String pageAsText = page.asText();
         assertFalse(pageAsText.contains("Hello " + val));
@@ -123,5 +133,7 @@ public class InitialTestCase extends HtmlUnitFacesTestCase {
 
         String pageText = page.asXml();
         assertTrue(pageText.contains("<input type=\"hidden\" name=\"javax.faces.ViewState\" id="));
+        
     }
+    
 }

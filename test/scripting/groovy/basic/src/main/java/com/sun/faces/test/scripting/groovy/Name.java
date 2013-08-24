@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.systest;
+package com.sun.faces.test.scripting.groovy;
 
 import java.util.StringTokenizer;
 

@@ -1,9 +1,9 @@
 package hello
 
- import javax.faces.component.UIComponent;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import com.sun.faces.systest.Name;
+import com.sun.faces.test.scripting.groovy.Name;
 
 public class NameConverter implements Converter {
 
@@ -15,7 +15,7 @@ public class NameConverter implements Converter {
     }
     public Object getAsObject(FacesContext context, UIComponent component,
             String value) {
-      com.sun.faces.systest.Name name = new com.sun.faces.systest.Name(value);
+      Name name = new Name(value);
       return name.getFirst() + " " + name.getLast();
 
     }

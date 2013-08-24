@@ -3,7 +3,7 @@
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -39,62 +39,23 @@
     only if the new code is made subject to such option by the copyright
     holder.
 
--->
+--><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>pom</artifactId>
+    <groupId>com.sun.faces.test.scripting.groovy</groupId>
+    <version>2.2.3-SNAPSHOT</version>
+  </parent>
+  
+  <groupId>com.sun.faces.test.scripting.groovy</groupId>
+  <artifactId>test-basic</artifactId>
+  <version>2.2.3-SNAPSHOT</version>
+  <packaging>war</packaging>
+  <name>Mojarra ${project.version} - Test - Scripting - Groovy - Basic</name>
 
-<web-app version="3.0"
-         xmlns="http://java.sun.com/xml/ns/javaee"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
-
-    <display-name>web.xml included</display-name>
-
-    <context-param>
-        <param-name>javax.faces.PROJECT_STAGE</param-name>
-        <param-value>Development</param-value>
-    </context-param>
-
-    <context-param>
-        <param-name>com.sun.faces.enableGroovyScripting</param-name>
-        <param-value>true</param-value>
-    </context-param>
-
-    <context-param>
-        <param-name>javax.faces.FACELETS_LIBRARIES</param-name>
-        <param-value>/WEB-INF/groovy-taglib.xml</param-value>
-    </context-param>
-
-    <filter>
-        <filter-name>GroovyFilter</filter-name>
-        <filter-class>com.sun.faces.scripting.GroovySupportFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>GroovyFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>FORWARD</dispatcher>
-        <dispatcher>INCLUDE</dispatcher>
-        <dispatcher>ERROR</dispatcher>
-    </filter-mapping>
-
-    <servlet>
-        <servlet-name>Faces Servlet</servlet-name>
-        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>Faces Servlet</servlet-name>
-        <url-pattern>*.jsf</url-pattern>      
-    </servlet-mapping>
-
-    <session-config>
-        <session-timeout>
-            30
-        </session-timeout>
-    </session-config>
-
-    <welcome-file-list>
-        <welcome-file>hello.jsf</welcome-file>
-    </welcome-file-list>
-
-</web-app>
+  
+  <build>
+    <finalName>test-scripting-groovy-basic</finalName>
+  </build>
+  
+</project>
