@@ -3,7 +3,7 @@
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -39,19 +39,35 @@
     only if the new code is made subject to such option by the copyright
     holder.
 
---><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.sun.faces.test.scripting</groupId>
-        <artifactId>pom</artifactId>
-        <version>2.2.3-SNAPSHOT</version>
-    </parent>
-    <groupId>com.sun.faces.test.scripting.groovy</groupId>
-    <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Scripting - Groovy</name>
-    <modules>
-      <module>basic</module>
-      <module>weldAware</module>
-  </modules>
-</project>
+-->
+
+<facelet-taglib xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facelettaglibrary_2_2.xsd"
+              version="2.2">
+    <namespace>http://mojarra.dev.java.net/source1</namespace>
+    <tag>
+        <tag-name>hello</tag-name>
+        <component>
+            <component-type>agecomponent</component-type>
+        </component>
+
+    </tag>
+
+    <tag>
+        <tag-name>messageoutput</tag-name>
+        <component>
+            <component-type>messageoutput</component-type>
+        </component>
+
+    </tag>
+
+     <tag>
+         <tag-name>renderer</tag-name>
+         <component>
+             <component-type>javax.faces.Output</component-type>
+             <renderer-type>messagerenderer</renderer-type>
+         </component>
+     </tag>
+
+</facelet-taglib>
