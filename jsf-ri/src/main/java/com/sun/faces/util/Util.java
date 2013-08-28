@@ -133,6 +133,17 @@ public class Util {
         return result;
     }
 
+    private static final String CDI_AVAILABLE_PER_APP_KEY = Util.class.getName()+ "_CDI_AVAILABLE";
+
+    public static boolean isCDIAvailable(ServletContext sc) {
+        boolean result = null != sc.getAttribute(CDI_AVAILABLE_PER_APP_KEY);
+        return result;
+    }
+
+    public static void setCDIAvailable(ServletContext sc, Object beanManager) {
+        sc.setAttribute(CDI_AVAILABLE_PER_APP_KEY, beanManager);
+    }
+
     /**
      * <p>
      * Convenience method for determining if the request associated

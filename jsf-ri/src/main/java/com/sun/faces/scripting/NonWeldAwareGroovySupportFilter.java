@@ -40,7 +40,7 @@
 
 package com.sun.faces.scripting;
 
-import com.sun.faces.util.Util;
+import com.sun.faces.scripting.groovy.GroovyHelper;
 import java.io.IOException;
 
 import javax.servlet.Filter;
@@ -51,31 +51,37 @@ import javax.servlet.ServletResponse;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletContext;
 
-public class GroovySupportFilter implements Filter {
+class NonWeldAwareGroovySupportFilter implements Filter {
 
+    private boolean helperChecked;
+    private GroovyHelper helper;
     private ServletContext sc;
-    
-    private Filter delegate;
 
     public void init(FilterConfig filterConfig) throws ServletException {
         sc = filterConfig.getServletContext();
-        if (Util.isCDIAvailable(sc)) {
-            delegate = new WeldAwareGroovySupportFilter();
-        } else {
-            delegate = new NonWeldAwareGroovySupportFilter();
-        }
-        delegate.init(filterConfig);
     }
 
     public void doFilter(ServletRequest servletRequest,
                          ServletResponse servletResponse,
                          FilterChain filterChain)
           throws IOException, ServletException {
-        delegate.doFilter(servletRequest, servletResponse, filterChain);        
+
+        if (!helperChecked) {
+            helper = GroovyHelper.getCurrentInstance(sc);
+            // if null at this point, it will be null for the remainder
+            // of the app.  Set a flag so that we don't continually hit
+            // the ServletContext looking up the helper.
+            helperChecked = true;
+        }
+        if (helper != null) {
+            helper.setClassLoader();
+        }
+        filterChain.doFilter(servletRequest, servletResponse);
+        
     }
 
     public void destroy() {
-        delegate.destroy();
+        // no-op
     }
     
 }

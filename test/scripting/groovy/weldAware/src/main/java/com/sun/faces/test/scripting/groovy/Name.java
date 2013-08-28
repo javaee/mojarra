@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2010 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -38,44 +38,44 @@
  * holder.
  */
 
-package com.sun.faces.scripting;
+package com.sun.faces.test.scripting.groovy;
 
-import com.sun.faces.util.Util;
-import java.io.IOException;
+import java.util.StringTokenizer;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletContext;
+public class Name {
+  String first = "";
+  String last = "";
 
-public class GroovySupportFilter implements Filter {
+    public Name(String name) {
 
-    private ServletContext sc;
-    
-    private Filter delegate;
-
-    public void init(FilterConfig filterConfig) throws ServletException {
-        sc = filterConfig.getServletContext();
-        if (Util.isCDIAvailable(sc)) {
-            delegate = new WeldAwareGroovySupportFilter();
-        } else {
-            delegate = new NonWeldAwareGroovySupportFilter();
+        System.out.println("Name : name = " + name);
+        StringTokenizer token = new StringTokenizer(name);
+        String[] nameArray = new String[2];
+        int i = 0;
+        while (token.hasMoreTokens()) {
+            nameArray[i] = token.nextToken();
+            //System.out.println("Name : nameArray[" + i + "] = " + nameArray[i]);
+            i++;
         }
-        delegate.init(filterConfig);
+        if (nameArray[0] != null)
+            this.first = nameArray[0].toUpperCase();
+        if (nameArray[1] != null)
+            this.last = nameArray[1].toUpperCase();
     }
 
-    public void doFilter(ServletRequest servletRequest,
-                         ServletResponse servletResponse,
-                         FilterChain filterChain)
-          throws IOException, ServletException {
-        delegate.doFilter(servletRequest, servletResponse, filterChain);        
+    public String getFirst() {
+        return first;
     }
 
-    public void destroy() {
-        delegate.destroy();
+    public String  getLast() {
+        return last;
     }
-    
+
+    public void setFirst(String first) {
+        this.first = first;
+    }
+
+    public void setLast(String last) {
+        this.last = last;
+    }
 }
