@@ -364,8 +364,6 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                     this.onreadystatechange(evt);                
                 } finally {
                     this.cleanupReqParams();
-                    this.frame = null;
-                    
                 }               
             },
             
