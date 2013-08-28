@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:jsf="http://xmlns.jcp.org/jsf">
+    <head jsf:id="head">
+        <title>HTML5 Facelets Processing</title>
+    </head>
+    <body jsf:id="body">
+        <form jsf:id="form">
+            <h:dataTable id="persons" value="#{personPage.persons}" var="person">
+                <h:column>
+                    <f:facet name="header">Person</f:facet>
+                    <a jsf:outcome="personDetails" title="Show #{person.name}">
+                        #{person.name}
+                        <f:param name="id" value="#{person.id}"/>
+                    </a>
+                </h:column>
+            </h:dataTable>
+        </form>
+    </body>
+</html>

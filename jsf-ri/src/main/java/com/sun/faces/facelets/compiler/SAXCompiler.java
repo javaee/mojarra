@@ -232,7 +232,7 @@ public final class SAXCompiler extends Compiler {
                     facelets.isProcessCurrentDocumentAsFaceletsXhtml(alias);
 
 
-            if (this.inDocument && processAsXhtml) {
+            if (this.inDocument && (processAsXhtml || facelets.isOutputHtml5Doctype(alias))) {
                 boolean isHtml5 = facelets.isOutputHtml5Doctype(alias);
                 // If we're in an ajax request, this is unnecessary and bugged
                 // RELEASE_PENDING - this is a hack, and should probably not be here -

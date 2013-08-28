@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:jsf="http://xmlns.jcp.org/jsf">
+    <f:metadata>
+        <f:viewParam name="id" value="#{personPage.selectedId}"/>
+        <f:viewAction action="#{personPage.loadPerson}"/>
+    </f:metadata>
+    <head jsf:id="head">
+        <title>HTML5 Facelets Processing</title>
+    </head>
+    <body jsf:id="body">
+        <form jsf:id="form">
+            <h:messages/>
+            <h:panelGrid columns="2">
+                <h:outputText value="ID:"/>
+                <h:outputText value="#{personPage.selectedPerson.id}"/>
+                <h:outputText value="Name:"/>
+                <h:outputText value="#{personPage.selectedPerson.name}"/>
+                <h:outputText value="Email:"/>
+                <h:outputText value="#{personPage.selectedPerson.email}"/>
+            </h:panelGrid>
+            <br/>
+            <a jsf:outcome="editPerson" title="Edit Person">
+                Edit
+                <f:param name="id" value="#{personPage.selectedPerson.id}"/>
+            </a>
+            &#160;
+            <a jsf:outcome="personList" title="Back to person list">Back</a>
+        </form>
+    </body>
+</html>
