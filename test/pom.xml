@@ -10,7 +10,6 @@
     <packaging>pom</packaging>
     <name>Mojarra ${project.version} - Test</name>
     <modules>
-        <module>util</module>
         <module>agnostic</module>
         <module>cluster</module>
         <module>glassfish</module>
@@ -19,6 +18,7 @@
         <module>quality</module>
         <module>selenium</module>
         <module>unit</module>
+        <module>util</module>
         <module>virtual</module>
         <module>weblogic12c</module>
         <module>web-profile</module>
@@ -1284,7 +1284,7 @@
             </properties>
         </profile>
         <profile>
-            <id>integration-weblogic12c-cargo</id>
+            <id>integration-wls1211-cargo</id>
             <build>
                 <plugins>
                     <plugin>
@@ -1309,11 +1309,11 @@
                         <configuration>
                             <container>
                                 <containerId>${integration.container.id}</containerId>
-                                <home>${integration.container.home}</home>
+                                <home>${integration.container.wlserver}</home>
                             </container>
                             <configuration>
                                 <type>${integration.container.type}</type>
-                                <home>${integration.container.runtime}</home>
+                                <home>${integration.container.wldomain}</home>
                                 <properties>
                                     <cargo.servlet.port>${integration.serverPort}</cargo.servlet.port>
                                     <cargo.weblogic.administrator.password>${integration.container.password}</cargo.weblogic.administrator.password>
@@ -1325,80 +1325,60 @@
                 </plugins>
             </build>
             <properties>
-                <integration.container.home>${integration.container.root}/server/wlserver</integration.container.home>
-                <integration.container.id>weblogic103x</integration.container.id>
-                <integration.container.root>C:/Weblogic12c</integration.container.root>
-                <integration.container.runtime>${integration.container.root}/domain</integration.container.runtime>
+                <integration.container.home>C:/Wls1211</integration.container.home>
+                <integration.container.id>weblogic10x</integration.container.id>
                 <integration.container.type>existing</integration.container.type>
+                <integration.container.wldomain>${integration.container.home}/user_projects/domains/mydomain</integration.container.wldomain>
+                <integration.container.wlserver>${integration.container.home}/wlserver</integration.container.wlserver>
             </properties>
         </profile>
         <profile>
-            <id>integration-weblogic12c-prepare</id>
+            <id>integration-wls1212-cargo</id>
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-antrun-plugin</artifactId>
+                        <groupId>org.codehaus.cargo</groupId>
+                        <artifactId>cargo-maven2-plugin</artifactId>
                         <executions>
                             <execution>
-                                <id>package</id>
-                                <phase>validate</phase>
-                                <configuration>
-                                    <target>
-                                        <delete>
-                                            <fileset dir="${integration.container.runtime}/autodeploy" includes="**/*"/>
-                                        </delete>
-                                    </target>
-                                </configuration>
+                                <id>start-container</id>
+                                <phase>pre-integration-test</phase>
                                 <goals>
-                                    <goal>run</goal>
+                                    <goal>start</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>stop-container</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
                                 </goals>
                             </execution>
                         </executions>
-                    </plugin>
-                    <plugin>                 
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-dependency-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>copy</id>                         
-                                <phase>validate</phase>
-                                <goals>
-                                    <goal>copy</goal>
-                                </goals>
-                                <configuration>
-                                    <artifactItems>
-                                        <artifactItem>
-                                            <groupId>com.sun.faces.test.weblogic12c</groupId>
-                                            <artifactId>jsf-impl</artifactId>
-                                            <version>${jsf.version}</version>
-                                            <type>jar</type>
-                                            <overWrite>true</overWrite>                                     
-                                            <outputDirectory>${integration.container.root}/server/modules</outputDirectory>
-                                            <destFileName>glassfish.jsf_1.0.0.0_2-1-5.jar</destFileName>
-                                        </artifactItem>
-                                        <artifactItem>
-                                            <groupId>com.sun.faces.test.weblogic12c</groupId>
-                                            <artifactId>jsf-api</artifactId>
-                                            <version>${jsf.version}</version>
-                                            <type>jar</type>
-                                            <overWrite>true</overWrite>                                     
-                                            <outputDirectory>${integration.container.root}/server/modules</outputDirectory>
-                                            <destFileName>javax.jsf_1.0.0.0_2-1.jar</destFileName>
-                                        </artifactItem>
-                                    </artifactItems>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
+                        <configuration>
+                            <container>
+                                <containerId>${integration.container.id}</containerId>
+                                <home>${integration.container.wlserver}</home>
+                            </container>
+                            <configuration>
+                                <type>${integration.container.type}</type>
+                                <home>${integration.container.wldomain}</home>
+                                <properties>
+                                    <cargo.servlet.port>${integration.serverPort}</cargo.servlet.port>
+                                    <cargo.weblogic.administrator.password>${integration.container.password}</cargo.weblogic.administrator.password>
+                                    <cargo.weblogic.administrator.user>${integration.container.username}</cargo.weblogic.administrator.user>
+                                </properties>
+                            </configuration>
+                        </configuration>
+                    </plugin>                    
                 </plugins>
             </build>
             <properties>
-                <integration.container.home>${integration.container.root}/server/wlserver</integration.container.home>
-                <integration.container.id>weblogic103x</integration.container.id>
-                <integration.container.root>C:/Weblogic12c</integration.container.root>
-                <integration.container.runtime>${integration.container.root}/domain</integration.container.runtime>
+                <integration.container.home>C:/Wls1212</integration.container.home>
+                <integration.container.id>weblogic10x</integration.container.id>
                 <integration.container.type>existing</integration.container.type>
+                <integration.container.wldomain>${integration.container.home}/user_projects/domains/mydomain</integration.container.wldomain>
+                <integration.container.wlserver>${integration.container.home}/wlserver</integration.container.wlserver>
             </properties>
         </profile>
     </profiles>
