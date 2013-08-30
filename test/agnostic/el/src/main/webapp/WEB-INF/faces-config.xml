@@ -52,10 +52,4 @@
             <system-event-class>javax.faces.event.PreRenderComponentEvent</system-event-class>
         </system-event-listener>
     </application>    
-    <managed-bean>
-        <description>This is a description</description>
-        <managed-bean-name>description</managed-bean-name>
-        <managed-bean-class>java.util.Date</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>
-    </managed-bean>
 </faces-config>
