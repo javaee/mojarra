@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -39,20 +39,18 @@
     only if the new code is made subject to such option by the copyright
     holder.
 
---><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.sun.faces.test.javaee7</groupId>
-        <artifactId>pom</artifactId>
-        <version>2.2.3-SNAPSHOT</version>
-    </parent>
-    <groupId>com.sun.faces.test.javaee7.cdi</groupId>
-    <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - JavaEE 7 - CDI</name>
-    <modules>
-        <module>initDestroy</module>
-        <module>noBeansXml</module>
-    <module>beanValidatorCdi</module>
-  </modules>
-</project>
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <h:form prependId="false">
+            <h:inputText id="input" value="#{userBean.firstName}" />
+            <h:commandButton id="button" value="submit" />
+        </h:form>
+    </body>
+</html>
+

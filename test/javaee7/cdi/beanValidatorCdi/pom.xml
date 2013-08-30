@@ -40,19 +40,21 @@
     holder.
 
 --><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.sun.faces.test.javaee7</groupId>
-        <artifactId>pom</artifactId>
-        <version>2.2.3-SNAPSHOT</version>
-    </parent>
-    <groupId>com.sun.faces.test.javaee7.cdi</groupId>
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
     <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - JavaEE 7 - CDI</name>
-    <modules>
-        <module>initDestroy</module>
-        <module>noBeansXml</module>
-    <module>beanValidatorCdi</module>
-  </modules>
+    <groupId>com.sun.faces.test.javaee7.cdi</groupId>
+    <version>2.2.3-SNAPSHOT</version>
+  </parent>
+  
+  <groupId>com.sun.faces.test.javaee7.cdi</groupId>
+  <artifactId>beanValidatorCdi</artifactId>
+  <version>2.2.3-SNAPSHOT</version>
+  <packaging>war</packaging>
+  <name>Automated Test Depending on JSF 2.2</name>
+  
+  <build>
+    <finalName>test-javaee7-cdi-beanValidatorCdi</finalName>
+  </build>
+
 </project>
