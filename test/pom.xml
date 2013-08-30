@@ -164,6 +164,7 @@
                                 <integration.url>${integration.protocol}://${integration.serverName}:${integration.serverPort}/${project.build.finalName}/</integration.url>
                                 <jsf.version>${jsf.version}</jsf.version>
                                 <project.build.finalName>${project.build.finalName}</project.build.finalName>
+                                <project.build.sourceEncoding>${project.build.sourceEncoding}</project.build.sourceEncoding>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>                
@@ -209,6 +210,7 @@
                                     <systemPropertyVariables>
                                         <integration.url>${integration.protocol}://${integration.serverName1}:${integration.serverPort1}/${project.build.finalName}/</integration.url>
                                         <integration.url2>${integration.protocol}://${integration.serverName2}:${integration.serverPort2}/${project.build.finalName}/</integration.url2>
+                                        <project.build.sourceEncoding>${project.build.sourceEncoding}</project.build.sourceEncoding>
                                     </systemPropertyVariables>
                                 </configuration>
                             </execution>
@@ -258,6 +260,7 @@
                                     <systemPropertyVariables>
                                         <integration.url>${integration.protocol}://${integration.serverName1}:${integration.serverPort1}/${project.build.finalName}/</integration.url>
                                         <integration.url.https>${integration.protocol2}://${integration.serverName2}:${integration.serverPort2}/${project.build.finalName}/</integration.url.https>
+                                        <project.build.sourceEncoding>${project.build.sourceEncoding}</project.build.sourceEncoding>
                                     </systemPropertyVariables>
                                 </configuration>
                             </execution>
@@ -312,6 +315,7 @@
                                         <integration.serverProtocol>${integration.serverProtocol}</integration.serverProtocol>
                                         <integration.url>${integration.protocol}://${integration.serverName1}:${integration.serverPort1}/${project.build.finalName}/</integration.url>
                                         <project.build.finalName>${project.build.finalName}</project.build.finalName>
+                                        <project.build.sourceEncoding>${project.build.sourceEncoding}</project.build.sourceEncoding>
                                     </systemPropertyVariables>
                                 </configuration>
                             </execution>
@@ -328,6 +332,7 @@
                                         <integration.serverProtocol>${integration.serverProtocol}</integration.serverProtocol>
                                         <integration.url>${integration.protocol}://${integration.serverName2}:${integration.serverPort2}/${project.build.finalName}/</integration.url>
                                         <project.build.finalName>${project.build.finalName}</project.build.finalName>
+                                        <project.build.sourceEncoding>${project.build.sourceEncoding}</project.build.sourceEncoding>
                                     </systemPropertyVariables>
                                 </configuration>
                             </execution>
@@ -1283,7 +1288,106 @@
             </properties>
         </profile>
         <profile>
-            <id>integration-weblogic12c-cargo</id>
+            <id>integration-wls-hudson-prepare</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>prepare</id>
+                                <phase>validate</phase>
+                                <configuration>
+                                    <target>
+                                        <delete quiet="true" failonerror="false" dir="${integration.container.root}"/>
+                                        <mkdir dir="${integration.container.root}"/>
+                                        <unzip src="${integration.container.zipFile}" dest="${integration.container.root}"/>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>ant-contrib</groupId>
+                                <artifactId>ant-contrib</artifactId>
+                                <version>1.0b3</version>
+                                <exclusions>
+                                    <exclusion>
+                                        <groupId>ant</groupId>
+                                        <artifactId>ant</artifactId>
+                                    </exclusion>
+                                </exclusions>
+                            </dependency>
+                        </dependencies>
+                    </plugin>                    
+                </plugins>
+            </build>
+            <properties>
+                <integration.container.root>C:/Wls1211</integration.container.root>
+                <integration.container.zipFile>C:/Downloads/Wls12.1.1.zip</integration.container.zipFile>
+            </properties>
+        </profile>
+        <profile>
+            <id>integration-wls1211-cargo</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.cargo</groupId>
+                        <artifactId>cargo-maven2-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>start-container</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>start</goal>
+                                </goals>
+                                <configuration>
+                                    <timeout>600000</timeout>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>stop-container</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                                <configuration>
+                                    <timeout>600000</timeout>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <container>
+                                <containerId>${integration.container.id}</containerId>
+                                <home>${integration.container.wlserver}</home>
+                            </container>
+                            <configuration>
+                                <type>${integration.container.type}</type>
+                                <home>${integration.container.wldomain}</home>
+                                <properties>
+                                    <cargo.servlet.port>${integration.serverPort}</cargo.servlet.port>
+                                    <cargo.weblogic.administrator.password>${integration.container.password}</cargo.weblogic.administrator.password>
+                                    <cargo.weblogic.administrator.user>${integration.container.username}</cargo.weblogic.administrator.user>
+                                </properties>
+                            </configuration>
+                        </configuration>
+                    </plugin>                    
+                </plugins>
+            </build>
+            <properties>
+                <integration.container.home>C:/Wls1211</integration.container.home>
+                <integration.container.id>weblogic10x</integration.container.id>
+                <integration.container.type>existing</integration.container.type>
+                <integration.container.wldomain>${integration.container.home}/user_projects/domains/mydomain</integration.container.wldomain>
+                <integration.container.wlserver>${integration.container.home}/wlserver</integration.container.wlserver>
+            </properties>
+        </profile>
+        <profile>
+            <id>integration-wls1212-cargo</id>
             <build>
                 <plugins>
                     <plugin>
@@ -1308,11 +1412,11 @@
                         <configuration>
                             <container>
                                 <containerId>${integration.container.id}</containerId>
-                                <home>${integration.container.home}</home>
+                                <home>${integration.container.wlserver}</home>
                             </container>
                             <configuration>
                                 <type>${integration.container.type}</type>
-                                <home>${integration.container.runtime}</home>
+                                <home>${integration.container.wldomain}</home>
                                 <properties>
                                     <cargo.servlet.port>${integration.serverPort}</cargo.servlet.port>
                                     <cargo.weblogic.administrator.password>${integration.container.password}</cargo.weblogic.administrator.password>
@@ -1320,84 +1424,15 @@
                                 </properties>
                             </configuration>
                         </configuration>
-                    </plugin>                    
-                </plugins>
-            </build>
-            <properties>
-                <integration.container.home>${integration.container.root}/server/wlserver</integration.container.home>
-                <integration.container.id>weblogic103x</integration.container.id>
-                <integration.container.root>C:/Weblogic12c</integration.container.root>
-                <integration.container.runtime>${integration.container.root}/domain</integration.container.runtime>
-                <integration.container.type>existing</integration.container.type>
-            </properties>
-        </profile>
-        <profile>
-            <id>integration-weblogic12c-prepare</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-antrun-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>package</id>
-                                <phase>validate</phase>
-                                <configuration>
-                                    <target>
-                                        <delete>
-                                            <fileset dir="${integration.container.runtime}/autodeploy" includes="**/*"/>
-                                        </delete>
-                                    </target>
-                                </configuration>
-                                <goals>
-                                    <goal>run</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>                 
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-dependency-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>copy</id>                         
-                                <phase>validate</phase>
-                                <goals>
-                                    <goal>copy</goal>
-                                </goals>
-                                <configuration>
-                                    <artifactItems>
-                                        <artifactItem>
-                                            <groupId>com.sun.faces.test.weblogic12c</groupId>
-                                            <artifactId>jsf-impl</artifactId>
-                                            <version>${jsf.version}</version>
-                                            <type>jar</type>
-                                            <overWrite>true</overWrite>                                     
-                                            <outputDirectory>${integration.container.root}/server/modules</outputDirectory>
-                                            <destFileName>glassfish.jsf_1.0.0.0_2-1-5.jar</destFileName>
-                                        </artifactItem>
-                                        <artifactItem>
-                                            <groupId>com.sun.faces.test.weblogic12c</groupId>
-                                            <artifactId>jsf-api</artifactId>
-                                            <version>${jsf.version}</version>
-                                            <type>jar</type>
-                                            <overWrite>true</overWrite>                                     
-                                            <outputDirectory>${integration.container.root}/server/modules</outputDirectory>
-                                            <destFileName>javax.jsf_1.0.0.0_2-1.jar</destFileName>
-                                        </artifactItem>
-                                    </artifactItems>
-                                </configuration>
-                            </execution>
-                        </executions>
                     </plugin>
                 </plugins>
             </build>
             <properties>
-                <integration.container.home>${integration.container.root}/server/wlserver</integration.container.home>
-                <integration.container.id>weblogic103x</integration.container.id>
-                <integration.container.root>C:/Weblogic12c</integration.container.root>
-                <integration.container.runtime>${integration.container.root}/domain</integration.container.runtime>
+                <integration.container.home>C:/Wls1212</integration.container.home>
+                <integration.container.id>weblogic10x</integration.container.id>
                 <integration.container.type>existing</integration.container.type>
+                <integration.container.wldomain>${integration.container.home}/user_projects/domains/mydomain</integration.container.wldomain>
+                <integration.container.wlserver>${integration.container.home}/wlserver</integration.container.wlserver>
             </properties>
         </profile>
     </profiles>
