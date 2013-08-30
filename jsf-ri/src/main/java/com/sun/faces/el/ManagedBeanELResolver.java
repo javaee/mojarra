@@ -96,7 +96,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import javax.faces.context.ExternalContext;
 
 public class ManagedBeanELResolver extends ELResolver {
 
@@ -240,21 +239,9 @@ public class ManagedBeanELResolver extends ELResolver {
             if (builder != null) {
                 FacesContext facesContext = (FacesContext)
                     context.getContext(FacesContext.class);
-
-                // JAVASERVERFACES-2989: Make sure to check request, session, and application.
-                ExternalContext extContext = facesContext.getExternalContext();
-                if (extContext.getRequestMap().containsKey(beanName)) {
-                    return null;
-                } else if (null != extContext.getSession(false) &&
-                           extContext.getSessionMap().containsKey(beanName)) {
-                    return null;
-                } else if (extContext.getApplicationMap().containsKey(beanName)) {
-                    return null;
-                }                
-                
                 result = manager.getBeanFromScope(beanName, builder, facesContext);
                 if (result == null) {
-                        result = manager.create(beanName, builder, facesContext);
+                    result = manager.create(beanName, builder, facesContext);
                 }
                 context.setPropertyResolved(markAsResolvedIfCreated && (result != null));
             }
