@@ -190,6 +190,7 @@
                                         <delete quiet="true" failonerror="false" dir="${integration.container.root}"/>
                                         <mkdir dir="${integration.container.root}"/>
                                         <unzip src="${integration.container.zipFile}" dest="${integration.container.root}"/>
+                                        <delete file="${integration.container.zipFile}"/>
                                     </target>
                                 </configuration>
                                 <goals>
