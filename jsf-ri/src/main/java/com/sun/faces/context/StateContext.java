@@ -64,6 +64,7 @@ import static com.sun.faces.RIConstants.DYNAMIC_CHILD_COUNT;
 import static com.sun.faces.RIConstants.DYNAMIC_COMPONENT;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.OptimizedSet;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -349,7 +350,7 @@ public class StateContext {
                 }
             }
         }
-
+        
         /**
          * Are we listening for these particular changes.
          * 
@@ -424,9 +425,58 @@ public class StateContext {
             super(context);
         }
  
-
+        private boolean thisEventCorrespondsToSubtreeRootRemove(FacesContext context, UIComponent c) {
+            boolean result = false;
+            if (null != c) {
+                c = c.getParent();
+                if (null != c) {
+                    result = c.isInView();
+                }
+            }
+            
+            return result;
+        }
+        
+        private boolean thisEventCorrespondsToSubtreeRootAdd(FacesContext context, UIComponent c) {
+            boolean result = false;
+            Map<Object, Object> contextMap = context.getAttributes();
+            UIViewRoot root = context.getViewRoot();
+            UIComponent originalComponent = c;
+            if (null != c) {
+                Collection<UIComponent> dynamics = getDynamicComponentCollection(contextMap);
+                if (!dynamics.contains(c)) {
+                    c = c.getParent();
+                    while (null != c && !dynamics.contains(c)) {
+                        c = c.getParent();
+                    }
+                    if (null == c || root.equals(c)) {
+                        dynamics.add(originalComponent);
+                        result = true;
+                    }
+                }
+            }
+            
+            return result;
+        }
+        
+        private static final String DYNAMIC_COMPONENT_ADD_COLLECTION = 
+                RIConstants.FACES_PREFIX + "DynamicComponentSubtreeRoots";
+        
+        private Collection<UIComponent> getDynamicComponentCollection(Map<Object, Object> contextMap) {
+            Collection<UIComponent> result = (Collection<UIComponent>) contextMap.get(DYNAMIC_COMPONENT_ADD_COLLECTION);
+            if (null == result) {
+                result = new OptimizedSet<UIComponent>();
+                contextMap.put(DYNAMIC_COMPONENT_ADD_COLLECTION, result);
+            }
+            return result;
+        }
+        
         @Override
         protected void handleRemove(FacesContext context, UIComponent component) {
+            if (!thisEventCorrespondsToSubtreeRootRemove(context, component)) {
+                return;
+            }
+            
             Map<String, Object> attrs = component.getAttributes();
 
             // If the component is a tag-created child, we remove its
@@ -444,32 +494,21 @@ public class StateContext {
         
         private void childRemovedFromParent(UIComponent parent, String childTagId) {
             if (parent !=null) {
-                Collection<String> removedChildrenIds = getRemovedChildren(parent);                
+                Collection<String> removedChildrenIds = getPreviouslyRemovedChildren(parent);                
                 removedChildrenIds.add(childTagId);
                 
                 markChildrenModified(parent);
             }
         }
 
-        private Collection<String> getRemovedChildren(UIComponent parent) {
+        private Collection<String> getPreviouslyRemovedChildren(UIComponent parent) {
             Map<String, Object> attrs = parent.getAttributes();
             Collection<String> removedChildrenIds = (Collection<String>)
                     attrs.get(ComponentSupport.REMOVED_CHILDREN);
             
             if (removedChildrenIds == null) {
 
-                // Todo: we are using a HashSet with a default initial capacity here because it
-                // is convenient.  However, this is not optimal.  A better approach would be to
-                // optimize for a small collection size, since the most common dynamic component
-                // cases likely involve a small # of removes per-parent.  However, we do want this
-                // to scale well in the event that a large # of components are used.  One approach
-                // would be to create a wrapper collection that switches between:
-                // 1. Collections.singleton(): 1 element case
-                // 2. ArrayList(): small # of elements (eg. 2-4)
-                // 3. HashSet: medium-large # of elements (eg. > 5)
-                // Minimally, we should support #1 and #3 - ie. we should optimize
-                // the single element case.
-                removedChildrenIds = new HashSet<String>();
+                removedChildrenIds = new OptimizedSet<String>();
                 attrs.put(ComponentSupport.REMOVED_CHILDREN, removedChildrenIds);
             }
 
@@ -482,10 +521,14 @@ public class StateContext {
 
         @Override
         protected void handleAdd(FacesContext context, UIComponent component) {
+            if (!thisEventCorrespondsToSubtreeRootAdd(context, component)) {
+                return;
+            }
+            
             Map<String, Object> attrs = component.getAttributes();
             String tagId = (String)attrs.get(MARK_CREATED_REMOVED);
             
-            if (childAddedToParent(component, tagId)) {
+            if (childAddedToSameParentAsBefore(component, tagId)) {
                 
                 // Restore MARK_CREATED if the added component was originally
                 // created as a tag-based child of this parent.
@@ -498,7 +541,7 @@ public class StateContext {
 
         // Handles the addition of a new child to the parent.  Returns true
         // if the child was previously removed from this parent.
-        private boolean childAddedToParent(UIComponent parent, String childTagId) {
+        private boolean childAddedToSameParentAsBefore(UIComponent parent, String childTagId) {
             if (parent != null) {
                 Map<String, Object> attrs = parent.getAttributes();
                 Collection<String> removedChildrenIds = (Collection<String>)
