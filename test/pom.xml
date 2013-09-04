@@ -141,6 +141,85 @@
     </dependencies>
     <profiles>
         <profile>
+            <id>hudson-container-cleanup</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>                        
+                        <executions>
+                            <execution>
+                                <id>prepare</id>
+                                <phase>validate</phase>
+                                <configuration>
+                                    <target>
+                                        <delete quiet="true" failonerror="false" dir="${integration.container.root}"/>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>ant-contrib</groupId>
+                                <artifactId>ant-contrib</artifactId>
+                                <version>1.0b3</version>
+                                <exclusions>
+                                    <exclusion>
+                                        <groupId>ant</groupId>
+                                        <artifactId>ant</artifactId>
+                                    </exclusion>
+                                </exclusions>
+                            </dependency>
+                        </dependencies>
+                    </plugin>                    
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>hudson-container-prepare</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>prepare</id>
+                                <phase>validate</phase>
+                                <configuration>
+                                    <target>
+                                        <delete quiet="true" failonerror="false" dir="${integration.container.root}"/>
+                                        <mkdir dir="${integration.container.root}"/>
+                                        <unzip src="${integration.container.zipFile}" dest="${integration.container.root}"/>
+                                        <delete file="${integration.container.zipFile}"/>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>ant-contrib</groupId>
+                                <artifactId>ant-contrib</artifactId>
+                                <version>1.0b3</version>
+                                <exclusions>
+                                    <exclusion>
+                                        <groupId>ant</groupId>
+                                        <artifactId>ant</artifactId>
+                                    </exclusion>
+                                </exclusions>
+                            </dependency>
+                        </dependencies>
+                    </plugin>                    
+                </plugins>
+            </build>
+        </profile>
+        <profile>
             <id>integration-failsafe</id>
             <build>
                 <plugins>
@@ -1285,50 +1364,6 @@
                 <integration.container.home>C:/Temp/Cargo/tomcat7</integration.container.home>
                 <integration.container.id>tomcat7x</integration.container.id>
                 <tomcat.version>7.0.35</tomcat.version>
-            </properties>
-        </profile>
-        <profile>
-            <id>integration-wls-hudson-prepare</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-antrun-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>prepare</id>
-                                <phase>validate</phase>
-                                <configuration>
-                                    <target>
-                                        <delete quiet="true" failonerror="false" dir="${integration.container.root}"/>
-                                        <mkdir dir="${integration.container.root}"/>
-                                        <unzip src="${integration.container.zipFile}" dest="${integration.container.root}"/>
-                                    </target>
-                                </configuration>
-                                <goals>
-                                    <goal>run</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <dependencies>
-                            <dependency>
-                                <groupId>ant-contrib</groupId>
-                                <artifactId>ant-contrib</artifactId>
-                                <version>1.0b3</version>
-                                <exclusions>
-                                    <exclusion>
-                                        <groupId>ant</groupId>
-                                        <artifactId>ant</artifactId>
-                                    </exclusion>
-                                </exclusions>
-                            </dependency>
-                        </dependencies>
-                    </plugin>                    
-                </plugins>
-            </build>
-            <properties>
-                <integration.container.root>C:/Wls1211</integration.container.root>
-                <integration.container.zipFile>C:/Downloads/Wls12.1.1.zip</integration.container.zipFile>
             </properties>
         </profile>
         <profile>
