@@ -43,7 +43,7 @@
                                     <input>${basedir}/src/test/jmeter</input>
                                     <historydir>${basedir}/chronos-history</historydir>
                                     <jmeterVariables>
-                                        <integration.serverPort>${integration.serverPort}</integration.serverPort>
+                                        integration.serverPort=${integration.serverPort}
                                     </jmeterVariables>
                                 </configuration>
                                 <goals>
@@ -55,7 +55,7 @@
                                 <configuration>
                                     <historydir>${basedir}/chronos-history</historydir>
                                     <jmeterVariables>
-                                        <integration.serverPort>${integration.serverPort}</integration.serverPort>
+                                        integration.serverPort=${integration.serverPort}
                                     </jmeterVariables>
                                 </configuration>
                                 <goals>
