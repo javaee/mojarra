@@ -12,7 +12,7 @@
     <groupId>com.sun.faces.test</groupId>
     <artifactId>performance</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra ${project.version} - Test - Performance</name>
+    <name>Mojarra ${jsf.version} - Test - Performance</name>
     <build>
         <finalName>test-performance</finalName>
         <plugins>
