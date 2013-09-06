@@ -176,4 +176,18 @@
         <webapp.delegate>true</webapp.delegate>
         <webapp.useBundledJsf>false</webapp.useBundledJsf>
     </properties>
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>2.4</version>
+                <reportSets>
+                    <reportSet>
+                        <reports/>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>        
+    </reporting>
 </project>
