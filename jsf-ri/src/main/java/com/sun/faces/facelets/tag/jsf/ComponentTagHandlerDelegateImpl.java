@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -187,8 +187,21 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
             ComponentSupport.setTagForComponent(context, c, this.owner.getTag());
         }
 
-        // first allow c to get populated
-        owner.applyNextHandler(ctx, c);
+        // If this this a naming container, stop generating unique Ids
+        // for the repeated tags
+        boolean setUniqueIds = false;
+        boolean oldUnique = false;
+        if (c instanceof NamingContainer) {
+            oldUnique = ComponentSupport.setNeedUniqueIds(ctx, false);
+            setUniqueIds = true;
+        }
+        try {
+                // first allow c to get populated
+                owner.applyNextHandler(ctx, c);
+        } finally {
+            if (setUniqueIds)
+                ComponentSupport.setNeedUniqueIds(ctx, oldUnique);
+        }
 
         // finish cleaning up orphaned children
         if (componentFound) {
@@ -408,7 +421,10 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
                                   String id,
                                   UIComponent c) {
 
-        if (this.id != null) {
+        // If the id is specified as a literal, and the component is being
+        // repeated (by c:forEach, for example), use generated unique ids
+        // after the first instance
+        if (this.id != null && !(this.id.isLiteral() && ComponentSupport.getNeedUniqueIds(ctx))) {
             c.setId(this.id.getValue(ctx));
         } else {
             UIViewRoot root = ComponentSupport.getViewRoot(ctx, parent);
