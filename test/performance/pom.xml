@@ -184,7 +184,9 @@
                 <version>2.7</version>
                 <reportSets>
                     <reportSet>
-                        <reports/>
+                        <reports>
+                            <report>index</report>
+                        </reports>
                     </reportSet>
                 </reportSets>
             </plugin>
