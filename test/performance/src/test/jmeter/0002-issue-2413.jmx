@@ -29,8 +29,8 @@
         <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Regular Expression Extractor" enabled="true">
           <stringProp name="RegexExtractor.useHeaders">false</stringProp>
           <stringProp name="RegexExtractor.refname">jsfViewState</stringProp>
-          <stringProp name="RegexExtractor.regex">&lt;input type=&quot;hidden&quot; name=&quot;javax\.faces\.ViewState&quot; id=&quot;javax\.faces\.ViewState&quot; value=&quot;(.+?)&quot;</stringProp>
-          <stringProp name="RegexExtractor.template">$1$</stringProp>
+          <stringProp name="RegexExtractor.regex">&lt;input type=&quot;hidden&quot; name=&quot;javax\.faces\.ViewState&quot; id=&quot;(.+?)javax\.faces\.ViewState(.+?)&quot; value=&quot;(.+?)&quot;</stringProp>
+          <stringProp name="RegexExtractor.template">$1$$2$$3$</stringProp>
           <stringProp name="RegexExtractor.default"></stringProp>
           <stringProp name="RegexExtractor.match_number">0</stringProp>
           <stringProp name="Sample.scope">all</stringProp>
@@ -80,12 +80,12 @@
                   <boolProp name="HTTPArgument.use_equals">true</boolProp>
                   <stringProp name="Argument.name">form:add</stringProp>
                 </elementProp>
-                <elementProp name="javax.faces.ViewState" elementType="HTTPArgument">
+                <elementProp name="${jsfViewState_g1}javax.faces.ViewState${jsfViewState_g2}" elementType="HTTPArgument">
                   <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                  <stringProp name="Argument.value">${jsfViewState}</stringProp>
+                  <stringProp name="Argument.value">${jsfViewState_g3}</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                   <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                  <stringProp name="Argument.name">javax.faces.ViewState</stringProp>
+                  <stringProp name="Argument.name">${jsfViewState_g1}javax.faces.ViewState${jsfViewState_g2}</stringProp>
                 </elementProp>
               </collectionProp>
             </elementProp>
@@ -123,12 +123,12 @@
                   <boolProp name="HTTPArgument.use_equals">true</boolProp>
                   <stringProp name="Argument.name">form:add</stringProp>
                 </elementProp>
-                <elementProp name="javax.faces.ViewState" elementType="HTTPArgument">
+                <elementProp name="${jsfViewState_g1}javax.faces.ViewState${jsfViewState_g2}" elementType="HTTPArgument">
                   <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                  <stringProp name="Argument.value">${jsfViewState}</stringProp>
+                  <stringProp name="Argument.value">${jsfViewState_g3}</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                   <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                  <stringProp name="Argument.name">javax.faces.ViewState</stringProp>
+                  <stringProp name="Argument.name">${jsfViewState_g1}javax.faces.ViewState${jsfViewState_g2}</stringProp>
                 </elementProp>
               </collectionProp>
             </elementProp>
