@@ -45,13 +45,18 @@ import com.gargoylesoftware.htmlunit.html.DomNodeList;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlLink;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import java.io.IOException;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class Issue2511IT {
 
     private String webUrl;
@@ -131,6 +136,7 @@ public class Issue2511IT {
         assertThat(footer.getTextContent().trim(), is(""));
     }
 
+    @JsfTest(JsfVersion.JSF_2_2_1)
     @Test
     public void testCompositeComponent() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");

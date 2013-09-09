@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,7 +37,6 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
 package com.sun.faces.test.agnostic.flash.basic;
 
 import com.gargoylesoftware.htmlunit.util.Cookie;
@@ -46,15 +45,16 @@ import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlButtonInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 import static org.junit.Assert.assertTrue;
+import org.junit.runner.RunWith;
 
-/**
-  *
- */
+@RunWith(JsfTestRunner.class)
 public class FlashViewParamIT {
 
     private String webUrl;
@@ -71,20 +71,17 @@ public class FlashViewParamIT {
         webClient.closeAllWindows();
     }
 
-
-    // ------------------------------------------------------------ Test Methods
-
-
     /**
      * Added for issue 904.
      */
+    @JsfTest(JsfVersion.JSF_2_2_1)
     @Test
     public void testBooleanCheckboxSubmittedValue() throws Exception {
-
         HtmlPage page = webClient.getPage(webUrl + "/faces/flash01.xhtml");
         HtmlButtonInput button = (HtmlButtonInput) page.getElementById("nextButton");
         page = button.click();
         assertTrue(page.asText().contains("foo = bar"));
+
         Cookie cookie = webClient.getCookieManager().getCookie("csfcfc");
         assertTrue(cookie.isHttpOnly());
 
@@ -92,6 +89,7 @@ public class FlashViewParamIT {
         HtmlAnchor link = (HtmlAnchor) page.getElementById("nextLink");
         page = link.click();
         assertTrue(page.asText().contains("foo = bar"));
+
         cookie = webClient.getCookieManager().getCookie("csfcfc");
         assertTrue(cookie.isHttpOnly());
 
@@ -99,6 +97,7 @@ public class FlashViewParamIT {
         link = (HtmlAnchor) page.getElementById("nextCommandLink");
         page = link.click();
         assertTrue(page.asText().contains("foo = bar"));
+        
         cookie = webClient.getCookieManager().getCookie("csfcfc");
         assertTrue(cookie.isHttpOnly());
 
@@ -106,8 +105,8 @@ public class FlashViewParamIT {
         HtmlSubmitInput submitButton = (HtmlSubmitInput) page.getElementById("nextCommandButton");
         page = submitButton.click();
         assertTrue(page.asText().contains("foo = bar"));
+        
         cookie = webClient.getCookieManager().getCookie("csfcfc");
         assertTrue(cookie.isHttpOnly());
-
     }
 }

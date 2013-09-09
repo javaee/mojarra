@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,105 +37,70 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
 package com.sun.faces.test.agnostic.facelets.viewAction.simple;
 
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
-
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import org.junit.AfterClass;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
+import org.junit.runner.RunWith;
 
-/**
- * Test cases for Facelets functionality
- */
-public class Issue758SimpleIT  {
+@RunWith(JsfTestRunner.class)
+public class Issue758SimpleIT {
 
-    /**
-     * Stores the web URL.
-     */
     private String webUrl;
-    /**
-     * Stores the web webClient.
-     */
     private WebClient webClient;
-    
 
-    /**
-     * Setup before testing.
-     * 
-     * @throws Exception when a serious error occurs.
-     */
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    /**
-     * Cleanup after testing.
-     * 
-     * @throws Exception when a serious error occurs.
-     */
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-
-    /**
-     * Setup before testing.
-     */
     @Before
     public void setUp() {
         webUrl = System.getProperty("integration.url");
         webClient = new WebClient();
     }
 
-
-    // ------------------------------------------------------------ Test Methods
-    
     @Test
     public void testSimple() throws Exception {
         webClient.setRedirectEnabled(false);
         HtmlPage page;
         boolean exceptionThrown = false;
-        
+
         try {
-            page = webClient.getPage(webUrl);
+            webClient.getPage(webUrl);
         } catch (FailingHttpStatusCodeException ex) {
             assertEquals(302, ex.getStatusCode());
             exceptionThrown = true;
         }
         assertTrue(exceptionThrown);
-        
-        webClient.setRedirectEnabled(true);
-        page = page = webClient.getPage(webUrl);
-        assertTrue(page.asText().contains("Result page"));
 
+        webClient.setRedirectEnabled(true);
+        page = webClient.getPage(webUrl);
+        assertTrue(page.asText().contains("Result page"));
     }
 
+    @JsfTest(JsfVersion.JSF_2_2_1)
     @Test
     public void testSimpleNewNamespace() throws Exception {
         webClient.setRedirectEnabled(false);
         HtmlPage page;
         boolean exceptionThrown = false;
-        
+
         try {
-            page = webClient.getPage(webUrl + "faces/main-new-namespace.xhtml");
+            webClient.getPage(webUrl + "faces/main-new-namespace.xhtml");
         } catch (FailingHttpStatusCodeException ex) {
             assertEquals(302, ex.getStatusCode());
             exceptionThrown = true;
         }
         assertTrue(exceptionThrown);
-        
+
         webClient.setRedirectEnabled(true);
         page = webClient.getPage(webUrl + "faces/main-new-namespace.xhtml");
         assertTrue(page.asText().contains("Result page"));
-
     }
 
     @Test
@@ -143,7 +108,7 @@ public class Issue758SimpleIT  {
         webClient.setRedirectEnabled(false);
         HtmlPage page = null;
         boolean exceptionThrown = false;
-        
+
         try {
             page = webClient.getPage(webUrl + "faces/pageAviewActionPageA.xhtml");
         } catch (FailingHttpStatusCodeException ex) {
@@ -151,9 +116,7 @@ public class Issue758SimpleIT  {
             exceptionThrown = true;
         }
         assertFalse(exceptionThrown);
-        
         assertTrue(page.asText().contains("pageA action"));
-
     }
 
     @Test
@@ -161,7 +124,7 @@ public class Issue758SimpleIT  {
         webClient.setRedirectEnabled(false);
         HtmlPage page = null;
         boolean exceptionThrown = false;
-        
+
         try {
             page = webClient.getPage(webUrl + "faces/pageAviewActionEmpty.xhtml");
         } catch (FailingHttpStatusCodeException ex) {
@@ -169,9 +132,7 @@ public class Issue758SimpleIT  {
             exceptionThrown = true;
         }
         assertFalse(exceptionThrown);
-        
         assertTrue(page.asText().contains("pageA empty"));
-
     }
 
     @Test
@@ -179,7 +140,7 @@ public class Issue758SimpleIT  {
         webClient.setRedirectEnabled(false);
         HtmlPage page = null;
         boolean exceptionThrown = false;
-        
+
         try {
             page = webClient.getPage(webUrl + "faces/pageAviewActionNull.xhtml");
         } catch (FailingHttpStatusCodeException ex) {
@@ -187,37 +148,31 @@ public class Issue758SimpleIT  {
             exceptionThrown = true;
         }
         assertFalse(exceptionThrown);
-        
         assertTrue(page.asText().contains("pageA null"));
-
     }
-    
+
     @Test
     public void testNegativeIntentionalInfiniteRedirect() throws Exception {
         webClient.setRedirectEnabled(false);
         webClient.setThrowExceptionOnFailingStatusCode(true);
-        HtmlPage page = null;
         boolean exceptionThrown = false;
-        
+
         try {
-            page = webClient.getPage(webUrl + "faces/pageAviewActionPageAExplicitRedirect.xhtml");
-        } catch (FailingHttpStatusCodeException ex) {
-            assertEquals(302, ex.getStatusCode());
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-        
-        webClient.setRedirectEnabled(true);
-        webClient.setThrowExceptionOnFailingStatusCode(false);
-        try {
-            page = webClient.getPage(webUrl + "faces/pageAviewActionPageAExplicitRedirect.xhtml");
+            webClient.getPage(webUrl + "faces/pageAviewActionPageAExplicitRedirect.xhtml");
         } catch (FailingHttpStatusCodeException ex) {
             assertEquals(302, ex.getStatusCode());
             exceptionThrown = true;
         }
         assertTrue(exceptionThrown);
 
+        webClient.setRedirectEnabled(true);
+        webClient.setThrowExceptionOnFailingStatusCode(false);
+        try {
+            webClient.getPage(webUrl + "faces/pageAviewActionPageAExplicitRedirect.xhtml");
+        } catch (FailingHttpStatusCodeException ex) {
+            assertEquals(302, ex.getStatusCode());
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
     }
-    
-    
 }

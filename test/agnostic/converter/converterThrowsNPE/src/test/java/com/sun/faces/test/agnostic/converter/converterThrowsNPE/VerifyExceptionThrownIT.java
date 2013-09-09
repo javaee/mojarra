@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -42,46 +42,22 @@ package com.sun.faces.test.agnostic.converter.converterThrowsNPE;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 import static org.junit.Assert.assertTrue;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class VerifyExceptionThrownIT {
-    /**
-     * Stores the web URL.
-     */
+
     private String webUrl;
-    /**
-     * Stores the web client.
-     */
     private WebClient webClient;
 
-    /**
-     * Setup before testing.
-     * 
-     * @throws Exception when a serious error occurs.
-     */
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    /**
-     * Cleanup after testing.
-     * 
-     * @throws Exception when a serious error occurs.
-     */
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-
-    /**
-     * Setup before testing.
-     */
     @Before
     public void setUp() {
         webUrl = System.getProperty("integration.url");
@@ -90,35 +66,28 @@ public class VerifyExceptionThrownIT {
         webClient.setJavaScriptTimeout(60000);
     }
 
-    /**
-     * Tear down after testing.
-     */
     @After
     public void tearDown() {
         webClient.closeAllWindows();
     }
 
+    @JsfTest(JsfVersion.JSF_2_2_1)
     @Test
     public void testConverterThrowsNPEViaAjax() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
-
         HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("button1");
         page = button.click();
         webClient.waitForBackgroundJavaScript(60000);
         HtmlElement span = page.getHtmlElementById("ajaxResponseOutput");
-        
         assertTrue(span.asText().contains("NullPointerException"));
-        
     }
-    
+
     @Test
     public void testConverterThrowsNPEViaNonAjax() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
         webClient.setThrowExceptionOnFailingStatusCode(false);
-
         HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("button2");
         page = button.click();
         assertTrue(page.asText().contains("NullPointerException"));
-        
     }
 }

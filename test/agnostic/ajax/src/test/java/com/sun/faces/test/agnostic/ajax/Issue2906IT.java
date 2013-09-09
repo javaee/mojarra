@@ -37,29 +37,23 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
-package com.sun.faces.test.agnostic.ajax; 
+package com.sun.faces.test.agnostic.ajax;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlRadioButtonInput;
-
-import java.util.ArrayList;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 import java.util.List;
-
 import org.junit.*;
 import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class Issue2906IT {
 
-    /**
-     * Stores the web URL.
-     */
     private String webUrl;
-    /**
-     * Stores the web client.
-     */
     private WebClient webClient;
 
     @Before
@@ -73,17 +67,14 @@ public class Issue2906IT {
         webClient.closeAllWindows();
     }
 
-
-    // ------------------------------------------------------------ Test Methods
-
+    @JsfTest(JsfVersion.JSF_2_2_1)
     @Test
     public void testCommandLinksInRepeat() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl+"faces/issue2906.xhtml");
+        HtmlPage page = webClient.getPage(webUrl + "faces/issue2906.xhtml");
         assertTrue(page.asText().contains("2   2   2   2   2   2   2   2   2   2"));
 
         List anchors = page.getAnchors();
-
-        HtmlAnchor anchor = (HtmlAnchor)anchors.get(9);
+        HtmlAnchor anchor = (HtmlAnchor) anchors.get(9);
         page = anchor.click();
         webClient.waitForBackgroundJavaScript(60000);
         anchors.clear();
@@ -91,7 +82,7 @@ public class Issue2906IT {
         assertTrue(page.asText().contains("3   3   3   3   3   3   3   3   3"));
         assertTrue(anchors.size() == 9);
 
-        anchor = (HtmlAnchor)anchors.get(8);
+        anchor = (HtmlAnchor) anchors.get(8);
         page = anchor.click();
         webClient.waitForBackgroundJavaScript(60000);
         anchors.clear();
@@ -99,7 +90,7 @@ public class Issue2906IT {
         assertTrue(page.asText().contains("4   4   4   4   4   4   4   4"));
         assertTrue(anchors.size() == 8);
 
-        anchor = (HtmlAnchor)anchors.get(7);
+        anchor = (HtmlAnchor) anchors.get(7);
         page = anchor.click();
         webClient.waitForBackgroundJavaScript(60000);
         anchors.clear();
@@ -107,7 +98,7 @@ public class Issue2906IT {
         assertTrue(page.asText().contains("5   5   5   5   5   5   5"));
         assertTrue(anchors.size() == 7);
 
-        anchor = (HtmlAnchor)anchors.get(0);
+        anchor = (HtmlAnchor) anchors.get(0);
         page = anchor.click();
         webClient.waitForBackgroundJavaScript(60000);
         anchors.clear();
@@ -115,7 +106,7 @@ public class Issue2906IT {
         assertTrue(page.asText().contains("6   6   6   6   6   6"));
         assertTrue(anchors.size() == 6);
 
-        anchor = (HtmlAnchor)anchors.get(2);
+        anchor = (HtmlAnchor) anchors.get(2);
         page = anchor.click();
         webClient.waitForBackgroundJavaScript(60000);
         anchors.clear();
