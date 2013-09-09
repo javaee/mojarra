@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,23 +37,24 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
-package com.sun.faces.test.agnostic.flash.issue2973;
+package com.sun.faces.test.agnostic.flash.basic;
 
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebClient;
-
-
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 import org.junit.After;
 import org.junit.Before;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class Issue2973IT {
 
     private String webUrl;
@@ -70,9 +71,7 @@ public class Issue2973IT {
         webClient.closeAllWindows();
     }
 
-
-    // ------------------------------------------------------------ Test Methods
-
+    @JsfTest(JsfVersion.JSF_2_2_2)
     @Test
     public void testServerRestartHandledGracefully() throws Exception {
 
@@ -93,7 +92,7 @@ public class Issue2973IT {
             page = webClient.getPage(webUrl + "faces/issue2973/page1.xhtml") ;
             button = (HtmlSubmitInput) page.getElementById("restart");
             page = button.click();
-            Thread.currentThread().sleep(3000);
+            Thread.sleep(3000);
             
             textInput = (HtmlTextInput) page.getElementById("input");
             message = "" + System.currentTimeMillis();
@@ -112,6 +111,4 @@ public class Issue2973IT {
         assertTrue(assertionValue);   
         
     }
-    
-
 }
