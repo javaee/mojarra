@@ -41,11 +41,16 @@ package com.sun.faces.test.agnostic.el;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class Issue2989IT {
 
     private String webUrl;
@@ -62,11 +67,10 @@ public class Issue2989IT {
         webClient.closeAllWindows();
     }
 
+    @JsfTest(JsfVersion.JSF_2_2_3)
     @Test
     public void testSetNull1() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/issue2989.jsp");
         assertTrue(page.asXml().indexOf("PASSED") != -1);
     }
-
-    
 }

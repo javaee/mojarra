@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -43,112 +43,73 @@ package com.sun.faces.test.webprofile.flow.basic_multi_page.issue2997;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class Issue2997IT {
-    
-    /**
-     * Stores the web URL.
-     */
+
     private String webUrl;
-    /**
-     * Stores the web client.
-     */
     private WebClient webClient;
 
-    /**
-     * Setup before testing.
-     * 
-     * @throws Exception when a serious error occurs.
-     */
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    /**
-     * Cleanup after testing.
-     * 
-     * @throws Exception when a serious error occurs.
-     */
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-
-    /**
-     * Setup before testing.
-     */
     @Before
     public void setUp() {
         webUrl = System.getProperty("integration.url");
         webClient = new WebClient();
     }
 
-    /**
-     * Tear down after testing.
-     */
     @After
     public void tearDown() {
         webClient.closeAllWindows();
     }
 
+    @JsfTest(JsfVersion.JSF_2_2_3)
     @Test
     public void testGlobalReturn() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
-
         assertTrue(page.getBody().asText().indexOf("Page with link to flow entry") != -1);
 
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("flow-with-templates");
         page = button.click();
-        
         String pageText = page.getBody().asText();
         assertTrue(pageText.indexOf("Bottom From Template") != -1);
-        
+
         button = (HtmlSubmitInput) page.getElementById("issue2997Home");
         page = button.click();
-        
         pageText = page.getBody().asText();
         assertTrue(pageText.indexOf("Issue2997Home") != -1);
 
         page = webClient.getPage(webUrl);
-
         assertTrue(page.getBody().asText().indexOf("Page with link to flow entry") != -1);
 
         button = (HtmlSubmitInput) page.getElementById("flow-with-templates");
         page = button.click();
-        
         pageText = page.getBody().asText();
         assertTrue(pageText.indexOf("Bottom From Template") != -1);
-        
+
         button = (HtmlSubmitInput) page.getElementById("issue2997UserList");
         page = button.click();
-        
         pageText = page.getBody().asText();
         assertTrue(pageText.indexOf("Issue2997UserList") != -1);
-        
-        page = webClient.getPage(webUrl);
 
+        page = webClient.getPage(webUrl);
         assertTrue(page.getBody().asText().indexOf("Page with link to flow entry") != -1);
 
         button = (HtmlSubmitInput) page.getElementById("flow-with-templates");
         page = button.click();
-        
         pageText = page.getBody().asText();
         assertTrue(pageText.indexOf("Bottom From Template") != -1);
-        
+
         button = (HtmlSubmitInput) page.getElementById("issue2997PageInFacesConfig");
         page = button.click();
-        
         pageText = page.getBody().asText();
         assertTrue(pageText.indexOf("Issue2997PageInFacesConfig") != -1);
-        
-        
-        
     }
-    
 }
