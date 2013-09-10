@@ -2436,8 +2436,13 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 var delayValue;
                 if (typeof options.delay == 'number') {
                     delayValue = options.delay;
-                } else if (!explicitlyDoNotDelay) {
-                    throw new Error('invalid value for delay option: ' + options.delay);
+                } else  {
+                    var converted = parseInt(options.delay);
+                    
+                    if (!explicitlyDoNotDelay && isNaN(converted)) {
+                        throw new Error('invalid value for delay option: ' + options.delay);
+                    }
+                    delayValue = converted;
                 }
 
                 // remove non-passthrough options
