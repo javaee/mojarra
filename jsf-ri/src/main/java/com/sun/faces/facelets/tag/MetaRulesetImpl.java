@@ -100,7 +100,11 @@ public class MetaRulesetImpl extends MetaRuleset {
         // setup attributes
         TagAttribute[] attrs = this.tag.getAttributes().getAll();
         for (int i = 0; i < attrs.length; i++) {
-            attributes.put(attrs[i].getLocalName(), attrs[i]);
+            if (attrs[i].getLocalName().equals("class")) {
+                attributes.put("styleClass", attrs[i]);
+            } else {
+                attributes.put(attrs[i].getLocalName(), attrs[i]);
+            }
         }
 
         // add default rules
