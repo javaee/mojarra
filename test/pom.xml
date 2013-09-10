@@ -19,7 +19,6 @@
         <module>protocolaware</module>
         <module>quality</module>
         <module>selenium</module>
-        <module>servlet25</module>
         <module>servlet31</module>
         <module>unit</module>
         <module>util</module>
