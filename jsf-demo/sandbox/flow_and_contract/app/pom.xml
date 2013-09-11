@@ -7,7 +7,7 @@
     <version>1.0</version>
     <packaging>war</packaging>
     <name>${project.artifactId}</name>
-    <description>A simple project with war packaging that depends on JSF 2.2-m12 and 
+    <description>A simple project with war packaging that depends on JSF 2.2 and 
         javaee 6, in that order.</description>
     <url>http://jsf-spec.java.net/</url>
     <build>
@@ -30,7 +30,7 @@
         </plugins>
     </build>
     <properties>
-      <spec.snapshot.version>2.2-m12</spec.snapshot.version>
+      <spec.snapshot.version>2.2</spec.snapshot.version>
         <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
     </properties>
     <dependencies>
