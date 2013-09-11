@@ -54,7 +54,7 @@
     <packaging>war</packaging>
     <name>Mojarra ${project.version} - Test - JavaEE 7 - CDI - noBeansXml</name>  
     <build>
-        <finalName>test-${project.artifactId}</finalName>
+        <finalName>test-javaee7-cdi-noBeansXml</finalName>
     </build>
     <properties>
         <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
