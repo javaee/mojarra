@@ -142,6 +142,7 @@
                         <artifactId>chronos-report-maven-plugin</artifactId>
                         <version>1.0</version>
                         <configuration>
+                            <title>Performance - ${jsf.version}</title>
                             <historydir>${basedir}/chronos-history</historydir>
                             <showaverage>true</showaverage>
                             <showdetails>true</showdetails>
