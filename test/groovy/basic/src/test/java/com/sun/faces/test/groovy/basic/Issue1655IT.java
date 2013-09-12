@@ -126,7 +126,7 @@ public class Issue1655IT {
 
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form:command");
         page = (HtmlPage) button.click();
-        String pageAsText = page.asText();
+        String pageAsText = page.asXml();
         assertFalse(pageAsText.contains("Hello " + val));
         assertFalse(pageAsText.contains("Happy Birthday"));
         assertTrue(pageAsText.contains("please enter a valid age between 0 and 65"));
