@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE glassfish-web-app PUBLIC "-//GlassFish.org//DTD GlassFish Application Server 3.1 Servlet 3.0//EN" "http://glassfish.org/dtds/glassfish-web-app_3_0-1.dtd">
+<?xml version='1.0' encoding='UTF-8' ?>
+
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -41,12 +41,25 @@
     holder.
 
 -->
-<glassfish-web-app error-url="">
-  <context-root>/test-webprofile-scope-view</context-root>
-  <class-loader delegate="true"/>
-  <jsp-config>
-    <property name="keepgenerated" value="true">
-      <description>Keep a copy of the generated servlet class' java code.</description>
-    </property>
-  </jsp-config>
-</glassfish-web-app>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <head>
+        <title>ViewScoped</title>
+    </head>
+    <body>
+        <h1>ViewScoped</h1>
+        
+    <h:form prependId="false">
+        
+        <p><h:inputText id="input" value="#{viewScopedBean.value}" /></p>
+        <p><h:outputText id="output" value="#{viewScopedBean.value}" /></p>
+        
+        <p><h:commandButton id="stay" value="Stay Here" /></p>
+        
+        <p><h:commandButton id="go" value="Leave" action="otherPage"/></p>
+    </h:form>
+</body>
+</html>
