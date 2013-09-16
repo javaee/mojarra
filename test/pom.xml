@@ -269,8 +269,9 @@
                                         <unzip src="jsf-impl.jar" dest="wls-jar" overwrite="yes"/>
                                         <unzip src="wls.jsf.di-2.0.4.jar" dest="wls-jar" overwrite="yes"/>
                                         <zip destfile="jsf-wls.jar" basedir="wls-jar"/>
-                                        <delete file="wls.jar"/>
+                                        <delete file="wls.jsf.di-2.0.4.jar"/>
                                         <delete file="wls-api.jar"/>
+                                        <delete file="jsf-api.jar"/>
                                         <delete file="jsf-impl.jar"/>
                                     </target>
                                 </configuration>
