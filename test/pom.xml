@@ -266,7 +266,7 @@
                                 <configuration>
                                     <target>
                                         <mkdir dir="wls-jar"/>
-                                        <unzip src="wls-impl.jar" dest="wls-jar" overwrite="yes"/>
+                                        <unzip src="jsf-impl.jar" dest="wls-jar" overwrite="yes"/>
                                         <unzip src="wls.jsf.di-2.0.4.jar" dest="wls-jar" overwrite="yes"/>
                                         <zip destfile="jsf-wls.jar" basedir="wls-jar"/>
                                         <delete file="wls.jar"/>
