@@ -301,7 +301,7 @@
                 <wls.apiArtifactId>jsf-api</wls.apiArtifactId>
                 <wls.implGroupId>com.sun.faces</wls.implGroupId>
                 <wls.implArtifactId>jsf-api</wls.implArtifactId>
-                <wls.jarDownloadUrl>http://hg.us.oracle.com/jsf/website/raw-file/43f22fe82eca/downloads/wls.jsf.di-2.0.4.jar</wls.jarDownloadUrl>
+                <wls.jarDownloadUrl>https://stbeehive.oracle.com/content/dav/st/Mojarra/Public%20Documents/repository/com/bea/faces/wls.jsf.di/2.0.4/wls.jsf.di-2.0.4.jar</wls.jarDownloadUrl>
             </properties>
         </profile>
         <profile>
