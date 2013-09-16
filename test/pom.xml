@@ -218,6 +218,86 @@
             </build>
         </profile>
         <profile>
+            <id>hudson-wls-prepare</id>
+            <build>
+                <plugins>
+                    <plugin>                 
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy</id>                         
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>copy</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>${wls.apiGroupId}</groupId>
+                                            <artifactId>${wls.apiArtifactId}</artifactId>
+                                            <version>${jsf.version}</version>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>                                     
+                                            <outputDirectory>${basedir}</outputDirectory>
+                                            <destFileName>jsf-api.jar</destFileName>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>${wls.implGroupId}</groupId>
+                                            <artifactId>${wls.implArtifactId}</artifactId>
+                                            <version>${jsf.version}</version>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>                                     
+                                            <outputDirectory>${basedir}</outputDirectory>
+                                            <destFileName>jsf-impl.jar</destFileName>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>prepare</id>
+                                <phase>validate</phase>
+                                <configuration>
+                                    <target>
+                                        <wget url="http://hg.us.oracle.com/jsf/website/raw-file/43f22fe82eca/downloads/wls.jsf.di-2.0.4.jar" 
+                                              dest="wls.jar"/>
+                                        <unzip src="jsf-impl.jar" dest="wls-jar" overwrite="yes"/>
+                                        <unzip src="wls.jar" dest="wls-jar" overwrite="yes"/>
+                                        <zip destfile="jsf-wls.jar" basedir="wls-jar"/>
+                                        <delete file="wls.jar"/>
+                                        <delete file="wls-api.jar"/>
+                                        <delete file="jsf-impl.jar"/>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>ant-contrib</groupId>
+                                <artifactId>ant-contrib</artifactId>
+                                <version>1.0b3</version>
+                                <exclusions>
+                                    <exclusion>
+                                        <groupId>ant</groupId>
+                                        <artifactId>ant</artifactId>
+                                    </exclusion>
+                                </exclusions>
+                            </dependency>
+                        </dependencies>
+                    </plugin>                    
+                </plugins>
+            </build>
+        </profile>
+        <profile>
             <id>integration-failsafe</id>
             <build>
                 <plugins>
