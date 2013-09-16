@@ -94,7 +94,7 @@ public class Issue3005IT {
         String pageAsText = page.asXml();
         assertFalse(pageAsText.contains("Hello " + val));
         assertFalse(pageAsText.contains("Happy Birthday"));
-        assertTrue(pageAsText.contains("please enter a valid age between 0 and 65"));
+        assertTrue(pageAsText.matches("(?s).*please.*enter.*a.*valid.*age.*between.*0.*and.*65.*"));
         String pageText = page.asXml();
         assertTrue(pageText.contains("<input type=\"hidden\" name=\"javax.faces.ViewState\" id="));
     }
