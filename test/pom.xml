@@ -265,7 +265,7 @@
                                 <phase>validate</phase>
                                 <configuration>
                                     <target>
-                                        <wget url="${wls.jarDownloadUrl}" 
+                                        <get url="${wls.jarDownloadUrl}" 
                                               dest="wls.jar"/>
                                         <unzip src="jsf-impl.jar" dest="wls-jar" overwrite="yes"/>
                                         <unzip src="wls.jar" dest="wls-jar" overwrite="yes"/>
