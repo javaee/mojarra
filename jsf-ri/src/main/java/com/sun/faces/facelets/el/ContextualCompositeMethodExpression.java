@@ -70,6 +70,7 @@ import javax.el.ValueExpression;
 import javax.el.MethodInfo;
 import javax.el.ELContext;
 import javax.el.ELException;
+import javax.el.MethodNotFoundException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
@@ -200,7 +201,7 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
                 throw (ValidatorException) ele.getCause();
             }
             
-            if (source != null) {
+            if (source != null && ele instanceof MethodNotFoundException) {
                 // special handling when an ELException handling.  This is necessary
                 // when there are multiple levels of composite component nesting.
                 // When this happens, we need to evaluate the source expression
