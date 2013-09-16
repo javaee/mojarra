@@ -265,7 +265,7 @@
                                 <phase>validate</phase>
                                 <configuration>
                                     <target>
-                                        <wget url="http://hg.us.oracle.com/jsf/website/raw-file/43f22fe82eca/downloads/wls.jsf.di-2.0.4.jar" 
+                                        <wget url="${wls.jarDownloadUrl}" 
                                               dest="wls.jar"/>
                                         <unzip src="jsf-impl.jar" dest="wls-jar" overwrite="yes"/>
                                         <unzip src="wls.jar" dest="wls-jar" overwrite="yes"/>
@@ -296,6 +296,13 @@
                     </plugin>                    
                 </plugins>
             </build>
+            <properties>
+                <wls.apiGroupId>com.sun.faces</wls.apiGroupId>
+                <wls.apiArtifactId>jsf-api</wls.apiArtifactId>
+                <wls.implGroupId>com.sun.faces</wls.implGroupId>
+                <wls.implArtifactId>jsf-api</wls.implArtifactId>
+                <wls.jarDownloadUrl>http://hg.us.oracle.com/jsf/website/raw-file/43f22fe82eca/downloads/wls.jsf.di-2.0.4.jar</wls.jarDownloadUrl>
+            </properties>
         </profile>
         <profile>
             <id>integration-failsafe</id>
