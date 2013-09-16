@@ -60,6 +60,9 @@
                     </plugin>
                 </plugins>
             </build>
+            <properties>
+                <performance.title>Performance - ${jsf.version}</performance.title>
+            </properties>
             <reporting>
                 <plugins>
                     <plugin>
@@ -67,7 +70,7 @@
                         <artifactId>chronos-report-maven-plugin</artifactId>
                         <version>1.0</version>
                         <configuration>
-                            <title>Performance - ${jsf.version}</title>
+                            <title>${performance.title}</title>
                             <historydir>${basedir}/chronos-history</historydir>
                             <showaverage>true</showaverage>
                             <showdetails>true</showdetails>
@@ -135,6 +138,9 @@
                     </plugin>
                 </plugins>
             </build>
+            <properties>
+                <performance.title>Performance - ${jsf.version}</performance.title>
+            </properties>
             <reporting>
                 <plugins>
                     <plugin>
@@ -142,7 +148,7 @@
                         <artifactId>chronos-report-maven-plugin</artifactId>
                         <version>1.0</version>
                         <configuration>
-                            <title>Performance - ${jsf.version}</title>
+                            <title>${performance.title}</title>
                             <historydir>${basedir}/chronos-history</historydir>
                             <showaverage>true</showaverage>
                             <showdetails>true</showdetails>
