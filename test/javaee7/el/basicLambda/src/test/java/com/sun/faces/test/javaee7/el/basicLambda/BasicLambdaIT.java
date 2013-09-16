@@ -40,58 +40,27 @@
 package com.sun.faces.test.javaee7.el.basicLambda;
 
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+import com.gargoylesoftware.htmlunit.WebClient;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class BasicLambdaIT {
-    /**
-     * Stores the web URL.
-     */
+
     private String webUrl;
-    /**
-     * Stores the web client.
-     */
     private WebClient webClient;
 
-    /**
-     * Setup before testing.
-     * 
-     * @throws Exception when a serious error occurs.
-     */
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    /**
-     * Cleanup after testing.
-     * 
-     * @throws Exception when a serious error occurs.
-     */
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-
-    /**
-     * Setup before testing.
-     */
     @Before
     public void setUp() {
         webUrl = System.getProperty("integration.url");
         webClient = new WebClient();
     }
 
-    /**
-     * Tear down after testing.
-     */
     @After
     public void tearDown() {
         webClient.closeAllWindows();
@@ -100,39 +69,30 @@ public class BasicLambdaIT {
     @Test
     public void testIndex() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
-        
-        HtmlElement out = page.getElementById("output");
-
+        HtmlElement out = page.getHtmlElementById("output");
         assertEquals("20", out.asText());
-        
+
         HtmlTextInput input = (HtmlTextInput) page.getElementById("input");
         input.setValueAttribute("1");
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button");
         page = button.click();
-        
-        out = page.getElementById("output");
+        out = page.getHtmlElementById("output");
         assertEquals("40", out.asText());
 
         input = (HtmlTextInput) page.getElementById("input");
         input.setValueAttribute("2");
         button = (HtmlSubmitInput) page.getElementById("button");
         page = button.click();
-        
-        out = page.getElementById("output");
+        out = page.getHtmlElementById("output");
         assertEquals("60", out.asText());
-                
     }
-    
-    @Test 
+
+    @Test
     public void testBookTable() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/bookTable.xhtml");
-        
         assertTrue(page.asText().contains("At Swim Two Birds"));
         assertTrue(page.asText().contains("The Third Policeman"));
-        
-        HtmlElement out = page.getElementById("output2");
-
+        HtmlElement out = page.getHtmlElementById("output2");
         assertEquals("The Picture of Dorian Gray", out.asText());
-        
     }
 }
