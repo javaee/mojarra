@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -214,7 +214,16 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
                     }
 
                 } catch(Exception ex) {
+                    /*
+                     * If we got a validator exception it is actually correct to 
+                     * immediately bubble it up. 
+                     */
+                    if (ex.getCause() != null && ex.getCause() instanceof ValidatorException) {
+                        throw (ValidatorException) ex.getCause();
+                    }
+                    
                     if (LOGGER.isLoggable(Level.WARNING)) {
+                        LOGGER.log(Level.WARNING, ele.toString());
                         LOGGER.log(Level.WARNING,
                             "jsf.facelets.el.method.expression.invoke.error:"+ex.toString(),
                             new Object[] { source.getExpressionString() });
