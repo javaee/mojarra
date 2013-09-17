@@ -39,6 +39,7 @@
  */
 package com.sun.faces.test.agnostic.externalContext.basic;
 
+import java.net.URL;
 import com.gargoylesoftware.htmlunit.html.HtmlButtonInput;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -103,9 +104,14 @@ public class Issue2440IT {
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("reload");
         
         page = button.click();
-        String query = page.getUrl().getQuery();
-        
-        assertTrue(query.contains("%E6%97%A5%D7%90"));
+        URL pageUrl = page.getUrl();
+        assertTrue(null != pageUrl);
+        String query = pageUrl.getQuery();
+        if (null != query) {
+            assertTrue(query.contains("%E6%97%A5%D7%90"));
+        } else {
+            System.out.println("HtmlUnit error: pageUrl should have query string: " + pageUrl.toExternalForm());
+        }
         
     }
 
