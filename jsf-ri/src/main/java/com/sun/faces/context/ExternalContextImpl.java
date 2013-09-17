@@ -1031,6 +1031,10 @@ public class ExternalContextImpl extends ExternalContext {
         FacesContext context = FacesContext.getCurrentInstance();
         String encodingFromContext =
               (String) context.getAttributes().get(RIConstants.FACELETS_ENCODING_KEY);
+        if (null == encodingFromContext) {
+            encodingFromContext = (String) context.getViewRoot().getAttributes().
+                    get(RIConstants.FACELETS_ENCODING_KEY);
+        }
         
         String currentResponseEncoding = (null != encodingFromContext) ? encodingFromContext : getResponseCharacterEncoding();
 
@@ -1046,6 +1050,10 @@ public class ExternalContextImpl extends ExternalContext {
         FacesContext context = FacesContext.getCurrentInstance();
         String encodingFromContext =
               (String) context.getAttributes().get(RIConstants.FACELETS_ENCODING_KEY);
+        if (null == encodingFromContext) {
+            encodingFromContext = (String) context.getViewRoot().getAttributes().
+                    get(RIConstants.FACELETS_ENCODING_KEY);
+        }
         
         String currentResponseEncoding = (null != encodingFromContext) ? encodingFromContext : getResponseCharacterEncoding();
 
@@ -1068,6 +1076,10 @@ public class ExternalContextImpl extends ExternalContext {
         FacesContext context = FacesContext.getCurrentInstance();
         String encodingFromContext =
               (String) context.getAttributes().get(RIConstants.FACELETS_ENCODING_KEY);
+        if (null == encodingFromContext) {
+            encodingFromContext = (String) context.getViewRoot().getAttributes().
+                    get(RIConstants.FACELETS_ENCODING_KEY);
+        }
         
         String currentResponseEncoding = (null != encodingFromContext) ? encodingFromContext : getResponseCharacterEncoding();
         

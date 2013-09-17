@@ -167,6 +167,7 @@ public final class ViewHandler extends TagHandlerImpl {
             if (this.encoding != null) {
                 String v = this.encoding.getValue(ctx);
                 ctx.getFacesContext().getAttributes().put(RIConstants.FACELETS_ENCODING_KEY, v);
+                root.getAttributes().put(RIConstants.FACELETS_ENCODING_KEY, v);
             }
             if (this.beforePhase != null) {
                 MethodExpression m = this.beforePhase
