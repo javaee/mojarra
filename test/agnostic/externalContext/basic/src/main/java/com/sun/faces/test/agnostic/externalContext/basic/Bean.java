@@ -76,4 +76,11 @@ public class Bean implements Serializable {
         
         return "issue2440?param=" + stringWithSpecialChars + "&faces-redirect=true";
     }
+    
+    public String getStringWithSpecialCharacters() {
+        String stringWithSpecialChars = "日א";
+        
+        return stringWithSpecialChars;
+        
+    }
 }

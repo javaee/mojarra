@@ -39,6 +39,7 @@
  */
 package com.sun.faces.test.agnostic.externalContext.basic;
 
+import com.gargoylesoftware.htmlunit.html.HtmlButtonInput;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -97,16 +98,26 @@ public class Issue2440IT {
     }
 
     @Test
-    public void testQueryParamEncoding() throws Exception {
+    public void testQueryParamEncodingOnCommandButton() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/issue2440.xhtml");
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("reload");
         
         page = button.click();
-        String url = page.getUrl().toExternalForm();
+        String query = page.getUrl().getQuery();
         
-        System.out.println("debug: edburns: url: " + url);
-        
-        //assertTrue(url.contains("%E6%97%A5%D7%90"));
+        assertTrue(query.contains("%E6%97%A5%D7%90"));
         
     }
+
+    @Test
+    public void testQueryParamEncodingOnOutcomeTargetButton() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/issue2440.xhtml");
+        HtmlButtonInput button = (HtmlButtonInput) page.getHtmlElementById("bookmarkable01");
+        
+        String xml = button.asXml();
+        
+        assertTrue(xml.contains("%E6%97%A5%D7%90"));
+        
+    }
+
 }
