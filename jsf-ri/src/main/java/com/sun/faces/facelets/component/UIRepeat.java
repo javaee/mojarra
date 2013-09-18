@@ -95,6 +95,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Collection;
+import java.util.concurrent.ConcurrentHashMap;
+import static javax.faces.component.UINamingContainer.getSeparatorChar;
 
 
 public class UIRepeat extends UINamingContainer {
@@ -122,6 +124,9 @@ public class UIRepeat extends UINamingContainer {
     private Integer end;
     private Integer step;
     private Integer size;
+    
+    private Map<String, SavedState> initialChildState;
+    private String initialClientId;
 
     public UIRepeat() {
         this.setRendererType("facelets.ui.Repeat");
@@ -425,7 +430,15 @@ public class UIRepeat extends UINamingContainer {
             if (ss != null) {
                 ss.apply(evh);
             } else {
-                NullState.apply(evh);
+                String childId = clientId.substring(initialClientId.length() + 1);
+                childId = childId.substring(childId.indexOf(getSeparatorChar(faces)) + 1);
+                childId = initialClientId + getSeparatorChar(faces) + childId;
+                if (initialChildState.containsKey(childId)) {
+                    SavedState initialState = initialChildState.get(childId);
+                    initialState.apply(evh);
+                } else {
+                    NullState.apply(evh);
+                }
             }
         }
 
@@ -461,9 +474,57 @@ public class UIRepeat extends UINamingContainer {
         return false;
     }
 
+    /**
+     * Save the initial child state.
+     * 
+     * <p>
+     *  In order to be able to restore each row to a pristine condition if NO
+     *  state was necessary to be saved for a given row we need to store the
+     *  initial state (a.k.a the state of the skeleton) so we can restore the
+     *  skeleton as if it was just created by the page markup.
+     * </p>
+     * 
+     * @param facesContext the Faces context. 
+     */
+    private void saveInitialChildState(FacesContext facesContext) {
+        index = -1;
+        initialChildState = new ConcurrentHashMap<String, SavedState>();
+        initialClientId = getClientId(facesContext);
+        if (getChildCount() > 0) {
+            for (UIComponent child : getChildren()) {
+                saveInitialChildState(facesContext, child);
+            }
+        }
+    }
+
+    /**
+     * Recursively create the initial state for the given component.
+     * 
+     * @param facesContext the Faces context.
+     * @param component the UI component to save the state for.
+     * @see #saveInitialChildState(javax.faces.context.FacesContext) 
+     */
+    private void saveInitialChildState(FacesContext facesContext, UIComponent component) {
+        if (component instanceof EditableValueHolder && !component.isTransient()) {
+            String clientId = component.getClientId(facesContext);
+            SavedState state = new SavedState();
+            initialChildState.put(clientId, state);
+            state.populate((EditableValueHolder) component);
+        }
+
+        Iterator<UIComponent> iterator = component.getFacetsAndChildren();
+        while (iterator.hasNext()) {
+            saveChildState(facesContext, iterator.next());
+        }
+    }
+
     private void setIndex(FacesContext ctx, int index) {
 
         DataModel localModel = getDataModel();
+        
+        if (index == -1 && initialChildState == null) {
+            saveInitialChildState(ctx);
+        }
         
         // save child state
         if (this.index != -1 && localModel.isRowAvailable()) {
@@ -512,7 +573,7 @@ public class UIRepeat extends UINamingContainer {
         }
 
         // reset index
-        this.captureOrigValue(faces);
+        this.captureOrigValue(faces);        
         this.setIndex(faces, -1);
 
         try {
