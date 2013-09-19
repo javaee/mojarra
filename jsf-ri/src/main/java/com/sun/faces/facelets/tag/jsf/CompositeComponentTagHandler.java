@@ -635,13 +635,11 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
                 Collection<String> attributesWithDeclaredDefaultValues = (Collection<String>)
                         desc.getValue(UIComponent.ATTRS_WITH_DECLARED_DEFAULT_VALUES);
                 if (null != attributesWithDeclaredDefaultValues &&
-                        attributesWithDeclaredDefaultValues.contains(name)) {
+                        attributesWithDeclaredDefaultValues.contains(name) && attrs.containsKey(name)) {
                     // It is necessary to remove the value from the attribute
                     // map because the ELexpression transparancy doesn't know
                     // about the value's existence.
-                    if (attrs.containsKey(name)) {
-                        attrs.remove(name);
-                    }
+                    attrs.remove(name);
                 }
                 cc.setValueExpression(name, ve);
 
