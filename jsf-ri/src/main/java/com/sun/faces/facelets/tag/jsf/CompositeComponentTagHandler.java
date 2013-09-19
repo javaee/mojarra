@@ -639,7 +639,9 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
                     // It is necessary to remove the value from the attribute
                     // map because the ELexpression transparancy doesn't know
                     // about the value's existence.
-                    attrs.remove(name);
+                    if (attrs.containsKey(name)) {
+                        attrs.remove(name);
+                    }
                 }
                 cc.setValueExpression(name, ve);
 

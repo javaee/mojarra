@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+              xmlns:h="http://java.sun.com/jsf/html"
+              xmlns:c="http://java.sun.com/jsp/jstl/core"
+              xmlns:f="http://java.sun.com/jsf/core"
+              xmlns:composite="http://java.sun.com/jsf/composite"
+              xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <composite:interface componentType="com.sun.faces.test.agnostic.facelets.composite.AttributeELInput">
+        <composite:attribute name="mandatory" type="java.lang.Boolean" default="false"/>
+    </composite:interface>
+    <composite:implementation>
+        <div>
+            <h:inputText value="#{cc.attrs.value}" id="#{cc.attrs.id}_value"/>													
+        </div>
+    </composite:implementation>
+</ui:component>
