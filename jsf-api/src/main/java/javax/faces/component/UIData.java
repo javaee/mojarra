@@ -1762,9 +1762,20 @@ public class UIData extends UIComponentBase
         } 
     }
 
+    private void resetClientIds(UIComponent component) {
+        Iterator<UIComponent> iterator = component.getFacetsAndChildren();
+        while(iterator.hasNext()) {
+            UIComponent child = iterator.next();
+            resetClientIds(child);
+            child.setId(child.getId());
+        }
+    }
+        
     @Override
     public Object saveState(FacesContext context)
     {
+        resetClientIds(this);
+        
         if (initialStateMarked()) {
             Object superState = super.saveState(context);
             
