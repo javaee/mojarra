@@ -493,7 +493,7 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         /*
          * Repply the id, for the case when the component tree was changed, and the id's are set explicitly.
          */
-        if (this.id != null) {
+        if (this.id != null && !(this.id.isLiteral() && ComponentSupport.getNeedUniqueIds(ctx))) {
      	   c.setId(this.id.getValue(ctx));
         }
     }
