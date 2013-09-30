@@ -39,6 +39,7 @@
  */
 package com.sun.faces.test.agnostic.facelets.html;
 
+import com.gargoylesoftware.htmlunit.ElementNotFoundException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -67,14 +68,18 @@ public class Issue2683IT {
     public void tearDown() {
         webClient.closeAllWindows();
     }
-    
+
     @JsfTest(JsfVersion.JSF_2_2_4)
     @Test
     public void testDataTablePreserved() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/dataTablePreserved.xhtml");
         HtmlElement button = page.getHtmlElementById("form:button");
         page = button.click();
-        assertTrue(page.getHtmlElementById("form:j_idt6:j_idt8") == null);
-        assertTrue(page.getHtmlElementById("form:j_idt6:0:j_idt8") != null);
+        try {
+            page.getHtmlElementById("form:j_idt5:j_idt7");
+            fail();
+        } catch (ElementNotFoundException enfe) {
+        }
+        assertTrue(page.getHtmlElementById("form:j_idt5:0:j_idt7") != null);
     }
 }
