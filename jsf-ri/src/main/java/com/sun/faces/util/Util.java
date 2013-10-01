@@ -429,8 +429,16 @@ public class Util {
             throw new IllegalArgumentException("Illegal locale String: " +
                                                localeStr);
         }
-
         Locale result = null;
+        
+        try {
+            result = Locale.forLanguageTag(localeStr);
+            return result;
+        } catch(Throwable throwable) {
+            // if we are not running JavaSE 7 we end up here and we will 
+            // default to the previous way of determining the Locale below.
+        }
+
         String lang = null;
         String country = null;
         String variant = null;
