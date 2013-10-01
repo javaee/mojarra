@@ -574,70 +574,72 @@ public class Util {
         
         try {
             result = Locale.forLanguageTag(localeStr);
-            return result;
         } catch(Throwable throwable) {
             // if we are not running JavaSE 7 we end up here and we will 
             // default to the previous way of determining the Locale below.
         }
 
-        String lang = null;
-        String country = null;
-        String variant = null;
-        char[] seps = {
-            '-',
-            '_'
-        };
-        int inputLength = localeStr.length();
-        int i = 0;
-        int j = 0;
+        if (result != null) {
+            String lang = null;
+            String country = null;
+            String variant = null;
+            char[] seps = {
+                '-',
+                '_'
+            };
+            int inputLength = localeStr.length();
+            int i = 0;
+            int j = 0;
 
-        // to have a language, the length must be >= 2
-        if ((inputLength >= 2) &&
-            ((i = indexOfSet(localeStr, seps, 0)) == -1)) {
-            // we have only Language, no country or variant
-            if (2 != localeStr.length()) {
-                throw new
-                    IllegalArgumentException("Illegal locale String: " +
-                                             localeStr);
-            }
-            lang = localeStr.toLowerCase();
-        }
-
-        // we have a separator, it must be either '-' or '_'
-        if (i != -1) {
-            lang = localeStr.substring(0, i);
-            // look for the country sep.
-            // to have a country, the length must be >= 5
-            if ((inputLength >= 5) &&
-                ((j = indexOfSet(localeStr, seps, i + 1)) == -1)) {
-                // no further separators, length must be 5
-                if (inputLength != 5) {
+            // to have a language, the length must be >= 2
+            if ((inputLength >= 2) &&
+                ((i = indexOfSet(localeStr, seps, 0)) == -1)) {
+                // we have only Language, no country or variant
+                if (2 != localeStr.length()) {
                     throw new
                         IllegalArgumentException("Illegal locale String: " +
                                                  localeStr);
                 }
-                country = localeStr.substring(i + 1);
+                lang = localeStr.toLowerCase();
             }
-            if (j != -1) {
-                country = localeStr.substring(i + 1, j);
-                // if we have enough separators for language, locale,
-                // and variant, the length must be >= 8.
-                if (inputLength >= 8) {
-                    variant = localeStr.substring(j + 1);
-                } else {
-                    throw new
-                        IllegalArgumentException("Illegal locale String: " +
-                                                 localeStr);
+
+            // we have a separator, it must be either '-' or '_'
+            if (i != -1) {
+                lang = localeStr.substring(0, i);
+                // look for the country sep.
+                // to have a country, the length must be >= 5
+                if ((inputLength >= 5) &&
+                    ((j = indexOfSet(localeStr, seps, i + 1)) == -1)) {
+                    // no further separators, length must be 5
+                    if (inputLength != 5) {
+                        throw new
+                            IllegalArgumentException("Illegal locale String: " +
+                                                     localeStr);
+                    }
+                    country = localeStr.substring(i + 1);
+                }
+                if (j != -1) {
+                    country = localeStr.substring(i + 1, j);
+                    // if we have enough separators for language, locale,
+                    // and variant, the length must be >= 8.
+                    if (inputLength >= 8) {
+                        variant = localeStr.substring(j + 1);
+                    } else {
+                        throw new
+                            IllegalArgumentException("Illegal locale String: " +
+                                                     localeStr);
+                    }
                 }
             }
+            if (variant != null && country != null && lang != null) {
+                result = new Locale(lang, country, variant);
+            } else if (lang != null && country != null) {
+                result = new Locale(lang, country);
+            } else if (lang != null) {
+                result = new Locale(lang, "");
+            }
         }
-        if (variant != null && country != null && lang != null) {
-            result = new Locale(lang, country, variant);
-        } else if (lang != null && country != null) {
-            result = new Locale(lang, country);
-        } else if (lang != null) {
-            result = new Locale(lang, "");
-        }
+        
         return result;
     }
 
