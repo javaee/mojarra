@@ -579,7 +579,7 @@ public class Util {
             // default to the previous way of determining the Locale below.
         }
 
-        if (result != null) {
+        if (result == null) {
             String lang = null;
             String country = null;
             String variant = null;
