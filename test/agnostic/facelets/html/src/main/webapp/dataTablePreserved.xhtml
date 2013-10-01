@@ -11,11 +11,11 @@
     </h:head>
     <h:body>
         <h:form id="form">
-            <h:dataTable value="#{'T1,T2,T3,T4'.split(',')}" 
+            <h:dataTable id="table" value="#{'T1,T2,T3,T4'.split(',')}" 
                          rowStatePreserved="true"
                          var="item">
                 <h:column>
-                    <h:inputText value="#{item}"/>
+                    <h:inputText id="inputText" value="#{item}"/>
                 </h:column>
             </h:dataTable>
             <h:commandButton id="button" value="click me twice"/>

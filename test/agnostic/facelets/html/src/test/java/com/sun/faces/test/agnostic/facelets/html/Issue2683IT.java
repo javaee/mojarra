@@ -76,10 +76,10 @@ public class Issue2683IT {
         HtmlElement button = page.getHtmlElementById("form:button");
         page = button.click();
         try {
-            page.getHtmlElementById("form:j_idt5:j_idt7");
+            page.getHtmlElementById("form:table:inputText");
             fail();
         } catch (ElementNotFoundException enfe) {
         }
-        assertTrue(page.getHtmlElementById("form:j_idt5:0:j_idt7") != null);
+        assertTrue(page.getHtmlElementById("form:table:0:inputText") != null);
     }
 }
