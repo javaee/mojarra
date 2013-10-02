@@ -63,7 +63,9 @@ import javax.faces.flow.ViewNode;
 import javax.faces.lifecycle.ClientWindow;
 
 public class FlowImpl extends Flow implements Serializable {
-    
+
+    private static final long serialVersionUID = 5287030395068302998L;
+
     public static final Flow SYNTHESIZED_RETURN_CASE_FLOW = new FlowImpl(FlowHandler.NULL_FLOW);
     
     public static final Flow ABANDONED_FLOW = new FlowImpl(FlowHandlerImpl.ABANDONED_FLOW);
