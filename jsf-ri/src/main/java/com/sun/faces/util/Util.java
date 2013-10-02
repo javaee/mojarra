@@ -572,14 +572,17 @@ public class Util {
         }
         Locale result = null;
         
-//        try {
-//            result = Locale.forLanguageTag(localeStr);
-//        } catch(Throwable throwable) {
-//            // if we are not running JavaSE 7 we end up here and we will 
-//            // default to the previous way of determining the Locale below.
-//        }
-//
-//        if (result == null) {
+        try {
+            Method method = Locale.class.getMethod("forLanguageTag", String.class);
+            if (method != null) {
+                result = (Locale) method.invoke(null, localeStr);
+            }
+        } catch(Throwable throwable) {
+            // if we are NOT running JavaSE 7 we end up here and we will 
+            // default to the previous way of determining the Locale below.
+        }
+
+        if (result == null || result.getLanguage().equals("")) {
             String lang = null;
             String country = null;
             String variant = null;
@@ -638,7 +641,7 @@ public class Util {
             } else if (lang != null) {
                 result = new Locale(lang, "");
             }
-//        }
+        }
         
         return result;
     }
