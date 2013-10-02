@@ -268,19 +268,12 @@ public final class ComponentSupport {
         }
         if (obj instanceof String) {
             String s = (String) obj;
-            if (s.length() == 2) {
-                return new Locale(s);
+            try {
+                return Util.getLocaleFromString(s);
             }
-            if (s.length() == 5) {
-                return new Locale(s.substring(0, 2), s.substring(3, 5)
-                        .toUpperCase());
+            catch(IllegalArgumentException iae) {
+                throw new TagAttributeException(attr, "Invalid Locale Specified: " + s);
             }
-            if (s.length() >= 7) {
-                return new Locale(s.substring(0, 2), s.substring(3, 5)
-                        .toUpperCase(), s.substring(6, s.length()));
-            }
-            throw new TagAttributeException(attr, "Invalid Locale Specified: "
-                    + s);
         } else {
             throw new TagAttributeException(attr,
                     "Attribute did not evaluate to a String or Locale: " + obj);
