@@ -61,6 +61,7 @@ package com.sun.faces.facelets.tag.jsf;
 import com.sun.faces.RIConstants;
 import com.sun.faces.context.StateContext;
 import com.sun.faces.facelets.tag.jsf.core.FacetHandler;
+import com.sun.faces.util.Util;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIPanel;
