@@ -386,8 +386,11 @@ public final class SAXCompiler extends Compiler {
                 if (processingMetadata) {
                     super.startElement(uri, localName, qName, attributes);
                 }
+            } 
+            if ((localName.equals("view") && 
+                    (RIConstants.CORE_NAMESPACE.equals(uri) || RIConstants.CORE_NAMESPACE_NEW.equals(uri)))) {
+                super.startElement(uri, localName, qName, attributes);
             }
-
         }
 
         @Override
@@ -408,7 +411,10 @@ public final class SAXCompiler extends Compiler {
                     }
                 }
             }
-
+            if ((localName.equals("view") && 
+                    (RIConstants.CORE_NAMESPACE.equals(uri) || RIConstants.CORE_NAMESPACE_NEW.equals(uri)))) {
+                super.endElement(uri, localName, qName);
+            }
         }
 
     }
