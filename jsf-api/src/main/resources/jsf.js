@@ -314,7 +314,8 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                         nameValue[0] === "javax.faces.partial.event" ||
                         nameValue[0] === "javax.faces.partial.execute" ||
                         nameValue[0] === "javax.faces.partial.render" ||
-                        nameValue[0] === "javax.faces.partial.ajax") {
+                        nameValue[0] === "javax.faces.partial.ajax" ||
+                        nameValue[0] === "javax.faces.behavior.event") {
                         input = document.createElement("input");
                         input.setAttribute("type", "hidden");
                         input.setAttribute("id", nameValue[0]);
