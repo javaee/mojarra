@@ -41,6 +41,7 @@ package com.sun.faces.test.agnostic.facelets.viewAction.simple;
 
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.sun.faces.test.junit.JsfTest;
 import com.sun.faces.test.junit.JsfTestRunner;
@@ -81,6 +82,50 @@ public class Issue758SimpleIT {
         webClient.setRedirectEnabled(true);
         page = webClient.getPage(webUrl);
         assertTrue(page.asText().contains("Result page"));
+    }
+
+    @JsfTest(JsfVersion.JSF_2_2_5)
+    @Test
+    public void testActionListener01NewNamespace() throws Exception {
+        webClient.setRedirectEnabled(true);
+        HtmlPage page;
+
+        page = webClient.getPage(webUrl + "faces/main-actionListener01-new-namespace.xhtml");
+        DomElement e = page.getElementById("result");
+        assertTrue(e.asText().contains("01 viewAction01 02 viewAction01"));
+    }
+
+    @JsfTest(JsfVersion.JSF_2_2_5)
+    @Test
+    public void testActionListener01() throws Exception {
+        webClient.setRedirectEnabled(true);
+        HtmlPage page;
+
+        page = webClient.getPage(webUrl + "faces/main-actionListener01.xhtml");
+        DomElement e = page.getElementById("result");
+        assertTrue(e.asText().contains("01 viewAction01 02 viewAction01"));
+    }
+
+    @JsfTest(JsfVersion.JSF_2_2_5)
+    @Test
+    public void testActionListener02NewNamespace() throws Exception {
+        webClient.setRedirectEnabled(true);
+        HtmlPage page;
+
+        page = webClient.getPage(webUrl + "faces/main-actionListener02-new-namespace.xhtml");
+        DomElement e = page.getElementById("result");
+        assertTrue(e.asText().contains("method viewAction01"));
+    }
+
+    @JsfTest(JsfVersion.JSF_2_2_5)
+    @Test
+    public void testActionListener02() throws Exception {
+        webClient.setRedirectEnabled(true);
+        HtmlPage page;
+
+        page = webClient.getPage(webUrl + "faces/main-actionListener02.xhtml");
+        DomElement e = page.getElementById("result");
+        assertTrue(e.asText().contains("method viewAction01"));
     }
 
     @JsfTest(JsfVersion.JSF_2_2_1)
