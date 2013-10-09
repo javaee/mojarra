@@ -866,7 +866,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                 !viewIdToTest.startsWith("/" + currentFlow.getId())) {
                 // ... it must be out of the current flow.  
                 // If this is a flow return...
-                if (FlowHandlerImpl.NULL_FLOW.equals(flowDefiningDocumentId)) {
+                if (FlowHandler.NULL_FLOW.equals(flowDefiningDocumentId)) {
                     // treat it as such
                     newFlow = null;
                     viewIdToTest = null;
@@ -884,6 +884,12 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         if (null == result && null != viewIdToTest) {
             result = new CaseStruct();
             result.viewId = viewIdToTest;
+            // If this navigation case does not involve flows, make sure
+            // to convey that fact.
+            if (null == newFlow && null == currentFlow && 
+                !FlowHandlerImpl.NULL_FLOW.equals(flowDefiningDocumentId)) {
+                flowDefiningDocumentId = null;
+            }
             result.navCase = new NavigationCase(currentViewId,
                                                     fromAction,
                                                     outcome,
