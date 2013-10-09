@@ -1077,6 +1077,8 @@ public class UIRepeat extends UINamingContainer {
     }
 
     public Object saveState(FacesContext faces) {
+        resetClientIds(this);
+        
         if (faces == null) {
             throw new NullPointerException();
         }
