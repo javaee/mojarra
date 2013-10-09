@@ -413,6 +413,7 @@ public class HtmlResponseWriter extends ResponseWriter {
                                           disableUnicodeEscaping,
                                           isPartial);
             responseWriter.dontEscape = this.dontEscape;
+            responseWriter.writingCdata = this.writingCdata;
             return responseWriter;
             
         } catch (FacesException e) {
