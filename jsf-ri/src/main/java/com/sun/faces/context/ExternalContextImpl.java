@@ -504,6 +504,9 @@ public class ExternalContextImpl extends ExternalContext {
      * @see javax.faces.context.ExternalContext#getInitParameter(String)
      */
     public String getInitParameter(String name) {
+        if (name == null) {
+            throw new NullPointerException("Init parameter name cannot be null");
+        }
         return servletContext.getInitParameter(name);
     }
 
