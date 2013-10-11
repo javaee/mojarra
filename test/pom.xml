@@ -223,86 +223,45 @@
                 <plugins>
                     <plugin>                 
                         <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-dependency-plugin</artifactId>
+                        <artifactId>maven-antrun-plugin</artifactId>
                         <executions>
                             <execution>
-                                <id>copy</id>                         
+                                <id>instrument-wls-with-mojarra</id>
                                 <phase>validate</phase>
                                 <goals>
-                                    <goal>copy</goal>
+                                    <goal>run</goal>
                                 </goals>
                                 <configuration>
-                                    <artifactItems>
-                                        <artifactItem>
-                                            <groupId>${wls.apiGroupId}</groupId>
-                                            <artifactId>${wls.apiArtifactId}</artifactId>
-                                            <version>${jsf.version}</version>
-                                            <type>jar</type>
-                                            <overWrite>true</overWrite>                                     
-                                            <outputDirectory>${basedir}</outputDirectory>
-                                            <destFileName>jsf-api.jar</destFileName>
-                                        </artifactItem>
-                                        <artifactItem>
-                                            <groupId>${wls.implGroupId}</groupId>
-                                            <artifactId>${wls.implArtifactId}</artifactId>
-                                            <version>${jsf.version}</version>
-                                            <type>jar</type>
-                                            <overWrite>true</overWrite>                                     
-                                            <outputDirectory>${basedir}</outputDirectory>
-                                            <destFileName>jsf-impl.jar</destFileName>
-                                        </artifactItem>
-                                    </artifactItems>
+                                  <target>
+                                    <delete failonerror="false" dir="${integration.container.home}/tmp.mojarra" />
+                                    <mkdir dir="${integration.container.home}/tmp.mojarra" />
+                                    <mkdir dir="${integration.container.home}/tmp.mojarra/wls.mojarra" />
+                                    <unzip src="${integration.container.home}/${wls.mojarraJarPath}/${wls.mojarraJarName}"
+                                           dest="${integration.container.home}/tmp.mojarra/wls.mojarra" />
+                                    <delete dir="${integration.container.home}/tmp.mojarra/wls.mojarra/javax" />
+                                    <delete dir="${integration.container.home}/tmp.mojarra/wls.mojarra/com/sun" />
+                                    <delete dir="${integration.container.home}/tmp.mojarra/wls.mojarra/META-INF" />
+                                    <unzip src="${settings.localRepository}/org/glassfish/javax.faces/${project.version}/javax.faces-${project.version}.jar"
+                                           dest="${integration.container.home}/tmp.mojarra/wls.mojarra" />
+                                    <zip destfile="${integration.container.home}/tmp.mojarra/${wls.mojarraJarName}"
+                                         basedir="${integration.container.home}/tmp.mojarra/wls.mojarra"
+                                         update="true" />
+                                    <copy overwrite="true"
+                                          file="${integration.container.home}/tmp.mojarra/${wls.mojarraJarName}"
+                                          tofile="${integration.container.home}/${wls.mojarraJarPath}/${wls.mojarraJarName}" />
+                                  </target>
                                 </configuration>
                             </execution>
                         </executions>
                     </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-antrun-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>prepare</id>
-                                <phase>validate</phase>
-                                <configuration>
-                                    <target>
-                                        <mkdir dir="wls-jar"/>
-                                        <unzip src="jsf-impl.jar" dest="wls-jar" overwrite="yes"/>
-                                        <unzip src="wls.jsf.di-2.0.4.jar" dest="wls-jar" overwrite="yes"/>
-                                        <zip destfile="jsf-wls.jar" basedir="wls-jar"/>
-                                        <delete file="wls.jsf.di-2.0.4.jar"/>
-                                        <delete file="wls-api.jar"/>
-                                        <delete file="jsf-api.jar"/>
-                                        <delete file="jsf-impl.jar"/>
-                                    </target>
-                                </configuration>
-                                <goals>
-                                    <goal>run</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <dependencies>
-                            <dependency>
-                                <groupId>ant-contrib</groupId>
-                                <artifactId>ant-contrib</artifactId>
-                                <version>1.0b3</version>
-                                <exclusions>
-                                    <exclusion>
-                                        <groupId>ant</groupId>
-                                        <artifactId>ant</artifactId>
-                                    </exclusion>
-                                </exclusions>
-                            </dependency>
-                        </dependencies>
-                    </plugin>                    
                 </plugins>
             </build>
             <properties>
-                <wls.apiGroupId>com.sun.faces</wls.apiGroupId>
-                <wls.apiArtifactId>jsf-api</wls.apiArtifactId>
-                <wls.implGroupId>com.sun.faces</wls.implGroupId>
-                <wls.implArtifactId>jsf-api</wls.implArtifactId>
+                <wls.mojarraJarPath>wlserver/modules</wls.mojarraJarPath>
+                <wls.mojarraJarName>glassfish.jsf_2.0.0.0_2-1-20.jar</wls.mojarraJarName>
             </properties>
         </profile>
+
         <profile>
             <id>integration-failsafe</id>
             <build>
