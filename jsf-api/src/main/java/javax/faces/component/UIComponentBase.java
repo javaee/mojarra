@@ -75,6 +75,7 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.WeakHashMap;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
@@ -112,8 +113,15 @@ public abstract class UIComponentBase extends UIComponent {
      * the properties of a concrete {@link UIComponent} implementation, keyed
      * by the corresponding <code>java.lang.Class</code>.</p>
      * <p/>
+     * <p><strong>IMPLEMENTATION NOTE</strong> - This is implemented as a
+     * <code>WeakHashMap</code> so that, even if this class is embedded in a
+     * container's class loader that is a parent to webapp class loaders,
+     * references to the classes will eventually expire.</p>
      */
-    private Map<Class<?>, Map<String, PropertyDescriptor>> descriptors;            
+    @SuppressWarnings({"CollectionWithoutInitialCapacity"})
+    private static Map<Class<?>, Map<String, PropertyDescriptor>>
+            descriptors =
+            new WeakHashMap<Class<?>, Map<String, PropertyDescriptor>>();
 
     /**
      * Reference to the map of <code>PropertyDescriptor</code>s for this class
@@ -133,51 +141,43 @@ public abstract class UIComponentBase extends UIComponent {
     }
 
     private void populateDescriptorsMapIfNecessary() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        Class<?> clazz = getClass();
-        
-        /*
-         * If we can find a valid FacesContext we are going to use it to get
-         * access to the property descriptor map.
-         */
-        if (facesContext != null && 
-                facesContext.getExternalContext() != null && 
-                facesContext.getExternalContext().getApplicationMap() != null) {
-            
-            Map<String, Object> applicationMap = facesContext.getExternalContext().getApplicationMap();
-            
-            if (!applicationMap.containsKey("com.sun.faces.compnent.COMPONENT_DESCRIPTORS_MAP")) {
-                applicationMap.put("com.sun.faces.compnent.COMPONENT_DESCRIPTORS_MAP", 
-                        new ConcurrentHashMap<Class<?>, Map<String, PropertyDescriptor>>());
-            }
-            
-            descriptors = (Map<Class<?>, Map<String, PropertyDescriptor>>) applicationMap.get("com.sun.faces.compnent.COMPONENT_DESCRIPTORS_MAP");
+        Class<?> clazz = this.getClass();
+        synchronized(descriptors) {
             pdMap = descriptors.get(clazz);
         }
+        if (null != pdMap) {
+            return;
+        }
 
-        if (pdMap == null) {
-            /*
-             * We did not find the property descriptor map so we are now 
-             * going to load it.
-             */
-            PropertyDescriptor pd[] = getPropertyDescriptors();
-            if (pd != null) {
-                pdMap = new HashMap<String, PropertyDescriptor>(pd.length, 1.0f);
-                for (PropertyDescriptor aPd : pd) {
-                    pdMap.put(aPd.getName(), aPd);
-                }
-                if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.log(Level.FINE, "fine.component.populating_descriptor_map",
-                            new Object[]{clazz,
-                                    Thread.currentThread().getName()});
-                }
+        // load the property descriptors for this class.
+        PropertyDescriptor pd[] = getPropertyDescriptors();
+        if (pd != null) {
+            pdMap = new HashMap<String, PropertyDescriptor>(pd.length, 1.0f);
+            for (PropertyDescriptor aPd : pd) {
+                pdMap.put(aPd.getName(), aPd);
+            }
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE, "fine.component.populating_descriptor_map",
+                        new Object[]{clazz,
+                                Thread.currentThread().getName()});
+            }
 
-                if (descriptors != null && !descriptors.containsKey(clazz)) {
-                    descriptors.put(clazz, pdMap);
-                }
+            // Check again
+            Map<String, PropertyDescriptor> reCheckMap = null;
+            synchronized(descriptors) {
+                reCheckMap = descriptors.get(clazz);
+            }
+            if (null != reCheckMap) {
+                return;
+            }
+            synchronized(descriptors) {
+                descriptors.put(clazz, pdMap);
             }
         }
+
+
     }
+
 
     /**
      * <p>Return an array of <code>PropertyDescriptors</code> for this
