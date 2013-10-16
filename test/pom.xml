@@ -1619,6 +1619,7 @@
                             <container>
                                 <containerId>${integration.container.id}</containerId>
                                 <home>${integration.container.wlserver}</home>
+                                <timeout>600000</timeout>
                             </container>
                             <configuration>
                                 <type>${integration.container.type}</type>
