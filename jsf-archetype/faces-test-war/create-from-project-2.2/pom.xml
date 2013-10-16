@@ -46,7 +46,7 @@
   
   <groupId>com.sun.faces</groupId>
   <artifactId>faces-2.2-test-war</artifactId>
-  <version>0.1</version>
+  <version>0.2</version>
   <packaging>war</packaging>
   <name>Automated Test Depending on JSF 2.2</name>
   

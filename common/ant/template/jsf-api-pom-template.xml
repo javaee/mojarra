@@ -53,7 +53,7 @@
     <description>
         This is the master POM file for Oracle's Implementation of the JSF 2.2 Specification.
     </description>
-    <url>http://java.sun.com/javaee/javaserverfaces/</url>
+    <url>http://jsf-spec.java.net/</url>
     <licenses>
         <license>
             <name>
