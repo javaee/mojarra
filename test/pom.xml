@@ -71,7 +71,7 @@
                 <plugin>
                     <groupId>org.codehaus.cargo</groupId>
                     <artifactId>cargo-maven2-plugin</artifactId>
-                    <version>1.2.3</version>
+                    <version>1.2.4</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -297,7 +297,6 @@
                 <wls.mojarraJarName>glassfish.jsf_2.0.0.0_2-1-20.jar</wls.mojarraJarName>
             </properties>
         </profile>
-
         <profile>
             <id>integration-failsafe</id>
             <build>
