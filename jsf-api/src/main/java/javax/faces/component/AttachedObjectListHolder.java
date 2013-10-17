@@ -44,7 +44,6 @@ import javax.faces.context.FacesContext;
 import java.util.List;
 import java.util.ArrayList;
 import java.lang.reflect.Array;
-import java.util.Iterator;
 
 /**
  * <p>
@@ -208,10 +207,6 @@ class AttachedObjectListHolder<T> implements PartialStateHolder {
 
         return new ArrayList<T>(attachedObjects).toArray((T[])Array.newInstance(type, attachedObjects.size()));
         
-    }
-    
-    Iterator<T> iterator() {
-        return attachedObjects.iterator();
     }
     
 }
