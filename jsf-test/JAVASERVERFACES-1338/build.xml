@@ -55,22 +55,22 @@
     </path>
 
     <target name="build">
-
+<!--
       <jsf.mvn dir="${jsf.build.home}/jsf-demo/sandbox/scrumtoys2009/eclipseProject/latest" goals="install" />
       <jsf.mvn dir="${basedir}/i_jsf_1338_htmlunit" goals="install" />
-
+-->
     </target>    
 
     <target name="clean">
-
+<!--
       <jsf.mvn dir="${jsf.build.home}/jsf-demo/sandbox/scrumtoys2009/eclipseProject/latest" goals="clean" />
       <jsf.mvn dir="${basedir}/i_jsf_1338_htmlunit" goals="clean" />
       <delete dir="${basedir}/build" />
-
+-->
     </target>    
 
     <target name="install">
-
+<!--
       <start.database />
       <set.security.properties />
       <echo message="Database started" />
@@ -81,8 +81,6 @@
           <non.ant.deploy.artifact
               artifact="${jsf.build.home}/jsf-demo/sandbox/scrumtoys2009/eclipseProject/latest/target/scrumtoys.war"
               appName="scrumtoys" />
-<!--          <echo message="sleeping for 2 minutes" />
-          <sleep minutes="2"/> -->
         </then>
         <else>
           <deploy.artifact
@@ -90,18 +88,20 @@
               appName="scrumtoys" />
         </else>
       </if>
+-->
     </target>    
 
     <target name="remove">
-
+<!--
       <undeploy.artifact artifact="${basedir}/target/scrumtoys.war"
                 appName="scrumtoys" />
       <stop.database />
       <echo message="Database stopped" />
-
+-->
     </target>    
     
     <target name="scrumtoys-check">
+<!--
       <var name="do.sleep" unset="true" />
       <var name="deployment.host" unset="true" />
       <var name="deployment.port" unset="true" />
@@ -115,11 +115,13 @@
       <property name="deployment.retries" value="5" />
       
       <antcall target="deployment.check" />
+-->
     </target>
 
     
 
     <target name="test" depends="scrumtoys-check,define.scenario.aware.port">
+<!--
       <retry retrycount="${deployment.retries}">
         <sequential>
           <echo message="TEST RETRY..." />
@@ -133,6 +135,7 @@
           </jsf.junit>
         </sequential>
       </retry>
+-->
     </target>    
 
 
