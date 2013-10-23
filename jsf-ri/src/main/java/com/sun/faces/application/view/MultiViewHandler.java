@@ -437,24 +437,26 @@ public class MultiViewHandler extends ViewHandler {
         }
         
         String responseEncoding = (null != encodingFromContext) ? encodingFromContext : context.getExternalContext().getResponseCharacterEncoding();
-        
-        Map<String, List<String>> decodedParameters = new HashMap<String, List<String>>();
-        for (Map.Entry<String, List<String>> entry : parameters.entrySet()) {
-            String string = entry.getKey();
-            List<String> list = entry.getValue();
-            List<String> values = new ArrayList<String>();
-            for (Iterator<String> it = list.iterator(); it.hasNext();) {
-                String value = it.next();
-                try {
-                    value = URLDecoder.decode(value, responseEncoding);
-                } catch(UnsupportedEncodingException e) {
-                    throw new RuntimeException("Unable to decode");
+
+        if (parameters != null) {
+            Map<String, List<String>> decodedParameters = new HashMap<String, List<String>>();
+            for (Map.Entry<String, List<String>> entry : parameters.entrySet()) {
+                String string = entry.getKey();
+                List<String> list = entry.getValue();
+                List<String> values = new ArrayList<String>();
+                for (Iterator<String> it = list.iterator(); it.hasNext();) {
+                    String value = it.next();
+                    try {
+                        value = URLDecoder.decode(value, responseEncoding);
+                    } catch(UnsupportedEncodingException e) {
+                        throw new RuntimeException("Unable to decode");
+                    }
+                    values.add(value);
                 }
-                values.add(value);
+                decodedParameters.put(string, values);
             }
-            decodedParameters.put(string, values);
+            parameters = decodedParameters;
         }
-        parameters = decodedParameters;
                 
         Map<String,List<String>> params;
         if (includeViewParams) {
