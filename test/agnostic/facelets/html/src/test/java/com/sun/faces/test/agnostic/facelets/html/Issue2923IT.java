@@ -49,6 +49,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 
 @RunWith(JsfTestRunner.class)
@@ -68,8 +69,9 @@ public class Issue2923IT {
         webClient.closeAllWindows();
     }
     
-    @JsfTest(JsfVersion.JSF_2_2_2)
+//    @JsfTest(JsfVersion.JSF_2_2_2)
     @Test
+    @Ignore
     public void testInputFileRequired() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/inputFileRequired.xhtml");
         HtmlElement button = page.getHtmlElementById("form:button");
