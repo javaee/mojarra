@@ -58,6 +58,8 @@ import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.*;
 
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -427,6 +429,33 @@ public class MultiViewHandler extends ViewHandler {
     @Override
     public String getRedirectURL(FacesContext context, String viewId, Map<String, List<String>> parameters, boolean includeViewParams) {
 
+        String encodingFromContext =
+              (String) context.getAttributes().get(RIConstants.FACELETS_ENCODING_KEY);
+        if (null == encodingFromContext) {
+            encodingFromContext = (String) context.getViewRoot().getAttributes().
+                    get(RIConstants.FACELETS_ENCODING_KEY);
+        }
+        
+        String responseEncoding = (null != encodingFromContext) ? encodingFromContext : context.getExternalContext().getResponseCharacterEncoding();
+        
+        Map<String, List<String>> decodedParameters = new HashMap<String, List<String>>();
+        for (Map.Entry<String, List<String>> entry : parameters.entrySet()) {
+            String string = entry.getKey();
+            List<String> list = entry.getValue();
+            List<String> values = new ArrayList<String>();
+            for (Iterator<String> it = list.iterator(); it.hasNext();) {
+                String value = it.next();
+                try {
+                    value = URLDecoder.decode(value, responseEncoding);
+                } catch(UnsupportedEncodingException e) {
+                    throw new RuntimeException("Unable to decode");
+                }
+                values.add(value);
+            }
+            decodedParameters.put(string, values);
+        }
+        parameters = decodedParameters;
+                
         Map<String,List<String>> params;
         if (includeViewParams) {
             params = getFullParameterList(context, viewId, parameters);
