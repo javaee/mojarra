@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.webprofile.lifecycle.request_char_encoding;
+package com.sun.faces.test.glassfish.request_char_encoding2;
 
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
@@ -50,6 +50,10 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
+/*
+ * Because the glassfish-web.xml sets the requestencoding to US-ASCII, the
+ * UTF-8 characters will not be processed correctly.
+ */
 public class Issue2217IT {
 
     private String webUrl;
@@ -70,8 +74,8 @@ public class Issue2217IT {
     public void testJapanese() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
         
-        String pageText = page.getBody().asText();
-        assertTrue(pageText.contains("Hello, my name is Duke. What's yours?"));
+        String str = page.getBody().asText();
+        assertTrue(str.contains("Hello, my name is Duke. What's yours?"));
 
         HtmlTextInput text = (HtmlTextInput) page.getElementById("username");
         text.type("\u65E5");
@@ -79,9 +83,8 @@ public class Issue2217IT {
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("submit");
         page = button.click();
         
-        pageText = page.getBody().asText();
-        assertTrue(pageText.contains("\u65E5"));
-        
+        str = page.asXml();
+        assertFalse(str.contains("\u65E5"));    
     }
         
     @Test
@@ -98,8 +101,6 @@ public class Issue2217IT {
         page = button.click();
         
         pageText = page.getBody().asText();
-        assertTrue(pageText.contains("\u05D0"));
-        
+        assertFalse(pageText.contains("\u05D0"));   
     }
-    
 }

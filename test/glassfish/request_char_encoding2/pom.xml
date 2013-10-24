@@ -45,16 +45,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.sun.faces.test.webprofile.lifecycle</groupId>
+        <groupId>com.sun.faces.test.glassfish</groupId>
         <artifactId>pom</artifactId>
         <version>2.2.5-SNAPSHOT</version>
     </parent>
-    <groupId>com.sun.faces.test.webprofile.lifecycle</groupId>
-    <artifactId>request_char_encoding</artifactId>
+    <groupId>com.sun.faces.test.glassfish</groupId>
+    <artifactId>request_char_encoding2</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra ${project.version} - Test - Web-Profile - Lifecycle - Request Character Encoding</name>
+    <name>Mojarra ${project.version} - Test - Glassfish - Request Character Encoding #2</name>
     <build>
-        <finalName>test-webprofile-lifecycle-request_char_encoding</finalName>
+        <finalName>test-glassfish-request_char_encoding2</finalName>
     </build>
     <properties>
         <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>

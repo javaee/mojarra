@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.webprofile.lifecycle.request_char_encoding2;
+package com.sun.faces.test.glassfish.request_char_encoding;
 
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
@@ -46,12 +46,8 @@ import org.junit.Before;
 import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
 
-// Because the glassfish-web.xml sets the requestencoding to US-ASCII, the
-// UTF-8 characters will not be processed correctly.
 public class Issue2217IT {
 
     private String webUrl;
@@ -71,37 +67,34 @@ public class Issue2217IT {
     @Test
     public void testJapanese() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
-        
-        String str = page.getBody().asText();
-        assertTrue(str.contains("Hello, my name is Duke. What's yours?"));
+
+        String pageText = page.getBody().asText();
+        assertTrue(pageText.contains("Hello, my name is Duke. What's yours?"));
 
         HtmlTextInput text = (HtmlTextInput) page.getElementById("username");
         text.type("\u65E5");
-        
+
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("submit");
         page = button.click();
-        
-        str = page.asXml();
-        assertFalse(str.contains("\u65E5"));
-        
+
+        pageText = page.getBody().asText();
+        assertTrue(pageText.contains("\u65E5"));
     }
-        
+
     @Test
     public void testHebrew() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
-        
+
         String pageText = page.getBody().asText();
         assertTrue(pageText.contains("Hello, my name is Duke. What's yours?"));
 
         HtmlTextInput text = (HtmlTextInput) page.getElementById("username");
         text.type("\u05D0");
-        
+
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("submit");
         page = button.click();
-        
+
         pageText = page.getBody().asText();
-        assertFalse(pageText.contains("\u05D0"));
-        
+        assertTrue(pageText.contains("\u05D0"));
     }
-    
 }
