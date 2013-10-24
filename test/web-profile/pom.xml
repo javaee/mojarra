@@ -67,7 +67,6 @@
         <module>el</module>
         <module>facelets</module>
         <module>flow</module>
-        <module>lifecycle</module>
         <module>multi_templating</module>
         <module>renderKit</module>
         <module>scope</module>
