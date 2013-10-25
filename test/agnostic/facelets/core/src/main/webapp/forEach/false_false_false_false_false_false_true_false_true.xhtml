@@ -1,10 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -41,23 +39,43 @@
     holder.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.sun.faces.test</groupId>
-        <artifactId>pom</artifactId>
-        <version>2.1.20-01-SNAPSHOT</version>
-    </parent>
-    <groupId>com.sun.faces.test.javaee6</groupId>
-    <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - JavaEE 6</name>
-    <dependencies>
-        <dependency>
-            <groupId>com.sun.faces.test</groupId>
-            <artifactId>util</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>    
-</project>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <f:view beforePhase="#{forEachBean.modify}">
+
+<h:head>
+<title>forEach</title>
+</h:head>
+
+<h:body>
+
+<h:form prependId="false" id="form01">
+
+<c:forEach items="#{forEachBean.names}" var="outer">
+    
+    <f:subview id="outer">
+
+  <ui:include src="includedLiterally.xhtml" />
+  
+    </f:subview>
+
+</c:forEach>
+
+<h:commandButton id="submit" value="submit" />
+
+<h:commandButton id="submitAjax" value="submitAjax">
+  <f:ajax execute="@form"  render="@form"/>
+</h:commandButton>
+
+</h:form>
+
+</h:body>
+
+    </f:view>
+
+</html>
