@@ -47,6 +47,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 public class Issue3023IT {
     
@@ -66,6 +67,7 @@ public class Issue3023IT {
     }
 
     @Test
+    @Ignore
     public void testOutcomeParameter1() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/outcomeParameterForm.xhtml");
         HtmlElement submit1 = page.getHtmlElementById("form:submit1");
@@ -74,6 +76,7 @@ public class Issue3023IT {
     }
 
     @Test
+    @Ignore
     public void testOutcomeParameter2() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/outcomeParameterForm.xhtml");
         HtmlElement submit = page.getHtmlElementById("form:submit2");
@@ -83,6 +86,7 @@ public class Issue3023IT {
     }
 
     @Test
+    @Ignore
     public void testOutcomeParameter3() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/outcomeParameterForm.xhtml");
         HtmlElement submit = page.getHtmlElementById("form:submit3");
@@ -91,6 +95,7 @@ public class Issue3023IT {
     }
 
     @Test
+    @Ignore
     public void testOutcomeParameter4() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/outcomeParameterForm.xhtml");
         HtmlElement submit = page.getHtmlElementById("form:submit4");
@@ -99,6 +104,7 @@ public class Issue3023IT {
     }
 
     @Test
+    @Ignore
     public void testOutcomeParameter5() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/outcomeParameterForm.xhtml");
         HtmlElement submit = page.getHtmlElementById("form:submit4");
