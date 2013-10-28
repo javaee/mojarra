@@ -71,7 +71,7 @@
                 <plugin>
                     <groupId>org.codehaus.cargo</groupId>
                     <artifactId>cargo-maven2-plugin</artifactId>
-                    <version>1.2.3</version>
+                    <version>${cargo.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -586,9 +586,11 @@
                             </container>
                             <configuration>
                                 <type>standalone</type>
+                                <home>${integration.container.config}</home>
                                 <properties>
                                     <cargo.hostname>${integration.serverName}</cargo.hostname>
                                     <cargo.servlet.port>${integration.serverPort}</cargo.servlet.port>
+                                    <cargo.domain>${integration.container.domain}</cargo.domain>
                                 </properties>
                             </configuration>
                         </configuration>
@@ -597,6 +599,8 @@
             </build>
             <properties>
                 <integration.container.home>C:/Glassfish3.1.2.2</integration.container.home>
+                <integration.container.config>${integration.container.home}/glassfish/domains</integration.container.config>
+                <integration.container.domain>cargo-domain</integration.container.domain>
                 <integration.container.id>glassfish3x</integration.container.id>
             </properties>
         </profile>
@@ -1635,7 +1639,7 @@
             </build>
             <properties>
                 <integration.container.home>C:/Wls1212</integration.container.home>
-                <integration.container.id>weblogic10x</integration.container.id>
+                <integration.container.id>weblogic12x</integration.container.id>
                 <integration.container.type>existing</integration.container.type>
                 <integration.container.wldomain>${integration.container.home}/user_projects/domains/mydomain</integration.container.wldomain>
                 <integration.container.wlserver>${integration.container.home}/wlserver</integration.container.wlserver>
@@ -1643,6 +1647,7 @@
         </profile>
     </profiles>
     <properties>
+        <cargo.version>1.4.4</cargo.version>
         <integration.serverName>localhost</integration.serverName>
         <integration.serverPort>8080</integration.serverPort>
         <jsf.artifactId>javax.faces</jsf.artifactId>
