@@ -69,6 +69,7 @@ public class ReleaseIT {
     }
 
     @Test
+    @Ignore
     public void testRelease1() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/release1.xhtml");
     }
