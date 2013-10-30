@@ -231,28 +231,28 @@
                         <executions>
                             <execution>
                                 <id>copy</id>                         
-                                <phase>validate</phase>
+                                <phase>prepare-package</phase>
                                 <goals>
                                     <goal>copy</goal>
                                 </goals>
                                 <configuration>
                                     <artifactItems>
                                         <artifactItem>
-                                            <groupId>com.sun.faces</groupId>
-                                            <artifactId>jsf-api</artifactId>
+                                            <groupId>${jsf.pre-maven-rename.groupId}</groupId>
+                                            <artifactId>${jsf.pre-maven-rename.api.artifactId}</artifactId>
                                             <version>${jsf.version}</version>
                                             <type>jar</type>
                                             <overWrite>true</overWrite>                                     
-                                            <outputDirectory>${basedir}/container</outputDirectory>
+                                            <outputDirectory>${integration.container.home}/tmp.mojarra</outputDirectory>
                                             <destFileName>jsf-api.jar</destFileName>
                                         </artifactItem>
                                         <artifactItem>
-                                            <groupId>com.sun.faces</groupId>
-                                            <artifactId>jsf-impl</artifactId>
+                                            <groupId>${jsf.pre-maven-rename.groupId}</groupId>
+                                            <artifactId>${jsf.pre-maven-rename.impl.artifactId}</artifactId>
                                             <version>${jsf.version}</version>
                                             <type>jar</type>
                                             <overWrite>true</overWrite>                                     
-                                            <outputDirectory>${basedir}/container</outputDirectory>
+                                            <outputDirectory>${integration.container.home}/tmp.mojarra</outputDirectory>
                                             <destFileName>jsf-impl.jar</destFileName>
                                         </artifactItem>
                                     </artifactItems>
@@ -260,46 +260,75 @@
                             </execution>
                         </executions>
                     </plugin>
-                    <plugin>
+                    <plugin>                 
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-antrun-plugin</artifactId>
-                        <version>1.7</version>
                         <executions>
                             <execution>
-                                <id>prepare</id>
-                                <phase>install</phase>
-                                <configuration>
-                                    <target>
-                                        <!-- unzip the API JAR -->
-                                        <!-- unzip the WLS JAR -->
-                                        <!-- zip the API jar -->
-                                        <!-- copy the API jar into WLS -->
-                                        <!-- copy the Impl jar into WLS -->
-                                    </target>
-                                </configuration>
+                                <id>create-wls.mojarra</id>
+                                <phase>validate</phase>
                                 <goals>
                                     <goal>run</goal>
                                 </goals>
+                                <configuration>
+                                  <target>
+                                    <delete failonerror="false" dir="${integration.container.home}/tmp.mojarra" />
+                                    <mkdir dir="${integration.container.home}/tmp.mojarra/wls.mojarra" />
+                                  </target>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>instrument-wls-with-mojarra</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                  <target>
+                                    <!-- do the jsf-impl.jar -->
+                                    <unzip src="${integration.container.home}/${wls.mojarraJarPath}/${wls.mojarraImplJarName}"
+                                           dest="${integration.container.home}/tmp.mojarra/wls.mojarra" />
+                                    <delete dir="${integration.container.home}/tmp.mojarra/wls.mojarra/com/sun" />
+                                    <delete dir="${integration.container.home}/tmp.mojarra/wls.mojarra/META-INF" />
+                                    <unzip src="${integration.container.home}/tmp.mojarra/jsf-impl.jar"
+                                           dest="${integration.container.home}/tmp.mojarra/wls.mojarra" />
+                                    <zip destfile="${integration.container.home}/tmp.mojarra/${wls.mojarraImplJarName}"
+                                         basedir="${integration.container.home}/tmp.mojarra/wls.mojarra"
+                                         update="true" />
+                                    <copy overwrite="true"
+                                          file="${integration.container.home}/tmp.mojarra/${wls.mojarraImplJarName}"
+                                          tofile="${integration.container.home}/${wls.mojarraJarPath}/${wls.mojarraImplJarName}" />
+
+                                    <!-- do the jsf-api.jar -->
+                                    <delete failonerror="false" dir="${integration.container.home}/tmp.mojarra/wls.mojarra" />
+                                    <mkdir dir="${integration.container.home}/tmp.mojarra/wls.mojarra" />
+                                    <unzip src="${integration.container.home}/${wls.mojarraJarPath}/${wls.mojarraApiJarName}"
+                                           dest="${integration.container.home}/tmp.mojarra/wls.mojarra" />
+                                    <delete dir="${integration.container.home}/tmp.mojarra/wls.mojarra/javax" />
+                                    <delete dir="${integration.container.home}/tmp.mojarra/wls.mojarra/META-INF" />
+                                    <unzip src="${integration.container.home}/tmp.mojarra/jsf-api.jar"
+                                           dest="${integration.container.home}/tmp.mojarra/wls.mojarra" />
+                                    <zip destfile="${integration.container.home}/tmp.mojarra/${wls.mojarraApiJarName}"
+                                         basedir="${integration.container.home}/tmp.mojarra/wls.mojarra"
+                                         update="true" />
+                                    <copy overwrite="true"
+                                          file="${integration.container.home}/tmp.mojarra/${wls.mojarraApiJarName}"
+                                          tofile="${integration.container.home}/${wls.mojarraJarPath}/${wls.mojarraApiJarName}" />
+
+
+                                  </target>
+                                </configuration>
                             </execution>
                         </executions>
-                        <dependencies>
-                            <dependency>
-                                <groupId>ant-contrib</groupId>
-                                <artifactId>ant-contrib</artifactId>
-                                <version>1.0b3</version>
-                                <exclusions>
-                                    <exclusion>
-                                        <groupId>ant</groupId>
-                                        <artifactId>ant</artifactId>
-                                    </exclusion>
-                                </exclusions>
-                            </dependency>
-                        </dependencies>
-                    </plugin>                    
+                    </plugin>
                 </plugins>
             </build>
-        </profile>
-        <profile>
+            <properties>
+                <wls.mojarraJarPath>modules</wls.mojarraJarPath>
+                <wls.mojarraImplJarName>glassfish.jsf_1.0.0.0_2-1-5.jar</wls.mojarraImplJarName>
+                <wls.mojarraApiJarName>javax.jsf_1.0.0.0_2-1.jar</wls.mojarraApiJarName>
+            </properties>
+        </profile>        <profile>
             <id>integration-failsafe</id>
             <build>
                 <plugins>
@@ -1556,6 +1585,9 @@
         <integration.serverPort>8080</integration.serverPort>
         <jsf.artifactId>javax.faces</jsf.artifactId>
         <jsf.groupId>org.glassfish</jsf.groupId>
+        <jsf.pre-maven-rename.api.artifactId>jsf-api</jsf.pre-maven-rename.api.artifactId>
+        <jsf.pre-maven-rename.impl.artifactId>jsf-impl</jsf.pre-maven-rename.impl.artifactId>
+        <jsf.pre-maven-rename.groupId>com.sun.faces</jsf.pre-maven-rename.groupId>
         <jsf.version>${project.version}</jsf.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <webapp.partialStateSaving>true</webapp.partialStateSaving>
