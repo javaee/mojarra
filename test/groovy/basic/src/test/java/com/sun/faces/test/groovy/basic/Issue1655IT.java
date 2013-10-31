@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -41,9 +41,7 @@ package com.sun.faces.test.groovy.basic;
 
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -52,45 +50,16 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
 public class Issue1655IT {
-    /**
-     * Stores the web URL.
-     */
+
     private String webUrl;
-    /**
-     * Stores the web client.
-     */
     private WebClient webClient;
 
-    /**
-     * Setup before testing.
-     * 
-     * @throws Exception when a serious error occurs.
-     */
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    /**
-     * Cleanup after testing.
-     * 
-     * @throws Exception when a serious error occurs.
-     */
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-
-    /**
-     * Setup before testing.
-     */
     @Before
     public void setUp() {
         webUrl = System.getProperty("integration.url");
         webClient = new WebClient();
     }
 
-    /**
-     * Tear down after testing.
-     */
     @After
     public void tearDown() {
         webClient.closeAllWindows();
@@ -113,11 +82,11 @@ public class Issue1655IT {
         String pageText = page.asXml();
         assertTrue(pageText.contains("<input type=\"hidden\" name=\"javax.faces.ViewState\" id="));
     }
-    
+
     @Test
     public void testBasicAppFunctionalityNegative() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
-        
+
         HtmlTextInput inputText = (HtmlTextInput) page.getElementById("form:name");
         String val = "" + System.currentTimeMillis();
         inputText.setValueAttribute(val);
@@ -134,7 +103,5 @@ public class Issue1655IT {
 
         String pageText = page.asXml();
         assertTrue(pageText.contains("<input type=\"hidden\" name=\"javax.faces.ViewState\" id="));
-        
     }
-    
 }

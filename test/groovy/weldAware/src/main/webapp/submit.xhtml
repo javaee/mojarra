@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
-        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
-        xmlns:h="http://java.sun.com/jsf/html"
-        xmlns:f="http://java.sun.com/jsf/core"
-        xmlns:render="http://mojarra.dev.java.net/source1">
-<head>
-    <title>Hello</title>
-</head>
-<body>
-<h:form id="form">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:render="http://mojarra.dev.java.net/source1">
+    <head>
+        <title>Hello</title>
+    </head>
+    <body>
+        <h:form id="form">
 
-    <render:messageoutput id="string">
-        <render:renderer hellomsg="#{hello.message}"/>
-    </render:messageoutput>
-</h:form>
-</body>
+            <render:messageoutput id="string">
+                <render:renderer hellomsg="#{hello.message}"/>
+            </render:messageoutput>
+        </h:form>
+        <h:messages/>
+    </body>
 </html>
