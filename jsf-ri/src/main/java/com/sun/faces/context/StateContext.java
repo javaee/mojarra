@@ -64,6 +64,7 @@ import static com.sun.faces.RIConstants.DYNAMIC_CHILD_COUNT;
 import static com.sun.faces.RIConstants.DYNAMIC_COMPONENT;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.MostlySingletonSet;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -506,18 +507,7 @@ public class StateContext {
                     attrs.get(ComponentSupport.REMOVED_CHILDREN);
             
             if (removedChildrenIds == null) {
-// Todo: we are using a HashSet with a default initial capacity here because it
-// is convenient.  However, this is not optimal.  A better approach would be to
-// optimize for a small collection size, since the most common dynamic component
-// cases likely involve a small # of removes per-parent.  However, we do want this
-// to scale well in the event that a large # of components are used.  One approach
-// would be to create a wrapper collection that switches between:
-// 1. Collections.singleton(): 1 element case
-// 2. ArrayList(): small # of elements (eg. 2-4)
-// 3. HashSet: medium-large # of elements (eg. > 5)
-// Minimally, we should support #1 and #3 - ie. we should optimize
-// the single element case.
-                removedChildrenIds = new HashSet<String>();
+                removedChildrenIds = new MostlySingletonSet<String>();
                 attrs.put(ComponentSupport.REMOVED_CHILDREN, removedChildrenIds);
             }
 
