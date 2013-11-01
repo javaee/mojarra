@@ -50,13 +50,20 @@
        JSF Systests
     </description>
     <display-name>JSF Systests</display-name>
-
-    <!-- Validate the Application Configuration Resources -->
-   <context-param>
+    
+    <context-param>
         <param-name>javax.faces.PROJECT_STAGE</param-name>
-        <param-value>Development</param-value>
+        <param-value>${webapp.projectStage}</param-value>
     </context-param>
-
+    <context-param>
+        <param-name>javax.faces.PARTIAL_STATE_SAVING</param-name>
+        <param-value>${webapp.partialStateSaving}</param-value>
+    </context-param>
+    <context-param>
+        <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+        <param-value>${webapp.stateSavingMethod}</param-value>
+    </context-param>
+    
     <!-- Faces Servlet -->
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
@@ -73,12 +80,7 @@
     <servlet>
       <servlet-name>resources</servlet-name>
       <servlet-class>org.apache.myfaces.trinidad.webapp.ResourceServlet</servlet-class>
-     </servlet>
-    <context-param>
-       <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
-       <param-value>client</param-value>
-     </context-param>
-    
+     </servlet>    
 
     <!-- This cannot be configured currently -->
     <servlet-mapping>

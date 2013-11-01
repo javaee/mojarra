@@ -156,6 +156,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     private boolean groovyAvailable;
     private int responseBufferSize;
     private boolean responseBufferSizeSet;
+    private boolean isTrinidadStateManager;
 
     private Cache<Resource, BeanInfo> metadataCache;
 
@@ -185,7 +186,15 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         if (stateCtx.isPartialStateSaving(context, viewId)) {
             result = new FaceletPartialStateManagementStrategy(context);
         } else {
-            result = new JspStateManagementStrategy(context);
+            // Spec for this method says:
+            
+            // Implementations that provide the VDL for Facelets for JSF 2.0 
+            // and later must return non-null from this method.
+            
+            // Limit the specification violating change to the case where
+            // we are running in Trinidad.
+            // 
+            result = isTrinidadStateManager ? null : new JspStateManagementStrategy(context);
         }
         
         return result;
@@ -996,6 +1005,13 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
         vdlFactory = (ViewDeclarationLanguageFactory) FactoryFinder.getFactory(FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY);
 
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (null != context) {
+            StateManager stateManager = Util.getStateManager(context);
+            if (null != stateManager) {
+                isTrinidadStateManager = stateManager.getClass().getName().contains("trinidad");
+            }
+        }
     }
 
 
