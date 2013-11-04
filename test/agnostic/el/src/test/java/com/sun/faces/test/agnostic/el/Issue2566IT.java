@@ -45,7 +45,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 
 public class Issue2566IT {
 
@@ -64,7 +63,6 @@ public class Issue2566IT {
     }
 
     @Test
-    @Ignore
     public void testIssue1533() throws Exception {
         TextPage page = webClient.getPage(webUrl + "issue2566.jsp");
         assertTrue(page.getContent().indexOf("EL Resolver Passed") != -1);

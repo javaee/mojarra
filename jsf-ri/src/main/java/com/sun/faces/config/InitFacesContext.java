@@ -300,6 +300,12 @@ public class InitFacesContext extends FacesContext {
         }
     }
 
+    public void releaseCurrentInstance() {
+        Map <Thread, InitFacesContext>threadInitContext = InitFacesContext.getThreadInitContextMap();
+        threadInitContext.remove(Thread.currentThread());
+        setCurrentInstance(null);
+    }
+
     private static class ServletContextAdapter extends ExternalContext {
 
         private ServletContext servletContext = null;
