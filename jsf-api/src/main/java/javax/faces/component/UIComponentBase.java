@@ -2190,9 +2190,10 @@ public abstract class UIComponentBase extends UIComponent {
                     // assume the behaviors have already been populated by
                     // execution of the template.  Process the state in the
                     // same order that the names were saved.
-                    List<ClientBehavior> existingBehaviors =
-                          behaviors.get(names[i]);
-                    restoreBehaviors(context, existingBehaviors, (Object[]) attachedBehaviors[i]);
+                    if (behaviors != null) {
+                        List<ClientBehavior> existingBehaviors = behaviors.get(names[i]);
+                        restoreBehaviors(context, existingBehaviors, (Object[]) attachedBehaviors[i]);
+                    }
                 }
                 return behaviors;
             }
