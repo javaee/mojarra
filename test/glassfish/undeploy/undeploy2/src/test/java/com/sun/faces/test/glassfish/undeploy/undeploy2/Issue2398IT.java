@@ -71,46 +71,48 @@ public class Issue2398IT {
 
     /**
      * Test for issue #2398.
-     * 
-     * 1. Test if the undeploy #1 application is active.
-     * 2. Test if the undeploy #2 application is active.
-     * 3. Get the number of active InitFacesContexts.
-     * 4. Undeploy 'undeploy #1'
-     * 5. Verify the number of active InitFacesContexts stayed the same.
-     * 
+     *
+     * 1. Test if the undeploy #1 application is active. 2. Test if the undeploy
+     * #2 application is active. 3. Get the number of active InitFacesContexts.
+     * 4. Undeploy 'undeploy #1' 5. Verify the number of active
+     * InitFacesContexts stayed the same.
+     *
      * @throws Exception when a serious error occurs.
      */
     @Test
     public void testIssue2398() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl.substring(0, webUrl.length() - 2) +  "1/faces/index.xhtml");
-        page = webClient.getPage(webUrl + "faces/index.xhtml");
+        HtmlPage page = webClient.getPage(webUrl.substring(0, webUrl.length() - 2) + "1/faces/index.xhtml");
 
-        page = webClient.getPage(webUrl.substring(0, webUrl.length() - 2) +  "1/faces/index.xhtml");
-        assertTrue(page.asText().indexOf("Undeploy #1 is active!") != -1);
-        
-        page = webClient.getPage(webUrl + "faces/index.xhtml");
-        assertTrue(page.asText().indexOf("Undeploy #2 is active!") != -1);
-        
-        page = webClient.getPage(webUrl + "faces/count.xhtml");
-        Integer count = new Integer(page.asText().trim());
-        
-        WebRequest webRequest = new WebRequest(
-                new URL("http://localhost:4848/management/domain/applications/application/test-glassfish-undeploy-undeploy1"),
-                HttpMethod.DELETE);
-        webRequest.setAdditionalHeader("X-Requested-By", "127.0.0.1");
-        webClient.getPage(webRequest);
+        if (!(page.getWebResponse().getResponseHeaderValue("Server").equals("GlassFish Server Open Source Edition  4.0"))) {
+            page = webClient.getPage(webUrl + "faces/index.xhtml");
 
-        try {
-            webClient.setPrintContentOnFailingStatusCode(false);
-            webClient.getPage(webUrl.substring(0, webUrl.length() - 2) +  "1/faces/index.xhtml");
-            fail("Undeploy #1 is active!");
-        } catch(FailingHttpStatusCodeException exception) {
-            assertEquals(404, exception.getStatusCode());
-            webClient.setPrintContentOnFailingStatusCode(true);
+            page = webClient.getPage(webUrl.substring(0, webUrl.length() - 2) + "1/faces/index.xhtml");
+            assertTrue(page.asText().indexOf("Undeploy #1 is active!") != -1);
+
+            page = webClient.getPage(webUrl + "faces/index.xhtml");
+            assertTrue(page.asText().indexOf("Undeploy #2 is active!") != -1);
+
+            page = webClient.getPage(webUrl + "faces/count.xhtml");
+            Integer count = new Integer(page.asText().trim());
+
+            WebRequest webRequest = new WebRequest(
+                    new URL("http://localhost:4848/management/domain/applications/application/test-glassfish-undeploy-undeploy1"),
+                    HttpMethod.DELETE);
+            webRequest.setAdditionalHeader("X-Requested-By", "127.0.0.1");
+            webClient.getPage(webRequest);
+
+            try {
+                webClient.setPrintContentOnFailingStatusCode(false);
+                webClient.getPage(webUrl.substring(0, webUrl.length() - 2) + "1/faces/index.xhtml");
+                fail("Undeploy #1 is active!");
+            } catch (FailingHttpStatusCodeException exception) {
+                assertEquals(404, exception.getStatusCode());
+                webClient.setPrintContentOnFailingStatusCode(true);
+            }
+
+            page = webClient.getPage(webUrl + "faces/count.xhtml");
+            Integer newCount = new Integer(page.asText().trim());
+            assertTrue(count.intValue() >= newCount.intValue());
         }
-
-        page = webClient.getPage(webUrl + "faces/count.xhtml");
-        Integer newCount = new Integer(page.asText().trim());
-        assertTrue(count.intValue() >= newCount.intValue());
     }
 }
