@@ -122,6 +122,7 @@ import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
 import javax.faces.component.visit.VisitResult;
 import static com.sun.faces.RIConstants.DYNAMIC_COMPONENT;
+import com.sun.faces.facelets.impl.XMLFrontMatterSaver;
 import javax.faces.application.ProjectStage;
 
 /**
@@ -420,6 +421,17 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                 }
                 
                 // render the view to the response
+                String XMLDECL = Util.getXMLDECLFromFacesContextAttributes(ctx);
+                if (null != XMLDECL) {
+                    // Do not escape.
+                    writer.write(XMLDECL);
+                }
+
+                String DOCTYPE = Util.getDOCTYPEFromFacesContextAttributes(ctx);
+                if (null != DOCTYPE) {
+                    // Do not escape.
+                    writer.write(DOCTYPE);
+                }
                 writer.startDocument();
                 viewToRender.encodeAll(ctx);
                 try {
@@ -836,6 +848,18 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             ctx.getAttributes().put(IS_BUILDING_INITIAL_STATE, Boolean.TRUE);
             stateCtx.setTrackViewModifications(false);
             f.apply(ctx, view);
+            
+            if (f instanceof XMLFrontMatterSaver) {
+                XMLFrontMatterSaver frontMatterSaver = (XMLFrontMatterSaver) f;
+                String DOCTYPE = frontMatterSaver.getSavedDoctype();
+                if (null != DOCTYPE) {
+                    Util.saveDOCTYPEToFacesContextAttributes(DOCTYPE);
+                }
+                String XMLDECL = frontMatterSaver.getSavedXMLDecl();
+                if (null != XMLDECL) {
+                    Util.saveXMLDECLToFacesContextAttributes(XMLDECL);
+                }
+            }
             
             if (!stateCtx.isPartialStateSaving(ctx, view.getViewId())) {
                 reapplyDynamicActions(ctx);

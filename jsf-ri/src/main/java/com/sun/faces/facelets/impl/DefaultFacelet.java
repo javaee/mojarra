@@ -89,7 +89,7 @@ import java.util.logging.Logger;
  * @author Jacob Hookom
  * @version $Id$
  */
-final class DefaultFacelet extends Facelet {
+final class DefaultFacelet extends Facelet implements XMLFrontMatterSaver {
 
     private static final Logger log = FacesLogger.FACELETS_FACELET.getLogger();
 
@@ -113,6 +113,10 @@ final class DefaultFacelet extends Facelet {
     private final URL src;
 
     private IdMapper mapper;
+    
+    private String savedDoctype;
+    
+    private String savedXMLDecl;
 
     public DefaultFacelet(DefaultFaceletFactory factory,
                           ExpressionFactory el,
@@ -130,7 +134,18 @@ final class DefaultFacelet extends Facelet {
         this.refreshPeriod = this.factory.getRefreshPeriod();
         this.relativePaths = new WeakHashMap<String,URL>();
 
+        String DOCTYPE = Util.getDOCTYPEFromFacesContextAttributes(FacesContext.getCurrentInstance());
+        if (null != DOCTYPE) {
+            // This will happen on the request that causes the facelets to be compiled
+            this.setSavedDoctype(DOCTYPE);
+        }        
 
+        String XMLDECL = Util.getXMLDECLFromFacesContextAttributes(FacesContext.getCurrentInstance());
+        if (null != XMLDECL) {
+            // This will happen on the request that causes the facelets to be compiled
+            this.setSavedXMLDecl(XMLDECL);
+        }        
+        
     }
 
     /**
@@ -395,8 +410,31 @@ final class DefaultFacelet extends Facelet {
     public String toString() {
         return this.alias;
     }
+    
+    // ---------------------------------------------------------- Helper Methods
 
+    @Override
+    public String getSavedDoctype() {
+        return savedDoctype;
+    }
 
+    @Override
+    public void setSavedDoctype(String savedDoctype) {
+        this.savedDoctype = savedDoctype;
+    }
+
+    @Override
+    public String getSavedXMLDecl() {
+        return savedXMLDecl;
+    }
+
+    @Override
+    public void setSavedXMLDecl(String savedXMLDecl) {
+        this.savedXMLDecl = savedXMLDecl;
+    }
+    
+    
+    
     // --------------------------------------------------------- Private Methods
 
 

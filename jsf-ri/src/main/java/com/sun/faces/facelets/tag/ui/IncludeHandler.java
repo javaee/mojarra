@@ -71,7 +71,6 @@ import javax.faces.view.facelets.TagConfig;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.faces.context.FacesContext;
 import javax.faces.view.facelets.TagException;
 
 /**
@@ -102,27 +101,6 @@ public final class IncludeHandler extends TagHandlerImpl {
         this.src = attr;
     }
     
-    public static boolean isInInclude() {
-
-        FaceletContext faceletContext = 
-                (FaceletContext) FacesContext.getCurrentInstance().getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
-        boolean isInInclude = 
-                null != faceletContext &&
-                null != faceletContext.getAttribute(IncludeHandler.IS_IN_INCLUDE_KEY);
-        return isInInclude;
-    }
-    
-    // <editor-fold defaultstate="collapsed" desc="private contract">    
-    
-    private static final String IS_IN_INCLUDE_KEY = 
-            IncludeHandler.class.getPackage().getName() + ".IS_IN_INCLUDE";
-    
-    private void setIsInInclude(FaceletContext ctx, boolean newValue) {
-            ctx.setAttribute(IS_IN_INCLUDE_KEY, (Boolean) newValue);
-    }
-    
-    // </editor-fold>
-    
     /*
      * (non-Javadoc)
      * 
@@ -139,11 +117,6 @@ public final class IncludeHandler extends TagHandlerImpl {
         ctx.setVariableMapper(new VariableMapperWrapper(orig));
         try {
             this.nextHandler.apply(ctx, null);
-            setIsInInclude(ctx, true);
-            // fix for JAVASERVERFACES-2328.  It's safe to do this here
-            // because when the Facelet tree is being compiled, this value
-            // will be read and cause a CompilationUnit to *not* be included
-            // in the compiled tree where it otherwise would be.
             ctx.includeFacelet(parent, path);
         } catch (IOException e) {
             if (log.isLoggable(Level.FINE)) {
@@ -152,7 +125,6 @@ public final class IncludeHandler extends TagHandlerImpl {
             throw new TagAttributeException(this.tag, this.src, "Invalid path : " + path);
         } finally {
             ctx.setVariableMapper(orig);
-            setIsInInclude(ctx, false);
         }
     }
 }
