@@ -74,7 +74,6 @@ public class Issue2895IT {
     }
 
     @Test
-    @Ignore
     public void testResourceCaching() throws Exception {
         String cssUrl = webUrl + "faces/javax.faces.resource/styles.css";
         Page cssPage = webClient.getPage(cssUrl);
