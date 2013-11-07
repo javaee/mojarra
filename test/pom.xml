@@ -407,9 +407,11 @@
                             </container>
                             <configuration>
                                 <type>standalone</type>
+                                <home>${integration.container.config}</home>
                                 <properties>
                                     <cargo.hostname>${integration.serverName}</cargo.hostname>
                                     <cargo.servlet.port>${integration.serverPort}</cargo.servlet.port>
+                                    <cargo.domain>${integration.container.domain}</cargo.domain>
                                 </properties>
                             </configuration>
                         </configuration>
@@ -418,6 +420,8 @@
             </build>
             <properties>
                 <integration.container.home>C:/Glassfish3.1.2.2</integration.container.home>
+                <integration.container.config>${integration.container.home}/glassfish/domains</integration.container.config>
+                <integration.container.domain>cargo-domain</integration.container.domain>
                 <integration.container.id>glassfish3x</integration.container.id>
             </properties>
         </profile>
