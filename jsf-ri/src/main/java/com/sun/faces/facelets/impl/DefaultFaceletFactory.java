@@ -253,7 +253,22 @@ public class DefaultFaceletFactory extends FaceletFactory {
      * @throws ELException
      */
     public Facelet getFacelet(URL url) throws IOException {
-        return this.cache.getFacelet(url);
+        DefaultFacelet _facelet = null;
+        Facelet result = this.cache.getFacelet(url);
+        if (result instanceof DefaultFacelet) {
+            _facelet = (DefaultFacelet) result;
+            String docType = _facelet.getSavedDoctype();
+            if (null != docType) {
+                Util.saveDOCTYPEToFacesContextAttributes(docType);
+            }
+            
+            String xmlDecl = _facelet.getSavedXMLDecl();
+            if (null != xmlDecl) {
+                Util.saveXMLDECLToFacesContextAttributes(xmlDecl);
+            }
+        }
+        
+        return result;
     }
 
     public Facelet getMetadataFacelet(URL url) throws IOException {

@@ -75,4 +75,16 @@ public class Issue2453IT {
         response = page.getWebResponse().getContentAsString();
         assertTrue(response.contains("<!DOCTYPE html>"));
     }
+    
+    @Test
+    public void testDOCTYPES_Reload() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/Issue2575_templateClient.xhtml");
+        String response = page.getWebResponse().getContentAsString();
+        assertTrue(response.contains("<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">"));
+
+        page = webClient.getPage(webUrl + "faces/Issue2575_templateClient.xhtml");
+        response = page.getWebResponse().getContentAsString();
+        assertTrue(response.contains("<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">"));
+        
+    }
 }
