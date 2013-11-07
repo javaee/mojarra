@@ -49,8 +49,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
-import org.junit.Ignore;
-
 
 public class Issue2326IT {
 
@@ -78,7 +76,6 @@ public class Issue2326IT {
     // ------------------------------------------------------------ Test Methods
 
     @Test
-    @Ignore
     public void testFileException() throws Exception {
 
         webClient = new WebClient();
