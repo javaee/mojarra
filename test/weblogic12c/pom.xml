@@ -22,5 +22,6 @@
     <modules>
         <module>repackage-api</module>
         <module>repackage-impl</module>
+        <module>request_char_encoding</module>
     </modules>
 </project>

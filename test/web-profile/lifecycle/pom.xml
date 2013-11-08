@@ -12,7 +12,6 @@
     <packaging>pom</packaging>
     <name>Mojarra ${project.version} - Test - Web-Profile - Lifecycle</name>
     <modules>
-        <module>request_char_encoding</module>
         <module>request_char_encoding2</module>
     </modules>
 </project>

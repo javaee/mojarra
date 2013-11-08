@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -40,28 +39,36 @@
     only if the new code is made subject to such option by the copyright
     holder.
 
--->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.sun.faces.test</groupId>
-        <artifactId>pom</artifactId>
-        <version>2.1.20-01-SNAPSHOT</version>
-    </parent>
-    <groupId>com.sun.faces.test.glassfish</groupId>
-    <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Glassfish</name>
-    <dependencies>
-        <dependency>
-            <groupId>com.sun.faces.test</groupId>
-            <artifactId>util</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>    
-    <modules>
-        <module>undeploy</module>
-        <module>request_char_encoding</module>
-    </modules>
-</project>
+--><actions>
+        <action>
+            <actionName>debug.test.single</actionName>
+            <goals>
+                <goal>test-compile</goal>
+                <goal>surefire:test</goal>
+            </goals>
+            <properties>
+                <test>${packageClassName}</test>
+                <forkMode>once</forkMode>
+                <maven.surefire.debug>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address}</maven.surefire.debug>
+                <jpda.listen>true</jpda.listen>
+                <project.build.finalName>test-glassfish-request_char_encoding</project.build.finalName>
+                <integration.serverPort>8080</integration.serverPort>
+                <integration.serverName>localhost</integration.serverName>
+                <integration.url>http://localhost:8080/test-glassfish-request_char_encoding/</integration.url>
+            </properties>
+        </action>
+        <action>
+            <actionName>test.single</actionName>
+            <goals>
+                <goal>test-compile</goal>
+                <goal>surefire:test</goal>
+            </goals>
+            <properties>
+                <project.build.finalName>test-glassfish-request_char_encoding</project.build.finalName>
+                <integration.serverPort>8080</integration.serverPort>
+                <integration.serverName>localhost</integration.serverName>
+                <integration.url>http://localhost:8080/test-glassfish-request_char_encoding/</integration.url>
+                <test>${packageClassName}</test>
+            </properties>
+        </action>
+    </actions>

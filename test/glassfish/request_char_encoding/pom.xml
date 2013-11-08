@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -41,27 +40,22 @@
     holder.
 
 -->
+
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.sun.faces.test</groupId>
+        <groupId>com.sun.faces.test.glassfish</groupId>
         <artifactId>pom</artifactId>
         <version>2.1.20-01-SNAPSHOT</version>
     </parent>
     <groupId>com.sun.faces.test.glassfish</groupId>
-    <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Glassfish</name>
-    <dependencies>
-        <dependency>
-            <groupId>com.sun.faces.test</groupId>
-            <artifactId>util</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>    
-    <modules>
-        <module>undeploy</module>
-        <module>request_char_encoding</module>
-    </modules>
+    <artifactId>request_char_encoding</artifactId>
+    <packaging>war</packaging>
+    <name>Mojarra ${project.version} - Test - Glassfish - Request Character Encoding</name>
+    <build>
+        <finalName>test-glassfish-request_char_encoding</finalName>
+    </build>
+    <properties>
+        <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
+    </properties>
 </project>
