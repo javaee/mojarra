@@ -98,7 +98,7 @@ public class FormOmittedTrinidadIT {
     
     @Test
     public void testFormOmittedTrinidad() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "/faces/formomitted.xhtml");
+        HtmlPage page = webClient.getPage(webUrl + "faces/formomitted.xhtml");
 
         String pageAsText = page.asText();
         assertTrue (!pageAsText.contains("The form component needs to have a UIForm in its ancestry. Suggestion: enclose the necessary components within <h:form>"));
