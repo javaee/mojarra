@@ -22,7 +22,6 @@
     <modules>
         <module>adf</module>
         <module>lifecycle</module>
-        <module>seam</module>
         <module>stateSaving</module>
     </modules>
 </project>
