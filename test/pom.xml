@@ -1635,6 +1635,7 @@
                             </configuration>
                         </configuration>
                     </plugin>
+<!--
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-antrun-plugin</artifactId>                        
@@ -1666,7 +1667,7 @@
                                 </exclusions>
                             </dependency>
                         </dependencies>
-                    </plugin>                    
+                    </plugin>                    -->
                 </plugins>
             </build>
             <properties>
@@ -1679,7 +1680,7 @@
         </profile>
     </profiles>
     <properties>
-        <cargo.version>1.4.4</cargo.version>
+        <cargo.version>1.4.5</cargo.version>
         <integration.serverName>localhost</integration.serverName>
         <integration.serverPort>8080</integration.serverPort>
         <jsf.artifactId>javax.faces</jsf.artifactId>
