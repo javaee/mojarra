@@ -1644,8 +1644,8 @@
                                 <phase>pre-integration-test</phase>
                                 <configuration>
                                     <target>
-                                        <echo>Waiting 15 seconds for server to come up</echo>
-                                        <sleep seconds="15"/>
+                                        <echo>Waiting 60 seconds for server to come up</echo>
+                                        <sleep seconds="60"/>
                                     </target>
                                 </configuration>
                                 <goals>
