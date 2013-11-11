@@ -1635,39 +1635,6 @@
                             </configuration>
                         </configuration>
                     </plugin>
-<!--
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-antrun-plugin</artifactId>                        
-                        <executions>
-                            <execution>
-                                <id>prepare</id>
-                                <phase>pre-integration-test</phase>
-                                <configuration>
-                                    <target>
-                                        <echo>Waiting 60 seconds for server to come up</echo>
-                                        <sleep seconds="60"/>
-                                    </target>
-                                </configuration>
-                                <goals>
-                                    <goal>run</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <dependencies>
-                            <dependency>
-                                <groupId>ant-contrib</groupId>
-                                <artifactId>ant-contrib</artifactId>
-                                <version>1.0b3</version>
-                                <exclusions>
-                                    <exclusion>
-                                        <groupId>ant</groupId>
-                                        <artifactId>ant</artifactId>
-                                    </exclusion>
-                                </exclusions>
-                            </dependency>
-                        </dependencies>
-                    </plugin>                    -->
                 </plugins>
             </build>
             <properties>
@@ -1680,7 +1647,7 @@
         </profile>
     </profiles>
     <properties>
-        <cargo.version>1.4.5</cargo.version>
+        <cargo.version>1.4.4</cargo.version>
         <integration.serverName>localhost</integration.serverName>
         <integration.serverPort>8080</integration.serverPort>
         <jsf.artifactId>javax.faces</jsf.artifactId>
