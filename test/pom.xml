@@ -1252,60 +1252,6 @@
             </properties>
         </profile>
         <profile>
-            <id>integration-jboss-cargo</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.cargo</groupId>
-                        <artifactId>cargo-maven2-plugin</artifactId>
-                        <inherited>true</inherited>
-                        <executions>
-                            <execution>
-                                <id>start-container</id>
-                                <phase>pre-integration-test</phase>
-                                <goals>
-                                    <goal>start</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>stop-container</id>
-                                <phase>post-integration-test</phase>
-                                <goals>
-                                    <goal>stop</goal>
-                                </goals>
-                            </execution>
-                        </executions>                        
-                        <configuration>
-                            <container>
-                                <containerId>${integration.container.id}</containerId>
-                                <zipUrlInstaller>
-                                    <url>${integration.container.downloadUrl}</url>
-                                    <downloadDir>${integration.container.downloadDir}</downloadDir>
-                                    <extractDir>${integration.container.extractDir}</extractDir>
-                                </zipUrlInstaller>
-                                <type>installed</type>
-                            </container>
-                            <configuration>
-                                <type>standalone</type>
-                                <home>${integration.container.home}</home>
-                                <properties>
-                                    <cargo.hostname>${integration.serverName}</cargo.hostname>
-                                    <cargo.servlet.port>${integration.serverPort}</cargo.servlet.port>
-                                </properties>
-                            </configuration>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-            <properties>
-                <integration.container.downloadDir>C:/Temp/Cargo/download</integration.container.downloadDir>
-                <integration.container.downloadUrl>http://download.jboss.org/jbossas/7.1/jboss-as-7.1.1.Final/jboss-as-7.1.1.Final.zip</integration.container.downloadUrl>
-                <integration.container.extractDir>C:/Temp/Cargo/extracts</integration.container.extractDir>
-                <integration.container.home>C:/Temp/Cargo/jboss7</integration.container.home>
-                <integration.container.id>jboss71x</integration.container.id>
-            </properties>
-        </profile>
-        <profile>
             <id>integration-tomcat-cargo</id>
             <build>
                 <plugins>
