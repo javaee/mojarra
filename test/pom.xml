@@ -1439,7 +1439,7 @@
                                     <goal>start</goal>
                                 </goals>
                                 <configuration>
-                                    <timeout>1800000</timeout>
+                                    <timeout>6000000</timeout>
                                 </configuration>
                             </execution>
                             <execution>
