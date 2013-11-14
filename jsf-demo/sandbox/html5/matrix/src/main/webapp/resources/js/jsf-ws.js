@@ -76,12 +76,16 @@ if (!JSF) {
         
         return {
             
-            init: function init(channel) {
+            init: function init(hostname, port, channels) {
+                //  
+                var baseUrl = "ws://" + hostname + ":" + port;
+                JSF.hostname = hostname;
+                JSF.port = port;
                 
-                for (var i in channel) {
-                    var url = i; 
+                for (var i in channels) {
+                    var url = baseUrl + i; 
                     var socket = new WebSocket(url);
-                    var callbacks = channel[i];
+                    var callbacks = channels[i];
                     socket.onopen = function(evt) {socket.send("register")};
                     socket.onmessage = function(evt) {processMessage(callbacks, evt)};
                     urlSockets[url] = socket;
@@ -89,7 +93,8 @@ if (!JSF) {
 
             },
                        
-            getSocket: function getSocket(endpoint) {
+            getSocket: function getSocket(path) {
+                var endpoint = "ws://" + JSF.hostname + ":" + JSF.port + path;
                 return urlSockets[endpoint];      
             }
         };

@@ -230,7 +230,7 @@ function sendMessage() {
  */
 function send(msg, arg) {
     if (arg !== undefined) msg = msg + "," + arg;
-    var socket = JSF.ws.getSocket("ws://HOSTNAME:8021/matrix/matrix");
+    var socket = JSF.ws.getSocket("/matrix/matrix");
     socket.send(msg);
 }
 

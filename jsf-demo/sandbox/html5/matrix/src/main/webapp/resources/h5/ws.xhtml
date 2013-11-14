@@ -56,13 +56,15 @@
 <body>
 
 <composite:interface>
-    <composite:attribute name="channel" required="true"/>
+    <composite:attribute name="channels" required="true" />
+    <composite:attribute name="hostname" default="#{request.serverName}" />
+    <composite:attribute name="port" default="#{request.serverPort}" />
 </composite:interface>
 
 <composite:implementation>
     <h:outputScript name="js/jsf-ws.js" target="head"/>
     <script type="text/javascript">
-        JSF.ws.init(#{cc.attrs.channel});
+        JSF.ws.init("#{cc.attrs.hostname}", "#{cc.attrs.port}", #{cc.attrs.channels});
     </script>
 </composite:implementation>
 
