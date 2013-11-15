@@ -39,7 +39,6 @@
  */
 package com.sun.faces.test.javaee6.resource.cacheLastMod.wartest;
 
-import org.junit.Ignore;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -75,19 +74,24 @@ public class Issue2895IT {
 
     @Test
     public void testResourceCaching() throws Exception {
-        String cssUrl = webUrl + "faces/javax.faces.resource/styles.css";
-        Page cssPage = webClient.getPage(cssUrl);
-        assertEquals(200, cssPage.getWebResponse().getStatusCode());
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         
-        String ifModifiedSinceValue = cssPage.getWebResponse().getResponseHeaderValue("Last-Modified");
-        if (ifModifiedSinceValue == null) {
-            ifModifiedSinceValue = cssPage.getWebResponse().getResponseHeaderValue("Date");
-        }
+        Page initialPage = webClient.getPage(webUrl + "faces/index.xhtml");
+        if (initialPage.getWebResponse().getStatusCode() == 200) {
+            String cssUrl = webUrl + "faces/javax.faces.resource/styles.css";
+            Page cssPage = webClient.getPage(cssUrl);
+            assertEquals(200, cssPage.getWebResponse().getStatusCode());
 
-        webClient.getCache().clear();
-        webClient.addRequestHeader("If-Modified-Since", ifModifiedSinceValue);
-        webClient.addRequestHeader(("Cache-Control"), "max-age=0");
-        cssPage = webClient.getPage(cssUrl);
-        assertEquals(304, cssPage.getWebResponse().getStatusCode());
+            String ifModifiedSinceValue = cssPage.getWebResponse().getResponseHeaderValue("Last-Modified");
+            if (ifModifiedSinceValue == null) {
+                ifModifiedSinceValue = cssPage.getWebResponse().getResponseHeaderValue("Date");
+            }
+
+            webClient.getCache().clear();
+            webClient.addRequestHeader("If-Modified-Since", ifModifiedSinceValue);
+            webClient.addRequestHeader(("Cache-Control"), "max-age=0");
+            cssPage = webClient.getPage(cssUrl);
+            assertEquals(304, cssPage.getWebResponse().getStatusCode());
+        }
     }
 }
