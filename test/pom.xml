@@ -1466,7 +1466,6 @@
                                     <cargo.servlet.port>${integration.serverPort}</cargo.servlet.port>
                                     <cargo.weblogic.administrator.password>${integration.container.password}</cargo.weblogic.administrator.password>
                                     <cargo.weblogic.administrator.user>${integration.container.username}</cargo.weblogic.administrator.user>
-                                    <cargo.jvmargs>-Dweblogic.hk2.enabled=false</cargo.jvmargs>
                                 </properties>
                             </configuration>
                         </configuration>
