@@ -53,7 +53,8 @@ import javax.websocket.RemoteEndpoint;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-@ServerEndpoint(value = "/matrix")
+@ServerEndpoint(value = "/matrix",
+        configurator=ConfiguratorImpl.class)
 /**
  * Websocket endpoint for handling matrix control messages.
  */
