@@ -1005,6 +1005,32 @@ public class ELFlash extends Flash {
                 properties = null;
             }
             contextMap.put(CONSTANTS.DidWriteCookieAttributeName, Boolean.TRUE);
+        } else if (!extContext.isResponseCommitted()) {
+            Map<String, Object> properties = new HashMap();
+            Object val;
+            toSet.setMaxAge(0);
+
+            if (null != (val = toSet.getComment())) {
+                properties.put("comment", val);
+            }
+            if (null != (val = toSet.getDomain())) {
+                properties.put("domain", val);
+            }
+            if (null != (val = toSet.getMaxAge())) {
+                properties.put("maxAge", val);
+            }
+            if (context.getExternalContext().isSecure()) {
+                properties.put("secure", Boolean.TRUE);
+            } else if (null != (val = toSet.getSecure())) {
+                properties.put("secure", val);
+            }
+            if (null != (val = toSet.getPath())) {
+                properties.put("path", val);
+            }
+            properties.put("httpOnly", Boolean.TRUE);
+            extContext.addResponseCookie(toSet.getName(), toSet.getValue(), 
+                    !properties.isEmpty() ? properties : null);
+            properties = null;           
         }
     }
 
