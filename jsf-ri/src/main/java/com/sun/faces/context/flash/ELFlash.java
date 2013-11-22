@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -134,7 +134,7 @@ public class ELFlash extends Flash {
 
     private long numberOfFlashesBetweenFlashReapings = Long.
      parseLong(WebContextInitParameter.NumberOfFlashesBetweenFlashReapings.getDefaultValue());
-
+    
     private ByteArrayGuardAESCTR guard;
 
     // </editor-fold>
@@ -576,7 +576,7 @@ public class ELFlash extends Flash {
             doLastPhaseActions(context, false);
         }
     }
-
+    
     /**
      * <p>This is the most magic of methods.  There are several scenarios
      * in which this method can be called, but the first time it is
@@ -642,7 +642,7 @@ public class ELFlash extends Flash {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Helpers">
-
+    
     private void maybeWriteCookie(FacesContext context,
             PreviousNextFlashInfoManager flashManager) {
         FlashInfo flashInfo = flashManager.getPreviousRequestFlashInfo();
@@ -967,6 +967,31 @@ public class ELFlash extends Flash {
 
             }
             contextMap.put(CONSTANTS.DidWriteCookieAttributeName, Boolean.TRUE);
+        } else if (!extContext.isResponseCommitted()) {
+            Map<String, Object> properties = new HashMap();
+            Object val;
+            toSet.setMaxAge(0);
+
+            if (null != (val = toSet.getComment())) {
+                properties.put("comment", val);
+            }
+            if (null != (val = toSet.getDomain())) {
+                properties.put("domain", val);
+            }
+            if (null != (val = toSet.getMaxAge())) {
+                properties.put("maxAge", val);
+            }
+            if (context.getExternalContext().isSecure()) {
+                properties.put("secure", Boolean.TRUE);
+            } else if (null != (val = toSet.getSecure())) {
+                properties.put("secure", val);
+            }
+            if (null != (val = toSet.getPath())) {
+                properties.put("path", val);
+            }
+            extContext.addResponseCookie(toSet.getName(), toSet.getValue(), 
+                    !properties.isEmpty() ? properties : null);
+            properties = null;           
         }
     }
 
