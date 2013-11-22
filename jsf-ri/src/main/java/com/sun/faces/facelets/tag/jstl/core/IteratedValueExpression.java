@@ -71,10 +71,12 @@ public final class IteratedValueExpression extends ValueExpression {
 
     private ValueExpression orig;
 
+    private int start;
     private int index;
 
-    public IteratedValueExpression(ValueExpression orig, int index) {
+    public IteratedValueExpression(ValueExpression orig, int start, int index) {
         this.orig = orig;
+        this.start = start;
         this.index = index;
     }
 
@@ -87,8 +89,18 @@ public final class IteratedValueExpression extends ValueExpression {
         Collection collection = (Collection) orig.getValue(context);
         Iterator iterator = collection.iterator();
         Object result = null;
-        int i = 0;
-        result = iterator.next();
+        int i = start;
+        if (i != 0) {
+            while(i != 0) {
+                result = iterator.next();
+                if (!iterator.hasNext()) {
+                    throw new ELException("Unable to position start");
+                }
+                i--;
+            }
+        } else {
+            result = iterator.next();
+        }
         while(i < index) {
             if (!iterator.hasNext()) {
                 throw new ELException("Unable to get given value");

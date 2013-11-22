@@ -299,7 +299,7 @@ public final class ForEachHandler extends TagHandlerImpl {
         } else if (src instanceof Map && value instanceof Map.Entry) {
             return new MappedValueExpression(ve, (Map.Entry) value);
         } else if (src instanceof Collection) {
-            return new IteratedValueExpression(ve, start + i);
+            return new IteratedValueExpression(ve, start, i);
         }
         throw new IllegalStateException("Cannot create VE for: " + src);
     }
