@@ -1,0 +1,38 @@
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:composite="http://java.sun.com/jsf/composite">
+
+	<composite:interface name="internal-composite">
+		<composite:attribute name="param" type="java.lang.String" />
+	</composite:interface>
+
+	<composite:implementation>
+		<h:panelGroup layout="block"
+			style="border: 1px solid black; padding: 5px;">
+			This is the internal composite component. Here we evaluate #{'#{'}cc} both
+			directly in the implementation and inside an included xhtml.
+			<hr />
+			<h:panelGroup layout="block">
+				cc is evaluated inside the composite component
+				<ol start="11">
+					<li>#{'#{'}cc} evaluates to: <h:outputText value="#{cc}" /></li>
+					<li>#{'#{'}cc['clientId']} evaluates to: <h:outputText
+							value="#{cc['clientId']}" /></li>
+					<li>#{'#{'}cc.clientId} evaluates to: <h:outputText
+							value="#{cc.clientId}" /></li>
+					<li>#{'#{'}cc['attrs'].param} evaluates to: <h:outputText
+							value="#{cc['attrs'].param}" /></li>
+					<li>#{'#{'}cc.attrs.param} evaluates to: <h:outputText
+							value="#{cc.attrs.param}" /></li>
+				</ol>
+			</h:panelGroup>
+
+			<h:panelGroup layout="block">
+				cc is evaluated in a xhtml file included by the composite component
+				<ui:include src="/ccAndInclude-include.xhtml" />
+			</h:panelGroup>
+		</h:panelGroup>
+	</composite:implementation>
+</f:view>

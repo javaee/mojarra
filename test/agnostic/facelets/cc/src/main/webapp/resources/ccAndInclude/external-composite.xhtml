@@ -1,0 +1,20 @@
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:ccAndInclude="http://java.sun.com/jsf/composite/ccAndInclude">
+
+	<composite:interface name="external-composite">
+	</composite:interface>
+
+	<composite:implementation>
+		<h:panelGroup layout="block"
+			style="border: 1px solid black; padding: 5px;">
+			This is the external composite component. Here we use 'internal-component'
+			and pass 'Test string' through 'param' parameter.
+			<hr />
+			<ccAndInclude:internal-composite id="internal" param="Test string" />
+		</h:panelGroup>
+	</composite:implementation>
+</f:view>
