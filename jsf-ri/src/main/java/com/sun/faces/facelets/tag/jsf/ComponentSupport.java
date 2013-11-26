@@ -411,7 +411,7 @@ public final class ComponentSupport {
         } else {
             UIComponent existing = parent.getFacets().get(facetName);
             if (existing != null && existing != child) {
-                if (!(existing instanceof UIPanel)) {
+                if (existing.getAttributes().get(ComponentSupport.IMPLICIT_PANEL) == null) {
                     // move existing component under a panel group
                     UIComponent panelGroup = ctx.getFacesContext().getApplication().createComponent(UIPanel.COMPONENT_TYPE);
                     parent.getFacets().put(facetName, panelGroup);
@@ -419,7 +419,7 @@ public final class ComponentSupport {
                     attrs.put(ComponentSupport.IMPLICIT_PANEL, true);
                     panelGroup.getChildren().add(existing);
                     existing = panelGroup;
-                } 
+                }
                 if (existing.getAttributes().get(ComponentSupport.IMPLICIT_PANEL) != null) {
                     // we have a panel group, so add the new component to it
                     existing.getChildren().add(child);
@@ -427,9 +427,9 @@ public final class ComponentSupport {
                     parent.getFacets().put(facetName, child);
                 }
             } else {
-                parent.getFacets().put(facetName, child);
+                    parent.getFacets().put(facetName, child);
+                }
             }
-        }
         
     }
 
