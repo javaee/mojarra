@@ -374,7 +374,8 @@ public class ResourceManager {
         if (name != null) {
         name = name.toLowerCase();
 
-        result = name.startsWith("..") ||
+        result = name.startsWith("./..") ||
+                 name.startsWith("..") ||
                  name.contains("../") ||
                  name.contains("..\\") ||
                  name.startsWith("/") ||
