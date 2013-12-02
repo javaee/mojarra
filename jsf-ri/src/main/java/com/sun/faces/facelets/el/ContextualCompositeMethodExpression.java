@@ -215,6 +215,11 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
                     }
 
                 } catch(Exception ex) {
+                    
+                    if (ex instanceof ValidatorException) {
+                        throw (ValidatorException) ex;
+                    }
+                    
                     /*
                      * If we got a validator exception it is actually correct to 
                      * immediately bubble it up. 
