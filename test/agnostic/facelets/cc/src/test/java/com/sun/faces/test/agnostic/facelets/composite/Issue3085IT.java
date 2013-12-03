@@ -67,6 +67,8 @@ public class Issue3085IT {
     public void testInputTextValidator1() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/inputTextValidator1.xhtml");
         HtmlElement button = page.getHtmlElementById("form:submit");
+        HtmlElement inputText = page.getHtmlElementById("form:level1:level2:inputText");
+        inputText.type("test");
         page = button.click();
         assertTrue(page.asXml().indexOf("Oops") != -1);
     }
