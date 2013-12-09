@@ -65,6 +65,7 @@ public class CompositeComponentsTestCase extends HtmlUnitFacesTestCase {
         addExclusion(Container.TOMCAT7, "testForNoNPE");
         addExclusion(Container.WLS_10_3_4_NO_CLUSTER, "testForNoNPE");
         addExclusion(Container.TOMCAT6, "testMetadataCache");
+        addExclusion(Container.WLS_12_1_1_NO_CLUSTER, "testMetadataCache");
         addExclusion(Container.TOMCAT7, "testMetadataCache");
         addExclusion(Container.WLS_10_3_4_NO_CLUSTER, "testMetadataCache");
     }

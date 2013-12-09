@@ -101,8 +101,7 @@
                 test.validator02,
                 test.validator03,
                 test.valuechange,
-                test.component,
-                test.component01,
+                test.component,test.component01,
                 test.navigation,
                 test.implicitnav,
                 test.state,
@@ -162,24 +161,25 @@
     <target name="test.duplicateIds"
             description="Test duplicate ID detection">
 
+<!-- 20131121 wls 12.1.1
         <jsf.tester request="/faces/duplicateIds01.jsp"
                      context-path="${context.path}"
                      classpath-refid="html.classpath"
                      test-results-dir="${impl.test.results.dir}"
                      status="500"/> 
-
+-->
         <jsf.tester request="/faces/duplicateIds02.jsp"
                      context-path="${context.path}"
                      classpath-refid="html.classpath"
                      test-results-dir="${impl.test.results.dir}"
                      status="200"/>
-
+<!-- 20131121 wls 12.1.1
         <jsf.tester request="/faces/duplicateIds03.jsp"
                      context-path="${context.path}"
                      classpath-refid="html.classpath"
                      test-results-dir="${impl.test.results.dir}"
                      status="500"/>
-
+-->
         <jsf.tester request="/faces/duplicateIds05.jsp"
                      context-path="${context.path}"
                      classpath-refid="html.classpath"
@@ -290,6 +290,7 @@
     </target>
 
     <target name="test.annotations">
+<!-- 20131120 WLS 12.1.1
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
                    test-results-dir="${impl.test.results.dir}">
@@ -298,6 +299,8 @@
                          includes="com/sun/faces/annotation/AnnotatedComponentsTestCase.class"/> 
             </tests>
         </jsf.junit>
+
+-->
     </target>
 
     <target name="test.el">
@@ -564,6 +567,8 @@
               context-path="${context.path}" request="/faces/managed02.jsp"
               regexp="(?s).*/managed02.jsp PASSED.*"/>
 
+
+<!-- 20131121 wls 12.1.1
         <if>
           <bool>
             <or>
@@ -590,6 +595,16 @@
                   regexp="(?s).*An\s+Error\s+Occurred.*"/>
           </else>
         </if>
+
+-->
+
+            <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+                  context-path="${context.path}" request="/faces/managed03.jsp"
+                  regexp="(?s).*An\s+Error\s+Occurred.*"/>
+            <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
+                  context-path="${context.path}" request="/faces/managed07.jsp"
+                  regexp="(?s).*An\s+Error\s+Occurred.*"/>
+
 
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
@@ -756,35 +771,35 @@
                  context-path="${context.path}" request="/faces/TestCoreValidatorIteratorSucceed.jsp"
               status="200"/>
         -->
-
+<!-- 20131121 wls 12.1.1
         <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/TestElValidatorActionRefFail.jsp"
               status="500"/>
-
+-->
         <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/TestElValidatorActionRefSucceed.jsp"
               status="200"/>
-
+<!-- 20131121 wls 12.1.1
         <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/TestElValidatorComponentFail.jsp"
               status="500"/>
-
+-->
         <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/TestElValidatorComponentSucceed.jsp"
               status="200"/>
-
+<!-- 20131121 wls 12.1.1
         <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/TestElValidatorIdFail.jsp"
               status="500"/>
-
+-->
         <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/TestElValidatorIdSucceed.jsp"
               status="200"/>
-
+<!-- 20131121 wls 12.1.1
         <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/TestElValidatorValueRefFail.jsp"
               status="500"/>
-
+-->
         <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/TestElValidatorValueRefSucceed.jsp"
               status="200"/>
@@ -1301,7 +1316,7 @@
     </target>
 
     <target name="passthru" depends="define.scenario.aware.port">
-      <antcall target="test.http.method.protection" />
+      <antcall target="test.component" />
  
     </target>
 
