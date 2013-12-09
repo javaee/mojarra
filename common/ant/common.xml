@@ -107,7 +107,7 @@
     <!-- Version -->
     <property name="spec.version" value="2.1"/>
     <property name="spec.snapshot.version" value="2.1-SNAPSHOT"/>
-    <property name="patch.version" value="5"/>
+    <property name="patch.version" value="5-01"/>
     <property name="impl.name" value="Mojarra"/>
     <property name="build.number" value="${DSTAMP}"/>
     <property name="build.type" value="SNAPSHOT"/>
@@ -316,7 +316,7 @@
                              value="@{logging.config.file}"/>
                 <sysproperty key="force.no.cluster" 
                              value="@{force.no.cluster}"/>
-                <sysproperty key="container" value="${container.name}" />
+                <sysproperty key="container" value="wls_12_1_1_no_cluster" />
                 <sysproperty key="instance.numbers" value="@{instance.numbers}" />
                 <sysproperty key="virtual-server" value="@{virtual-server}" />
                 <custom-sysproperties/>
@@ -500,7 +500,7 @@
                              value="@{logging.config.file}"/>
                 <sysproperty key="force.no.cluster" 
                              value="@{force.no.cluster}"/>
-                <sysproperty key="container" value="${container.name}" />
+                <sysproperty key="container" value="wls_12_1_1_no_cluster" />
                 <sysproperty key="instance.numbers" value="@{instance.numbers}" />
                 <sysproperty key="SimpleTesterTestCase.dumpText" 
                              value="${SimpleTesterTestCase.dumpText}" />

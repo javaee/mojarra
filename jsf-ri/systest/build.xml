@@ -248,7 +248,7 @@
     <target name="passthru" depends="define.scenario.aware.port"
             description="useful for running one test">
        
-        <ant antfile="build-tests.xml" target="test"/>
+        <ant antfile="build-tests.xml" target="test.duplicateIds"/>
 
         
     </target>  
