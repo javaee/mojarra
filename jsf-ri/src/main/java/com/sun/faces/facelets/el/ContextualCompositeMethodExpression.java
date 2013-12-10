@@ -214,11 +214,7 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
 
                     }
 
-                } catch(Exception ex) {
-                    
-                    if (ex instanceof ValidatorException) {
-                        throw (ValidatorException) ex;
-                    }
+                } catch(ELException ex) {
                     
                     /*
                      * If we got a validator exception it is actually correct to 
@@ -233,6 +229,10 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
                         LOGGER.log(Level.WARNING,
                             "jsf.facelets.el.method.expression.invoke.error:"+ex.toString(),
                             new Object[] { source.getExpressionString() });
+                    }
+                    
+                    if (!(ex instanceof MethodNotFoundException)) {
+                        throw ex;
                     }
                 }
             }
