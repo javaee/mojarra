@@ -68,7 +68,10 @@ import java.util.logging.Logger;
 import com.sun.faces.component.visit.PartialVisitContext;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
+import javax.faces.FactoryFinder;
 import javax.faces.lifecycle.ClientWindow;
+import javax.faces.render.RenderKit;
+import javax.faces.render.RenderKitFactory;
 
  public class PartialViewContextImpl extends PartialViewContext {
 
@@ -482,9 +485,17 @@ import javax.faces.lifecycle.ClientWindow;
         }
 
         if (out != null) {
-            responseWriter =
-                ctx.getRenderKit().createResponseWriter(out,
-                "text/xml", encoding);
+            UIViewRoot viewRoot = ctx.getViewRoot();
+            if (viewRoot != null) {
+                responseWriter =
+                    ctx.getRenderKit().createResponseWriter(out,
+                    "text/xml", encoding);
+            } else {
+                RenderKitFactory factory = (RenderKitFactory)
+                    FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+                RenderKit renderKit = factory.getRenderKit(ctx, RenderKitFactory.HTML_BASIC_RENDER_KIT);
+                responseWriter = renderKit.createResponseWriter(out, "text/xml", encoding);
+            }
         }
         if (responseWriter instanceof PartialResponseWriter)  {
             return (PartialResponseWriter) responseWriter;
