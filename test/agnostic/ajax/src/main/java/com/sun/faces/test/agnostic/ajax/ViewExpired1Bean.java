@@ -50,7 +50,7 @@ import javax.faces.context.FacesContext;
 public class ViewExpired1Bean {
 
     public void expireSessionSoon() {
-        FacesContext.getCurrentInstance().getExternalContext().setSessionMaxInactiveInterval(5);
+        FacesContext.getCurrentInstance().getExternalContext().setSessionMaxInactiveInterval(1);
     }
     
     public void verifySession() {
