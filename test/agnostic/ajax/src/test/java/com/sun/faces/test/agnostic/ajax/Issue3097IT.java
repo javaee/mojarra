@@ -65,17 +65,25 @@ public class Issue3097IT {
         webClient.closeAllWindows();
     }
 
+    /*
+     * This test is purposely only triggering when server side state saving 
+     * as there is no way to force a view to expire when client side state 
+     * saving.
+     */
     @Test
     public void testViewExpired1() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/viewExpired1.xhtml");
-        HtmlElement expireButton = page.getHtmlElementById("form:expireSessionSoon");
-        expireButton.click();
-        webClient.waitForBackgroundJavaScript(60000);
-        Thread.sleep(25000);
-        HtmlElement submitButton = page.getHtmlElementById("form:submit");
-        page = submitButton.click();
-        webClient.waitForBackgroundJavaScript(60000);
-        String text = page.asXml();
-        assertTrue(text.indexOf("class javax.faces.application.ViewExpiredException") != -1);
+
+        if (page.asXml().indexOf("State Saving Method: server") != -1) {
+            HtmlElement expireButton = page.getHtmlElementById("form:expireSessionSoon");
+            expireButton.click();
+            webClient.waitForBackgroundJavaScript(60000);
+            Thread.sleep(25000);
+            HtmlElement submitButton = page.getHtmlElementById("form:submit");
+            page = submitButton.click();
+            webClient.waitForBackgroundJavaScript(60000);
+            String text = page.asXml();
+            assertTrue(text.indexOf("class javax.faces.application.ViewExpiredException") != -1);
+        }
     }
 }

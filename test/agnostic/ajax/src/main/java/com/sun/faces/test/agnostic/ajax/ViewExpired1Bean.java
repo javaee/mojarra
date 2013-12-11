@@ -49,6 +49,11 @@ import javax.faces.context.FacesContext;
 @RequestScoped
 public class ViewExpired1Bean {
 
+    public String getStateSavingMethod() {
+        return FacesContext.getCurrentInstance().getApplication().
+                getStateManager().isSavingStateInClient(FacesContext.getCurrentInstance()) ? "client" : "server";
+    }
+    
     public void expireSessionSoon() {
         FacesContext.getCurrentInstance().getExternalContext().setSessionMaxInactiveInterval(1);
     }

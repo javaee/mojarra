@@ -11,6 +11,7 @@
     </h:head>
     <h:body>    
         <h:form id="form">
+            State Saving Method: <h:outputText value="#{viewExpired1Bean.stateSavingMethod}"/>
             <h:commandButton id="expireSessionSoon" value="Expire Session Soon" actionListener="#{viewExpired1Bean.expireSessionSoon}">
                 <f:ajax render="@all"/>
             </h:commandButton>
