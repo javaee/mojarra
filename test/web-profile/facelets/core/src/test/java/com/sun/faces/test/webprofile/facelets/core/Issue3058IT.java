@@ -37,10 +37,12 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.facelets.core;
+package com.sun.faces.test.webprofile.facelets.core;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.sun.faces.test.junit.JsfTestRunner;
 import org.junit.After;
 import org.junit.Before;
@@ -64,17 +66,23 @@ public class Issue3058IT {
     public void tearDown() {
         webClient.closeAllWindows();
     }
-
+    
     @Test
-    public void testViewParamRequiredPositive() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/faces/viewParam7Required.xhtml?input1=test");
-        assertTrue(!page.asXml().contains("INPUT1 HAS NO VALUE!"));
+    public void testValidateRequired() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/faces/validateRequired.xhtml");
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("submit");
+        page = button.click();
+        assertTrue(page.asText().contains("input2"));
     }
 
     @Test
-    public void testViewParamRequiredNegative() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/faces/viewParam7Required.xhtml");
-        assertTrue(page.asXml().contains("INPUT1 HAS NO VALUE!"));
+    public void testValidateRequiredNegative() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/faces/validateRequired.xhtml");
+        HtmlTextInput input = (HtmlTextInput) page.getElementById("input2");
+        input.setText("Some Value");
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("submit");
+        page = button.click();
+        assertTrue(!page.asText().contains("input2"));
     }
     
 }
