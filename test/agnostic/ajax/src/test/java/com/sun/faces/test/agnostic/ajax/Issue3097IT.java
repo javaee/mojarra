@@ -71,7 +71,7 @@ public class Issue3097IT {
         HtmlElement expireButton = page.getHtmlElementById("form:expireSessionSoon");
         expireButton.click();
         webClient.waitForBackgroundJavaScript(60000);
-        Thread.sleep(10000);
+        Thread.sleep(25000);
         HtmlElement submitButton = page.getHtmlElementById("form:submit");
         page = submitButton.click();
         webClient.waitForBackgroundJavaScript(60000);
