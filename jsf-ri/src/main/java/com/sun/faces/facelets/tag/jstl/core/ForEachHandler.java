@@ -58,33 +58,21 @@
 
 package com.sun.faces.facelets.tag.jstl.core;
 
-import com.sun.faces.facelets.FaceletContextImplBase;
-import com.sun.faces.facelets.TemplateClient;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
-import java.io.IOException;
-import java.lang.reflect.Array;
-import java.net.URL;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import javax.el.ELException;
-import javax.el.ELResolver;
-import javax.el.ExpressionFactory;
-import javax.el.FunctionMapper;
+import com.sun.faces.facelets.tag.jsf.ComponentSupport;
+
+import com.sun.faces.facelets.tag.jsf.IterationIdManager;
+
 import javax.el.ValueExpression;
 import javax.el.VariableMapper;
-import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.FaceletException;
 import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagAttributeException;
 import javax.faces.view.facelets.TagConfig;
+import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.*;
 
 /**
  * @author Jacob Hookom
@@ -160,18 +148,16 @@ public final class ForEachHandler extends TagHandlerImpl {
 
     public void apply(FaceletContext ctx, UIComponent parent)
             throws IOException {
-
-        String prefix = ctx.generateUniqueId(tagId);
-
+        
         int s = this.getBegin(ctx);
         int e = this.getEnd(ctx);
         int m = this.getStep(ctx);
         Integer sO = this.begin != null ? s : null;
         Integer eO = this.end != null ? e : null;
         Integer mO = this.step != null ? m : null;
-
+        
         boolean t = this.getTransient(ctx);
-        Object src;
+        Object src = null;
         ValueExpression srcVE = null;
         if (this.items != null) {
             srcVE = this.items.getValueExpression(ctx, Object.class);
@@ -197,12 +183,15 @@ public final class ForEachHandler extends TagHandlerImpl {
                 String v = this.getVarName(ctx);
                 String vs = this.getVarStatusName(ctx);
                 VariableMapper vars = ctx.getVariableMapper();
-                ValueExpression ve;
+                ValueExpression ve = null;
                 ValueExpression vO = this.capture(v, vars);
                 ValueExpression vsO = this.capture(vs, vars);
-                int mi;
-                Object value;
+                int mi = 0;
+                Object value = null;
                 int count = 0;
+                
+                IterationIdManager.startIteration(ctx);
+                
                 try {
                     boolean first = true;
                     while (i <= e && itr.hasNext()) {
@@ -221,7 +210,7 @@ public final class ForEachHandler extends TagHandlerImpl {
 
                         // set the varStatus
                         if (vs != null) {
-                            JstlIterationStatus itrS = new JstlIterationStatus(first, !itr.hasNext(), i, sO, eO, mO, value, count);
+                            JstlIterationStatus itrS = new JstlIterationStatus(first, !itr.hasNext(),i, sO, eO, mO, value, count);
                             if (t || srcVE == null) {
                                 ctx.setAttribute(vs, itrS);
                             } else {
@@ -230,9 +219,9 @@ public final class ForEachHandler extends TagHandlerImpl {
                             }
                         }
 
+
                         // execute body
-                        ForEachFaceletContext faceletContext = new ForEachFaceletContext(ctx, prefix, i);
-                        this.nextHandler.apply(faceletContext, parent);
+                        this.nextHandler.apply(ctx, parent);
 
                         // increment steps
                         mi = 1;
@@ -242,7 +231,7 @@ public final class ForEachHandler extends TagHandlerImpl {
                             i++;
                         }
                         i++;
-
+                        
                         first = false;
                     }
                 } finally {
@@ -252,6 +241,7 @@ public final class ForEachHandler extends TagHandlerImpl {
                     if (vs != null) {
                         vars.setVariable(vs, vsO);
                     }
+                    IterationIdManager.stopIteration(ctx);
                 }
             }
         }
@@ -333,160 +323,4 @@ public final class ForEachHandler extends TagHandlerImpl {
         }
     }
 
-    private static class ForEachFaceletContext extends FaceletContextImplBase {
-
-        private String prefix;
-        private int index;
-        private FaceletContextImplBase faceletContext;
-        private final Map<String, Integer> ids;
-
-        private ForEachFaceletContext(FaceletContext faceletContext, String prefix, int index) {
-            this.faceletContext = (FaceletContextImplBase) faceletContext;
-            this.prefix = prefix;
-            this.index = index;
-            this.ids = new HashMap<String, Integer>();
-        }
-
-        @Override
-        public FacesContext getFacesContext() {
-            return faceletContext.getFacesContext();
-        }
-
-        @Override
-        public String generateUniqueId(String base) {
-            StringBuilder uniqueIdBuilder = new StringBuilder();
-            Integer cnt = ids.get(base);
-
-            if (cnt == null) {
-                ids.put(base, 0);
-                uniqueIdBuilder.delete(0, uniqueIdBuilder.length());
-                uniqueIdBuilder.append(prefix);
-                uniqueIdBuilder.append("_");
-                uniqueIdBuilder.append(index);
-                uniqueIdBuilder.append("_");
-                uniqueIdBuilder.append(base);
-            } else {
-                int i = cnt.intValue() + 1;
-                ids.put(base, i);
-                uniqueIdBuilder.delete(0, uniqueIdBuilder.length());
-                uniqueIdBuilder.append(prefix);
-                uniqueIdBuilder.append("_");
-                uniqueIdBuilder.append(index);
-                uniqueIdBuilder.append("_");
-                uniqueIdBuilder.append(base);
-                uniqueIdBuilder.append("_");
-                uniqueIdBuilder.append(i);
-            }
-
-            return uniqueIdBuilder.toString();
-        }
-
-        @Override
-        public ExpressionFactory getExpressionFactory() {
-            return faceletContext.getExpressionFactory();
-        }
-
-        @Override
-        public void setVariableMapper(VariableMapper varMapper) {
-            faceletContext.setVariableMapper(varMapper);
-        }
-
-        @Override
-        public void setFunctionMapper(FunctionMapper fnMapper) {
-            faceletContext.setFunctionMapper(fnMapper);
-        }
-
-        @Override
-        public void setAttribute(String name, Object value) {
-            faceletContext.setAttribute(name, value);
-        }
-
-        @Override
-        public Object getAttribute(String name) {
-            return faceletContext.getAttribute(name);
-        }
-
-        @Override
-        public void includeFacelet(UIComponent parent, String relativePath) throws IOException {
-            faceletContext.includeFacelet(parent, relativePath);
-        }
-
-        @Override
-        public void includeFacelet(UIComponent parent, URL absolutePath) throws IOException {
-            faceletContext.includeFacelet(parent, absolutePath);
-        }
-
-        @Override
-        public ELResolver getELResolver() {
-            return faceletContext.getELResolver();
-        }
-
-        @Override
-        public FunctionMapper getFunctionMapper() {
-            return faceletContext.getFunctionMapper();
-        }
-
-        @Override
-        public VariableMapper getVariableMapper() {
-            return faceletContext.getVariableMapper();
-        }
-
-        @Override
-        public Object getContext(Class key) {
-            return faceletContext.getContext(key);
-        }
-
-        @Override
-        public Locale getLocale() {
-            return faceletContext.getLocale();
-        }
-
-        public int getIndex() {
-            return index;
-        }
-
-        public String getPrefix() {
-            return prefix;
-        }
-
-        @Override
-        public boolean isPropertyResolved() {
-            return faceletContext.isPropertyResolved();
-        }
-
-        @Override
-        public void putContext(Class key, Object contextObject) {
-            faceletContext.putContext(key, contextObject);
-        }
-
-        @Override
-        public void setLocale(Locale locale) {
-            faceletContext.setLocale(locale);
-        }
-
-        @Override
-        public void setPropertyResolved(boolean resolved) {
-            faceletContext.setPropertyResolved(resolved);
-        }
-
-        @Override
-        public void pushClient(TemplateClient client) {
-            faceletContext.pushClient(client);
-        }
-
-        @Override
-        public void popClient(TemplateClient client) {
-            faceletContext.popClient(client);
-        }
-
-        @Override
-        public void extendClient(TemplateClient client) {
-            faceletContext.extendClient(client);
-        }
-
-        @Override
-        public boolean includeDefinition(UIComponent parent, String name) throws IOException, FaceletException, FacesException, ELException {
-            return faceletContext.includeDefinition(parent, name);
-        }
-    }
 }

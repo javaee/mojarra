@@ -67,33 +67,33 @@ public class Issue2217IT {
     @Test
     public void testJapanese() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
-
+        
         String pageText = page.getBody().asText();
         assertTrue(pageText.contains("Hello, my name is Duke. What's yours?"));
 
         HtmlTextInput text = (HtmlTextInput) page.getElementById("username");
         text.type("\u65E5");
-
+        
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("submit");
         page = button.click();
-
+        
         pageText = page.getBody().asText();
         assertTrue(pageText.contains("\u65E5"));
     }
-
+        
     @Test
     public void testHebrew() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
-
+        
         String pageText = page.getBody().asText();
         assertTrue(pageText.contains("Hello, my name is Duke. What's yours?"));
 
         HtmlTextInput text = (HtmlTextInput) page.getElementById("username");
         text.type("\u05D0");
-
+        
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("submit");
         page = button.click();
-
+        
         pageText = page.getBody().asText();
         assertTrue(pageText.contains("\u05D0"));
     }

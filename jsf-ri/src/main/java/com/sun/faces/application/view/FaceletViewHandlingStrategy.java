@@ -117,6 +117,7 @@ import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.Face
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.StateSavingMethod;
 import com.sun.faces.util.ComponentStruct;
 import static javax.faces.application.StateManager.IS_BUILDING_INITIAL_STATE;
+import javax.faces.component.ContextCallback;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
 import javax.faces.component.visit.VisitResult;
@@ -164,6 +165,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     private boolean groovyAvailable;
     private int responseBufferSize;
     private boolean responseBufferSizeSet;
+    private boolean isTrinidadStateManager;
 
     private Cache<Resource, BeanInfo> metadataCache;
     private Map<String, List<String>> contractMappings;
@@ -198,7 +200,15 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         if (stateCtx.isPartialStateSaving(context, viewId)) {
             result = new FaceletPartialStateManagementStrategy(context);
         } else {
-            result = new FaceletFullStateManagementStrategy(context);
+            // Spec for this method says:
+            
+            // Implementations that provide the VDL for Facelets for JSF 2.0 
+            // and later must return non-null from this method.
+            
+            // Limit the specification violating change to the case where
+            // we are running in Trinidad.
+            // 
+            result = isTrinidadStateManager ? null : new JspStateManagementStrategy(context);
         }
         
         return result;
@@ -577,7 +587,12 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             }
         }
 
-        UIViewRoot root = super.restoreView(context, viewId);        
+        UIViewRoot root = super.restoreView(context, viewId);
+        
+        ViewHandler viewHandler = context.getApplication().getViewHandler();
+        ViewDeclarationLanguage vdl = viewHandler.getViewDeclarationLanguage(context, viewId);
+        context.setResourceLibraryContracts(vdl.calculateResourceLibraryContracts(context, viewId));       
+        
         StateContext stateCtx = StateContext.getStateContext(context);
         stateCtx.startTrackViewModifications(context, root);
         
@@ -1083,7 +1098,12 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             }
             contractDataStructure.clear();
         }
-        
+        if (null != context) {
+            StateManager stateManager = Util.getStateManager(context);
+            if (null != stateManager) {
+                isTrinidadStateManager = stateManager.getClass().getName().contains("trinidad");
+            }
+        }        
     }
 
 
@@ -2045,50 +2065,32 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         final List<UIComponent> found = new ArrayList<UIComponent>();
         UIComponent result = null;
 
-        try {
-            context.getAttributes().put(SKIP_ITERATION_HINT, true);
-            Set<VisitHint> hints = EnumSet.of(VisitHint.SKIP_ITERATION);
+        context.getViewRoot().invokeOnComponent(context, clientId, new ContextCallback() {
 
-            VisitContext visitContext = VisitContext.createVisitContext(context, null, hints);
+            public void invokeContextCallback(FacesContext context, UIComponent target) {
+                found.add(target);
+            }
+        });
+
+        /*
+         * Since we did not find it the cheaper way we need to assume there is a
+         * UINamingContainer that does not prepend its ID. So we are going to
+         * walk the tree to find it.
+         */
+        if (found.isEmpty()) {
+            VisitContext visitContext = VisitContext.createVisitContext(context);
             context.getViewRoot().visitTree(visitContext, new VisitCallback() {
 
                 public VisitResult visit(VisitContext visitContext, UIComponent component) {
                     VisitResult result = VisitResult.ACCEPT;
                     if (component.getClientId(visitContext.getFacesContext()).equals(clientId)) {
-                        /*
-                         * If the client id matches up we have found our match.
-                         */
                         found.add(component);
                         result = VisitResult.COMPLETE;
-                    } else if (component instanceof UIForm) {
-                        /*
-                         * If the component is a UIForm and it is prepending its
-                         * id then we can short circuit out of here if the the
-                         * client id of the component we are trying to find does
-                         * not begin with the id of the UIForm.
-                         */
-                        UIForm form = (UIForm) component;
-                        if (form.isPrependId() && !clientId.startsWith(form.getClientId(visitContext.getFacesContext()))) {
-                            result = VisitResult.REJECT;
                         }
-                    } else if (component instanceof NamingContainer && 
-                        !clientId.startsWith(component.getClientId(visitContext.getFacesContext()))) {
-                        /*
-                         * If the component is a naming container then assume it
-                         * is prepending its id so if our client id we are
-                         * looking for does not start with the naming container
-                         * id we can skip visiting this tree.
-                         */
-                        result = VisitResult.REJECT;
-                    }
-
                     return result;
                 }
             });
-        } finally {
-            context.getAttributes().remove(SKIP_ITERATION_HINT);
         }
-
         if (!found.isEmpty()) {
             result = found.get(0);
         }

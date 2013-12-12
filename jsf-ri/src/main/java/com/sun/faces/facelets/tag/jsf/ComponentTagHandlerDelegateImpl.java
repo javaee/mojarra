@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -70,6 +70,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import static com.sun.faces.RIConstants.DYNAMIC_COMPONENT;
 import static com.sun.faces.component.CompositeComponentStackManager.StackType.TreeCreation;
+import java.util.Collection;
 
 public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
     
@@ -162,9 +163,12 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         }
         
         boolean componentFound = false;
+        boolean parentModified = false;
         if (c != null) {
             componentFound = true;
-                doExistingComponentActions(ctx, id, c);
+            doExistingComponentActions(ctx, id, c);
+        } else if (suppressRemovedChild(parent, id)) {
+            return;
         } else {
             //hook method
             c = owner.createComponent(ctx);
@@ -186,12 +190,28 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         if (ProjectStage.Development == context.getApplication().getProjectStage()) {
             ComponentSupport.setTagForComponent(context, c, this.owner.getTag());
         }
-        // first allow c to get populated
-        owner.applyNextHandler(ctx, c);
+
+        // If this this a naming container, stop generating unique Ids
+        // for the repeated tags
+        boolean isNaming = false;
+        if (c instanceof NamingContainer) {
+            isNaming = true;
+            IterationIdManager.startNamingContainer(ctx);
+        }
+        try {
+            // first allow c to get populated
+            owner.applyNextHandler(ctx, c);
+        } finally {
+            if (isNaming)
+            {
+                IterationIdManager.stopNamingContainer(ctx);
+            }
+        }
 
         // finish cleaning up orphaned children
         if (componentFound) {
-               doOrphanedChildCleanup(ctx, parent, c);
+               parentModified = isParentChildrenModified(parent);
+               doOrphanedChildCleanup(ctx, parent, c, parentModified);
             }
 
         this.privateOnComponentPopulated(ctx, c);
@@ -199,12 +219,29 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         // add to the tree afterwards
         // this allows children to determine if it's
         // been part of the tree or not yet
-        addComponentToView(ctx, parent, c, componentFound);
+        addComponentToView(ctx, parent, c, componentFound, parentModified);
         ComponentSupport.copyPassthroughAttributes(ctx, c, owner.getTag());
         adjustIndexOfDynamicChildren(context, c);
         popComponentFromEL(ctx, c, ccStackManager, compcompPushed);
     }
 
+    // Tests whether the component associated with the specified tagId was
+    // a child of the parent component that has been dynamically removed.  If
+    // so, we want to suppress re-creation of this child
+    private boolean suppressRemovedChild(UIComponent parent, String childTagId) {
+        Collection<String> removedChildren = (Collection<String>)
+                parent.getAttributes().get(ComponentSupport.REMOVED_CHILDREN);
+        return ((removedChildren != null) && removedChildren.contains(childTagId));
+    }
+    
+    // Tests whether the specified parent component has had any dynamic 
+    // child additions or removals.  If so, we avoid re-ordering its children
+    // during tag re-execution, since we want to preserve the dynamically
+    // specified order.
+    private boolean isParentChildrenModified(UIComponent parent) {
+        return (parent.getAttributes().get(ComponentSupport.MARK_CHILDREN_MODIFIED) != null);    
+    }
+ 
     private void adjustIndexOfDynamicChildren(FacesContext context, 
             UIComponent parent) {
         StateContext stateContext = StateContext.getStateContext(context);
@@ -287,6 +324,16 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         // ------------------------------------------------------- Protected Methods
 
 
+    private void addComponentToView(FaceletContext ctx,
+                                    UIComponent parent,
+                                    UIComponent c,
+                                    boolean componentFound,
+                                    boolean parentModified) {
+        if (!componentFound || !parentModified) {
+            addComponentToView(ctx, parent, c, componentFound);   
+        }
+    }
+
     protected void addComponentToView(FaceletContext ctx,
                                       UIComponent parent,
                                       UIComponent c,
@@ -336,6 +383,16 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
 
     }
 
+    private void doOrphanedChildCleanup(FaceletContext ctx,
+                                          UIComponent parent,
+                                          UIComponent c,
+                                          boolean parentModified) {
+        if (parentModified) {
+            ComponentSupport.finalizeForDeletion(c);
+        } else {
+            doOrphanedChildCleanup(ctx, parent, c);
+        }
+    }
 
     protected void doOrphanedChildCleanup(FaceletContext ctx,
                                           UIComponent parent,
@@ -369,7 +426,11 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
                                   String id,
                                   UIComponent c) {
 
-        if (this.id != null) {
+        // If the id is specified as a literal, and the component is being
+        // repeated (by c:forEach, for example), use generated unique ids
+        // after the first instance 
+        
+        if (this.id != null && !(this.id.isLiteral() && IterationIdManager.registerLiteralId(ctx, this.id.getValue()))) {
             c.setId(this.id.getValue(ctx));
         } else {
             UIViewRoot root = ComponentSupport.getViewRoot(ctx, parent);
@@ -435,11 +496,22 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
                      + "] Found, marking children for cleanup");
         }
         ComponentSupport.markForDeletion(c);
-        /*
-         * Repply the id, for the case when the component tree was changed, and the id's are set explicitly.
-         */
-        if (this.id != null) {
-     	   c.setId(this.id.getValue(ctx));
+        
+        if (this.id != null){
+            /*
+             * Note that registerLiteralId() needs to be called here regardless of whether we keep the code for 
+             * reapplying Ids below.
+             * This makes IterationIdManager aware of all literal Ids on the page, so that it can ensure Id uniqueness for components
+             * added during postback.
+             */
+            boolean autoGenerated = (this.id.isLiteral() && IterationIdManager.registerLiteralId(ctx, this.id.getValue()));
+            
+            /*
+             * Repply the id, for the case when the component tree was changed, and the id's are set explicitly.
+             */
+            if (!autoGenerated) {
+                c.setId(this.id.getValue(ctx));
+            }
         }
     }
 
@@ -457,7 +529,14 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
     protected UIComponent findReparentedComponent(FaceletContext ctx,
                                     UIComponent parent,
                                     String tagId) {
-        return ComponentSupport.findChildByTagId(parent, tagId);
+        UIComponent facet = parent.getFacets().get(UIComponent.COMPOSITE_FACET_NAME);
+        if (facet != null) {
+            UIComponent newParent = facet.findComponent(
+               (String)parent.getAttributes().get(tagId));
+            if (newParent != null)
+                return ComponentSupport.findChildByTagId(newParent, tagId);
+        }
+        return null;
     }
 
     // ------------------------------------------------- Package Private Methods

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -419,6 +419,33 @@ public class FaceletsTestCase extends HtmlUnitFacesTestCase {
         return builder.toString();
     }
 
+    /*
+     * Added for issue 1527
+     */
+    public void testForEach() throws Exception {
+
+        HtmlPage page = getPage("/faces/facelets/forEach.xhtml");
+        boolean uniqueIds = true;
+        List<HtmlTextInput> input = new ArrayList<HtmlTextInput>();
+        getAllElementsOfGivenClass(page, input, HtmlTextInput.class);
+        String[] names = new String[input.size()];
+        String[] temp = new String[input.size()];
+        int i=0;
+        int j=0;
+        for (HtmlTextInput inputText : input) {
+            names[i++] = inputText.getNameAttribute();
+        }
+        for (i=0; i < names.length; i++) {
+            if (isUnique(names[i], temp)) {
+                temp[j++] = names[i];
+            } else {
+                uniqueIds = false;
+                break;
+            }
+        }
+        assertTrue(uniqueIds);
+    }
+
     public void testDefineInsertELExpression() throws Exception {
         HtmlPage page = getPage("/faces/facelets/Client3.xhtml");
         assertTrue(page.asText().contains("Inserted from client3"));
@@ -426,6 +453,15 @@ public class FaceletsTestCase extends HtmlUnitFacesTestCase {
 
 
     // --------------------------------------------------------- Private Methods
+
+    private boolean isUnique(String s, String[] array) {
+        for (int i=0; i < array.length; i++) {
+            if (array[i] != null && s.equals(array[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     private void validateToggleState1(List<HtmlDivision> divs) {
         assertTrue(divs.size() == 2);

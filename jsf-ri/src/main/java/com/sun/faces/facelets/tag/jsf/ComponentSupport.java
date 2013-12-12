@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -80,16 +80,25 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 
  * @author Jacob Hookom
+ * @version $Id$
  */
 public final class ComponentSupport {
 
     private final static String MARK_DELETED = "com.sun.faces.facelets.MARK_DELETED";
     public final static String MARK_CREATED = "com.sun.faces.facelets.MARK_ID";
+
+    // Expando boolean attribute used to identify parent components that have had
+    // a dynamic child addition or removal.
+    public final static String MARK_CHILDREN_MODIFIED = "com.sun.faces.facelets.MARK_CHILDREN_MODIFIED";
+    
+    // Expando Collection<String> attribute used to identify tagIds of child components that
+    // have been removed from a parent component.
+    public final static String REMOVED_CHILDREN = "com.sun.faces.facelets.REMOVED_CHILDREN";
+
     private final static String IMPLICIT_PANEL = "com.sun.faces.facelets.IMPLICIT_PANEL";
 
     /**
@@ -209,27 +218,34 @@ public final class ComponentSupport {
      * @return the UI component
      */
     public static UIComponent findChildByTagId(UIComponent parent, String id) {
-        ConcurrentHashMap<String, UIComponent> componentMap = getFaceletComponentMap();
-        if (componentMap != null) {
-        return componentMap.get(id);
-        } else {
-            return null;
-        }
-    }
-
-    public static ConcurrentHashMap<String, UIComponent> getFaceletComponentMap() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        UIViewRoot viewRoot = facesContext.getViewRoot();
-        
-        if (viewRoot != null) {
-            if (viewRoot.getTransientStateHelper().getTransient("com.sun.faces.facelets.FACELET_COMPONENT_MAP") == null) {
-                viewRoot.getTransientStateHelper().putTransient("com.sun.faces.facelets.FACELET_COMPONENT_MAP", 
-                    new ConcurrentHashMap<String, UIComponent>());
+        Iterator itr = parent.getFacetsAndChildren();
+        UIComponent c = null;
+        String cid = null;
+        while (itr.hasNext()) {
+            c = (UIComponent) itr.next();
+            cid = (String) c.getAttributes().get(MARK_CREATED);
+            if (id.equals(cid)) {
+                return c;
             }
-            return (ConcurrentHashMap<String, UIComponent>) viewRoot.getTransientStateHelper().getTransient(
-                    "com.sun.faces.facelets.FACELET_COMPONENT_MAP");
+            if (c instanceof UIPanel && c.getAttributes().containsKey(IMPLICIT_PANEL)) {
+                for (UIComponent c2 : c.getChildren()) {
+                    cid = (String) c2.getAttributes().get(MARK_CREATED);
+                    if (id.equals(cid)) {
+                        return c2;
+                }
+            }
         } 
-        
+            /*
+             * Make sure we look for the child recursively it might have moved
+             * into a different parent in the parent hierarchy. Note currently
+             * we are only looking down the tree. Maybe it would be better
+             * to use the VisitTree API instead.
+             */
+            UIComponent foundChild = findChildByTagId(c, id);
+            if (foundChild != null) {
+                return foundChild;
+            }
+        }
         return null;
     }
     
@@ -427,10 +443,9 @@ public final class ComponentSupport {
                     parent.getFacets().put(facetName, child);
                 }
             } else {
-                    parent.getFacets().put(facetName, child);
-                }
+                parent.getFacets().put(facetName, child);
             }
-        
+        }
     }
 
     public static String getFacetName(UIComponent parent) {
