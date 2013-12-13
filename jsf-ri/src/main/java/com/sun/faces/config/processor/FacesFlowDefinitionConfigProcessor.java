@@ -655,8 +655,11 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
                 throw new XPathExpressionException("Within <switch> only one <default-outcome> child is allowed");
             }
             if (null != defaultOutcomeList) {
-                String defaultOutcomeStr = defaultOutcomeList.item(0).getNodeValue().trim();
-                switchBuilder.defaultOutcome(defaultOutcomeStr);
+                Node defaultOutcomeNode = defaultOutcomeList.item(0);
+                if (null != defaultOutcomeNode) {
+                    String defaultOutcomeStr = defaultOutcomeNode.getNodeValue().trim();
+                    switchBuilder.defaultOutcome(defaultOutcomeStr);
+                }
             }
         }
         

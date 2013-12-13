@@ -81,6 +81,39 @@ public class FlowCDIContext implements Context, Serializable {
     static class FlowBeanInfo {
         String definingDocumentId;
         String id;
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final FlowBeanInfo other = (FlowBeanInfo) obj;
+            if ((this.definingDocumentId == null) ? (other.definingDocumentId != null) : !this.definingDocumentId.equals(other.definingDocumentId)) {
+                return false;
+            }
+            if ((this.id == null) ? (other.id != null) : !this.id.equals(other.id)) {
+                return false;
+            }
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 7;
+            hash = 79 * hash + (this.definingDocumentId != null ? this.definingDocumentId.hashCode() : 0);
+            hash = 79 * hash + (this.id != null ? this.id.hashCode() : 0);
+            return hash;
+        }
+
+        @Override
+        public String toString() {
+            return "FlowBeanInfo{" + "definingDocumentId=" + definingDocumentId + ", id=" + id + '}';
+        }
+        
+        
     }
     
     // This should be vended from a factory for decoration purposes.

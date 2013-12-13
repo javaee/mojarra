@@ -44,24 +44,18 @@
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
     <head>
-        <title>Outside of flow</title>
+        <title>First page in the flow</title>
     </head>
-    <body>
-        <h1>Outside of flow</h1>
-        
+    <body bgcolor="purple">
     <h:form prependId="false">
-        <p><h:commandButton id="start_a" value="enter flow-a" 
-                            action="flow-a" /></p>
-        <p><h:commandButton id="start_b" value="enter flow-b" 
-                            action="flow-b" /></p>
-        <p><h:commandButton id="start_method-call-start-node" value="enter method-call-start-node" 
-                            action="method-call-start-node" /></p>
-        <p><h:commandButton id="start_switch-start-node" value="enter switch-start-node" 
-                            action="switch-start-node" /></p>
-
-        <p><h:commandButton id="stay" value="stay" /></p>
+        <p>First page in the flow</p>
+        
+        <p><h:commandButton id="switch-button" value="call method-call-start-node" action="call-method-call-start-node" /></p>
+        
     </h:form>
-</body>
+    </body>
 </html>

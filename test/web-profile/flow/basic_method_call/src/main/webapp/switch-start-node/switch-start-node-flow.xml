@@ -41,27 +41,27 @@
 
 -->
 
-<!DOCTYPE html>
-
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html">
-    <head>
-        <title>Outside of flow</title>
-    </head>
-    <body>
-        <h1>Outside of flow</h1>
-        
-    <h:form prependId="false">
-        <p><h:commandButton id="start_a" value="enter flow-a" 
-                            action="flow-a" /></p>
-        <p><h:commandButton id="start_b" value="enter flow-b" 
-                            action="flow-b" /></p>
-        <p><h:commandButton id="start_method-call-start-node" value="enter method-call-start-node" 
-                            action="method-call-start-node" /></p>
-        <p><h:commandButton id="start_switch-start-node" value="enter switch-start-node" 
-                            action="switch-start-node" /></p>
-
-        <p><h:commandButton id="stay" value="stay" /></p>
-    </h:form>
-</body>
-</html>
+<faces-config version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                                  http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
+  
+  <flow-definition id="switch-start-node">
+    <start-node>firstpage</start-node>
+    
+    <switch id="firstpage">
+      <case>
+        <if>#{switchFlow.isFirstPage()}</if>
+        <from-outcome>myFirstViewNode</from-outcome>
+      </case>
+    </switch>
+    
+    <flow-call id="call-method-call-start-node">
+        <flow-reference>
+            <flow-id>method-call-start-node</flow-id>
+        </flow-reference>
+    </flow-call>
+    
+  </flow-definition>  
+  
+</faces-config>

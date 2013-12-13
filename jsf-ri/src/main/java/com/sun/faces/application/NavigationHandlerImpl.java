@@ -40,6 +40,7 @@
 
 package com.sun.faces.application;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.config.InitFacesContext;
 import com.sun.faces.flow.FlowHandlerImpl;
 import com.sun.faces.flow.FlowImpl;
@@ -235,10 +236,11 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                 updateRenderTargets(context, caseStruct.viewId);
                 context.setViewRoot(newRoot);
                 FlowHandler flowHandler = context.getApplication().getFlowHandler();
-                if (null != flowHandler) {
+                if (null != flowHandler && !isDidTransition(context)) {
                     flowHandler.transition(context, 
                             caseStruct.currentFlow, caseStruct.newFlow, 
                             caseStruct.facesFlowCallNode, caseStruct.viewId);
+                    setDidTransition(context, false);
                 }
                 if (logger.isLoggable(Level.FINE)) {
                     logger.log(Level.FINE, "Set new view in FacesContext for {0}", caseStruct.viewId);
@@ -1109,7 +1111,31 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                 if (null != flowId) {
                     newFlow = flowHandler.getFlow(context, flowDocumentId, flowId);
                     if (null != newFlow) {
-                        result = synthesizeCaseStruct(context, newFlow, fromAction, flowId);
+                        String startNodeId = newFlow.getStartNodeId();
+                        result = synthesizeCaseStruct(context, newFlow, fromAction, startNodeId);
+                        if (null == result) {
+                            assert(null != currentFlow);
+                            // If no CaseStruct can be synthesized, we must execute the
+                            // navigation handler algorithm to try to find the CaseStruct
+                            // for the start node.  However, in order to do that, we
+                            // must enter the new flow.  To preserve the intergity
+                            // of the state machine, we enter the flow now, and mark
+                            // that we must not enter it later.
+                            try {
+                                setDidTransition(context, true);
+                                flowHandler.transition(context, currentFlow, newFlow, null, startNodeId);
+                                result = getViewId(context, fromAction, startNodeId, toFlowDocumentId);
+                            }
+                            finally {
+                                if (null == result) {
+                                    // If we did not find a CaseStruct, preserve the 
+                                    // integrity of the state machine by transitioning 
+                                    // out of the flow.
+                                    flowHandler.transition(context, newFlow, currentFlow, null, outcome);
+                                    setDidTransition(context, false);
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -1120,7 +1146,27 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                 String startNodeId = newFlow.getStartNodeId();
                 result = synthesizeCaseStruct(context, newFlow, fromAction, startNodeId);
                 if (null == result) {
-                    result = getViewId(context, fromAction, startNodeId, toFlowDocumentId);
+                    assert(null == currentFlow);
+                    // If no CaseStruct can be synthesized, we must execute the
+                    // navigation handler algorithm to try to find the CaseStruct
+                    // for the start node.  However, in order to do that, we
+                    // must enter the new flow.  To preserve the intergity
+                    // of the state machine, we enter the flow now, and mark
+                    // that we must not enter it later.
+                    try {
+                        setDidTransition(context, true);
+                        flowHandler.transition(context, null, newFlow, null, startNodeId);
+                        result = getViewId(context, fromAction, startNodeId, toFlowDocumentId);
+                    }
+                    finally {
+                        if (null == result) {
+                            // If we did not find a CaseStruct, preserve the 
+                            // integrity of the state machine by transitioning 
+                            // out of the flow.
+                            flowHandler.transition(context, newFlow, null, null, outcome);
+                            setDidTransition(context, false);
+                        }
+                    }
                 } else if (!outcome.equals(startNodeId) && null != result.navCase) {
                     ((MutableNavigationCase)result.navCase).setFromOutcome(outcome);
                 }
@@ -1134,6 +1180,24 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         
         return result;
     }  
+    
+    private static final String DID_TRANSITION_FLAG = RIConstants.FACES_PREFIX + "NavigationHandlerDidTransition";
+    
+    private boolean isDidTransition(FacesContext context) {
+        boolean result = context.getAttributes().containsKey(DID_TRANSITION_FLAG);
+        
+        return result;
+    }
+    
+    private void setDidTransition(FacesContext context, boolean value) {
+        Map<Object,Object> contextMap = context.getAttributes();
+        if (value) {
+            contextMap.put(DID_TRANSITION_FLAG, Boolean.TRUE);
+        } else {
+            contextMap.remove(DID_TRANSITION_FLAG);
+        }
+        
+    }
     
     private CaseStruct findViewNodeMatch(FacesContext context, 
             String fromAction, String outcome, String toFlowDocumentId) {
