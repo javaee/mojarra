@@ -69,7 +69,7 @@ public class Issue3100IT {
         HtmlElement inputText = page.getHtmlElementById("form:nesting0:nesting1:inputText");
         inputText.type("12345");
         inputText.blur();
-        webClient.waitForBackgroundJavaScript(60000);
+        webClient.waitForBackgroundJavaScript(1200000);
         String text = page.asXml();
         assertTrue(text.indexOf("class java.lang.IllegalStateException") != -1);
     }
