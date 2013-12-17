@@ -98,7 +98,7 @@ public class FormOmittedTrinidadIT {
     
     @Test
     public void testFormOmittedTrinidad() throws Exception {
-        webClient.getOptions().setJavaScriptEnabled(false);
+        webClient.setJavaScriptEnabled(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/formomitted.xhtml");
 
         String pageAsText = page.asText();
