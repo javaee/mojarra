@@ -46,6 +46,7 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 public class Issue3100IT {
 
@@ -64,6 +65,7 @@ public class Issue3100IT {
     }
 
     @Test
+    @Ignore
     public void testInputAjaxListener1() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/inputTextAjaxListener1.xhtml");
         HtmlElement inputText = page.getHtmlElementById("form:nesting0:nesting1:inputText");
