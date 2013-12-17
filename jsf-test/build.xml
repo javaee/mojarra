@@ -70,7 +70,6 @@
     <property name="container-agnostic-applications" value="
                     JAVASERVERFACES-2195,
                     JAVASERVERFACES-2112,
-                    JAVASERVERFACES-1958,
                     JAVASERVERFACES-832,
                     JAVASERVERFACES-2038,
                     JAVASERVERFACES-2025,

@@ -1,9 +1,10 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
+
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -41,50 +42,35 @@
 
 -->
 
-<!-- ************ JSF build file ************************************** -->
-
-<project name="GLASSFISH-11636" default="test" basedir=".">
-
-    <property file="../../build.properties"/>
-
-    <import file="${jsf.build.home}/common/ant/common.xml"/>
-
-    <target name="build">
-
-      <jsf.mvn dir="${basedir}/i_jsf_1958" goals="install" />
-
-    </target>    
-
-    <target name="clean">
-
-      <jsf.mvn dir="${basedir}/i_jsf_1958" goals="clean" />
-
-    </target>    
-
-    <target name="install">
-      <deploy.artifact
-              artifact="${basedir}/i_jsf_1958/target/i_jsf_1958.war"
-              appName="i_jsf_1958"/>
-
-    </target>    
-
-    <target name="remove">
-
-      <undeploy.artifact
-              artifact="${basedir}/i_jsf_1958/target/i_jsf_1958.war"
-              appName="i_jsf_1958"/>
-
-    </target>    
-
-    <target name="test" depends="define.scenario.aware.port">
-
-        <jsf.tester request="/i_jsf_1958-using.jsf"
-                     context-path="/i_jsf_1958"
-                     classpath-refid="html.classpath"
-                     test-results-dir="${regression.test.results.dir}"
-                     regexp="(?s).*col1Link.*col2Link.*col1Link.*col2Link.*col1Link.*col2Link.*col1Link.*col2Link.*col1Link.*col2Link.*col1Link.*col2Link.*col1Link.*col2Link.*col1Link.*col2Link.*"/>
-    </target>    
-
-
-        
-</project>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:composite="http://java.sun.com/jsf/composite">
+    <h:head>
+        <title></title>
+    </h:head>
+    <h:body>
+        <composite:interface>
+            <composite:attribute name="title" required="false" />
+            <composite:attribute name="styleClass" required="false" 
+                                 default="ui-two-cols-layout"/>
+            <composite:attribute name="style" required="false" />
+            <composite:attribute name="col1Width" required="false" 
+                                 default="50%"/>
+            <composite:attribute name="col2Width" required="false" 
+                                 default="50%"/>
+            <composite:facet name="col1"/>
+            <composite:facet name="col2"/>
+        </composite:interface>
+        <composite:implementation>        
+            <div style="#{cc.attrs.style}" class="#{cc.attrs.styleClass}" 
+                 role="two-cols-layout">
+                <div class="two-cols-layout-col1"  style="width: #{cc.attrs.col1Width};">
+                    <composite:renderFacet name="col1" />
+                </div>
+                <div class="two-cols-layout-col2" style="width: #{cc.attrs.col2Width};">
+                    <composite:renderFacet name="col2" />
+                </div>                
+            </div>        
+        </composite:implementation>
+    </h:body>
+</html>
