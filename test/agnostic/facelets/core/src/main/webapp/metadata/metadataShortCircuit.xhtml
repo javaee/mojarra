@@ -1,19 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core">
     <f:metadata id="metadata">
         <h:inputHidden id="metadataHidden" />
     </f:metadata>
-<h:head>
-  <title>i_spec_762</title>
-</h:head>
-<h:body>
-    <h:form prependId="false">
-        <p><h:commandButton id="button" value="submit" /></p>
-    </h:form>
-    
-    <p>Message: #{bean.message}</p>
-
-</h:body>
+    <h:head>
+        <title>Metadata Short-circuit Spec #762</title>
+    </h:head>
+    <h:body>
+        <h:form prependId="false">
+            <p><h:commandButton id="button" value="submit" /></p>
+        </h:form>
+        <p>Message: #{metadataShortCircuitBean.message}</p>
+    </h:body>
 </html>

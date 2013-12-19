@@ -10,6 +10,9 @@
             <var>messages</var>
         </resource-bundle>
     </application>
+    <lifecycle>
+        <phase-listener>com.sun.faces.test.agnostic.facelets.core.MetadataShortCircuitPhaseListener</phase-listener>
+    </lifecycle>
     <navigation-rule>
         <from-view-id>*</from-view-id>
         <navigation-case>

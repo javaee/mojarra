@@ -1,8 +1,7 @@
-
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -38,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.regression.i_spec_762;
+package com.sun.faces.test.agnostic.facelets.core;
 
 import java.util.Map;
 import javax.faces.context.FacesContext;
@@ -46,7 +45,7 @@ import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 
-public class Issue762PhaseListener implements PhaseListener {
+public class MetadataShortCircuitPhaseListener implements PhaseListener {
 
     @Override
     public void afterPhase(PhaseEvent event) {
@@ -54,19 +53,18 @@ public class Issue762PhaseListener implements PhaseListener {
 
     @Override
     public void beforePhase(PhaseEvent event) {
-        UserBean bean = getUserBean(event.getFacesContext());
+        MetadataShortCircuitBean bean = getUserBean(event.getFacesContext());
         bean.appendMessage(" beforePhase " + event.getPhaseId().toString());
     }
-    
-    private UserBean getUserBean(FacesContext context) {
-        // Can't inject into PhaseListener.  Phooey.
+
+    private MetadataShortCircuitBean getUserBean(FacesContext context) {
         Map<String, Object> requestScope = context.getExternalContext().getRequestMap();
-        UserBean result = (UserBean) requestScope.get("bean");
+        MetadataShortCircuitBean result = (MetadataShortCircuitBean) requestScope.get("metadataShortCircuitBean");
         if (null == result) {
-            result = new UserBean();
-            requestScope.put("bean", result);
+            result = new MetadataShortCircuitBean();
+            requestScope.put("metadataShortCircuitBean", result);
         }
-        
+
         return result;
     }
 
@@ -74,7 +72,4 @@ public class Issue762PhaseListener implements PhaseListener {
     public PhaseId getPhaseId() {
         return PhaseId.ANY_PHASE;
     }
-    
-    
-    
 }
