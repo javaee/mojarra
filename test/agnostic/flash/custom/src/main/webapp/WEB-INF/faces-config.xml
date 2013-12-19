@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 
 <!--
 
@@ -40,20 +40,13 @@
     only if the new code is made subject to such option by the copyright
     holder.
 
---><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.sun.faces.test.agnostic</groupId>
-        <artifactId>pom</artifactId>
-        <version>2.2.5-SNAPSHOT</version>
-    </parent>
-    <groupId>com.sun.faces.test.agnostic.flash</groupId>
-    <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Agnostic - Flash</name>
-    <modules>
-        <module>basic</module>
-        <module>chunkRedirect</module>
-        <module>custom</module>
-    </modules>
-</project>
+-->
+
+<faces-config xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
+              version="2.2">
+    <factory>
+        <flash-factory>com.sun.faces.test.agnostic.flash.custom.CustomFlashFactory</flash-factory>
+    </factory>
+</faces-config>

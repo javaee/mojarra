@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -36,27 +36,30 @@
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
  * holder.
-
  */
-package com.sun.faces.test.i_spec_1071_war;
+package com.sun.faces.test.agnostic.flash.custom;
 
-import javax.faces.FacesWrapper;
 import javax.faces.context.Flash;
-import javax.faces.context.FlashWrapper;
+import javax.faces.context.FlashFactory;
 
-public class MyFlashImpl extends FlashWrapper implements FacesWrapper<Flash>{
+public class CustomFlashFactory extends FlashFactory {
+
+    private FlashFactory parent;
+
+    public CustomFlashFactory() {
+    }
     
-    private Flash parent;
-
-    public MyFlashImpl(Flash parent) {
+    public CustomFlashFactory(FlashFactory parent) {
         this.parent = parent;
     }
 
     @Override
-    public Flash getWrapped() {
-        return parent;
+    public Flash getFlash(boolean create) {
+        return new CustomFlash(getWrapped().getFlash(create));
     }
     
-    
-    
+    @Override
+    public FlashFactory getWrapped() {
+        return parent;
+    }
 }
