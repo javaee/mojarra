@@ -215,7 +215,20 @@ public abstract class OutcomeTargetRenderer extends HtmlBasicRenderer {
                 // if the parameter name isn't already present within the existing
                 // collection
                 if (!existingParams.containsKey(navParamName)) {
-                    existingParams.put(navParamName, entry.getValue());
+                    if (entry.getValue().size() == 1) {
+                        String value = entry.getValue().get(0);
+                        if (value.trim().startsWith("#{") || value.trim().startsWith("${")) {
+                            FacesContext fc = FacesContext.getCurrentInstance();
+                            value = fc.getApplication().evaluateExpressionGet(fc, value, String.class);
+                            List<String> values = new ArrayList<String>();
+                            values.add(value);
+                            existingParams.put(navParamName, values);
+                        } else {
+                            existingParams.put(navParamName, entry.getValue());
+                        }
+                    } else {
+                        existingParams.put(navParamName, entry.getValue());
+                    }
                 }
             }
         }
