@@ -58,7 +58,6 @@
 
 package com.sun.faces.facelets.el;
 
-import com.sun.faces.el.ELUtils;
 import javax.el.ELContext;
 import javax.el.ELException;
 import javax.el.ExpressionFactory;
@@ -70,9 +69,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sun.faces.util.HtmlUtils;
-import com.sun.faces.util.MessageUtils;
-import javax.faces.context.FacesContext;
-import javax.faces.view.Location;
 
 /**
  * Handles parsing EL Strings in accordance with the EL-API Specification. The
@@ -204,15 +200,8 @@ public class ELText {
         }
 
         public ELText apply(ExpressionFactory factory, ELContext ctx) {
-            ELText result = null;
-            if (this.ve instanceof ContextualCompositeValueExpression) {
-                result = new ELTextVariable(ve);
-            } else {
-                result = new ELTextVariable(factory.createValueExpression(ctx,
+            return new ELTextVariable(factory.createValueExpression(ctx,
                     this.ve.getExpressionString(), String.class));
-            }
-            
-            return result;
         }
 
         public void write(Writer out, ELContext ctx) throws ELException,
@@ -325,9 +314,7 @@ public class ELText {
     /**
      * Factory method for creating an unvalidated ELText instance. NOTE: All
      * expressions in the passed String are treated as
-     * {@link com.sun.faces.facelets.el.ELText.LiteralValueExpression}, with one
-     * exception: composite component expressions.  These are treated as
-     * ContextualCompositeValueExpressions.
+     * {@link com.sun.faces.facelets.el.ELText.LiteralValueExpression}
      * 
      * @param in
      *            String to parse
@@ -337,15 +324,6 @@ public class ELText {
     public static ELText parse(String in) throws ELException {
         return parse(null, null, in);
     }
-    
-    public static ELText parse(String in, String alias) throws ELException {
-        return parse(null, null, in, alias);
-    }
-    
-    public static ELText parse(ExpressionFactory fact, ELContext ctx, String in)
-            throws ELException {
-        return parse(null, null, in, null);
-    }    
 
     /**
      * Factory method for creating a validated ELText instance. When an
@@ -362,8 +340,7 @@ public class ELText {
      * @return ELText that can be re-applied later
      * @throws javax.el.ELException
      */
-    public static ELText parse(ExpressionFactory fact, ELContext ctx, String in,
-            String alias)
+    public static ELText parse(ExpressionFactory fact, ELContext ctx, String in)
             throws ELException {
         char[] ca = in.toCharArray();
         int i = 0;
@@ -399,26 +376,8 @@ public class ELText {
                                     i, vlen), String.class);
                             t = new ELTextVariable(ve);
                         } else {
-                            String expr = new String(ca, i, vlen);
-                            if (null != alias && ELUtils.isCompositeComponentExpr(expr)) {
-                                if (ELUtils.isCompositeComponentLookupWithArgs(expr)) {
-                                    String message =
-                                            MessageUtils.getExceptionMessageString(MessageUtils.ARGUMENTS_NOT_LEGAL_CC_ATTRS_EXPR);
-                                    throw new ELException(message);
-                                }    
-                                FacesContext context = FacesContext.getCurrentInstance();
-                                ELContext elContext = context.getELContext();
-                                ValueExpression delegate = 
-                                        context.getApplication().getExpressionFactory().
-                                        createValueExpression(elContext, expr, Object.class);
-                                Location location = new Location(alias, -1, -1);                                
-                                ve = new ContextualCompositeValueExpression(location,
-                                                                            delegate);
-                                
-                            } else {
-                                ve = new LiteralValueExpression(expr);
-                            }
-                            t = new ELTextVariable(ve);
+                            t = new ELTextVariable(new LiteralValueExpression(
+                                    new String(ca, i, vlen)));
                         }
                         text.add(t);
                         i += vlen;

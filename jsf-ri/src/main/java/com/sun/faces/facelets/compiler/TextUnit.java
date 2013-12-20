@@ -88,7 +88,7 @@ final class TextUnit extends CompilationUnit {
     private final String alias;
 
     private final String id;
-    
+
     public TextUnit(String alias, String id) {
         this.alias = alias;
         this.id = id;
@@ -136,7 +136,7 @@ final class TextUnit extends CompilationUnit {
                 s = trimRight(s);
             }
             if (s.length() > 0) {
-                ELText txt = ELText.parse(s, alias);
+                ELText txt = ELText.parse(s);
                 if (txt != null) {
                     if (txt.isLiteral()) {
                         this.instructionBuffer.add(new LiteralTextInstruction(
