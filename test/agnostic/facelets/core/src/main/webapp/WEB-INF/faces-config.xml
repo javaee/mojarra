@@ -26,4 +26,17 @@
             </redirect>
         </navigation-case>
     </navigation-rule>
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>viewParam7</from-outcome>
+            <to-view-id>/viewParam7.xhtml</to-view-id>
+            <redirect>
+                <view-param>
+                    <name>viewparam</name>
+                    <value>#{2+3}</value>
+                </view-param>
+            </redirect>
+        </navigation-case>
+    </navigation-rule>
+
 </faces-config>
