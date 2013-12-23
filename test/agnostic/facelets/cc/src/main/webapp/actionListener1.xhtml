@@ -1,9 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
+
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -40,59 +41,21 @@
     holder.
 
 -->
-
-<!-- ************ JSF build file ************************************** -->
-
-<project name="JAVASERVERFACES_SPEC_PUBLIC-901" default="test" basedir=".">
-
-    <property file="../../build.properties"/>
-    <path id="901.classpath">  
-        <path refid="html.classpath" />
-        <pathelement location="${basedir}/i_spec_901_htmlunit/target/classes"/>
-    </path>
-
-    <import file="${jsf.build.home}/common/ant/common.xml"/>
-
-    <target name="build">
-
-      <jsf.mvn dir="${basedir}/i_spec_901_war" goals="install" />
-
-    </target>    
-
-    <target name="clean">
-
-      <jsf.mvn dir="${basedir}/i_spec_901_war" goals="clean" />
-
-    </target>    
-
-    <target name="install">
-      <deploydir.artifact
-              explodedWarDir="${basedir}/i_spec_901_war/target/i_spec_901_war"
-              appName="i_spec_901_war"/>
-
-    </target>    
-
-    <target name="remove">
-
-      <undeploy.artifact
-              artifact="${basedir}/i_spec_901/target/i_spec_901_war.war"
-              appName="i_spec_901_war"/>
-
-    </target>    
-
-    <target name="test" depends="define.scenario.aware.port">
-
-      <jsf.junit context-path="/i_spec_901_war"
-                 classpath-refid="901.classpath"    
-                 test-results-dir="${regression.test.results.dir}">
-          <tests>
-            <fileset dir="${basedir}/i_spec_901_htmlunit/target/classes"
-                     includes="com/sun/faces/regression/i_spec_901/Issue901TestCase.class"/> 
-          </tests>
-      </jsf.junit>
-
-    </target>    
-
-
-        
-</project>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:actionListener="http://java.sun.com/jsf/composite/actionListener">
+    <h:head>
+        <title>Spec issue #901</title>
+    </h:head>
+    <h:body>
+        <h:form id="form">
+            <actionListener:actionListener1 id="loginPanel">
+                <f:actionListener for="loginEvent" binding="#{actionListener1Bean.loginEventListener}" />
+                <f:actionListener for="loginEvent" binding="#{actionListener1Bean.loginEventListener2}" />
+                <f:attribute name="cancelEvent" value="#{actionListener1Bean.cancelEventListener}" />
+            </actionListener:actionListener1>
+            <p>Message: #{actionListener1Bean.message}</p>
+        </h:form>
+    </h:body>
+</html>

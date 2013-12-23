@@ -1,9 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
+
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -40,23 +41,19 @@
     holder.
 
 -->
+
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ez="http://java.sun.com/jsf/composite/i_spec_901_cc" xmlns:f="http://java.sun.com/jsf/core">
-<h:head>
-  <title>i_spec_901</title>
-</h:head>
-<h:body>
-  <h:form>
-
-      <ez:cc id="loginPanel" model="#{bean}">
-        <f:actionListener for="loginEvent" binding="#{bean.loginEventListener}" />
-        <f:actionListener for="loginEvent" binding="#{bean.loginEventListener2}" />
-        <f:actionListener for="cancelEvent" binding="#{bean.cancelEventListener}" />
-      </ez:cc>
-
-      <p>Message: #{bean.message}</p>
-
-  </h:form>
-</h:body>
+      xmlns:cc="http://java.sun.com/jsf/composite">
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <cc:interface name="cc2">
+            <cc:actionSource name="someOtherEvent" />
+        </cc:interface>
+        <cc:implementation>
+            <h:commandButton id="someOtherEvent" value="buttonInCc2"/>
+        </cc:implementation>
+    </body>
 </html>
