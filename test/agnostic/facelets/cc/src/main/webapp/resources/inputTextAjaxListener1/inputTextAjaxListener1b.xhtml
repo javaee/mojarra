@@ -17,7 +17,7 @@
         </composite:interface>
         <composite:implementation>
             <h:inputText id="inputText" value="#{cc.attrs.value}">
-                <f:ajax listener="#{cc.attrs.listener}" />
+                <f:ajax immediate="true" listener="#{cc.attrs.listener}" />
             </h:inputText>
         </composite:implementation>
     </body>
