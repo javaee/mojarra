@@ -1,4 +1,8 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core">
@@ -7,11 +11,11 @@
     </h:head>
     <h:body>
         <h:form prependId="false" enctype="multipart/form-data">
-            <h:inputFile id="fileUpload" value="#{userBean.uploadedFile}">
-                <f:validator validatorId="FileValidator" />
+            <h:inputFile id="fileUpload" value="#{inputFile1Bean.uploadedFile}">
+                <f:validator validatorId="InputFile1Validator" />
             </h:inputFile>
             <p><h:commandButton value="submit" /></p>
-            #{userBean.fileText}
+            #{inputFile1Bean.fileText}
             <p><h:messages /></p>
         </h:form>
     </h:body>
