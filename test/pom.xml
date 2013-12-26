@@ -9,6 +9,10 @@
     <version>2.1.5-02-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Mojarra ${project.version} - Test</name>
+    <modules>
+        <module>util</module>
+        <module>agnostic</module>
+    </modules>
     <build>
         <pluginManagement>
             <plugins>

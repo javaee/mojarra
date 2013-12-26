@@ -2024,8 +2024,22 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 var responseType = xml.getElementsByTagName("partial-response")[0].firstChild;
 
                 if (responseType.nodeName === "error") { // it's an error
-                    var errorName = responseType.firstChild.firstChild.nodeValue;
-                    var errorMessage = responseType.firstChild.nextSibling.firstChild.nodeValue;
+                    var errorName = "";
+                    var errorMessage = "";
+                    
+                    var element = responseType.firstChild;
+                    if (element.nodeName === "error-name") {
+                        if (null != element.firstChild) {
+                            errorName = element.firstChild.nodeValue;
+                        }
+                    }
+                    
+                    element = responseType.firstChild.nextSibling;
+                    if (element.nodeName === "error-message") {
+                        if (null != element.firstChild) {
+                            errorMessage = element.firstChild.nodeValue;
+                        }
+                    }
                     sendError(request, context, "serverError", null, errorName, errorMessage);
                     sendEvent(request, context, "success");
                     return;
