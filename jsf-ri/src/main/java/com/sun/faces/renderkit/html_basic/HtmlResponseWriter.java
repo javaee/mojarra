@@ -1208,9 +1208,9 @@ public class HtmlResponseWriter extends ResponseWriter {
     private String getAttributeValue(FacesContext context, Object valObj) {
         String val;
         if (valObj instanceof ValueExpression) {
-            val = (String) ((ValueExpression) valObj).getValue(context.getELContext());
+            val = ((ValueExpression) valObj).getValue(context.getELContext()).toString();
         } else {
-            val = (String) valObj;
+            val = valObj.toString();
         }
         return val;
     }
