@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,48 +37,39 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.agnostic.ajax;
 
-package com.sun.faces.test.i_spec_220_htmlunit;
-
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-
+import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import static junit.framework.Assert.assertTrue;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
+public class Spec220IT {
 
-public class IssueSpec220TestCase extends HtmlUnitFacesTestCase {
+    private String webUrl;
+    private WebClient webClient;
 
-    public IssueSpec220TestCase(String name) {
-        super(name);
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
+        webClient.setJavaScriptEnabled(true);
+        webClient.setJavaScriptTimeout(60000);
     }
 
-
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(IssueSpec220TestCase.class));
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
     }
 
-
-    // ------------------------------------------------------------ Test Methods
-
-    public void testServerViewStateCorrectness() throws Exception {
-        contextPath = "/i_spec_220_server_state_war";
-        doTest();
-    }
-    
-    public void testClientViewStateCorrectnes() throws Exception {
-        contextPath = "/i_spec_220_client_state_war";
-        doTest();
-    }
-    
-    public void doTest() throws Exception {
-
-        HtmlPage page = getPage("/");
+    @Test
+    public void testViewState() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/viewState1.xhtml");
         HtmlTextInput textField = (HtmlTextInput) page.getElementById("firstName");
         textField.setValueAttribute("ajaxFirstName");
         
@@ -97,6 +88,4 @@ public class IssueSpec220TestCase extends HtmlUnitFacesTestCase {
         pageText = page.asText();
         assertTrue(pageText.contains("|nonAjaxFirstName|"));
     }
-
-
 }
