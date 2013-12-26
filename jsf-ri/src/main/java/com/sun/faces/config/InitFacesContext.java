@@ -41,8 +41,10 @@
 package com.sun.faces.config;
 
 import com.sun.faces.RIConstants;
+import java.util.Map.Entry;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ExternalContext;
+import javax.faces.context.Flash;
 import javax.faces.context.ResponseStream;
 import javax.faces.context.ResponseWriter;
 import javax.faces.component.UIViewRoot;
@@ -80,7 +82,7 @@ import java.util.logging.Logger;
 public class InitFacesContext extends FacesContext {
     
     private static Logger LOGGER = FacesLogger.CONFIG.getLogger();
-
+    
     private ServletContextAdapter ec;
     private UIViewRoot viewRoot;
     private FacesContext orig;
@@ -311,9 +313,16 @@ public class InitFacesContext extends FacesContext {
         private ServletContext servletContext = null;
         private ApplicationMap applicationMap = null;
         private InitParameterMap initMap = null;
-
+        private boolean isEnableTransitionTimeNoOpFlash = WebConfiguration.BooleanWebContextInitParameter.EnableTransitionTimeNoOpFlash.getDefaultValue();
+    
         public ServletContextAdapter(ServletContext sc) {
             this.servletContext = sc;
+            
+            Object paramValue = sc.getInitParameter(WebConfiguration.BooleanWebContextInitParameter.EnableTransitionTimeNoOpFlash.getQualifiedName());
+            if (null != paramValue) {
+                isEnableTransitionTimeNoOpFlash = Boolean.parseBoolean(paramValue.toString());
+            }
+            
         }
 
         public void dispatch(String path) throws IOException {
@@ -346,6 +355,121 @@ public class InitFacesContext extends FacesContext {
             return applicationMap;
         }
 
+        @Override
+        public Flash getFlash() {
+            if (isEnableTransitionTimeNoOpFlash) {
+                return new Flash() {
+                    
+                    @Override
+                    public void doPostPhaseActions(FacesContext ctx) {
+                        
+                    }
+                    
+                    @Override
+                    public void doPrePhaseActions(FacesContext ctx) {
+                        
+                    }
+                    
+                    @Override
+                    public boolean isKeepMessages() {
+                        return false;
+                    }
+                    
+                    @Override
+                    public boolean isRedirect() {
+                        return false;
+                    }
+                    
+                    @Override
+                    public void keep(String key) {
+                        
+                    }
+                    
+                    @Override
+                    public void putNow(String key, Object value) {
+                        
+                    }
+                    
+                    @Override
+                    public void setKeepMessages(boolean newValue) {
+                        
+                    }
+                    
+                    @Override
+                    public void setRedirect(boolean newValue) {
+                        
+                    }
+                    
+                    @Override
+                    public void clear() {
+                        
+                    }
+                    
+                    @Override
+                    public boolean containsKey(Object key) {
+                        return false;
+                    }
+                    
+                    @Override
+                    public boolean containsValue(Object value) {
+                        return false;
+                    }
+                    
+                    @Override
+                    public Set<Entry<String, Object>> entrySet() {
+                        return Collections.emptySet();
+                    }
+                    
+                    @Override
+                    public Object get(Object key) {
+                        return null;
+                    }
+                    
+                    @Override
+                    public boolean isEmpty() {
+                        return true;
+                    }
+                    
+                    @Override
+                    public Set<String> keySet() {
+                        return Collections.emptySet();
+                    }
+                    
+                    @Override
+                    public Object put(String key, Object value) {
+                        return null;
+                    }
+                    
+                    @Override
+                    public void putAll(Map<? extends String, ? extends Object> m) {
+                        
+                    }
+                    
+                    @Override
+                    public Object remove(Object key) {
+                        return null;
+                    }
+                    
+                    @Override
+                    public int size() {
+                        return 0;
+                    }
+                    
+                    @Override
+                    public Collection<Object> values() {
+                        return Collections.emptyList();
+                    }
+                    
+                    
+                };
+            } else {
+                return super.getFlash();
+            }
+        
+    }
+            
+            
+            
         @Override
         public String getApplicationContextPath() {
             return servletContext.getContextPath();

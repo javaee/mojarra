@@ -38,18 +38,59 @@
  * holder.
 
  */
-package com.sun.faces.test.javaee7.beanValidator.methodValidator;
+package com.sun.faces.test.agnostic.context;
 
 import java.io.Serializable;
-import javax.enterprise.context.Dependent;
+import javax.annotation.PreDestroy;
+import javax.faces.bean.ApplicationScoped;
+import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.PreDestroyApplicationEvent;
+import javax.faces.event.SystemEvent;
+import javax.faces.event.SystemEventListener;
 
-@Dependent
-public class HelloService implements Serializable {
-    @FooConstraint 
-    public String sayHello(String mustBeFoo) {
-        String result = "value is foo";
+@ManagedBean(eager=true)
+@ApplicationScoped
+public class ApplicationScopedBean implements Serializable {
+    
+    private static final long serialVersionUID = -7637392264151341963L;
+    
+    private String result = "FAILURE";
+    
+    public ApplicationScopedBean() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        Flash startupFlash = context.getExternalContext().getFlash();
+        result = null != startupFlash ? "SUCCESS" : "FAILURE";
         
+        context.getApplication().subscribeToEvent(PreDestroyApplicationEvent.class, new SystemEventListener() {
+
+            @Override
+            public void processEvent(SystemEvent event) throws AbortProcessingException {
+                ApplicationScopedBean.this.testPredestroy();
+            }
+
+            @Override
+            public boolean isListenerForSource(Object source) {
+                return true;
+            }
+        });
+        
+    }
+
+    public String getResult() {
         return result;
     }
+
+    
+    public void testPredestroy() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        Flash startupFlash = context.getExternalContext().getFlash();
+        result = null != startupFlash ? "SUCCESS" : "FAILURE";
+        
+    }
+    
+    
     
 }

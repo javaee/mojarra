@@ -1398,7 +1398,11 @@ public class WebConfiguration {
         ),
         DisableIdUniquenessCheck(
             "com.sun.faces.disableIdUniquenessCheck",
-            false);
+            false),
+        EnableTransitionTimeNoOpFlash(
+                "com.sun.fase.enableTransitionTimeNoOpFlash",
+                false)
+        ;
 
         private BooleanWebContextInitParameter alternate;
 
