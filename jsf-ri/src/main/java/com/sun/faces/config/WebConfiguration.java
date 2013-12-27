@@ -1400,7 +1400,7 @@ public class WebConfiguration {
             "com.sun.faces.disableIdUniquenessCheck",
             false),
         EnableTransitionTimeNoOpFlash(
-                "com.sun.fase.enableTransitionTimeNoOpFlash",
+                "com.sun.faces.enableTransitionTimeNoOpFlash",
                 false)
         ;
 

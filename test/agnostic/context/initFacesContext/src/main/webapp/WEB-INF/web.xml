@@ -55,7 +55,7 @@
         <param-value>${webapp.stateSavingMethod}</param-value>
     </context-param>
     <context-param>
-        <param-name>com.sun.fase.enableTransitionTimeNoOpFlash</param-name>
+        <param-name>com.sun.faces.enableTransitionTimeNoOpFlash</param-name>
         <param-value>true</param-value>
     </context-param>
     <servlet>
