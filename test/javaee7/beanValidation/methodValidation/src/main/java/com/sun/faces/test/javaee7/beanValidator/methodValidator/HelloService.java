@@ -36,7 +36,6 @@
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
  * holder.
-
  */
 package com.sun.faces.test.javaee7.beanValidator.methodValidator;
 
@@ -45,8 +44,8 @@ import javax.enterprise.context.Dependent;
 
 @Dependent
 public class HelloService implements Serializable {
-    @FooConstraint 
-    public String sayHello(String mustBeFoo) {
+    
+    public String sayHello(@FooConstraint String mustBeFoo) {
         String result = "value is foo";
         
         return result;
