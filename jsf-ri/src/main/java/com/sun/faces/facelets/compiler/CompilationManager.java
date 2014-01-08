@@ -58,6 +58,7 @@
 
 package com.sun.faces.facelets.compiler;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.facelets.tag.TagAttributesImpl;
 import com.sun.faces.facelets.tag.TagLibrary;
@@ -364,9 +365,10 @@ final class CompilationManager {
             log.fine("Namespace Pushed " + prefix + ": " + uri);
         }
 
+        boolean alreadyPresent = this.namespaceManager.getNamespace(prefix) != null;
         this.namespaceManager.pushNamespace(prefix, uri);
         NamespaceUnit unit;
-        if (this.currentUnit() instanceof NamespaceUnit) {
+        if (this.currentUnit() instanceof NamespaceUnit && !alreadyPresent) {
             unit = (NamespaceUnit) this.currentUnit();
         } else {
             unit = new NamespaceUnit(this.tagLibrary);
@@ -425,27 +427,27 @@ final class CompilationManager {
     }
 
     protected static boolean isRemove(String ns, String name) {
-        return UILibrary.Namespace.equals(ns)
+        return (UILibrary.Namespace.equals(ns) || UILibrary.XMLNSNamespace.equals(ns))
                 && "remove".equals(name);
     }
 
     // edburns: This is the magic line that tells the system to trim out the 
     // extra content above and below the tag.
     protected static boolean isTrimmed(String ns, String name) {
-        boolean matchInUILibrary = UILibrary.Namespace.equals(ns) && 
+        boolean matchInUILibrary = (UILibrary.Namespace.equals(ns) || UILibrary.XMLNSNamespace.equals(ns)) && 
                 (CompositionHandler.Name.equals(name) || 
                 ComponentRefHandler.Name.equals(name));
         return matchInUILibrary;
     }
 
     protected static boolean isImplementation(String ns, String name) {
-        boolean matchInCompositeLibrary = CompositeLibrary.Namespace.equals(ns) && 
+        boolean matchInCompositeLibrary = (CompositeLibrary.Namespace.equals(ns) || CompositeLibrary.XMLNSNamespace.equals(ns)) && 
                 (ImplementationHandler.Name.equals(name));
         return matchInCompositeLibrary;
     }
 
     protected static boolean isInterface(String ns, String name) {
-        boolean matchInCompositeLibrary = CompositeLibrary.Namespace.equals(ns) && 
+        boolean matchInCompositeLibrary = (CompositeLibrary.Namespace.equals(ns) || CompositeLibrary.XMLNSNamespace.equals(ns)) && 
                 (InterfaceHandler.Name.equals(name));
         return matchInCompositeLibrary;
     }
@@ -536,7 +538,8 @@ final class CompilationManager {
             CompilationUnit compilationUnit = iterator.next();
             if (compilationUnit instanceof TagUnit) {
                 TagUnit tagUnit = (TagUnit) compilationUnit;
-                if (tagUnit.getTag().getNamespace().equals("http://java.sun.com/jsf/core") &&
+                String ns = tagUnit.getTag().getNamespace();
+                if ((ns.equals(RIConstants.CORE_NAMESPACE) || ns.equals(RIConstants.CORE_NAMESPACE_NEW)) &&
                         tagUnit.getTag().getLocalName().equals("view")) {
                     result = tagUnit;
                     break;

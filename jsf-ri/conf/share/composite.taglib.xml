@@ -1718,4 +1718,82 @@
             <type>boolean</type>
         </attribute>
     </tag>
+
+    <tag>
+        <description><![CDATA[
+
+<div class="changed_added_2_1">
+<p>Declares that the composite component whose contract is declared by
+the <code>&lt;composite:interface&gt;</code> in which this element is
+nested exposes an implementation of <code>ClientBehaviorHolder</code>
+suitable for use as the target of <em>attached objects</em> in <em>the
+using page</em>.  Any attached objects suitable for implementations of
+<code>ClientBehaviorHolder</code> may be attached to the composite
+component.</p>
+</div>
+        ]]></description>
+        <tag-name>clientBehavior</tag-name>
+        <handler-class>com.sun.faces.facelets.tag.composite.BehaviorHolderAttachedObjectTargetHandler</handler-class>
+        <attribute>
+            <description><![CDATA[
+
+<div class="changed_added_2_1">
+<p>The evaluated value of this attribute will be passed as the first
+argument to the <code>addClientBehavior()</code> method on
+<code>ClientBehaviorHolder</code>.</p>              
+
+            ]]></description>
+            <name>event</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+
+<div class="changed_added_2_1">
+If the evaluated value of this attribute is <code>true</code>, the page
+author may omit the the "event" attribute when specifying the behavior
+in the using page.  This is analogous to "action" being the default
+event for <code>commandLink</code>.  The usage of this attribute assumes
+only one <code>clientBehavior</code> is declared in this composite
+component.  If more than one is specified, only the first one is used in
+the case of a using page with no event attribute.  </div>
+
+            ]]></description>
+            <name>default</name>
+            <required>false</required>
+            <type>boolean</type>
+        </attribute>
+
+        <attribute>
+            <description><![CDATA[
+<div class="changed_added_2_1">
+<p>
+  The value of this attribute maps back to the "for" attribute on an attachable object
+  nested within a composite component.   If the "targets" attribute is not specified,
+  this value also represents the component ID of the target component within the
+  that the <code>&lt;composite:implementation&gt;</code>
+  ActionListener should be mapped to. 
+</p>
+</div>
+            ]]></description>
+            <name>name</name>
+            <required>true</required>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description><![CDATA[
+<div class="changed_added_2_1">
+<p>If present, this must be a space (not tab) separated list of client
+ids (relative to the <em>top level component</em>) of components within
+the <code>&lt;composite:implementation&gt;</code> section.  Space is
+used as the delimiter for compatibility with the IDREFS and NMTOKENS
+data types from the XML Schema.</p></div>
+            ]]></description>
+            <name>targets</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
 </facelet-taglib>

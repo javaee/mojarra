@@ -85,7 +85,7 @@ public class Issue2629IT {
         webClient.setJavaScriptEnabled(true);
         webClient.setJavaScriptTimeout(60000);
         HtmlPage page = webClient.getPage(webUrl + "/faces/fieldset.xhtml");
-        HtmlFieldSet fieldset = (HtmlFieldSet)page.getElementById("fieldset4");
+        HtmlFieldSet fieldset = (HtmlFieldSet)page.getHtmlElementById("fieldset4");
         page = fieldset.click();
         webClient.waitForBackgroundJavaScript(60000);
         assertTrue(page.asXml().contains("fieldset4 Event: begin"));
@@ -98,7 +98,7 @@ public class Issue2629IT {
         webClient.setJavaScriptEnabled(true);
         webClient.setJavaScriptTimeout(60000);
         HtmlPage page = webClient.getPage(webUrl + "/faces/label.xhtml");
-        HtmlElement label = page.getElementById("label2");
+        HtmlElement label = page.getHtmlElementById("label2");
         page = (HtmlPage)label.mouseOver();
         webClient.waitForBackgroundJavaScript(60000);
         assertTrue(page.asXml().contains("label2 Event: begin"));

@@ -46,16 +46,6 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
     version="1.2">
 
-  <managed-bean>
-    <managed-bean-name>SimpleBean</managed-bean-name>
-    <managed-bean-class>com.sun.faces.test.agnostic.config.configFile.SimpleBean</managed-bean-class>
-    <managed-bean-scope>session</managed-bean-scope>
-    <managed-property>
-      <property-name>simpleProperty</property-name>
-      <value>Bobby Orr</value>
-    </managed-property>
-  </managed-bean>
-
   <!-- bean that is a List of Integers -->
   <managed-bean>
     <managed-bean-name>simpleList</managed-bean-name>

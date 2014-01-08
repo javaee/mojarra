@@ -156,6 +156,22 @@ public class Util {
     
     public static void setCDIAvailable(ServletContext sc, Object beanManager) {
         sc.setAttribute(CDI_AVAILABLE_PER_APP_KEY, beanManager);
+        }
+    
+    public static boolean isCdiOneOneOrGreater() {
+
+        // The following try/catch is a hack to discover
+        // if CDI 1.1 or greater is available
+        boolean result = false;
+        try {
+            Class.forName("javax.enterprise.context.Initialized");
+            result = true;
+        } catch (ClassNotFoundException ignored) {
+            if (LOGGER.isLoggable(Level.FINEST)) {
+                LOGGER.log(Level.FINEST, "Dected CDI 1.0", ignored);
+            }
+        }
+        return result;
     }
 
     /**
@@ -275,27 +291,6 @@ public class Util {
                                   Object fallbackClass)
         throws ClassNotFoundException {
         ClassLoader loader = Util.getCurrentLoader(fallbackClass);
-//        // Where to begin...
-//        // JDK 6 introduced CR 6434149 where one couldn't pass
-//        // in a literal for an array type ([Ljava.lang.String) and
-//        // get the Class representation using ClassLoader.loadClass().
-//        // It was recommended to use Class.forName(String, boolean, ClassLoader)
-//        // for all ClassLoading requests.
-//        // HOWEVER, when trying to eliminate the need for .groovy extensions
-//        // being specified in the faces-config.xml for Groovy-based artifacts,
-//        // by using a an adapter to the GroovyScriptEngine, I found that the class
-//        // instance was cached somewhere, so that no matter what change I made,
-//        // Class.forName() always returned the same instance.  I haven't been
-//        // able to determine why this happens in the appserver environment
-//        // as the same adapter in a standalone program works as one might expect.
-//        // So, for now, if the classname starts with '[', then use Class.forName()
-//        // to avoid CR 643419 and for all other cases, use ClassLoader.loadClass().
-//        if (name.charAt(0) == '[') {
-//            return Class.forName(name, true, loader);
-//        } else {
-//            return loader.loadClass(name);
-//        }
-
         
         String[] primitiveNames = { "byte", "short", "int", "long", "float", "double", "boolean", "char" };
         Class[] primitiveClasses = { byte.class, short.class, int.class, long.class, float.class, double.class, boolean.class, char.class };
@@ -305,7 +300,28 @@ public class Util {
                 return primitiveClasses[i];
             }
         }
-                
+        // Where to begin...
+        // JDK 6 introduced CR 6434149 where one couldn't pass
+        // in a literal for an array type ([Ljava.lang.String) and
+        // get the Class representation using ClassLoader.loadClass().
+        // It was recommended to use Class.forName(String, boolean, ClassLoader)
+        // for all ClassLoading requests.
+        // HOWEVER, when trying to eliminate the need for .groovy extensions
+        // being specified in the faces-config.xml for Groovy-based artifacts,
+        // by using an adapter to the GroovyScriptEngine, I found that the class
+        // instance was cached somewhere, so that no matter what change I made,
+        // Class.forName() always returned the same instance.  I haven't been
+        // able to determine why this happens in the appserver environment
+        // as the same adapter in a standalone program works as one might expect.
+        // So, for now, if the classname starts with '[', then use Class.forName()
+        // to avoid CR 643419 and for all other cases, use ClassLoader.loadClass().
+        if (loader.getClass() == com.sun.faces.scripting.groovy.GroovyHelperImpl.MojarraGroovyClassLoader.class) {
+            if (name.charAt(0) == '[') {
+                return Class.forName(name, true, loader);
+            } else {
+                return loader.loadClass(name);
+            }
+        }        
         return Class.forName(name, true, loader);
     }
 
@@ -554,66 +570,79 @@ public class Util {
             throw new IllegalArgumentException("Illegal locale String: " +
                                                localeStr);
         }
-
         Locale result = null;
-        String lang = null;
-        String country = null;
-        String variant = null;
-        char[] seps = {
-            '-',
-            '_'
-        };
-        int inputLength = localeStr.length();
-        int i = 0;
-        int j = 0;
-
-        // to have a language, the length must be >= 2
-        if ((inputLength >= 2) &&
-            ((i = indexOfSet(localeStr, seps, 0)) == -1)) {
-            // we have only Language, no country or variant
-            if (2 != localeStr.length()) {
-                throw new
-                    IllegalArgumentException("Illegal locale String: " +
-                                             localeStr);
+        
+        try {
+            Method method = Locale.class.getMethod("forLanguageTag", String.class);
+            if (method != null) {
+                result = (Locale) method.invoke(null, localeStr);
             }
-            lang = localeStr.toLowerCase();
+        } catch(Throwable throwable) {
+            // if we are NOT running JavaSE 7 we end up here and we will 
+            // default to the previous way of determining the Locale below.
         }
 
-        // we have a separator, it must be either '-' or '_'
-        if (i != -1) {
-            lang = localeStr.substring(0, i);
-            // look for the country sep.
-            // to have a country, the length must be >= 5
-            if ((inputLength >= 5) &&
-                ((j = indexOfSet(localeStr, seps, i + 1)) == -1)) {
-                // no further separators, length must be 5
-                if (inputLength != 5) {
+        if (result == null || result.getLanguage().equals("")) {
+            String lang = null;
+            String country = null;
+            String variant = null;
+            char[] seps = {
+                '-',
+                '_'
+            };
+            int inputLength = localeStr.length();
+            int i = 0;
+            int j = 0;
+
+            // to have a language, the length must be >= 2
+            if ((inputLength >= 2) &&
+                ((i = indexOfSet(localeStr, seps, 0)) == -1)) {
+                // we have only Language, no country or variant
+                if (2 != localeStr.length()) {
                     throw new
                         IllegalArgumentException("Illegal locale String: " +
                                                  localeStr);
                 }
-                country = localeStr.substring(i + 1);
+                lang = localeStr.toLowerCase();
             }
-            if (j != -1) {
-                country = localeStr.substring(i + 1, j);
-                // if we have enough separators for language, locale,
-                // and variant, the length must be >= 8.
-                if (inputLength >= 8) {
-                    variant = localeStr.substring(j + 1);
-                } else {
-                    throw new
-                        IllegalArgumentException("Illegal locale String: " +
-                                                 localeStr);
+
+            // we have a separator, it must be either '-' or '_'
+            if (i != -1) {
+                lang = localeStr.substring(0, i);
+                // look for the country sep.
+                // to have a country, the length must be >= 5
+                if ((inputLength >= 5) &&
+                    ((j = indexOfSet(localeStr, seps, i + 1)) == -1)) {
+                    // no further separators, length must be 5
+                    if (inputLength != 5) {
+                        throw new
+                            IllegalArgumentException("Illegal locale String: " +
+                                                     localeStr);
+                    }
+                    country = localeStr.substring(i + 1);
+                }
+                if (j != -1) {
+                    country = localeStr.substring(i + 1, j);
+                    // if we have enough separators for language, locale,
+                    // and variant, the length must be >= 8.
+                    if (inputLength >= 8) {
+                        variant = localeStr.substring(j + 1);
+                    } else {
+                        throw new
+                            IllegalArgumentException("Illegal locale String: " +
+                                                     localeStr);
+                    }
                 }
             }
+            if (variant != null && country != null && lang != null) {
+                result = new Locale(lang, country, variant);
+            } else if (lang != null && country != null) {
+                result = new Locale(lang, country);
+            } else if (lang != null) {
+                result = new Locale(lang, "");
+            }
         }
-        if (variant != null && country != null && lang != null) {
-            result = new Locale(lang, country, variant);
-        } else if (lang != null && country != null) {
-            result = new Locale(lang, country);
-        } else if (lang != null) {
-            result = new Locale(lang, "");
-        }
+        
         return result;
     }
 

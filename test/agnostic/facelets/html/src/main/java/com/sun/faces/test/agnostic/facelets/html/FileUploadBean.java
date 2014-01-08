@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,19 +37,22 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
 package com.sun.faces.test.agnostic.facelets.html;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
-import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.application.ProjectStage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
-import javax.inject.Named;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.AjaxBehaviorEvent;
+import javax.faces.event.ValueChangeEvent;
 import javax.servlet.http.Part;
 
-@Named
+@ManagedBean(name = "fileUploadBean")
 @RequestScoped
 public class FileUploadBean {
 
@@ -64,21 +67,19 @@ public class FileUploadBean {
     public void setUploadedFile(Part uploadedFile) {
         this.uploadedFile = uploadedFile;
     }
-    
+
     public String getFileText() {
         String text = "";
 
         if (null != uploadedFile) {
             try {
                 InputStream is = uploadedFile.getInputStream();
-                text = new Scanner( is ).useDelimiter("\\A").next();
+                text = new Scanner(is).useDelimiter("\\A").next();
             } catch (IOException ex) {
-                
             }
         }
         return text;
     }
-    
     private String text;
 
     public String getText() {
@@ -95,5 +96,9 @@ public class FileUploadBean {
             projectStage = "ProjectStage.Development";
         }
         return projectStage;
+    }
+
+    public void processEvent(AjaxBehaviorEvent event) throws AbortProcessingException {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("ajax listener was called"));
     }
 }

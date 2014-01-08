@@ -165,46 +165,6 @@ public class TestValueExpressionImpl_Model extends ServletFacesTestCase {
         assertTrue(System.getProperty(TestBean.PROP).equals(TestBean.TRUE));
     }
 
-
-    public void testSetNull() throws Exception {
-//        FacesContext facesContext = getFacesContext();
-//        System.out.println(
-//            "Testing setValue() with model bean in session with null rValues");
-//        TestBean testBean = new TestBean();
-//        InnerBean inner = new InnerBean();
-//        Inner2Bean innerInner = new Inner2Bean();
-//
-//        getFacesContext().getExternalContext().getSessionMap().put("TestBean",
-//                                                                   testBean);
-//
-//        // Test one level of nesting
-//        valueExpression = this.create("TestBean.one");
-//        valueExpression.setValue(getFacesContext().getELContext(), null);
-//        assertTrue(testBean.getOne() == null);
-//
-//        System.setProperty(TestBean.PROP, TestBean.FALSE);
-//        valueExpression = this.create("sessionScope.TestBean.inner");
-//        valueExpression.setValue(getFacesContext().getELContext(), inner);
-//        assertTrue(System.getProperty(TestBean.PROP).equals(TestBean.TRUE));
-//
-//        valueExpression = this.create("sessionScope.TestBean.inner");
-//        valueExpression.setValue(getFacesContext().getELContext(), null);
-//        assertTrue(testBean.getInner() == null);
-//
-//        // Inner bean does not exist anymore. So this should result in an
-//        // exception.  Should throw a PropertyNotFoundException according
-//        // to page 92 of the EL Spec
-//        boolean exceptionThrown = false;
-//        valueExpression = this.create("sessionScope.TestBean.inner.two");
-//        try {
-//            valueExpression.setValue(getFacesContext().getELContext(), null);
-//        } catch (javax.el.PropertyNotFoundException ee) {
-//            exceptionThrown = true;
-//        }
-//        assertTrue(exceptionThrown);
-    }
-
-
     public void testSetWithNoCurlyBraces() throws Exception {
         FacesContext facesContext = getFacesContext();
         System.out.println("Testing setValue() with model bean in request ");

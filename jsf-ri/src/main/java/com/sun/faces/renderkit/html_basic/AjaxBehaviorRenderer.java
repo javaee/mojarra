@@ -60,6 +60,7 @@ import javax.faces.event.PhaseId;
 import javax.faces.render.ClientBehaviorRenderer;
 
 import com.sun.faces.renderkit.RenderKitUtils;
+import javax.faces.component.UINamingContainer;
 
 /*
  *<b>AjaxBehaviorRenderer</b> renders Ajax behavior for a component.
@@ -301,11 +302,10 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
 
         UIComponent resolvedComponent = component.findComponent(id);
         if (resolvedComponent == null) {
-            // RELEASE_PENDING  i18n
-            throw new FacesException(
-                "<f:ajax> contains an unknown id '"
-                + id
-                + "' - cannot locate it in the context of the component "+component.getId());
+            if (id.charAt(0) == UINamingContainer.getSeparatorChar(FacesContext.getCurrentInstance())) {
+                return id.substring(1);
+            }
+            return id;
         }
 
         return resolvedComponent.getClientId();

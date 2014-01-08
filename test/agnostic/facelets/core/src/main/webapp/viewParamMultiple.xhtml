@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <f:view>
+        <f:metadata>
+            <f:viewParam name="param1" value="#{viewScope['param1']}"/>
+            <f:viewParam name="param2" value="#{viewScope['param2']}"/>
+        </f:metadata>
+        <h:head>
+            <title>Test multiple view parameters.</title>
+        </h:head>
+        <h:body>
+            <h:panelGrid columns="1">
+                <h:panelGroup>
+                    <h:form id="form">
+                        <h:outputText value="Param1:=#{param['param1']};"/>
+                        <br/>
+                        <h:outputText value="Param2:=#{param['param2']};"/>
+                        <br/>
+                        <h:outputText value="viewScope-param1:=#{viewScope['param1']};"/>
+                        <br/>
+                        <h:outputText value="viewScope-param2:=#{viewScope['param2']};"/>
+                        <br/>
+                        <br/>
+                        <h:commandLink
+                            id="set1"
+                            value="SET param1"
+                            rendered="#{not 'value'.equals(viewScope['param1'])}">
+                            <f:param name="param1" value="value"/>
+                            <f:ajax execute="@form" render="@form"/>
+                        </h:commandLink>
+                        <h:commandLink
+                            value="UNSET param1"
+                            rendered="#{'value'.equals(viewScope['param1'])}">
+                            <f:param name="param1" value=""/>
+                            <f:ajax execute="@form" render="@form"/>
+                        </h:commandLink>
+                        <br/>
+                        <br/>
+                        <h:commandLink
+                            id="set2"
+                            value="SET param2"
+                            rendered="#{not 'value'.equals(viewScope['param2'])}">
+                            <f:param name="param2" value="value"/>
+                            <f:ajax execute="@form" render="@form"/>
+                        </h:commandLink>
+                        <h:commandLink
+                            value="UNSET param2"
+                            rendered="#{'value'.equals(viewScope['param2'])}">
+                            <f:param name="param2" value=""/>
+                            <f:ajax execute="@form" render="@form"/>
+                        </h:commandLink>
+                        <br/>
+                        <br/>
+                        <h:commandButton id="postback" value="POSTBACK"/>
+                        <br/>
+                        <h:link id="link" value="LINK with ViewParams" includeViewParams="true" outcome="#{view.viewId}"/>
+                        <br/>
+
+                        <h:link value="LINK without ViewParams" includeViewParams="false" outcome="#{view.viewId}"/>
+                        <br/>
+                    </h:form>
+                </h:panelGroup>
+            </h:panelGrid>
+        </h:body>
+    </f:view>
+</html>

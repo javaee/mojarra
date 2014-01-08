@@ -60,7 +60,6 @@ package com.sun.faces.facelets.tag.ui;
 
 import com.sun.faces.util.FacesLogger;
 import javax.faces.component.UIComponent;
-import javax.faces.view.facelets.*;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.util.HashSet;
@@ -68,6 +67,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.view.facelets.ComponentConfig;
+import javax.faces.view.facelets.ComponentHandler;
+import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.MetaRuleset;
+import javax.faces.view.facelets.Metadata;
+import javax.faces.view.facelets.TagAttribute;
 
 public class RepeatHandler extends ComponentHandler {
 
@@ -77,10 +82,13 @@ public class RepeatHandler extends ComponentHandler {
         super(config);
     }
 
+    @Override
     protected MetaRuleset createMetaRuleset(Class type) {
         MetaRuleset meta = super.createMetaRuleset(type);
+        String myNamespace = this.tag.getNamespace();
 
-        if (!UILibrary.Namespace.equals(this.tag.getNamespace())) {
+        if ((!UILibrary.Namespace.equals(myNamespace)) &&
+            (!UILibrary.XMLNSNamespace.equals(myNamespace))) {
             meta.add(new TagMetaData(type));
         }
         
@@ -119,6 +127,7 @@ public class RepeatHandler extends ComponentHandler {
             this.attrs = (String[]) s.toArray(new String[s.size()]);
         }
 
+        @Override
         public void applyMetadata(FaceletContext ctx, Object instance) {
             UIComponent c = (UIComponent) instance;
             Map localAttrs = c.getAttributes();

@@ -66,23 +66,23 @@ public class Issue2848IT {
     @Test
     public void testVerifyOnePhaseListener() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/phaseListener1.xhtml");
-        HtmlElement button = page.getElementById("form:submit");        
+        HtmlElement button = page.getHtmlElementById("form:submit");        
         page = button.click();
         assertTrue(!page.asText().contains("ERROR"));
         
-        button = page.getElementById("form:submit");
+        button = page.getHtmlElementById("form:submit");
         page = button.click();
         assertTrue(!page.asText().contains("ERROR"));
 
-        button = page.getElementById("form:submit");
+        button = page.getHtmlElementById("form:submit");
         page = button.click();
         assertTrue(!page.asText().contains("ERROR"));
 
-        button = page.getElementById("form:submit");
+        button = page.getHtmlElementById("form:submit");
         page = button.click();
         assertTrue(!page.asText().contains("ERROR"));
 
-        button = page.getElementById("form:submit");
+        button = page.getHtmlElementById("form:submit");
         page = button.click();
         assertTrue(!page.asText().contains("ERROR"));
     }

@@ -108,7 +108,7 @@
     <property name="spec.version" value="2.2"/>
     <property name="spec_version" value="2_2"/>
     <property name="spec.snapshot.version" value="2.2-SNAPSHOT"/>
-    <property name="patch.version" value="1"/>
+    <property name="patch.version" value="5"/>
     <property name="impl.name" value="Mojarra"/>
     <property name="build.number" value="${DSTAMP}-${TSTAMP}"/>
     <property name="build.type" value="-SNAPSHOT"/>
@@ -173,12 +173,17 @@
         <dependency groupId="org.codehaus.groovy" artifactId="groovy-all" version="1.6.9" scope="provided"/>
         <dependency groupId="javax.validation" artifactId="validation-api" version="1.0.0.GA" scope="provided"/>
         <dependency groupId="javax.inject" artifactId="javax.inject" version="1" scope="provided"/>
-        <dependency groupId="javax.enterprise" artifactId="cdi-api" version="1.0" scope="provided"/>
         <dependency groupId="javax.servlet.jsp.jstl" artifactId="jstl-api" version="1.2" scope="provided" />
         <dependency groupId="javax" artifactId="javaee-web-api" version="6.0" scope="provided"/>
         <dependency groupId="com.sun.el" artifactId="el-ri" version="1.0" scope="provided"/>
         <localRepository refid="local.repository"/>
         <remoteRepository refid="j.n.repo"/>
+    </artifact:dependencies>
+
+    <artifact:dependencies filesetId="cdi.filepath" pathId="cdi.path">
+        <dependency groupId="javax.enterprise" artifactId="cdi-api" version="1.1" scope="provided"/>
+        <localRepository refid="local.repository"/>
+        <remoteRepository refid="ibiblio.repo"/>
     </artifact:dependencies>
     
     <artifact:dependencies filesetId="jsf-spi.filepath" pathId="jsf-spi.path">
@@ -211,7 +216,7 @@
 
     <!-- this is hard coded to match the values in ${basedir}/jsf-tools/pom.xml -->
     <property name="jsf-tools.jar" 
-              value="${maven.repo.local}/com/sun/faces/build/jsf-tools/${impl.version.number}/jsf-tools-${impl.version.number}.jar"/>
+              value="${maven.repo.local}/com/sun/faces/build/jsf-tools/${snapshot.version}/jsf-tools-${snapshot.version}.jar" />
 
     <!-- Test classpaths that are used in multiple places within the project -->
     <path id="junit.classpath">
@@ -251,6 +256,11 @@
     <path id="compile.classpath">
         <path refid="compile.path"/>
     </path>
+
+    <path id="cdi.classpath">
+        <path refid="cdi.path"/>
+    </path>
+
 
     <path id="api-compile.classpath">
         <path refid="jsf-spi.path"/>

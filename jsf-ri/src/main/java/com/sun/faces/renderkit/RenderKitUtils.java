@@ -1352,7 +1352,7 @@ public class RenderKitUtils {
             Resource res = handler.createResource(resName, libName);
             if (res == null) {
                 if (context.isProjectStage(ProjectStage.Development)) {
-                    String msg = "Unable to find resource " + resName;
+                    String msg = "Unable to find resource " + (libName == null ? "" : libName + ", ") + resName;
                     context.addMessage(component.getClientId(context),
                                        new FacesMessage(FacesMessage.SEVERITY_ERROR,
                                                         msg,

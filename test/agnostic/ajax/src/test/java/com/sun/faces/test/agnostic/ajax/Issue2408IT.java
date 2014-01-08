@@ -41,15 +41,13 @@
 package com.sun.faces.test.agnostic.ajax; 
 
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.html.DomNodeList;
 import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlRadioButtonInput;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import org.junit.*;
 import static org.junit.Assert.*;
 
@@ -86,8 +84,8 @@ public class Issue2408IT {
     public void testSelectManyCheckboxInComposite() throws Exception {
         HtmlPage page = webClient.getPage(webUrl+"faces/selectManyCheckboxInComposite.xhtml");
         final List<HtmlCheckBoxInput> checkBoxes = new ArrayList();
-        final DomNodeList<HtmlElement> elements = page.getElementsByTagName("input");
-        for (HtmlElement elem : elements) {
+        final DomNodeList<DomElement> elements = page.getElementsByTagName("input");
+        for (DomElement elem : elements) {
             if (elem instanceof HtmlCheckBoxInput) {
                 checkBoxes.add((HtmlCheckBoxInput)elem);
             }
@@ -148,8 +146,8 @@ public class Issue2408IT {
     public void testSelectManyCheckboxNoComposite() throws Exception {
         HtmlPage page = webClient.getPage(webUrl+"faces/selectManyCheckboxNoComposite.xhtml");
         final List<HtmlCheckBoxInput> checkBoxes = new ArrayList();
-        final DomNodeList<HtmlElement> elements = page.getElementsByTagName("input");
-        for (HtmlElement elem : elements) {
+        final DomNodeList<DomElement> elements = page.getElementsByTagName("input");
+        for (DomElement elem : elements) {
             if (elem instanceof HtmlCheckBoxInput) {
                 checkBoxes.add((HtmlCheckBoxInput)elem);
             }
@@ -182,8 +180,8 @@ public class Issue2408IT {
     public void testSelectOneRadioInComposite() throws Exception {
         HtmlPage page = webClient.getPage(webUrl+"faces/selectOneRadioInComposite.xhtml");
         final List<HtmlRadioButtonInput> radios = new ArrayList();
-        final DomNodeList<HtmlElement> elements = page.getElementsByTagName("input");
-        for (HtmlElement elem : elements) {
+        final DomNodeList<DomElement> elements = page.getElementsByTagName("input");
+        for (DomElement elem : elements) {
             if (elem instanceof HtmlRadioButtonInput) {
                 radios.add((HtmlRadioButtonInput)elem);
             }
@@ -245,8 +243,8 @@ public class Issue2408IT {
     public void testSelectOneRadioNoComposite() throws Exception {
         HtmlPage page = webClient.getPage(webUrl+"faces/selectOneRadioNoComposite.xhtml");
         final List<HtmlRadioButtonInput> radios = new ArrayList();
-        final DomNodeList<HtmlElement> elements = page.getElementsByTagName("input");
-        for (HtmlElement elem : elements) {
+        final DomNodeList<DomElement> elements = page.getElementsByTagName("input");
+        for (DomElement elem : elements) {
             if (elem instanceof HtmlRadioButtonInput) {
                 radios.add((HtmlRadioButtonInput)elem);
             }

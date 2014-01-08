@@ -24,7 +24,7 @@ h1
 hr
 {
 	border: none 0;
-	border-top: 1px solid #7F8FB1;
+	border-top: 1px solid #000000;
 	height: 1px;
 }
 
@@ -79,12 +79,12 @@ h1.classTitle
 h2 { font-size: 110%; }
 caption, div.sectionTitle
 {
-	background-color: #7F8FB1;
+	background-color: #000000;
 	color: #fff;
 	font-size:130%;
 	text-align: left;
 	padding: 2px 6px 2px 6px;
-	border: 1px #7F8FB1 solid;
+	border: 1px #000000 solid;
 }
 
 div.sectionTitle { margin-bottom: 8px; }
@@ -94,14 +94,14 @@ div.sectionTitle { margin-bottom: 8px; }
 {
 	vertical-align: top;
 	padding: 4px;
-	border-bottom: 1px #7F8FB1 solid;
-	border-right: 1px #7F8FB1 solid;
+	border-bottom: 1px #000000 solid;
+	border-right: 1px #000000 solid;
 }
 
 /*col#summaryAttributes {}*/
 .summaryTable td.attributes
 {
-	border-left: 1px #7F8FB1 solid;
+	border-left: 1px #000000 solid;
 	width: 140px;
 	text-align: right;
 }

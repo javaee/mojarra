@@ -139,8 +139,20 @@ public class ValidatorTagHandlerDelegateImpl extends TagHandlerDelegate implemen
             throw new TagException(owner.getTag(), "No Validator was created");
         }
         owner.setAttributes(ctx, v);
-        evh.addValidator(v);
-
+        
+        Validator[] validators = evh.getValidators();
+        boolean found = false;
+        
+        for (Validator validator : validators) {
+            if (validator.getClass().equals(v.getClass())) {
+                found = true;
+                break;
+            }
+        }
+        
+        if (!found) {
+            evh.addValidator(v);
+        }
     }
 
 

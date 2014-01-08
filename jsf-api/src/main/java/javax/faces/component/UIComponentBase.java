@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -75,7 +75,6 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
-import java.util.WeakHashMap;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
@@ -113,15 +112,8 @@ public abstract class UIComponentBase extends UIComponent {
      * the properties of a concrete {@link UIComponent} implementation, keyed
      * by the corresponding <code>java.lang.Class</code>.</p>
      * <p/>
-     * <p><strong>IMPLEMENTATION NOTE</strong> - This is implemented as a
-     * <code>WeakHashMap</code> so that, even if this class is embedded in a
-     * container's class loader that is a parent to webapp class loaders,
-     * references to the classes will eventually expire.</p>
      */
-    @SuppressWarnings({"CollectionWithoutInitialCapacity"})
-    private static Map<Class<?>, Map<String, PropertyDescriptor>>
-            descriptors =
-            new WeakHashMap<Class<?>, Map<String, PropertyDescriptor>>();
+    private Map<Class<?>, Map<String, PropertyDescriptor>> descriptors;            
 
     /**
      * Reference to the map of <code>PropertyDescriptor</code>s for this class
@@ -141,43 +133,51 @@ public abstract class UIComponentBase extends UIComponent {
     }
 
     private void populateDescriptorsMapIfNecessary() {
-        Class<?> clazz = this.getClass();
-        synchronized(descriptors) {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        Class<?> clazz = getClass();
+        
+        /*
+         * If we can find a valid FacesContext we are going to use it to get
+         * access to the property descriptor map.
+         */
+        if (facesContext != null && 
+                facesContext.getExternalContext() != null && 
+                facesContext.getExternalContext().getApplicationMap() != null) {
+            
+            Map<String, Object> applicationMap = facesContext.getExternalContext().getApplicationMap();
+            
+            if (!applicationMap.containsKey("com.sun.faces.compnent.COMPONENT_DESCRIPTORS_MAP")) {
+                applicationMap.put("com.sun.faces.compnent.COMPONENT_DESCRIPTORS_MAP", 
+                        new ConcurrentHashMap<Class<?>, Map<String, PropertyDescriptor>>());
+            }
+            
+            descriptors = (Map<Class<?>, Map<String, PropertyDescriptor>>) applicationMap.get("com.sun.faces.compnent.COMPONENT_DESCRIPTORS_MAP");
             pdMap = descriptors.get(clazz);
         }
-        if (null != pdMap) {
-            return;
-        }
 
-        // load the property descriptors for this class.
-        PropertyDescriptor pd[] = getPropertyDescriptors();
-        if (pd != null) {
-            pdMap = new HashMap<String, PropertyDescriptor>(pd.length, 1.0f);
-            for (PropertyDescriptor aPd : pd) {
-                pdMap.put(aPd.getName(), aPd);
-            }
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE, "fine.component.populating_descriptor_map",
-                        new Object[]{clazz,
-                                Thread.currentThread().getName()});
-            }
+        if (pdMap == null) {
+            /*
+             * We did not find the property descriptor map so we are now 
+             * going to load it.
+             */
+            PropertyDescriptor pd[] = getPropertyDescriptors();
+            if (pd != null) {
+                pdMap = new HashMap<String, PropertyDescriptor>(pd.length, 1.0f);
+                for (PropertyDescriptor aPd : pd) {
+                    pdMap.put(aPd.getName(), aPd);
+                }
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.log(Level.FINE, "fine.component.populating_descriptor_map",
+                            new Object[]{clazz,
+                                    Thread.currentThread().getName()});
+                }
 
-            // Check again
-            Map<String, PropertyDescriptor> reCheckMap = null;
-            synchronized(descriptors) {
-                reCheckMap = descriptors.get(clazz);
-            }
-            if (null != reCheckMap) {
-                return;
-            }
-            synchronized(descriptors) {
-                descriptors.put(clazz, pdMap);
+                if (descriptors != null && !descriptors.containsKey(clazz)) {
+                    descriptors.put(clazz, pdMap);
+                }
             }
         }
-
-
     }
-
 
     /**
      * <p>Return an array of <code>PropertyDescriptors</code> for this
@@ -428,18 +428,7 @@ public abstract class UIComponentBase extends UIComponent {
         return (this.parent);
     }
 
-    private ConcurrentHashMap<String, UIComponent> getFaceletComponentMap() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        if (!facesContext.getAttributes().containsKey("com.sun.faces.facelets.FACELET_COMPONENT_MAP")) {
-            facesContext.getAttributes().put("com.sun.faces.facelets.FACELET_COMPONENT_MAP", 
-                    new ConcurrentHashMap<String, UIComponent>());
-        }
-        return (ConcurrentHashMap<String, UIComponent>) facesContext.getAttributes().get(
-                "com.sun.faces.facelets.FACELET_COMPONENT_MAP");
-    }
-
     public void setParent(UIComponent parent) {
-
 
         if (parent == null) {
             if (this.parent != null) {
@@ -447,15 +436,6 @@ public abstract class UIComponentBase extends UIComponent {
                 this.parent = parent;
             }
             compositeParent = null;
-
-            /*
-             * Make sure we remove the given component from the facelet component map if it is in there.
-             */
-            if (getAttributes().containsKey("com.sun.faces.facelets.MARK_ID")) {
-                ConcurrentHashMap<String, UIComponent> faceletComponentMap = getFaceletComponentMap();
-                faceletComponentMap.remove((String) getAttributes().get("com.sun.faces.facelets.MARK_ID"));
-            }
-            
         } else {
             this.parent = parent;
             if (this.getAttributes().get(ADDED) == null) {
@@ -469,19 +449,8 @@ public abstract class UIComponentBase extends UIComponent {
                 // processing.
                 this.getAttributes().remove(ADDED);
             }
-            
-            /*
-             * Make sure we add a component created by a facelet to the facelet component map.
-             */
-            if (getAttributes().containsKey("com.sun.faces.facelets.MARK_ID")) {
-                ConcurrentHashMap<String, UIComponent> faceletComponentMap = getFaceletComponentMap();
-                faceletComponentMap.put(getAttributes().get("com.sun.faces.facelets.MARK_ID").toString(), this);
-            }            
         }
-
-    }
-
-
+    }            
 
     public boolean isRendered() {
         
@@ -948,6 +917,8 @@ public abstract class UIComponentBase extends UIComponent {
             Renderer renderer = this.getRenderer(context);
             if (renderer != null) {
                 renderer.encodeEnd(context, this);
+            } else {
+                // We've already logged for this component
             }
         }
         popComponentFromEL(context);
@@ -1338,55 +1309,55 @@ public abstract class UIComponentBase extends UIComponent {
 
         pushComponentToEL(context, null);
 
-        // Process this component itself
-        stateStruct[MY_STATE] = saveState(context);
+        try {
+            // Process this component itself
+            stateStruct[MY_STATE] = saveState(context);
 
-        // determine if we have any children to store
-        int count = this.getChildCount() + this.getFacetCount();
-        if (count > 0) {
+            // determine if we have any children to store
+            int count = this.getChildCount() + this.getFacetCount();
+            if (count > 0) {
 
-            // this arraylist will store state
-            List<Object> stateList = new ArrayList<Object>(count);
+                // this arraylist will store state
+                List<Object> stateList = new ArrayList<Object>(count);
 
-            // if we have children, add them to the stateList
-            if (this.getChildCount() > 0) {
-                Iterator kids = getChildren().iterator();
-                UIComponent kid;
-                while (kids.hasNext()) {
-                    kid = (UIComponent) kids.next();
-                    if (!kid.isTransient()) {
-                        stateList.add(kid.processSaveState(context));
-                        popComponentFromEL(context);
+                // if we have children, add them to the stateList
+                if (this.getChildCount() > 0) {
+                    Iterator kids = getChildren().iterator();
+                    UIComponent kid;
+                    while (kids.hasNext()) {
+                        kid = (UIComponent) kids.next();
+                        if (!kid.isTransient()) {
+                            stateList.add(kid.processSaveState(context));
+                        }
                     }
                 }
-            }
 
-            pushComponentToEL(context, null);
-
-            // if we have facets, add them to the stateList
-            if (this.getFacetCount() > 0) {
-                Iterator myFacets = getFacets().entrySet().iterator();
-                UIComponent facet;
-                Object facetState;
-                Object[] facetSaveState;
-                Map.Entry entry;
-                while (myFacets.hasNext()) {
-                    entry = (Map.Entry) myFacets.next();
-                    facet = (UIComponent) entry.getValue();
-                    if (!facet.isTransient()) {
-                        facetState = facet.processSaveState(context);
-                        popComponentFromEL(context);
-                        facetSaveState = new Object[2];
-                        facetSaveState[0] = entry.getKey();
-                        facetSaveState[1] = facetState;
-                        stateList.add(facetSaveState);
+                // if we have facets, add them to the stateList
+                if (this.getFacetCount() > 0) {
+                    Iterator myFacets = getFacets().entrySet().iterator();
+                    UIComponent facet;
+                    Object facetState;
+                    Object[] facetSaveState;
+                    Map.Entry entry;
+                    while (myFacets.hasNext()) {
+                        entry = (Map.Entry) myFacets.next();
+                        facet = (UIComponent) entry.getValue();
+                        if (!facet.isTransient()) {
+                            facetState = facet.processSaveState(context);
+                            facetSaveState = new Object[2];
+                            facetSaveState[0] = entry.getKey();
+                            facetSaveState[1] = facetState;
+                            stateList.add(facetSaveState);
+                        }
                     }
                 }
-            }
 
-            // finally, capture the stateList and replace the original,
-            // EMPTY_OBJECT_ARRAY Object array
-            childState = stateList.toArray();
+                // finally, capture the stateList and replace the original,
+                // EMPTY_OBJECT_ARRAY Object array
+                childState = stateList.toArray();
+            }
+        } finally {
+            popComponentFromEL(context);
         }
 
         stateStruct[CHILD_STATE] = childState;
@@ -2219,9 +2190,10 @@ public abstract class UIComponentBase extends UIComponent {
                     // assume the behaviors have already been populated by
                     // execution of the template.  Process the state in the
                     // same order that the names were saved.
-                    List<ClientBehavior> existingBehaviors =
-                          behaviors.get(names[i]);
-                    restoreBehaviors(context, existingBehaviors, (Object[]) attachedBehaviors[i]);
+                    if (behaviors != null) {
+                        List<ClientBehavior> existingBehaviors = behaviors.get(names[i]);
+                        restoreBehaviors(context, existingBehaviors, (Object[]) attachedBehaviors[i]);
+                    }
                 }
                 return behaviors;
             }
@@ -2768,8 +2740,8 @@ public abstract class UIComponentBase extends UIComponent {
 
         public UIComponent remove(int index) {
             UIComponent child = get(index);
-            super.remove(index);
             child.setParent(null);
+            super.remove(index);
             return (child);
         }
 
@@ -2779,8 +2751,10 @@ public abstract class UIComponentBase extends UIComponent {
                 throw new NullPointerException();
             }
 
-            if (super.remove(element)) {
+            if (super.indexOf(element) != -1) {
                 element.setParent(null);
+            }            
+            if (super.remove(element)) {
                 return (true);
             } else {
                 return (false);

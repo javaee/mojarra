@@ -96,7 +96,7 @@ public class CustomRenderKitIT {
 
     @Test
     public void testRenderKit03() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/renderkit03.jsp");
+        HtmlPage page = webClient.getPage(webUrl + "renderkit03.jsp");
         String pageText = page.getBody().asText();
         assertTrue(pageText.matches("(?s).*This IS A SIMPLE LABEL FROM THE CUSTOM RENDERER.*/renderkit03.jsp PASSED.*"));
 

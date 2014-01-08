@@ -66,9 +66,9 @@ public class Issue2665IT {
     @Test
     public void testValidatorException() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/validatorException.xhtml");
-        HtmlElement inputText = page.getElementById("form:composite:inputText");
+        HtmlElement inputText = page.getHtmlElementById("form:composite:inputText");
         inputText.type("1234");
-        HtmlElement button = page.getElementById("form:submitButton");
+        HtmlElement button = page.getHtmlElementById("form:submitButton");
         page = button.click();
         assertTrue(page.asXml().indexOf("Name is invalid") != -1);
     }

@@ -34,20 +34,13 @@
  */
 package com.sun.faces.test.agnostic.dynamic;
 
-import com.sun.faces.context.StateContext;
-import javax.faces.FacesException;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGroup;
-import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
-/**
- * @author Manfred Riem
- */
 @ManagedBean
 @RequestScoped
 public class Issue2395Bean {
@@ -64,125 +57,37 @@ public class Issue2395Bean {
 
     public void doAdd(ActionEvent event) {
         HtmlOutputText out = new HtmlOutputText();
+        out.setValue("I was dynamically added");
         getPanelGroup().getChildren().add(out);
-        FacesContext context = FacesContext.getCurrentInstance();
-        StateContext stateContext = StateContext.getStateContext(context);
-        if (stateContext.getDynamicActions().size() != 1) {
-            context.addMessage(null, new FacesMessage(
-                    FacesMessage.SEVERITY_FATAL, 
-                    "Number of dynamic actions should be 1",
-                    "Number of dynamic actions should be 1"));
         }
-    }
     
     public void doAddRemove(ActionEvent event) {
         HtmlOutputText out = new HtmlOutputText();
         getPanelGroup().getChildren().add(out);
-        FacesContext context = FacesContext.getCurrentInstance();
-        StateContext stateContext = StateContext.getStateContext(context);
-        if (stateContext.getDynamicActions().size() != 1) {
-            context.addMessage(null, new FacesMessage(
-                    FacesMessage.SEVERITY_FATAL, 
-                    "Number of dynamic actions should be 1",
-                    "Number of dynamic actions should be 1"));
-        }
-
+        out.setValue("I was dynamically added");
         getPanelGroup().getChildren().remove(out);
-        if (!stateContext.getDynamicActions().isEmpty()) {
-            context.addMessage(null, new FacesMessage(
-                    FacesMessage.SEVERITY_FATAL, 
-                    "Number of dynamic actions should be 0",
-                    "Number of dynamic actions should be 0"));
         }
-    }
 
     public void doAddRemoveAdd(ActionEvent event) {
         HtmlOutputText out = new HtmlOutputText();
-        out.setTitle("Issue2395addRemoveAdd");
+        out.setValue("I was dynamically added");
         getPanelGroup().getChildren().add(out);
-        FacesContext context = FacesContext.getCurrentInstance();
-        StateContext stateContext = StateContext.getStateContext(context);
-        if (stateContext.getDynamicActions().size() != 1) {
-            context.addMessage(null, new FacesMessage(
-                    FacesMessage.SEVERITY_FATAL, 
-                    "Number of dynamic actions should be 1",
-                    "Number of dynamic actions should be 1"));
-        }
-
         getPanelGroup().getChildren().remove(out);
-        if (!stateContext.getDynamicActions().isEmpty()) {
-            context.addMessage(null, new FacesMessage(
-                    FacesMessage.SEVERITY_FATAL, 
-                    "Number of dynamic actions should be 0",
-                    "Number of dynamic actions should be 0"));
-        }
-
         getPanelGroup().getChildren().add(out);
-        if (stateContext.getDynamicActions().size() != 1) {
-            context.addMessage(null, new FacesMessage(
-                    FacesMessage.SEVERITY_FATAL, 
-                    "Number of dynamic actions should be 1",
-                    "Number of dynamic actions should be 1"));
         }
-    }
 
     public void doRemove(ActionEvent event) {
         getPanelGroup().getChildren().remove(0);
-        FacesContext context = FacesContext.getCurrentInstance();
-        StateContext stateContext = StateContext.getStateContext(context);
-        if (stateContext.getDynamicActions().size() != 1) {
-            context.addMessage(null, new FacesMessage(
-                    FacesMessage.SEVERITY_FATAL, 
-                    "Number of dynamic actions should be 1",
-                    "Number of dynamic actions should be 1"));
         }
-    }
     
     public void doRemoveAdd(ActionEvent event) {
         UIComponent component = getPanelGroup().getChildren().remove(0);
-        FacesContext context = FacesContext.getCurrentInstance();
-        StateContext stateContext = StateContext.getStateContext(context);
-        if (stateContext.getDynamicActions().size() != 1) {
-            context.addMessage(null, new FacesMessage(
-                    FacesMessage.SEVERITY_FATAL, 
-                    "Number of dynamic actions should be 1",
-                    "Number of dynamic actions should be 1"));
-        }
-        
         getPanelGroup().getChildren().add(component);
-        if (stateContext.getDynamicActions().size() != 2) {
-            context.addMessage(null, new FacesMessage(
-                    FacesMessage.SEVERITY_FATAL, 
-                    "Number of dynamic actions should be 2",
-                    "Number of dynamic actions should be 2"));
         }
-    }
     
     public void doRemoveAddRemove(ActionEvent event) {
         UIComponent component = getPanelGroup().getChildren().remove(0);
-        FacesContext context = FacesContext.getCurrentInstance();
-        StateContext stateContext = StateContext.getStateContext(context);
-        if (stateContext.getDynamicActions().size() != 1) {
-            context.addMessage(null, new FacesMessage(
-                    FacesMessage.SEVERITY_FATAL, 
-                    "Number of dynamic actions should be 1",
-                    "Number of dynamic actions should be 1"));
-        }
-        
         getPanelGroup().getChildren().add(component);
-        if (stateContext.getDynamicActions().size() != 2) {
-            context.addMessage(null, new FacesMessage(
-                    FacesMessage.SEVERITY_FATAL, 
-                    "Number of dynamic actions should be 2",
-                    "Number of dynamic actions should be 2"));
-        }
-        
         getPanelGroup().getChildren().remove(component);
-        if (stateContext.getDynamicActions().size() != 1) {
-            context.addMessage(null, new FacesMessage(
-                    FacesMessage.SEVERITY_FATAL, 
-                    "Number of dynamic actions should be 1",
-                    "Number of dynamic actions should be 1"));
         }
     }
-}

@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:body>
+        <h:form id="form1" prependId="false">
+            <h:inputText id="input2" value="#{validateRequiredBean.text2}">
+                <f:validateRequired />
+            </h:inputText>
+            
+            <h:commandButton value="submit" id="submit" />
+            
+            
+            <p id="messages"><h:messages /></p>
+        </h:form>
+    </h:body>
+</html>

@@ -41,15 +41,13 @@
 package com.sun.faces.test.agnostic.ajax; 
 
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.html.DomNodeList;
 import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlRadioButtonInput;
-
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-
 import org.junit.*;
 import static org.junit.Assert.*;
 
@@ -86,8 +84,9 @@ public class Issue1581IT {
     public void testSelectManyCheckboxInComposite() throws Exception {
         HtmlPage page = webClient.getPage(webUrl+"faces/issue1581.xhtml");
         final List<HtmlCheckBoxInput> checkBoxes = new ArrayList();
-        final DomNodeList<HtmlElement> elements = page.getElementsByTagName("input");
-        for (HtmlElement elem : elements) {
+        final DomNodeList<DomElement> elements = page.getElementsByTagName("input");
+        for (Iterator<DomElement> it = elements.iterator(); it.hasNext();) {
+            DomElement elem = it.next();
             if (elem instanceof HtmlCheckBoxInput) {
                 checkBoxes.add((HtmlCheckBoxInput)elem);
             }

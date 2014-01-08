@@ -319,7 +319,11 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
                                       phaseId.toString(),
                                       ((c != null) ? c.getClientId(exceptionContext.getContext()) : ""),
                                       t.getMessage()});
-            LOGGER.log(level, t.getMessage(), t);
+            if (t.getMessage() != null) {
+                LOGGER.log(level, t.getMessage(), t);
+            } else {
+                LOGGER.log(level, "No associated message", t);
+            }
         }
         
     }

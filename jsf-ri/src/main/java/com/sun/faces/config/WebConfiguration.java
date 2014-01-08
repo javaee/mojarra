@@ -853,6 +853,19 @@ public class WebConfiguration {
                     LOGGER.fine(root.toString());
                 }
             }
+            // JAVASERVERFACES-2922 Martin Kouba
+            if (!Util.isCDIAvailable(servletContext)) {
+                try {
+                    Object beanManager = initialContext.lookup("java:comp/env/BeanManager");
+                    if (null != beanManager) {
+                        Util.setCDIAvailable(servletContext, beanManager);
+                    }
+                } catch (NamingException root) {
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.fine(root.toString());
+                    }
+                }
+            }
         }
 
     }
@@ -1385,7 +1398,11 @@ public class WebConfiguration {
         ),
         DisableIdUniquenessCheck(
             "com.sun.faces.disableIdUniquenessCheck",
-            false);
+            false),
+        EnableTransitionTimeNoOpFlash(
+                "com.sun.faces.enableTransitionTimeNoOpFlash",
+                false)
+        ;
 
         private BooleanWebContextInitParameter alternate;
 

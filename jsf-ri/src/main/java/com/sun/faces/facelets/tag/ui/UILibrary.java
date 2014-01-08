@@ -67,31 +67,12 @@ import com.sun.faces.facelets.tag.AbstractTagLibrary;
 public final class UILibrary extends AbstractTagLibrary {
 
     public final static String Namespace = "http://java.sun.com/jsf/facelets";
+    public final static String XMLNSNamespace = "http://xmlns.jcp.org/jsf/facelets";
 
     public final static UILibrary Instance = new UILibrary();
 
     public UILibrary() {
-        super(Namespace);
-
-        this.addTagHandler("include", IncludeHandler.class);
-
-        this.addTagHandler("composition", CompositionHandler.class);
-        
-        this.addComponent("component", ComponentRef.COMPONENT_TYPE, null, ComponentRefHandler.class);
-        
-        this.addComponent("fragment", ComponentRef.COMPONENT_TYPE, null, ComponentRefHandler.class);
-
-        this.addTagHandler("define", DefineHandler.class);
-
-        this.addTagHandler("insert", InsertHandler.class);
-
-        this.addTagHandler("param", ParamHandler.class);
-
-        this.addTagHandler("decorate", DecorateHandler.class);
-        
-        this.addComponent("repeat", UIRepeat.COMPONENT_TYPE, null, RepeatHandler.class);
-        
-        this.addComponent("debug", UIDebug.COMPONENT_TYPE, null);
+        this(Namespace);
     }
     
     public UILibrary(String namespace) {

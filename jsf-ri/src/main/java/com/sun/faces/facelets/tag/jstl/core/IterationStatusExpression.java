@@ -138,18 +138,21 @@ public final class IterationStatusExpression extends ValueExpression {
         return this.toString();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see javax.el.Expression#equals(java.lang.Object)
-     */
+    @Override
     public boolean equals(Object obj) {
-        if (obj instanceof IterationStatus) {
-            return this.status.equals(obj);
+        if (obj == null) {
+            return false;
         }
-        return false;
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final IterationStatusExpression other = (IterationStatusExpression) obj;
+        if (this.status != other.status && (this.status == null || !this.status.equals(other.status))) {
+            return false;
+        }
+        return true;
     }
-
+    
     /*
      * (non-Javadoc)
      * 

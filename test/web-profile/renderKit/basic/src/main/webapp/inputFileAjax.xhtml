@@ -46,6 +46,16 @@
     <h:head></h:head>
 
     <h:form id="form" enctype="multipart/form-data" prependId="false">
+
+        <h4>Manual Testing Instructions</h4>
+        <ul>
+        <li>Press <i>Choose File</i> button</li>
+        <li>Navigate to root directory for this application (test/webprofile/renderKit/basic)</li>
+        <li>Select <i>inputFileSuccess.txt</i> file</li>
+        <li>You should see the text: <i>This file contains the string JSR-344 and will be successfully set into the model.</i></li>
+        <li>Do the same by choosing <i>inputFileFailure.txt</i> file</li>
+        <li>You should see the text: <i>Invalid file. File must contain special string</i></li>
+        </ul>
         
         <p><h:inputText id="text" value="#{fileUploadBean.text}">
            </h:inputText></p>

@@ -140,22 +140,6 @@ public final class ViewHandler extends TagHandlerImpl {
             throws IOException {
         UIViewRoot root = ComponentSupport.getViewRoot(ctx, parent);
         if (root != null) {
-            if (this.locale != null) {
-                try {
-                    root.setLocale(ComponentSupport.getLocale(ctx,
-                            this.locale));
-                } catch (TagAttributeException tae) {
-                    Object result = this.locale.getObject(ctx);
-                    if (null == result) {
-                        Locale l = Locale.getDefault();
-                        // Special case for bugdb 13582626
-                        if (LOGGER.isLoggable(Level.WARNING)) {
-                            LOGGER.log(Level.WARNING, "Using {0} for locale because expression {1} returned null.", new Object[]{l, this.locale.toString()});
-                        }
-                        root.setLocale(l);
-                    }
-                }
-            }
             if (this.renderKitId != null) {
                 String v = this.renderKitId.getValue(ctx);
                 root.setRenderKitId(v);
@@ -167,6 +151,7 @@ public final class ViewHandler extends TagHandlerImpl {
             if (this.encoding != null) {
                 String v = this.encoding.getValue(ctx);
                 ctx.getFacesContext().getAttributes().put(RIConstants.FACELETS_ENCODING_KEY, v);
+                root.getAttributes().put(RIConstants.FACELETS_ENCODING_KEY, v);
             }
             if (this.beforePhase != null) {
                 MethodExpression m = this.beforePhase
@@ -206,6 +191,30 @@ public final class ViewHandler extends TagHandlerImpl {
             assert(0 < viewId.length());
 
         }
+
+        /*
+         * Fixes https://java.net/jira/browse/JAVASERVERFACES-3021.
+         * 
+         * The rational behind moving this here is that we need to make sure
+         * we establish the locale in all cases.
+         */
+        if (this.locale != null && root != null) {
+            try {
+                root.setLocale(ComponentSupport.getLocale(ctx, this.locale));
+            } catch (TagAttributeException tae) {
+                Object result = this.locale.getObject(ctx);
+                if (null == result) {
+                    Locale l = Locale.getDefault();
+                    // Special case for bugdb 13582626
+                    if (LOGGER.isLoggable(Level.WARNING)) {
+                        LOGGER.log(Level.WARNING, 
+                                "Using {0} for locale because expression {1} returned null.", 
+                                new Object[]{l, this.locale.toString()});
+                    }
+                    root.setLocale(l);
+                }
+            }
+        }        
 
         this.nextHandler.apply(ctx, parent);
     }

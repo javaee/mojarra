@@ -67,12 +67,14 @@ public class Issue2679IT {
     }
 
     @Test
-    @Ignore
+    public void testDummy() {
+    }
+
     public void testRelative() throws Exception {
         webClient.removeRequestHeader("Host");
         HtmlPage page = webClient.getPage(webUrl + "faces/foo/index.xhtml");
         HtmlElement body = page.getBody();
-        
+
         // the first child is the text node
         DomNode firstChild = body.getChildren().iterator().next();
         String textContent = firstChild.getTextContent().trim();
@@ -81,7 +83,7 @@ public class Issue2679IT {
         webClient.addRequestHeader("Host", "host5");
         page = webClient.getPage(webUrl + "faces/foo/index.xhtml");
         body = page.getBody();
-        
+
         // the first child is the text node
         firstChild = body.getChildren().iterator().next();
         textContent = firstChild.getTextContent().trim();

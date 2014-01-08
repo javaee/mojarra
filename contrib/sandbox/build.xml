@@ -295,6 +295,10 @@
                 access="protected"
                 useexternalfile="yes"
                 use="true">
+           <link offline="true"
+                 href="http://java.sun.com/javase/6/docs/api/package-list"
+                 packagelistloc="${jsf.build.home}/common/ant/package-list" />
+                 
             <fileset dir="${source.dir}" defaultexcludes="yes" />
         </javadoc>
     </target>

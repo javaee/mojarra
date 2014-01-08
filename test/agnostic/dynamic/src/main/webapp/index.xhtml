@@ -7,7 +7,7 @@
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -51,9 +51,25 @@
         <f:view>
             <h2>Dynamic Component Tests</h2>
             <ul>
-                <li><a href="#{facesContext.externalContext.requestContextPath}/faces/moveComponent.xhtml">Move a component around</a></li>
-                <li><a href="#{facesContext.externalContext.requestContextPath}/faces/toggle.xhtml">Toggle a component back and forth</a></li>
-                <li><a href="#{facesContext.externalContext.requestContextPath}/faces/removeComponent.xhtml">Remove a component using a PreRenderComponent event</a></li>
+                <li><a href="#{facesContext.externalContext.requestContextPath}/faces/moveComponent.xhtml">ActionEvent Processing: Move a component around</a></li>
+                <br/>
+                <li><a href="#{facesContext.externalContext.requestContextPath}/faces/moveComponent1.xhtml">PreRenderViewEvent Processing: Move a component</a></li>
+                <br/>
+                <li><a href="#{facesContext.externalContext.requestContextPath}/faces/toggle.xhtml">PreRenderViewEvent Processing: Toggle components</a></li>
+                <br/>
+                <li><a href="#{facesContext.externalContext.requestContextPath}/faces/removeComponent.xhtml">PreRenderViewEvent Processing: Remove a component</a></li>
+                <br/>
+                <li><a href="#{facesContext.externalContext.requestContextPath}/faces/add.xhtml">PreRenderViewEvent Processing: Creates/adds a component</a></li>
+                <br/>
+                <li><a href="#{facesContext.externalContext.requestContextPath}/faces/stable.xhtml">PreRenderViewEvent Processing: Creates/adds three input components. Tests for ordering stability after postback</a></li>
+                <br/>
+                <li><a href="#{facesContext.externalContext.requestContextPath}/faces/table.xhtml">PreRenderViewEvent Processing: Creates/adds a datatable component, followed by the creation/addition of a component to the datatable</a></li>
+                <br/>
+                <li><a href="#{facesContext.externalContext.requestContextPath}/faces/recursive.xhtml">PreRenderViewEvent Processing: Creates/adds a component, followed by the creation/addition of a nested component</a></li>
+                <br/>
+                <li><a href="#{facesContext.externalContext.requestContextPath}/faces/add1.xhtml">PreRenderViewEvent / PostRestoreStateEvent Processing: Creates/adds components</a></li>
+                <br/>
+                <li><a href="#{facesContext.externalContext.requestContextPath}/faces/add2.xhtml">PreRenderViewEvent Processing: Creates/adds a component to an existing component.  Each subsequent action appends a new component.</a></li>
             </ul>
         </f:view>
     </body>

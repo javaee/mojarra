@@ -62,7 +62,12 @@ import java.util.Map.Entry;
 import java.util.Set;
 import static com.sun.faces.RIConstants.DYNAMIC_CHILD_COUNT;
 import static com.sun.faces.RIConstants.DYNAMIC_COMPONENT;
+import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.MostlySingletonSet;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.logging.Logger;
 import javax.faces.FacesException;
 
@@ -73,6 +78,11 @@ public class StateContext {
 
 
     private static final String KEY = StateContext.class.getName() + "_KEY";
+    
+    // Expando attribute used to mark dynamic UIComponents that have had their
+    // ComponentSupport.MARK_CREATED expando removed.
+    private static final String MARK_CREATED_REMOVED =
+            StateContext.class.getName() + "_MARK_CREATED_REMOVED";
     
     private boolean partial;
     private boolean partialLocked;
@@ -189,7 +199,7 @@ public class StateContext {
     public void startTrackViewModifications(FacesContext ctx, UIViewRoot root) {
         if (modListener == null) {
             if (root != null) {
-                modListener = new AddRemoveListener(ctx);
+                modListener = createAddRemoveListener(ctx, root);
                 root.subscribeToViewEvent(PostAddToViewEvent.class, modListener);
                 root.subscribeToViewEvent(PreRemoveFromViewEvent.class, modListener);
             } else {
@@ -204,7 +214,7 @@ public class StateContext {
      * Toggles the current modification tracking status.
      * 
      * @param trackMods if <code>true</code> and the listener installed by 
-     * {@link #startTrackViewModifications(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot)}
+     * {@link #startTrackViewModifications(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot) 
      * is present, then view modifications will be tracked.  If 
      * <code>false</code>, then modification events will be ignored.
      */
@@ -285,31 +295,25 @@ public class StateContext {
     // ---------------------------------------------------------- Nested Classes
 
 
-    /**
-     * A system event listener which is used to listen for changes on the 
-     * component tree after restore view and before rendering out the view.
-     */
-    public class AddRemoveListener implements SystemEventListener {
+    private AddRemoveListener createAddRemoveListener(FacesContext context, UIViewRoot root) {
+        return isPartialStateSaving(context, root.getViewId()) ?
+                new DynamicAddRemoveListener(context) :
+                new StatelessAddRemoveListener(context);
+    }
 
+    abstract private class AddRemoveListener implements SystemEventListener {
+ 
         /**
          * Stores the state context we work for,
          */
         private StateContext stateCtx;
-        /**
-         * Stores the list of adds/removes.
-         */
-        private List<ComponentStruct> dynamicActions;
-        /**
-         * Stores the hash map of dynamic components.
-         */
-        private transient HashMap<String, UIComponent> dynamicComponents;
 
         /**
          * Constructor.
          * 
          * @param context the Faces context. 
          */
-        public AddRemoveListener(FacesContext context) {
+        protected AddRemoveListener(FacesContext context) {
             stateCtx = StateContext.getStateContext(context);
         }
 
@@ -318,28 +322,14 @@ public class StateContext {
          * 
          * @return the list of adds/removes.
          */
-        public List<ComponentStruct> getDynamicActions() {
-            synchronized(this) {
-                if (dynamicActions == null) {
-                    dynamicActions = new ArrayList<ComponentStruct>();
-                }
-            }
-            return dynamicActions;
-        }
+        abstract public List<ComponentStruct> getDynamicActions();
 
         /**
          * Get the hash map of dynamic components.
          * 
          * @return the hash map of dynamic components.
          */
-        public HashMap<String, UIComponent> getDynamicComponents() {
-            synchronized(this) {
-                if (dynamicComponents == null) {
-                    dynamicComponents = new HashMap<String, UIComponent>();
-                }
-            }
-            return dynamicComponents;
-        }
+        abstract public HashMap<String, UIComponent> getDynamicComponents();
         
         /**
          * Process the add/remove event.
@@ -382,7 +372,253 @@ public class StateContext {
          * @param context the Faces context.
          * @param component the UI component to add to the list as a REMOVE.
          */
-        private void handleRemove(FacesContext context, UIComponent component) {
+        abstract protected void handleRemove(FacesContext context, UIComponent component);
+
+        /**
+         * Handle the add.
+         * 
+         * @param context the Faces context.
+         * @param component the UI component to add to the list as an ADD.
+         */
+        abstract protected void handleAdd(FacesContext context, UIComponent component);
+    }
+
+    public class NoopAddRemoveListener extends AddRemoveListener {
+
+        // This is silly.  We should be able to use Colletions.emptyMap(),
+        // but cannot as StateContext.getDynamicComponents() API returns a
+        // HashMap instead of a Map.
+        private HashMap emptyComponentsMap = new HashMap();
+
+        public NoopAddRemoveListener(FacesContext context) {
+            super(context);
+        }
+
+        @Override
+        public List<ComponentStruct> getDynamicActions() {
+            return Collections.emptyList();
+        }
+
+        @Override
+        public HashMap<String, UIComponent> getDynamicComponents() {
+            return emptyComponentsMap;
+        }
+
+        @Override
+        protected void handleRemove(FacesContext context, UIComponent component) {
+        }
+
+        @Override
+        protected void handleAdd(FacesContext context, UIComponent component) {
+        }
+    }
+ 
+    /**
+     * An AddRemoveListener that implements the new dynamic component
+     * strategy where no state is managed by the listener itself.  Instead,
+     * we use expando attributes on the dynamic components (and their parents)
+     * to track/preserve the dynamic nature of these components.
+     */
+    public class StatelessAddRemoveListener extends NoopAddRemoveListener {
+        
+        public StatelessAddRemoveListener(FacesContext context) {
+            super(context);
+        }
+ 
+        private boolean thisEventCorrespondsToSubtreeRootRemove(FacesContext context, UIComponent c) {
+            boolean result = false;
+            if (null != c) {
+                c = c.getParent();
+                if (null != c) {
+                    result = c.isInView();
+                }
+            }
+            
+            return result;
+        }
+        
+        private boolean thisEventCorrespondsToSubtreeRootAdd(FacesContext context, UIComponent c) {
+            boolean result = false;
+            Map<Object, Object> contextMap = context.getAttributes();
+            UIViewRoot root = context.getViewRoot();
+            UIComponent originalComponent = c;
+            if (null != c) {
+                Collection<UIComponent> dynamics = getDynamicComponentCollection(contextMap);
+                if (!dynamics.contains(c)) {
+                    c = c.getParent();
+                    while (null != c && !dynamics.contains(c)) {
+                        c = c.getParent();
+                    }
+                    if (null == c || root.equals(c)) {
+                        dynamics.add(originalComponent);
+                        result = true;
+                    }
+                }
+            }
+            
+            return result;
+        }
+        
+        private static final String DYNAMIC_COMPONENT_ADD_COLLECTION = 
+                RIConstants.FACES_PREFIX + "DynamicComponentSubtreeRoots";
+        
+        private Collection<UIComponent> getDynamicComponentCollection(Map<Object, Object> contextMap) {
+            Collection<UIComponent> result = (Collection<UIComponent>) contextMap.get(DYNAMIC_COMPONENT_ADD_COLLECTION);
+            if (null == result) {
+                result = new HashSet<UIComponent>();
+                contextMap.put(DYNAMIC_COMPONENT_ADD_COLLECTION, result);
+            }
+            return result;
+        }
+        
+        @Override
+        protected void handleRemove(FacesContext context, UIComponent component) {
+            if (!thisEventCorrespondsToSubtreeRootRemove(context, component)) {
+                return;
+            }
+            
+            Map<String, Object> attrs = component.getAttributes();
+
+            // If the component is a tag-created child, we remove its
+            // MARK_CREATED expando so that it will now be treated as
+            // a dynamic/non-tag created component.
+            String tagId = (String)attrs.remove(ComponentSupport.MARK_CREATED);
+            if (tagId != null) {
+                // Actually, we don't just remove the MARK_CREATED - we need
+                // to stash it away so that we can restore it later if the
+                // component happens to be re-added to its original parent.
+                attrs.put(MARK_CREATED_REMOVED, tagId);
+                childRemovedFromParent(component.getParent(), tagId);
+            }
+        }
+        
+        private void childRemovedFromParent(UIComponent parent, String childTagId) {
+            if (parent !=null) {
+                Collection<String> removedChildrenIds = getPreviouslyRemovedChildren(parent);                
+                removedChildrenIds.add(childTagId);
+                
+                markChildrenModified(parent);
+            }
+        }
+
+        private Collection<String> getPreviouslyRemovedChildren(UIComponent parent) {
+            Map<String, Object> attrs = parent.getAttributes();
+            Collection<String> removedChildrenIds = (Collection<String>)
+                    attrs.get(ComponentSupport.REMOVED_CHILDREN);
+            
+            if (removedChildrenIds == null) {
+                removedChildrenIds = new MostlySingletonSet<String>();
+                attrs.put(ComponentSupport.REMOVED_CHILDREN, removedChildrenIds);
+            }
+
+            return removedChildrenIds;
+        }
+
+        private void markChildrenModified(UIComponent parent) {
+          parent.getAttributes().put(ComponentSupport.MARK_CHILDREN_MODIFIED, true); 
+        }
+
+        @Override
+        protected void handleAdd(FacesContext context, UIComponent component) {
+            if (!thisEventCorrespondsToSubtreeRootAdd(context, component)) {
+                return;
+            }
+            
+            Map<String, Object> attrs = component.getAttributes();
+            String tagId = (String)attrs.get(MARK_CREATED_REMOVED);
+            
+            if (childAddedToSameParentAsBefore(component, tagId)) {
+                
+                // Restore MARK_CREATED if the added component was originally
+                // created as a tag-based child of this parent.
+                attrs.remove(MARK_CREATED_REMOVED);
+                attrs.put(ComponentSupport.MARK_CREATED, tagId);
+            }
+            
+            markChildrenModified(component.getParent());
+        }
+
+        // Handles the addition of a new child to the parent.  Returns true
+        // if the child was previously removed from this parent.
+        private boolean childAddedToSameParentAsBefore(UIComponent parent, String childTagId) {
+            if (parent != null) {
+                Map<String, Object> attrs = parent.getAttributes();
+                Collection<String> removedChildrenIds = (Collection<String>)
+                        attrs.get(ComponentSupport.REMOVED_CHILDREN);
+                if ((removedChildrenIds != null) && removedChildrenIds.remove(childTagId)) {
+                    if (removedChildrenIds.isEmpty()) {
+                        attrs.remove(ComponentSupport.REMOVED_CHILDREN);
+                    }
+                    return true;
+                }
+            }
+            
+            return false;
+        }
+    }
+
+    /**
+     * A system event listener which is used to listen for changes on the 
+     * component tree after restore view and before rendering out the view.
+     */
+    public class DynamicAddRemoveListener extends AddRemoveListener {
+
+        /**
+         * Stores the list of adds/removes.
+         */
+        private List<ComponentStruct> dynamicActions;
+        /**
+         * Stores the hash map of dynamic components.
+         */
+        private transient HashMap<String, UIComponent> dynamicComponents;
+
+        /**
+         * Constructor.
+         * 
+         * @param context the Faces context. 
+         */
+        public DynamicAddRemoveListener(FacesContext context) {
+            super(context);
+        }
+
+        /**
+         * Get the list of adds/removes.
+         * 
+         * @return the list of adds/removes.
+         */
+        @Override
+        public List<ComponentStruct> getDynamicActions() {
+            synchronized(this) {
+                if (dynamicActions == null) {
+                    dynamicActions = new ArrayList<ComponentStruct>();
+                }
+            }
+            return dynamicActions;
+        }
+
+        /**
+         * Get the hash map of dynamic components.
+         * 
+         * @return the hash map of dynamic components.
+         */
+        @Override
+        public HashMap<String, UIComponent> getDynamicComponents() {
+            synchronized(this) {
+                if (dynamicComponents == null) {
+                    dynamicComponents = new HashMap<String, UIComponent>();
+                }
+            }
+            return dynamicComponents;
+        }
+        
+        /**
+         * Handle the remove.
+         * 
+         * @param context the Faces context.
+         * @param component the UI component to add to the list as a REMOVE.
+         */
+        @Override
+        protected void handleRemove(FacesContext context, UIComponent component) {
             if (component.isInView()) {
                 decrementDynamicChildCount(component.getParent());
                 ComponentStruct struct = new ComponentStruct();
@@ -399,7 +635,8 @@ public class StateContext {
          * @param context the Faces context.
          * @param component the UI component to add to the list as an ADD.
          */
-        private void handleAdd(FacesContext context, UIComponent component) {
+        @Override
+        protected void handleAdd(FacesContext context, UIComponent component) {
             if (component.getParent() != null && component.getParent().isInView()) {
                 String id = component.getId();
 

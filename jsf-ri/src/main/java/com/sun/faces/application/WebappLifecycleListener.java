@@ -137,6 +137,11 @@ public class WebappLifecycleListener {
      * @param event the notification event
      */
     public void requestInitialized(ServletRequestEvent event) {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        if (facesContext instanceof InitFacesContext) {
+            InitFacesContext initFacesContext = (InitFacesContext) facesContext;
+            initFacesContext.releaseCurrentInstance();
+        }
         ApplicationAssociate.setCurrentInstance(getAssociate());
     }
 

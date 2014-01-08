@@ -115,11 +115,6 @@ public class SetHandler extends TagHandlerImpl {
         // seem to enforce much in the way of this, so I edburns needs to check
         // with an authority on the matter, probabyl Kin-Man Chung
         
-        // If var is set, value must be set, otherwise an error is thrown
-        if (this.var != null && !valSet) {
-            throw new TagException(tag, "var set with null or empty value");
-        }
-
         ValueExpression veObj;
         ValueExpression lhs;
         String expr;

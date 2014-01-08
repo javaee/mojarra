@@ -158,16 +158,7 @@ public class DataTableTestCase extends HtmlUnitFacesTestCase {
         cell = assertSingle(row.getCells());
         assertFalse(cell.hasAttribute("colspan"));
         HtmlTableBody body = assertSingle(table.getBodies());
-        row = assertSingle(body.getRows());
-        cell = assertSingle(row.getCells());
-        assertEquals("", cell.asText());
-
-        assertEmptyTable("PureEmptyDataTable", page, false);
-
-        // panelGridTests
-        assertEmptyTable("PureEmptyPanelGrid", page, false);
-        assertEmptyTable("NoRenderedContentPanelGrid", page, true);
-
+        assertSingle(body.getRows());
     }
 
     /**
@@ -194,15 +185,12 @@ public class DataTableTestCase extends HtmlUnitFacesTestCase {
                 + " should have " + expectedRowCount
                 + " row(s)", expectedRowCount,
                 allRows.size());
-        // test that we have <tbody><tr><td></td></tr></tbody>
+        // test that we have <tbody><tr>...</tr></tbody>
         HtmlTableBody body = assertSingle(tableId + "should have one tbody",
                 table.getBodies());
         HtmlTableRow row = assertSingle(tableId + ":tbody should have one tr",
                 body.getRows());
-        HtmlTableCell cell = assertSingle(tableId
-                + ":tbody:tr should have one td", row.getCells());
-        assertEquals(tableId + " the single td should be empty", "", cell
-                .asText());
+        assertTrue(row.getCells().size() == 2);
     }
 
     private static <T> T assertSingle(final String msg, final List<T> input) {

@@ -42,7 +42,6 @@ package com.sun.faces.test.agnostic.facelets.core;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -74,7 +73,7 @@ public class Issue2731IT {
         HtmlPage page = webClient.getPage(webUrl + "faces/viewTransient.xhtml");
         assertTrue(page.asXml().indexOf("\"stateless\"") != -1);
         
-        HtmlElement button = page.getElementById("form:button");
+        HtmlElement button = page.getHtmlElementById("form:button");
         page = button.click();
         
         assertTrue(page.asXml().indexOf("\"stateless\"") != -1);
@@ -92,14 +91,14 @@ public class Issue2731IT {
         assertTrue(page.asXml().indexOf("\"stateless\"") != -1);
         assertTrue(page.asXml().indexOf("[]") != -1);
         
-        HtmlElement button = page.getElementById("form:ajaxButton");
+        HtmlElement button = page.getHtmlElementById("form:ajaxButton");
         page = button.click();
         webClient.waitForBackgroundJavaScript(60000);
         
         assertTrue(page.asXml().indexOf("\"stateless\"") != -1);
         assertTrue(page.asXml().indexOf("[ajax]") != -1);
 
-        button = page.getElementById("form:submitButton");
+        button = page.getHtmlElementById("form:submitButton");
         page = button.click();
 
         assertTrue(page.asXml().indexOf("\"stateless\"") != -1);
@@ -116,7 +115,7 @@ public class Issue2731IT {
         HtmlPage page = webClient.getPage(webUrl + "faces/viewTransientFalse.xhtml");
         assertTrue(page.asXml().indexOf("com.sun.faces.StatelessPostback") == -1);
         
-        HtmlElement button = page.getElementById("form:button");
+        HtmlElement button = page.getHtmlElementById("form:button");
         page = button.click();
         
         assertTrue(page.asXml().indexOf("com.sun.faces.StatelessPostback") == -1);

@@ -158,7 +158,7 @@ public class UIInputTest {
         assertTrue(!l2.initialStateMarked());
         Object state = input.saveState(context);
         assertTrue(state instanceof Object[]);
-        Object[] validatorState = (Object[]) ((Object[]) state)[3];
+        Object[] validatorState = (Object[]) ((Object[]) state)[1];
         assertNotNull(validatorState);
         assertNull(validatorState[0]);
         assertNotNull(validatorState[1]);
@@ -189,7 +189,7 @@ public class UIInputTest {
         state = input.saveState(context);
         assertNotNull(validatorState);
         assertTrue(state instanceof Object[]);
-        validatorState = (Object[]) ((Object[]) state)[3];
+        validatorState = (Object[]) ((Object[]) state)[1];
         assertNotNull(validatorState);
         assertTrue(validatorState.length == 3);
         assertNotNull(validatorState[0]);

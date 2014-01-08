@@ -116,8 +116,10 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
         ResponseWriter writer = getWrapped();
         writer.startElement("partial-response", null);
         FacesContext ctx = FacesContext.getCurrentInstance();
-        String id = ctx.getViewRoot().getContainerClientId(ctx);
-        writer.writeAttribute("id", id, "id");
+        if (ctx.getViewRoot() != null) {
+            String id = ctx.getViewRoot().getContainerClientId(ctx);
+            writer.writeAttribute("id", id, "id");
+        }
     }
 
     /**

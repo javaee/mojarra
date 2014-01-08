@@ -148,7 +148,7 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
                 }
             };
 	}
-        clearDescriptors();
+//        clearDescriptors();
         Thread thread = null;
         for (i = 0; i < runnables.length; i++) {
             thread = new Thread(runnables[i], "" + i);
@@ -177,10 +177,10 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
     private void clearDescriptors() throws Exception {
         Field descriptorsField = UIComponentBase.class.getDeclaredField("descriptors");
         descriptorsField.setAccessible(true);
-        WeakHashMap<Class<?>, Map<String, PropertyDescriptor>> descriptors =
-              (WeakHashMap<Class<?>, Map<String, PropertyDescriptor>>) descriptorsField
+        Map<Class<?>, Map<String, PropertyDescriptor>> descriptors =
+              (Map<Class<?>, Map<String, PropertyDescriptor>>) descriptorsField
                     .get(null);
-        descriptors.clear();        
+        descriptors.clear();
     }
 
     public void testAttributesTransparency() {

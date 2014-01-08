@@ -51,31 +51,25 @@
 
     <property name="deploy-exploded-applications" value="" />
 
-    <property name="applications-for-V3-only" value="JAVASERVERFACES-1856" />
+    <property name="applications-for-V3-only" value="" />
 
     <property name="applications-for-V3.1-only"
               value="GLASSFISH-11636,
                      GLASSFISH-15985,
-                     GLASSFISH-17218,
-                     JAVASERVERFACES-1856" />
+                     GLASSFISH-17218" />
 
     <property name="applications-for-V3.1_no_cluster-only"
               value="GLASSFISH-11636,
                      GLASSFISH-15985,
                      GLASSFISH-17218,
-                     JAVASERVERFACES-1856,
                      JAVASERVERFACES-2033,
                      GLASSFISH-16847,
                      JAVASERVERFACES-1338,
                      admingui" />
 
-<!-- Need to re-enable this test.  It fails as a result of fix for: JAVASERVERFACES-2491 -->
-<!-- JAVASERVERFACES-1655, --> 
-
     <property name="container-agnostic-applications" value="
                     JAVASERVERFACES-2195,
                     JAVASERVERFACES-2112,
-                    JAVASERVERFACES-1958,
                     JAVASERVERFACES-832,
                     JAVASERVERFACES-2038,
                     JAVASERVERFACES-2025,
@@ -84,18 +78,13 @@
                     JAVASERVERFACES-2067,
                     JAVASERVERFACES-2079,
                     JAVASERVERFACES-1995,
-                    JAVASERVERFACES_SPEC_PUBLIC-762,
                     JAVASERVERFACES_SPEC_PUBLIC-745,
-                    JAVASERVERFACES_SPEC_PUBLIC-758,
                     JAVASERVERFACES_SPEC_PUBLIC-763,
                     JAVASERVERFACES-2266,
                     JAVASERVERFACES-2089,
                     GLASSFISH-18007,
                     JAVASERVERFACES-2113,
-                    JAVASERVERFACES_SPEC_PUBLIC-479,
-                    JAVASERVERFACES_SPEC_PUBLIC-220,
                     JAVASERVERFACES_SPEC_PUBLIC-594,
-                    JAVASERVERFACES_SPEC_PUBLIC-1071,
                     JAVASERVERFACES_SPEC_PUBLIC-719,
                     JAVASERVERFACES_SPEC_PUBLIC-1082" />
 

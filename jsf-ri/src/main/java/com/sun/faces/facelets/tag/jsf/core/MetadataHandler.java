@@ -112,6 +112,8 @@ public class MetadataHandler extends TagHandlerImpl {
                 panelGroup.getChildren().add(facetComponent);
                 root.getFacets().put(UIViewRoot.METADATA_FACET_NAME, panelGroup);
                 facetComponent = panelGroup;
+            }
+            if (null != facetComponent) {
                 facetComponent.setId(UIViewRoot.METADATA_FACET_NAME);
             }
         }

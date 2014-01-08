@@ -68,18 +68,18 @@ body {
 .html4strict .imp {font-weight: bold; color: red;}
 .html4strict li {background: #ffffff;}
 .html4strict li.li2 {background: #f8f8f8;}
-.html4strict .kw1 {color: #b1b100;}
+.html4strict .kw1 {color: #000000;}
 .html4strict .kw2 {color: #000000;}
 .html4strict .kw3 {color: #000066;}
-.html4strict .coMULTI {color: #008800;}
-.html4strict .es0 {color: #000099;}
-.html4strict .br0 {color: #66cc66;}
-.html4strict .st0 {color: #008888;}
-.html4strict .nu0 {color: #cc66cc;}
-.html4strict .sc0 {color: #00bbbb;}
-.html4strict .sc1 {color: #bb44bb;}
-.html4strict .sc2 {color: #009900;}
-.html4strict .sc3 {color: #FF0000;}
+.html4strict .coMULTI {color: #000000;}
+.html4strict .es0 {color: #000000;}
+.html4strict .br0 {color: #000000;}
+.html4strict .st0 {color: #000000;}
+.html4strict .nu0 {color: #000000;}
+.html4strict .sc0 {color: #000000;}
+.html4strict .sc1 {color: #000000;}
+.html4strict .sc2 {color: #000000;}
+.html4strict .sc3 {color: #000000;}
 
 /*
 The cleverer parts of this stylesheet came from

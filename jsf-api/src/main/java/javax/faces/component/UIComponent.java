@@ -59,6 +59,7 @@ import java.util.MissingResourceException;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.el.ELContext;
@@ -704,7 +705,6 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
     public void setInView(boolean isInView) {
         this.isInView = isInView;
     }
-
 
     /**
      * <p class="changed_added_2_0">Enable EL to access the <code>clientId</code>

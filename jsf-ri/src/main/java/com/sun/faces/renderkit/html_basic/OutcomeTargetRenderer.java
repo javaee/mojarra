@@ -40,6 +40,7 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import com.sun.faces.flow.FlowHandlerImpl;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.util.Util;
@@ -214,7 +215,20 @@ public abstract class OutcomeTargetRenderer extends HtmlBasicRenderer {
                 // if the parameter name isn't already present within the existing
                 // collection
                 if (!existingParams.containsKey(navParamName)) {
-                    existingParams.put(navParamName, entry.getValue());
+                    if (entry.getValue().size() == 1) {
+                        String value = entry.getValue().get(0);
+                        if (value.trim().startsWith("#{") || value.trim().startsWith("${")) {
+                            FacesContext fc = FacesContext.getCurrentInstance();
+                            value = fc.getApplication().evaluateExpressionGet(fc, value, String.class);
+                            List<String> values = new ArrayList<String>();
+                            values.add(value);
+                            existingParams.put(navParamName, values);
+                        } else {
+                            existingParams.put(navParamName, entry.getValue());
+                        }
+                    } else {
+                        existingParams.put(navParamName, entry.getValue());
+                    }
                 }
             }
         }
@@ -225,6 +239,16 @@ public abstract class OutcomeTargetRenderer extends HtmlBasicRenderer {
                 List<String> flowDocumentIdValues = new ArrayList<String>();
                 flowDocumentIdValues.add(FlowHandler.NULL_FLOW);
                 existingParams.put(FlowHandler.TO_FLOW_DOCUMENT_ID_REQUEST_PARAM_NAME, flowDocumentIdValues);
+                
+                FacesContext context = FacesContext.getCurrentInstance();
+                FlowHandler fh = context.getApplication().getFlowHandler();
+                if (fh instanceof FlowHandlerImpl) {
+                    FlowHandlerImpl fhi = (FlowHandlerImpl) fh;
+                    List<String> flowReturnDepthValues = new ArrayList<String>();
+                    flowReturnDepthValues.add("" + fhi.getAndClearReturnModeDepth(context));
+                    existingParams.put(FlowHandlerImpl.FLOW_RETURN_DEPTH_PARAM_NAME, flowReturnDepthValues);
+                }
+                
             } else {
                 String flowId = navCase.getFromOutcome();
                 List<String> flowDocumentIdValues = new ArrayList<String>();

@@ -58,11 +58,8 @@
 
 package com.sun.faces.facelets.tag.jsf;
 
-import com.sun.faces.application.ApplicationAssociate;
-import javax.faces.view.facelets.Facelet;
 import com.sun.faces.facelets.util.ReflectionUtil;
 import com.sun.faces.facelets.el.VariableMapperWrapper;
-import com.sun.faces.facelets.impl.DefaultFaceletFactory;
 import com.sun.faces.facelets.tag.jsf.ComponentTagHandlerDelegateImpl.CreateComponentDelegate;
 import com.sun.faces.facelets.tag.MetaRulesetImpl;
 import com.sun.faces.facelets.tag.MetadataTargetImpl;
@@ -156,6 +153,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
             }
             if (cc == null) {
                 cc = context.getApplication().createComponent(context, ccResource);
+                cc.setValueExpression("binding", ve);
                 ve.setValue(ctx, cc);
             }
         } else {
@@ -464,20 +462,16 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
                     Object obj = compDescriptor.getValue("type");
                     if ((null != obj) && !(obj instanceof Class)) {
                         ValueExpression typeVE = (ValueExpression) obj;
-                        if (typeVE == null) {
-                            return Object.class;
-                        } else {
-                            String className = (String) typeVE.getValue(FacesContext.getCurrentInstance().getELContext());
-                            if (className != null) {
-                                className = prefix(className);
-                                try {
-                                    return ReflectionUtil.forName(className);
-                                } catch (ClassNotFoundException cnfe) {
-                                    throw new FacesException(cnfe);
-                                }
-                            } else {
-                                return Object.class;
+                        String className = (String) typeVE.getValue(FacesContext.getCurrentInstance().getELContext());
+                        if (className != null) {
+                            className = prefix(className);
+                            try {
+                                return ReflectionUtil.forName(className);
+                            } catch (ClassNotFoundException cnfe) {
+                                throw new FacesException(cnfe);
                             }
+                        } else {
+                            return Object.class;
                         }
                     } else {
                         return (Class) obj;
@@ -641,7 +635,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
                 Collection<String> attributesWithDeclaredDefaultValues = (Collection<String>)
                         desc.getValue(UIComponent.ATTRS_WITH_DECLARED_DEFAULT_VALUES);
                 if (null != attributesWithDeclaredDefaultValues &&
-                        attributesWithDeclaredDefaultValues.contains(name)) {
+                        attributesWithDeclaredDefaultValues.contains(name) && attrs.containsKey(name)) {
                     // It is necessary to remove the value from the attribute
                     // map because the ELexpression transparancy doesn't know
                     // about the value's existence.

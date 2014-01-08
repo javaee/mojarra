@@ -48,7 +48,7 @@ import javax.faces.event.SystemEventListener;
 public class ToggleComponent extends UIComponentBase implements SystemEventListener {
 
     public ToggleComponent() {
-        setRendererType("com.sun.faces.test.agnostic.dynamic.ToggleComponentRenderer");
+        setRendererType("component");
         FacesContext context = FacesContext.getCurrentInstance();
         UIViewRoot root = context.getViewRoot();
         root.subscribeToViewEvent(PreRenderViewEvent.class, this);
@@ -56,7 +56,7 @@ public class ToggleComponent extends UIComponentBase implements SystemEventListe
 
     @Override
     public String getFamily() {
-        return "com.sun.faces.test.agnostic.dynamic.ToggleComponent";
+        return "com.sun.faces.test.agnostic.dynamic";
     }
 
     public boolean isListenerForSource(Object source) {

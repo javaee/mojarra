@@ -70,18 +70,18 @@ public class Issue2605IT {
     @Test
     public void testFieldset() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/fieldset.xhtml");
-        HtmlElement elem = page.getElementById("fieldset1");
+        HtmlElement elem = page.getHtmlElementById("fieldset1");
         String xml = elem.asXml();
         assertTrue(xml.contains("<fieldset"));
         assertTrue(xml.contains("id=\"" + "fieldset1" + "\""));
 
-        elem = page.getElementById("fieldset2");
+        elem = page.getHtmlElementById("fieldset2");
         xml = elem.asXml();
         assertTrue(xml.contains("<fieldset"));
         assertTrue(xml.contains("id=\"" + "fieldset2" + "\""));
         assertTrue(xml.contains("disabled=\"" + "disabled" + "\""));
 
-        elem = page.getElementById("fieldset3");
+        elem = page.getHtmlElementById("fieldset3");
         xml = elem.asXml();
         assertTrue(xml.contains("<fieldset"));
         assertTrue(xml.contains("id=\"" + "fieldset3" + "\""));
@@ -92,7 +92,7 @@ public class Issue2605IT {
     @Test
     public void testMeter() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/meter.xhtml");
-        HtmlElement elem = page.getElementById("meter1");
+        HtmlElement elem = page.getHtmlElementById("meter1");
         String xml = elem.asXml();
         assertTrue(xml.contains("<meter"));
         assertTrue(xml.contains("id=\"" + "meter1" + "\""));
@@ -100,7 +100,7 @@ public class Issue2605IT {
         assertTrue(xml.contains("max=\"" + "500" + "\""));
         assertTrue(xml.contains("value=\"" + "350" + "\""));
 
-        elem = page.getElementById("meter2");
+        elem = page.getHtmlElementById("meter2");
         xml = elem.asXml();
         assertTrue(xml.contains("<meter"));
         assertTrue(xml.contains("id=\"" + "meter2" + "\""));
@@ -112,7 +112,7 @@ public class Issue2605IT {
     @Test
     public void testLabel() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/label.xhtml");
-        HtmlElement elem = page.getElementById("label1");
+        HtmlElement elem = page.getHtmlElementById("label1");
         String xml = elem.asXml();
         assertTrue(xml.contains("<label"));
         assertTrue(xml.contains("id=\"" + "label1" + "\""));
@@ -123,7 +123,7 @@ public class Issue2605IT {
     @Test
     public void testDataList() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/datalist.xhtml");
-        HtmlElement elem = page.getElementById("colors");
+        HtmlElement elem = page.getHtmlElementById("colors");
         String xml = elem.asXml();
         assertTrue(xml.contains("<datalist"));
         assertTrue(xml.contains("id=\"" + "colors" + "\""));
@@ -137,7 +137,7 @@ public class Issue2605IT {
     @Test
     public void testOutput() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/output.xhtml");
-        HtmlElement elem = page.getElementById("output1");
+        HtmlElement elem = page.getHtmlElementById("output1");
         String xml = elem.asXml();
         assertTrue(xml.contains("<output"));
         assertTrue(xml.contains("id=\"" + "output1" + "\""));
@@ -146,7 +146,7 @@ public class Issue2605IT {
     @Test
     public void testKeygen() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/keygen.xhtml");
-        HtmlElement elem = page.getElementById("keygen1");
+        HtmlElement elem = page.getHtmlElementById("keygen1");
         String xml = elem.asXml();
         assertTrue(xml.contains("<keygen"));
         assertTrue(xml.contains("id=\"" + "keygen1" + "\""));

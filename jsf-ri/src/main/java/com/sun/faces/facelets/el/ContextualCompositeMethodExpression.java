@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -70,6 +70,7 @@ import javax.el.ValueExpression;
 import javax.el.MethodInfo;
 import javax.el.ELContext;
 import javax.el.ELException;
+import javax.el.MethodNotFoundException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
@@ -200,7 +201,7 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
                 throw (ValidatorException) ele.getCause();
             }
             
-            if (source != null) {
+            if (source != null && ele instanceof MethodNotFoundException) {
                 // special handling when an ELException handling.  This is necessary
                 // when there are multiple levels of composite component nesting.
                 // When this happens, we need to evaluate the source expression
@@ -213,11 +214,25 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
 
                     }
 
-                } catch(Exception ex) {
+                } catch(ELException ex) {
+                    
+                    /*
+                     * If we got a validator exception it is actually correct to 
+                     * immediately bubble it up. 
+                     */
+                    if (ex.getCause() != null && ex.getCause() instanceof ValidatorException) {
+                        throw (ValidatorException) ex.getCause();
+                    }
+                    
                     if (LOGGER.isLoggable(Level.WARNING)) {
+                        LOGGER.log(Level.WARNING, ele.toString());
                         LOGGER.log(Level.WARNING,
                             "jsf.facelets.el.method.expression.invoke.error:"+ex.toString(),
                             new Object[] { source.getExpressionString() });
+                    }
+                    
+                    if (!(ex instanceof MethodNotFoundException)) {
+                        throw ex;
                     }
                 }
             }

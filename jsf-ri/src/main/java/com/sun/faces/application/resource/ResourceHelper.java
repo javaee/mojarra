@@ -139,6 +139,13 @@ public abstract class ResourceHelper {
     
     public abstract String getBaseContractsPath();
 
+    protected String getBasePath(String contract) {
+        if(contract == null) {
+            return getBaseResourcePath();
+        }
+        return getBaseContractsPath() + '/' + contract;
+    }
+
 
     /**
      * <p>
@@ -276,16 +283,17 @@ public abstract class ResourceHelper {
     /**
      * Search for the specified library/localPrefix combination in an
      * implementation dependent manner.
+     *
      * @param libraryName the name of the library
      * @param localePrefix the logicial identifier for a locale specific library.
      *  if no localePrefix is configured, pass <code>null</code>
-     * @param ctx the {@link FacesContext} for the current request
-     * @return a {@link LibraryInfo} if a matching library based off the inputs
+     * @param contract the name of the contract
+     *@param ctx the {@link javax.faces.context.FacesContext} for the current request  @return a {@link LibraryInfo} if a matching library based off the inputs
      *  can be found, otherwise returns <code>null</code>
      */
     public abstract LibraryInfo findLibrary(String libraryName,
                                             String localePrefix,
-                                            FacesContext ctx);
+                                            String contract, FacesContext ctx);
 
 
     /**
@@ -335,29 +343,7 @@ public abstract class ResourceHelper {
         if (url == null) {
             return 0;
         }
-        long ret;
-        InputStream input = null;
-        try {
-            URLConnection con = url.openConnection();
-            con.setUseCaches(false);
-            con.connect();
-            input = con.getInputStream();
-            ret = con.getLastModified();
-        } catch (IOException ioe) {
-            ret = 0;
-        } finally {
-            if (input != null) {
-                try {
-                    input.close();
-                } catch (IOException ioe) { 
-                    if (LOGGER.isLoggable(Level.FINEST)) {
-                        LOGGER.log(Level.FINEST, "Closing stream", ioe);
-                    }
-                }
-            }
-        }
-
-        return ((ret >= 0) ? ret : 0);
+        return Util.getLastModified(url);
 
     }
 

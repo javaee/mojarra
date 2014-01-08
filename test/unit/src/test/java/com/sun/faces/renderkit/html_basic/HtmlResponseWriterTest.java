@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -57,6 +57,27 @@ public class HtmlResponseWriterTest {
         Writer writer = new StringWriter();
         HtmlResponseWriter responseWriter = new HtmlResponseWriter(writer, "text/html", "UTF-8");
         Field field = responseWriter.getClass().getDeclaredField("dontEscape");
+        field.setAccessible(true);
+        field.set(responseWriter, Boolean.TRUE);
+
+        HtmlResponseWriter clonedWriter = (HtmlResponseWriter) responseWriter.cloneWithWriter(writer);
+        assertTrue((Boolean) field.get(clonedWriter));
+
+        responseWriter = new HtmlResponseWriter(writer, "text/html", "UTF-8");
+        field.set(responseWriter, Boolean.FALSE);
+
+        clonedWriter = (HtmlResponseWriter) responseWriter.cloneWithWriter(writer);
+        assertFalse((Boolean) field.get(clonedWriter));
+    }
+
+    /**
+     * Test cloneWithWriter method.
+     */
+    @Test
+    public void testCloneWithWriter2() throws Exception {
+        Writer writer = new StringWriter();
+        HtmlResponseWriter responseWriter = new HtmlResponseWriter(writer, "text/html", "UTF-8");
+        Field field = responseWriter.getClass().getDeclaredField("writingCdata");
         field.setAccessible(true);
         field.set(responseWriter, Boolean.TRUE);
 

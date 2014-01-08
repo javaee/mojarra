@@ -67,7 +67,7 @@ public class Issue2703IT {
     public void testRepeatDynamicConverter() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/repeatDynamicConverter.xhtml");
         assertFalse(page.asText().contains("1.00"));
-        HtmlElement element = page.getElementById("form:button");
+        HtmlElement element = page.getHtmlElementById("form:button");
         page = element.click();
         assertTrue(page.asText().contains("1.00"));
         page = element.click();

@@ -133,6 +133,12 @@ public class FileRenderer extends TextRenderer {
 
     @Override
     public Object getConvertedValue(FacesContext context, UIComponent component, Object submittedValue) throws ConverterException {
+        if (submittedValue instanceof Part) {
+            Part part = (Part) submittedValue;
+            if ((part.getHeader("content-disposition") == null || part.getHeader("content-disposition").endsWith("filename=\"\"")) && part.getSize() <= 0) {
+                return null;
+            }
+        }
         return submittedValue;
     }
         

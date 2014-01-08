@@ -40,8 +40,9 @@
 
 package com.sun.faces.application;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.config.InitFacesContext;
-import com.sun.faces.application.view.ViewScopeManager;
+import com.sun.faces.flow.FlowHandlerImpl;
 import com.sun.faces.flow.FlowImpl;
 import com.sun.faces.flow.builder.MutableNavigationCase;
 import javax.faces.FacesException;
@@ -203,9 +204,6 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             } 
             if (caseStruct.navCase.isRedirect() || isUIViewActionBroadcastAndViewdsDiffer) {
                 
-                // PENDING(edburns): Flows currently don't work with redirect.
-                // Obviously I have to fix that.
-
                 // perform a 302 redirect.
                 String redirectUrl =
                       viewHandler.getRedirectURL(context,
@@ -238,10 +236,11 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                 updateRenderTargets(context, caseStruct.viewId);
                 context.setViewRoot(newRoot);
                 FlowHandler flowHandler = context.getApplication().getFlowHandler();
-                if (null != flowHandler) {
+                if (null != flowHandler && !isDidTransition(context)) {
                     flowHandler.transition(context, 
                             caseStruct.currentFlow, caseStruct.newFlow, 
                             caseStruct.facesFlowCallNode, caseStruct.viewId);
+                    setDidTransition(context, false);
                 }
                 if (logger.isLoggable(Level.FINE)) {
                     logger.log(Level.FINE, "Set new view in FacesContext for {0}", caseStruct.viewId);
@@ -253,6 +252,24 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     
     // --------------------------------------------------------- Private Methods
     private static final String ROOT_NAVIGATION_MAP_ID = NavigationHandlerImpl.class.getName() + ".NAVIGATION_MAP";
+    
+    private Map<String, Set<NavigationCase>> getRootNavigationMap(FacesContext context) {
+        Map<String, Set<NavigationCase>> result = null;
+        NavigationInfo info = null;
+        if (null == navigationMaps) {
+            createNavigationMaps();
+            result = navigationMaps.get(ROOT_NAVIGATION_MAP_ID).ruleSet;
+        } else {
+            info = navigationMaps.get(ROOT_NAVIGATION_MAP_ID);
+            if (null == info.ruleSet) {
+                result = Collections.emptyMap();
+            } else {
+                result = info.ruleSet;
+            }
+            
+        }
+        return result;
+    }
     
     private Map<String, Set<NavigationCase>> getNavigationMap(FacesContext context) {
         Map<String, Set<NavigationCase>> result = null;
@@ -458,16 +475,18 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         // a navigation match, otherwise look for a match
         // based soley on the fromAction and outcome
         CaseStruct caseStruct = null;
+        Map<String, Set<NavigationCase>> navMap = getNavigationMap(ctx);
+        
         if (viewId != null) {
-            caseStruct = findExactMatch(ctx, viewId, fromAction, outcome, toFlowDocumentId);
+            caseStruct = findExactMatch(ctx, viewId, fromAction, outcome, toFlowDocumentId, navMap);
 
             if (caseStruct == null) {
-                caseStruct = findWildCardMatch(ctx, viewId, fromAction, outcome, toFlowDocumentId);
+                caseStruct = findWildCardMatch(ctx, viewId, fromAction, outcome, toFlowDocumentId, navMap);
             }
         }
 
         if (caseStruct == null) {
-            caseStruct = findDefaultMatch(ctx, fromAction, outcome, toFlowDocumentId);
+            caseStruct = findDefaultMatch(ctx, fromAction, outcome, toFlowDocumentId, navMap);
         }
         
         // If the preceding steps found a match, but it was a flow call...
@@ -515,7 +534,23 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             }
         }
         
-        // no navigation case fo
+        // If we still don't have a match...
+        if (caseStruct == null && outcome != null && viewId != null) {
+
+            FlowHandler flowHandler = ctx.getApplication().getFlowHandler();
+            if (null != flowHandler) {
+
+                Flow currentFlow = null;
+                Flow newFlow = null;
+                currentFlow = flowHandler.getCurrentFlow(ctx);
+                if (null != currentFlow) {
+                    caseStruct = findRootNavigationMapAbandonedFlowMatch(ctx, viewId, fromAction, outcome, toFlowDocumentId);
+                }
+            }
+            
+        }
+        
+        // no navigation case found
         if (caseStruct == null && outcome != null && development) {
             String key;
             Object[] params;
@@ -549,8 +584,8 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     private CaseStruct findExactMatch(FacesContext ctx,
                                       String viewId,
                                       String fromAction,
-                                      String outcome, String toFlowDocumentId) {
-        Map<String, Set<NavigationCase>> navMap = getNavigationMap(ctx);
+                                      String outcome, String toFlowDocumentId,
+                                      Map<String, Set<NavigationCase>> navMap) {
 
         Set<NavigationCase> caseSet = navMap.get(viewId);
 
@@ -593,9 +628,9 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     private CaseStruct findWildCardMatch(FacesContext ctx,
                                          String viewId,
                                          String fromAction,
-                                         String outcome, String toFlowDocumentId) {
+                                         String outcome, String toFlowDocumentId,
+                                      Map<String, Set<NavigationCase>> navMap) {
         CaseStruct result = null;
-        Map<String, Set<NavigationCase>> navMap = getNavigationMap(ctx);
 
         for (String fromViewId : getWildCardMatchList(ctx)) {
             // See if the entire wildcard string (without the trailing "*" is
@@ -657,8 +692,8 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
 
     private CaseStruct findDefaultMatch(FacesContext ctx,
                                         String fromAction,
-                                        String outcome, String toFlowDocumentId) {
-        Map<String, Set<NavigationCase>> navMap = getNavigationMap(ctx);
+                                        String outcome, String toFlowDocumentId,
+                                      Map<String, Set<NavigationCase>> navMap) {
         
         Set<NavigationCase> caseSet = navMap.get("*");
 
@@ -684,6 +719,33 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         
         return result;
     }
+    
+    private CaseStruct findRootNavigationMapAbandonedFlowMatch(FacesContext ctx,
+                                         String viewId,
+                                         String fromAction,
+                                         String outcome, String toFlowDocumentId) {
+        CaseStruct caseStruct = null;
+        Map<String, Set<NavigationCase>> navMap = getRootNavigationMap(ctx);
+        
+        if (viewId != null) {
+            caseStruct = findExactMatch(ctx, viewId, fromAction, outcome, toFlowDocumentId, navMap);
+            
+            if (caseStruct == null) {
+                caseStruct = findWildCardMatch(ctx, viewId, fromAction, outcome, toFlowDocumentId, navMap);
+            }
+        }
+        
+        if (caseStruct == null) {
+            caseStruct = findDefaultMatch(ctx, fromAction, outcome, toFlowDocumentId, navMap);
+        }
+        
+        if (null != caseStruct) {
+            caseStruct.newFlow = FlowImpl.ABANDONED_FLOW;
+        }
+        
+        return caseStruct;
+    }
+    
 
     /**
      * <p>
@@ -804,10 +866,17 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             // the current flow id
             if (null != currentFlow && null != viewIdToTest && 
                 !viewIdToTest.startsWith("/" + currentFlow.getId())) {
-                // ... it must be out of the current flow.  Make sure the 
-                // current flow is marked as abandoned.
-                newFlow = null;
-                viewIdToTest = null;
+                // ... it must be out of the current flow.  
+                // If this is a flow return...
+                if (FlowHandler.NULL_FLOW.equals(flowDefiningDocumentId)) {
+                    // treat it as such
+                    newFlow = null;
+                    viewIdToTest = null;
+                } else {
+                    // otherwise Make sure the current flow is marked as abandoned.
+                    newFlow = FlowImpl.ABANDONED_FLOW;
+                }
+
             }            
         }
         if (null != viewIdToTest) {
@@ -817,6 +886,12 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         if (null == result && null != viewIdToTest) {
             result = new CaseStruct();
             result.viewId = viewIdToTest;
+            // If this navigation case does not involve flows, make sure
+            // to convey that fact.
+            if (null == newFlow && null == currentFlow && 
+                !FlowHandlerImpl.NULL_FLOW.equals(flowDefiningDocumentId)) {
+                flowDefiningDocumentId = null;
+            }
             result.navCase = new NavigationCase(currentViewId,
                                                     fromAction,
                                                     outcome,
@@ -1036,7 +1111,31 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                 if (null != flowId) {
                     newFlow = flowHandler.getFlow(context, flowDocumentId, flowId);
                     if (null != newFlow) {
-                        result = synthesizeCaseStruct(context, newFlow, fromAction, flowId);
+                        String startNodeId = newFlow.getStartNodeId();
+                        result = synthesizeCaseStruct(context, newFlow, fromAction, startNodeId);
+                        if (null == result) {
+                            assert(null != currentFlow);
+                            // If no CaseStruct can be synthesized, we must execute the
+                            // navigation handler algorithm to try to find the CaseStruct
+                            // for the start node.  However, in order to do that, we
+                            // must enter the new flow.  To preserve the intergity
+                            // of the state machine, we enter the flow now, and mark
+                            // that we must not enter it later.
+                            try {
+                                setDidTransition(context, true);
+                                flowHandler.transition(context, currentFlow, newFlow, null, startNodeId);
+                                result = getViewId(context, fromAction, startNodeId, toFlowDocumentId);
+                            }
+                            finally {
+                                if (null == result) {
+                                    // If we did not find a CaseStruct, preserve the 
+                                    // integrity of the state machine by transitioning 
+                                    // out of the flow.
+                                    flowHandler.transition(context, newFlow, currentFlow, null, outcome);
+                                    setDidTransition(context, false);
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -1047,7 +1146,27 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                 String startNodeId = newFlow.getStartNodeId();
                 result = synthesizeCaseStruct(context, newFlow, fromAction, startNodeId);
                 if (null == result) {
-                    result = getViewId(context, fromAction, startNodeId, toFlowDocumentId);
+                    assert(null == currentFlow);
+                    // If no CaseStruct can be synthesized, we must execute the
+                    // navigation handler algorithm to try to find the CaseStruct
+                    // for the start node.  However, in order to do that, we
+                    // must enter the new flow.  To preserve the intergity
+                    // of the state machine, we enter the flow now, and mark
+                    // that we must not enter it later.
+                    try {
+                        setDidTransition(context, true);
+                        flowHandler.transition(context, null, newFlow, null, startNodeId);
+                        result = getViewId(context, fromAction, startNodeId, toFlowDocumentId);
+                    }
+                    finally {
+                        if (null == result) {
+                            // If we did not find a CaseStruct, preserve the 
+                            // integrity of the state machine by transitioning 
+                            // out of the flow.
+                            flowHandler.transition(context, newFlow, null, null, outcome);
+                            setDidTransition(context, false);
+                        }
+                    }
                 } else if (!outcome.equals(startNodeId) && null != result.navCase) {
                     ((MutableNavigationCase)result.navCase).setFromOutcome(outcome);
                 }
@@ -1061,6 +1180,24 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         
         return result;
     }  
+    
+    private static final String DID_TRANSITION_FLAG = RIConstants.FACES_PREFIX + "NavigationHandlerDidTransition";
+    
+    private boolean isDidTransition(FacesContext context) {
+        boolean result = context.getAttributes().containsKey(DID_TRANSITION_FLAG);
+        
+        return result;
+    }
+    
+    private void setDidTransition(FacesContext context, boolean value) {
+        Map<Object,Object> contextMap = context.getAttributes();
+        if (value) {
+            contextMap.put(DID_TRANSITION_FLAG, Boolean.TRUE);
+        } else {
+            contextMap.remove(DID_TRANSITION_FLAG);
+        }
+        
+    }
     
     private CaseStruct findViewNodeMatch(FacesContext context, 
             String fromAction, String outcome, String toFlowDocumentId) {

@@ -43,6 +43,7 @@ package com.sun.faces.application.view;
 import com.sun.faces.RIConstants;
 import javax.faces.view.facelets.Facelet;
 import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.context.FacesFileNotFoundException;
 
 
 import com.sun.faces.facelets.impl.DefaultFaceletFactory;
@@ -113,6 +114,11 @@ public class ViewMetadataImpl extends ViewMetadata {
             Facelet f = faceletFactory.getMetadataFacelet(context, result.getViewId());
 
             f.apply(context, result);
+        } catch (FacesFileNotFoundException ffnfe) {
+            try {
+                context.getExternalContext().responseSendError(404, ffnfe.getMessage());
+            } catch(IOException ioe) {}
+            context.responseComplete();
         } catch (IOException ioe) {
             throw new FacesException(ioe);
         } finally {

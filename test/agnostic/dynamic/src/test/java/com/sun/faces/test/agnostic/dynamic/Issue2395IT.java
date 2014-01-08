@@ -63,7 +63,7 @@ public class Issue2395IT {
         HtmlPage page = webClient.getPage(webUrl + "faces/issue2395.xhtml");
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form:add");
         page = button.click();
-        assertTrue(page.asXml().indexOf("Number of dynamic actions should be") == -1);
+        assertTrue(page.asXml().indexOf("I was dynamically added") != -1);
     }
 
     @Test
@@ -71,7 +71,7 @@ public class Issue2395IT {
         HtmlPage page = webClient.getPage(webUrl + "faces/issue2395.xhtml");
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form:addRemove");
         page = button.click();
-        assertTrue(page.asXml().indexOf("Number of dynamic actions should be") == -1);
+        assertTrue(page.asXml().indexOf("I was dynamically added") == -1);
     }
 
     @Test
@@ -79,7 +79,7 @@ public class Issue2395IT {
         HtmlPage page = webClient.getPage(webUrl + "faces/issue2395.xhtml");
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form:addRemoveAdd");
         page = button.click();
-        assertTrue(page.asXml().indexOf("Number of dynamic actions should be") == -1);
+        assertTrue(page.asXml().indexOf("I was dynamically added") != -1);
     }
 
     @Test
@@ -87,7 +87,7 @@ public class Issue2395IT {
         HtmlPage page = webClient.getPage(webUrl + "faces/issue2395.xhtml");
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form:remove");
         page = button.click();
-        assertTrue(page.asXml().indexOf("Number of dynamic actions should be") == -1);
+        assertTrue(page.asXml().indexOf("Remove Me") == -1);
     }
 
     @Test
@@ -95,7 +95,7 @@ public class Issue2395IT {
         HtmlPage page = webClient.getPage(webUrl + "faces/issue2395.xhtml");
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form:removeAdd");
         page = button.click();
-        assertTrue(page.asXml().indexOf("Number of dynamic actions should be") == -1);
+        assertTrue(page.asXml().indexOf("Remove Me") != -1);
     }
 
     @Test
@@ -103,6 +103,6 @@ public class Issue2395IT {
         HtmlPage page = webClient.getPage(webUrl + "faces/issue2395.xhtml");
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form:removeAddRemove");
         page = button.click();
-        assertTrue(page.asXml().indexOf("Number of dynamic actions should be") == -1);
+        assertTrue(page.asXml().indexOf("Remove Me") == -1);
     }
 }

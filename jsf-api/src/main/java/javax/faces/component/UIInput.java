@@ -180,9 +180,9 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     
     private static final Validator[] EMPTY_VALIDATOR = new Validator[0];
 
-    private Boolean emptyStringIsNull;
+    private transient Boolean emptyStringIsNull;
 
-    private Boolean validateEmptyFields;
+    private transient Boolean validateEmptyFields;
 
     enum PropertyKeys {
         /**
@@ -249,7 +249,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     /**
      * <p>The submittedValue value of this {@link UIInput} component.</p>
      */
-    private Object submittedValue = null;
+    private transient Object submittedValue = null;
 
 
     /**
@@ -307,9 +307,9 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * <p/>
      * <p>Call {@link #setSubmittedValue} passing <code>null</code>.</p>
      * <p/>
-     * <p>Call {@link #setLocalValueSet} passing <code>false</code>.</p>
+     * <p>Clear state for property <code>localValueSet</code>.</p>
      * <p/>
-     * <p>Call {@link #setValid} passing <code>true</code>.</p>
+     * <p>Clear state for property <code>valid</code>.</p>
      * <p/>
      * <p>Upon return from this call if the instance had a
      * <code>ValueBinding</code> associated with it for the "value"
@@ -322,8 +322,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     public void resetValue() {
         super.resetValue();
         this.setSubmittedValue(null);
-        this.setLocalValueSet(false);
-        this.setValid(true);
+        getStateHelper().remove(PropertyKeys.localValueSet);
+        getStateHelper().remove(PropertyKeys.valid);
     }
 
 
@@ -1395,8 +1395,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         Object superState = super.saveState(context);
         Object validatorsState = ((validators != null) ? validators.saveState(context) : null);
         
-        if (superState != null || emptyStringIsNull != null || validateEmptyFields != null || validatorsState != null) {
-            result = new Object[] { superState, emptyStringIsNull, validateEmptyFields, validatorsState};
+        if (superState != null || validatorsState != null) {
+            result = new Object[] { superState, validatorsState};
         }
         
         return (result);
@@ -1414,13 +1414,11 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         }
         Object[] values = (Object[]) state;
         super.restoreState(context, values[0]);
-        emptyStringIsNull = (Boolean) values[1];
-        validateEmptyFields = (Boolean) values[2];
-        if (values[3] != null) {
+        if (values[1] != null) {
             if (validators == null) {
                 validators = new AttachedObjectListHolder<Validator>();
             }
-            validators.restoreState(context, values[3]);
+            validators.restoreState(context, values[1]);
         }
 
     }

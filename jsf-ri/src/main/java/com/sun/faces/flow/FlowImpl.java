@@ -41,6 +41,7 @@
 package com.sun.faces.flow;
 
 import com.sun.faces.util.Util;
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -61,10 +62,14 @@ import javax.faces.flow.SwitchNode;
 import javax.faces.flow.ViewNode;
 import javax.faces.lifecycle.ClientWindow;
 
-public class FlowImpl extends Flow {
-    
+public class FlowImpl extends Flow implements Serializable {
+
+    private static final long serialVersionUID = 5287030395068302998L;
+
     public static final Flow SYNTHESIZED_RETURN_CASE_FLOW = new FlowImpl(FlowHandler.NULL_FLOW);
     
+    public static final Flow ABANDONED_FLOW = new FlowImpl(FlowHandlerImpl.ABANDONED_FLOW);
+
     // <editor-fold defaultstate="collapsed" desc="Instance variables">    
     
     private String id;

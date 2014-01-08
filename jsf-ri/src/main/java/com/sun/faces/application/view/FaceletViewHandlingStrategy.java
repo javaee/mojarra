@@ -125,9 +125,14 @@ import static com.sun.faces.RIConstants.DYNAMIC_COMPONENT;
 import com.sun.faces.facelets.impl.XMLFrontMatterSaver;
 import com.sun.faces.renderkit.RenderKitUtils;
 import java.util.Collections;
+import java.util.EnumSet;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javax.faces.application.ProjectStage;
+import javax.faces.component.NamingContainer;
+import javax.faces.component.UIForm;
+import javax.faces.component.visit.VisitHint;
 import javax.faces.render.ResponseStateManager;
 
 /**
@@ -160,10 +165,15 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     private boolean groovyAvailable;
     private int responseBufferSize;
     private boolean responseBufferSizeSet;
+    private boolean isTrinidadStateManager;
 
     private Cache<Resource, BeanInfo> metadataCache;
     private Map<String, List<String>> contractMappings;
 
+    /**
+     * Stores the skip hint.
+     */
+    private static String SKIP_ITERATION_HINT = "javax.faces.visit.SKIP_ITERATION";
 
     // ------------------------------------------------------------ Constructors
 
@@ -190,7 +200,15 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         if (stateCtx.isPartialStateSaving(context, viewId)) {
             result = new FaceletPartialStateManagementStrategy(context);
         } else {
-            result = new FaceletFullStateManagementStrategy(context);
+            // Spec for this method says:
+            
+            // Implementations that provide the VDL for Facelets for JSF 2.0 
+            // and later must return non-null from this method.
+            
+            // Limit the specification violating change to the case where
+            // we are running in Trinidad.
+            // 
+            result = isTrinidadStateManager ? null : new JspStateManagementStrategy(context);
         }
         
         return result;
@@ -569,7 +587,12 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             }
         }
 
-        UIViewRoot root = super.restoreView(context, viewId);        
+        UIViewRoot root = super.restoreView(context, viewId);
+        
+        ViewHandler viewHandler = context.getApplication().getViewHandler();
+        ViewDeclarationLanguage vdl = viewHandler.getViewDeclarationLanguage(context, viewId);
+        context.setResourceLibraryContracts(vdl.calculateResourceLibraryContracts(context, viewId));       
+        
         StateContext stateCtx = StateContext.getStateContext(context);
         stateCtx.startTrackViewModifications(context, root);
         
@@ -1075,7 +1098,12 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             }
             contractDataStructure.clear();
         }
-        
+        if (null != context) {
+            StateManager stateManager = Util.getStateManager(context);
+            if (null != stateManager) {
+                isTrinidadStateManager = stateManager.getClass().getName().contains("trinidad");
+            }
+        }        
     }
 
 
@@ -2058,7 +2086,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                     if (component.getClientId(visitContext.getFacesContext()).equals(clientId)) {
                         found.add(component);
                         result = VisitResult.COMPLETE;
-                    }
+                        }
                     return result;
                 }
             });

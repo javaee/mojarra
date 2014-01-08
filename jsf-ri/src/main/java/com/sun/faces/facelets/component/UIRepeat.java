@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -95,6 +95,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Collection;
+import java.util.concurrent.ConcurrentHashMap;
+import static javax.faces.component.UINamingContainer.getSeparatorChar;
 
 
 public class UIRepeat extends UINamingContainer {
@@ -122,6 +124,9 @@ public class UIRepeat extends UINamingContainer {
     private Integer end;
     private Integer step;
     private Integer size;
+    
+    private Map<String, SavedState> initialChildState;
+    private String initialClientId;
 
     public UIRepeat() {
         this.setRendererType("facelets.ui.Repeat");
@@ -358,6 +363,32 @@ public class UIRepeat extends UINamingContainer {
         }
     }
 
+    private void removeChildState(FacesContext ctx) {
+        if (this.getChildCount() > 0) {
+
+            for (UIComponent uiComponent : this.getChildren()) {
+                this.removeChildState(ctx, uiComponent);
+            }
+            
+            if (this.childState != null) {
+                this.childState.remove(this.getClientId(ctx));
+            }
+        }
+    }
+
+    private void removeChildState(FacesContext faces, UIComponent c) {
+        String id = c.getId();
+        c.setId(id);        
+        
+        Iterator itr = c.getFacetsAndChildren();
+        while (itr.hasNext()) {
+            removeChildState(faces, (UIComponent) itr.next());
+        }
+        if (this.childState != null) {
+            this.childState.remove(c.getClientId(faces));
+        }
+    }
+    
     private void saveChildState(FacesContext faces, UIComponent c) {
 
         if (c instanceof EditableValueHolder && !c.isTransient()) {
@@ -399,7 +430,15 @@ public class UIRepeat extends UINamingContainer {
             if (ss != null) {
                 ss.apply(evh);
             } else {
-                NullState.apply(evh);
+                String childId = clientId.substring(initialClientId.length() + 1);
+                childId = childId.substring(childId.indexOf(getSeparatorChar(faces)) + 1);
+                childId = initialClientId + getSeparatorChar(faces) + childId;
+                if (initialChildState.containsKey(childId)) {
+                    SavedState initialState = initialChildState.get(childId);
+                    initialState.apply(evh);
+                } else {
+                    NullState.apply(evh);
+                }
             }
         }
 
@@ -419,7 +458,7 @@ public class UIRepeat extends UINamingContainer {
     private boolean hasErrorMessages(FacesContext context) {
 
         FacesMessage.Severity sev = context.getMaximumSeverity();
-        return (sev != null && (FacesMessage.SEVERITY_ERROR.compareTo(sev) >= 0));
+        return (sev != null && (FacesMessage.SEVERITY_ERROR.compareTo(sev) <= 0));
         
     }
 
@@ -435,13 +474,66 @@ public class UIRepeat extends UINamingContainer {
         return false;
     }
 
+    /**
+     * Save the initial child state.
+     * 
+     * <p>
+     *  In order to be able to restore each row to a pristine condition if NO
+     *  state was necessary to be saved for a given row we need to store the
+     *  initial state (a.k.a the state of the skeleton) so we can restore the
+     *  skeleton as if it was just created by the page markup.
+     * </p>
+     * 
+     * @param facesContext the Faces context. 
+     */
+    private void saveInitialChildState(FacesContext facesContext) {
+        index = -1;
+        initialChildState = new ConcurrentHashMap<String, SavedState>();
+        initialClientId = getClientId(facesContext);
+        if (getChildCount() > 0) {
+            for (UIComponent child : getChildren()) {
+                saveInitialChildState(facesContext, child);
+            }
+        }
+    }
+
+    /**
+     * Recursively create the initial state for the given component.
+     * 
+     * @param facesContext the Faces context.
+     * @param component the UI component to save the state for.
+     * @see #saveInitialChildState(javax.faces.context.FacesContext) 
+     */
+    private void saveInitialChildState(FacesContext facesContext, UIComponent component) {
+        if (component instanceof EditableValueHolder && !component.isTransient()) {
+            String clientId = component.getClientId(facesContext);
+            SavedState state = new SavedState();
+            initialChildState.put(clientId, state);
+            state.populate((EditableValueHolder) component);
+        }
+
+        Iterator<UIComponent> iterator = component.getFacetsAndChildren();
+        while (iterator.hasNext()) {
+            saveChildState(facesContext, iterator.next());
+        }
+    }
+
     private void setIndex(FacesContext ctx, int index) {
 
+        DataModel localModel = getDataModel();
+        
+        if (index == -1 && initialChildState == null) {
+            saveInitialChildState(ctx);
+        }
+        
         // save child state
-        this.saveChildState(ctx);
+        if (this.index != -1 && localModel.isRowAvailable()) {
+            this.saveChildState(ctx);
+        } else if (this.index >= 0 && this.childState != null) {
+            this.removeChildState(ctx);
+        }
 
         this.index = index;
-        DataModel localModel = getDataModel();
         localModel.setRowIndex(index);
 
         if (this.index != -1 && this.var != null && localModel.isRowAvailable()) {
@@ -450,7 +542,9 @@ public class UIRepeat extends UINamingContainer {
         }
 
         // restore child state
-        this.restoreChildState(ctx);
+        if (this.index != -1 && localModel.isRowAvailable()) {
+            this.restoreChildState(ctx);
+        }
     }
 
     private void updateIterationStatus(FacesContext ctx, IterationStatus status) {
@@ -479,7 +573,7 @@ public class UIRepeat extends UINamingContainer {
         }
 
         // reset index
-        this.captureOrigValue(faces);
+        this.captureOrigValue(faces);        
         this.setIndex(faces, -1);
 
         try {
@@ -553,6 +647,23 @@ public class UIRepeat extends UINamingContainer {
             this.setIndex(faces, -1);
             this.restoreOrigValue(faces);
         }
+
+        /*
+         * Once rendering is done we need to make sure the child components
+         * are not still having client ids that use an index.
+         */
+        if (PhaseId.RENDER_RESPONSE.equals(phase)) {
+            resetClientIds(this);
+        }
+    }
+    
+    private void resetClientIds(UIComponent component) {
+        Iterator<UIComponent> iterator = component.getFacetsAndChildren();
+        while(iterator.hasNext()) {
+            UIComponent child = iterator.next();
+            resetClientIds(child);
+            child.setId(child.getId());
+        }
     }
 
      public boolean invokeOnComponent(FacesContext faces, String clientId,
@@ -608,8 +719,6 @@ public class UIRepeat extends UINamingContainer {
             return false;
         }
         
-        this.setDataModel(null);
-
         FacesContext facesContext = context.getFacesContext();
         boolean visitRows = requiresRowIteration(context);
 
@@ -618,6 +727,8 @@ public class UIRepeat extends UINamingContainer {
             oldRowIndex = getDataModel().getRowIndex();
             setIndex(facesContext, -1);
         }
+
+        this.setDataModel(null);
 
         // Push ourselves to EL
         pushComponentToEL(facesContext, null);
@@ -726,7 +837,7 @@ public class UIRepeat extends UINamingContainer {
                                                        begin,
                                                        end,
                                                        step));
-        while (i <= e && this.isIndexAvailable()) {
+        while (i < e && this.isIndexAvailable()) {
 
             this.setIndex(faces, i);
             this.updateIterationStatus(faces,
@@ -843,6 +954,8 @@ public class UIRepeat extends UINamingContainer {
 
     private static final class IndexedEvent extends FacesEvent {
 
+        private static final long serialVersionUID = 1L;
+        
         private final FacesEvent target;
 
         private final int index;
@@ -964,6 +1077,8 @@ public class UIRepeat extends UINamingContainer {
     }
 
     public Object saveState(FacesContext faces) {
+        resetClientIds(this);
+        
         if (faces == null) {
             throw new NullPointerException();
         }

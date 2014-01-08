@@ -47,12 +47,12 @@
     <parent>
         <groupId>com.sun.faces.test.webprofile</groupId>
         <artifactId>pom</artifactId>
-        <version>2.2.1-SNAPSHOT</version>
+        <version>2.2.5-SNAPSHOT</version>
     </parent>
     <groupId>com.sun.faces.test.webprofile.facelets</groupId>
     <artifactId>pom</artifactId>
     <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Web-Profile - Facelets - POM</name>
+    <name>Mojarra ${project.version} - Test - Web-Profile - Facelets</name>
     <modules>
         <module>core</module>
     </modules>

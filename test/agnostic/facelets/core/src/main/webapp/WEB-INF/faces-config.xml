@@ -4,6 +4,15 @@
               xmlns="http://java.sun.com/xml/ns/javaee"
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
+    <application>
+        <resource-bundle>
+            <base-name>com.sun.faces.test.agnostic.facelets.core.Messages</base-name>
+            <var>messages</var>
+        </resource-bundle>
+    </application>
+    <lifecycle>
+        <phase-listener>com.sun.faces.test.agnostic.facelets.core.MetadataShortCircuitPhaseListener</phase-listener>
+    </lifecycle>
     <navigation-rule>
         <from-view-id>*</from-view-id>
         <navigation-case>
@@ -17,4 +26,17 @@
             </redirect>
         </navigation-case>
     </navigation-rule>
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>viewParam7</from-outcome>
+            <to-view-id>/viewParam7.xhtml</to-view-id>
+            <redirect>
+                <view-param>
+                    <name>viewparam</name>
+                    <value>#{2+3}</value>
+                </view-param>
+            </redirect>
+        </navigation-case>
+    </navigation-rule>
+
 </faces-config>

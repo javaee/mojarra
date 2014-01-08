@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -59,6 +59,9 @@
 package com.sun.faces.facelets.tag.jstl.core;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
+import com.sun.faces.facelets.tag.jsf.ComponentSupport;
+
+import com.sun.faces.facelets.tag.jsf.IterationIdManager;
 
 import javax.el.ValueExpression;
 import javax.el.VariableMapper;
@@ -186,6 +189,9 @@ public final class ForEachHandler extends TagHandlerImpl {
                 int mi = 0;
                 Object value = null;
                 int count = 0;
+                
+                IterationIdManager.startIteration(ctx);
+                
                 try {
                     boolean first = true;
                     while (i <= e && itr.hasNext()) {
@@ -197,7 +203,7 @@ public final class ForEachHandler extends TagHandlerImpl {
                             if (t || srcVE == null) {
                                 ctx.setAttribute(v, value);
                             } else {
-                                ve = this.getVarExpr(srcVE, src, value, i);
+                                ve = this.getVarExpr(srcVE, src, value, i, s);
                                 vars.setVariable(v, ve);
                             }
                         }
@@ -212,6 +218,7 @@ public final class ForEachHandler extends TagHandlerImpl {
                                 vars.setVariable(vs, ve);
                             }
                         }
+
 
                         // execute body
                         this.nextHandler.apply(ctx, parent);
@@ -234,6 +241,7 @@ public final class ForEachHandler extends TagHandlerImpl {
                     if (vs != null) {
                         vars.setVariable(vs, vsO);
                     }
+                    IterationIdManager.stopIteration(ctx);
                 }
             }
         }
@@ -275,13 +283,13 @@ public final class ForEachHandler extends TagHandlerImpl {
     }
 
     private ValueExpression getVarExpr(ValueExpression ve, Object src,
-            Object value, int i) {
+            Object value, int i, int start) {
         if (src instanceof List || src.getClass().isArray()) {
             return new IndexedValueExpression(ve, i);
         } else if (src instanceof Map && value instanceof Map.Entry) {
             return new MappedValueExpression(ve, (Map.Entry) value);
         } else if (src instanceof Collection) {
-            return new IteratedValueExpression(ve, value);
+            return new IteratedValueExpression(ve, start, i);
         }
         throw new IllegalStateException("Cannot create VE for: " + src);
     }

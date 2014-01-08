@@ -39,18 +39,16 @@
  */
 package com.sun.faces.test.agnostic.lifeycle.basic;
 
-import org.junit.Ignore;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
-import static org.junit.Assert.assertTrue;
+import org.junit.After;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
 public class Spec566IT {
 
@@ -71,35 +69,25 @@ public class Spec566IT {
     @Test
     public void testConfigurationEffective() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/spec566.xhtml");
-        HtmlTextInput input1 = (HtmlTextInput) page.getElementById("input1");
+        HtmlTextInput input1 = (HtmlTextInput) page.getHtmlElementById("input1");
         input1.setTextContent("3");
-        HtmlTextInput input2 = (HtmlTextInput) page.getElementById("input2");
-        input2.setTextContent("4");
-        
-        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("reload");
-        
-        page = button.click();
-        
-        input1 = (HtmlTextInput) page.getElementById("input1");
+        HtmlTextInput input2 = (HtmlTextInput) page.getHtmlElementById("input2");
+        input2.setTextContent("4");               
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("reload");       
+        page = button.click();       
+        input1 = (HtmlTextInput) page.getHtmlElementById("input1");
         input1.setValueAttribute("");
-        input2 = (HtmlTextInput) page.getElementById("input2");
-        input2.setValueAttribute("abcd");
-
-        button = (HtmlSubmitInput) page.getElementById("reload");
-        
-        page = button.click();
-        
-        HtmlElement message1 = page.getElementById("input1Message");
-        assertTrue(!message1.getTextContent().contains("input1:"));
-        
-        HtmlElement message2 = page.getElementById("input2Message");
-        assertTrue(message2.getTextContent().contains("input2:"));
-        
+        input2 = (HtmlTextInput) page.getHtmlElementById("input2");
+        input2.setValueAttribute("abcd");       
+        button = (HtmlSubmitInput) page.getHtmlElementById("reload");       
+        page = button.click();        
+        HtmlElement message1 = page.getHtmlElementById("input1Message");
+        assertTrue(!message1.getTextContent().contains("input1:"));        
+        HtmlElement message2 = page.getHtmlElementById("input2Message");
+        assertTrue(message2.getTextContent().contains("input2:"));       
         input1 = (HtmlTextInput) page.getElementById("input1");
         assertEquals(0, input1.getTextContent().length());
-
         input2 = (HtmlTextInput) page.getElementById("input2");
         assertEquals("abcd", input2.getValueAttribute());
-
     }
 }

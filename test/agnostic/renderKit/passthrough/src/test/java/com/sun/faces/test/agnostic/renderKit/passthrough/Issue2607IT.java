@@ -86,7 +86,7 @@ public class Issue2607IT {
     @Test
     public void testBase() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/base.xhtml");
-        HtmlElement base = page.getElementById("base1");
+        HtmlElement base = page.getHtmlElementById("base1");
         String xml = base.asXml();
         assertTrue(xml.contains("<base"));
         assertTrue(xml.contains("id=\"" + "base1" + "\""));
@@ -100,7 +100,7 @@ public class Issue2607IT {
     @Test
     public void testCommand() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/command.xhtml");
-        HtmlElement command = page.getElementById("command1");
+        HtmlElement command = page.getHtmlElementById("command1");
         String xml = command.asXml();
         assertTrue(xml.contains("<command"));
         assertTrue(xml.contains("id=\"" + "command1" + "\""));
@@ -113,7 +113,7 @@ public class Issue2607IT {
     @Test
     public void testMeta() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/meta.xhtml");
-        HtmlElement meta = page.getElementById("meta1");
+        HtmlElement meta = page.getHtmlElementById("meta1");
         String xml = meta.asXml();
         assertTrue(xml.contains("<meta"));
         assertTrue(xml.contains("id=\"" + "meta1" + "\""));

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -58,6 +58,7 @@
 
 package com.sun.faces.facelets.el;
 
+import com.sun.faces.el.ELUtils;
 import javax.el.ELContext;
 import javax.el.ELException;
 import javax.el.ExpressionFactory;
@@ -69,6 +70,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sun.faces.util.HtmlUtils;
+import com.sun.faces.util.MessageUtils;
+import javax.faces.context.FacesContext;
+import javax.faces.view.Location;
 
 /**
  * Handles parsing EL Strings in accordance with the EL-API Specification. The
@@ -200,8 +204,15 @@ public class ELText {
         }
 
         public ELText apply(ExpressionFactory factory, ELContext ctx) {
-            return new ELTextVariable(factory.createValueExpression(ctx,
+            ELText result = null;
+            if (this.ve instanceof ContextualCompositeValueExpression) {
+                result = new ELTextVariable(ve);
+            } else {
+                result = new ELTextVariable(factory.createValueExpression(ctx,
                     this.ve.getExpressionString(), String.class));
+            }
+            
+            return result;
         }
 
         public void write(Writer out, ELContext ctx) throws ELException,
@@ -226,7 +237,7 @@ public class ELText {
                 throws ELException, IOException {
             Object v = this.ve.getValue(ctx);
             if (v != null) {
-                out.writeText((String) v, null);
+                out.writeText(v.toString(), null);
             }
         }
     }
@@ -314,7 +325,9 @@ public class ELText {
     /**
      * Factory method for creating an unvalidated ELText instance. NOTE: All
      * expressions in the passed String are treated as
-     * {@link com.sun.faces.facelets.el.ELText.LiteralValueExpression}
+     * {@link com.sun.faces.facelets.el.ELText.LiteralValueExpression}, with one
+     * exception: composite component expressions.  These are treated as
+     * ContextualCompositeValueExpressions.
      * 
      * @param in
      *            String to parse
@@ -324,6 +337,15 @@ public class ELText {
     public static ELText parse(String in) throws ELException {
         return parse(null, null, in);
     }
+    
+    public static ELText parse(String in, String alias) throws ELException {
+        return parse(null, null, in, alias);
+    }
+    
+    public static ELText parse(ExpressionFactory fact, ELContext ctx, String in)
+            throws ELException {
+        return parse(null, null, in, null);
+    }    
 
     /**
      * Factory method for creating a validated ELText instance. When an
@@ -340,7 +362,8 @@ public class ELText {
      * @return ELText that can be re-applied later
      * @throws javax.el.ELException
      */
-    public static ELText parse(ExpressionFactory fact, ELContext ctx, String in)
+    public static ELText parse(ExpressionFactory fact, ELContext ctx, String in,
+            String alias)
             throws ELException {
         char[] ca = in.toCharArray();
         int i = 0;
@@ -376,8 +399,26 @@ public class ELText {
                                     i, vlen), String.class);
                             t = new ELTextVariable(ve);
                         } else {
-                            t = new ELTextVariable(new LiteralValueExpression(
-                                    new String(ca, i, vlen)));
+                            String expr = new String(ca, i, vlen);
+                            if (null != alias && ELUtils.isCompositeComponentExpr(expr)) {
+                                if (ELUtils.isCompositeComponentLookupWithArgs(expr)) {
+                                    String message =
+                                            MessageUtils.getExceptionMessageString(MessageUtils.ARGUMENTS_NOT_LEGAL_CC_ATTRS_EXPR);
+                                    throw new ELException(message);
+                                }    
+                                FacesContext context = FacesContext.getCurrentInstance();
+                                ELContext elContext = context.getELContext();
+                                ValueExpression delegate = 
+                                        context.getApplication().getExpressionFactory().
+                                        createValueExpression(elContext, expr, Object.class);
+                                Location location = new Location(alias, -1, -1);                                
+                                ve = new ContextualCompositeValueExpression(location,
+                                                                            delegate);
+                                
+                            } else {
+                                ve = new LiteralValueExpression(expr);
+                            }
+                            t = new ELTextVariable(ve);
                         }
                         text.add(t);
                         i += vlen;
@@ -395,8 +436,8 @@ public class ELText {
             buff.setLength(0);
         }
 
-        if (text.size() == 0) {
-            return null;
+        if (text.isEmpty()) {
+            return new ELText("");
         } else if (text.size() == 1) {
             return (ELText) text.get(0);
         } else {
@@ -410,6 +451,7 @@ public class ELText {
         int len = ca.length;
         char c = 0;
         int str = 0;
+        int nested = 0;
         while (i < len) {
             c = ca[i];
             if ('\\' == c && i<len-1) {
@@ -420,8 +462,14 @@ public class ELText {
                 } else {
                     str = c;
                 }
+            } else if ('{' == c) {
+                nested++;
             } else if (str == 0 && ('}' == c)) {
-                return i - s + 1;
+                if (nested > 1) {
+                    nested--;
+                } else {
+                    return i - s + 1;
+                }
             }
             i++;
         }

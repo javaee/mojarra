@@ -41,6 +41,7 @@
 package com.sun.faces.flow;
 
 import com.sun.faces.util.Util;
+import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.ArrayDeque;
 import java.util.HashMap;
@@ -62,6 +63,8 @@ import javax.faces.flow.FlowHandler;
 import javax.faces.flow.Parameter;
 
 public class FlowHandlerImpl extends FlowHandler {
+    
+    public static final String ABANDONED_FLOW = "javax.faces.flow.AbandonedFlow";
 
     public FlowHandlerImpl() {
         flowFeatureIsEnabled = false;
@@ -169,8 +172,17 @@ public class FlowHandlerImpl extends FlowHandler {
             return null;
         }
         Flow result = null;
+        // If there is no session, there cannot possibly be a flow, so
+        // don't create one just to check.
+        if (null == context.getExternalContext().getSession(false)) {
+            return null;
+        }
+        
         FlowDeque<Flow> flowStack = getFlowStack(context);
         int returnDepth = flowStack.getReturnDepth();
+        if (flowStack.size() <= returnDepth) {
+            return null;
+        }
         if (0 < returnDepth) {
             Iterator<Flow> stackIter = flowStack.iterator();
             int i = 0;
@@ -196,7 +208,15 @@ public class FlowHandlerImpl extends FlowHandler {
         return result;
     }
     
+    public static final String FLOW_RETURN_DEPTH_PARAM_NAME = "jffrd";
     
+    public int getAndClearReturnModeDepth(FacesContext context) {
+        int result = 0;
+        FlowDeque<Flow> flowStack = getFlowStack(context);
+        result = flowStack.getAndClearMaxReturnDepth(context);
+        
+        return result;
+    }
 
     @Override
     public void pushReturnMode(FacesContext context) {
@@ -256,7 +276,7 @@ public class FlowHandlerImpl extends FlowHandler {
             }
             
             performPops(context, sourceFlow, targetFlow);
-            if (null != targetFlow) {
+            if (null != targetFlow && !targetFlow.equals(FlowImpl.ABANDONED_FLOW)) {
                 pushFlow(context, targetFlow, toViewId);
             }
             // Now the new flow is active, it's time to evaluate the inbound
@@ -293,6 +313,11 @@ public class FlowHandlerImpl extends FlowHandler {
                 if (null != targetFlow && null != sourceFlow) {
                     flowCallNode = sourceFlow.getFlowCall(targetFlow);
                 }
+            } else {
+                String maxReturnDepthStr = requestParamMap.get(FLOW_RETURN_DEPTH_PARAM_NAME);
+                int maxReturnDepth = Integer.valueOf(maxReturnDepthStr).intValue();
+                FlowDeque<Flow> flowStack = getFlowStack(context);
+                flowStack.setMaxReturnDepth(context, maxReturnDepth);
             }
             
             fh.transition(context, sourceFlow, targetFlow, flowCallNode, context.getViewRoot().getViewId());
@@ -309,11 +334,24 @@ public class FlowHandlerImpl extends FlowHandler {
                 
         // case 1: target is null
         if (null == targetFlow) {
-            popFlow(context);
+            FlowDeque<Flow> flowStack = getFlowStack(context);
+            int maxReturns = flowStack.getAndClearMaxReturnDepth(context);
+            for (int i=0; i < maxReturns; i++) {
+                popFlow(context);
+            }
             return;
         } 
         
-        // case 2: neither source nor target are null.  If source does not
+        if (FlowImpl.ABANDONED_FLOW.equals(targetFlow)) {
+            FlowDeque<Flow> flowStack = getFlowStack(context);
+            int depth = flowStack.size();
+            for (int i=0; i<depth; i++) {
+                popFlow(context);
+            }
+            return;
+        }
+        
+        // case 3: neither source nor target are null.  If source does not
         // have a call that calls target, we must pop source.
         if (null == sourceFlow.getFlowCall(targetFlow)) {
             popFlow(context);            
@@ -388,11 +426,13 @@ public class FlowHandlerImpl extends FlowHandler {
         return result;
     }
     
-    private static class FlowDeque<E> implements Iterable<E> {
+    private static class FlowDeque<E> implements Iterable<E>, Serializable {
+        
+        private static final long serialVersionUID = 7915803727932706270L;
         
         private int returnDepth = 0;
         private ArrayDeque<E> data;
-        private static class RideAlong {
+        private static class RideAlong implements Serializable {
             String lastDisplayedViewId;
 
             public RideAlong(String lastDisplayedViewId) {
@@ -405,6 +445,10 @@ public class FlowHandlerImpl extends FlowHandler {
         public FlowDeque() {
             data = new ArrayDeque<E>();
             rideAlong = new ArrayDeque<RideAlong>();
+        }
+        
+        public int size() {
+            return data.size();
         }
 
         @Override
@@ -454,14 +498,43 @@ public class FlowHandlerImpl extends FlowHandler {
         public int getReturnDepth() {
             return returnDepth;
         }
-
+        
+        private void setMaxReturnDepth(FacesContext context, int value) {
+            Map<Object, Object> attrs = context.getAttributes();
+            attrs.put(FLOW_RETURN_DEPTH_PARAM_NAME, value);
+        }
+        
+        private int getAndClearMaxReturnDepth(FacesContext context) {
+            Map<Object, Object> attrs = context.getAttributes();
+            int result = 0;
+            if (attrs.containsKey(FLOW_RETURN_DEPTH_PARAM_NAME)) {
+              result = ((Integer)attrs.remove(FLOW_RETURN_DEPTH_PARAM_NAME)).intValue();
+            } 
+            return result;
+        }
+        
+        private void incrementMaxReturnDepth() {
+            FacesContext context = FacesContext.getCurrentInstance();
+            Map<Object, Object> attrs = context.getAttributes();
+            if (!attrs.containsKey(FLOW_RETURN_DEPTH_PARAM_NAME)) {
+                attrs.put(FLOW_RETURN_DEPTH_PARAM_NAME, (Integer) 1);
+            } else {
+                Integer cur = (Integer) attrs.get(FLOW_RETURN_DEPTH_PARAM_NAME);
+                attrs.put(FLOW_RETURN_DEPTH_PARAM_NAME, (Integer) cur + 1);
+            }
+            
+        }
+        
         public void pushReturnMode() {
+            this.incrementMaxReturnDepth();
             this.returnDepth++;
         }
         
         public void popReturnMode() {
             this.returnDepth--;
         }
+        
+        
 
     }
         

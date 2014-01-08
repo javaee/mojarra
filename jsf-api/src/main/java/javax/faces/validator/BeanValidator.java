@@ -145,19 +145,28 @@ public class BeanValidator implements Validator, PartialStateHolder {
 
     public void setValidationGroups(String validationGroups) {
 
-        clearInitialState();
+        clearInitialState();        
+        String newValidationGroups = validationGroups;
+        
         // treat empty list as null
-        if (validationGroups != null && validationGroups.matches(EMPTY_VALIDATION_GROUPS_PATTERN)) {
-            validationGroups = null;
+        if (newValidationGroups != null && newValidationGroups.matches(EMPTY_VALIDATION_GROUPS_PATTERN)) {
+            newValidationGroups = null;
         }
         
         // only clear cache of validation group classes if value is changing
-        if ((validationGroups == null && this.validationGroups != null) ||
-            (validationGroups != null && !validationGroups.equals(this.validationGroups))) {
-            this.cachedValidationGroups = null;
+        if (newValidationGroups == null && validationGroups != null) {
+            cachedValidationGroups = null;
         }
         
-        this.validationGroups = validationGroups;
+        if (newValidationGroups != null && validationGroups != null && !newValidationGroups.equals(validationGroups)) {
+            cachedValidationGroups = null;
+        }
+        
+        if (newValidationGroups != null && validationGroups == null) {
+            cachedValidationGroups = null;
+        }
+        
+        this.validationGroups = newValidationGroups;
     }
 
     /**

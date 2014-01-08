@@ -43,6 +43,8 @@ package com.sun.faces.renderkit.html_basic;
 import java.io.IOException;
 import java.util.Map;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.application.ProjectStage;
 import javax.faces.application.Resource;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -104,7 +106,14 @@ public class StylesheetRenderer extends ScriptStyleBaseRenderer {
         String resourceUrl = "RES_NOT_FOUND";
         if (resource != null) {
         	resourceUrl = context.getExternalContext().encodeResourceURL(resource.getRequestPath());
+        } else if (context.isProjectStage(ProjectStage.Development)) {
+            String msg = "Unable to find resource " + (library == null ? "" : library + ", ") + name;
+            context.addMessage(component.getClientId(context),
+                               new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                                msg,
+                                                msg));
         }
+        
         writer.writeURIAttribute("href", resourceUrl, "href");
         if (media != null) {
             writer.writeAttribute("media", media, "media");

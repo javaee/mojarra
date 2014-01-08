@@ -51,6 +51,7 @@ public class LibraryInfo {
     private String name;
     private VersionInfo version;
     private String localePrefix;
+    private String contract;
     private ResourceHelper helper;
     private String path;
     private String nonLocalizedPath;
@@ -59,15 +60,17 @@ public class LibraryInfo {
      * Constructs a new <code>LibraryInfo</code> using the specified details.
      * @param name the name of the library
      * @param version the version of the library, if any
+     * @param contract
      * @param helper the helper class for this resource
      */
     LibraryInfo(String name,
                 VersionInfo version,
                 String localePrefix,
-                ResourceHelper helper) {
+                String contract, ResourceHelper helper) {
         this.name = name;
         this.version = version;
         this.localePrefix = localePrefix;
+        this.contract = contract;
         this.helper = helper;
         initPath();
     }
@@ -76,6 +79,9 @@ public class LibraryInfo {
         this.name = other.name;
         this.version = other.version;
         if (copyLocalePrefix) {
+            this.contract = other.contract;
+            
+            // http://java.net/jira/browse/JAVASERVERFACES_SPEC_PUBLIC-548 http://java.net/jira/browse/JAVASERVERFACES-2348
             this.localePrefix = other.localePrefix;
         }
         this.helper = other.helper;
@@ -103,6 +109,9 @@ public class LibraryInfo {
         if ((this.localePrefix == null) ? (other.localePrefix != null) : !this.localePrefix.equals(other.localePrefix)) {
             return false;
         }
+        if ((this.contract == null) ? (other.contract != null) : !this.contract.equals(other.contract)) {
+            return false;
+        }
         if ((this.path == null) ? (other.path != null) : !this.path.equals(other.path)) {
             return false;
         }
@@ -115,6 +124,7 @@ public class LibraryInfo {
         hash = 37 * hash + (this.name != null ? this.name.hashCode() : 0);
         hash = 37 * hash + (this.version != null ? this.version.hashCode() : 0);
         hash = 37 * hash + (this.localePrefix != null ? this.localePrefix.hashCode() : 0);
+        hash = 37 * hash + (this.contract != null ? this.contract.hashCode() : 0);
         hash = 37 * hash + (this.path != null ? this.path.hashCode() : 0);
         return hash;
     }
@@ -172,6 +182,7 @@ public class LibraryInfo {
                "name='" + name + '\'' +
                ", version=" + ((version != null) ? version : "NONE") + '\'' +
                ", localePrefix='" + ((localePrefix != null) ? localePrefix : "NONE") + '\'' +
+               ", contract='" + ((contract != null) ? contract : "NONE") + '\'' +
                ", path='" + path + '\'' +
                '}';
     }
@@ -186,10 +197,10 @@ public class LibraryInfo {
 
         StringBuilder builder = new StringBuilder(64),
                       noLocaleBuilder = new StringBuilder(64);
-        
-        builder.append(helper.getBaseResourcePath());
-        noLocaleBuilder.append(helper.getBaseResourcePath());
-        
+
+        appendBasePath(builder);
+        appendBasePath(noLocaleBuilder);
+
         if (localePrefix != null) {
             builder.append('/').append(localePrefix);
         }
@@ -201,7 +212,14 @@ public class LibraryInfo {
         }
         path = builder.toString();
         nonLocalizedPath = noLocaleBuilder.toString();
-        
+    }
+
+    private void appendBasePath(StringBuilder builder) {
+        if (contract == null) {
+            builder.append(helper.getBaseResourcePath());
+        } else {
+            builder.append(helper.getBaseContractsPath()).append('/').append(contract);
+        }
     }
 
 }

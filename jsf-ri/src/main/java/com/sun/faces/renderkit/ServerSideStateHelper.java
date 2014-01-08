@@ -310,16 +310,21 @@ public class ServerSideStateHelper extends StateHelper {
                                             RequestStateManager.LOGICAL_VIEW_MAP,
                                             idInLogicalMap);
                     Object[] state = (Object[]) actualMap.get(idInActualMap);
+                    Object[] restoredState = new Object[2];
+                    
+                    restoredState[0] = state[0];
+                    restoredState[1] = state[1];
+                    
                     if(state != null){
                         RequestStateManager.set(ctx,
                                                 RequestStateManager.ACTUAL_VIEW_MAP,
                                                 idInActualMap);
                         if (state.length == 2 && state[1] != null) {
-                            state[1] = handleRestoreState(state[1]);
+                            restoredState[1] = handleRestoreState(state[1]);
                         }
                     }
 
-                    return state;
+                    return restoredState;
                 }
             }
         }

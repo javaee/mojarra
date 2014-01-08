@@ -54,10 +54,16 @@ public class UIParameterTest {
      * Test isDisable method.
      */
     @Test
-    public void testIsDisable() {
+    public void testIsDisable() throws Exception {
+        FacesContext facesContext = PowerMock.createNicePartialMockForAllMethodsExcept(FacesContext.class, "getCurrentInstance", "setCurrentInstance");
+        ValueExpression valueExpression = PowerMock.createMock(ValueExpression.class);
+        Method method = FacesContext.class.getDeclaredMethod("setCurrentInstance", FacesContext.class);
+        method.setAccessible(true);
+        method.invoke(null, facesContext);        
         UIParameter parameter = new UIParameter();
         parameter.setDisable(true);
         assertTrue(parameter.isDisable());
+        method.invoke(null, (FacesContext) null);
     }
     
     /**
@@ -71,11 +77,12 @@ public class UIParameterTest {
         Method method = FacesContext.class.getDeclaredMethod("setCurrentInstance", FacesContext.class);
         method.setAccessible(true);
         method.invoke(null, facesContext);        
-        UIParameter parameter = new UIParameter();
+        expect(facesContext.getExternalContext()).andReturn(null).anyTimes();
         expect(valueExpression.isLiteralText()).andReturn(false).anyTimes();
         expect(facesContext.getELContext()).andReturn(elContext);
         expect(valueExpression.getValue(elContext)).andReturn(true);
         replay(elContext, facesContext, valueExpression);
+        UIParameter parameter = new UIParameter();
         parameter.setValueExpression("disable", valueExpression);
         assertTrue(parameter.isDisable());
         verify(elContext, facesContext, valueExpression);

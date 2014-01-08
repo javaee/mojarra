@@ -43,7 +43,12 @@ package com.sun.faces.context.flash;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.facelets.tag.ui.UIDebug;
+import com.sun.faces.util.ByteArrayGuardAESCTR;
 import com.sun.faces.util.FacesLogger;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.security.InvalidKeyException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -136,6 +141,8 @@ public class ELFlash extends Flash {
      parseLong(WebContextInitParameter.NumberOfFlashesBetweenFlashReapings.getDefaultValue());
     
     private Application application;
+
+    private ByteArrayGuardAESCTR guard;
 
     // </editor-fold>
 
@@ -250,6 +257,7 @@ public class ELFlash extends Flash {
         }
         
         application = FacesContext.getCurrentInstance().getApplication();
+        guard = new ByteArrayGuardAESCTR();
 
     }
 
@@ -983,20 +991,46 @@ public class ELFlash extends Flash {
                 if (null != (val = toSet.getMaxAge())) {
                     properties.put("maxAge", val);
                 }
-                if (null != (val = toSet.getSecure())) {
+                if (context.getExternalContext().isSecure()) {
+                    properties.put("secure", Boolean.TRUE);
+                } else if (null != (val = toSet.getSecure())) {
                     properties.put("secure", val);
                 }
                 if (null != (val = toSet.getPath())) {
                     properties.put("path", val);
                 }
-                if (null != (val = toSet.isHttpOnly())) {
-                    properties.put("httpOnly", val);
-                }
+                properties.put("httpOnly", Boolean.TRUE);
                 extContext.addResponseCookie(toSet.getName(), toSet.getValue(), 
                         !properties.isEmpty() ? properties : null);
                 properties = null;
             }
             contextMap.put(CONSTANTS.DidWriteCookieAttributeName, Boolean.TRUE);
+        } else if (!extContext.isResponseCommitted()) {
+            Map<String, Object> properties = new HashMap();
+            Object val;
+            toSet.setMaxAge(0);
+
+            if (null != (val = toSet.getComment())) {
+                properties.put("comment", val);
+            }
+            if (null != (val = toSet.getDomain())) {
+                properties.put("domain", val);
+            }
+            if (null != (val = toSet.getMaxAge())) {
+                properties.put("maxAge", val);
+            }
+            if (context.getExternalContext().isSecure()) {
+                properties.put("secure", Boolean.TRUE);
+            } else if (null != (val = toSet.getSecure())) {
+                properties.put("secure", val);
+            }
+            if (null != (val = toSet.getPath())) {
+                properties.put("path", val);
+            }
+            properties.put("httpOnly", Boolean.TRUE);
+            extContext.addResponseCookie(toSet.getName(), toSet.getValue(), 
+                    !properties.isEmpty() ? properties : null);
+            properties = null;           
         }
     }
 
@@ -1069,7 +1103,7 @@ public class ELFlash extends Flash {
                 contextMap.get(CONSTANTS.RequestFlashManager);
 
         if (null == result && create) {
-            result = new PreviousNextFlashInfoManager(flashInnerMap);
+            result = new PreviousNextFlashInfoManager(guard, flashInnerMap);
             result.initializeBaseCase(this);
             contextMap.put(CONSTANTS.RequestFlashManager, result);
 
@@ -1089,9 +1123,19 @@ public class ELFlash extends Flash {
                 contextMap.get(CONSTANTS.RequestFlashManager);
 
         if (null == result) {
-            result = new PreviousNextFlashInfoManager(flashInnerMap);
-            result.decode(context, this, cookie);
-            contextMap.put(CONSTANTS.RequestFlashManager, result);
+            result = new PreviousNextFlashInfoManager(guard, flashInnerMap);
+            try {
+                result.decode(context, this, cookie);
+                contextMap.put(CONSTANTS.RequestFlashManager, result);
+            } catch (InvalidKeyException ike) {
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    result = getCurrentFlashManager(contextMap, true);
+                    LOGGER.log(Level.SEVERE,
+                            "jsf.externalcontext.flash.bad.cookie",
+                            new Object [] { ike.getMessage() });
+                }
+                
+            }
 
         }
         return result;
@@ -1127,15 +1171,20 @@ public class ELFlash extends Flash {
         private boolean incomingCookieCameFromRedirect = false;
 
         private Map<String,Map<String, Object>> innerMap;
+        
+        private ByteArrayGuardAESCTR guard;
 
-        private PreviousNextFlashInfoManager() {}
+        private PreviousNextFlashInfoManager(ByteArrayGuardAESCTR guard) {
+            this.guard = guard;
+        }
 
-        private PreviousNextFlashInfoManager(Map<String,Map<String, Object>> innerMap) {
+        private PreviousNextFlashInfoManager(ByteArrayGuardAESCTR guard, Map<String,Map<String, Object>> innerMap) {
+            this.guard = guard;
             this.innerMap = innerMap;
         }
 
         protected PreviousNextFlashInfoManager copyWithoutInnerMap() {
-            PreviousNextFlashInfoManager result = new PreviousNextFlashInfoManager();
+            PreviousNextFlashInfoManager result = new PreviousNextFlashInfoManager(guard);
             result.innerMap = Collections.emptyMap();
             if (null != previousRequestFlashInfo) {
                 result.previousRequestFlashInfo = (FlashInfo)
@@ -1235,15 +1284,27 @@ public class ELFlash extends Flash {
 	 * the system.  When any error occurs, the flash is not usable
 	 * for this request, and a nice error message is logged.</p>
 
-	 * <p>This method is where the LifetimeMarker is incremeted,
+	 * <p>This method is where the LifetimeMarker is incremented,
 	 * UNLESS the incoming request is the GET after the REDIRECT
 	 * after POST, in which case we don't increment it because the
 	 * system will expire the entries in the doLastPhaseActions.</p>
 	 *
 	 */
 
-        void decode(FacesContext context, ELFlash flash, Cookie cookie) {
-            String temp, value = cookie.getValue();
+        void decode(FacesContext context, ELFlash flash, Cookie cookie) throws InvalidKeyException {
+            String temp;
+            String value;
+            
+            String urlDecodedValue = null;
+            
+            try {
+                urlDecodedValue = URLDecoder.decode(cookie.getValue(), "UTF-8");
+            } catch (UnsupportedEncodingException uee) {
+                urlDecodedValue = cookie.getValue();
+            }
+            
+            value = guard.decrypt(urlDecodedValue);
+            
             try {
                 int i = value.indexOf("_");
 
@@ -1316,15 +1377,21 @@ public class ELFlash extends Flash {
 
             String value = ((null != previousRequestFlashInfo) ? previousRequestFlashInfo.encode() : "")  + "_" +
                            ((null != nextRequestFlashInfo) ? nextRequestFlashInfo.encode() : "");
-            result = new Cookie(FLASH_COOKIE_NAME, value);
+            String encryptedValue = guard.encrypt(value);
+            try {
+                result = new Cookie(FLASH_COOKIE_NAME, URLEncoder.encode(encryptedValue, "UTF-8"));
+            } catch (UnsupportedEncodingException uee) {
+                result = new Cookie(FLASH_COOKIE_NAME, encryptedValue);
+            }
+                
             if (1 == value.length()) {
                 result.setMaxAge(0);
-                result.setPath(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath());
-            } 
-            else {
-                result.setPath(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath());
+            }            
+            String requestContextPath = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+            if (requestContextPath.isEmpty()) {
+                requestContextPath = "/";
             }
-
+            result.setPath(requestContextPath);
             return result;
         }
 

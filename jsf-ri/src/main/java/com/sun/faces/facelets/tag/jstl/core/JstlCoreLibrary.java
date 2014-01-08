@@ -70,6 +70,8 @@ public final class JstlCoreLibrary extends AbstractTagLibrary {
      * Stores the default namespace.
      */
     public final static String Namespace = "http://java.sun.com/jsp/jstl/core";
+    public final static String IncorrectNamespace = "http://java.sun.com/jstl/core";
+    public final static String XMLNSNamespace = "http://xmlns.jcp.org/jsp/jstl/core";
 
     /**
      * Default constructor.
