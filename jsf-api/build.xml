@@ -1044,8 +1044,8 @@ ant -Dgpg.passphrase=PASSPHRASE HERE mvn.deploy.snapshot.local
 
 
     <target name="mvn.deploy.release" depends="strip.api.jar">
-        <mvn.deploy.release type="api" 
-                            version="${spec.version}"/>
+<!--        <mvn.deploy.release type="api" 
+                            version="${spec.version}"/> -->
     </target>
 
     <target name="passthru">
