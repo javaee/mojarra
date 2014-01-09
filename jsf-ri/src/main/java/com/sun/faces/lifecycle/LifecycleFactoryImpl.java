@@ -42,6 +42,7 @@
 
 package com.sun.faces.lifecycle;
 
+import com.sun.faces.action.ActionLifecycle;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 
@@ -81,6 +82,8 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
         // We must have an implementation under this key.
         lifecycleMap.put(LifecycleFactory.DEFAULT_LIFECYCLE,
                          new LifecycleImpl(FacesContext.getCurrentInstance()));
+        lifecycleMap.put(ActionLifecycle.ACTION_LIFECYCLE,
+                         new ActionLifecycle());
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Created Default Lifecycle");
         }
