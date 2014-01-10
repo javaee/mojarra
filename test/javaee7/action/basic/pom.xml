@@ -45,16 +45,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.sun.faces.test.webprofile.action</groupId>
+        <groupId>com.sun.faces.test.javaee7.action</groupId>
         <artifactId>pom</artifactId>
         <version>2.2.6-SNAPSHOT</version>
     </parent>
-    <groupId>com.sun.faces.test.webprofile.action</groupId>
+    <groupId>com.sun.faces.test.javaee7.action</groupId>
     <artifactId>basic</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra ${project.version} - Test - Web-Profile - Action - Basic Tests</name>
+    <name>Mojarra ${project.version} - Test - JavaEE 7 - Action - Basic Tests</name>
     <build>
-        <finalName>test-webprofile-action-basic</finalName>
+        <finalName>test-javaee7-action-basic</finalName>
     </build>
     <properties>
         <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>

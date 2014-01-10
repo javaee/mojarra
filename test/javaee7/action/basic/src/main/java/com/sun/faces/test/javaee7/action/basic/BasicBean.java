@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.webprofile.action.basic;
+package com.sun.faces.test.javaee7.action.basic;
 
 import javax.enterprise.context.RequestScoped;
 import com.sun.faces.action.RequestMapping;

@@ -62,7 +62,6 @@
         </dependency>
     </dependencies>
     <modules>
-	<module>action</module>
         <module>adf</module>
         <module>ajax</module>
         <module>el</module>
