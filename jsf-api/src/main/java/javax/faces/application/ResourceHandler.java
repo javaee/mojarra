@@ -48,7 +48,7 @@ import javax.faces.context.FacesContext;
 /**
  * <p class="changed_added_2_0"><strong
  * class="changed_modified_2_0_rev_a
- * changed_modified_2_2">ResourceHandler</strong> is the run-time API by
+ * changed_modified_2_2 changed_modified_2_3">ResourceHandler</strong> is the run-time API by
  * which {@link javax.faces.component.UIComponent} and {@link
  * javax.faces.render.Renderer} instances<span
  * class="changed_added_2_2">, and the {@link
@@ -166,10 +166,14 @@ public abstract class ResourceHandler {
 
 
     /**
-     * <p class="changed_added_2_2">The name of the marker file that
-     * the implementation must scan for, within sub-directories
-     * <code>META-INF/contracts</code>, to identify the set of available
-     * resource library contracts.</p>
+     * <p class="changed_added_2_2 changed_modified_2_3">This file must
+     * be located in
+     * <code>META-INF/contracts/&lt;contractName&gt;/</code> in a jar
+     * file that contains a resource library contract, where
+     * <code>&lt;contractName&gt;</code> is the name of the contract. If
+     * the jar file contains multiple contracts, the marker file must be
+     * present in each one. See &#8220;constant field values&#8221; for
+     * the name of the file that must be placed at that location.</p>
 
      * @since 2.2
      */

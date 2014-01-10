@@ -223,7 +223,6 @@ ul.inheritsList
                  border-top:none; border-bottom:none; border-color:red;
                  text-decoration: line-through; }
 
-*/
 
    .changed_added_2_2 { cursor: url(changed_added_2_2_cursor.cur), auto;
                  background: url(changed_added_2_2.png); 
@@ -239,6 +238,27 @@ ul.inheritsList
 
    .changed_deleted_2_2 { cursor: url(changed_deleted_2_2_cursor.cur), auto;
                  background: url(changed_deleted_2_2.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:red;
+                 text-decoration: line-through; }
+
+*/
+
+   .changed_added_2_3 { cursor: url(changed_added_2_3_cursor.cur), auto;
+                 background: url(changed_added_2_3.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:green }
+
+   .changed_modified_2_3 { cursor: url(changed_modified_2_3_cursor.cur), auto;
+                 background: url(changed_modified_2_3.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:orange }
+
+   .changed_deleted_2_3 { cursor: url(changed_deleted_2_3_cursor.cur), auto;
+                 background: url(changed_deleted_2_3.png); 
                  padding-left:0.2em; border-left:solid;
                  border-left-width:thin; border-right:none;
                  border-top:none; border-bottom:none; border-color:red;
