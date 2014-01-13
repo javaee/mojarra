@@ -66,6 +66,6 @@ public class Issue3127IT {
     @Test
     public void testEmpty() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/dataTableEmpty.xhtml");
-        assertTrue(Pattern.matches("(.|\\n)*<td/>(.|\\n)*<td/>(.|\\n)*<td/>(.|\\n)*", page.asXml()));
+        assertTrue(Pattern.matches("(.|\\r|\\n)*<td/>(.|\\r|\\n)*<td/>(.|\\r|\\n)*<td/>(.|\\r|\\n)*", page.asXml()));
     }
 }
