@@ -452,17 +452,20 @@ public class ELText {
         char c = 0;
         int str = 0;
         int nested = 0;
+        boolean insideString = false;
         while (i < len) {
             c = ca[i];
             if ('\\' == c && i<len-1) {
                 i++;
             } else if ('\'' == c || '"' == c) {
                 if (str == c) {
+                    insideString = false;
                     str = 0;
                 } else {
+                    insideString = true;
                     str = c;
                 }
-            } else if ('{' == c) {
+            } else if ('{' == c && !insideString) {
                 nested++;
             } else if (str == 0 && ('}' == c)) {
                 if (nested > 1) {
@@ -470,6 +473,8 @@ public class ELText {
                 } else {
                     return i - s + 1;
                 }
+            } else if ('}' == c && !insideString) {
+                nested--;
             }
             i++;
         }
