@@ -217,7 +217,7 @@ public final class SelectItemsIterator<T extends SelectItem> implements Iterator
                                                      (UISelectItems) kid,
                                                      (Iterable<?>) value);
                 } else if (value instanceof Map) {
-                    items = new MapIterator((Map) value);
+                    items = new MapIterator((Map) value, ui.getParent());
                 } else {
                     throw new IllegalArgumentException();
                 }
@@ -334,22 +334,23 @@ public final class SelectItemsIterator<T extends SelectItem> implements Iterator
 
         private SelectItem item = new SelectItem();
         private Iterator iterator;
+        private transient UIComponent parent;
 
 
         // -------------------------------------------------------- Constructors
 
 
-        private MapIterator(Map map) {
+        private MapIterator(Map map, UIComponent parent) {
 
             this.iterator = map.entrySet().iterator();
-
+            this.parent = parent;
         }
 
 
         // ----------------------------------------------- Methods from ComponentAwareSelectItemIterator
 
         public UIComponent currentSelectComponent() {
-            return null;
+            return parent;
         }
         
         // ----------------------------------------------- Methods from Iterator

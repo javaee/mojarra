@@ -1216,6 +1216,11 @@ public class HtmlResponseWriter extends ResponseWriter {
     }
 
     private String pushElementName(String original) {
+        
+        if (original.equals("option")) {
+            return original;
+        }
+        
         String name = getElementName(original);
 
         if(passthroughAttributes != null) {
