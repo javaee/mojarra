@@ -50,6 +50,7 @@ import javax.faces.application.Application;
 import javax.faces.view.facelets.ValidatorHandler;
 import javax.faces.view.facelets.FaceletContext;
 import java.util.*;
+import javax.faces.event.PhaseId;
 
 /**
  * <p>
@@ -133,19 +134,20 @@ public class ComponentValidators {
     public static void addDefaultValidatorsToComponent(FacesContext ctx,
                                                        EditableValueHolder editableValueHolder) {
 
-        Set<String> keySet = ctx.getApplication().getDefaultValidatorInfo().keySet();
-        List<String> validatorIds = new ArrayList<String>(keySet.size());
-        Set<String> disabledValidatorIds = (Set<String>)
-              RequestStateManager.remove(ctx, RequestStateManager.DISABLED_VALIDATORS);
-        for (String key : keySet) {
-            if (disabledValidatorIds != null && disabledValidatorIds.contains(key)) {
-                continue;
+        if (!ctx.isPostback() || ctx.getCurrentPhaseId().equals(PhaseId.RESTORE_VIEW)) {
+            Set<String> keySet = ctx.getApplication().getDefaultValidatorInfo().keySet();
+            List<String> validatorIds = new ArrayList<String>(keySet.size());
+            Set<String> disabledValidatorIds = (Set<String>)
+                  RequestStateManager.remove(ctx, RequestStateManager.DISABLED_VALIDATORS);
+            for (String key : keySet) {
+                if (disabledValidatorIds != null && disabledValidatorIds.contains(key)) {
+                    continue;
+                }
+                validatorIds.add(key);
             }
-            validatorIds.add(key);
+
+            addValidatorsToComponent(ctx, validatorIds, editableValueHolder, null);
         }
-
-        addValidatorsToComponent(ctx, validatorIds, editableValueHolder, null);
-
     }
 
 
