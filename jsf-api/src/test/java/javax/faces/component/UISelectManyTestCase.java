@@ -580,7 +580,7 @@ public class UISelectManyTestCase extends UIInputTestCase {
             assertEquals(Integer.toString(i), item.getLabel());
             assertNull(item.getDescription());
             assertFalse(item.isDisabled());
-            assertFalse(item.isEscape());
+            assertTrue(item.isEscape());
             if (previous != null) {
                 // using fly-weight pattern make sure we use the same
                 // instance through out the iteration
@@ -612,7 +612,7 @@ public class UISelectManyTestCase extends UIInputTestCase {
             assertEquals(Integer.toString(i), item.getLabel());
             assertNull(item.getDescription());
             assertFalse(item.isDisabled());
-            assertFalse(item.isEscape());
+            assertTrue(item.isEscape());
             if (previous != null) {
                 // using fly-weight pattern make sure we use the same
                 // instance through out the iteration

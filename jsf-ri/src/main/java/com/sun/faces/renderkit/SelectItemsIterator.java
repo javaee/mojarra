@@ -509,7 +509,7 @@ public final class SelectItemsIterator<T extends SelectItem> implements Iterator
                                         : null));
                     setEscape(((itemEscapedResult != null)
                                    ? Boolean.valueOf(itemEscapedResult.toString())
-                                   : false));
+                                   : true));
                     setDisabled(((itemDisabledResult != null)
                                      ? Boolean.valueOf(itemDisabledResult.toString())
                                      : false));
