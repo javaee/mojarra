@@ -218,10 +218,16 @@ final class WriteBehindStateWriter extends Writer {
         // multiple forms.
         StateManager stateManager = Util.getStateManager(context);
         ResponseWriter origWriter = context.getResponseWriter();
-        StringBuilder stateBuilder = getState(stateManager, origWriter);
+        FastStringWriter state =
+              new FastStringWriter((stateManager.isSavingStateInClient(
+                    context)) ? bufSize : 128);
+        context.setResponseWriter(origWriter.cloneWithWriter(state));
+        stateManager.writeState(context, stateManager.saveView(context));
+        context.setResponseWriter(origWriter);
         StringBuilder builder = fWriter.getBuffer();
         // begin writing...
         int totalLen = builder.length();
+        StringBuilder stateBuilder = state.getBuffer();
         int stateLen = stateBuilder.length();
         int pos = 0;
         int tildeIdx = getNextDelimiterIndex(builder, pos);
@@ -276,10 +282,6 @@ final class WriteBehindStateWriter extends Writer {
 
                     }
                 }
-                
-                stateBuilder = getState(stateManager, origWriter);
-                stateLen = stateBuilder.length();
-                
             } else {
                 // we've written all of the state field markers.
                 // finish writing content
@@ -303,32 +305,6 @@ final class WriteBehindStateWriter extends Writer {
         // browser.
         out = orig;
 
-    }
-    
-    /**
-     * Get the state.
-     * 
-     * <p>
-     *  In JSF 2.2 it is required by the specification that the view state in
-     *  each h:form has a unique view state id. So we have to call this method
-     *  multiple times as each h:form needs to generate the view state string
-     *  for itself.
-     * </p>
-     * 
-     * @param stateManager the state manager.
-     * @param origWriter the original response writer.
-     * @return the state.
-     * @throws IOException when an I/O error occurs. 
-     */
-    private StringBuilder getState(StateManager stateManager, ResponseWriter origWriter) throws IOException {
-        FastStringWriter state =
-                new FastStringWriter((stateManager.isSavingStateInClient(
-                        context)) ? bufSize : 128);
-        context.setResponseWriter(origWriter.cloneWithWriter(state));
-        stateManager.writeState(context, stateManager.saveView(context));
-        context.setResponseWriter(origWriter);
-        StringBuilder stateBuilder = state.getBuffer();
-        return stateBuilder;
     }
 
 
