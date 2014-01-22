@@ -76,6 +76,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.application.ProjectStage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.facelets.TagAttributeException;
 
@@ -165,16 +166,21 @@ public final class ViewHandler extends TagHandlerImpl {
             }
 
             if (this.contracts != null) {
-                if (!ctx.getFacesContext().getAttributes().containsKey("com.sun.faces.uiCompositionCount")) {
-                    String contractsValue = this.contracts.getValue(ctx);
-                    if (contractsValue != null) {
-                        List<String> contractList = Arrays.asList(contractsValue.split(","));
-                        ctx.getFacesContext().setResourceLibraryContracts(contractList);
-                    }
-                } else {
-                    if (LOGGER.isLoggable(Level.INFO)) {
+                /*
+                 * JAVASERVERFACES-3139: We are relaxing when the contracts
+                 * attribute can be used. In Development mode we will still 
+                 * blurb a message that the user is not using it at the top
+                 * level, which could cause problems.
+                 */
+                if (ctx.getFacesContext().getAttributes().containsKey("com.sun.faces.uiCompositionCount") &&
+                        LOGGER.isLoggable(Level.INFO) && 
+                        ctx.getFacesContext().getApplication().getProjectStage().equals(ProjectStage.Development)) {
                         LOGGER.log(Level.INFO, "f:view contracts attribute found, but not used at top level");
-                    }
+                }
+                String contractsValue = this.contracts.getValue(ctx);
+                if (contractsValue != null) {
+                    List<String> contractList = Arrays.asList(contractsValue.split(","));
+                    ctx.getFacesContext().setResourceLibraryContracts(contractList);
                 }
             }
             
