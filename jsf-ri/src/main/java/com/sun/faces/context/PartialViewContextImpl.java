@@ -40,6 +40,7 @@
 
 package com.sun.faces.context;
 
+import com.sun.faces.component.visit.PartialVisitContext;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
@@ -65,10 +66,11 @@ import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.sun.faces.component.visit.PartialVisitContext;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import javax.faces.FactoryFinder;
+import static javax.faces.FactoryFinder.VISIT_CONTEXT_FACTORY;
+import javax.faces.component.visit.VisitContextFactory;
 import javax.faces.lifecycle.ClientWindow;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
@@ -395,8 +397,10 @@ import javax.faces.render.RenderKitFactory;
         // is visited.  Note that we use the SKIP_UNRENDERED hint as we
         // only want to visit the rendered subtree.
         EnumSet<VisitHint> hints = EnumSet.of(VisitHint.SKIP_UNRENDERED, VisitHint.EXECUTE_LIFECYCLE);
-        PartialVisitContext visitContext =
-            new PartialVisitContext(context, phaseClientIds, hints);
+        VisitContextFactory visitContextFactory = (VisitContextFactory) 
+                FactoryFinder.getFactory(VISIT_CONTEXT_FACTORY);
+        PartialVisitContext visitContext = (PartialVisitContext)
+                visitContextFactory.getVisitContext(context, phaseClientIds, hints);
         PhaseAwareVisitCallback visitCallback =
             new PhaseAwareVisitCallback(ctx, phaseId);
         component.visitTree(visitContext, visitCallback);
