@@ -68,6 +68,9 @@ import javax.el.ELContext;
  */
 public abstract class FacesContextWrapper extends FacesContext implements FacesWrapper<FacesContext> {
 
+    public FacesContextWrapper() {
+        FacesContext.setCurrentInstance(this);
+    }
 
     // ----------------------------------------------- Methods from FacesWrapper
 
