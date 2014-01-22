@@ -45,6 +45,7 @@ import com.sun.faces.util.Util;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
+import javax.faces.component.UIComponent;
 import javax.faces.context.ExceptionHandlerFactory;
 import javax.faces.context.ExternalContextFactory;
 import javax.faces.context.FacesContext;
@@ -55,8 +56,8 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
 
     
 
-    private ExceptionHandlerFactory exceptionHandlerFactory;
-    private ExternalContextFactory externalContextFactory;
+    private final ExceptionHandlerFactory exceptionHandlerFactory;
+    private final ExternalContextFactory externalContextFactory;
 
 
     // ------------------------------------------------------------ Constructors
@@ -94,7 +95,20 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
 
         ctx.setExceptionHandler(exceptionHandlerFactory.getExceptionHandler());
 
+        savePerRequestInitParams(ctx);
         return ctx;
+        
+    }
+    
+    /*
+     * Copy the value of any init params that must be checked during
+     * this request to our FacesContext attribute map.  
+     */
+    private void savePerRequestInitParams(FacesContext context) {
+        String val = context.getExternalContext().getInitParameter(UIComponent.HONOR_CURRENT_COMPONENT_ATTRIBUTES_PARAM_NAME);
+        boolean setCurrentComponent = Boolean.valueOf(val);
+        context.getAttributes().put(UIComponent.HONOR_CURRENT_COMPONENT_ATTRIBUTES_PARAM_NAME, 
+                setCurrentComponent ? Boolean.TRUE : Boolean.FALSE);
         
     }
 
