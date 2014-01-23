@@ -72,6 +72,13 @@
                     <groupId>org.codehaus.cargo</groupId>
                     <artifactId>cargo-maven2-plugin</artifactId>
                     <version>${cargo.version}</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.codehaus.cargo</groupId>
+                            <artifactId>cargo-core-container-weblogic</artifactId>
+                            <version>1.4.7-SNAPSHOT</version>
+                        </dependency>
+                    </dependencies>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -1478,6 +1485,64 @@
                 <integration.container.type>existing</integration.container.type>
                 <integration.container.wldomain>${integration.container.home}/user_projects/domains/mydomain</integration.container.wldomain>
                 <integration.container.wlserver>${integration.container.home}/wlserver</integration.container.wlserver>
+            </properties>
+        </profile>
+        <profile>
+            <id>integration-wls1214-cargo</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.cargo</groupId>
+                        <artifactId>cargo-maven2-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>start-container</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>start</goal>
+                                </goals>
+                                <configuration>
+                                    <timeout>6000000</timeout>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>stop-container</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                                <configuration>
+                                    <timeout>600000</timeout>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <container>
+                                <containerId>${integration.container.id}</containerId>
+                                <home>${integration.container.wlserver}</home>
+                                <timeout>600000</timeout>
+                            </container>
+                            <configuration>
+                                <type>${integration.container.type}</type>
+                                <home>${integration.container.wldomain}</home>
+                                <properties>
+                                    <cargo.servlet.port>${integration.serverPort}</cargo.servlet.port>
+                                    <cargo.weblogic.administrator.password>${integration.container.password}</cargo.weblogic.administrator.password>
+                                    <cargo.weblogic.administrator.user>${integration.container.username}</cargo.weblogic.administrator.user>
+                                    <cargo.weblogic.server>myserver</cargo.weblogic.server>
+                                </properties>
+                            </configuration>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+            <properties>
+                <integration.container.home>C:/Wls1212</integration.container.home>
+                <integration.container.id>weblogic12x</integration.container.id>
+                <integration.container.type>existing</integration.container.type>
+                <integration.container.wldomain>${integration.container.home}/user_projects/domains/mydomain</integration.container.wldomain>
+                <integration.container.wlserver>${integration.container.home}/wlserver</integration.container.wlserver>
+                <wls.mojarraJarName>glassfish.jsf_1.0.0.0_2-1-20.jar</wls.mojarraJarName>
             </properties>
         </profile>
         <profile>
