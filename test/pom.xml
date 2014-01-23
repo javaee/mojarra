@@ -76,7 +76,7 @@
                         <dependency>
                             <groupId>org.codehaus.cargo</groupId>
                             <artifactId>cargo-core-container-weblogic</artifactId>
-                            <version>1.4.4-patch</version>
+                            <version>1.4.4-patch2</version>
                         </dependency>
                     </dependencies>
                 </plugin>
