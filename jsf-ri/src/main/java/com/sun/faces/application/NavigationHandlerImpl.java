@@ -1338,7 +1338,9 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                     toFlowDocumentId = (null != cnc.getToFlowDocumentId()) ? cnc.getToFlowDocumentId() : toFlowDocumentId;
                     if (null != toFlowDocumentId) {
                         FlowHandler fh = ctx.getApplication().getFlowHandler();
-                        result.isFlowEntryFromExplicitRule = null != fh.getFlow(ctx, toFlowDocumentId, outcome);
+                        if (null != outcome) {
+                            result.isFlowEntryFromExplicitRule = null != fh.getFlow(ctx, toFlowDocumentId, outcome);
+                        }
                     }
                     return result;
                 }
