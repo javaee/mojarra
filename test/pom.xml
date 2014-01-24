@@ -1495,7 +1495,7 @@
                                     <goal>start</goal>
                                 </goals>
                                 <configuration>
-                                    <timeout>6000000</timeout>
+                                    <timeout>12000000</timeout>
                                 </configuration>
                             </execution>
                             <execution>
@@ -1513,7 +1513,7 @@
                             <container>
                                 <containerId>${integration.container.id}</containerId>
                                 <home>${integration.container.wlserver}</home>
-                                <timeout>600000</timeout>
+                                <timeout>1200000</timeout>
                             </container>
                             <configuration>
                                 <type>${integration.container.type}</type>
