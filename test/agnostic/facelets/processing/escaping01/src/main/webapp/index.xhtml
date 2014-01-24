@@ -40,18 +40,38 @@
     only if the new code is made subject to such option by the copyright
     holder.
 
---><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.sun.faces.test.agnostic.facelets</groupId>
-        <artifactId>pom</artifactId>
-        <version>2.2.6-SNAPSHOT</version>
-    </parent>
-    <groupId>com.sun.faces.test.agnostic.facelets.processing</groupId>
-    <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Agnostic - Facelets - Processing</name>
-    <modules>
-        <module>html5</module>
-    </modules>
-</project>
+-->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+<!-- Case 1-->
+
+<h:outputText id="id" value="#{param['id']}"></h:outputText>
+
+<!-- Case 2-->
+
+<h:inputHidden id="id" value="#{param['id']}"></h:inputHidden>
+
+<!-- Case 3 -->
+
+<input type="hidden" name="id" id="id" value="#{param['id']}"/>
+
+beforeScriptBlock: #{param['id']}
+
+<script>
+
+// case 4
+var paramId = #{param['id2']};
+// case 5
+var paramIdd = "<h:outputText value="#{param['id3']}" />";
+</script>
+
+<!-- Case 6 -->
+
+#{param['id4']}
+
+</html>
