@@ -51,6 +51,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.sun.faces.util.FacesLogger;
+import javax.crypto.spec.SecretKeySpec;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.xml.bind.DatatypeConverter;
 
 /**
  * <p>This utility class is to provide both encryption and
@@ -201,13 +205,32 @@ public final class ByteArrayGuard {
      */
     private void setupKeyAndMac() {
 
+        /*
+         * Lets see if an encoded key was given to the application, if so use
+         * it and skip the code to generate it.
+         */
         try {
-            KeyGenerator kg = KeyGenerator.getInstance(KEY_ALGORITHM);
-            kg.init(KEY_LENGTH);   // 256 if you're using the Unlimited Policy Files
-            sk = kg.generateKey(); 
+            InitialContext context = new InitialContext();
+            String encodedKeyArray = (String) context.lookup("java:comp/env/jsf/ClientSideSecretKey");
+            byte[] keyArray = DatatypeConverter.parseBase64Binary(encodedKeyArray);
+            sk = new SecretKeySpec(keyArray, KEY_ALGORITHM);
+        }
+        catch(NamingException exception) {
+            if (LOGGER.isLoggable(Level.SEVERE)) { 
+                LOGGER.log(Level.SEVERE, "Unable to find the encoded key.", exception);
+            }
+        }
+        
+        if (sk == null) {
+            try {
+                KeyGenerator kg = KeyGenerator.getInstance(KEY_ALGORITHM);
+                kg.init(KEY_LENGTH);   // 256 if you're using the Unlimited Policy Files
+                sk = kg.generateKey(); 
+                System.out.print("SecretKey: " + DatatypeConverter.printBase64Binary(sk.getEncoded()));
 
-        } catch (Exception e) {
-            throw new FacesException(e);
+            } catch (Exception e) {
+                throw new FacesException(e);
+            }
         }
     }
 
