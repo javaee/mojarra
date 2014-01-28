@@ -68,6 +68,10 @@ import java.util.logging.Logger;
 import com.sun.faces.component.visit.PartialVisitContext;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
+import javax.faces.FactoryFinder;
+import static javax.faces.FactoryFinder.VISIT_CONTEXT_FACTORY;
+import javax.faces.component.visit.VisitContextFactory;
+import javax.faces.component.visit.VisitContextWrapper;
 
  public class PartialViewContextImpl extends PartialViewContext {
 
@@ -371,24 +375,50 @@ import com.sun.faces.util.Util;
         // is visited.  Note that we use the SKIP_UNRENDERED hint as we
         // only want to visit the rendered subtree.
         EnumSet<VisitHint> hints = EnumSet.of(VisitHint.SKIP_UNRENDERED, VisitHint.EXECUTE_LIFECYCLE);
-        PartialVisitContext visitContext =
-            new PartialVisitContext(context, phaseClientIds, hints);
-        PhaseAwareVisitCallback visitCallback =
-            new PhaseAwareVisitCallback(ctx, phaseId);
-        component.visitTree(visitContext, visitCallback);
-        if (LOGGER.isLoggable(Level.FINER) && !visitContext.getUnvisitedClientIds().isEmpty()) {
-            Collection<String> unvisitedClientIds = visitContext.getUnvisitedClientIds();
-            String message;
-            StringBuilder builder = new StringBuilder();
-            for (String cur : unvisitedClientIds) {
-                builder.append(cur).append(" ");
-            }
-            LOGGER.log(Level.FINER,
-                    "jsf.context.partial_visit_context_unvisited_children",
-                    new Object[]{builder.toString()});
-        }
+        VisitContextFactory visitContextFactory = (VisitContextFactory) 
+                FactoryFinder.getFactory(VISIT_CONTEXT_FACTORY);
+        VisitContext visitContext = visitContextFactory.getVisitContext(context, phaseClientIds, hints);
+         PhaseAwareVisitCallback visitCallback =
+             new PhaseAwareVisitCallback(ctx, phaseId);
+         component.visitTree(visitContext, visitCallback);
+
+        PartialVisitContext partialVisitContext = unwrapPartialVisitContext(visitContext);
+        if (partialVisitContext != null) {
+            if (LOGGER.isLoggable(Level.FINER) && !partialVisitContext.getUnvisitedClientIds().isEmpty()) {
+                Collection<String> unvisitedClientIds = partialVisitContext.getUnvisitedClientIds();
+                String message;
+                StringBuilder builder = new StringBuilder();
+                for (String cur : unvisitedClientIds) {
+                    builder.append(cur).append(" ");
+                }
+                LOGGER.log(Level.FINER,
+                        "jsf.context.partial_visit_context_unvisited_children",
+                        new Object[]{builder.toString()});
+             }
+        }    
     }
 
+    /**
+     * Unwraps {@link PartialVisitContext} from a chain of {@link VisitContextWrapper}s.
+     *
+     * If no {@link PartialVisitContext} is found in the chain, null is returned instead.
+     * 
+     * @param visitContext the visit context.
+     * @return the (unwrapped) partial visit context.
+     */
+    private static PartialVisitContext unwrapPartialVisitContext(VisitContext visitContext) {
+        if (visitContext == null) {
+            return null;
+         }
+        if (visitContext instanceof PartialVisitContext) {
+            return (PartialVisitContext) visitContext;
+        }
+        if (visitContext instanceof VisitContextWrapper) {
+            return unwrapPartialVisitContext(((VisitContextWrapper) visitContext).getWrapped());
+        }
+        return null;
+    }
+    
     private void renderAll(FacesContext context, UIViewRoot viewRoot) throws IOException {
         // If this is a "render all via ajax" request,
         // make sure to wrap the entire page in a <render> elemnt
