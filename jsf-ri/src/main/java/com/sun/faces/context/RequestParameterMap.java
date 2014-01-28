@@ -56,6 +56,7 @@ import com.sun.faces.util.Util;
 public class RequestParameterMap extends BaseContextMap<String> {
 
     private final ServletRequest request;
+    private boolean inspectedParameterNames = false;
 
 
     // ------------------------------------------------------------ Constructors
@@ -72,6 +73,10 @@ public class RequestParameterMap extends BaseContextMap<String> {
     @Override
     public String get(Object key) {
         Util.notNull("key", key);
+        if (!inspectedParameterNames) {
+            inspectedParameterNames = true;
+            request.getParameterNames();
+        }
         return request.getParameter(key.toString());
     }
 
