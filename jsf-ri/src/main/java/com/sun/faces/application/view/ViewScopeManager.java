@@ -42,6 +42,7 @@ package com.sun.faces.application.view;
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.util.LRUMap;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
@@ -223,7 +224,7 @@ public class ViewScopeManager implements HttpSessionListener, ViewMapListener {
                 }
 
                 if (sessionMap.get(ACTIVE_VIEW_MAPS) == null) {
-                    sessionMap.put(ACTIVE_VIEW_MAPS, (Map<String, Object>) new LRUMap<String, Object>(size));
+                    sessionMap.put(ACTIVE_VIEW_MAPS, (Map<String, Object>) Collections.synchronizedMap(new LRUMap<String, Object>(size)));
                 }
                 
                 Map<String, Object> viewMaps = (Map<String, Object>) sessionMap.get(ACTIVE_VIEW_MAPS);
