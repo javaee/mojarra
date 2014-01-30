@@ -15,6 +15,7 @@
         <module>glassfish</module>
         <module>groovy</module>
         <module>javaee6</module>
+        <module>javaee6web</module>
         <module>javaee7</module>
         <module>performance</module>
         <module>protocolaware</module>
