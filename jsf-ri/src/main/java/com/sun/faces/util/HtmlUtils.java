@@ -172,11 +172,11 @@ public class HtmlUtils {
                                             buffLength,
                                             AMP_CHARS);
                 } else if (ch == '"') {
-                     nextIndex = addToBuffer(out,
-                                             buff,
-                                             buffIndex,
-                                             buffLength,
-                                             QUOT_CHARS);
+                        nextIndex = addToBuffer(out,
+                             buff,
+                             buffIndex,
+                             buffLength,
+                             "\"".toCharArray());
                 } else {
                     nextIndex = addToBuffer(out, buff, buffIndex,
                                             buffLength, ch);
