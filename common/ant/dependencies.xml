@@ -85,8 +85,8 @@
     <property name="redhat.maven2" value="https://repository.jboss.org/nexus/content/repositories/thirdparty-releases"/>
     <!--<property name="maven2.mirror" value="http://mirrors.ibiblio.org/pub/mirrors/maven2"/>-->
     <property name="maven2.mirror" value="http://repo.exist.com/maven2/"/>
-    <property name="java.net.maven" value="http://download.java.net/maven/1"/>
-    <property name="java.net.maven2" value="http://download.java.net/maven/2"/>
+    <property name="java.net.maven" value="http://search.maven.org/remotecontent?filepath="/>
+    <property name="java.net.maven2" value="http://search.maven.org/remotecontent?filepath="/>
     <property name="codehaus.maven" value="http://repository.codehaus.org"/>
     <property name="download.java.net" value="http://download.java.net/javaee5/external/shared"/>
     <property name="jboss.maven2" value="http://repository.jboss.com/maven2"/>
@@ -183,7 +183,7 @@
                 <available file="${gf-ant.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="http://download.java.net/maven/glassfish/org/glassfish/ant-tasks/${gf-ant.version}/ant-tasks-${gf-ant.version}.jar"
+                <get src="http://search.maven.org/remotecontent?filepath=org/glassfish/ant-tasks/${gf-ant.version}/ant-tasks-${gf-ant.version}.jar"
                      dest="${gf-ant.jar}"
                      usetimestamp="true"/>
             </then>
@@ -323,7 +323,7 @@
                 </not>
             </and>
             <then>
-                <get src="${java.net.maven}/com.sun.wts.tools.mri/jars/maven-repository-importer-${maven.repository.importer.version}.jar"
+					<get src="${java.net.maven}com/sun/wts/tools/mri/maven-repository-importer/${maven.repository.importer.version}/maven-repository-importer-${maven.repository.importer.version}.jar"
                      dest="${maven.repository.importer.jar}"
                      usetimestamp="true"/>
 
@@ -348,7 +348,7 @@
                 <available file="${servlet.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${java.net.maven}/javax.servlet/jars/servlet-api-${servlet.api.version}.jar"
+					<get src="${java.net.maven}javax/servlet/servlet-api/${servlet.api.version}/servlet-api-${servlet.api.version}.jar"
                      dest="${servlet.jar}"
                      usetimestamp="true"/>
 
@@ -375,7 +375,7 @@
                 <available file="${jsp.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${java.net.maven}/javax.servlet.jsp/jars/jsp-api-${jsp.api.version}.jar"
+                <get src="${java.net.maven}javax.servlet.jsp/jars/jsp-api-${jsp.api.version}.jar"
                      dest="${jsp.jar}"
                      usetimestamp="true"/>
 
@@ -389,7 +389,7 @@
                 <available file="${el-api.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${java.net.maven}/javax.el/jars/el-api-${el.version}.jar"
+                <get src="${java.net.maven}javax.el/jars/el-api-${el.version}.jar"
                      dest="${el-api.jar}"
                      usetimestamp="true"/>
 
@@ -400,7 +400,7 @@
                 <available file="${el-impl.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${java.net.maven}/el-impl/jars/el-impl-${el.version}.jar"
+                <get src="${java.net.maven}el-impl/jars/el-impl-${el.version}.jar"
                      dest="${el-impl.jar}"
                      usetimestamp="true"/>
 
@@ -413,7 +413,7 @@
                 <available file="${jstl.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${java.net.maven}/jstl/jars/jstl-${jstl.api.version}.jar"
+					<get src="${java.net.maven}jstl/jstl/${jstl.api.version}/jstl-${jstl.api.version}.jar"
                      dest="${jstl.jar}"
                      usetimestamp="true"/>
 
@@ -426,7 +426,7 @@
                 <available file="${annotation.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${java.net.maven}/javax.annotation/jars/jsr250-api-${annotation.api.version}.jar"
+                <get src="${java.net.maven}javax.annotation/jars/jsr250-api-${annotation.api.version}.jar"
                      dest="${annotation.jar}"
                      usetimestamp="true"/>
 

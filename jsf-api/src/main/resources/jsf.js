@@ -946,6 +946,29 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
         };
 
         /**
+         * Find encoded url field for a given form.
+         * @param form
+         * @ignore
+         */
+        var getEncodedUrlElement = function getEncodedUrlElement(form) {
+            var encodedUrlElement = form['javax.faces.encodedURL'];
+
+            if (encodedUrlElement) {
+                return encodedUrlElement;
+            } else {
+                var formElements = form.elements;
+                for (var i = 0, length = formElements.length; i < length; i++) {
+                    var formElement = formElements[i];
+                    if (formElement.name.indexOf('javax.faces.encodedURL') >= 0) {
+                        return formElement;
+                    }
+                }
+            }
+
+            return undefined;
+        };
+
+        /**
          * Find view state field for a given form.
          * @param form
          * @ignore
@@ -959,7 +982,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 var formElements = form.elements;
                 for (var i = 0, length = formElements.length; i < length; i++) {
                     var formElement = formElements[i];
-                    if (formElement.name == 'javax.faces.ViewState') {
+                    if (formElement.name.indexOf('javax.faces.ViewState') >= 0) {
                         return formElement;
                     }
                 }
@@ -1962,11 +1985,17 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 // specified, determine the default.
 
                 var args = {};
+                
+                var namingContainerId = options["com.sun.faces.namingContainerId"];
+                
+                if (typeof(namingContainerId) === 'undefined' || options === null) {
+                	namingContainerId = "";
+                }                
 
-                args["javax.faces.source"] = element.id;
+                args[namingContainerId + "javax.faces.source"] = element.id;
 
                 if (event && !!event.type) {
-                    args["javax.faces.partial.event"] = event.type;
+                    args[namingContainerId + "javax.faces.partial.event"] = event.type;
                 }
 
                 // If we have 'execute' identifiers:
@@ -1990,11 +2019,11 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                         } else {
                             options.execute = "@all";
                         }
-                        args["javax.faces.partial.execute"] = options.execute;
+                        args[namingContainerId + "javax.faces.partial.execute"] = options.execute;
                     }
                 } else {
                     options.execute = element.name + " " + element.id;
-                    args["javax.faces.partial.execute"] = options.execute;
+                    args[namingContainerId + "javax.faces.partial.execute"] = options.execute;
                 }
 
                 if (options.render) {
@@ -2007,7 +2036,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                         } else {
                             options.render = "@all";
                         }
-                        args["javax.faces.partial.render"] = options.render;
+                        args[namingContainerId + "javax.faces.partial.render"] = options.render;
                     }
                 }
 
@@ -2019,16 +2048,18 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 // copy all other options to args
                 for (var property in options) {
                     if (options.hasOwnProperty(property)) {
-                        args[property] = options[property];
+                        if (property != "com.sun.faces.namingContainerId") {
+                            args[namingContainerId + property] = options[property];
+                        }
                     }
                 }
 
-                args["javax.faces.partial.ajax"] = "true";
+                args[namingContainerId + "javax.faces.partial.ajax"] = "true";
                 args["method"] = "POST";
 
                 // Determine the posting url
 
-                var encodedUrlField = form.elements["javax.faces.encodedURL"];
+                var encodedUrlField = getEncodedUrlElement(form);
                 if (typeof encodedUrlField == 'undefined') {
                     args["url"] = form.action;
                 } else {
@@ -2042,7 +2073,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 ajaxEngine.context.onerror = onerror;
                 ajaxEngine.context.sourceid = element.id;
                 ajaxEngine.context.formid = form.id;
-                ajaxEngine.context.render = args["javax.faces.partial.render"];
+                ajaxEngine.context.render = args[namingContainerId + "javax.faces.partial.render"];
                 ajaxEngine.sendRequest();
 
                 // null out element variables to protect against IE memory leak

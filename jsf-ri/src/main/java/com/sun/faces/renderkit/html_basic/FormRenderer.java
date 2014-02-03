@@ -47,6 +47,7 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.logging.Level;
 
+import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIViewRoot;
@@ -67,6 +68,11 @@ public class FormRenderer extends HtmlBasicRenderer {
     private static final Attribute[] ATTRIBUTES =
           AttributeManager.getAttributes(AttributeManager.Key.FORMFORM);
 
+    /**
+     * Flag determining whether or not javax.faces.ViewState should be namespaced.
+     */
+    protected transient boolean namespaceParameters;
+
     private boolean writeStateAtEnd;
 
     // ------------------------------------------------------------ Constructors
@@ -77,6 +83,9 @@ public class FormRenderer extends HtmlBasicRenderer {
         writeStateAtEnd =
              webConfig.isOptionEnabled(
                   BooleanWebContextInitParameter.WriteStateAtFormEnd);
+        namespaceParameters =
+             webConfig.isOptionEnabled(
+                  BooleanWebContextInitParameter.NamespaceParameters);
     }
 
     // ---------------------------------------------------------- Public Methods
@@ -159,9 +168,11 @@ public class FormRenderer extends HtmlBasicRenderer {
         writer.writeAttribute("value", clientId, "value");
         writer.endElement("input");
         writer.write('\n');
+        
+        UIViewRoot viewRoot = context.getViewRoot();
 
         // Write out special hhidden field for partial submits
-        String viewId = context.getViewRoot().getViewId();
+        String viewId = viewRoot.getViewId();
         String actionURL =
             context.getApplication().getViewHandler().getActionURL(context, viewId);
         ExternalContext externalContext = context.getExternalContext();
@@ -171,7 +182,15 @@ public class FormRenderer extends HtmlBasicRenderer {
             if (!encodedPartialActionURL.equals(encodedActionURL)) {
                 writer.startElement("input", component);
                 writer.writeAttribute("type", "hidden", "type");
-                writer.writeAttribute("name", "javax.faces.encodedURL", null);
+                String attributeName = "javax.faces.encodedURL";
+                
+                if (namespaceParameters && (viewRoot instanceof NamingContainer)) {
+                    String namingContainerId = viewRoot.getContainerClientId(context);
+                    if (namingContainerId != null) {
+                        attributeName = namingContainerId + attributeName;
+                    }
+                }
+                writer.writeAttribute("name", attributeName, null);
                 writer.writeAttribute("value", encodedPartialActionURL, "value");
                 writer.endElement("input");
                 writer.write('\n');

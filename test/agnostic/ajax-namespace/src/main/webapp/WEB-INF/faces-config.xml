@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.1" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd">
+    <factory>
+        <application-factory>com.sun.faces.test.agnostic.ajax_namespace.ApplicationFactoryImpl</application-factory>
+    </factory>
+</faces-config>

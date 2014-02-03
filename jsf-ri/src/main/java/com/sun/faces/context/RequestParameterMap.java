@@ -46,8 +46,14 @@ import java.util.Collections;
 import java.util.Collection;
 import java.util.Iterator;
 
+import javax.faces.application.Application;
+import javax.faces.component.NamingContainer;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
 import javax.servlet.ServletRequest;
 
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.util.Util;
 
 /**
@@ -55,14 +61,18 @@ import com.sun.faces.util.Util;
  */
 public class RequestParameterMap extends BaseContextMap<String> {
 
+    private String namingContainerId;
+    private final boolean namespaceParameters;
     private final ServletRequest request;
-
 
     // ------------------------------------------------------------ Constructors
 
 
     public RequestParameterMap(ServletRequest request) {
         this.request = request;
+        WebConfiguration webConfig = WebConfiguration.getInstance();
+        namespaceParameters = webConfig.isOptionEnabled(
+                  BooleanWebContextInitParameter.NamespaceParameters);
     }
 
 
@@ -72,7 +82,15 @@ public class RequestParameterMap extends BaseContextMap<String> {
     @Override
     public String get(Object key) {
         Util.notNull("key", key);
-        return request.getParameter(key.toString());
+    	String mapKey = key.toString();
+        String mapValue = null;
+        if (namespaceParameters) {
+            mapValue = request.getParameter(getNamingContainerId() + mapKey);
+        }
+        if (mapValue == null) {
+        	mapValue = request.getParameter(mapKey);
+        }
+        return mapValue;
     }
 
 
@@ -93,10 +111,34 @@ public class RequestParameterMap extends BaseContextMap<String> {
         return Collections.unmodifiableCollection(super.values());
     }
 
+    protected String getNamingContainerId() {
+        if (null == namingContainerId) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            UIViewRoot viewRoot = context.getViewRoot();
+            if (viewRoot == null) {
+                Application application = context.getApplication();
+                viewRoot = (UIViewRoot) application.createComponent(UIViewRoot.COMPONENT_TYPE);
+            }
+            if (viewRoot instanceof NamingContainer) {
+                namingContainerId = viewRoot.getContainerClientId(context);
+            } else {
+                namingContainerId = "";
+            }
+        }
+        return namingContainerId;
+    }
 
     @Override
-    public boolean containsKey(Object key) {
-        return (request.getParameter(key.toString()) != null);
+    public boolean containsKey(Object key) {    	
+    	boolean containsKey = false;
+    	String mapKey = key.toString();
+        if (namespaceParameters) {
+            containsKey = (request.getParameter(getNamingContainerId() + mapKey) != null);
+        }
+        if (!containsKey) {
+        	containsKey = (request.getParameter(mapKey) != null);
+        }
+        return containsKey;
     }
 
 

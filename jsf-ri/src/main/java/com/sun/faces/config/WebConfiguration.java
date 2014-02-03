@@ -1272,6 +1272,9 @@ public class WebConfiguration {
         ),
         DisableIdUniquenessCheck(
             "com.sun.faces.disableIdUniquenessCheck",
+            false),
+        NamespaceParameters(
+            "com.sun.faces.namespaceParameters",
             false);
 
         private BooleanWebContextInitParameter alternate;

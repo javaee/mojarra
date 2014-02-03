@@ -57,6 +57,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.FacesException;
+import javax.faces.component.NamingContainer;
 import javax.faces.component.UIViewRoot;
 
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
@@ -70,6 +71,7 @@ import com.sun.faces.util.RequestStateManager;
 
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.AutoCompleteOffOnViewState;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableViewStateIdRendering;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.NamespaceParameters;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.NumberOfLogicalViews;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.NumberOfViews;
 import com.sun.faces.config.WebConfiguration;
@@ -118,6 +120,11 @@ public class ServerSideStateHelper extends StateHelper {
 
 
     /**
+     * Flag determining whether or not javax.faces.ViewState should be namespaced.
+     */
+    protected boolean namespaceParameters;
+ 
+    /**
      * Used to generate unique server state IDs.
      */
     protected final Random random;
@@ -141,6 +148,7 @@ public class ServerSideStateHelper extends StateHelper {
         } else {
             random = null;
         }
+        namespaceParameters = webConfig.isOptionEnabled(NamespaceParameters);
 
     }
 
@@ -172,7 +180,9 @@ public class ServerSideStateHelper extends StateHelper {
 
         String id;
         
-        if (!ctx.getViewRoot().isTransient()) {
+        UIViewRoot viewRoot = ctx.getViewRoot();
+
+        if (!viewRoot.isTransient()) {
             Util.notNull("state", state);
             Object[] stateToWrite = (Object[]) state;
             ExternalContext externalContext = ctx.getExternalContext();
@@ -242,9 +252,18 @@ public class ServerSideStateHelper extends StateHelper {
                  
             writer.startElement("input", null);
             writer.writeAttribute("type", "hidden", null);
-            writer.writeAttribute("name", ResponseStateManager.VIEW_STATE_PARAM, null);
+
+            String viewStateParam = ResponseStateManager.VIEW_STATE_PARAM;
+            
+            if ((namespaceParameters) && (viewRoot instanceof NamingContainer)) {
+                String namingContainerId = viewRoot.getContainerClientId(ctx);
+                if (namingContainerId != null) {
+            	    viewStateParam = namingContainerId + viewStateParam;
+                }
+            }
+            writer.writeAttribute("name", viewStateParam, null);
             if (webConfig.isOptionEnabled(EnableViewStateIdRendering)) {
-                writer.writeAttribute("id", ResponseStateManager.VIEW_STATE_PARAM, null);
+                writer.writeAttribute("id", viewStateParam, null);
             }
             writer.writeAttribute("value", id, null);
             if (webConfig.isOptionEnabled(AutoCompleteOffOnViewState)) {
