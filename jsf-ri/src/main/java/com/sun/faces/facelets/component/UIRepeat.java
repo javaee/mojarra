@@ -787,7 +787,12 @@ public class UIRepeat extends UINamingContainer {
         // Just need to check whether there are any ids under this
         // subtree.  Make sure row index is cleared out since
         // getSubtreeIdsToVisit() needs our row-less client id.
-        setIndex(context.getFacesContext(), -1);
+        //
+        // We only need to position if row iteration is actually needed.
+        //
+        if (requiresRowIteration(context)) {
+            setIndex(context.getFacesContext(), -1);
+        }
         Collection<String> idsToVisit = context.getSubtreeIdsToVisit(this);
         assert(idsToVisit != null);
 
