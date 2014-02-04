@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,48 +37,49 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.servlet31.facelets.ui;
 
-package com.sun.faces.systest.model;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import org.junit.After;
+import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
 
-import java.util.Arrays;
+public class Issue1807IT {
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+    private String webUrl;
+    private WebClient webClient;
 
-@ManagedBean
-@RequestScoped
-public class Bean1807 {
-
-    private Cell[][] matrix = new Cell[2][2];
-
-    public Bean1807() { 
-        for (int x = 0; x < matrix.length; x++) {
-            for (int y = 0; y < matrix[x].length; y++) {
-                matrix[x][y] = new Cell(); 
-            }
-        }
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-    public void refresh() { 
-        matrix[0][0].setValue(true); 
-        System.out.println("Refresh: " + Arrays.deepToString(matrix)); 
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
     }
 
-    public Cell[][] getMatrix() { 
-        return matrix; 
-    }
+    @Test
+    public void testRepeatNested() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/repeatNested.xhtml");
+        HtmlSubmitInput submit = (HtmlSubmitInput) page.getElementById("form:refresh");
+        page = (HtmlPage) submit.click();
 
-    public static class Cell {
-        private boolean value;
-        public boolean getValue() { 
-            return this.value; 
-        }
-        public void setValue(boolean value) { 
-            this.value = value; 
-        }
-        public String toString() { 
-            return String.valueOf(value); 
-        }
-    }
+        HtmlCheckBoxInput cell0_0 = (HtmlCheckBoxInput) page.getElementById("form:level1:0:level2:0:_");
+        assertTrue(cell0_0.isChecked());
+        
+        HtmlCheckBoxInput cell0_1 = (HtmlCheckBoxInput) page.getElementById("form:level1:0:level2:1:_");
+        assertFalse(cell0_1.isChecked());
 
+        HtmlCheckBoxInput cell1_0 = (HtmlCheckBoxInput) page.getElementById("form:level1:1:level2:0:_");
+        assertFalse(cell1_0.isChecked());
+
+        HtmlCheckBoxInput cell1_1 = (HtmlCheckBoxInput) page.getElementById("form:level1:1:level2:1:_");
+        assertFalse(cell1_1.isChecked());
+    }
 }

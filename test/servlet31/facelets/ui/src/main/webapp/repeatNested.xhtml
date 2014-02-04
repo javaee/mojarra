@@ -2,7 +2,7 @@
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -41,34 +41,23 @@
 -->
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:d="http://mojarra.dev.java.net/source1"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:f="http://java.sun.com/jsf/core">
-  <h:head>
-    <title>1807</title>
-  </h:head>
-
-  <h:body>
-
-<p>Test for <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=1807">1807</a>.</p>
-
-
-<f:view>
-
-    <h:form id="form" >
-
-       <ui:repeat value="#{bean1807.matrix}" var="row">
-          <ui:repeat value="#{row}" var="cell">
-             <h:outputText value="#{cell.value}" />
-             <h:selectBooleanCheckbox value="#{cell.value}" />
-          </ui:repeat>
-          <br/>
-       </ui:repeat>
-       <h:commandButton id="refresh" action="#{bean1807.refresh}" value="Refresh" />
-    </h:form>
-</f:view>
-
-  </h:body>
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <title>Nested ui:repeat</title>
+    </h:head>
+    <h:body>
+        <h:form id="form" >
+            <ui:repeat id="level1" value="#{repeatNestedBean.matrix}" var="row" varStatus="level1">
+                <ui:repeat id="level2" value="#{row}" var="cell" varStatus="level2">
+                    <h:outputText value="#{cell.value}" />
+                    <h:selectBooleanCheckbox id="#{level1.index}#{level2.index}_" value="#{cell.value}" />
+                </ui:repeat>
+                <br/>
+            </ui:repeat>
+            <h:commandButton id="refresh" action="#{repeatNestedBean.refresh}" value="Refresh" />
+        </h:form>
+    </h:body>
 </html>
