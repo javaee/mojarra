@@ -309,7 +309,7 @@ public class BeanValidator implements Validator, PartialStateHolder {
             return;
         }
         if (isResolvable(valueReference, valueExpression)) {
-            Set<ConstraintViolation> violations = null;
+            Set<ConstraintViolation<?>> violations = null;
             try {
                 //noinspection unchecked
                 violations =

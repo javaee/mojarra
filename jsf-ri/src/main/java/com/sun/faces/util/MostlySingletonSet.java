@@ -87,7 +87,7 @@ public class MostlySingletonSet<E> implements Set<E>, Serializable {
         boolean result = true;
         
         if (null == inner && 1 == c.size()) {
-            inner = Collections.singleton(c.iterator().next());
+            inner = (Set<E>) Collections.singleton(c.iterator().next());
         } else {
             // If we need to transition from one to more-than-one
             if (1 == inner.size()) {
@@ -319,7 +319,7 @@ public class MostlySingletonSet<E> implements Set<E>, Serializable {
 
     @Override
     public Iterator<E> iterator() {
-        Iterator<E> result = null;
+        Iterator<E> result;
 
         if (null != inner) {
             result = inner.iterator();
