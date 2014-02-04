@@ -47,6 +47,8 @@ import java.util.Iterator;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
+import javax.servlet.http.HttpServletResponse;
+
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.ExceptionHandler;
@@ -196,6 +198,7 @@ public class AjaxExceptionHandlerImpl extends ExceptionHandlerWrapper {
              ExternalContext extContext = context.getExternalContext();
              extContext.setResponseContentType("text/xml");
              extContext.addResponseHeader("Cache-Control", "no-cache");
+             extContext.setResponseStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
              PartialResponseWriter writer = context.getPartialViewContext().getPartialResponseWriter();
 
              writer.startDocument();

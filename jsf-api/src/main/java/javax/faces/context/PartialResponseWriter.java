@@ -54,7 +54,7 @@ import java.util.Map;
  * @since 2.0
  */
 public class PartialResponseWriter extends ResponseWriterWrapper {
-    // True when we need to close a start tag
+    // True when we need to close a changes tag
     //
     private boolean inChanges = false;
 
@@ -65,6 +65,10 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
     // True when we need to close afer insert tag
     //
     private boolean inInsertAfter = false;
+    
+    // True when we need to close an update tag
+    //
+    private boolean inUpdate = false;
 
     ResponseWriter writer;
 
@@ -199,6 +203,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
      */
     public void startUpdate(String targetId) throws IOException {
         startChangesIfNecessary();
+        inUpdate = true;
         ResponseWriter writer = getWrapped();
         writer.startElement("update", null);
         writer.writeAttribute("id", targetId, null);
@@ -215,6 +220,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
         ResponseWriter writer = getWrapped();
         writer.endCDATA();
         writer.endElement("update");
+        inUpdate = false;
     }
 
     /**
@@ -332,6 +338,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
      * @since 2.0
      */
     public void startError(String errorName) throws IOException {
+        endUpdateIfNecessary();
         endChangesIfNecessary();
         ResponseWriter writer = getWrapped();
         writer.startElement("error", null);
@@ -360,6 +367,12 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
             ResponseWriter writer = getWrapped();
             writer.startElement("changes", null);
             inChanges = true;
+        }
+    }
+    
+    private void endUpdateIfNecessary() throws IOException {
+        if (inUpdate) {
+            endUpdate();
         }
     }
 
