@@ -79,6 +79,5 @@
         <module>scope</module>
         <module>stateSaving</module>
         <module>vdl</module>
-        <module>ajax-namespace</module>
     </modules>
 </project>
