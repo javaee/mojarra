@@ -40,6 +40,7 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import com.sun.faces.config.WebConfiguration;
 import java.io.IOException;
 import java.util.Map;
 import javax.faces.application.FacesMessage;
@@ -106,9 +107,25 @@ public class ScriptRenderer extends ScriptStyleBaseRenderer {
         ResponseWriter writer = context.getResponseWriter();
         this.startElement(writer, component);
 
-        String resourceSrc;
+        String resourceSrc = "RES_NOT_FOUND";
+        
+        WebConfiguration webConfig = WebConfiguration.getInstance();
+        
+        if (library == null && name != null && 
+                name.startsWith(webConfig.getOptionValue(WebConfiguration.WebContextInitParameter.WebAppContractsDirectory))) {
+            
+            if (context.isProjectStage(ProjectStage.Development)) {
+            
+            String msg = "Illegal path, direct contract references are not allowed: " + name;
+            context.addMessage(component.getClientId(context),
+                               new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                                msg,
+                                                msg));  
+            }
+            resource = null;
+        } 
+        
         if (resource == null) {
-            resourceSrc = "RES_NOT_FOUND";
             
             if (context.isProjectStage(ProjectStage.Development)) {
                 String msg = "Unable to find resource " + (library == null ? "" : library + ", ") + name;

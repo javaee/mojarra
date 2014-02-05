@@ -40,6 +40,7 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import com.sun.faces.config.WebConfiguration;
 import java.io.IOException;
 import java.util.Map;
 
@@ -103,7 +104,22 @@ public class StylesheetRenderer extends ScriptStyleBaseRenderer {
         writer.startElement("link", component);
         writer.writeAttribute("type", "text/css", "type");
         writer.writeAttribute("rel", "stylesheet", "rel");
+
         String resourceUrl = "RES_NOT_FOUND";
+
+        WebConfiguration webConfig = WebConfiguration.getInstance();
+
+        if (library == null 
+                && name.startsWith(webConfig.getOptionValue(WebConfiguration.WebContextInitParameter.WebAppContractsDirectory))
+                && context.isProjectStage(ProjectStage.Development)) {
+            String msg = "Illegal path, direct contract references are not allowed: " + name;
+            context.addMessage(component.getClientId(context),
+                               new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                                msg,
+                                                msg));                
+            resource = null;
+        }
+        
         if (resource != null) {
         	resourceUrl = context.getExternalContext().encodeResourceURL(resource.getRequestPath());
         } else if (context.isProjectStage(ProjectStage.Development)) {
