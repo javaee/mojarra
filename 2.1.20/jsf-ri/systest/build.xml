@@ -1,0 +1,266 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+
+    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+    Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+
+    The contents of this file are subject to the terms of either the GNU
+    General Public License Version 2 only ("GPL") or the Common Development
+    and Distribution License("CDDL") (collectively, the "License").  You
+    may not use this file except in compliance with the License.  You can
+    obtain a copy of the License at
+    https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+    or packager/legal/LICENSE.txt.  See the License for the specific
+    language governing permissions and limitations under the License.
+
+    When distributing the software, include this License Header Notice in each
+    file and include the License file at packager/legal/LICENSE.txt.
+
+    GPL Classpath Exception:
+    Oracle designates this particular file as subject to the "Classpath"
+    exception as provided by Oracle in the GPL Version 2 section of the License
+    file that accompanied this code.
+
+    Modifications:
+    If applicable, add the following below the License Header, with the fields
+    enclosed by brackets [] replaced by your own identifying information:
+    "Portions Copyright [year] [name of copyright owner]"
+
+    Contributor(s):
+    If you wish your version of this file to be governed by only the CDDL or
+    only the GPL Version 2, indicate your decision by adding "[Contributor]
+    elects to include this software in this distribution under the [CDDL or GPL
+    Version 2] license."  If you don't indicate a single choice of license, a
+    recipient has the option to distribute your version of this file under
+    either the CDDL, the GPL Version 2 or to extend the choice of license to
+    its licensees as provided above.  However, if you add GPL Version 2 code
+    and therefore, elected the GPL Version 2 license, then the option applies
+    only if the new code is made subject to such option by the copyright
+    holder.
+
+-->
+
+<!-- ************ JSF build file ******************************************* -->
+
+<project name="JSF-RI-Systest" default="main" basedir=".">    
+
+    <property name="Name" value="JavaServer Faces RI System Test"/>   
+
+    <!-- ************ Per user local properties **************************** -->
+    <property file="${user.home}/build.properties"/>    
+    <property file="../../build.properties"/>
+    
+    <!-- Deployment handling import -->  
+    <import file="${jsf.build.home}/common/ant/common.xml"/>
+
+
+    <!-- ************ Where are we building into? ************************** -->
+
+    <property name="test.suite.name" value="jsf-systest"/>  
+
+    <!-- The base directory for compilation targets -->
+    <property name="build.dir" value="${basedir}/build"/>
+    <property name="dist.dir" value="${basedir}/dist"/>
+
+    <!-- The base directory for system test sources -->
+    <property name="source.dir" value="${basedir}/src"/>   
+
+    <!-- The base directory for static web files -->
+    <property name="web.dir" value="${basedir}/web"/>
+
+
+    <!-- Context Path of the integration test web-app -->
+    <property name="context.path" value="/${test.suite.name}"/>
+
+    <path id="systest.compile.classpath">
+        <pathelement path="${javax.faces.jar}"/>
+        <path refid="jsf.test.jar.classpath"/>
+        <path refid="compile.classpath"/>
+        <path refid="htmlunit.compile.classpath"/> 
+    </path>
+           
+    <!-- ************ Executable Targets ************************************** -->
+
+
+    <target name="init"
+            description="Initialize and evaluate conditionals">
+        <echo message="-------- ${test.suite.name} ${impl.version} --------"/>
+        <mkdir dir="${impl.test.results.dir}/systest"/>
+    </target>
+    
+    
+    <target name="build.war" depends="compile">
+
+        <echo message="Building jsf-systest.war with partial state saving: ${partial.state.saving}" />
+        <copy file="${web.dir}/WEB-INF/web.xml.template" tofile="${web.dir}/WEB-INF/web.xml" />
+        <replace token="{partial-state-saving}"
+                 file="${web.dir}/WEB-INF/web.xml"
+                 value="${partial.state.saving}" />
+        <jsf.war basedir="${build.dir}"
+                 archive-name="jsf-systest"
+                 webxml="${web.dir}/WEB-INF/web.xml">
+            <archive-elements>
+                <zipfileset dir="${source.dir}"
+                            includes="**/*.properties,**/*.xml"
+                            prefix="WEB-INF/classes"/>
+                <zipfileset dir="${build.dir}/classes"
+                            prefix="WEB-INF/classes"
+                            excludes="**/*TestCase.class"/>
+                <zipfileset dir="${web.dir}"/>
+            </archive-elements>
+        </jsf.war>
+        <mkdir dir="${build.dir}/target/jsf-systest" />
+        <unjar src="${build.dir}/jsf-systest.war" overwrite="true"
+               dest="${build.dir}/target/jsf-systest" />
+        <delete file="${web.dir}/WEB-INF/web.xml" />
+
+    </target>
+
+    <target name="compile" depends=""
+            description="Just compile the classes">
+        <mkdir dir="${build.dir}/classes"/>
+        <!-- Run javac through everything -->
+        <jsf.javac srcdir="${impl.dir}/test"
+                   destdir="${build.dir}/classes"
+                   includes="**/TestingUtil**">
+            <classpath>
+                <path refid="systest.compile.classpath"/>                   
+            </classpath>              
+        </jsf.javac>
+        <jsf.javac srcdir="${source.dir}"
+                   destdir="${build.dir}/classes">
+            <classpath>
+                <path refid="systest.compile.classpath"/>                   
+            </classpath>
+        </jsf.javac>                         
+    </target>
+
+
+    <target name="clean"
+            description="Clean build and distribution directories">
+        <delete dir="${build.dir}"/>
+        <delete dir="${dist.dir}"/>
+    </target>
+
+
+    <target name="main" depends="init,compile"/>
+
+
+    <!-- ********** Test Execution Targets ************************************ -->
+
+
+    <target name="test" depends="init,define.scenario.aware.port"
+            description="Execute all tests against installed /jsf-systest application">
+
+        <antcall target="build.war">
+            <param name="partial.state.saving" value="true" />
+        </antcall>
+        <echo>
+
+**** RUNNING JSF-SYSTEST USING PARTIAL STATE SAVING ****
+
+        </echo>
+        <antcall target="undeploy"/>
+        <antcall target="deploy"/>
+        <ant antfile="build-tests.xml" target="test">
+            <property name="partial.state.saving" value="true" />
+        </ant>
+        <antcall target="undeploy"/>
+        <!--renaming the result xml files to TEST-systest-partial-true-xxx.xml
+        for e.g. TEST-systest-partial-true-com.sun.faces.systest.SuppressXmlDeclTestCase.xml-->
+
+        <antcall  target="rename.test.results">
+            <param name="partial.state.saving" value="true" />
+        </antcall>
+
+        <antcall target="build.war">
+            <param name="partial.state.saving" value="false" />
+        </antcall>
+        <echo>
+
+**** RUNNING JSF-SYSTEST USING FULL STATE SAVING ****
+
+        </echo>
+        <antcall target="deploy"/>
+        <ant antfile="build-tests.xml" target="test">
+            <property name="partial.state.saving" value="false" />
+        </ant>
+        <antcall target="undeploy"/>
+
+        <!--renaming the result xml files to TEST-systest-partial-false-xxx.xml
+        for e.g. TEST-systest-partial-false-com.sun.faces.systest.SuppressXmlDeclTestCase.xml-->
+
+        <antcall  target="rename.test.results">
+            <param name="partial.state.saving" value="false" />
+        </antcall>
+
+    </target>  
+
+    <target name="test.partial.true" depends="init"
+            description="Execute all tests against installed /jsf-systest application">
+
+        <antcall target="build.war">
+            <param name="partial.state.saving" value="true" />
+        </antcall>
+        <echo>
+
+**** RUNNING JSF-SYSTEST USING PARTIAL STATE SAVING ****
+
+        </echo>
+        <antcall target="undeploy"/>
+        <antcall target="deploy"/>
+        <ant antfile="build-tests.xml" target="test">
+            <property name="partial.state.saving" value="true" />
+        </ant>
+        <antcall target="undeploy"/>
+        <!--renaming the result xml files to TEST-systest-partial-true-xxx.xml
+        for e.g. TEST-systest-partial-true-com.sun.faces.systest.SuppressXmlDeclTestCase.xml-->
+
+        <antcall  target="rename.test.results">
+            <param name="partial.state.saving" value="true" />
+        </antcall>
+    </target>
+    
+    <target name="test.with.nodeploy"
+            description="The same as 'test', but with no deployment">
+        <ant antfile="build-tests.xml" target="test"/>    
+    </target>
+
+    <target name="deploy" 
+            description="Deploy the jsf-systest application">
+        <deploy.artifact artifact="${build.dir}/jsf-systest.war"
+                appName="jsf-systest"/>
+    </target>
+
+    <target name="deploydir" 
+            description="Deploy the exploded jsf-systest application">
+        <deploydir.artifact explodedWarDir="${build.dir}/target/jsf-systest"
+                appName="jsf-systest"/>
+    </target>
+    
+    <target name="undeploy" 
+            description="Undeploy the jsf-systest application">
+        <undeploy.artifact artifact="${build.dir}/jsf-systest.war"
+                  appName="jsf-systest"/>
+    </target>
+
+    <target name="passthru" depends="define.scenario.aware.port"
+            description="useful for running one test">
+       
+        <ant antfile="build-tests.xml" target="test"/>
+
+        
+    </target>  
+
+    <target name="rename.test.results">
+        <move todir="${impl.test.results.dir}/systest" includeemptydirs="false" overwrite="true">
+                <fileset dir="${impl.test.results.dir}">
+                  <exclude name="**/TEST-systest-partial-*.xml"/>
+                </fileset>
+                <mapper type="glob" from="TEST-*.xml" to="TEST-systest-partial-${partial.state.saving}-*.xml"/>
+              </move>
+    </target>
+
+        
+</project>

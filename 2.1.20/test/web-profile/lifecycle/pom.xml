@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.sun.faces.test.webprofile</groupId>
+        <artifactId>pom</artifactId>
+        <version>2.1.20-02-SNAPSHOT</version>
+    </parent>
+    <groupId>com.sun.faces.test.webprofile.lifecycle</groupId>
+    <artifactId>pom</artifactId>
+    <packaging>pom</packaging>
+    <name>Mojarra ${project.version} - Test - Web-Profile - Lifecycle</name>
+    <modules>
+        <module>request_char_encoding2</module>
+    </modules>
+</project>

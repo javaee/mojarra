@@ -1,0 +1,138 @@
+#
+# The contents of this file are subject to the terms
+# of the Common Development and Distribution License
+# (the License). You may not use this file except in
+# compliance with the License.
+# 
+# You can obtain a copy of the License at
+# https://javaserverfaces.dev.java.net/CDDL.html or
+# legal/CDDLv1.0.txt. 
+# See the License for the specific language governing
+# permission and limitations under the License.
+# 
+# When distributing Covered Code, include this CDDL
+# Header Notice in each file and include the License file
+# at legal/CDDLv1.0.txt.    
+# If applicable, add the following below the CDDL Header,
+# with the fields enclosed by brackets [] replaced by
+# your own identifying information:
+# "Portions Copyrighted [year] [name of copyright owner]"
+# 
+# [Name of File] [ver.__] [Date]
+# 
+# Copyright 2005 Sun Microsystems Inc. All Rights Reserved
+#
+#
+# -----------------------------------------------------------------------------
+# build.properties.tomcat
+#
+# This build.properties allows for the building of 
+# javaserverfaces-sources against Tomcat.
+#
+# $Id: build.properties.glassfish,v 1.14 2008/04/02 20:00:03 rlubke Exp $
+# -----------------------------------------------------------------------------
+
+# --------------------------------------------------
+#   BUILD REQUIRES ANT 1.7.0 OR ABOVE
+# --------------------------------------------------
+
+# --------------------------------------------------
+# Set this to the directory in which the sources
+# were checked out into
+# --------------------------------------------------
+jsf.build.home=
+
+# --------------------------------------------------
+# Set the values for http.proxy.host and 
+# http.proxy.port if the build environment is
+# behind a firewall.  This is necessary in order
+# for the build system to download the required
+# dependencies.
+# --------------------------------------------------
+http.proxy.host=
+http.proxy.port=
+
+# --------------------------------------------------
+#    Container Name - a simple identifier which maps
+#      to the container.xml file in 
+#      ${jsf.build.home}/common/ant/${container.name}
+#
+#  For Tomcat 6, use:             tomcat6
+# --------------------------------------------------
+container.name=
+
+# --------------------------------------------------
+#    Path to the web container installation.
+#    This is only necessary if running the unit tests
+#    Override the default value if testing against
+#    a different version is desirable.
+# --------------------------------------------------
+container.home=
+container.host=localhost
+container.port=8080
+
+# --------------------------------------------------
+#    Tomcat specific properties needed by
+#    ${jsf.build.home}/common/ant/tomcat6/container.xml
+#
+#    These are used specifically for testing.  Override
+#    the defaults if desired.
+#
+#    tomcat.Xms - min value of the memory for th tomcat VM
+#    tomcat.Xmx - max value of the memory for the tomcat VM
+#    tomcat.debug.port - port on which to listen for debugging
+# --------------------------------------------------
+tomcat.Xms=64M
+tomcat.Xmx=128M
+tomcat.debug.port=8000
+
+# --------------------------------------------------
+#    Compilation flags
+# --------------------------------------------------
+compile.deprecation=off
+compile.debug=true
+
+# --------------------------------------------------
+#    Java 'Endorsed' directory
+# --------------------------------------------------
+endorsed.dirs=
+
+# --------------------------------------------------
+#    Web application packaging
+#      - true: no dependent libraries packaged with
+#              applications
+#      - false: dependent libraries packaged with
+#               applications
+#    Note that this is true by default, because some
+#    tests do require libraries that are not shipped
+#    by default with Tomcat (e.g. JSTL)
+# --------------------------------------------------
+build.standalone=true
+
+# --------------------------------------------------
+#   Unit testing 
+#     - If 'yes', then the unit tests will stop 
+#       running if any failure occurs
+#     - If 'no', then the unit tests will run 
+#       through to completion regardless of errors
+# --------------------------------------------------
+halt.on.failure=yes  
+
+
+# --------------------------------------------------
+#     Debugging control Flags 
+#
+# Define the arguments to give to the jvm to enable debugging
+# If this is commented out, no debugging arguments will be passed.
+# Make sure to uncomment the proper arguments for your platform.
+# --------------------------------------------------
+
+# --------------------------------------------------
+#    Unix
+# --------------------------------------------------
+#debug.jvm.args = -agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=y
+
+# --------------------------------------------------
+#    Windows
+## -------------------------------------------------- 
+#debug.jvm.args = -agentlib:jdwp=transport=dt_shmem,address=jdbconn,server=y,suspend=n

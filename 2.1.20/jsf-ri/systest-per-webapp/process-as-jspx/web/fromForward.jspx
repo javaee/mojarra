@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='utf-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page"
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:h="http://java.sun.com/jsf/html"
+          version="1.2">
+  <jsp:directive.page contentType="text/html;charset=utf-8"/>
+  <f:view>
+
+<html xmlns="http://www.w3.org/1999/xhtml">    
+<head><title>receive a forward</title></head>
+<body>
+
+<p>This page is the result of a forward.</p>
+
+<h:outputText id="param1" value="#{param['param1']}" /> <br />
+<h:outputText id="param2" value="#{param['param2']}" /> <br />
+
+</body>
+</html>
+      
+  </f:view>
+</jsp:root>

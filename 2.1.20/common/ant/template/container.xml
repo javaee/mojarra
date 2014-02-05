@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+    Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+
+    The contents of this file are subject to the terms of either the GNU
+    General Public License Version 2 only ("GPL") or the Common Development
+    and Distribution License("CDDL") (collectively, the "License").  You
+    may not use this file except in compliance with the License.  You can
+    obtain a copy of the License at
+    https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+    or packager/legal/LICENSE.txt.  See the License for the specific
+    language governing permissions and limitations under the License.
+
+    When distributing the software, include this License Header Notice in each
+    file and include the License file at packager/legal/LICENSE.txt.
+
+    GPL Classpath Exception:
+    Oracle designates this particular file as subject to the "Classpath"
+    exception as provided by Oracle in the GPL Version 2 section of the License
+    file that accompanied this code.
+
+    Modifications:
+    If applicable, add the following below the License Header, with the fields
+    enclosed by brackets [] replaced by your own identifying information:
+    "Portions Copyright [year] [name of copyright owner]"
+
+    Contributor(s):
+    If you wish your version of this file to be governed by only the CDDL or
+    only the GPL Version 2, indicate your decision by adding "[Contributor]
+    elects to include this software in this distribution under the [CDDL or GPL
+    Version 2] license."  If you don't indicate a single choice of license, a
+    recipient has the option to distribute your version of this file under
+    either the CDDL, the GPL Version 2 or to extend the choice of license to
+    its licensees as provided above.  However, if you add GPL Version 2 code
+    and therefore, elected the GPL Version 2 license, then the option applies
+    only if the new code is made subject to such option by the copyright
+    holder.
+
+-->
+
+<project name="replace.with.container.name" basedir=".">
+    
+
+    <macrodef name="deploy.artifact">
+        <attribute name="artifact"
+                   description="The WAR to deploy"/>
+        <attribute name="appName"
+                   description="The name of the application"/>
+        <sequential>
+          <fail message="this macro is unimplemented for this container" />
+        </sequential>
+    </macrodef>
+
+    <macrodef name="deploydir.artifact">
+        <attribute name="explodedWarDir"
+                   description="The exploded war directory to deploy"/>
+        <attribute name="appName"
+                   description="The name of the application"/>
+        <sequential>
+          <fail message="this macro is unimplemented for this container" />
+        </sequential>
+    </macrodef>
+
+
+    <!-- 
+        Undeploy the specified WAR from the 
+        target container.
+    -->
+    <macrodef name="undeploy.artifact">
+        <attribute name="artifact"
+                   description="The WAR to deploy"/>
+        <attribute name="appName"
+                   description="The name of the application"/>
+        <sequential>
+          <fail message="this macro is unimplemented for this container" />
+        </sequential>
+    </macrodef>
+
+    <!-- 
+        OPTIONAL
+          Start the container
+    -->
+    <macrodef name="container.start"
+            description="Start the target container.">
+        <sequential>
+          <fail message="this macro is unimplemented for this container" />
+        </sequential>
+    </macrodef>
+
+    <!--
+        OPTIONAL
+          Start the container in debug mode
+    -->
+    <macrodef name="container.debug"
+            description="Start the target container in debug mode.">
+        <sequential>
+          <fail message="this macro is unimplemented for this container" />
+        </sequential>
+    </macrodef>
+    <!--
+       OPTIONAL
+          Stop the container
+    -->
+    <macrodef name="container.stop"
+              description="Stop the target container.">
+        <sequential>
+          <fail message="this macro is unimplemented for this container" />
+        </sequential>
+    </macrodef>
+
+    <macrodef name="create.virtual.servers">
+        <!-- depends on property instance.numbers -->
+        <sequential>
+          <fail message="this macro is unimplemented for this container" />
+        </sequential>
+    </macrodef>
+
+    <macrodef name="delete.virtual.servers">
+        <!-- depends on property instance.numbers -->
+        <sequential>
+          <fail message="this macro is unimplemented for this container" />
+        </sequential>
+    </macrodef>
+
+    <target name="define.scenario.aware.port">
+      <property name="scenario.aware.port" value="${container.port}" />
+      <fail message="this macro is unimplemented for this container" />
+    </target>
+
+    <target name="define.virtual-server.aware.port">
+      <property name="scenario.aware.port" 
+                value="${glassfish.virtual.server.port}" />
+      <echo message="scenario.aware.port = ${scenario.aware.port}" />
+      <fail message="this macro is unimplemented for this container" />
+    </target>
+
+    <target name="container.init.osgi"
+            description="Configure GlassFish 3.1 for OSGi WAB deployment">
+      <fail message="this macro is unimplemented for this container" />
+    </target>
+
+
+    <target name="container.start"
+            description="Start the GlassFish container">
+        <container.start />
+    </target>
+
+    <target name="container.debug"
+            description="Start the GlassFish container">
+        <container.debug />
+    </target>
+
+    <target name="container.stop"
+            description="Stop the GlassFish container">
+        <container.stop />
+
+    </target>
+
+    <!--
+         Display/Validate any property information necessary to build 
+         successfully.
+     -->
+    <target name="props">
+      <fail message="this macro is unimplemented for this container" />
+    </target>
+    
+    <!--
+        OPTIONAL
+          Perform whatever steps are necessary to integrate
+          Sun's JavaServer Faces implementation into the
+          target container.
+    -->
+    <target name="container.deploy" 
+            description="Deploy the JSF Implementation artifacts to the target container.">
+      <fail message="this macro is unimplemented for this container" />
+    </target>
+
+</project>

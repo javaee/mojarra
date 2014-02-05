@@ -1,0 +1,3737 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+
+    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+    Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+
+    The contents of this file are subject to the terms of either the GNU
+    General Public License Version 2 only ("GPL") or the Common Development
+    and Distribution License("CDDL") (collectively, the "License").  You
+    may not use this file except in compliance with the License.  You can
+    obtain a copy of the License at
+    https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+    or packager/legal/LICENSE.txt.  See the License for the specific
+    language governing permissions and limitations under the License.
+
+    When distributing the software, include this License Header Notice in each
+    file and include the License file at packager/legal/LICENSE.txt.
+
+    GPL Classpath Exception:
+    Oracle designates this particular file as subject to the "Classpath"
+    exception as provided by Oracle in the GPL Version 2 section of the License
+    file that accompanied this code.
+
+    Modifications:
+    If applicable, add the following below the License Header, with the fields
+    enclosed by brackets [] replaced by your own identifying information:
+    "Portions Copyright [year] [name of copyright owner]"
+
+    Contributor(s):
+    If you wish your version of this file to be governed by only the CDDL or
+    only the GPL Version 2, indicate your decision by adding "[Contributor]
+    elects to include this software in this distribution under the [CDDL or GPL
+    Version 2] license."  If you don't indicate a single choice of license, a
+    recipient has the option to distribute your version of this file under
+    either the CDDL, the GPL Version 2 or to extend the choice of license to
+    its licensees as provided above.  However, if you add GPL Version 2 code
+    and therefore, elected the GPL Version 2 license, then the option applies
+    only if the new code is made subject to such option by the copyright
+    holder.
+
+-->
+
+<!-- =========== FULL CONFIGURATION FILE ================================== -->
+
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+    version="2.0">
+
+    <!-- Generic User Interface Components -->
+
+
+    <component>
+
+        <component-type>javax.faces.Column</component-type>
+        <component-class>javax.faces.component.UIColumn</component-class>
+        <facet>
+            <facet-name>header</facet-name>
+        </facet>
+        <facet>
+            <facet-name>footer</facet-name>
+        </facet>
+
+        <xi:include href="uicolumn-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <component-family>javax.faces.Column</component-family>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <component-type>javax.faces.Command</component-type>
+        <component-class>javax.faces.component.UICommand</component-class>
+
+        <xi:include href="uicommand-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <component-family>javax.faces.Command</component-family>
+            <renderer-type>javax.faces.Button</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <component-type>javax.faces.Data</component-type>
+        <component-class>javax.faces.component.UIData</component-class>
+
+        <xi:include href="uidata-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <component-family>javax.faces.Data</component-family>
+            <renderer-type>javax.faces.Table</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <component-type>javax.faces.Form</component-type>
+        <component-class>javax.faces.component.UIForm</component-class>
+
+        <xi:include href="uiform-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <component-family>javax.faces.Form</component-family>
+            <renderer-type>javax.faces.Form</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <component-type>javax.faces.Graphic</component-type>
+        <component-class>javax.faces.component.UIGraphic</component-class>
+
+        <xi:include href="uigraphic-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <component-family>javax.faces.Graphic</component-family>
+            <renderer-type>javax.faces.Image</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <component-type>javax.faces.Input</component-type>
+        <component-class>javax.faces.component.UIInput</component-class>
+
+        <xi:include href="uiinput-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <component-family>javax.faces.Input</component-family>
+            <renderer-type>javax.faces.Text</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <component-type>javax.faces.Message</component-type>
+        <component-class>javax.faces.component.UIMessage</component-class>
+
+        <xi:include href="uimessage-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <component-family>javax.faces.Message</component-family>
+            <renderer-type>javax.faces.Message</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <component-type>javax.faces.Messages</component-type>
+        <component-class>javax.faces.component.UIMessages</component-class>
+
+        <xi:include href="uimessages-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <component-family>javax.faces.Messages</component-family>
+            <renderer-type>javax.faces.Messages</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <component-type>javax.faces.NamingContainer</component-type>
+        <component-class>javax.faces.component.UINamingContainer</component-class>
+
+        <xi:include href="uinamingcontainer-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <component-family>javax.faces.NamingContainer</component-family>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <component-type>javax.faces.Output</component-type>
+        <component-class>javax.faces.component.UIOutput</component-class>
+
+        <xi:include href="uioutput-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <component-family>javax.faces.Output</component-family>
+            <renderer-type>javax.faces.Text</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <component-type>javax.faces.OutcomeTarget</component-type>
+        <component-class>javax.faces.component.UIOutcomeTarget</component-class>
+
+        <xi:include href="uioutcometarget-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <component-family>javax.faces.OutcomeTarget</component-family>
+            <renderer-type>javax.faces.Link</renderer-type>
+        </component-extension>
+
+    </component>
+    
+    <component>
+
+        <component-type>javax.faces.Panel</component-type>
+        <component-class>javax.faces.component.UIPanel</component-class>
+
+        <xi:include href="uipanel-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <component-family>javax.faces.Panel</component-family>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <component-type>javax.faces.ViewParameter</component-type>
+        <component-class>javax.faces.component.UIViewParameter</component-class>
+
+        <xi:include href="uiinput-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="uiparameter-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <component-family>javax.faces.ViewParameter</component-family>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <component-type>javax.faces.Parameter</component-type>
+        <component-class>javax.faces.component.UIParameter</component-class>
+
+        <xi:include href="uiparameter-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <component-family>javax.faces.Parameter</component-family>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <component-type>javax.faces.SelectBoolean</component-type>
+        <component-class>javax.faces.component.UISelectBoolean</component-class>
+
+        <xi:include href="uiselectboolean-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <component-family>javax.faces.SelectBoolean</component-family>
+            <renderer-type>javax.faces.Checkbox</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <component-type>javax.faces.SelectItem</component-type>
+        <component-class>javax.faces.component.UISelectItem</component-class>
+
+        <xi:include href="uiselectitem-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <component-family>javax.faces.SelectItem</component-family>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <component-type>javax.faces.SelectItems</component-type>
+        <component-class>javax.faces.component.UISelectItems</component-class>
+
+        <xi:include href="uiselectitems-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <component-family>javax.faces.SelectItems</component-family>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <component-type>javax.faces.SelectMany</component-type>
+        <component-class>javax.faces.component.UISelectMany</component-class>
+
+        <xi:include href="uiselectmany-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <component-family>javax.faces.SelectMany</component-family>
+            <renderer-type>javax.faces.Listbox</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <component-type>javax.faces.SelectOne</component-type>
+        <component-class>javax.faces.component.UISelectOne</component-class>
+
+        <xi:include href="uiselectone-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <component-family>javax.faces.SelectOne</component-family>
+            <renderer-type>javax.faces.Menu</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <component-type>javax.faces.ViewRoot</component-type>
+        <component-class>javax.faces.component.UIViewRoot</component-class>
+
+        <xi:include href="uiviewroot-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <component-family>javax.faces.ViewRoot</component-family>
+        </component-extension>
+
+    </component>
+
+
+    <!-- Concrete HTML Components -->
+
+    <component>
+                                                                                 
+        <description>
+            <![CDATA[<p>Represents a column that will be rendered 
+      in an HTML <code>table</code> element.</p>]]>
+        </description>
+        <display-name>Column</display-name>
+        <component-type>javax.faces.HtmlColumn</component-type>
+        <component-class>javax.faces.component.html.HtmlColumn</component-class>
+                                                                                 
+        <xi:include href="uicolumn-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="column-props.xml" xpointer="xpointer(/root/*)"/>
+                                                                                 
+        <component-extension>
+            <base-component-type>javax.faces.Column</base-component-type>
+        </component-extension>
+                                                                                 
+    </component>
+
+    <component>
+
+        <description>
+            <![CDATA[<p>Represents an HTML <code>input</code> element
+      for a button of type <code>submit</code> or <code>reset</code>.
+      The label text is specified by the component value.</p>]]>
+        </description>
+        <display-name>Command Button</display-name>
+        <component-type>javax.faces.HtmlCommandButton</component-type>
+        <component-class>javax.faces.component.html.HtmlCommandButton</component-class>
+
+        <xi:include href="uicommand-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="core-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="focus-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="input-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="image-button-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="command-button-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <base-component-type>javax.faces.Command</base-component-type>
+            <renderer-type>javax.faces.Button</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <description>
+            <![CDATA[<p>Represents an HTML <code>a</code> element for a hyperlink that acts
+      like a submit button.  This component must be placed inside
+      a form, and requires JavaScript to be enabled in the client.</p>]]>
+        </description>
+        <display-name>Command Hyperlink</display-name>
+        <component-type>javax.faces.HtmlCommandLink</component-type>
+        <component-class>javax.faces.component.html.HtmlCommandLink</component-class>
+
+        <xi:include href="uicommand-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="core-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="focus-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="link-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <base-component-type>javax.faces.Command</base-component-type>
+            <renderer-type>javax.faces.Link</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <description>
+            <![CDATA[<p>Represents a set of repeating data (segregated into
+      columns by child UIColumn components) that will
+      be rendered in an HTML <code>table</code> element.</p>]]>
+        </description>
+        <display-name>Data Table</display-name>
+        <component-type>javax.faces.HtmlDataTable</component-type>
+        <component-class>javax.faces.component.html.HtmlDataTable</component-class>
+
+        <xi:include href="uidata-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="core-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="events-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="table-props.xml" xpointer="xpointer(/root/*)"/>
+        <property>
+            <description>
+              <![CDATA[<span class="changed_added_2_1">Boolean flag directing how the per-row component state should be handled.</span>]]>
+            </description>
+            <display-name>Preserve Row Component State</display-name>
+            <icon></icon>
+            <property-name>rowStatePreserved</property-name>
+            <property-class>boolean</property-class>
+            <property-extension>
+                <tag-attribute>false</tag-attribute>
+            </property-extension>
+        </property>
+
+        <component-extension>
+            <base-component-type>javax.faces.Data</base-component-type>
+            <renderer-type>javax.faces.Table</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <description>
+            <![CDATA[<p>Represents an HTML <code>form</code> element.  Child input components
+      will be submitted unless they have been disabled.</p>]]>
+        </description>
+        <display-name>Form</display-name>
+        <component-type>javax.faces.HtmlForm</component-type>
+        <component-class>javax.faces.component.html.HtmlForm</component-class>
+
+        <xi:include href="uiform-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="core-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="events-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="form-form-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <base-component-type>javax.faces.Form</base-component-type>
+            <renderer-type>javax.faces.Form</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <description>
+            <![CDATA[<p>Represents an HTML <code>img</code> element, used to retrieve
+      and render a graphical image.</p>]]>
+        </description>
+        <display-name>Graphic Image</display-name>
+        <component-type>javax.faces.HtmlGraphicImage</component-type>
+        <component-class>javax.faces.component.html.HtmlGraphicImage</component-class>
+
+        <xi:include href="uigraphic-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="core-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="events-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="graphic-image-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <base-component-type>javax.faces.Graphic</base-component-type>
+            <renderer-type>javax.faces.Image</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <description>
+            <![CDATA[<p>Represents an HTML <code>input</code> element
+      of type <code>hidden</code>.</p>]]>
+        </description>
+        <display-name>Input Hidden</display-name>
+        <component-type>javax.faces.HtmlInputHidden</component-type>
+        <component-class>javax.faces.component.html.HtmlInputHidden</component-class>
+
+        <xi:include href="uiinput-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <base-component-type>javax.faces.Input</base-component-type>
+            <renderer-type>javax.faces.Hidden</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <description>
+            <![CDATA[<p>Represents an HTML <code>input</code> element
+      of type <code>password</code>.  On a redisplay,
+      any previously entered value will <em>not</em>
+      be rendered (for security reasons) unless the
+      <code>redisplay</code> property is set to
+      <code>true</code>.</p>]]>
+        </description>
+        <display-name>Input Secret</display-name>
+        <component-type>javax.faces.HtmlInputSecret</component-type>
+        <component-class>javax.faces.component.html.HtmlInputSecret</component-class>
+
+        <xi:include href="uiinput-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="core-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="events-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="focus-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="input-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="text-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="input-secret-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <base-component-type>javax.faces.Input</base-component-type>
+            <renderer-type>javax.faces.Secret</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <description>
+            <![CDATA[<p>Represents an HTML <code>input</code> element
+      of type <code>text</code>.</p>]]>
+        </description>
+        <display-name>Input Text</display-name>
+        <component-type>javax.faces.HtmlInputText</component-type>
+        <component-class>javax.faces.component.html.HtmlInputText</component-class>
+
+        <xi:include href="uiinput-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="core-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="events-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="focus-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="input-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="text-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <base-component-type>javax.faces.Input</base-component-type>
+            <renderer-type>javax.faces.Text</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <description>
+            <![CDATA[<p>Represents an HTML <code>textarea</code> element.</p>]]>
+        </description>
+        <display-name>Input Textarea</display-name>
+        <component-type>javax.faces.HtmlInputTextarea</component-type>
+        <component-class>javax.faces.component.html.HtmlInputTextarea</component-class>
+
+        <xi:include href="uiinput-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="core-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="events-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="focus-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="input-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="input-textarea-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <base-component-type>javax.faces.Input</base-component-type>
+            <renderer-type>javax.faces.Textarea</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <display-name>Message</display-name>
+        <component-type>javax.faces.HtmlMessage</component-type>
+        <component-class>javax.faces.component.html.HtmlMessage</component-class>
+
+        <xi:include href="uimessage-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="core-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="message-message-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <base-component-type>javax.faces.Message</base-component-type>
+            <renderer-type>javax.faces.Message</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <display-name>Messages</display-name>
+        <component-type>javax.faces.HtmlMessages</component-type>
+        <component-class>javax.faces.component.html.HtmlMessages</component-class>
+
+        <xi:include href="uimessages-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="core-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="messages-messages-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <base-component-type>javax.faces.Messages</base-component-type>
+            <renderer-type>javax.faces.Messages</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <description>
+            <![CDATA[<p>Represents a component that looks up a localized message in a
+      resource bundle, optionally uses it as a
+      <code>MessageFormat</code> pattern string and substitutes in
+      parameter values from nested <em>UIParameter</em> components, and
+      renders the result.  If the "dir" or "lang" attributes are
+      present, render a <code>span</code> element and pass them through
+      as attributes on the span.</p>]]>
+        </description>
+        <display-name>Output Format</display-name>
+        <component-type>javax.faces.HtmlOutputFormat</component-type>
+        <component-class>javax.faces.component.html.HtmlOutputFormat</component-class>
+
+        <xi:include href="uioutput-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="core-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="output-format-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <base-component-type>javax.faces.Output</base-component-type>
+            <renderer-type>javax.faces.Format</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <description>
+            <![CDATA[<p>Represents an HTML <code>label</code> element, used to define
+      an accessible label for a corresponding input element.</p>]]>
+        </description>
+        <display-name>Output Label</display-name>
+        <component-type>javax.faces.HtmlOutputLabel</component-type>
+        <component-class>javax.faces.component.html.HtmlOutputLabel</component-class>
+
+        <xi:include href="uioutput-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="core-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="events-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="focus-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="output-label-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <base-component-type>javax.faces.Output</base-component-type>
+            <renderer-type>javax.faces.Label</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <description>
+            <![CDATA[<p>Represents an HTML <code>a</code> (hyperlink) element that may be
+      used to link to an arbitrary URL defined by the <code>value</code>
+      property.</p>]]>
+        </description>
+        <display-name>Output Hyperlink</display-name>
+        <component-type>javax.faces.HtmlOutputLink</component-type>
+        <component-class>javax.faces.component.html.HtmlOutputLink</component-class>
+
+        <xi:include href="uioutput-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="core-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="events-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="focus-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="link-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="direct-link-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <base-component-type>javax.faces.Output</base-component-type>
+            <renderer-type>javax.faces.Link</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+       <description>
+            <![CDATA[<p>Represents an HTML <code>a</code> (hyperlink) element that may be
+      used to link to a URL handled by the Faces Servlet resolved preemptively using the logical
+      outcome defined by the <code>outcome</code> property.]]></description>
+        <display-name>Outcome Target Hyperlink</display-name>
+        <component-type>javax.faces.HtmlOutcomeTargetLink</component-type>
+        <component-class>javax.faces.component.html.HtmlOutcomeTargetLink</component-class>
+
+        <xi:include href="uioutcometarget-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="core-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="focus-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="link-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="direct-link-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <base-component-type>javax.faces.OutcomeTarget</base-component-type>
+            <renderer-type>javax.faces.Link</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+       <description>
+            <![CDATA[<p>Represents an HTML <code>input</code> element of type "button" or image that
+            may be used to link to a URL handled by the Faces Servlet resolved preemptively using
+            the logical outcome defined by the <code>outcome</code> property. The button behaves like
+            a link, so the current form is not submitted when it is activated (the transitive of how
+            the UICommandLink behaves like a submit button).]]></description>
+        <display-name>Outcome Target Button</display-name>
+        <component-type>javax.faces.HtmlOutcomeTargetButton</component-type>
+        <component-class>javax.faces.component.html.HtmlOutcomeTargetButton</component-class>
+
+        <xi:include href="uioutcometarget-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="core-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="focus-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="events-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="image-button-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="direct-link-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <base-component-type>javax.faces.OutcomeTarget</base-component-type>
+            <renderer-type>javax.faces.Button</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <description>
+            <![CDATA[<p>Renders the component value as text, optionally wrapping in a
+      <code>span</code> element if I18N attributes, CSS styles or style
+      classes are specified.</p>]]>
+        </description>
+        <display-name>Output Text</display-name>
+        <component-type>javax.faces.HtmlOutputText</component-type>
+        <component-class>javax.faces.component.html.HtmlOutputText</component-class>
+
+        <xi:include href="uioutput-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="core-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="output-text-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <base-component-type>javax.faces.Output</base-component-type>
+            <renderer-type>javax.faces.Text</renderer-type>
+        </component-extension>
+
+    </component>
+    
+    <component>
+
+        <description>
+            <![CDATA[<p>Renders child components in a table, starting a new
+      row after the specified number of columns.</p>]]>
+        </description>
+        <display-name>Panel Grid</display-name>
+        <component-type>javax.faces.HtmlPanelGrid</component-type>
+        <component-class>javax.faces.component.html.HtmlPanelGrid</component-class>
+
+        <xi:include href="uipanel-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="core-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="events-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="table-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="panel-grid-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <base-component-type>javax.faces.Panel</base-component-type>
+            <renderer-type>javax.faces.Grid</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <description>
+            <![CDATA[<p>Causes all child components of this component
+      to be rendered.  This is useful in scenarios
+      where a parent component is expecting a single
+      component to be present, but the application
+      wishes to render more than one.</p>]]>
+        </description>
+        <display-name>Panel Group</display-name>
+        <component-type>javax.faces.HtmlPanelGroup</component-type>
+        <component-class>javax.faces.component.html.HtmlPanelGroup</component-class>
+
+        <xi:include href="uipanel-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="panel-group-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <base-component-type>javax.faces.Panel</base-component-type>
+            <renderer-type>javax.faces.Group</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <description>
+            <![CDATA[<p><span
+            class="changed_modified_2_0_rev_a">Represents</span> an HTML
+            <code>input</code> element of type <code>checkbox</code>.
+            The checkbox will be rendered as checked, or not, based on
+            the value of the <code>value</code> property.</p>]]>
+        </description>
+        <display-name>Checkbox</display-name>
+        <component-type>javax.faces.HtmlSelectBooleanCheckbox</component-type>
+        <component-class>javax.faces.component.html.HtmlSelectBooleanCheckbox</component-class>
+
+        <xi:include href="uiselectboolean-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="core-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="events-props-noclick.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="focus-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="input-props-nochange.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="events-valueChanged-click.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <base-component-type>javax.faces.SelectBoolean</base-component-type>
+            <renderer-type>javax.faces.Checkbox</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <description>
+            <![CDATA[<p><span
+            class="changed_modified_2_0_rev_a">Represents</span> a
+            multiple-selection component that is rendered as a set of
+            HTML <code>input</code> elements of type
+            <code>checkbox</code>.</p>]]>
+        </description>
+        <display-name>Multi-Select Checkbox</display-name>
+        <component-type>javax.faces.HtmlSelectManyCheckbox</component-type>
+        <component-class>javax.faces.component.html.HtmlSelectManyCheckbox</component-class>
+
+        <xi:include href="uiselectmany-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="core-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="events-props-noclick.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="focus-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="input-props-nochange.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="events-valueChanged-click.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="selectmany-checkbox-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <base-component-type>javax.faces.SelectMany</base-component-type>
+            <renderer-type>javax.faces.Checkbox</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <description>
+            <![CDATA[<p>Represents a multiple-selection component that is rendered
+      as an HTML <code>select</code> element, showing either all
+      available options or the specified number of options.</p>]]>
+        </description>
+        <display-name>Multi-Select Listbox</display-name>
+        <component-type>javax.faces.HtmlSelectManyListbox</component-type>
+        <component-class>javax.faces.component.html.HtmlSelectManyListbox</component-class>
+
+        <xi:include href="uiselectmany-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="core-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="events-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="focus-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="input-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="listbox-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <base-component-type>javax.faces.SelectMany</base-component-type>
+            <renderer-type>javax.faces.Listbox</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <description>
+            <![CDATA[<p>Represents a multiple-selection component that is rendered
+      as an HTML <code>select</code> element, showing a single
+      available option at a time.</p>]]>
+        </description>
+        <display-name>Multi-Select Menu</display-name>
+        <component-type>javax.faces.HtmlSelectManyMenu</component-type>
+        <component-class>javax.faces.component.html.HtmlSelectManyMenu</component-class>
+
+        <xi:include href="uiselectmany-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="core-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="events-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="focus-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="input-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="menu-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <base-component-type>javax.faces.SelectMany</base-component-type>
+            <renderer-type>javax.faces.Menu</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <description>
+            <![CDATA[<p>Represents a single-selection component that is rendered
+      as an HTML <code>select</code> element, showing either all
+      available options or the specified number of options.</p>]]>
+        </description>
+        <display-name>Listbox</display-name>
+        <component-type>javax.faces.HtmlSelectOneListbox</component-type>
+        <component-class>javax.faces.component.html.HtmlSelectOneListbox</component-class>
+
+        <xi:include href="uiselectone-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="core-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="events-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="focus-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="input-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="listbox-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <base-component-type>javax.faces.SelectOne</base-component-type>
+            <renderer-type>javax.faces.Listbox</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <description>
+            <![CDATA[<p>Represents a single-selection component that is rendered
+      as an HTML <code>select</code> element, showing a single
+      available option at a time.</p>]]>
+        </description>
+        <display-name>Menu</display-name>
+        <component-type>javax.faces.HtmlSelectOneMenu</component-type>
+        <component-class>javax.faces.component.html.HtmlSelectOneMenu</component-class>
+
+        <xi:include href="uiselectone-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="core-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="events-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="focus-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="input-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="menu-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <base-component-type>javax.faces.SelectOne</base-component-type>
+            <renderer-type>javax.faces.Menu</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <description>
+            <![CDATA[<p><span
+            class="changed_modified_2_0_rev_a">Represents</span> a
+            single-selection component that is rendered as a set of HTML
+            <code>input</code> elements of type
+            <code>radio</code>.</p>]]>
+        </description>
+        <display-name>Radio</display-name>
+        <component-type>javax.faces.HtmlSelectOneRadio</component-type>
+        <component-class>javax.faces.component.html.HtmlSelectOneRadio</component-class>
+
+        <xi:include href="uiselectone-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="core-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="events-props-noclick.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="focus-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="input-props-nochange.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="events-valueChanged-click.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="selectone-radio-props.xml" xpointer="xpointer(/root/*)"/>
+        <component-extension>
+            <base-component-type>javax.faces.SelectOne</base-component-type>
+            <renderer-type>javax.faces.Radio</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <!--
+         the following components are here merely for AttributeManager
+         generation.
+    -->
+
+    <component>
+        <description>NONE</description>
+        <display-name>doctype</display-name>
+        <component-type>javax.faces.OutputDoctype</component-type>
+        <component-class>javax.faces.component.html.HtmlDoctype</component-class>
+
+        <xi:include href="doctype-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <base-component-type>javax.faces.Output</base-component-type>
+            <renderer-type>javax.faces.Doctype</renderer-type>
+        </component-extension>
+    </component>
+
+    <component>
+        <description>NONE</description>
+        <display-name>head</display-name>
+        <component-type>javax.faces.OutputHead</component-type>
+        <component-class>javax.faces.component.html.HtmlHead</component-class>
+
+        <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="document-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <base-component-type>javax.faces.Output</base-component-type>
+            <renderer-type>javax.faces.Head</renderer-type>
+        </component-extension>
+    </component>
+
+    <component>
+        <description>NONE</description>
+        <display-name>body</display-name>
+        <component-type>javax.faces.OutputBody</component-type>
+        <component-class>javax.faces.component.html.HtmlBody</component-class>
+
+        <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="document-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="core-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="events-props.xml" xpointer="xpointer(/root/*)"/>
+        <property>
+            <description>
+            </description>
+            <display-name></display-name>
+            <icon></icon>
+            <property-name>onload</property-name>
+            <property-class>java.lang.String</property-class>
+            <property-extension>
+                <pass-through>true</pass-through>
+                <behavior/>
+            </property-extension>
+        </property>
+
+        <property>
+            <description>
+            </description>
+            <display-name></display-name>
+            <icon></icon>
+            <property-name>onunload</property-name>
+            <property-class>java.lang.String</property-class>
+            <property-extension>
+                <pass-through>true</pass-through>
+                <behavior/>
+            </property-extension>
+        </property>
+
+        <component-extension>
+            <base-component-type>javax.faces.Output</base-component-type>
+            <renderer-type>javax.faces.Body</renderer-type>
+        </component-extension>
+    </component>
+
+
+    <!-- Standard HTML Renderkit -->
+
+    <render-kit>
+
+        <description>
+            <![CDATA[
+     The standard HTML RenderKit.  Please see the spec for additional
+     details for the standard render-kit.
+
+     <div class="changed_added_2_0">
+     <p>The following new renderers have been
+     added in this release of the specification.  The default
+     implementation of the spec must not expose these renderers to JSP
+     based views.</p>
+
+<dl>
+<dt>javax.faces.Output</dt>
+
+<dd>javax.faces.Body
+</dd>
+
+<dd>javax.faces.Head
+</dd>
+
+<dd>javax.faces.resource.Script
+</dd>
+
+<dd>javax.faces.resource.Stylesheet
+</dd>
+
+<dd>javax.faces.Composite
+</dd>
+
+
+</dl>
+
+     </div>
+
+     <p><a name="general_decoding">General</a> notes on decoding</p>
+
+     <ul>
+
+     <p>Only Renderers for components which cause data to sent to the
+     server on a page submit need to implement decode behavior.  In
+     practical terms, this means Renderers for components that implement
+     from <code>javax.faces.component.EditableValueHolder</code> or
+     <code>javax.faces.component.ActionSource</code> or Renderers for
+     <code>javax.faces.component.UIForm</code> components.  Renderers
+     for components that do not send data to the server on page submit
+     may choose to accept the no-op decode behavior of the
+     <code>javax.faces.render.Renderer</code> abstract class.  In the
+     Renderer descriptions that follow, the omission of a Decode
+     Behavior section indicates that this Renderer does no decoding.</p>
+
+     <p>If a Renderer chooses to implement decode behavior, it must
+     consult the "disabled" and "readonly" attributes of the component
+     to be rendered, if the value of either attribute is equal to,
+     ignoring case, the string "true" (without the quotes) the decode
+     method must take no action and return immediately.</p>
+
+     <div class="changed_added_2_0">
+     <p>If the component associated with the Renderer implements the
+     <code>javax.faces.component.behavior.ClientBehaviorHolder</code> interface,
+     process <code>javax.faces.component.behavior.ClientBehavior</code>s as follows:
+      <ul>
+      <li>Determine if there are <code>javax.faces.component.behavior.ClientBehavior</code>s
+      associated with this component by calling the implementation of
+      <code>javax.faces.component.behavior.ClientBehaviorHolder.getClientBehaviors</code>.</li>
+      <li>If there are <code>client behaviors</code>, determine the
+      client behavior event name from the request parameter:
+      <code>javax.faces.behavior.event</code>.</li>
+      <li>If that request parameter exists, get the <code>List</code> of
+      <code>javax.faces.component.behavior.ClientBehavior</code>s for the
+      behavior event name from the <code>Map</code> returned from
+      <code>javax.faces.component.behavior.ClientBehaviorHolder.getClientBehaviors</code>.</li>
+      <li>If there are <code>client behaviors</code> for the <code>behavior event name</code>,
+      determine the behavior source name from the request parameter:
+      <code>javax.faces.source</code>.</li>
+      <li>If the request parameter exists, and its value is the same as this
+      component's <code>clientId</code>, iterate over the <code>List</code> of
+      <code>javax.faces.component.behavior.ClientBehavior</code>s and call the
+      <code>decode()</code> method for each one.</li>
+      </ul>
+      Behavior decoding is applicable to components that are "readonly", but it is
+      not applicable to components that are "disabled".</p>
+      </div>
+
+     <p>
+
+     </ul>
+
+     <p><a name="general_encoding">General</a> notes on encoding</p>
+
+     <ul>
+
+     <p>If the value of the component's "rendered" property is false,
+     the component, and its children must not be rendered.</p>
+
+     <p>General notes regarding the <code>id</code> attribute</p>
+
+     <ul>
+
+     <p>All components, and therefore all tags for those components
+     support the <code>id</code> attribute.  This attribute is optional.
+     If not present its value is autogenerated by the implementation and
+     used for internal purposes only.  If present, an <code>id</code>
+     attribute must not start with the <code>String</code> listed as the
+     value of the constant <code>UIViewRoot.UNIQUE_ID_PREFIX</code>, and
+     it must be unique within the scope of the nearest component that is
+     a <code>NamingContainer</code>.  </p>
+
+     <p>All renderers must take the following action regarding the
+     <code>id</code> attribute: If the value returned from
+     <code>component.getId()</code> is non-<code>null</code> and does
+     not start with <code>UIViewRoot.UNIQUE_ID_PREFIX</code>, call
+     <code>component.getClientId()</code> and render the result as the
+     value of the <code>id</code> attribute in the markup for the
+     component.  See the javadoc for
+     <code>component.getClientId()</code> for details, particularly note
+     that the Renderer has a chance to modify the client id before it is
+     rendered. If the component doesn't generate any markup elements,
+     include the <code>id</code> attribte on a "span" element that
+     encloses the content for the component.</p>
+
+    <p>In addition to any action already specified in the renderers, all
+    renderers for <code>UIInput</code> components must take the
+    following action regarding the <code>id</code> attribute: Call
+    <code>component.getClientId()</code> and render the result as the
+    value of the <code>name</code> attribute.  This may cause some
+    renderers to have "id" and "name" attributes that have exactly the
+    same value.</p>
+
+    </ul>
+
+     <p>General notes regarding the rendering of JavaScript in the
+     standard components.</p>
+
+     <ul>
+
+       <p>The intent of the standard renderkit is to specify the minimal
+       Renderers a JSF implementation must provide.  As such, it is the
+       baseline for building JSF applications that are maximally
+       portable across JSF implementations and user agents.  Therefore,
+       the use of JavaScript must be minimized as not all browsers
+       support JavaScript, nor do all users enable JavaScript support in
+       their user agents.</p>
+
+       <p>Compliant implementations must only generate JavaScript in the
+       <a href="javax.faces.Commandjavax.faces.Link.html">
+       <code>javax.faces.Link</code></a> and <a
+       href="javax.faces.Commandjavax.faces.Button.html"><code>javax.faces.Button</code></a>
+       Renderers for the <code>javax.faces.Command</code></a> component.
+       The generation of JavaScript in any other Renderer in the
+       HTML_BASIC renderkit is not permitted.  However, any JavaScript
+       code provided by the user as the value of a passthru attribute,
+       such as "onmouseover", is excluded from this restriction.</p>
+
+     </ul>
+
+     <div class="changed_added_2_0">
+     <p><a name="general_behavior_encoding">General</a> notes regarding the rendering of component <code>Client Behaviors</code>.</p>
+
+     <ul>
+
+       <p>Components that implement the <code>javax.faces.component.behavior.ClientBehaviorHolder</code>
+       interface are eligable to have <code>ClientBehavior</code> instances attached to them. The standard
+       renderers are responsible for inserting the scripts produced by client behaviors into the component's
+       rendered content.  Components may obtain script from multiple sources.  Event handler scripts may be specified 
+       by page authors, scripts may be produced by client behaviors and renderers may produce ther own scripts.
+       When multiple scripts are present, the scripts must be chained together in this order:
+       <ul>
+       <li>User specified event handler scripts</li>
+       <li>client behavior scripts</li>
+       <li>renderer specific scripts</li>
+       </ul>
+       If any of the scripts in the chain returns <code>false</code>, subsequent script must not be executed.
+       The specification provides a utility function <code>jsf.util.chain</code> to handle this capability.  If there
+       are <code>UIParameter</code> children the parameter names and values must be passed into the client behavior
+       getScript method via the <code>ClientBehaviorContext</code>.</p> 
+         
+     </ul>
+     </div>
+
+
+    </ul>]]>
+
+        </description>
+
+        <renderer>
+
+            <description><![CDATA[<p><span class="changed_modified_2_0
+            changed_modified_2_0_rev_a">Renders</span> an HTML "input"
+            element.</p>
+
+      <p>Decode Behavior</p>
+
+      <ul>
+
+      <p>Obtain the <code>Map</code> from the "requestParameterMap"
+      property of the <code>ExternalContext</code>.  If the value in the
+      <code>Map</code> for the value of the "clientId" property of the
+      component is <code>null</code>, create a String by concatenating
+      the value of the "clientId" property of the component with the
+      String ".x" (without the quotes).  Create another String in the
+      same manner, but concatenate ".y" (without the quotes).  If
+      <code>null</code> is the value in the <code>Map</code> for both
+      Strings, return from <code>decode()</code>.  If the value in the
+      <code>Map</code> for the value of the "clientId" property of the
+      component is not <code>null</code>, get the value of the "type"
+      attribute, and convert it to lower case.  If the result is equal
+      to the String "reset" (without the quotes), return from
+      <code>decode()</code>.  Otherwise, create a
+      <code>javax.faces.event.ActionEvent</code> around the component,
+      and pass it to the <code>queueEvent()</code> method of the
+      component, which must be an instance of
+      <code>UICommand</code>.</p>
+
+      </ul>
+
+
+
+      <p>Encode Behavior</p>
+
+      <ul>
+
+      <p>Render the clientId of the component as the value of the "name"
+      attribute.  Render the current value of the component as the value
+      of the "value" attribute. If "image" attribute is specified render
+      it as the value of the "src" attribute after passing it to the
+      <code>getResourceURL()</code> method of the
+      <code>ViewHandler</code> for this application, and passing the
+      result through the <code>encodeResourceURL()</code> method of the
+      <code>ExternalContext</code>.  <span
+      class="changed_added_2_0">Note that calling
+      <code>getResourceURL()</code> will prefix the context-root of the
+      current application if the value of the "src" attribute starts
+      with "/".</span> When handling the "image" attribute, the value
+      must not be escaped.  For example, <code>&</code> must not be
+      turned into <code>&amp;amp;</code>.  If the "styleClass" attribute
+      is specified, render its value as the value of the "class"
+      attribute.  If the user has specified an "onclick" attribute,
+      append that JavaScript to any existing JavaScript <span
+      class="changed_modified_2_0_rev_a">already being output by the
+      implementation before rendering.</span></p>
+
+      <p class="changed_added_2_0">If the component being rendered by
+      this renderer has any <code>UIParameter</code> children, each one
+      of them must be rendered using the renderer for component-family:
+      "javax.faces.Input" and renderer-type: "javax.faces.Hidden".  For
+      discussion, this is called the hiddenRenderer.  A component with
+      component-type "javax.faces.Input" must be created for local use
+      in rendering each <code>UIParameter</code> child.  The "id"
+      property of the temporary component must be set to the "name" of
+      the <code>UIParameter</code>.  The "value" property of the
+      temporary component must be set to the "value" of the
+      <code>UIParameter</code>.  For each <code>UIParameter</code>
+      child, the hiddenRenderer must have its
+      <code>encodeBegin()</code>, <code>encodeChildren()</code>, and
+      <code>encodeEnd()</code> methods called, in order, passing the
+      temporary component as the second argument.</p>
+
+      </ul>
+            ]]>
+            </description>
+            <component-family>javax.faces.Command</component-family>
+            <renderer-type>javax.faces.Button</renderer-type>
+            <renderer-class>
+                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/command-button-renderer-class/text())"/>
+            </renderer-class>
+
+            <xi:include href="core-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="focus-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="input-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="image-button-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="command-button-attrs.xml" xpointer="xpointer(/root/*)"/>
+
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
+
+        </renderer>
+
+        <renderer>
+
+            <description><![CDATA[<p><span class="changed_modified_2_0
+            changed_modified_2_0_rev_a">Render</span> an HTML "a" anchor
+            element that acts like a form submit button when
+            clicked.</p>
+
+      <p>General Behaviour</p>
+
+      <p>Both the encode and decode behavior require the ability to get
+      the id/name for a hidden field, <span
+      class="changed_added_2_0">which may be rendered in markup or which
+      may be programmatically added via client DOM manipulation</span>,
+      whose value is set by the JavaScript form submit.  This name must
+      be constructed as follows:</p>
+
+      <ul>
+
+      <li><p>Get the clientId for the form of which this component is a
+      child.</p></li>
+
+      <li><p>Append
+      <code>NamingContainer.SEPARATOR_CHAR</code>.</p></li>
+
+      <li><p>Append a constant string that is the same for all command
+      link components in the tree.</p></li>
+
+      </ul>
+
+      <p>In the following text, this String is called
+      hiddenFieldName.</p>
+
+      <p>Decode Behavior</p>
+
+      <ul>
+
+      <p>Obtain the "clientId" property of the component.  Obtain the
+      <code>Map</code> from the "requestParameterMap" property of the
+      <code>ExternalContext</code>.  Derive hiddenFieldName as above.
+      Get the entry in the <code>Map</code> under the key that is the
+      hiddenFieldName.  If the there is no entry, or the entry is the
+      empty String, or the entry is not equal to the value of the
+      "clientId" property, return immediately.  If there is an entry,
+      and its value is equal to the value of the "clientId" property,
+      create a new <code>javax.faces.event.ActionEvent</code> instance
+      around the component and call <code>queueActionEvent()</code> on
+      the component, passing the event.</p>
+
+      </ul>
+
+
+      <p>Encode Behavior</p>
+
+      <ul>
+
+      <p>If the value of the <code>disabled</code> attribute is
+      <code>true</code>, render a span element.  Render all the passthru
+      attributes and the <code>target</code> attribute as pass-through
+      attributes on the span, even though the <code>target</code>
+      attribute will have no effect on a span.  Render the current value
+      of the component as the content of the span.  Return.</p>
+
+      <p>If the <code>disabled</code> attribute is not present, or its
+      value is <code>false</code>, render an HTML <code>a</code>
+      element.  Render "#" as the value of the "href" attribute. Render
+      the current value of the component as the link text if it is
+      specified. Render JavaScript that is functionally equivalent to
+      the following as the value of the "onclick" attribute:</p>
+
+      <p><code>document.forms['CLIENT_ID']['hiddenFieldName'].value='CLIENT_ID';
+      document.forms['CLIENT_ID']['PARAM1_NAME'].value='PARAM1_VALUE';
+      document.forms['CLIENT_ID']['PARAM2_NAME'].value='PARAM2_VALUE';
+      return false;</code></p>
+
+      <p>document.forms['CLIENT_ID'].submit()" where hiddenFieldName is
+      as described above, CLIENT_ID is the clientId of the UICommand
+      component, PARAM*_NAME and PARAM*_VALUE are the names and values,
+      respectively, of any nested UIParameter children.  The name and
+      the value must be URLEncoded.  <span
+      class="changed_modified_2_0_rev_a">Note that the required url
+      encoding is handled by
+      <code>ResponseWrter.writeAttribute()</code>.</span> If an
+      "onclick" attribute was specified by the user, render this
+      JavaScript in a function, and render the user's JavaScript in a
+      function.  Render both functions in a choice function as
+      follows:</p>
+
+      <p><code>var a=function(){#USER_FUNCTION#};
+      var b=function(){#JSF_FUNCTION#};
+      return (a()==false) ? false : b();</code></p>
+      
+      <p>where #USER_FUNCTION# is the user's JavaScript and
+      #JSF_FUNCTION# is the JavaScript rendered by JSF.  The choice
+      function should operate such that if the user's JavaScript returns
+      true, then the rendered JavaScript will also execute.</p>
+ 
+      <p>If the "styleClass" attribute is specified, render its value as
+      the value of the "class" attribute.  Render any non-UIParameter
+      output children as normal inside of the "a" element.  These will
+      appear as the link text.  Allow the form renderer to output a
+      single "input" element (for the entire page, regardless of how
+      many command link components are in the page) of "type" "hidden"
+      whose "name" is the value of hiddenFieldName, and which must not
+      have a "value" attribute.  Multiple occurrences of command link
+      components in the tree should not cause multiple hiddenFieldName
+      hidden fields.  Allow the form renderer to output an "input"
+      element of "type" "hidden" for each of the nested UIParameter
+      children, taking the name property (but not the value) from each
+      one in turn.  If the "disabled" attribute is specified, do not
+      render the HTML "a" anchor element or its "href" attribute.
+      Instead, render a "span" element.  If the "styleClass" attribute
+      is specified, render its value as the value of the "class"
+      attribute on the "span".  Render any pass-through attributes on
+      the "span".  The content of the span element comes from the value
+      of the component or its children as specified above.</p>
+
+      <p>If the user specified a <code>target</code> attribute, its
+      value must be set using javascript since the <code>onclick</code>
+      handler will prevent the target attribute from being generated.
+      This must be accomplished using JavaScript that is equivalent to
+      the following.</p>
+
+      <p><code>document.forms['CLIENT_ID'].target='TARGET';</code></p>
+
+      <p>Where TARGET is the value of the target attribute on the JSP
+      tag.</p>
+
+      </ul>]]>
+            </description>
+            <component-family>javax.faces.Command</component-family>
+            <renderer-type>javax.faces.Link</renderer-type>
+            <renderer-class>
+                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/command-link-renderer-class/text())"/>
+            </renderer-class>
+
+            <xi:include href="core-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="focus-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="link-attrs.xml" xpointer="xpointer(/root/*)"/>
+
+            <renderer-extension>
+                <renders-children>true</renders-children>
+                <body-tag>true</body-tag>
+            </renderer-extension>
+
+        </renderer>
+
+        <renderer>
+
+            <description>
+                <![CDATA[
+
+      <p><span class="changed_modified_2_0_rev_a">Renders</span> an HTML
+      "table" element compliant with the HTML 401 specification.  Render
+      the "caption" facet, if present, inside a "caption" element
+      immediately below the "table" element.  If the "captionClass"
+      attribute is specified, render its value as the value of the
+      "class" attribute on the "caption" element.  If the "captionStyle"
+      attribute is specified, render its value as the value of the
+      "style" attribute on the "caption" element.</p> <p>Please consult
+      the javadoc for <code>UIData</code> to supplement this
+      specification.  If the "styleClass" attribute is specified, render
+      its value as the value of the "class" attribute on the "table"
+      element.  Any pass-through attributes are also rendered on the
+      "table" element.  </p>
+
+     <p>Column Groups</p>
+
+     <ul>
+
+       <p>If the <code>UIData</code> component has a "colgroups" facet,
+       render its contents.  Consistent with the rules of facets in
+       general, this facet must have only one child.  In general, this
+       will be a <code>panel group</code> component that will contain
+       <code>colgroup</code> and <code>col</code> elements per the HTML
+       Table specification.  Use of column grouping can improve
+       accessibility.  This facet must be rendered before the table
+       header and footer.</p>
+
+     </ul>
+
+     <p>Rendering the header</p>
+
+     <ul>
+
+      <p>If the <code>UIData</code> component has a "header" facet, or
+      any of the child <code>UIColumn</code> components has a "header"
+      facet, render a "thead" element.  If the <code>UIData</code>
+      component has a "header" facet, encode its contents inside of "tr"
+      and "th" elements, respectively.  Output the value of the
+      "headerClass" attribute of the <code>UIData</code> component, if
+      present, as the value of the "class" attribute on the "th".
+      Output the number of child <code>UIColumn</code> components of the
+      <code>UIData</code> component as the value of the "colspan"
+      attribute on the "th".  Output "colgroup" as the value of the
+      "scope" attribute on the "th" element. </p>
+
+      <p>If any of the child <code>UIColumn</code> components has a
+      "header" facet render a "tr" element.  For each
+      <code>UIColumn</code> that actually has a "header" facet, render
+      it inside of a "th" element.  Columns that don't have a "header"
+      facet cause an empty "th" element to be rendered.  Output the 
+      value of the "headerClass" attribute of the <code>UIColumn</code>
+      component, if present, as the value of the "class" attribute on
+      the "th".  If the "headerClass" attribute of the <code>UIColumn</code>
+      component is not present, output the value of the "headerClass" 
+      attribute of the <code>UIData</code> component, if present, as
+      the value of the "class" attribute on the "th".  Output "col" as
+      the value of the "scope" attribute on the "th" element.
+      </p>
+
+      <p>Close out the "thead" element.</p>
+
+      </ul>
+
+      <p>Rendering the footer</p>
+
+      <ul>
+
+      <div class="changed_modified_2_0_rev_a">
+      <p>If the <code>UIData</code> component has a "footer" facet, or
+      any of the child <code>UIColumn</code> components has a "footer"
+      facet, render a "tfoot" element.  If the <code>UIData</code>
+      component has "footer" facets, encode the contents inside of a "tr"
+      element. </p>
+
+      <p>If any of the child <code>UIColumn</code> components has a
+      "footer" facet render a "td" element.  For each 
+      <code>UIColumn</code> that actually has a "footer" facet, render
+      it inside of a "td" element.  Columns that don't have a "footer"
+      facet cause an empty "td" element to be rendered.  Output the
+      value of the "footerClass" attribute of the <code>UIColumn</code>
+      component, if present, as the value of the "class" attribute on
+      the "td".  If the "footerClass" attribute of the <code>UIColumn</code>
+      component is not present, output the value of the "footerClass"
+      attribute of the <code>UIData</code> component, if present, as
+      the value of the "class" attribute on the "td".</p>
+
+      <p>If the <code>UIData</code> component has a "footer" facet,
+      encode its contents inside of "tr" and "td" elements, respectively.
+      Output the value of the "footerClass" attribute of the 
+      <code>UIData</code> component, if present, as the value of the 
+      "class" attribute on the "td".  Output the number of child 
+      <code>UIColumn</code> components of the <code>UIData</code> 
+      component as the value of the "colspan" attribute on the "td". </p>
+
+      <p>Close out the "tfoot" element.</p>
+      </div>
+
+      </ul>
+
+      <p>Rendering the table body</p>
+
+      <ul>
+
+      <p>Look at the value of the "bodyrows" attribute.  If present,
+      this must be a comma separated list of integers.  Each entry in
+      this list is the row index of the row before which a "tbody"
+      element should be rendered.</p>
+
+      <p>If there was no "bodyrows" attribute, or it was empty, render a
+      "tbody" element.  Keep track of the result of the "rows" property
+      on the <code>UIData</code> component.  Keep track of the number of
+      rows we have rendered so far.  Iterate through the rows.  Set the
+      "rowIndex" property of the <code>UIData</code> component to be
+      correct as we iterate through the rows.  Stop rendering children
+      and close out the "tbody" element if the "rowAvailable" property
+      of the <code>UIData</code> returned false.  If the current row
+      index is contained in the "bodyrows" attribute, check if a "tbody"
+      start element was rendered that needs to be closed, and if so,
+      close the "tbody" element.  Then render a "tbody" element start.
+      Otherwise, do not render a "tbody" element.</p>
+
+      <p>Output a "tr" element.  Output the value of the "rowClasses"
+      per the attribute description below.  For each
+      <code>UIColumn</code> child, if the column component has a
+      "rowHeader" attribute with a value of "true", output a "th"
+      element with a "scope" attribute with the value of "row".
+      Otherwise, if the column component has no "rowHeader" attribute,
+      or its value is false, output a "td" element.  In either case
+      attach the value of the "columnClasses" attribute of the
+      <code>UIData</code> component per the attribute description below.
+      Recursively encode each child of each <code>UIColumn</code> child.
+      Close out the "td" or "th" element.  When done with the row, close
+      out the "tr" element.  When done with all the rows, close out the
+      "tbody" element.</p>
+
+      </ul>
+
+     <p>When done rendering all the rows, set the "rowIndex" property of
+     the <code>UIData</code> to -1, and close out the "table"
+     element.</p>
+            ]]>
+            </description>
+
+            <component-family>javax.faces.Data</component-family>
+            <renderer-type>javax.faces.Table</renderer-type>
+            <renderer-class>
+                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/data-table-renderer-class/text())"/>
+            </renderer-class>
+            <facet>
+                <facet-name>caption</facet-name>
+            </facet>
+            <facet>
+                <facet-name>header</facet-name>
+            </facet>
+            <facet>
+                <facet-name>footer</facet-name>
+            </facet>
+            <facet>
+                <facet-name>colgroups</facet-name>
+            </facet>
+
+            <xi:include href="core-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="events-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="table-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <attribute>
+                <description>
+                  <![CDATA[<span class="changed_added_2_1">Boolean flag directing how the per-row component state should be handled.</span>]]>
+                </description>
+                <display-name>Preserve Row Component State</display-name>
+                <icon></icon>
+                <attribute-name>rowStatePreserved</attribute-name>
+                <attribute-class>boolean</attribute-class>
+                <attribute-extension>
+                    <tag-attribute>false</tag-attribute>
+                </attribute-extension>
+            </attribute>
+
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
+
+        </renderer>
+
+        <renderer>
+
+            <description><![CDATA[
+
+<p><span class="changed_modified_2_0">Renders</span> an HTML "form" element.</p>
+
+      <p>Decode Behavior</p>
+
+      <ul>
+
+      <p>Obtain the <code>Map</code> from the "requestParameterMap"
+      property of the <code>ExternalContext</code>.  If the map contains
+      an entry for the "clientId" of this <code>UIForm</code> component,
+      call <code>setSubmitted(true)</code> on the form, otherwise call
+      <code>setSubmitted(false)</code> on the form.</p>
+
+      </ul>
+
+
+
+      <p>Encode Behavior</p>
+
+      <ul>
+
+      <p>The value of the "method" attribute must be "post".  The value
+      of the "action" attribute must be the result of passing the view
+      identifier of the current view to the <code>getActionURL()</code>
+      method of the <code>ViewHandler</code> for this application, then
+      passing that String to the <code>encodeActionURL()</code> method
+      on the <code>ExternalContext</code>.  The value of the acceptcharset
+      attribute must be rendered as the value of "accept-charset".
+      If the "styleClass" attribute is specified, render its value as the 
+      value of the "class" attribute.  Render a "name"
+      attribute with a value the same as the "id" attribute as described
+      in "<a href="renderkit-summary.html#general_encoding">General Notes on
+      Encoding</a>" regarding the "id" attribute for UIInput
+      components.  <p class="changed_added_2_0">Obtain the <code>UIViewRoot view identifier</code> and
+      use it to obtain an <code>action URL</code> by calling <code>ViewHandler.getActionURL</code>.
+      Use the <code>action URL</code> to obtain an <code>encoded action URL</code> by calling 
+      <code>ExternalContext.encodeActionURL</code>.  Obtain an 
+      <code>encoded partial action URL</code> by calling
+      <code>ExternalContext.encodePartialActionURL</code> using <code>action URL</code> as the argument.
+      Compare the result from <code>ExternalContext.encodePartialActionURL</code> with the
+      value from <code>ExternalContext.encodeActionURL()</code>.  If they are different, 
+      render a hidden field with the name <code>javax.faces.encodedURL</code> and the value
+      of this hidden field as the value from <code>ExternalContext.encodePartialActionURL</code>.</p>
+      Call <code>ViewHandler.writeState()</code>
+      before the the close of the "form" element. 
+      Render all the necessary hidden fields 
+      for all commandLink instances in the page just before the close of the "form" element.  
+      <div class="changed_modified_2_0">
+      Just before rendering the closing <code>&lt;/form&gt;</code> element tag, render 
+      any resources that have been targeted for this form:
+      <ul>
+      <li>Obtain a <code>UIViewRoot</code> instance.</li>
+      <li>Obtain a <code>List</code> of component resources targeted for
+      this form with a call to <code>UIViewRoot.getComponentResources()</code>
+      with the <code>String "form"</code> as the argument.</li>
+      <li>Iterate over the returned <code>List</code> of <code>UIComponent</code> instances         
+      and call <code>encodeAll</code> on each <code>UIComponent</code> instance.
+      </ul>
+      </div>
+      </p>
+      </ul>
+      ]]>
+            </description>
+            <component-family>javax.faces.Form</component-family>
+            <renderer-type>javax.faces.Form</renderer-type>
+            <renderer-class>
+                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/form-form-renderer-class/text())"/>
+            </renderer-class>
+
+            <xi:include href="core-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="events-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="form-form-attrs.xml" xpointer="xpointer(/root/*)"/>
+
+            <renderer-extension>
+                <renders-children>true</renders-children>
+                <tag-name>form</tag-name>
+            </renderer-extension>
+
+        </renderer>
+
+        <renderer>
+
+            <description><![CDATA[<p><span
+            class="changed_modified_2_0">Renders</span> an HTML "img"
+            element.  Render the clientId as the value of the "id"
+            attribute.</p>
+
+<div class="changed_modified_2_0">
+
+<p>Handling the Value</p>
+
+  <ul>
+
+    <p>If the "name" attribute is present, execute algorithm <a
+    href="javax.faces.Outputjavax.faces.resource.Script.html#ResourceCommonGetResource">Common Algorithm for Obtaining A Resource to Render</a> to obtain a <code>Resource</code> instance.  Call
+    <code>Resource.getRequestPath()</code> and output the result as the
+    value of the "src" attribute on the rendered markup.</p>
+
+    <p>Otherwise, if the "url" attribute is present, treat its value as
+    if it was the value of the "value" attribute.  Otherwise, if the
+    "value" attribute is present, render the value of the component as
+    the value of the "src" attribute, after passing it to the
+    <code>getResourceURL()</code> method of the <code>ViewHandler</code>
+    for this application, and passing the result through the
+    <code>encodeResourceURL()</code> method of the
+    <code>ExternalContext</code>.</p>
+
+    <p>When handling the "src" attribute,
+    the value must not be escaped.  For example, <code>&</code> must not
+    be turned into <code>&amp;amp;</code>.  If the "styleClass"
+    attribute is specified, render its value as the value of the "class"
+    attribute.</p>
+
+  </ul>
+
+</div>]]></description>
+    <component-family>javax.faces.Graphic</component-family>
+    <renderer-type>javax.faces.Image</renderer-type>
+            <renderer-class>
+                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/graphic-image-renderer-class/text())"/>
+            </renderer-class>
+
+            <xi:include href="core-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="events-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="graphic-image-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="output-resource-attrs.xml" xpointer="xpointer(/root/*)"/>
+
+            <attribute>
+                <description><![CDATA[<div class="changed_added_2_0"><p>The 
+                <em>resourceName</em> for this resource.</p></div>]]>
+                </description>
+                <display-name>Resource Name</display-name>
+                <icon/>
+                <attribute-name>name</attribute-name>
+                <attribute-class>java.lang.String</attribute-class>
+                <attribute-extension>
+                    <required>false</required>
+                    <tag-attribute>true</tag-attribute>
+                </attribute-extension>
+            </attribute>
+
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
+        </renderer>
+
+        <renderer>
+
+            <description><![CDATA[<p>Renders an HTML "input" element of type
+      "hidden".</p>
+
+      <p>Decode Behavior</p>
+
+      <ul>
+
+      <p>See the decode description for the <a
+      href="javax.faces.Inputjavax.faces.Text.html#encode">Input
+      Text</a> renderer.</p>
+
+      </ul>
+
+      <p>Encode Behavior</p>
+
+      <ul>
+
+      <p>Render the clientId of the component as the value of the
+      "name" attribute.  Render the current value of the component as
+      the value of the "value" attribute.</p>
+
+      </ul>]]>
+
+            </description>
+            <component-family>javax.faces.Input</component-family>
+            <renderer-type>javax.faces.Hidden</renderer-type>
+            <renderer-class>
+                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/input-hidden-renderer-class/text())"/>
+            </renderer-class>
+
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
+        </renderer>
+
+        <renderer>
+
+            <description><![CDATA[<p>Renders an HTML "input" element of "type" "password".</p>
+
+      <p>Decode Behavior</p>
+
+      <ul>
+
+      <p>See the decode description for the <a
+      href="javax.faces.Inputjavax.faces.Text.html#encode">Input
+      Text</a> renderer.</p>
+
+      </ul>
+
+      <p>Encode Behavior</p>
+
+      <ul>
+
+      <p>
+      Render the clientId of the component as the value of the "name"
+      attribute.  Render the current value of the component as the value
+      of the "value" attribute, if and only if the "redisplay" component
+      attribute is the string "true".  If the "styleClass" attribute is
+      specified, render its value as the value of the "class"
+      attribute.</p>
+
+      </ul>]]>
+
+            </description>
+            <component-family>javax.faces.Input</component-family>
+            <renderer-type>javax.faces.Secret</renderer-type>
+            <renderer-class>
+                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/input-secret-renderer-class/text())"/>
+            </renderer-class>
+
+            <xi:include href="core-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="events-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="focus-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="input-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="text-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="input-secret-attrs.xml" xpointer="xpointer(/root/*)"/>
+
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
+        </renderer>
+
+        <renderer>
+
+            <description><![CDATA[<p>Renders an HTML "input"
+      element of "type" "text".</p>
+
+      <p><a name="decode">Decode Behavior</a></p>
+
+      <ul>
+
+      <p>Obtain the <code>Map</code> from the "requestParameterMap"
+      property of the <code>ExternalContext</code>.  If the
+      <code>Map</code> contains an entry for the "clientId" of the
+      component, pass the value of the entry to the
+      <code>setSubmittedValue()</code> method of the component, which
+      must be an instance of <code>EditableValueHolder</code>.</p>
+
+      </ul>
+
+      <p>Encode Behavior</p>
+
+      <ul>
+
+      <p>  Render the clientId of the component as
+      the value of the "name" attribute.  Render the current value of
+      the component as the value of the "value" attribute.  If the
+      "styleClass" attribute is specified, render its value as the value
+      of the "class" attribute.
+      </p>
+
+      </ul>]]>
+
+            </description>
+            <component-family>javax.faces.Input</component-family>
+            <renderer-type>javax.faces.Text</renderer-type>
+            <renderer-class>
+                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/input-text-renderer-class/text())"/>
+            </renderer-class>
+
+            <xi:include href="core-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="events-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="focus-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="input-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="text-attrs.xml" xpointer="xpointer(/root/*)"/>
+
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
+        </renderer>
+
+        <renderer>
+
+            <description><![CDATA[<p>Renders an HTML "textarea" element.</p>
+
+      <p>Decode Behavior</p>
+
+      <ul>
+
+      <p>See the encode description for the <a
+      href="javax.faces.Inputjavax.faces.Text.html#encode">Input
+      Text</a> renderer.</p>
+
+      </ul>
+
+      <p>Encode Behavior</p>
+
+      <ul>
+
+      <p>  Render the
+      clientId as the value of the "name" attribute.  Render the current
+      valu eof the component inside the "textarea"
+      element.</p> </ul>]]> </description>
+            <component-family>javax.faces.Input</component-family>
+            <renderer-type>javax.faces.Textarea</renderer-type>
+            <renderer-class>
+                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/input-textarea-renderer-class/text())"/>
+            </renderer-class>
+
+            <xi:include href="core-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="events-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="focus-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="input-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="input-textarea-attrs.xml" xpointer="xpointer(/root/*)"/>
+
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
+        </renderer>
+
+        <renderer>
+
+            <description><![CDATA[<p>Render a single message for a specific component.</p>
+
+      <p>Set-up for Rendering</p>
+
+      <ul>
+
+        <p>Obtain the "summary" and "detail" properties from
+        <code>UIMessage</code> component.  If not present, keep the
+        empty string as the value, respectively.  Obtain the first
+        <code>FacesMessage</code> to render from the component, using
+        the "for" property of the <code>UIMessage</code>.  This will be
+        the only message we render.  Obtain the severity style for this
+        message.  If the severity of the message is
+        <code>FacesMessage.SEVERITY_INFO</code>, the severity style
+        comes from the value of the "infoStyle" attribute.  If the
+        severity of the message is
+        <code>FacesMessage.SEVERITY_WARN</code>, the severity style
+        comes from the value of the "warnStyle" attribute, and so on for
+        each of the severities, <code>INFO, WARN, ERROR</code> and
+        <code>FATAL</code>.  The same rules apply for obtaining the
+        severity style class, but instead of "infoStyle, warnStyle", etc
+        use "infoClass, warnClass", etc.  Obtain the "style",
+        "styleClass" and "layout" attributes from the
+        <code>UIMessage</code> component.  If we have a "style"
+        attribute and a severity style attribute, use the severity style
+        attribute as the value of the "style" attribute.  If we have no
+        "style" attribute, but do have a severity style, use the
+        severity style as the value of the "style" attribute.  The same
+        precedence rules apply for the style class.  Obtain the value of
+        the <code>dir</code> and <code>lang</code> attributes.</p>
+
+      </ul>
+
+      <p>Rendering</p>
+
+      <ul>
+
+      <p>For the message renderer, we only render one row, for the first
+      message.  For the messages renderer, we render as many rows as we
+      have messages.  If any of the "dir", "lang", "style" or
+      "styleClass" attributes has a non-null value (as determined
+      above), render a "span" element, outputting the value of the
+      "style" attribute as the the value of the "style" attribute, and
+      outputting the value of the "styleClass" attribute as the value of
+      the "class" attribute on the "span" element.  Output the "dir" and
+      "lang" attributes as well, if they are present.  If the
+      <code>UIMessage</code> has a "tooltip" attribute with the value of
+      "true", and the <code>UIMessage</code> has "showSummary" and
+      "showDetail" properties with the value "true", if we haven't
+      already written out the "span", output the "summary" as the value
+      of the "title" attribute on the "span".  If we haven't already
+      written out a "title" attribute, and "showSummary" is true, output
+      the summary.  If "showDetail" is true, output the detail.  Close
+      out the span if necessary.</p>
+
+      </ul>]]>
+
+            </description>
+            <component-family>javax.faces.Message</component-family>
+            <renderer-type>javax.faces.Message</renderer-type>
+            <renderer-class>
+                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/message-message-renderer-class/text())"/>
+            </renderer-class>
+
+            <xi:include href="core-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="message-message-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
+
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
+        </renderer>
+
+        <renderer>
+
+            <description>
+                <![CDATA[
+
+     <p><span class="changed_modified_2_0">The</span> same as for the
+     Message renderer, but output all the messages.  <span
+     class="changed_added_2_0">If an "id" attribute has been specified,
+     it must be rendered on the outermost markup corresponding to this
+     component.</span> If the value of the "layout" attribute is
+     "table", render nested "table", "tr", and "td" elements, in that
+     order.  If the value of the "layout" attribute is "list", or the
+     "layout" attribute is not specified, render nested "ul", "li"
+     elements, in that order.  Output the value of the "style" attribute
+     as the value of the "style" attribute, output the value of the
+     "styleClass" attribute as the value of the "class" attribute, and
+     output the dir and lang attributes.  Output these values on the
+     "table" element or the "ul" element.  Output the values of the
+     "errorStyle", "fatalStyle", "infoStyle", "warnStyle" attributes as
+     the value of the "style" attribute on either the "tr" element or
+     the "li" element.  Output the values of the "errorClass",
+     "fatalClass", "infoClass", "warnClass" attributes as the value of
+     the "class" attribute on either the "tr" element or the "li"
+     element.  The component is a <code>UIMessages</code>, and there is
+     no "for" attribute.  Therefore, use either <code>null</code> to
+     obtain the messages from the <code>FacesContext</code> or the empty
+     string if the components "globalOnly" property is
+     <code>true</code>.  If the layout was "table" close out the table
+     elements, otherwise, close out the list elements.</p>
+
+            ]]>
+            </description>
+
+            <component-family>javax.faces.Messages</component-family>
+            <renderer-type>javax.faces.Messages</renderer-type>
+            <renderer-class>
+                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/messages-messages-renderer-class/text())"/>
+            </renderer-class>
+
+            <xi:include href="core-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="messages-messages-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
+
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
+        </renderer>
+
+        <renderer>
+
+            <description><![CDATA[<p>Render parameterized text.  Obtain the
+      <code>style</code>, <code>styleClass</code>, <code>dir</code>, and
+      <code>lang</code> attributees from this component.  If any are
+      present, render a "span" element.  Output the
+      <code>styleClass</code> attribute (if present) as the value of the
+      <code>class</code> attribute.  Output the <code>style</code>
+      attribute as the value of the <code>style</code> attribute.
+      Output the <code>dir</code> and <code>lang</code> attributes as
+      pass through attributes.  Accrue a list of the values of all child
+      <code>UIParameter</code> components of this component.  If there
+      are one or more accumulated parameter values, convert the list of
+      parameter values to an <code>Object</code> array, call
+      <code>MessageFormat.format()</code>, passing the
+      <code>value</code> of this component as the first argument, and
+      the array of parameter values as the second argument, and render
+      the result.  Otherwise, render the <code>value</code> of this
+      component unmodified.</p>]]>
+            </description>
+            <component-family>javax.faces.Output</component-family>
+            <renderer-type>javax.faces.Format</renderer-type>
+            <renderer-class>
+                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/output-format-renderer-class/text())"/>
+            </renderer-class>
+
+            <xi:include href="core-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="output-format-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
+
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
+        </renderer>
+
+        <renderer>
+
+            <description>Renders an HTML "label" element.  Render the current value
+      of the component as label text if it is specified. If a "for" attribute is
+      specified, find the component specified by the value of the "for"
+      attribute, and render its client id as the value of the "for" attribute.
+      If "styleClass" attribute is specified, render its value as the value
+      of the "class" attribute.</description>
+            <component-family>javax.faces.Output</component-family>
+            <renderer-type>javax.faces.Label</renderer-type>
+            <renderer-class>
+                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/output-label-renderer-class/text())"/>
+            </renderer-class>
+
+            <xi:include href="core-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="events-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="focus-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="output-label-attrs.xml" xpointer="xpointer(/root/*)"/>
+
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
+        </renderer>
+
+        <renderer>
+
+            <description><![CDATA[
+
+            <p><span class="changed_modified_2_0_rev_a">Render</span> an
+            HTML "a" anchor element.  The value of the component is
+            rendered as the value of the "href" attribute.  Any child
+            UIParameter components <span
+            class="changed_modified_2_0_rev_a">whose
+            <code>disable</code> property is <code>false</code></span>
+            are appended to the String to be output as the value of the
+            "href" attribute as query parameters before rendering.  The
+            entire "href" string must be passed through a call to the
+            <code>encodeResourceURL()</code> method of the
+            <code>ExternalContext</code>.  The name of the UIParameter
+            goes on the left hand side, and the value of the UIParameter
+            on the right hand side.  The name and the value must be
+            URLEncoded.  <span class="changed_modified_2_0_rev_a">Note
+            that the required url encoding is handled by
+            <code>ResponseWrter.writeAttribute()</code>.</span> Each
+            UIParameter instance is separeted by an ampersand, as
+            dictated in the URL spec.  If the "styleClass" attribute is
+            specified, render its value as the value of the "class"
+            attribute.  If the "id" attribute is specified, follow the
+            same steps as mentioned in the 
+            "<a href="renderkit-summary.html#general_encoding">General
+            Notes on Encoding</a>" regarding the "id" attribute for
+            UIInput components.  If the "disabled" attribute is
+            specified, do not render the HTML "a" anchor element or the
+            "href" element.  Instead, render a "span" element.  If the
+            "styleClass" attribute is specified, render its value as the
+            value of the "class" attribute on the "span".  Render any
+            pass-through attributes on the "span".
+
+            </p>]]>
+            </description>
+            <component-family>javax.faces.Output</component-family>
+            <renderer-type>javax.faces.Link</renderer-type>
+            <renderer-class>
+                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/output-link-renderer-class/text())"/>
+            </renderer-class>
+
+            <xi:include href="core-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="events-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="focus-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="link-attrs.xml" xpointer="xpointer(/root/*)"/>
+
+            <renderer-extension>
+                <renders-children>true</renders-children>
+                <body-tag>true</body-tag>
+            </renderer-extension>
+
+        </renderer>
+
+        <renderer>
+
+            <description><![CDATA[
+
+<p><span class="changed_added_2_0 changed_modified_2_0_rev_a
+changed_modified_2_1">Render</span> <span class="changed_added_2_0
+changed_modified_2_1">an HTML "a" anchor element.  The value of the
+component is rendered as the anchor text and the outcome of the
+component is used to determine the target URL rendered in the "href"
+attribute.  Execute the <a
+href="javax.faces.OutcomeTargetjavax.faces.Button.html#UIOutcomeTargetGetEncodedTargetUrl">Algorithm
+to obtain the URL to which the user-agent should issue a GET request
+when clicked</a>.</span></p>
+
+<p class="changed_added_2_0">Any child <code>UIParameter</code> components
+<span class="changed_modified_2_0_rev_a">whose <code>disable</code>
+property is <code>false</code></span> are appended to the String to be
+output as the value of the "href" attribute as query parameters before
+rendering.  The entire "href" string must be passed through a call to
+the <code>encodeResourceURL()</code> method of the
+<code>ExternalContext</code>.  The name of the <code>UIParameter</code>
+goes on the left hand side, and the value of the
+<code>UIParameter</code> on the right hand side.  The name and the value
+must be URLEncoded.  <span class="changed_modified_2_0_rev_a">Note that
+the required url encoding is handled by
+<code>ResponseWrter.writeAttribute()</code>.</span> Each
+<code>UIParameter</code> instance is separated by an ampersand, as
+dictated in the URL spec.  If the "fragment" attribute is specified, the
+value will be included at the end of the resulting URL preceded by a
+hash mark.  If the "styleClass" attribute is specified, render its value
+as the value of the "class" attribute.</p>
+
+<p class="changed_added_2_0">If the "id" attribute is specified, follow
+the same steps as mentioned in the "<a
+href="renderkit-summary.html#general_encoding">General Notes on
+Encoding</a>" regarding the "id" attribute for UIInput components.  If
+the "disabled" attribute is specified, do not render the HTML "a" anchor
+element or the "href" element.  Instead, render a "span" element.  If
+the "styleClass" attribute is specified, render its value as the value
+of the "class" attribute on the "span".  Render any pass-through
+attributes on the "span".</p>
+
+]]>
+            </description>
+
+            <component-family>javax.faces.OutcomeTarget</component-family>
+            <renderer-type>javax.faces.Link</renderer-type>
+            <renderer-class>
+                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/outcome-target-link-renderer-class/text())"/>
+            </renderer-class>
+
+            <xi:include href="core-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="events-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="focus-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="link-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="direct-link-attrs.xml" xpointer="xpointer(/root/*)"/>
+
+            <renderer-extension>
+                <renders-children>true</renders-children>
+                <body-tag>true</body-tag>
+                <jsp-ignore>true</jsp-ignore>
+                <tag-name>link</tag-name>
+            </renderer-extension>
+
+        </renderer>
+
+        <renderer>
+            <description><![CDATA[
+
+<p><span class="changed_modified_2_1">Render a button that does not
+cause an HTTP POST.</span></p>
+
+<div class="changed_added_2_0"><div class="changed_modified_2_1">
+ 
+      <p>Encode Behavior</p>
+
+<p>Render an HTML "input" element of type "button".  The value of the
+component is rendered as the button text and the outcome of the
+component is used to determine the target URL which is activated by
+onclick.  If "image" attribute is specified, render it as the value of
+the "src" attribute after passing it to the
+<code>getResourceURL()</code> method of the <code>ViewHandler</code> for
+this application, and passing the result through the
+<code>encodeResourceURL()</code> method of the
+<code>ExternalContext</code>.</p>
+
+<p>If the component is not disabled, take the following actions.</p>
+
+  <p><a name="UIOutcomeTargetGetEncodedTargetUrl">Algorithm to obtain the url to which the user-agent should issue a GET request when clicked</a></p>
+
+  <p>Obtain the <code>NavigationCase</code> that corresponds to the
+  component instance for this <code>Renderer</code>.</p>
+
+  <p>Obtain an instance of
+  <code>javax.faces.application.ConfigurableNavigationHandler</code> from
+  the <code>ViewHandler</code>.  If no such instance can be obtained,
+  write the "disabled" attribute on the button.  Otherwise, let
+  <em>outcome</em> be the result of calling <code>getOutcome()</code> on
+  the argument component, which must be an instance of
+  <code>UIOutcomeTarget</code>.  If this result is <code>null</code>, let
+  <em>outcome</em> be the viewId of the current <code>UIViewRoot</code>.
+  Let <em>navCase</em> be the return from calling
+  <code>getNavigationCase()</code> on the
+  <code>ConfigurableNavigationHandler</code>, passing the current
+  <code>FacesContext</code> as the first argument, <code>null</code>, as
+  the second argument, and <em>outcome</em> as the third argument.  If
+  this returns <code>null</code>, log an informative error which includes
+  the component id, and write the "disabled" attribute on the component
+  markup, with the value of <code>true</code>.  Otherwise obtain the
+  encoded target URL using the following algorithm.</p>
+
+  <p>Algorithm to obtain the encoded target URL</p>
+
+  <ul>
+
+	  <li><p>Let <em>params</em> be the <code>Map&lt;String,
+	  List&lt;String&gt;&gt;</code> to be passed to
+	  <code>ViewHandler.getBookmarkableURL()</code>.  Build this map up first
+	  from any child <code>UIParameter</code> components.  These children must
+	  be processed in the order in which they appear as children.  If multiple
+	  children with the same name are encountered, their values must appear in
+	  the <code>List&lt;String&gt;</code> in the <code>Map</code> entry with
+	  the same name, and appear in the list in the same order as their child
+	  order.</p></li>
+
+	  <li><p>Next, obtain any parameters included within the
+	  navigation case.  Call <code>getParameters()</code> on
+	  <em>navCase</em>.  The result will be a <code>Map&lt;String,
+	  List&lt;String&gt;&gt;</code>.  If the result is
+	  non-<code>null</code> and non-empty, iterate over the entries
+	  from the result <code>Map</code> and, if no entry with the
+	  same name exists in <em>params</em>, set the value from the
+	  current entry as the value in the <em>params</em>
+	  <code>Map</code>.</p></li>
+
+	  <li><p>Let <em>includeViewParams</em> be the result of a
+	  logical OR of the results from calling
+	  <code>isIncludeViewParams()</code> on the argument
+	  <code>UIOutcomeTarget</code> component and calling
+	  <code>isIncludeViewParams</code> on <em>navCase</em>.</p></li>
+
+
+	  <li><p>Call <code>getBookmarkableURL()</code> on the
+	  <code>ViewHandler</code>, passing the current
+	  <code>FacesContext</code> as the first argument, the return
+	  from calling <code>getToViewId()</code> as the second
+	  argument, <em>params</em> as the third argument, and
+	  <em>includeViewParams</em> as the last argument.</p></li>
+
+  </ul>
+
+  <p>The entire target URL string must be passed through a call to
+  the <code>encodeResourceURL()</code> method of the
+  <code>ExternalContext</code>.  The name of the
+  <code>UIParameter</code> goes on the left hand side, and the value of
+  the <code>UIParameter</code> on the right hand side.  The name and the
+  value must be URLEncoded.  Each <code>UIParameter</code> instance is
+  separeted by an ampersand, as dictated in the URL spec.  The final
+  encoded result will be written out to the onclick attribute of the
+  button as "window.location.href = '<encoded HREF value>'".  If the
+  developer has specified a custom onlclick the window.location.href
+  name/value pair will be appended at the end of the developer specified
+  script.  If the "fragment" attribute is specified, the value will be
+  included at the end of the resulting URL preceded by a hash mark.  If
+  the "styleClass" attribute is specified, render its value as the value
+  of the "class" attribute.  If the "id" attribute is specified, follow
+  the same steps as mentioned in the "<a
+  href="renderkit-summary.html#general_encoding">General
+  Notes on Encoding</a>" regarding the "id" attribute for UIInput
+  components.  If the "disabled" attribute is specified, do not render
+  the "onclick" element and assign the "disabled" attribute a value of
+  true.</p>
+
+</div></div>]]>
+
+            </description>
+            <component-family>javax.faces.OutcomeTarget</component-family>
+            <renderer-type>javax.faces.Button</renderer-type>
+            <renderer-class>
+                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/outcome-target-button-renderer-class/text())"/>
+            </renderer-class>
+
+            <xi:include href="core-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="focus-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="events-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="image-button-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="direct-link-attrs.xml" xpointer="xpointer(/root/*)"/>
+
+            <renderer-extension>
+                <renders-children>true</renders-children>
+                <body-tag>true</body-tag>
+                <jsp-ignore>true</jsp-ignore>
+                <tag-name>button</tag-name>
+            </renderer-extension>
+
+        </renderer>
+
+        <renderer>
+
+            <description>If the "styleClass", "style", "dir" or "lang"
+      attributes are present, render a "span" element.  If the
+      "styleClass" attribute is present, render its value as the value
+      of the "class" attribute.  If the "style" attribute is present,
+      pass it thru.  If the "escape" attribute is not present, or it is
+      present and its value is "true" all angle brackets should be
+      converted to the ampersand xx semicolon syntax when rendering the
+      value of the "value" attribute as the value of the component.  If
+      the "escape" attribute is present and is "false" the value of the
+      component should be rendered as text without escaping.
+            </description>
+            <component-family>javax.faces.Output</component-family>
+            <renderer-type>javax.faces.Text</renderer-type>
+            <renderer-class>
+                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/output-text-renderer-class/text())"/>
+            </renderer-class>
+
+            <xi:include href="core-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="output-text-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
+
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
+        </renderer>
+
+        <renderer>
+
+            <description><![CDATA[Renders an HTML "table" element, conforming to the
+      rules in the HTML 401 specification.  Render the "caption" facet, 
+      if present, inside a "caption" element immediately below the "table" element.  
+      If the "captionClass" attribute is specified, render its value as the value 
+      of the "class" attribute on the "caption" element.  If the "captionStyle" attribute
+      is specified, render its value as the value of the "style" attribute
+      on the "caption" element.  If the "styleClass" attribute is specified, render 
+      its value as the value of the "class" attribute.  Render the pass-through 
+      attributes in the table below.  Render the "header" facet, if present, inside of
+      "thead", "tr", and "th" elements, nested in that order.  If the
+      "headerClass" attribute is specifed, render its value as the value
+      of the "class" attribute on the "th" element.  Render "colgroup"
+      as the value of the "scope" attribute.  Render the value of the
+      "columns" attribute as the value of the "colspan" attribute on the
+      "th" element.  Render the "footer" facet if present, using similar
+      logic to the rendering of the "header", but replacing "thead" with
+      "tfoot", "th" with "td", and "headerClass" with "footerClass".
+      Render the children of the <code>UIPanel</code> component inside
+      of a "tbody" element.  Render the children based on the value of
+      the "columns" attribute, creating a new row each time a "columns"
+      worth of children have been rendered.  For the start of each row,
+      render a "tr" element.  Output the value of the "rowClasses" per
+      the attribute description below.  For each child, output a "td" 
+      element, attaching the value of the "columnClasses" attribute per
+      the attribute description below.  Recursively encode each child.
+      Close out the "td" element.  When done with the row, close out the 
+      "tr" element.  If a child has "rendered==false" it is not rendered, 
+      and the column counter must not be incremented.]]>
+            </description>
+            <component-family>javax.faces.Panel</component-family>
+            <renderer-type>javax.faces.Grid</renderer-type>
+            <renderer-class>
+                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/panel-grid-renderer-class/text())"/>
+            </renderer-class>
+            <facet>
+                <facet-name>header</facet-name>
+            </facet>
+            <facet>
+                <facet-name>footer</facet-name>
+            </facet>
+
+            <xi:include href="core-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="events-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="table-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="panel-grid-attrs.xml" xpointer="xpointer(/root/*)"/>
+
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
+
+        </renderer>
+
+        <renderer>
+
+            <description>Intended for use in situations when only one
+      UIComponent child can be nested, such as in the case of facets.
+      If the "style" or "styleClass" attributes are present, and the "layout"
+      attribute is present with a value of "block", render a "div" element,
+      outputting the value of the "style" attribute as the value of the 
+      "style" attribute and the value of the "styleClass" attribute as the
+      value of the "class" attribute.  Otherwise, if the "layout" attribute
+      is not present, or the "layout" attribute contains a value other than
+      "block", render a "span" element, outputting the value of the 
+      "style" attribute as the value of the "style" attribute, and the value 
+      of the "styleClass" attribute as the value of the "class"
+      attribute. </description>
+            <component-family>javax.faces.Panel</component-family>
+            <renderer-type>javax.faces.Group</renderer-type>
+            <renderer-class>
+                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/panel-group-renderer-class/text())"/>
+            </renderer-class>
+
+            <xi:include href="panel-group-attrs.xml" xpointer="xpointer(/root/*)"/>
+
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
+
+        </renderer>
+
+        <renderer>
+
+            <description><![CDATA[<p>Renders an HTML "input" element of type "checkbox".</p>
+
+      <p>Decode Behavior</p>
+
+      <ul>
+
+      <p>Obtain the <code>Map</code> from the "requestParameterMap"
+      property of the <code>ExternalContext</code>.  If there is no
+      entry in the <code>Map</code> for the "clientId" of this
+      component, pass "false" to the <code>setSubmittedValue()</code>
+      method of the component, which must be an instance of
+      <code>EditableValueHolder</code>.  If there is an entry, and its
+      value is equal, ignoring case and without quotes, to any of the
+      Strings: "on", "yes" or "true" pass true to the
+      <code>setSubmittedValue()</code> method of the component.</p>
+
+      </ul>
+
+      <p>Encode Behavior</p>
+
+      <ul>
+
+      <p>
+      Render the clientId of the component as the value of the "name"
+      attribute.  If the current value of the component is "true",
+      output the "checked" attribute (must be rendered as checked="checked").  
+      If the "styleClass" attribute is specified, render its value as the value 
+      of the "class" attribute.</p> </ul>]]></description>
+            <component-family>javax.faces.SelectBoolean</component-family>
+            <renderer-type>javax.faces.Checkbox</renderer-type>
+            <renderer-class>
+                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/selectboolean-checkbox-renderer-class/text())"/>
+            </renderer-class>
+
+            <xi:include href="core-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="events-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="focus-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="input-attrs.xml" xpointer="xpointer(/root/*)"/>
+
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
+        </renderer>
+
+        <renderer>
+
+            <description><![CDATA[<p><span class="changed_modified_2_0
+            changed_modified_2_0_rev_a">Render</span> an HTML checkbox
+            list.</p>
+
+      <p><a name="decode">Decode Behavior</a></p>
+
+      <ul>
+
+      <p>See the <a
+      href="javax.faces.SelectManyjavax.faces.Listbox.html">"Decode
+      Behavior for UISelectMany Components"</a> section.</p>
+
+      </ul>
+
+      <p>Encode Behavior</p>
+
+      <ul>
+      <p>Render a "table" element.  If the "styleClass" is specified,
+      render the value of the "styleClass" attribute as the value of the
+      "class" attribute on the "table" element. If the "style", or
+      "border" attributes are specified, pass them thru <span
+      class="changed_added_2_0">and render their values as the "style"
+      and "border" attributes on the "table", respectively.</span> If
+      the "layout" attribute is specified, and its value is
+      "pageDirection", render the children elements vertically,
+      otherwise horizontally, in the table.  If any of the children are
+      an instance of SelectItemGroup, render them as a nested table.
+      Each of the children are ultimately rendererd as follows.  Render
+      an "input" element of "type" "checkbox" for each child component.
+      Render the "name" attribute on the "input" element with the value
+      of the <code>clientId</code> of the component.  Render an "id"
+      attribute on the "input" element.  Each "id" value must be unique.
+      If the current SelectItem.isDisabled() returns true, render
+      "disabled" as the value of the "disabled" attribute.  Close out
+      the "input" element.  Render a "label" element.  Render the "for"
+      attribute of the "label" element whose value is the corresponding
+      "input" element's "id" value.  
+      <span
+      class="changed_added_2_0">If the current checkbox would be
+      rendered as being checked, and there is a "selectedClass"
+      attribute, append a space, followed by the value of the
+      "selectedClass" attribute to any existing "class" attribute value
+      on the label element.  Otherwise, render the value of the
+      "selectedClass" attribute as the value of the "class" attribute on
+      the label element.  If the current checkbox would be rendered as
+      being not checked, and there is a "unselectedClass" attribute,
+      append a space, followed by the value of the "unselectedClass"
+      attribute to any existing "class" attribute value on the label
+      element.  Otherwise, render the value of the "unselectedClass"
+      attribute as the value of the "class" attribute on the label
+      element.</span>  <span class="changed_modified_2_0_rev_a">If the 
+      current checkbox would be rendered as being disabled, and there is a 
+      "disabledClass" attribute, append a space, followed by the value 
+      of the "disabledClass" attribute to any existing "class" attribute 
+      value on the label element.  Otherwise, render the value of the 
+      "disabledClass" attribute as the value of the "class" attribute on 
+      the label element.  If the current checkbox would be rendered as 
+      being enabled, and there is an "enabledClass" attribute, append a 
+      space, followed by the value of the "enabledClass" attribute to any 
+      existing "class" attribute value on the label element.  Otherwise, 
+      render the value of the "enabledClass" attribute as the value of 
+      the "class" attribute on the label element.</span> Close out the starting 
+      "label" element and render the label value from SelectItem.getLabel().  
+      Close out the "label" element.  As an exception to the general rules about 
+      how to handle the "id" attribute, render it as an attribute on the outer "table"
+      element, the value of which is the <code>clientId</code> of the
+      component per the rules at the beginning of this specification.
+      The value of the current SelectItem is rendered as the value of
+      the "value" attribute.  Coerce the value of the currently rendered
+      child to the type of the parent UISelectMany value following the
+      Expression Language coercion rules, before comparing the values.
+      If the value of the enclosing UISelectMany matches the current
+      value, render "checked" as the value of the "checked" attribute.
+      See the <a href="javax.faces.SelectManyjavax.faces.Listbox.html">"Rendering the option
+      elements" </a> specification for <code>ListboxRenderer</code> for
+      more detail on how to render the "option" elements in this
+      renderer.  <span class="changed_modified_2_0_rev_a">Note that this
+      renderer does not support <code>SelectItemGroup</code> elements,
+      so the text that describes the rendering of
+      <code>SelectItemGroup</code> does not apply to this
+      renderer.</span></p>
+
+      </ul>]]>
+
+            </description>
+            <component-family>javax.faces.SelectMany</component-family>
+            <renderer-type>javax.faces.Checkbox</renderer-type>
+            <renderer-class>
+                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/selectmany-checkbox-renderer-class/text())"/>
+            </renderer-class>
+
+            <xi:include href="core-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="events-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="focus-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="input-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="selectmany-checkbox-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="selectmany-attrs.xml" xpointer="xpointer(/root/*)"/>
+
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
+        </renderer>
+
+        <renderer>
+
+            <description><![CDATA[<p><span class="changed_modified_2_0
+            changed_modified_2_0_rev_a">Render</span> an HTML option
+            list.</p>
+
+      <p>Decode Behavior</p>
+
+      <p>This section documents the decode behavior for all renderers
+      that handle <code>UISelectMany</code> or <code>UISelectOne</code>
+      components.</p>
+
+      <ul>
+
+      <p><a name="decodeMany">Decode Behavior for
+      <code>UISelectMany</code> components</a></p>
+
+      <ul>
+
+        <p>Obtain the <code>Map</code> from the
+        "requestParameterValuesMap" property of the
+        <code>ExternalContext</code>.  If the <code>Map</code> contains
+        an entry for the "clientId" of the component, pass the value of
+        the entry, cast to a <code>String []</code>, to the
+        <code>setSubmittedValue()</code> method of the component, which
+        must be an <code>EditableValueHolder</code>.  If the
+        <code>Map</code> does not contain an entry, create an empty
+        <code>String</code> array and call
+        <code>setSubmittedValue()</code> with it.</p>
+
+        <p class="changed_modified_2_0">Please check the javadoc for <a
+        href="../../javadocs/javax/faces/component/UISelectMany.html#getConvertedvalue">UISelectMany.getConvertedValue()</a>
+        for additional requirements for renderers that render this kind
+        of component.</p>
+
+      </ul>
+
+      <p><a name="decodeOne">Decode Behavior for
+      <code>UISelectOne</code> components</a></p>
+
+      <ul>
+
+      <p>Obtain the <code>Map</code> from the "requestParameterMap"
+      property of the <code>ExternalContext</code>.  If there is a
+      <code>Map</code> entry for the "clientId" property of the
+      component, pass it to the <code>setSubmittedValue()</code> method
+      of the component. <span class="changed_added_2_0">If the
+      <code>Map</code> does not contain an entry, call
+      <code>setSubmittedValue()</code> passing an empty
+      <code>String</code> as the argument.</span> </p>
+
+      </ul>
+
+      <p>Encode Behavior</p>
+
+      <ul>
+
+      <p>Render an HTML "select" element. Render the clientId of
+      the component as the value of the "name" attribute.  If the "styleClass"
+      attribute is specified, render its value as the value of the "class"
+      attribute on the "select" element.  If the component is a
+      <code>UISelectMany</code> instance, render "multiple" as the value of the
+      "multiple" attribute.  If the "size" attribute is specified, render its
+      value as the value of the "size" attribute.  Otherwise use the number of
+      items as the value of the "size" attribute.</p>
+
+      </ul>
+
+      <p><a name="option">Rendering the "option" elements</a></p>
+
+      <ul>
+
+      <p>The only valid children of this component are
+      <code>UISelectItem</code> or <code>UISelectItems</code>
+      instances. Iterate over the children of this component, and accrue
+      a list of <code>javax.faces.model.SelectItem</code> instances.
+      <span class="changed_added_2_0">If the current child is a
+      <code>SelectItem</code> whose <code>noSelctionProperty</code> is
+      <code>true</code>, <b>and</b> the <code>UISelectOne</code> or
+      <code>UISelectMany</code> parent of this option has one or more
+      selected values that <b>are not</b> the "no selection"
+      <code>SelectItem</code>, <b>and</b> the component has a
+      "hideNoSelectionLabel" attribute whose value is <code>true</code>,
+      then the current option, which is the "no selection" option, must
+      not be rendered.</span> If the current child is a
+      <code>UISelectItem</code> create a <code>SelectItem</code>instance
+      from its <code>itemValue, itemLabel</code>, <code
+      class="changed_added_2_0_rev_a">itemEscaped</code>, and
+      <code>itemDescription</code> properties, add it to the list.  If
+      the current child is a <code>UISelectItems</code> instance, call
+      its <code>getValue()</code> method.  If the result is a
+      <code>SelectItem</code> bean, add it to the list.  If the result
+      is an array of <code>SelectItem</code> beans, add each one to the
+      list.  If the result is a <code>Collection</code> of
+      <code>SelectItem</code> beans, add each one to the list.  If the
+      result is a <code>Map</code>, create a <code>SelectItem</code>
+      bean for each entry in the <code>Map</code> using the key as the
+      label, the value as the value, and <code>null</code> as the
+      description.</p>
+
+      <p><span class="changed_modified_2_0_rev_a">Iterate over the list
+      of <code>SelectItem</code> beans.  If the current element is a
+      <code>SelectItemGroup</code>, render an "optgroup" element with a
+      "label" attribute, the value of which is the "label" property from
+      the current element, then call <code>getSelectItems()</code> and
+      render each element as below.  If the current element is not a
+      <code>SelectItemGroup</code>, render an "option" element.  Follow
+      the conversion rules in the spec to obtain a renderable
+      <code>String</code> from the "value" property of the current
+      element, render that as the value of the "value" atribute.  Now it
+      is time to see if the current element is the selected value.  Call
+      its <code>getSubmittedValue()</code> method, casting the result to
+      an <code>Object []</code>, otherwise the component must be a
+      <code>UISelectOne</code> instance, call its
+      <code>getSubmittedValue()</code> method and create an <code>Object
+      []</code> around the result.  Determine the type of the resultant
+      array, if the resultant array is non-null, otherwise the type is
+      <code>String</code>.  Coerce the current item value to this type
+      following the Expression Language coercion rules.  If the
+      resultant array is non-null, we look in the array for a
+      value</span> that, when we pass the renderable value to its
+      <code>equals()</code> method, it returns <code>true</code>,
+      meaning the current element is selected.  If the resultant array
+      is <code>null</code>, if the component is a
+      <code>UISelectMany</code>, call its <code>getValue()</code>
+      method.  If the result is a <code>List</code> obtain the values in
+      the list as an array.  Otherwise, the component must be a
+      <code>UISelectOne</code> instance.  Call its
+      <code>getValue()</code> method, which must be an Object array.
+      Look for an element in the resultant array that, 1. when we pass
+      the renderable value to its <code>equals()</code> method, it
+      returns <code>true</code> , or 2. if the renderable value is null,
+      and there is a null element in the array, also conclude that the
+      current element is selected.  Otherwise the current element is not
+      selected.  Now, if the current value is selected, write out an
+      HTML boolean property "selected".  If the current
+      SelectItem.isDisabled() returns true, render "disabled" as the
+      value of the "disabled" attribute.  <span
+      class="changed_added_2_0_rev_a">If the value of the
+      <code>escape</code> property is true, use the
+      <code>writeText()</code> method of <code>ResponseWriter</code> to
+      write out the value of the <code>label</code> property.
+      Otherwise, use the <code>write()</code> method of the
+      <code>ResponseWriter</code> to do so.</span></p>
+
+      </ul>
+
+      </ul>]]>
+
+            </description>
+            <component-family>javax.faces.SelectMany</component-family>
+            <renderer-type>javax.faces.Listbox</renderer-type>
+            <renderer-class>
+                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/selectmany-listbox-renderer-class/text())"/>
+            </renderer-class>
+
+            <xi:include href="core-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="events-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="focus-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="input-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="listbox-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="selectmany-attrs.xml" xpointer="xpointer(/root/*)"/>
+
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
+        </renderer>
+
+        <renderer>
+
+            <description><![CDATA[<p><span
+            class="changed_modified_2_0">Render</span> an HTML option
+            list.</p>
+
+      <p><a name="decode">Decode Behavior</a></p>
+
+      <ul>
+
+      <p>See the <a
+      href="javax.faces.SelectManyjavax.faces.Listbox.html">"Decode
+      Behavior for UISelectMany Components"</a> section.</p>
+
+      </ul>
+
+      <p>Encode Behavior</p>
+
+      <ul>
+
+      <p>Render an HTML "select" element.  Render the clientId of
+      the component as the value of the "name" attribute.  If the "styleClass"
+      attribute is specified, render its value as the value of the "class"
+      attribute on the "select" element. If the component
+      to be rendered is a UISelectMany, render "multiple" as the value of
+      the "multiple" attribute.  Render "1" as the value of the "size"
+      attribute.  See the <a
+      href="javax.faces.SelectManyjavax.faces.Listbox.html">"Rendering the option
+      elements" </a> specification for <code>ListboxRenderer</code> for
+      more detail on how to render the "option" elements in this
+      renderer.</p>
+
+      </ul>]]>
+
+            </description>
+            <component-family>javax.faces.SelectMany</component-family>
+            <renderer-type>javax.faces.Menu</renderer-type>
+            <renderer-class>
+                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/selectmany-menu-renderer-class/text())"/>
+            </renderer-class>
+
+            <xi:include href="core-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="events-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="focus-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="input-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="menu-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="selectmany-attrs.xml" xpointer="xpointer(/root/*)"/>
+
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
+        </renderer>
+
+        <renderer>
+
+            <description><![CDATA[<p>Render an HTML option list.</p>
+
+      <p><a name="decode">Decode Behavior</a></p>
+
+      <ul>
+
+      <p>See the <a
+      href="javax.faces.SelectManyjavax.faces.Listbox.html">"Decode
+      Behavior for UISelectOne Components"</a> section.</p>
+
+      </ul>
+
+      <p>Encode Behavior</p>
+
+      <ul>
+      <p>Render an HTML "select" element.  Render the clientId of
+      the component as the value of the "name" attribute.  If the "styleClass"
+      attribute is specified, render its value as the value of the "class"
+      attribute on the "select" element. If the component
+      to be rendered is a UISelectMany, render "multiple" as the value of
+      the "multiple" attribute.  If the "size" attribute is specified,
+      render its value as the value of the "size" attribute.  Otherwise
+      use the number of items as the value of the "size" attribute.  See
+      the <a href="javax.faces.SelectManyjavax.faces.Listbox.html">"Rendering the option
+      elements" </a> specification for <code>ListboxRenderer</code> for
+      more detail on how to render the "option" elements in this
+      renderer.</p>
+
+      </ul>]]>
+            </description>
+            <component-family>javax.faces.SelectOne</component-family>
+            <renderer-type>javax.faces.Listbox</renderer-type>
+            <renderer-class>
+                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/selectone-listbox-renderer-class/text())"/>
+            </renderer-class>
+
+            <xi:include href="core-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="events-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="focus-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="input-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="listbox-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="selectone-attrs.xml" xpointer="xpointer(/root/*)"/>
+
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
+        </renderer>
+
+        <renderer>
+
+            <description><![CDATA[<p>Render an HTML option list.</p>
+
+      <p><a name="decode">Decode Behavior</a></p>
+
+      <ul>
+
+      <p>See the <a
+      href="javax.faces.SelectManyjavax.faces.Listbox.html">"Decode
+      Behavior for UISelectOne Components"</a> section.</p>
+
+      </ul>
+
+      <p>Encode Behavior</p>
+
+      <ul>
+
+      <p>Render an HTML "select" element.  Render the clientId of the
+      component as the value of the "name" attribute.  If the
+      "styleClass" attribute is specified, render its value as the value
+      of the "class" attribute on the "select" element. If the component
+      to be rendered is a UISelectMany, render "true" as the value of
+      the "multiple" attribute.  Use the number of items as the value of
+      the "size" attribute.  See the <a
+      href="javax.faces.SelectManyjavax.faces.Listbox.html">"Rendering
+      the option elements" </a> specification for
+      <code>ListboxRenderer</code> for more detail on how to render the
+      "option" elements in this renderer.</p>
+
+      </ul>]]>
+
+            </description>
+            <component-family>javax.faces.SelectOne</component-family>
+            <renderer-type>javax.faces.Menu</renderer-type>
+            <renderer-class>
+                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/selectone-menu-renderer-class/text())"/>
+            </renderer-class>
+
+            <xi:include href="core-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="events-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="focus-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="input-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="menu-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="selectone-attrs.xml" xpointer="xpointer(/root/*)"/>
+
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
+        </renderer>
+
+        <renderer>
+
+            <description><![CDATA[<p><span
+            class="changed_modified_2_0 changed_modified_2_0_rev_a">Render</span> a set of html
+            "input" elements of type "radio".</p>
+
+      <p><a name="decode">Decode Behavior</a></p>
+
+      <ul>
+
+      <p>See the <a
+      href="javax.faces.SelectManyjavax.faces.Listbox.html">"Decode
+      Behavior for UISelectOne Components"</a> section.</p>
+
+      </ul>
+
+      <p>Encode Behavior</p>
+
+      <ul>
+
+      <p>Render a "table" element. If the "styleClass" is specified,
+      render the value of the "styleClass" attribute as the value of the
+      "class" attribute on the "table" element. If the "style", "border"
+      attributes are specified, pass them thru <span
+      class="changed_added_2_0">and render their values as the "style"
+      and "border" attributes on the "table", respectively.</span>. If
+      the "layout" attribute is specified, and its value is
+      "pageDirection", render the children elements vertically,
+      otherwise horizontally, in the table.  If any of the children are
+      an instance of SelectItemGroup, render them as a nested table.
+      Each of the children are ultimately rendered as follows.  Render
+      an "input" element of "type" "radio" for each child component.
+      Render the "name" attribute on the "input" element with the value
+      of the <code>clientId</code> of the component.  Render an "id"
+      attribute on the "input" element.  Each "id" value must be unique.
+      If the current SelectItem.isDisabled() returns true, render
+      "disabled" as the value of the "disabled" attribute.  Close out
+      the "input" element.  Render a "label" element.  Render the "for"
+      attribute of the "label" element whose value is the corresponding
+      "input" element's "id" value.  Render any "style" as the "class"
+      attribute on the "label" element.  Close out the starting "label"
+      element and render the label value from SelectItem.getLabel().
+      Close out the "label" element.  As an exception to the general
+      rules about how to handle the "id" attribute, render it as an
+      attribute on the outer "table" element, the value of which is the
+      <code>clientId</code> of the component per the rules at the
+      beginning of this specification.  Coerce the value of the
+      currently rendered child to the type of the parent UISelectOne
+      value using the Expression Language coercion rules before
+      comparing the values.  If the value of the currently rendered
+      child is equal to the value of the parent UISelectOne, render an
+      appropriate HTML boolean value indicating "checked" for the
+      enclosing "input".  See the <a
+      href="javax.faces.SelectManyjavax.faces.Listbox.html">"Rendering the option elements" </a>
+      specification for <code>ListboxRenderer</code> for more detail on
+      how to render the "option" elements in this renderer.  <span
+      class="changed_modified_2_0_rev_a">Note that this renderer does
+      not support <code>SelectItemGroup</code> elements, so the text
+      that describes the rendering of <code>SelectItemGroup</code> does
+      not apply to this renderer.</span></p>
+
+      </ul>]]>
+
+            </description>
+            <component-family>javax.faces.SelectOne</component-family>
+            <renderer-type>javax.faces.Radio</renderer-type>
+            <renderer-class>
+                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/selectone-radio-renderer-class/text())"/>
+            </renderer-class>
+
+            <xi:include href="core-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="events-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="focus-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="input-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="input-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="selectone-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="selectone-radio-attrs.xml" xpointer="xpointer(/root/*)"/>
+
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
+        </renderer>
+
+        <renderer>
+            <description><![CDATA[<div class="changed_added_2_0">
+
+<p>Renders a composite component.</p>
+
+      <p>Decode Behavior</p>
+
+      <ul>
+
+<p>No action is required during decode for this renderer.</p>
+
+</ul>
+
+      <p>Encode Behavior</p>
+
+	<ul>
+
+           <p>Ask the argument <code>UIComponent</code> for its facet
+           under the key <code>UIComponent.COMPOSITE_FACET_NAME</code>.
+           Such a facet must exist.  Call the <code>encodeAll()</code>
+           method on this facet.</p>
+
+	</ul>
+
+
+
+</div>]]></description>
+
+            <component-family>javax.faces.NamingContainer</component-family>
+            <renderer-type>javax.faces.Composite</renderer-type>
+            <renderer-class>
+               <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/naming-container-composite-renderer-class/text())"/>
+            </renderer-class>
+            <renderer-extension>
+                <ignore-all>true</ignore-all>
+            </renderer-extension>
+        </renderer>
+
+      <renderer>
+            <description><![CDATA[<div class="changed_added_2_0">
+
+<p><span class="changed_modified_2_0_rev_a">Renders</span> a facet at
+this particular point in the composite component VDL page.</p>
+
+      <p>Decode Behavior</p>
+
+      <ul>
+
+<p>No action is required during decode for this renderer.</p>
+
+</ul>
+
+      <p>Encode Behavior</p>
+
+<p><code>encodeBegin()</code> and <code>encodeEnd()</code> must take no
+action for this renderer.  Due to the specification of the
+<code>&lt;composite:insertChildren&gt;</code> tag handler, the component
+passed to the <code>encodeChildern()</code> method of this renderer will
+be the component with <code>component-family</code>
+<code>javax.faces.Output</code> and <code>renderer-type</code> equal to
+the one for this renderer.  The implementation of
+<code><span class="changed_modified_2_0_rev_a">encodeChildren()</span></code>, must obtain the component attribute value
+under the key given by the value of the symbolic constant
+<code>UIComponent.FACETS_KEY</code> from the attributes map of the
+argument component.  If not found, throw <code>IOException</code>.  This
+value is referred to as "facetName" for discission.  Find the closest
+ancestor composite component in which the argument component is nested.
+If no such component can be found, thow <code>IOException</code>.
+Otherwise, get the facet whose name is "facetName".  If found call
+<code>encodeAll()</code> on the facet.</p>
+
+
+
+</div>]]></description>
+
+            <component-family>javax.faces.Output</component-family>
+            <renderer-type>javax.faces.CompositeFacet</renderer-type>
+            <renderer-class>
+               <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/output-composite-facet-renderer-class/text())"/>
+            </renderer-class>
+            <renderer-extension>
+               <ignore-all>true</ignore-all>
+            </renderer-extension>
+        </renderer>
+
+        <renderer>
+            <description><![CDATA[ 
+
+            <p class="changed_modified_2_0"><span
+            class="changed_modified_2_0_rev_a
+            changed_modified_2_1">Render</span> the markup for a
+            <code>&lt;script&gt;</code> element that renders the script
+            <code>Resource</code> specified by the optional
+            <code>name</code> attribute and <code>library</code>
+            attributes.</p>
+
+<p class="changed_modified_2_0">The implementation of this renderer must
+have a <a target="_"
+href="../../javadocs/javax/faces/event/ListenerFor.html"><code>@ListenerFor</code></a>
+annotation attached to it, at the class level, declaring <a target="_"
+href="../../javadocs/javax/faces/event/PostAddToViewEvent.html"><code>PostAddToViewEvent.class</code></a>
+as the value of the <code>systemEventClass</code> attribute.  The
+presence of this annotation on a renderer implies the renderer
+implements <a target="_"
+href="../../javadocs/javax/faces/event/ComponentSystemEventListener.html"><code>ComponentSystemEventListener</code></a>,
+which this renderer must do.  The implementation of
+<code>processEvent()</code> must extract the <code>UIComponent</code>
+from the argument event and look for the presence of the key
+"<code>target</code>" in the component's attribute <code>Map</code>.  If
+and only if such a key is present, the implementation of
+<code>processEvent()</code> must pass the component to <a target="_"
+href="../../javadocs/javax/faces/component/UIViewRoot.html#addComponentResource(javax.faces.context.FacesContext,%20javax.faces.component.UIComponent)"><code>UIViewRoot.addComponentResource()</code></a>.</p>
+
+      <p class="changed_modified_2_0">Decode Behavior</p>
+
+      <ul class="changed_modified_2_0">
+
+<p>No action is required during decode for this renderer.</p>
+
+</ul>
+
+      <p class="changed_modified_2_0">Encode Behavior</p>
+
+      <ul class="changed_modified_2_0">
+
+        <p><a name="ResourceCommonGetResource">Common Algorithm for Obtaining A Resource to Render</a></p>
+
+        <ul>
+
+          <p>This algorithm is used by all resource renderers to obtain
+          a <code>Resource</code> instance which is then rendered in a
+          specific way depending on what kind of renderer is doing the
+          encoding.</p>
+
+          <ul>
+
+	  <li><p>Look in the component attribute <code>Map</code> for a
+	  value under the key <em>name</em>.</p></li>
+
+	  <li><p>Look in the component attribute <code>Map</code> for a
+	  value under the key <em>library</em>.  This attribute is
+	  optional, therefore, <em>library</em> may be
+	  <code>null</code>.</p></li>
+
+	  <li><p>Create the resource by calling
+	  <code>Application.getResourceHandler.createResource(<em>name</em>,
+	  <em>library</em>);</code>.</p></li>
+
+	  </p></li>
+
+          </ul>
+
+        </ul>
+
+        <p><a name="ResourceCommonEncode">Common Encode Behavior</a></p>
+
+      <ul>
+
+       <p>This algorithm is used by all resource renderers to render the
+       resource.</p>
+
+        <p><code>encodeBegin()</code> must take no action.</p>
+
+        <p>Because this renderer returns <code>true</code> from
+        <code>getRendersChildren()</code>, the <code>encodeChildren()
+        method must take the following action.</code></p>
+
+        	<ul>
+
+	  <li><p>If there is no <em>name</em> attribute, and the
+	  argument <code>component</code> has no children, and
+	  <code>ProjectStage</code> is not
+	  <code>ProjectStage.Production</code>, add a
+	  <code>FacesMessage</code> for this component's clientId to the
+	  <code>FacesContext</code> stating that if no name attribute is
+	  present, and no body content is present either, then the user
+	  should take action to correct this problem.  In this case,
+	  <code>encodeChildren()</code> must take no further
+	  action.</p></li>
+
+	  <li><p>If there is no <em>name</em> attribute and the argument
+	  <code>component</code> <b>does</b> have children, the renderer
+	  must ensure that those children are encoded as usual.</p></li>
+
+	  <li><p>If there <b>is</b> a <em>name</em> attribute and the
+	  argument <code>component</code> <b>does</b> have children, the
+	  renderer must log a descriptive localized message stating that
+	  the child content will be ignored.  The resource referenced by
+	  the <em>name</em> attribute will be rendered in
+	  <code>encodeEnd()</code>.</p></li>
+
+	  <li><p>If there <b>is</b> a <em>name attribute</em> and the
+	  argument <code>component</code> <b>does not</b> have children,
+	  <code>encodeChildren()</code> must take no action.</p></li>
+
+	</ul>
+
+       <p><code>encodeEnd()</code> must take specific action based on
+       the specific kind of resource being rendered.</p>
+
+      </ul>
+
+       <p>Use the algorithm <em>Common Encode Behavior</em> for
+       <code>encodeBegin()</code>, <code>encodeChildren()</code> and
+       <code>getRendersChildren()</code>.</p>
+
+        <p>For <code>encodeEnd()</code>, use the algorithm <em>Common
+        Algorithm for Obtaining A Resource to Render</em> above to
+        obtain a reference to the <code>Resource</code> to be
+        encoded.</p>
+
+        <p>If this is NOT the first time this <code>Resource</code> has
+        been referenced on this request take no action and return.</p>
+
+        <p>Render a script element.  <span
+        class="changed_modified_2_1">Call
+        <code>resource.getRequestPath()</code>.  If the result contains
+        a query string, take care to handle it correctly.  Pass the
+        request path to a call to <code>encodeResourceURL()</code> on
+        the <code>ExternalContext</code>.  Use the result as the value
+        of the "src" attribute.  Use the result from calling
+        <code>resource.getContentType()</code> as the value of the
+        "type" attribute.</span></p>
+
+       </ul>
+
+
+]]></description>
+            <component-family>javax.faces.Output</component-family>
+            <renderer-type>javax.faces.resource.Script</renderer-type>
+            <renderer-class>
+               <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/output-script-renderer-class/text())"/>
+            </renderer-class>
+            <xi:include href="output-resource-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <attribute>
+                <description><![CDATA[<div class="changed_added_2_0"><p>The
+                <em>resourceName</em> for this resource.</p></div><div class="changed_modified_2_0_rev_a">
+                <p>This attribute is required</p></div>]]>
+                </description>
+                <display-name>Resource Name</display-name>
+                <icon/>
+                <attribute-name>name</attribute-name>
+                <attribute-class>java.lang.String</attribute-class>
+                <attribute-extension>
+                    <required>true</required>
+                    <tag-attribute>true</tag-attribute>
+                </attribute-extension>
+            </attribute>
+
+            <attribute>
+                <description>
+
+                    <![CDATA[<div class="changed_added_2_0"><p>The
+                    <em>target</em> area for which this resource will be
+                    rendered.  For example, <em>target="head"</em> would
+                    cause the resource to be rendered within the
+                    <em>head</em> element.  <span
+                    class="changed_modified_2_0_rev_a">If no value is
+                    specififed, the script element is rendered at the
+                    same point in the view where the tag is
+                    located.</span> <span
+                    class="changed_modified_2_0_rev_a">Currently
+                    supported values for this attribute are "head",
+                    "body", and "form".</span></p></div>]]>
+
+                </description>
+                <display-name>Target</display-name>
+                <icon></icon>
+                <attribute-name>target</attribute-name>
+                <attribute-class>java.lang.String</attribute-class>
+                <attribute-extension>
+                    <required>false</required>
+                    <tag-attribute>true</tag-attribute>
+                </attribute-extension>
+
+            </attribute>
+            <renderer-extension>
+                <jsp-ignore>true</jsp-ignore>
+                <renders-children>true</renders-children>
+            </renderer-extension>            
+        </renderer>
+
+        <renderer>
+            <description><![CDATA[
+
+<p><span class="changed_modified_2_0 changed_modified_2_0_rev_a
+changed_modified_2_1">Render</span> the markup for a
+<code>&lt;link&gt;</code> element that renders the style
+<code>Resource</code> specified by the optional <code>name</code> and
+<code>library</code> attributes.</p>
+
+      <p class="changed_modified_2_0">Decode Behavior</p>
+
+      <ul class="changed_modified_2_0">
+
+<p>No action is required during decode for this renderer.</p>
+
+</ul>
+
+      <p class="changed_modified_2_0">Encode Behavior</p>
+
+      <ul class="changed_modified_2_0">
+
+       <p>Use the algorithm <em>Common Encode Behavior</em> for
+       <code>encodeBegin()</code>, <code>encodeChildren()</code> and
+       <code>getRendersChildren()</code>.</p>
+
+        <p>For <code>encodeEnd()</code>, use the algorithm <a
+        href="javax.faces.Outputjavax.faces.resource.Script.html#ResourceCommonGetResource">Common
+        Algorithm for Obtaining A Resource to Render</a> to obtain a
+        reference to the <code>Resource</code> to be encoded.</p>
+
+<p>Output a <code>&lt;link&gt;</code> element.  Use the result from
+calling <code>resource.getRequestPath()</code> as the value of the
+"href" attribute, the result from calling
+<code>resource.getContentType()</code> as the value of the "type"
+attribute, the literal string "stylesheet" as the value of the "rel"
+attribute, and the literal string "screen" as the value of the "media"
+<span class="changed_modified_2_1">attribute, and the value of the
+"media" attribute set to the value of the "media" attribute of this
+tag.</span></p>
+
+
+<p>The implementation of this renderer must have a <a target="_"
+href="../../javadocs/javax/faces/event/ListenerFor.html"><code>@ListenerFor</code></a>
+annotation attached to it, at the class level, declaring <a target="_"
+href="../../javadocs/javax/faces/event/PostAddToViewEvent.html"><code>PostAddToViewEvent.class</code></a>
+as the value of the <code>systemEventClass</code> attribute.  The presence of
+this annotation on a renderer implies the renderer implements <a target="_"
+href="../../javadocs/javax/faces/event/ComponentSystemEventListener.html"><code>ComponentSystemEventListener</code></a>,
+which this renderer must do.  The implementation of
+<code>processEvent()</code> must extract the <code>UIComponent</code>
+from the argument event pass it to <a target="_"
+href="../../javadocs/javax/faces/component/UIViewRoot.html#addComponentResource(javax.faces.context.FacesContext,%20javax.faces.component.UIComponent,%20java.lang.String)"><code>UIViewRoot.addComponentResource()</code></a>, specifying
+the literal string "<code>head</code>" as the last argument.</p>
+
+<p>The stylsheet renderer must ensure that any stylesheets are included in the &lt;head&gt; of the document. 
+</p>
+
+</ul>
+
+]]></description>
+            <component-family>javax.faces.Output</component-family>
+            <renderer-type>javax.faces.resource.Stylesheet</renderer-type>
+            <renderer-class>
+               <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/output-stylesheet-renderer-class/text())"/>
+            </renderer-class>
+            <xi:include href="output-resource-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <attribute>
+                <description><![CDATA[<div class="changed_added_2_0"><p>The
+                <em>resourceName</em> for this resource.</p></div><div class="changed_modified_2_1">
+                <p>This attribute is required</p></div>]]>
+                </description>
+                <display-name>Resource Name</display-name>
+                <icon/>
+                <attribute-name>name</attribute-name>
+                <attribute-class>java.lang.String</attribute-class>
+                <attribute-extension>
+                    <required>true</required>
+                    <tag-attribute>true</tag-attribute>
+                </attribute-extension>
+            </attribute>
+
+            <attribute>
+                <description>
+
+                    <![CDATA[<div class="changed_added_2_1"><p>The
+                    <em>media</em> type for this stylesheet.  For
+                    example, <em>media="screen"</em> would cause the
+                    resource to be rendered with the <em>media</em>
+                    attribute of the <em>link</em> set to
+                    <em>screen</em>.</p></div>]]>
+
+                </description>
+                <display-name>Media</display-name>
+                <icon></icon>
+                <attribute-name>media</attribute-name>
+                <attribute-class>java.lang.String</attribute-class>
+                <attribute-extension>
+                    <required>false</required>
+                    <tag-attribute>true</tag-attribute>
+                </attribute-extension>
+
+            </attribute>
+
+
+            <renderer-extension>
+                <jsp-ignore>true</jsp-ignore>
+                <renders-children>true</renders-children>
+            </renderer-extension>
+        </renderer>
+
+
+<renderer>
+            <description><![CDATA[<div class="changed_added_2_1">
+
+<p><span class="changed_added_2_1">Render</span> the markup for
+a <code>&lt;!DOCTYPE&gt;</code> declaration.</p>
+
+      <p>Decode Behavior</p>
+
+      <ul>
+
+<p>No action is required during decode for this renderer.</p>
+
+</ul>
+
+      <p>Encode Behavior</p>
+
+<p>Output an XML Doctype using the provided attributes.  Output the
+literal text <code>&lt;!DOCTYPE</code>. The "rootElement" attribute is
+required and must be rendered next.  If the "public" attribute is
+defined, render the literal text <code>PUBLIC</code> then render the
+value of the attribute inside double quotes.  If the "system" attribute
+is defined, render it next, inside double quotes.  Close the doctype
+declaration with the literal text <code>&gt;</code>.</p>
+
+
+</div>]]></description>
+            <component-family>javax.faces.Output</component-family>
+            <renderer-type>javax.faces.Doctype</renderer-type>
+            <renderer-class>
+               <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/output-doctype-renderer-class/text())"/>
+            </renderer-class>
+
+            <xi:include href="doctype-attrs.xml" xpointer="xpointer(/root/*)"/>
+
+            <renderer-extension>
+                <jsp-ignore>true</jsp-ignore>
+                <tag-name>doctype</tag-name>
+            </renderer-extension>
+        </renderer>
+
+        <renderer>
+            <description><![CDATA[
+
+<p><span class="changed_modified_2_0_rev_a
+changed_modified_2_1">Render</span> the markup for a
+<code>&lt;head&gt;</code> element.</p>
+
+<div class="changed_added_2_0">
+
+      <p>Decode Behavior</p>
+
+      <ul>
+
+<p>No action is required during decode for this renderer.</p>
+
+</ul>
+
+      <p>Encode Behavior</p>
+
+      <ul>
+
+<p>Render the starting <code>&lt;head&gt;</code> element tag.  Any
+attributes declared on the element must be passed through unmodified to
+the rendered output.  <span class="changed_modified_2_0_rev_a">At some
+point before rendering the closing <code>&lt;/head&gt;</code> element
+tag</span>, render any resources that have been targeted for this "head"
+element:
+      <ul>
+      <li>Obtain a <code>UIViewRoot</code> instance.</li>
+      <li>Obtain a <code>List</code> of component resources targeted for
+      this "head" element with a call to <code>UIViewRoot.getComponentResources()</code>
+      with the <code>String "head"</code> as the argument.</li>
+      <li>Iterate over the returned <code>List</code> of <code>UIComponent</code> instances
+      and call <code>encodeAll</code> on each <code>UIComponent</code> instance. 
+
+<p>Any attributes declared on the element must be passed through
+unmodified to the rendered output.</p>
+
+      </ul>
+
+<div class="changed_modified_2_0_rev_a">
+
+      <p>Note that due to the cascading nature of CSS files, the order
+      in which these files have been added to the view must be preserved
+      when rendering the references to the files within the
+      <code>&lt;head&gt;</code> element.  Also, the end result of the
+      rendered <code>&lt;head&gt;</code> section must be that any CSS
+      files referenced due to previous calls to
+      <code>addComponentResource()</code> do not adversely interfere
+      with any CSS files manually placed in this section by the page
+      author.</p>
+
+      <p>Render the ending <code>&lt;/head&gt;</code> element tag.</p>
+
+</div>
+
+</div>]]></description>
+            <component-family>javax.faces.Output</component-family>
+            <renderer-type>javax.faces.Head</renderer-type>
+            <renderer-class>
+               <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/output-head-renderer-class/text())"/>
+            </renderer-class>
+
+            <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="document-attrs.xml" xpointer="xpointer(/root/*)"/>
+
+            <renderer-extension>
+                <jsp-ignore>true</jsp-ignore>
+                <tag-name>head</tag-name>
+            </renderer-extension>
+        </renderer>
+
+        <renderer>
+            <description><![CDATA[
+
+<p><span class="changed_modified_2_1 changed_added_2_0">Render</span> the markup for a
+<code>&lt;body&gt;</code> element.</p>
+
+<div class="changed_added_2_0">
+
+      <p>Decode Behavior</p>
+
+      <ul>
+
+<p>No action is required during decode for this renderer.</p>
+
+</ul>
+
+      <p>Encode Behavior</p>
+
+      <ul>
+
+<p>Render the starting <code>&lt;body&gt;</code> element tag. Just before rendering the
+      closing <code>&lt;/body&gt;</code> element tag, render any resources that have been targeted
+      for this "body" element:
+      <ul>
+      <li>Obtain a <code>UIViewRoot</code> instance.</li>
+
+      <li>Obtain a <code>List</code> of component resources targeted for
+      this "body" element with a call to
+      <code>UIViewRoot.getComponentResources()</code> with the
+      <code>String "body"</code> as the argument.  Render the ending
+      <code>&lt;/body&gt;</code> element tag.</li>
+
+      <li>Iterate over the returned <code>List</code> of <code>UIComponent</code> instances
+      and call <code>encodeAll</code> on each <code>UIComponent</code> instance.
+      </ul>
+
+<p>Any attributes declared on the element must be passed through
+unmodified to the rendered output.</p>
+
+</div>]]></description>
+            <component-family>javax.faces.Output</component-family>
+            <renderer-type>javax.faces.Body</renderer-type>
+            <renderer-class>
+               <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/output-body-renderer-class/text())"/>
+            </renderer-class>
+ 
+            <xi:include href="core-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="document-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="events-attrs.xml" xpointer="xpointer(/root/*)"/>
+
+            <attribute>
+               <description>
+                   Javascript code executed when the user agent finishes loading
+                   a window or all frames within a frameset.
+               </description>
+               <display-name>Body Onload Script</display-name>
+               <icon></icon>
+               <attribute-name>onload</attribute-name>
+               <attribute-class>java.lang.String</attribute-class>
+               <attribute-extension>
+                   <pass-through>true</pass-through>
+                   <behavior/>
+               </attribute-extension>
+            </attribute> 
+
+            <attribute>
+               <description>
+                   Javascript code executed when the user agent removes 
+                   a document from a window or frame. 
+               </description>
+               <display-name>Body Onunload Script</display-name>
+               <icon></icon>
+               <attribute-name>onunload</attribute-name>
+               <attribute-class>java.lang.String</attribute-class>
+               <attribute-extension>
+                   <pass-through>true</pass-through>
+                   <behavior/>
+               </attribute-extension>
+            </attribute> 
+
+            <renderer-extension>
+                <jsp-ignore>true</jsp-ignore>
+                <tag-name>body</tag-name>
+            </renderer-extension>
+        </renderer>
+
+
+    </render-kit>
+
+</faces-config>

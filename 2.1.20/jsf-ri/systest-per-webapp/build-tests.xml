@@ -1,0 +1,249 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+
+    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+    Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+
+    The contents of this file are subject to the terms of either the GNU
+    General Public License Version 2 only ("GPL") or the Common Development
+    and Distribution License("CDDL") (collectively, the "License").  You
+    may not use this file except in compliance with the License.  You can
+    obtain a copy of the License at
+    https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+    or packager/legal/LICENSE.txt.  See the License for the specific
+    language governing permissions and limitations under the License.
+
+    When distributing the software, include this License Header Notice in each
+    file and include the License file at packager/legal/LICENSE.txt.
+
+    GPL Classpath Exception:
+    Oracle designates this particular file as subject to the "Classpath"
+    exception as provided by Oracle in the GPL Version 2 section of the License
+    file that accompanied this code.
+
+    Modifications:
+    If applicable, add the following below the License Header, with the fields
+    enclosed by brackets [] replaced by your own identifying information:
+    "Portions Copyright [year] [name of copyright owner]"
+
+    Contributor(s):
+    If you wish your version of this file to be governed by only the CDDL or
+    only the GPL Version 2, indicate your decision by adding "[Contributor]
+    elects to include this software in this distribution under the [CDDL or GPL
+    Version 2] license."  If you don't indicate a single choice of license, a
+    recipient has the option to distribute your version of this file under
+    either the CDDL, the GPL Version 2 or to extend the choice of license to
+    its licensees as provided above.  However, if you add GPL Version 2 code
+    and therefore, elected the GPL Version 2 license, then the option applies
+    only if the new code is made subject to such option by the copyright
+    holder.
+
+-->
+
+<!-- ********** JSF System Integration Test File ************************** -->
+
+
+<project name="JSF-RI-Systest-Execute" default="test" basedir=".">
+
+
+    <!-- =========================== Configuration ============================ -->
+
+
+    <property file="${user.home}/build.properties"/>
+    <property file="../../build.properties"/>
+    <import file="${jsf.build.home}/common/ant/common.xml"/>
+
+
+    <!-- Property definitions to map the application to a JUnit test case -->
+    <property  name="annotation-restrictions"
+               value="com/sun/faces/systest/AnnotationProcessingTestCase.class" />
+    <property name="absolute-ordering"
+              value="com/sun/faces/systest/AbsoluteOrderingTestCase.class"/>
+    <property name="clientside-statesaving"
+              value="com/sun/faces/systest/clientside/AjaxMultiformTestCase.class"/>
+    <property name="document-ordering"
+              value="com/sun/faces/systest/DocumentOrderingTestCase.class"/>
+    <property name="empty-string-as-null"
+              value="com/sun/faces/systest/EmptyStringAsNullTestCase.class"/>
+    <property name="flash"
+              value="com/sun/faces/systest/FlashTestCase.class"/>
+    <property name="jsp-flash"
+              value="com/sun/faces/systest/JspFlashTestCase.class"/>
+    <property name="resource-locale-prefix"
+              value="com/sun/faces/systest/ResourceLocalePrefixTestCase.class"/>
+    <property name="replace-application"
+              value="com/sun/faces/systest/ReplaceApplicationTestCase.class"/>
+    <property name="replace-statemanager"
+              value="com/sun/faces/systest/ReplaceStateManagerTestCase.class"/>
+    <property name="invalid-mapping"
+              value="com/sun/faces/systest/InvalidMappingTestCase.class"/>
+    <property name="nested-datatables"
+              value="com/sun/faces/systest/NestedDatatablesTestCase.class"/>
+    <property name="nested-loadbundles"
+              value="com/sun/faces/systest/NestedLoadBundlesTestCase.class"/>
+    <property name="jar-ordering"
+              value="com/sun/faces/systest/JarOrderingTestCase.class"/>
+    <property name="replace-lifecycle"
+              value="com/sun/faces/systest/ReplaceLifecycleTestCase.class"/>
+    <property name="string-converter"
+              value="com/sun/faces/systest/StringConverterTestCase.class"/>
+    <property name="replace-variableresolver" 
+              value="com/sun/faces/systest/ReplaceVariableResolverTestCase.class"/>
+    <property name="replace-variableresolver-programmatically" 
+              value="com/sun/faces/systest/ReplaceVariableResolverTestCase.class"/>
+    <property name="add-er-replace-vr" 
+              value="com/sun/faces/systest/AddELResolverAndReplaceVariableresolverProgrammaticallyTestCase.class"/>
+    <property name="replace-vr-add-er" 
+              value="com/sun/faces/systest/ReplaceVariableResolverAndAddELResolverProgrammaticallyTestCase.class"/>
+    <property name="converter-property-editor" 
+              value="com/sun/faces/systest/ConverterPropertyEditorTestCase.class"/>
+    <property name="late-bindings"
+              value="com/sun/faces/systest/LateBindingTestCase.class"/>
+    <property name="property-resolver-jsp"
+              value="com/sun/faces/systest/PropertyResolverJspTestCase.class"/>
+    <property name="never-unwrap-exceptions"
+              value="com/sun/faces/systest/NeverUnwrapExceptionsTestCase.class"/>
+    <property name="write-attribute-script-enabled"
+              value="com/sun/faces/systest/WriteAttributeScriptEnabledTestCase.class"/>
+    <property name="write-attribute-script-disabled"
+              value="com/sun/faces/systest/WriteAttributeScriptDisabledTestCase.class"/>
+    <property name="write-attribute-script-enabled"
+              value="com/sun/faces/systest/WriteAttributeScriptEnabledTestCase.class"/>
+    <property name="disable-unicode-escaping"
+              value="com/sun/faces/systest/UnicodeTestCase.class"/>
+    <property name="wcag-datatable"
+              value="com/sun/faces/systest/WcagDataTableTestCase.class"/>
+    <property name="disable-bean-validator"
+              value="com/sun/faces/systest/DisableBeanValidatorTestCase.class"/>
+    <property  name="no-web-xml"
+               value="com/sun/faces/systest/NoWebXMLTestCase.class" />
+    <property  name="injection"
+               value="com/sun/faces/systest/InjectionTestCase.class" />
+    <property  name="suppress-xml-decl"
+               value="com/sun/faces/systest/SuppressXmlDeclTestCase.class" />
+    <property  name="groovy"
+               value="com/sun/faces/systest/GroovyTestCase.class" />
+    <property  name="myfaces-uidata-component-state-test"
+               value="com/sun/faces/systest/myfaces_uidata_component_state_test/MyFacesUIDataTestCase.class" />
+    <property  name="process-as-jspx"
+               value="com/sun/faces/systest/ProcessAsJspxTestCase.class" />
+    <property  name="request-char-encoding-no-session"
+               value="com/sun/faces/systest/NoSessionCharEncTestCase.class" />
+    <property  name="request-char-encoding-no-session"
+               value="com/sun/faces/systest/NoSessionCharEncTestCase.class" />
+    <property  name="bogus-render-kit-id"
+               value="com/sun/faces/systest/render/BogusRenderKitIdTestCase.class" />
+    <property  name="characterCombat"
+               value="characterCombat/CharacterCombatTestCase.class" />
+    <property  name="cluster-no-agressive-session-dirtying"
+               value="com/sun/faces/systest/ClusterNoAgressiveSessionDirtyingTestCase.class" />
+
+    <!--
+        EXCLUDED APPLICATIONS:
+
+        <property name="core-tags
+                  value="com/sun/faces/systest/CoreTagsTestCase.class"/>
+        <property name="view-expired"
+                  value="com/sun/faces/systest/ViewExpiredExceptionTestCase.class"/>
+    -->
+
+
+    <!-- ======================== Test Execution ============================== -->
+
+
+    <target name="test" depends="define.scenario.aware.port"
+            description="Execute all tests against installed applications">
+        <property name="systest-per-webapp.results.dir" 
+                  value="${impl.test.results.dir}/systest-per-webapp" />
+
+        <mkdir dir="${systest-per-webapp.results.dir}" />
+
+        <for list="${applications}" param="app" trim="true">
+            <sequential>
+              <propertycopy name="test.name"
+                            from="@{app}"
+                            override="true"/>
+              <test-webapp app-name="@{app}"
+                           app-base-dir="${basedir}/@{app}"
+                           test-case="${test.name}"
+                           test-results-dir="${systest-per-webapp.results.dir}" />
+            </sequential>
+        </for>
+
+        <rename.test-results prefix="non-virtual-server" 
+                             destdir="${impl.test.results.dir}"
+                             srcdir="${systest-per-webapp.results.dir}" />
+        <delete failonerror="false" dir="${systest-per-webapp.results.dir}" />
+
+    </target>
+
+    <target name="test-virtual-server" depends="define.virtual-server.aware.port"
+            description="Execute all tests against installed applications">
+        <property name="systest-per-webapp.results.dir" 
+                  value="${impl.test.results.dir}/systest-per-webapp-virtual-server" />
+
+        <mkdir dir="${systest-per-webapp.results.dir}" />
+
+        <for list="${applications}" param="app" trim="true">
+            <sequential>
+              <propertycopy name="test.name"
+                            from="@{app}"
+                            override="true"/>
+              <test-webapp app-name="@{app}"
+                           app-base-dir="${basedir}/@{app}"
+                           test-case="${test.name}" virtual-server="true"
+                           test-results-dir="${systest-per-webapp.results.dir}"/>
+            </sequential>
+        </for>
+        <rename.test-results prefix="virtual-server" 
+                             destdir="${impl.test.results.dir}"
+                             srcdir="${systest-per-webapp.results.dir}" />
+        <delete failonerror="false" dir="${systest-per-webapp.results.dir}" />
+
+
+    </target>
+
+    <macrodef name="rename.test-results">
+      <attribute name="prefix" />
+      <attribute name="srcdir" />
+      <attribute name="destdir" />
+      <sequential>
+        <move todir="@{destdir}" 
+              includeemptydirs="false" overwrite="true">
+                <fileset dir="@{srcdir}">
+                  <exclude name="**/TEST-@{prefix}-*.xml"/>
+                </fileset>
+                <mapper type="glob" from="TEST-*.xml" to="TEST-@{prefix}-*.xml"/>
+        </move>
+      </sequential>
+    </macrodef>
+
+    <macrodef name="test-webapp">
+        <attribute name="app-name"/>
+        <attribute name="app-base-dir"/>
+        <attribute name="test-case"/>
+        <attribute name="virtual-server" default=""/>
+        <attribute name="test-results-dir" default="${impl.test.results.dir}"/>
+        <sequential>
+            <path id="test.classpath">
+                <pathelement location="@{app-base-dir}/build/classes"/>
+                <pathelement location="${basedir}/build/classes"/>
+                <path refid="htmlunit.runtime.classpath"/>
+                <path refid="html.classpath"/>
+            </path>
+            <jsf.junit classpath-refid="test.classpath"
+                       context-path="/jsf-@{app-name}"
+                       instance.numbers="${instance.numbers}"
+                       test-results-dir="@{test-results-dir}"
+                       custom.port="${scenario.aware.port}"
+                       virtual-server="@{virtual-server}">
+                <tests>
+                    <fileset dir="@{app-base-dir}/build/classes"
+                             includes="@{test-case}"/>
+                </tests>
+            </jsf.junit>
+        </sequential>
+    </macrodef>
+
+</project>

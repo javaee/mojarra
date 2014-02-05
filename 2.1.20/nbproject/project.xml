@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://www.netbeans.org/ns/project/1">
+    <type>org.netbeans.modules.ant.freeform</type>
+    <configuration>
+        <general-data xmlns="http://www.netbeans.org/ns/freeform-project/1">
+            <name>mojarra-2.1.20-SNAPSHOT</name>
+        </general-data>
+        <general-data xmlns="http://www.netbeans.org/ns/freeform-project/2">
+            <!-- Do not use Project Properties customizer when editing this file manually. -->
+            <name>mojarra-2.1.20-SNAPSHOT</name>
+            <properties>
+                <property-file>build.properties</property-file>
+            </properties>
+            <folders>
+                <source-folder>
+                    <label>Mojarra</label>
+                    <location>.</location>
+                    <encoding>UTF-8</encoding>
+                </source-folder>
+                <source-folder>
+                    <label>jsf-ri/build/generate</label>
+                    <type>java</type>
+                    <location>jsf-ri/build/generate</location>
+                    <encoding>UTF-8</encoding>
+                </source-folder>
+                <source-folder>
+                    <label>jsf-api/build/generate</label>
+                    <type>java</type>
+                    <location>jsf-api/build/generate</location>
+                    <encoding>UTF-8</encoding>
+                </source-folder>
+                <source-folder>
+                    <label>jsf-api/src/main/java</label>
+                    <type>java</type>
+                    <location>jsf-api/src/main/java</location>
+                    <encoding>UTF-8</encoding>
+                </source-folder>
+                <source-folder>
+                    <label>jsf-ri/src/main/java</label>
+                    <type>java</type>
+                    <location>jsf-ri/src/main/java</location>
+                    <encoding>UTF-8</encoding>
+                </source-folder>
+            </folders>
+            <ide-actions>
+                <action name="build">
+                    <target>main</target>
+                </action>
+                <action name="clean">
+                    <target>clean</target>
+                </action>
+                <action name="javadoc">
+                    <target>build.javadocs.dist</target>
+                </action>
+                <action name="test">
+                    <target>test</target>
+                </action>
+                <action name="rebuild">
+                    <target>clean</target>
+                    <target>main</target>
+                </action>
+            </ide-actions>
+            <view>
+                <items>
+                    <source-folder style="packages">
+                        <label>jsf-ri/build/generate</label>
+                        <location>jsf-ri/build/generate</location>
+                    </source-folder>
+                    <source-folder style="packages">
+                        <label>jsf-api/build/generate</label>
+                        <location>jsf-api/build/generate</location>
+                    </source-folder>
+                    <source-folder style="packages">
+                        <label>jsf-api/src/main/java</label>
+                        <location>jsf-api/src/main/java</location>
+                    </source-folder>
+                    <source-folder style="packages">
+                        <label>jsf-ri/src/main/java</label>
+                        <location>jsf-ri/src/main/java</location>
+                    </source-folder>
+                    <source-file>
+                        <location>build.xml</location>
+                    </source-file>
+                </items>
+                <context-menu>
+                    <ide-action name="build"/>
+                    <ide-action name="rebuild"/>
+                    <ide-action name="clean"/>
+                    <ide-action name="javadoc"/>
+                    <ide-action name="test"/>
+                </context-menu>
+            </view>
+            <subprojects/>
+        </general-data>
+        <java-data xmlns="http://www.netbeans.org/ns/freeform-project-java/2">
+            <compilation-unit>
+                <package-root>jsf-api/src/main/java</package-root>
+                <package-root>jsf-ri/src/main/java</package-root>
+                <package-root>jsf-api/build/generate</package-root>
+                <package-root>jsf-ri/build/generate</package-root>
+                <classpath mode="compile">D:\Glassfish3.1.2.2\glassfish\modules\javax.el-api.jar;D:\Glassfish3.1.2.2\glassfish\modules\javax.servlet-api.jar;D:\Glassfish3.1.2.2\glassfish\modules\javax.servlet.jsp-api.jar;dependencies/jars/jsp-api-2.1.jar;dependencies/jars/jstl-1.2.jar;dependencies/jars/validation-api-1.0.0.GA.jar;dependencies/jars/servlet-api-3.0.20100224.jar;dependencies/jars/groovy-all-1.6.9.jar;dependencies/jars/junit-3.8.1.jar;lib/jsf-extensions-test-time.jar;lib/cactus-1.7.1-javaee5.jar;dependencies/jars/cdi-api-1.0-SP1.jar;dependencies/jars/javax.inject-1.0-PFD-1.jar;D:/Glassfish3.1.2.2/glassfish/modules/bean-validator.jar</classpath>
+                <source-level>1.5</source-level>
+            </compilation-unit>
+        </java-data>
+    </configuration>
+</project>

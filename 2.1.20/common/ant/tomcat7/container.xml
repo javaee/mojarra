@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+      
+<!--
+ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+ 
+ Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ 
+ The contents of this file are subject to the terms of either the GNU
+ General Public License Version 2 only ("GPL") or the Common Development
+ and Distribution License("CDDL") (collectively, the "License").  You
+ may not use this file except in compliance with the License. You can obtain
+ a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
+ or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
+ language governing permissions and limitations under the License.
+ 
+ When distributing the software, include this License Header Notice in each
+ file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
+ Sun designates this particular file as subject to the "Classpath" exception
+ as provided by Sun in the GPL Version 2 section of the License file that
+ accompanied this code.  If applicable, add the following below the License
+ Header, with the fields enclosed by brackets [] replaced by your own
+ identifying information: "Portions Copyrighted [year]
+ [name of copyright owner]"
+ 
+ Contributor(s):
+ 
+ If you wish your version of this file to be governed by only the CDDL or
+ only the GPL Version 2, indicate your decision by adding "[Contributor]
+ elects to include this software in this distribution under the [CDDL or GPL
+ Version 2] license."  If you don't indicate a single choice of license, a
+ recipient has the option to distribute your version of this file under
+ either the CDDL, the GPL Version 2 or to extend the choice of license to
+ its licensees as provided above.  However, if you add GPL Version 2 code
+ and therefore, elected the GPL Version 2 license, then the option applies
+ only if the new code is made subject to such option by the copyright
+ holder.
+-->
+<project name="Tomcat" basedir=".">
+ 
+    <!-- 
+       JARs that may be packaged in WEB-INF/lib
+       in order for the implementation to run 
+       properly if they aren't availabe in the
+       container's classloader.  
+   
+       This is a comma separated list of fully
+       qualified JARs.
+    -->
+    <property name="webapp.jars" value="${jstl.jar}"/>
+
+    <property name="tomcat.Xms" value="512m" />
+    <property name="tomcat.Xmx" value="786m" />
+    <property name="tomcat.debug.port" value="9009" />
+
+
+
+    <!-- Required Targets/Macrodefs -->
+    
+    <!-- 
+       Deploys the specified artifact to the
+       target container.
+    -->      
+    <macrodef name="deploy.artifact">
+        <attribute name="artifact"
+                   description="The WAR to deploy"/>
+        <attribute name="appName"
+                   description="The name of the application"/>
+        <attribute name="use-virtual-servers"
+                   description="If true, deploy to the virtual servers."
+                   default="false"/>
+        <sequential>
+            <echo>
+
+---------------- Apache Tomcat - Deploying @{appName} ----------------
+
+            </echo>
+            <copy file="@{artifact}" toDir="${container.home}/webapps" />
+            <sleep seconds="8" />
+
+        </sequential>
+    </macrodef>
+
+    <!-- 
+        Undeploy the specified WAR from the 
+        target container.
+    -->
+    <macrodef name="undeploy.artifact">
+        <attribute name="artifact"
+                   description="The WAR to deploy"/>
+        <attribute name="appName"
+                   description="The name of the application"/>
+        <sequential>
+            <echo>
+
+---------------- Apache Tomcat - Undeploying @{appName} ----------------
+
+            </echo>
+            <basename file="@{artifact}" property="warFile" />
+            <delete file="${container.home}/webapps/${warFile}" />
+            <sleep seconds="8" />
+
+        </sequential>
+    </macrodef>
+    
+    <!-- 
+        Perform any configuration of the target container in order
+        to run the unit tests.
+        
+        Ensure the following at a minimum:
+           java.util.PropertyPermission is read,write
+           java.lang.ReflectPermission is "*"                   
+    -->
+    <target name="config.container"
+            description="Perform any container specific configuration necessary for the unit tests to run">
+    </target>
+
+    <!--
+         Display/Validate any property information necessary to build 
+         successfully.
+     -->
+    <target name="props">
+        <echo message="Provide 'props' implementation"/>            
+    </target>
+    
+    <!--
+        OPTIONAL
+          Update the javax.faces.jar's manfest file
+          with the versions of the compile time
+          dependencies.
+    -->
+    <target name="update.impl.manifest">
+        <echo message="Provide 'update.impl.manifest' implementation"/>
+    </target>
+
+    <!--
+        OPTIONAL
+          Perform whatever steps are necessary to integrate
+          Sun's JavaServer Faces implementation into the
+          target container.
+    -->
+    <target name="container.deploy" 
+            description="Deploy the JSF Implementation artifacts to the target container.">
+        <copy overwrite="true" file="${impl.dir}/build/lib/javax.faces.jar" toFile="${container.home}/lib/javax.faces.jar"/>
+        <copy overwrite="true" file="${jstl.jar}" todir="${container.home}/lib"/>
+    </target>
+
+
+    <target name="container.start"
+            description="Start the Tomcat container">
+        <container.start/>
+    </target>
+
+    <target name="container.stop"
+            description="Stop the Tomcat container">
+        <container.stop/>
+    </target>
+
+    <target name="container.debug"
+            description="Start the Tomcat container in debug mode">
+        <container.debug/>
+    </target>
+
+    <target name="container.restart"
+            description="Stop the Tomcat container">
+        <container.stop/>
+        <container.start/>
+    </target>
+    
+    <target name="define.scenario.aware.port">
+      <property name="scenario.aware.port" value="${container.port}" />
+    </target>
+
+    <target name="define.virtual-server.aware.port">
+      <property name="scenario.aware.port" value="${container.port}" />
+    </target>
+
+    <!-- 
+        OPTIONAL
+          Start the container
+    -->
+    <macrodef name="container.start"
+            description="Start the target container.">
+        <sequential>
+
+            <java classname="org.apache.catalina.startup.Bootstrap" fork="true" spawn="true">
+                <classpath>
+                    <pathelement path="${container.home}/bin/bootstrap.jar" />
+                    <pathelement path="${container.home}/bin/tomcat-juli.jar" />
+                </classpath>
+                <jvmarg value="-Dorg.apache.el.parser.SKIP_IDENTIFIER_CHECK=true" />
+                <jvmarg value="-Dcatalina.home=${container.home}" />
+                <jvmarg value="-Dcatalina.base=${container.home}" />
+                <jvmarg value="-Djava.util.logging.config.file=${container.home}/conf/logging.properties" />
+                <jvmarg value="-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager" />
+                <jvmarg value="-Xms${tomcat.Xms}" />
+                <jvmarg value="-Xmx${tomcat.Xmx}" />
+                <jvmarg value="-XX:MaxPermSize=${tomcat.Xmx}" />
+                <jvmarg value="-client" />
+                <arg value="start" />
+            </java>
+
+        </sequential>
+    </macrodef>
+
+    <!--
+        OPTIONAL
+          Start the container in debug mode
+    -->
+    <macrodef name="container.debug"
+            description="Start the target container in debug mode.">
+        <sequential>
+
+            <java classname="org.apache.catalina.startup.Bootstrap" fork="true" spawn="true">
+                <classpath>
+                    <pathelement path="${container.home}/bin/bootstrap.jar" />
+                    <pathelement path="${container.home}/bin/tomcat-juli.jar" />
+                </classpath>
+                <jvmarg value="-Dcatalina.home=${container.home}" />
+                <jvmarg value="-Dorg.apache.el.parser.SKIP_IDENTIFIER_CHECK=true" />
+                <jvmarg value="-Dcatalina.base=${container.home}" />
+                <jvmarg value="-Djava.util.logging.config.file=${container.home}/conf/logging.properties" />
+                <jvmarg value="-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager" />
+                <jvmarg value="-Xms${tomcat.Xms}" />
+                <jvmarg value="-Xmx${tomcat.Xmx}" />
+                <jvmarg value="-XX:MaxPermSize=${tomcat.Xmx}" />
+                <jvmarg value="-Xdebug"/>
+    			<jvmarg value="-Xrunjdwp:transport=dt_socket,address=${tomcat.debug.port},server=y,suspend=n"/>
+                <jvmarg value="-client" />
+                <arg value="start" />
+            </java>
+            
+
+        </sequential>
+    </macrodef>
+    <!--
+       OPTIONAL
+          Stop the container
+    -->
+    <macrodef name="container.stop"
+              description="Stop the target container.">
+        <sequential>
+            <java classname="org.apache.catalina.startup.Bootstrap" fork="true" spawn="true">
+                <classpath>
+                    <pathelement path="${container.home}/bin/bootstrap.jar" />
+                    <pathelement path="${container.home}/bin/tomcat-juli.jar" />
+                </classpath>
+                <jvmarg value="-Dcatalina.home=${container.home}" />
+                <jvmarg value="-Dcatalina.base=${container.home}" />
+                <jvmarg value="-Xms${tomcat.Xms}" />
+                <jvmarg value="-Xmx${tomcat.Xmx}" />
+                <jvmarg value="-XX:MaxPermSize=${tomcat.Xmx}" />
+                <jvmarg value="-client" />
+                <arg value="stop" />    
+            </java>
+        </sequential>
+    </macrodef>
+
+</project>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.sun.faces.test</groupId>
+        <artifactId>pom</artifactId>
+        <version>2.1.20-02-SNAPSHOT</version>
+    </parent>
+    <groupId>com.sun.faces.test.weblogic12c</groupId>
+    <artifactId>pom</artifactId>
+    <packaging>pom</packaging>
+    <name>Mojarra ${project.version} - Test - Weblogic 12c</name>
+    <dependencies>
+        <dependency>
+            <groupId>com.sun.faces.test</groupId>
+            <artifactId>util</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>    
+    <modules>
+        <module>repackage-api</module>
+        <module>repackage-impl</module>
+        <module>request_char_encoding</module>
+    </modules>
+</project>

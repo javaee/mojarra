@@ -1,0 +1,80 @@
+<html>
+<head>
+<!--
+
+    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+    Copyright (c) 2010 Oracle and/or its affiliates. All rights reserved.
+
+    The contents of this file are subject to the terms of either the GNU
+    General Public License Version 2 only ("GPL") or the Common Development
+    and Distribution License("CDDL") (collectively, the "License").  You
+    may not use this file except in compliance with the License.  You can
+    obtain a copy of the License at
+    https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+    or packager/legal/LICENSE.txt.  See the License for the specific
+    language governing permissions and limitations under the License.
+
+    When distributing the software, include this License Header Notice in each
+    file and include the License file at packager/legal/LICENSE.txt.
+
+    GPL Classpath Exception:
+    Oracle designates this particular file as subject to the "Classpath"
+    exception as provided by Oracle in the GPL Version 2 section of the License
+    file that accompanied this code.
+
+    Modifications:
+    If applicable, add the following below the License Header, with the fields
+    enclosed by brackets [] replaced by your own identifying information:
+    "Portions Copyright [year] [name of copyright owner]"
+
+    Contributor(s):
+    If you wish your version of this file to be governed by only the CDDL or
+    only the GPL Version 2, indicate your decision by adding "[Contributor]
+    elects to include this software in this distribution under the [CDDL or GPL
+    Version 2] license."  If you don't indicate a single choice of license, a
+    recipient has the option to distribute your version of this file under
+    either the CDDL, the GPL Version 2 or to extend the choice of license to
+    its licensees as provided above.  However, if you add GPL Version 2 code
+    and therefore, elected the GPL Version 2 license, then the option applies
+    only if the new code is made subject to such option by the copyright
+    holder.
+
+-->
+
+<title>Package Description for "javax.faces.view.facelets"</title>
+</head>
+<body bgcolor="white">
+
+<p class="changed_added_2_0"><span class="changed_modified_2_0_rev_a
+changed_modified_2_1">This</span> package contains public classes for
+the Java code API of Facelets.  The vast majority of Facelets users have
+no need to access the Java API and can get all their work done using the
+tag-level API.  These classes are provided for users that have a need
+for a Java API that allows participation in the execution of a Facelets
+View, which happens as a result of the runtime calling <a
+href="../ViewDeclarationLanguage.html#buildView(javax.faces.context.FacesContext,%20javax.faces.component.UIViewRoot)"><code>ViewDeclarationLanguage.buildView()</code></a>.
+    </p>
+
+<div class="changed_added_2_0">
+
+<p>
+
+<img src="Facelets.jpg" alt="UML Class Diagram of classes in this package" />
+
+</p>
+
+<p>The most common usecase for participating in the execution of a
+Facelets View is to provide a custom tag handler in those cases when the
+non-Java API methods for doing so is not sufficient.  In such cases,
+Java classes may extend from <code><a
+href="ComponentHandler.html">ComponentHandler</a></code>, <code><a
+href="BehaviorHandler.html">BehaviorHandler</a></code>, <code><a
+href="ConverterHandler.html">ConverterHandler</a></code>, or <code><a
+href="ValidatorHandler.html">ValidatorHandler</a></code> depending upon
+the kind of JSF Java API artifact they want to represent in the Facelets
+VDL page.</p>
+
+</div>
+
+</body> </html>

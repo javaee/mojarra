@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <h:head>
+        <title>Issue #1660</title>
+    </h:head>
+    <h:body>
+        <h1>The application demonstrating issue #1660</h1>
+        <h:form prependId="false">
+            <h:outputText value="Simple value is "/>
+            <h:outputText value="#{issue1660Bean.simpleValue}"/>
+            <br/>
+            <h:outputText value="Complex value would be "/>
+            <h:outputText value="#{issue1660Bean.complexValue}"/>
+            <br/>
+            <h:commandButton id="button" value="invokeMe"/>
+        </h:form>
+    </h:body>
+</html>

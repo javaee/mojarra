@@ -1,0 +1,139 @@
+/*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+ *
+ * Copyright (c) 2010 Oracle and/or its affiliates. All rights reserved.
+ *
+ * The contents of this file are subject to the terms of either the GNU
+ * General Public License Version 2 only ("GPL") or the Common Development
+ * and Distribution License("CDDL") (collectively, the "License").  You
+ * may not use this file except in compliance with the License.  You can
+ * obtain a copy of the License at
+ * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+ * or packager/legal/LICENSE.txt.  See the License for the specific
+ * language governing permissions and limitations under the License.
+ *
+ * When distributing the software, include this License Header Notice in each
+ * file and include the License file at packager/legal/LICENSE.txt.
+ *
+ * GPL Classpath Exception:
+ * Oracle designates this particular file as subject to the "Classpath"
+ * exception as provided by Oracle in the GPL Version 2 section of the License
+ * file that accompanied this code.
+ *
+ * Modifications:
+ * If applicable, add the following below the License Header, with the fields
+ * enclosed by brackets [] replaced by your own identifying information:
+ * "Portions Copyright [year] [name of copyright owner]"
+ *
+ * Contributor(s):
+ * If you wish your version of this file to be governed by only the CDDL or
+ * only the GPL Version 2, indicate your decision by adding "[Contributor]
+ * elects to include this software in this distribution under the [CDDL or GPL
+ * Version 2] license."  If you don't indicate a single choice of license, a
+ * recipient has the option to distribute your version of this file under
+ * either the CDDL, the GPL Version 2 or to extend the choice of license to
+ * its licensees as provided above.  However, if you add GPL Version 2 code
+ * and therefore, elected the GPL Version 2 license, then the option applies
+ * only if the new code is made subject to such option by the copyright
+ * holder.
+ */
+
+/* Change bars from http://www.geocities.com/hentaihelper/2atimlin.htm */
+
+/* put a red "change" bar in the left margin			*/
+/*
+   .changed_added_2_0 { cursor: url(changed_added_2_0_cursor.png), auto;
+                 background: url(changed_added_2_0.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:green }
+
+   .changed_modified_2_0 { cursor: url(changed_modified_2_0_cursor.png), auto;
+                 background: url(changed_modified_2_0.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:orange }
+
+   .changed_deleted_2_0 { cursor: url(changed_deleted_2_0_cursor.png), auto;
+                 background: url(changed_deleted_2_0.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:red;
+                 text-decoration: line-through; }
+
+   .changed_added_2_0_rev_a { cursor: url(changed_added_2_0_rev_a_cursor.cur), auto;
+                 background: url(changed_added_2_0_rev_a.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:green }
+
+   .changed_modified_2_0_rev_a { cursor: url(changed_modified_2_0_rev_a_cursor.cur), auto;
+                 background: url(changed_modified_2_0_rev_a.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:orange }
+
+   .changed_deleted_2_0_rev_a { cursor: url(changed_deleted_2_0_rev_a_cursor.cur), auto;
+                 background: url(changed_deleted_2_0_rev_a.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:red;
+                 text-decoration: line-through; }
+
+*/
+
+   .changed_added_2_1 { cursor: url(changed_added_2_1_cursor.cur), auto;
+                 background: url(changed_added_2_1.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:green }
+
+   .changed_modified_2_1 { cursor: url(changed_modified_2_1_cursor.cur), auto;
+                 background: url(changed_modified_2_1.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:orange }
+
+   .changed_deleted_2_1 { cursor: url(changed_deleted_2_1_cursor.cur), auto;
+                 background: url(changed_deleted_2_1.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:red;
+                 text-decoration: line-through; }
+
+
+
+.javadocSection { font-size: large; }
+
+.java .de1, .java .de2 {font-family: 'Courier New', Courier, monospace; font-weight: normal;}
+.java  {font-family: monospace;}
+.java .imp {font-weight: bold; color: red;}
+.java li {background: #ffffff;}
+.java li.li2 {background: #f8f8f8;}
+.java .kw1 {color: #b1b100;}
+.java .kw2 {color: #000000; font-weight: bold;}
+.java .kw3 {color: #aaaadd; font-weight: bold;}
+.java .kw4 {color: #993333;}
+.java .co1 {color: #808080; font-style: italic;}
+.java .co2 {color: #a1a100;}
+.java .coMULTI {color: #808080; font-style: italic;}
+.java .es0 {color: #000099; font-weight: bold;}
+.java .br0 {color: #66cc66;}
+.java .st0 {color: #ff0000;}
+.java .nu0 {color: #cc66cc;}
+.java .me1 {color: #006600;}
+.java .me2 {color: #006600;}
+
+
+div.syntax
+{
+background:white;
+}
+
+div.syntax a
+{
+	font-family: 'Courier New', Courier, monospace; 
+	font-weight: normal;
+	color:black;
+	text-decoration:underline;
+}

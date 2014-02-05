@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:test="http://testcomponent"
+				template="dynamicComponents_common.xhtml">
+      
+	<h2>Toggle Test Instructions</h2>
+	
+	<ol>
+		<li>The component should have dynamically modified the tree so that 'Manually added child 2' appears before 'Manually added child 1' inside the red box</li>
+		<li>Click 'POSTback'. The 'Manually added child 2' and 'Manually added child 1' should keep switching places</li>
+		<li>Click 'POSTback' 3 times. You will see an error.</li>
+	</ol>
+		
+	<h:messages/>
+		
+	<h:form prependId="false" form="dynamicForm">
+	
+		<test:togglecomponent>
+			<h:outputText id="child1" value="Manually added child 1&lt;br/&gt;" escape="false"/>
+			<h:outputText id="child2" value="Manually added child 2&lt;br/&gt;" escape="false"/>
+		</test:togglecomponent>
+		
+		<br/>
+		
+		<h:commandButton id="button" value="POSTback" action="#{testManagedBean.save}"/>
+		
+	</h:form>
+	
+</ui:composition>			
