@@ -41,7 +41,6 @@ package com.sun.faces.test.agnostic.facelets.ui;
 
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.sun.faces.test.htmlunit.IgnoringIncorrectnessListener;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -55,7 +54,6 @@ public class Issue3167IT {
     public void setUp() {
         webUrl = System.getProperty("integration.url");
         webClient = new WebClient();
-        webClient.setIncorrectnessListener(new IgnoringIncorrectnessListener());
     }
 
     @After
