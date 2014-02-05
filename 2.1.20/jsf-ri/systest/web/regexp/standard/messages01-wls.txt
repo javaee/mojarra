@@ -1,1 +1,0 @@
-(?s).*class="errors".*Validation\s+Error:\s+Value\s+is\s+required.*messages01.jsp.*\.errors.*

@@ -1,1 +1,0 @@
-(?s).*<html>\s+\s+<head/>\s+\s+<body>\s+\s+<textarea\s+name=.j_id_id1.\s+rows=.30.>\s+</textarea>\s+Text\s+Area\s+Row\s+Attribute\s+Regression\s+Test\s+\s+</body>\s+</html>.*
