@@ -42,6 +42,7 @@ package com.sun.faces.application.resource;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.faces.component.UIViewRoot;
 import java.io.IOException;
 import java.io.InputStream;
@@ -52,7 +53,6 @@ import javax.faces.context.FacesContext;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.util.Util;
 
-import java.util.Collections;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.CacheResourceModificationTimestamp;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableMissingResourceLibraryDetection;
 
@@ -355,11 +355,13 @@ public class ClasspathResourceHelper extends ResourceHelper {
                                      String [] outBasePath,
                                      FacesContext ctx) {
         UIViewRoot root = ctx.getViewRoot();
-        List<String> contracts = (null != root) ? 
-                ctx.getResourceLibraryContracts() : Collections.EMPTY_LIST;
+        List<String> contracts = null;
         URL result = null;
-
-        if (contracts.isEmpty()) {
+        
+        if (library != null) {
+        	contracts = new ArrayList<String>(1);
+        	contracts.add(library.getContract());
+        } else if (root == null) {
             String contractName = ctx.getExternalContext().getRequestParameterMap()
                   .get("con");
             if (null != contractName && 0 < contractName.length()) {
@@ -368,6 +370,8 @@ public class ClasspathResourceHelper extends ResourceHelper {
             } else {
                 return null;
             }
+        } else {
+       		contracts = ctx.getResourceLibraryContracts();
         }
 
         String basePath = null;

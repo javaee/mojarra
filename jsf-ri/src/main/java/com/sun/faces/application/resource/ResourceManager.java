@@ -122,7 +122,7 @@ public class ResourceManager {
     public ResourceManager(ResourceCache cache) {
 
         this.cache = cache;
-        Map<String, Object> throwAwayMap = new HashMap();
+        Map<String, Object> throwAwayMap = new HashMap<String, Object>();
         initCompressableTypes(throwAwayMap);
 
     }
@@ -202,6 +202,7 @@ public class ResourceManager {
                                         localePrefix,
                                         compressable,
                                         isViewResource,
+                                        contracts,
                                         ctx);
                         if (info != null) {
                             addToCache(info, contracts);
@@ -216,6 +217,7 @@ public class ResourceManager {
                                 localePrefix,
                                 compressable,
                                 isViewResource,
+                                contracts,
                                 ctx);
                 
                 if (null == info && null != contracts) {
@@ -232,6 +234,7 @@ public class ResourceManager {
                             localePrefix,
                             compressable,
                             isViewResource,
+                            contracts,
                             ctx);
                 }
 
@@ -257,6 +260,8 @@ public class ResourceManager {
      * @param resourceName the name of the resource
      * @param localePrefix the locale prefix for this resource (if any)
      * @param compressable if this resource can be compressed
+     * @param isViewResource 
+     * @param contracts the contracts to consider
      * @param ctx the {@link javax.faces.context.FacesContext} for the current
 *  request
      *
@@ -268,10 +273,11 @@ public class ResourceManager {
                                   String localePrefix,
                                   boolean compressable,
                                   boolean isViewResource,
+                                  List<String> contracts,
                                   FacesContext ctx) {
         // loop over the contracts as described in deriveResourceIdConsideringLocalePrefixAndContracts in the spec
         LibraryInfo library = null;
-        for (String contract : getResourceLibraryContracts(ctx)) {
+        for (String contract : contracts) {
             ResourceInfo info = getResourceInfo(libraryName, resourceName, localePrefix, contract, compressable, isViewResource, ctx, library);
             if(info != null) {
                 return info;

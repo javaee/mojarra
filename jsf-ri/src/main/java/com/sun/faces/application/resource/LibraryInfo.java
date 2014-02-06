@@ -43,7 +43,7 @@ package com.sun.faces.application.resource;
 /**
  * <p>
  * <code>LibraryInfo</code> is a simple wrapper class for information pertinent to building
- * a complete resource path using a Library.
+ * a complete resource path using a Library and/or Contract.
  * <p>
  */
 public class LibraryInfo {
@@ -176,10 +176,17 @@ public class LibraryInfo {
     public String getLocalePrefix() {
         return localePrefix;
     }
+    
+    /**
+     * @return active contract or null
+     */
+    public String getContract() {
+		return contract;
+	}
 
     public String toString() {
         return "LibraryInfo{" +
-               "name='" + name + '\'' +
+               "name='" + (name != null ? name : "NONE") + '\'' +
                ", version=" + ((version != null) ? version : "NONE") + '\'' +
                ", localePrefix='" + ((localePrefix != null) ? localePrefix : "NONE") + '\'' +
                ", contract='" + ((contract != null) ? contract : "NONE") + '\'' +
@@ -204,8 +211,10 @@ public class LibraryInfo {
         if (localePrefix != null) {
             builder.append('/').append(localePrefix);
         }
-        builder.append('/').append(name);
-        noLocaleBuilder.append('/').append(name);
+        if (name != null) {
+	        builder.append('/').append(name);
+	        noLocaleBuilder.append('/').append(name);
+        }
         if (version != null) {
             builder.append('/').append(version.getVersion());
             noLocaleBuilder.append('/').append(version.getVersion());

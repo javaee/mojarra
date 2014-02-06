@@ -42,25 +42,39 @@
 
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.sun.faces.test.agnostic.vdl.facelets</groupId>
-        <artifactId>pom</artifactId>
+        <groupId>com.sun.faces.test.agnostic.vdl.facelets.contracts</groupId>
+        <artifactId>extended</artifactId>
         <version>2.2.6-SNAPSHOT</version>
     </parent>
-    <groupId>com.sun.faces.test.agnostic.vdl.facelets.contracts</groupId>
-    <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Agnostic - VDL - Facelets - Contracts</name>
-    <modules>
-        <module>basic</module>
-        <module>basic_contract_in_jar</module>
-        <module>basic_contract_jar</module>
-        <module>extended</module>
-        <module>sample</module>
-        <module>simple</module>
-        <module>vhosts</module>
-        <module>viewroot</module>
-    </modules>
+    <groupId>com.sun.faces.test.agnostic.vdl.facelets.contracts.extended</groupId>
+    <artifactId>extended_contracts</artifactId>
+    <packaging>war</packaging>
+    <name>Mojarra ${project.version} - Test - Agnostic - VDL - Facelets - Contracts - extended</name>
+    <build>
+        <finalName>test-agnostic-vdl-facelets-contracts-extended-extended_contracts</finalName>
+    </build>
+    <dependencies>
+        <dependency>
+            <artifactId>extended_base</artifactId>
+            <groupId>com.sun.faces.test.agnostic.vdl.facelets.contracts.extended</groupId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <artifactId>extended_blue</artifactId>
+            <groupId>com.sun.faces.test.agnostic.vdl.facelets.contracts.extended</groupId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <artifactId>extended_red</artifactId>
+            <groupId>com.sun.faces.test.agnostic.vdl.facelets.contracts.extended</groupId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 </project>
