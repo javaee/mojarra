@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -42,21 +43,22 @@
 -->
 
 <!DOCTYPE html
-      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
       xmlns:h="http://java.sun.com/jsf/html">
-<head>
-    <title>checkboxSubmittedValue</title>
-</head>
-<body>
-   <h:form prependId="false">
-            <h:selectBooleanCheckbox id="box1" value="#{sessionScope.box1}" />
+    <head>
+        <title>checkboxSubmittedValue</title>
+    </head>
+    <body>
+        <h:form prependId="false">
+            <h:selectBooleanCheckbox id="box1" value="#{selectBooleanCheckboxSubmittedValueBean.box1}" />
             <h:selectBooleanCheckbox id="box2"
-                                     value="#{sessionScope.box2}"
+                                     value="#{selectBooleanCheckboxSubmittedValueBean.box2}"
                                      immediate="true"
-                                     valueChangeListener="#{valueChangeListenerBean.valueChange}"
+                                     valueChangeListener="#{selectBooleanCheckboxSubmittedValueBean.valueChange}"
                                      onclick="this.form.submit()"/>
-    </h:form>
-</body>
+        </h:form>
+    </body>
 </html>

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,63 +37,38 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.agnostic.facelets.html;
 
-package com.sun.faces.systest;
-
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import com.gargoylesoftware.htmlunit.html.HtmlImage;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertTrue;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-/**
-  *
- */
-public class CheckboxTestCase extends HtmlUnitFacesTestCase {
+public class Issue904IT {
 
-    /**
-     * Construct a new instance of this test case.
-     *
-     * @param name Name of the test case
-     */
-    public CheckboxTestCase(String name) {
-        super(name);
+    private String webUrl;
+    private WebClient webClient;
+
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-
-    /**
-     * Set up instance variables required by this test case.
-     */
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
-
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(CheckboxTestCase.class));
-    }
-
-
-    /**
-     * Tear down instance variables required by this test case.
-     */
+    @After
     public void tearDown() {
-        super.tearDown();
+        webClient.closeAllWindows();
     }
-
-
-    // ------------------------------------------------------------ Test Methods
-
-
-    /**
-     * Added for issue 904.
-     */
-    public void testBooleanCheckboxSubmittedValue() throws Exception {
-
-        HtmlPage page = getPage("/faces/standard/checkboxSubmittedValue.xhtml");
+    
+    @Test
+    public void testSelectBooleanCheckboxSubmittedValue() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/selectBooleanCheckboxSubmittedValue.xhtml");
         HtmlCheckBoxInput box1 = (HtmlCheckBoxInput) page.getHtmlElementById("box1");
         assertNotNull(box1);
         page = (HtmlPage) box1.click();
@@ -104,6 +79,5 @@ public class CheckboxTestCase extends HtmlUnitFacesTestCase {
         assertTrue(box1.isChecked());
         box2 = (HtmlCheckBoxInput) newPage.getHtmlElementById("box2");
         assertTrue(box2.isChecked());
-
     }
 }
