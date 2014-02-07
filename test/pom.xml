@@ -1557,7 +1557,7 @@
                                     <cargo.servlet.port>${integration.serverPort}</cargo.servlet.port>
                                     <cargo.weblogic.administrator.password>${integration.container.password}</cargo.weblogic.administrator.password>
                                     <cargo.weblogic.administrator.user>${integration.container.username}</cargo.weblogic.administrator.user>
-                                    <cargo.weblogic.server>myserver</cargo.weblogic.server>
+                                    <cargo.weblogic.server>${integration.container.wlservername}</cargo.weblogic.server>
                                 </properties>
                             </configuration>
                         </configuration>
@@ -1575,6 +1575,7 @@
                 <integration.container.home>C:/Wls1214</integration.container.home>
                 <integration.container.id>weblogic12x</integration.container.id>
                 <integration.container.type>existing</integration.container.type>
+                <integration.container.wlservername>myserver</integration.container.wlservername>
                 <integration.container.wldomain>${integration.container.home}/user_projects/domains/mydomain</integration.container.wldomain>
                 <integration.container.wlserver>${integration.container.home}/wlserver</integration.container.wlserver>
                 <wls.mojarraJarName>glassfish.jsf_1.0.0.0_2-1-20.jar</wls.mojarraJarName>
