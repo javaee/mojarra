@@ -40,7 +40,6 @@
 
 package com.sun.faces.renderkit;
 
-import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.GZIPOutputStream;
@@ -182,7 +181,7 @@ public class ServerSideStateHelper extends StateHelper {
                   (Map) sessionMap
                         .get(LOGICAL_VIEW_MAP), String.class, Map.class);
             if (logicalMap == null) {
-                logicalMap = Collections.synchronizedMap(new LRUMap<String, Map>(numberOfLogicalViews));
+                logicalMap = new LRUMap<String, Map>(numberOfLogicalViews);
                 sessionMap.put(LOGICAL_VIEW_MAP, logicalMap);
             }
 
@@ -210,7 +209,7 @@ public class ServerSideStateHelper extends StateHelper {
                   TypedCollections.dynamicallyCastMap(
                         logicalMap.get(idInLogicalMap), String.class, Object[].class);
             if (actualMap == null) {
-                actualMap = Collections.synchronizedMap(new LRUMap<String, Object[]>(numberOfViews));
+                actualMap = new LRUMap<String, Object[]>(numberOfViews);
                 logicalMap.put(idInLogicalMap, actualMap);
             }
 
