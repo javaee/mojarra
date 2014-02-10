@@ -78,6 +78,7 @@ import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
+import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.ActionSource2;
 import javax.faces.component.EditableValueHolder;
@@ -110,8 +111,10 @@ import javax.faces.view.ViewDeclarationLanguageFactory;
 import javax.faces.view.ViewMetadata;
 import javax.faces.view.facelets.FaceletContext;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FaceletsBufferSize;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FaceletsViewMappings;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.StateSavingMethod;
 import static javax.faces.application.StateManager.IS_BUILDING_INITIAL_STATE;
 
 /**
@@ -378,6 +381,19 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             }
 
             ExternalContext extContext = ctx.getExternalContext();
+            
+            /*
+             * Make sure we have a session here if we are using server state
+             * saving. The WriteBehindStateWriter needs an active session when
+             * it writes out state to a server session.
+             * 
+             * Note if you flag a view as transient then we won't acquire the
+             * session as you are stating it does not need one.
+             */
+            if (isServerStateSaving() && !viewToRender.isTransient()) {
+                getSession(ctx);
+            }            
+            
             Writer outputWriter = extContext.getResponseOutputWriter();
             stateWriter = new WriteBehindStateWriter(outputWriter,
                                                      ctx,
@@ -432,7 +448,35 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
     }
 
+    /**
+     * Are we saving state server side?
+     * 
+     * @return true if we are, false otherwise.
+     */
+    private boolean isServerStateSaving() {
+        boolean result = false;
+        String stateMode = webConfig.getOptionValue(StateSavingMethod);
+        if (StateManager.STATE_SAVING_METHOD_SERVER.equals(stateMode)) {
+            result = true;
+        }
+        return result;
+    }
 
+    /**
+     * Get a session (if we are using server state saving).
+     * 
+     * @param context the Faces context.
+     * @return the session, or null if we are not using server state saving.
+     */
+    private HttpSession getSession(FacesContext context) {
+        HttpSession result = null;
+        Object sessionObj = context.getExternalContext().getSession(true);
+        if (sessionObj instanceof HttpSession) {
+            result = (HttpSession) sessionObj;
+        }
+        return result;
+    }
+    
     /**
      * <p>
      * If {@link UIDebug#debugRequest(javax.faces.context.FacesContext)}} is <code>true</code>,
