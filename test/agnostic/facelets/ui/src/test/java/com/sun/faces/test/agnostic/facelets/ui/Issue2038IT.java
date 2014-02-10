@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,67 +37,41 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.agnostic.facelets.ui;
 
-package com.sun.faces.systest;
-
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
-import java.util.ArrayList;
-import java.util.List;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+public class Issue2038IT {
 
+    private String webUrl;
+    private WebClient webClient;
 
-public class Issue2038TestCase extends HtmlUnitFacesTestCase {
-
-    public Issue2038TestCase(String name) {
-        super(name);
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-    /**
-     * Set up instance variables required by this test case.
-     */
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
-
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(Issue2038TestCase.class));
-    }
-
-
-    /**
-     * Tear down instance variables required by this test case.
-     */
+    @After
     public void tearDown() {
-        super.tearDown();
+        webClient.closeAllWindows();
     }
 
-
-    // ------------------------------------------------------------ Test Methods
-
-    public void testBasicAppFunctionality() throws Exception {
-
-        HtmlPage page = getPage("/");
-        List<HtmlAnchor> anchors = new ArrayList<HtmlAnchor>();
-        getAllElementsOfGivenClass(page, anchors, HtmlAnchor.class);
-
-        // click the first link and assert that the text is first: true
-        page = anchors.get(0).click();
-        assertTrue(page.asText().contains("Triggered first: true"));
-
-        // click the second link and assert that the text is first: false
-        anchors.clear();
-        getAllElementsOfGivenClass(page, anchors, HtmlAnchor.class);
-        page = anchors.get(1).click();
-        assertTrue(page.asText().contains("Triggered first: false"));
-
+    @Test
+    public void testRepeatPropertyActionListener() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/repeatPropertyActionListener.xhtml");  
+        HtmlElement link = page.getHtmlElementById("form:repeat:0:link");
+        page = link.click();
+        assertTrue(page.asXml().contains("Triggered first: true"));
+        link = page.getHtmlElementById("form:repeat:1:link");
+        page = link.click();
+        assertTrue(page.asXml().contains("Triggered first: false"));
     }
-
 }
