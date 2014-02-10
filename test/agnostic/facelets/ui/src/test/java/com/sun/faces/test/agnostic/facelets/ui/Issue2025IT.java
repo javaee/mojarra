@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,81 +37,67 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
-package com.sun.faces.systest;
+package com.sun.faces.test.agnostic.facelets.ui;
 
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import static junit.framework.Assert.assertTrue;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
-import java.util.ArrayList;
-import java.util.List;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+public class Issue2025IT {
 
+    private String webUrl;
+    private WebClient webClient;
 
-public class Issue2025TestCase extends HtmlUnitFacesTestCase {
-
-    public Issue2025TestCase(String name) {
-        super(name);
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-    /**
-     * Set up instance variables required by this test case.
-     */
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
-
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(Issue2025TestCase.class));
-    }
-
-
-    /**
-     * Tear down instance variables required by this test case.
-     */
+    @After
     public void tearDown() {
-        super.tearDown();
+        webClient.closeAllWindows();
     }
 
-
-    // ------------------------------------------------------------ Test Methods
-
-    public void testBasicAppFunctionality() throws Exception {
-
-        HtmlPage page = null;
-
-        try {
-            page = getPage("/index.composition.badpath.xhtml");
+    @Test
+    public void testCompositionBadPath() throws Exception {
+        try { 
+            webClient.getPage(webUrl + "faces/compositionBadPath.xhtml");        
         } catch (FailingHttpStatusCodeException e) {
             assertTrue(e.getResponse().getContentAsString().contains("Invalid path : foobar"));
         }
-
-        try {
-            page = getPage("/index.composition.emptypath.xhtml");
-        } catch (FailingHttpStatusCodeException e) {
-            assertTrue(e.getResponse().getContentAsString().contains("Invalid path :"));
-        }
-
-        try {
-            page = getPage("/index.decorate.badpath.xhtml");
-        } catch (FailingHttpStatusCodeException e) {
-            assertTrue(e.getResponse().getContentAsString().contains("Invalid path : foobar"));
-        }
-
-        try {
-            page = getPage("/index.decorate.emptypath.xhtml");
-        } catch (FailingHttpStatusCodeException e) {
-            assertTrue(e.getResponse().getContentAsString().contains("Invalid path :"));
-        }
     }
-
     
-
+    @Test
+    public void testCompositionEmptyPath() throws Exception {
+        try {
+            webClient.getPage(webUrl + "faces/compositionEmptyPath.xhtml");
+        } catch (FailingHttpStatusCodeException e) {
+            assertTrue(e.getResponse().getContentAsString().contains("Invalid path :"));
+        }
+    }
+    
+    @Test
+    public void testDecorateBadPath() throws Exception {
+        try {
+            webClient.getPage(webUrl + "faces/decorateBadPath.xhtml");
+        } catch (FailingHttpStatusCodeException e) {
+            assertTrue(e.getResponse().getContentAsString().contains("Invalid path : foobar"));
+        }
+    }
+    
+    @Test
+    public void testDecorateEmptyPath() throws Exception {
+        try {
+            webClient.getPage(webUrl + "faces/decorateEmptyPath.xhtml");
+        } catch (FailingHttpStatusCodeException e) {
+            assertTrue(e.getResponse().getContentAsString().contains("Invalid path :"));
+        }        
+    }
 }
