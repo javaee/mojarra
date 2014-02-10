@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <facelet-taglib xmlns="http://xmlns.jcp.org/xml/ns/javaee"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facelettaglibary_2_2.xsd"
                 version="2.2">
 
-	<namespace>test</namespace>
-	<!-- composite-library-name>myCC</composite-library-name -->
-	
-	<tag>
-              <tag-name>i_jsf_2033</tag-name>
-              <component>
-		<resource-id>myCC/layout.xhtml</resource-id>
-              </component>
-	</tag>
-
+    <namespace>sourceValidationFails</namespace>
+    <tag>
+        <tag-name>sourceValidationFails</tag-name>
+        <component>
+            <resource-id>sourceValidationFails1/sourceValidationFails.xhtml</resource-id>
+        </component>
+    </tag>
 </facelet-taglib>
