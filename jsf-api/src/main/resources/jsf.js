@@ -2021,7 +2021,15 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                     return;
                 }
 
-                var responseType = xml.getElementsByTagName("partial-response")[0].firstChild;
+                var partialResponse = xml.getElementsByTagName("partial-response")[0];
+                var responseType = partialResponse.firstChild;
+
+                for (var i = 0; i < partialResponse.childNodes.length; i++) {
+                    if (partialResponse.childNodes[i].nodeName === "error") {
+                        responseType = partialResponse.childNodes[i];
+                        break;
+                    }
+                }
 
                 if (responseType.nodeName === "error") { // it's an error
                     var errorName = "";
