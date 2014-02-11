@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,63 +37,38 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.agnostic.config.lowerCase;
 
-package com.sun.faces.systest;
-
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
-import java.util.ArrayList;
-import java.util.List;
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
-
-public class Issue2067TestCase extends HtmlUnitFacesTestCase {
-
-    public Issue2067TestCase(String name) {
-        super(name);
-    }
-
-    /**
-     * Set up instance variables required by this test case.
-     */
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
-
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(Issue2067TestCase.class));
-    }
-
-
-    /**
-     * Tear down instance variables required by this test case.
-     */
-    public void tearDown() {
-        super.tearDown();
-    }
-
-
-    // ------------------------------------------------------------ Test Methods
-
-    // Ensure view state is NOT the last text immediately before clsing form tag.
-    // The web.xml file for this test has an entry of "FalSe" for com.sun.faces.writeStateAtFormEnd
-    // This test verifies that a mixed case value  will work the same way for boolean values.
-    public void testBasicAppFunctionality() throws Exception {
-
-//        HtmlPage page = getPage("/");
-//        String xmlText = page.asXml();
-//        xmlText = xmlText.replace("\n", "").trim();
-//        assertTrue(xmlText.matches("(?s).*HELLO    </form>  </body></html>"));
-
-    }
-
+public class Issue2067IT {
     
+    private String webUrl;
+    private WebClient webClient;
 
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
+    }
+
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
+    }
+
+    @Test
+    public void testCamelCaseFalseConfig() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
+        int index1 = page.asXml().indexOf("javax.faces.ViewState");
+        int index2 = page.asXml().indexOf("HELLO");
+        assertTrue(index1 != -1);
+        assertTrue(index2 != -1);
+        assertTrue(index1 < index2);
+    }
 }
