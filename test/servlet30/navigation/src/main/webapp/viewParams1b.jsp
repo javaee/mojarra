@@ -2,7 +2,7 @@
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -40,29 +40,22 @@
 
 --%>
 
-
+<%@ taglib uri="http://java.sun.com/jsf/core"  prefix="f" %>
+<%@ taglib uri="http://java.sun.com/jsf/html"  prefix="h" %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
 <html>
-  <head>
-    <title>Programmatic Component Addition</title>
-    <%@ taglib uri="http://java.sun.com/jsf/core"  prefix="f" %>
-    <%@ taglib uri="http://java.sun.com/jsf/html"  prefix="h" %>
-  </head>
-
-  <body>
-    <h1>Page02</h1>
-
-<f:view>
-
-  <h:form id="form">
-
-     <h:outputText value="PAGE 2 OUTPUT"/>
-
-  </h:form>
-
-</f:view>
-
-    <hr>
-  </body>
+    <head>
+        <title>View Params NullPointerException</title>
+    </head>
+    <body>
+        <h1>ViewParams - Page 2</h1>
+        <f:view>
+            <h:form id="form">
+                <h:outputText value="PAGE 2 OUTPUT"/>
+            </h:form>
+        </f:view>
+        <hr>
+    </body>
 </html>

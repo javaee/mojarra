@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,54 +37,37 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.systest;
+package com.sun.faces.test.servlet30.navigation;
 
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
+public class Issue2266IT {
 
-import javax.faces.component.NamingContainer;
+    private String webUrl;
+    private WebClient webClient;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
-public class Issue2266TestCase extends HtmlUnitFacesTestCase {
-
-    public Issue2266TestCase(String name) {
-        super(name);
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-    /**
-     * Set up instance variables required by this test case.
-     */
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(Issue2266TestCase.class));
-    }
-
-    /**
-     * Tear down instance variables required by this test case.
-     */
-    @Override
+    @After
     public void tearDown() {
-        super.tearDown();
+        webClient.closeAllWindows();
     }
 
-    // ------------------------------------------------------------ Test Methods
-    public void testNoViewParamsWithJsp() throws Exception {
-        HtmlPage page = getPage("/faces/view1.jsp");
-
-        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form:refreshWithRedirectParams");
+    @Test
+    public void testViewParamsNullPointerException() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/viewParams1.jsp");
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("form:button");
         page = button.click();
-        assertTrue(page.asText().contains("PAGE 2 OUTPUT"));
+        assertTrue(page.asXml().contains("PAGE 2 OUTPUT"));
     }
 }

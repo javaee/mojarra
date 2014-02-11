@@ -1,9 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
+
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -40,48 +41,18 @@
     holder.
 
 -->
-<!-- ************ JSF build file ************************************** -->
-<project name="JAVASERVERFACES-2266" default="test" basedir=".">
 
-    <property file="../../build.properties"/>
-    <path id="2266.classpath">  
-        <path refid="html.classpath" />
-        <pathelement location="${basedir}/htmlunit/target/classes"/>
-    </path>
-
-    <import file="${jsf.build.home}/common/ant/common.xml"/>
-
-    <target name="build">
-        <jsf.mvn dir="${basedir}/i_jsf_2266" goals="install" />
-        <jsf.mvn dir="${basedir}/htmlunit" goals="install" />
-    </target>    
-
-    <target name="clean">
-        <jsf.mvn dir="${basedir}/i_jsf_2266" goals="clean" />
-        <jsf.mvn dir="${basedir}/htmlunit" goals="clean" />
-    </target>    
-
-    <target name="install">
-        <deploy.artifact
-              artifact="${basedir}/i_jsf_2266/target/i_jsf_2266.war"
-              appName="i_jsf_2266"/>
-    </target>    
-
-    <target name="remove">
-        <undeploy.artifact
-              artifact="${basedir}/i_jsf_2052/target/i_jsf_2266.war"
-              appName="i_jsf_2266"/>
-    </target>    
-
-    <target name="test" depends="define.scenario.aware.port">
-        <jsf.junit context-path="/i_jsf_2266"
-                 classpath-refid="2266.classpath"    
-                 test-results-dir="${regression.test.results.dir}">
-            <tests>
-                <fileset dir="${basedir}/htmlunit/target/classes"
-                     includes="com/sun/faces/systest/Issue2266TestCase.class"/> 
-            </tests>
-        </jsf.junit>
-    </target>    
-
-</project>
+<faces-config 
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+    version="2.0">
+    <navigation-rule>
+        <from-view-id>/viewParams1.jsp</from-view-id>
+        <navigation-case>
+            <from-outcome>viewParams1</from-outcome>
+            <to-view-id>/viewParams1b.jsp</to-view-id>
+            <redirect include-view-params="true"/>
+        </navigation-case>
+    </navigation-rule>
+</faces-config>

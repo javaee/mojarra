@@ -1,9 +1,8 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!--
+<%--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -39,20 +38,22 @@
     only if the new code is made subject to such option by the copyright
     holder.
 
--->
+--%>
 
-<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
-    version="2.0">
+<%@ taglib uri="http://java.sun.com/jsf/core"  prefix="f" %>
+<%@ taglib uri="http://java.sun.com/jsf/html"  prefix="h" %>
 
-    <navigation-rule>
-        <from-view-id>/view1.jsp</from-view-id>
-        <navigation-case>
-            <from-outcome>homeWithParams</from-outcome>
-            <to-view-id>/page02.jsp</to-view-id>
-            <redirect include-view-params="true"/>
-        </navigation-case>
-    </navigation-rule>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
-</faces-config>
+<html>
+    <head>
+        <title>View Params NullPointerException</title>
+    </head>
+    <f:view>
+        <h:form id="form">
+            <h:commandButton id="button"
+                             action="viewParams1"
+                             value="Refresh w/ params)"/>
+        </h:form>
+    </f:view>
+</html>
