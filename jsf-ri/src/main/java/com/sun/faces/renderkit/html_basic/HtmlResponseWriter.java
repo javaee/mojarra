@@ -570,6 +570,7 @@ public class HtmlResponseWriter extends ResponseWriter {
                 flushAttributes();
                 writer.write(" />");
                 closeStart = false;
+                popElementName(name);
                 return;
             }
             flushAttributes();

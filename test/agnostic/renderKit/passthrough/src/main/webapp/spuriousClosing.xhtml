@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:jsf="http://xmlns.jcp.org/jsf" 
+      xmlns:h="http://java.sun.com/jsf/html">
+    <h:body>
+        <div style="background-color: red;">
+            <h:form prependId="false">
+                <div>
+                        <button jsf:action="#{test}">
+                            <span></span>
+                        </button>
+                </div>
+                <div>
+                        <input type="text" jsf:id="date" disabled="disabled" value="#{'123'}" />
+                </div>
+                <div>
+                        <button jsf:action="#{test}">
+                            <span></span>
+                        </button>
+                </div>
+            </h:form>
+        </div> 
+        <!-- End red div -->
+        <div style="background-color: blue; opacity:0.5;margin-top: 20px;">
+            <table style="border: 2px solid black; width: 100%;opacity:1;">
+                <tr>
+                    <td style="border: 2px solid black;">test</td>
+                    <td style="border: 2px solid black;">table</td>
+                </tr>
+            </table>
+        </div>
+    </h:body>
+</html>
