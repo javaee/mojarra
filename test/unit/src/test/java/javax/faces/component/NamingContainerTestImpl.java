@@ -39,33 +39,42 @@
  */
 package javax.faces.component;
 
-import javax.faces.event.FacesEvent;
-import javax.faces.event.FacesListener;
+/**
+ * <p>
+ * Test {@link NamingContainer} implementation with tracing.</p>
+ */
+public class NamingContainerTestImpl extends UINamingContainer {
 
-public class TestEvent extends FacesEvent {
-
-    public TestEvent(UIComponent component) {
-        this(component, null);
+    // ------------------------------------------------------------ Constructors
+    public NamingContainerTestImpl() {
     }
 
-    public TestEvent(UIComponent component, String id) {
-        super(component);
-        this.id = id;
-    }
-
-    private String id;
-
-    public String getId() {
-        return (this.id);
-    }
-
+    // ---------------------------------------------------------- Public Methods
     @Override
-    public boolean isAppropriateListener(FacesListener listener) {
-        return (listener instanceof TestListener);
+    public UIComponent findComponent(String expr) {
+
+        trace(getId());
+        trace(expr);
+        return (super.findComponent(expr));
+
     }
 
-    @Override
-    public void processListener(FacesListener listener) {
-        ((TestListener) listener).processTest(this);
+    // ---------------------------------------------------- Static Trace Methods
+    // Accumulated trace log
+    private static StringBuffer trace = new StringBuffer();
+
+    // Append to the current trace log (or clear if null)
+    public static void trace(String text) {
+        if (text == null) {
+            trace.setLength(0);
+        } else {
+            trace.append('/');
+            trace.append(text);
+        }
+    }
+
+    // Retrieve the current trace log
+    public static String trace() {
+        return (trace.toString());
     }
 }

@@ -149,7 +149,7 @@ public class UIComponentTestCase extends JUnitFacesTestCaseBase {
         } catch (IllegalArgumentException e) {
         }
 
-        component = new TestComponent(expectedId);
+        component = new ComponentTestImpl(expectedId);
     }
 
     // Return the tests included in this test case.
@@ -395,12 +395,12 @@ public class UIComponentTestCase extends JUnitFacesTestCaseBase {
         Iterator kids;
 
         // Construct components we will need
-        UIComponent comp0 = new TestComponent(null);
-        UIComponent comp1 = new TestComponent("comp1");
-        UIComponent comp2 = new TestComponent("comp2");
-        UIComponent comp3 = new TestComponent("comp3");
-        UIComponent comp4 = new TestComponent("comp4");
-        UIComponent comp5 = new TestComponent("comp5");
+        UIComponent comp0 = new ComponentTestImpl(null);
+        UIComponent comp1 = new ComponentTestImpl("comp1");
+        UIComponent comp2 = new ComponentTestImpl("comp2");
+        UIComponent comp3 = new ComponentTestImpl("comp3");
+        UIComponent comp4 = new ComponentTestImpl("comp4");
+        UIComponent comp5 = new ComponentTestImpl("comp5");
         List comps = new ArrayList();
         comps.add(comp0);
         comps.add(comp1);
@@ -448,13 +448,13 @@ public class UIComponentTestCase extends JUnitFacesTestCaseBase {
         ListIterator kids;
 
         // Construct components we will need
-        UIComponent comp0 = new TestComponent(null);
-        UIComponent comp1 = new TestComponent("comp1");
-        UIComponent comp2 = new TestComponent("comp2");
-        UIComponent comp3 = new TestComponent("comp3");
-        UIComponent comp4 = new TestComponent("comp4");
-        UIComponent comp5 = new TestComponent("comp5");
-        UIComponent comp6 = new TestComponent("comp6");
+        UIComponent comp0 = new ComponentTestImpl(null);
+        UIComponent comp1 = new ComponentTestImpl("comp1");
+        UIComponent comp2 = new ComponentTestImpl("comp2");
+        UIComponent comp3 = new ComponentTestImpl("comp3");
+        UIComponent comp4 = new ComponentTestImpl("comp4");
+        UIComponent comp5 = new ComponentTestImpl("comp5");
+        UIComponent comp6 = new ComponentTestImpl("comp6");
         List comps = new ArrayList();
         comps.add(comp0);
         comps.add(comp1);
@@ -621,10 +621,10 @@ public class UIComponentTestCase extends JUnitFacesTestCaseBase {
     public void testChidrenNegative() {
 
         // Construct components we will need
-        UIComponent comp0 = new TestComponent(null);
-        UIComponent comp1 = new TestComponent("comp1");
-        UIComponent comp2 = new TestComponent("comp2");
-        UIComponent comp3 = new TestComponent("comp3");
+        UIComponent comp0 = new ComponentTestImpl(null);
+        UIComponent comp1 = new ComponentTestImpl("comp1");
+        UIComponent comp2 = new ComponentTestImpl("comp2");
+        UIComponent comp3 = new ComponentTestImpl("comp3");
 
         // Set up and verify initial state
         List children = component.getChildren();
@@ -773,13 +773,13 @@ public class UIComponentTestCase extends JUnitFacesTestCaseBase {
     public void testChildrenPositive() {
 
         // Construct components we will need
-        UIComponent comp0 = new TestComponent(null);
-        UIComponent comp1 = new TestComponent("comp1");
-        UIComponent comp2 = new TestComponent("comp2");
-        UIComponent comp3 = new TestComponent("comp3");
-        UIComponent comp4 = new TestComponent("comp4");
-        UIComponent comp5 = new TestComponent("comp5");
-        UIComponent comp6 = new TestComponent("comp6");
+        UIComponent comp0 = new ComponentTestImpl(null);
+        UIComponent comp1 = new ComponentTestImpl("comp1");
+        UIComponent comp2 = new ComponentTestImpl("comp2");
+        UIComponent comp3 = new ComponentTestImpl("comp3");
+        UIComponent comp4 = new ComponentTestImpl("comp4");
+        UIComponent comp5 = new ComponentTestImpl("comp5");
+        UIComponent comp6 = new ComponentTestImpl("comp6");
 
         // Verify initial state
         List children = component.getChildren();
@@ -940,8 +940,8 @@ public class UIComponentTestCase extends JUnitFacesTestCaseBase {
     // Test replacing a child with a new one that has the same id
     public void testChidrenReplace() {
 
-        TestComponent child1 = new TestComponent("child");
-        TestComponent child2 = new TestComponent("child");
+        ComponentTestImpl child1 = new ComponentTestImpl("child");
+        ComponentTestImpl child2 = new ComponentTestImpl("child");
 
         checkChildCount(component, 0);
         component.getChildren().add(child1);
@@ -966,12 +966,12 @@ public class UIComponentTestCase extends JUnitFacesTestCaseBase {
         Iterator entries;
 
         // Construct the pre-load set of facets we will need
-        UIComponent facet1 = new TestComponent("facet1");
-        UIComponent facet2 = new TestComponent("facet2");
-        UIComponent facet3 = new TestComponent("facet3");
-        UIComponent facet4 = new TestComponent("facet4");
-        UIComponent facet5 = new TestComponent("facet5");
-        UIComponent facet6 = new TestComponent("facet6"); // Not normally added
+        UIComponent facet1 = new ComponentTestImpl("facet1");
+        UIComponent facet2 = new ComponentTestImpl("facet2");
+        UIComponent facet3 = new ComponentTestImpl("facet3");
+        UIComponent facet4 = new ComponentTestImpl("facet4");
+        UIComponent facet5 = new ComponentTestImpl("facet5");
+        UIComponent facet6 = new ComponentTestImpl("facet6"); // Not normally added
         Map preload = new HashMap<String, UIComponent>();
         preload.put("a", facet1);
         preload.put("b", facet2);
@@ -1164,12 +1164,12 @@ public class UIComponentTestCase extends JUnitFacesTestCaseBase {
         Iterator keys;
 
         // Construct the pre-load set of facets we will need
-        UIComponent facet1 = new TestComponent("facet1");
-        UIComponent facet2 = new TestComponent("facet2");
-        UIComponent facet3 = new TestComponent("facet3");
-        UIComponent facet4 = new TestComponent("facet4");
-        UIComponent facet5 = new TestComponent("facet5");
-        UIComponent facet6 = new TestComponent("facet6"); // Not normally added
+        UIComponent facet1 = new ComponentTestImpl("facet1");
+        UIComponent facet2 = new ComponentTestImpl("facet2");
+        UIComponent facet3 = new ComponentTestImpl("facet3");
+        UIComponent facet4 = new ComponentTestImpl("facet4");
+        UIComponent facet5 = new ComponentTestImpl("facet5");
+        UIComponent facet6 = new ComponentTestImpl("facet6"); // Not normally added
         Map preload = new HashMap();
         preload.put("a", facet1);
         preload.put("b", facet2);
@@ -1342,12 +1342,12 @@ public class UIComponentTestCase extends JUnitFacesTestCaseBase {
         Iterator vals;
 
         // Construct the pre-load set of facets we will need
-        UIComponent facet1 = new TestComponent("facet1");
-        UIComponent facet2 = new TestComponent("facet2");
-        UIComponent facet3 = new TestComponent("facet3");
-        UIComponent facet4 = new TestComponent("facet4");
-        UIComponent facet5 = new TestComponent("facet5");
-        UIComponent facet6 = new TestComponent("facet6"); // Not normally added
+        UIComponent facet1 = new ComponentTestImpl("facet1");
+        UIComponent facet2 = new ComponentTestImpl("facet2");
+        UIComponent facet3 = new ComponentTestImpl("facet3");
+        UIComponent facet4 = new ComponentTestImpl("facet4");
+        UIComponent facet5 = new ComponentTestImpl("facet5");
+        UIComponent facet6 = new ComponentTestImpl("facet6"); // Not normally added
         Map preload = new HashMap();
         preload.put("a", facet1);
         preload.put("b", facet2);
@@ -1361,7 +1361,7 @@ public class UIComponentTestCase extends JUnitFacesTestCaseBase {
         facets.putAll(preload);
         values = facets.values();
         try {
-            values.add(new TestComponent("facet0"));
+            values.add(new ComponentTestImpl("facet0"));
             fail("Should have thrown UnsupportedOperationExcepton");
         } catch (UnsupportedOperationException e) {
             // Expected result
@@ -1515,9 +1515,9 @@ public class UIComponentTestCase extends JUnitFacesTestCaseBase {
     public void testFacetsNegative() {
 
         // Construct components we will need
-        UIComponent facet1 = new TestComponent("facet1");
-        UIComponent facet2 = new TestComponent("facet2");
-        UIComponent facet3 = new TestComponent("facet3");
+        UIComponent facet1 = new ComponentTestImpl("facet1");
+        UIComponent facet2 = new ComponentTestImpl("facet2");
+        UIComponent facet3 = new ComponentTestImpl("facet3");
 
         // Set up and verify initial conditions
         Map facets = component.getFacets();
@@ -1582,12 +1582,12 @@ public class UIComponentTestCase extends JUnitFacesTestCaseBase {
     public void testFacetsPositive() {
 
         // Construct components we will need
-        UIComponent facet1 = new TestComponent("facet1");
-        UIComponent facet2 = new TestComponent("facet2");
-        UIComponent facet3 = new TestComponent("facet3");
-        UIComponent facet4 = new TestComponent("facet4");
-        UIComponent facet5 = new TestComponent("facet5");
-        UIComponent facet6 = new TestComponent("facet6");
+        UIComponent facet1 = new ComponentTestImpl("facet1");
+        UIComponent facet2 = new ComponentTestImpl("facet2");
+        UIComponent facet3 = new ComponentTestImpl("facet3");
+        UIComponent facet4 = new ComponentTestImpl("facet4");
+        UIComponent facet5 = new ComponentTestImpl("facet5");
+        UIComponent facet6 = new ComponentTestImpl("facet6");
 
         // Verify initial conditions
         Map facets = component.getFacets();
@@ -1750,7 +1750,7 @@ public class UIComponentTestCase extends JUnitFacesTestCaseBase {
                 "a123-bcd_e", component.getId());
 
         // parent
-        UIComponent parent = new TestComponent("parent");
+        UIComponent parent = new ComponentTestImpl("parent");
         component.setParent(parent);
         assertEquals("expected parent",
                 parent, component.getParent());

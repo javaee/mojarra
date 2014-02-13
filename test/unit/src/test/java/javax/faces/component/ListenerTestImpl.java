@@ -39,53 +39,51 @@
  */
 package javax.faces.component;
 
-import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
-import javax.faces.event.ActionListener;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.FacesListener;
 
-/**
- * <p>
- * Test {@link ActionListener} implementation.</p>
- */
-public class TestActionListener implements ActionListener, StateHolder {
+public class ListenerTestImpl implements FacesListener {
 
-    public TestActionListener() {
+    public ListenerTestImpl(String id,
+            String fromId, String toId) {
+        this.id = id;
+        this.fromId = fromId; // When an event with this id is received ...
+        this.toId = toId;     // queue an additional event with this id
     }
 
-    public TestActionListener(String id) {
+    public ListenerTestImpl(String id) {
         this.id = id;
     }
 
-    private String id = null;
+    public ListenerTestImpl(String id, boolean abort) {
+        this.id = id;
+        this.abort = abort;
+    }
 
-    // ----------------------------------------------------------- Pubic Methods
+    private boolean abort = false;
+    private String fromId = null;
+    private String id = null;
+    private String toId = null;
+
     public String getId() {
         return (this.id);
     }
 
-    @Override
-    public void processAction(ActionEvent event) {
-        trace(getId() + "@" + event.getPhaseId().toString());
+    public void processTest(EventTestImpl event) {
+        if (getId() != null) {
+            trace(getId());
+        }
+        if (event.getId() != null) {
+            trace(event.getId());
+            if (event.getId().equals(fromId)) {
+                event.getComponent().queueEvent(new EventTestImpl(event.getComponent(), toId));
+            }
+        }
+        if (abort) {
+            throw new AbortProcessingException();
+        }
     }
 
-    @Override
-    public boolean equals(Object otherObj) {
-        if (!(otherObj instanceof TestActionListener)) {
-            return false;
-        }
-        TestActionListener other = (TestActionListener) otherObj;
-        if ((null != id && null == other.id)
-                || (null == id && null != other.id)) {
-            return false;
-        }
-        boolean idsAreEqual = true;
-        if (null != id) {
-            idsAreEqual = id.equals(other.id);
-        }
-        return idsAreEqual;
-    }
-
-    // ---------------------------------------------------- Static Trace Methods
     // Accumulated trace log
     private static StringBuffer trace = new StringBuffer();
 
@@ -102,27 +100,5 @@ public class TestActionListener implements ActionListener, StateHolder {
     // Retrieve the current trace log
     public static String trace() {
         return (trace.toString());
-    }
-
-    //
-    // methods from StateHolder
-    //
-    @Override
-    public Object saveState(FacesContext context) {
-        return id;
-    }
-
-    @Override
-    public void restoreState(FacesContext context, Object state) {
-        id = (String) state;
-    }
-
-    @Override
-    public boolean isTransient() {
-        return false;
-    }
-
-    @Override
-    public void setTransient(boolean newT) {
     }
 }

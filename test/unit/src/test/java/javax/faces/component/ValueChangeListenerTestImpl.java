@@ -47,17 +47,17 @@ import javax.faces.context.FacesContext;
  * <p>
  * Test {@link ValueChangeListener} implementation.</p>
  */
-public class TestValueChangeListener implements ValueChangeListener, StateHolder {
+public class ValueChangeListenerTestImpl implements ValueChangeListener, StateHolder {
 
     // ------------------------------------------------------------ Constructors
     /**
      *
      * Called from state system.
      */
-    public TestValueChangeListener() {
+    public ValueChangeListenerTestImpl() {
     }
 
-    public TestValueChangeListener(String id) {
+    public ValueChangeListenerTestImpl(String id) {
         this.id = id;
     }
 
@@ -95,10 +95,10 @@ public class TestValueChangeListener implements ValueChangeListener, StateHolder
     // this needs to be named differently because other test methods
     // rely on the standard equal method.
     public boolean isEqual(Object otherObj) {
-        if (!(otherObj instanceof TestValueChangeListener)) {
+        if (!(otherObj instanceof ValueChangeListenerTestImpl)) {
             return false;
         }
-        TestValueChangeListener other = (TestValueChangeListener) otherObj;
+        ValueChangeListenerTestImpl other = (ValueChangeListenerTestImpl) otherObj;
         if ((null != id && null == other.id)
                 || (null == id && null != other.id)) {
             return false;

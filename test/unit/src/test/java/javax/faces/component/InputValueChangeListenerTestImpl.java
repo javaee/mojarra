@@ -39,24 +39,24 @@
  */
 package javax.faces.component;
 
-import javax.faces.event.ActionEvent;
-import javax.faces.event.ActionListener;
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.event.ValueChangeListener;
 
 /**
  * <p>
- * Test implementation of {@link ActionListener}.</p>
+ * Test implementation of {@link ValueChangeListener}.</p>
  */
-public class TestCommandActionListener implements ActionListener {
+public class InputValueChangeListenerTestImpl implements ValueChangeListener {
 
-    protected String actionListenerId = null;
+    protected String valueChangeListenerId = null;
 
-    public TestCommandActionListener(String actionListenerId) {
-        this.actionListenerId = actionListenerId;
+    public InputValueChangeListenerTestImpl(String valueChangeListenerId) {
+        this.valueChangeListenerId = valueChangeListenerId;
     }
 
     @Override
-    public void processAction(ActionEvent event) {
-        trace(actionListenerId);
+    public void processValueChange(ValueChangeEvent event) {
+        trace(valueChangeListenerId);
     }
 
     // ---------------------------------------------------- Static Trace Methods

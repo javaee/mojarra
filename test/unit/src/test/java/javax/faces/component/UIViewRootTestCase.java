@@ -188,20 +188,20 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
         // Register three listeners, with the second one set to abort
         UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
         facesContext.setViewRoot(root);
-        root.addFacesListener(new TestListener("a", false));
-        root.addFacesListener(new TestListener("b", true));
-        root.addFacesListener(new TestListener("c", false));
+        root.addFacesListener(new ListenerTestImpl("a", false));
+        root.addFacesListener(new ListenerTestImpl("b", true));
+        root.addFacesListener(new ListenerTestImpl("c", false));
 
         // Queue two event and check the results
-        TestListener.trace(null);
-        TestEvent event1 = new TestEvent(root, "1");
+        ListenerTestImpl.trace(null);
+        EventTestImpl event1 = new EventTestImpl(root, "1");
         event1.setPhaseId(PhaseId.APPLY_REQUEST_VALUES);
         root.queueEvent(event1);
-        TestEvent event2 = new TestEvent(root, "2");
+        EventTestImpl event2 = new EventTestImpl(root, "2");
         event2.setPhaseId(PhaseId.APPLY_REQUEST_VALUES);
         root.queueEvent(event2);
         root.processDecodes(facesContext);
-        assertEquals("/a/1/b/1/a/2/b/2", TestListener.trace());
+        assertEquals("/a/1/b/1/a/2/b/2", ListenerTestImpl.trace());
     }
 
     // Test event queuing and dequeuing during broadcasting
@@ -210,17 +210,17 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
         UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
         facesContext.setViewRoot(root);
 
-        root.addFacesListener(new TestListener("t", "2", "4"));
-        TestListener.trace(null);
+        root.addFacesListener(new ListenerTestImpl("t", "2", "4"));
+        ListenerTestImpl.trace(null);
 
         // Queue some events, including the trigger one
-        TestEvent event = new TestEvent(root, "1");
+        EventTestImpl event = new EventTestImpl(root, "1");
         event.setPhaseId(PhaseId.APPLY_REQUEST_VALUES);
         root.queueEvent(event);
-        event = new TestEvent(root, "2");
+        event = new EventTestImpl(root, "2");
         event.setPhaseId(PhaseId.APPLY_REQUEST_VALUES);
         root.queueEvent(event);
-        event = new TestEvent(root, "3");
+        event = new EventTestImpl(root, "3");
         event.setPhaseId(PhaseId.APPLY_REQUEST_VALUES);
         root.queueEvent(event);
 
@@ -229,7 +229,7 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 
         // Validate the results (expect 4th event to also be queued)
         String expected = "/t/1/t/2/t/3/t/4";
-        assertEquals(expected, TestListener.trace());
+        assertEquals(expected, ListenerTestImpl.trace());
     }
 
     // Test event queuing and broadcasting
@@ -562,17 +562,17 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
     public void testEventsListClear() {
         UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
         facesContext.setViewRoot(root);
-        TestEvent event1, event2, event3, event4 = null;
-        event1 = new TestEvent(root, "1");
+        EventTestImpl event1, event2, event3, event4 = null;
+        event1 = new EventTestImpl(root, "1");
         event1.setPhaseId(PhaseId.APPLY_REQUEST_VALUES);
         root.queueEvent(event1);
-        event2 = new TestEvent(root, "2");
+        event2 = new EventTestImpl(root, "2");
         event2.setPhaseId(PhaseId.PROCESS_VALIDATIONS);
         root.queueEvent(event2);
-        event3 = new TestEvent(root, "3");
+        event3 = new EventTestImpl(root, "3");
         event3.setPhaseId(PhaseId.UPDATE_MODEL_VALUES);
         root.queueEvent(event3);
-        event4 = new TestEvent(root, "4");
+        event4 = new EventTestImpl(root, "4");
         event4.setPhaseId(PhaseId.INVOKE_APPLICATION);
         root.queueEvent(event4);
         final Field fields[] = UIViewRoot.class.getDeclaredFields();
@@ -709,49 +709,49 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
         // Register an event listener for the specified phase id
         UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
         facesContext.setViewRoot(root);
-        TestEvent event = null;
-        TestListener listener = new TestListener("t");
+        EventTestImpl event = null;
+        ListenerTestImpl listener = new ListenerTestImpl("t");
         root.addFacesListener(listener);
 
         // Queue some events to be processed
-        event = new TestEvent(root, "1");
+        event = new EventTestImpl(root, "1");
         event.setPhaseId(phaseId);
         root.queueEvent(event);
-        event = new TestEvent(root, "2");
+        event = new EventTestImpl(root, "2");
         event.setPhaseId(phaseId);
         root.queueEvent(event);
         String expected = "/t/1/t/2";
 
         // Fire off the relevant lifecycle methods and check expected results
-        TestListener.trace(null);
-        assertEquals("", TestListener.trace());
+        ListenerTestImpl.trace(null);
+        assertEquals("", ListenerTestImpl.trace());
         root.processDecodes(facesContext);
         if (PhaseId.APPLY_REQUEST_VALUES.equals(phaseId)
                 || PhaseId.ANY_PHASE.equals(phaseId)) {
-            assertEquals(expected, TestListener.trace());
+            assertEquals(expected, ListenerTestImpl.trace());
         } else {
-            assertEquals("", TestListener.trace());
+            assertEquals("", ListenerTestImpl.trace());
         }
         root.processValidators(facesContext);
         if (PhaseId.PROCESS_VALIDATIONS.equals(phaseId)
                 || PhaseId.APPLY_REQUEST_VALUES.equals(phaseId)
                 || PhaseId.APPLY_REQUEST_VALUES.equals(phaseId)
                 || PhaseId.ANY_PHASE.equals(phaseId)) {
-            assertEquals(expected, TestListener.trace());
+            assertEquals(expected, ListenerTestImpl.trace());
         } else {
-            assertEquals("", TestListener.trace());
+            assertEquals("", ListenerTestImpl.trace());
         }
         root.processUpdates(facesContext);
         if (PhaseId.UPDATE_MODEL_VALUES.equals(phaseId)
                 || PhaseId.PROCESS_VALIDATIONS.equals(phaseId)
                 || PhaseId.APPLY_REQUEST_VALUES.equals(phaseId)
                 || PhaseId.ANY_PHASE.equals(phaseId)) {
-            assertEquals(expected, TestListener.trace());
+            assertEquals(expected, ListenerTestImpl.trace());
         } else {
-            assertEquals("", TestListener.trace());
+            assertEquals("", ListenerTestImpl.trace());
         }
         root.processApplication(facesContext);
-        assertEquals(expected, TestListener.trace());
+        assertEquals(expected, ListenerTestImpl.trace());
     }
 
     // These overrides are necessary because our normal setup

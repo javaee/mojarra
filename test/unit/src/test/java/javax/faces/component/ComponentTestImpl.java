@@ -46,13 +46,13 @@ import javax.faces.context.FacesContext;
  * <p>
  * Test <code>UIComponent</code> for unit tests.</p>
  */
-public class TestComponent extends UIComponentBase {
+public class ComponentTestImpl extends UIComponentBase {
 
-    public TestComponent() {
+    public ComponentTestImpl() {
         this("test");
     }
 
-    public TestComponent(String componentId) {
+    public ComponentTestImpl(String componentId) {
         super();
         setId(componentId);
     }

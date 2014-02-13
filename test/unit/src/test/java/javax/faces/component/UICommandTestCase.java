@@ -113,26 +113,26 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
         MethodBinding actionBinding = facesContext.getApplication().
                 createMethodBinding("#{l4.test}", null);
         command.setId("command");
-        command.addActionListener(new TestCommandActionListener("l1"));
-        command.addActionListener(new TestCommandActionListener("l2"));
+        command.addActionListener(new CommandActionListenerTestImpl("l1"));
+        command.addActionListener(new CommandActionListenerTestImpl("l2"));
         command.setActionListener(binding);
         command.setAction(actionBinding);
         command.setImmediate(true);
-        request.setAttribute("l3", new TestCommandActionListener("l3"));
+        request.setAttribute("l3", new CommandActionListenerTestImpl("l3"));
 
         // Override the default action listener to test ordering
         ActionListener oldDefaultActionListener
                 = facesContext.getApplication().getActionListener();
         facesContext.getApplication().setActionListener(
-                new TestCommandActionListener("14"));
+                new CommandActionListenerTestImpl("14"));
         Map map = new HashMap();
         map.put(command.getClientId(facesContext), "");
         MockExternalContext econtext
                 = (MockExternalContext) facesContext.getExternalContext();
         econtext.setRequestParameterMap(map);
-        TestCommandActionListener.trace(null);
+        CommandActionListenerTestImpl.trace(null);
         root.processDecodes(facesContext);
-        assertEquals("/l1/l2/l3/14", TestCommandActionListener.trace());
+        assertEquals("/l1/l2/l3/14", CommandActionListenerTestImpl.trace());
 
         // Restore the default action listener
         facesContext.getApplication().setActionListener(
@@ -199,12 +199,12 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
         ActionEvent event = new ActionEvent(command);
 
         // Register three listeners
-        command.addActionListener(new TestActionListener("AP0"));
-        command.addActionListener(new TestActionListener("AP1"));
-        command.addActionListener(new TestActionListener("AP2"));
+        command.addActionListener(new ActionListenerTestImpl("AP0"));
+        command.addActionListener(new ActionListenerTestImpl("AP1"));
+        command.addActionListener(new ActionListenerTestImpl("AP2"));
 
         // Fire events and evaluate results
-        TestActionListener.trace(null);
+        ActionListenerTestImpl.trace(null);
         UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
         root.getChildren().add(command);
         command.queueEvent(event);
@@ -212,7 +212,7 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
         root.processValidators(facesContext);
         root.processApplication(facesContext);
         assertEquals("/AP0@INVOKE_APPLICATION 5/AP1@INVOKE_APPLICATION 5/AP2@INVOKE_APPLICATION 5",
-                TestActionListener.trace());
+                ActionListenerTestImpl.trace());
 
     }
 
@@ -224,12 +224,12 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
         ActionEvent event = new ActionEvent(command);
 
         // Register three listeners
-        command.addActionListener(new TestActionListener("ARV"));
-        command.addActionListener(new TestActionListener("PV"));
-        command.addActionListener(new TestActionListener("AP"));
+        command.addActionListener(new ActionListenerTestImpl("ARV"));
+        command.addActionListener(new ActionListenerTestImpl("PV"));
+        command.addActionListener(new ActionListenerTestImpl("AP"));
 
         // Fire events and evaluate results
-        TestActionListener.trace(null);
+        ActionListenerTestImpl.trace(null);
         UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
         root.getChildren().add(command);
         command.queueEvent(event);
@@ -237,7 +237,7 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
         root.processValidators(facesContext);
         root.processApplication(facesContext);
         assertEquals("/ARV@INVOKE_APPLICATION 5/PV@INVOKE_APPLICATION 5/AP@INVOKE_APPLICATION 5",
-                TestActionListener.trace());
+                ActionListenerTestImpl.trace());
 
     }
 
@@ -251,12 +251,12 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
         ActionEvent event = new ActionEvent(command);
 
         // Register three listeners
-        command.addActionListener(new TestActionListener("ARV"));
-        command.addActionListener(new TestActionListener("PV"));
-        command.addActionListener(new TestActionListener("AP"));
+        command.addActionListener(new ActionListenerTestImpl("ARV"));
+        command.addActionListener(new ActionListenerTestImpl("PV"));
+        command.addActionListener(new ActionListenerTestImpl("AP"));
 
         // Fire events and evaluate results
-        TestActionListener.trace(null);
+        ActionListenerTestImpl.trace(null);
         UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
         root.getChildren().add(command);
         command.queueEvent(event);
@@ -264,21 +264,21 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
         root.processValidators(facesContext);
         root.processApplication(facesContext);
         assertEquals("/ARV@APPLY_REQUEST_VALUES 2/PV@APPLY_REQUEST_VALUES 2/AP@APPLY_REQUEST_VALUES 2",
-                TestActionListener.trace());
+                ActionListenerTestImpl.trace());
 
     }
 
     // Test listener registration and deregistration
     public void testListeners() {
 
-        TestCommand command = new TestCommand();
-        TestActionListener listener = null;
+        CommandTestImpl command = new CommandTestImpl();
+        ActionListenerTestImpl listener = null;
 
-        command.addActionListener(new TestActionListener("ARV0"));
-        command.addActionListener(new TestActionListener("ARV1"));
-        command.addActionListener(new TestActionListener("PV0"));
-        command.addActionListener(new TestActionListener("PV1"));
-        command.addActionListener(new TestActionListener("PV2"));
+        command.addActionListener(new ActionListenerTestImpl("ARV0"));
+        command.addActionListener(new ActionListenerTestImpl("ARV1"));
+        command.addActionListener(new ActionListenerTestImpl("PV0"));
+        command.addActionListener(new ActionListenerTestImpl("PV1"));
+        command.addActionListener(new ActionListenerTestImpl("PV2"));
 
         ActionListener listeners[] = command.getActionListeners();
         assertEquals(5, listeners.length);
@@ -291,8 +291,8 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
     // Test empty listener list
     public void testEmptyListeners() {
 
-        TestCommand command = new TestCommand();
-        TestActionListener listener = null;
+        CommandTestImpl command = new CommandTestImpl();
+        ActionListenerTestImpl listener = null;
 
         //No listeners added, should be empty
         ActionListener listeners[] = command.getActionListeners();
@@ -420,14 +420,14 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
         UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
         root.getChildren().add(command);
 
-        TestActionListener ta1 = new TestActionListener("ta1"),
-                ta2 = new TestActionListener("ta2");
+        ActionListenerTestImpl ta1 = new ActionListenerTestImpl("ta1"),
+                ta2 = new ActionListenerTestImpl("ta2");
 
         command.addActionListener(ta1);
         command.addActionListener(ta2);
         ActionListener[] listeners = (ActionListener[]) command.getActionListeners();
         assertEquals(2, listeners.length);
-        TestActionListener[] taListeners = (TestActionListener[]) command.getFacesListeners(TestActionListener.class);
+        ActionListenerTestImpl[] taListeners = (ActionListenerTestImpl[]) command.getFacesListeners(ActionListenerTestImpl.class);
     }
 
     // --------------------------------------------------------- Support Methods

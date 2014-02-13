@@ -111,11 +111,11 @@ public class NamingContainerTestCase extends JUnitFacesTestCaseBase {
     // Test nested NamingContainer callbacks
     public void testNested() {
 
-        TestNamingContainer a = new TestNamingContainer();
+        NamingContainerTestImpl a = new NamingContainerTestImpl();
         a.setId("a");
-        TestNamingContainer b = new TestNamingContainer();
+        NamingContainerTestImpl b = new NamingContainerTestImpl();
         b.setId("b");
-        TestNamingContainer d = new TestNamingContainer();
+        NamingContainerTestImpl d = new NamingContainerTestImpl();
         d.setId("d");
         UIPanel e = new UIPanel();
         e.setId("e");
@@ -126,34 +126,34 @@ public class NamingContainerTestCase extends JUnitFacesTestCaseBase {
         b.getChildren().add(g);
         d.getChildren().add(e);
 
-        TestNamingContainer.trace(null);
+        NamingContainerTestImpl.trace(null);
         assertTrue(a == a.findComponent("a"));
 
-        TestNamingContainer.trace(null);
+        NamingContainerTestImpl.trace(null);
         assertTrue(a == a.findComponent(":a"));
 
-        TestNamingContainer.trace(null);
+        NamingContainerTestImpl.trace(null);
         assertTrue(b == a.findComponent("b"));
 
-        TestNamingContainer.trace(null);
+        NamingContainerTestImpl.trace(null);
         assertTrue(b == a.findComponent(":b"));
 
-        TestNamingContainer.trace(null);
+        NamingContainerTestImpl.trace(null);
         assertTrue(d == a.findComponent("b:d"));
 
-        TestNamingContainer.trace(null);
+        NamingContainerTestImpl.trace(null);
         assertTrue(d == a.findComponent(":b:d"));
 
-        TestNamingContainer.trace(null);
+        NamingContainerTestImpl.trace(null);
         assertTrue(e == a.findComponent("b:d:e"));
 
-        TestNamingContainer.trace(null);
+        NamingContainerTestImpl.trace(null);
         assertTrue(e == a.findComponent(":b:d:e"));
 
-        TestNamingContainer.trace(null);
+        NamingContainerTestImpl.trace(null);
         assertTrue(g == a.findComponent("b:g"));
 
-        TestNamingContainer.trace(null);
+        NamingContainerTestImpl.trace(null);
         assertTrue(g == a.findComponent(":b:g"));
 
     }
@@ -161,11 +161,11 @@ public class NamingContainerTestCase extends JUnitFacesTestCaseBase {
     // Test nested NamingContainer callbacks
     public void testNested2() {
 
-        TestNamingContainer a = new TestNamingContainer();
+        NamingContainerTestImpl a = new NamingContainerTestImpl();
         a.setId("a");
-        TestNamingContainer b = new TestNamingContainer();
+        NamingContainerTestImpl b = new NamingContainerTestImpl();
         b.setId("b");
-        TestNamingContainer d = new TestNamingContainer();
+        NamingContainerTestImpl d = new NamingContainerTestImpl();
         d.setId("b");
         UIPanel e = new UIPanel();
         e.setId("e");
@@ -176,34 +176,34 @@ public class NamingContainerTestCase extends JUnitFacesTestCaseBase {
         b.getChildren().add(g);
         d.getChildren().add(e);
 
-        TestNamingContainer.trace(null);
+        NamingContainerTestImpl.trace(null);
         assertTrue(a == a.findComponent("a"));
 
-        TestNamingContainer.trace(null);
+        NamingContainerTestImpl.trace(null);
         assertTrue(a == a.findComponent(":a"));
 
-        TestNamingContainer.trace(null);
+        NamingContainerTestImpl.trace(null);
         assertTrue(b == a.findComponent("b"));
 
-        TestNamingContainer.trace(null);
+        NamingContainerTestImpl.trace(null);
         assertTrue(b == a.findComponent(":b"));
 
-        TestNamingContainer.trace(null);
+        NamingContainerTestImpl.trace(null);
         assertTrue(d == a.findComponent("b:b"));
 
-        TestNamingContainer.trace(null);
+        NamingContainerTestImpl.trace(null);
         assertTrue(d == a.findComponent(":b:b"));
 
-        TestNamingContainer.trace(null);
+        NamingContainerTestImpl.trace(null);
         assertTrue(e == a.findComponent("b:b:e"));
 
-        TestNamingContainer.trace(null);
+        NamingContainerTestImpl.trace(null);
         assertTrue(e == a.findComponent(":b:b:e"));
 
-        TestNamingContainer.trace(null);
+        NamingContainerTestImpl.trace(null);
         assertTrue(g == a.findComponent("b:g"));
 
-        TestNamingContainer.trace(null);
+        NamingContainerTestImpl.trace(null);
         assertTrue(g == a.findComponent(":b:g"));
 
     }

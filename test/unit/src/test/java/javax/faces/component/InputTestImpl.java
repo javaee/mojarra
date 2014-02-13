@@ -40,16 +40,20 @@
 package javax.faces.component;
 
 /**
- * <p>
- * Test {@link UICommand} subclass.</p>
+ * <p>Test {@link UIInput} subclass.</p>
  */
-public class TestCommand extends UICommand {
+public class InputTestImpl extends UIInput {
 
-    public TestCommand() {
+    public InputTestImpl() {
         super();
     }
 
-    public TestCommand(String id) {
+    public InputTestImpl(String id) {
         setId(id);
+    }
+
+    @Override
+    public boolean compareValues(Object previous, Object value) {
+        return (super.compareValues(previous, value));
     }
 }

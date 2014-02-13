@@ -111,11 +111,11 @@ public class UIComponentBaseAttachedStateTestCase extends TestCase {
     public void testAttachedObjectsSet() throws Exception {
         Set<ValueChangeListener> returnedAttachedObjects = null,
                 attachedObjects = new HashSet<ValueChangeListener>();
-        ValueChangeListener toAdd = new TestValueChangeListener();
+        ValueChangeListener toAdd = new ValueChangeListenerTestImpl();
         attachedObjects.add(toAdd);
-        toAdd = new TestValueChangeListener();
+        toAdd = new ValueChangeListenerTestImpl();
         attachedObjects.add(toAdd);
-        toAdd = new TestValueChangeListener();
+        toAdd = new ValueChangeListenerTestImpl();
         attachedObjects.add(toAdd);
         Object result = UIComponentBase.saveAttachedState(facesContext, attachedObjects);
         returnedAttachedObjects = (Set<ValueChangeListener>) UIComponentBase.restoreAttachedState(facesContext, result);
@@ -124,11 +124,11 @@ public class UIComponentBaseAttachedStateTestCase extends TestCase {
     public void testAttachedObjectsStack() throws Exception {
         Stack<ValueChangeListener> returnedAttachedObjects = null,
                 attachedObjects = new Stack<ValueChangeListener>();
-        ValueChangeListener toAdd = new TestValueChangeListener();
+        ValueChangeListener toAdd = new ValueChangeListenerTestImpl();
         attachedObjects.add(toAdd);
-        toAdd = new TestValueChangeListener();
+        toAdd = new ValueChangeListenerTestImpl();
         attachedObjects.add(toAdd);
-        toAdd = new TestValueChangeListener();
+        toAdd = new ValueChangeListenerTestImpl();
         attachedObjects.add(toAdd);
         Object result = UIComponentBase.saveAttachedState(facesContext, attachedObjects);
         returnedAttachedObjects = (Stack<ValueChangeListener>) UIComponentBase.restoreAttachedState(facesContext, result);
@@ -137,11 +137,11 @@ public class UIComponentBaseAttachedStateTestCase extends TestCase {
     public void testAttachedObjectsMap() throws Exception {
         Map<String, ValueChangeListener> returnedAttachedObjects = null,
                 attachedObjects = new HashMap<String, ValueChangeListener>();
-        ValueChangeListener toAdd = new TestValueChangeListener();
+        ValueChangeListener toAdd = new ValueChangeListenerTestImpl();
         attachedObjects.put("one", toAdd);
-        toAdd = new TestValueChangeListener();
+        toAdd = new ValueChangeListenerTestImpl();
         attachedObjects.put("two", toAdd);
-        toAdd = new TestValueChangeListener();
+        toAdd = new ValueChangeListenerTestImpl();
         attachedObjects.put("three", toAdd);
         Object result = UIComponentBase.saveAttachedState(facesContext, attachedObjects);
         returnedAttachedObjects = (Map<String, ValueChangeListener>) UIComponentBase.restoreAttachedState(facesContext, result);
@@ -151,11 +151,11 @@ public class UIComponentBaseAttachedStateTestCase extends TestCase {
     public void testAttachedObjectsCount() throws Exception {
         Set<ValueChangeListener> returnedAttachedObjects = null,
                 attachedObjects = new HashSet<ValueChangeListener>();
-        ValueChangeListener toAdd = new TestValueChangeListener();
+        ValueChangeListener toAdd = new ValueChangeListenerTestImpl();
         attachedObjects.add(toAdd);
-        toAdd = new TestValueChangeListener();
+        toAdd = new ValueChangeListenerTestImpl();
         attachedObjects.add(toAdd);
-        toAdd = new TestValueChangeListener();
+        toAdd = new ValueChangeListenerTestImpl();
         attachedObjects.add(toAdd);
         Object result = UIComponentBase.saveAttachedState(facesContext, attachedObjects);
         returnedAttachedObjects = (Set<ValueChangeListener>) UIComponentBase.restoreAttachedState(facesContext, result);

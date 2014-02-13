@@ -39,42 +39,38 @@
  */
 package javax.faces.component;
 
-import javax.faces.event.ValueChangeEvent;
-import javax.faces.event.ValueChangeListener;
+import java.io.Serializable;
 
-/**
- * <p>
- * Test implementation of {@link ValueChangeListener}.</p>
- */
-public class TestInputValueChangeListener implements ValueChangeListener {
+// Test JavaBean for DataModel Tests
+public class DataBeanTestImpl implements Serializable {
 
-    protected String valueChangeListenerId = null;
+    private String command;
 
-    public TestInputValueChangeListener(String valueChangeListenerId) {
-        this.valueChangeListenerId = valueChangeListenerId;
+    public String getCommand() {
+        return (this.command);
     }
 
-    @Override
-    public void processValueChange(ValueChangeEvent event) {
-        trace(valueChangeListenerId);
+    public void setCommand(String command) {
+        this.command = command;
     }
 
-    // ---------------------------------------------------- Static Trace Methods
-    // Accumulated trace log
-    private static StringBuffer trace = new StringBuffer();
+    private String input;
 
-    // Append to the current trace log (or clear if null)
-    public static void trace(String text) {
-        if (text == null) {
-            trace.setLength(0);
-        } else {
-            trace.append('/');
-            trace.append(text);
-        }
+    public String getInput() {
+        return (this.input);
     }
 
-    // Retrieve the current trace log
-    public static String trace() {
-        return (trace.toString());
+    public void setInput(String input) {
+        this.input = input;
+    }
+
+    private String output;
+
+    public String getOutput() {
+        return (this.output);
+    }
+
+    public void setOutput(String output) {
+        this.output = output;
     }
 }

@@ -39,21 +39,42 @@
  */
 package javax.faces.component;
 
+import javax.faces.event.ActionEvent;
+import javax.faces.event.ActionListener;
+
 /**
- * <p>Test {@link UIInput} subclass.</p>
+ * <p>
+ * Test implementation of {@link ActionListener}.</p>
  */
-public class TestInput extends UIInput {
+public class CommandActionListenerTestImpl implements ActionListener {
 
-    public TestInput() {
-        super();
-    }
+    protected String actionListenerId = null;
 
-    public TestInput(String id) {
-        setId(id);
+    public CommandActionListenerTestImpl(String actionListenerId) {
+        this.actionListenerId = actionListenerId;
     }
 
     @Override
-    public boolean compareValues(Object previous, Object value) {
-        return (super.compareValues(previous, value));
+    public void processAction(ActionEvent event) {
+        trace(actionListenerId);
+    }
+
+    // ---------------------------------------------------- Static Trace Methods
+    // Accumulated trace log
+    private static StringBuffer trace = new StringBuffer();
+
+    // Append to the current trace log (or clear if null)
+    public static void trace(String text) {
+        if (text == null) {
+            trace.setLength(0);
+        } else {
+            trace.append('/');
+            trace.append(text);
+        }
+    }
+
+    // Retrieve the current trace log
+    public static String trace() {
+        return (trace.toString());
     }
 }

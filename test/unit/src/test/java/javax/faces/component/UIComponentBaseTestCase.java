@@ -80,7 +80,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
         // Set up the component under test
         super.setUp();
-        component = new TestComponent(expectedId);
+        component = new ComponentTestImpl(expectedId);
 
     }
 
@@ -113,7 +113,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
         final String key = UIComponent.CURRENT_COMPONENT;
         ((MockExternalContext) this.facesContext.getExternalContext()).addInitParameter(UIComponent.HONOR_CURRENT_COMPONENT_ATTRIBUTES_PARAM_NAME, "true");
-        TestComponent c = new TestComponent();
+        ComponentTestImpl c = new ComponentTestImpl();
         facesContext.getAttributes().clear();
         assertNull(facesContext.getAttributes().get(key));
         c.pushComponentToEL(facesContext, null);
@@ -126,7 +126,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
     public void testComponentToFromEL() {
 
         final String key = UIComponent.CURRENT_COMPONENT;
-        TestComponent c = new TestComponent();
+        ComponentTestImpl c = new ComponentTestImpl();
         facesContext.getAttributes().clear();
         assertNull(facesContext.getAttributes().get(key));
         c.pushComponentToEL(facesContext, null);
@@ -140,10 +140,10 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
         final String key = UIComponent.CURRENT_COMPONENT;
         final FacesContext ctx = facesContext;
-        TestComponent c = new TestComponent();
-        TestComponent c2 = new TestComponent();
+        ComponentTestImpl c = new ComponentTestImpl();
+        ComponentTestImpl c2 = new ComponentTestImpl();
         UIComponent eeo = new UIComponentOverrideEncodeEnd();
-        TestComponent c3 = new TestComponent();
+        ComponentTestImpl c3 = new ComponentTestImpl();
         UIComponent ebo = new UIComponentOverrideEncodeBegin();
 
         c.encodeBegin(ctx);
@@ -210,20 +210,20 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
     }
 
     public void testEncodeChildren() throws Exception {
-        TestComponent.trace(null);
-        UIComponent comp1 = new TestComponent("one");
-        UIComponent comp2 = new TestComponent("two");
-        UIComponent comp3 = new TestComponent("three");
-        UIComponent comp4 = new TestComponent("four");
+        ComponentTestImpl.trace(null);
+        UIComponent comp1 = new ComponentTestImpl("one");
+        UIComponent comp2 = new ComponentTestImpl("two");
+        UIComponent comp3 = new ComponentTestImpl("three");
+        UIComponent comp4 = new ComponentTestImpl("four");
 
         comp1.getChildren().add(comp2);
         comp1.getChildren().add(comp3);
         comp1.getChildren().add(comp4);
 
         comp1.encodeChildren(facesContext);
-        System.out.println("Actual:   " + TestComponent.trace());
+        System.out.println("Actual:   " + ComponentTestImpl.trace());
         System.out.println("Expected: " + "/eC-one/eB-two/eE-two/eB-three/eE-three/eB-four/eE-four");
-        assertEquals("/eC-one/eB-two/eE-two/eB-three/eE-three/eB-four/eE-four", TestComponent.trace());
+        assertEquals("/eC-one/eB-two/eE-two/eB-three/eE-three/eB-four/eE-four", ComponentTestImpl.trace());
 
     }
 
@@ -231,10 +231,10 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
     public void testChildrenRecursive() {
 
         // Create the components we will need
-        UIComponent testComponent = new TestComponent();
-        UIComponent child1 = new TestComponent("child1");
-        UIComponent child2 = new TestComponent("child2");
-        UIComponent child3 = new TestComponent("child3");
+        UIComponent testComponent = new ComponentTestImpl();
+        UIComponent child1 = new ComponentTestImpl("child1");
+        UIComponent child2 = new ComponentTestImpl("child2");
+        UIComponent child3 = new ComponentTestImpl("child3");
 
         // Prepare ancestry tree before adding to base component
         child1.getChildren().add(child2);
@@ -264,7 +264,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
     }
 
     public void testChildrenAndFacetsWithNullGetParent() throws Exception {
-        TestComponent child = new TestComponent() {
+        ComponentTestImpl child = new ComponentTestImpl() {
             @Override
             public UIComponent getParent() {
                 return null;
@@ -272,7 +272,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         };
         component.getChildren().add(child);
         assertNull(component.getChildren().get(0).getParent());
-        TestComponent facet = new TestComponent() {
+        ComponentTestImpl facet = new ComponentTestImpl() {
             @Override
             public UIComponent getParent() {
                 return null;
@@ -285,8 +285,8 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
     // Test reconnecting a child or facet to a different component
     public void testComponentReconnect() {
 
-        UIComponent parent1 = new TestComponent();
-        UIComponent parent2 = new TestComponent();
+        UIComponent parent1 = new ComponentTestImpl();
+        UIComponent parent2 = new ComponentTestImpl();
 
         // Reconnect an existing child as a child
         checkChildCount(parent1, 0);
@@ -338,10 +338,10 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
     // Test removing components from our naming container.
     public void testComponentRemoval() {
 
-        UIComponent testComponent = new TestComponent();
-        UIComponent child1 = new TestComponent("child1");
-        UIComponent child2 = new TestComponent("child2");
-        UIComponent child3 = new TestComponent("child3");
+        UIComponent testComponent = new ComponentTestImpl();
+        UIComponent child1 = new ComponentTestImpl("child1");
+        UIComponent child2 = new ComponentTestImpl("child2");
+        UIComponent child3 = new ComponentTestImpl("child3");
         UIComponent child = null;
 
         //adding children to naming container
@@ -395,7 +395,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
     public void testStateHolder() throws Exception {
 
         // Set up the components we will need
-        UIComponent parent = new TestComponent("root");
+        UIComponent parent = new ComponentTestImpl("root");
         UIComponent preSave = createComponent();
         UIComponent facet1 = createComponent();
         facet1.setId("facet1");
@@ -642,57 +642,57 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         panel.getChildren().add(component);
 
         // Establish a view with multiple facets and children
-        UIComponent facet1 = new TestComponent("f1");
-        UIComponent facet2 = new TestComponent("f2");
-        UIComponent facet3 = new TestComponent("f3");
+        UIComponent facet1 = new ComponentTestImpl("f1");
+        UIComponent facet2 = new ComponentTestImpl("f2");
+        UIComponent facet3 = new ComponentTestImpl("f3");
         component.getFacets().put("f1", facet1);
         component.getFacets().put("f2", facet2);
         component.getFacets().put("f3", facet3);
         checkFacetCount(component, 3);
-        UIComponent child1 = new TestComponent("c1");
-        UIComponent child2 = new TestComponent("c2");
-        UIComponent child3 = new TestComponent("c3");
+        UIComponent child1 = new ComponentTestImpl("c1");
+        UIComponent child2 = new ComponentTestImpl("c2");
+        UIComponent child3 = new ComponentTestImpl("c3");
         component.getChildren().add(child1);
         component.getChildren().add(child2);
         component.getChildren().add(child3);
         checkChildCount(component, 3);
-        UIComponent child2a = new TestComponent("c2a");
-        UIComponent child2b = new TestComponent("c2b");
+        UIComponent child2a = new ComponentTestImpl("c2a");
+        UIComponent child2b = new ComponentTestImpl("c2b");
         child2.getChildren().add(child2a);
         child2.getChildren().add(child2b);
         checkChildCount(child2, 2);
 
         // Enqueue a single FacesEvent for each component
-        component.queueEvent(new TestEvent(component));
-        component.queueEvent(new TestEvent(facet1));
-        component.queueEvent(new TestEvent(facet2));
-        component.queueEvent(new TestEvent(facet3));
-        component.queueEvent(new TestEvent(child1));
-        component.queueEvent(new TestEvent(child2));
-        component.queueEvent(new TestEvent(child3));
-        component.queueEvent(new TestEvent(child2a));
-        component.queueEvent(new TestEvent(child2b));
+        component.queueEvent(new EventTestImpl(component));
+        component.queueEvent(new EventTestImpl(facet1));
+        component.queueEvent(new EventTestImpl(facet2));
+        component.queueEvent(new EventTestImpl(facet3));
+        component.queueEvent(new EventTestImpl(child1));
+        component.queueEvent(new EventTestImpl(child2));
+        component.queueEvent(new EventTestImpl(child3));
+        component.queueEvent(new EventTestImpl(child2a));
+        component.queueEvent(new EventTestImpl(child2b));
 
         // Test processDecodes()
-        TestComponent.trace(null);
+        ComponentTestImpl.trace(null);
         component.processDecodes(facesContext);
         assertEquals("processDecodes",
                 lifecycleTrace("pD", "d"),
-                TestComponent.trace());
+                ComponentTestImpl.trace());
 
         // Test processValidators()
-        TestComponent.trace(null);
+        ComponentTestImpl.trace(null);
         component.processValidators(facesContext);
         assertEquals("processValidators",
                 lifecycleTrace("pV", null),
-                TestComponent.trace());
+                ComponentTestImpl.trace());
 
         // Test processUpdates()
-        TestComponent.trace(null);
+        ComponentTestImpl.trace(null);
         component.processUpdates(facesContext);
         assertEquals("processUpdates",
                 lifecycleTrace("pU", null),
-                TestComponent.trace());
+                ComponentTestImpl.trace());
 
     }
 
@@ -711,57 +711,57 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         panel.getChildren().add(component);
 
         // Establish a view with multiple facets and children
-        UIComponent facet1 = new TestComponent("f1");
-        UIComponent facet2 = new TestComponent("f2");
-        UIComponent facet3 = new TestComponent("f3");
+        UIComponent facet1 = new ComponentTestImpl("f1");
+        UIComponent facet2 = new ComponentTestImpl("f2");
+        UIComponent facet3 = new ComponentTestImpl("f3");
         component.getFacets().put("f1", facet1);
         component.getFacets().put("f2", facet2);
         component.getFacets().put("f3", facet3);
         checkFacetCount(component, 3);
-        UIComponent child1 = new TestComponent("c1");
-        UIComponent child2 = new TestComponent("c2");
-        UIComponent child3 = new TestComponent("c3");
+        UIComponent child1 = new ComponentTestImpl("c1");
+        UIComponent child2 = new ComponentTestImpl("c2");
+        UIComponent child3 = new ComponentTestImpl("c3");
         component.getChildren().add(child1);
         component.getChildren().add(child2);
         component.getChildren().add(child3);
         checkChildCount(component, 3);
-        UIComponent child2a = new TestComponent("c2a");
-        UIComponent child2b = new TestComponent("c2b");
+        UIComponent child2a = new ComponentTestImpl("c2a");
+        UIComponent child2b = new ComponentTestImpl("c2b");
         child2.getChildren().add(child2a);
         child2.getChildren().add(child2b);
         checkChildCount(child2, 2);
 
         // Enqueue a single FacesEvent for each component
-        component.queueEvent(new TestEvent(component));
-        component.queueEvent(new TestEvent(facet1));
-        component.queueEvent(new TestEvent(facet2));
-        component.queueEvent(new TestEvent(facet3));
-        component.queueEvent(new TestEvent(child1));
-        component.queueEvent(new TestEvent(child2));
-        component.queueEvent(new TestEvent(child3));
-        component.queueEvent(new TestEvent(child2a));
-        component.queueEvent(new TestEvent(child2b));
+        component.queueEvent(new EventTestImpl(component));
+        component.queueEvent(new EventTestImpl(facet1));
+        component.queueEvent(new EventTestImpl(facet2));
+        component.queueEvent(new EventTestImpl(facet3));
+        component.queueEvent(new EventTestImpl(child1));
+        component.queueEvent(new EventTestImpl(child2));
+        component.queueEvent(new EventTestImpl(child3));
+        component.queueEvent(new EventTestImpl(child2a));
+        component.queueEvent(new EventTestImpl(child2b));
 
         // Test processDecodes()
-        TestComponent.trace(null);
+        ComponentTestImpl.trace(null);
         component.processDecodes(facesContext);
         assertEquals("processDecodes",
                 lifecycleTrace("pD", "d"),
-                TestComponent.trace());
+                ComponentTestImpl.trace());
 
         // Test processValidators()
-        TestComponent.trace(null);
+        ComponentTestImpl.trace(null);
         component.processValidators(facesContext);
         assertEquals("processValidators",
                 lifecycleTrace("pV", null),
-                TestComponent.trace());
+                ComponentTestImpl.trace());
 
         // Test processUpdates()
-        TestComponent.trace(null);
+        ComponentTestImpl.trace(null);
         component.processUpdates(facesContext);
         assertEquals("processUpdates",
                 lifecycleTrace("pU", null),
-                TestComponent.trace());
+                ComponentTestImpl.trace());
 
     }
 
@@ -777,57 +777,57 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         root.getChildren().add(component);
 
         // Establish a view with multiple facets and children
-        UIComponent facet1 = new TestComponent("f1");
-        UIComponent facet2 = new TestComponent("f2");
-        UIComponent facet3 = new TestComponent("f3");
+        UIComponent facet1 = new ComponentTestImpl("f1");
+        UIComponent facet2 = new ComponentTestImpl("f2");
+        UIComponent facet3 = new ComponentTestImpl("f3");
         component.getFacets().put("f1", facet1);
         component.getFacets().put("f2", facet2);
         component.getFacets().put("f3", facet3);
         checkFacetCount(component, 3);
-        UIComponent child1 = new TestComponent("c1");
-        UIComponent child2 = new TestComponent("c2");
-        UIComponent child3 = new TestComponent("c3");
+        UIComponent child1 = new ComponentTestImpl("c1");
+        UIComponent child2 = new ComponentTestImpl("c2");
+        UIComponent child3 = new ComponentTestImpl("c3");
         component.getChildren().add(child1);
         component.getChildren().add(child2);
         component.getChildren().add(child3);
         checkChildCount(component, 3);
-        UIComponent child2a = new TestComponent("c2a");
-        UIComponent child2b = new TestComponent("c2b");
+        UIComponent child2a = new ComponentTestImpl("c2a");
+        UIComponent child2b = new ComponentTestImpl("c2b");
         child2.getChildren().add(child2a);
         child2.getChildren().add(child2b);
         checkChildCount(child2, 2);
 
         // Enqueue a single FacesEvent for each component
-        component.queueEvent(new TestEvent(component));
-        component.queueEvent(new TestEvent(facet1));
-        component.queueEvent(new TestEvent(facet2));
-        component.queueEvent(new TestEvent(facet3));
-        component.queueEvent(new TestEvent(child1));
-        component.queueEvent(new TestEvent(child2));
-        component.queueEvent(new TestEvent(child3));
-        component.queueEvent(new TestEvent(child2a));
-        component.queueEvent(new TestEvent(child2b));
+        component.queueEvent(new EventTestImpl(component));
+        component.queueEvent(new EventTestImpl(facet1));
+        component.queueEvent(new EventTestImpl(facet2));
+        component.queueEvent(new EventTestImpl(facet3));
+        component.queueEvent(new EventTestImpl(child1));
+        component.queueEvent(new EventTestImpl(child2));
+        component.queueEvent(new EventTestImpl(child3));
+        component.queueEvent(new EventTestImpl(child2a));
+        component.queueEvent(new EventTestImpl(child2b));
 
         // Test processDecodes()
-        TestComponent.trace(null);
+        ComponentTestImpl.trace(null);
         component.processDecodes(facesContext);
         assertEquals("processDecodes",
                 lifecycleTrace("pD", "d"),
-                TestComponent.trace());
+                ComponentTestImpl.trace());
 
         // Test processValidators()
-        TestComponent.trace(null);
+        ComponentTestImpl.trace(null);
         component.processValidators(facesContext);
         assertEquals("processValidators",
                 lifecycleTrace("pV", null),
-                TestComponent.trace());
+                ComponentTestImpl.trace());
 
         // Test processUpdates()
-        TestComponent.trace(null);
+        ComponentTestImpl.trace(null);
         component.processUpdates(facesContext);
         assertEquals("processUpdates",
                 lifecycleTrace("pU", null),
-                TestComponent.trace());
+                ComponentTestImpl.trace());
 
     }
 
@@ -843,57 +843,57 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         root.getChildren().add(component);
 
         // Establish a view with multiple facets and children
-        UIComponent facet1 = new TestComponent("f1");
-        UIComponent facet2 = new TestComponent("f2");
-        UIComponent facet3 = new TestComponent("f3");
+        UIComponent facet1 = new ComponentTestImpl("f1");
+        UIComponent facet2 = new ComponentTestImpl("f2");
+        UIComponent facet3 = new ComponentTestImpl("f3");
         component.getFacets().put("f1", facet1);
         component.getFacets().put("f2", facet2);
         component.getFacets().put("f3", facet3);
         checkFacetCount(component, 3);
-        UIComponent child1 = new TestComponent("c1");
-        UIComponent child2 = new TestComponent("c2");
-        UIComponent child3 = new TestComponent("c3");
+        UIComponent child1 = new ComponentTestImpl("c1");
+        UIComponent child2 = new ComponentTestImpl("c2");
+        UIComponent child3 = new ComponentTestImpl("c3");
         component.getChildren().add(child1);
         component.getChildren().add(child2);
         component.getChildren().add(child3);
         checkChildCount(component, 3);
-        UIComponent child2a = new TestComponent("c2a");
-        UIComponent child2b = new TestComponent("c2b");
+        UIComponent child2a = new ComponentTestImpl("c2a");
+        UIComponent child2b = new ComponentTestImpl("c2b");
         child2.getChildren().add(child2a);
         child2.getChildren().add(child2b);
         checkChildCount(child2, 2);
 
         // Enqueue a single FacesEvent for each component
-        component.queueEvent(new TestEvent(component));
-        component.queueEvent(new TestEvent(facet1));
-        component.queueEvent(new TestEvent(facet2));
-        component.queueEvent(new TestEvent(facet3));
-        component.queueEvent(new TestEvent(child1));
-        component.queueEvent(new TestEvent(child2));
-        component.queueEvent(new TestEvent(child3));
-        component.queueEvent(new TestEvent(child2a));
-        component.queueEvent(new TestEvent(child2b));
+        component.queueEvent(new EventTestImpl(component));
+        component.queueEvent(new EventTestImpl(facet1));
+        component.queueEvent(new EventTestImpl(facet2));
+        component.queueEvent(new EventTestImpl(facet3));
+        component.queueEvent(new EventTestImpl(child1));
+        component.queueEvent(new EventTestImpl(child2));
+        component.queueEvent(new EventTestImpl(child3));
+        component.queueEvent(new EventTestImpl(child2a));
+        component.queueEvent(new EventTestImpl(child2b));
 
         // Test processDecodes()
-        TestComponent.trace(null);
+        ComponentTestImpl.trace(null);
         component.processDecodes(facesContext);
         assertEquals("processDecodes",
                 lifecycleTrace("pD", "d"),
-                TestComponent.trace());
+                ComponentTestImpl.trace());
 
         // Test processValidators()
-        TestComponent.trace(null);
+        ComponentTestImpl.trace(null);
         component.processValidators(facesContext);
         assertEquals("processValidators",
                 lifecycleTrace("pV", null),
-                TestComponent.trace());
+                ComponentTestImpl.trace());
 
         // Test processUpdates()
-        TestComponent.trace(null);
+        ComponentTestImpl.trace(null);
         component.processUpdates(facesContext);
         assertEquals("processUpdates",
                 lifecycleTrace("pU", null),
-                TestComponent.trace());
+                ComponentTestImpl.trace());
 
     }
 
@@ -937,7 +937,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
     // Create a pristine component of the type to be used in state holder tests
     protected UIComponent createComponent() {
-        return (new TestComponent());
+        return (new ComponentTestImpl());
     }
 
     // Populate a pristine component to be used in state holder tests
@@ -1014,13 +1014,13 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
     public void testGetFacetsAndChildren() {
 
-        UIComponent testComponent = new TestComponent();
-        UIComponent child1 = new TestComponent("child1");
-        UIComponent child2 = new TestComponent("child2");
-        UIComponent child3 = new TestComponent("child3");
-        UIComponent facet1 = new TestComponent("facet1");
-        UIComponent facet2 = new TestComponent("facet2");
-        UIComponent facet3 = new TestComponent("facet3");
+        UIComponent testComponent = new ComponentTestImpl();
+        UIComponent child1 = new ComponentTestImpl("child1");
+        UIComponent child2 = new ComponentTestImpl("child2");
+        UIComponent child3 = new ComponentTestImpl("child3");
+        UIComponent facet1 = new ComponentTestImpl("facet1");
+        UIComponent facet2 = new ComponentTestImpl("facet2");
+        UIComponent facet3 = new ComponentTestImpl("facet3");
 
         testComponent.getChildren().add(child1);
         testComponent.getChildren().add(child2);

@@ -128,7 +128,7 @@ public class UIInputTestCase extends UIOutputTestCase {
 
     // Test the compareValues() method
     public void testCompareValues() {
-        TestInput input = new TestInput();
+        InputTestImpl input = new InputTestImpl();
         Object value1a = "foo";
         Object value1b = "foo";
         Object value2 = "bar";
@@ -152,15 +152,15 @@ public class UIInputTestCase extends UIOutputTestCase {
         ValueChangeEvent event = new ValueChangeEvent(input, null, null);
 
         // Register three listeners
-        input.addValueChangeListener(new TestValueChangeListener("AP0"));
-        input.addValueChangeListener(new TestValueChangeListener("AP1"));
-        input.addValueChangeListener(new TestValueChangeListener("AP2"));
+        input.addValueChangeListener(new ValueChangeListenerTestImpl("AP0"));
+        input.addValueChangeListener(new ValueChangeListenerTestImpl("AP1"));
+        input.addValueChangeListener(new ValueChangeListenerTestImpl("AP2"));
 
         // Fire events and evaluate results
-        TestValueChangeListener.trace(null);
+        ValueChangeListenerTestImpl.trace(null);
         input.broadcast(event);
         assertEquals("/AP0/AP1/AP2",
-                TestValueChangeListener.trace());
+                ValueChangeListenerTestImpl.trace());
     }
 
     // Test event queuing and broadcasting (mixed phase listeners)
@@ -172,11 +172,11 @@ public class UIInputTestCase extends UIOutputTestCase {
         ValueChangeEvent event = null;
 
         // Register three listeners
-        input.addValueChangeListener(new TestValueChangeListener("ARV"));
-        input.addValueChangeListener(new TestValueChangeListener("PV"));
-        input.addValueChangeListener(new TestValueChangeListener("AP"));
+        input.addValueChangeListener(new ValueChangeListenerTestImpl("ARV"));
+        input.addValueChangeListener(new ValueChangeListenerTestImpl("PV"));
+        input.addValueChangeListener(new ValueChangeListenerTestImpl("AP"));
 
-        TestValueChangeListener.trace(null);
+        ValueChangeListenerTestImpl.trace(null);
         event = new ValueChangeEvent(input, null, null);
         event.setPhaseId(PhaseId.APPLY_REQUEST_VALUES);
         input.queueEvent(event);
@@ -194,19 +194,19 @@ public class UIInputTestCase extends UIOutputTestCase {
         root.processValidators(facesContext);
         root.processApplication(facesContext);
         assertEquals("/ARV/PV/AP/ARV/PV/AP/ARV/PV/AP",
-                TestValueChangeListener.trace());
+                ValueChangeListenerTestImpl.trace());
     }
 
     // Test listener registration and deregistration
     public void testListeners() {
-        TestInput input = new TestInput();
-        TestValueChangeListener listener = null;
+        InputTestImpl input = new InputTestImpl();
+        ValueChangeListenerTestImpl listener = null;
 
-        input.addValueChangeListener(new TestValueChangeListener("ARV0"));
-        input.addValueChangeListener(new TestValueChangeListener("ARV1"));
-        input.addValueChangeListener(new TestValueChangeListener("PV0"));
-        input.addValueChangeListener(new TestValueChangeListener("PV1"));
-        input.addValueChangeListener(new TestValueChangeListener("PV2"));
+        input.addValueChangeListener(new ValueChangeListenerTestImpl("ARV0"));
+        input.addValueChangeListener(new ValueChangeListenerTestImpl("ARV1"));
+        input.addValueChangeListener(new ValueChangeListenerTestImpl("PV0"));
+        input.addValueChangeListener(new ValueChangeListenerTestImpl("PV1"));
+        input.addValueChangeListener(new ValueChangeListenerTestImpl("PV2"));
 
         ValueChangeListener listeners[] = input.getValueChangeListeners();
         assertEquals(5, listeners.length);
@@ -217,8 +217,8 @@ public class UIInputTestCase extends UIOutputTestCase {
 
     // Test empty listener list
     public void testEmptyListeners() {
-        TestInput input = new TestInput();
-        TestValueChangeListener listener = null;
+        InputTestImpl input = new InputTestImpl();
+        ValueChangeListenerTestImpl listener = null;
 
         //No listeners added, should be empty
         ValueChangeListener listeners[] = input.getValueChangeListeners();
@@ -286,7 +286,7 @@ public class UIInputTestCase extends UIOutputTestCase {
     // Test updating model values
     public void testUpdateModel() throws Exception {
         // Set up test bean as a request attribute
-        TestDataBean test = new TestDataBean();
+        DataBeanTestImpl test = new DataBeanTestImpl();
         test.setCommand("old command");
         request.setAttribute("test", test);
 
@@ -353,19 +353,19 @@ public class UIInputTestCase extends UIOutputTestCase {
         UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
         root.getChildren().add(component);
         UIInput input = (UIInput) component;
-        input.addValidator(new TestInputValidator("v1"));
-        input.addValidator(new TestInputValidator("v2"));
+        input.addValidator(new InputValidatorTestImpl("v1"));
+        input.addValidator(new InputValidatorTestImpl("v2"));
         Application app = facesContext.getApplication();
         MethodBinding methodBinding = null;
 
         input.setValidator(methodBinding
                 = app.createMethodBinding("v3.validate", validateParams));
         assertEquals(methodBinding, input.getValidator());
-        request.setAttribute("v3", new TestInputValidator("v3"));
-        TestInputValidator.trace(null);
+        request.setAttribute("v3", new InputValidatorTestImpl("v3"));
+        InputValidatorTestImpl.trace(null);
         setupNewValue(input);
         root.processValidators(facesContext);
-        assertEquals("/v1/v2/v3", TestInputValidator.trace());
+        assertEquals("/v1/v2/v3", InputValidatorTestImpl.trace());
     }
 
     // Test validation of a required field
@@ -465,14 +465,14 @@ public class UIInputTestCase extends UIOutputTestCase {
         UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
         root.getChildren().add(component);
         UIInput input = (UIInput) component;
-        input.addValueChangeListener(new TestInputValueChangeListener("l1"));
-        input.addValueChangeListener(new TestInputValueChangeListener("l2"));
+        input.addValueChangeListener(new InputValueChangeListenerTestImpl("l1"));
+        input.addValueChangeListener(new InputValueChangeListenerTestImpl("l2"));
         input.setValueChangeListener(app.createMethodBinding("l3.processValueChange", signature));
-        request.setAttribute("l3", new TestInputValueChangeListener("l3"));
-        TestInputValueChangeListener.trace(null);
+        request.setAttribute("l3", new InputValueChangeListenerTestImpl("l3"));
+        InputValueChangeListenerTestImpl.trace(null);
         setupNewValue(input);
         root.processValidators(facesContext);
-        assertEquals("/l1/l2/l3", TestInputValueChangeListener.trace());
+        assertEquals("/l1/l2/l3", InputValueChangeListenerTestImpl.trace());
     }
 
     // Test order of value change calls with valueChangeListener also
@@ -485,17 +485,17 @@ public class UIInputTestCase extends UIOutputTestCase {
         root.getChildren().add(component);
         UIInput input = (UIInput) component;
         input.setImmediate(true);
-        input.addValueChangeListener(new TestInputValueChangeListener("l1"));
-        input.addValueChangeListener(new TestInputValueChangeListener("l2"));
+        input.addValueChangeListener(new InputValueChangeListenerTestImpl("l1"));
+        input.addValueChangeListener(new InputValueChangeListenerTestImpl("l2"));
         input.setValueChangeListener(app.createMethodBinding("l3.processValueChange", signature));
-        request.setAttribute("l3", new TestInputValueChangeListener("l3"));
-        TestInputValueChangeListener.trace(null);
+        request.setAttribute("l3", new InputValueChangeListenerTestImpl("l3"));
+        InputValueChangeListenerTestImpl.trace(null);
         setupNewValue(input);
         root.processValidators(facesContext);
         // No ValueChangeEvent should get delivered, because
         // "immediate" processing fires during processDecodes(), not
         // processValidators()
-        assertEquals("", TestInputValueChangeListener.trace());
+        assertEquals("", InputValueChangeListenerTestImpl.trace());
     }
 
     public void testGetValueChangeListeners() throws Exception {
@@ -503,14 +503,14 @@ public class UIInputTestCase extends UIOutputTestCase {
         UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
         root.getChildren().add(command);
 
-        TestValueChangeListener ta1 = new TestValueChangeListener("ta1"),
-                ta2 = new TestValueChangeListener("ta2");
+        ValueChangeListenerTestImpl ta1 = new ValueChangeListenerTestImpl("ta1"),
+                ta2 = new ValueChangeListenerTestImpl("ta2");
 
         command.addValueChangeListener(ta1);
         command.addValueChangeListener(ta2);
         ValueChangeListener[] listeners = (ValueChangeListener[]) command.getValueChangeListeners();
         assertEquals(2, listeners.length);
-        TestValueChangeListener[] taListeners = (TestValueChangeListener[]) command.getFacesListeners(TestValueChangeListener.class);
+        ValueChangeListenerTestImpl[] taListeners = (ValueChangeListenerTestImpl[]) command.getFacesListeners(ValueChangeListenerTestImpl.class);
     }
 
     // --------------------------------------------------------- Support Methods

@@ -97,7 +97,7 @@ public class UISelectManyTestCase extends UIInputTestCase {
     // Test the compareValues() method
     @Override
     public void testCompareValues() {
-        TestSelectMany selectMany = new TestSelectMany();
+        SelectManyTestImpl selectMany = new SelectManyTestImpl();
         Object values1a[] = new Object[]{"foo", "bar", "baz"};
         Object values1b[] = new Object[]{"foo", "baz", "bar"};
         Object values1c[] = new Object[]{"baz", "foo", "bar"};

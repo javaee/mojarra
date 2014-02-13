@@ -39,14 +39,42 @@
  */
 package javax.faces.component;
 
+import javax.faces.context.FacesContext;
+import javax.faces.validator.Validator;
+
 /**
  * <p>
- * Test {@link UISelectMany} subclass.</p>
+ * Test implementation of {@link Validator}.</p>
  */
-public class TestSelectMany extends UISelectMany {
+public class InputValidatorTestImpl implements Validator {
+
+    protected String validatorId = null;
+
+    public InputValidatorTestImpl(String validatorId) {
+        this.validatorId = validatorId;
+    }
 
     @Override
-    public boolean compareValues(Object previous, Object value) {
-        return (super.compareValues(previous, value));
+    public void validate(FacesContext context, UIComponent component, Object value) {
+        trace(validatorId);
+    }
+
+    // ---------------------------------------------------- Static Trace Methods
+    // Accumulated trace log
+    private static StringBuffer trace = new StringBuffer();
+
+    // Append to the current trace log (or clear if null)
+    public static void trace(String text) {
+        if (text == null) {
+            trace.setLength(0);
+        } else {
+            trace.append('/');
+            trace.append(text);
+        }
+    }
+
+    // Retrieve the current trace log
+    public static String trace() {
+        return (trace.toString());
     }
 }

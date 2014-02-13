@@ -39,38 +39,33 @@
  */
 package javax.faces.component;
 
-import java.io.Serializable;
+import javax.faces.event.FacesEvent;
+import javax.faces.event.FacesListener;
 
-// Test JavaBean for DataModel Tests
-public class TestDataBean implements Serializable {
+public class EventTestImpl extends FacesEvent {
 
-    private String command;
-
-    public String getCommand() {
-        return (this.command);
+    public EventTestImpl(UIComponent component) {
+        this(component, null);
     }
 
-    public void setCommand(String command) {
-        this.command = command;
+    public EventTestImpl(UIComponent component, String id) {
+        super(component);
+        this.id = id;
     }
 
-    private String input;
+    private String id;
 
-    public String getInput() {
-        return (this.input);
+    public String getId() {
+        return (this.id);
     }
 
-    public void setInput(String input) {
-        this.input = input;
+    @Override
+    public boolean isAppropriateListener(FacesListener listener) {
+        return (listener instanceof ListenerTestImpl);
     }
 
-    private String output;
-
-    public String getOutput() {
-        return (this.output);
-    }
-
-    public void setOutput(String output) {
-        this.output = output;
+    @Override
+    public void processListener(FacesListener listener) {
+        ((ListenerTestImpl) listener).processTest(this);
     }
 }
