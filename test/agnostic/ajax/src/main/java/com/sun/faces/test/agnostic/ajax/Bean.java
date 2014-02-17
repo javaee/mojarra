@@ -46,8 +46,8 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
+import javax.faces.context.PartialViewContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.ValueChangeEvent;
@@ -99,5 +99,19 @@ public class Bean {
 
     public void processIt(AjaxBehaviorEvent event) {
         setRadioValue("red");
+    }
+    
+    public String getThrowExceptionOnAjax() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        PartialViewContext partialContext = context.getPartialViewContext();
+        if (null != partialContext) {
+            if (partialContext.isAjaxRequest()) {
+                throw new RuntimeException("Intentionally throwing exception on ajax request");
+            }
+        }
+        
+        String result = "not an ajax request";
+        
+        return result;
     }
 }

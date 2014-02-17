@@ -2741,6 +2741,13 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 var partialResponseId = partialResponse.getAttribute("id");
                 var responseType = partialResponse.firstChild;
 
+                for (var i = 0; i < partialResponse.childNodes.length; i++) {
+                    if (partialResponse.childNodes[i].nodeName === "error") {
+                        responseType = partialResponse.childNodes[i];
+                        break;
+                    }
+                }
+
                 if (responseType.nodeName === "error") { // it's an error
                     var errorName = "";
                     var errorMessage = "";
