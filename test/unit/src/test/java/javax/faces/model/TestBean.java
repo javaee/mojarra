@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,59 +37,11 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package javax.faces.model;
 
-package javax.faces.event;
-
-import junit.framework.TestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
-import java.util.Iterator;
-
-public class PhaseIdTest extends TestCase
-{
-//
-// Protected Constants
-//
-
-//
-// Class Variables
-//
-
-//
-// Instance Variables
-//
-
-// Attribute Instance Variables
-
-// Relationship Instance Variables
-
-//
-// Constructors and Initializers    
-//
-
-public PhaseIdTest()
-{
-    super();
+/**
+ * <p>
+ * JavaBean for data model tests.</p>
+ */
+public class TestBean extends com.sun.faces.mock.model.TestBean {
 }
-
-//
-// Class methods
-//
-
-//
-// General Methods
-//
-
-    public void testToString() {
-	Iterator valueIter = PhaseId.VALUES.iterator();
-	String cur = null;
-	while (valueIter.hasNext()) {
-	    cur = (String) valueIter.next().toString();
-	    System.out.println(cur);
-	    assertTrue(cur.length() > 3);
-	}
-	
-    }
-
-} // end of class PhaseIdTest

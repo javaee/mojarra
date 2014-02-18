@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,72 +37,45 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
 package javax.faces.model;
 
-
-import java.util.ArrayList;
-import java.util.List;
-
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
-
 /**
- * <p>Unit tests for {@link ListDataModel}.</p>
+ * <p>
+ * Test implementation of DataModelListener.</p>
  */
+public class TestListener implements DataModelListener {
 
-public class ListDataModelTestCase extends DataModelTestCaseBase {
-
-
-    // ------------------------------------------------------------ Constructors
-
-
-    /**
-     * Construct a new instance of this test case.
-     *
-     * @param name Name of the test case
-     */
-    public ListDataModelTestCase(String name) {
-
-        super(name);
-
-    }
-
-
-    // ------------------------------------------------------ Instance Variables
-
-
-    // ---------------------------------------------------- Overall Test Methods
-
-
-    // Set up instance variables required by this test case.
-    public void setUp() throws Exception {
-
-        List<TestBean> list = new ArrayList<TestBean>();
-        for (int i = 0; i < 5; i++) {
-            list.add(new TestBean());
+    // ----------------------------------------------- DataModelListener Methods
+    @Override
+    public void rowSelected(DataModelEvent event) {
+        Object rowData = event.getRowData();
+        int rowIndex = event.getRowIndex();
+        trace("" + rowIndex);
+        if ((rowIndex >= 0) && (rowData == null)) {
+            throw new IllegalArgumentException("rowIndex=" + rowIndex
+                    + " but rowData is null");
+        } else if ((rowIndex == -1) && (rowData != null)) {
+            throw new IllegalArgumentException("rowIndex=" + rowIndex
+                    + " but rowData is not null");
+        } else if (rowIndex < -1) {
+            throw new IllegalArgumentException("rowIndex=" + rowIndex);
         }
-        beans = list.toArray(new TestBean[5]);
-        configure();
-        model = new ListDataModel<TestBean>(list);
-        super.setUp();
 
     }
 
+    // ---------------------------------------------------------- Static Methods
+    private static StringBuffer trace = new StringBuffer();
 
-    // Return the tests included in this test case.
-    public static Test suite() {
-
-        return (new TestSuite(ListDataModelTestCase.class));
-
+    public static String trace() {
+        return (trace.toString());
     }
 
-
-    // ------------------------------------------------- Individual Test Methods
-
-
-    // ------------------------------------------------------- Protected Methods
-
-
+    public static void trace(String value) {
+        if (value == null) {
+            trace = new StringBuffer();
+        } else {
+            trace.append("/");
+            trace.append(value);
+        }
+    }
 }

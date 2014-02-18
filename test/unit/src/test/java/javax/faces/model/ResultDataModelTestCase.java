@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,68 +37,76 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
 package javax.faces.model;
 
-
+import java.util.Map;
+import com.sun.faces.mock.MockResult;
+import static junit.framework.Assert.assertTrue;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-
 /**
- * <p>Unit tests for {@link ArrayDataModel}.</p>
+ * <p>
+ * Unit tests for {@link ResultDataModel}.</p>
  */
-
-public class ArrayDataModelTestCase extends DataModelTestCaseBase {
-
+public class ResultDataModelTestCase extends DataModelTestCaseBase {
 
     // ------------------------------------------------------------ Constructors
-
-
     /**
      * Construct a new instance of this test case.
      *
      * @param name Name of the test case
      */
-    public ArrayDataModelTestCase(String name) {
+    public ResultDataModelTestCase(String name) {
 
         super(name);
 
     }
 
-
     // ------------------------------------------------------ Instance Variables
-
+    // The Result passed to our ResultDataModel
+    protected MockResult result = null;
 
     // ---------------------------------------------------- Overall Test Methods
-
-
     // Set up instance variables required by this test case.
+    @Override
     public void setUp() throws Exception {
-
         beans = new TestBean[5];
         for (int i = 0; i < beans.length; i++) {
             beans[i] = new TestBean();
         }
         configure();
-        model = new ArrayDataModel<TestBean>(beans);
+        result = new MockResult(beans);
+        model = new ResultDataModel(result);
         super.setUp();
-
     }
-
 
     // Return the tests included in this test case.
     public static Test suite() {
-
-        return (new TestSuite(ArrayDataModelTestCase.class));
-
+        return (new TestSuite(ResultDataModelTestCase.class));
     }
 
-
     // ------------------------------------------------- Individual Test Methods
-
-
     // ------------------------------------------------------- Protected Methods
+    @Override
+    protected TestBean data() throws Exception {
+        Object data = model.getRowData();
+        assertTrue(data instanceof Map);
+        TestBean bean = new TestBean();
+        Map map = (Map) data;
 
+        bean.setBooleanProperty(((Boolean) map.get("booleanProperty")).booleanValue());
+        bean.setBooleanSecond(((Boolean) map.get("booleanSecond")).booleanValue());
+        bean.setByteProperty(((Byte) map.get("byteProperty")).byteValue());
+        bean.setDoubleProperty(((Double) map.get("doubleProperty")).doubleValue());
+        bean.setFloatProperty(((Float) map.get("floatProperty")).floatValue());
+        bean.setIntProperty(((Integer) map.get("intProperty")).intValue());
+        bean.setLongProperty(((Long) map.get("longProperty")).longValue());
+        bean.setNullProperty((String) map.get("nullProperty"));
+        bean.setShortProperty(((Short) map.get("shortProperty")).shortValue());
+        bean.setStringProperty((String) map.get("stringProperty"));
+        bean.setWriteOnlyProperty((String) map.get("writeOnlyPropertyValue"));
 
+        return (bean);
+    }
 }

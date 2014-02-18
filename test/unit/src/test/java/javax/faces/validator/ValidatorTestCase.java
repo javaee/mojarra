@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,75 +37,56 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
 package javax.faces.validator;
 
-
-import java.util.Locale;
-
-import javax.faces.component.UIInput;
-
+import com.sun.faces.junit.JUnitFacesTestCaseBase;
+import javax.faces.FactoryFinder;
+import com.sun.faces.mock.MockRenderKit;
+import javax.faces.render.RenderKit;
+import javax.faces.render.RenderKitFactory;
 import junit.framework.Test;
 import junit.framework.TestSuite;
+import javax.faces.component.UIViewRoot;
 
 /**
- * <p>Unit tests for {@link RegexValidator}.</p>
+ * <p>
+ * Base unit tests for all {@link Validator} implementations.</p>
  */
-
-public class RegexValidatorTestCase extends ValidatorTestCase {
-
+public class ValidatorTestCase extends JUnitFacesTestCaseBase {
 
     // ------------------------------------------------------------ Constructors
-
-
     /**
      * Construct a new instance of this test case.
      *
      * @param name Name of the test case
      */
-    public RegexValidatorTestCase(String name) {
+    public ValidatorTestCase(String name) {
         super(name);
     }
 
-
     // ---------------------------------------------------- Overall Test Methods
+    // Set up instance variables required by this test case.
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+        root.setViewId("/viewId");
+        facesContext.setViewRoot(root);
+        RenderKitFactory renderKitFactory = (RenderKitFactory) FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        RenderKit renderKit = new MockRenderKit();
+        try {
+            renderKitFactory.addRenderKit(RenderKitFactory.HTML_BASIC_RENDER_KIT,
+                    renderKit);
+        } catch (IllegalArgumentException e) {
+        }
+
+    }
 
     // Return the tests included in this test case.
     public static Test suite() {
-        return (new TestSuite(RegexValidatorTestCase.class));
+        return (new TestSuite(ValidatorTestCase.class));
     }
 
-
-    // ------------------------------------------------- Individual Test Methods
-
-    public void testPatternMatch() {
-        String patternStr = "t.*";
-        RegexValidator validator = new RegexValidator();
-        validator.setPattern(patternStr);
-        UIInput component = new UIInput();
-        String checkme = "test";
-        try {
-            validator.validate(facesContext, component, checkme);
-            assertTrue(true);
-        } catch (ValidatorException ve) {
-            fail("Exception thrown "+ve.getMessage());
-        }
-    }
-
-    public void testPatterMismatch() {
-        String patternStr = "t.*";
-        facesContext.getViewRoot().setLocale(Locale.US);
-        RegexValidator validator = new RegexValidator();
-        validator.setPattern(patternStr);
-        UIInput component = new UIInput();
-        String checkme = "jest";
-        try {
-            validator.validate(facesContext, component, checkme);
-            fail("Exception not thrown when tested "+checkme+" against "+patternStr);
-        } catch (ValidatorException ve) {
-            String detail = ve.getFacesMessage().getDetail();
-            System.out.println("Detail in test: "+detail);
-            assertTrue(detail.equalsIgnoreCase("Regex pattern of 't.*' not matched"));
-        }
+    public void testNoOp() {
     }
 }

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,16 +37,44 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
 package javax.faces.model;
 
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 /**
- * <p>JavaBean for data model tests.</p>
+ * <p>
+ * Unit tests for {@link ScalarDataModel}.</p>
  */
+public class ScalarDataModelTestCase extends DataModelTestCaseBase {
 
-public class TestBean extends com.sun.faces.mock.model.TestBean {
+    // ------------------------------------------------------------ Constructors
+    /**
+     * Construct a new instance of this test case.
+     *
+     * @param name Name of the test case
+     */
+    public ScalarDataModelTestCase(String name) {
+        super(name);
+    }
 
+    // ------------------------------------------------------ Instance Variables
+    // ---------------------------------------------------- Overall Test Methods
+    // Set up instance variables required by this test case.
+    @Override
+    public void setUp() throws Exception {
+        beans = new TestBean[1];
+        beans[0] = new TestBean();
+        configure();
+        model = new ScalarDataModel<TestBean>(beans[0]);
+        super.setUp();
+    }
 
+    // Return the tests included in this test case.
+    public static Test suite() {
+        return (new TestSuite(ScalarDataModelTestCase.class));
+    }
 
+    // ------------------------------------------------- Individual Test Methods
+    // ------------------------------------------------------- Protected Methods
 }

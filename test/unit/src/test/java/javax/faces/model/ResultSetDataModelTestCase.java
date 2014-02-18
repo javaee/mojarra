@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,9 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
 package javax.faces.model;
-
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -47,52 +45,39 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import javax.faces.context.FacesContext;
 import com.sun.faces.mock.MockResultSet;
-import com.sun.faces.mock.MockResultSetMetaData;
-import javax.faces.model.DataModel;
-import javax.faces.model.DataModelEvent;
-import javax.faces.model.DataModelListener;
-import junit.framework.TestCase;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertNull;
+import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.fail;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-
 /**
- * <p>Unit tests for {@link ArrayDataModel}.</p>
+ * <p>
+ * Unit tests for {@link ArrayDataModel}.</p>
  */
-
 public class ResultSetDataModelTestCase extends DataModelTestCaseBase {
 
-
     // ------------------------------------------------------------ Constructors
-
-
     /**
      * Construct a new instance of this test case.
      *
      * @param name Name of the test case
      */
     public ResultSetDataModelTestCase(String name) {
-
         super(name);
-
     }
 
-
     // ------------------------------------------------------ Instance Variables
-
-
     // The ResultSet passed to our ResultSetDataModel
     protected MockResultSet result = null;
 
-
     // ---------------------------------------------------- Overall Test Methods
-
-
     // Set up instance variables required by this test case.
+    @Override
     public void setUp() throws Exception {
-
         beans = new TestBean[5];
         for (int i = 0; i < beans.length; i++) {
             beans[i] = new TestBean();
@@ -101,24 +86,16 @@ public class ResultSetDataModelTestCase extends DataModelTestCaseBase {
         result = new MockResultSet(beans);
         model = new ResultSetDataModel(result);
         super.setUp();
-
     }
-
 
     // Return the tests included in this test case.
     public static Test suite() {
-
         return (new TestSuite(ResultSetDataModelTestCase.class));
-
     }
 
-
     // ------------------------------------------------- Individual Test Methods
-
-
     // Test ((Map) getRowData()).containsKey()
     public void testRowDataContainsKey() throws Exception {
-
         // Position to row 1 and retrieve the corresponding Map
         model.setRowIndex(1);
         assertTrue(model.isRowAvailable());
@@ -152,13 +129,10 @@ public class ResultSetDataModelTestCase extends DataModelTestCaseBase {
         assertTrue(!map.containsKey("FOO"));
         assertTrue(!map.containsKey("bar"));
         assertTrue(!map.containsKey("BAR"));
-
     }
-
 
     // Test ((Map) getRowData()).containsValue()
     public void testRowDataContainsValue() throws Exception {
-
         // Position to row 1 and retrieve the corresponding Map
         model.setRowIndex(1);
         assertTrue(model.isRowAvailable());
@@ -180,13 +154,10 @@ public class ResultSetDataModelTestCase extends DataModelTestCaseBase {
         // Test negative results
         assertTrue(!map.containsValue("foo"));
         assertTrue(!map.containsValue(new Integer(654321)));
-
     }
-
 
     // Test ((Map) getRowData()).entrySet()
     public void testRowDataEntrySet() throws Exception {
-
         // Position to row 1 and retrieve the corresponding Map
         model.setRowIndex(1);
         assertTrue(model.isRowAvailable());
@@ -197,54 +168,38 @@ public class ResultSetDataModelTestCase extends DataModelTestCaseBase {
         Set set = map.entrySet();
 
         // Test exact match postive results
-        assertTrue(set.contains
-                   (new TestEntry("booleanProperty",
-                                  Boolean.FALSE)));
-        assertTrue(set.contains
-                   (new TestEntry("booleanSecond",
-                                  Boolean.TRUE)));
-        assertTrue(set.contains
-                   (new TestEntry("byteProperty",
-                                  new Byte((byte) 1))));
-        assertTrue(set.contains
-                   (new TestEntry("doubleProperty",
-                                  new Double((double) 100.0))));
-        assertTrue(set.contains
-                   (new TestEntry("floatProperty",
-                                  new Float((float) 10.0))));
-        assertTrue(set.contains
-                   (new TestEntry("intProperty",
-                                  new Integer((int) 1000))));
-        assertTrue(set.contains
-                   (new TestEntry("longProperty",
-                                  new Long((long) 10000))));
-        assertTrue(set.contains
-                   (new TestEntry("stringProperty", "This is string 1")));
+        assertTrue(set.contains(new TestEntry("booleanProperty",
+                Boolean.FALSE)));
+        assertTrue(set.contains(new TestEntry("booleanSecond",
+                Boolean.TRUE)));
+        assertTrue(set.contains(new TestEntry("byteProperty",
+                new Byte((byte) 1))));
+        assertTrue(set.contains(new TestEntry("doubleProperty",
+                new Double((double) 100.0))));
+        assertTrue(set.contains(new TestEntry("floatProperty",
+                new Float((float) 10.0))));
+        assertTrue(set.contains(new TestEntry("intProperty",
+                new Integer((int) 1000))));
+        assertTrue(set.contains(new TestEntry("longProperty",
+                new Long((long) 10000))));
+        assertTrue(set.contains(new TestEntry("stringProperty", "This is string 1")));
 
         // Test exact match postive results
-        assertTrue(set.contains
-                   (new TestEntry("booleanPROPERTY",
-                                  Boolean.FALSE)));
-        assertTrue(set.contains
-                   (new TestEntry("booleanSECOND",
-                                  Boolean.TRUE)));
-        assertTrue(set.contains
-                   (new TestEntry("bytePROPERTY",
-                                  new Byte((byte) 1))));
-        assertTrue(set.contains
-                   (new TestEntry("doublePROPERTY",
-                                  new Double((double) 100.0))));
-        assertTrue(set.contains
-                   (new TestEntry("floatPROPERTY",
-                                  new Float((float) 10.0))));
-        assertTrue(set.contains
-                   (new TestEntry("intPROPERTY",
-                                  new Integer((int) 1000))));
-        assertTrue(set.contains
-                   (new TestEntry("longPROPERTY",
-                                  new Long((long) 10000))));
-        assertTrue(set.contains
-                   (new TestEntry("stringPROPERTY", "This is string 1")));
+        assertTrue(set.contains(new TestEntry("booleanPROPERTY",
+                Boolean.FALSE)));
+        assertTrue(set.contains(new TestEntry("booleanSECOND",
+                Boolean.TRUE)));
+        assertTrue(set.contains(new TestEntry("bytePROPERTY",
+                new Byte((byte) 1))));
+        assertTrue(set.contains(new TestEntry("doublePROPERTY",
+                new Double((double) 100.0))));
+        assertTrue(set.contains(new TestEntry("floatPROPERTY",
+                new Float((float) 10.0))));
+        assertTrue(set.contains(new TestEntry("intPROPERTY",
+                new Integer((int) 1000))));
+        assertTrue(set.contains(new TestEntry("longPROPERTY",
+                new Long((long) 10000))));
+        assertTrue(set.contains(new TestEntry("stringPROPERTY", "This is string 1")));
 
         // Test negative results
         assertTrue(!set.contains(new TestEntry("foo", "bar")));
@@ -264,22 +219,18 @@ public class ResultSetDataModelTestCase extends DataModelTestCaseBase {
             }
         }
         assertEquals("This is string 1 modified",
-                     beans[1].getStringProperty());
+                beans[1].getStringProperty());
         assertEquals("This is string 1 modified",
-                     (String) map.get("stringProperty"));
+                (String) map.get("stringProperty"));
         assertEquals("This is string 1 modified",
-                     (String) map.get("stringPROPERTY"));
+                (String) map.get("stringPROPERTY"));
         result.absolute(2); // ResultSet indexing is one-relative
         assertEquals("This is string 1 modified",
-                     (String) result.getObject("stringProperty"));
-
-
+                (String) result.getObject("stringProperty"));
     }
-
 
     // Test ((Map) getRowData()).get()
     public void testRowDataGet() throws Exception {
-
         // Position to row 1 and retrieve the corresponding Map
         model.setRowIndex(1);
         assertTrue(model.isRowAvailable());
@@ -290,52 +241,49 @@ public class ResultSetDataModelTestCase extends DataModelTestCaseBase {
 
         // Test exact match on column names
         assertEquals(Boolean.FALSE,
-                     (Boolean) map.get("booleanProperty"));
+                (Boolean) map.get("booleanProperty"));
         assertEquals(Boolean.TRUE,
-                     (Boolean) map.get("booleanSecond"));
+                (Boolean) map.get("booleanSecond"));
         assertEquals(new Byte((byte) 1),
-                     (Byte) map.get("byteProperty"));
+                (Byte) map.get("byteProperty"));
         assertEquals(new Double((double) 100.0),
-                     (Double) map.get("doubleProperty"));
+                (Double) map.get("doubleProperty"));
         assertEquals(new Float((float) 10.0),
-                     (Float) map.get("floatProperty"));
+                (Float) map.get("floatProperty"));
         assertEquals(new Integer((int) 1000),
-                     (Integer) map.get("intProperty"));
+                (Integer) map.get("intProperty"));
         assertEquals(new Long((long) 10000),
-                     (Long) map.get("longProperty"));
+                (Long) map.get("longProperty"));
         assertEquals("This is string 1",
-                     (String) map.get("stringProperty"));
+                (String) map.get("stringProperty"));
 
         // Test inexact match on column names
         assertEquals(Boolean.FALSE,
-                     (Boolean) map.get("booleanPROPERTY"));
+                (Boolean) map.get("booleanPROPERTY"));
         assertEquals(Boolean.TRUE,
-                     (Boolean) map.get("booleanSECOND"));
+                (Boolean) map.get("booleanSECOND"));
         assertEquals(new Byte((byte) 1),
-                     (Byte) map.get("bytePROPERTY"));
+                (Byte) map.get("bytePROPERTY"));
         assertEquals(new Double((double) 100.0),
-                     (Double) map.get("doublePROPERTY"));
+                (Double) map.get("doublePROPERTY"));
         assertEquals(new Float((float) 10.0),
-                     (Float) map.get("floatPROPERTY"));
+                (Float) map.get("floatPROPERTY"));
         assertEquals(new Integer((int) 1000),
-                     (Integer) map.get("intPROPERTY"));
+                (Integer) map.get("intPROPERTY"));
         assertEquals(new Long((long) 10000),
-                     (Long) map.get("longPROPERTY"));
+                (Long) map.get("longPROPERTY"));
         assertEquals("This is string 1",
-                     (String) map.get("stringPROPERTY"));
+                (String) map.get("stringPROPERTY"));
 
         // Test null return on non-existent column names
         assertNull(map.get("foo"));
         assertNull(map.get("FOO"));
         assertNull(map.get("bar"));
         assertNull(map.get("bar"));
-
     }
-
 
     // Test ((Map) getRowData()).keySet()
     public void testRowDataKeySet() throws Exception {
-
         // Position to row 1 and retrieve the corresponding Map
         model.setRowIndex(1);
         assertTrue(model.isRowAvailable());
@@ -373,13 +321,10 @@ public class ResultSetDataModelTestCase extends DataModelTestCaseBase {
 
         // Test other methods
         assertTrue(!set.isEmpty());
-
     }
-
 
     // Test ((Map) getRowData()).put()
     public void testRowDataPut() throws Exception {
-
         // Position to row 1 and retrieve the corresponding Map
         model.setRowIndex(1);
         assertTrue(model.isRowAvailable());
@@ -387,13 +332,10 @@ public class ResultSetDataModelTestCase extends DataModelTestCaseBase {
         assertNotNull(data);
         assertTrue(data instanceof Map);
         Map map = (Map) data;
-
     }
-
 
     // Test unsupported operations on ((Map) getRowData())
     public void testRowDataUnsupported() throws Exception {
-
         // Position to row 1 and retrieve the corresponding Map
         model.setRowIndex(1);
         assertTrue(model.isRowAvailable());
@@ -407,7 +349,7 @@ public class ResultSetDataModelTestCase extends DataModelTestCaseBase {
             map.clear();
             fail("Should have thrown UnsupportedOperationException");
         } catch (UnsupportedOperationException e) {
-            ; // Expected result
+            // Expected result
         }
 
         // entrySet()
@@ -416,7 +358,7 @@ public class ResultSetDataModelTestCase extends DataModelTestCaseBase {
             entrySet.add(new TestEntry("foo", "bar"));
             fail("Should have thrown UnsupportedOperationException");
         } catch (UnsupportedOperationException e) {
-            ; // Expected result
+            // Expected result
         }
         List mapEntries = new ArrayList();
         mapEntries.add(new TestEntry("foo", "bar"));
@@ -425,13 +367,13 @@ public class ResultSetDataModelTestCase extends DataModelTestCaseBase {
             entrySet.addAll(mapEntries);
             fail("Should have thrown UnsupportedOperationException");
         } catch (UnsupportedOperationException e) {
-            ; // Expected result
+            // Expected result
         }
         try {
             entrySet.clear();
             fail("Should have thrown UnsupportedOperationException");
         } catch (UnsupportedOperationException e) {
-            ; // Expected result
+            // Expected result
         }
         try {
             Iterator iterator = entrySet.iterator();
@@ -439,25 +381,25 @@ public class ResultSetDataModelTestCase extends DataModelTestCaseBase {
             iterator.remove();
             fail("Should have thrown UnsupportedOperationException");
         } catch (UnsupportedOperationException e) {
-            ; // Expected result
+            // Expected result
         }
         try {
             entrySet.remove(new TestEntry("foo", "bar"));
             fail("Should have thrown UnsupportedOperationException");
         } catch (UnsupportedOperationException e) {
-            ; // Expected result
+            // Expected result
         }
         try {
             entrySet.removeAll(mapEntries);
             fail("Should have thrown UnsupportedOperationException");
         } catch (UnsupportedOperationException e) {
-            ; // Expected result
+            // Expected result
         }
         try {
             entrySet.retainAll(mapEntries);
             fail("Should have thrown UnsupportedOperationException");
         } catch (UnsupportedOperationException e) {
-            ; // Expected result
+            // Expected result
         }
 
         // keySet()
@@ -466,7 +408,7 @@ public class ResultSetDataModelTestCase extends DataModelTestCaseBase {
             keySet.add("foo");
             fail("Should have thrown UnsupportedOperationException");
         } catch (UnsupportedOperationException e) {
-            ; // Expected result
+            // Expected result
         }
         List mapKeys = new ArrayList();
         mapKeys.add("foo");
@@ -475,13 +417,13 @@ public class ResultSetDataModelTestCase extends DataModelTestCaseBase {
             keySet.addAll(mapKeys);
             fail("Should have thrown UnsupportedOperationException");
         } catch (UnsupportedOperationException e) {
-            ; // Expected result
+            // Expected result
         }
         try {
             keySet.clear();
             fail("Should have thrown UnsupportedOperationException");
         } catch (UnsupportedOperationException e) {
-            ; // Expected result
+            // Expected result
         }
         try {
             Iterator iterator = keySet.iterator();
@@ -489,25 +431,25 @@ public class ResultSetDataModelTestCase extends DataModelTestCaseBase {
             iterator.remove();
             fail("Should have thrown UnsupportedOperationException");
         } catch (UnsupportedOperationException e) {
-            ; // Expected result
+            // Expected result
         }
         try {
             keySet.remove(new TestEntry("foo", "bar"));
             fail("Should have thrown UnsupportedOperationException");
         } catch (UnsupportedOperationException e) {
-            ; // Expected result
+            // Expected result
         }
         try {
             keySet.removeAll(mapKeys);
             fail("Should have thrown UnsupportedOperationException");
         } catch (UnsupportedOperationException e) {
-            ; // Expected result
+            // Expected result
         }
         try {
             keySet.retainAll(mapKeys);
             fail("Should have thrown UnsupportedOperationException");
         } catch (UnsupportedOperationException e) {
-            ; // Expected result
+            // Expected result
         }
 
         // remove()
@@ -515,7 +457,7 @@ public class ResultSetDataModelTestCase extends DataModelTestCaseBase {
             map.remove("foo");
             fail("Should have thrown UnsupportedOperationException");
         } catch (UnsupportedOperationException e) {
-            ; // Expected result
+            // Expected result
         }
 
         // values()
@@ -524,7 +466,7 @@ public class ResultSetDataModelTestCase extends DataModelTestCaseBase {
             values.add("foo");
             fail("Should have thrown UnsupportedOperationException");
         } catch (UnsupportedOperationException e) {
-            ; // Expected result
+            // Expected result
         }
         List list = new ArrayList();
         list.add("foo");
@@ -533,13 +475,13 @@ public class ResultSetDataModelTestCase extends DataModelTestCaseBase {
             values.addAll(list);
             fail("Should have thrown UnsupportedOperationException");
         } catch (UnsupportedOperationException e) {
-            ; // Expected result
+            // Expected result
         }
         try {
             values.clear();
             fail("Should have thrown UnsupportedOperationException");
         } catch (UnsupportedOperationException e) {
-            ; // Expected result
+            // Expected result
         }
         try {
             Iterator iterator = values.iterator();
@@ -547,33 +489,31 @@ public class ResultSetDataModelTestCase extends DataModelTestCaseBase {
             iterator.remove();
             fail("Should have thrown UnsupportedOperationException");
         } catch (UnsupportedOperationException e) {
-            ; // Expected result
+            // Expected result
         }
         try {
             values.remove("foo");
             fail("Should have thrown UnsupportedOperationException");
         } catch (UnsupportedOperationException e) {
-            ; // Expected result
+            // Expected result
         }
         try {
             values.removeAll(list);
             fail("Should have thrown UnsupportedOperationException");
         } catch (UnsupportedOperationException e) {
-            ; // Expected result
+            // Expected result
         }
         try {
             values.retainAll(list);
             fail("Should have thrown UnsupportedOperationException");
         } catch (UnsupportedOperationException e) {
-            ; // Expected result
+            // Expected result
         }
 
     }
 
-
     // Test ((Map) getRowData()).values()
     public void testRowDataValues() throws Exception {
-
         // Position to row 1 and retrieve the corresponding Map
         model.setRowIndex(1);
         assertTrue(model.isRowAvailable());
@@ -599,45 +539,30 @@ public class ResultSetDataModelTestCase extends DataModelTestCaseBase {
 
         // Test other methods
         assertTrue(!values.isEmpty());
-
     }
 
-
     // ------------------------------------------------------- Protected Methods
-
-
+    @Override
     protected TestBean data() throws Exception {
-
         Object data = model.getRowData();
         assertTrue(data instanceof Map);
         TestBean bean = new TestBean();
         Map map = (Map) data;
 
-        bean.setBooleanProperty
-            (((Boolean) map.get("booleanProperty")).booleanValue());
-        bean.setBooleanSecond
-            (((Boolean) map.get("booleanSecond")).booleanValue());
-        bean.setByteProperty
-            (((Byte) map.get("byteProperty")).byteValue());
-        bean.setDoubleProperty
-            (((Double) map.get("doubleProperty")).doubleValue());
-        bean.setFloatProperty
-            (((Float) map.get("floatProperty")).floatValue());
-        bean.setIntProperty
-            (((Integer) map.get("intProperty")).intValue());
-        bean.setLongProperty
-            (((Long) map.get("longProperty")).longValue());
+        bean.setBooleanProperty(((Boolean) map.get("booleanProperty")).booleanValue());
+        bean.setBooleanSecond(((Boolean) map.get("booleanSecond")).booleanValue());
+        bean.setByteProperty(((Byte) map.get("byteProperty")).byteValue());
+        bean.setDoubleProperty(((Double) map.get("doubleProperty")).doubleValue());
+        bean.setFloatProperty(((Float) map.get("floatProperty")).floatValue());
+        bean.setIntProperty(((Integer) map.get("intProperty")).intValue());
+        bean.setLongProperty(((Long) map.get("longProperty")).longValue());
         bean.setNullProperty((String) map.get("nullProperty"));
-        bean.setShortProperty
-            (((Short) map.get("shortProperty")).shortValue());
+        bean.setShortProperty(((Short) map.get("shortProperty")).shortValue());
         bean.setStringProperty((String) map.get("stringProperty"));
-        bean.setWriteOnlyProperty
-            ((String) map.get("writeOnlyPropertyValue"));
+        bean.setWriteOnlyProperty((String) map.get("writeOnlyPropertyValue"));
 
         return (bean);
-
     }
-
 
     class TestEntry implements Map.Entry {
 
@@ -649,25 +574,33 @@ public class ResultSetDataModelTestCase extends DataModelTestCaseBase {
         private Object key;
         private Object value;
 
-        public Object getKey() { return key; }
-        public Object getValue() { return value; }
+        @Override
+        public Object getKey() {
+            return key;
+        }
+
+        @Override
+        public Object getValue() {
+            return value;
+        }
+
+        @Override
         public Object setValue(Object value) {
             Object previous = this.value;
             this.value = value;
             return previous;
         }
 
+        @Override
         public boolean equals(Object o) {
             if (!(o instanceof Map.Entry)) {
                 return (false);
             }
             Map.Entry e = (Map.Entry) o;
-            return (key == null ?
-                    e.getKey() == null : key.equals(e.getKey())) &&
-                (value == null ?
-                 e.getValue() == null : value.equals(e.getValue()));
+            return (key == null
+                    ? e.getKey() == null : key.equals(e.getKey()))
+                    && (value == null
+                    ? e.getValue() == null : value.equals(e.getValue()));
         }
-        
     }
-
 }

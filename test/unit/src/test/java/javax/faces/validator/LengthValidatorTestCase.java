@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,27 +37,22 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
 package javax.faces.validator;
 
-
 import java.util.Locale;
-
 import javax.faces.component.UIInput;
-
+import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.fail;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
 /**
- * <p>Unit tests for {@link LengthValidator}.</p>
+ * <p>
+ * Unit tests for {@link LengthValidator}.</p>
  */
-
 public class LengthValidatorTestCase extends ValidatorTestCase {
 
-
     // ------------------------------------------------------------ Constructors
-
-
     /**
      * Construct a new instance of this test case.
      *
@@ -67,57 +62,50 @@ public class LengthValidatorTestCase extends ValidatorTestCase {
         super(name);
     }
 
-
     // ---------------------------------------------------- Overall Test Methods
-
     // Return the tests included in this test case.
     public static Test suite() {
         return (new TestSuite(LengthValidatorTestCase.class));
     }
 
-
     // ------------------------------------------------- Individual Test Methods
-
     public void testLocaleHonored() {
-	LengthValidator validator = new LengthValidator();
-	validator.setMinimum(1000);
-	validator.setMaximum(2000);
-	boolean exceptionThrown = false;
-	UIInput component = new UIInput();
-	String message;
-	Locale.setDefault(Locale.US);
-	facesContext.getViewRoot().setLocale(Locale.US);
-	
-	try {
-	    validator.validate(facesContext, component, 
-			       "Not at all long enough");
-	    fail("Exception not thrown");
-	}
-	catch (ValidatorException e) {
-	    exceptionThrown = true;
-	    message = e.getMessage();
-	    assertTrue("message: \"" + message + "\" missing localized chars.",
-		       -1 != message.indexOf("1,000"));
-	}
-	assertTrue(exceptionThrown);
+        LengthValidator validator = new LengthValidator();
+        validator.setMinimum(1000);
+        validator.setMaximum(2000);
+        boolean exceptionThrown = false;
+        UIInput component = new UIInput();
+        String message;
+        Locale.setDefault(Locale.US);
+        facesContext.getViewRoot().setLocale(Locale.US);
 
-	exceptionThrown = false;
-	Locale.setDefault(Locale.GERMAN);
-	facesContext.getViewRoot().setLocale(Locale.GERMAN);
+        try {
+            validator.validate(facesContext, component,
+                    "Not at all long enough");
+            fail("Exception not thrown");
+        } catch (ValidatorException e) {
+            exceptionThrown = true;
+            message = e.getMessage();
+            assertTrue("message: \"" + message + "\" missing localized chars.",
+                    -1 != message.indexOf("1,000"));
+        }
+        assertTrue(exceptionThrown);
 
-	try {
-	    validator.validate(facesContext, component, 
-			       "Still not long enough");
-	    fail("Exception not thrown");
-	}
-	catch (ValidatorException e) {
-	    exceptionThrown = true;
-	    message = e.getMessage();
-	    assertTrue("message: \"" + message + "\" missing localized chars.",
-		       -1 != message.indexOf("1.000"));
-	}
-	assertTrue(exceptionThrown);
+        exceptionThrown = false;
+        Locale.setDefault(Locale.GERMAN);
+        facesContext.getViewRoot().setLocale(Locale.GERMAN);
 
+        try {
+            validator.validate(facesContext, component,
+                    "Still not long enough");
+            fail("Exception not thrown");
+        } catch (ValidatorException e) {
+            exceptionThrown = true;
+            message = e.getMessage();
+            assertTrue("message: \"" + message + "\" missing localized chars.",
+                    -1 != message.indexOf("1.000"));
+        }
+        assertTrue(exceptionThrown);
     }
 
     public void testHashCode() {
@@ -154,5 +142,4 @@ public class LengthValidatorTestCase extends ValidatorTestCase {
 
         assertTrue(validator1.hashCode() != validator2.hashCode());
     }
-
 }
