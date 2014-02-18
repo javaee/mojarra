@@ -42,18 +42,25 @@ package com.sun.faces.renderkit.html_basic;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
+import javax.faces.context.FacesContext;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class HtmlResponseWriterTest {
-
+    
     /**
      * Test cloneWithWriter method.
      */
     @Test
     public void testCloneWithWriter() throws Exception {
+        
+        Method method = FacesContext.class.getDeclaredMethod("setCurrentInstance", FacesContext.class);
+        method.setAccessible(true);
+        method.invoke(null, new Object[] { null });
+        
         Writer writer = new StringWriter();
         HtmlResponseWriter responseWriter = new HtmlResponseWriter(writer, "text/html", "UTF-8");
         Field field = responseWriter.getClass().getDeclaredField("dontEscape");
@@ -75,6 +82,11 @@ public class HtmlResponseWriterTest {
      */
     @Test
     public void testCloneWithWriter2() throws Exception {
+
+        Method method = FacesContext.class.getDeclaredMethod("setCurrentInstance", FacesContext.class);
+        method.setAccessible(true);
+        method.invoke(null, new Object[] { null });        
+        
         Writer writer = new StringWriter();
         HtmlResponseWriter responseWriter = new HtmlResponseWriter(writer, "text/html", "UTF-8");
         Field field = responseWriter.getClass().getDeclaredField("writingCdata");
@@ -96,6 +108,11 @@ public class HtmlResponseWriterTest {
      */
     @Test
     public void testCDATAWithXHTML() throws Exception {
+        
+        Method method = FacesContext.class.getDeclaredMethod("setCurrentInstance", FacesContext.class);
+        method.setAccessible(true);
+        method.invoke(null, new Object[] { null });
+
         UIComponent componentForElement = new UIOutput();
         String expected = "<script>\n//<![CDATA[\n\n function queueEvent() {\n  return false;\n}\n\n\n//]]>\n</script>";
 
