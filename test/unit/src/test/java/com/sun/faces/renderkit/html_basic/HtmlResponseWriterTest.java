@@ -54,7 +54,6 @@ public class HtmlResponseWriterTest {
      * Test cloneWithWriter method.
      */
     @Test
-    @Ignore
     public void testCloneWithWriter() throws Exception {
         Writer writer = new StringWriter();
         HtmlResponseWriter responseWriter = new HtmlResponseWriter(writer, "text/html", "UTF-8");
@@ -76,7 +75,6 @@ public class HtmlResponseWriterTest {
      * Test cloneWithWriter method.
      */
     @Test
-    @Ignore
     public void testCloneWithWriter2() throws Exception {
         Writer writer = new StringWriter();
         HtmlResponseWriter responseWriter = new HtmlResponseWriter(writer, "text/html", "UTF-8");
@@ -98,7 +96,6 @@ public class HtmlResponseWriterTest {
      * Test CDATA.
      */
     @Test
-    @Ignore
     public void testCDATAWithXHTML() throws Exception {
         UIComponent componentForElement = new UIOutput();
         String expected = "<script>\n//<![CDATA[\n\n function queueEvent() {\n  return false;\n}\n\n\n//]]>\n</script>";
