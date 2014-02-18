@@ -60,7 +60,7 @@ import java.sql.SQLWarning;
 import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Timestamp;
-import com.sun.faces.mock.model.TestBean;
+import com.sun.faces.mock.model.BeanTestImpl;
 import org.apache.commons.beanutils.PropertyUtils;
 
 /**
@@ -160,8 +160,8 @@ public class MockResultSet implements ResultSet {
         }
         try {
             if (columnName.equals("writeOnlyProperty")
-                    && (beans[row - 1] instanceof TestBean)) {
-                return (((TestBean) beans[row - 1]).getWriteOnlyPropertyValue());
+                    && (beans[row - 1] instanceof BeanTestImpl)) {
+                return (((BeanTestImpl) beans[row - 1]).getWriteOnlyPropertyValue());
             } else {
                 return (PropertyUtils.getSimpleProperty(beans[row - 1],
                         columnName));
@@ -1154,12 +1154,10 @@ public class MockResultSet implements ResultSet {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
     public <T> T getObject(int columnIndex, Class<T> type) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
     public <T> T getObject(String columnLabel, Class<T> type) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); 
     }

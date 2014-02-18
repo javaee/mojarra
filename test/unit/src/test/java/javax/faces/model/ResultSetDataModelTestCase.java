@@ -78,9 +78,9 @@ public class ResultSetDataModelTestCase extends DataModelTestCaseBase {
     // Set up instance variables required by this test case.
     @Override
     public void setUp() throws Exception {
-        beans = new TestBean[5];
+        beans = new BeanTestImpl[5];
         for (int i = 0; i < beans.length; i++) {
-            beans[i] = new TestBean();
+            beans[i] = new BeanTestImpl();
         }
         configure();
         result = new MockResultSet(beans);
@@ -543,10 +543,10 @@ public class ResultSetDataModelTestCase extends DataModelTestCaseBase {
 
     // ------------------------------------------------------- Protected Methods
     @Override
-    protected TestBean data() throws Exception {
+    protected BeanTestImpl data() throws Exception {
         Object data = model.getRowData();
         assertTrue(data instanceof Map);
-        TestBean bean = new TestBean();
+        BeanTestImpl bean = new BeanTestImpl();
         Map map = (Map) data;
 
         bean.setBooleanProperty(((Boolean) map.get("booleanProperty")).booleanValue());

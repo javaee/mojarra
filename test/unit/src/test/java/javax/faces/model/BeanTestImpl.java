@@ -43,5 +43,5 @@ package javax.faces.model;
  * <p>
  * JavaBean for data model tests.</p>
  */
-public class TestBean extends com.sun.faces.mock.model.TestBean {
+public class BeanTestImpl extends com.sun.faces.mock.model.BeanTestImpl {
 }

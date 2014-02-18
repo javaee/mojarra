@@ -63,12 +63,12 @@ public class ArrayDataModelTestCase extends DataModelTestCaseBase {
     // Set up instance variables required by this test case.
     @Override
     public void setUp() throws Exception {
-        beans = new TestBean[5];
+        beans = new BeanTestImpl[5];
         for (int i = 0; i < beans.length; i++) {
-            beans[i] = new TestBean();
+            beans[i] = new BeanTestImpl();
         }
         configure();
-        model = new ArrayDataModel<TestBean>(beans);
+        model = new ArrayDataModel<BeanTestImpl>(beans);
         super.setUp();
     }
 

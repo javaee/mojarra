@@ -72,7 +72,7 @@ public abstract class DataModelTestCaseBase extends TestCase {
 
     // ------------------------------------------------------ Instance Variables
     // The array of beans we will be wrapping (must be initialized before setUp)
-    protected TestBean beans[] = new TestBean[0];
+    protected BeanTestImpl beans[] = new BeanTestImpl[0];
 
     // The DataModel we are testing
     protected DataModel model = null;
@@ -81,7 +81,7 @@ public abstract class DataModelTestCaseBase extends TestCase {
     // Configure the properties of the beans we will be wrapping
     protected void configure() {
         for (int i = 0; i < beans.length; i++) {
-            TestBean bean = beans[i];
+            BeanTestImpl bean = beans[i];
             bean.setBooleanProperty((i % 2) == 0);
             bean.setBooleanSecond(!bean.getBooleanProperty());
             bean.setByteProperty((byte) i);
@@ -134,30 +134,30 @@ public abstract class DataModelTestCaseBase extends TestCase {
     public void testPositionAscending() throws Exception {
         StringBuffer sb = new StringBuffer();
         model.setRowIndex(-1);
-        model.addDataModelListener(new TestListener());
-        TestListener.trace(null);
+        model.addDataModelListener(new ListenerTestImpl());
+        ListenerTestImpl.trace(null);
 
         int n = model.getRowCount();
         for (int i = 0; i < n; i++) {
             checkRow(i);
             sb.append("/").append(i);
         }
-        assertEquals(sb.toString(), TestListener.trace());
+        assertEquals(sb.toString(), ListenerTestImpl.trace());
     }
 
     // Test positioning to all rows in descending order
     public void testPositionDescending() throws Exception {
         StringBuffer sb = new StringBuffer();
         model.setRowIndex(-1);
-        model.addDataModelListener(new TestListener());
-        TestListener.trace(null);
+        model.addDataModelListener(new ListenerTestImpl());
+        ListenerTestImpl.trace(null);
 
         int n = model.getRowCount();
         for (int i = (n - 1); i >= 0; i--) {
             checkRow(i);
             sb.append("/").append(i);
         }
-        assertEquals(sb.toString(), TestListener.trace());
+        assertEquals(sb.toString(), ListenerTestImpl.trace());
     }
 
     // Test a pristine DataModel instance
@@ -180,8 +180,8 @@ public abstract class DataModelTestCaseBase extends TestCase {
 
     // Test removing listener
     public void testRemoveListener() throws Exception {
-        TestListener listener = new TestListener();
-        TestListener.trace(null);
+        ListenerTestImpl listener = new ListenerTestImpl();
+        ListenerTestImpl.trace(null);
         model.addDataModelListener(listener);
         model.setRowIndex(-1);
         model.setRowIndex(0);
@@ -189,18 +189,18 @@ public abstract class DataModelTestCaseBase extends TestCase {
         model.setRowIndex(-1);
         model.removeDataModelListener(listener);
         model.setRowIndex(0);
-        assertEquals("/-1/0/-1", TestListener.trace());
+        assertEquals("/-1/0/-1", ListenerTestImpl.trace());
     }
 
     // Test resetting the wrapped data (should trigger an event
     public void testReset() throws Exception {
-        TestListener listener = new TestListener();
-        TestListener.trace(null);
+        ListenerTestImpl listener = new ListenerTestImpl();
+        ListenerTestImpl.trace(null);
         model.addDataModelListener(listener);
 
         assertEquals(0, model.getRowIndex());
         model.setWrappedData(model.getWrappedData());
-        assertEquals("/0", TestListener.trace());
+        assertEquals("/0", ListenerTestImpl.trace());
     }
 
     // Test row available manipulations
@@ -226,7 +226,7 @@ public abstract class DataModelTestCaseBase extends TestCase {
         assertNotNull(data);
 
         // Modify several property values
-        TestBean bean = beans[0];
+        BeanTestImpl bean = beans[0];
         bean.setBooleanProperty(!bean.getBooleanProperty());
         if (data instanceof Map) {
             ((Map) data).put("booleanProperty",
@@ -322,17 +322,17 @@ public abstract class DataModelTestCaseBase extends TestCase {
     }
 
     // ------------------------------------------------------- Protected Methods
-    protected TestBean data() throws Exception {
+    protected BeanTestImpl data() throws Exception {
         Object data = model.getRowData();
         assertNotNull(data);
-        assertTrue(data instanceof TestBean);
-        return ((TestBean) data);
+        assertTrue(data instanceof BeanTestImpl);
+        return ((BeanTestImpl) data);
     }
 
     protected void checkRow(int i) throws Exception {
         model.setRowIndex(i);
         String prompt = "Row " + i + " property ";
-        TestBean bean = data();
+        BeanTestImpl bean = data();
         assertNotNull("Row " + i + " data", bean);
         assertEquals(prompt + "booleanProperty",
                 beans[i].getBooleanProperty(),

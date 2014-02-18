@@ -68,13 +68,13 @@ public class ListDataModelTestCase extends DataModelTestCaseBase {
     // Set up instance variables required by this test case.
     @Override
     public void setUp() throws Exception {
-        List<TestBean> list = new ArrayList<TestBean>();
+        List<BeanTestImpl> list = new ArrayList<BeanTestImpl>();
         for (int i = 0; i < 5; i++) {
-            list.add(new TestBean());
+            list.add(new BeanTestImpl());
         }
-        beans = list.toArray(new TestBean[5]);
+        beans = list.toArray(new BeanTestImpl[5]);
         configure();
-        model = new ListDataModel<TestBean>(list);
+        model = new ListDataModel<BeanTestImpl>(list);
         super.setUp();
     }
 

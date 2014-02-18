@@ -43,7 +43,7 @@ package com.sun.faces.mock.model;
  * <p>
  * JavaBean for data model tests.</p>
  */
-public class TestBean {
+public class BeanTestImpl {
 
     // -------------------------------------------------------------- Properties
     /**

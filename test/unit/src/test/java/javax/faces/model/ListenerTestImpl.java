@@ -43,7 +43,7 @@ package javax.faces.model;
  * <p>
  * Test implementation of DataModelListener.</p>
  */
-public class TestListener implements DataModelListener {
+public class ListenerTestImpl implements DataModelListener {
 
     // ----------------------------------------------- DataModelListener Methods
     @Override

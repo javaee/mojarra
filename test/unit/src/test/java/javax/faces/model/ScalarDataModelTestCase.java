@@ -63,10 +63,10 @@ public class ScalarDataModelTestCase extends DataModelTestCaseBase {
     // Set up instance variables required by this test case.
     @Override
     public void setUp() throws Exception {
-        beans = new TestBean[1];
-        beans[0] = new TestBean();
+        beans = new BeanTestImpl[1];
+        beans[0] = new BeanTestImpl();
         configure();
-        model = new ScalarDataModel<TestBean>(beans[0]);
+        model = new ScalarDataModel<BeanTestImpl>(beans[0]);
         super.setUp();
     }
 
