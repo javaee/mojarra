@@ -46,7 +46,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 
 public class HtmlResponseWriterTest {
 
