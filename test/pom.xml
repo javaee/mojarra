@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.sun.faces.test</groupId>
     <artifactId>com.sun.faces.test</artifactId>
-    <version>2.1.7-SNAPSHOT</version>
+    <version>2.1.7-02-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Mojarra Test POM</name>
     <modules>
@@ -39,8 +39,18 @@
             <plugins>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>1.7</version>
+                </plugin>                
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
                     <version>2.2</version>
+                </plugin>
+                <plugin>                 
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>2.8</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -66,6 +76,112 @@
         </dependency>
     </dependencies>
     <profiles>
+        <profile>
+            <id>hudson-wls-prepare-two-jar</id>
+            <build>
+                <plugins>
+                    <plugin>                 
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy</id>                         
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>copy</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>${jsf.pre-maven-rename.groupId}</groupId>
+                                            <artifactId>${jsf.pre-maven-rename.api.artifactId}</artifactId>
+                                            <version>${jsf.version}</version>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>                                     
+                                            <outputDirectory>${integration.container.home}/tmp.mojarra</outputDirectory>
+                                            <destFileName>jsf-api.jar</destFileName>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>${jsf.pre-maven-rename.groupId}</groupId>
+                                            <artifactId>${jsf.pre-maven-rename.impl.artifactId}</artifactId>
+                                            <version>${jsf.version}</version>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>                                     
+                                            <outputDirectory>${integration.container.home}/tmp.mojarra</outputDirectory>
+                                            <destFileName>jsf-impl.jar</destFileName>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>                 
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>create-wls.mojarra</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                  <target>
+                                    <delete failonerror="false" dir="${integration.container.home}/tmp.mojarra" />
+                                    <mkdir dir="${integration.container.home}/tmp.mojarra/wls.mojarra" />
+                                  </target>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>instrument-wls-with-mojarra</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                  <target>
+                                    <!-- do the jsf-impl.jar -->
+                                    <unzip src="${integration.container.home}/${wls.mojarraJarPath}/${wls.mojarraImplJarName}"
+                                           dest="${integration.container.home}/tmp.mojarra/wls.mojarra" />
+                                    <delete dir="${integration.container.home}/tmp.mojarra/wls.mojarra/com/sun" />
+                                    <delete dir="${integration.container.home}/tmp.mojarra/wls.mojarra/META-INF" />
+                                    <unzip src="${integration.container.home}/tmp.mojarra/jsf-impl.jar"
+                                           dest="${integration.container.home}/tmp.mojarra/wls.mojarra" />
+                                    <zip destfile="${integration.container.home}/tmp.mojarra/${wls.mojarraImplJarName}"
+                                         basedir="${integration.container.home}/tmp.mojarra/wls.mojarra"
+                                         update="true" />
+                                    <copy overwrite="true"
+                                          file="${integration.container.home}/tmp.mojarra/${wls.mojarraImplJarName}"
+                                          tofile="${integration.container.home}/${wls.mojarraJarPath}/${wls.mojarraImplJarName}" />
+                                    <!-- do the jsf-api.jar -->
+                                    <delete failonerror="false" dir="${integration.container.home}/tmp.mojarra/wls.mojarra" />
+                                    <mkdir dir="${integration.container.home}/tmp.mojarra/wls.mojarra" />
+                                    <unzip src="${integration.container.home}/${wls.mojarraJarPath}/${wls.mojarraApiJarName}"
+                                           dest="${integration.container.home}/tmp.mojarra/wls.mojarra" />
+                                    <delete dir="${integration.container.home}/tmp.mojarra/wls.mojarra/javax" />
+                                    <delete dir="${integration.container.home}/tmp.mojarra/wls.mojarra/META-INF" />
+                                    <unzip src="${integration.container.home}/tmp.mojarra/jsf-api.jar"
+                                           dest="${integration.container.home}/tmp.mojarra/wls.mojarra" />
+                                    <zip destfile="${integration.container.home}/tmp.mojarra/${wls.mojarraApiJarName}"
+                                         basedir="${integration.container.home}/tmp.mojarra/wls.mojarra"
+                                         update="true" />
+                                    <copy overwrite="true"
+                                          file="${integration.container.home}/tmp.mojarra/${wls.mojarraApiJarName}"
+                                          tofile="${integration.container.home}/${wls.mojarraJarPath}/${wls.mojarraApiJarName}" />
+
+                                  </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <properties>
+                <wls.mojarraJarPath>modules</wls.mojarraJarPath>
+                <wls.mojarraImplJarName>glassfish.jsf_1.0.0.0_2-1-5.jar</wls.mojarraImplJarName>
+                <wls.mojarraApiJarName>javax.jsf_1.0.0.0_2-1.jar</wls.mojarraApiJarName>
+            </properties>
+        </profile>
         <profile>
             <id>integration-failsafe</id>
             <build>
@@ -306,6 +422,9 @@
         <integration.serverPort>8080</integration.serverPort>
         <jsf.artifactId>javax.faces</jsf.artifactId>
         <jsf.groupId>org.glassfish</jsf.groupId>
+        <jsf.pre-maven-rename.api.artifactId>jsf-api</jsf.pre-maven-rename.api.artifactId>
+        <jsf.pre-maven-rename.impl.artifactId>jsf-impl</jsf.pre-maven-rename.impl.artifactId>
+        <jsf.pre-maven-rename.groupId>com.sun.faces</jsf.pre-maven-rename.groupId>
         <jsf.version>${project.version}</jsf.version>
     </properties>
 </project>
