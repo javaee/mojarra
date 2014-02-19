@@ -421,7 +421,7 @@
 
     <target name="test"
             description="Run all JUnit test cases"
-            >
+            depends="build.test.dir">
     </target>
 
     <target name="test.FactoryFinder" depends="build.test.dir">
