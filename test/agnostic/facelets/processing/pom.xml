@@ -53,5 +53,6 @@
     <name>Mojarra ${project.version} - Test - Agnostic - Facelets - Processing</name>
     <modules>
         <module>html5</module>
+        <module>escaping01</module>
     </modules>
 </project>
