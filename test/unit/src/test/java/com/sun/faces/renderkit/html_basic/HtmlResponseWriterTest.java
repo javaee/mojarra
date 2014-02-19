@@ -53,6 +53,7 @@ public class HtmlResponseWriterTest {
     
     /**
      * Test cloneWithWriter method.
+     * @throws java.lang.Exception
      */
     @Test
     public void testCloneWithWriter() throws Exception {
@@ -79,6 +80,7 @@ public class HtmlResponseWriterTest {
 
     /**
      * Test cloneWithWriter method.
+     * @throws java.lang.Exception
      */
     @Test
     public void testCloneWithWriter2() throws Exception {
@@ -105,6 +107,7 @@ public class HtmlResponseWriterTest {
 
     /**
      * Test CDATA.
+     * @throws java.lang.Exception
      */
     @Test
     public void testCDATAWithXHTML() throws Exception {

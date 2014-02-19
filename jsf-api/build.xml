@@ -421,18 +421,7 @@
 
     <target name="test"
             description="Run all JUnit test cases"
-            depends="build.test.dir,
-                copy.template.sources,
-                test.FactoryFinder,
-                test.FactoryFinder2,
-                test.FacesWrapper,
-                test.PhaseId,
-                test.application,
-                test.component,
-                test.validator,
-                test.mock,
-                test.model,
-                test.webapp">
+            >
     </target>
 
     <target name="test.FactoryFinder" depends="build.test.dir">
