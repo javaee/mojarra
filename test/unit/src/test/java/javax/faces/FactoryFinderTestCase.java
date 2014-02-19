@@ -144,7 +144,7 @@ public class FactoryFinderTestCase extends TestCase {
 
         // simulate the "WEB-INF/services" part
         // this is done by the build.xml file
-        File servicesDir = new File("target/classes/META-INF/services");
+        File servicesDir = new File(System.getProperty("basedir"), "target/classes/META-INF/services");
         servicesDir.mkdirs();
 
         File servicesFile = new File(servicesDir, "javax.faces.context.FacesContextFactory");
@@ -218,7 +218,7 @@ public class FactoryFinderTestCase extends TestCase {
 
         // simulate the "WEB-INF/services" part
         // this is done by the build.xml file
-        File servicesDir = new File("target/classes/META-INF/services");
+        File servicesDir = new File(System.getProperty("basedir"), "target/classes/META-INF/services");
         servicesDir.mkdirs();
 
         File servicesFile = new File(servicesDir, "javax.faces.context.FacesContextFactory");
