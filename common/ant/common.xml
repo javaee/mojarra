@@ -107,7 +107,7 @@
     <!-- Version -->
     <property name="spec.version" value="2.1"/>
     <property name="spec.snapshot.version" value="2.1-SNAPSHOT"/>
-    <property name="patch.version" value="7-02"/>
+    <property name="patch.version" value="7-03"/>
     <property name="impl.name" value="Mojarra"/>
     <property name="build.number" value="${DSTAMP}"/>
     <property name="build.type" value="SNAPSHOT"/>
@@ -207,7 +207,7 @@
     <!-- Intra-project dependency property names -->
 
     <property name="jsf-tools.jar" 
-              value="${maven.repo.local}/com/sun/faces/build/jsf-tools/2.1.7-02-SNAPSHOT/jsf-tools-2.1.7-02-SNAPSHOT.jar" />
+              value="${maven.repo.local}/com/sun/faces/build/jsf-tools/2.1.7-03-SNAPSHOT/jsf-tools-2.1.7-03-SNAPSHOT.jar" />
 
     <!-- Test classpaths that are used in multiple places within the project -->
     <path id="junit.classpath">

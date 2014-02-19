@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.sun.faces.test</groupId>
     <artifactId>com.sun.faces.test</artifactId>
-    <version>2.1.7-02-SNAPSHOT</version>
+    <version>2.1.7-03-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Mojarra Test POM</name>
     <modules>
