@@ -148,6 +148,10 @@ public class FactoryFinderTestCase extends TestCase {
         servicesDir.mkdirs();
 
         File servicesFile = new File(servicesDir, "javax.faces.context.FacesContextFactory");
+        
+        if (servicesFile.exists()) {
+            servicesFile.delete();
+        }
         PrintWriter writer = new PrintWriter(servicesFile);
         writer.println("javax.faces.mock.MockFacesContextFactoryExtender");
         writer.flush();
@@ -184,7 +188,7 @@ public class FactoryFinderTestCase extends TestCase {
         } catch (IllegalStateException ise) {
             exceptionThrown = true;
         }
-//        assertTrue(exceptionThrown);
+        assertTrue(exceptionThrown);
 
         servicesFile.delete();
     }
@@ -224,6 +228,11 @@ public class FactoryFinderTestCase extends TestCase {
         servicesDir.mkdirs();
 
         File servicesFile = new File(servicesDir, "javax.faces.context.FacesContextFactory");
+        
+        if (servicesFile.exists()) {
+            servicesFile.delete();
+        }
+        
         PrintWriter writer = new PrintWriter(servicesFile);
         writer.println("javax.faces.mock.MockFacesContextFactoryExtender");
         writer.flush();
