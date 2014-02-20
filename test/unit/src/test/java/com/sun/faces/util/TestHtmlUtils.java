@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,13 +37,11 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
 // TestHtmlUtils.java
 package com.sun.faces.util;
 
 import java.io.IOException;
 import java.io.StringWriter;
-
 
 import junit.framework.TestCase;
 
@@ -55,34 +53,33 @@ public class TestHtmlUtils extends TestCase {
     public void testWriteURL() throws IOException {
         //Test url with no params
         testURLEncoding("http://www.google.com",
-                        "http://www.google.com",
-                        "http://www.google.com");
+                "http://www.google.com",
+                "http://www.google.com");
         //Test URL with one param
         testURLEncoding("http://www.google.com?joe=10",
-                        "http://www.google.com?joe=10",
-                        "http://www.google.com?joe=10");
+                "http://www.google.com?joe=10",
+                "http://www.google.com?joe=10");
         //Test URL with two params
         testURLEncoding("http://www.google.com?joe=10&fred=20",
-                        "http://www.google.com?joe=10&amp;fred=20",
-                        "http://www.google.com?joe=10&amp;fred=20");
+                "http://www.google.com?joe=10&amp;fred=20",
+                "http://www.google.com?joe=10&amp;fred=20");
         //Test URL with & entity encoded
         testURLEncoding("/index.jsf?joe=10&amp;fred=20",
-                        "/index.jsf?joe=10&amp;fred=20",
-                        "/index.jsf?joe=10&amp;fred=20");
+                "/index.jsf?joe=10&amp;fred=20",
+                "/index.jsf?joe=10&amp;fred=20");
         //Test URL with two params and second & close to end of string
         testURLEncoding("/index.jsf?joe=10&f=20",
-                        "/index.jsf?joe=10&amp;f=20",
-                        "/index.jsf?joe=10&amp;f=20");
+                "/index.jsf?joe=10&amp;f=20",
+                "/index.jsf?joe=10&amp;f=20");
         //Test URL with misplaced & expected behavior but not necissarily right.
         testURLEncoding("/index.jsf?joe=10&f=20&",
-                        "/index.jsf?joe=10&amp;f=20&amp;",
-                        "/index.jsf?joe=10&amp;f=20&amp;");
+                "/index.jsf?joe=10&amp;f=20&amp;",
+                "/index.jsf?joe=10&amp;f=20&amp;");
         //Test URL with encoded entity at end of URL expected behavior but not necissarily right.
         testURLEncoding("/index.jsf?joe=10&f=20&amp;",
-                        "/index.jsf?joe=10&amp;f=20&amp;",
-                        "/index.jsf?joe=10&amp;f=20&amp;");
+                "/index.jsf?joe=10&amp;f=20&amp;",
+                "/index.jsf?joe=10&amp;f=20&amp;");
     }
-
 
     public void testControlCharacters() throws IOException {
 
@@ -125,7 +122,6 @@ public class TestHtmlUtils extends TestCase {
             }
         }
 
-
         for (int i = 0; i < 32; i++) {
             char[] textBuffer = new char[1024];
             char[] buffer = new char[1024];
@@ -149,11 +145,10 @@ public class TestHtmlUtils extends TestCase {
                 assertTrue(writer.toString().length() == 33);
             }
         }
-
     }
 
     private void testURLEncoding(String urlToEncode, String expectedHTML, String expectedXML)
-    throws IOException {
+            throws IOException {
         char[] textBuffer = new char[1024];
         StringWriter xmlWriter = new StringWriter();
         HtmlUtils.writeURL(xmlWriter, urlToEncode, textBuffer, "UTF-8");
@@ -164,5 +159,4 @@ public class TestHtmlUtils extends TestCase {
         System.out.println("HTML: " + htmlWriter.toString());
         assertEquals(htmlWriter.toString(), expectedHTML);
     }
-
 }

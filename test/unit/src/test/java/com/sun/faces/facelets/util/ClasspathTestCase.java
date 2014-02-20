@@ -1,7 +1,8 @@
+
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,90 +38,28 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.facelets.util;
 
-// TestUtil_local.java
-
-package com.sun.faces.util;
-
+import java.util.jar.JarFile;
+import static junit.framework.Assert.assertNull;
+import junit.framework.Test;
 import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
-import java.util.Locale;
+public class ClasspathTestCase extends TestCase {
 
-/**
- * <B>TestUtil_local.java</B> is a class ...
- * <p/>
- * <B>Lifetime And Scope</B> <P>
- *
- */
-
-public class TestUtil_local extends TestCase {
-
-//
-// Protected Constants
-//
-
-// Class Variables
-//
-
-//
-// Instance Variables
-//
-
-// Attribute Instance Variables
-
-// Relationship Instance Variables
-
-//
-// Constructors and Initializers    
-//
-
-    public TestUtil_local() {
-        super("TestUtil_local.java");
+    public static Test suite() {
+        return (new TestSuite(ClasspathTestCase.class));
     }
 
+    public void testGetAlternativeJarFile() throws Exception {
+        String input = "rar:/scratch/fleme/fmwhome/AS11gR1SOA/soa/connectors/FileAdapter.rar!fileAdapter.jar!/META-INF/";
 
-    public TestUtil_local(String name) {
-        super(name);
+        JarFile output = Classpath.getAlternativeJarFile(input);
+        assertNull(output);
+
+        input = "/scratch/ejburns/Documents/JavaEE/workareas/i_mojarra_1869/jsf-test/JAVASERVERFACES-1869/reproducer/FileAdapter.rar!fileAdapter.jar!/META-INF/";
+        output = Classpath.getAlternativeJarFile(input);
+        assertNull(output);
     }
-
-//
-// Class methods
-//
-
-//
-// General Methods
-//
-
-
-    public void testGetLocaleFromString() {
-        Locale result = null;
-
-        // positive tests
-        assertNotNull(result = Util.getLocaleFromString("ps"));
-        assertNotNull(result = Util.getLocaleFromString("tg_AF"));
-        assertNotNull(result = Util.getLocaleFromString("tk_IQ-Traditional"));
-        assertNotNull(result = Util.getLocaleFromString("tk-IQ_Traditional"));
-
-        try {
-            Util.getLocaleFromString("aoeuhoentuhtnhtnhoaenhnhu");
-            fail();
-        } catch(Exception exception) {}
-
-        try {
-            Util.getLocaleFromString("ps_PS-at-pq-wp");
-        } catch (Exception exception) {}
-
-        try {
-            Util.getLocaleFromString("tg-AF-oe-12");
-        } catch (Exception exception) {}
-
-        try {
-            Util.getLocaleFromString("12-34");
-        } catch (Exception exception) {}
-
-        try {
-            Util.getLocaleFromString("12-");
-        } catch (Exception exception) {}
-    }
-
-} // end of class TestUtil_local
+}

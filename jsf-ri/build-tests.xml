@@ -495,23 +495,6 @@
 
 
     <target name="run.test" depends="compile.test,config.compile">
-        <jsf.junit classpath-refid="test.runtime.classpath"
-                   test-results-dir="${impl.test.results.dir}" assert.classes="-ea:com.sun.faces.el.ChainAwareVariableResolver"
-                   custom.port="${scenario.aware.port}">
-            <suite>
-                <test todir="${impl.test.results.dir}"
-                      name="com.sun.faces.util.TestUtil_local"/>  
-                 <test todir="${impl.test.results.dir}"
-                      name="com.sun.faces.util.TestLRUMap_local"/>
-                 <test todir="${impl.test.results.dir}"
-                      name="com.sun.faces.util.TestHtmlUtils"/>
-                 <test todir="${impl.test.results.dir}"
-                      name="com.sun.faces.xml.ParseXMLTestCase"/>
-                <test todir="${impl.test.results.dir}"
-                      name="com.sun.faces.facelets.util.ClasspathTestCase"/>  
-
-            </suite>    
-        </jsf.junit>
 
 <!-- PENDING(sheetalv): return to running
 

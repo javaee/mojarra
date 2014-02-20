@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,12 +37,12 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
 package com.sun.faces.util;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Collections;
+import static junit.framework.Assert.assertEquals;
 
 import junit.framework.TestCase;
 
@@ -52,7 +52,6 @@ import junit.framework.TestCase;
 public class TestLRUMap_local extends TestCase {
 
     // ------------------------------------------------------------ Constructors
-
     public TestLRUMap_local() {
         super("TestLRUMap_local");
     }
@@ -62,25 +61,24 @@ public class TestLRUMap_local extends TestCase {
     }
 
     // ------------------------------------------------------------ Test Methods
-
     /**
      * Ensure that LRUMap works as advertised.
      */
     public void testLRUMap() {
 
-        LRUMap<String,String> map = new LRUMap<String,String>(5);
+        LRUMap<String, String> map = new LRUMap<String, String>(5);
         map.put("one", "one");
         map.put("two", "two");
         map.put("three", "three");
 
         // order should be "three", "two", "one"
         String[] control = {
-              "three", "two", "one"
+            "three", "two", "one"
         };
 
         int count = 3;
         display(control.clone(), map);
-        for (String s : map.keySet()) {          
+        for (String s : map.keySet()) {
             assertEquals(control[--count], s);
         }
 
@@ -88,28 +86,27 @@ public class TestLRUMap_local extends TestCase {
         map.put("five", "five");
         map.put("three", "three");
         map.put("six", "six");
-        control = new String[] {
-              "six", "three", "five", "four", "two"
+        control = new String[]{
+            "six", "three", "five", "four", "two"
         };
         count = 5;
         display(control.clone(), map);
-        for (String s: map.keySet()) {            
+        for (String s : map.keySet()) {
             assertEquals(control[--count], s);
         }
     }
-    
+
     // --------------------------------------------------------- Private Methods
-    
-    private static void display(String[] expected, LRUMap<String,String> actual) {
+    private static void display(String[] expected, LRUMap<String, String> actual) {
         System.out.println("Expected order:");
         List<String> revControl = Arrays.asList(expected);
         Collections.reverse(revControl);
-        for (String s: revControl) {
+        for (String s : revControl) {
             System.out.print(s + ' ');
         }
         System.out.println('\n');
         System.out.println("Actual order:");
-        for (String s: actual.keySet()) {
+        for (String s : actual.keySet()) {
             System.out.print(s + ' ');
         }
         System.out.println();

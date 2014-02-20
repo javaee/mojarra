@@ -2,7 +2,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -38,29 +38,65 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.facelets.util;
+package com.sun.faces.xml;
 
-import java.util.jar.JarFile;
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
+import java.util.Locale;
+import java.util.ResourceBundle;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
 
-public class ClasspathTestCase extends TestCase {
-    
-    public static Test suite() {
-        return (new TestSuite(ClasspathTestCase.class));
+public class XHTMLResolvingHandler extends DefaultHandler {
+
+    private ResourceBundle bundle;
+
+    public XHTMLResolvingHandler() {
+        bundle = ResourceBundle.getBundle(this.getClass().getPackage().getName() + ".Entities",
+                Locale.US);
     }
-    
-    public void testGetAlternativeJarFile() throws Exception {
-        String input = "rar:/scratch/fleme/fmwhome/AS11gR1SOA/soa/connectors/FileAdapter.rar!fileAdapter.jar!/META-INF/";
 
-        JarFile output = Classpath.getAlternativeJarFile(input);
-        assertNull(output);
-        
-        input = "/scratch/ejburns/Documents/JavaEE/workareas/i_mojarra_1869/jsf-test/JAVASERVERFACES-1869/reproducer/FileAdapter.rar!fileAdapter.jar!/META-INF/";
-        output = Classpath.getAlternativeJarFile(input);
-       assertNull(output);
+    @Override
+    public InputSource resolveEntity(String publicId, String systemId) throws IOException, SAXException {
+        InputSource is = null;
+        int slashslash = systemId.indexOf("//");
+        String key = systemId;
+        if (-1 != slashslash) {
+            key = systemId.substring(slashslash + 2);
+        }
+        final String value;
+
+        try {
+            value = bundle.getString(key);
+            is = new InputSource(systemId) {
+
+                @Override
+                public InputStream getByteStream() {
+                    InputStream inputStream = null;
+                    try {
+                        inputStream = new ByteArrayInputStream(value.getBytes("UTF-8"));
+                    } catch (UnsupportedEncodingException ex) {
+                    }
+                    return inputStream;
+                }
+
+                @Override
+                public Reader getCharacterStream() {
+                    Reader reader = null;
+                    reader = new StringReader(value);
+                    return reader;
+                }
+
+            };
+        } catch (Exception e) {
+
+        }
+
+        return is;
     }
-    
-    
 }
