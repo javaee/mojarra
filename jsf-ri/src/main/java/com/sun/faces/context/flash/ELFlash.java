@@ -224,6 +224,11 @@ public class ELFlash extends Flash {
          * twice.
          */
         DidWriteCookieAttributeName,
+        
+        /**
+         * Force setMaxAge(0)
+         */
+        ForceSetMaxAgeZero,
 
     }
 
@@ -969,6 +974,10 @@ public class ELFlash extends Flash {
         FlashInfo
                 nextFlash = flashManager.getNextRequestFlashInfo(),
                 prevFlash = flashManager.getPreviousRequestFlashInfo();
+        if (context.getAttributes().containsKey(CONSTANTS.ForceSetMaxAgeZero)) {
+            removeCookie(extContext, toSet);
+            return;
+        }
 
         // Don't try to write the cookie unless there is data in the flash.
         if ((null != nextFlash && !nextFlash.getFlashMap().isEmpty()) ||
@@ -991,7 +1000,7 @@ public class ELFlash extends Flash {
                 if (null != (val = toSet.getMaxAge())) {
                     properties.put("maxAge", val);
                 }
-                if (context.getExternalContext().isSecure()) {
+                if (extContext.isSecure()) {
                     properties.put("secure", Boolean.TRUE);
                 } else if (null != (val = toSet.getSecure())) {
                     properties.put("secure", val);
@@ -1005,33 +1014,41 @@ public class ELFlash extends Flash {
                 properties = null;
             }
             contextMap.put(CONSTANTS.DidWriteCookieAttributeName, Boolean.TRUE);
-        } else if (!extContext.isResponseCommitted()) {
-            Map<String, Object> properties = new HashMap();
-            Object val;
-            toSet.setMaxAge(0);
-
-            if (null != (val = toSet.getComment())) {
-                properties.put("comment", val);
-            }
-            if (null != (val = toSet.getDomain())) {
-                properties.put("domain", val);
-            }
-            if (null != (val = toSet.getMaxAge())) {
-                properties.put("maxAge", val);
-            }
-            if (context.getExternalContext().isSecure()) {
-                properties.put("secure", Boolean.TRUE);
-            } else if (null != (val = toSet.getSecure())) {
-                properties.put("secure", val);
-            }
-            if (null != (val = toSet.getPath())) {
-                properties.put("path", val);
-            }
-            properties.put("httpOnly", Boolean.TRUE);
-            extContext.addResponseCookie(toSet.getName(), toSet.getValue(), 
-                    !properties.isEmpty() ? properties : null);
-            properties = null;           
+        } else {
+            removeCookie(extContext, toSet);
         }
+    }
+    
+    private void removeCookie(ExternalContext extContext, Cookie toRemove) {
+        if (extContext.isResponseCommitted()) {
+            return;
+        }
+        Map<String, Object> properties = new HashMap();
+        Object val;
+        toRemove.setMaxAge(0);
+        
+        if (null != (val = toRemove.getComment())) {
+            properties.put("comment", val);
+        }
+        if (null != (val = toRemove.getDomain())) {
+            properties.put("domain", val);
+        }
+        if (null != (val = toRemove.getMaxAge())) {
+            properties.put("maxAge", val);
+        }
+        if (extContext.isSecure()) {
+            properties.put("secure", Boolean.TRUE);
+        } else if (null != (val = toRemove.getSecure())) {
+            properties.put("secure", val);
+        }
+        if (null != (val = toRemove.getPath())) {
+            properties.put("path", val);
+        }
+        properties.put("httpOnly", Boolean.TRUE);
+        extContext.addResponseCookie(toRemove.getName(), toRemove.getValue(), 
+                !properties.isEmpty() ? properties : null);
+        properties = null;           
+        
     }
 
     // </editor-fold>
@@ -1128,6 +1145,7 @@ public class ELFlash extends Flash {
                 result.decode(context, this, cookie);
                 contextMap.put(CONSTANTS.RequestFlashManager, result);
             } catch (InvalidKeyException ike) {
+                contextMap.put(CONSTANTS.ForceSetMaxAgeZero, Boolean.TRUE);
                 if (LOGGER.isLoggable(Level.SEVERE)) {
                     result = getCurrentFlashManager(contextMap, true);
                     LOGGER.log(Level.SEVERE,
@@ -1359,6 +1377,7 @@ public class ELFlash extends Flash {
                     nextRequestFlashInfo.setFlashMap(flashMap);
                 }
             } catch (Throwable t) {
+                context.getAttributes().put(CONSTANTS.ForceSetMaxAgeZero, Boolean.TRUE);
                 if (LOGGER.isLoggable(Level.SEVERE)) {
                     LOGGER.log(Level.SEVERE,
                             "jsf.externalcontext.flash.bad.cookie",

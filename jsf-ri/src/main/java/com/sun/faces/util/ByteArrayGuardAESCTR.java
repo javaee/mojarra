@@ -148,7 +148,8 @@ public final class ByteArrayGuardAESCTR {
 
             byte[] plaindata = decryptCipher.doFinal(bytes);
             for (byte cur : plaindata) {
-                if (cur < 0 || cur > 255) {
+                // Values < 0 cause the conversion to text to fail.
+                if (cur < 0 || cur > Byte.MAX_VALUE) {
                     throw new InvalidKeyException("Invalid characters in decrypted value");
                 }
             }
