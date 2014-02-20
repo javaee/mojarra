@@ -156,6 +156,19 @@ public class FactoryFinderTestCase extends TestCase {
         writer.println("javax.faces.mock.MockFacesContextFactoryExtender");
         writer.flush();
         writer.close();
+        
+        File cServicesDir = new File(System.getProperty("basedir"), "target/generated-classes/cobertura/META-INF/services");
+        cServicesDir.mkdirs();
+
+        File cServicesFile = new File(cServicesDir, "javax.faces.context.FacesContextFactory");
+        
+        if (cServicesFile.exists()) {
+            cServicesFile.delete();
+        }
+        PrintWriter cWriter = new PrintWriter(cServicesFile);
+        cWriter.println("javax.faces.mock.MockFacesContextFactoryExtender");
+        cWriter.flush();
+        cWriter.close();
 
         // simulate the "webapp faces-config.xml" part
         FactoryFinder.setFactory(FactoryFinder.FACES_CONTEXT_FACTORY,
@@ -191,6 +204,7 @@ public class FactoryFinderTestCase extends TestCase {
         assertTrue(exceptionThrown);
 
         servicesFile.delete();
+        cServicesFile.delete();
     }
 
     public void testNoFacesContext() throws Exception {
@@ -222,8 +236,6 @@ public class FactoryFinderTestCase extends TestCase {
 
         // simulate the "WEB-INF/services" part
         // this is done by the build.xml file
-        System.out.println(System.getProperty("basedir"));
-        System.out.println(System.getProperty("user.dir"));
         File servicesDir = new File(System.getProperty("basedir"), "target/classes/META-INF/services");
         servicesDir.mkdirs();
 
@@ -237,6 +249,20 @@ public class FactoryFinderTestCase extends TestCase {
         writer.println("javax.faces.mock.MockFacesContextFactoryExtender");
         writer.flush();
         writer.close();
+        
+        File cServicesDir = new File(System.getProperty("basedir"), "target/generated-classes/cobertura/META-INF/services");
+        cServicesDir.mkdirs();
+
+        File cServicesFile = new File(cServicesDir, "javax.faces.context.FacesContextFactory");
+        
+        if (cServicesFile.exists()) {
+            cServicesFile.delete();
+        }
+        
+        PrintWriter cWriter = new PrintWriter(cServicesFile);
+        cWriter.println("javax.faces.mock.MockFacesContextFactoryExtender");
+        cWriter.flush();
+        cWriter.close();
 
         // this testcase omits the "webapp faces-config.xml" simulation
         for (i = 0, len = FACTORIES.length; i < len; i++) {
@@ -255,6 +281,7 @@ public class FactoryFinderTestCase extends TestCase {
         assertTrue(System.getProperty("oldImpl").equals("com.sun.faces.mock.MockFacesContextFactory"));
 
         servicesFile.delete();
+        cServicesFile.delete();
     }
 
     public void testNoFacesContextInitially() throws Exception {
