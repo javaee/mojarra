@@ -1,0 +1,1505 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.sun.faces.test</groupId>
+    <artifactId>pom</artifactId>
+    <version>2.0.9-01-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>Mojarra ${project.version} - Test</name>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>1.7</version>
+                </plugin>                
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.0</version>
+                </plugin>
+                <plugin>                 
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>2.6</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>2.12.4</version>
+                </plugin>                
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>2.6</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.2</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-report-plugin</artifactId>
+                    <version>2.12.4</version>
+                </plugin>                
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>2.3</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.cargo</groupId>
+                    <artifactId>cargo-maven2-plugin</artifactId>
+                    <version>1.4.4</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <inherited>true</inherited>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <inherited>true</inherited>
+                <configuration>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <inherited>true</inherited>
+                <configuration>
+                    <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <dependencies>
+        <dependency>
+            <groupId>javax.faces</groupId>
+            <artifactId>javax.faces-api</artifactId>
+            <version>2.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.faces</artifactId>
+            <version>${jsf.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-web-api</artifactId>
+            <version>6.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.htmlunit</groupId>
+            <artifactId>htmlunit</artifactId>
+            <version>2.10</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    <profiles>
+        <profile>
+            <id>integration-glassfish-patch-weld</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>copy</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>org.jboss.weld</groupId>
+                                            <artifactId>weld-osgi-bundle</artifactId>
+                                            <version>1.1.11.Final</version>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>
+                                            <outputDirectory>${integration.container.home}/glassfish/modules</outputDirectory>
+                                            <destFileName>weld-osgi-bundle.jar</destFileName>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <properties>
+                <integration.container.home>C:/Glassfish3.1.2.2</integration.container.home>
+                <integration.container.id>glassfish3x</integration.container.id>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>integration-failsafe</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <inherited>true</inherited>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <integration.serverName>${integration.serverName}</integration.serverName>
+                                <integration.serverPort>${integration.serverPort}</integration.serverPort>
+                                <integration.serverProtocol>${integration.serverProtocol}</integration.serverProtocol>
+                                <integration.url>${integration.protocol}://${integration.serverName}:${integration.serverPort}/${project.build.finalName}/</integration.url>
+                                <jsf.version>${jsf.version}</jsf.version>
+                                <project.build.finalName>${project.build.finalName}</project.build.finalName>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>                
+                </plugins>
+            </build>
+            <properties>
+                <integration.protocol>http</integration.protocol>
+                <integration.serverName>localhost</integration.serverName>
+                <integration.serverPort>8080</integration.serverPort>
+            </properties>
+            <reporting>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-report-plugin</artifactId>
+                        <reportSets>
+                            <reportSet>
+                                <id>integration-tests</id>
+                                <reports>
+                                    <report>failsafe-report-only</report>
+                                </reports>
+                            </reportSet>
+                        </reportSets>
+                    </plugin>
+                </plugins>
+            </reporting>
+        </profile>
+        <profile>
+            <id>integration-failsafe-cluster</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <inherited>true</inherited>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                                <configuration>
+                                    <systemPropertyVariables>
+                                        <integration.url>${integration.protocol}://${integration.serverName1}:${integration.serverPort1}/${project.build.finalName}/</integration.url>
+                                        <integration.url2>${integration.protocol}://${integration.serverName2}:${integration.serverPort2}/${project.build.finalName}/</integration.url2>
+                                    </systemPropertyVariables>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>                
+                </plugins>
+            </build>
+            <properties>
+                <integration.protocol>http</integration.protocol>
+                <integration.serverName1>localhost</integration.serverName1>
+                <integration.serverName2>localhost</integration.serverName2>
+                <integration.serverPort1>28080</integration.serverPort1>
+                <integration.serverPort2>28081</integration.serverPort2>
+            </properties>
+            <reporting>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-report-plugin</artifactId>
+                        <reportSets>
+                            <reportSet>
+                                <id>integration-tests</id>
+                                <reports>
+                                    <report>failsafe-report-only</report>
+                                </reports>
+                            </reportSet>
+                        </reportSets>
+                    </plugin>
+                </plugins>
+            </reporting>
+        </profile>
+        <profile>
+            <id>integration-failsafe-virtual</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <inherited>true</inherited>
+                        <executions>
+                            <execution>
+                                <id>server1</id>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                                <configuration>
+                                    <systemPropertyVariables>
+                                        <integration.serverName>${integration.serverName1}</integration.serverName>
+                                        <integration.serverPort>${integration.serverPort1}</integration.serverPort>
+                                        <integration.serverProtocol>${integration.serverProtocol}</integration.serverProtocol>
+                                        <integration.url>${integration.protocol}://${integration.serverName1}:${integration.serverPort1}/${project.build.finalName}/</integration.url>
+                                        <project.build.finalName>${project.build.finalName}</project.build.finalName>
+                                    </systemPropertyVariables>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>server2</id>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                                <configuration>
+                                    <systemPropertyVariables>
+                                        <integration.serverName>${integration.serverName2}</integration.serverName>
+                                        <integration.serverPort>${integration.serverPort2}</integration.serverPort>
+                                        <integration.serverProtocol>${integration.serverProtocol}</integration.serverProtocol>
+                                        <integration.url>${integration.protocol}://${integration.serverName2}:${integration.serverPort2}/${project.build.finalName}/</integration.url>
+                                        <project.build.finalName>${project.build.finalName}</project.build.finalName>
+                                    </systemPropertyVariables>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>                
+                </plugins>
+            </build>
+            <properties>
+                <integration.protocol>http</integration.protocol>
+                <integration.serverName1>localhost</integration.serverName1>
+                <integration.serverName2>localhost</integration.serverName2>
+                <integration.serverPort1>18080</integration.serverPort1>
+                <integration.serverPort2>28080</integration.serverPort2>
+            </properties>
+            <reporting>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-report-plugin</artifactId>
+                        <reportSets>
+                            <reportSet>
+                                <id>integration-tests</id>
+                                <reports>
+                                    <report>failsafe-report-only</report>
+                                </reports>
+                            </reportSet>
+                        </reportSets>
+                    </plugin>
+                </plugins>
+            </reporting>
+        </profile>
+        <profile>
+            <id>integration-glassfish-cargo</id>
+            <build>
+                <plugins>
+                    <plugin>                 
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy</id>                         
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>copy</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>${jsf.groupId}</groupId>
+                                            <artifactId>${jsf.artifactId}</artifactId>
+                                            <version>${jsf.version}</version>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>                                     
+                                            <outputDirectory>${integration.container.home}/glassfish/modules</outputDirectory>
+                                            <destFileName>javax.faces.jar</destFileName>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.cargo</groupId>
+                        <artifactId>cargo-maven2-plugin</artifactId>
+                        <inherited>true</inherited>
+                        <executions>
+                            <execution>
+                                <id>start-container</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>start</goal>
+                                </goals>
+                                <configuration>
+                                    <timeout>600000</timeout>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>stop-container</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                                <configuration>
+                                    <timeout>600000</timeout>
+                                </configuration>
+                            </execution>
+                        </executions>                        
+                        <configuration>
+                            <container>
+                                <containerId>${integration.container.id}</containerId>
+                                <type>installed</type>
+                                <home>${integration.container.home}</home>
+                                <timeout>600000</timeout>
+                            </container>
+                            <configuration>
+                                <type>standalone</type>
+                                <home>${integration.container.config}</home>
+                                <properties>
+                                    <cargo.hostname>${integration.serverName}</cargo.hostname>
+                                    <cargo.servlet.port>${integration.serverPort}</cargo.servlet.port>
+                                    <cargo.domain>${integration.container.domain}</cargo.domain>
+                                </properties>
+                            </configuration>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+            <properties>
+                <integration.container.home>C:/Glassfish3.1.2.2</integration.container.home>
+                <integration.container.config>${integration.container.home}/glassfish/domains</integration.container.config>
+                <integration.container.domain>cargo-domain</integration.container.domain>
+                <integration.container.id>glassfish3x</integration.container.id>
+            </properties>
+        </profile>
+        <profile>
+            <id>integration-glassfish-cluster</id>
+            <build>
+                <plugins>
+                    <plugin>                 
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy</id>                         
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>copy</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>${jsf.groupId}</groupId>
+                                            <artifactId>${jsf.artifactId}</artifactId>
+                                            <version>${jsf.version}</version>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>                                     
+                                            <outputDirectory>${integration.container.home}/glassfish/modules</outputDirectory>
+                                            <destFileName>javax.faces.jar</destFileName>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>start-container</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <echo>=== Starting ${integration.container.cluster.domain}s ===</echo>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                            <arg line="start-domain ${integration.container.cluster.domain}"/>
+                                        </exec>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
+                                            <arg line="start-domain ${integration.container.cluster.domain}"/>
+                                        </exec>
+                                        <echo>=== Starting ${integration.container.cluster.name} ===</echo>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                            <arg line="start-cluster ${integration.container.cluster.name}"/>
+                                        </exec>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
+                                            <arg line="start-cluster ${integration.container.cluster.name}"/>
+                                        </exec>
+                                        <echo>=== Deploying ${project.build.finalName} to ${integration.container.cluster.name} ===</echo>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                            <arg line="deploy --force --target ${integration.container.cluster.name} ${project.build.directory}/${project.build.finalName}.war"/>
+                                        </exec>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
+                                            <arg line="deploy --force --target ${integration.container.cluster.name} ${project.build.directory}/${project.build.finalName}.war"/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>stop-container</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <echo>=== Undeploying ${project.build.finalName} from ${integration.container.cluster.name} ===</echo>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                            <arg line="undeploy --target ${integration.container.cluster.name} ${project.build.finalName}"/>
+                                        </exec>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
+                                            <arg line="undeploy --target ${integration.container.cluster.name} ${project.build.finalName}"/>
+                                        </exec>
+                                        <echo>=== Stopping ${integration.container.cluster.name} ===</echo>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                            <arg line="stop-cluster ${integration.container.cluster.name}"/>
+                                        </exec>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
+                                            <arg line="stop-cluster ${integration.container.cluster.name}"/>
+                                        </exec>
+                                        <echo>=== Stopping ${integration.container.cluster.domain} ===</echo>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                            <arg line="stop-domain ${integration.container.cluster.domain}"/>
+                                        </exec>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
+                                            <arg line="stop-domain ${integration.container.cluster.domain}"/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>                    
+                </plugins>
+            </build>
+            <properties>
+                <integration.container.cluster.domain>domain1</integration.container.cluster.domain>
+                <integration.container.cluster.name>cluster1</integration.container.cluster.name>
+                <integration.container.home>C:/Glassfish3.1.2.2</integration.container.home>
+            </properties>
+        </profile>
+        <profile>
+            <id>integration-glassfish-deploy</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>deploy-wars</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.plugin.classpath"/>
+                                        <available file="${project.build.directory}/${project.build.finalName}.war" property="war.exists"/>
+                                        <if>
+                                            <isset property="war.exists"/>
+                                            <then>
+                                                <echo>=== Deploying ${project.build.finalName} ===</echo>
+                                                <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                                    <arg line="deploy --force ${project.build.directory}/${project.build.finalName}.war"/>
+                                                </exec>
+                                                <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
+                                                    <arg line="deploy --force ${project.build.directory}/${project.build.finalName}.war"/>
+                                                </exec>
+                                            </then>
+                                        </if>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>ant-contrib</groupId>
+                                <artifactId>ant-contrib</artifactId>
+                                <version>1.0b3</version>
+                                <exclusions>
+                                    <exclusion>
+                                        <groupId>ant</groupId>
+                                        <artifactId>ant</artifactId>
+                                    </exclusion>
+                                </exclusions>
+                            </dependency>
+                        </dependencies>
+                    </plugin>                    
+                </plugins>
+            </build>
+            <properties>
+                <integration.container.home>C:/Glassfish3.1.2.2</integration.container.home>
+            </properties>
+        </profile>
+        <profile>
+            <id>integration-glassfish-hudson</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>prepare</id>
+                                <phase>validate</phase>
+                                <configuration>
+                                    <target>
+                                        <delete quiet="true" failonerror="false" dir="${integration.container.root}"/>
+                                        <mkdir dir="${integration.container.root}"/>
+                                        <unzip src="${integration.container.zipFile}" dest="${integration.container.root}"/>
+                                        <exec executable="sh" osfamily="unix">
+                                            <arg line='-c "chmod a+x ${integration.container.home}/glassfish/bin/*"'/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>ant-contrib</groupId>
+                                <artifactId>ant-contrib</artifactId>
+                                <version>1.0b3</version>
+                                <exclusions>
+                                    <exclusion>
+                                        <groupId>ant</groupId>
+                                        <artifactId>ant</artifactId>
+                                    </exclusion>
+                                </exclusions>
+                            </dependency>
+                        </dependencies>
+                    </plugin>                    
+                </plugins>
+            </build>
+            <properties>
+                <integration.container.home>C:/Glassfish3.1.2.2/glassfish3</integration.container.home>
+                <integration.container.root>C:/Glassfish3.1.2.2</integration.container.root>
+                <integration.container.zipFile>C:/Downloads/Glassfish3.1.2.2.zip</integration.container.zipFile>
+            </properties>
+        </profile>
+        <profile>
+            <id>hudson-container-cleanup</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.7</version>
+                        <executions>
+                            <execution>
+                                <id>prepare</id>
+                                <phase>validate</phase>
+                                <configuration>
+                                    <target>
+                                        <delete quiet="true" failonerror="false" dir="${integration.container.root}"/>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>ant-contrib</groupId>
+                                <artifactId>ant-contrib</artifactId>
+                                <version>1.0b3</version>
+                                <exclusions>
+                                    <exclusion>
+                                        <groupId>ant</groupId>
+                                        <artifactId>ant</artifactId>
+                                    </exclusion>
+                                </exclusions>
+                            </dependency>
+                        </dependencies>
+                    </plugin>                    
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>hudson-container-prepare</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.7</version>
+                        <executions>
+                            <execution>
+                                <id>prepare</id>
+                                <phase>validate</phase>
+                                <configuration>
+                                    <target>
+                                        <delete quiet="true" failonerror="false" dir="${integration.container.root}"/>
+                                        <mkdir dir="${integration.container.root}"/>
+                                        <unzip src="${integration.container.zipFile}" dest="${integration.container.root}"/>
+                                        <delete file="${integration.container.zipFile}"/>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>ant-contrib</groupId>
+                                <artifactId>ant-contrib</artifactId>
+                                <version>1.0b3</version>
+                                <exclusions>
+                                    <exclusion>
+                                        <groupId>ant</groupId>
+                                        <artifactId>ant</artifactId>
+                                    </exclusion>
+                                </exclusions>
+                            </dependency>
+                        </dependencies>
+                    </plugin>                    
+                </plugins>
+            </build>
+        </profile>        <profile>
+            <id>hudson-wls-prepare-two-jar</id>
+            <build>
+                <plugins>
+                    <plugin>                 
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy</id>                         
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>copy</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>${jsf.pre-maven-rename.groupId}</groupId>
+                                            <artifactId>${jsf.pre-maven-rename.api.artifactId}</artifactId>
+                                            <version>${jsf.version}</version>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>                                     
+                                            <outputDirectory>${integration.container.home}/tmp.mojarra</outputDirectory>
+                                            <destFileName>jsf-api.jar</destFileName>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>${jsf.pre-maven-rename.groupId}</groupId>
+                                            <artifactId>${jsf.pre-maven-rename.impl.artifactId}</artifactId>
+                                            <version>${jsf.version}</version>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>                                     
+                                            <outputDirectory>${integration.container.home}/tmp.mojarra</outputDirectory>
+                                            <destFileName>jsf-impl.jar</destFileName>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>                 
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>create-wls.mojarra</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                  <target>
+                                    <delete failonerror="false" dir="${integration.container.home}/tmp.mojarra" />
+                                    <mkdir dir="${integration.container.home}/tmp.mojarra/wls.mojarra" />
+                                  </target>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>instrument-wls-with-mojarra</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                  <target>
+                                    <!-- do the jsf-impl.jar -->
+                                    <unzip src="${integration.container.home}/${wls.mojarraJarPath}/${wls.mojarraImplJarName}"
+                                           dest="${integration.container.home}/tmp.mojarra/wls.mojarra" />
+                                    <delete dir="${integration.container.home}/tmp.mojarra/wls.mojarra/com/sun" />
+                                    <delete dir="${integration.container.home}/tmp.mojarra/wls.mojarra/META-INF" />
+                                    <unzip src="${integration.container.home}/tmp.mojarra/jsf-impl.jar"
+                                           dest="${integration.container.home}/tmp.mojarra/wls.mojarra" />
+                                    <zip destfile="${integration.container.home}/tmp.mojarra/${wls.mojarraImplJarName}"
+                                         basedir="${integration.container.home}/tmp.mojarra/wls.mojarra"
+                                         update="true" />
+                                    <copy overwrite="true"
+                                          file="${integration.container.home}/tmp.mojarra/${wls.mojarraImplJarName}"
+                                          tofile="${integration.container.home}/${wls.mojarraJarPath}/${wls.mojarraImplJarName}" />
+
+                                    <!-- do the jsf-api.jar -->
+                                    <delete failonerror="false" dir="${integration.container.home}/tmp.mojarra/wls.mojarra" />
+                                    <mkdir dir="${integration.container.home}/tmp.mojarra/wls.mojarra" />
+                                    <unzip src="${integration.container.home}/${wls.mojarraJarPath}/${wls.mojarraApiJarName}"
+                                           dest="${integration.container.home}/tmp.mojarra/wls.mojarra" />
+                                    <delete dir="${integration.container.home}/tmp.mojarra/wls.mojarra/javax" />
+                                    <delete dir="${integration.container.home}/tmp.mojarra/wls.mojarra/META-INF" />
+                                    <unzip src="${integration.container.home}/tmp.mojarra/jsf-api.jar"
+                                           dest="${integration.container.home}/tmp.mojarra/wls.mojarra" />
+                                    <zip destfile="${integration.container.home}/tmp.mojarra/${wls.mojarraApiJarName}"
+                                         basedir="${integration.container.home}/tmp.mojarra/wls.mojarra"
+                                         update="true" />
+                                    <copy overwrite="true"
+                                          file="${integration.container.home}/tmp.mojarra/${wls.mojarraApiJarName}"
+                                          tofile="${integration.container.home}/${wls.mojarraJarPath}/${wls.mojarraApiJarName}" />
+
+
+                                  </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <properties>
+                <wls.mojarraJarPath>modules</wls.mojarraJarPath>
+                <wls.mojarraImplJarName>glassfish.jsf_1.0.0.0_2-1-5.jar</wls.mojarraImplJarName>
+                <wls.mojarraApiJarName>javax.jsf_1.0.0.0_2-1.jar</wls.mojarraApiJarName>
+            </properties>
+        </profile>
+        <profile>
+            <id>hudson-wls-prepare</id>
+            <build>
+                <plugins>
+                    <plugin>                 
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy</id>                         
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>copy</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>${jsf.groupId}</groupId>
+                                            <artifactId>${jsf.artifactId}</artifactId>
+                                            <version>${jsf.version}</version>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>                                     
+                                            <outputDirectory>${integration.container.home}/tmp.mojarra</outputDirectory>
+                                            <destFileName>javax.faces.jar</destFileName>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>                 
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>create-wls.mojarra</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                  <target>
+                                    <delete failonerror="false" dir="${integration.container.home}/tmp.mojarra" />
+                                    <mkdir dir="${integration.container.home}/tmp.mojarra/wls.mojarra" />
+                                  </target>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>instrument-wls-with-mojarra</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                  <target>
+                                    <unzip src="${integration.container.home}/${wls.mojarraJarPath}/${wls.mojarraJarName}"
+                                           dest="${integration.container.home}/tmp.mojarra/wls.mojarra" />
+                                    <delete dir="${integration.container.home}/tmp.mojarra/wls.mojarra/javax" />
+                                    <delete dir="${integration.container.home}/tmp.mojarra/wls.mojarra/com/sun" />
+                                    <delete dir="${integration.container.home}/tmp.mojarra/wls.mojarra/META-INF" />
+                                    <unzip src="${integration.container.home}/tmp.mojarra/javax.faces.jar"
+                                           dest="${integration.container.home}/tmp.mojarra/wls.mojarra" />
+                                    <zip destfile="${integration.container.home}/tmp.mojarra/${wls.mojarraJarName}"
+                                         basedir="${integration.container.home}/tmp.mojarra/wls.mojarra"
+                                         update="true" />
+                                    <copy overwrite="true"
+                                          file="${integration.container.home}/tmp.mojarra/${wls.mojarraJarName}"
+                                          tofile="${integration.container.home}/${wls.mojarraJarPath}/${wls.mojarraJarName}" />
+                                  </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <properties>
+                <wls.mojarraJarPath>wlserver/modules</wls.mojarraJarPath>
+                <wls.mojarraJarName>glassfish.jsf_2.0.0.0_2-1-20.jar</wls.mojarraJarName>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>integration-glassfish-hudson-remove</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>prepare</id>
+                                <phase>validate</phase>
+                                <configuration>
+                                    <target>
+                                        <delete failonerror="false" file="${integration.container.zipFile}"/>
+                                        <delete quiet="true" failonerror="false" dir="${integration.container.root}"/>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>ant-contrib</groupId>
+                                <artifactId>ant-contrib</artifactId>
+                                <version>1.0b3</version>
+                                <exclusions>
+                                    <exclusion>
+                                        <groupId>ant</groupId>
+                                        <artifactId>ant</artifactId>
+                                    </exclusion>
+                                </exclusions>
+                            </dependency>
+                        </dependencies>
+                    </plugin>                    
+                </plugins>
+            </build>
+            <properties>
+                <integration.container.root>C:/Glassfish3.1.2.2</integration.container.root>
+                <integration.container.zipFile>C:/Downloads/Glassfish3.1.2.2.zip</integration.container.zipFile>
+            </properties>
+        </profile>
+        <profile>
+            <id>integration-glassfish-patch-el</id>
+            <build>
+                <plugins>
+                    <plugin>                 
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy</id>                         
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>copy</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>org.glassfish.web</groupId>
+                                            <artifactId>javax.el</artifactId>
+                                            <version>2.2.5</version>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>                                     
+                                            <outputDirectory>${integration.container.home}/glassfish/modules</outputDirectory>
+                                            <destFileName>javax.el.jar</destFileName>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <properties>
+                <integration.container.home>C:/Glassfish3.1.2.2</integration.container.home>
+                <integration.container.id>glassfish3x</integration.container.id>
+            </properties>
+        </profile>
+        <profile>
+            <id>integration-glassfish-prepare</id>
+            <build>
+                <plugins>
+                    <plugin>                 
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy</id>                         
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>copy</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>${jsf.groupId}</groupId>
+                                            <artifactId>${jsf.artifactId}</artifactId>
+                                            <version>${jsf.version}</version>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>                                     
+                                            <outputDirectory>${integration.container.home}/glassfish/modules</outputDirectory>
+                                            <destFileName>javax.faces.jar</destFileName>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <properties>
+                <integration.container.home>C:/Glassfish3.1.2.2</integration.container.home>
+                <integration.container.id>glassfish3x</integration.container.id>
+            </properties>
+        </profile>
+        <profile>
+            <id>integration-glassfish-virtual</id>
+            <build>
+                <plugins>
+                    <plugin>                 
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy</id>                         
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>copy</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>${jsf.groupId}</groupId>
+                                            <artifactId>${jsf.artifactId}</artifactId>
+                                            <version>${jsf.version}</version>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>                                     
+                                            <outputDirectory>${integration.container.home}/glassfish/modules</outputDirectory>
+                                            <destFileName>javax.faces.jar</destFileName>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>start-container</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <echo>=== Starting domain1 ===</echo>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                            <arg line="start-domain"/>
+                                        </exec>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
+                                            <arg line="start-domain"/>
+                                        </exec>
+                                        <echo>=== Creating server1 ===</echo>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                            <arg line="create-virtual-server --hosts localhost server1"/>
+                                        </exec>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
+                                            <arg line="create-virtual-server --hosts localhost server1"/>
+                                        </exec>
+                                        <echo>=== Creating server2 ===</echo>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                            <arg line="create-virtual-server --hosts localhost server2"/>
+                                        </exec>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
+                                            <arg line="create-virtual-server --hosts localhost server2"/>
+                                        </exec>
+                                        <echo>=== Creating listener-server1 ===</echo>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                            <arg line="create-http-listener --listeneraddress 0.0.0.0 --listenerport 18080 --default-virtual-server server1 listener-server1"/>
+                                        </exec>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
+                                            <arg line="create-http-listener --listeneraddress 0.0.0.0 --listenerport 18080 --default-virtual-server server1 listener-server1"/>
+                                        </exec>
+                                        <echo>=== Creating listener-server2 ===</echo>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                            <arg line="create-http-listener --listeneraddress 0.0.0.0 --listenerport 28080 --default-virtual-server server2 listener-server2"/>
+                                        </exec>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
+                                            <arg line="create-http-listener --listeneraddress 0.0.0.0 --listenerport 28080 --default-virtual-server server2 listener-server2"/>
+                                        </exec>
+                                        <echo>=== Deploying ${project.build.finalName} to server1 and server2 ===</echo>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                            <arg line="deploy --force --virtualservers server1,server2 ${project.build.directory}/${project.build.finalName}.war"/>
+                                        </exec>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
+                                            <arg line="deploy --force --virtualservers server1,server2 ${project.build.directory}/${project.build.finalName}.war"/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>stop-container</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <echo>=== Undeploying ${project.build.finalName} from server1 and server2 ===</echo>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                            <arg line="undeploy ${project.build.directory}/${project.build.finalName}"/>
+                                        </exec>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
+                                            <arg line="undeploy ${project.build.directory}/${project.build.finalName}"/>
+                                        </exec>
+                                        <echo>=== Deleting listener-server1 ===</echo>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                            <arg line="delete-http-listener listener-server1"/>
+                                        </exec>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
+                                            <arg line="delete-http-listener listener-server1"/>
+                                        </exec>
+                                        <echo>=== Deleting listener-server2 ===</echo>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                            <arg line="delete-http-listener listener-server2"/>
+                                        </exec>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
+                                            <arg line="delete-http-listener listener-server2"/>
+                                        </exec>
+                                        <echo>=== Deleting server2 ===</echo>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                            <arg line="delete-virtual-server server2"/>
+                                        </exec>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
+                                            <arg line="delete-virtual-server server2"/>
+                                        </exec>
+                                        <echo>=== Deleting server1 ===</echo>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                            <arg line="delete-virtual-server server1"/>
+                                        </exec>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
+                                            <arg line="delete-virtual-server server1"/>
+                                        </exec>
+                                        <echo>=== Stopping domain1 ===</echo>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                            <arg line="stop-domain"/>
+                                        </exec>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
+                                            <arg line="stop-domain"/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>                    
+                </plugins>
+            </build>
+            <properties>
+                <integration.container.home>C:/Glassfish3.1.2.2</integration.container.home>
+            </properties>
+        </profile>
+        <profile>
+            <id>integration-jboss-cargo</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.cargo</groupId>
+                        <artifactId>cargo-maven2-plugin</artifactId>
+                        <inherited>true</inherited>
+                        <executions>
+                            <execution>
+                                <id>start-container</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>start</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>stop-container</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                            </execution>
+                        </executions>                        
+                        <configuration>
+                            <container>
+                                <containerId>${integration.container.id}</containerId>
+                                <zipUrlInstaller>
+                                    <url>${integration.container.downloadUrl}</url>
+                                    <downloadDir>${integration.container.downloadDir}</downloadDir>
+                                    <extractDir>${integration.container.extractDir}</extractDir>
+                                </zipUrlInstaller>
+                                <type>installed</type>
+                            </container>
+                            <configuration>
+                                <type>standalone</type>
+                                <home>${integration.container.home}</home>
+                                <properties>
+                                    <cargo.hostname>${integration.serverName}</cargo.hostname>
+                                    <cargo.servlet.port>${integration.serverPort}</cargo.servlet.port>
+                                </properties>
+                            </configuration>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+            <properties>
+                <integration.container.downloadDir>C:/Temp/Cargo/download</integration.container.downloadDir>
+                <integration.container.downloadUrl>http://download.jboss.org/jbossas/7.1/jboss-as-7.1.1.Final/jboss-as-7.1.1.Final.zip</integration.container.downloadUrl>
+                <integration.container.extractDir>C:/Temp/Cargo/extracts</integration.container.extractDir>
+                <integration.container.home>C:/Temp/Cargo/jboss7</integration.container.home>
+                <integration.container.id>jboss71x</integration.container.id>
+            </properties>
+        </profile>
+        <profile>
+            <id>integration-tomcat-cargo</id>
+            <build>
+                <plugins>
+                    <plugin>                 
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy</id>                         
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>copy</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>${jsf.groupId}</groupId>
+                                            <artifactId>${jsf.artifactId}</artifactId>
+                                            <version>${jsf.version}</version>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>                                     
+                                            <outputDirectory>${integration.container.extractDir}/apache-tomcat-${tomcat.version}/apache-tomcat-${tomcat.version}/lib</outputDirectory>
+                                            <destFileName>javax.faces.jar</destFileName>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>javax.servlet.jsp.jstl</groupId> 
+                                            <artifactId>jstl-api</artifactId> 
+                                            <version>1.2</version> 
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>                                     
+                                            <outputDirectory>${integration.container.extractDir}/apache-tomcat-${tomcat.version}/apache-tomcat-${tomcat.version}/lib</outputDirectory>
+                                            <destFileName>jstl-api.jar</destFileName>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>org.glassfish.web</groupId>
+                                            <artifactId>javax.servlet.jsp.jstl</artifactId>
+                                            <version>1.2.1</version>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>                                     
+                                            <outputDirectory>${integration.container.extractDir}/apache-tomcat-${tomcat.version}/apache-tomcat-${tomcat.version}/lib</outputDirectory>
+                                            <destFileName>jstl-impl.jar</destFileName>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.cargo</groupId>
+                        <artifactId>cargo-maven2-plugin</artifactId>
+                        <inherited>true</inherited>
+                        <executions>
+                            <execution>
+                                <id>start-container</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>start</goal>
+                                </goals>
+                                <configuration>
+                                    <timeout>600000</timeout>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>stop-container</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                                <configuration>
+                                    <timeout>600000</timeout>
+                                </configuration>
+                            </execution>
+                        </executions>                        
+                        <configuration>
+                            <container>
+                                <containerId>${integration.container.id}</containerId>
+                                <zipUrlInstaller>
+                                    <url>${integration.container.downloadUrl}</url>
+                                    <downloadDir>${integration.container.downloadDir}</downloadDir>
+                                    <extractDir>${integration.container.extractDir}</extractDir>
+                                </zipUrlInstaller>
+                                <timeout>600000</timeout>
+                                <type>installed</type>
+                            </container>
+                            <configuration>
+                                <type>standalone</type>
+                                <home>${integration.container.home}</home>
+                                <properties>
+                                    <cargo.hostname>${integration.serverName}</cargo.hostname>
+                                    <cargo.servlet.port>${integration.serverPort}</cargo.servlet.port>
+                                </properties>
+                            </configuration>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+            <properties>
+                <integration.container.downloadDir>C:/Temp/Cargo/download</integration.container.downloadDir>
+                <integration.container.downloadUrl>http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.35/bin/apache-tomcat-7.0.35.zip</integration.container.downloadUrl>
+                <integration.container.extractDir>C:/Temp/Cargo/extracts</integration.container.extractDir>
+                <integration.container.home>C:/Temp/Cargo/tomcat7</integration.container.home>
+                <integration.container.id>tomcat7x</integration.container.id>
+                <tomcat.version>7.0.35</tomcat.version>
+            </properties>
+        </profile>
+        <profile>
+            <id>integration-weblogic12c-cargo</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.cargo</groupId>
+                        <artifactId>cargo-maven2-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>start-container</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>start</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>stop-container</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <container>
+                                <containerId>${integration.container.id}</containerId>
+                                <home>${integration.container.home}</home>
+                            </container>
+                            <configuration>
+                                <type>${integration.container.type}</type>
+                                <home>${integration.container.runtime}</home>
+                                <properties>
+                                    <cargo.servlet.port>${integration.serverPort}</cargo.servlet.port>
+                                    <cargo.weblogic.administrator.password>${integration.container.password}</cargo.weblogic.administrator.password>
+                                    <cargo.weblogic.administrator.user>${integration.container.username}</cargo.weblogic.administrator.user>
+                                </properties>
+                            </configuration>
+                        </configuration>
+                    </plugin>                    
+                </plugins>
+            </build>
+            <properties>
+                <integration.container.home>${integration.container.root}/server/wlserver</integration.container.home>
+                <integration.container.id>weblogic103x</integration.container.id>
+                <integration.container.root>C:/Weblogic12c</integration.container.root>
+                <integration.container.runtime>${integration.container.root}/domain</integration.container.runtime>
+                <integration.container.type>existing</integration.container.type>
+            </properties>
+        </profile>
+        <profile>
+            <id>integration-weblogic12c-prepare</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>package</id>
+                                <phase>validate</phase>
+                                <configuration>
+                                    <target>
+                                        <delete>
+                                            <fileset dir="${integration.container.runtime}/autodeploy" includes="**/*"/>
+                                        </delete>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>                 
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy</id>                         
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>copy</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>com.sun.faces.test.weblogic12c</groupId>
+                                            <artifactId>jsf-impl</artifactId>
+                                            <version>${jsf.version}</version>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>                                     
+                                            <outputDirectory>${integration.container.root}/server/modules</outputDirectory>
+                                            <destFileName>glassfish.jsf_1.0.0.0_2-1-5.jar</destFileName>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>com.sun.faces.test.weblogic12c</groupId>
+                                            <artifactId>jsf-api</artifactId>
+                                            <version>${jsf.version}</version>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>                                     
+                                            <outputDirectory>${integration.container.root}/server/modules</outputDirectory>
+                                            <destFileName>javax.jsf_1.0.0.0_2-1.jar</destFileName>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <properties>
+                <integration.container.home>${integration.container.root}/server/wlserver</integration.container.home>
+                <integration.container.id>weblogic103x</integration.container.id>
+                <integration.container.root>C:/Weblogic12c</integration.container.root>
+                <integration.container.runtime>${integration.container.root}/domain</integration.container.runtime>
+                <integration.container.type>existing</integration.container.type>
+            </properties>
+        </profile>
+        <profile>
+            <id>integration-wls1213-cargo</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.cargo</groupId>
+                        <artifactId>cargo-maven2-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>start-container</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>start</goal>
+                                </goals>
+                                <configuration>
+                                    <timeout>600000</timeout>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>stop-container</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                                <configuration>
+                                    <timeout>600000</timeout>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <container>
+                                <containerId>${integration.container.id}</containerId>
+                                <home>${integration.container.wlserver}</home>
+                                <timeout>600000</timeout>
+                            </container>
+                            <configuration>
+                                <type>${integration.container.type}</type>
+                                <home>${integration.container.wldomain}</home>
+                                <properties>
+                                    <cargo.servlet.port>${integration.serverPort}</cargo.servlet.port>
+                                    <cargo.weblogic.administrator.password>${integration.container.password}</cargo.weblogic.administrator.password>
+                                    <cargo.weblogic.administrator.user>${integration.container.username}</cargo.weblogic.administrator.user>
+                                </properties>
+                            </configuration>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+            <properties>
+                <integration.container.home>C:/Wls1212</integration.container.home>
+                <integration.container.id>weblogic12x</integration.container.id>
+                <integration.container.type>existing</integration.container.type>
+                <integration.container.wldomain>${integration.container.home}/user_projects/domains/mydomain</integration.container.wldomain>
+                <integration.container.wlserver>${integration.container.home}/wlserver</integration.container.wlserver>
+            </properties>
+        </profile>
+    </profiles>
+    <properties>
+        <integration.serverName>localhost</integration.serverName>
+        <integration.serverPort>8080</integration.serverPort>
+        <jsf.artifactId>javax.faces</jsf.artifactId>
+        <jsf.groupId>org.glassfish</jsf.groupId>
+        <jsf.version>${project.version}</jsf.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <webapp.partialStateSaving>true</webapp.partialStateSaving>
+        <webapp.projectStage>Production</webapp.projectStage>
+        <webapp.stateSavingMethod>server</webapp.stateSavingMethod>
+    </properties>
+</project>
