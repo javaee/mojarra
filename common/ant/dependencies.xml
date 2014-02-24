@@ -429,7 +429,7 @@
                 <available file="${javax-inject.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${central.maven2}/javax/inject/javax.inject/${javax-inject.version}/javax.inject-${javax-inject.version}.jar"
+                <get src="${maven2.mirror}/javax/inject/javax.inject/${javax-inject.version}/javax.inject-${javax-inject.version}.jar"
                      dest="${javax-inject.jar}"
                      usetimestamp="true"/>
             </then>
