@@ -988,15 +988,23 @@
                                 <configuration>
                                     <artifactItems>
                                         <artifactItem>
-                                            <groupId>${jsf.groupId}</groupId>
-                                            <artifactId>${jsf.artifactId}</artifactId>
+                                            <groupId>com.sun.faces</groupId>
+                                            <artifactId>jsf-impl</artifactId>
                                             <version>${jsf.version}</version>
                                             <type>jar</type>
                                             <overWrite>true</overWrite>                                     
                                             <outputDirectory>${integration.container.home}/glassfish/modules</outputDirectory>
-                                            <destFileName>javax.faces.jar</destFileName>
+                                            <destFileName>jsf-impl.jar</destFileName>
                                         </artifactItem>
-                                    </artifactItems>
+                                        <artifactItem>
+                                            <groupId>com.sun.faces</groupId>
+                                            <artifactId>jsf-api</artifactId>
+                                            <version>${jsf.version}</version>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>                                     
+                                            <outputDirectory>${integration.container.home}/glassfish/modules</outputDirectory>
+                                            <destFileName>jsf-api.jar</destFileName>
+                                        </artifactItem>                                    </artifactItems>
                                 </configuration>
                             </execution>
                         </executions>
