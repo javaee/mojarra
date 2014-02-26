@@ -177,6 +177,8 @@
                 <integration.container.config>${integration.container.home}/glassfish/domains</integration.container.config>
                 <integration.container.domain>domain1</integration.container.domain>
                 <integration.container.id>glassfish3x</integration.container.id>
+                <integration.container.serverName>localhost</integration.container.serverName>
+                <integration.container.servletPort>8080</integration.container.servletPort>
             </properties>
         </profile>
         <profile>
