@@ -240,6 +240,7 @@
                                 <configuration>
                                     <target>
                                         <ant antfile="${tck.build.file}" target="deploy.all"/>
+                                        <echo message="Waiting for deploy to settle down (5 minutes)"/>
                                         <sleep seconds="300"/>
                                         <ant antfile="${tck.build.file}" target="run.all"/>
                                         <ant antfile="${tck.build.file}" target="undeploy.all"/>
