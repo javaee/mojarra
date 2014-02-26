@@ -239,6 +239,7 @@
                                 <phase>validate</phase>
                                 <configuration>
                                     <target>
+                                        <ant antfile="${tck.build.file}" target="deploy.all"/>
                                         <sleep seconds="300"/>
                                     </target>
                                 </configuration>
@@ -263,6 +264,9 @@
                     </plugin>  
                 </plugins>
             </build>
+            <properties>
+                <tck.build.file>jsftck/bin/build.xml</tck.build.file>
+            </properties>
         </profile>
         <profile>
             <id>glassfish-unzip</id>
