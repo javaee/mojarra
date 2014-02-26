@@ -239,6 +239,7 @@
                                 <phase>validate</phase>
                                 <configuration>
                                     <target>
+                                        <unzip src="${tck.zip.file}" dest="." overwrite="true"/>
                                         <ant antfile="${tck.build.file}" target="deploy.all"/>
                                         <echo message="Waiting for deploy to settle down (5 minutes)"/>
                                         <sleep seconds="300"/>
@@ -268,6 +269,7 @@
                 </plugins>
             </build>
             <properties>
+                <tck.zip.file>tck.zip</tck.zip.file>
                 <tck.build.file>jsftck/bin/build.xml</tck.build.file>
             </properties>
         </profile>
