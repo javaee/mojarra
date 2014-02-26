@@ -243,7 +243,7 @@
                                         <mkdir dir="jsftck/report.dir"/>
                                         <mkdir dir="jsftck/work.dir"/>
                                         <delete file="js.tx" failonerror="false"/>
-                                        <get url="${tck.exclude.url}" dest="js.tx"/>
+                                        <get src="${tck.exclude.url}" dest="js.tx"/>
                                         <copy file="js.tx" dest="jsftck/bin/js.tx"/>
                                         <ant antfile="${tck.build.file}" target="deploy.all"/>
                                         <echo message="Waiting for deploy to settle down (5 minutes)"/>
