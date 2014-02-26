@@ -163,8 +163,8 @@
                                 <type>standalone</type>
                                 <home>${integration.container.config}</home>
                                 <properties>
-                                    <cargo.hostname>${integration.serverName}</cargo.hostname>
-                                    <cargo.servlet.port>${integration.serverPort}</cargo.servlet.port>
+                                    <cargo.hostname>${integration.container.serverName}</cargo.hostname>
+                                    <cargo.servlet.port>${integration.container.serverPort}</cargo.servlet.port>
                                     <cargo.domain>${integration.container.domain}</cargo.domain>
                                 </properties>
                             </configuration>
