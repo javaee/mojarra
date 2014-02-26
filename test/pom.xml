@@ -165,7 +165,7 @@
                                 <properties>
                                     <cargo.hostname>${integration.container.serverName}</cargo.hostname>
                                     <cargo.servlet.port>${integration.container.servletPort}</cargo.servlet.port>
-                                    <cargo.domain>${integration.container.domain}</cargo.domain>
+                                    <cargo.glassfish.domain.name>${integration.container.domain}</cargo.glassfish.domain.name>
                                 </properties>
                             </configuration>
                         </configuration>
