@@ -164,7 +164,7 @@
                                 <home>${integration.container.config}</home>
                                 <properties>
                                     <cargo.hostname>${integration.container.serverName}</cargo.hostname>
-                                    <cargo.servlet.port>${integration.container.serverPort}</cargo.servlet.port>
+                                    <cargo.servlet.port>${integration.container.servletPort}</cargo.servlet.port>
                                     <cargo.domain>${integration.container.domain}</cargo.domain>
                                 </properties>
                             </configuration>
