@@ -241,6 +241,8 @@
                                     <target>
                                         <ant antfile="${tck.build.file}" target="deploy.all"/>
                                         <sleep seconds="300"/>
+                                        <ant antfile="${tck.build.file}" target="run.all"/>
+                                        <ant antfile="${tck.build.file}" target="undeploy.all"/>
                                     </target>
                                 </configuration>
                                 <goals>
