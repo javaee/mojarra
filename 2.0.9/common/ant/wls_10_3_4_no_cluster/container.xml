@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+    Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+
+    The contents of this file are subject to the terms of either the GNU
+    General Public License Version 2 only ("GPL") or the Common Development
+    and Distribution License("CDDL") (collectively, the "License").  You
+    may not use this file except in compliance with the License.  You can
+    obtain a copy of the License at
+    https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+    or packager/legal/LICENSE.txt.  See the License for the specific
+    language governing permissions and limitations under the License.
+
+    When distributing the software, include this License Header Notice in each
+    file and include the License file at packager/legal/LICENSE.txt.
+
+    GPL Classpath Exception:
+    Oracle designates this particular file as subject to the "Classpath"
+    exception as provided by Oracle in the GPL Version 2 section of the License
+    file that accompanied this code.
+
+    Modifications:
+    If applicable, add the following below the License Header, with the fields
+    enclosed by brackets [] replaced by your own identifying information:
+    "Portions Copyright [year] [name of copyright owner]"
+
+    Contributor(s):
+    If you wish your version of this file to be governed by only the CDDL or
+    only the GPL Version 2, indicate your decision by adding "[Contributor]
+    elects to include this software in this distribution under the [CDDL or GPL
+    Version 2] license."  If you don't indicate a single choice of license, a
+    recipient has the option to distribute your version of this file under
+    either the CDDL, the GPL Version 2 or to extend the choice of license to
+    its licensees as provided above.  However, if you add GPL Version 2 code
+    and therefore, elected the GPL Version 2 license, then the option applies
+    only if the new code is made subject to such option by the copyright
+    holder.
+
+-->
+
+<project name="wls-10.3.4" basedir=".">
+
+    <property name="wl.username" value="weblogic"/>
+    <property name="wl.password" value="weblogic1"/>
+    <property name="wl.home" value="${container.home}/wlserver_10.3" />
+    <property name="wl.domain.home" value="${container.home}/user_projects/domains" />
+    <property name="wl.domain.name" value="base_domain" />
+    <property name="wl.admin.server.name" value="AdminServer" />
+
+    <taskdef name="wlserver" 
+             classname="weblogic.ant.taskdefs.management.WLServer">
+        <classpath>
+            <pathelement
+                  location="${wl.home}/server/lib/weblogic.jar"/>
+        </classpath>
+      
+    </taskdef>
+    <taskdef name="wldeploy" 
+             classname="weblogic.ant.taskdefs.management.WLDeploy">
+        <classpath>
+            <pathelement
+                  location="${wl.home}/server/lib/weblogic.jar"/>
+        </classpath>
+      
+    </taskdef>
+
+    <!-- Required Targets -->
+    <macrodef name="deploy.artifact">
+        <attribute name="artifact"
+                   description="The WAR to deploy"/>
+        <attribute name="appName"
+                   description="The name of the application"/>
+        <sequential>
+            <echo>Instrumenting @{artifact} with weblogic.xml</echo>
+            <property name="local.wls-jsf"
+                  value="${jsf.build.home}/common/ant/${container.name}/wls-jsf" />
+            <property name="local.wls-jsf.deploy.artifact"
+                  value="${local.wls-jsf}/target/deploy.artifact" />
+            <delete dir="${local.wls-jsf.deploy.artifact}" 
+                    failonerror="false" />
+            <mkdir dir="${local.wls-jsf.deploy.artifact}/WEB-INF/" />
+            <copy file="${local.wls-jsf}/src/main/templates/weblogic.xml"
+                  tofile="${local.wls-jsf.deploy.artifact}/WEB-INF/weblogic.xml"
+                  filtering="true">
+                <filterset>
+                  <filter token="spec.version" value="${impl.version.number}"/>
+                  <filter token="impl.name" value="${impl.name}"/>
+                </filterset>
+            </copy>
+            <jar update="true" destfile="@{artifact}">
+                <fileset dir="${local.wls-jsf.deploy.artifact}"
+                         includes="**/*.*" />
+            </jar>
+
+            <echo>
+
+---------------- wls - Deploying @{appName} ---------------- 
+
+            </echo>
+            <wldeploy action="deploy"
+                appversion="${impl.version.number}"
+                adminurl="t3://${container.host}:${container.port}"     
+                name="@{appName}"
+                password="${wl.password}"
+                user="${wl.username}"
+                source="@{artifact}"
+                verbose="true" />
+        </sequential>
+    </macrodef>
+
+    <macrodef name="deploydir.artifact">
+        <attribute name="explodedWarDir"
+                   description="The exploded war directory to deploy"/>
+        <attribute name="appName"
+                   description="The name of the application"/>
+        <sequential>
+            <echo>Instrumenting @{explodedWarDir} with weblogic.xml</echo>
+            <property name="local.wls-jsf"
+                  value="${jsf.build.home}/common/ant/${container.name}/wls-jsf" />
+            <copy file="${local.wls-jsf}/src/main/templates/weblogic.xml"
+                  tofile="@{explodedWarDir}/WEB-INF/weblogic.xml"
+                  filtering="true">
+                <filterset>
+                  <filter token="spec.version" value="${impl.version.number}"/>
+                  <filter token="impl.name" value="${impl.name}"/>
+                </filterset>
+            </copy>
+            <echo>
+
+--------- wls - Deploying @{appName} from @{explodedWarDir} ---------------- 
+
+            </echo>
+            <wldeploy action="deploy"
+                appversion="${impl.version.number}"
+                adminurl="t3://${container.host}:${container.port}"     
+                name="@{appName}"
+                password="${wl.password}"
+                user="${wl.username}"
+                source="@{explodedWarDir}"
+                verbose="true" />
+      </sequential>
+
+    </macrodef>
+
+
+    <macrodef name="undeploy.artifact">
+        <attribute name="artifact"
+                   description="The WAR to deploy"/>
+        <attribute name="appName"
+                   description="The name of the application"/>
+        <sequential>
+            <echo>
+
+---------------- wls - Undeploying @{appName} ---------------- 
+
+            </echo>
+            <wldeploy action="undeploy"
+                adminurl="t3://${container.host}:${container.port}"     
+                name="@{appName}"
+                password="${wl.password}"
+                user="${wl.username}"
+                verbose="true" debug="true" failonerror="false"/>
+
+        </sequential>
+    </macrodef>
+
+    <target name="config.container">
+    </target>
+
+    <!-- Require target to display information about the build environment -->
+    <target name="props">
+        <echo message="PENDING - Please add a message"/>
+        <echo message="container.home->${container.home}" />
+        <echo message="javaee.jar->${container.home}/lib/javaee.jar" />
+    </target>
+
+    <target name="update.impl.manifest">
+        <echo message="PENDING - Please implement"/>
+    </target>
+
+    <target name="define.wls.properties">
+      <echo message="container.host ${container.host}" />
+      <property name="wls.jsf.di.groupId" value="com/bea/faces" />
+      <property name="wls.jsf.di.artifactId" value="wls.jsf.di" />
+      <property name="wls.jsf.di.version" value="2.0.4" />
+      <property name="wls.jsf.di.path" value="${wls.jsf.di.groupId}/${wls.jsf.di.artifactId}/${wls.jsf.di.version}" />
+      <property name="wls.jsf.di.jar" value="${wls.jsf.di.path}/${wls.jsf.di.artifactId}-${wls.jsf.di.version}.jar" />
+      <property name="wls.jsf.di.url" value="http://hg.us.oracle.com/jsf/website/raw-file/43f22fe82eca/downloads/wls.jsf.di-2.0.4.jar"/>
+
+      <propertyregex override="true"
+                   property="groupPath" input="${groupId}"
+                   regexp="\." replace="/" global="true" />
+    </target>
+
+    <target name="container.deploy" depends="define.wls.properties"
+            description="Deploy the JSF Implementation artifacts to the target container.">
+     
+      <mkdir dir="${maven.repo.local}/${groupPath}/jsf-api/${impl.version}" />
+      <copy file="${jsf.build.home}/jsf-api/build/lib/jsf-api.jar" overwrite="true"
+            tofile="${maven.repo.local}/${groupPath}/jsf-api/${impl.version}/jsf-api-${impl.version}.jar" />
+      <copy file="${jsf.build.home}/jsf-ri/build/lib/jsf-impl.jar" overwrite="true"
+            tofile="${maven.repo.local}/${groupPath}/jsf-impl/${impl.version}/jsf-impl-${impl.version}.jar" />
+
+      <if>
+        <not>
+          <available file="${maven.repo.local}/${wls.jsf.di.jar}" property="ignored"/>
+        </not>
+        <then>
+          <sequential>
+            <mkdir dir="${maven.repo.local}/${wls.jsf.di.path}" />
+            <get src="${wls.jsf.di.url}" verbose="true"
+                 usetimestamp="true"
+                 dest="${maven.repo.local}/${wls.jsf.di.jar}" />
+          </sequential>
+        </then>
+      </if>
+      <jsf.mvn mvnargs="-Dimpl.version=${impl.version} -Dimpl.name=${impl.name}" 
+               dir="${jsf.build.home}/common/ant/${container.name}/wls-jsf" goals="clean install" />
+      <container.stop />
+
+      <copy file="${jsf.build.home}/jsf-api/build/lib/jsf-api.jar" overwrite="true"
+            todir="${wl.home}/server/lib/consoleapp/webapp/WEB-INF/lib" />
+      <copy file="${jsf.build.home}/jsf-ri/build/lib/jsf-impl.jar" overwrite="true"
+            todir="${wl.home}/server/lib/consoleapp/webapp/WEB-INF/lib" />
+      <container.start />
+      <wldeploy action="deploy"
+                adminurl="t3://${container.host}:${container.port}"     
+                appversion="${impl.version.number}"
+                libImplVer="${impl.version.number}"
+                libSpecVer="${impl.version.number}"
+                library="true"
+                name="${impl.name}"
+                password="${wl.password}"
+                user="${wl.username}"
+                source="${jsf.build.home}/common/ant/${container.name}/wls-jsf/target/${impl.name}-${impl.version}.war"
+                verbose="true" />
+      <container.stop />
+
+    </target>
+
+    <target name="container.undeploy" depends="define.wls.properties"
+            description="Undeploy the JSF Implementation artifacts from the target container.">
+     
+      <container.stop />
+      <container.start />
+      <wldeploy action="undeploy"
+                adminurl="t3://${container.host}:${container.port}"     
+                appversion="${impl.version.number}"
+                libImplVer="${impl.version.number}"
+                libSpecVer="${impl.version.number}"
+                library="true"
+                name="${impl.name}"
+                password="${wl.password}"
+                user="${wl.username}"
+                verbose="true" />
+      <container.stop />
+
+    </target>
+
+    <target name="container.deploy.test.dependencies"
+            description="Deploy any container level dependencies to the container.">
+    </target>
+
+    <target name="container.undeploy.test.dependencies"
+            description="Undeploy any container level dependencies from the container.">
+    </target>
+
+    <target name="container.start"
+            description="Start the wls container">
+        <container.start />
+    </target>
+
+    <target name="container.debug"
+            description="Start the GlassFish container in debug mode">
+        <container.debug create-domain="${create-domain-value}"
+                         create-cluster="${create-cluster-value}"/>
+    </target>
+
+    <target name="container.stop"
+            description="Stop the GlassFish container">
+        <var name="create-domain-value" value="true" />
+        <var name="create-cluster-value" value="true" />
+        <if>
+          <equals arg1="${create-domain}" 
+                  casesensitive="false" trim="true"
+                  arg2="false" />
+          <then>
+            <var name="create-domain-value" value="false" />
+          </then>
+        </if>
+        <if>
+          <equals arg1="${create-cluster}" 
+                  casesensitive="false" trim="true"
+                  arg2="false" />
+          <then>
+            <var name="create-cluster-value" value="false" />
+          </then>
+        </if>
+        <echo>
+--------- Stopping container, create-domain: ${create-domain-value} create-cluster: ${create-cluster-value}
+        </echo>
+        <container.stop create-domain="${create-domain-value}"
+                        create-cluster="${create-cluster-value}"/>
+    </target>
+
+    <target name="container.restart"
+            description="Stop the GlassFish container">
+        <container.stop/>
+        <container.start/>
+    </target>
+
+    <target name="define.scenario.aware.port">
+      <property name="scenario.aware.port" value="${container.port}" />
+      <echo message="scenario.aware.port = ${scenario.aware.port}" />
+
+      <var name="force.no.cluster" value="true" />
+      <echo message="force.no.cluster = ${force.no.cluster}" />
+    </target>
+
+    <target name="define.virtual-server.aware.port">
+      <property name="scenario.aware.port" value="${container.port}" />
+      <echo message="scenario.aware.port = ${scenario.aware.port}" />
+
+      <var name="force.no.cluster" value="true" />
+      <echo message="force.no.cluster = ${force.no.cluster}" />
+    </target>
+
+
+    <macrodef name="container.start"
+            description="Start the wls container">
+        <sequential>
+          <echo>Starting ${container.name}</echo>
+          <wlserver dir="${wl.domain.home}/${wl.domain.name}" 
+                    host="${container.host}" port="${container.port}"
+                    domainname="${wl.domain.name}" 
+                    servername="${wl.admin.server.name}"
+                    action="start" 
+                    username="${wl.username}" password="${wl.password}"
+                    beahome="${container.home}" 
+                    weblogichome="${wl.home}" verbose="true" 
+                    noExit="true"
+                    protocol="t3" 
+                    classpath="${wl.home}/server/lib/weblogic.jar" >
+                       <jvmarg value="-server"/>
+                       <jvmarg value="-Xms512m"/>
+                       <jvmarg value="-Xmx786m"/>
+                       <jvmarg value="-XX:PermSize=128m"/>
+                       <jvmarg value="-XX:MaxPermSize=786m"/>
+           </wlserver>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="container.debug"
+            description="Start the wls container in debug mode">
+      <sequential>
+        <echo message="This macro is not supported for Mojarra in wls" />
+      </sequential>
+    </macrodef>
+
+
+    <macrodef name="container.stop"
+            description="Stop the WLS container">
+        <sequential>
+          <echo>Stopping ${container.name}</echo>
+          <wlserver dir="${wl.domain.home}/${wl.domain.name}" 
+                    host="${container.host}" port="${container.port}"
+                    servername="${wl.admin.server.name}" 
+                    username="${wl.username}" password="${wl.password}"
+                    action="shutdown" 
+                    beahome="${container.home}" 
+                    weblogichome="${wl.home}" 
+                    forceshutdown="true"/>
+        </sequential>
+    </macrodef>
+
+    <!-- ************ Compiler Defaults *************************************** -->
+
+
+    <!-- ************ Executable Targets ************************************** -->
+
+    <target name="main">
+    </target>
+
+    <target name="edburns">
+
+    <propertyregex override="true"
+                   property="groupPath" input="${groupId}"
+                   regexp="\." replace="/" global="true" />
+<echo>${groupId} ${groupPath}</echo>
+    </target>
+
+</project>
+

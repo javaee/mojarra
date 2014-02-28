@@ -1,0 +1,41 @@
+<project name="mojarra-updatecenter2" default="main" basedir=".">
+
+
+    <property file="${user.home}/build.properties"/>
+    <property file="../build.properties"/>
+
+    <import file="${jsf.build.home}/common/ant/common.xml"/>
+
+    <target name="main" depends="repo"/>
+
+    <!-- Create the distributed artifacts -->
+    <target name="dist">
+      <mkdir dir="dist/glassfish/modules/web"/>
+      <copy file="lib/jsf-api.jar" 
+            tofile="dist/glassfish/modules/jsf-api.jar"/>
+      <copy file="lib/jsf-impl.jar" 
+            tofile="dist/glassfish/modules/web/jsf-impl.jar"/>
+      <mkdir dir="dist/jsf2.1"/>
+      <copy file="conf/LICENSE" todir="dist/jsf2.1"/>
+      <copy file="conf/README" todir="dist/jsf2.1"/>
+    </target>
+
+    <target name="repo" depends="dist">
+        <exec command="/bin/sh bin/makepkgs.sh ${pkg.dir}" failonerror="true"/>
+    </target>
+
+    <target name="updatecenter2.clean" depends="cleanall"/>
+
+    <target name="clean">
+      <delete dir="build"/>
+      <delete dir="dist"/>
+      <delete dir="repo"/>
+      <delete file="conf/jsf_proto.pyc"/>
+    </target>
+
+    <target name="cleanall" depends="clean">
+      <delete file="lib/jsf-api.jar"/>
+      <delete file="lib/jsf-impl.jar"/>
+    </target>
+
+</project>

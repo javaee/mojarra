@@ -1,0 +1,997 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+
+    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+    Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+
+    The contents of this file are subject to the terms of either the GNU
+    General Public License Version 2 only ("GPL") or the Common Development
+    and Distribution License("CDDL") (collectively, the "License").  You
+    may not use this file except in compliance with the License.  You can
+    obtain a copy of the License at
+    https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+    or packager/legal/LICENSE.txt.  See the License for the specific
+    language governing permissions and limitations under the License.
+
+    When distributing the software, include this License Header Notice in each
+    file and include the License file at packager/legal/LICENSE.txt.
+
+    GPL Classpath Exception:
+    Oracle designates this particular file as subject to the "Classpath"
+    exception as provided by Oracle in the GPL Version 2 section of the License
+    file that accompanied this code.
+
+    Modifications:
+    If applicable, add the following below the License Header, with the fields
+    enclosed by brackets [] replaced by your own identifying information:
+    "Portions Copyright [year] [name of copyright owner]"
+
+    Contributor(s):
+    If you wish your version of this file to be governed by only the CDDL or
+    only the GPL Version 2, indicate your decision by adding "[Contributor]
+    elects to include this software in this distribution under the [CDDL or GPL
+    Version 2] license."  If you don't indicate a single choice of license, a
+    recipient has the option to distribute your version of this file under
+    either the CDDL, the GPL Version 2 or to extend the choice of license to
+    its licensees as provided above.  However, if you add GPL Version 2 code
+    and therefore, elected the GPL Version 2 license, then the option applies
+    only if the new code is made subject to such option by the copyright
+    holder.
+
+-->
+
+<!--
+  =======================================================================
+    JSF-API build file
+  =======================================================================
+-->
+<project name="JSF-API" default="main" basedir=".">
+
+    <property file="${user.home}/build.properties"/>
+    <property file="../build.properties"/>
+
+    <import file="${jsf.build.home}/common/ant/common.xml"/>
+
+    <!-- Structural -->
+    <property name="doc.dir" value="${basedir}/doc"/>
+    <property name="src.dir" value="${basedir}/src/main/java"/>
+    <property name="resources.dir" value="${basedir}/src/main/resources"/>
+    <property name="tools.dir" value="${basedir}/tools"/>
+    <property name="test.dir" value="${basedir}/src/test/java"/>
+    <property name="dist.dir" value="${basedir}/dist"/>
+    <property name="build.dir" value="build"/>
+    <property name="target.dir" value="target"/>
+    <property name="build.classes.dir" value="${build.dir}/classes"/>
+    <property name="build.lib.dir" value="${build.dir}/lib"/>
+    <property name="build.temp.dir" value="${build.dir}/temp"/>
+    <property name="build.test.dir" value="${build.dir}/test"/>
+    <property name="build.generate.dir" value="${build.dir}/generate"/>
+    <property name="build.javadocs.dir" value="${build.dir}/javadocs"/>
+    <property name="build.managed-bean-javadocs.dir" value="${build.javadocs.dir}/../managed-bean-javadocs"/>
+    <property name="build.renderkitdoc.dirs"
+              value="${build.dir}/renderkitdocs"/>
+    <property name="build.mifdocs.dir" value="${build.dir}/mifdocs"/>
+    <property name="javadoc.private" value="false"/>
+    <property name="javadoc.protected" value="true"/>
+
+    <property name="assertion.classes" value="-ea:javax.faces..."/>
+    <property name="name" value="jsf-api-intermediate"/>
+    <property name="DocName" value="JavaServer Faces API"/>
+
+    <path id="test.classpath">
+        <pathelement location="${build.classes.dir}"/>
+        <pathelement location="${build.test.dir}"/>
+        <pathelement location="${jsf.test.jar}"/>
+        <pathelement location="${tools.dir}/build/classes"/>
+        <path refid="apache.commons.classpath"/>
+        <path refid="compile.classpath"/>
+        <path refid="junit.classpath"/>
+    </path>
+
+    <property name="test.factory"
+              value="org.apache.commons.logging.impl.LogFactoryImpl"/>
+    <property name="test.failonerror" value="true"/>
+    <property name="test.level" value="error"/>
+    <property name="test.log"
+              value="org.apache.commons.logging.impl.SimpleLog"/>
+    <property name="test.runner" value="junit.textui.TestRunner"/>
+
+
+    <!--
+         ===================================================================
+           Prepare the build
+         ===================================================================
+    -->
+    <target name="prepare">
+        <tstamp/>
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${build.classes.dir}"/>
+        <mkdir dir="${build.lib.dir}"/>
+        <mkdir dir="${build.javadocs.dir}"/>
+        <mkdir dir="${build.managed-bean-javadocs.dir}"/>
+        <mkdir dir="${build.generate.dir}"/>
+    </target>
+
+    <target name="attributes"
+            description="Recreate attributes include files from property include files"
+            depends="prepare">
+
+        <!-- Copy just the properties files we wish to convert -->
+        <copy todir="${doc.dir}"
+              overwrite="true">
+            <mapper type="glob"
+                    from="*-props.xml"
+                    to="*-attrs.xml"/>
+            <fileset dir="${doc.dir}">
+                <include name="*-props.xml"/>
+                <exclude name="actionsource-props.xml"/>
+                <exclude name="actionsource2-props.xml"/>
+                <exclude name="editable-props.xml"/>
+                <exclude name="valueholder-props.xml"/>
+                <exclude name="ui*-props.xml"/>
+            </fileset>
+        </copy>
+
+        <!-- Replace "property" with "attribute" in relevant cases -->
+        <replace dir="${doc.dir}"
+                 summary="true">
+            <include name="*-attrs.xml"/>
+            <replacefilter token="&lt;property"
+                           value="&lt;attribute"/>
+            <replacefilter token="&lt;/property"
+                           value="&lt;/attribute"/>
+            <replacefilter token="Properties"
+                           value="Attributes"/>
+        </replace>
+
+    </target>
+
+    <!--
+         ===================================================================
+           Build the API code
+         ===================================================================
+    -->
+
+    <target name="compile">
+        <jsf.javac destdir="${build.classes.dir}"
+                   srcdir="${src.dir}:${build.generate.dir}">
+            <classpath>
+                <path refid="compile.classpath"/>
+            </classpath>
+        </jsf.javac>
+    </target>
+
+    <target name="build"
+            depends="prepare,generate,copy.template.sources,compile">
+        <copy todir="${build.classes.dir}">
+            <fileset dir="${src.dir}">
+                <exclude name="**/*.java"/>
+                <exclude name="**/*.html"/>
+                <exclude name="**/*.jpg"/>
+            </fileset>
+        </copy>
+        <copy todir="${build.classes.dir}/META-INF" file="src/main/resources/mojarra-jsf-api-probe-provider.xml"/>
+        <copy todir="${build.lib.dir}">
+            <fileset dir="${doc.dir}">
+                <include name="*.dtd"/>
+            </fileset>
+        </copy>
+
+    </target>
+
+    <target name="check.generation.necessity">
+        <uptodate property="skip.generation"
+                  targetfile="${build.generate.dir}/last-generation">
+            <srcfiles dir="${basedir}/doc">
+                <include name="standard-html-renderkit.xml"/>
+            </srcfiles>
+        </uptodate>
+    </target>
+
+    <target name="generate"
+            depends="check.generation.necessity"
+            unless="skip.generation">
+
+        <delete dir="${build.generate.dir}"/>      
+        <antcall target="tools.javac"/>
+
+        <taskdef name="generateComponents"
+                 classname="com.sun.faces.ant.ComponentGenTask">
+            <classpath>
+                <path refid="apache.commons.classpath"/>
+                <pathelement location="${tools.dir}/build/classes"/>
+            </classpath>
+        </taskdef>
+        <generateComponents
+              generatorConfig="${tools.dir}/conf/HtmlBasicTaglib21.properties"
+              facesConfig="${standard.renderkit.xml}"
+              fork="true">
+            <classpath>
+                <path refid="apache.commons.classpath"/>
+                <path refid="compile.classpath"/>
+                <pathelement location="${commons-beanutils.jar}" />
+                <pathelement location="${commons-digester.jar}" />
+                <pathelement location="${commons-collections.jar}" />
+                <pathelement location="${commons-logging.jar}" />
+                <pathelement location="${jsf-api-intermediate.jar}"/>
+                <pathelement location="${tools.dir}/build/classes"/>
+            </classpath>
+            <assertions>
+                <enable/>
+            </assertions>
+            <sysproperty key="java.endorsed.dirs" value="${endorsed.dirs}"/>
+        </generateComponents>
+
+        <copy todir="${build.generate.dir}/javax/faces/component/html"
+              file="${src.dir}/javax/faces/component/html/package.html"/>
+
+        <touch file="${build.generate.dir}/last-generation"/>
+
+    </target>
+
+    <target name="facesdoc" 
+            description="Create the Standard HTML Renderkit Documentation">
+        <taskdef name="generateRenderkitDocs"
+                 classname="com.sun.faces.ant.RenderkitDocGenTask">
+            <classpath>
+                <path refid="apache.commons.classpath"/>
+                <pathelement location="${tools.dir}/build/classes"/>
+            </classpath>
+        </taskdef>
+        <copy todir="${build.generate.dir}/facesdoc/">
+           <fileset dir="${doc.dir}">
+             <include name="changed*.png" />
+             <include name="changed*.cur" />
+           </fileset>
+        </copy>
+        
+        <generateRenderkitDocs
+              generatorConfig="${tools.dir}/conf/HtmlBasicTaglib21.properties"
+              facesConfig="${standard.renderkit.xml}"
+              fork="true">
+            <classpath>
+                <path refid="apache.commons.classpath"/>
+                <path refid="compile.classpath"/>
+                <pathelement location="${jsf-api-intermediate.jar}"/>
+                <pathelement location="${tools.dir}/build/classes"/>
+            </classpath>
+            <sysproperty key="java.endorsed.dirs" value="${endorsed.dirs}"/>
+            <sysproperty key="tools.src.dir" value="${tools.dir}/src/main/java"/>
+            <jvmarg line="${debug.jvm.args}"/>
+            <assertions>
+                <enable/>
+            </assertions>
+        </generateRenderkitDocs>      
+
+    </target>
+
+    <target name="tools.javac">
+        <path id="ant.classpath">
+            <pathelement location="${myenv.ANT_HOME}/lib/ant.jar"/>
+        </path>
+
+        <mkdir dir="${tools.dir}/build/classes"/>
+        <jsf.javac srcdir="${tools.dir}/src/main/java"
+                   destdir="${tools.dir}/build/classes">
+            <classpath>
+                <path refid="compile.classpath"/>
+                <path refid="apache.commons.classpath"/>
+                <path refid="ant.classpath"/>
+            </classpath>
+        </jsf.javac>
+        <copy todir="${tools.dir}/build/classes">
+            <fileset dir="${tools.dir}/src/main/resources"
+                     includes="**/*.properties"/>
+        </copy>
+        <copy todir="${tools.dir}/build/classes" >
+            <fileset dir="${impl.dir}/src/main/resources"
+                     includes="**/LogStrings.properties"/>
+        </copy>
+        <copy todir="${tools.dir}/build/classes/com/sun/faces"
+              flatten="true">
+            <fileset dir="${api.dir}/doc"
+                     includes="*.dtd,*.xsd"/>
+        </copy>
+    </target>
+
+    <target name="copy.template.sources"
+            description="Copy template sources from ${tools.dir}/template-source">
+
+        <filter token="protection" value=""/>
+
+        <filter token="package" value="javax.faces"/>
+        <copy file="${tools.dir}/template-src/TypedCollections.java"
+              todir="${build.generate.dir}/javax/faces"
+              filtering="true"/>
+
+        <filter token="package" value="javax.faces.component"/>
+        <copy file="${tools.dir}/template-src/SharedUtils.java"
+              todir="${build.generate.dir}/javax/faces/component"
+              filtering="true"/>
+        <copy file="${tools.dir}/template-src/MessageFactory.java"
+              todir="${build.generate.dir}/javax/faces/component"
+              filtering="true"/>
+        <copy file="${tools.dir}/template-src/TypedCollections.java"
+              todir="${build.generate.dir}/javax/faces/component"
+              filtering="true"/>
+        <copy file="${tools.dir}/template-src/StateHolderSaver.java"
+              todir="${build.generate.dir}/javax/faces/component"
+              filtering="true"/>
+        <copy todir="${build.generate.dir}/javax/faces/component"
+              filtering="true">
+            <fileset dir="${basedir}/template-src">
+                <include name="*Adapter.java"/>
+            </fileset>
+        </copy>
+
+        <filter token="package" value="javax.faces.application"/>
+        <copy file="${tools.dir}/template-src/SharedUtils.java"
+              todir="${build.generate.dir}/javax/faces/application"
+              filtering="true"/>
+
+        <filter token="package" value="javax.faces.convert"/>
+        <copy file="${tools.dir}/template-src/MessageFactory.java"
+              todir="${build.generate.dir}/javax/faces/convert"
+              filtering="true"/>
+
+        <filter token="package" value="javax.faces.validator"/>
+        <copy file="${tools.dir}/template-src/MessageFactory.java"
+              todir="${build.generate.dir}/javax/faces/validator"
+              filtering="true"/>
+
+        <filter token="package" value="javax.faces.webapp"/>
+        <copy file="${tools.dir}/template-src/MessageFactory.java"
+              todir="${build.generate.dir}/javax/faces/webapp"
+              filtering="true"/>
+        <copy file="${tools.dir}/template-src/TypedCollections.java"
+              todir="${build.generate.dir}/javax/faces/webapp"
+              filtering="true"/>
+
+        <replace
+              file="${build.generate.dir}/javax/faces/component/MethodBindingMethodExpressionAdapter.java"
+              token="@serialVersionUID@"
+              value="7334926223014401689L"/>
+
+        <replace
+              file="${build.generate.dir}/javax/faces/component/MethodExpressionMethodBindingAdapter.java"
+              token="@serialVersionUID@"
+              value="-1822420567946048452L"/>
+
+        <replace
+              file="${build.generate.dir}/javax/faces/component/ValueExpressionValueBindingAdapter.java"
+              token="@serialVersionUID@"
+              value="2388977392466671243L"/>
+
+        <replace
+              file="${build.generate.dir}/javax/faces/component/ValueBindingValueExpressionAdapter.java"
+              token="@serialVersionUID@"
+              value="-8015491904782686906L"/>
+
+        <replace
+              file="${build.generate.dir}/javax/faces/component/StateHolderSaver.java"
+              token="@serialVersionUID@"
+              value="6470180891722042701L"/>
+
+    </target>
+
+    <target name="prepare.test">
+        <mkdir dir="${api.test.results.dir}"/>
+    </target>
+
+    <!--
+         ===================================================================
+           Build the test code
+         ===================================================================
+    -->
+
+    <target name="build.test.dir" depends="build,prepare.test">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${build.test.dir}"/>
+
+        <jsf.javac srcdir="${test.dir}"
+                   destdir="${build.test.dir}">
+            <classpath>
+                <path refid="test.classpath"/>
+                <path refid="apache.commons.classpath"/>
+            </classpath>
+        </jsf.javac>
+
+        <copy todir="${build.test.dir}">
+            <fileset dir="${test.dir}" includes="**/*.properties"/>
+        </copy>
+
+        <delete file="${basedir}/test/javax/faces/mock/MockPageContext.java"/>
+
+        <copy todir="${build.test.dir}">
+            <fileset dir="${test.dir}">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+
+       <delete dir="${build.test.dir}/META-INF/services" />
+        <mkdir dir="${build.test.dir}/META-INF/services"/>
+        <echo
+              file="${build.test.dir}/META-INF/services/javax.faces.context.ExceptionHandlerFactory">javax.faces.webapp.PreJsf2ExceptionHandlerFactory</echo>
+
+
+    </target>
+
+
+    <!--
+         ===================================================================
+           Test targets
+         ===================================================================
+    -->
+
+
+    <target name="test"
+            description="Run all JUnit test cases"
+            depends="build.test.dir,
+                copy.template.sources,
+                test.FactoryFinder,
+                test.FactoryFinder2,
+                test.PhaseId,
+                test.component,
+                test.validator,
+                test.mock,
+                test.model,
+                test.webapp">
+    </target>
+
+    <target name="test.FactoryFinder" depends="build.test.dir">
+        <echo message="Running FactoryFinder tests ..."/>
+        <mkdir dir="${build.classes.dir}/META-INF/services"/>
+        <echo
+              file="${build.classes.dir}/META-INF/services/javax.faces.context.FacesContextFactory">javax.faces.mock.MockFacesContextFactoryExtender</echo>
+        <jsf.junit test-results-dir="${api.test.results.dir}"
+                   classpath-refid="test.classpath"
+                   assert.classes="${assertion.classes}">
+            <tests>
+                <fileset dir="${build.test.dir}"
+                         includes="javax/faces/FactoryFinderTestCase.class"/>
+            </tests>
+        </jsf.junit>
+        <delete dir="${build.classes.dir}/META-INF"/>
+    </target>
+
+    <target name="test.FactoryFinder2" depends="build.test.dir">
+        <echo message="Running FactoryFinder tests ..."/>
+        <jsf.junit test-results-dir="${api.test.results.dir}"
+                   classpath-refid="test.classpath"
+                   assert.classes="${assertion.classes}">
+            <tests>
+                <fileset dir="${build.test.dir}"
+                         includes="javax/faces/FactoryFinderTestCase2.class"/>
+            </tests>
+        </jsf.junit>
+    </target>   
+
+    <target name="test.PhaseId" depends="build.test.dir">
+        <echo message="Running PhaseId tests ..."/>
+        <jsf.junit test-results-dir="${api.test.results.dir}"
+                   classpath-refid="test.classpath"
+                   assert.classes="${assertion.classes}">
+            <tests>
+                <fileset dir="${build.test.dir}"
+                         includes="javax/faces/event/PhaseIdTest.class"/>
+            </tests>
+        </jsf.junit>
+    </target>
+
+    <target name="test.component" depends="build.test.dir">
+        <echo message="Running javax.faces.component tests ..."/>
+        <delete file="${api.test.results.dir}/api-test.log"/>
+        <delete file="${api.test.results.dir}/test-logging.properties"/>
+        <echo file="${api.test.results.dir}/test-logging.properties">
+handlers=java.util.logging.FileHandler
+java.util.logging.FileHandler.append=true
+java.util.logging.FileHandler.encoding=UTF-8
+java.util.logging.FileHandler.formatter=java.util.logging.SimpleFormatter
+java.util.logging.FileHandler.pattern=${api.test.results.dir}/api-test.log
+javax.faces.level=ALL
+        </echo>
+        <jsf.junit test-results-dir="${api.test.results.dir}"
+                   classpath-refid="test.classpath"
+                   assert.classes="${assertion.classes}"
+                   logging.config.file="${api.test.results.dir}/test-logging.properties">
+            <tests>
+                <fileset dir="${build.test.dir}"
+                         includes="javax/faces/component/*TestCase.class"
+                         excludes="javax/faces/component/UIDataTestCase.class,javax/faces/component/UIFormTestCase.class"/>
+            </tests>
+        </jsf.junit>
+    </target>
+
+    <target name="test.validator" depends="build.test.dir">
+        <echo message="Running javax.faces.validator tests ..."/>
+        <jsf.junit test-results-dir="${api.test.results.dir}"
+                   classpath-refid="test.classpath"
+                   assert.classes="${assertion.classes}">
+            <tests>
+                <fileset dir="${build.test.dir}"
+                         includes="javax/faces/validator/*TestCase.class"/>
+            </tests>
+        </jsf.junit>
+    </target>
+
+    <target name="test.mock" depends="build.test.dir">
+        <echo message="Running javax.faces.mock tests ..."/>
+        <jsf.junit test-results-dir="${api.test.results.dir}"
+                   classpath-refid="test.classpath"
+                   assert.classes="${assertion.classes}">
+            <tests>
+                <fileset dir="${build.test.dir}"
+                         includes="javax/faces/mock/*TestCase.class"/>
+            </tests>
+        </jsf.junit>
+    </target>
+
+    <target name="test.model" depends="build.test.dir">
+        <echo message="Running javax.faces.model tests ..."/>
+        <jsf.junit test-results-dir="${api.test.results.dir}"
+                   classpath-refid="test.classpath"
+                   assert.classes="${assertion.classes}">
+            <tests>
+                <fileset dir="${build.test.dir}"
+                         includes="javax/faces/model/*TestCase.class"/>
+            </tests>
+        </jsf.junit>
+    </target>
+
+    <target name="test.webapp" depends="build.test.dir">
+        <echo message="Running javax.faces.webapp tests ..."/>
+        <jsf.junit test-results-dir="${api.test.results.dir}"
+                   classpath-refid="test.classpath"
+                   assert.classes="${assertion.classes}">
+            <custom-sysproperties>
+                <sysproperty key="base.dir" value="${basedir}/build"/>
+            </custom-sysproperties>
+            <tests>
+            <fileset dir="${build.test.dir}"
+                         includes="javax/faces/webapp/*TestCase.class"
+                         excludes="javax/faces/webapp/UIComponentTagTestCase.class"/>
+            </tests>
+        </jsf.junit>
+    </target>
+
+    <!--
+         ===================================================================
+           Create the standard-html-renderkit.xml document
+         ===================================================================
+    -->
+
+    <target name="create.standard.xml" depends="attributes">
+        <copy
+              file="${basedir}/../jsf-ri/src/main/resources/com/sun/faces/standard-html-renderkit-impl.xml"
+              todir="${basedir}/doc"/>
+        <exec executable="xmllint" dir="${basedir}/doc" failonerror="true">
+            <arg
+                  line="--xinclude --format --output standard-html-renderkit.xml standard-html-renderkit-base.xml"/>
+        </exec>
+        <replace file="${basedir}/doc/standard-html-renderkit.xml">
+            <replacetoken>
+                <![CDATA[<?xml version="1.0" encoding="UTF-8"?>]]></replacetoken>
+            <replacevalue><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- DO NOT EDIT     DO NOT EDIT    DO NOT EDIT    DO NOT EDIT    DO NOT EDIT -->]]>
+            </replacevalue>
+        </replace>
+        <delete file="${basedir}/doc/standard-html-renderkit-impl.xml"/>
+
+        <mkdir dir="${tools.dir}/build/classes"/>
+        <antcall target="tools.javac"/>
+        <javac srcdir="${tools.dir}/src/main/java"
+               destdir="${tools.dir}/build/classes">
+            <classpath>
+                <path refid="compile.classpath"/>
+            </classpath>
+        </javac>
+
+        <!-- validate the generated standard-html-renderkit.xml -->
+        <taskdef name="validate" classname="com.sun.faces.ant.ValidateTask">
+            <classpath>
+                <pathelement location="${tools.dir}/build/classes"/>
+            </classpath>
+        </taskdef>
+        <validate schemaDir="${basedir}/doc"/>
+    </target>
+
+    <!--
+         ===================================================================
+           Create the jars
+         ===================================================================
+    -->
+    <target name="jars" depends="build">
+
+        <copy file="${basedir}/mojarra-jsf-api.bnd" tofile="tmp.bnd"/>
+        <replace file="tmp.bnd"
+                 token="@spec.version@"
+                 value="${spec.version}"/>
+        <replace file="tmp.bnd"
+                 token="@impl.name@"
+                 value="${impl.name}"/>
+        <replace file="tmp.bnd"
+                 token="@impl.version@"
+                 value="${impl.version}"/>
+        <replace file="tmp.bnd"
+                 token="@full.impl.version@"
+                 value="${full.impl.version}"/>
+        <if>
+            <equals arg1="${build.type}" arg2=""/>
+            <then>
+                <replace file="tmp.bnd"
+                         token="@osgi.version@"
+                         value="${impl.version.number}"/>
+            </then>
+            <else>
+                <replace file="tmp.bnd"
+                         token="@osgi.version@"
+                         value="${impl.version.number}-${build.type}"/>
+            </else>
+        </if>
+        <replace file="tmp.bnd"
+                 token="@extension.name@"
+                 value="javax.faces"/>
+        <jsf.osgi.jar jarfile="${build.lib.dir}/${name}.jar"
+                            basedir="${build.classes.dir}"
+                            extension-name="javax.faces"
+                            bndfile="tmp.bnd"/>
+        <delete file="tmp.bnd"/>
+
+    </target>
+
+
+    <!--
+         ===================================================================
+           Clean up build and distribution directories
+         ===================================================================
+    -->
+    <target name="clean" description="Clean build directory">
+        <delete dir="${build.dir}"/>
+        <delete dir="${target.dir}"/>
+        <delete dir="${api.test.results.dir}"/>
+        <delete>
+            <fileset dir="." includes="**/.nbattrs" defaultexcludes="no"/>
+            <fileset dir="." includes="**/*~" defaultexcludes="no"/>
+        </delete>
+        <!-- delete this file since it's copied from another file based on JSP level -->
+        <delete file="${basedir}/test/javax/faces/mock/MockPageContext.java"/>
+        <delete dir="${dist.dir}"/>
+        <!-- delete extraneous generated doc files, if necessary -->
+        <delete>
+            <fileset dir="doc" includes="*-attrs.xml"/>
+        </delete>
+    </target>
+
+
+    <!--
+         ===================================================================
+           Clean everything
+         ===================================================================
+    -->
+    <target name="allclean" depends="clean">
+    </target>
+
+
+    <!--
+         ===================================================================
+           Create the API documentation
+         ===================================================================
+    -->
+
+    <target name="javadoc_check">
+        <uptodate property="javadoc.notrequired"
+                  targetfile="${build.javadocs.dir}/packages.html">
+            <srcfiles dir="${src.dir}" includes="**/*.java"/>
+            <srcfiles dir="${resources.dir}" includes="**/*.html"/>
+            <srcfiles dir="${build.generate.dir}" includes="**/*.java"/>
+        </uptodate>
+    </target>
+
+    <target name="javadocs"
+            depends="prepare,javadoc_check,generate,generate.javadocs,facesdoc"
+            unless="javadoc.notrequired"
+            description="Create the JavaDoc API documentation">
+
+        <copy todir="${build.javadocs.dir}/javax/faces/component"
+              file="${src.dir}/javax/faces/component/UIComponentHierarchy.jpg"/>
+        <copy todir="${build.javadocs.dir}/javax/faces/event"
+              file="${src.dir}/javax/faces/event/EventHierarchy.jpg"/>
+
+        <copy todir="${build.javadocs.dir}/javax/faces/view/facelets"
+              file="${src.dir}/javax/faces/view/facelets/Facelets.jpg"/>
+
+        <copy todir="${build.javadocs.dir}/">
+           <fileset dir="${doc.dir}">
+             <include name="changed*.png" />
+             <include name="changed*.cur" />
+           </fileset>
+        </copy>
+
+        <copy todir="${build.managed-bean-javadocs.dir}/">
+           <fileset dir="${doc.dir}">
+             <include name="changed*.png" />
+             <include name="changed*.cur" />
+           </fileset>
+        </copy>
+
+    </target>
+
+
+    <target name="generate.javadocs">
+        <javadoc packagenames="javax.*"
+                 destdir="${build.javadocs.dir}"
+                 Overview="${resources.dir}/overview.html"
+                 private="${javadoc.private}"
+                 link="http://java.sun.com/javase/6/docs/api/"
+                 protected="${javadoc.protected}"
+                 windowtitle="${DocName} (${spec.version})"
+                 stylesheetfile="${resources.dir}/jsf-api.css"
+                 source="1.5"
+                 doctitle="${DocName} (${spec.version})"
+                 bottom="Copyright 2002-2010 Oracle America Inc, Inc. All Rights Reserved.">
+            <fileset dir="${src.dir}">
+                <include name="**/*.java"/>
+                <exclude name="**/ApplicationScoped.java" />
+                <exclude name="**/CustomScoped.java" />
+                <exclude name="**/ManagedBean.java" />
+                <exclude name="**/ReferencedBean.java" />
+                <exclude name="**/ManagedProperty.java" />
+                <exclude name="**/NoneScoped.java" />
+                <exclude name="**/RequestScoped.java" />
+                <exclude name="**/SessionScoped.java" />
+                <exclude name="**/ViewScoped.java" />
+            </fileset>
+            <fileset dir="${build.generate.dir}">
+                <include name="**/*.java"/>
+            </fileset>
+            <classpath refid="compile.classpath"/>
+        </javadoc>
+
+        <javadoc packagenames="javax.*"
+                 destdir="${build.managed-bean-javadocs.dir}"
+                 Overview="${resources.dir}/managed-bean-overview.html"
+                 private="${javadoc.private}"
+                 link="http://java.sun.com/javase/6/docs/api/"
+                 protected="${javadoc.protected}"
+                 windowtitle="Faces Managed Bean Annotation Specification (${spec.version})"
+                 stylesheetfile="${resources.dir}/jsf-api.css"
+                 source="1.5"
+                 doctitle="Faces Managed Bean Annotation Specification (${spec.version})"
+                 bottom="Copyright &#169; 2002-2009 Sun Microsystems, Inc. All Rights Reserved.">
+            <fileset dir="${src.dir}">
+                <include name="**/ApplicationScoped.java" />
+                <include name="**/CustomScoped.java" />
+                <include name="**/ReferencedBean.java" />
+                <include name="**/ManagedBean.java" />
+                <include name="**/ManagedProperty.java" />
+                <include name="**/NoneScoped.java" />
+                <include name="**/RequestScoped.java" />
+                <include name="**/SessionScoped.java" />
+                <include name="**/ViewScoped.java" />
+            </fileset>
+            <classpath refid="compile.classpath"/>
+        </javadoc>
+    </target>
+
+
+    <!--
+         ===================================================================
+           Main target
+         ===================================================================
+    -->
+    <target name="main" depends="update,jars"
+            description="Compile API classes and build JAR file"/>
+
+    <!--
+         ===================================================================
+           Distributions target
+         ===================================================================
+    -->
+    <target name="dist" depends="main,javadocs"
+            description="Build distribution files">
+
+        <!-- Create the distributions directory -->
+        <mkdir dir="${dist.dir}"/>
+
+        <!-- Create the binary distribution -->
+        <zip destfile="${dist.dir}/${name}-${impl.version}.zip">
+            <zipfileset dir="${build.dir}"
+                        includes="lib/**"
+                        prefix="${name}-${impl.version}"/>
+        </zip>
+
+        <!-- Create the javadocs distribution -->
+        <zip destfile="${dist.dir}/${name}-javadocs-${impl.version}.zip">
+            <zipfileset dir="${build.dir}"
+                        includes="javadocs/**"
+                        prefix="${name}-${impl.version}"/>
+            <zipfileset dir="${build.dir}/generate"
+                        includes="facesdoc/**"
+                        prefix="${name}-${impl.version}"/>
+
+        </zip>
+
+
+        <!-- Create the source distribution -->
+        <zip destfile="${dist.dir}/${name}-src-${impl.version}.zip">
+            <zipfileset dir="${basedir}"
+                        includes="build.xml COPYRIGHT LICENSE.html"
+                        prefix="${name}"/>
+            <zipfileset dir="${src.dir}"
+                        excludes="**/CVS/**"
+                        prefix="${name}/src"/>
+            <zipfileset dir="${test.dir}"
+                        excludes="**/CVS/**"
+                        prefix="${name}/test"/>
+            <zipfileset dir="${doc.dir}"
+                        includes="*.dtd,*.xsd,standard-html-renderkit.xml"
+                        prefix="${name}/doc"/>
+            <zipfileset dir="${tools.dir}"
+                        excludes="**/CVS/**, **/build/**"
+                        prefix="jsf-tools"/>
+        </zip>
+
+    </target>
+
+
+    <!--
+       USE THE FOLLOWING TARGETS TO PUSH VARIOUS BUILD TYPES TO YOUR LOCAL
+       M2 REPOSITORY
+    -->
+
+    <target name="mvn.deploy.snapshot.local" depends="strip.api.jar">
+        <mvn.deploy.snapshot.local type="api" 
+                                   version="${spec.snapshot.version}"/>
+    </target>
+
+    <target name="mvn.deploy.promoted.local" depends="strip.api.jar">
+        <mvn.deploy.promoted.local type="api"/>
+    </target>
+
+    <target name="mvn.deploy.release.local" depends="strip.api.jar">
+        <mvn.deploy.release.local type="api" 
+                                  version="${spec.version}"/>
+    </target>
+
+    <target name="strip.api.jar" 
+            depends="get.faces.java.packages.as.space.separated.string">
+        <!-- path maintenance -->
+        <delete failonerror="false" dir="${build.lib.dir}/jsf-api-stripped" />
+        <mkdir dir="${build.lib.dir}/jsf-api-stripped" />
+        <!-- windows or unix java exec invocation -->
+        <condition property="exec.name" value="cmd.exe">
+            <os family="windows"/>
+        </condition>
+        <condition property="exec.name" value="${java.home}/bin/javac">
+            <available file="${java.home}/bin/javac"/>
+        </condition>
+        <condition property="exec.name" value="${java.home}/../bin/javac">
+            <available file="${java.home}/../bin/javac"/>
+        </condition>
+        <condition property="exec.arg.1"
+                   value="/c ${java.home}/bin/javac.exe">
+            <available file="${java.home}/bin/javac.exe"/>
+        </condition>
+        <condition property="exec.arg.1"
+                   value="/c ${java.home}/../bin/javac.exe">
+            <available file="${java.home}/../bin/javac.exe"/>
+        </condition>
+        <property name="exec.name" value="${java.home}/bin/javac"/>
+        <property name="exec.arg.1" value=""/>
+        <!-- invoke the javac processor to produce stripped .class files -->
+        <exec executable="${exec.name}" failonerror="true">
+            <arg line="${exec.arg.1}"/>
+            <arg line="-XDprocess.packages"/>
+            <arg line="-proc:only"/>
+            <arg line="-cp ${build.lib.dir}/${name}.jar${path.separator}${jsf-tools.jar}"/>
+            <arg line="-processor com.sun.faces.tools.StripClassesForApiJar"/>
+            <arg line="-Acom.sun.tools.javac.sym.Jar=${build.lib.dir}/${name}.jar"/>
+            <arg line="-Acom.sun.tools.javac.sym.ExtraApiClassPath=${servlet.jar}:${jsp.jar}:${el-api.jar}:${jstl.jar}:${validation-api.jar}"/>
+            <arg line="-Acom.sun.tools.javac.sym.Dest=${build.lib.dir}/jsf-api-stripped"/>
+            <arg line="${src.paths}"/>
+        </exec>
+        <!-- jar up the stripped files into javax.faces-api.jar. -->
+        <!-- Extract the original manifest -->
+        <unjar src="${build.lib.dir}/${name}.jar"
+               dest="${build.lib.dir}/jsf-api-stripped">
+          <patternset>
+            <include name="META-INF/MANIFEST.MF" />
+          </patternset>
+        </unjar>
+        <jar destfile="${javax.faces-api.jar}"
+             basedir="${build.lib.dir}/jsf-api-stripped"
+             manifest="${build.lib.dir}/jsf-api-stripped/META-INF/MANIFEST.MF" />
+    </target>
+
+    <target name="get.faces.java.packages.as.space.separated.string"
+            description="Traverse ${src.dir} and extract the directory names into a property ${src.paths} as a space separated list of java packages">
+      <!-- Suck the dirs into a path-like structure. -->
+      <path id="src.dir.path">
+        <dirset dir="${src.dir}" />
+      </path>
+      <!-- Suck the path-like structure into a property. -->
+      <property name="src.dir.paths" refid="src.dir.path" />
+
+      <!-- Massage the property value to make it be as desired. -->
+
+      <propertyregex property="src.dir.paths" input="${src.dir.paths}" override="true"
+                     regexp="\\" replace="/" global="true" />
+      <propertyregex property="src.dir" input="${src.dir}" override="true"
+                     regexp="\\" replace="/" global="true" />
+      <!-- Remove the leading fully qualified paths. -->
+      <propertyregex property="src.paths" input="${src.dir.paths}" override="true"
+                     regexp="${src.dir}" replace="" global="true" />
+      <!-- Remove the leading "/" from every path entry. -->
+      <propertyregex property="src.paths" input="${src.paths}" override="true"
+                     regexp="/javax" 
+                     replace="javax" global="true" />
+      <!-- Remove the javax entry.  It is not a java package. -->
+      <propertyregex property="src.paths" input="${src.paths}" override="true"
+                     regexp="${path.separator}javax${path.separator}" 
+                     replace="" global="true" />
+      <!-- Replace ':' with ' ' (or ';' with ' ' on windows). -->
+      <propertyregex property="src.paths" input="${src.paths}" override="true"
+                     regexp="${path.separator}" 
+                     replace=" " global="true" />
+      <!-- Replace '/' with '.'. -->
+      <propertyregex property="src.paths" input="${src.paths}" override="true"
+                     regexp="/" 
+                     replace="." global="true" />
+    </target>
+        
+    <target name="mvn.deploy.api.release.local" depends="strip.api.jar">
+
+        <mvn.deploy.release.local version="${spec.version}" type="api"/>
+    </target>
+
+
+    <!--
+       USE THE FOLLOWING TARGETS TO PUSH VARIOUS BUILD TYPES TO THE
+       JAVA.NET M2 REPOSITORY
+
+ant -Dgpg.passphrase=PASSPHRASE HERE mvn.deploy.snapshot.local
+
+    -->
+     <target name="mvn.deploy.snapshot" depends="strip.api.jar">
+        <mvn.deploy.snapshot type="api" 
+                             version="${spec.snapshot.version}"/>
+    </target>
+
+
+    <target name="mvn.deploy.promoted" depends="strip.api.jar">
+        <mvn.deploy.promoted type="api"/>
+    </target>
+
+
+    <target name="mvn.deploy.release" depends="strip.api.jar">
+        <mvn.deploy.release type="api" 
+                            version="${spec.version}"/>
+    </target>
+
+    <target name="passthru">
+        <echo message="Running javax.faces.component tests ..."/>
+        <delete file="${api.test.results.dir}/api-test.log"/>
+        <delete file="${api.test.results.dir}/test-logging.properties"/>
+        <echo file="${api.test.results.dir}/test-logging.properties">
+handlers=java.util.logging.FileHandler
+java.util.logging.FileHandler.append=true
+java.util.logging.FileHandler.encoding=UTF-8
+java.util.logging.FileHandler.formatter=java.util.logging.SimpleFormatter
+java.util.logging.FileHandler.pattern=${api.test.results.dir}/api-test.log
+javax.faces.level=ALL
+        </echo>
+        <jsf.junit test-results-dir="${api.test.results.dir}"
+                   classpath-refid="test.classpath"
+                   assert.classes="${assertion.classes}"
+                   logging.config.file="${api.test.results.dir}/test-logging.properties">
+            <tests>
+                <fileset dir="${build.test.dir}"
+                         includes="javax/faces/webapp/FacesServletTestCase.class"/>
+            </tests>
+        </jsf.junit>
+    </target>
+
+</project>

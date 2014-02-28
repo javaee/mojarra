@@ -1,0 +1,129 @@
+<!--
+ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+ 
+ Copyright 1997-2009 Sun Microsystems, Inc. All rights reserved.
+ 
+ The contents of this file are subject to the terms of either the GNU
+ General Public License Version 2 only ("GPL") or the Common Development
+ and Distribution License("CDDL") (collectively, the "License").  You
+ may not use this file except in compliance with the License. You can obtain
+ a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
+ or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
+ language governing permissions and limitations under the License.
+ 
+ When distributing the software, include this License Header Notice in each
+ file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
+ Sun designates this particular file as subject to the "Classpath" exception
+ as provided by Sun in the GPL Version 2 section of the License file that
+ accompanied this code.  If applicable, add the following below the License
+ Header, with the fields enclosed by brackets [] replaced by your own
+ identifying information: "Portions Copyrighted [year]
+ [name of copyright owner]"
+ 
+ Contributor(s):
+ 
+ If you wish your version of this file to be governed by only the CDDL or
+ only the GPL Version 2, indicate your decision by adding "[Contributor]
+ elects to include this software in this distribution under the [CDDL or GPL
+ Version 2] license."  If you don't indicate a single choice of license, a
+ recipient has the option to distribute your version of this file under
+ either the CDDL, the GPL Version 2 or to extend the choice of license to
+ its licensees as provided above.  However, if you add GPL Version 2 code
+ and therefore, elected the GPL Version 2 license, then the option applies
+ only if the new code is made subject to such option by the copyright
+ holder.
+-->
+
+<project name="custom-bean-scope" default="build" basedir=".">
+
+    <property file="${user.home}/build.properties"/>
+    <property file="../../build.properties"/>
+    <import file="${jsf.build.home}/common/ant/common.xml"/>
+
+    <!-- Configure the context path for this application -->
+    <property name="context.path" value="/custom-bean-scope"/>
+    <property name="example" value="custom-bean-scope"/>
+    <property name="build" value="${basedir}/build"/>
+
+    <path id="classpath">
+        <pathelement location="${jsf-api.jar}"/>
+        <pathelement location="${jsf-impl.jar}"/>
+        <pathelement location="${build}/${example}/WEB-INF/classes"/>
+        <path refid="compile.classpath"/>
+    </path>
+
+    <target name="init" depends="check.changes">
+        <tstamp/>
+    </target>
+
+    <target name="check.changes">
+        <uptodate property="skip.build"
+                  targetfile="${build}/last-build">
+            <srcfiles dir="${basedir}">
+                <include name="src/**/*.*"/>
+                <include name="conf/**/*.*"/>
+                <include name="web/**/*.*"/>
+            </srcfiles>
+        </uptodate>
+    </target>
+
+    <target name="clean">
+        <delete dir="${build}"/>
+        <delete dir="${context.path}"/>
+    </target>
+
+
+    <target name="prepare" depends="init"
+            description="Create build directories.">
+        <mkdir dir="${build}/${example}"/>
+        <mkdir dir="${build}/${example}/WEB-INF"/>
+        <mkdir dir="${build}/${example}/WEB-INF/classes"/>
+        <mkdir dir="${build}/${example}/WEB-INF/lib"/>
+    </target>
+
+
+    <target name="build" unless="skip.build" depends="prepare"
+            description="Compile Java files and copy static files.">
+        <touch file="${build}/last-build"/>
+         <jsf.javac srcdir="src"
+                   destdir="${build}/${example}/WEB-INF/classes">
+            <classpath>
+                <path refid="classpath"/>
+            </classpath>
+        </jsf.javac>
+        <copy todir="${build}/${example}/WEB-INF">
+            <fileset dir="src/main/webapp/WEB-INF">
+                <include name="*.xml"/>
+            </fileset>          
+        </copy>
+
+        <copy todir="${build}/${example}/">
+            <fileset dir="src/main/webapp">
+                <include name="resources/**"/>
+                <include name="*.html"/>
+                <include name="*.gif"/>
+                <include name="*.jpg"/>
+                <include name="*.xhtml"/>
+                <include name="*.xml"/>
+            </fileset>
+        </copy>
+        <copy todir="${build}/${example}/WEB-INF/classes/${example}">
+            <fileset dir="src/main/webapp">
+                <include name="*properties"/>
+            </fileset>
+        </copy>
+        <copy todir="${build}/${example}/WEB-INF/classes">
+            <fileset dir="src/main/java"/>
+        </copy>
+
+        <jsf.war basedir="${build}"
+                 archive-name="${example}"
+                 webxml="${build}/${example}/WEB-INF/web.xml">
+            <archive-elements>
+                <zipfileset dir="${build}/${example}"/>
+            </archive-elements>
+        </jsf.war>
+    </target>
+
+</project>
+

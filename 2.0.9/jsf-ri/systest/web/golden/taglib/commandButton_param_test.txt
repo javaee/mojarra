@@ -1,0 +1,25 @@
+<html>
+<head>
+    
+    
+    <title>commandButton_param_test.jsp</title>
+</head>
+<body>
+    
+    
+<form id="form01" name="form01" method="post" action="/jsf-systest/faces/taglib/commandButton_param_test.jsp" enctype="application/x-www-form-urlencoded">
+<input type="hidden" name="form01" value="form01" />
+<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id3:j_id4" />
+
+<script type="text/javascript" src="/jsf-systest/faces/javax.faces.resource/jsf.js?ln=javax.faces&amp;stage=Development"></script>
+<input id="form01:button01" type="submit" name="form01:button01" value="Label" onclick="mojarra.jsfcljs(document.getElementById('form01'),{'form01:button01':'form01:button01','testname':'testval'},'');return false" />Test Link
+        
+        <p/>
+        <input id="form01:button02" type="submit" name="form01:button02" value="Label" />Test Link
+        <p/>
+        <input id="form01:button03" type="submit" name="form01:button03" value="Label" onclick="mojarra.jsfcljs(document.getElementById('form01'),{'form01:button03':'form01:button03','testname2':'This is a String property'},'');return false" />Test Link
+        <p/>
+        <input id="form01:button04" type="submit" name="form01:button04" value="Label" onclick="jsf.util.chain(this,event,'hello();','mojarra.jsfcljs(document.getElementById(\'form01\'),{\'form01:button04\':\'form01:button04\',\'testname\':\'testval\'},\'\')');return false" />Test Link
+</form>
+</body>
+</html>

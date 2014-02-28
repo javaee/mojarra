@@ -1,0 +1,14 @@
+
+
+<HTML>
+
+    
+    
+
+       <span id="simplelabel">Simple Label</span>
+
+</HTML>
+
+
+/renderkit02.jsp PASSED
+

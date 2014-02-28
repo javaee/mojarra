@@ -1,0 +1,236 @@
+<!--
+ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+ 
+ Copyright 1997-2009 Sun Microsystems, Inc. All rights reserved.
+ 
+ The contents of this file are subject to the terms of either the GNU
+ General Public License Version 2 only ("GPL") or the Common Development
+ and Distribution License("CDDL") (collectively, the "License").  You
+ may not use this file except in compliance with the License. You can obtain
+ a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
+ or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
+ language governing permissions and limitations under the License.
+ 
+ When distributing the software, include this License Header Notice in each
+ file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
+ Sun designates this particular file as subject to the "Classpath" exception
+ as provided by Sun in the GPL Version 2 section of the License file that
+ accompanied this code.  If applicable, add the following below the License
+ Header, with the fields enclosed by brackets [] replaced by your own
+ identifying information: "Portions Copyrighted [year]
+ [name of copyright owner]"
+ 
+ Contributor(s):
+ 
+ If you wish your version of this file to be governed by only the CDDL or
+ only the GPL Version 2, indicate your decision by adding "[Contributor]
+ elects to include this software in this distribution under the [CDDL or GPL
+ Version 2] license."  If you don't indicate a single choice of license, a
+ recipient has the option to distribute your version of this file under
+ either the CDDL, the GPL Version 2 or to extend the choice of license to
+ its licensees as provided above.  However, if you add GPL Version 2 code
+ and therefore, elected the GPL Version 2 license, then the option applies
+ only if the new code is made subject to such option by the copyright
+ holder.
+-->
+
+<project name="JSF Demo unit tests" default="main" basedir=".">
+
+    <!-- Test Properties -->
+    <property file="${user.home}/build.properties"/>
+    <property file="../build.properties"/>
+    <import file="${jsf.build.home}/common/ant/common.xml"/>
+
+    <property name="build" value="${basedir}/test/build"/>
+    <property name="customscope.context.path" value="/custom-bean-scope"/>
+    <property name="guessNumber.context.path" value="/jsf-guessNumber"/>
+    <property name="components.context.path" value="/jsf-components"/>
+    <property name="cardemo.context.path" value="/jsf-cardemo"/>
+    <property name="tree-visit.context.path" value="/tree-visit"/>
+    <property name="viewExpired.context.path" value="/viewExpired"/>
+    <property name="mojarra_ext.context.path" value="/mojarra_ext"/>
+    <property name="mapping-extension.context.path"
+              value="/jsf-mappingDemo-extension"/>
+    <property name="mapping-prefix.context.path"
+              value="/jsf-mappingDemo-prefix"/>
+    <!-- Default value for debugging arguments is no.  Override in
+         build.properties -->
+
+
+    <!-- Demo WAR files -->
+    <property name="custom-bean-scope.war"
+              value="${basedir}/custom-bean-scope/build/custom-bean-scope.war"/>
+    <property name="components.war"
+              value="${basedir}/components/build/jsf-components.war"/>
+    <property name="guessNumber.war"
+              value="${basedir}/guessNumber/build/jsf-guessNumber.war"/>
+    <property name="cardemo.war"
+              value="${basedir}/archive/carstore/build/jsf-cardemo.war"/>
+    <property name="mojarra_ext.war"
+              value="${basedir}/archive/mojarra_ext/build/mojarra_ext.war"/>
+    <property name="mapping-extension.war"
+              value="${basedir}/test/mappingDemo/build/jsf-mappingDemo-extension.war"/>
+    <property name="mapping-prefix.war"
+              value="${basedir}/test/mappingDemo/build/jsf-mappingDemo-prefix.war"/>
+    <property name="tree-visit.war"
+              value="${basedir}/sandbox/tree-visit/build/tree-visit.war"/>
+    <property name="viewExpired.war"
+              value="${basedir}/viewExpired/build/viewExpired.war"/>
+    <property name="test.results.dir" value="${basedir}/testresults"/>
+
+    <property name="appserver.domain" value="domain1"/>
+
+    <path id="classpath">
+        <pathelement location="${jsf-api.jar}"/>
+        <pathelement location="${build}/classes"/>
+        <path refid="htmlunit.compile.classpath"/>
+        <path refid="compile.classpath"/>
+    </path>
+
+    <path id="run.classpath">
+        <path refid="htmlunit.runtime.classpath"/>
+        <pathelement location="${build}/classes"/>
+        <!-- Include this to have access to the ResourceBundles for carstore -->
+        <pathelement location="archive/carstore/src"/>
+    </path>
+
+    <target name="init" depends="check.changes">
+        <tstamp/>
+    </target>
+
+    <target name="check.changes">
+        <uptodate property="skip.build"
+                  targetfile="${build}/last-build">
+            <srcfiles dir="${basedir}">
+                <include name="test/**/*.*"/>
+            </srcfiles>
+        </uptodate>
+    </target>
+
+    <target name="prepare" depends="init"
+            description="Create build directories.">
+        <mkdir dir="${build}/classes"/>
+    </target>
+
+    <macrodef name="run-tests">
+        <attribute name="context-path"/>
+        <attribute name="demo-name"/>
+        <attribute name="demo-war"/>
+        <attribute name="tests"/> 
+        <sequential>
+            <undeploy.artifact artifact="@{demo-war}"
+                               appName="@{demo-name}"/>
+            <deploy.artifact artifact="@{demo-war}"
+                               appName="@{demo-name}"/>
+            <jsf.junit context-path="@{context-path}"
+                       classpath-refid="run.classpath"
+                       test-results-dir="${test.results.dir}">
+                <tests>
+                    <fileset dir="test/tests">
+                        <include name="**/@{tests}/**Test*.java"/>
+                    </fileset>
+                </tests>
+            </jsf.junit>
+            <undeploy.artifact artifact="@{demo-war}"
+                               appName="@{demo-name}"/>
+        </sequential>
+    </macrodef>
+
+
+    <target name="build.test" unless="skip.build"
+            description="Compile Java files." depends="prepare">
+        <touch file="${build}/last-build"/>
+        <jsf.javac srcdir="test"
+                   destdir="${build}/classes">
+            <classpath>
+                <path refid="classpath"/>
+            </classpath>
+        </jsf.javac>
+    </target>
+
+
+
+    <target name="test" depends="build,build.test"
+            description="Runs all of available demo unit tests">
+        <delete dir="${test.results.dir}"/>
+        <mkdir dir="${test.results.dir}"/>
+
+        <!-- Broken
+        <run-tests demo-war="${components.war}" 
+                   demo-name="jsf-components"
+                   tests="components"
+                   context-path="${components.context.path}"/>
+                   -->
+
+        <!-- Broken due to bug in V3
+         <run-tests demo-war="${guessNumber.war}" 
+                   demo-name="jsf-guessNumber"
+                   tests="guessNumber"
+                   context-path="${guessNumber.context.path}"/>
+                   -->
+        
+        <!-- Need to reevaluate how to do this since
+             the single test is against both WARs
+         <run-tests demo-war="${mapping-prefix.war}" 
+                   demo-name="mapping-prefix"
+                   context-path="${mapping-prefix.context.path}"/>
+        
+         <run-tests demo-war="${mapping-extension.war}" 
+                   demo-name="mapping-extension"
+                   context-path="${mapping-extension.context.path}"/>
+        -->
+
+        <copy todir="${build}/classes">
+            <fileset dir="archive/carstore/src/java">
+                <include name="**/*.properties"/>
+            </fileset>
+        </copy>
+
+        <run-tests demo-war="${tree-visit.war}"
+                   demo-name="tree-visit"
+                   tests="treevisit"
+                   context-path="${tree-visit.context.path}"/>
+
+        <run-tests demo-war="${viewExpired.war}"
+                   demo-name="viewExpired"
+                   tests="viewExpired"
+                   context-path="${viewExpired.context.path}"/>
+
+        <run-tests demo-war="${cardemo.war}"
+                   demo-name="jsf-cardemo"
+                   tests="cardemo"
+                   context-path="${cardemo.context.path}"/>
+
+        <run-tests demo-war="${mojarra_ext.war}"
+                   demo-name="mojarra_ext"
+                   tests="mojarra_ext"
+                   context-path="${mojarra_ext.context.path}"/>
+
+        <run-tests demo-war="${custom-bean-scope.war}"
+                   demo-name="custom-bean-scope"
+                   tests="customscope"
+                   context-path="${customscope.context.path}"/>
+
+    </target>
+
+    <target name="clean">
+        <ant target="clean" dir="custom-bean-scope" inheritAll="false"/>
+        <ant target="clean" dir="archive/guessNumber" inheritAll="false"/>
+        <ant target="clean" dir="sandbox/tree-visit" inheritAll="false"/>
+        <ant target="clean" dir="viewExpired" inheritAll="false"/>
+        <ant target="clean" dir="archive/carstore" inheritAll="false"/>
+        <ant target="clean" dir="archive/mojarra_ext" inheritAll="false"/>
+    </target>
+
+    <target name="build">
+        <ant dir="custom-bean-scope" inheritAll="false" />
+        <ant dir="sandbox/tree-visit" inheritAll="false" />
+        <ant dir="viewExpired" inheritAll="false" />
+        <ant dir="archive/carstore" inheritAll="false" />
+        <ant dir="archive/mojarra_ext" inheritAll="false" />        
+    </target>
+
+    <target name="main" depends="build,test,clean">
+    </target>
+
+</project>

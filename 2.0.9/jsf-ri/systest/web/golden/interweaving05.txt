@@ -1,0 +1,31 @@
+<!--
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
+
+
+
+
+
+
+
+<html>
+<head>
+<title>jstl-choose test without "id"</title>
+</head>
+<body>
+Begin jstl-choose test without id[FIRST][SECOND]End jstl-choose test without id
+
+  
+    
+    
+  
+  
+  
+
+
+</body>
+</html>
+

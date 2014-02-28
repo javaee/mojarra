@@ -1,0 +1,258 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+
+ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+ Copyright 1997-2009 Sun Microsystems, Inc. All rights reserved.
+
+ The contents of this file are subject to the terms of either the GNU
+ General Public License Version 2 only ("GPL") or the Common Development
+ and Distribution License("CDDL") (collectively, the "License").  You
+ may not use this file except in compliance with the License. You can obtain
+ a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
+ or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
+ language governing permissions and limitations under the License.
+
+ When distributing the software, include this License Header Notice in each
+ file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
+ Sun designates this particular file as subject to the "Classpath" exception
+ as provided by Sun in the GPL Version 2 section of the License file that
+ accompanied this code.  If applicable, add the following below the License
+ Header, with the fields enclosed by brackets [] replaced by your own
+ identifying information: "Portions Copyrighted [year]
+ [name of copyright owner]"
+
+ Contributor(s):
+
+ If you wish your version of this file to be governed by only the CDDL or
+ only the GPL Version 2, indicate your decision by adding "[Contributor]
+ elects to include this software in this distribution under the [CDDL or GPL
+ Version 2] license."  If you don't indicate a single choice of license, a
+ recipient has the option to distribute your version of this file under
+ either the CDDL, the GPL Version 2 or to extend the choice of license to
+ its licensees as provided above.  However, if you add GPL Version 2 code
+ and therefore, elected the GPL Version 2 license, then the option applies
+ only if the new code is made subject to such option by the copyright
+ holder.
+
+-->
+
+<demo-info>
+
+    <demo>
+        <name>Switchlist In-Page Example</name>
+        <page>switchlistPage.jsf</page>
+        <sources>
+            <source>
+                <label>JSF Page</label>
+                <path>/switchlistPage.xhtml</path>
+            </source>
+            <source>
+                <label>CSS</label>
+                <path>/resources/switchlist.css</path>
+            </source>
+            <source>
+                <label>Backing Bean</label>
+                <path>/WEB-INF/classes/switchlist/SwitchlistBean.java</path>
+            </source>
+        </sources>
+    </demo>
+
+    <!-- =================================================================== -->
+
+    <demo>
+        <name>Switchlist with Ajax Tag</name>
+        <page>switchlistAjaxTag.jsf</page>
+        <sources>
+            <source>
+                <label>JSF Page</label>
+                <path>/switchlistAjaxTag.xhtml</path>
+            </source>
+            <source>
+                <label>CSS</label>
+                <path>/resources/switchlist.css</path>
+            </source>
+            <source>
+                <label>Managed Bean</label>
+                <path>/WEB-INF/classes/switchlist/SwitchlistBean.java</path>
+            </source>
+        </sources>
+    </demo>
+
+    <!-- =================================================================== -->
+
+    <demo>
+        <name>Switchlist Component</name>
+        <page>switchlistComponent.jsf</page>
+        <sources>
+            <source>
+                <label>JSF Page</label>
+                <path>/switchlistComponent.xhtml</path>
+            </source>
+            <source>
+                <label>Component CSS</label>
+                <path>/resources/switchlist/switchlist.css</path>
+            </source>
+            <source>
+                <label>Component xhtml</label>
+                <path>/resources/switchlist/switchlist.xhtml</path>
+            </source>
+            <source>
+                <label>Managed Bean</label>
+                <path>/WEB-INF/classes/switchlist/SwitchlistBean.java</path>
+            </source>
+        </sources>
+    </demo>
+
+    <!-- =================================================================== -->
+
+    <demo>
+        <name>Switchlist Ajax Component</name>
+        <page>switchlistAjaxComponent.jsf</page>
+        <sources>
+            <source>
+                <label>JSF Page</label>
+                <path>/switchlistAjaxComponent.xhtml</path>
+            </source>
+            <source>
+                <label>Component CSS</label>
+                <path>/resources/switchlistajax/switchlist.css</path>
+            </source>
+            <source>
+                <label>Component xhtml</label>
+                <path>/resources/switchlistajax/switchlist.xhtml</path>
+            </source>
+            <source>
+                <label>Interface</label>
+                <path>/WEB-INF/classes/switchlist/ListHolder.java</path>
+            </source>
+            <source>
+                <label>Managed Bean</label>
+                <path>/WEB-INF/classes/switchlist/ListHolder1.java</path>
+            </source>
+            <source>
+                <label>Managed Bean</label>
+                <path>/WEB-INF/classes/switchlist/ListHolder2.java</path>
+            </source>
+            <source>
+                <label>Controller Bean</label>
+                <path>/WEB-INF/classes/switchlist/SwitchlistController.java</path>
+            </source>
+        </sources>
+    </demo>
+
+    <!-- =================================================================== -->
+
+    <demo>
+        <name>Editable Text Component</name>
+        <page>edittext.jsf</page>
+        <sources>
+            <source>
+                <label>JSF Page</label>
+                <path>/edittext.xhtml</path>
+            </source>
+            <source>
+                <label>Component CSS</label>
+                <path>/resources/editText/styles.css</path>
+            </source>
+            <source>
+                <label>Component xhtml</label>
+                <path>/resources/editText/editText.xhtml</path>
+            </source>
+            <source>
+                <label>Component JavaScript</label>
+                <path>/resources/editText/editText.js</path>
+            </source>
+            <source>
+                <label>Managed Bean</label>
+                <path>/WEB-INF/classes/dataholding/StringHolder.java</path>
+            </source>
+        </sources>
+    </demo>
+
+    <!-- =================================================================== -->
+
+    <demo>
+        <name>Poll via Request Component</name>
+        <page>poll.jsf</page>
+        <sources>
+            <source>
+                <label>JSF Page</label>
+                <path>/poll.xhtml</path>
+            </source>
+            <source>
+                <label>Component xhtml</label>
+                <path>/resources/poll/poll.xhtml</path>
+            </source>
+            <source>
+                <label>Component JavaScript</label>
+                <path>/resources/poll/poll.js</path>
+            </source>
+            <source>
+                <label>Component xhtml</label>
+                <path>/resources/poll/polltag.xhtml</path>
+            </source>
+            <source>
+                <label>Component JavaScript</label>
+                <path>/resources/poll/polltag.js</path>
+            </source>
+            <source>
+                <label>Managed Bean</label>
+                <path>/WEB-INF/classes/dataholding/Count.java</path>
+            </source>
+        </sources>
+    </demo>
+
+
+    <!-- =================================================================== -->
+
+    <demo>
+        <name>YUI Calendar Component</name>
+        <page>yuical.jsf</page>
+        <sources>
+            <source>
+                <label>JSF Page</label>
+                <path>/yuical.xhtml</path>
+            </source>
+            <source>
+                <label>Component xhtml</label>
+                <path>/resources/yuical/yuical.xhtml</path>
+            </source>
+            <source>
+                <label>Component JavaScript</label>
+                <path>/resources/yuical/calendar.js</path>
+            </source>
+            <source>
+                <label>Managed Bean</label>
+                <path>/WEB-INF/classes/dataholding/DateHolder.java</path>
+            </source>
+        </sources>
+    </demo>
+
+
+    <!-- =================================================================== -->
+
+    <demo>
+        <name>Busy Status Component</name>
+        <page>busystatus.jsf</page>
+        <sources>
+            <source>
+                <label>JSF Page</label>
+                <path>/busystatus.xhtml</path>
+            </source>
+            <source>
+                <label>Component xhtml</label>
+                <path>/resources/busystatus/busystatus.xhtml</path>
+            </source>
+            <source>
+                <label>Component JavaScript</label>
+                <path>/resources/busystatus/busystatus.js</path>
+            </source>
+            <source>
+                <label>Managed Bean</label>
+                <path>/WEB-INF/classes/dataholding/StringHolder.java</path>
+            </source>
+        </sources>
+    </demo>
+
+</demo-info>

@@ -1,0 +1,530 @@
+<!DOCTYPE html PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+  <meta content="text/html; charset=iso-8859-1"
+ http-equiv="Content-Type">
+  <meta
+ content="Mozilla/4.79C-CCK-MCD  [en] (X11; U; SunOS 5.8 sun4u) [Netscape]"
+ name="GENERATOR">
+  <title>JavaServer Faces Technology 1.1 FCS Installallation
+Instructions</title>
+  <link href="style/default.css" type="text/css" rel="stylesheet">
+</head>
+<body style="background-color: rgb(255, 255, 255);">
+<center>
+<h1>JavaServer<sup><font size="-1">TM</font></sup> Faces Technology
+1.1_01 FCS<br>
+Installation Instructions</h1>
+</center>
+<hr>
+<br>
+<p>
+<a name="14145"></a>Revised: 20040513
+</p>
+<p>For updates to these instructions, please see the online version, <a
+ href="http://java.sun.com/j2ee/javaserverfaces/docs/Installation.html">
+JavaServer Faces Technology 1.1_01 Installation Instructions</a>.
+</p>
+<p></p>
+<p><a name="13552"></a>Please refer to the <a
+ href="http://java.sun.com/j2ee/javaserverfaces/docs/ReleaseNotes.html">Release
+Notes</a>, located in your download bundle, for information regarding
+supported
+operating
+systems, required software, limitations and bugs. <br>
+</p>
+<h2>Table of Contents:</h2>
+<h4>Using JavaServer Faces Technology with the Sun Java<font size="-2"><sup>TM</sup></font>
+System Application Server, Platform Edition 8</h4>
+<ul>
+  <li><a href="#Installing_Java_Server_Faces_Technology_AS"><big>Installing
+Java Server Faces Technology in the Application Server</big></a></li>
+  <li><a href="#Running_the_Examples_in_App_Server"><big>Running the
+Pre-packaged Example WAR Files in the Application Server</big></a></li>
+  <li><a href="#Building_and_Running_the_Examples_AS"><big>Building and
+Running the Examples with the Application Server</big></a></li>
+</ul>
+<h4>Using JavaServer Faces Technology with the Java<font size="-2"><sup>TM</sup></font>
+Web Services Developer Pack (Java WSDP)</h4>
+<ul>
+  <li><a href="#Installing_JavaServer_Faces_Technology"><big>Installing
+JavaServer Faces in Java WSDP</big></a></li>
+  <li><a href="#Running_the_Examples_in_JWSDP"><big>Running the
+Pre-packaged Example WAR files in Java WSDP</big></a></li>
+  <li><a href="#Building_and_Running_the_Examples"><big>Building and
+Running the Examples with the Java WSDP</big></a></li>
+</ul>
+<h4>Using JavaServer Faces Technology with Other Containers</h4>
+<ul>
+  <li><a href="#Installing_Building_and_Running_the"><big>Installing,
+Building, and Running the Examples in a Different Container</big></a></li>
+</ul>
+<hr style="width: 100%; height: 2px;">
+<h1><a name="Installing_Java_Server_Faces_Technology_AS"></a>Installing
+JavaServer Faces Technology in the Application Server<br>
+</h1>
+<ol>
+  <li>Download the <a
+ href="http://java.sun.com/j2ee/1.4/download.html#nb">Application Server</a>.</li>
+  <li>Follow the installation
+instructions provided with the Application Server.</li>
+  <li>Download the <a
+ href="http://java.sun.com/j2ee/javaserverfaces/download.html">JavaServer
+Faces Technology 1.1_01 ZIP file</a>.</li>
+  <li>Archive or remove the the old JavaServer Faces Technology release
+JAR files
+located in the <code>lib</code> directory of your Application Server
+installation. These JAR files are <tt>jsf-api.jar</tt> and <tt>jsf-impl.jar</tt>.<br>
+  </li>
+  <li>Unzip the JavaServer Faces Technology 1.1_01 ZIP file and copy
+the <code>jsf-api.jar</code> and <code>jsf-impl.jar</code> files from
+the <code>lib</code> directory of your JavaServer Faces Technology FCS
+1.1_01 installation to the <code>lib</code> directory of your
+Application Server installation. If you have paths to these files
+already set in your environment, make sure to update the paths to point
+to the new JAR files in the <code>lib</code> directory of the
+Application Server installation.<br>
+  </li>
+</ol>
+<h1><a name="Running_the_Examples_in_App_Server"></a>
+Running the Pre-packaged Example WAR Files in the Application Server<br>
+</h1>
+The <code>samples</code> directory of your JavaServer Faces Technology
+FCS 1.1_01 installation contains
+a set of WAR files that were packaged from the example source, which is
+provided in the subdirectories of the <code>samples</code> directory.
+To run the pre-packaged WAR files, you need to deploy them to the
+server. The Application Server gives you three ways to deploy:
+<ul>
+  <li type="disc">Copy the WAR file to the <code>autodeploy</code>
+directory
+  </li>
+  <li type="disc">Run <code>asadmin deploy</code> with the path to the
+WAR file
+  </li>
+  <li type="disc">Launch <code>deploytool</code> and deploy the WAR
+file from there
+  </li>
+</ul>
+<br>
+To deploy using <code>autodeploy</code>, start the server and then
+simply copy the WAR file to the
+<code>domains/domain1/autodeploy</code> directory of your Application
+Server installation.
+<p>To deploy using <code>asadmin</code>, start the server and run this
+command:
+</p>
+<pre>	asadmin deploy &lt;full path to the WAR file&gt;<br></pre>
+<p>
+You can also deploy a pre-packaged WAR file using <code>deploytool</code>,
+a tool that also allows you to
+package an application WAR file. To deploy a pre-packaged WAR file
+using <code>deploytool</code>:
+</p>
+<ol>
+  <li>Start the server.</li>
+  <li>Launch <code>deploytool</code>. (See the Quick Start Guide
+located in the <code>docs</code> directory of your
+Application Server installation for instructions on launching <code>deploytool</code>.)</li>
+  <li>Go to the File Menu, select Open. Browse for and open your WAR
+file.</li>
+  <li>From the tree, select your WAR file.</li>
+  <li>On the General tabbed-pane for this WAR file, enter a context
+root in the Context Root field.
+For example, you could enter <code>/guessNumber</code> as the context
+root for the <code>guessNumber</code> example.
+  </li>
+  <li>Go to the Tools menu and select Deploy.</li>
+</ol>
+<br>
+See the <a
+ href="http://java.sun.com/j2ee/1.4/docs/tutorial/doc/index.html">J2EE
+Tutorial</a> for information on using <code>deploytool</code> to
+package Web applications.
+<p>When the server has finished deploying the application, you can run
+it by specifing the name of the
+WAR file in your Web browser:<br>
+</p>
+<pre>http://localhost:8080/&lt;EXAMPLE NAME&gt;/<br></pre>
+For example, to run <code>cardemo</code>, specify this URL in your Web
+browser:
+<pre>http://localhost:8080/jsf-cardemo/<br></pre>
+If you used <code>deploytool</code> to deploy the example, use the
+context root that you gave
+it in the URL. For example, if you entered the context root <code>/guessNumber</code>,
+enter the
+following in your Web browser:
+<pre>http://localhost:8080/guessNumber<br></pre>
+<h1><a name="Building_and_Running_the_Examples_AS"></a>Building and
+Running the Examples Using the Application Server<br>
+</h1>
+<p>To build one of the samples, you need to run its <tt>
+build.xml</tt> file using the <tt>
+asant</tt> tool, which is a make tool included with the Application
+Server.<br>
+</p>
+<p>
+</p>
+<p>When <code>asant</code> builds the application, it copies files to
+a temporary <tt>
+build</tt> directory. This directory contains an exact image of the
+binary distribution for your JavaServer Faces application. When <code>asant</code>
+builds the WAR file, it packages all the files from the <tt>
+build</tt> directory into the WAR file while preserving the directory
+structure contained in the <tt>
+build</tt> directory</p>
+<p>To build the samples you first need to enter some paths
+in the <code>build.properties</code> file:</p>
+<ol>
+  <li>Make sure you have the necessary preconditions as listed in the <a
+ href="http://java.sun.com/j2ee/javaserverfaces/docs/ReleaseNotes.html">ReleaseNotes</a>.
+  </li>
+  <li>Copy <code>build.properties.sample</code> to <code>build.properties</code>.</li>
+  <li>In <code>build.properties</code>, set the <code>tomcat.home</code>
+property to the location of your Application Server installation.</li>
+  <li>Set the other properties as shown here:
+    <pre>  	jsf-api.jar=${tomcat.home}/lib/jsf-api.jar<br>	jsf-impl.jar=${tomcat.home}/lib/jsf-impl.jar<br>	commons-logging.jar=${tomcat.home}/lib/appserv-rt.jar<br>	commons-digester.jar=${tomcat.home}/lib/appserv-rt.jar<br>	commons-beanutils.jar=${tomcat.home}/lib/appserv-rt.jar<br>	commons-collections.jar=${tomcat.home}/lib/appserv-rt.jar<br>	jstl.jar=${tomcat.home}/lib/appserv-jstl.jar<br>	standard.jar=${tomcat.home}/lib/appserv-jstl.jar<br>	servlet.jar=${tomcat.home}/lib/j2ee.jar<br>	jsp.jar=${tomcat.home}/lib/j2ee.jar<br>  </pre>
+  </li>
+</ol>
+<p>To build a sample WAR file and deploy it:</p>
+<ol>
+  <li>Go to the directory of the sample you want to build. </li>
+  <li>At the command line, run the default<tt></tt> target:
+    <pre>asant</pre>
+  </li>
+  <li>The WAR file of the sample you just built will overwrite the
+corresponding pre-packaged WAR file in the <code>samples</code>
+directory of your JavaServer Faces Technology installation</li>
+  <li>Follow the instructions in <a
+ href="#Running_the_Examples_in_App_Server">Running the Pre-Packaged
+Example WAR Files in the Application Server</a> to run the application
+WAR file.</li>
+</ol>
+<h1><a name="Installing_JavaServer_Faces_Technology"></a>Installing
+JavaServer Faces Technology in Java WSDP<br>
+</h1>
+<ol>
+  <li>Download the <a
+ href="http://java.sun.com/webservices/downloads/webservicespack.html">Java
+WSDP</a>.</li>
+  <li>Follow the Installation
+Instructions for the Java WSDP.</li>
+  <li>Update your path so that <code>JWSDP_HOME</code>&nbsp;points to
+the location of your Java WSDP installation.</li>
+  <li>Download the <a
+ href="http://java.sun.com/j2ee/javaserverfaces/download.html">JavaServer
+Faces 1.1_01 ZIP file</a>.</li>
+  <li>Archive or remove the the old JavaServer Faces release
+located in <code>JWSDP_HOME/jsf</code><br>
+  </li>
+  <li>Remove any serialized JavaServer Faces application files from the
+    <code>work</code> directory of Java WSDP.</li>
+  <li>Unzip the JavaServer Faces 1.1_01 ZIP file into <code>JWSDP_HOME</code>
+and rename the base directory to "<code>jsf</code>"<br>
+  </li>
+</ol>
+<h1><a name="Running_the_Examples_in_JWSDP"></a>Running the Examples in
+the Java WSDP<br>
+</h1>
+To run one of the samples,
+<ol>
+  <li>Go to the&nbsp; <tt>JWSDP_HOME/bin</tt> directory.<br>
+    <br>
+  </li>
+  <li>In a terminal window start the web server. <br clear="all">
+    <br clear="all">
+If you are on a Unix platform, invoke the following command to start
+the web server:<br>
+    <br>
+    <tt>catalina.sh run&nbsp;</tt><br>
+    <br>
+If you are running Windows, invoke the following command to start the
+web server:<br clear="all">
+    <br>
+    <tt>catalina run</tt> <br>
+    <br>
+    <br>
+  </li>
+  <li>Wait for the copyright license to display in your terminal window.<br>
+    <br>
+  </li>
+  <li>Launch your browser.<br>
+    <br>
+  </li>
+  <li>You can find a page containing links to the JavaServer Faces
+sample programs on your default server port:</li>
+</ol>
+<div style="margin-left: 40px;"><code>http://localhost:8080</code><br>
+<br>
+You can also run each sample individually by specifing the name of the
+WAR file in your web browser:<br>
+</div>
+<div style="margin-left: 40px;"><tt><br>
+http://localhost:8080/&lt;EXAMPLE NAME&gt;/&nbsp;</tt><br>
+</div>
+<tt> <br>
+</tt>
+<div style="margin-left: 40px;"><tt> </tt>For example, this is the
+address
+you enter if you are running the cardemo:<br>
+<br>
+<tt>http://localhost:8080/jsf-cardemo/</tt>
+</div>
+<p style="margin-left: 40px;">Please note that the samples
+are provided as a proof-of-concept rather than a best-practices guide
+for writing JavaServer Faces applications.
+</p>
+<h1><a name="Building_and_Running_the_Examples"></a>Building and
+Running the Examples With the Java WSDP</h1>
+<p>To build one of the samples, you need to run its <tt>
+build.xml</tt> file using <tt>
+Ant</tt>, which is a portable make tool.<br>
+</p>
+<p>
+</p>
+<p>Like the <code>asant</code> tool, when Ant builds the application
+it copies files to a temporary <tt>
+build</tt> directory. When Ant
+builds the WAR file, it packages all the files from the <tt>
+build</tt> directory into the WAR file.
+</p>
+<p>To build the samples you first need to enter some paths
+in the <code>build.properties</code> file:</p>
+<ol>
+  <li>Make sure you have the necessary preconditions as listed in the <a
+ href="http://java.sun.com/j2ee/javaserverfaces/docs/ReleaseNotes.html">ReleaseNotes</a>.
+  </li>
+  <li>Make sure you have <a href="http://ant.apache.org/">Ant version
+1.5.1</a> installed and working on
+your machine.<br>
+  </li>
+  <li>Copy <code>build.properties.sample</code> to <code>build.properties</code>
+and edit accordingly for your system. </li>
+  <li>Go to the directory of the sample you want to build. </li>
+</ol>
+<p>To build a sample WAR file and deploy it:</p>
+<ol>
+  <li>Go to the directory of the sample you want to build. </li>
+  <li>At the command line, run the default<tt></tt> target:
+    <pre>ant</pre>
+  </li>
+  <li>The WAR file of the sample you just built will be placed in the <code>JWSDP_HOME/jsf/samples</code>
+directory.</li>
+  <li>Your application will be automatically deployed in Java WSDP 1.3.</li>
+  <ul>
+    <li>Java WSDP 1.3 includes an XML file for each sample application
+in the <tt>JWSDP_HOME/conf/Catalina/localhost</tt> directory. This
+file causes that application to be automatically deployed when you
+start Tomcat. <br>
+    </li>
+  </ul>
+  <ul>
+    <li>You can manually deploy an application by copying the WAR file
+you just generated to the <code>JWSDP_HOME/webapps</code>
+directory.</li>
+    <ul>
+      <li> When manually deploying under Java WSDP 1.3 make sure to
+remove the corresponding XML file located in the <tt>JWSDP_HOME/conf/Catalina/localhost</tt>
+directory.<br>
+      </li>
+    </ul>
+  </ul>
+  <li>Start the server by either running <tt>
+catalina.sh run</tt> if you are using UNIX or <tt>
+catalina run</tt> if your are using Windows.</li>
+  <li>When the server has started, open your browser and enter this
+URL:
+    <pre>	http://localhost:8080/&lt;EXAMPLE NAME&gt;</pre>
+    <br>
+In Java WSDP, you can also find a page
+containing links to the JavaServer Faces samples on your default
+server port:<br>
+    <pre>	http://localhost:8080</pre>
+    <br>
+  </li>
+</ol>
+<h1><a name="Installing_Building_and_Running_the"></a>Installing,
+Building and Running the Examples in Other Containers</h1>
+<ol>
+  <li>Download the <a
+ href="http://java.sun.com/j2ee/javaserverfaces/download.html">
+JavaServer Faces 1.0_01 ZIP file.</a></li>
+  <li>Unzip the file.</li>
+  <li>Copy the <code>build.properties.sample</code> file to <code>build.properties</code>
+and edit it according to your system configuration. Be sure to
+uncomment the <code>build.standalone</code> property in the <code>build.properties</code>
+file. </li>
+  <li>Make sure the following properties in your customized <code>build.properties</code>
+file point to the correct JAR file location according to your system
+configuration:
+    <ul>
+      <li type="disc"><code>tomcat-home</code>: path to your web
+container</li>
+      <li type="disc"><code>jsf-api.jar</code></li>
+      <li type="disc"><code>jsf-impl.jar</code><br>
+      </li>
+      <li type="disc"><code>commons-beanutils.jar</code></li>
+      <li type="disc"><code>commons-digester.jar</code></li>
+      <li type="disc"><code>commons-logging.jar</code></li>
+      <li type="disc"><code>commons-collections.jar</code>: available
+in the <code>lib</code> directory of your JavaServer Faces unzipped
+bundle</li>
+      <li type="disc"><code>jsp.jar</code>: JSP 1.2+ API JAR is
+available from <a href="http://jakarta.apache.org/tomcat/">Jakarta
+Tomcat</a><br>
+      </li>
+      <li type="disc"><code>jstl.jar</code>: JSTL 1.0+ API JAR is
+available from <a
+ href="http://jakarta.apache.org/taglibs/doc/standard-doc/intro.html">Jakarta
+Taglibs</a>. You should use JSTL 1.1 in a container that supports JSP
+2.0. If your container does not support JSP 2.0 then use JSTL 1.0.x.
+The JavaServer Faces standalone samples contain JSTL 1.1 implementation
+jars.</li>
+      <li type="disc"><code>standard.jar</code>: JSTL 1.0+
+Implementation JAR file is available from <a
+ href="http://jakarta.apache.org/taglibs/doc/standard-doc/intro.html">Jakarta
+Taglibs</a>. You should use JSTL 1.1 in a container that supports JSP
+2.0. If your container does not support JSP 2.0 then use JSTL 1.0.x.
+The JavaServer Faces standalone samples contain JSTL 1.1 implementation
+jars.</li>
+      <li type="disc"><code>servlet.jar</code>: Servlet 2.3+ API jar
+available from <a href="http://jakarta.apache.org/tomcat/">Jakarta
+Tomcat</a><br>
+      </li>
+    </ul>
+  </li>
+  <li>If you have previously run JavaServer Faces applications, you
+should remove your web server's cached files before running the new
+release.
+For instance, the cached files in a Java WSDP container will be located
+in <code>JWSDP_HOME/work/Catalina/localhost/jsf-*</code>.
+It is safe to remove all these files before restarting your
+server. Read your container's documentation to find out where the
+cached files are located in your specific container.</li>
+  <li>Follow the <a href="#Building_and_Running_the_Examples">Building
+and Running the Examples With Java WSDP</a> section <br>
+You will need to rebuild each of the
+JavaServer Faces sample applications with
+the <code>build.standalone</code> property set to "<code>true</code>"
+so that each sample's web archive includes all of the jar file
+dependencies. This step is not necessary in a JWSDP container since all
+the jar dependencies that JavaServer Faces requires are already part of
+the container.<br>
+    <br>
+Note: the <a href="#Building_and_Running_the_Examples">Building
+and Running the Examples With Java WSDP</a> section makes reference to <code>JWSDP_HOME</code>,
+substitute your container's home directory for <code>JWSDP_HOME</code>.
+You will also need to manually deploy the sample WAR files into your
+container's <code>webapps</code> directory<br>
+  </li>
+</ol>
+<hr>
+<p>Copyright &copy; 2004 Sun Microsystems, Inc., 4150 Network
+Circle, Santa
+<br>
+Clara, California 95054, U.S.A. All rights reserved.
+</p>
+<p>Sun Microsystems, Inc. has intellectual property rights relating to
+<br>
+technology embodied in this product. In particular, and without
+<br>
+limitation, these intellectual property rights may include one or more
+<br>
+of the U.S. patents listed at http://www.sun.com/patents and one or
+more
+<br>
+additional patents or pending patent applications in the U.S. and other
+<br>
+countries.
+</p>
+<p>This product is distributed under licenses restricting its use,
+copying
+<br>
+distribution, and decompilation. No part of this product may be
+<br>
+reproduced in any form by any means without prior written authorization
+<br>
+of Sun and its licensors, if any.
+</p>
+<p>Third-party software, including font technology, is copyrighted and
+<br>
+licensed from Sun suppliers.
+</p>
+<p>Sun, Sun Microsystems, the Sun logo, the Java Coffee Cup logo,
+<br>
+JavaServer, and Java are trademarks or registered trademarks of Sun
+<br>
+Microsystems, Inc. in the U.S. and other countries.
+</p>
+<p>Federal Acquisitions: Commercial Software - Government Users Subject
+to
+<br>
+Standard License Terms and Conditions.
+</p>
+<hr width="100%">
+<p>Copyright &copy; 2004 Sun Microsystems, Inc., 4150 Network
+Circle,
+<br>
+Santa Clara, California 95054, Etats-Unis. Tous droits
+r&eacute;serv&eacute;s.
+</p>
+<p>Sun Microsystems, Inc. a les droits de propri&eacute;t&eacute;
+intellectuels
+relatants
+<br>
+&agrave; la technologie incorpor&eacute;e dans ce produit. En
+particulier,
+et sans la
+<br>
+limitation, ces droits de propri&eacute;t&eacute; intellectuels peuvent
+inclure un ou
+<br>
+plus des brevets am&eacute;ricains &eacute;num&eacute;r&eacute;s
+&agrave;
+http://www.sun.com/patents et un
+<br>
+ou les brevets plus suppl&eacute;mentaires ou les applications de
+brevet
+en
+<br>
+attente dans les Etats - Unis et les autres pays.
+</p>
+<p>Ce produit ou document est prot&eacute;g&eacute; par un copyright et
+distribu&eacute; avec
+<br>
+des licences qui en restreignent l'utilisation, la copie, la
+<br>
+distribution, et la d&eacute;compilation. Aucune partie de ce produit
+ou
+<br>
+document ne peut &ecirc;tre reproduite sous aucune forme, par quelque
+moyen
+<br>
+que ce soit, sans l'autorisation pr&eacute;alable et &eacute;crite
+de Sun et de ses
+<br>
+bailleurs de licence, s'il y ena.
+</p>
+<p>Le logiciel d&eacute;tenu par des tiers, et qui comprend la
+technologie
+<br>
+relative aux polices de caract&egrave;res, est prot&eacute;g&eacute;
+par un copyright et
+<br>
+licenci&eacute; par des fournisseurs de Sun.
+</p>
+<p>Sun, Sun Microsystems, le logo Sun, le logo Java Coffee Cup,
+JavaServer,
+<br>
+et Java sont des marques de fabrique ou des marques
+d&eacute;pos&eacute;es
+de Sun
+<br>
+Microsystems, Inc. aux Etats-Unis et dans d'autres pays.
+<br>
+&nbsp;
+<br>
+&nbsp;
+</p>
+</body>
+</html>

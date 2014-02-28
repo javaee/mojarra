@@ -1,0 +1,21 @@
+
+
+<html>
+<head>
+
+
+    <title>commandLink_test.jsp</title>
+</head>
+<body>
+
+
+<form id="form01" name="form01" method="post" action="/jsf-systest/faces/taglib/commandLink_test.jsp" enctype="application/x-www-form-urlencoded">
+<input type="hidden" name="form01" value="form01" />
+<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id5:j_id6" />
+
+<script type="text/javascript" src="/jsf-systest/faces/javax.faces.resource/jsf.js?ln=javax.faces&amp;stage=Development"></script>
+<a id="form01:hyperlink01" href="#" onclick="mojarra.jsfcljs(document.getElementById('form01'),{'form01:hyperlink01':'form01:hyperlink01'},'');return false">My Link</a><a id="form01:hyperlink02" href="#" onclick="mojarra.jsfcljs(document.getElementById('form01'),{'form01:hyperlink02':'form01:hyperlink02'},'');return false">This is a String property</a><a id="form01:hyperlink03" href="#" onclick="mojarra.jsfcljs(document.getElementById('form01'),{'form01:hyperlink03':'form01:hyperlink03'},'');return false">RES-BUNDLE LINK</a><a id="form01:hyperlink04" href="#" onclick="mojarra.jsfcljs(document.getElementById('form01'),{'form01:hyperlink04':'form01:hyperlink04'},'');return false"><img src="duke.gif" /></a><a id="form01:hyperlink05" href="#" onclick="mojarra.jsfcljs(document.getElementById('form01'),{'form01:hyperlink05':'form01:hyperlink05'},'');return false"><img src="resbundle_image.gif" /></a><a id="form01:hyperlink06" href="#" onclick="mojarra.jsfcljs(document.getElementById('form01'),{'form01:hyperlink06':'form01:hyperlink06','param1':'value1'},'');return false">Paramter Link</a>
+</form>
+</body>
+</html>
+

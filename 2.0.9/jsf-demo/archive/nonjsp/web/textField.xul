@@ -1,0 +1,18 @@
+<?xml version="1.0"?> <!-- -*- Mode: HTML -*- --> 
+
+<page>
+
+<window id="textFields">
+
+<label id="userLabel" value="UserName" />
+<textbox id="userName" value="default" />
+
+<label id="pwdLabel" value="Password" />
+<textbox id="password" type="password" />
+
+<label id="addrLabel" value="Address" />
+<textbox id="address" multiline="true" />
+
+</window>
+
+</page>

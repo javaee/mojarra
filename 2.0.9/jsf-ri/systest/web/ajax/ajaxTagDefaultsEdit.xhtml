@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+  Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
+
+  The contents of this file are subject to the terms of either the GNU
+  General Public License Version 2 only ("GPL") or the Common Development
+  and Distribution License("CDDL") (collectively, the "License").  You
+  may not use this file except in compliance with the License. You can obtain
+  a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
+  or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
+  language governing permissions and limitations under the License.
+
+  When distributing the software, include this License Header Notice in each
+  file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
+  Sun designates this particular file as subject to the "Classpath" exception
+  as provided by Sun in the GPL Version 2 section of the License file that
+  accompanied this code.  If applicable, add the following below the License
+  Header, with the fields enclosed by brackets [] replaced by your own
+  identifying information: "Portions Copyrighted [year]
+  [name of copyright owner]"
+
+  Contributor(s):
+
+  If you wish your version of this file to be governed by only the CDDL or
+  only the GPL Version 2, indicate your decision by adding "[Contributor]
+  elects to include this software in this distribution under the [CDDL or GPL
+  Version 2] license."  If you don't indicate a single choice of license, a
+  recipient has the option to distribute your version of this file under
+  either the CDDL, the GPL Version 2 or to extend the choice of license to
+  its licensees as provided above.  However, if you add GPL Version 2 code
+  and therefore, elected the GPL Version 2 license, then the option applies
+  only if the new code is made subject to such option by the copyright
+  holder.
+
+-->
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+    <title>Ajax Defaults Request Test Page</title>
+</h:head>
+<h:body>
+    <h:outputScript library="javax.faces" name="jsf.js" target="head"/>
+    <h1>Test defaults with Prepended Ids</h1>
+    <h:form id="form1">
+        <h:panelGroup layout="block" id="outPanel">
+        <h:outputText id="out1" value="#{ajaxrequest.echo}"/>
+        <br/>
+        <h:outputText id="echo1Out" value="#{ajaxrequest.echo1}"/>
+        <br/>
+        <h:outputText id="echo2Out" value="#{ajaxrequest.echo2}"/>
+        <br/>
+        <h:outputText id="echo3Out" value="#{ajaxrequest.echo3}"/>
+        <br/>
+        <h:outputText id="echo4Out" value="#{ajaxrequest.echo4}"/>
+        <br/>
+        </h:panelGroup>
+    <h:commandButton id="refresh" value="refresh">
+            <f:ajax render="form1:outPanel"/>
+            </h:commandButton>
+        Explicit parameters:
+            <h:inputText id="edit1" value="#{ajaxrequest.echo1}" valueChangeListener="#{ajaxrequest.echoValue}" >
+                <f:ajax execute="form1:edit1" render="form1:edit1" />
+                </h:inputText>
+            <br/>
+            Implicit execute:
+            <h:inputText id="edit2" value="#{ajaxrequest.echo2}" valueChangeListener="#{ajaxrequest.echoValue}" >
+                <f:ajax render="form1:edit2" />
+            </h:inputText>
+            <br/>
+            Implicit render:
+            <h:inputText id="edit3" value="#{ajaxrequest.echo3}" valueChangeListener="#{ajaxrequest.echoValue}" >
+                <f:ajax execute="form1:edit3"/>
+                </h:inputText>
+            <br/>
+            Default Options:
+            <h:inputText id="edit4" value="#{ajaxrequest.echo4}" valueChangeListener="#{ajaxrequest.echoValue}" >
+                <f:ajax/>
+                </h:inputText>
+            <br/>
+            <!-- Contained within the form - but still shouldn't update except for full page load -->
+        <h:outputText id="out2" value="#{ajaxrequest.echo}"/>
+        <br/>
+        <!-- Used to reset the values between tests -->
+        <h:commandButton id="reset" value="reset" actionListener="#{ajaxrequest.resetEcho}"/>
+        <br/>
+        <h:commandButton id="reload" value="reload" />
+    </h:form>
+    <!-- Contained outside the form - shouldn't update except for full page load -->
+    <h:outputText id="out3" value="#{ajaxrequest.echo}"/>
+
+</h:body>
+</html>

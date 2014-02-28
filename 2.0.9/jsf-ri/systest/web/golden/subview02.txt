@@ -1,0 +1,31 @@
+<!--
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
+
+
+
+
+<html>
+<head>
+<title>subview02</title>
+</head>
+<body>
+<p>
+Begin test &lt;c:import&gt; with subview tag in importing page
+</p>
+
+<p>foo02</p>
+
+
+<p>subview02</p>
+
+<p>bar02
+</p>
+
+<p>End test &lt;c:import&gt; with subview tag in importing page</p>
+</body>
+</html>
+

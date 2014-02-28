@@ -1,0 +1,44 @@
+
+
+
+
+
+
+                                                                                    
+
+                                                                                    
+<html>
+<STYLE TYPE="text/css" MEDIA=screen>
+<!--
+.errors {
+  background-color: #7171A5;
+  border: 5px outset #71A5A5;
+  border-collapse: collapse;
+  font-family: sans-serif;
+  font-size: 14pt;
+  padding: 10px;
+  left: 48px;
+  top: 300px;
+  position: absolute;
+}
+-->
+</STYLE>
+
+<table>
+<tbody>
+<tr>
+<td><ul dir="LTR" style="left: 48px; top: 100px; position: absolute"><li style="color: yellow"><span title="Information Summary">	Informational Detail</span></li><li><span title="Warning Summary">	Warning Detail</span></li><li style="color: red"><span title="Error Summary">	Error Detail</span></li><li style="color: blue"><span title="Fatal Summary">	Fatal Detail</span></li></ul></td>
+</tr>
+<tr>
+<td><table lang="en" style="left: 48px; top: 200px; position: absolute"><tr style="color: yellow"><td><span title="Information Summary">	Informational Detail</span></td></tr><tr><td><span title="Warning Summary">	Warning Detail</span></td></tr><tr style="color: red"><td><span title="Error Summary">	Error Detail</span></td></tr><tr style="color: blue"><td><span title="Fatal Summary">	Fatal Detail</span></td></tr></table></td>
+</tr>
+<tr>
+<td><ul class="errors"><li>	Information Summary Informational Detail</li><li>	Warning Summary Warning Detail</li><li>	Error Summary Error Detail</li><li>	Fatal Summary Fatal Detail</li></ul></td>
+</tr>
+<tr>
+<td><table style="left: 48px; top: 500px; position: absolute"><tr style="color: yellow"><td>	Information Summary Informational Detail</td></tr><tr><td>	Warning Summary Warning Detail</td></tr><tr style="color: red"><td>	Error Summary Error Detail</td></tr><tr style="color: blue"><td>	Fatal Summary Fatal Detail</td></tr></table></td>
+</tr>
+</tbody>
+</table>
+
+</html>

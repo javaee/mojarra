@@ -1,0 +1,164 @@
+<!--
+
+ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+ Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
+
+ The contents of this file are subject to the terms of either the GNU
+ General Public License Version 2 only ("GPL") or the Common Development
+ and Distribution License("CDDL") (collectively, the "License").  You
+ may not use this file except in compliance with the License. You can obtain
+ a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
+ or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
+ language governing permissions and limitations under the License.
+
+ When distributing the software, include this License Header Notice in each
+ file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
+ Sun designates this particular file as subject to the "Classpath" exception
+ as provided by Sun in the GPL Version 2 section of the License file that
+ accompanied this code.  If applicable, add the following below the License
+ Header, with the fields enclosed by brackets [] replaced by your own
+ identifying information: "Portions Copyrighted [year]
+ [name of copyright owner]"
+
+ Contributor(s):
+
+ If you wish your version of this file to be governed by only the CDDL or
+ only the GPL Version 2, indicate your decision by adding "[Contributor]
+ elects to include this software in this distribution under the [CDDL or GPL
+ Version 2] license."  If you don't indicate a single choice of license, a
+ recipient has the option to distribute your version of this file under
+ either the CDDL, the GPL Version 2 or to extend the choice of license to
+ its licensees as provided above.  However, if you add GPL Version 2 code
+ and therefore, elected the GPL Version 2 license, then the option applies
+ only if the new code is made subject to such option by the copyright
+ holder.
+
+-->
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+    <title>Test nested output script content</title>
+</h:head>
+<h:body>
+    <h:form prependId="false">
+
+<h1>Case 1: script, nested: yes; target: yes; name: yes;</h1>
+
+     <h:outputScript target="head" name="case1.js">
+      alert("case1");
+
+     </h:outputScript>
+
+<h1>Case 2: script, nested: yes; target: yes; name: no;</h1>
+
+     <h:outputScript target="body">
+      alert("case2");
+
+     </h:outputScript>
+
+<h1>Case 3: script, nested: yes; target: no; name: yes;</h1>
+
+     <h:outputScript name="case3.js">
+      alert("case3");
+
+     </h:outputScript>
+
+<h1>Case 4: script, nested: no; target: yes; name: yes;</h1>
+
+     <h:outputScript target="head" name="case4.js"/>
+
+
+<h1>Case 5: script, nested: no; target: no; name: no;</h1>
+
+     <h:outputScript />
+
+<h1>Case 6: script, nested: no; target: no; name: yes;</h1>
+
+     <h:outputScript name="case6.js"/>
+
+<h1>Case 7: script, nested: no; target: yes; name: no;</h1>
+
+     <h:outputScript target="head"/>
+
+<h1>Case 8: script, nested: yes; target: no; name: no;</h1>
+
+     <h:outputScript>
+      alert("case8");
+     </h:outputScript>
+
+<h1>Case 9: Stylesheet, nested: yes; target: yes; name: yes;</h1>
+
+     <h:outputStylesheet target="head" name="case9.css">
+
+.case9 {
+
+color: red;
+
+}
+      
+
+     </h:outputStylesheet>
+
+<h1>Case 10: Stylesheet, nested: yes; target: yes; name: no;</h1>
+
+     <h:outputStylesheet target="body">
+
+.case10 {
+
+color: blue;
+
+}
+
+
+     </h:outputStylesheet>
+
+<h1>Case 11: Stylesheet, nested: yes; target: no; name: yes;</h1>
+
+     <h:outputStylesheet name="case11.css">
+
+.case11 {
+
+color: green;
+
+}
+
+     </h:outputStylesheet>
+
+<h1>Case 12: Stylesheet, nested: no; target: yes; name: yes;</h1>
+
+     <h:outputStylesheet target="head" name="case12.css"/>
+
+<h1>Case 13: Stylesheet, nested: no; target: no; name: no;</h1>
+
+     <h:outputStylesheet />
+
+<h1>Case 14: Stylesheet, nested: no; target: no; name: yes;</h1>
+
+     <h:outputStylesheet name="case14.css"/>
+
+<h1>Case 15: Stylesheet, nested: no; target: yes; name: no;</h1>
+
+     <h:outputStylesheet target="head"/>
+
+<h1>Case 16: Stylesheet, nested: yes; target: no; name: no;</h1>
+
+     <h:outputStylesheet>
+
+.case16 {
+
+color: orange;
+
+}
+
+     </h:outputStylesheet>
+
+
+    </h:form>
+
+</h:body>
+</html>

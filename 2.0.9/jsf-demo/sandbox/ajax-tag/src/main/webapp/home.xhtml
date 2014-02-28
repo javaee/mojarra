@@ -1,0 +1,790 @@
+<!--
+ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+ Copyright 1997-2009 Sun Microsystems, Inc. All rights reserved.
+
+ The contents of this file are subject to the terms of either the GNU
+ General Public License Version 2 only ("GPL") or the Common Development
+ and Distribution License("CDDL") (collectively, the "License").  You
+ may not use this file except in compliance with the License. You can obtain
+ a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
+ or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
+ language governing permissions and limitations under the License.
+
+ When distributing the software, include this License Header Notice in each
+ file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
+ Sun designates this particular file as subject to the "Classpath" exception
+ as provided by Sun in the GPL Version 2 section of the License file that
+ accompanied this code.  If applicable, add the following below the License
+ Header, with the fields enclosed by brackets [] replaced by your own
+ identifying information: "Portions Copyrighted [year]
+ [name of copyright owner]"
+
+ Contributor(s):
+
+ If you wish your version of this file to be governed by only the CDDL or
+ only the GPL Version 2, indicate your decision by adding "[Contributor]
+ elects to include this software in this distribution under the [CDDL or GPL
+ Version 2] license."  If you don't indicate a single choice of license, a
+ recipient has the option to distribute your version of this file under
+ either the CDDL, the GPL Version 2 or to extend the choice of license to
+ its licensees as provided above.  However, if you add GPL Version 2 code
+ and therefore, elected the GPL Version 2 license, then the option applies
+ only if the new code is made subject to such option by the copyright
+ holder.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:be="http://javaserverfaces.dev.java.net/demo/behavior">
+
+<f:view contentType="text/html"/>
+
+<h:head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <title>Ajax Request</title>
+
+    <script type="text/javascript">
+        function statusUpdate(data) {
+
+            text = "Name: "+ data.source.id;
+            if (data.type === "event") {
+                text = text + ", Event: " + data.name;
+            } else {
+                text = text + ", Error: " + data.name;
+            }
+
+            window.status = text;
+        }
+    </script>
+
+</h:head>
+
+<h:body>
+
+<!-- Ajaxify Individual Controls -->
+
+    <h:form id="form1" >
+
+       <h:panelGrid columns="5">
+
+       <h:commandButton id="nonAjax" 
+                        value="Non-Ajax" 
+                        actionListener="#{ajaxtagbean.processAction}"/>
+
+       <h:commandButton id="singleAjax"
+                        value="Ajax"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <f:ajax listener="#{ajaxtagbean.processBehavior}"/>
+       </h:commandButton>
+
+       <h:commandButton id="greet" 
+                        value="Greet"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <be:greet/>
+       </h:commandButton>
+
+       <h:commandButton id="doubleGreet" 
+                        value="Double Greet"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <be:greet/>
+           <be:greet name="Joe"/>
+       </h:commandButton>
+
+       <h:commandButton id="greetAndAjax" 
+                        value="Greet and Ajax"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <be:greet/>
+           <f:ajax listener="#{ajaxtagbean.processBehavior}"/>
+       </h:commandButton>
+
+       <f:ajax listener="#{ajaxtagbean.processBehavior}">
+          <h:commandButton id="wrapped" 
+                           value="Wrapped Button"
+                           actionListener="#{ajaxtagbean.processAction}"/>
+          <h:commandButton id="wrappedRender" 
+                           value="Wrapped Button, Local Ajax"
+                           actionListener="#{ajaxtagbean.processAction}">
+              <f:ajax render="out" listener="#{ajaxtagbean.processBehavior}"/>
+          </h:commandButton>
+          <h:commandButton id="wrappedDisabled" 
+                           value="Wrapped Button, Local Disabled Ajax"
+                           actionListener="#{ajaxtagbean.processAction}">
+              <f:ajax disabled="true" listener="#{ajaxtagbean.processBehavior}"/>
+          </h:commandButton>
+          <h:commandButton id="wrappedGreet" 
+                           value="Wrapped Button, Local Greet"
+                           actionListener="#{ajaxtagbean.processAction}">
+              <be:greet/>
+          </h:commandButton>
+       </f:ajax>
+
+       <h:commandButton id="ajaxParams" 
+                        value="Ajax With Params"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <f:ajax listener="#{ajaxtagbean.processBehavior}"/>
+           <f:param name="foo" value="Hello"/>
+           <f:param name="bar" value="Goodbye"/>
+           <f:param name="foobar" value="#{null}"/>
+           <f:param name="#{null}" value="should_not_be_present"/>
+       </h:commandButton>
+
+       <h:commandButton id="nonAjaxParams" 
+                        value="Non-Ajax With Params"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <f:param name="foo" value="Hello"/>
+           <f:param name="bar" value="Goodbye"/>
+           <f:param name="foobar" value="#{null}"/>
+           <f:param name="#{null}" value="should_not_be_present"/>
+       </h:commandButton>
+
+       <h:commandButton id="nonAjaxParamsHandler" 
+                        value="Non-Ajax With Params With User Handler"
+                        onclick="alert('Hello from onclick')"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <f:param name="foo" value="Hello"/>
+           <f:param name="bar" value="Goodbye"/>
+           <f:param name="foobar" value="#{null}"/>
+           <f:param name="#{null}" value="should_not_be_present"/>
+       </h:commandButton>
+
+       <h:commandButton id="greetParams"
+                        value="Greet With Params"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <be:greet/>
+           <f:param name="foo" value="Hello"/>
+           <f:param name="bar" value="Goodbye"/>
+           <f:param name="foobar" value="#{null}"/>
+           <f:param name="#{null}" value="should_not_be_present"/>
+       </h:commandButton>
+
+       <h:commandButton id="status" 
+                        value="Ajax With OnEvent"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <f:ajax onevent="statusUpdate" 
+                   onerror="statusUpdate"
+                   listener="#{ajaxtagbean.processBehavior}"/>
+       </h:commandButton>
+
+       <h:commandButton id="mouseOver" 
+                        value="MouseOver Ajax"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <f:ajax listener="#{ajaxtagbean.processBehavior}"/>
+           <f:ajax event="mouseover" listener="#{ajaxtagbean.processBehavior}"/>
+       </h:commandButton>
+
+       <h:commandButton id="mouseOverJavaScript" 
+                        value="MouseOver JavaScript Ajax"
+                        actionListener="#{ajaxtagbean.processAction}"
+                        onclick="jsf.ajax.request(this,event);return false;"
+                        onmouseover="jsf.ajax.request(this,event)"/>
+
+       <h:commandButton id="disabledButton" 
+                        value="Disabled Button With Enabled Ajax"
+                        actionListener="#{ajaxtagbean.processAction}"
+                        disabled="true">
+           <f:ajax listener="#{ajaxtagbean.processBehavior}"/>
+           <f:ajax event="mouseover" listener="#{ajaxtagbean.processBehavior}"/>
+       </h:commandButton>
+
+       <h:commandButton id="disabledAjax" 
+                        value="Enabled Button With Disabled Ajax"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <f:ajax disabled="true" listener="#{ajaxtagbean.processBehavior}"/>
+           <f:ajax event="mouseover" 
+                   disabled="true" 
+                   listener="#{ajaxtagbean.processBehavior}"/>
+       </h:commandButton>
+
+       <h:commandButton id="immediateAjax" 
+                        value="Immediate Ajax"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <f:ajax immediate="true" listener="#{ajaxtagbean.processBehavior}"/>
+       </h:commandButton>
+
+       <h:commandButton id="immediateButton" 
+                        value="Immediate Button"
+                        actionListener="#{ajaxtagbean.processAction}"
+                        immediate="true">
+           <f:ajax listener="#{ajaxtagbean.processBehavior}"/>
+       </h:commandButton>
+
+       <h:commandButton id="immediateButtonNonImmediateAjax" 
+                        value="Immediate Button With Non-Immediate Ajax"
+                        actionListener="#{ajaxtagbean.processAction}"
+                        immediate="true">
+           <f:ajax immediate="false" listener="#{ajaxtagbean.processBehavior}"/>
+       </h:commandButton>
+
+       <h:commandButton value="No Id Ajax"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <f:ajax listener="#{ajaxtagbean.processBehavior}"/>
+       </h:commandButton>
+
+       <h:commandButton value="No Id JavaScript Ajax"
+                        onclick="jsf.ajax.request(this,event);return false;"
+                        actionListener="#{ajaxtagbean.processAction}"/>
+
+       <h:commandButton value="No Id Non-Ajax"
+                        actionListener="#{ajaxtagbean.processAction}"/>
+
+       <h:commandButton id="allKeyword"
+                        value="@all"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <f:ajax execute="@all" 
+                   render="@all"
+                   listener="#{ajaxtagbean.processBehavior}"/>
+       </h:commandButton>
+
+       <h:commandButton id="formKeyword"
+                        value="@form"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <f:ajax execute="@form" 
+                   render="@form"
+                   listener="#{ajaxtagbean.processBehavior}"/>
+       </h:commandButton>
+
+       <h:commandButton id="thisKeyword"
+                        value="@this"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <f:ajax execute="@this" 
+                   render="@this"
+                   listener="#{ajaxtagbean.processBehavior}"/>
+       </h:commandButton>
+
+       <h:commandButton id="noneKeyword"
+                        value="@none"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <f:ajax execute="@none" 
+                   render="@none"
+                   listener="#{ajaxtagbean.processBehavior}"/>
+       </h:commandButton>
+
+       <h:commandButton id="multipleIds"
+                        value="Multiple Ids"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <f:ajax execute="@this noneKeyword thisKeyword formKeyword" 
+                   render="@this noneKeyword thisKeyword formKeyword"
+                   listener="#{ajaxtagbean.processBehavior}"/>
+       </h:commandButton>
+
+       <h:commandButton id="multipleIdsExpression"
+                        value="Multiple Ids Expression"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <f:ajax execute="#{ajaxtagbean.multipleIds}" 
+                   render="#{ajaxtagbean.multipleIds}" 
+                   listener="#{ajaxtagbean.processBehavior}"/>
+       </h:commandButton>
+
+       <h:commandButton id="multipleIdsStringExpression"
+                        value="Multiple Ids String Expression"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <f:ajax execute="noneKeyword #{ajaxtagbean.thisKeyword} formKeyword" 
+                   render="noneKeyword #{ajaxtagbean.thisKeyword} formKeyword"
+                   listener="#{ajaxtagbean.processBehavior}"/>
+       </h:commandButton>
+
+       </h:panelGrid>
+
+       <h:panelGrid columns="5">
+
+       <h:commandLink id="nonAjaxLink" 
+                        value="Non-Ajax" 
+                        actionListener="#{ajaxtagbean.processAction}"/>
+
+       <h:commandLink id="singleAjaxLink"
+                        value="Ajax"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <f:ajax listener="#{ajaxtagbean.processBehavior}"/>
+       </h:commandLink>
+
+       <h:commandLink id="greetLink" 
+                        value="Greet"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <be:greet/>
+       </h:commandLink>
+
+       <h:commandLink id="doubleGreetLink" 
+                        value="Double Greet"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <be:greet/>
+           <be:greet name="Joe"/>
+       </h:commandLink>
+
+       <h:commandLink id="greetAndAjaxLink" 
+                        value="Greet and Ajax"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <be:greet/>
+           <f:ajax listener="#{ajaxtagbean.processBehavior}"/>
+       </h:commandLink>
+
+       <f:ajax listener="#{ajaxtagbean.processBehavior}">
+          <h:commandLink id="wrappedLink" 
+                           value="Wrapped Link"
+                           actionListener="#{ajaxtagbean.processAction}"/>
+          <h:commandLink id="wrappedRenderLink" 
+                           value="Wrapped Link, Local Ajax"
+                           actionListener="#{ajaxtagbean.processAction}">
+              <f:ajax render="out" listener="#{ajaxtagbean.processBehavior}"/>
+          </h:commandLink>
+          <h:commandLink id="wrappedDisabledLink" 
+                           value="Wrapped Link, Local Disabled Ajax"
+                           actionListener="#{ajaxtagbean.processAction}">
+              <f:ajax disabled="true" listener="#{ajaxtagbean.processBehavior}"/>
+          </h:commandLink>
+          <h:commandLink id="wrappedGreetLink" 
+                           value="Wrapped Link, Local Greet"
+                           actionListener="#{ajaxtagbean.processAction}">
+              <be:greet/>
+          </h:commandLink>
+       </f:ajax>
+
+       <h:commandLink id="ajaxParamsLink" 
+                        value="Ajax With Params"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <f:ajax listener="#{ajaxtagbean.processBehavior}"/>
+           <f:param name="foo" value="Hello"/>
+           <f:param name="bar" value="Goodbye"/>
+           <f:param name="foobar" value="#{null}"/>
+           <f:param name="#{null}" value="should_not_be_present"/>
+       </h:commandLink>
+
+       <h:commandLink id="nonAjaxParamsLink" 
+                        value="Non-Ajax With Params"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <f:param name="foo" value="Hello"/>
+           <f:param name="bar" value="Goodbye"/>
+           <f:param name="foobar" value="#{null}"/>
+           <f:param name="#{null}" value="should_not_be_present"/>
+       </h:commandLink>
+
+       <h:commandLink id="nonAjaxParamsHandlerLink" 
+                        value="Non-Ajax With Params With User Handler"
+                        onclick="alert('Hello from onclick')"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <f:param name="foo" value="Hello"/>
+           <f:param name="bar" value="Goodbye"/>
+           <f:param name="foobar" value="#{null}"/>
+           <f:param name="#{null}" value="should_not_be_present"/>
+       </h:commandLink>
+
+       <h:commandLink id="greetParamsLink"
+                        value="Greet With Params"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <be:greet/>
+           <f:param name="foo" value="Hello"/>
+           <f:param name="bar" value="Goodbye"/>
+           <f:param name="foobar" value="#{null}"/>
+           <f:param name="#{null}" value="should_not_be_present"/>
+       </h:commandLink>
+
+       <h:commandLink id="statusLink" 
+                        value="Ajax With OnEvent"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <f:ajax onevent="statusUpdate" 
+                   onerror="statusUpdate"
+                   listener="#{ajaxtagbean.processBehavior}"/>
+       </h:commandLink>
+
+       <h:commandLink id="mouseOverLink" 
+                        value="MouseOver Ajax"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <f:ajax listener="#{ajaxtagbean.processBehavior}"/>
+           <f:ajax event="mouseover" listener="#{ajaxtagbean.processBehavior}"/>
+       </h:commandLink>
+
+       <h:commandLink id="mouseOverJavaScriptLink" 
+                        value="MouseOver JavaScript Ajax"
+                        actionListener="#{ajaxtagbean.processAction}"
+                        onclick="jsf.ajax.request(this,event);return false;"
+                        onmouseover="jsf.ajax.request(this,event)"/>
+
+       <h:commandLink id="disabledLinkLink" 
+                        value="Disabled Link With Enabled Ajax"
+                        actionListener="#{ajaxtagbean.processAction}"
+                        disabled="true">
+           <f:ajax listener="#{ajaxtagbean.processBehavior}"/>
+           <f:ajax event="mouseover" listener="#{ajaxtagbean.processBehavior}"/>
+       </h:commandLink>
+
+       <h:commandLink id="disabledAjaxLink" 
+                        value="Enabled Link With Disabled Ajax"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <f:ajax disabled="true" listener="#{ajaxtagbean.processBehavior}"/>
+           <f:ajax event="mouseover" 
+                   disabled="true" 
+                   listener="#{ajaxtagbean.processBehavior}"/>
+       </h:commandLink>
+
+       <h:commandLink id="immediateAjaxLink" 
+                        value="Immediate Ajax"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <f:ajax immediate="true" listener="#{ajaxtagbean.processBehavior}"/>
+       </h:commandLink>
+
+       <h:commandLink id="immediateLink" 
+                        value="Immediate Link"
+                        actionListener="#{ajaxtagbean.processAction}"
+                        immediate="true">
+           <f:ajax listener="#{ajaxtagbean.processBehavior}"/>
+       </h:commandLink>
+
+       <h:commandLink id="immediateLinkNonImmediateAjax" 
+                        value="Immediate Link With Non-Immediate Ajax"
+                        actionListener="#{ajaxtagbean.processAction}"
+                        immediate="true">
+           <f:ajax immediate="false" listener="#{ajaxtagbean.processBehavior}"/>
+       </h:commandLink>
+
+       <h:commandLink value="No Id Ajax"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <f:ajax listener="#{ajaxtagbean.processBehavior}"/>
+       </h:commandLink>
+
+       <h:commandLink value="No Id JavaScript Ajax"
+                        onclick="jsf.ajax.request(this,event);return false;"
+                        actionListener="#{ajaxtagbean.processAction}"/>
+
+       <h:commandLink value="No Id Non-Ajax"
+                        actionListener="#{ajaxtagbean.processAction}"/>
+
+       <h:commandLink id="allKeywordLink"
+                        value="@all"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <f:ajax execute="@all" 
+                   render="@all"
+                   listener="#{ajaxtagbean.processBehavior}"/>
+       </h:commandLink>
+
+       <h:commandLink id="formKeywordLink"
+                        value="@form"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <f:ajax execute="@form" 
+                   render="@form"
+                   listener="#{ajaxtagbean.processBehavior}"/>
+       </h:commandLink>
+
+       <h:commandLink id="thisKeywordLink"
+                        value="@this"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <f:ajax execute="@this" 
+                   render="@this"
+                   listener="#{ajaxtagbean.processBehavior}"/>
+       </h:commandLink>
+
+       <h:commandLink id="noneKeywordLink"
+                        value="@none"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <f:ajax execute="@none" 
+                   render="@none"
+                   listener="#{ajaxtagbean.processBehavior}"/>
+       </h:commandLink>
+
+       <h:commandLink id="multipleIdsLink"
+                        value="Multiple Ids"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <f:ajax execute="@this noneKeyword thisKeyword formKeyword" 
+                   render="@this noneKeyword thisKeyword formKeyword"
+                   listener="#{ajaxtagbean.processBehavior}"/>
+       </h:commandLink>
+
+       <h:commandLink id="multipleIdsExpressionLink"
+                        value="Multiple Ids Expression"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <f:ajax execute="#{ajaxtagbean.multipleIds}" 
+                   render="#{ajaxtagbean.multipleIds}" 
+                   listener="#{ajaxtagbean.processBehavior}"/>
+       </h:commandLink>
+
+       <h:commandLink id="multipleIdsStringExpressionLink"
+                        value="Multiple Ids String Expression"
+                        actionListener="#{ajaxtagbean.processAction}">
+           <f:ajax execute="noneKeyword #{ajaxtagbean.thisKeyword} formKeyword" 
+                   render="noneKeyword #{ajaxtagbean.thisKeyword} formKeyword"
+                   listener="#{ajaxtagbean.processBehavior}"/>
+       </h:commandLink>
+
+       </h:panelGrid>
+
+       <h:panelGrid columns="5">
+
+       <h:inputText id="nonAjaxInput" 
+                        value="Non-Ajax" 
+                        valueChangeListener="#{ajaxtagbean.processValueChange}"/>
+
+       <h:inputText id="singleAjaxInput"
+                        value="Ajax"
+                        valueChangeListener="#{ajaxtagbean.processValueChange}">
+           <f:ajax listener="#{ajaxtagbean.processBehavior}"/>
+       </h:inputText>
+
+       <h:inputText id="greetInput" 
+                        value="Greet"
+                        valueChangeListener="#{ajaxtagbean.processValueChange}">
+           <be:greet/>
+       </h:inputText>
+
+       <h:inputText id="doubleGreetInput" 
+                        value="Double Greet"
+                        valueChangeListener="#{ajaxtagbean.processValueChange}">
+           <be:greet/>
+           <be:greet name="Joe"/>
+       </h:inputText>
+
+       <h:inputText id="greetAndAjaxInput" 
+                        value="Greet and Ajax"
+                        valueChangeListener="#{ajaxtagbean.processValueChange}">
+           <be:greet/>
+           <f:ajax listener="#{ajaxtagbean.processBehavior}"/>
+       </h:inputText>
+
+       <f:ajax listener="#{ajaxtagbean.processBehavior}">
+          <h:inputText id="wrappedInput" 
+                           value="Wrapped Input"
+                           valueChangeListener="#{ajaxtagbean.processValueChange}"/>
+          <h:inputText id="wrappedRenderInput" 
+                           value="Wrapped Input, Local Ajax"
+                           valueChangeListener="#{ajaxtagbean.processValueChange}">
+              <f:ajax render="out" listener="#{ajaxtagbean.processBehavior}"/>
+          </h:inputText>
+          <h:inputText id="wrappedDisabledInput" 
+                           value="Wrapped Input, Local Disabled Ajax"
+                           valueChangeListener="#{ajaxtagbean.processValueChange}">
+              <f:ajax disabled="true" listener="#{ajaxtagbean.processBehavior}"/>
+          </h:inputText>
+          <h:inputText id="wrappedGreetInput" 
+                           value="Wrapped Input, Local Greet"
+                           valueChangeListener="#{ajaxtagbean.processValueChange}">
+              <be:greet/>
+          </h:inputText>
+       </f:ajax>
+
+       <h:inputText id="ajaxParamsInput" 
+                        value="Ajax With Params"
+                        valueChangeListener="#{ajaxtagbean.processValueChange}">
+           <f:ajax listener="#{ajaxtagbean.processBehavior}"/>
+           <f:param name="foo" value="Hello"/>
+           <f:param name="bar" value="Goodbye"/>
+           <f:param name="foobar" value="#{null}"/>
+           <f:param name="#{null}" value="should_not_be_present"/>
+       </h:inputText>
+
+       <h:inputText id="statusInput" 
+                        value="Ajax With OnEvent"
+                        valueChangeListener="#{ajaxtagbean.processValueChange}">
+           <f:ajax onevent="statusUpdate" 
+                   onerror="statusUpdate"
+                   listener="#{ajaxtagbean.processBehavior}"/>
+       </h:inputText>
+
+       <h:inputText id="mouseOverInput" 
+                        value="MouseOver Ajax"
+                        valueChangeListener="#{ajaxtagbean.processValueChange}">
+           <f:ajax listener="#{ajaxtagbean.processBehavior}"/>
+           <f:ajax event="mouseover" listener="#{ajaxtagbean.processBehavior}"/>
+       </h:inputText>
+
+       <h:inputText id="mouseOverJavaScriptInput" 
+                        value="MouseOver JavaScript Ajax"
+                        valueChangeListener="#{ajaxtagbean.processValueChange}"
+                        onchange="jsf.ajax.request(this,event);return false;"
+                        onmouseover="jsf.ajax.request(this,event)"/>
+
+       <h:inputText id="disabledInput" 
+                        value="Disabled Input With Enabled Ajax"
+                        valueChangeListener="#{ajaxtagbean.processValueChange}"
+                        disabled="true">
+           <f:ajax listener="#{ajaxtagbean.processBehavior}"/>
+           <f:ajax event="mouseover" listener="#{ajaxtagbean.processBehavior}"/>
+       </h:inputText>
+
+       <h:inputText id="disabledAjaxInput" 
+                        value="Enabled Input With Disabled Ajax"
+                        valueChangeListener="#{ajaxtagbean.processValueChange}">
+           <f:ajax disabled="true" listener="#{ajaxtagbean.processBehavior}"/>
+           <f:ajax event="mouseover" 
+                   disabled="true" 
+                   listener="#{ajaxtagbean.processBehavior}"/>
+       </h:inputText>
+
+       <h:inputText id="immediateAjaxInput" 
+                        value="Immediate Ajax"
+                        valueChangeListener="#{ajaxtagbean.processValueChange}">
+           <f:ajax immediate="true" listener="#{ajaxtagbean.processBehavior}"/>
+       </h:inputText>
+
+       <h:inputText id="immediateInput" 
+                        value="Immediate Input"
+                        valueChangeListener="#{ajaxtagbean.processValueChange}"
+                        immediate="true">
+           <f:ajax listener="#{ajaxtagbean.processBehavior}"/>
+       </h:inputText>
+
+       <h:inputText id="immediateInputNonImmediateAjax" 
+                        value="Immediate Input With Non-Immediate Ajax"
+                        valueChangeListener="#{ajaxtagbean.processValueChange}"
+                        immediate="true">
+           <f:ajax immediate="false" listener="#{ajaxtagbean.processBehavior}"/>
+       </h:inputText>
+
+
+       <h:inputText value="No Id Ajax"
+                    valueChangeListener="#{ajaxtagbean.processValueChange}">
+           <f:ajax listener="#{ajaxtagbean.processBehavior}"/>
+       </h:inputText>
+
+       <h:inputText value="No Id JavaScript Ajax"
+                    valueChangeListener="#{ajaxtagbean.processValueChange}"
+                    onchange="jsf.ajax.request(this,event)"/>
+
+       <h:inputText id="allKeywordInput"
+                        value="@all"
+                        valueChangeListener="#{ajaxtagbean.processValueChange}">
+           <f:ajax execute="@all" 
+                   render="@all"
+                   listener="#{ajaxtagbean.processBehavior}"/>
+       </h:inputText>
+
+       <h:inputText id="formKeywordInput"
+                        value="@form"
+                        valueChangeListener="#{ajaxtagbean.processValueChange}">
+           <f:ajax execute="@form" 
+                   render="@form"
+                   listener="#{ajaxtagbean.processBehavior}"/>
+       </h:inputText>
+
+       <h:inputText id="thisKeywordInput"
+                        value="@this"
+                        valueChangeListener="#{ajaxtagbean.processValueChange}">
+           <f:ajax execute="@this" 
+                   render="@this"
+                   listener="#{ajaxtagbean.processBehavior}"/>
+       </h:inputText>
+
+       <h:inputText id="noneKeywordInput"
+                        value="@none"
+                        valueChangeListener="#{ajaxtagbean.processValueChange}">
+           <f:ajax execute="@none" 
+                   render="@none"
+                   listener="#{ajaxtagbean.processBehavior}"/>
+       </h:inputText>
+
+       <h:inputText id="multipleIdsInput"
+                        value="Multiple Ids"
+                        valueChangeListener="#{ajaxtagbean.processValueChange}">
+           <f:ajax execute="@this noneKeyword thisKeyword formKeyword" 
+                   render="@this noneKeyword thisKeyword formKeyword"
+                   listener="#{ajaxtagbean.processBehavior}"/>
+       </h:inputText>
+
+       <h:inputText id="multipleIdsExpressionInput"
+                        value="Multiple Ids Expression"
+                        valueChangeListener="#{ajaxtagbean.processValueChange}">
+           <f:ajax execute="#{ajaxtagbean.multipleIds}" 
+                   render="#{ajaxtagbean.multipleIds}" 
+                   listener="#{ajaxtagbean.processBehavior}"/>
+       </h:inputText>
+
+       <h:inputText id="multipleIdsStringExpressionInput"
+                        value="Multiple Ids String Expression"
+                        valueChangeListener="#{ajaxtagbean.processValueChange}">
+           <f:ajax execute="noneKeyword #{ajaxtagbean.thisKeyword} formKeyword" 
+                   render="noneKeyword #{ajaxtagbean.thisKeyword} formKeyword"
+                   listener="#{ajaxtagbean.processBehavior}"/>
+       </h:inputText>
+
+       </h:panelGrid> 
+
+       <h:panelGrid>
+           <be:greet event="dblclick"/>
+           <h:outputText value="Panel Grid with Double Click Greet"/>
+       </h:panelGrid>
+
+       <h:panelGrid ondblclick="alert('Hello from user handler')">
+           <be:greet event="dblclick"/>
+           <h:outputText value="Panel Grid with Double Click User Handler and Greet"/>
+       </h:panelGrid>
+
+       <h:panelGrid>
+           <be:greet event="click"/>
+           <be:greet event="dblclick"/>
+           <h:outputText value="Panel Grid with Both Click And Double Click Greet"/>
+       </h:panelGrid>
+
+       <h:panelGrid onclick="alert('Hello from onclick user handler')"
+                    ondblclick="alert('Hello from ondblclick user handler')">
+           <be:greet event="click"/>
+           <be:greet event="dblclick"/>
+           <h:outputText value="Panel Grid with Both Click And Double Click Greet And User Handlers"/>
+       </h:panelGrid>
+
+       <h:panelGrid columns="3">
+           <f:ajax event="action" listener="#{ajaxtagbean.processBehavior}">
+               <f:ajax event="valueChange" listener="#{ajaxtagbean.processBehavior}">
+                   <h:commandButton id="wrappingAjax" 
+                                    value="Wrapping Ajax"
+                                    actionListener="#{ajaxtagbean.processAction}"/>
+                   <h:commandLink id="wrappingAjaxLink" 
+                                  value="Wrapping Ajax"
+                                  actionListener="#{ajaxtagbean.processAction}"/>
+                   <h:inputText id="wrappingAjaxInput"
+                                value="WrappingAjax"
+                                valueChangeListener="#{ajaxtagbean.processValueChange}"/>
+               </f:ajax>
+           </f:ajax>
+       </h:panelGrid>
+
+       <h:outputText id="out"/>
+
+       <h:dataTable value="#{ajaxtagbean.statusMessages}" 
+                    var="message" 
+                    id="statusTable"
+                    border="1">
+           <h:column>
+               <f:facet name="header">
+                   <h:outputText value="Count"/>
+               </f:facet>
+    
+               <h:outputText value="#{message.count}"/>
+           </h:column>
+
+           <h:column>
+               <f:facet name="header">
+                   <h:outputText value="Type"/>
+               </f:facet>
+    
+               <h:outputText value="#{message.type}"/>
+           </h:column>
+
+           <h:column>
+               <f:facet name="header">
+                   <h:outputText value="Phase"/>
+               </f:facet>
+    
+               <h:outputText value="#{message.phase}"/>
+           </h:column>
+
+           <h:column>
+               <f:facet name="header">
+                   <h:outputText value="Details"/>
+               </f:facet>
+    
+               <h:outputText value="#{message.details}"/>
+           </h:column>
+
+       </h:dataTable>
+
+       <h:commandButton value="Reset Status Messages" id="resetMessages"
+                        actionListener="#{ajaxtagbean.resetStatusMessages}">
+           <f:ajax/>
+       </h:commandButton>
+    
+
+       <h:outputStylesheet name="stylesheet.css" />
+   </h:form>
+
+</h:body>
+
+</html>

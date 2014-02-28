@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+ Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+
+ The contents of this file are subject to the terms of either the GNU
+ General Public License Version 2 only ("GPL") or the Common Development
+ and Distribution License("CDDL") (collectively, the "License").  You
+ may not use this file except in compliance with the License. You can obtain
+ a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
+ or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
+ language governing permissions and limitations under the License.
+
+ When distributing the software, include this License Header Notice in each
+ file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
+ Sun designates this particular file as subject to the "Classpath" exception
+ as provided by Sun in the GPL Version 2 section of the License file that
+ accompanied this code.  If applicable, add the following below the License
+ Header, with the fields enclosed by brackets [] replaced by your own
+ identifying information: "Portions Copyrighted [year]
+ [name of copyright owner]"
+
+ Contributor(s):
+
+ If you wish your version of this file to be governed by only the CDDL or
+ only the GPL Version 2, indicate your decision by adding "[Contributor]
+ elects to include this software in this distribution under the [CDDL or GPL
+ Version 2] license."  If you don't indicate a single choice of license, a
+ recipient has the option to distribute your version of this file under
+ either the CDDL, the GPL Version 2 or to extend the choice of license to
+ its licensees as provided above.  However, if you add GPL Version 2 code
+ and therefore, elected the GPL Version 2 license, then the option applies
+ only if the new code is made subject to such option by the copyright
+ holder.
+-->
+
+<project>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.sun.faces</groupId>
+    <artifactId>jsf-api</artifactId>
+    <version>2.1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>Sun's implementation of the JSF 2.1 specification API.</name>
+    <description>This is the master POM file for Sun's Implementation of the JSF 2.1 Specification.</description>
+    <url>http://java.sun.com/javaee/javaserverfaces/</url>
+
+    <licenses>
+        <license>
+            <name>COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) plus GPL</name>
+            <url>https://glassfish.dev.java.net/public/CDDL+GPL.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <scm>
+        <url>https://mojarra.dev.java.net/svn/mojarra</url>
+        <connection>scm:svn:https://mojarra.dev.java.net/svn/mojarra</connection>
+    </scm>
+
+    <developers>
+        <developer>
+            <id>edburns</id>
+            <name>Ed Burns</name>
+            <email>ed.burns@sun.com</email>
+            <organization>Sun Microsystems, Inc.</organization>
+            <roles>
+                <role>project-owner</role>
+            </roles>
+            <timezone>-6</timezone>
+        </developer>
+        <developer>
+            <id>rlubke</id>
+            <name>Ryan Lubke</name>
+            <email>Ryan.Lubke@sun.com</email>
+            <organization>Sun Microsystems, Inc.</organization>
+            <roles>
+                <role>project-owner</role>
+            </roles>
+            <timezone>-9</timezone>
+        </developer>
+        <developer>
+            <id>rogerk</id>
+            <name>Roger Kitain</name>
+            <email>Roger.Kitain@sun.com</email>
+            <organization>Sun Microsystems, Inc.</organization>
+            <roles>
+                <role>project-owner</role>
+            </roles>
+            <timezone>-6</timezone>
+        </developer>
+        <developer>
+            <id>driscoll</id>
+            <name>Jim Driscoll</name>
+            <email>jim.dirscoll@sun.com</email>
+            <organization>Sun Microsystems, Inc.</organization>
+            <roles>
+                <role>project-owner</role>
+            </roles>
+            <timezone>-9</timezone>
+        </developer>
+    </developers>
+
+    <!--
+    <repositories>
+        <repository>
+            <snapshots/>
+            <id>ibiblio</id>
+            <url>http://www.ibiblio.org/maven2/</url>
+        </repository>
+        <repository>
+            <id>maven2-repository.dev.java.net</id>
+            <name>Java.net Repository for Maven</name>
+            <url>http://download.java.net/maven/2/</url>
+            <layout>default</layout>
+        </repository>
+        <repository>
+            <snapshots/>
+            <id>codehaus</id>
+            <name>codehaus</name>
+            <url>http://repository.codehaus.org</url>
+        </repository>
+        <repository>
+            <snapshots/>
+            <id>java.net</id>
+            <name>Java.net Maven 1.x Repository for external projects</name>
+            <url>http://download.java.net/maven/1/</url>
+            <layout>legacy</layout>
+        </repository>
+        <repository>
+            <snapshots/>
+            <id>java.net.shared</id>
+            <name>Java.net Maven 1.x Repository for glassfish dependencies
+            </name>
+            <url>http://download.java.net/javaee5/external/shared</url>
+            <layout>legacy</layout>
+        </repository>
+    </repositories>
+    -->
+
+    <distributionManagement>
+        <repository>
+            <uniqueVersion>false</uniqueVersion>
+            <id>java.net-mavent2-repository</id>
+            <url>java-net:/maven2-repository/trunk/repository/</url>
+        </repository>
+    </distributionManagement>
+
+    <build>
+        <defaultGoal>compile</defaultGoal>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>get_build_date</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <taskdef name="generateComponents" classname="com.sun.faces.ant.ComponentGenTask">
+                                    <classpath>
+                                        <path refid="apache.commons.classpath"/>
+                                        <pathelement location="${tools.dir}/build/classes"/>
+                                    </classpath>
+                                </taskdef>
+                                <generateComponents
+                                      generatorConfig="${tools.dir}/conf/HtmlBasicTaglib21.properties"
+                                      facesConfig="${standard.renderkit.xml}"
+                                      fork="true">
+                                    <classpath>
+                                        <path refid="apache.commons.classpath"/>
+                                        <path refid="compile.classpath"/>
+                                        <pathelement location="${commons-beanutils.jar}" />
+                                        <pathelement location="${commons-digester.jar}" />
+                                        <pathelement location="${commons-collections.jar}" />
+                                        <pathelement location="${commons-logging.jar}" />
+                                        <pathelement location="${jsf-api.jar}"/>
+                                        <pathelement location="${tools.dir}/build/classes"/>
+                                    </classpath>
+                                    <assertions>
+                                        <enable/>
+                                    </assertions>
+                                    <sysproperty key="java.endorsed.dirs" value="${endorsed.dirs}"/>
+                                </generateComponents>
+                            </tasks>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestFile>target/classes/META-INF/MANIFEST.MF</manifestFile>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+
+        <extensions>
+            <extension>
+                <groupId>org.jvnet.wagon-svn</groupId>
+                <artifactId>wagon-svn</artifactId>
+                <version>1.8</version>
+            </extension>
+        </extensions>
+
+    </build>
+
+    <issueManagement>
+        <system>issueZilla</system>
+        <url>https://javaserverfaces.dev.java.net/servlets/ProjectIssues</url>
+    </issueManagement>
+
+    <mailingLists>
+        <mailingList>
+            <name>JSF 2.1 Specification Comments</name>
+            <post>jsr-314-comments@jcp.org</post>
+        </mailingList>
+        <mailingList>
+            <name>Mojarra Implementation Dev List</name>
+            <post>dev@javaserverfaces.dev.java.net</post>
+            <archive>https://javaserverfaces.dev.java.net/servlets/SummarizeList?listName=dev</archive>
+        </mailingList>
+    </mailingLists>
+
+    <contributors>
+        <contributor>
+            <name>Craig McClanahan</name>
+        </contributor>
+        <contributor>
+            <name>Deepak Gothe</name>
+        </contributor>
+        <contributor>
+            <name>Gregory Murray</name>
+        </contributor>
+        <contributor>
+            <name>Justyna Horwat</name>
+        </contributor>
+        <contributor>
+            <name>Jayashri Visvanathan</name>
+        </contributor>
+        <contributor>
+            <name>Jennifer Ball</name>
+        </contributor>
+        <contributor>
+            <name>Jacob Hookom</name>
+        </contributor>
+        <contributor>
+            <name>Raj Premkumar</name>
+        </contributor>
+        <contributor>
+            <name>Stan Silvert</name>
+        </contributor>
+        <contributor>
+            <name>Mike Youngstrom</name>
+        </contributor>
+        <contributor>
+            <name>Jason Lee</name>
+        </contributor>
+    </contributors>
+
+    <organization>
+        <name>Sun Microsystems, Inc</name>
+        <url>http://www.sun.com/</url>
+    </organization>
+
+    <dependencies>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>2.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.el</groupId>
+            <artifactId>el-api</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>jstl</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>1.0.0.GA</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+</project>

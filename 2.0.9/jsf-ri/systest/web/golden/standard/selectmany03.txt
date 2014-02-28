@@ -1,0 +1,23 @@
+<table>
+	<tr>
+<td>
+<input name="j_id_id11" id="j_id_id11:0" value="1" type="checkbox" checked="checked" /><label for="j_id_id11:0" class="three"> Open</label></td>
+<td>
+<input name="j_id_id11" id="j_id_id11:1" value="2" type="checkbox" checked="checked" /><label for="j_id_id11:1" class="three"> Submitted</label></td>
+<td>
+<input name="j_id_id11" id="j_id_id11:2" value="3" type="checkbox" /><label for="j_id_id11:2" class="four"> Accepted</label></td>
+<td>
+<input name="j_id_id11" id="j_id_id11:3" value="4" type="checkbox" /><label for="j_id_id11:3" class="four"> Rejected</label></td>
+	</tr>
+</table><table>
+	<tr>
+<td>
+<input name="j_id_id23" id="j_id_id23:0" value="1" type="checkbox" checked="checked" /><label for="j_id_id23:0" class="four"> Open</label></td>
+<td>
+<input name="j_id_id23" id="j_id_id23:1" value="2" type="checkbox" checked="checked" /><label for="j_id_id23:1" class="four"> Submitted</label></td>
+<td>
+<input name="j_id_id23" id="j_id_id23:2" value="3" type="checkbox" /><label for="j_id_id23:2" class="four"> Accepted</label></td>
+<td>
+<input name="j_id_id23" id="j_id_id23:3" value="4" type="checkbox" disabled="disabled" /><label for="j_id_id23:3" class="five"> Rejected</label></td>
+	</tr>
+</table>
