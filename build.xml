@@ -569,6 +569,32 @@ find . -name "TEST*.xml" -exec perl -pi.bak -e "s/^>/ /g" {} \; -print
 
     <target name="blank" />
 
+    <target name="mvn.pre-maven-rename.deploy.snapshot.local">
+
+      <ant inheritAll="true"
+            antfile="build-pre-maven-rename.xml"
+            target="main"
+               dir="jsf-api">
+        <property name="skip.javadoc.jar"  value="true" />
+      </ant>
+
+      <ant inheritAll="true"
+            antfile="build-pre-maven-rename.xml"
+            target="mvn.pre-maven-rename.deploy.snapshot.local"
+               dir="jsf-api">
+        <property name="skip.javadoc.jar"  value="true" />
+      </ant>
+
+      <ant inheritAll="true"
+            antfile="build-pre-maven-rename.xml"
+            target="main"
+               dir="jsf-ri" />
+
+      <ant inheritAll="true"
+            antfile="build-pre-maven-rename.xml"
+            target="mvn.pre-maven-rename.deploy.snapshot.local"
+               dir="jsf-ri" />
+    </target>
 
 </project>
 

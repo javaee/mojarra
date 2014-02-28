@@ -1,2 +1,0 @@
-      <form id="form01" method="post" action="/jsf-systest/faces/taglib/command_link_test.jsp;jsessionid=D3E423C65F27CA81AD8CAB5333C4D202" enctype="application/x-www-form-urlencoded">
-        <a id="form01:hyperlink05" href="#" onclick="document.forms['form01']['form01:hyperlink05'].value='form01:hyperlink05'; document.forms['form01'].submit()"><img id="form01:_id4" src="resbundle_image.gif;jsessionid=D3E423C65F27CA81AD8CAB5333C4D202" alt="" /></a>

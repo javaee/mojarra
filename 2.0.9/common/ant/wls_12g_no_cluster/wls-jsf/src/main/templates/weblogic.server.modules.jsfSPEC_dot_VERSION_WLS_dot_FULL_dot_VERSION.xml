@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><feature-definition xmlns="http://www.bea.com/ns/cie/feature" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="weblogic.server.modules.jsf@spec.version@" version="@wl.full.version@">
-  <modules>
-    <module file-name="glassfish.jsf_1.0.0.0_@impl.version.number.dashes@.jar"/>
-    <module file-name="javax.jsf_1.0.0.0_@spec.version.dashes@.jar"/>
-  </modules>
-</feature-definition>
