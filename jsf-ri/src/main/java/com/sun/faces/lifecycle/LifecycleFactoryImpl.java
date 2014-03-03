@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -42,14 +42,11 @@
 
 package com.sun.faces.lifecycle;
 
-import com.sun.faces.action.ActionLifecycle;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
-
 import javax.faces.FacesException;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
-
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
@@ -82,8 +79,8 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
         // We must have an implementation under this key.
         lifecycleMap.put(LifecycleFactory.DEFAULT_LIFECYCLE,
                          new LifecycleImpl(FacesContext.getCurrentInstance()));
-        lifecycleMap.put(ActionLifecycle.ACTION_LIFECYCLE,
-                         new ActionLifecycle());
+//        lifecycleMap.put(ActionLifecycle.ACTION_LIFECYCLE,
+//                         new ActionLifecycle());
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Created Default Lifecycle");
         }
