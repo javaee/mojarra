@@ -68,6 +68,5 @@
         <module>cdi</module>
         <module>el</module>
         <module>beanValidation</module>
-    <module>action</module>
-  </modules>
+    </modules>
 </project>
