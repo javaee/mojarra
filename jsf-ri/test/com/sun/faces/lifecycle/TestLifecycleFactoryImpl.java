@@ -137,7 +137,7 @@ public class TestLifecycleFactoryImpl extends ServletFacesTestCase {
             i++;
         }
 
-        assertTrue(5 == i);
+        assertTrue(4 == i);
     }
 
 
