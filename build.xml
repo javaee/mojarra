@@ -590,10 +590,12 @@
     </target>
 
     <target name="hudson.deploy">
-
+<!--
       <ant inheritAll="true"
             target="mvn.deploy.${mojarra.build.type}${mojarra.build.local.or.blank}"
                dir="jsf-api" />
+  -->
+
       <ant inheritAll="true"
             target="mvn.deploy.${mojarra.build.type}${mojarra.build.local.or.blank}"
                dir="jsf-ri" />
