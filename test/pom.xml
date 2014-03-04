@@ -1276,7 +1276,7 @@
                                     <goal>start</goal>
                                 </goals>
                                 <configuration>
-                                    <timeout>600000</timeout>
+                                    <timeout>2400000</timeout>
                                 </configuration>
                             </execution>
                             <execution>
@@ -1286,7 +1286,7 @@
                                     <goal>stop</goal>
                                 </goals>
                                 <configuration>
-                                    <timeout>600000</timeout>
+                                    <timeout>2400000</timeout>
                                 </configuration>
                             </execution>
                         </executions>                        
@@ -1298,7 +1298,7 @@
                                     <downloadDir>${integration.container.downloadDir}</downloadDir>
                                     <extractDir>${integration.container.extractDir}</extractDir>
                                 </zipUrlInstaller>
-                                <timeout>600000</timeout>
+                                <timeout>2400000</timeout>
                                 <type>installed</type>
                             </container>
                             <configuration>
@@ -1337,7 +1337,7 @@
                                     <goal>start</goal>
                                 </goals>
                                 <configuration>
-                                    <timeout>600000</timeout>
+                                    <timeout>2400000</timeout>
                                 </configuration>
                             </execution>
                             <execution>
@@ -1347,7 +1347,7 @@
                                     <goal>stop</goal>
                                 </goals>
                                 <configuration>
-                                    <timeout>600000</timeout>
+                                    <timeout>2400000</timeout>
                                 </configuration>
                             </execution>
                         </executions>
@@ -1441,7 +1441,7 @@
                                     <goal>start</goal>
                                 </goals>
                                 <configuration>
-                                    <timeout>6000000</timeout>
+                                    <timeout>2400000</timeout>
                                 </configuration>
                             </execution>
                             <execution>
@@ -1451,7 +1451,7 @@
                                     <goal>stop</goal>
                                 </goals>
                                 <configuration>
-                                    <timeout>600000</timeout>
+                                    <timeout>2400000</timeout>
                                 </configuration>
                             </execution>
                         </executions>
@@ -1459,7 +1459,7 @@
                             <container>
                                 <containerId>${integration.container.id}</containerId>
                                 <home>${integration.container.wlserver}</home>
-                                <timeout>600000</timeout>
+                                <timeout>2400000</timeout>
                             </container>
                             <configuration>
                                 <type>${integration.container.type}</type>
@@ -1530,7 +1530,7 @@
                                     <goal>start</goal>
                                 </goals>
                                 <configuration>
-                                    <timeout>12000000</timeout>
+                                    <timeout>24000000</timeout>
                                 </configuration>
                             </execution>
                             <execution>
@@ -1540,7 +1540,7 @@
                                     <goal>stop</goal>
                                 </goals>
                                 <configuration>
-                                    <timeout>600000</timeout>
+                                    <timeout>2400000</timeout>
                                 </configuration>
                             </execution>
                         </executions>
@@ -1548,7 +1548,7 @@
                             <container>
                                 <containerId>${integration.container.id}</containerId>
                                 <home>${integration.container.wlserver}</home>
-                                <timeout>1200000</timeout>
+                                <timeout>2400000</timeout>
                             </container>
                             <configuration>
                                 <type>${integration.container.type}</type>
