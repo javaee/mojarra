@@ -565,7 +565,7 @@
                                     <goal>start</goal>
                                 </goals>
                                 <configuration>
-                                    <timeout>600000</timeout>
+                                    <timeout>2400000</timeout>
                                 </configuration>
                             </execution>
                             <execution>
@@ -575,7 +575,7 @@
                                     <goal>stop</goal>
                                 </goals>
                                 <configuration>
-                                    <timeout>600000</timeout>
+                                    <timeout>2400000</timeout>
                                 </configuration>
                             </execution>
                         </executions>                        
@@ -584,7 +584,7 @@
                                 <containerId>${integration.container.id}</containerId>
                                 <type>installed</type>
                                 <home>${integration.container.home}</home>
-                                <timeout>600000</timeout>
+                                <timeout>2400000</timeout>
                             </container>
                             <configuration>
                                 <type>standalone</type>
@@ -1050,7 +1050,7 @@
                                     <goal>start</goal>
                                 </goals>
                                 <configuration>
-                                    <timeout>600000</timeout>
+                                    <timeout>2400000</timeout>
                                 </configuration>
                             </execution>
                             <execution>
@@ -1060,7 +1060,7 @@
                                     <goal>stop</goal>
                                 </goals>
                                 <configuration>
-                                    <timeout>600000</timeout>
+                                    <timeout>2400000</timeout>
                                 </configuration>
                             </execution>
                         </executions>                        
@@ -1069,7 +1069,7 @@
                                 <containerId>${integration.container.id}</containerId>
                                 <type>installed</type>
                                 <home>${integration.container.home}</home>
-                                <timeout>600000</timeout>
+                                <timeout>2400000</timeout>
                             </container>
                             <configuration>
                                 <type>existing</type>
