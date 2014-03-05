@@ -245,11 +245,15 @@
                                         <delete file="../js.tx" failonerror="false"/>
                                         <get src="${tck.exclude.url}" dest="../js.tx"/>
                                         <copy file="../js.tx" tofile="../jsftck/bin/js.tx"/>
-                                        <ant antfile="${tck.build.file}" target="deploy.all"/>
+                                        <replaceregexp file="../jsftck/bin/js.jte" 
+                                                       match="sigTestClasspath=(.*)"
+                                                       replace="sigTestClasspath=${sigTestClasspath}"
+                                                       byline="true"/>
+<!--                                        <ant antfile="${tck.build.file}" target="deploy.all"/>
                                         <echo message="Waiting for deploy to settle down (5 minutes)"/>
                                         <sleep seconds="300"/>
                                         <ant antfile="${tck.build.file}" target="run.all"/>
-                                        <ant antfile="${tck.build.file}" target="undeploy.all"/>
+                                        <ant antfile="${tck.build.file}" target="undeploy.all"/>-->
                                     </target>
                                 </configuration>
                                 <goals>
