@@ -245,7 +245,7 @@
                                         <delete file="../js.tx" failonerror="false"/>
                                         <get src="${tck.exclude.url}" dest="../js.tx"/>
                                         <copy file="../js.tx" tofile="../jsftck/bin/js.tx"/>
-                                        <replaceregexp file="../jsftck/bin/js.jte" 
+                                        <replaceregexp file="../jsftck/bin/ts.jte" 
                                                        match="sigTestClasspath=(.*)"
                                                        replace="sigTestClasspath=${sigTestClasspath}"
                                                        byline="true"/>
