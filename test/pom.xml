@@ -255,7 +255,7 @@
                                                        byline="true"/>
                                         <replaceregexp file="../jsftck/bin/ts.jte" 
                                                        match="jspservlet.classes=(.*)"
-                                                       replace="jspservlet.classes=${jspservletClasses}"
+                                                       replace="jspservlet.classes=${jspServletClasses}"
                                                        byline="true"/>
                                         <ant antfile="${tck.build.file}" target="deploy.all"/>
                                         <echo message="Waiting for deploy to settle down (5 minutes)"/>
