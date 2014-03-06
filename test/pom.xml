@@ -249,6 +249,14 @@
                                                        match="sigTestClasspath=(.*)"
                                                        replace="sigTestClasspath=${sigTestClasspath}"
                                                        byline="true"/>
+                                        <replaceregexp file="../jsftck/bin/ts.jte" 
+                                                       match="jsf.classes=(.*)"
+                                                       replace="jsf.classes=${jsf.classes}"
+                                                       byline="true"/>
+                                        <replaceregexp file="../jsftck/bin/ts.jte" 
+                                                       match="jspservlet.classes=(.*)"
+                                                       replace="jspservlet.classes=${jspservlet.classes}"
+                                                       byline="true"/>
                                         <ant antfile="${tck.build.file}" target="deploy.all"/>
                                         <echo message="Waiting for deploy to settle down (5 minutes)"/>
                                         <sleep seconds="300"/>
