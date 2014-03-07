@@ -233,9 +233,9 @@
                                         <unzip src="${tck.zip.file}" dest=".." overwrite="true"/>
                                         <mkdir dir="../jsftck/report.dir"/>
                                         <mkdir dir="../jsftck/work.dir"/>
-                                        <delete file="../js.tx" failonerror="false"/>
-                                        <get src="${tck.exclude.url}" dest="../js.tx"/>
-                                        <copy force="true" file="../js.tx" tofile="../jsftck/bin/js.tx"/>
+                                        <delete file="../ts.jtx" failonerror="false"/>
+                                        <get src="${tck.exclude.url}" dest="../ts.jtx"/>
+                                        <copy force="true" file="../ts.jtx" tofile="../jsftck/bin/ts.jtx"/>
                                         <replaceregexp file="../jsftck/bin/ts.jte" 
                                                        match="sigTestClasspath=(.*)"
                                                        replace="sigTestClasspath=${sigTestClasspath}"
