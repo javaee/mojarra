@@ -605,9 +605,9 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
     // Validate a resource streamed from a JAR is compressed
     //
     public void beginHandleResourceRequest7(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
-        req.addParameter("ln", "nvLibrary-jar");
-        req.addHeader("accept-encoding", "gzip,deflate");
+//        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
+//        req.addParameter("ln", "nvLibrary-jar");
+//        req.addHeader("accept-encoding", "gzip,deflate");
     }
 
     public void testHandleResourceRequest7() throws Exception {
