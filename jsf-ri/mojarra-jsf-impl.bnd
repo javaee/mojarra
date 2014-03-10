@@ -54,7 +54,7 @@ Import-Package: javax.faces.*,javax.servlet.annotation.*;resolution:=optional,ja
   org.apache.*;resolution:=optional, \
   org.xml.sax.*,javax.naming.*
 Include-Resource: META-INF=build/classes/META-INF,build/classes
-Bundle-Version: @osgi.version@
+Bundle-Version: @impl.version@
 Bundle-Name: Mojarra JSF Implementation @impl.version@
 Bundle-Description: Mojarra JSF Implementation (javax.faces/@spec.version@) @impl.version@
 Bundle-SymbolicName: org.glassfish.com.sun.faces
