@@ -43,6 +43,8 @@ package com.sun.faces.renderkit;
 
 import java.io.IOException;
 
+import javax.faces.component.NamingContainer;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.ResponseStateManager;
@@ -51,6 +53,7 @@ import javax.faces.render.RenderKitFactory;
 import com.sun.faces.spi.SerializationProviderFactory;
 import com.sun.faces.spi.SerializationProvider;
 import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.CompressViewState;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableViewStateIdRendering;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.AutoCompleteOffOnViewState;
@@ -149,6 +152,11 @@ public abstract class StateHelper {
     protected char[] stateFieldEnd;
 
 
+    /**
+     * Flag determining whether or not javax.faces.ViewState should be namespaced.
+     */
+    protected boolean namespaceParameters;
+
     // ------------------------------------------------------------ Constructors
 
 
@@ -175,6 +183,9 @@ public abstract class StateHelper {
                   .createInstance(FacesContext
                         .getCurrentInstance().getExternalContext());
         }
+        namespaceParameters =
+                webConfig.isOptionEnabled(
+                     BooleanWebContextInitParameter.NamespaceParameters);
 
     }
 
@@ -245,8 +256,16 @@ public abstract class StateHelper {
             && !RenderKitFactory.HTML_BASIC_RENDER_KIT.equals(result)) {
             writer.startElement("input", context.getViewRoot());
             writer.writeAttribute("type", "hidden", "type");
+            String renderKitIdParam = ResponseStateManager.RENDER_KIT_ID_PARAM;
+            UIViewRoot viewRoot = context.getViewRoot();
+            if ((namespaceParameters) && (viewRoot instanceof NamingContainer)) {
+                String namingContainerId = viewRoot.getContainerClientId(context);
+                if (namingContainerId != null) {
+                	renderKitIdParam = namingContainerId + renderKitIdParam;
+                }
+            }
             writer.writeAttribute("name",
-                                  ResponseStateManager.RENDER_KIT_ID_PARAM,
+                                  renderKitIdParam,
                                   "name");
             writer.writeAttribute("value",
                                   result,
