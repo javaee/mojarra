@@ -114,7 +114,7 @@
     <property name="build.number" value="${DSTAMP}"/>
     <property name="build.type" value="-SNAPSHOT"/>
     <property name="impl.version.number" value="${spec.version}.${patch.version}" />
-    <property name="impl.version" value="${impl.version.number}${build.type}"/>
+    <property name="impl.version" value="${impl.version.number}"/>
     <property name="full.impl.version" value="${impl.version.number}"/>
     <property name="snapshot.version" value="${impl.version.number}-SNAPSHOT"/>
     <property name="groupId" value="com.sun.faces"/>
