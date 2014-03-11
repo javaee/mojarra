@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+    Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+
+    The contents of this file are subject to the terms of either the GNU
+    General Public License Version 2 only ("GPL") or the Common Development
+    and Distribution License("CDDL") (collectively, the "License").  You
+    may not use this file except in compliance with the License.  You can
+    obtain a copy of the License at
+    https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+    or packager/legal/LICENSE.txt.  See the License for the specific
+    language governing permissions and limitations under the License.
+
+    When distributing the software, include this License Header Notice in each
+    file and include the License file at packager/legal/LICENSE.txt.
+
+    GPL Classpath Exception:
+    Oracle designates this particular file as subject to the "Classpath"
+    exception as provided by Oracle in the GPL Version 2 section of the License
+    file that accompanied this code.
+
+    Modifications:
+    If applicable, add the following below the License Header, with the fields
+    enclosed by brackets [] replaced by your own identifying information:
+    "Portions Copyright [year] [name of copyright owner]"
+
+    Contributor(s):
+    If you wish your version of this file to be governed by only the CDDL or
+    only the GPL Version 2, indicate your decision by adding "[Contributor]
+    elects to include this software in this distribution under the [CDDL or GPL
+    Version 2] license."  If you don't indicate a single choice of license, a
+    recipient has the option to distribute your version of this file under
+    either the CDDL, the GPL Version 2 or to extend the choice of license to
+    its licensees as provided above.  However, if you add GPL Version 2 code
+    and therefore, elected the GPL Version 2 license, then the option applies
+    only if the new code is made subject to such option by the copyright
+    holder.
+
+-->
+
+<project name="JSF Maven-pre-maven-rename" basedir=".">
+
+    <property name="current.dir" value="${jsf.build.home}/common/ant"/>
+    <property environment="myenv"/>
+    <property name="mvn.home" value="${myenv.M2_HOME}"/>
+    <property name="mvn.pre-maven-rename.api.dir" value="${api.dir}/${build.dir}/mvn-pre-maven-rename" />
+    <property name="mvn.pre-maven-rename.impl.dir" value="${jsf.build.home}/jsf-ri/${build.dir}/mvn-pre-maven-rename"/>
+    <property name="groupId" value="com.sun.faces"/>
+
+    <!-- ======================== SNAPSHOT ============================ -->
+
+    <macrodef name="mvn.pre-maven-rename.deploy.snapshot.local">
+        <attribute name="type"/>
+        <sequential>
+            <do.pre-maven-rename.mvn type="@{type}" goal="install" version="${snapshot.version}"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="mvn.pre-maven-rename.deploy.snapshot">
+        <attribute name="type"/>
+        <sequential>
+            <sequential>
+                <do.pre-maven-rename.mvn type="@{type}" goal="deploy" version="${snapshot.version}"/>
+            </sequential>
+        </sequential>
+    </macrodef>
+
+    <!-- ======================== PROMOTED BUILD =========================== -->
+
+    <macrodef name="mvn.pre-maven-rename.deploy.promoted.local">
+        <attribute name="type"/>
+        <sequential>
+            <do.pre-maven-rename.mvn type="@{type}" goal="install" version="${impl.version.number}-${build.number}"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="mvn.pre-maven-rename.deploy.promoted">
+        <attribute name="type"/>
+        <sequential>
+            <do.pre-maven-rename.mvn type="@{type}" goal="deploy" version="${impl.version.number}-${build.number}"/>
+        </sequential>
+    </macrodef>
+
+    <!-- ========================= RELEASE BUILD =========================== -->
+
+    <macrodef name="mvn.pre-maven-rename.deploy.release.local">
+        <attribute name="type"/>
+        <attribute name="groupId" default="${groupId}"/>
+        <attribute name="version" default="${impl.version.number}"/>
+        <sequential>
+            <do.pre-maven-rename.mvn type="@{type}" groupId="@{groupId}" goal="install" version="@{version}"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="mvn.pre-maven-rename.deploy.release">
+        <attribute name="type"/>
+        <attribute name="groupId" default="${groupId}"/>
+        <attribute name="version" default="${impl.version.number}"/>
+        <sequential>
+            <do.pre-maven-rename.mvn type="@{type}" groupId="@{groupId}" goal="deploy" version="@{version}"/>
+        </sequential>
+    </macrodef>
+
+    <!-- ============================== HELPER MACROS ====================== -->
+
+    <macrodef name="create.pre-maven-rename.pom">
+        <attribute name="template.file"/>
+        <attribute name="output.file"/>
+        <attribute name="version"/>
+        <attribute name="groupId" default="${groupId}"/>
+        <sequential>
+            <copy overwrite="true" file="@{template.file}" tofile="@{output.file}"/>
+            <replace file="@{output.file}"
+                     token="@version@"
+                     value="@{version}"/>
+            <replace file="@{output.file}"
+                     token="@groupId@"
+                     value="@{groupId}"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="obtain.pre-maven-rename.javadoc.jar">
+      <attribute name="artifactId" />
+      <attribute name="version" />
+      <attribute name="target.parent.dir" />
+     
+      <sequential>
+        <property name="documentation.zip"
+                  value="${jsf.build.home}/jsf-demo/dist/docs/mojarra-@{version}-documentation.zip" />
+        <property name="javadoc.jar"
+                  value="@{target.parent.dir}/target/@{artifactId}-@{version}-javadoc.jar" />
+        <if>
+          <isset property="skip.javadoc.jar" />
+          <then>
+            <echo file="@{target.parent.dir}/target/index.html" append="false">
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;javadoc generation skipped&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+javadoc generation skipped
+&lt;/body&gt;
+&lt;/html&gt;
+            </echo>
+            <jar destfile="@{target.parent.dir}/target/@{artifactId}-@{version}-javadoc.jar" 
+                 basedir="@{target.parent.dir}/target/" includes="index.html"/>
+          </then>
+          <else>
+            <if>
+              <not>
+                <resourceexists>
+                  <file file="${documentation.zip}" />
+                </resourceexists>
+              </not>
+              <then>
+                <echo message="Generating documentation for inclusion as ${javadoc.jar}"/>
+                <property name="documentation.version" value="@{version}" />
+                <ant dir="${demo.dir}" 
+                  target="generate.documentatation.given.documentation.version" />
+              </then>
+            </if>
+            <copy file="${documentation.zip}" tofile="${javadoc.jar}"
+                  overwrite="true" failonerror="false"/> 
+          </else>
+        </if>
+      </sequential>
+    </macrodef>
+
+    <macrodef name="do.pre-maven-rename.mvn">
+        <attribute name="type"/>
+        <attribute name="version"/>
+        <attribute name="goal"/>
+        <attribute name="groupId" default="${groupId}"/>
+        <sequential>
+            <if>
+                <equals arg1="@{type}" arg2="api"/>
+                <then>
+                    <delete failonerror="false" dir="${mvn.pre-maven-rename.api.dir}"/>
+                    <create.pre-maven-rename.pom
+                          template.file="${current.dir}/template/jsf-pre-maven-rename-api-pom-template.xml"
+                          output.file="${mvn.pre-maven-rename.api.dir}/jsf-api-pom.xml"
+                          version="@{version}"
+                          groupId="@{groupId}"/>
+                    <mkdir dir="${mvn.pre-maven-rename.api.dir}/target/classes"/>
+                    <mkdir dir="${mvn.pre-maven-rename.api.dir}/src/main/java"/>
+                    <copy overwrite="true" 
+                          todir="${mvn.pre-maven-rename.api.dir}/src/main/java">
+                      <fileset dir="${api.dir}/doc">
+                        <include name="**/*.png" />
+                        <include name="*.xsd" />
+                        <include name="*.dtd" />
+                        <include name="standard-html-renderkit.xml" />
+                        <exclude name="xml.xsd" />
+                        <exclude name="javaee*.xsd" />
+                        <exclude name="XMLSchema.dtd" />
+                        <exclude name="datatypes.dtd" />
+                        <exclude name="changed_*.png" />
+                      </fileset>
+                      <fileset dir="${api.dir}/src/main/java">
+                        <include name="**/*" />
+                        <exclude name="**/*.png" />
+                      </fileset>
+                      <fileset dir="${api.dir}/${build.dir}/generate/">
+                        <include name="**/*" />
+                        <exclude name="**/last-generation" />
+                        <exclude name="facesdoc/**/*.*" />
+                        <exclude name="**/*.png" />
+                      </fileset>
+                    </copy>
+                    <unjar src="${api.dir}/${build.dir}/lib/jsf-api.jar"
+                           overwrite="yes"
+                           dest="${mvn.pre-maven-rename.api.dir}/target/classes"/>
+                    <obtain.pre-maven-rename.javadoc.jar 
+                            artifactId="jsf-api"
+                            version="@{version}" 
+                            target.parent.dir="${mvn.pre-maven-rename.api.dir}"/>
+                    <jsf.pre-maven-rename.mvn pomFile="${mvn.pre-maven-rename.api.dir}/jsf-api-pom.xml"
+                             mvnSpecVersion="@{version}"
+                             dir="${mvn.pre-maven-rename.api.dir}"
+                             goals="@{goal}"/>
+                    <output.jar.contents
+                            locally.deployed.jar="${maven.repo.local}/com/sun/faces/jsf-api/@{version}/jsf-api-@{version}.jar" />
+                    <output.jar.contents
+                            locally.deployed.jar="${maven.repo.local}/com/sun/faces/jsf-api/@{version}/jsf-api-@{version}-javadoc.jar" />
+                    <output.jar.contents
+                            locally.deployed.jar="${maven.repo.local}/com/sun/faces/jsf-api/@{version}/jsf-api-@{version}-sources.jar" />
+
+
+                </then>
+                <else>
+                     <echo>Fabricating maven structure in ${mvn.pre-maven-rename.impl.dir}</echo>
+                     <delete failonerror="false" dir="${mvn.pre-maven-rename.impl.dir}"/>
+                     <create.pre-maven-rename.pom
+                          template.file="${current.dir}/template/jsf-pre-maven-rename-impl-pom-template.xml"
+                          output.file="${mvn.pre-maven-rename.impl.dir}/jsf-impl-pom.xml"
+                          version="@{version}"/>
+                    <mkdir dir="${mvn.pre-maven-rename.impl.dir}/target/classes"/>
+                    <mkdir dir="${mvn.pre-maven-rename.impl.dir}/src/main/java"/>
+                    <copy overwrite="true" 
+                          todir="${mvn.pre-maven-rename.impl.dir}/src/main/java">
+                      <fileset dir="${impl.dir}/src/main/java" includes="**/*" />
+                      <fileset dir="${impl.dir}/${build.dir}/generate/"> 
+                        <include name="**/*" />
+                        <exclude name="last-generation" />
+                        <exclude name="conf/**" />
+                        <exclude name="facesdoc/**" />
+                        <exclude name="**/*.xsd" />
+                      </fileset>
+                    </copy>
+                    <unjar src="${impl.dir}/${build.dir}/lib/jsf-impl.jar"
+                           overwrite="yes"
+                           dest="${mvn.pre-maven-rename.impl.dir}/target/classes"/>
+                    <property name="skip.javadoc.jar" value="true" />
+                    <obtain.pre-maven-rename.javadoc.jar 
+                            artifactId="jsf-impl"
+                            version="@{version}" 
+                            target.parent.dir="${mvn.pre-maven-rename.impl.dir}"/>
+                    <jsf.pre-maven-rename.mvn pomFile="${mvn.pre-maven-rename.impl.dir}/jsf-impl-pom.xml"
+                             mvnSpecVersion="@{version}"
+                             dir="${mvn.pre-maven-rename.impl.dir}"
+                             goals="@{goal}"/>
+
+                    <output.jar.contents
+                            locally.deployed.jar="${maven.repo.local}/com/sun/faces/jsf-impl/@{version}/jsf-impl-@{version}.jar" />
+                    <output.jar.contents
+                            locally.deployed.jar="${maven.repo.local}/com/sun/faces/jsf-impl/@{version}/jsf-impl-@{version}-javadoc.jar" />
+                    <output.jar.contents
+                            locally.deployed.jar="${maven.repo.local}/com/sun/faces/jsf-impl/@{version}/jsf-impl-@{version}-sources.jar" />
+
+                </else>
+            </if>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="output.jar.contents">
+      <attribute name="locally.deployed.jar" />
+      <sequential>
+        <var name="jar.contents.raw" unset="true" />
+        <var name="jar.contents" unset="true" />
+
+        <pathconvert pathsep="${line.separator}" 
+                     property="jar.contents.raw">
+          <zipfileset src="@{locally.deployed.jar}" />
+        </pathconvert>
+        <!-- Remove the leading fully qualified paths. -->
+        <propertyregex property="jar.contents" 
+                       input="${jar.contents.raw}" override="true"
+                       regexp="@{locally.deployed.jar}:" replace="" 
+                       global="true" />
+        <echo>
++++++++++++++++++++++++++++++++ START contents of @{locally.deployed.jar}:
+${jar.contents}
++++++++++++++++++++++++++++++++ END contents of @{locally.deployed.jar}:
+        </echo>
+      </sequential>                    
+    </macrodef>
+
+    <macrodef name="jsf.pre-maven-rename.mvn">
+        <attribute name="pomFile" default="pom.xml"/>
+        <attribute name="mvnSpecVersion" default="${impl.version}"/>
+        <attribute name="goals"/>
+        <attribute name="dir"/>
+        <attribute name="skipTests" default="true"/>
+        <attribute name="mvnargs" default=""/>
+        <sequential>
+            <if>
+                <equals arg1="${mvn.home}" arg2="$${myenv.M2_HOME}"/>
+                <then>
+                    <if>
+                        <os family="windows"/>
+                        <then>
+                            <property name="mvn.cmd" value="mvn.bat"/>
+                        </then>
+                        <else>
+                            <property name="mvn.cmd" value="mvn"/>
+                        </else>
+                    </if>
+                </then>
+                <else>
+                    <if>
+                        <os family="windows"/>
+                        <then>
+                            <property name="mvn.cmd" value="${mvn.home}/bin/mvn.bat"/>
+                        </then>
+                        <else>
+                            <property name="mvn.cmd" value="${mvn.home}/bin/mvn"/>
+                        </else>
+                    </if>
+                </else>
+            </if>
+
+
+            <if>
+                <!-- If maven.repo.local set, respect it -->
+                <isset property="maven.repo.local"/>
+                <then>
+                    <property name="mvn.repo.local.prop" value="-D'maven.repo.local=${maven.repo.local}'"/>
+                </then>
+                <else>
+                    <property name="mvn.repo.local.prop" value=""/>
+                </else>
+            </if>
+            <if>
+                <!-- If maven.m2.settings set, respect it -->
+                <isset property="maven.m2.settings"/>
+                <then>
+                    <property name="mvn.m2.settings.prop" value="--settings ${maven.m2.settings}"/>
+                </then>
+                <else>
+                    <property name="mvn.m2.settings.prop" value=""/>
+                </else>
+            </if>
+            <if>
+                <equals arg1="@{skipTests}" arg2="false"/>
+                <then>
+                    <property name="testSkipProperty" value=""/>
+                </then>
+                <else>
+                    <property name="testSkipProperty"
+                              value="-Dmaven.test.skip=true"/>
+                </else>
+            </if>
+            <if>
+                <and>
+                  <isset property="http.proxy.host" />
+                  <length string="${http.proxy.host}" when="greater" length="0" />
+                </and>
+                <then>
+                    <property name="httpProxyProperty" value="-Dhttp.proxyHost=${http.proxy.host} -Dhttp.proxyPort=${http.proxy.port}"/>
+                </then>
+                <else>
+                    <property name="httpProxyProperty" value=""/>
+                </else>
+            </if>
+
+            <if>
+                <and>
+                  <isset property="gpg.passphrase" />
+                  <length string="${gpg.passphrase}" when="greater" length="0" />
+                </and>
+                <then>
+                    <property name="gpgPassphraseProperty" value="-Prelease-sign-artifacts -Dgpg.passphrase=${gpg.passphrase}"/>
+                </then>
+                <else>
+                    <property name="gpgPassphraseProperty" value=""/>
+                </else>
+            </if>
+            <if>
+                <and>
+                  <isset property="https.proxy.host" />
+                  <length string="${https.proxy.host}" when="greater" length="0" />
+                </and>
+                <then>
+                    <property name="httpsProxyProperty" value="-Dhttps.proxyHost=${https.proxy.host} -Dhttps.proxyPort=${https.proxy.port}"/>
+                </then>
+                <else>
+                    <property name="httpsProxyProperty" value=""/>
+                </else>
+            </if>
+
+            <exec os="SunOS" dir="@{dir}" failonerror="yes"
+                  executable="${mvn.cmd}">
+                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals} -Dspec.snapshot.version=${spec.snapshot.version} ${gpgPassphraseProperty} ${httpProxyProperty} ${httpsProxyProperty}"/>
+            </exec>
+            <exec os="Linux" dir="@{dir}" failonerror="yes"
+                  executable="${mvn.cmd}">
+                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals} -Dspec.snapshot.version=${spec.snapshot.version} ${gpgPassphraseProperty} ${httpProxyProperty} ${httpsProxyProperty}"/>
+            </exec>
+            <exec osfamily="windows" dir="@{dir}" executable="${mvn.cmd}"
+                  failonerror="yes">
+                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals} -Dspec.snapshot.version=${spec.snapshot.version} ${gpgPassphraseProperty} ${httpProxyProperty} ${httpsProxyProperty}"/>
+            </exec>
+            <exec os="Mac OS X" dir="@{dir}" executable="${mvn.cmd}"
+                  failonerror="yes">
+                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals} -Dspec.snapshot.version=${spec.snapshot.version} ${gpgPassphraseProperty} ${httpProxyProperty} ${httpsProxyProperty}"/>
+            </exec>
+        </sequential>
+    </macrodef>
+
+   
+
+</project>
