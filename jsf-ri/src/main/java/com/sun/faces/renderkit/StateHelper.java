@@ -256,12 +256,12 @@ public abstract class StateHelper {
             && !RenderKitFactory.HTML_BASIC_RENDER_KIT.equals(result)) {
             writer.startElement("input", context.getViewRoot());
             writer.writeAttribute("type", "hidden", "type");
-            String renderKitIdParam = ResponseStateManager.RENDER_KIT_ID_PARAM;
+            StringBuffer renderKitIdParam = new StringBuffer(ResponseStateManager.RENDER_KIT_ID_PARAM);
             UIViewRoot viewRoot = context.getViewRoot();
             if ((namespaceParameters) && (viewRoot instanceof NamingContainer)) {
                 String namingContainerId = viewRoot.getContainerClientId(context);
                 if (namingContainerId != null) {
-                	renderKitIdParam = namingContainerId + renderKitIdParam;
+                	renderKitIdParam.insert(0, namingContainerId);
                 }
             }
             writer.writeAttribute("name",
