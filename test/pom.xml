@@ -242,9 +242,9 @@
                                         <unzip src="${tck.zip.file}" dest=".." overwrite="true"/>
                                         <mkdir dir="../jsftck/report.dir"/>
                                         <mkdir dir="../jsftck/work.dir"/>
-                                        <delete file="../js.tx" failonerror="false"/>
-                                        <get src="${tck.exclude.url}" dest="../js.tx"/>
-                                        <copy file="../js.tx" tofile="../jsftck/bin/js.tx"/>
+                                        <delete file="../js.jtx" failonerror="false"/>
+                                        <get src="${tck.exclude.url}" dest="../js.jtx"/>
+                                        <copy file="../js.jtx" tofile="../jsftck/bin/js.jtx"/>
                                         <ant antfile="${tck.build.file}" target="deploy.all"/>
                                         <echo message="Waiting for deploy to settle down (5 minutes)"/>
                                         <sleep seconds="300"/>
