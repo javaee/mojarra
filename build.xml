@@ -371,6 +371,71 @@
       <copy file="jsf-ri/build/lib/jsf-impl.jar" todir="updatecenter2/lib"/>
     </target>
 
+    <target name="hudson.deploy">
+
+      <!-- Do not deploy the javax.faces-api jar on this branch. 
+           That jar must only be deployed from the trunk because the 
+           2.0 spec has been frozen. -->
+
+      <ant inheritAll="true"
+            target="mvn.deploy.${mojarra.build.type}${mojarra.build.local.or.blank}"
+               dir="jsf-ri" />
+
+      <ant inheritAll="true"
+            antfile="build-pre-maven-rename.xml"
+            target="main"
+               dir="jsf-api">
+        <property name="skip.javadoc.jar"  value="true" />
+      </ant>
+
+      <ant inheritAll="true"
+            antfile="build-pre-maven-rename.xml"
+            target="mvn.pre-maven-rename.deploy.${mojarra.build.type}${mojarra.build.local.or.blank}"
+               dir="jsf-api">
+        <property name="skip.javadoc.jar"  value="true" />
+      </ant>
+
+      <ant inheritAll="true"
+            antfile="build-pre-maven-rename.xml"
+            target="main"
+               dir="jsf-ri" />
+
+      <ant inheritAll="true"
+            antfile="build-pre-maven-rename.xml"
+            target="mvn.pre-maven-rename.deploy.${mojarra.build.type}${mojarra.build.local.or.blank}"
+               dir="jsf-ri" />
+
+    </target>
+
+    <target name="blank" />
+
+    <target name="mvn.pre-maven-rename.deploy.snapshot.local">
+
+      <ant inheritAll="true"
+            antfile="build-pre-maven-rename.xml"
+            target="main"
+               dir="jsf-api">
+        <property name="skip.javadoc.jar"  value="true" />
+      </ant>
+
+      <ant inheritAll="true"
+            antfile="build-pre-maven-rename.xml"
+            target="mvn.pre-maven-rename.deploy.snapshot.local"
+               dir="jsf-api">
+        <property name="skip.javadoc.jar"  value="true" />
+      </ant>
+
+      <ant inheritAll="true"
+            antfile="build-pre-maven-rename.xml"
+            target="main"
+               dir="jsf-ri" />
+
+      <ant inheritAll="true"
+            antfile="build-pre-maven-rename.xml"
+            target="mvn.pre-maven-rename.deploy.snapshot.local"
+               dir="jsf-ri" />
+    </target>
+
 </project>
 
 
