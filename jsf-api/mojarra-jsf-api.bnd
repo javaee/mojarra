@@ -52,7 +52,7 @@ Import-Package: javax.servlet.jsp.jstl.*;version=1.2,\
   javax.el.*;version=2.1
 DynamicImport-Package: org.glassfish.flashlight.provider
 Include-Resource: META-INF=build/classes/META-INF,build/classes
-Bundle-Version: @osgi.version@
+Bundle-Version: @impl.version@
 Bundle-Name: Mojarra JSF API Implementation @impl.version@
 Bundle-Description: Mojarra JSF API (javax.faces/@spec.version@) @impl.version@
 Bundle-SymbolicName: org.glassfish.javax.faces
