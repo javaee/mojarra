@@ -521,6 +521,9 @@ public class HtmlResponseWriter extends ResponseWriter {
         }
         isScript = false;
         isStyle = false;
+        
+        dontEscape = false;
+        
         if ("cdata".equalsIgnoreCase(name)) {
             endCDATA();
             return;
