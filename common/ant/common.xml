@@ -158,9 +158,9 @@
         <dependency groupId="org.glassfish" artifactId="javax.servlet" version="3.0" scope="provided"/>
         <dependency groupId="javax.servlet.jsp" artifactId="jsp-api" version="2.1" scope="provided"/>
         <dependency groupId="javax.annotation" artifactId="jsr250-api" version="1.0" scope="provided"/>
-        <dependency groupId="org.codehaus.groovy" artifactId="groovy-all" version="1.6.4" scope="provided"/>
+        <dependency groupId="org.codehaus.groovy" artifactId="groovy-all" version="1.6.9" scope="provided"/>
         <dependency groupId="javax.validation" artifactId="validation-api" version="1.0.0.GA" scope="provided"/>
-        <dependency groupId="javax.inject" artifactId="javax.inject" version="1.0-PFD-1" scope="provided"/>
+        <dependency groupId="javax.inject" artifactId="javax.inject" version="1" scope="provided"/>
         <dependency groupId="jstl" artifactId="jstl" version="1.2" scope="provided" />
         <dependency groupId="com.sun.el" artifactId="el-ri" version="1.0" scope="provided"/>
         <localRepository refid="local.repository"/>
