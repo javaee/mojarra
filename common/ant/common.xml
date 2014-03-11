@@ -97,7 +97,7 @@
     <property name="spec.snapshot.version" value="2.0-SNAPSHOT"/>
     <property name="patch.version" value="4"/>
     <property name="impl.name" value="Mojarra"/>
-    <property name="build.number" value="b11"/>
+    <property name="build.number" value="12"/>
     <property name="build.type" value="FCS"/>
     <property name="impl.version.number" value="${spec.version}.${patch.version}" />
     <property name="impl.version" value="${impl.version.number}-${build.number}"/>
