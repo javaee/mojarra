@@ -266,6 +266,30 @@
                                                        match="jspservlet.classes=(.*)"
                                                        replace="jspservlet.classes=${jspServletClasses}"
                                                        byline="true"/>
+                                        <replaceregexp file="../jsftck/bin/ts.jte" 
+                                                       match="webServerHome=(.*)"
+                                                       replace="webServerHome=${glassfishHome}"
+                                                       byline="true"/>
+                                        <replaceregexp file="../jsftck/bin/ts.jte" 
+                                                       match="webServerPort=(.*)"
+                                                       replace="webServerPort=${glassfishPort}"
+                                                       byline="true"/>
+                                        <replaceregexp file="../jsftck/bin/ts.jte" 
+                                                       match="webServerHost=(.*)"
+                                                       replace="webServerHost=${glassfishHost}"
+                                                       byline="true"/>
+                                        <replaceregexp file="../jsftck/bin/ts.jte" 
+                                                       match="impl.vi=(.*)"
+                                                       replace="impl.vi=glassfish"
+                                                       byline="true"/>
+                                        <replaceregexp file="../jsftck/bin/ts.jte" 
+                                                       match="impl.vi.deploy.dir=(.*)"
+                                                       replace="impl.vi.deploy.dir=${glassfishDeployDir}"
+                                                       byline="true"/>
+                                        <replaceregexp file="../jsftck/bin/ts.jte" 
+                                                       match="impl.deploy.timeout.multiplier=(.*)"
+                                                       replace="impl.deploy.timeout.multiplier=20"
+                                                       byline="true"/>
                                         <ant antfile="${tck.build.file}" target="deploy.all"/>
                                         <echo message="Waiting for deploy to settle down (5 minutes)"/>
                                         <sleep seconds="300"/>
