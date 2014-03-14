@@ -157,7 +157,7 @@
                                 <containerId>${glassfish.cargoContainerId}</containerId>
                                 <type>installed</type>
                                 <home>${glassfish.home}</home>
-                                <timeout>2400000</timeout>
+                                <timeout>600000</timeout>
                             </container>
                             <configuration>
                                 <type>standalone</type>
