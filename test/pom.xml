@@ -138,7 +138,7 @@
                                     <goal>start</goal>
                                 </goals>
                                 <configuration>
-                                    <timeout>600000</timeout>
+                                    <timeout>2400000</timeout>
                                 </configuration>
                             </execution>
                             <execution>
@@ -148,7 +148,7 @@
                                     <goal>stop</goal>
                                 </goals>
                                 <configuration>
-                                    <timeout>600000</timeout>
+                                    <timeout>2400000</timeout>
                                 </configuration>
                             </execution>
                         </executions>
@@ -157,7 +157,7 @@
                                 <containerId>${glassfish.cargoContainerId}</containerId>
                                 <type>installed</type>
                                 <home>${glassfish.home}</home>
-                                <timeout>600000</timeout>
+                                <timeout>2400000</timeout>
                             </container>
                             <configuration>
                                 <type>standalone</type>
@@ -326,8 +326,8 @@
         <glassfish.cargoConfigHome>${glassfish.home}/glassfish/domains</glassfish.cargoConfigHome>
         <glassfish.domainName>domain1</glassfish.domainName>
         <glassfish.home>C:/Glassfishv3</glassfish.home>
-        <glassfish.hostName>localhost</glassfish.hostName>
         <glassfish.portNumber>8080</glassfish.portNumber>
+        <glassfish.serverName>localhost</glassfish.serverName>
         <glassfish.tckZipFile>tck.zip</glassfish.tckZipFile>
         <glassfish.tckBuildFile>jsftck/bin/build.xml</glassfish.tckBuildFile>
         <glassfish.tckExcludeUrl>http://localhost/js.tx</glassfish.tckExcludeUrl>
