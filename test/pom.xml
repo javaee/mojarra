@@ -138,7 +138,7 @@
                                     <goal>start</goal>
                                 </goals>
                                 <configuration>
-                                    <timeout>2400000</timeout>
+                                    <timeout>600000</timeout>
                                 </configuration>
                             </execution>
                             <execution>
@@ -148,7 +148,7 @@
                                     <goal>stop</goal>
                                 </goals>
                                 <configuration>
-                                    <timeout>2400000</timeout>
+                                    <timeout>600000</timeout>
                                 </configuration>
                             </execution>
                         </executions>
