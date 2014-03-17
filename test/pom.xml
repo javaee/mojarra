@@ -1834,7 +1834,7 @@
         <glassfish.cargoContainerId>glassfish3x</glassfish.cargoContainerId>
         <glassfish.cargoConfigHome>${glassfish.home}/glassfish/domains</glassfish.cargoConfigHome>
         <glassfish.domainName>domain1</glassfish.domainName>
-        <glassfish.home>C:/Glassfishv3</glassfish.home>
+        <glassfish.home>C:/Glassfish3</glassfish.home>
         <glassfish.portNumber>8080</glassfish.portNumber>
         <glassfish.serverName>localhost</glassfish.serverName>
         <glassfish.tckZipFile>tck.zip</glassfish.tckZipFile>
