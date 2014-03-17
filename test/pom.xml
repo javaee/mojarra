@@ -45,7 +45,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-failsafe-plugin</artifactId>
-                    <version>2.15</version>
+                    <version>2.16</version>
                 </plugin>                
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -60,7 +60,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-report-plugin</artifactId>
-                    <version>2.15</version>
+                    <version>2.16</version>
                 </plugin>                
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -70,7 +70,7 @@
                 <plugin>
                     <groupId>org.codehaus.cargo</groupId>
                     <artifactId>cargo-maven2-plugin</artifactId>
-                    <version>1.2.2</version>
+                    <version>1.4.4</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -78,7 +78,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
                 <inherited>true</inherited>
                 <configuration>
                     <source>1.5</source>
@@ -89,7 +88,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>2.6</version>
                 <inherited>true</inherited>
                 <configuration>
                     <encoding>${project.build.sourceEncoding}</encoding>
@@ -98,7 +96,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>2.4</version>
                 <inherited>true</inherited>
                 <configuration>
                     <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
@@ -172,32 +169,24 @@
                         </executions>                        
                         <configuration>
                             <container>
-                                <containerId>${integration.container.id}</containerId>
+                                <containerId>${glassfish.cargoContainerId}</containerId>
                                 <type>installed</type>
-                                <home>${integration.container.home}</home>
+                                <home>${glassfish.home}</home>
                                 <timeout>2400000</timeout>
                             </container>
                             <configuration>
                                 <type>standalone</type>
-                                <home>${integration.container.config}</home>
+                                <home>${glassfish.cargoConfigHome}</home>
                                 <properties>
-                                    <cargo.hostname>${integration.container.serverName}</cargo.hostname>
-                                    <cargo.servlet.port>${integration.container.servletPort}</cargo.servlet.port>
-                                    <cargo.glassfish.domain.name>${integration.container.domain}</cargo.glassfish.domain.name>
+                                    <cargo.hostname>${glassfish.serverName}</cargo.hostname>
+                                    <cargo.servlet.port>${glassfish.portNumber}</cargo.servlet.port>
+                                    <cargo.glassfish.domain.name>${glassfish.domainName}</cargo.glassfish.domain.name>
                                 </properties>
                             </configuration>
                         </configuration>
                     </plugin>
                 </plugins>
             </build>
-            <properties>
-                <integration.container.home>C:/Glassfish3.1.2.2</integration.container.home>
-                <integration.container.config>${integration.container.home}/glassfish/domains</integration.container.config>
-                <integration.container.domain>domain1</integration.container.domain>
-                <integration.container.id>glassfish3x</integration.container.id>
-                <integration.container.serverName>localhost</integration.container.serverName>
-                <integration.container.servletPort>8080</integration.container.servletPort>
-            </properties>
         </profile>
         <profile>
             <id>glassfish-copy-mojarra-1jar</id>
@@ -221,7 +210,7 @@
                                             <version>${jsf.version}</version>
                                             <type>jar</type>
                                             <overWrite>true</overWrite>                                     
-                                            <outputDirectory>${integration.container.home}/glassfish/modules</outputDirectory>
+                                            <outputDirectory>${glassfish.home}/glassfish/modules</outputDirectory>
                                             <destFileName>javax.faces.jar</destFileName>
                                         </artifactItem>
                                     </artifactItems>
@@ -231,9 +220,6 @@
                     </plugin>
                 </plugins>
             </build>
-            <properties>
-                <integration.container.home>C:/Glassfish3.1.2.2</integration.container.home>
-            </properties>
         </profile>
         <profile>
             <id>glassfish-tck</id>
@@ -248,12 +234,12 @@
                                 <phase>validate</phase>
                                 <configuration>
                                     <target>
-                                        <unzip src="${tck.zip.file}" dest=".." overwrite="true"/>
+                                        <unzip src="${glassfish.tckZipFile}" dest=".." overwrite="true"/>
                                         <mkdir dir="../jsftck/report.dir"/>
                                         <mkdir dir="../jsftck/work.dir"/>
                                         <delete file="../ts.jtx" failonerror="false"/>
-                                        <get src="${tck.exclude.url}" dest="../ts.jtx"/>
-                                        <copy force="true" file="../ts.jtx" tofile="../jsftck/bin/ts.jtx"/>
+                                        <get src="${glassfish.tckExcludeUrl}" dest="../ts.jtx"/>
+                                        <copy file="../ts.jtx" tofile="../jsftck/bin/ts.jtx"/>
                                         <replaceregexp file="../jsftck/bin/ts.jte" 
                                                        match="sigTestClasspath=(.*)"
                                                        replace="sigTestClasspath=${sigTestClasspath}"
@@ -266,11 +252,12 @@
                                                        match="jspservlet.classes=(.*)"
                                                        replace="jspservlet.classes=${jspServletClasses}"
                                                        byline="true"/>
-                                        <ant antfile="${tck.build.file}" target="deploy.all"/>
+                                        <ant antfile="${glassfish.tckBuildFile}" target="deploy.all"/>
                                         <echo message="Waiting for deploy to settle down (5 minutes)"/>
                                         <sleep seconds="300"/>
-                                        <ant antfile="${tck.build.file}" target="run.all"/>
-                                        <ant antfile="${tck.build.file}" target="undeploy.all"/>
+                                        <ant antfile="${glassfish.tckBuildFile}" target="run.all"/>
+                                        <ant antfile="${glassfish.tckBuildFile}" target="undeploy.all"/>
+                                        <delete file="${glassfish.tckZipFile}"/>
                                     </target>
                                 </configuration>
                                 <goals>
@@ -294,11 +281,6 @@
                     </plugin>  
                 </plugins>
             </build>
-            <properties>
-                <tck.zip.file>tck.zip</tck.zip.file>
-                <tck.build.file>jsftck/bin/build.xml</tck.build.file>
-                <tck.exclude.url>http://localhost/js.tx</tck.exclude.url>
-            </properties>
         </profile>
         <profile>
             <id>glassfish-unzip</id>
@@ -313,12 +295,13 @@
                                 <phase>validate</phase>
                                 <configuration>
                                     <target>
-                                        <delete quiet="true" failonerror="false" dir="${integration.container.unzipDir}"/>
-                                        <mkdir dir="${integration.container.unzipDir}"/>
-                                        <unzip src="${integration.container.zipFile}" dest="${integration.container.unzipDir}"/>
+                                        <delete quiet="true" failonerror="false" dir="${glassfish.unzipDir}"/>
+                                        <mkdir dir="${glassfish.unzipDir}"/>
+                                        <unzip src="${glassfish.zipFile}" dest="${glassfish.unzipDir}"/>
                                         <exec executable="sh" osfamily="unix">
-                                            <arg line='-c "chmod a+x ${integration.container.home}/glassfish/bin/*"'/>
+                                            <arg line='-c "chmod a+x ${glassfish.home}/glassfish/bin/*"'/>
                                         </exec>
+                                        <delete file="${glassfish.zipFile}"/>
                                     </target>
                                 </configuration>
                                 <goals>
@@ -342,11 +325,6 @@
                     </plugin>                    
                 </plugins>
             </build>
-            <properties>
-                <integration.container.unzipDir>C:/</integration.container.unzipDir>
-                <integration.container.home>C:/glassfish3</integration.container.home>
-                <integration.container.zipFile>C:/Downloads/Glassfish3.1.2.2.zip</integration.container.zipFile>
-            </properties>
         </profile>
         <profile>
             <id>hudson-container-cleanup</id>
@@ -1870,6 +1848,17 @@
         </profile>
     </profiles>
     <properties>
+        <glassfish.cargoContainerId>glassfish3x</glassfish.cargoContainerId>
+        <glassfish.cargoConfigHome>${glassfish.home}/glassfish/domains</glassfish.cargoConfigHome>
+        <glassfish.domainName>domain1</glassfish.domainName>
+        <glassfish.home>C:/Glassfish3</glassfish.home>
+        <glassfish.portNumber>8080</glassfish.portNumber>
+        <glassfish.serverName>localhost</glassfish.serverName>
+        <glassfish.tckZipFile>tck.zip</glassfish.tckZipFile>
+        <glassfish.tckBuildFile>jsftck/bin/build.xml</glassfish.tckBuildFile>
+        <glassfish.tckExcludeUrl>http://localhost/js.tx</glassfish.tckExcludeUrl>
+        <glassfish.unzipDir>C:/</glassfish.unzipDir>
+        <glassfish.zipFile>C:/Glassfish3.1.2.2.zip</glassfish.zipFile>
         <integration.serverName>localhost</integration.serverName>
         <integration.serverPort>8080</integration.serverPort>
         <jsf.artifactId>javax.faces</jsf.artifactId>
