@@ -144,6 +144,12 @@ public class ConfigureListener implements ServletRequestListener,
         if (timer != null) {
             timer.startTiming();
         }
+
+        ConfigManager configManager = ConfigManager.getInstance();
+        if (configManager.hasBeenInitialized(context)) {
+            return;
+        }
+
         InitFacesContext initContext = new InitFacesContext(context);
 
         if (LOGGER.isLoggable(Level.FINE)) {
@@ -154,11 +160,6 @@ public class ConfigureListener implements ServletRequestListener,
         }
 
         webConfig = WebConfiguration.getInstance(context);
-        ConfigManager configManager = ConfigManager.getInstance();
-
-        if (configManager.hasBeenInitialized(context)) {
-            return;
-        }
 
         // Check to see if the FacesServlet is present in the
         // web.xml.   If it is, perform faces configuration as normal,
@@ -278,6 +279,11 @@ public class ConfigureListener implements ServletRequestListener,
 
     public void contextDestroyed(ServletContextEvent sce) {
         ServletContext context = sce.getServletContext();
+
+        if (!ConfigManager.getInstance().hasBeenInitialized(context)) {
+            return;
+        }
+
         InitFacesContext initContext = null;
         try {
             initContext = getInitFacesContext(context);
@@ -293,9 +299,6 @@ public class ConfigureListener implements ServletRequestListener,
             }
             if (webResourcePool != null) {
                 webResourcePool.shutdownNow();
-            }
-            if (!ConfigManager.getInstance().hasBeenInitialized(context)) {
-                return;
             }
             GroovyHelper helper = GroovyHelper.getCurrentInstance(context);
             if (helper != null) {
