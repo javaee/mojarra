@@ -81,6 +81,7 @@ import com.sun.faces.config.DocumentInfo;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import javax.faces.validator.BeanValidator;
+import javax.validation.Validator;
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler;
@@ -415,10 +416,21 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                         if (LOGGER.isLoggable(Level.FINE)) {
                             String msg = "Could not build a default Bean Validator factory: " 
                                     + root.getMessage();
-                            LOGGER.fine(msg);                        }
+                            LOGGER.fine(msg);                       
+                        }
                     }
-                }        
-                
+                    
+                    if (!result) {
+                        try {
+                            ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+                            Validator validator = factory.getValidator();
+                            appMap.put(BeanValidator.VALIDATOR_FACTORY_KEY, factory);
+                            result = true;
+                        } catch(Throwable throwable) {
+                        }
+                    }
+                }
+
             } catch (Throwable t) { // CNFE or ValidationException or any other
                 if (LOGGER.isLoggable(Level.FINE)) {
                     LOGGER.fine("Unable to load Beans Validation");
