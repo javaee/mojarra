@@ -8,7 +8,7 @@
  * and Distribution License("CDDL") (collectively, the "License").  You
  * may not use this file except in compliance with the License.  You can
  * obtain a copy of the License at
- * https://glassfish.dev.java.net/public/CDDLGPL_1_1.html
+ * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
  *
@@ -37,55 +37,68 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.javaee7.action.basic;
+package com.sun.faces.action;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import org.junit.*;
-import static org.junit.Assert.*;
+import java.util.Iterator;
+import javax.faces.lifecycle.Lifecycle;
+import javax.faces.lifecycle.LifecycleFactory;
 
-public class Issue3136IT {
+public class ActionLifecycleFactory extends LifecycleFactory {
 
-    private String webUrl;
-    private WebClient webClient;
-
-    @Before
-    public void setUp() {
-        webUrl = System.getProperty("integration.url");
-        webClient = new WebClient();
+    /**
+     * Stores the wrapped instance.
+     */
+    private final LifecycleFactory wrapped;
+    
+    /**
+     * Constructor.
+     * 
+     * @param wrapped the wrapped lifecycle factory.
+     */
+    public ActionLifecycleFactory(LifecycleFactory wrapped) {
+        this.wrapped = wrapped;
+        wrapped.addLifecycle(ActionLifecycle.ACTION_LIFECYCLE, new ActionLifecycle());
+    }
+    
+    /**
+     * Get the wrapped lifecycle factory.
+     * 
+     * @return the lifecycle factory. 
+     */
+    @Override
+    public LifecycleFactory getWrapped() {
+        return wrapped;
+    }
+    
+    /**
+     * Add the lifecycle.
+     * 
+     * @param lifecycleId the lifecycle id.
+     * @param lifecycle the lifecycle to add.
+     */
+    @Override
+    public void addLifecycle(String lifecycleId, Lifecycle lifecycle) {
+        wrapped.addLifecycle(lifecycleId, lifecycle);
     }
 
-    @After
-    public void tearDown() {
-        webClient.closeAllWindows();
+    /**
+     * Get the lifecycle.
+     * 
+     * @param lifecycleId the lifecycle id.
+     * @return the lifecycle.
+     */
+    @Override
+    public Lifecycle getLifecycle(String lifecycleId) {
+        return wrapped.getLifecycle(lifecycleId);
     }
 
-    @Test
-    public void testExactMapping() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "action/exact.xhtml");
-        assertTrue(page.asXml().contains("This page used an exact mapping of /exact.xhtml using @RequestMapping."));
-    }
-
-    @Test
-    public void testPrefixMapping() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "action/prefix/prefix.xhtml");
-        assertTrue(page.asXml().contains("This page used an prefix mapping of /prefix/* using @RequestMapping."));
-    }
-
-    @Test
-    public void testExtensionMapping() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "action/extension.do");
-        assertTrue(page.asXml().contains("This page used an extension mapping of *.do using @RequestMapping."));
-    }
-
-    @Test
-    public void testSimpleForm() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/form1.xhtml");
-        HtmlElement inputText1 = page.getHtmlElementById("inputText1");
-        inputText1.type("12345");
-        HtmlElement submit = page.getHtmlElementById("submit");
-        page = submit.click();
-        assertTrue(page.asXml().contains("We set inputText1 manually to - 12345"));
+    /**
+     * Get the lifecycle ids.
+     * 
+     * @return the lifecycle ids. 
+     */
+    @Override
+    public Iterator<String> getLifecycleIds() {
+        return wrapped.getLifecycleIds();
     }
 }
