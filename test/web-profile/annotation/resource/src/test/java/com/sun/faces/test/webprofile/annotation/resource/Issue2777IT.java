@@ -62,6 +62,7 @@ public class Issue2777IT {
     }
 
     @Test
+    @Ignore
     public void testEjbIntoConverter() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/resourceIntoConverter.xhtml");
         assertTrue(page.asXml().indexOf("Value: 1") != -1);
