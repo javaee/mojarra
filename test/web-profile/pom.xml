@@ -64,6 +64,7 @@
     <modules>
         <module>adf</module>
         <module>ajax</module>
+	<module>annotation</module>
         <module>facelets</module>
         <module>flow</module>
         <module>multi_templating</module>

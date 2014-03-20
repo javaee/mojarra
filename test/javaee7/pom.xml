@@ -65,6 +65,7 @@
         </dependency>
     </dependencies>    
     <modules>
+	<module>action</module>
         <module>cdi</module>
         <module>el</module>
         <module>beanValidation</module>

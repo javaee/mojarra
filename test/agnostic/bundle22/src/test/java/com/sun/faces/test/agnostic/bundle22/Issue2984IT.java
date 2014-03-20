@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,27 +37,17 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
-package com.sun.faces.test.agnostic.ajax; 
+package com.sun.faces.test.agnostic.bundle22;
 
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
-
 import org.junit.*;
 import static org.junit.Assert.*;
 
 public class Issue2984IT {
 
-    /**
-     * Stores the web URL.
-     */
     private String webUrl;
-    /**
-     * Stores the web client.
-     */
     private WebClient webClient;
 
     @Before
@@ -71,20 +61,19 @@ public class Issue2984IT {
         webClient.closeAllWindows();
     }
 
-
-    // ------------------------------------------------------------ Test Methods
-
     /**
-     * This test verifies the deployment of the application (containing a bundled JSF 2.2.2)
-     * deployed and is accessible. 
+     * This test verifies the deployment of the application (containing a
+     * bundled JSF 2.2.2) deployed and is accessible.
+     * 
+     * @throws Exception when a serious error occurs.
      */
     @Test
+    @Ignore
     public void testBundledApp() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl+"faces/simple.xhtml");
+        HtmlPage page = webClient.getPage(webUrl + "faces/simple.xhtml");
         assertTrue(page.asText().contains("Press the button"));
-        HtmlSubmitInput button = (HtmlSubmitInput)page.getElementById("form1:submit");
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form1:submit");
         page = button.click();
         assertTrue(page.asText().contains("Bundled JSF Version: 2.2.2"));
     }
-
 }
