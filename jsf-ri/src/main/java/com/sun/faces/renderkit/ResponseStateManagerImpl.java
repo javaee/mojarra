@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -43,12 +43,8 @@ package com.sun.faces.renderkit;
 import java.io.IOException;
 
 import javax.faces.FacesException;
-import javax.faces.application.StateManager;
 import javax.faces.context.FacesContext;
 import javax.faces.render.ResponseStateManager;
-
-import com.sun.faces.config.WebConfiguration;
-import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.StateSavingMethod;
 import com.sun.faces.util.RequestStateManager;
 
 
@@ -61,14 +57,6 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
     private StateHelper helper;
 
     public ResponseStateManagerImpl() {
-
-        WebConfiguration webConfig = WebConfiguration.getInstance();
-        String stateMode =
-              webConfig.getOptionValue(StateSavingMethod);
-        helper = ((StateManager.STATE_SAVING_METHOD_CLIENT.equalsIgnoreCase(stateMode)
-                   ? new ClientSideStateHelper()
-                   : new ServerSideStateHelper()));
-
     }
 
 
@@ -88,7 +76,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 
     @Override
     public String getCryptographicallyStrongTokenFromSession(FacesContext context) {
-        return helper.getCryptographicallyStrongTokenFromSession(context);
+        return getStateHelper(context).getCryptographicallyStrongTokenFromSession(context);
     }
 
     /**
@@ -101,7 +89,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
               RequestStateManager.get(context, RequestStateManager.FACES_VIEW_STATE);
         if (state == null) {
             try {
-                state = helper.getState(context, viewId);
+                state = getStateHelper(context).getState(context, viewId);
                 if (state != null) {
                     RequestStateManager.set(context,
                                             RequestStateManager.FACES_VIEW_STATE,
@@ -120,11 +108,10 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
      * @see ResponseStateManager#writeState(javax.faces.context.FacesContext, java.lang.Object) 
      */
     @Override
-    public void writeState(FacesContext context, Object state)
-          throws IOException {
+    public void writeState(FacesContext context, Object state) 
+            throws IOException {
 
-        helper.writeState(context, state, null);
-
+        getStateHelper(context).writeState(context, state, null);
     }
 
 
@@ -134,9 +121,9 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
     @Override
     public String getViewState(FacesContext context, Object state) {
 
-        StringBuilder sb = new StringBuilder(32);
+        StringBuilder sb = new StringBuilder(32);        
         try {
-            helper.writeState(context, state, sb);
+            getStateHelper(context).writeState(context, state, sb);
         } catch (IOException e) {
             throw new FacesException(e);
         }
@@ -165,6 +152,24 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
      */
     @Override
     public boolean isStateless(FacesContext facesContext, String viewId) {
-        return helper.isStateless(facesContext, viewId);
+        return getStateHelper(facesContext).isStateless(facesContext, viewId);
     }
-} 
+    
+    /**
+     * Get the state helper.
+     * 
+     * @param context the Faces context.
+     * @return the state helper.
+     */
+    private StateHelper getStateHelper(FacesContext context) {
+        if (helper == null) {
+            boolean clientStateSaving = context.getApplication().
+                getStateManager().isSavingStateInClient(context);
+
+            helper = clientStateSaving
+               ? new ClientSideStateHelper()
+               : new ServerSideStateHelper();
+        }
+        return helper;
+    }
+}
