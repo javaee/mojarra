@@ -51,12 +51,15 @@ public class ViewExpiredBean {
 
     @PreDestroy
     public void destroy() {
-        Map<String, Object> applicationMap = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
-        if (!applicationMap.containsKey("count")) {
-            applicationMap.put("count", 1);
-        } else {
-            int count = ((Integer) applicationMap.get("count")) + 1;
-            applicationMap.put("count", count);
+        if (FacesContext.getCurrentInstance() != null &&
+                FacesContext.getCurrentInstance().getExternalContext() != null) {
+            Map<String, Object> applicationMap = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
+            if (!applicationMap.containsKey("count")) {
+                applicationMap.put("count", 1);
+            } else {
+                int count = ((Integer) applicationMap.get("count")) + 1;
+                applicationMap.put("count", count);
+            }
         }
     }
     
