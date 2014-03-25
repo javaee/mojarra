@@ -424,40 +424,40 @@ public final class FactoryFinder {
      *                        cannot be identified
      */
     public static void releaseFactories() throws FacesException {
+        synchronized(FACTORIES_CACHE) {
+            // Identify the web application class loader
+            ClassLoader cl = getClassLoader();
 
-        // Identify the web application class loader
-        ClassLoader cl = getClassLoader();
-        
-        if (!FACTORIES_CACHE.applicationMap.isEmpty()) {
-        
-            FactoryManager fm = FACTORIES_CACHE.getApplicationFactoryManager(cl);
-            InjectionProvider provider = fm.getInjectionProvider();
-            if (null != provider) {
-                Collection factories = null;
-                for (Map.Entry<FactoryManagerCacheKey, FactoryManager> entry : 
-                        FACTORIES_CACHE.applicationMap.entrySet()) {
-                    factories = entry.getValue().getFactories();
-                    for (Object curFactory : factories) {
-                        try {
-                            provider.invokePreDestroy(curFactory);
-                        } catch (Exception ex) {
-                            if (LOGGER.isLoggable(Level.SEVERE)) {
-                                String message = MessageFormat.format("Unable to invoke @PreDestroy annotated methods on {0}.", 
-                                        curFactory);
-                                LOGGER.log(Level.SEVERE, message, ex);
+            if (!FACTORIES_CACHE.applicationMap.isEmpty()) {
+
+                FactoryManager fm = FACTORIES_CACHE.getApplicationFactoryManager(cl);
+                InjectionProvider provider = fm.getInjectionProvider();
+                if (null != provider) {
+                    Collection factories = null;
+                    for (Map.Entry<FactoryManagerCacheKey, FactoryManager> entry : 
+                            FACTORIES_CACHE.applicationMap.entrySet()) {
+                        factories = entry.getValue().getFactories();
+                        for (Object curFactory : factories) {
+                            try {
+                                provider.invokePreDestroy(curFactory);
+                            } catch (Exception ex) {
+                                if (LOGGER.isLoggable(Level.SEVERE)) {
+                                    String message = MessageFormat.format("Unable to invoke @PreDestroy annotated methods on {0}.", 
+                                            curFactory);
+                                    LOGGER.log(Level.SEVERE, message, ex);
+                                }
                             }
                         }
                     }
-                }
-            } else {
-                if (LOGGER.isLoggable(Level.SEVERE)) {
-                    LOGGER.log(Level.SEVERE, "Unable to call @PreDestroy annotated methods because no InjectionProvider can be found. Does this container implement the Mojarra Injection SPI?");
+                } else {
+                    if (LOGGER.isLoggable(Level.SEVERE)) {
+                        LOGGER.log(Level.SEVERE, "Unable to call @PreDestroy annotated methods because no InjectionProvider can be found. Does this container implement the Mojarra Injection SPI?");
+                    }
                 }
             }
+
+            FACTORIES_CACHE.removeApplicationFactoryManager(cl);
         }
-
-        FACTORIES_CACHE.removeApplicationFactoryManager(cl);
-
     }
 
 
