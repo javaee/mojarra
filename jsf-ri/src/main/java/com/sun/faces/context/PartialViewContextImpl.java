@@ -113,7 +113,6 @@ import javax.faces.render.RenderKitFactory;
     public boolean isAjaxRequest() {
 
         assertNotReleased();
-        updateFacesContext();
         if (ajaxRequest == null) {
             ajaxRequest = "partial/ajax".equals(ctx.
                 getExternalContext().getRequestHeaderMap().get("Faces-Request"));
@@ -164,7 +163,6 @@ import javax.faces.render.RenderKitFactory;
     public boolean isRenderAll() {
 
         assertNotReleased();
-        updateFacesContext();
         if (renderAll == null) {
             String render = ctx.
                 getExternalContext().getRequestParameterMap()
@@ -244,7 +242,6 @@ import javax.faces.render.RenderKitFactory;
      */
     @Override
     public void processPartial(PhaseId phaseId) {
-        updateFacesContext();
         PartialViewContext pvc = ctx.getPartialViewContext();
         Collection <String> myExecuteIds = pvc.getExecuteIds();
         Collection <String> myRenderIds = pvc.getRenderIds();
@@ -549,20 +546,6 @@ import javax.faces.render.RenderKitFactory;
             throw new IllegalStateException();
         }
     }
-
-    /**
-     * While setting up PartialViewContextImpl the RI's FacesContextImpl is passed in, but while
-     * processing phases also FacesContextWrapper must be supported. Therefore ctx is updated 
-     * until processing phases has started. Released FacesContext is updated too.
-     */
-    private void updateFacesContext() {
-    	  if (!processingPhases || ctx.isReleased()) {
-            ctx = FacesContext.getCurrentInstance();
-    	  	  processingPhases = ctx.getCurrentPhaseId() != null;
-    	  }
-    }
-
-
 
     // ----------------------------------------------------------- Inner Classes
 

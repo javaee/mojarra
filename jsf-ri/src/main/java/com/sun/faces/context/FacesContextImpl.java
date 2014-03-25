@@ -187,7 +187,7 @@ public class FacesContextImpl extends FacesContext {
         if (partialViewContext == null) {
             PartialViewContextFactory f = (PartialViewContextFactory)
                   FactoryFinder.getFactory(FactoryFinder.PARTIAL_VIEW_CONTEXT_FACTORY);
-            partialViewContext = f.getPartialViewContext(this);
+            partialViewContext = f.getPartialViewContext(FacesContext.getCurrentInstance());
         }
         return partialViewContext;
         
