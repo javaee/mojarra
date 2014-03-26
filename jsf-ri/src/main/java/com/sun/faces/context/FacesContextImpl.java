@@ -587,6 +587,9 @@ public class FacesContextImpl extends FacesContext {
             resourceLibraryContracts.clear();
             resourceLibraryContracts = null;
         }
+        if (partialViewContext != null) {
+            partialViewContext.release();
+        }
         partialViewContext = null;
         exceptionHandler = null;
         elContext = null;
