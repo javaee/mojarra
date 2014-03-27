@@ -79,10 +79,7 @@
                 test.interweaving,
                 test.listener,
                 test.duplicateIds,
-                test.viewIdNormalization,
                 test.renderkit,
-                test.hello,
-                test.external,
                 test.el,
                 test.event,
                 test.resourcelocation,
@@ -116,7 +113,6 @@
                 test.jsf2jsp,
                 test.path,
                 test.valueBindingGet,
-                test.misc,
                 test.regressions,
                 test.view.xml,
                 test.projectstage,
@@ -137,15 +133,6 @@
         <mkdir dir="${impl.test.results.dir}"/>
     </target>
     
-    <target name="test.misc">
-        <!-- validates fix for issue IMPL-262 - should be 404 not 500 -->
-        <jsf.tester request="/faces/thispagedoesnexist.jsp"
-            context-path="${context.path}"
-            classpath-refid="html.classpath"
-            test-results-dir="${impl.test.results.dir}"
-            status="404"/>
-    </target>
-
     <target name="test.view.xml">
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
@@ -172,36 +159,6 @@
         </bool>
         <then>
 
-          <jsf.tester request="/faces/duplicateIds01.jsp"
-                       context-path="${context.path}"
-                       classpath-refid="html.classpath"
-                       test-results-dir="${impl.test.results.dir}"
-                       status="500"/> 
-
-          <jsf.tester request="/faces/duplicateIds02.jsp"
-                       context-path="${context.path}"
-                       classpath-refid="html.classpath"
-                       test-results-dir="${impl.test.results.dir}"
-                       status="200"/>
-
-          <jsf.tester request="/faces/duplicateIds03.jsp"
-                       context-path="${context.path}"
-                       classpath-refid="html.classpath"
-                       test-results-dir="${impl.test.results.dir}"
-                       status="500"/>
-
-          <jsf.tester request="/faces/duplicateIds05.jsp"
-                       context-path="${context.path}"
-                       classpath-refid="html.classpath"
-                       test-results-dir="${impl.test.results.dir}"
-                       status="200"/>
-
-          <jsf.tester request="/faces/forEach02.jsp"
-                       context-path="${context.path}"
-                       classpath-refid="html.classpath"
-                       test-results-dir="${impl.test.results.dir}"
-                       status="200"/>
-
           <!-- PENDING: return to running
           <jsf.junit context-path="${context.path}"
                      classpath-refid="html.classpath"
@@ -217,64 +174,7 @@
 
     </target>
     
-    
-    <target name="test.viewIdNormalization">
-        <!-- request for any page will do -->
-        <jsf.tester request="/faces/faces/faces/faces/duplicateIds02.jsp"
-                     context-path="${context.path}"
-                     classpath-refid="html.classpath"
-                     test-results-dir="${impl.test.results.dir}"
-                     status="200"/>
-    </target>
-
-    <target name="test.external"
-            description="Test ExternalContext implementation issues">
-
-        <!-- Request scope attribute transparency -->
-        <jsf.tester request="/faces/external01.jsp"
-                     context-path="${context.path}"
-                     classpath-refid="html.classpath"
-                     test-results-dir="${impl.test.results.dir}"
-                     regexp="(?s).*/external01.jsp PASSED.*"/>
-
-        <!-- Session scope attribute transparency -->
-        <jsf.tester request="/faces/external02.jsp"
-                     context-path="${context.path}"
-                     classpath-refid="html.classpath"
-                     test-results-dir="${impl.test.results.dir}"
-                     regexp="(?s).*/external02.jsp PASSED.*"/>
-
-        <!-- Application scope attribute transparency -->
-        <jsf.tester request="/faces/external03.jsp"
-                     context-path="${context.path}"
-                     classpath-refid="html.classpath"
-                     test-results-dir="${impl.test.results.dir}"
-                     regexp="(?s).*/external03.jsp PASSED.*"/>
-
-    </target>
-
     <target name="test.facelets">
-        <!-- Tests to verify 955, return a 500, rather than a 404 -->
-        <jsf.tester request="/faces/facelets/compositionnotfound.xhtml"
-                     context-path="${context.path}"
-                     classpath-refid="html.classpath"
-                     test-results-dir="${impl.test.results.dir}"
-                     status="500"/>
-        <jsf.tester request="/faces/facelets/decoratenotfound.xhtml"
-                     context-path="${context.path}"
-                     classpath-refid="html.classpath"
-                     test-results-dir="${impl.test.results.dir}"
-                     status="500"/>
-        <jsf.tester request="/faces/facelets/includenotfound.xhtml"
-                     context-path="${context.path}"
-                     classpath-refid="html.classpath"
-                     test-results-dir="${impl.test.results.dir}"
-                     status="500"/>        
-        <jsf.tester request="/faces/facelets/i_bugdb_13582626_fViewNullLocale.xhtml"
-                     context-path="${context.path}"
-                     classpath-refid="html.classpath"
-                     test-results-dir="${impl.test.results.dir}"
-                     regexp="(?s).*text\s+value.*"/>
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
                    test-results-dir="${impl.test.results.dir}">
@@ -321,21 +221,6 @@ PENDING(edburns): This test doesn't run on GlassFish 4.0. Fix it.
                          includes="com/sun/faces/annotation/AnnotatedComponentsTestCase.class"/> 
             </tests>
         </jsf.junit>
-
-        <if>
-          <bool>
-            <not>
-              <equals arg1="${container.name}" arg2="wls_12_1_1_no_cluster"/>
-            </not>
-          </bool>
-          <then>
-            <jsf.tester request="/faces/pre31injection/injectedComponent.xhtml"
-                     context-path="${context.path}"
-                     classpath-refid="html.classpath"
-                     test-results-dir="${impl.test.results.dir}"
-                     regexp="(?s).*Hello World from env-entry!.*"/>
-          </then>
-        </if>
     </target>
 
     <target name="test.el">
@@ -371,41 +256,9 @@ PENDING(edburns): This test doesn't run on GlassFish 4.0. Fix it.
         </jsf.junit>
     </target>
 
-
-    <target name="test.hello"
-            description="Basic Hello, World Tests">
-
-        <!-- Simple Non-Faces Response -->
-        <jsf.tester request="/hello.jsp" status="200"
-                     context-path="${context.path}"
-                     classpath-refid="html.classpath"
-                     test-results-dir="${impl.test.results.dir}"
-                     regexp="(?s).*/hello.jsp PASSED.*"/>
-
-        <!-- Simple Faces Response (Direct) -->
-        <jsf.tester request="/faces/hello.jsp"
-                     context-path="${context.path}"
-                     classpath-refid="html.classpath"
-                     test-results-dir="${impl.test.results.dir}"
-                     regexp="(?s).*/hello.jsp PASSED.*"/>
-
-        <jsf.tester request="/hello.jsp"
-                     context-path="${context.path}"
-                     classpath-refid="html.classpath"
-                     test-results-dir="${impl.test.results.dir}"
-                     regexp="(?s).*/hello.jsp PASSED.*"/>
-    </target>
-
-
     <target name="test.jsp"
             description="Test JSP Integration">
         
-        <jsf.tester request="/faces/positiveTagFile.jsp"
-                     context-path="${context.path}"
-                     classpath-refid="html.classpath"
-                     test-results-dir="${impl.test.results.dir}"
-                     status="200"/>
-
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
                    test-results-dir="${impl.test.results.dir}">
@@ -464,14 +317,6 @@ PENDING(edburns): This test doesn't run on GlassFish 4.0. Fix it.
                          includes="com/sun/faces/methodref/*TestCase.class"/>
             </tests>
         </jsf.junit> 
-       
-        <!-- MethodBinding Test #2 (Superclass Method Calls) -->
-        <jsf.tester request="/faces/methodref02.jsp"
-                     context-path="${context.path}"
-                     classpath-refid="html.classpath"
-                     test-results-dir="${impl.test.results.dir}"
-                     regexp="(?s).*/methodref02.jsp PASSED.*"/>
-
     </target>
 
     <target name="test.prefix.security"
