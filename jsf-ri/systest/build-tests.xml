@@ -83,15 +83,9 @@
                 test.resourcelocation,
                 test.managed,
                 test.message,
-                test.converter,
-                test.converter01,
                 test.converter02,
-                test.converter03,
-                test.converter04,
                 test.converter05,
-                test.enum-converter-1,
                 test.validator,
-                test.validator01,
                 test.validator02,
                 test.validator03,
                 test.valuechange,
@@ -101,7 +95,6 @@
                 test.implicitnav,
                 test.state,
                 test.resourceBundleELResolver,
-                test.tlvalidator,
                 test.standard,
                 test.verbatim,
                 test.phases,
@@ -464,37 +457,6 @@ PENDING(edburns): This test doesn't run on GlassFish 4.0. Fix it.
     <target name="test.tlvalidator"
             description="Test the RI Tag Library Validator">
 
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/faces/TestHtmlBasicValidatorFail.jsp"
-              status="500"/>
-
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/TestHtmlBasicValidatorFail.jsp"
-              status="500"/>
-
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/faces/TestHtmlBasicValidatorSucceed.jsp"
-              status="200"/>
-
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/faces/TestCoreValidatorFail.jsp"
-              status="500"/>
-
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/TestCoreValidatorFail.jsp"
-              status="500"/>
-
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/faces/TestCoreValidatorSucceed.jsp"
-              status="200"/>
-
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/faces/TestCoreValidatorIfFail.jsp"
-              status="200"/>
-
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/faces/TestCoreValidatorIfSucceed.jsp"
-              status="200"/>
         <!-- JSTL forEach integration indefinately inoperable.
             <jsf.tester 
                  context-path="${context.path}" request="/faces/TestCoreValidatorIteratorFail.jsp"
@@ -504,54 +466,6 @@ PENDING(edburns): This test doesn't run on GlassFish 4.0. Fix it.
                  context-path="${context.path}" request="/faces/TestCoreValidatorIteratorSucceed.jsp"
               status="200"/>
         -->
-        <if>
-          <bool>
-            <or>
-              <equals arg1="${container.name}" arg2="tomcat7"/>
-              <equals arg1="${container.name}" arg2="glassfishV3"/>
-              <equals arg1="${container.name}" arg2="glassfishV3.1"/>
-              <equals arg1="${container.name}" arg2="glassfishV3.1_no_cluster"/>
-            </or>
-          </bool>
-          <then>
-
-            <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-                  context-path="${context.path}" request="/faces/TestElValidatorActionRefFail.jsp"
-                  status="500"/>
-            <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-                  context-path="${context.path}" request="/faces/TestElValidatorComponentFail.jsp"
-                  status="500"/>
-
-            <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-                  context-path="${context.path}" request="/faces/TestElValidatorIdFail.jsp"
-                  status="500"/>
-
-            <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-                  context-path="${context.path}" request="/faces/TestElValidatorValueRefFail.jsp"
-                  status="500"/>
-
-          </then>
-        </if>
-
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/faces/TestElValidatorActionRefSucceed.jsp"
-              status="200"/>
-
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/faces/TestElValidatorComponentSucceed.jsp"
-              status="200"/>
-
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/faces/TestElValidatorIdSucceed.jsp"
-              status="200"/>
-
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/faces/TestElValidatorValueRefSucceed.jsp"
-              status="200"/>
-
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/faces/jsp/tlvTest01.jsp"
-              status="200"/>
 
     </target>
 
@@ -568,45 +482,12 @@ PENDING(edburns): This test doesn't run on GlassFish 4.0. Fix it.
         </jsf.junit>
     </target>
 
-    <target name="test.converter"
-            description="Test Converter creation facility">
-
-        <!-- Test Converter creation -->
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/faces/converter.jsp"
-              regexp="(?s).*/converter.jsp PASSED.*"/>
-    </target>
-
-    <target name="test.converter01"
-            description="Test standard Converter replacement">
-
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/faces/converter01.jsp"
-              regexp="(?s).*/converter01.jsp PASSED.*"/>
-    </target>
-
     <target name="test.converter02"
             description="Test passing Converter instances to component tag">
 
         <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
               context-path="${context.path}" request="/faces/converter02.jsp"
               regexpFile="${regexp.path}/converter02.txt"/>
-    </target>
-
-    <target name="test.converter03"
-            description="Test converter">
-
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/faces/converter03.jsp"
-              status="200"/>
-    </target>
-
-    <target name="test.converter04"
-            description="Test converter">
-
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/faces/converter04.jsp"
-              status="200"/>
     </target>
 
     <target name="test.converter05">
@@ -639,21 +520,8 @@ PENDING(edburns): This test doesn't run on GlassFish 4.0. Fix it.
     </target>
     -->
 
-    <target name="test.enum-converter-1"
-            description="Test Enum Converter ">
-                                                                                                                          
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/faces/enum-converter-1.jsp"
-              regexp="(?s).*/enum-converter-1.jsp PASSED.*"/>
-    </target>
-
     <target name="test.validator"
             description="Test Validator creation facility">
-
-        <!-- Test validator creation -->
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/faces/validator.jsp"
-              regexp="(?s).*/validator.jsp PASSED.*"/>
 
             <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
@@ -664,31 +532,6 @@ PENDING(edburns): This test doesn't run on GlassFish 4.0. Fix it.
             </tests>
         </jsf.junit>
 
-    </target>
-
-    <target name="test.validator01"
-            description="Test standard Validator replacement">
-
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/faces/validator01.jsp"
-              regexp="(?s).*/validator01.jsp PASSED.*"/>
-    </target>
-
-    <target name="test.validator02"
-            description="Test validator">
-
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/faces/validator02.jsp"
-              status="200"/>
-    </target>
-
-    <target name="test.validator03"
-            description="Test validator">
-
-
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/faces/validator03.jsp"
-              status="200"/>
     </target>
 
     <target name="test.ajax"
@@ -717,26 +560,11 @@ PENDING(edburns): This test doesn't run on GlassFish 4.0. Fix it.
 <!-- 139-StateSaving -->
             </tests>
         </jsf.junit>
-
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/faces/render/outputLinkSpaces.jsp"
-              regexp="(?s).*text%20before%20query%20string.*?text%20after=query%20string.*"/>
-
     </target>
 
     <target name="test.component"
             description="Test Component creation facility">
-
-        <!-- Test Component creation -->
-
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/faces/component.jsp"
-              regexp="(?s).*/component.jsp PASSED.*"/>
-        
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"             
-              context-path="${context.path}" request="/faces/ProcessSaveRestoreStateTest.jsp"
-              status="200"/>
-        
+                
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
                    test-results-dir="${impl.test.results.dir}">
@@ -764,14 +592,6 @@ PENDING(edburns): This test doesn't run on GlassFish 4.0. Fix it.
         
 
         
-    </target>
-
-    <target name="test.component01"
-            description="Test standard Component replacement">
-
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/faces/component01.jsp"
-              regexp="(?s).*/component01.jsp PASSED.*"/>
     </target>
 
     <target name="test.composite"
