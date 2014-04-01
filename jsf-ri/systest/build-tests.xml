@@ -88,7 +88,6 @@
                 test.validator,
                 test.valuechange,
                 test.component,
-                test.component01,
                 test.navigation,
                 test.implicitnav,
                 test.state,
