@@ -85,9 +85,7 @@
                 test.message,
                 test.converter02,
                 test.converter05,
-                test.validator,
-                test.validator02,
-                test.validator03,
+                test.validator
                 test.valuechange,
                 test.component,
                 test.component01,
