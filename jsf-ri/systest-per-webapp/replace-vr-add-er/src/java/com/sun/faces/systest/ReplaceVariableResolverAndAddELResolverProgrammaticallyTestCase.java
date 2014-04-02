@@ -157,7 +157,7 @@ public class ReplaceVariableResolverAndAddELResolverProgrammaticallyTestCase ext
         for (i = 0; i < foundFlags.length; i++) {
             if (!foundFlags[i]) {
                 fail("Unable to find " + orderedListOfStringsToFindInPage[i] +
-                     " at expected order in ELResolver chain");
+                     " at expected order in ELResolver chain.  Text: " + text);
             }
         }
     }
