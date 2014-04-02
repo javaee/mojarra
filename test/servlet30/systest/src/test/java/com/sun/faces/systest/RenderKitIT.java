@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,44 +37,41 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.systest;
 
-package com.sun.faces.groovy;
-
+import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import java.util.regex.Pattern;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-public class GroovyITCase extends HtmlUnitFacesITCase {
-    public GroovyITCase() {
-        this("groovyTestCase");
+public class RenderKitIT {
+
+    private String webUrl;
+    private WebClient webClient;
+
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-
-    public GroovyITCase(String name) {
-        super(name);
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
     }
 
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(GroovyITCase.class));
+    @Test
+    public void testRenderKit01() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "renderkit01.jsp");
+        assertTrue(Pattern.matches("(?s).*/renderkit01.jsp PASSED.*", page.asXml()));
     }
 
-
-    // ------------------------------------------------------------ Test Methods
-
-
-    public void testManagedBean() throws Exception {
-//        HtmlPage page = getPage("/faces/groovy/groovy.xhtml") ;
-//        assertNotNull(page.getElementById("bean"));
-//        assertTrue (page.getElementById("bean").getTextContent().equals("Hello World!"));
-    }
-
-    public void testComponent() throws Exception {
-//        HtmlPage page = getPage("/faces/groovy/groovy.xhtml") ;
-//        assertNotNull(page.getElementById("header"));
-//        assertTrue (page.getElementById("header").getTextContent().equals("THIS IS A HEADER!"));
+    @Test
+    public void testRenderKit02() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "renderkit02.jsp");
+        assertTrue(Pattern.matches("(?s).*/renderkit02.jsp PASSED.*", page.asXml()));
     }
 }

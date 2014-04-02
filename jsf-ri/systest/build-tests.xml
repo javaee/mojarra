@@ -76,13 +76,11 @@
                 test.html.taglib,
                 test.config,
                 test.interweaving,
-                test.duplicateIds,
                 test.renderkit,
                 test.el,
                 test.event,
                 test.resourcelocation,
                 test.managed,
-                test.message,
                 test.converter02,
                 test.converter05,
                 test.validator,
@@ -94,20 +92,15 @@
                 test.resourceBundleELResolver,
                 test.standard,
                 test.verbatim,
-                test.phases,
                 test.subview,
                 test.methodRef,
                 test.jsp,  
                 test.jsf2jsp,
                 test.path,
                 test.regressions,
-                test.view.xml,
                 test.projectstage,
                 test.http.method.protection"
             />
-            <!--
-                test.groovy"
-            -->
     <!-- Special double converter test that addresses java jre issue outlined here:
          http://www.exploringbinary.com/java-hangs-when-converting-2-2250738585072012e-308/
          Java hangs when converting 2.2250738585072012e-308
@@ -119,48 +112,7 @@
     <target name="test.init">
         <mkdir dir="${impl.test.results.dir}"/>
     </target>
-    
-    <target name="test.view.xml">
-        <jsf.junit context-path="${context.path}"
-                   classpath-refid="html.classpath"
-                   test-results-dir="${impl.test.results.dir}">
-            <tests>
-                <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/systest/view/xml/*TestCase.class"/> 
-            </tests>
-        </jsf.junit>
-    </target>
-
-
-    <target name="test.duplicateIds"
-            description="Test duplicate ID detection">
-
-      <if>
-        <bool>
-          <or>
-            <equals arg1="${container.name}" arg2="tomcat7"/>
-            <equals arg1="${container.name}" arg2="glassfishV3"/>
-            <equals arg1="${container.name}" arg2="glassfishV3.1"/>
-            <equals arg1="${container.name}" arg2="glassfishV3.1_no_cluster"/>
-          </or>
-        </bool>
-        <then>
-
-          <!-- PENDING: return to running
-          <jsf.junit context-path="${context.path}"
-                     classpath-refid="html.classpath"
-                     test-results-dir="${impl.test.results.dir}">
-              <tests>
-                  <fileset dir="${basedir}/build/classes"
-                           includes="com/sun/faces/systest/DuplicateIds04TestCase.class"/>
-              </tests>
-          </jsf.junit>               
-          -->
-        </then>
-      </if>
-
-    </target>
-    
+        
     <target name="test.facelets">
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
@@ -260,9 +212,6 @@ PENDING(edburns): This test doesn't run on GlassFish 4.0. Fix it.
                                    com/sun/faces/jsptest/ForEachTestCase.class,
                                    com/sun/faces/jsptest/SetPropertyTestCase.class,
                                    com/sun/faces/jsptest/JspIntegrationTestCase2.class"/>
-                               <!--
-                                   com/sun/faces/jsptest/PrependIdTestCase.class,
-                               -->
             </tests>
         </jsf.junit>       
     </target>
@@ -370,43 +319,6 @@ PENDING(edburns): This test doesn't run on GlassFish 4.0. Fix it.
         </jsf.junit>         
     </target>
 
-
-    <target name="test.message"
-            description="Test message resources processing">
-
-        <!--
-            These tests aren't run due to their design.  They
-            shouldn't be changing the ViewRoot while the view
-            is being built.
-        -->
-        <!-- Standard API Message Resources -->
-        <!--
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              context-path="${context.path}" request="/faces/message01.jsp"
-              outContent="/message01.jsp PASSED"/>-->
-
-        <!-- Standard IMPL Message Resources -->
-        <!--
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              context-path="${context.path}" request="/faces/message02.jsp"
-              outContent="/message02.jsp PASSED"/>-->
-
-        <!-- Single Message Resources Element -->
-        <!--<jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              context-path="${context.path}" request="/faces/message03.jsp"
-               outContent="/message03.jsp PASSED"/>-->
-
-        <!-- Double Message Resources Element -->
-        <!--<jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              context-path="${context.path}" request="/faces/message04.jsp"
-              outContent="/message04.jsp PASSED"/>-->
-
-    </target>
-
     <target name="test.navigation"
             description="Test navigation handler rule processing">
         
@@ -448,21 +360,6 @@ PENDING(edburns): This test doesn't run on GlassFish 4.0. Fix it.
                          includes="com/sun/faces/systest/state/*TestCase.class"/>
             </tests>
         </jsf.junit>  
-
-    </target>
-
-    <target name="test.tlvalidator"
-            description="Test the RI Tag Library Validator">
-
-        <!-- JSTL forEach integration indefinately inoperable.
-            <jsf.tester 
-                 context-path="${context.path}" request="/faces/TestCoreValidatorIteratorFail.jsp"
-              status="500"/>
-        
-            <jsf.tester 
-                 context-path="${context.path}" request="/faces/TestCoreValidatorIteratorSucceed.jsp"
-              status="200"/>
-        -->
 
     </target>
 
@@ -689,19 +586,6 @@ PENDING(edburns): This test doesn't run on GlassFish 4.0. Fix it.
               context-path="${context.path}" 
               request="/faces/standard/selectmany02.jsp"
               regexpFile="${regexp.path}/standard/selectmany02.txt"/>
-
-<!--  
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              context-path="${context.path}" request="/faces/standard/selectmany03.jsp"
-              recordGolden="${local.golden.path}/standard/selectmany03.txt"
-              golden="${golden.path}/standard/selectmany03.txt"/>              
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              context-path="${context.path}" request="/faces/standard/selectmany04.jsp"
-              recordGolden="${local.golden.path}/standard/selectmany04.txt"
-              golden="${golden.path}/standard/selectmany04.txt"/>
--->
     </target>
 
     <target name="test.verbatim"
@@ -720,13 +604,6 @@ PENDING(edburns): This test doesn't run on GlassFish 4.0. Fix it.
 
     <target name="test.renderkit"
             description="Test renderkit processing">
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/faces/renderkit01.jsp"
-              regexp="(?s).*/renderkit01.jsp PASSED.*"/>
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/renderkit02.jsp"
-              regexp="(?s).*/renderkit02.jsp PASSED.*"/>
-        <!-- test renderkit03.jsp moved to test/agnostic/renderKit/basic/src/main/webapp/renderkit03.jsp -->
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
                    test-results-dir="${impl.test.results.dir}">
@@ -751,26 +628,8 @@ PENDING(edburns): This test doesn't run on GlassFish 4.0. Fix it.
               context-path="${context.path}" 
               request="/faces/resourceBundle03.jsp"
               regexp="(?s).*Values\s*from\s*Components:.*resourceBundle01:.*Value\s*From\s*ResourceBundle.*non\s*existing\s*resourceBundle:\s*.br/.\s*resourceBundle03:\s*Value\s*from\s*ResourceBundle03.*"/>
-        <!-- RETURN TO RUNNING
-            <jsf.tester 
-                 context-path="${context.path}" request="/faces/resourceBundle04.jsp"
-                 recordGolden="${local.golden.path}/resourceBundle04.txt"
-                 golden="${golden.path}/resourceBundle04.txt"/>
-        -->
     </target>
 
-
-    <target name="test.phases"
-            description="Test Phase processing with Phase Listener">
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/phaseListener01.jsp"
-              regexp="(?s).*/phaseListener01.jsp PASSED.*"/>
-        <!-- PENDING investigate the need for this
-  <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}" 
-        context-path="${context.path}" request="/faces/phaseListener01.jsp?param=foo"
-        outContent="/phaseListener01.jsp FAILED"/>
-        -->
-    </target>
     <target name="test.subview"
             description="Test subview tag">
 
@@ -842,7 +701,7 @@ PENDING(edburns): This test doesn't run on GlassFish 4.0. Fix it.
     </target>
 
     <target name="passthru" depends="define.scenario.aware.port">
-            <jsf.junit context-path="${context.path}"
+        <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
                    test-results-dir="${impl.test.results.dir}">
             <tests>
