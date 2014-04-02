@@ -50,4 +50,8 @@ public class RepeatUseLocalValueTypeB {
     public String getB() {
         return b;
     }
+    
+    public String getName() {
+        return getClass().getName();
+    }
 }

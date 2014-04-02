@@ -7,10 +7,10 @@
     <h:body>
         <h:form id="form">
             <ui:repeat var="object" value="#{repeatUseLocalValueBean.objects}">
-                <h:panelGroup rendered="#{object.class.name eq 'com.sun.faces.test.agnostic.facelets.ui.RepeatUseLocalValueTypeA'}">
+                <h:panelGroup rendered="#{object.name eq 'com.sun.faces.test.agnostic.facelets.ui.RepeatUseLocalValueTypeA'}">
                     <h:inputText value="#{object.a}" />
                 </h:panelGroup>
-                <h:panelGroup rendered="#{object.class.name eq 'com.sun.faces.test.agnostic.facelets.ui.RepeatUseLocalValueTypeB'}">
+                <h:panelGroup rendered="#{object.name eq 'com.sun.faces.test.agnostic.facelets.ui.RepeatUseLocalValueTypeB'}">
                     <h:inputText value="#{object.b}" />
                 </h:panelGroup>
             </ui:repeat>
