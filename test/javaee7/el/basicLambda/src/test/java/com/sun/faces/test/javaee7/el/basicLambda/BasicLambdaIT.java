@@ -49,6 +49,7 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import org.junit.Ignore;
 
 public class BasicLambdaIT {
 
@@ -67,6 +68,7 @@ public class BasicLambdaIT {
     }
 
     @Test
+    @Ignore
     public void testIndex() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
         HtmlElement out = page.getHtmlElementById("output");
@@ -88,6 +90,7 @@ public class BasicLambdaIT {
     }
 
     @Test
+    @Ignore
     public void testBookTable() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/bookTable.xhtml");
         assertTrue(page.asText().contains("At Swim Two Birds"));
