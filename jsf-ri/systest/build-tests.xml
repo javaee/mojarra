@@ -76,7 +76,6 @@
                 test.html.taglib,
                 test.config,
                 test.interweaving,
-                test.event,
                 test.managed,
                 test.converter02,
                 test.converter05,
