@@ -50,6 +50,7 @@ import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import static org.junit.Assert.assertEquals;
+import org.junit.Ignore;
 
 public class NoBeansXmlIT {
     /**
@@ -97,6 +98,7 @@ public class NoBeansXmlIT {
     }
 
     @Test
+    @Ignore
     public void testFlowWithNoBeansXml() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("enterFlow");
