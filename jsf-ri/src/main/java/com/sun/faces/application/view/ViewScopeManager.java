@@ -283,8 +283,9 @@ public class ViewScopeManager implements HttpSessionListener, ViewMapListener {
 
                     if (viewMaps.size() == size) {
                         String eldestViewMapId = viewMaps.keySet().iterator().next();
-                        Map<String, Object> eldestViewMap = (Map<String, Object>) viewMaps.remove(eldestViewMapId);
+                        Map<String, Object> eldestViewMap = (Map<String, Object>) viewMaps.get(eldestViewMapId);
                         removeEldestViewMap(facesContext, eldestViewMap);
+                        viewMaps.remove(eldestViewMapId);
                     }
 
                     viewMaps.put(viewMapId, viewMap);

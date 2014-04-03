@@ -98,25 +98,27 @@ public class DynamicAddTestCase extends HtmlUnitFacesTestCase {
     }
 
     public void testDynamicAddHandlesViewIdChanges() throws Exception {
-
-        HtmlPage page = getPage("/faces/dynamicComponents00.xhtml");
-        String text;
-        HtmlSubmitInput button = (HtmlSubmitInput)
-                this.getInputContainingGivenId(page, "next");
-        page = button.click();
-        button = (HtmlSubmitInput)
-                this.getInputContainingGivenId(page, "thisAgain");
-        page = button.click();
-        button = (HtmlSubmitInput)
-                this.getInputContainingGivenId(page, "thisAgain");
-        page = button.click();
-        text = page.asXml();
-        assertTrue(text.contains("Dynamic Component dynamic1"));
-        button = (HtmlSubmitInput)
-                this.getInputContainingGivenId(page, "next");
-        page = button.click();
-        text = page.asXml();
-        assertTrue(page.asXml().contains("no dynamic component"));
+//
+// disabling as the test also exists on the new harness.
+// 
+//        HtmlPage page = getPage("/faces/dynamicComponents00.xhtml");
+//        String text;
+//        HtmlSubmitInput button = (HtmlSubmitInput)
+//                this.getInputContainingGivenId(page, "next");
+//        page = button.click();
+//        button = (HtmlSubmitInput)
+//                this.getInputContainingGivenId(page, "thisAgain");
+//        page = button.click();
+//        button = (HtmlSubmitInput)
+//                this.getInputContainingGivenId(page, "thisAgain");
+//        page = button.click();
+//        text = page.asXml();
+//        assertTrue(text.contains("Dynamic Component dynamic1"));
+//        button = (HtmlSubmitInput)
+//                this.getInputContainingGivenId(page, "next");
+//        page = button.click();
+//        text = page.asXml();
+//        assertTrue(page.asXml().contains("no dynamic component"));
     }
 
 

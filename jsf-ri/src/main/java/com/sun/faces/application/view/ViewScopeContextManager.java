@@ -113,7 +113,7 @@ public class ViewScopeContextManager {
         if (LOGGER.isLoggable(Level.FINEST)) {
             LOGGER.log(Level.FINEST, "Clearing @ViewScoped CDI beans for given view map: {0}");
         }
-        Map<Contextual, ViewScopeContextObject> contextMap = getContextMap(facesContext, false);
+        Map<Contextual, ViewScopeContextObject> contextMap = getContextMap(facesContext, viewMap);
         if (contextMap != null) {
             destroyBeans(viewMap, contextMap);
         }
@@ -244,6 +244,28 @@ public class ViewScopeContextManager {
             }
         }
 
+        return result;
+    }
+    
+    /**
+     * Get the context map for the given view map.
+     * 
+     * @param facesContext the Faces context.
+     * @param viewMap the view map.
+     * @return the context map.
+     */
+    private Map<Contextual, ViewScopeContextObject> getContextMap(FacesContext facesContext, Map<String, Object> viewMap) {
+        Map<Contextual, ViewScopeContextObject> result = null;
+
+        ExternalContext externalContext = facesContext.getExternalContext();
+
+        if (externalContext != null) {
+            Map<String, Object> sessionMap = externalContext.getSessionMap();
+            Map<Object, Map<Contextual, ViewScopeContextObject>> activeViewScopeContexts =
+                    (Map<Object, Map<Contextual, ViewScopeContextObject>>) sessionMap.get(ACTIVE_VIEW_CONTEXTS);
+            result = activeViewScopeContexts.get(System.identityHashCode(viewMap));
+        }
+        
         return result;
     }
 
