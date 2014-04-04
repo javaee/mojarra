@@ -104,7 +104,7 @@ public class MetadataOmittedITCase extends HtmlUnitFacesITCase {
         HtmlPage page = getPage("/faces/standard/metadataomitted.xhtml");
         String pageAsText = page.asXml();
         if (pageAsText.contains("Project Stage: Development")) {
-            assertTrue (pageAsText.contains("The metadata component needs to be nested within a f:metadata tag. Suggestion: enclose the necessary components within <f:metadata>"));
+            assertTrue (pageAsText.contains("The metadata component needs to be nested within a f:metadata tag."));
         }
     }
 
@@ -112,8 +112,8 @@ public class MetadataOmittedITCase extends HtmlUnitFacesITCase {
         HtmlPage page = getPage("/faces/standard/metadataandformomitted.xhtml");
         String pageAsText = page.asXml();       
         if (pageAsText.contains("Project Stage: Development")) {
-            assertTrue (pageAsText.contains("The metadata component needs to be nested within a f:metadata tag. Suggestion: enclose the necessary components within <f:metadata>"));
-            assertTrue (pageAsText.contains("The form component needs to have a UIForm in its ancestry. Suggestion: enclose the necessary components within <h:form>"));
+            assertTrue (pageAsText.contains("The metadata component needs to be nested within a f:metadata tag."));
+            assertTrue (pageAsText.contains("The form component needs to have a UIForm in its ancestry."));
         }
     }
 }

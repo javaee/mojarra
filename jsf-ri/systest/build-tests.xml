@@ -83,7 +83,6 @@
                 test.valuechange,
                 test.component,
                 test.navigation,
-                test.implicitnav,
                 test.state,
                 test.resourceBundleELResolver,
                 test.standard,
@@ -598,18 +597,6 @@ PENDING(edburns): This test doesn't run on GlassFish 4.0. Fix it.
 
     </target>
 
-    <target name="test.implicitnav">
-        <jsf.junit context-path="${context.path}"
-                   classpath-refid="html.classpath"
-                   test-results-dir="${impl.test.results.dir}">
-            <tests>
-                <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/systest/implicitnav/*TestCase.class"/> 
-            </tests>
-        </jsf.junit>
-
-    </target>
-
     <target name="passthru" depends="define.scenario.aware.port">
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
@@ -622,6 +609,5 @@ PENDING(edburns): This test doesn't run on GlassFish 4.0. Fix it.
 
 
     </target>
-
 
 </project>

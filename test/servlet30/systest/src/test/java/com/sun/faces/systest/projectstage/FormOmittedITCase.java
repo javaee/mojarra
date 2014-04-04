@@ -103,7 +103,7 @@ public class FormOmittedITCase extends HtmlUnitFacesITCase {
         HtmlPage page = getPage("/faces/standard/formomitted.xhtml");
         String pageAsText = page.asXml();       
         if (pageAsText.contains("Project Stage: Development")) {
-            assertTrue (pageAsText.contains("The form component needs to have a UIForm in its ancestry. Suggestion: enclose the necessary components within <h:form>"));
+            assertTrue (pageAsText.contains("The form component needs to have a UIForm in its ancestry."));
         }
     }
     
@@ -119,7 +119,7 @@ public class FormOmittedITCase extends HtmlUnitFacesITCase {
         HtmlPage page = getPage("/faces/standard/formomittedforcc.xhtml");
         String pageAsText = page.asXml();
         if (pageAsText.contains("Project Stage: Development")) {
-            assertTrue (pageAsText.contains("The form component needs to have a UIForm in its ancestry. Suggestion: enclose the necessary components within <h:form>"));
+            assertTrue (pageAsText.contains("The form component needs to have a UIForm in its ancestry."));
         }
     }
 
