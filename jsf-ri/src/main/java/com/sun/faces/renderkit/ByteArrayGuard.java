@@ -216,8 +216,8 @@ public final class ByteArrayGuard {
             sk = new SecretKeySpec(keyArray, KEY_ALGORITHM);
         }
         catch(NamingException exception) {
-            if (LOGGER.isLoggable(Level.FINEST)) { 
-                LOGGER.log(Level.FINEST, "Unable to find the encoded key.", exception);
+            if (LOGGER.isLoggable(Level.SEVERE)) { 
+                LOGGER.log(Level.SEVERE, "Unable to find the encoded key.", exception);
             }
         }
         
