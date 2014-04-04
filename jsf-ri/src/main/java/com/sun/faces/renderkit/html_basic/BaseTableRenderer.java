@@ -329,7 +329,6 @@ public abstract class BaseTableRenderer extends HtmlBasicRenderer {
 
     protected static class TableMetaInfo {
 
-        private static final UIColumn PLACE_HOLDER_COLUMN = new UIColumn();
         private static final String[] EMPTY_STRING_ARRAY = new String[0];
         public static final String KEY = TableMetaInfo.class.getName();
 
@@ -466,7 +465,7 @@ public abstract class BaseTableRenderer extends HtmlBasicRenderer {
                 }
                 List<UIColumn> result = new ArrayList<UIColumn>(count);
                 for (int i = 0; i < count; i++) {
-                    result.add(PLACE_HOLDER_COLUMN);
+                    result.add(new UIColumn());
                 }
                 return result;
             }
