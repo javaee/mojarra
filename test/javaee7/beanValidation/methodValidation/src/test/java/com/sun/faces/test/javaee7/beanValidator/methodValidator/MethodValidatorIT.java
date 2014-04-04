@@ -50,6 +50,7 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
+import org.junit.Ignore;
 
 
 public class MethodValidatorIT {
@@ -98,6 +99,7 @@ public class MethodValidatorIT {
     }
 
     @Test
+    @Ignore
     public void testIncorrectUsage() throws Exception {
         webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl);
@@ -114,6 +116,7 @@ public class MethodValidatorIT {
     }
     
     @Test
+    @Ignore
     public void testCorrectUsage1() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
         HtmlTextInput input = (HtmlTextInput) page.getElementById("lastName");
@@ -129,6 +132,7 @@ public class MethodValidatorIT {
     }
     
     @Test
+    @Ignore
     public void testCorrectUsage2() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
         HtmlTextInput input = (HtmlTextInput) page.getElementById("requestValue");
