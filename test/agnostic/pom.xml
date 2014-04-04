@@ -71,6 +71,7 @@
         <module>converter</module>
         <module>dynamic</module>
         <module>el</module>
+        <module>replace-vr-add-er</module>
         <module>externalContext</module>
         <module>facelets</module>
         <module>flash</module>

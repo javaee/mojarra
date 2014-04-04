@@ -106,7 +106,6 @@
                    replace-variableresolver,
                    replace-variableresolver-programmatically,
                    add-er-replace-vr,
-                   replace-vr-add-er,
                    converter-property-editor,
                    disable-unicode-escaping,
                    late-bindings,

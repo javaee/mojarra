@@ -38,16 +38,19 @@
  * holder.
  */
 
-package com.sun.faces.systest;
+package com.sun.faces.test.agnostic;
 
-
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
-
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import com.gargoylesoftware.htmlunit.WebClient;
+import org.junit.Ignore;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 
 /**
@@ -56,72 +59,68 @@ import junit.framework.TestSuite;
  * to do the bulk of the requests works.</p>
  */
 
-public class ReplaceVariableResolverAndAddELResolverProgrammaticallyTestCase extends HtmlUnitFacesTestCase {
-
-
-    // ------------------------------------------------------------ Constructors
+public class IssueReplaceVariableResolverAndAddELResolverProgrammaticallyIT {
 
 
     /**
-     * Construct a new instance of this test case.
-     *
-     * @param name Name of the test case
+     * Stores the web URL.
      */
-    public ReplaceVariableResolverAndAddELResolverProgrammaticallyTestCase(String name) {
-        super(name);
+    private String webUrl;
+    /**
+     * Stores the web client.
+     */
+    private WebClient webClient;
+
+    /**
+     * Setup before testing.
+     * 
+     * @throws Exception when a serious error occurs.
+     */
+    @BeforeClass
+    public static void setUpClass() throws Exception {
     }
 
-
-    // ------------------------------------------------------ Instance Variables
-
-
-    // ---------------------------------------------------- Overall Test Methods
-
-
     /**
-     * Set up instance variables required by this test case.
+     * Cleanup after testing.
+     * 
+     * @throws Exception when a serious error occurs.
      */
-    public void setUp() throws Exception {
-        super.setUp();
+    @AfterClass
+    public static void tearDownClass() throws Exception {
     }
 
-
     /**
-     * Return the tests included in this test suite.
+     * Setup before testing.
      */
-    public static Test suite() {
-        return (new TestSuite(ReplaceVariableResolverAndAddELResolverProgrammaticallyTestCase.class));
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-
     /**
-     * Tear down instance variables required by this test case.
+     * Tear down after testing.
      */
+    @After
     public void tearDown() {
-        super.tearDown();
+        webClient.closeAllWindows();
     }
-
-
-    // ------------------------------------------------------ Instance Variables
-
-
-
-    // ------------------------------------------------- Individual Test Methods
 
     /**
      *
      * <p>Verify that the bean is successfully resolved</p>
      */
-
+    @Test
+    @Ignore
     public void testReplaceVariableResolverAndAddELResolverProgrammatically() throws Exception {
-	HtmlPage page = getPage("/faces/test.jsp");
+	HtmlPage page = webClient.getPage(webUrl + "faces/test.jsp");
 	assertTrue(-1 != page.asText().indexOf("Invoking the variable resolver chain: success."));
 	assertTrue(-1 != page.asText().indexOf("Invoking the variable resolver directly: success."));
 	assertTrue(-1 != page.asText().indexOf("Invoking the EL resolver directly: true."));
 	assertTrue(-1 != page.asText().indexOf("result: isReadOnly invoked directly."));
 	assertTrue(-1 != page.asText().indexOf("Invoking the EL resolver via chain: true."));
 	assertTrue(-1 != page.asText().indexOf("result: isReadOnly invoked thru chain."));
-        HtmlSubmitInput button = (HtmlSubmitInput) getInputContainingGivenId(page, "reload");
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("reload", true);
         page = (HtmlPage) button.click();
         String text = page.asXml();
         text = text.replaceAll(":[0-9]*\\)", "\\)");
