@@ -94,7 +94,6 @@ public class ViewMetadataImpl extends ViewMetadata {
     public UIViewRoot createMetadataView(FacesContext context) {
 
         UIViewRoot result = null;
-        UIViewRoot currentViewRoot = context.getViewRoot();
 
         try {
             context.setProcessingEvents(false);
@@ -110,8 +109,7 @@ public class ViewMetadataImpl extends ViewMetadata {
             // Stash away view id before invoking handlers so that 
             // StateContext.partialStateSaving() can determine the current
             // view. 
-            context.getAttributes().put(RIConstants.VIEWID_KEY_NAME, viewId);            
-            context.setViewRoot(result);
+            context.getAttributes().put(RIConstants.VIEWID_KEY_NAME, viewId);
 
             Facelet f = faceletFactory.getMetadataFacelet(context, result.getViewId());
 
@@ -126,9 +124,6 @@ public class ViewMetadataImpl extends ViewMetadata {
         } finally {
             context.getAttributes().remove(RIConstants.VIEWID_KEY_NAME);
             context.setProcessingEvents(true);
-            if (null != currentViewRoot) {
-                context.setViewRoot(currentViewRoot);
-            }
         }
 
 
