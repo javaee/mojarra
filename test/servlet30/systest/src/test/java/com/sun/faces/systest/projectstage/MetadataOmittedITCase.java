@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -101,20 +101,19 @@ public class MetadataOmittedITCase extends HtmlUnitFacesITCase {
 
 
     public void testMetadataOmitted() throws Exception {
-//        HtmlPage page = getPage("/faces/standard/metadataomitted.xhtml");
-//
-//        String pageAsText = page.asText();       
-//        assertTrue (pageAsText.contains("The metadata component needs to be nested within a f:metadata tag. Suggestion: enclose the necessary components within <f:metadata>"));
-//
+        HtmlPage page = getPage("/faces/standard/metadataomitted.xhtml");
+        String pageAsText = page.asXml();
+        if (pageAsText.contains("Project Stage: Development")) {
+            assertTrue (pageAsText.contains("The metadata component needs to be nested within a f:metadata tag. Suggestion: enclose the necessary components within <f:metadata>"));
+        }
     }
 
     public void testMetadataAndFormOmitted() throws Exception {
-//
-//        HtmlPage page = getPage("/faces/standard/metadataandformomitted.xhtml");
-//
-//        String pageAsText = page.asText();       
-//        assertTrue (pageAsText.contains("The metadata component needs to be nested within a f:metadata tag. Suggestion: enclose the necessary components within <f:metadata>"));
-//        assertTrue (pageAsText.contains("The form component needs to have a UIForm in its ancestry. Suggestion: enclose the necessary components within <h:form>"));
-//
+        HtmlPage page = getPage("/faces/standard/metadataandformomitted.xhtml");
+        String pageAsText = page.asXml();       
+        if (pageAsText.contains("Project Stage: Development")) {
+            assertTrue (pageAsText.contains("The metadata component needs to be nested within a f:metadata tag. Suggestion: enclose the necessary components within <f:metadata>"));
+            assertTrue (pageAsText.contains("The form component needs to have a UIForm in its ancestry. Suggestion: enclose the necessary components within <h:form>"));
+        }
     }
 }

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -100,30 +100,35 @@ public class FormOmittedITCase extends HtmlUnitFacesITCase {
 
 
     public void testFormOmitted() throws Exception {
-//        HtmlPage page = getPage("/faces/standard/formomitted.xhtml");
-//
-//        String pageAsText = page.asText();       
-//        assertTrue (pageAsText.contains("The form component needs to have a UIForm in its ancestry. Suggestion: enclose the necessary components within <h:form>"));
-//
-//        page = getPage("/faces/standard/formnotomitted.xhtml");
-//
-//        pageAsText = page.asText();
-//        assertFalse (pageAsText.contains("The form component needs to have a UIForm in its ancestry. Suggestion: enclose the necessary components within <h:form>"));
-//
-//        page = getPage("/faces/standard/formomittedforcc.xhtml");
-//
-//        pageAsText = page.asText();
-//        assertTrue (pageAsText.contains("The form component needs to have a UIForm in its ancestry. Suggestion: enclose the necessary components within <h:form>"));
-//
-//
+        HtmlPage page = getPage("/faces/standard/formomitted.xhtml");
+        String pageAsText = page.asXml();       
+        if (pageAsText.contains("Project Stage: Development")) {
+            assertTrue (pageAsText.contains("The form component needs to have a UIForm in its ancestry. Suggestion: enclose the necessary components within <h:form>"));
+        }
+    }
+    
+    public void testFormNotOmitted() throws Exception {
+        HtmlPage page = getPage("/faces/standard/formnotomitted.xhtml");
+        String pageAsText = page.asXml();
+        if (pageAsText.contains("Project Stage: Development")) {
+            assertFalse (pageAsText.contains("The form component needs to have a UIForm in its ancestry. Suggestion: enclose the necessary components within <h:form>"));
+        }
+    }
+    
+    public void testFormOmittedForCC() throws Exception {
+        HtmlPage page = getPage("/faces/standard/formomittedforcc.xhtml");
+        String pageAsText = page.asXml();
+        if (pageAsText.contains("Project Stage: Development")) {
+            assertTrue (pageAsText.contains("The form component needs to have a UIForm in its ancestry. Suggestion: enclose the necessary components within <h:form>"));
+        }
     }
 
     public void testFormOmittedFormlayoutTemplates() throws Exception {
-//        HtmlPage page = getPage("/faces/standard/formlayouttemplates.xhtml");
-//
-//        String pageAsText = page.asText();
-//        assertTrue (pageAsText.contains("Page defined content"));
-//        assertFalse (pageAsText.contains("The form component needs to have a UIForm in its ancestry. Suggestion: enclose the necessary components within <h:form>"));
-
+        HtmlPage page = getPage("/faces/standard/formlayouttemplates.xhtml");
+        String pageAsText = page.asXml();
+        if (pageAsText.contains("Project Stage: Development")) {
+            assertTrue (pageAsText.contains("Page defined content"));
+            assertFalse (pageAsText.contains("The form component needs to have a UIForm in its ancestry. Suggestion: enclose the necessary components within <h:form>"));
+        }
     }
 }
