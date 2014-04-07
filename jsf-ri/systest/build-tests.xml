@@ -73,7 +73,6 @@
                 test.facelets,
                 test.init,                
                 test.render,
-                test.html.taglib,
                 test.config,
                 test.managed,
                 test.converter02,
@@ -84,7 +83,6 @@
                 test.navigation,
                 test.state,
                 test.standard,
-                test.verbatim,
                 test.jsp,  
                 test.jsf2jsp,
                 test.path"
@@ -476,62 +474,10 @@ PENDING(edburns): This test doesn't run on GlassFish 4.0. Fix it.
               context-path="${context.path}" request="/faces/standard/autocomplete.jsp"/>
         <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
             regexpFile="${regexp.path}/standard/dtablecolumnclasses.txt"
-            context-path="${context.path}" request="/faces/standard/dtablecolumnclasses.jsp"/>
-        <jsf.junit context-path="${context.path}"
-                   classpath-refid="html.classpath"
-                   test-results-dir="${impl.test.results.dir}">
-            <tests>
-                <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/systest/PGridColumnClassesTestCase.class,
-                                   com/sun/faces/systest/SelectOneManyEnumTestCase.class,
-                                   com/sun/faces/systest/SelectManyCollectionTestCase.class,
-                                   com/sun/faces/systest/DataTableTestCase.class,
-                                   com/sun/faces/systest/TestOutputTargets.class,
-                                   com/sun/faces/systest/LinkTypeAttributeTestCase.class,
-                                   com/sun/faces/systest/CheckboxTestCase.class,
-                                   com/sun/faces/systest/SelectOneHideNoSelectItemGroupTestCase.class,
-                                   com/sun/faces/systest/SelectOneHideNoSelectionTestCase.class,
-                                   com/sun/faces/systest/ForEachFaceletsTestCase.class,
-                                   com/sun/faces/systest/Issue1807TestCase.class,
-                                   com/sun/faces/systest/Issue2194TestCase.class,
-                                   com/sun/faces/systest/SelectOneValueExpressionHideNoSelectionTestCase.class"/>
-            </tests>
-        </jsf.junit>  
+            context-path="${context.path}" request="/faces/standard/dtablecolumnclasses.jsp"/> 
     </target>
 
-    <target name="test.html.taglib"
-            description="Test the HTML JSP Tags">
-        <echo message="Testing commandButton..."/>
-
-        <jsf.junit context-path="${context.path}"
-                   classpath-refid="html.classpath"
-                   test-results-dir="${impl.test.results.dir}">
-            <tests>
-                <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/systest/jsp/htmltaglib/*TestCase.class"/>
-            </tests>
-        </jsf.junit>
-
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" 
-              request="/faces/standard/selectmany02.jsp"
-              regexpFile="${regexp.path}/standard/selectmany02.txt"/>
-    </target>
-
-    <target name="test.verbatim"
-            description="Test the Verbatim tag">
-        <echo message="Testing verbatim..."/>
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" 
-              request="/faces/verbatim_test.jsp"
-              regexpFile="${regexp.path}/verbatim_test.txt"/>
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" 
-              request="/faces/escape_test.jsp"
-              regexpFile="${regexp.path}/escape_test.txt" />
-    </target>
-
-    <target name="passthru" depends="define.scenario.aware.port">
+     <target name="passthru" depends="define.scenario.aware.port">
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
                    test-results-dir="${impl.test.results.dir}">
@@ -540,8 +486,6 @@ PENDING(edburns): This test doesn't run on GlassFish 4.0. Fix it.
                          includes="com/sun/faces/systest/jsp/htmltaglib/HtmlTaglibTestCase.class" />
             </tests>
         </jsf.junit>
-
-
     </target>
 
 </project>
