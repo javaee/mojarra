@@ -71,13 +71,11 @@
                 test.ajax,
                 test.composite,
                 test.facelets,
-                test.init,                
-                test.render,
+                test.init,
                 test.config,
                 test.managed,
                 test.converter02,
                 test.converter05,
-                test.validator,
                 test.valuechange,
                 test.component,
                 test.navigation,
@@ -115,15 +113,6 @@ PENDING(edburns): This test doesn't run on GlassFish 4.0. Fix it.
 -->
             </tests>
         </jsf.junit>
-        <jsf.junit context-path="${context.path}"
-                   classpath-refid="html.classpath"
-                   test-results-dir="${impl.test.results.dir}">
-            <tests>
-                <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/systest/viewparameters/ViewParametersTestCase.class,com/sun/faces/systest/dynamic1757/*TestCase.class"/>
-            </tests>
-        </jsf.junit>  
-
     </target>
 
     <target name="test.groovy">
@@ -342,20 +331,6 @@ PENDING(edburns): This test doesn't run on GlassFish 4.0. Fix it.
     </target>
     -->
 
-    <target name="test.validator"
-            description="Test Validator creation facility">
-
-            <jsf.junit context-path="${context.path}"
-                   classpath-refid="html.classpath"
-                   test-results-dir="${impl.test.results.dir}">
-            <tests>
-                <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/systest/validator/*TestCase.class"/>
-            </tests>
-        </jsf.junit>
-
-    </target>
-
     <target name="test.ajax"
             description="Test Ajax Functionality">
 
@@ -365,21 +340,6 @@ PENDING(edburns): This test doesn't run on GlassFish 4.0. Fix it.
             <tests>
                 <fileset dir="${basedir}/build/classes"
                          includes="com/sun/faces/ajax/*TestCase.class"                         />
-            </tests>
-        </jsf.junit>
-    </target>
-
-    <target name="test.render"
-            description="Test Rendering Functionality">
-
-            <jsf.junit context-path="${context.path}"
-                   classpath-refid="html.classpath"
-                   test-results-dir="${impl.test.results.dir}">
-            <tests>
-                <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/render/*TestCase.class" />
-                         <!-- excludes="com/sun/faces/render/CommandButtonTestCase.class" /> -->
-<!-- 139-StateSaving -->
             </tests>
         </jsf.junit>
     </target>

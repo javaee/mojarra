@@ -201,27 +201,11 @@ public class OutputScriptStyleITCase extends HtmlUnitFacesITCase {
     }
 
     public void testScriptQuery() throws Exception {
-//        lastpage = getPage("/faces/render/outputScriptQuery.xhtml");
-//        String text = lastpage.asXml();
-//
-//        assertTrue(text.matches(
-//                "(?s).*"+
-//                "<script type=\"text/javascript\".*src=\"/jsf-systest/faces/javax.faces.resource/simple.js.*\\?mod=test\">.*" +
-//                "</script>.*"
-//                ));
-//
-//        assertTrue(text.matches(
-//                "(?s).*"+
-//                "<script type=\"text/javascript\".*src=\"/jsf-systest/faces/javax.faces.resource/simple2.js.*\">.*" +
-//                "</script>.*"
-//                ));
-//
-//        assertTrue(text.matches(
-//                "(?s).*"+
-//                "<script type=\"text/javascript\".*src=\"/jsf-systest/faces/javax.faces.resource/jsf.*js.*\\?ln=javax.faces&amp;stage=Development\">.*" +
-//                "</script>.*"
-//                ));
-//
+        lastpage = getPage("/faces/render/outputScriptQuery.xhtml");
+        String text = lastpage.asXml();
+        assertTrue(text.contains("/jsf-systest/faces/javax.faces.resource/simple.js"));
+        assertTrue(text.contains("/jsf-systest/faces/javax.faces.resource/simple2.js"));
+        assertTrue(text.contains("/jsf-systest/faces/javax.faces.resource/jsf.js"));
     }
 
     public void testSheetMedia() throws Exception {
