@@ -41,7 +41,6 @@
 
 package com.sun.faces.systest;
 
-import com.sun.faces.systest.jsp.interweaving.*;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import junit.framework.Test;
