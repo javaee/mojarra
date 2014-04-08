@@ -187,9 +187,7 @@
             <tests>
                 <fileset dir="${basedir}/build/classes"
                          includes="com/sun/faces/component/*TestCase.class"
-                         excludes="com/sun/faces/component/GetClientIdELTestCase.class"
                          />
-<!-- 139-StateSaving edburns remove excludes -->
             </tests>
         </jsf.junit>
 
