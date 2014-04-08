@@ -62,7 +62,6 @@
     <property name="regexp.path" value="${basedir}/web/regexp"/>
 
     <!-- ======================== Test Execution ============================== -->
-    <!-- converter06 impl logic deferred to 2.0 -->
     <!-- DO NOT REORDER test.annotations -->
     <target name="test"
             description="Execute all tests against installed application"
@@ -72,26 +71,13 @@
                 test.composite,
                 test.facelets,
                 test.init,
-                test.config,
                 test.managed,
-                test.converter02,
-                test.converter05,
-                test.valuechange,
                 test.component,
                 test.navigation,
                 test.state,
-                test.standard,
                 test.jsp,  
-                test.jsf2jsp,
-                test.path"
+                test.jsf2jsp"
             />
-    <!-- Special double converter test that addresses java jre issue outlined here:
-         http://www.exploringbinary.com/java-hangs-when-converting-2-2250738585072012e-308/
-         Java hangs when converting 2.2250738585072012e-308
-         This test should be enabled once the Java jre is patched.
-
-                test.converter07,
-    -->
 
     <target name="test.init">
         <mkdir dir="${impl.test.results.dir}"/>
@@ -172,32 +158,6 @@ PENDING(edburns): This test doesn't run on GlassFish 4.0. Fix it.
         </jsf.junit>
     </target>
 
-    <target name="test.path"
-            description="Test Path Handling">
-        <jsf.junit context-path="${context.path}"
-                   classpath-refid="html.classpath"
-                   test-results-dir="${impl.test.results.dir}">
-            <tests>
-                <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/pathtest/*TestCase.class"
-                         excludes="com/sun/faces/pathtest/PathTestCase.class"/>
-            </tests>
-        </jsf.junit>       
-    </target>
-
-    <target name="test.config"
-            description="Test config loading facility">
-
-        <jsf.junit context-path="${context.path}"
-                   classpath-refid="html.classpath"
-                   test-results-dir="${impl.test.results.dir}">
-            <tests>
-                <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/systest/jsp/config/*TestCase.class"/>
-            </tests>
-        </jsf.junit>
-    </target>
-
     <target name="test.managed"
             description="Test managed bean creation facility">
 
@@ -251,21 +211,6 @@ PENDING(edburns): This test doesn't run on GlassFish 4.0. Fix it.
 
     </target>
     
-      <target name="test.formomitted"
-            description="Test missing form">
-        
-        <jsf.junit context-path="${context.path}"
-                   classpath-refid="html.classpath"
-                   test-results-dir="${impl.test.results.dir}">
-            <tests>
-                <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/systest/FormOmittedTestCase.class"/>
-            </tests>
-        </jsf.junit>         
-        
-
-    </target>
-
     <target name="test.state"
             description="Test new state manager">
         
@@ -279,57 +224,6 @@ PENDING(edburns): This test doesn't run on GlassFish 4.0. Fix it.
         </jsf.junit>  
 
     </target>
-
-    <target name="test.valuechange"
-            description="Test ValueChangeListeners">
-
-        <jsf.junit context-path="${context.path}"
-                   classpath-refid="html.classpath"
-                   test-results-dir="${impl.test.results.dir}">
-            <tests>
-                <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/jsptest/ValueChangeListenerTestCase.class"/>
-            </tests>
-        </jsf.junit>
-    </target>
-
-    <target name="test.converter02"
-            description="Test passing Converter instances to component tag">
-
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/faces/converter02.jsp"
-              regexpFile="${regexp.path}/converter02.txt"/>
-    </target>
-
-    <target name="test.converter05">
-        <jsf.junit context-path="${context.path}"
-                   classpath-refid="html.classpath"
-                   test-results-dir="${impl.test.results.dir}">
-            <tests>
-                <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/systest/jsp/converter/*TestCase.class"/> 
-            </tests>
-        </jsf.junit>
-
-    </target>
-
-    <target name="test.converter06">
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/faces/converter06.jsp"
-              regexpFile="${regexp.path}/converter06.txt"/>
-    </target>
-
-    <!-- Special double converter test that addresses java jre issue outlined here:
-         http://www.exploringbinary.com/java-hangs-when-converting-2-2250738585072012e-308/
-         Java hangs when converting 2.2250738585072012e-308
-         This test should be enabled once the Java jre is patched.
-      
-    <target name="test.converter07">
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/faces/converter07.jsp"
-              regexpFile="${regexp.path}/converter07.txt"/>
-    </target>
-    -->
 
     <target name="test.ajax"
             description="Test Ajax Functionality">
@@ -415,29 +309,7 @@ PENDING(edburns): This test doesn't run on GlassFish 4.0. Fix it.
 
     </target>
 
-
-    <target name="test.standard"
-            description="Test the Standard RenderKit">
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" 
-              request="/faces/standard/messages01.jsp"
-              regexpFile="${regexp.path}/standard/messages01.txt"/>
-
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              context-path="${context.path}" request="/faces/standard/messages02.jsp"
-              regexpFile="${regexp.path}/standard/messages02.txt"/>
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              regexpFile="${regexp.path}/standard/component01.txt"
-              context-path="${context.path}" request="/faces/standard/component01.jsp"/>
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-              regexpFile="${regexp.path}/standard/autocomplete.txt"
-              context-path="${context.path}" request="/faces/standard/autocomplete.jsp"/>
-        <jsf.tester classpath-refid="html.classpath" test-results-dir="${impl.test.results.dir}"
-            regexpFile="${regexp.path}/standard/dtablecolumnclasses.txt"
-            context-path="${context.path}" request="/faces/standard/dtablecolumnclasses.jsp"/> 
-    </target>
-
-     <target name="passthru" depends="define.scenario.aware.port">
+    <target name="passthru" depends="define.scenario.aware.port">
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
                    test-results-dir="${impl.test.results.dir}">
