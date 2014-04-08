@@ -57,7 +57,7 @@
         <h:column>
 
             <f:facet name="header" id="facet">
-                <h:outputText value="#{component.parent.class.name}" id="nameHeader"/>
+                <h:outputText value="#{component.parent.getClass().name}" id="nameHeader"/>
             </f:facet>
 
             <h:outputText value="#{cur.name}" id="nameColumn"/>
