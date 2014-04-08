@@ -100,26 +100,6 @@ public class ViewRootPhaseListenerITCase extends HtmlUnitFacesITCase {
 
     // ------------------------------------------------- Individual Test Methods
 
-    public void testViewTagListeners() throws Exception {
-//        HtmlPage page = getPage("/faces/viewTagListeners.jsp");
-//
-//        assertTrue(-1 != page.asText().indexOf("beforePhaseEvent: beforePhase: RENDER_RESPONSE 6."));
-//        assertTrue(-1 != page.asText().indexOf("afterPhaseEvent: ."));
-//
-//        List list;
-//
-//        HtmlSubmitInput button = null;
-//        list = getAllElementsOfGivenClass(page, null,
-//                HtmlSubmitInput.class);
-//        button = (HtmlSubmitInput) list.get(0);
-//        page = (HtmlPage) button.click();
-//
-//        assertTrue(-1 != page.asText().indexOf("beforePhaseEvent: beforePhase: APPLY_REQUEST_VALUES 2 beforePhase: PROCESS_VALIDATIONS 3 beforePhase: UPDATE_MODEL_VALUES 4 beforePhase: INVOKE_APPLICATION 5 beforePhase: RENDER_RESPONSE 6."));
-//        assertTrue(-1 != page.asText().indexOf("afterPhaseEvent: afterPhase: APPLY_REQUEST_VALUES 2 afterPhase: PROCESS_VALIDATIONS 3 afterPhase: UPDATE_MODEL_VALUES 4 afterPhase: INVOKE_APPLICATION 5."));
-//
-//
-    }
-
     public void testListenerTagListenersType() throws Exception {
         HtmlPage page = getPage("/faces/listenerTagListenersType.jsp");
         doTestListenerTagListeners(page);

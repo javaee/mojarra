@@ -46,7 +46,7 @@ import javax.faces.validator.FacesValidator;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 
-//@FacesValidator
+@FacesValidator
 public class AnnotatedValidatorNoValue implements Validator {
     public void validate(FacesContext context,
                          UIComponent component,

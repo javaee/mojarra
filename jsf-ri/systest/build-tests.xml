@@ -62,18 +62,15 @@
     <property name="regexp.path" value="${basedir}/web/regexp"/>
 
     <!-- ======================== Test Execution ============================== -->
-    <!-- DO NOT REORDER test.annotations -->
+    
     <target name="test"
             description="Execute all tests against installed application"
             depends="define.scenario.aware.port,
-                test.annotations,
                 test.ajax,
                 test.composite,
                 test.init,
                 test.managed,
                 test.component,
-                test.navigation,
-                test.state,
                 test.jsp,  
                 test.jsf2jsp"
             />
@@ -93,17 +90,6 @@
         </jsf.junit>
     </target>
 
-    <target name="test.annotations">
-        <jsf.junit context-path="${context.path}"
-                   classpath-refid="html.classpath"
-                   test-results-dir="${impl.test.results.dir}">
-            <tests>
-                <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/annotation/AnnotatedComponentsTestCase.class"/> 
-            </tests>
-        </jsf.junit>
-    </target>
-
     <target name="test.jsp"
             description="Test JSP Integration">
         
@@ -112,15 +98,8 @@
                    test-results-dir="${impl.test.results.dir}">
             <tests>
                 <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/jsptest/ViewTagTestCase.class,
-                                   com/sun/faces/jsptest/CommandLinkNoFormTestCase.class,
-                                   com/sun/faces/jsptest/FormElTestCase.class,
-                                   com/sun/faces/jsptest/MissingActionListenerMethodTestCase.class,
-                                   com/sun/faces/jsptest/ConverterTestCase.class,
-                                   com/sun/faces/jsptest/IdRefTestCase.class,
-                                   com/sun/faces/jsptest/ForEachTestCase.class,
-                                   com/sun/faces/jsptest/SetPropertyTestCase.class,
-                                   com/sun/faces/jsptest/JspIntegrationTestCase2.class"/>
+                         includes="com/sun/faces/jsptest/IdRefTestCase.class,
+                                   com/sun/faces/jsptest/ForEachTestCase.class"/>
             </tests>
         </jsf.junit>       
     </target>
@@ -175,35 +154,6 @@
                          includes="com/sun/faces/systest/lifecycle/*TestCase.class"/>
             </tests>
         </jsf.junit>         
-    </target>
-
-    <target name="test.navigation"
-            description="Test navigation handler rule processing">
-        
-        <jsf.junit context-path="${context.path}"
-                   classpath-refid="html.classpath"
-                   test-results-dir="${impl.test.results.dir}">
-            <tests>
-                <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/systest/*NavigationTestCase.class"/>
-            </tests>
-        </jsf.junit>         
-        
-
-    </target>
-    
-    <target name="test.state"
-            description="Test new state manager">
-        
-        <jsf.junit context-path="${context.path}"
-                   classpath-refid="html.classpath"
-                   test-results-dir="${impl.test.results.dir}">
-            <tests>
-                <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/systest/state/*TestCase.class"/>
-            </tests>
-        </jsf.junit>  
-
     </target>
 
     <target name="test.ajax"

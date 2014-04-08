@@ -77,14 +77,12 @@ public class AnnotatedComponentsITCase extends HtmlUnitFacesITCase {
 
 
     public void testAnnotations() throws Exception {
-//
-//        HtmlPage page = getPage("/faces/annotationtest.xhtml");
-//        List<HtmlSpan> output = new ArrayList<HtmlSpan>(1);
-//        getAllElementsOfGivenClass(page, output, HtmlSpan.class);
-//        assertTrue(output.size() == 1);
-//        HtmlSpan span = output.get(0);
-//        assertTrue(span.asText().contains("true"));
-//        assertTrue(page.asText().contains("AnnotatedPhaseListener: Hello World from env-entry!"));
-//        
+        HtmlPage page = getPage("/faces/annotationtest.xhtml");
+        List<HtmlSpan> output = new ArrayList<HtmlSpan>(1);
+        getAllElementsOfGivenClass(page, output, HtmlSpan.class);
+        assertTrue(output.size() == 1);
+        HtmlSpan span = output.get(0);
+        assertTrue(span.asText().contains("true"));
+        assertTrue(page.asText().contains("AnnotatedPhaseListener: Hello World from env-entry!"));        
     }
 }

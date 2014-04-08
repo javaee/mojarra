@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,76 +37,56 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.jsptest;
 
-package com.sun.faces.systest;
-
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
+import java.util.List;
+import java.util.regex.Pattern;
+import static junit.framework.TestCase.assertTrue;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
+import org.junit.Ignore;
 
-public class ConditionalNavigationTestCase extends HtmlUnitFacesTestCase {
+public class ViewRootPhaseListenerIT {
 
+    private String webUrl;
+    private WebClient webClient;
 
-    public ConditionalNavigationTestCase(String name) {
-           super(name);
-       }
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
+    }
 
-       /**
-        * Set up instance variables required by this test case.
-        */
-       public void setUp() throws Exception {
-           super.setUp();
-       }
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
+    }
 
-
-       /**
-        * Return the tests included in this test suite.
-        */
-       public static Test suite() {
-           return (new TestSuite(ConditionalNavigationTestCase.class));
-       }
-
-
-       /**
-        * Tear down instance variables required by this test case.
-        */
-       public void tearDown() {
-           super.tearDown();
-       }
-
-
-       // ------------------------------------------------------------ Test Methods
-
-       public void testConditionalNavigation() throws Exception {
-
-           HtmlPage page = getPage("/faces/conditionalNav.xhtml");
-
-           HtmlCheckBoxInput checkbox = (HtmlCheckBoxInput)
-                   page.getElementById("checkbox");
-           checkbox.setChecked(true);
-           HtmlSubmitInput button = (HtmlSubmitInput)
-                   page.getElementById("submit");
-           page = button.click();
-           String text = page.asText();
-           assertTrue(text.contains("Success!"));
-
-           page = getPage("/faces/conditionalNav.xhtml");
-
-           checkbox = (HtmlCheckBoxInput)
-                   page.getElementById("checkbox");
-           checkbox.setChecked(false);
-           button = (HtmlSubmitInput)
-                   page.getElementById("submit");
-           page = button.click();
-           text = page.asText();
-           assertTrue(text.contains("Failure!"));
-
-
-
-       }
-
-
+    @Test
+    @Ignore
+    public void testViewTagListeners() throws Exception {
+//
+// TODO verifiy if this is indeed correct.
+//
+//        HtmlPage page = getPage("/faces/viewTagListeners.jsp");
+//
+//        assertTrue(-1 != page.asText().indexOf("beforePhaseEvent: beforePhase: RENDER_RESPONSE 6."));
+//        assertTrue(-1 != page.asText().indexOf("afterPhaseEvent: ."));
+//
+//        List list;
+//
+//        HtmlSubmitInput button = null;
+//        list = getAllElementsOfGivenClass(page, null,
+//                HtmlSubmitInput.class);
+//        button = (HtmlSubmitInput) list.get(0);
+//        page = (HtmlPage) button.click();
+//
+//        assertTrue(-1 != page.asText().indexOf("beforePhaseEvent: beforePhase: APPLY_REQUEST_VALUES 2 beforePhase: PROCESS_VALIDATIONS 3 beforePhase: UPDATE_MODEL_VALUES 4 beforePhase: INVOKE_APPLICATION 5 beforePhase: RENDER_RESPONSE 6."));
+//        assertTrue(-1 != page.asText().indexOf("afterPhaseEvent: afterPhase: APPLY_REQUEST_VALUES 2 afterPhase: PROCESS_VALIDATIONS 3 afterPhase: UPDATE_MODEL_VALUES 4 afterPhase: INVOKE_APPLICATION 5."));
+    }
 }
