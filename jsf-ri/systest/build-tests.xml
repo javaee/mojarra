@@ -69,7 +69,6 @@
                 test.annotations,
                 test.ajax,
                 test.composite,
-                test.facelets,
                 test.init,
                 test.managed,
                 test.component,
@@ -81,24 +80,6 @@
 
     <target name="test.init">
         <mkdir dir="${impl.test.results.dir}"/>
-    </target>
-        
-    <target name="test.facelets">
-        <jsf.junit context-path="${context.path}"
-                   classpath-refid="html.classpath"
-                   test-results-dir="${impl.test.results.dir}">
-            <tests>
-                <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/facelets/*TestCase.class" />
-
-<!--
-20130215 edburns
-PENDING(edburns): This test doesn't run on GlassFish 4.0. Fix it.
-                         excludes="com/sun/faces/facelets/ImplicitFacetTestCase.class"
-
--->
-            </tests>
-        </jsf.junit>
     </target>
 
     <target name="test.groovy">

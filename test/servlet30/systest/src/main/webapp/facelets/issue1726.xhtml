@@ -51,7 +51,7 @@
 </h:head>
 
 <h:body>
-
+    <h:outputText value="#{request.servletContext.serverInfo}"/>
     <h:dataTable value="#{issue1726.hobbitDataModel}" var="cur">
 
         <h:column>

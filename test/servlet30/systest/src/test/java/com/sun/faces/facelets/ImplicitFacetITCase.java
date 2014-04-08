@@ -121,13 +121,13 @@ public class ImplicitFacetITCase extends HtmlUnitFacesITCase {
      * Added for issue 1726.
      */
     public void testPostBack() throws Exception {
-//
-//        HtmlPage page = getPage("/faces/facelets/issue1726.xhtml") ;
-//        
-//        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button");
-//        page = button.click();
-//        String text = page.asText();
-//        assert(!text.contains("javax.faces.component.UIPanel"));
+        HtmlPage page = getPage("/faces/facelets/issue1726.xhtml");
+        if (!page.asXml().toUpperCase().contains("TOMCAT")) {
+            HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button");
+            page = button.click();
+            String text = page.asText();
+            assert(!text.contains("javax.faces.component.UIPanel"));
+        }
     }
 
     public void testConditionalImplicitFacetChild1727() throws Exception {
@@ -160,8 +160,10 @@ public class ImplicitFacetITCase extends HtmlUnitFacesITCase {
      * Tests h:column "rowHeader" tag attribute.
      */
     public void testColumnRowHeader() throws Exception {
-//         HtmlPage page = getPage("/faces/facelets/issue1726.xhtml");
-//         String xml = page.asXml();
-//         assertTrue(xml.contains("<th scope=\"row\">"));
+         HtmlPage page = getPage("/faces/facelets/issue1726.xhtml");
+         if (!page.asXml().toUpperCase().contains("TOMCAT")) {
+            String xml = page.asXml();
+            assertTrue(xml.contains("<th scope=\"row\">"));
+         }
     }
 }
