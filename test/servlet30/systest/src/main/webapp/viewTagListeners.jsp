@@ -51,7 +51,7 @@
       <title>listener methods on f:view</title>
     </head>
     <body>
-      <h:form>
+      <h:form id="form">
 
         <h2>About this test</h2>
 
@@ -78,7 +78,7 @@
 
         <p>afterPhaseEvent: <h:outputText value="#{afterPhaseEvent}"/>.</p>
 
-        <p><h:commandButton value="redisplay" /></p>
+        <p><h:commandButton id="redisplay" value="redisplay" /></p>
         
       </h:form>
      

@@ -40,15 +40,13 @@
 package com.sun.faces.jsptest;
 
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlButton;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import java.util.List;
-import java.util.regex.Pattern;
 import static junit.framework.TestCase.assertTrue;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import org.junit.Ignore;
 
 public class ViewRootPhaseListenerIT {
@@ -68,25 +66,16 @@ public class ViewRootPhaseListenerIT {
     }
 
     @Test
-    @Ignore
     public void testViewTagListeners() throws Exception {
-//
-// TODO verifiy if this is indeed correct.
-//
-//        HtmlPage page = getPage("/faces/viewTagListeners.jsp");
-//
-//        assertTrue(-1 != page.asText().indexOf("beforePhaseEvent: beforePhase: RENDER_RESPONSE 6."));
-//        assertTrue(-1 != page.asText().indexOf("afterPhaseEvent: ."));
-//
-//        List list;
-//
-//        HtmlSubmitInput button = null;
-//        list = getAllElementsOfGivenClass(page, null,
-//                HtmlSubmitInput.class);
-//        button = (HtmlSubmitInput) list.get(0);
-//        page = (HtmlPage) button.click();
-//
-//        assertTrue(-1 != page.asText().indexOf("beforePhaseEvent: beforePhase: APPLY_REQUEST_VALUES 2 beforePhase: PROCESS_VALIDATIONS 3 beforePhase: UPDATE_MODEL_VALUES 4 beforePhase: INVOKE_APPLICATION 5 beforePhase: RENDER_RESPONSE 6."));
-//        assertTrue(-1 != page.asText().indexOf("afterPhaseEvent: afterPhase: APPLY_REQUEST_VALUES 2 afterPhase: PROCESS_VALIDATIONS 3 afterPhase: UPDATE_MODEL_VALUES 4 afterPhase: INVOKE_APPLICATION 5."));
+        HtmlPage page = webClient.getPage(webUrl + "faces/viewTagListeners.jsp");
+
+        assertTrue(-1 != page.asText().indexOf("beforePhaseEvent: beforePhase: RENDER_RESPONSE 6."));
+        assertTrue(-1 != page.asText().indexOf("afterPhaseEvent: ."));
+
+        HtmlSubmitInput button = page.getHtmlElementById("form:redisplay");
+        page = (HtmlPage) button.click();
+
+        assertTrue(-1 != page.asText().indexOf("beforePhaseEvent: beforePhase: APPLY_REQUEST_VALUES 2 beforePhase: PROCESS_VALIDATIONS 3 beforePhase: UPDATE_MODEL_VALUES 4 beforePhase: INVOKE_APPLICATION 5 beforePhase: RENDER_RESPONSE 6."));
+        assertTrue(-1 != page.asText().indexOf("afterPhaseEvent: afterPhase: RESTORE_VIEW 1 afterPhase: APPLY_REQUEST_VALUES 2 afterPhase: PROCESS_VALIDATIONS 3 afterPhase: UPDATE_MODEL_VALUES 4 afterPhase: INVOKE_APPLICATION 5."));
     }
 }
