@@ -47,7 +47,6 @@ import com.sun.faces.test.junit.JsfTestRunner;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.Ignore;
 import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
 
@@ -69,7 +68,6 @@ public class Issue3205IT {
     }
 
     @Test
-    @Ignore
     public void testNotFound() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/viewParamListener_first.xhtml");
         HtmlAnchor link = page.getElementById("myHref", true);
