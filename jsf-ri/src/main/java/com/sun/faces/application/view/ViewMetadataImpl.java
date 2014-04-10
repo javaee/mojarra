@@ -48,11 +48,6 @@ import com.sun.faces.context.FacesFileNotFoundException;
 
 import com.sun.faces.facelets.impl.DefaultFaceletFactory;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import javax.faces.view.ViewMetadata;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
@@ -91,41 +86,6 @@ public class ViewMetadataImpl extends ViewMetadata {
         return viewId;
 
     }
-    
-    private static class EntryImpl<K,V> implements Map.Entry<K,V> {
-        
-        private K key;
-        private V value;
-        
-        public EntryImpl(K key, V value) {
-            this.key = key;
-            this.value = value;
-        }
-
-        @Override
-        public K getKey() {
-            return key;            
-        }
-
-        @Override
-        public V getValue() {
-            return value;
-        }
-
-        @Override
-        public V setValue(V value) {
-            V result = this.value;
-            this.value = value;
-            return result;
-        }
-        
-        public K setKey(K key) {
-            K result = this.key;
-            this.key = key;
-            return result;
-        }
-        
-    }
 
     /**
      * @see javax.faces.view.ViewMetadata#createMetadataView(javax.faces.context.FacesContext)
@@ -134,7 +94,6 @@ public class ViewMetadataImpl extends ViewMetadata {
     public UIViewRoot createMetadataView(FacesContext context) {
 
         UIViewRoot result = null;
-        UIViewRoot currentViewRoot = context.getViewRoot();
 
         try {
             context.setProcessingEvents(false);
@@ -151,19 +110,6 @@ public class ViewMetadataImpl extends ViewMetadata {
             // StateContext.partialStateSaving() can determine the current
             // view. 
             context.getAttributes().put(RIConstants.VIEWID_KEY_NAME, viewId);
-            
-            // If the currentViewRoot has a viewMap, make sure the entries are
-            // copied to the temporary UIViewRoot before invoking handlers.
-            if (null != currentViewRoot) {
-                Map<String, Object> currentViewMap = 
-                        currentViewRoot.getViewMap(false);
-                if (null != currentViewMap && !currentViewMap.isEmpty()) {
-                    Map<String, Object> resultViewMap = result.getViewMap(true);
-                    resultViewMap.putAll(currentViewMap);
-                }
-            }
-            
-            context.setViewRoot(result);
 
             Facelet f = faceletFactory.getMetadataFacelet(context, result.getViewId());
 
@@ -178,8 +124,11 @@ public class ViewMetadataImpl extends ViewMetadata {
         } finally {
             context.getAttributes().remove(RIConstants.VIEWID_KEY_NAME);
             context.setProcessingEvents(true);
+            if (null != currentViewRoot) {
+                context.setViewRoot(currentViewRoot);
+            }
+            
         }
-
 
         return result;
         
