@@ -69,14 +69,13 @@ public class Issue3205IT {
     }
 
     @Test
-    @Ignore
     public void testNotFound() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/viewParamListener_first.xhtml");
         HtmlAnchor link = page.getElementById("myHref", true);
         page = link.click();
         
         HtmlSubmitInput button = page.getElementById("postbackButton", true);
-        page = button.click();
+        button.click();
         assertTrue(true);
     }
 }
