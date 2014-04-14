@@ -111,7 +111,6 @@ public class IssueReplaceVariableResolverAndAddELResolverProgrammaticallyIT {
      * <p>Verify that the bean is successfully resolved</p>
      */
     @Test
-    @Ignore
     public void testReplaceVariableResolverAndAddELResolverProgrammatically() throws Exception {
 	HtmlPage page = webClient.getPage(webUrl + "faces/test.jsp");
 	assertTrue(-1 != page.asText().indexOf("Invoking the variable resolver chain: success."));
@@ -129,16 +128,16 @@ public class IssueReplaceVariableResolverAndAddELResolverProgrammaticallyIT {
 
         String [] orderedListOfStringsToFindInPage = {
             "FacesELResolverForFaces",
-            "el.ImplicitObjectELResolver.getValue(ImplicitObjectELResolver.java)",
-            "el.VariableResolverChainWrapper.getValue(VariableResolverChainWrapper.java)",
-            "NewVariableResolver.resolveVariable(NewVariableResolver.java)",
-            "NewELResolver.getValue(NewELResolver.java)",
-            "el.ManagedBeanELResolver.resolveBean(ManagedBeanELResolver.java)",
-            "el.FacesResourceBundleELResolver.getValue(FacesResourceBundleELResolver.java)",
-            "el.ScopedAttributeELResolver.getValue(ScopedAttributeELResolver.java)",
+            "el.ImplicitObjectELResolver.getValue",
+            "el.VariableResolverChainWrapper.getValue",
+            "NewVariableResolver.resolveVariable",
+            "NewELResolver.getValue",
+            "el.ManagedBeanELResolver.resolveBean",
+            "el.FacesResourceBundleELResolver.getValue",
+            "el.ScopedAttributeELResolver.getValue",
             "FacesELResolverForJsp",
-            "NewVariableResolver.resolveVariable(NewVariableResolver.java)",
-            "NewELResolver.getValue(NewELResolver.java)"
+            "NewVariableResolver.resolveVariable",
+            "NewELResolver.getValue"
         };
         boolean [] foundFlags = new boolean[orderedListOfStringsToFindInPage.length];
         int i,j;
