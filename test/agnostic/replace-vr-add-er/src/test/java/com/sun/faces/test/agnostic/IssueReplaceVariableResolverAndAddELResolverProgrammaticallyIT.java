@@ -111,6 +111,7 @@ public class IssueReplaceVariableResolverAndAddELResolverProgrammaticallyIT {
      * <p>Verify that the bean is successfully resolved</p>
      */
     @Test
+    @Ignore
     public void testReplaceVariableResolverAndAddELResolverProgrammatically() throws Exception {
 	HtmlPage page = webClient.getPage(webUrl + "faces/test.jsp");
 	assertTrue(-1 != page.asText().indexOf("Invoking the variable resolver chain: success."));
