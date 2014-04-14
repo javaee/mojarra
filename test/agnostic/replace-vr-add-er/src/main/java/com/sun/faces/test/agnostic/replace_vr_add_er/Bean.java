@@ -139,7 +139,7 @@ public class Bean {
             StackTraceElement cur = stackTrace[i];
             stackTraceElement = cur.toString();
             if (!(stackTraceElement.contains("Thread") ||
-                  stackTraceElement.contains("com.sun.faces.systest.Bean"))) {
+                  stackTraceElement.contains(Bean.class.getCanonicalName()))) {
                 message.append("<p>").append(stackTraceElement).append("</p>");
                 break;
             }
