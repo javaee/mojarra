@@ -47,6 +47,7 @@
       xmlns:ezb="http://java.sun.com/jsf/composite/ezbehaviors"
       xmlns:b="http://mojarra.dev.java.net/composite-behavior">
       <h:form id="form">
+        Project Stage: <h:outputText value="#{facesContext.application.projectStage}"/> <br/>
         <ezb:compositeTest id="composite" commandAction="#{compositeBehaviorTestBean.doAction}">
               	<b:behavior event="ok"/>        
                 <f:validateLength for="input" minimum="3" />

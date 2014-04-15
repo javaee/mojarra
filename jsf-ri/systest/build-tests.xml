@@ -66,7 +66,6 @@
     <target name="test"
             description="Execute all tests against installed application"
             depends="define.scenario.aware.port,
-                test.ajax,
                 test.composite,
                 test.init,
                 test.managed,
@@ -156,19 +155,6 @@
         </jsf.junit>         
     </target>
 
-    <target name="test.ajax"
-            description="Test Ajax Functionality">
-
-            <jsf.junit context-path="${context.path}"
-                   classpath-refid="html.classpath"
-                   test-results-dir="${impl.test.results.dir}">
-            <tests>
-                <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/ajax/*TestCase.class"                         />
-            </tests>
-        </jsf.junit>
-    </target>
-
     <target name="test.component"
             description="Test Component creation facility">
                 
@@ -208,8 +194,6 @@
             <tests>
                 <fileset dir="${basedir}/build/classes"
                          includes="com/sun/faces/composite/*TestCase.class"/>
-                <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/systest/composite/behavior/*TestCase.class"/>
                 <fileset dir="${basedir}/build/classes"
                          includes="com/sun/faces/systest/composite/*TestCase.class"/>
 

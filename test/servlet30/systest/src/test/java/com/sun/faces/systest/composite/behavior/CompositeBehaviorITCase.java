@@ -67,23 +67,23 @@ public class CompositeBehaviorITCase extends HtmlUnitFacesITCase {
 
     public void test01() throws Exception {
 
-//        HtmlPage page = getPage("/faces/composite/behavior/composite.xhtml");
-//        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form:composite:cancel");
-//        page = button.click();
-//        assertTrue("Page does not contain validation message after clicking cancel button.",
-//                page.asText().contains("Length"));
-//        button = (HtmlSubmitInput) page.getElementById("form:composite:sub:commandAction");
-//        page = button.click();
-//        assertTrue("Page does not contain validation message after clicking ok with no text in textfield button.",
-//                page.asText().contains("Length"));
-//        button = (HtmlSubmitInput) page.getElementById("form:composite:sub:commandAction");
-//        HtmlTextInput textField = (HtmlTextInput) page.getElementById("form:composite:input");
-//        textField.setValueAttribute("more than three characters");
-//        page = button.click();
-//        assertTrue("Can't find the message: \"Reaching this page indicates that the method expression retargeting was successful.\"",
-//                page.asText().contains("Reaching this page indicates that the method expression retargeting was successful."));
-//
-//
+        HtmlPage page = getPage("/faces/composite/behavior/composite.xhtml");
+        if (page.asXml().contains("Project Stage: Development")) {
+            HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form:composite:cancel");
+            page = button.click();
+            assertTrue("Page does not contain validation message after clicking cancel button.",
+                    page.asXml().contains("Length"));
+            button = (HtmlSubmitInput) page.getElementById("form:composite:sub:commandAction");
+            page = button.click();
+            assertTrue("Page does not contain validation message after clicking ok with no text in textfield button.",
+                    page.asXml().contains("Length"));
+            button = (HtmlSubmitInput) page.getElementById("form:composite:sub:commandAction");
+            HtmlTextInput textField = (HtmlTextInput) page.getElementById("form:composite:input");
+            textField.setValueAttribute("more than three characters");
+            page = button.click();
+            assertTrue("Can't find the message: \"Reaching this page indicates that the method expression retargeting was successful.\"",
+                    page.asXml().contains("Reaching this page indicates that the method expression retargeting was successful."));
+        }
     }
 
 }

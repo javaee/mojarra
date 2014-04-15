@@ -54,6 +54,7 @@
 </h:head>
 <body>
     <h:form id="form">
+        Project Stage: <h:outputText value="#{facesContext.application.projectStage}"/>
         <h:commandButton id="error" value="Error" action="#{errorBean.error}">
             <f:ajax execute="@this" render="@none"/>
         </h:commandButton>
