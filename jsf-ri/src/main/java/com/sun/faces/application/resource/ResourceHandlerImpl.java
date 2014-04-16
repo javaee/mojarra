@@ -308,7 +308,10 @@ public class ResourceHandlerImpl extends ResourceHandler {
             assert(resourceName != null);
             libraryName = context.getExternalContext().getRequestParameterMap()
                   .get("ln");
-            resource = context.getApplication().getResourceHandler().createResource(resourceName, libraryName);
+            
+            if ((libraryName != null && !libraryName.startsWith(".")) || libraryName == null) {
+                resource = context.getApplication().getResourceHandler().createResource(resourceName, libraryName);
+            }
         }
 
         if (resource != null) {
