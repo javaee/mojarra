@@ -61,7 +61,8 @@
     <modules>
         <module>mapping</module>
         <module>navigation</module>
-	<module>systest</module>
-    <module>ajax</module>
+        <module>systest</module>
+        <module>ajax</module>
+    <module>el</module>
   </modules>
 </project>

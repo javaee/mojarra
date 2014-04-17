@@ -38,7 +38,7 @@
  * holder.
 
  */
-package com.sun.faces.test.agnostic.el.issue2989;
+package com.sun.faces.test.agnostic.el;
 
 import java.util.Date;
 import javax.el.ELContext;
