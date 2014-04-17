@@ -37,55 +37,65 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.el;
+package com.sun.faces.test.servlet30.el;
 
-import javax.faces.component.UIViewRoot;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.SystemEvent;
-import javax.faces.event.SystemEventListener;
-import java.util.Map;
 
 /**
- * A system event listener that registers as a preRenderComponent event listener.
+ * A ViewScoped bean testing session invalidation functionality.
  */
-public class ViewInitFacesListener implements SystemEventListener {
+@ManagedBean(name = "viewInvalidatedBean")
+@ViewScoped
+public class ViewInvalidatedBean {
+
+    /**
+     * Stores the text.
+     */
+    private String text;
+
     /**
      * Constructor.
      */
-    public ViewInitFacesListener() {
-        FacesContext fc = FacesContext.getCurrentInstance();
-        UIViewRoot viewRoot = fc.getViewRoot();
-        if (viewRoot != null) {
-            Map viewMap = viewRoot.getViewMap();
-            if (viewMap != null) {
-                if (FacesContext.getCurrentInstance() != null &&
-                        FacesContext.getCurrentInstance().getClass().getName().equals("com.sun.faces.config.InitFacesContext")) {
-                    FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().put("viewMapCreated", "Yes");
-                }
-            }
+    public ViewInvalidatedBean() {
+        this.text = "This is from the constructor";
+    }
+
+    /**
+     * Post-construct.
+     *
+     */
+    @PostConstruct
+    public void init() {
+        FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().remove("invalidated");
+        this.text = "This is from the @PostConstruct";
+    }
+
+    /**
+     * Pre-destroy
+     */
+    @PreDestroy
+    public void destroy() {
+        /*
+         * For the purpose of the test we can actually ask for the current 
+         * instance of the FacesContext, because we trigger invalidating of the 
+         * session through a JSF page, however in the normal case of session 
+         * invalidation this will NOT be true. So this means that normally the 
+         * @PreDestroy annotated method should not try to use 
+         * FacesContext.getCurrentInstance().
+         */
+        if (FacesContext.getCurrentInstance() != null) {
+            FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().put("invalidated", true);
         }
     }
 
     /**
-     * Process the event.
-     * 
-     * @param event the system event.
-     * @throws AbortProcessingException when processing needs to be aborted.
+     * Get the text.
      */
-    public void processEvent(SystemEvent event) throws AbortProcessingException {
-    }
-
-    /**
-     * Is a listener for source.
-     * 
-     * @param source the source.
-     * @return true or false.
-     */
-    public boolean isListenerForSource(Object source) {
-        if (source instanceof UIViewRoot) {
-            return true;
-        }
-        return false;
+    public String getText() {
+        return this.text;
     }
 }

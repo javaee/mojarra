@@ -37,34 +37,36 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.el;
+package com.sun.faces.test.servlet30.el;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-/**
- * A ViewScoped bean testing constructor functionality.
- */
-@ManagedBean(name = "viewConstructorBean")
-@ViewScoped
-public class ViewConstructorBean {
+public class Issue2644IT {
 
-    /**
-     * Stores the text.
-     */
-    private String text;
-    
-    /**
-     * Constructor.
-     */
-    public ViewConstructorBean() {
-        this.text = "This is constructed";
+    private String webUrl;
+    private WebClient webClient;
+
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
+        webClient.setJavaScriptEnabled(true);
+        webClient.setJavaScriptTimeout(60000);
     }
-    
-    /**
-     * Get the text.
-     */
-    public String getText() {
-        return this.text;
+
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
+    }
+
+    @Test
+    public void testInitFaces() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/viewInitFaces.xhtml");
+        assertTrue(page.asText().indexOf("We are OK") != -1);
     }
 }

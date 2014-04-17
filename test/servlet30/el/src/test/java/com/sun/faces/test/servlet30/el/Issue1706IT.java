@@ -37,44 +37,45 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.el;
+package com.sun.faces.test.servlet30.el;
 
-import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-/**
- * A ViewScoped bean testing navigate functionality.
- */
-@ManagedBean(name = "viewNavigateBean")
-@ViewScoped
-public class ViewNavigateBean {
+public class Issue1706IT {
 
-    /**
-     * Stores the text.
-     */
-    private String text;
-    
-    /**
-     * Constructor.
-     */
-    public ViewNavigateBean() {
-        this.text = "This is from the constructor";
+    private String webUrl;
+    private WebClient webClient;
+
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
+        webClient.setJavaScriptEnabled(true);
+        webClient.setJavaScriptTimeout(60000);
     }
-    
-    /**
-     * Post-construct.
-     * 
-     */
-    @PostConstruct
-    public void init() {
-        this.text = "This is from the @PostConstruct";
+
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
     }
-    
-    /**
-     * Get the text.
-     */
-    public String getText() {
-        return this.text;
+
+    @Test
+    public void testVerbatim() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/viewVerbatim.xhtml");
+        String text = page.asText();
+        text = text.substring(text.indexOf("Hash='") + "Hash='".length());
+        text = text.substring(0, text.indexOf("'"));
+        HtmlElement button = page.getHtmlElementById("form:button");
+        page = button.click();
+        String text2 = page.asText();
+        text2 = text2.substring(text2.indexOf("Hash='") + "Hash='".length());
+        text2 = text2.substring(0, text2.indexOf("'"));
+        assertEquals(text, text2);
     }
 }

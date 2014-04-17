@@ -37,36 +37,28 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.el;
+package com.sun.faces.test.servlet30.el;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import java.io.Serializable;
 
-public class Issue2644IT {
+public class SetNullTestBean implements Serializable {
 
-    private String webUrl;
-    private WebClient webClient;
+    private SetNullInnerTestBean inner;
+    private Object one;
 
-    @Before
-    public void setUp() {
-        webUrl = System.getProperty("integration.url");
-        webClient = new WebClient();
-        webClient.setJavaScriptEnabled(true);
-        webClient.setJavaScriptTimeout(60000);
+    public SetNullInnerTestBean getInner() {
+        return this.inner;
     }
 
-    @After
-    public void tearDown() {
-        webClient.closeAllWindows();
+    public Object getOne() {
+        return this.one;
     }
 
-    @Test
-    public void testInitFaces() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/viewInitFaces.xhtml");
-        assertTrue(page.asText().indexOf("We are OK") != -1);
+    public void setInner(SetNullInnerTestBean inner) {
+        this.inner = inner;
+    }
+
+    public void setOne(Object one) {
+        this.one = one;
     }
 }

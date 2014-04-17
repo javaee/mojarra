@@ -37,65 +37,47 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.el;
+package com.sun.faces.test.servlet30.el;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 
-/**
- * A ViewScoped bean testing session invalidation functionality.
- */
-@ManagedBean(name = "viewInvalidatedBean")
+@ManagedBean(name = "viewVerbatimBean")
 @ViewScoped
-public class ViewInvalidatedBean {
+public class ViewVerbatimBean {
 
     /**
-     * Stores the text.
-     */
-    private String text;
-
-    /**
-     * Constructor.
-     */
-    public ViewInvalidatedBean() {
-        this.text = "This is from the constructor";
-    }
-
-    /**
-     * Post-construct.
-     *
+     * Initialize the bean.
      */
     @PostConstruct
     public void init() {
-        FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().remove("invalidated");
-        this.text = "This is from the @PostConstruct";
     }
 
     /**
-     * Pre-destroy
+     * Update the time.
+     *
+     * @param ae the action event.
      */
-    @PreDestroy
-    public void destroy() {
-        /*
-         * For the purpose of the test we can actually ask for the current 
-         * instance of the FacesContext, because we trigger invalidating of the 
-         * session through a JSF page, however in the normal case of session 
-         * invalidation this will NOT be true. So this means that normally the 
-         * @PreDestroy annotated method should not try to use 
-         * FacesContext.getCurrentInstance().
-         */
-        if (FacesContext.getCurrentInstance() != null) {
-            FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().put("invalidated", true);
-        }
+    public void updateTime(ActionEvent ae) {
     }
 
     /**
-     * Get the text.
+     * Get the time.
+     *
+     * @return the time.
      */
-    public String getText() {
-        return this.text;
+    public String getTime() {
+        return Long.toString(System.currentTimeMillis());
+    }
+
+    /**
+     * Get the bean hash.
+     *
+     * @return the bean hash.
+     */
+    public String getBeanHash() {
+        return this.toString();
     }
 }

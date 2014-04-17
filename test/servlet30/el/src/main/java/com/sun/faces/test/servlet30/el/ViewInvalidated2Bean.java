@@ -37,47 +37,55 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.el;
+package com.sun.faces.test.servlet30.el;
 
-import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.event.ActionEvent;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
 
-@ManagedBean(name = "viewVerbatimBean")
+/**
+ * A ViewScoped bean testing session invalidation functionality.
+ */
+@ManagedBean(name = "viewInvalidated2Bean")
 @ViewScoped
-public class ViewVerbatimBean {
+public class ViewInvalidated2Bean {
 
     /**
-     * Initialize the bean.
+     * Stores the invalidated attribute name.
      */
-    @PostConstruct
-    public void init() {
+    private static final String INVALIDATED_ATTRIBUTE = "com.sun.faces.test.servlet30.el.Invalidated2";
+    /**
+     * Stores the local count.
+     */
+    private int count;
+
+    /**
+     * Constructor.
+     */
+    public ViewInvalidated2Bean() {
+        FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().remove(INVALIDATED_ATTRIBUTE);
+        FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().put(INVALIDATED_ATTRIBUTE, false);
     }
 
     /**
-     * Update the time.
-     *
-     * @param ae the action event.
+     * Action that invalidates the session.
      */
-    public void updateTime(ActionEvent ae) {
+    public String doInvalidate() {
+        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+        if (session != null) {
+            session.invalidate();
+            FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().put(INVALIDATED_ATTRIBUTE, true);
+        }
+        return "";
     }
 
     /**
-     * Get the time.
+     * Get the count.
      *
-     * @return the time.
+     * @return the count.
      */
-    public String getTime() {
-        return Long.toString(System.currentTimeMillis());
-    }
-
-    /**
-     * Get the bean hash.
-     *
-     * @return the bean hash.
-     */
-    public String getBeanHash() {
-        return this.toString();
+    public int getCount() {
+        return count;
     }
 }

@@ -37,53 +37,40 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.el;
+package com.sun.faces.test.servlet30.el;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 
 /**
- * A ViewScoped bean testing navigate away functionality.
+ * A ViewScoped bean testing navigate functionality.
  */
-@ManagedBean(name = "viewNavigateAwayBean")
+@ManagedBean(name = "viewNavigateBean")
 @ViewScoped
-public class ViewNavigateAwayBean {
+public class ViewNavigateBean {
 
     /**
      * Stores the text.
      */
     private String text;
-
+    
     /**
      * Constructor.
      */
-    public ViewNavigateAwayBean() {
+    public ViewNavigateBean() {
         this.text = "This is from the constructor";
     }
-
+    
     /**
      * Post-construct.
-     *
+     * 
      */
     @PostConstruct
     public void init() {
-        FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().remove("navigatedAway");
         this.text = "This is from the @PostConstruct";
     }
-
-    /**
-     * Pre-destroy
-     */
-    @PreDestroy
-    public void destroy() {
-        if (FacesContext.getCurrentInstance() != null) {
-            FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().put("navigatedAway", true);
-        }
-    }
-
+    
     /**
      * Get the text.
      */

@@ -38,7 +38,7 @@
  * holder.
 
  */
-package com.sun.faces.test.agnostic.el;
+package com.sun.faces.test.servlet30.el;
 
 import java.util.Date;
 import javax.el.ELContext;
@@ -47,7 +47,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.NoneScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.servlet.jsp.PageContext;
 
 @ManagedBean
 @NoneScoped

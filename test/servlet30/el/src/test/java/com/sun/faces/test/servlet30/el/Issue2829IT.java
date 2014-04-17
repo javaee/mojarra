@@ -37,21 +37,16 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.el;
+package com.sun.faces.test.servlet30.el;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.sun.faces.test.junit.JsfTest;
-import com.sun.faces.test.junit.JsfTestRunner;
-import com.sun.faces.test.junit.JsfVersion;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.runner.RunWith;
 
-@RunWith(JsfTestRunner.class)
-public class Issue2989IT {
+public class Issue2829IT {
 
     private String webUrl;
     private WebClient webClient;
@@ -67,10 +62,39 @@ public class Issue2989IT {
         webClient.closeAllWindows();
     }
 
-    @JsfTest(JsfVersion.JSF_2_2_3)
     @Test
-    public void testSetNull1() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/issue2989.jsp");
-        assertTrue(page.asXml().indexOf("PASSED") != -1);
+    public void testValueBindingSet() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/valueBindingSet1.xhtml");
+        assertTrue(page.asXml().indexOf("one") != -1);
+    }
+
+    @Test
+    public void testValueBindingSetNull() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/valueBindingSet2.xhtml");
+        assertTrue(page.asXml().indexOf("NULL") != -1);
+    }
+
+    @Test
+    public void testValueBindingSetMapNotation() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/valueBindingSet3.xhtml");
+        assertTrue(page.asXml().indexOf("three") != -1);
+    }
+
+    @Test
+    public void testValueBindingSetNullMapNotation() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/valueBindingSet4.xhtml");
+        assertTrue(page.asXml().indexOf("NULL") != -1);
+    }
+
+    @Test
+    public void testValueBindingSetDoesNotExist() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/valueBindingSet5.xhtml");
+        assertTrue(page.asXml().indexOf("five") != -1);
+    }
+
+    @Test
+    public void testValueBindingSetSessionVariable() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/valueBindingSet6.xhtml");
+        assertTrue(page.asXml().indexOf("six") != -1);
     }
 }

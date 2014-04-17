@@ -37,64 +37,57 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.el;
+package com.sun.faces.test.servlet30.el;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 
-public class Issue2829IT {
+/**
+ * A ViewScoped bean testing navigate away functionality.
+ */
+@ManagedBean(name = "viewNavigateAwayBean")
+@ViewScoped
+public class ViewNavigateAwayBean {
 
-    private String webUrl;
-    private WebClient webClient;
+    /**
+     * Stores the text.
+     */
+    private String text;
 
-    @Before
-    public void setUp() {
-        webUrl = System.getProperty("integration.url");
-        webClient = new WebClient();
+    /**
+     * Constructor.
+     */
+    public ViewNavigateAwayBean() {
+        this.text = "This is from the constructor";
     }
 
-    @After
-    public void tearDown() {
-        webClient.closeAllWindows();
+    /**
+     * Post-construct.
+     *
+     */
+    @PostConstruct
+    public void init() {
+        FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().remove("navigatedAway");
+        this.text = "This is from the @PostConstruct";
     }
 
-    @Test
-    public void testValueBindingSet() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/valueBindingSet1.xhtml");
-        assertTrue(page.asXml().indexOf("one") != -1);
+    /**
+     * Pre-destroy
+     */
+    @PreDestroy
+    public void destroy() {
+        if (FacesContext.getCurrentInstance() != null) {
+            FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().put("navigatedAway", true);
+        }
     }
 
-    @Test
-    public void testValueBindingSetNull() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/valueBindingSet2.xhtml");
-        assertTrue(page.asXml().indexOf("NULL") != -1);
-    }
-
-    @Test
-    public void testValueBindingSetMapNotation() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/valueBindingSet3.xhtml");
-        assertTrue(page.asXml().indexOf("three") != -1);
-    }
-
-    @Test
-    public void testValueBindingSetNullMapNotation() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/valueBindingSet4.xhtml");
-        assertTrue(page.asXml().indexOf("NULL") != -1);
-    }
-
-    @Test
-    public void testValueBindingSetDoesNotExist() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/valueBindingSet5.xhtml");
-        assertTrue(page.asXml().indexOf("five") != -1);
-    }
-
-    @Test
-    public void testValueBindingSetSessionVariable() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/valueBindingSet6.xhtml");
-        assertTrue(page.asXml().indexOf("six") != -1);
+    /**
+     * Get the text.
+     */
+    public String getText() {
+        return this.text;
     }
 }

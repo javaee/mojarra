@@ -37,13 +37,55 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.el;
+package com.sun.faces.test.servlet30.el;
 
-import java.io.Serializable;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.SystemEvent;
+import javax.faces.event.SystemEventListener;
+import java.util.Map;
 
-public class SetNullInnerTestBean implements Serializable {
+/**
+ * A system event listener that registers as a preRenderComponent event listener.
+ */
+public class ViewInitFacesListener implements SystemEventListener {
+    /**
+     * Constructor.
+     */
+    public ViewInitFacesListener() {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        UIViewRoot viewRoot = fc.getViewRoot();
+        if (viewRoot != null) {
+            Map viewMap = viewRoot.getViewMap();
+            if (viewMap != null) {
+                if (FacesContext.getCurrentInstance() != null &&
+                        FacesContext.getCurrentInstance().getClass().getName().equals("com.sun.faces.config.InitFacesContext")) {
+                    FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().put("viewMapCreated", "Yes");
+                }
+            }
+        }
+    }
 
-    public String getTest4() {
-        return "You should not see me!";
+    /**
+     * Process the event.
+     * 
+     * @param event the system event.
+     * @throws AbortProcessingException when processing needs to be aborted.
+     */
+    public void processEvent(SystemEvent event) throws AbortProcessingException {
+    }
+
+    /**
+     * Is a listener for source.
+     * 
+     * @param source the source.
+     * @return true or false.
+     */
+    public boolean isListenerForSource(Object source) {
+        if (source instanceof UIViewRoot) {
+            return true;
+        }
+        return false;
     }
 }

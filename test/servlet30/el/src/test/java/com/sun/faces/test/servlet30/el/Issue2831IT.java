@@ -37,55 +37,52 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.el;
+package com.sun.faces.test.servlet30.el;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-/**
- * A ViewScoped bean testing session invalidation functionality.
- */
-@ManagedBean(name = "viewInvalidated2Bean")
-@ViewScoped
-public class ViewInvalidated2Bean {
+public class Issue2831IT {
 
-    /**
-     * Stores the invalidated attribute name.
-     */
-    private static final String INVALIDATED_ATTRIBUTE = "com.sun.faces.test.agnostic.el.Invalidated2";
-    /**
-     * Stores the local count.
-     */
-    private int count;
+    private String webUrl;
+    private WebClient webClient;
 
-    /**
-     * Constructor.
-     */
-    public ViewInvalidated2Bean() {
-        FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().remove(INVALIDATED_ATTRIBUTE);
-        FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().put(INVALIDATED_ATTRIBUTE, false);
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-    /**
-     * Action that invalidates the session.
-     */
-    public String doInvalidate() {
-        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
-        if (session != null) {
-            session.invalidate();
-            FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().put(INVALIDATED_ATTRIBUTE, true);
-        }
-        return "";
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
     }
 
-    /**
-     * Get the count.
-     *
-     * @return the count.
-     */
-    public int getCount() {
-        return count;
+    @Test
+    public void testSetNull1() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/setNull1.xhtml");
+        assertTrue(page.asXml().indexOf("SUCCESS") != -1);
+    }
+
+    @Test
+    public void testSetNull2() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/setNull2.xhtml");
+        assertTrue(page.asXml().indexOf("SUCCESS") != -1);
+    }
+
+    @Test
+    public void testSetNull3() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/setNull3.xhtml");
+        assertTrue(page.asXml().indexOf("SUCCESS") != -1);
+    }
+
+    @Test
+    public void testSetNull4() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/setNull4.xhtml");
+        assertTrue(page.asXml().indexOf("SUCCESS") != -1);
     }
 }

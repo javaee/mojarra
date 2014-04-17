@@ -37,16 +37,17 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.el;
+package com.sun.faces.test.servlet30.el;
 
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class Issue2831IT {
+public class Issue2638IT {
 
     private String webUrl;
     private WebClient webClient;
@@ -55,6 +56,8 @@ public class Issue2831IT {
     public void setUp() {
         webUrl = System.getProperty("integration.url");
         webClient = new WebClient();
+        webClient.setJavaScriptEnabled(true);
+        webClient.setJavaScriptTimeout(60000);
     }
 
     @After
@@ -63,26 +66,13 @@ public class Issue2831IT {
     }
 
     @Test
-    public void testSetNull1() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/setNull1.xhtml");
-        assertTrue(page.asXml().indexOf("SUCCESS") != -1);
-    }
-
-    @Test
-    public void testSetNull2() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/setNull2.xhtml");
-        assertTrue(page.asXml().indexOf("SUCCESS") != -1);
-    }
-
-    @Test
-    public void testSetNull3() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/setNull3.xhtml");
-        assertTrue(page.asXml().indexOf("SUCCESS") != -1);
-    }
-
-    @Test
-    public void testSetNull4() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/setNull4.xhtml");
-        assertTrue(page.asXml().indexOf("SUCCESS") != -1);
+    public void testInvalidatedSession2() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/viewInvalidatedSession2.xhtml");
+        assertTrue(page.asText().indexOf("Local Count: 0") != -1);
+        assertTrue(page.asText().indexOf("Invalidated: false") != -1);
+        HtmlElement button = page.getHtmlElementById("form:button");
+        page = button.click();
+        assertTrue(page.asText().indexOf("Local Count: 0") != -1);
+        assertTrue(page.asText().indexOf("Invalidated: true") != -1);
     }
 }

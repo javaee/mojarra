@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.el;
+package com.sun.faces.test.servlet30.el;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -50,9 +50,8 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
 
-@RunWith(value=JsfTestRunner.class)
-@JsfTest(JsfVersion.JSF_2_2_0_M09)
-public class Issue2673IT {
+@RunWith(JsfTestRunner.class)
+public class Issue2989IT {
 
     private String webUrl;
     private WebClient webClient;
@@ -61,8 +60,6 @@ public class Issue2673IT {
     public void setUp() {
         webUrl = System.getProperty("integration.url");
         webClient = new WebClient();
-        webClient.setJavaScriptEnabled(true);
-        webClient.setJavaScriptTimeout(60000);
     }
 
     @After
@@ -70,9 +67,10 @@ public class Issue2673IT {
         webClient.closeAllWindows();
     }
 
+    @JsfTest(JsfVersion.JSF_2_2_3)
     @Test
-    public void testInitFaces() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/viewInitFaces2.xhtml");
-        assertTrue(page.asText().indexOf("Yes") != -1);
+    public void testSetNull1() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/issue2989.jsp");
+        assertTrue(page.asXml().indexOf("PASSED") != -1);
     }
 }

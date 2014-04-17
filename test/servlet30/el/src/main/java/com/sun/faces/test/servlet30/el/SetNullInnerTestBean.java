@@ -37,44 +37,13 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.el;
+package com.sun.faces.test.servlet30.el;
 
-import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import java.io.Serializable;
 
-/**
- * A ViewScoped bean testing @PostConstruct functionality.
- */
-@ManagedBean(name = "viewPostConstructBean")
-@ViewScoped
-public class ViewPostConstructBean {
+public class SetNullInnerTestBean implements Serializable {
 
-    /**
-     * Stores the text.
-     */
-    private String text;
-    
-    /**
-     * Constructor.
-     */
-    public ViewPostConstructBean() {
-        this.text = "This is from the constructor";
-    }
-    
-    /**
-     * Post-construct.
-     * 
-     */
-    @PostConstruct
-    public void init() {
-        this.text = "This is from the @PostConstruct";
-    }
-    
-    /**
-     * Get the text.
-     */
-    public String getText() {
-        return this.text;
+    public String getTest4() {
+        return "You should not see me!";
     }
 }

@@ -37,52 +37,34 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.el;
+package com.sun.faces.test.servlet30.el;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 
-public class Issue2830IT {
+/**
+ * A ViewScoped bean testing constructor functionality.
+ */
+@ManagedBean(name = "viewConstructorBean")
+@ViewScoped
+public class ViewConstructorBean {
 
-    private String webUrl;
-    private WebClient webClient;
-
-    @Before
-    public void setUp() {
-        webUrl = System.getProperty("integration.url");
-        webClient = new WebClient();
+    /**
+     * Stores the text.
+     */
+    private String text;
+    
+    /**
+     * Constructor.
+     */
+    public ViewConstructorBean() {
+        this.text = "This is constructed";
     }
-
-    @After
-    public void tearDown() {
-        webClient.closeAllWindows();
-    }
-
-    @Test
-    public void testSetNull5() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/setNull5.xhtml");
-        assertTrue(page.asXml().indexOf("SUCCESS") != -1);
-    }
-
-    @Test
-    public void testSetNull6() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/setNull6.xhtml");
-        assertTrue(page.asXml().indexOf("SUCCESS") != -1);
-    }
-
-    @Test
-    public void testSetNull7() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/setNull7.xhtml");
-        assertTrue(page.asXml().indexOf("SUCCESS") != -1);
-    }
-
-    @Test
-    public void testSetNull8() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/setNull8.xhtml");
-        assertTrue(page.asXml().indexOf("SUCCESS") != -1);
+    
+    /**
+     * Get the text.
+     */
+    public String getText() {
+        return this.text;
     }
 }

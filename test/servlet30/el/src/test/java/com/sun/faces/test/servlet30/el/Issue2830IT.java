@@ -37,17 +37,16 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.el;
+package com.sun.faces.test.servlet30.el;
 
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class Issue1706IT {
+public class Issue2830IT {
 
     private String webUrl;
     private WebClient webClient;
@@ -56,8 +55,6 @@ public class Issue1706IT {
     public void setUp() {
         webUrl = System.getProperty("integration.url");
         webClient = new WebClient();
-        webClient.setJavaScriptEnabled(true);
-        webClient.setJavaScriptTimeout(60000);
     }
 
     @After
@@ -66,16 +63,26 @@ public class Issue1706IT {
     }
 
     @Test
-    public void testVerbatim() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/viewVerbatim.xhtml");
-        String text = page.asText();
-        text = text.substring(text.indexOf("Hash='") + "Hash='".length());
-        text = text.substring(0, text.indexOf("'"));
-        HtmlElement button = page.getHtmlElementById("form:button");
-        page = button.click();
-        String text2 = page.asText();
-        text2 = text2.substring(text2.indexOf("Hash='") + "Hash='".length());
-        text2 = text2.substring(0, text2.indexOf("'"));
-        assertEquals(text, text2);
+    public void testSetNull5() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/setNull5.xhtml");
+        assertTrue(page.asXml().indexOf("SUCCESS") != -1);
+    }
+
+    @Test
+    public void testSetNull6() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/setNull6.xhtml");
+        assertTrue(page.asXml().indexOf("SUCCESS") != -1);
+    }
+
+    @Test
+    public void testSetNull7() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/setNull7.xhtml");
+        assertTrue(page.asXml().indexOf("SUCCESS") != -1);
+    }
+
+    @Test
+    public void testSetNull8() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/setNull8.xhtml");
+        assertTrue(page.asXml().indexOf("SUCCESS") != -1);
     }
 }

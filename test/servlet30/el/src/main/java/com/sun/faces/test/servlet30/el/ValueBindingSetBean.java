@@ -1,4 +1,4 @@
-package com.sun.faces.test.agnostic.el;
+package com.sun.faces.test.servlet30.el;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;

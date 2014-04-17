@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,28 +37,34 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.el;
+package com.sun.faces.test.servlet30.el;
 
-import java.io.Serializable;
+import com.gargoylesoftware.htmlunit.TextPage;
+import com.gargoylesoftware.htmlunit.WebClient;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-public class SetNullTestBean implements Serializable {
+public class Issue2566IT {
 
-    private SetNullInnerTestBean inner;
-    private Object one;
+    private String webUrl;
+    private WebClient webClient;
 
-    public SetNullInnerTestBean getInner() {
-        return this.inner;
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-    public Object getOne() {
-        return this.one;
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
     }
 
-    public void setInner(SetNullInnerTestBean inner) {
-        this.inner = inner;
-    }
-
-    public void setOne(Object one) {
-        this.one = one;
+    @Test
+    public void testIssue1533() throws Exception {
+        TextPage page = webClient.getPage(webUrl + "issue2566.jsp");
+        assertTrue(page.getContent().indexOf("EL Resolver Passed") != -1);
     }
 }

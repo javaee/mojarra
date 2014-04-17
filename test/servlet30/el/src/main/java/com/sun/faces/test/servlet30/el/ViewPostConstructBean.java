@@ -37,42 +37,44 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.el;
+package com.sun.faces.test.servlet30.el;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import javax.annotation.PostConstruct;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 
-public class Issue2638IT {
+/**
+ * A ViewScoped bean testing @PostConstruct functionality.
+ */
+@ManagedBean(name = "viewPostConstructBean")
+@ViewScoped
+public class ViewPostConstructBean {
 
-    private String webUrl;
-    private WebClient webClient;
-
-    @Before
-    public void setUp() {
-        webUrl = System.getProperty("integration.url");
-        webClient = new WebClient();
-        webClient.setJavaScriptEnabled(true);
-        webClient.setJavaScriptTimeout(60000);
+    /**
+     * Stores the text.
+     */
+    private String text;
+    
+    /**
+     * Constructor.
+     */
+    public ViewPostConstructBean() {
+        this.text = "This is from the constructor";
     }
-
-    @After
-    public void tearDown() {
-        webClient.closeAllWindows();
+    
+    /**
+     * Post-construct.
+     * 
+     */
+    @PostConstruct
+    public void init() {
+        this.text = "This is from the @PostConstruct";
     }
-
-    @Test
-    public void testInvalidatedSession2() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/viewInvalidatedSession2.xhtml");
-        assertTrue(page.asText().indexOf("Local Count: 0") != -1);
-        assertTrue(page.asText().indexOf("Invalidated: false") != -1);
-        HtmlElement button = page.getHtmlElementById("form:button");
-        page = button.click();
-        assertTrue(page.asText().indexOf("Local Count: 0") != -1);
-        assertTrue(page.asText().indexOf("Invalidated: true") != -1);
+    
+    /**
+     * Get the text.
+     */
+    public String getText() {
+        return this.text;
     }
 }
