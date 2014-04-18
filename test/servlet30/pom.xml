@@ -64,5 +64,6 @@
         <module>systest</module>
         <module>ajax</module>
     <module>el</module>
+    <module>composite</module>
   </modules>
 </project>
