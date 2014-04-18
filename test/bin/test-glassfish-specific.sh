@@ -44,7 +44,7 @@ echo *  Test for $1, $2, $3
 echo *
 echo *************************************************************************
 
-mvn -N -Pintegration-glassfish-prepare validate
+mvn -N -Pglassfish-patch validate
 
 if [ "$?" -ne "0" ]; then
 exit $?
@@ -56,27 +56,27 @@ if [ "$?" -ne "0" ]; then
 exit $?
 fi
 
-mvn -N -Pintegration-glassfish-cargo -Dwebapp.projectStage=$1 -Dwebapp.partialStateSaving=$2 -Dwebapp.stateSavingMethod=$3 cargo:start
+mvn -N -Pglassfish-cargo -Dwebapp.projectStage=$1 -Dwebapp.partialStateSaving=$2 -Dwebapp.stateSavingMethod=$3 cargo:start
 
 if [ "$?" -ne "0" ]; then
 exit $?
 fi
 
-mvn -Pintegration-glassfish-cargo -Dwebapp.projectStage=$1 -Dwebapp.partialStateSaving=$2 -Dwebapp.stateSavingMethod=$3 cargo:redeploy
+mvn -Pglassfish-cargo -Dwebapp.projectStage=$1 -Dwebapp.partialStateSaving=$2 -Dwebapp.stateSavingMethod=$3 cargo:redeploy
 
 if [ "$?" -ne "0" ]; then
-    mvn -N -Pintegration-glassfish-cargo -Dwebapp.projectStage=$1 -Dwebapp.partialStateSaving=$2 -Dwebapp.stateSavingMethod=$3 cargo:stop;
+    mvn -N -Pglassfish-cargo -Dwebapp.projectStage=$1 -Dwebapp.partialStateSaving=$2 -Dwebapp.stateSavingMethod=$3 cargo:stop;
     exit $?
 fi
 
-mvn -Pintegration-failsafe -Dwebapp.projectStage=$1 -Dwebapp.partialStateSaving=$2 -Dwebapp.stateSavingMethod=$3 verify
+mvn -Pintegration -Dwebapp.projectStage=$1 -Dwebapp.partialStateSaving=$2 -Dwebapp.stateSavingMethod=$3 verify
 
 if [ "$?" -ne "0" ]; then
-    mvn -N -Pintegration-glassfish-cargo -Dwebapp.projectStage=$1 -Dwebapp.partialStateSaving=$2 -Dwebapp.stateSavingMethod=$3 cargo:stop;
+    mvn -N -Pglassfish-cargo -Dwebapp.projectStage=$1 -Dwebapp.partialStateSaving=$2 -Dwebapp.stateSavingMethod=$3 cargo:stop;
     exit $?
 fi
 
-mvn -N -Pintegration-glassfish-cargo -Dwebapp.projectStage=$1 -Dwebapp.partialStateSaving=$2 -Dwebapp.stateSavingMethod=$3 cargo:stop
+mvn -N -Pglassfish-cargo -Dwebapp.projectStage=$1 -Dwebapp.partialStateSaving=$2 -Dwebapp.stateSavingMethod=$3 cargo:stop
 
 if [ "$?" -ne "0" ]; then
 exit $?
