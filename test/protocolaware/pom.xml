@@ -66,7 +66,7 @@
     </modules>
     <profiles>
         <profile>
-            <id>integration-failsafe-protocolaware</id>
+            <id>integration-protocolaware</id>
             <build>
                 <plugins>
                     <plugin>
