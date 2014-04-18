@@ -342,7 +342,7 @@
                                         <mkdir dir="${glassfish.unzip.unzipDir}"/>
                                         <unzip src="${glassfish.unzip.zipFile}" dest="${glassfish.unzip.unzipDir}"/>
                                         <exec executable="sh" osfamily="unix">
-                                            <arg line='-c "chmod a+x ${glassfish.unzip.containerHome}/glassfish/bin/*"'/>
+                                            <arg line='-c "chmod a+x ${glassfish.unzip.home}/glassfish/bin/*"'/>
                                         </exec>
                                     </target>
                                 </configuration>
@@ -369,7 +369,7 @@
             </build>
             <properties>
                 <glassfish.unzip.unzipDir>C:/</glassfish.unzip.unzipDir>
-                <glassfish.unzip.containerHome>C:/glassfish4</glassfish.unzip.containerHome>
+                <glassfish.unzip.home>C:/glassfish4</glassfish.unzip.home>
                 <glassfish.unzip.zipFile>C:/Downloads/Glassfish4.0.zip</glassfish.unzip.zipFile>
             </properties>
         </profile>
