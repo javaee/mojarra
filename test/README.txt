@@ -2,141 +2,150 @@
  Introduction
  ============
 
- Running tests against a Mojarra code base is using Maven as its carrier.
- In order for you to be able productive we are using several profiles so
- that you can pick and choose what you need for a particular scenario.
+ This README contains helpful information to get you started with testing.
+ 
+ Note this README does not deal with building Mojarra from source, see the
+ top level directory README for more information on that.
 
- So far the following scenarios have been identified:
+ Install the required JAR files
+ ==============================
 
-	1. agnostic, tests not specific to a particular server.
-	2. cluster, tests for a clustered server.
-	3. selenium, tests that are browser specific.
-	4. virtual, tests that execute on a virtual server.
-        5. web-profile, tests that required JavaEE 6 Web Profile or later.
+  You will need to install some JAR files into your local Maven repository.
+  Execute the following command line from the top level test directory.
 
- In the test master POM we currently have the following profiles available:
+     mvn clean install
+ 
 
-	1. integration-failsafe, runs the integration tests.
-        2. integration-glassfish-embedded, starts and stops the Embedded Glassfish.
-        3. integration-glassfish-cargo, starts and stops an installed Glassfish.
-        4. integration-tomcat-cargo, starts and stops Tomcat 7.x
-        5. integration-selenium, runs the tests using Selenium.
+ Use Glassfish for testing
+ =========================
 
- Running tests
- =============
+  1. Configure settings.xml
+  2. Prepare Glassfish
+  3. Start Glassfish
+  4. Deploy the web application(s) you want to test
+  5. Run the tests
+  6. Stop Glassfish
 
- If you want to run the tests you can do it in several ways. The main reason why
- there are different ways is because we want to be able to run tests using  a 
- CI system, but also to run a single test by a developer. See below in which 
- ways we support testing:
+ 
+ Configure settings.xml
+ ----------------------
 
-    1. Running all tests against a running container.
-    2. Running all tests against an installed version of Glassfish (not running).
-    3. Running all tests against Tomcat 7.x.
-    4. Running a single test against a running container.
-    5. Running a single test against an installed version of Glassfish (not running).
-    6. Running a single test method against a running container.
+  Make sure you have a glassfish.patch.home and glassfish.cargo.home defined
+  in your settings.xml
 
- Scenario 1
- ----------
+    <properties>
+        <glassfish.cargo.home>C:/Glassfish4.0</glassfish.cargo.home>
+        <glassfish.patch.home>C:/Glassfish4.0</glassfish.patch.home>
+    </properties>
+      
+ 
+ Prepare Glassfish
+ -----------------
 
- To run all the tests against a running container use the following command line:
+  Copy the Mojarra version you want to test against into the Glassfish modules
+  directory.
 
-    mvn -Pintegration-failsafe clean verify
+    mvn -N -Pglassfish-patch [-Djsf.version=x.y.z] validate
 
- Scenario 2
- ----------
-
- To run all the tests against an installed version of Glassfish (not running):
-
-    mvn -Pintegration-failsafe,integration-glassfish-cargo clean verify
-
- Scenario 3
- ----------
-
- To run all the tests against Tomcat 7.x:
-
-    mvn -Pintegration-failsafe,integration-tomcat-cargo clean verify
-
- Scenario 4
- ----------
-
- To run a single test against a running container:
-
-    mvn -Pintegration-failsafe -Dit.test=IndexPageIT clean verify
-
- where IndexPageIT is the name of the test class (note you can use regular
- expressions to match more than one test class here).
-
- Scenario 5
- ----------
-
- To run a single test against an installed version of Glassfish (not running).
-
-    mvn -Pintegration-failsafe,integration-glassfish-cargo -Dit.test=IndexPageIT clean verify
-
- Scenario 6
- ----------
-
- To run a single test and single method against a running container use:
-
-    mvn -Pintegration-failsafe -Dit.test=VersionPageIT#testVerifyMojarraVersion clean verify
-
- where VersionPageIT is the name of the test class, and testVerifyMojarraVersion
- the name of the test method (note you can use regular expressions to match 
- multiple test and methods).
+  Note if you do not pass jsf.version it will default to the version under 
+  development.
 
 
- System Properties
- =================
+ Start your Glassfish server
+ ---------------------------
 
- As part of the test harness we use several system properties that can be 
- passed in on the command line to affect how the tests are run. The table
- below lists some of the properties used, see the master POMs for more 
- details.
+  Start your Glassfish server.
 
-    Properties used by integration-failsafe profile
-    ***********************************************
+    mvn -N -Pglassfish-cargo cargo:start
+  
 
-        property name                       property default value
-        -------------                       ----------------------
-        integration.serverName              localhost
-        integration.serverPort              8080
-        integration.protocol                http
-        jsf.artifactId                      javax.faces
-        jsf.groupId                         org.glassfish
-        jsf.version                         ${project.version}    
-        it.test                             <no default>
+ Deploy the web application(s) you want test
+ -------------------------------------------
 
+  From any of the sub directories within the top level test directory you can
+  deploy all the web applications in that directory, which will cause all of
+  the web applications inside that directory to be deployed.
 
-    Properties used by integration-glassfish-embedded profile
-    *********************************************************
+  E.g. if you want to deploy all the tests that should work on a Servlet 3.0
+  compliant container you would issue the following command from within the
+  servlet30 directory
 
-        No specific properties, use the ones defined in the
-        integration-failsafe profile.
+    mvn -Pglassfish-cargo 
+      [-Dwebapp.projectStage=[Production|Development]]
+      [-Dwebapp.partialStateSaving=[true|false]] 
+      [-Dwebapp.stateSavingMethod=[server|client]] cargo:redeploy
 
-
-    Properties used by integration-glassfish-cargo profile
-    ******************************************************
-
-        property name                       property default value
-        -------------                       ----------------------
-        integration.container.id            glassfish3x
-        integration.container.home          C:/Glassfish3.1.1
+  Note: if you do not pass -Dwebapp.projectStage it will default to Production,
+  likewise if you do not pass -Dwebapp.partialStateSaving it will default to
+  true and last if you do not pass -Dwebapp.stateSavingMethod it defaults to
+  server.
 
 
-    Properties used by integration-tomcat-cargo profile
-    ****************************************************
+ Run the tests
+ -------------
 
-        property name                       property default value
-        -------------                       ----------------------
-        integration.container.id            tomcat7x
-        integration.container.downloadUrl   http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.16/bin/apache-tomcat-7.0.16.zip
-        integration.container.downloadDir   C:/Temp/Cargo/download
-        integration.container.extractDir    C:/Temp/Cargo/extracts
-        integration.container.home          C:/Temp/Cargo/tomcat7                
-        tomcat.version                      7.0.16
+  Once you have deployed the tests to Glassfish you are ready to go ahead and
+  test. From the same directory you deployed you will run the tests.
 
+    mvn -Pintegration
+      [-Dwebapp.projectStage=[Production|Development]]
+      [-Dwebapp.partialStateSaving=[true|false]] 
+      [-Dwebapp.stateSavingMethod=[server|client]] verify
+
+  Note: Make sure you pass in the same -Dwebapp.xxx properties if you used them 
+        during deployment.
+
+
+ Stop your Glassfish server
+ ---------------------------
+
+  Stop your Glassfish server.
+
+    mvn -N -Pglassfish-cargo cargo:stop
+
+
+Convenience scripts
+===================
+
+ You will find some convenience scripts in the test/bin directory that can make
+ it easier to do testing as they do the invocations described above in order.
+ 
+
+More specific testing
+=====================
+
+
+ Running a single test
+ ---------------------
+
+  To run a single test against a previously deployed web application, go into
+  the project directory of the deployed web application and issue the following:
+
+    mvn -Pintegration -Dit.test=IndexPageIT clean verify
+
+  Note: IndexPageIT is the name of the test class (note you can use regular
+        expressions to match more than one test class here).
+
+  Note: Make sure you pass in the same -Dwebapp.xxx properties if you used them 
+        during deployment.
+
+ 
+ Running a single test and a single method
+ -----------------------------------------
+
+  To run a single test and single method against a running container use:
+
+    mvn -Pintegration -Dit.test=VersionPageIT#testVerifyMojarraVersion verify
+
+  Note: VersionPageIT is the name of the test class, and testVerifyMojarraVersion
+        the name of the test method (note you can use regular expressions to 
+        match multiple test and methods).
+
+ Testing using other servers
+ ===========================
+
+  Please see README-Tomcat.txt file for using Tomcat.
+  Please see README-Weblogic.text for using Weblogic.
 
  Pitfalls
  ========
@@ -145,45 +154,11 @@
  have to be aware of the following pitfalls that might crop up if you are doing
  testing against different application servers.
 
-    1. Make sure the context root in glassfish-web.xml matches the project.build.finalName,
+    1. Make sure the context root in glassfish-web.xml matches project.build.finalName,
        if you do not the test harness will not be able to run the tests since it
-       relies on the integration.url used by the integration-failsafe profile to
-       be build up in the following way 
+       relies on the integration.url used by the integration profile to be build up 
+       in the following way 
 
         ${integration.protocol}://${integration.serverName}:$integration.serverPort}/${project.build.finalName}/
-
- Example invocation
- ==================
-
- Consider this entry in a maven ~/.m2/settings.xml <profiles> section:
-
-    <profile>
-      <id>mojarra-trunk</id>
-      <properties>
-        <integration.container.home>/full/path/to/container/glassfish-3.1.2/glassfish3</integration.container.home>
-        <jsf.version>2.2.0-SNAPSHOT</jsf.version>
-      </properties>
-    </profile>
-
-  The following mvn invocation, in this directory will invoke all the
-  tests.  This assumes the container has already been started and
-  configured with the version of Mojarra to test.
-
-mvn -Dcargo.remote.password= -Pmojarra-trunk clean install
-mvn -Dcargo.remote.password= -Pmojarra-trunk,integration-glassfish-cargo cargo:redeploy
-mvn -Dcargo.remote.password= -Pmojarra-trunk,integration-failsafe verify 
-
- Writing tests
- =============
-
- To make it easier to write tests and to specify in which version this test is 
- relevant use the following 2 annotations.
-
- Eg.
-
-   @RunWith(value=JsfTestRunner.class)
-   @JsfTest(JsfVersion.JSF_2_2_XX)
-   public class IssueXxxIT {
-   }
  
 --END
