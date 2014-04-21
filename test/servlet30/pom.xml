@@ -66,5 +66,6 @@
     <module>el</module>
     <module>composite</module>
     <module>dynamic</module>
-  </modules>
+        <module>facelets</module>
+    </modules>
 </project>
