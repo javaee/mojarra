@@ -1174,8 +1174,9 @@ public class HtmlResponseWriter extends ResponseWriter {
                 Object valObj = entry.getValue();
                 String val = getAttributeValue(context, valObj);
                 String key = entry.getKey();
-
-                writeURIAttributeIgnoringPassThroughAttributes(key, val, key, true);
+                if (val != null) {
+                    writeURIAttributeIgnoringPassThroughAttributes(key, val, key, true);
+                }
             }
         }
 
@@ -1212,7 +1213,8 @@ public class HtmlResponseWriter extends ResponseWriter {
     private String getAttributeValue(FacesContext context, Object valObj) {
         String val;
         if (valObj instanceof ValueExpression) {
-            val = ((ValueExpression) valObj).getValue(context.getELContext()).toString();
+            Object result = ((ValueExpression) valObj).getValue(context.getELContext());
+            val = result != null ? result.toString() : null;
         } else {
             val = valObj.toString();
         }

@@ -41,22 +41,21 @@
 package com.sun.faces.renderkit.html_basic;
 
 
+import com.sun.faces.renderkit.Attribute;
+import com.sun.faces.renderkit.AttributeManager;
+import com.sun.faces.util.Util;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIData;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-
-import com.sun.faces.renderkit.Attribute;
-import com.sun.faces.renderkit.AttributeManager;
-import com.sun.faces.util.Util;
-import java.util.Collections;
 
 /** <p>Render a {@link UIData} component as a two-dimensional table.</p> */
 
@@ -267,6 +266,7 @@ public class TableRenderer extends BaseTableRenderer {
                 }
                 UIComponent facet = getFacet(column, "footer");
                 if (facet != null) {
+                    writer.writeText("", table, null);
                     encodeRecursive(context, facet);
                 }
                 writer.endElement("td");
