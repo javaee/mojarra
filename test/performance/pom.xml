@@ -29,7 +29,7 @@
     </build>
     <profiles>
         <profile>
-            <id>integration-jmeter</id>
+            <id>jmeter</id>
             <build>
                 <plugins>
                     <plugin>
@@ -99,7 +99,7 @@
             </reporting>        
         </profile>
         <profile>
-            <id>integration-jmeter-owan</id>
+            <id>jmeter-owan</id>
             <build>
                 <plugins>
                     <plugin>
