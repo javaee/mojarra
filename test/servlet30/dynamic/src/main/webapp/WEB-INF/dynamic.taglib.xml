@@ -4,7 +4,7 @@
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -41,41 +41,52 @@
     holder.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.sun.faces.test</groupId>
-        <artifactId>pom</artifactId>
-        <version>2.2.7-SNAPSHOT</version>
-    </parent>
-    <groupId>com.sun.faces.test.agnostic</groupId>
-    <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Agnostic</name>
-    <dependencies>
-        <dependency>
-            <groupId>com.sun.faces.test</groupId>
-            <artifactId>util</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-    <modules>
-        <module>application</module>
-        <module>bundle22</module>
-        <module>component</module>
-        <module>config</module>
-        <module>context</module>
-        <module>converter</module>
-        <module>replace-vr-add-er</module>
-        <module>externalContext</module>
-        <module>facelets</module>
-        <module>flash</module>
-        <module>lifecycle</module>
-        <module>renderKit</module>
-        <module>resource</module>
-        <module>scope</module>
-        <module>stateSaving</module>
-        <module>vdl</module>
-    </modules>
-</project>
+
+<facelet-taglib xmlns="http://java.sun.com/xml/ns/javaee"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_0.xsd" 
+                version="2.0">
+    <namespace>http://www.oracle.com/mojarra/test/dynamic</namespace>
+    <tag>
+        <tag-name>toggleComponent</tag-name>
+        <component>
+            <component-type>com.sun.faces.test.servlet30.dynamic.ToggleComponent</component-type>
+        </component>
+    </tag>
+    <tag>
+        <tag-name>addcomponent</tag-name>
+        <component>
+            <component-type>com.sun.faces.test.servlet30.dynamic.AddComponent</component-type>
+        </component>
+    </tag>
+    <tag>
+        <tag-name>stablecomponent</tag-name>
+        <component>
+            <component-type>com.sun.faces.test.servlet30.dynamic.StableComponent</component-type>
+        </component>
+    </tag>
+    <tag>
+        <tag-name>tablecomponent</tag-name>
+        <component>
+            <component-type>com.sun.faces.test.servlet30.dynamic.TableComponent</component-type>
+        </component>
+    </tag>
+    <tag>
+        <tag-name>recursivecomponent</tag-name>
+        <component>
+            <component-type>com.sun.faces.test.servlet30.dynamic.RecursiveComponent</component-type>
+        </component>
+    </tag>
+    <tag>
+        <tag-name>addcomponent1</tag-name>
+        <component>
+            <component-type>com.sun.faces.test.servlet30.dynamic.AddComponent1</component-type>
+        </component>
+    </tag>
+    <tag>
+        <tag-name>movecomponent</tag-name>
+        <component>
+            <component-type>com.sun.faces.test.servlet30.dynamic.MoveComponent</component-type>
+        </component>
+    </tag>
+</facelet-taglib>
