@@ -815,6 +815,50 @@
                 <wls.mojarraJarName>glassfish.jsf_2.0.0.0_2-1-20.jar</wls.mojarraJarName>
             </properties>
         </profile>
+        <profile>
+            <id>weblogic-unzip</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>prepare</id>
+                                <phase>validate</phase>
+                                <configuration>
+                                    <target>
+                                        <delete quiet="true" failonerror="false" dir="${weblogic.unzip.unzipDir}"/>
+                                        <mkdir dir="${weblogic.unzip.unzipDir}"/>
+                                        <unzip src="${weblogic.unzip.zipFile}" dest="${weblogic.unzip.unzipDir}"/>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>ant-contrib</groupId>
+                                <artifactId>ant-contrib</artifactId>
+                                <version>1.0b3</version>
+                                <exclusions>
+                                    <exclusion>
+                                        <groupId>ant</groupId>
+                                        <artifactId>ant</artifactId>
+                                    </exclusion>
+                                </exclusions>
+                            </dependency>
+                        </dependencies>
+                    </plugin>                    
+                </plugins>
+            </build>
+            <properties>
+                <weblogic.unzip.unzipDir>C:/</weblogic.unzip.unzipDir>
+                <weblogic.unzip.zipFile>C:/Downloads/Weblogic12.1.2.zip</weblogic.unzip.zipFile>
+            </properties>
+        </profile>
     </profiles>
     <properties>
         <jsf.artifactId>javax.faces</jsf.artifactId>
