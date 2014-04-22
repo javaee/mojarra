@@ -179,7 +179,7 @@
                                 <timeout>2400000</timeout>
                             </container>
                             <configuration>
-                                <type>standalone</type>
+                                <type>${glassfish.cargo.configType}</type>
                                 <home>${glassfish.cargo.config}</home>
                                 <properties>
                                     <cargo.hostname>${glassfish.cargo.serverName}</cargo.hostname>
@@ -193,6 +193,7 @@
             </build>
             <properties>
                 <glassfish.cargo.home>C:/Glassfish4.0</glassfish.cargo.home>
+                <glassfish.cargo.configType>standalone</glassfish.cargo.configType>
                 <glassfish.cargo.config>${glassfish.cargo.home}/glassfish/domains</glassfish.cargo.config>
                 <glassfish.cargo.domain>domain1</glassfish.cargo.domain>
                 <glassfish.cargo.id>glassfish3x</glassfish.cargo.id>
@@ -444,7 +445,7 @@
                                     <systemPropertyVariables>
                                         <integration.serverName>${integration.serverName1}</integration.serverName>
                                         <integration.serverPort>${integration.serverPort1}</integration.serverPort>
-                                        <integration.serverProtocol>${integration.serverProtocol}</integration.serverProtocol>
+                                        <integration.serverProtocol>${integration.protocol}</integration.serverProtocol>
                                         <integration.url>${integration.protocol}://${integration.serverName1}:${integration.serverPort1}/${project.build.finalName}/</integration.url>
                                         <project.build.finalName>${project.build.finalName}</project.build.finalName>
                                         <project.build.sourceEncoding>${project.build.sourceEncoding}</project.build.sourceEncoding>
@@ -461,7 +462,7 @@
                                     <systemPropertyVariables>
                                         <integration.serverName>${integration.serverName2}</integration.serverName>
                                         <integration.serverPort>${integration.serverPort2}</integration.serverPort>
-                                        <integration.serverProtocol>${integration.serverProtocol}</integration.serverProtocol>
+                                        <integration.serverProtocol>${integration.protocol}</integration.serverProtocol>
                                         <integration.url>${integration.protocol}://${integration.serverName2}:${integration.serverPort2}/${project.build.finalName}/</integration.url>
                                         <project.build.finalName>${project.build.finalName}</project.build.finalName>
                                         <project.build.sourceEncoding>${project.build.sourceEncoding}</project.build.sourceEncoding>
