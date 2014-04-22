@@ -45,6 +45,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.Ignore;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
@@ -98,11 +99,13 @@ public class FlowACallsFlowBIT {
     }
 
     @Test
+    @Ignore
     public void testFacesFlowCallPostback() throws Exception {
         doTestFacesFlowCall("");
     }
 
     @Test
+    @Ignore
     public void testFacesFlowCallGet() throws Exception {
         doTestFacesFlowCall("_GET");
     }

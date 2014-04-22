@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -39,19 +39,36 @@
     only if the new code is made subject to such option by the copyright
     holder.
 
---><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.sun.faces.test.cluster</groupId>
-        <artifactId>pom</artifactId>
-        <version>2.2.7-SNAPSHOT</version>
-    </parent>
-    <groupId>com.sun.faces.test.cluster.javaee6web</groupId>
-    <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Cluster - JavaEE 6 Web</name>
-    <modules>
-        <module>flow</module>
-        <module>viewScoped</module>
-  </modules>
-</project>
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <h:head>
+        <title></title>
+        <script type="text/javascript">
+            
+            var switchPort = function switchPort() {
+                var loc = window.location;
+                var otherPort = (loc.port == 18080) ? 28080 : 18080;
+                var newActionUrl = loc.protocol + "//" + loc.hostname + ":" + otherPort + loc.pathname;
+                var actionUrlMessageDiv = document.getElementById("actionUrlMessage");
+                actionUrlMessageDiv.innerHTML = "<p>new actionUrl is " + newActionUrl + ". </p>";
+                document['myForm'].action = newActionUrl;
+                
+            }
+            
+            
+        </script>
+    </h:head>
+    <body>
+        <div id="actionUrlMessage"></div>
+        <h:form id="myForm" prependId="false">
+            <p><h:inputText id="text" value="#{viewScopedBean.name}" /></p>
+            <p><h:commandButton id="reload" value="reload" /></p>
+            <p><h:commandButton id="page2" value="page2" action="page2" /></p>
+        </h:form>
+    
+        <p><button id="switchPort" type="button" onclick="switchPort(); return false;">switchPort</button></p>
+    </body>
+</html>
+

@@ -49,6 +49,7 @@ import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.AfterBeanDiscovery;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.BeforeBeanDiscovery;
 import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.ProcessBean;
 import javax.faces.view.ViewScoped;
@@ -87,6 +88,10 @@ public class ViewScopeExtension implements Extension {
             LOGGER.finest("Processing occurrence of @ViewScoped");
         }
 
+    }
+    
+    public void beforeBeanDiscovery(@Observes final BeforeBeanDiscovery event, BeanManager beanManager) {
+        event.addScope(ViewScoped.class, true, true);
     }
 
     /**

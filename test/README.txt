@@ -59,8 +59,8 @@
     mvn -N -Pglassfish-cargo cargo:start
   
 
- Deploy the web application(s) you want test
- -------------------------------------------
+ Deploy the web application(s) you want to test
+ ----------------------------------------------
 
   From any of the sub directories within the top level test directory you can
   deploy all the web applications in that directory, which will cause all of

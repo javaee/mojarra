@@ -174,10 +174,10 @@
                                         </exec>
                                         <echo>=== Deploying ${project.build.finalName} to ${integration.container.cluster.name} ===</echo>
                                         <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
-                                            <arg line="deploy --force --target ${integration.container.cluster.name} ${project.build.directory}/${project.build.finalName}.war"/>
+                                            <arg line="deploy --force --availabilityenabled=true --target ${integration.container.cluster.name} ${project.build.directory}/${project.build.finalName}.war"/>
                                         </exec>
                                         <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
-                                            <arg line="deploy --force --target ${integration.container.cluster.name} ${project.build.directory}/${project.build.finalName}.war"/>
+                                            <arg line="deploy --force --availabilityenabled=true --target ${integration.container.cluster.name} ${project.build.directory}/${project.build.finalName}.war"/>
                                         </exec>
                                     </target>
                                 </configuration>
@@ -275,10 +275,10 @@
                                         </exec>
                                         <echo>=== Starting ${integration.container.cluster.name} ===</echo>
                                         <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
-                                            <arg line="--port ${integration.container.cluster.adminport} start-cluster ${integration.container.cluster.name}"/>
+                                            <arg line="start-cluster ${integration.container.cluster.name}"/>
                                         </exec>
                                         <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
-                                            <arg line="--port ${integration.container.cluster.adminport} start-cluster ${integration.container.cluster.name}"/>
+                                            <arg line="start-cluster ${integration.container.cluster.name}"/>
                                         </exec>
                                     </target>
                                 </configuration>
@@ -288,14 +288,14 @@
                 </plugins>
             </build>
             <properties>
-                <integration.container.cluster.domain>mojarra-domain</integration.container.cluster.domain>
-                <integration.container.cluster.name>mojarra-cluster</integration.container.cluster.name>
-                <integration.container.cluster.adminport>60048</integration.container.cluster.adminport>
+                <integration.container.cluster.domain>domain1</integration.container.cluster.domain>
+                <integration.container.cluster.name>cluster1</integration.container.cluster.name>
                 <integration.container.home>C:/Glassfish3.1.2.2</integration.container.home>
             </properties>
         </profile>
         <profile>
             <id>integration-glassfish-cluster-start-debug</id>
+            <!-- Taken from https://blogs.oracle.com/foo/entry/how_to_debug_clustered_appserver -->
             <build>
                 <plugins>
                     <plugin>                 
@@ -343,19 +343,46 @@
                                         <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
                                             <arg line="start-domain ${integration.container.cluster.domain}"/>
                                         </exec>
-                                        <echo>=== Starting ${integration.container.cluster.node1} ===</echo>
+                                        <echo>=== Configuring ${integration.container.cluster.domain} ${integration.container.cluster.name} for cluster debugging ===</echo>
                                         <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
-                                            <arg line="start-instance --port ${integration.container.cluster.adminport} --debug=true ${integration.container.cluster.node1}"/>
+                                            <arg line="set ${integration.container.cluster.name}-config.java-config.debug-enabled=true"/>
                                         </exec>
                                         <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
-                                            <arg line="start-instance --port ${integration.container.cluster.adminport} --debug=true ${integration.container.cluster.node1}"/>
+                                            <arg line="set ${integration.container.cluster.name}-config.java-config.debug-enabled=true"/>
                                         </exec>
-                                        <echo>=== Starting ${integration.container.cluster.node2} ===</echo>
+                                        <echo>=== Starting ${integration.container.cluster.name} ===</echo>
                                         <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
-                                            <arg line="start-instance --port ${integration.container.cluster.adminport} --debug=true ${integration.container.cluster.node2}"/>
+                                            <arg line="start-cluster ${integration.container.cluster.name}"/>
                                         </exec>
                                         <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
-                                            <arg line="start-instance --port ${integration.container.cluster.adminport} --debug=true ${integration.container.cluster.node2}"/>
+                                            <arg line="start-cluster ${integration.container.cluster.name}"/>
+                                        </exec>
+
+                                        <echo>=== Configuring instances of ${integration.container.cluster.name} for debugging ===</echo>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                            <arg line="create-system-properties --target ${integration.container.cluster.instance.1} JAVA_DEBUGGER_PORT=${integration.container.cluster.instance.1.debugPort}"/>
+                                        </exec>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
+                                            <arg line="create-system-properties --target ${integration.container.cluster.instance.1} JAVA_DEBUGGER_PORT=${integration.container.cluster.instance.1.debugPort}"/>
+                                        </exec>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                            <arg line="create-system-properties --target ${integration.container.cluster.instance.2} JAVA_DEBUGGER_PORT=${integration.container.cluster.instance.2.debugPort}"/>
+                                        </exec>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
+                                            <arg line="create-system-properties --target ${integration.container.cluster.instance.2} JAVA_DEBUGGER_PORT=${integration.container.cluster.instance.2.debugPort}"/>
+                                        </exec>
+                                        <echo>=== Stopping and re-starting ${integration.container.cluster.name} after configuring instances for debugging ===</echo>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                            <arg line="stop-cluster ${integration.container.cluster.name}"/>
+                                        </exec>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
+                                            <arg line="stop-cluster ${integration.container.cluster.name}"/>
+                                        </exec>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                            <arg line="start-cluster ${integration.container.cluster.name}"/>
+                                        </exec>
+                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
+                                            <arg line="start-cluster ${integration.container.cluster.name}"/>
                                         </exec>
                                     </target>
                                 </configuration>
@@ -365,10 +392,12 @@
                 </plugins>
             </build>
             <properties>
-                <integration.container.cluster.domain>mojarra-domain</integration.container.cluster.domain>
-                <integration.container.cluster.node1>mojarra-cluster1</integration.container.cluster.node1>
-                <integration.container.cluster.node2>mojarra-cluster2</integration.container.cluster.node2>
-                <integration.container.cluster.adminport>60048</integration.container.cluster.adminport>
+                <integration.container.cluster.domain>domain1</integration.container.cluster.domain>
+                <integration.container.cluster.name>cluster1</integration.container.cluster.name>
+                <integration.container.cluster.instance.1>instance1</integration.container.cluster.instance.1>
+                <integration.container.cluster.instance.1.debugPort>19009</integration.container.cluster.instance.1.debugPort>
+                <integration.container.cluster.instance.2>instance2</integration.container.cluster.instance.2>
+                <integration.container.cluster.instance.2.debugPort>29009</integration.container.cluster.instance.2.debugPort>
                 <integration.container.home>C:/Glassfish3.1.2.2</integration.container.home>
             </properties>
         </profile>
@@ -381,7 +410,7 @@
                         <artifactId>maven-antrun-plugin</artifactId>
                         <executions>
                             <execution>
-                                <id>deploy-war</id>
+                                <id>start-container</id>
                                 <phase>pre-integration-test</phase>
                                 <goals>
                                     <goal>run</goal>
@@ -390,10 +419,10 @@
                                     <target>
                                         <echo>=== Deploying ${project.build.finalName} to ${integration.container.cluster.name} ===</echo>
                                         <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
-                                            <arg line="--port ${integration.container.cluster.adminport} deploy --force --target ${integration.container.cluster.name} ${project.build.directory}/${project.build.finalName}.war"/>
+                                            <arg line="deploy --force --availabilityenabled=true --target ${integration.container.cluster.name} ${project.build.directory}/${project.build.finalName}.war"/>
                                         </exec>
                                         <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
-                                            <arg line="--port ${integration.container.cluster.adminport} deploy --force --target ${integration.container.cluster.name} ${project.build.directory}/${project.build.finalName}.war"/>
+                                            <arg line="deploy --force --availabilityenabled=true --target ${integration.container.cluster.name} ${project.build.directory}/${project.build.finalName}.war"/>
                                         </exec>
                                     </target>
                                 </configuration>
@@ -403,9 +432,8 @@
                 </plugins>
             </build>
             <properties>
-                <integration.container.cluster.domain>mojarra-domain</integration.container.cluster.domain>
-                <integration.container.cluster.name>mojarra-cluster</integration.container.cluster.name>
-                <integration.container.cluster.adminport>60048</integration.container.cluster.adminport>
+                <integration.container.cluster.domain>domain1</integration.container.cluster.domain>
+                <integration.container.cluster.name>cluster1</integration.container.cluster.name>
                 <integration.container.home>C:/Glassfish3.1.2.2</integration.container.home>
             </properties>
         </profile>
@@ -418,7 +446,7 @@
                         <artifactId>maven-antrun-plugin</artifactId>
                         <executions>
                             <execution>
-                                <id>undeploy-wap</id>
+                                <id>undeploy</id>
                                 <phase>post-integration-test</phase>
                                 <goals>
                                     <goal>run</goal>
@@ -427,10 +455,10 @@
                                     <target>
                                         <echo>=== Undeploying ${project.build.finalName} from ${integration.container.cluster.name} ===</echo>
                                         <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
-                                            <arg line="--port ${integration.container.cluster.adminport} undeploy --target ${integration.container.cluster.name} ${project.build.finalName}"/>
+                                            <arg line="undeploy --target ${integration.container.cluster.name} ${project.build.finalName}"/>
                                         </exec>
                                         <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
-                                            <arg line="--port ${integration.container.cluster.adminport} undeploy --target ${integration.container.cluster.name} ${project.build.finalName}"/>
+                                            <arg line="undeploy --target ${integration.container.cluster.name} ${project.build.finalName}"/>
                                         </exec>
                                     </target>
                                 </configuration>
@@ -440,9 +468,8 @@
                 </plugins>
             </build>
             <properties>
-                <integration.container.cluster.domain>mojarra-domain</integration.container.cluster.domain>
-                <integration.container.cluster.name>mojarra-cluster</integration.container.cluster.name>
-                <integration.container.cluster.adminport>60048</integration.container.cluster.adminport>
+                <integration.container.cluster.domain>domain1</integration.container.cluster.domain>
+                <integration.container.cluster.name>cluster1</integration.container.cluster.name>
                 <integration.container.home>C:/Glassfish3.1.2.2</integration.container.home>
             </properties>
         </profile>
@@ -464,10 +491,10 @@
                                     <target>
                                         <echo>=== Stopping ${integration.container.cluster.name} ===</echo>
                                         <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
-                                            <arg line="--port ${integration.container.cluster.adminport} stop-cluster ${integration.container.cluster.name}"/>
+                                            <arg line="stop-cluster ${integration.container.cluster.name}"/>
                                         </exec>
                                         <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
-                                            <arg line="--port ${integration.container.cluster.adminport} stop-cluster ${integration.container.cluster.name}"/>
+                                            <arg line="stop-cluster ${integration.container.cluster.name}"/>
                                         </exec>
                                         <echo>=== Stopping ${integration.container.cluster.domain} ===</echo>
                                         <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
@@ -484,9 +511,8 @@
                 </plugins>
             </build>
             <properties>
-                <integration.container.cluster.domain>mojarra-domain</integration.container.cluster.domain>
-                <integration.container.cluster.name>mojarra-cluster</integration.container.cluster.name>
-                <integration.container.cluster.adminport>60048</integration.container.cluster.adminport>
+                <integration.container.cluster.domain>domain1</integration.container.cluster.domain>
+                <integration.container.cluster.name>cluster1</integration.container.cluster.name>
                 <integration.container.home>C:/Glassfish3.1.2.2</integration.container.home>
             </properties>
         </profile>

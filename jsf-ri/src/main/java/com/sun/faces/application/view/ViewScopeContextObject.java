@@ -39,23 +39,17 @@
  */
 package com.sun.faces.application.view;
 
-import javax.enterprise.context.spi.Contextual;
-import javax.enterprise.context.spi.CreationalContext;
+import java.io.Serializable;
 
 /**
  * An object used by ViewScopeContext to keep track of contextual and creational
  * context.
  */
-class ViewScopeContextObject {
+class ViewScopeContextObject implements Serializable {
+    private static final long serialVersionUID = 370695657651519831L;
 
-    /**
-     * Stores the contextual.
-     */
-    private Contextual contextual;
-    /**
-     * Stores the creational context.
-     */
-    private CreationalContext creationalContext;
+    private String passivationCapableId; 
+
     /**
      * Stores the name.
      */
@@ -64,31 +58,16 @@ class ViewScopeContextObject {
     /**
      * Constructor.
      *
-     * @param contextual the contextual.
+     * @param passivationCapableId the return from PassivationCapable.getId().
      * @param creationalContext the creational context.
      */
-    public ViewScopeContextObject(Contextual contextual, CreationalContext creationalContext, String name) {
-        this.contextual = contextual;
-        this.creationalContext = creationalContext;
+    public ViewScopeContextObject(String passivationCapableId, String name) {
+        this.passivationCapableId = passivationCapableId;
         this.name = name;
     }
 
-    /**
-     * Get the contextual.
-     *
-     * @return the contextual.
-     */
-    public Contextual getContextual() {
-        return this.contextual;
-    }
-
-    /**
-     * Get the creational context.
-     *
-     * @return the creational context.
-     */
-    public CreationalContext getCreationalContext() {
-        return this.creationalContext;
+    public String getPassivationCapableId() {
+        return this.passivationCapableId;
     }
     
     /*
@@ -100,22 +79,8 @@ class ViewScopeContextObject {
         return this.name;
     }
 
-    /**
-     * Set the contextual.
-     *
-     * @param contextual the contextual.
-     */
-    public void setContextual(Contextual contextual) {
-        this.contextual = contextual;
-    }
-
-    /**
-     * Set the creational context.
-     *
-     * @param creationalContext the creational context.
-     */
-    public void setCreationalContext(CreationalContext creationalContext) {
-        this.creationalContext = creationalContext;
+    public void setPassivationCapableId(String passivationCapableId) {
+        this.passivationCapableId = passivationCapableId;
     }
 
     /**

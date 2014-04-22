@@ -3,7 +3,7 @@
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -39,19 +39,31 @@
     only if the new code is made subject to such option by the copyright
     holder.
 
---><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.sun.faces.test.cluster</groupId>
-        <artifactId>pom</artifactId>
-        <version>2.2.7-SNAPSHOT</version>
-    </parent>
-    <groupId>com.sun.faces.test.cluster.javaee6web</groupId>
-    <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Cluster - JavaEE 6 Web</name>
-    <modules>
-        <module>flow</module>
-        <module>viewScoped</module>
-  </modules>
-</project>
+--><actions>
+    <action>
+        <actionName>debug.test.single</actionName>
+        <goals>
+            <goal>test-compile</goal>
+            <goal>surefire:test</goal>
+        </goals>
+        <properties>
+            <test>${packageClassName}</test>
+            <forkMode>once</forkMode>
+            <maven.surefire.debug>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address}</maven.surefire.debug>
+            <jpda.listen>true</jpda.listen>
+            <integration.url>http://localhost:18080/test-cluster-javaee6web-viewScoped/</integration.url>
+        </properties>
+    </action>
+    <action>
+        <actionName>test.single</actionName>
+        <goals>
+            <goal>test-compile</goal>
+            <goal>surefire:test</goal>
+        </goals>
+        <properties>
+            <integration.url>http://localhost:18080/test-cluster-javaee6web-viewScoped/</integration.url>
+            <integration.url2>http://localhost:18080/test-cluster-javaee6web-viewScoped/</integration.url2>
+            <test>${packageClassName}</test>
+        </properties>
+    </action>
+</actions>
