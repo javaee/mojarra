@@ -79,10 +79,10 @@
       <param-value>OPTIONS GET HEAD POST PUT DELETE TRACE CONNECT GETBOGUSALLOWED</param-value>
     </context-param>
 
-    <context-param>
+<!--    <context-param>
         <param-name>com.sun.faces.enableThreading</param-name>
         <param-value>true</param-value>
-    </context-param>
+    </context-param>-->
     <context-param>
         <param-name>com.sun.faces.generateUniqueServerStateIds</param-name>
         <param-value>false</param-value>

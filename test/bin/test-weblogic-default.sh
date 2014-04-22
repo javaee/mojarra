@@ -2,7 +2,7 @@
 
 #    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 #
-#    Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+#    Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
 #
 #    The contents of this file are subject to the terms of either the GNU
 #    General Public License Version 2 only ("GPL") or the Common Development
@@ -38,27 +38,10 @@
 #    only if the new code is made subject to such option by the copyright
 #    holder.
 
-echo *************************************************************************
-echo *
-echo *  Test for $1, $2, $3
-echo *
-echo *************************************************************************
 
-mvn -N -Phudson-wls-prepare clean install
-
+scriptdir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+$scriptdir/test-weblogic-specific.sh Production true server
+echo $?
 if [ "$?" -ne "0" ]; then
-exit $?
+exit $? 
 fi
-
-mvn -Dwebapp.projectStage=$1 -Dwebapp.partialStateSaving=$2 -Dwebapp.stateSavingMethod=$3 clean install
-
-if [ "$?" -ne "0" ]; then
-exit $?
-fi
-
-mvn -U -Pintegration-failsafe,integration-wls1214-cargo -Dintegration.serverPort=7001 -Dcargo.jvmargs="-Dweblogic.hk2.enabled=false -Xms512m -Xmx786m -XX:MaxPermSize=786m" clean verify
-
-if [ "$?" -ne "0" ]; then
-exit $?
-fi
-

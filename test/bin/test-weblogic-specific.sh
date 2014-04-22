@@ -2,7 +2,7 @@
 
 #    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 #
-#    Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+#    Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
 #
 #    The contents of this file are subject to the terms of either the GNU
 #    General Public License Version 2 only ("GPL") or the Common Development
@@ -38,10 +38,53 @@
 #    only if the new code is made subject to such option by the copyright
 #    holder.
 
+echo *************************************************************************
+echo *
+echo *  Test for $1, $2, $3
+echo *
+echo *************************************************************************
 
-scriptdir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-$scriptdir/test-wls1214-specific.sh Production true server
-echo $?
+mvn -N -Pweblogic-patch clean install
+
 if [ "$?" -ne "0" ]; then
-exit $? 
+    exit $?
+fi
+
+mvn -Dwebapp.projectStage=$1 -Dwebapp.partialStateSaving=$2 -Dwebapp.stateSavingMethod=$3 clean install
+
+if [ "$?" -ne "0" ]; then
+    exit $?
+fi
+
+mvn -N -Pweblogic-cargo -Dwebapp.projectStage=$1 -Dwebapp.partialStateSaving=$2 -Dwebapp.stateSavingMethod=$3 com.oracle.weblogic:wls-maven-plugin:start-server
+
+if [ "$?" -ne "0" ]; then
+    exit $?
+fi
+
+mvn -Pweblogic-cargo -Dwebapp.projectStage=$1 -Dwebapp.partialStateSaving=$2 -Dwebapp.stateSavingMethod=$3 pre-integration-test
+
+if [ "$?" -ne "0" ]; then
+    mvn -N -Pweblogic-cargo -Dwebapp.projectStage=$1 -Dwebapp.partialStateSaving=$2 -Dwebapp.stateSavingMethod=$3 com.oracle.weblogic:wls-maven-plugin:stop-server
+    exit $?
+fi
+
+mvn -U -Pintegration -Dintegration.serverPort=7001 verify
+
+if [ "$?" -ne "0" ]; then
+    mvn -N -Pweblogic-cargo -Dwebapp.projectStage=$1 -Dwebapp.partialStateSaving=$2 -Dwebapp.stateSavingMethod=$3 com.oracle.weblogic:wls-maven-plugin:stop-server
+    exit $?
+fi
+
+mvn -Pweblogic-cargo -Dwebapp.projectStage=$1 -Dwebapp.partialStateSaving=$2 -Dwebapp.stateSavingMethod=$3 post-integration-test
+
+if [ "$?" -ne "0" ]; then
+    mvn -N -Pweblogic-cargo -Dwebapp.projectStage=$1 -Dwebapp.partialStateSaving=$2 -Dwebapp.stateSavingMethod=$3 com.oracle.weblogic:wls-maven-plugin:stop-server
+    exit $?
+fi
+
+mvn -N -Pweblogic-cargo -Dwebapp.projectStage=$1 -Dwebapp.partialStateSaving=$2 -Dwebapp.stateSavingMethod=$3 com.oracle.weblogic:wls-maven-plugin:stop-server
+
+if [ "$?" -ne "0" ]; then
+    exit $?
 fi

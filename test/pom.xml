@@ -26,7 +26,7 @@
         <module>unit</module>
         <module>util</module>
         <module>web-profile</module>
-	<module>weblogic12c</module>
+        <module>weblogic12c</module>
     </modules>
     <build>
         <pluginManagement>
@@ -641,98 +641,42 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-antrun-plugin</artifactId>                        
+                        <groupId>com.oracle.weblogic</groupId>
+                        <artifactId>wls-maven-plugin</artifactId>
+                        <inherited>true</inherited>
                         <executions>
                             <execution>
-                                <id>cleanup</id>
-                                <phase>post-integration-test</phase>
-                                <configuration>
-                                    <target>
-                                        <delete failonerror="false">
-                                            <fileset dir="${integration.container.wldomain}/autodeploy"/>
-                                        </delete>
-                                    </target>
-                                </configuration>
-                                <goals>
-                                    <goal>run</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <dependencies>
-                            <dependency>
-                                <groupId>ant-contrib</groupId>
-                                <artifactId>ant-contrib</artifactId>
-                                <version>1.0b3</version>
-                                <exclusions>
-                                    <exclusion>
-                                        <groupId>ant</groupId>
-                                        <artifactId>ant</artifactId>
-                                    </exclusion>
-                                </exclusions>
-                            </dependency>
-                        </dependencies>
-                    </plugin>                    
-                    <plugin>
-                        <groupId>org.codehaus.cargo</groupId>
-                        <artifactId>cargo-maven2-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>start-container</id>
+                                <id>deploy</id>
                                 <phase>pre-integration-test</phase>
                                 <goals>
-                                    <goal>start</goal>
+                                    <goal>redeploy</goal>
                                 </goals>
-                                <configuration>
-                                    <timeout>24000000</timeout>
-                                </configuration>
                             </execution>
                             <execution>
-                                <id>stop-container</id>
+                                <id>undeploy</id>
                                 <phase>post-integration-test</phase>
                                 <goals>
-                                    <goal>stop</goal>
+                                    <goal>undeploy</goal>
                                 </goals>
-                                <configuration>
-                                    <timeout>2400000</timeout>
-                                </configuration>
                             </execution>
                         </executions>
-                        <configuration>
-                            <container>
-                                <containerId>${integration.container.id}</containerId>
-                                <home>${integration.container.wlserver}</home>
-                                <timeout>2400000</timeout>
-                            </container>
-                            <configuration>
-                                <type>${integration.container.type}</type>
-                                <home>${integration.container.wldomain}</home>
-                                <properties>
-                                    <cargo.servlet.port>${integration.serverPort}</cargo.servlet.port>
-                                    <cargo.weblogic.administrator.password>${integration.container.password}</cargo.weblogic.administrator.password>
-                                    <cargo.weblogic.administrator.user>${integration.container.username}</cargo.weblogic.administrator.user>
-                                    <cargo.weblogic.server>${integration.container.wlservername}</cargo.weblogic.server>
-                                </properties>
-                            </configuration>
-                        </configuration>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.codehaus.cargo</groupId>
-                                <artifactId>cargo-core-container-weblogic</artifactId>
-                                <version>1.4.4-patch4</version>
-                            </dependency>
-                        </dependencies>
                     </plugin>
                 </plugins>
             </build>
             <properties>
-                <integration.container.home>C:/Wls1214</integration.container.home>
-                <integration.container.id>weblogic12x</integration.container.id>
-                <integration.container.type>existing</integration.container.type>
-                <integration.container.wlservername>myserver</integration.container.wlservername>
-                <integration.container.wldomain>${integration.container.home}/user_projects/domains/mydomain</integration.container.wldomain>
-                <integration.container.wlserver>${integration.container.home}/wlserver</integration.container.wlserver>
-                <wls.mojarraJarName>glassfish.jsf_1.0.0.0_2-1-20.jar</wls.mojarraJarName>
+                <weblogic.cargo.home>C:/Wls1214</weblogic.cargo.home>
+                <weblogic.cargo.wlservername>myserver</weblogic.cargo.wlservername>
+                <weblogic.cargo.username>admin</weblogic.cargo.username>
+                <weblogic.cargo.password>adminadmin1</weblogic.cargo.password>
+                <weblogic.cargo.wldomain>${weblogic.cargo.home}/user_projects/domains/mydomain</weblogic.cargo.wldomain>
+                <weblogic.cargo.wlserver>${weblogic.cargo.home}/wlserver</weblogic.cargo.wlserver>
+                <domainHome>${weblogic.cargo.wldomain}</domainHome>
+                <middlewareHome>${weblogic.cargo.home}</middlewareHome>
+                <weblogicHome>${weblogic.cargo.wlserver}</weblogicHome>
+                <user>${weblogic.cargo.username}</user>
+                <password>${weblogic.cargo.password}</password>
+                <name>${project.build.finalName}</name>
+                <failOnError>false</failOnError>
             </properties>
         </profile>
         <profile>
@@ -757,7 +701,7 @@
                                             <version>${jsf.version}</version>
                                             <type>jar</type>
                                             <overWrite>true</overWrite>                                     
-                                            <outputDirectory>${integration.container.home}/tmp.mojarra</outputDirectory>
+                                            <outputDirectory>${weblogic.patch.home}/tmp.mojarra</outputDirectory>
                                             <destFileName>javax.faces.jar</destFileName>
                                         </artifactItem>
                                     </artifactItems>
@@ -776,10 +720,10 @@
                                     <goal>run</goal>
                                 </goals>
                                 <configuration>
-                                  <target>
-                                    <delete failonerror="false" dir="${integration.container.home}/tmp.mojarra" />
-                                    <mkdir dir="${integration.container.home}/tmp.mojarra/wls.mojarra" />
-                                  </target>
+                                    <target>
+                                        <delete failonerror="false" dir="${weblogic.patch.home}/tmp.mojarra" />
+                                        <mkdir dir="${weblogic.patch.home}/tmp.mojarra/wls.mojarra" />
+                                    </target>
                                 </configuration>
                             </execution>
                             <execution>
@@ -789,21 +733,21 @@
                                     <goal>run</goal>
                                 </goals>
                                 <configuration>
-                                  <target>
-                                    <unzip src="${integration.container.home}/${wls.mojarraJarPath}/${wls.mojarraJarName}"
-                                           dest="${integration.container.home}/tmp.mojarra/wls.mojarra" />
-                                    <delete dir="${integration.container.home}/tmp.mojarra/wls.mojarra/javax" />
-                                    <delete dir="${integration.container.home}/tmp.mojarra/wls.mojarra/com/sun" />
-                                    <delete dir="${integration.container.home}/tmp.mojarra/wls.mojarra/META-INF" />
-                                    <unzip src="${integration.container.home}/tmp.mojarra/javax.faces.jar"
-                                           dest="${integration.container.home}/tmp.mojarra/wls.mojarra" />
-                                    <zip destfile="${integration.container.home}/tmp.mojarra/${wls.mojarraJarName}"
-                                         basedir="${integration.container.home}/tmp.mojarra/wls.mojarra"
-                                         update="true" />
-                                    <copy overwrite="true"
-                                          file="${integration.container.home}/tmp.mojarra/${wls.mojarraJarName}"
-                                          tofile="${integration.container.home}/${wls.mojarraJarPath}/${wls.mojarraJarName}" />
-                                  </target>
+                                    <target>
+                                        <unzip src="${weblogic.patch.home}/${weblogic.patch.mojarraJarPath}/${weblogic.patch.mojarraJarName}"
+                                               dest="${weblogic.patch.home}/tmp.mojarra/wls.mojarra" />
+                                        <delete dir="${weblogic.patch.home}/tmp.mojarra/wls.mojarra/javax" />
+                                        <delete dir="${weblogic.patch.home}/tmp.mojarra/wls.mojarra/com/sun" />
+                                        <delete dir="${weblogic.patch.home}/tmp.mojarra/wls.mojarra/META-INF" />
+                                        <unzip src="${weblogic.patch.home}/tmp.mojarra/javax.faces.jar"
+                                               dest="${weblogic.patch.home}/tmp.mojarra/wls.mojarra" />
+                                        <zip destfile="${weblogic.patch.home}/tmp.mojarra/${weblogic.patch.mojarraJarName}"
+                                             basedir="${weblogic.patch.home}/tmp.mojarra/wls.mojarra"
+                                             update="true" />
+                                        <copy overwrite="true"
+                                              file="${weblogic.patch.home}/tmp.mojarra/${weblogic.patch.mojarraJarName}"
+                                              tofile="${weblogic.patch.home}/${weblogic.patch.mojarraJarPath}/${weblogic.patch.mojarraJarName}" />
+                                    </target>
                                 </configuration>
                             </execution>
                         </executions>
@@ -811,8 +755,8 @@
                 </plugins>
             </build>
             <properties>
-                <wls.mojarraJarPath>wlserver/modules</wls.mojarraJarPath>
-                <wls.mojarraJarName>glassfish.jsf_2.0.0.0_2-1-20.jar</wls.mojarraJarName>
+                <weblogic.patch.mojarraJarPath>wlserver/modules</weblogic.patch.mojarraJarPath>
+                <weblogic.patch.mojarraJarName>glassfish.jsf_2.0.0.0_2-1-20.jar</weblogic.patch.mojarraJarName>
             </properties>
         </profile>
         <profile>
