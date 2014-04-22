@@ -56,7 +56,6 @@
         <module>ccInJar</module>
         <module>core</module>
         <module>coreEmptyAsNull</module>
-        <module>html</module>
         <module>ui</module>
         <module>viewAction</module>
         <module>processing</module>
