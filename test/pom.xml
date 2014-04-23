@@ -654,13 +654,6 @@
                                     <goal>start-app</goal>
                                 </goals>
                             </execution>
-                            <execution>
-                                <id>undeploy</id>
-                                <phase>post-integration-test</phase>
-                                <goals>
-                                    <goal>undeploy</goal>
-                                </goals>
-                            </execution>
                         </executions>
                     </plugin>
                 </plugins>
