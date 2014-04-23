@@ -643,6 +643,7 @@
                     <plugin>
                         <groupId>com.oracle.weblogic</groupId>
                         <artifactId>wls-maven-plugin</artifactId>
+                        <version>12.1.3.0</version>
                         <inherited>true</inherited>
                         <executions>
                             <execution>
