@@ -671,7 +671,6 @@
                 <password>${weblogic.cargo.password}</password>
                 <name>${project.build.finalName}</name>
                 <failOnError>false</failOnError>
-                <verbose>true</verbose>
                 <timeout>60</timeout>
             </properties>
         </profile>
