@@ -41,7 +41,6 @@ package com.sun.faces.application.view;
 
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
