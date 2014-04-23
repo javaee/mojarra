@@ -39,6 +39,7 @@
  */
 package com.sun.faces.test.cluster.javaee6web.viewScoped;
 
+import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.html.HtmlButton;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import org.junit.After;
@@ -99,6 +100,7 @@ public class Issue3319IT {
 
     @Test
     public void testViewScopeAndViewStateIsReplicated() throws Exception {
+        webClient.setAjaxController(new NicelyResynchronizingAjaxController());
         HtmlPage page = webClient.getPage(webUrl);
 
         HtmlTextInput myText = (HtmlTextInput) page.getElementById("text");
@@ -129,6 +131,7 @@ public class Issue3319IT {
     
     @Test
     public void testViewScopeAndViewStateIsClearedAndReplicated() throws Exception {
+        webClient.setAjaxController(new NicelyResynchronizingAjaxController());
         HtmlPage page = webClient.getPage(webUrl);
 
         HtmlTextInput myText = (HtmlTextInput) page.getElementById("text");
