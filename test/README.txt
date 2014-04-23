@@ -1,14 +1,14 @@
 
- Introduction
- ============
+Introduction
+============
 
  This README contains helpful information to get you started with testing.
  
  Note this README does not deal with building Mojarra from source, see the
  top level directory README for more information on that.
 
- Install the required JAR files
- ==============================
+Install the required JAR files
+==============================
 
   You will need to install some JAR files into your local Maven repository.
   Execute the following command line from the top level test directory.
@@ -16,8 +16,8 @@
      mvn clean install
  
 
- Use Glassfish for testing
- =========================
+Use Glassfish for testing
+=========================
 
   1. Configure settings.xml
   2. Prepare Glassfish
@@ -85,7 +85,8 @@
  -------------
 
   Once you have deployed the tests to Glassfish you are ready to go ahead and
-  test. From the same directory you deployed you will run the tests.
+  test. From the same directory you deployed the web application(s) you will 
+  run the tests.
 
     mvn -Pintegration
       [-Dwebapp.projectStage=[Production|Development]]
@@ -141,14 +142,14 @@ More specific testing
         the name of the test method (note you can use regular expressions to 
         match multiple test and methods).
 
- Testing using other servers
- ===========================
+Testing using other servers
+===========================
 
   Please see README-Tomcat.txt file for using Tomcat.
   Please see README-Weblogic.text for using Weblogic.
 
- Pitfalls
- ========
+Pitfalls
+========
 
  Since we are assuming a particular way of deployment you as the developer will
  have to be aware of the following pitfalls that might crop up if you are doing
