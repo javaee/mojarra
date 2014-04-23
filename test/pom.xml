@@ -651,7 +651,6 @@
                                 <phase>pre-integration-test</phase>
                                 <goals>
                                     <goal>redeploy</goal>
-                                    <goal>start-app</goal>
                                 </goals>
                             </execution>
                         </executions>
