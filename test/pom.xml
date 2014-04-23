@@ -679,6 +679,7 @@
                 <password>${weblogic.cargo.password}</password>
                 <name>${project.build.finalName}</name>
                 <failOnError>false</failOnError>
+                <verbose>true</verbose>
             </properties>
         </profile>
         <profile>
