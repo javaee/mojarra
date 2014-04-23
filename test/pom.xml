@@ -776,6 +776,9 @@
                                         <delete quiet="true" failonerror="false" dir="${weblogic.unzip.unzipDir}"/>
                                         <mkdir dir="${weblogic.unzip.unzipDir}"/>
                                         <unzip src="${weblogic.unzip.zipFile}" dest="${weblogic.unzip.unzipDir}"/>
+                                        <exec executable="sh" osfamily="unix">
+                                            <arg line='-c "chmod a+x ${weblogic.unzip.home}/wls/user_projects/domains/mydomain/bin/*"'/>
+                                        </exec>
                                     </target>
                                 </configuration>
                                 <goals>
