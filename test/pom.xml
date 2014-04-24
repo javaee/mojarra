@@ -647,26 +647,6 @@
                         <inherited>true</inherited>
                         <executions>
                             <execution>
-                                <id>createDomain</id>
-                                <phase>validate</phase>
-                                <configuration>
-                                    <script>
-readTemplate('${weblogic.cargo.home}/wlserver/common/templates/wls/wls.jar')
-cd('/Security/mydomain/User/weblogic')
-set('Name', '${weblogic.cargo.username}')
-set('Password', '${weblogic.cargo.password}')
-cd('/Server/AdminServer')
-create('AdminServer', 'ServerStart')
-cd('ServerStart/AdminServer')
-set('Arguments', '${weblogic.cargo.memargs}')
-writeDomain('${weblogic.cargo.home}/user_projects/domains/mydomain')
-                                    </script>
-                                </configuration>
-                                <goals>
-                                    <goal>wlst</goal>
-                                </goals>
-                            </execution>
-                            <execution>
                                 <id>deploy</id>
                                 <phase>pre-integration-test</phase>
                                 <goals>
