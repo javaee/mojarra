@@ -670,7 +670,6 @@ writeDomain('${weblogic.cargo.home}/user_projects/domains/mydomain')
                                 <id>deploy</id>
                                 <phase>pre-integration-test</phase>
                                 <goals>
-                                    <goal>start-server</goal>
                                     <goal>redeploy</goal>
                                 </goals>
                             </execution>
@@ -679,7 +678,6 @@ writeDomain('${weblogic.cargo.home}/user_projects/domains/mydomain')
                                 <phase>post-integration-test</phase>
                                 <goals>
                                     <goal>undeploy</goal>
-                                    <goal>stop-server</goal>
                                 </goals>
                             </execution>
                         </executions>
