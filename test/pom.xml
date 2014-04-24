@@ -645,12 +645,27 @@
                         <artifactId>wls-maven-plugin</artifactId>
                         <version>12.1.3.0</version>
                         <inherited>true</inherited>
-                        <configuration>
-                            <systemProperties>
-                                <USER_MEM_ARGS>${weblogic.cargo.memargs}</USER_MEM_ARGS>
-                            </systemProperties>
-                        </configuration>
                         <executions>
+                            <execution>
+                                <id>createDomain</id>
+                                <phase>validate</phase>
+                                <configuration>
+                                    <script>
+readTemplate('${weblogic.cargo.home}/wlserver/common/templates/wls/wls.jar')
+cd('/Security/base_domain/User/weblogic')
+set('Name', '${weblogic.cargo.username}')
+set('Password', '${weblogic.cargo.password}')
+cd('/Server/AdminServer')
+create('AdminServer', 'ServerStart')
+cd('ServerStart/AdminServer')
+set('Arguments', '${weblogic.cargo.memargs}')
+writeDomain('${weblogic.cargo.home}/user_projects/domains/mydomain')
+                                    </script>
+                                </configuration>
+                                <goals>
+                                    <goal>wlst</goal>
+                                </goals>
+                            </execution>
                             <execution>
                                 <id>deploy</id>
                                 <phase>pre-integration-test</phase>
