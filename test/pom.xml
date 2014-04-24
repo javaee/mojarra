@@ -671,7 +671,7 @@ writeDomain('${weblogic.cargo.home}/user_projects/domains/mydomain')
                                 <phase>install</phase>
                                 <configuration>
                                     <script>
-startServer(domainName='AdminServer', jvmArgs='${weblogic.cargo.meargs}')
+startServer(domainName='AdminServer', jvmArgs='${weblogic.cargo.memargs}')
                                     </script>
                                 </configuration>
                                 <goals>
