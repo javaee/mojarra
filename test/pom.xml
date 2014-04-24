@@ -777,13 +777,16 @@
                                 <phase>install</phase>
                                 <configuration>
                                     <script>
-startServer(adminServerName='AdminServer', domainName='mydomain', jvmArgs='${weblogic.cargo.memargs}')
+startServer(
+    'AdminServer', 'mydomain', 't3://localhost:7001', '${weblogic.cargo.username}',
+    '${weblogic.cargo.password}', '${weblogic.cargo.wldomain}',
+    jvmArgs='${weblogic.cargo.memargs}')
                                     </script>
                                 </configuration>
                                 <goals>
                                     <goal>wlst</goal>
                                 </goals>
-                            </execution>
+                             </execution>
                         </executions>
                     </plugin>
                 </plugins>
@@ -791,8 +794,8 @@ startServer(adminServerName='AdminServer', domainName='mydomain', jvmArgs='${web
             <properties>
                 <weblogic.cargo.home>C:/Wls1214</weblogic.cargo.home>
                 <weblogic.cargo.wlservername>myserver</weblogic.cargo.wlservername>
-                <weblogic.cargo.username>admin</weblogic.cargo.username>
-                <weblogic.cargo.password>adminadmin1</weblogic.cargo.password>
+                <weblogic.cargo.username>system</weblogic.cargo.username>
+                <weblogic.cargo.password>weblogic</weblogic.cargo.password>
                 <weblogic.cargo.wldomain>${weblogic.cargo.home}/user_projects/domains/mydomain</weblogic.cargo.wldomain>
                 <weblogic.cargo.wlserver>${weblogic.cargo.home}/wlserver</weblogic.cargo.wlserver>
                 <weblogic.cargo.memargs>-Xms512m, -Xmx786m, -XX:MaxPermSize=786m</weblogic.cargo.memargs>
