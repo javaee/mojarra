@@ -280,6 +280,8 @@ public final class FactoryFinder {
                            javax.faces.context.ExternalContextFactory.class);
         factoryClasses.put(FACES_CONTEXT_FACTORY,
                            javax.faces.context.FacesContextFactory.class);
+        factoryClasses.put(FACELET_CACHE_FACTORY,
+                           javax.faces.view.facelets.FaceletCacheFactory.class);
         factoryClasses.put(VISIT_CONTEXT_FACTORY,
                            javax.faces.component.visit.VisitContextFactory.class);
         factoryClasses.put(LIFECYCLE_FACTORY,

@@ -72,6 +72,7 @@
         <module>dynamic</module>
         <module>el</module>
         <module>facelets</module>
+        <module>factory</module>
         <module>flash</module>
         <module>lifecycle</module>
         <module>renderKit</module>
