@@ -801,7 +801,7 @@ startServer(adminServerName='AdminServer', jvmArgs='${weblogic.cargo.memargs}')
                                     </script>
                                 </configuration>
                                 <goals>
-                                    <goal>start-server</goal>
+                                    <goal>wlst</goal>
                                 </goals>
                             </execution>
                         </executions>
