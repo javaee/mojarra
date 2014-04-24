@@ -652,7 +652,7 @@
                                 <configuration>
                                     <script>
 readTemplate('${weblogic.cargo.home}/wlserver/common/templates/wls/wls.jar')
-cd('/Security/base_domain/User/weblogic')
+cd('/Security/mydomain/User/weblogic')
 set('Name', '${weblogic.cargo.username}')
 set('Password', '${weblogic.cargo.password}')
 cd('/Server/AdminServer')
