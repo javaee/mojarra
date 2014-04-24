@@ -655,7 +655,7 @@
                                 <id>deploy</id>
                                 <phase>pre-integration-test</phase>
                                 <goals>
-                                    <goal>com.oracle.weblogic:wls-maven-plugin:start-server</goal>
+                                    <goal>start-server</goal>
                                     <goal>redeploy</goal>
                                 </goals>
                             </execution>
@@ -664,7 +664,7 @@
                                 <phase>post-integration-test</phase>
                                 <goals>
                                     <goal>undeploy</goal>
-                                    <goal>om.oracle.weblogic:wls-maven-plugin:stop-server</goal>
+                                    <goal>stop-server</goal>
                                 </goals>
                             </execution>
                         </executions>
