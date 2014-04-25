@@ -41,12 +41,15 @@
 package com.sun.faces.flow;
 
 import com.sun.faces.util.Util;
+import java.io.Serializable;
 import javax.el.ExpressionFactory;
 import javax.el.ValueExpression;
 import javax.faces.context.FacesContext;
 import javax.faces.flow.ReturnNode;
 
-public class ReturnNodeImpl extends ReturnNode {
+public class ReturnNodeImpl extends ReturnNode implements Serializable {
+    
+    private static final long serialVersionUID = 7159675814039078231L;
     
     private final String id;
     private ValueExpression fromOutcome;

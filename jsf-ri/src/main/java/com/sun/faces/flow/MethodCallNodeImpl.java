@@ -43,6 +43,7 @@ package com.sun.faces.flow;
 
 import com.sun.faces.facelets.util.ReflectionUtil;
 import com.sun.faces.util.FacesLogger;
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -56,7 +57,9 @@ import javax.faces.context.FacesContext;
 import javax.faces.flow.MethodCallNode;
 import javax.faces.flow.Parameter;
 
-public class MethodCallNodeImpl extends MethodCallNode {
+public class MethodCallNodeImpl extends MethodCallNode implements Serializable {
+
+    private static final long serialVersionUID = -5400138716176841428L;
     
     private final String id;
     

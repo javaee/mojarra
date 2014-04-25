@@ -39,8 +39,7 @@
     only if the new code is made subject to such option by the copyright
     holder.
 
--->
-<actions>
+--><actions>
     <action>
         <actionName>debug.test.single</actionName>
         <goals>
@@ -52,8 +51,8 @@
             <forkMode>once</forkMode>
             <maven.surefire.debug>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address}</maven.surefire.debug>
             <jpda.listen>true</jpda.listen>
-            <integration.url>http://localhost:18080/test-webprofile-cluster-flow-basic_faces_flow_call/</integration.url>
-            <integration.url2>http://localhost:28080/test-webprofile-cluster-flow-basic_faces_flow_call/</integration.url2>
+            <integration.url>http://localhost:18080/test-cluster-javaee6web-flow-basic_faces_flow_call/</integration.url>
+            <integration.url2>http://localhost:18080/test-cluster-javaee6web-flow-basic_faces_flow_call/</integration.url2>
         </properties>
     </action>
     <action>

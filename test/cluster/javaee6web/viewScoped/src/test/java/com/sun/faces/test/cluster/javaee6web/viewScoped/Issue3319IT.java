@@ -117,10 +117,6 @@ public class Issue3319IT {
         
         Thread.sleep(10000);
         
-        HtmlElement portSwitchMessage = (HtmlElement) page.getElementById("actionUrlMessage");
-        assertTrue(portSwitchMessage.asText().contains("28080"));
-        assertTrue(!portSwitchMessage.asText().contains("18080"));
-        
         button = (HtmlSubmitInput) page.getElementById("reload");
         page = button.click();
         
@@ -163,10 +159,6 @@ public class Issue3319IT {
         page = switchPort.click();
         
         Thread.sleep(10000);
-        
-        HtmlElement portSwitchMessage = (HtmlElement) page.getElementById("actionUrlMessage");
-        assertTrue(portSwitchMessage.asText().contains("28080"));
-        assertTrue(!portSwitchMessage.asText().contains("18080"));
         
         button = (HtmlSubmitInput) page.getElementById("reload");
         page = button.click();

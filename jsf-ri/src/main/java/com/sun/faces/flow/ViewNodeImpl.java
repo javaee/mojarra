@@ -40,9 +40,12 @@
  */
 package com.sun.faces.flow;
 
+import java.io.Serializable;
 import javax.faces.flow.ViewNode;
 
-public class ViewNodeImpl extends ViewNode {
+public class ViewNodeImpl extends ViewNode implements Serializable {
+    
+    private static final long serialVersionUID = -7577859001307479164L;
     
     private final String id;
     private final String vdlDocumentId;

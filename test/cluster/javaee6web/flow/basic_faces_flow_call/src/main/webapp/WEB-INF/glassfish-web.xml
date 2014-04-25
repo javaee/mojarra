@@ -12,4 +12,13 @@
             <description>Keep a copy of the generated servlet class' java code.</description>
         </property>
     </jsp-config>
+    
+  <session-config>
+    <session-manager persistence-type="replicated">
+      <manager-properties>
+    <property name="relaxCacheVersionSemantics" value="true"/>
+      </manager-properties>
+    </session-manager>
+  </session-config>
+  
 </glassfish-web-app>

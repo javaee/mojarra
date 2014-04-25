@@ -40,10 +40,11 @@
  */
 package com.sun.faces.flow;
 
+import java.io.Serializable;
 import javax.el.ValueExpression;
 import javax.faces.flow.Parameter;
 
-public class ParameterImpl extends Parameter {
+public class ParameterImpl extends Parameter implements Serializable {
     
     private static final long serialVersionUID = -5433802753213440653L;
 

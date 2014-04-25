@@ -49,15 +49,41 @@
     
     <head>
         <title>Last page in the flow</title>
+        <script type="text/javascript">
+            
+            var switchPort = function switchPort() {
+                var formAction = document['myForm'].action;
+                if (-1 != formAction.indexOf("18080")) {
+                    document['myForm'].action = formAction.replace("18080", "28080");
+                } else if (-1 != formAction.indexOf("28080")) {
+                    document['myForm'].action = formAction.replace("28080", "18080");
+                } else if (formAction.charAt(0) == '/') {
+                    var loc = window.location;
+                    var otherPort = (loc.port == 18080) ? 28080 : 18080;
+                    var newActionUrl = loc.protocol + "//" + loc.hostname + ":" + otherPort + formAction;
+                    document['myForm'].action = newActionUrl;
+                } else {
+                    throw new Error("This test assumes the port is either 18080 or 28080. formAction: " + formAction);
+                }
+                var actionUrlMessageDiv = document.getElementById("actionUrlMessage");
+                actionUrlMessageDiv.innerHTML = "<p>new actionUrl is " + document['myForm'].action + ". </p>";
+            }
+            
+            
+        </script>
+        
+        
     </head>
     <body bgcolor="red">
-        
+
+        <div id="actionUrlMessage"></div>
+
         <p>Last page in the flow</p>
         <p>Flow bean name: #{flow_a_Bean.name}</p>
         
         <p>value: #{flowScope.value}</p>
         
-    <h:form prependId="false">
+    <h:form id="myForm" prependId="false">
         <p><h:commandButton id="back" value="back" action="next_a" /></p>
         <p><h:commandButton id="return" value="return" action="taskFlowReturn1" /></p>
         <p><h:button id="return_GET" value="return via GET" outcome="taskFlowReturn1" /></p>
@@ -65,5 +91,8 @@
         <p><h:button id="callB_GET" value="callB via GET" outcome="callB" /></p>
         
     </h:form>
+    
+    <p><button id="switchPort" type="button" onclick="switchPort(); return false;">switchPort</button></p>
+        
     </body>
 </html>

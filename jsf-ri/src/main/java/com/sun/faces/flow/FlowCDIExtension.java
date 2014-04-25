@@ -55,6 +55,7 @@ import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.AfterBeanDiscovery;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.BeforeBeanDiscovery;
 import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.ProcessBean;
 import javax.faces.flow.FlowScoped;
@@ -81,6 +82,10 @@ public class FlowCDIExtension implements Extension {
            fbi.id = flowScoped.value();
            flowScopedBeanFlowIds.put(event.getBean(), fbi);
        }
+   }
+   
+   public void beforeBeanDiscovery(@Observes final BeforeBeanDiscovery event, BeanManager beanManager) {
+       event.addScope(FlowScoped.class, true, true);
    }
 
    void afterBeanDiscovery(@Observes final AfterBeanDiscovery event, BeanManager beanManager) {

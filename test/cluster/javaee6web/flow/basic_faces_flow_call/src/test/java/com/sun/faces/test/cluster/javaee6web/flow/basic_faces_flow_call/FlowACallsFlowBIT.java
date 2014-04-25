@@ -39,6 +39,8 @@
  */
 package com.sun.faces.test.cluster.javaee6web.flow.basic_faces_flow_call;
 
+import com.gargoylesoftware.htmlunit.html.HtmlButton;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -99,13 +101,11 @@ public class FlowACallsFlowBIT {
     }
 
     @Test
-    @Ignore
     public void testFacesFlowCallPostback() throws Exception {
         doTestFacesFlowCall("");
     }
 
     @Test
-    @Ignore
     public void testFacesFlowCallGet() throws Exception {
         doTestFacesFlowCall("_GET");
     }
@@ -141,6 +141,11 @@ public class FlowACallsFlowBIT {
         
         pageText = page.asText();
         assertTrue(pageText.contains(value));
+        
+        HtmlButton switchPort = (HtmlButton) page.getElementById("switchPort");
+        page = switchPort.click();
+        
+        Thread.sleep(10000);
         
         button = (HtmlInput) page.getElementById("callB" + flowInvocationSuffix);
         page = button.click();
