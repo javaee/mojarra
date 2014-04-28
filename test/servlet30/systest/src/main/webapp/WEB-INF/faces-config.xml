@@ -68,12 +68,12 @@
       <phase-listener>com.sun.faces.annotation.AnnotatedPhaseListener</phase-listener>
   </lifecycle>
   
-<!--  <factory>
+  <factory>
     <application-factory>com.sun.faces.systest.lifecycle.ApplicationFactoryWrapper</application-factory>
     <faces-context-factory>com.sun.faces.systest.lifecycle.FacesContextFactoryWrapper</faces-context-factory>
     <lifecycle-factory>com.sun.faces.systest.lifecycle.LifecycleFactoryWrapper</lifecycle-factory>
     <render-kit-factory>com.sun.faces.systest.lifecycle.RenderKitFactoryWrapper</render-kit-factory>
-  </factory>-->
+  </factory>
     
     <converter>
         <converter-for-class>com.sun.faces.systest.model.SpecialBean</converter-for-class>

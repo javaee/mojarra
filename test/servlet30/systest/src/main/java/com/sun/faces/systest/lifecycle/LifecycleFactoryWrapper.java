@@ -65,7 +65,7 @@ public class LifecycleFactoryWrapper extends LifecycleFactory {
 	return oldFactory.getLifecycle(lifecycleId);
     }
 
-    public Iterator getLifecycleIds() {
+    public Iterator<String> getLifecycleIds() {
 	return oldFactory.getLifecycleIds();
     }
 
