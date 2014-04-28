@@ -13,5 +13,6 @@
     <name>Mojarra Test Agnostic - POM</name>
     <modules>
         <module>shared</module>
+        <module>factory</module>
     </modules>
 </project>
