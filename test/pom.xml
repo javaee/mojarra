@@ -650,7 +650,7 @@
                                 <id>deploy</id>
                                 <phase>pre-integration-test</phase>
                                 <goals>
-                                    <goal>redeploy</goal>
+                                    <goal>deploy</goal>
                                 </goals>
                             </execution>
                             <execution>
