@@ -94,7 +94,7 @@ public class FaceletCacheFactoryIT {
     }
 
     @Test
-    public void testBuilderDefinedFlowWithMethodCall() throws Exception {
+    public void testFaceletCacheDecoration() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
 
         assertTrue(page.getBody().asText().indexOf("SUCCESS") != -1);
