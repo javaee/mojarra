@@ -225,6 +225,11 @@ public class ViewScopeManager implements HttpSessionListener, ViewMapListener {
      */
     @Override
     public void processEvent(SystemEvent se) throws AbortProcessingException {
+        // Take no action if CDI is not available.
+        if (null == contextManager) {
+            return;
+        }
+        
         if (se instanceof PreDestroyViewMapEvent) {
             processPreDestroyViewMap(se);
         }
