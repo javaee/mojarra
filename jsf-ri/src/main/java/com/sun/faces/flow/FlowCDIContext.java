@@ -382,9 +382,6 @@ public class FlowCDIContext implements Context, Serializable {
             Map<String, Object> flowScopedBeanMap = getFlowScopedBeanMapForCurrentFlow();
             Map<String, CreationalContext<?>> creationalMap = getFlowScopedCreationalMapForCurrentFlow();
             
-            if (!(contextual instanceof PassivationCapable)) {
-                throw new IllegalArgumentException("FlowScoped bean " + contextual.toString() + " must be PassivationCapable, but is not.");
-            }
             String passivationCapableId = ((PassivationCapable)contextual).getId();
 
             synchronized (flowScopedBeanMap) {
@@ -421,8 +418,12 @@ public class FlowCDIContext implements Context, Serializable {
     @Override
     public <T> T get(Contextual<T> contextual) {
         assertNotReleased();
-        
-        return (T) getFlowScopedBeanMapForCurrentFlow().get(contextual);
+        if (!(contextual instanceof PassivationCapable)) {
+            throw new IllegalArgumentException("FlowScoped bean " + contextual.toString() + " must be PassivationCapable, but is not.");
+        }
+        String passivationCapableId = ((PassivationCapable)contextual).getId();
+
+        return (T) getFlowScopedBeanMapForCurrentFlow().get(passivationCapableId);
     }
     
     @Override
