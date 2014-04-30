@@ -42,6 +42,7 @@ package com.sun.faces.application.view;
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.util.LRUMap;
+import com.sun.faces.util.Util;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
@@ -100,7 +101,12 @@ public class ViewScopeManager implements HttpSessionListener, ViewMapListener {
      */
     public ViewScopeManager() {
         try {
-            contextManager = new ViewScopeContextManager();
+            FacesContext context = FacesContext.getCurrentInstance();
+            if (Util.isCDIAvailable(context.getExternalContext().getApplicationMap())) {
+                contextManager = new ViewScopeContextManager();
+            } else {
+                contextManager = null;
+            }
         } catch (Exception exception) {
             if (LOGGER.isLoggable(Level.INFO)) {
                 LOGGER.log(Level.INFO, "CDI @ViewScoped manager unavailable", exception);
@@ -190,7 +196,7 @@ public class ViewScopeManager implements HttpSessionListener, ViewMapListener {
      *
      * @return the CDI context manager.
      */
-    public ViewScopeContextManager getContextManager() {
+    ViewScopeContextManager getContextManager() {
         return this.contextManager;
     }
 
@@ -225,11 +231,6 @@ public class ViewScopeManager implements HttpSessionListener, ViewMapListener {
      */
     @Override
     public void processEvent(SystemEvent se) throws AbortProcessingException {
-        // Take no action if CDI is not available.
-        if (null == contextManager) {
-            return;
-        }
-        
         if (se instanceof PreDestroyViewMapEvent) {
             processPreDestroyViewMap(se);
         }
@@ -296,7 +297,9 @@ public class ViewScopeManager implements HttpSessionListener, ViewMapListener {
                     viewRoot.getTransientStateHelper().putTransient(VIEW_MAP_ID, viewMapId);
                     viewRoot.getTransientStateHelper().putTransient(VIEW_MAP, viewMap);
                 }
-                getContextManager().fireInitializedEvent(facesContext, viewRoot);
+                if (null != contextManager) {
+                    contextManager.fireInitializedEvent(facesContext, viewRoot);
+                }
             }
         }
     }
@@ -319,9 +322,10 @@ public class ViewScopeManager implements HttpSessionListener, ViewMapListener {
 
             if (contextManager != null) {
                 contextManager.clear(facesContext, viewMap);
+                contextManager.fireDestroyedEvent(facesContext, viewRoot);
             }
 
-            getContextManager().fireDestroyedEvent(facesContext, viewRoot);
+            
             destroyBeans(facesContext, viewMap);
 
         }
