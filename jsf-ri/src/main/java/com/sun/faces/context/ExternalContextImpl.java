@@ -289,9 +289,15 @@ public class ExternalContextImpl extends ExternalContext {
      */
     public Map<String,Object> getSessionMap() {
         if (sessionMap == null) {
-            sessionMap = new SessionMap((HttpServletRequest) request,
-                                        FacesContext.getCurrentInstance()
-                                              .getApplication().getProjectStage(), distributable);
+            if (distributable) {
+                sessionMap = new AlwaysPuttingSessionMap((HttpServletRequest) request,
+                        FacesContext.getCurrentInstance()
+                        .getApplication().getProjectStage());
+            } else {
+                sessionMap = new SessionMap((HttpServletRequest) request,
+                        FacesContext.getCurrentInstance()
+                        .getApplication().getProjectStage());
+            }
         }
         return sessionMap;
     }

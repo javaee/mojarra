@@ -40,8 +40,6 @@
  */
 package com.sun.faces.flow;
 
-import com.sun.faces.config.WebConfiguration;
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableDistributable;
 import com.sun.faces.util.Util;
 import java.io.Serializable;
 import java.text.MessageFormat;
@@ -72,7 +70,6 @@ public class FlowHandlerImpl extends FlowHandler {
         flowFeatureIsEnabled = false;
         flows = new ConcurrentHashMap<String, Map<String, Flow>>();
         flowsByFlowId = new ConcurrentHashMap<String, List<Flow>>();
-        distributable = WebConfiguration.getInstance().isOptionEnabled(EnableDistributable);
     }
     
     private boolean flowFeatureIsEnabled;
@@ -82,11 +79,10 @@ public class FlowHandlerImpl extends FlowHandler {
     
     // key: flowId, List<Flow>
     private Map<String, List<Flow>> flowsByFlowId;
-    private final boolean distributable;
 
     @Override
     public Map<Object, Object> getCurrentFlowScope() {
-        return FlowCDIContext.getCurrentFlowScope(distributable);
+        return FlowCDIContext.getCurrentFlowScopeAndUpdateSession();
     }
     
     @Override
@@ -386,7 +382,7 @@ public class FlowHandlerImpl extends FlowHandler {
     private void pushFlow(FacesContext context, Flow toPush, String lastDisplayedViewId) {
         FlowDeque<Flow> flowStack = getFlowStack(context);
         flowStack.addFirst(toPush, lastDisplayedViewId);
-        FlowCDIContext.flowEntered(distributable);
+        FlowCDIContext.flowEntered();
         MethodExpression me  = toPush.getInitializer();
         if (null != me) {
             me.invoke(context.getELContext(), null);
@@ -416,7 +412,7 @@ public class FlowHandlerImpl extends FlowHandler {
         if (null != me) {
             me.invoke(context.getELContext(), null);
         }
-        FlowCDIContext.flowExited(distributable);
+        FlowCDIContext.flowExited();
     }
     
     private FlowDeque<Flow> getFlowStack(FacesContext context) {

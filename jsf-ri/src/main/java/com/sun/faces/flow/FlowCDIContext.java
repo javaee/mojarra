@@ -41,7 +41,6 @@
 package com.sun.faces.flow;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import java.io.Serializable;
@@ -49,6 +48,7 @@ import javax.faces.flow.FlowScoped;
 import java.lang.annotation.Annotation;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -130,71 +130,100 @@ public class FlowCDIContext implements Context, Serializable {
     
     // -------------------------------------------------------- Private Methods
     
-    // <editor-fold defaultstate="collapsed" desc="Private helpers">       
-    private static Map<String, Object> getFlowScopedBeanMapForCurrentFlow() {
-        return getFlowScopedBeanMapForCurrentFlow(false);
-    }
+    // <editor-fold defaultstate="collapsed" desc="Private helpers">  
     
-    private static Map<String, Object> getFlowScopedBeanMapForCurrentFlow(boolean touchSession) {
-
-        Map<String, Object> result;
-        FacesContext context = FacesContext.getCurrentInstance();
-        ExternalContext extContext = context.getExternalContext();
-        Map<String, Object> sessionMap = extContext.getSessionMap();
-        Flow currentFlow = getCurrentFlow(context);
+    /*
+     * Encapsulate access to the two maps we need to provide.
+     * 
+     */
+    private static class FlowScopeMapHelper {
+        // <editor-fold defaultstate="collapsed">  
+        private transient final String flowBeansForClientWindowKey;
+        private transient final String creationalForClientWindowKey;
+        private transient final Map<String, Object> sessionMap;
         
-        if (null == currentFlow) {
-            return null;
-        }
-        
-        ClientWindow curWindow = context.getExternalContext().getClientWindow();
-        if (null == curWindow) { 
-            throw new IllegalStateException("Unable to obtain current ClientWindow.  Is the ClientWindow feature enabled?");
-        }
-
-        String flowBeansForClientWindow = currentFlow.getClientWindowFlowId(curWindow) + "_beans";
-        result = (Map<String, Object>) sessionMap.get(flowBeansForClientWindow);
-        if (null == result) {
-            result = new ConcurrentHashMap<String, Object>();
-            sessionMap.put(flowBeansForClientWindow, result);
-            ensureBeanMapCleanupOnSessionDestroyed(sessionMap, flowBeansForClientWindow);
-        } else if (touchSession) {
-            sessionMap.put(flowBeansForClientWindow, result);
-        }
-        
-        return result;
-    }
-    
-    private static Map<String, CreationalContext<?>> getFlowScopedCreationalMapForCurrentFlow() {
-        return getFlowScopedCreationalMapForCurrentFlow(false);
-    }
-    
-    private static Map<String, CreationalContext<?>> getFlowScopedCreationalMapForCurrentFlow(boolean touchSession) {
-        Map<String, CreationalContext<?>> result;
-        FacesContext context = FacesContext.getCurrentInstance();
-        ExternalContext extContext = context.getExternalContext();
-        Map<String, Object> sessionMap = extContext.getSessionMap();
-        Flow currentFlow = getCurrentFlow(context);
-
-        ClientWindow curWindow = context.getExternalContext().getClientWindow();
-        if (null == curWindow) { 
-            throw new IllegalStateException("Unable to obtain current ClientWindow.  Is the ClientWindow feature enabled?");
-        }
-
-        String creationalForClientWindow = currentFlow.getClientWindowFlowId(curWindow) + "_creational";
-        result = (Map<String, CreationalContext<?>>) sessionMap.get(creationalForClientWindow);
-        if (null == result) {
-            result = new ConcurrentHashMap<String, CreationalContext<?>>();
-            sessionMap.put(creationalForClientWindow, result);
-            ensureCreationalCleanupOnSessionDestroyed(sessionMap, creationalForClientWindow);
-        } else if (touchSession) {
-            sessionMap.put(creationalForClientWindow, result);
+        private FlowScopeMapHelper(FacesContext facesContext) {
+            ExternalContext extContext = facesContext.getExternalContext();
+            this.sessionMap = extContext.getSessionMap();
+            Flow currentFlow = getCurrentFlow(facesContext);
+            if (null != currentFlow) {
+                ClientWindow curWindow = facesContext.getExternalContext().getClientWindow();
+                if (null == curWindow) { 
+                    throw new IllegalStateException("Unable to obtain current ClientWindow.  Is the ClientWindow feature enabled?");
+                }
+                final String clientWindow = currentFlow.getClientWindowFlowId(curWindow);
+                
+                flowBeansForClientWindowKey = clientWindow + "_beans";
+                creationalForClientWindowKey = clientWindow + "_creational";
+            } else {
+                flowBeansForClientWindowKey = creationalForClientWindowKey = null;
+            }
+            
         }
         
-        return result;
+        private void createMaps() {
+            getFlowScopedBeanMapForCurrentFlow();
+            getFlowScopedCreationalMapForCurrentFlow();
+        }
+        
+        private boolean isFlowExists() {
+            return (null != flowBeansForClientWindowKey && null != creationalForClientWindowKey);
+        }
 
+        public String getCreationalForClientWindowKey() {
+            return creationalForClientWindowKey;
+        }
+        
+        public String getFlowBeansForClientWindowKey() {
+            return flowBeansForClientWindowKey;
+        }
+        
+        private Map<String, Object> getFlowScopedBeanMapForCurrentFlow() {
+            if (null == flowBeansForClientWindowKey && null == creationalForClientWindowKey) {
+                return Collections.emptyMap();
+            }
+            Map<String, Object> result;
+            result = (Map<String, Object>) sessionMap.get(flowBeansForClientWindowKey);
+            if (null == result) {
+                result = new ConcurrentHashMap<String, Object>();
+                sessionMap.put(flowBeansForClientWindowKey, result);
+                ensureBeanMapCleanupOnSessionDestroyed(sessionMap, flowBeansForClientWindowKey);
+            }
+            return result;
+        }
+        
+        private Map<String, CreationalContext<?>> getFlowScopedCreationalMapForCurrentFlow() {
+            if (null == flowBeansForClientWindowKey && null == creationalForClientWindowKey) {
+                return Collections.emptyMap();
+            }
+            Map<String, CreationalContext<?>> result;
+            result = (Map<String, CreationalContext<?>>) sessionMap.get(creationalForClientWindowKey);
+            if (null == result) {
+                result = new ConcurrentHashMap<String, CreationalContext<?>>();
+                sessionMap.put(creationalForClientWindowKey, result);
+                ensureCreationalCleanupOnSessionDestroyed(sessionMap, creationalForClientWindowKey);
+            }
+            return result;
+        }
+        
+        private void updateSession() {
+            if (null == flowBeansForClientWindowKey && null == creationalForClientWindowKey) {
+                return;
+            }
+            sessionMap.put(flowBeansForClientWindowKey, getFlowScopedBeanMapForCurrentFlow());
+            sessionMap.put(creationalForClientWindowKey, getFlowScopedCreationalMapForCurrentFlow());
+            Object obj = sessionMap.get(PER_SESSION_BEAN_MAP_LIST);
+            if (null != obj) {
+                sessionMap.put(PER_SESSION_BEAN_MAP_LIST, obj);
+            }
+            obj = sessionMap.get(PER_SESSION_CREATIONAL_LIST);
+            if (null != obj) {
+                sessionMap.put(PER_SESSION_CREATIONAL_LIST, obj);
+            }
+        }
+        // </editor-fold>
     }
-    
+        
     private static void ensureBeanMapCleanupOnSessionDestroyed(Map<String, Object> sessionMap, String flowBeansForClientWindow) {
         List<String> beanMapList = (List<String>) sessionMap.get(PER_SESSION_BEAN_MAP_LIST);
         if (null == beanMapList) {
@@ -283,30 +312,35 @@ public class FlowCDIContext implements Context, Serializable {
 
     // <editor-fold defaultstate="collapsed" desc="Called from code related to flow">  
     
-    static Map<Object, Object> getCurrentFlowScope() {
-        return getCurrentFlowScope(false);
+    static Map<Object, Object> getCurrentFlowScopeAndUpdateSession() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        FlowScopeMapHelper mapHelper = new FlowScopeMapHelper(facesContext);
+        return getCurrentFlowScopeAndUpdateSession(mapHelper);
+
     }
     
-    static Map<Object, Object> getCurrentFlowScope(boolean distributable) {
-        Map<String, Object> flowScopedBeanMap = getFlowScopedBeanMapForCurrentFlow(distributable);
+    private static Map<Object, Object> getCurrentFlowScopeAndUpdateSession(FlowScopeMapHelper mapHelper) {
+        Map<String, Object> flowScopedBeanMap = mapHelper.getFlowScopedBeanMapForCurrentFlow();
         Map<Object, Object> result = null;
-        if (null != flowScopedBeanMap) {
+        if (mapHelper.isFlowExists()) {
             result = (Map<Object, Object>) flowScopedBeanMap.get(FLOW_SCOPE_MAP_KEY);
             if (null == result) {
                 result = new ConcurrentHashMap<Object, Object>();
                 flowScopedBeanMap.put(FLOW_SCOPE_MAP_KEY, result);
             }
         }
+        mapHelper.updateSession();
         return result; 
     }
         
-    static void flowExited(final boolean distributable) {
-        Map<String, Object> flowScopedBeanMap = getFlowScopedBeanMapForCurrentFlow(distributable);
-        Map<String, CreationalContext<?>> creationalMap = getFlowScopedCreationalMapForCurrentFlow(distributable);
+    static void flowExited() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        FlowScopeMapHelper mapHelper = new FlowScopeMapHelper(facesContext);
+        Map<String, Object> flowScopedBeanMap = mapHelper.getFlowScopedBeanMapForCurrentFlow();
+        Map<String, CreationalContext<?>> creationalMap = mapHelper.getFlowScopedCreationalMapForCurrentFlow();
         assert(!flowScopedBeanMap.isEmpty());
         assert(!creationalMap.isEmpty());
         List<String> flowScopedBeansToRemove = new ArrayList<String>();
-        FacesContext facesContext = FacesContext.getCurrentInstance();
         BeanManager beanManager = (BeanManager) Util.getCDIBeanManager(facesContext.getExternalContext().getApplicationMap());
         
         for (Entry<String, Object> entry : flowScopedBeanMap.entrySet()) {
@@ -326,6 +360,7 @@ public class FlowCDIContext implements Context, Serializable {
             flowScopedBeanMap.remove(cur);
             creationalMap.remove(cur);
         }
+        mapHelper.updateSession();
         
         if (Util.isCdiOneOneOrGreater()) {
             Class flowCDIEventFireHelperImplClass = null;
@@ -352,11 +387,12 @@ public class FlowCDIContext implements Context, Serializable {
         }
     }
     
-    static void flowEntered(boolean distributable) {
-        getFlowScopedBeanMapForCurrentFlow(distributable);
-        getFlowScopedCreationalMapForCurrentFlow(distributable);
+    static void flowEntered() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        FlowScopeMapHelper mapHelper = new FlowScopeMapHelper(facesContext);
+        mapHelper.createMaps();
         
-        getCurrentFlowScope(distributable);
+        getCurrentFlowScopeAndUpdateSession(mapHelper);
         
         if (Util.isCdiOneOneOrGreater()) {
             Class flowCDIEventFireHelperImplClass = null;
@@ -368,7 +404,6 @@ public class FlowCDIContext implements Context, Serializable {
                 }
             }
             if (null != flowCDIEventFireHelperImplClass) {
-                FacesContext facesContext = FacesContext.getCurrentInstance();
                 BeanManager beanManager = (BeanManager) Util.getCDIBeanManager(facesContext.getExternalContext().getApplicationMap());
                 Set<Bean<?>> availableBeans = beanManager.getBeans(flowCDIEventFireHelperImplClass);
                 if (null != availableBeans && !availableBeans.isEmpty()) {
@@ -392,11 +427,13 @@ public class FlowCDIContext implements Context, Serializable {
     public <T> T get(Contextual<T> contextual, CreationalContext<T> creational) {
         assertNotReleased();
         
-        T result = get(contextual);
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        FlowScopeMapHelper mapHelper = new FlowScopeMapHelper(facesContext);
+        T result = get(mapHelper, contextual);
         
         if (null == result) {
-            Map<String, Object> flowScopedBeanMap = getFlowScopedBeanMapForCurrentFlow();
-            Map<String, CreationalContext<?>> creationalMap = getFlowScopedCreationalMapForCurrentFlow();
+            Map<String, Object> flowScopedBeanMap = mapHelper.getFlowScopedBeanMapForCurrentFlow();
+            Map<String, CreationalContext<?>> creationalMap = mapHelper.getFlowScopedCreationalMapForCurrentFlow();
             
             String passivationCapableId = ((PassivationCapable)contextual).getId();
 
@@ -404,7 +441,6 @@ public class FlowCDIContext implements Context, Serializable {
                 result = (T) flowScopedBeanMap.get(passivationCapableId);
                 if (null == result) {
                     
-                    FacesContext facesContext = FacesContext.getCurrentInstance();
                     FlowHandler flowHandler = facesContext.getApplication().getFlowHandler();
                     
                     if (null == flowHandler) {
@@ -422,14 +458,12 @@ public class FlowCDIContext implements Context, Serializable {
                     if (null != result) {
                         flowScopedBeanMap.put(passivationCapableId, result);
                         creationalMap.put(passivationCapableId, creational);
-                        if (facesContext.getExternalContext().getApplicationMap().containsKey(WebConfiguration.BooleanWebContextInitParameter.EnableDistributable.getQualifiedName())) {
-                            getFlowScopedBeanMapForCurrentFlow(true);
-                            getFlowScopedCreationalMapForCurrentFlow(true);
-                        }
+                        mapHelper.updateSession();
                     }
                 }
             }
         }
+        mapHelper = null;
         
         return result;
 
@@ -441,9 +475,20 @@ public class FlowCDIContext implements Context, Serializable {
         if (!(contextual instanceof PassivationCapable)) {
             throw new IllegalArgumentException("FlowScoped bean " + contextual.toString() + " must be PassivationCapable, but is not.");
         }
-        String passivationCapableId = ((PassivationCapable)contextual).getId();
+        FlowScopeMapHelper mapHelper = new FlowScopeMapHelper(FacesContext.getCurrentInstance());
+        T result = get(mapHelper, contextual);
+        mapHelper = null;
 
-        return (T) getFlowScopedBeanMapForCurrentFlow().get(passivationCapableId);
+        return result;
+    }
+    
+    private <T> T get(FlowScopeMapHelper mapHelper, Contextual<T> contextual) {
+        assertNotReleased();
+        if (!(contextual instanceof PassivationCapable)) {
+            throw new IllegalArgumentException("FlowScoped bean " + contextual.toString() + " must be PassivationCapable, but is not.");
+        }
+        String passivationCapableId = ((PassivationCapable)contextual).getId();
+        return (T) mapHelper.getFlowScopedBeanMapForCurrentFlow().get(passivationCapableId);
     }
     
     @Override
