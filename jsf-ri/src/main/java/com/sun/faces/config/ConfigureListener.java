@@ -178,6 +178,7 @@ public class ConfigureListener implements ServletRequestListener,
                                 "No FacesServlet found in deployment descriptor - bypassing configuration");
                     }
                     WebConfiguration.clear(context);
+                    InitFacesContext.cleanupInitMaps(context);
                     return;
                 }
             } else {
