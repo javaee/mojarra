@@ -64,13 +64,15 @@ public class SessionMap extends BaseContextMap<Object> {
 
     private final HttpServletRequest request;
     private final ProjectStage stage;
+    private final boolean distributable;
 
     // ------------------------------------------------------------ Constructors
 
 
-    public SessionMap(HttpServletRequest request, ProjectStage stage) {
+    public SessionMap(HttpServletRequest request, ProjectStage stage, boolean distributable) {
         this.request = request;
         this.stage = stage;
+        this.distributable = distributable;
     }
 
 
@@ -137,7 +139,7 @@ public class SessionMap extends BaseContextMap<Object> {
         if (null != value && null != result) {
             doSet = ! result.equals(value);
         }
-        if (doSet) {
+        if (doSet || distributable) {
             session.setAttribute(key, value);
         }
         return (result);

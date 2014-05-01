@@ -154,8 +154,8 @@ public final class UIDebug extends UIComponentBase {
                     return (this.size() > 5);
                 }
             };
-            session.put(KEY, debugs);
         }
+        session.put(KEY, debugs);
         String id = "" + nextId++;
         debugs.put(id, fw.toString());
         return id;

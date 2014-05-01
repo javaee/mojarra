@@ -125,14 +125,9 @@ import static com.sun.faces.RIConstants.DYNAMIC_COMPONENT;
 import com.sun.faces.facelets.impl.XMLFrontMatterSaver;
 import com.sun.faces.renderkit.RenderKitUtils;
 import java.util.Collections;
-import java.util.EnumSet;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javax.faces.application.ProjectStage;
-import javax.faces.component.NamingContainer;
-import javax.faces.component.UIForm;
-import javax.faces.component.visit.VisitHint;
 import javax.faces.render.ResponseStateManager;
 
 /**

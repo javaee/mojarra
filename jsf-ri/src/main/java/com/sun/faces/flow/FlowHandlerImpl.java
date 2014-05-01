@@ -40,6 +40,8 @@
  */
 package com.sun.faces.flow;
 
+import com.sun.faces.config.WebConfiguration;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableDistributable;
 import com.sun.faces.util.Util;
 import java.io.Serializable;
 import java.text.MessageFormat;
@@ -70,6 +72,7 @@ public class FlowHandlerImpl extends FlowHandler {
         flowFeatureIsEnabled = false;
         flows = new ConcurrentHashMap<String, Map<String, Flow>>();
         flowsByFlowId = new ConcurrentHashMap<String, List<Flow>>();
+        distributable = WebConfiguration.getInstance().isOptionEnabled(EnableDistributable);
     }
     
     private boolean flowFeatureIsEnabled;
@@ -79,10 +82,11 @@ public class FlowHandlerImpl extends FlowHandler {
     
     // key: flowId, List<Flow>
     private Map<String, List<Flow>> flowsByFlowId;
+    private final boolean distributable;
 
     @Override
     public Map<Object, Object> getCurrentFlowScope() {
-        return FlowCDIContext.getCurrentFlowScope();
+        return FlowCDIContext.getCurrentFlowScope(distributable);
     }
     
     @Override
@@ -382,11 +386,12 @@ public class FlowHandlerImpl extends FlowHandler {
     private void pushFlow(FacesContext context, Flow toPush, String lastDisplayedViewId) {
         FlowDeque<Flow> flowStack = getFlowStack(context);
         flowStack.addFirst(toPush, lastDisplayedViewId);
-        FlowCDIContext.flowEntered();
+        FlowCDIContext.flowEntered(distributable);
         MethodExpression me  = toPush.getInitializer();
         if (null != me) {
             me.invoke(context.getELContext(), null);
         }
+        forceSessionUpdateForFlowStack(context, flowStack);
     }
     
     private Flow peekFlow(FacesContext context) {
@@ -400,7 +405,9 @@ public class FlowHandlerImpl extends FlowHandler {
         if (null != currentFlow) {
             callFinalizer(context, currentFlow);
         }
-        return flowStack.pollFirst();
+        Flow result = flowStack.pollFirst();
+        forceSessionUpdateForFlowStack(context, flowStack);
+        return result;
         
     }
     
@@ -409,7 +416,7 @@ public class FlowHandlerImpl extends FlowHandler {
         if (null != me) {
             me.invoke(context.getELContext(), null);
         }
-        FlowCDIContext.flowExited();
+        FlowCDIContext.flowExited(distributable);
     }
     
     private FlowDeque<Flow> getFlowStack(FacesContext context) {
@@ -419,11 +426,17 @@ public class FlowHandlerImpl extends FlowHandler {
         Map<String, Object> sessionMap = extContext.getSessionMap();
         result = (FlowDeque<Flow>) sessionMap.get(sessionKey);
         if (null == result) {
-            result = new FlowDeque<Flow>();
+            result = new FlowDeque<Flow>(sessionKey);
             sessionMap.put(sessionKey, result);
         }
         
         return result;
+    }
+    
+    private void forceSessionUpdateForFlowStack(FacesContext context, FlowDeque<Flow> stack) {
+        ExternalContext extContext = context.getExternalContext();
+        Map<String, Object> sessionMap = extContext.getSessionMap();
+        sessionMap.put(stack.getSessionKey(), stack);
     }
     
     private static class FlowDeque<E> implements Iterable<E>, Serializable {
@@ -441,10 +454,16 @@ public class FlowHandlerImpl extends FlowHandler {
             
         }
         private ArrayDeque<RideAlong> rideAlong;
+        private final String sessionKey;
 
-        public FlowDeque() {
+        public FlowDeque(final String sessionKey) {
             data = new ArrayDeque<E>();
             rideAlong = new ArrayDeque<RideAlong>();
+            this.sessionKey = sessionKey;
+        }
+        
+        public String getSessionKey() {
+            return sessionKey;
         }
         
         public int size() {
@@ -533,9 +552,9 @@ public class FlowHandlerImpl extends FlowHandler {
         public void popReturnMode() {
             this.returnDepth--;
         }
-        
-        
 
+
+        
     }
         
     // </editor-fold>

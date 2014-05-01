@@ -274,6 +274,10 @@ public class WebConfiguration {
     public void setOptionValue(WebContextInitParameter param, String value) {
         contextParameters.put(param, value);
     }
+    
+    public void setOptionEnabled(BooleanWebContextInitParameter param, boolean value) {
+        booleanContextParameters.put(param, value);
+    }
 
     public FaceletsConfiguration getFaceletsConfiguration() {
 
@@ -1390,6 +1394,10 @@ public class WebConfiguration {
         ),
         EnableAgressiveSessionDirtying(
               "com.sun.faces.enableAgressiveSessionDirtying",
+              false
+        ),
+        EnableDistributable(
+              "com.sun.faces.enableDistributable",
               false
         ),
         EnableMissingResourceLibraryDetection(

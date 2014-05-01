@@ -77,6 +77,7 @@ import java.util.logging.Level;
 
 import com.sun.faces.config.WebConfiguration;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.SendPoweredByHeader;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableDistributable;
 import com.sun.faces.util.TypedCollections;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
@@ -111,6 +112,7 @@ public class ExternalContextImpl extends ExternalContext {
     private Map<String,String> initParameterMap = null;
     private Map<String,String> fallbackContentTypeMap = null;
     private Flash flash;
+    private boolean distributable;
 
     private enum ALLOWABLE_COOKIE_PROPERTIES {
         domain,
@@ -144,6 +146,7 @@ public class ExternalContextImpl extends ExternalContext {
         if (config.isOptionEnabled(SendPoweredByHeader)) {
             ((HttpServletResponse) response).addHeader("X-Powered-By", "JSF/2.2");
         }
+        distributable = config.isOptionEnabled(EnableDistributable);
         fallbackContentTypeMap = new HashMap<String,String>(3, 1.0f);
         fallbackContentTypeMap.put("js", "text/javascript");
         fallbackContentTypeMap.put("css", "text/css");
@@ -288,7 +291,7 @@ public class ExternalContextImpl extends ExternalContext {
         if (sessionMap == null) {
             sessionMap = new SessionMap((HttpServletRequest) request,
                                         FacesContext.getCurrentInstance()
-                                              .getApplication().getProjectStage());
+                                              .getApplication().getProjectStage(), distributable);
         }
         return sessionMap;
     }

@@ -187,6 +187,11 @@ public class ConfigureListener implements ServletRequestListener,
                 }
             }
         }
+        
+        if (webXmlProcessor.isDistributablePresent()) {
+            webConfig.setOptionEnabled(WebConfiguration.BooleanWebContextInitParameter.EnableDistributable, true);
+            context.setAttribute(WebConfiguration.BooleanWebContextInitParameter.EnableDistributable.getQualifiedName(), Boolean.TRUE);
+        }
 
 
         // bootstrap of faces required
@@ -750,6 +755,7 @@ public class ConfigureListener implements ServletRequestListener,
 
         private boolean facesServletPresent;
         private boolean errorPagePresent;
+        private boolean distributablePresent;
 
 
         /**
@@ -791,6 +797,16 @@ public class ConfigureListener implements ServletRequestListener,
             return errorPagePresent;
 
         }
+
+        /*
+         * return true if <distributable /> is present in the web.xml or a fragment.
+         * 
+         */
+        public boolean isDistributablePresent() {
+            return distributablePresent;
+        }
+        
+        
 
 
         /**
@@ -936,6 +952,9 @@ public class ConfigureListener implements ServletRequestListener,
                     } else {
                         servletClassFound = false;
                     }
+                }
+                if ("distributable".equals(localName)) {
+                    distributablePresent = true;
                 }
 
 

@@ -41,6 +41,7 @@
 package com.sun.faces.flow;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import java.io.Serializable;
@@ -130,8 +131,11 @@ public class FlowCDIContext implements Context, Serializable {
     // -------------------------------------------------------- Private Methods
     
     // <editor-fold defaultstate="collapsed" desc="Private helpers">       
-    
     private static Map<String, Object> getFlowScopedBeanMapForCurrentFlow() {
+        return getFlowScopedBeanMapForCurrentFlow(false);
+    }
+    
+    private static Map<String, Object> getFlowScopedBeanMapForCurrentFlow(boolean touchSession) {
 
         Map<String, Object> result;
         FacesContext context = FacesContext.getCurrentInstance();
@@ -154,12 +158,18 @@ public class FlowCDIContext implements Context, Serializable {
             result = new ConcurrentHashMap<String, Object>();
             sessionMap.put(flowBeansForClientWindow, result);
             ensureBeanMapCleanupOnSessionDestroyed(sessionMap, flowBeansForClientWindow);
+        } else if (touchSession) {
+            sessionMap.put(flowBeansForClientWindow, result);
         }
         
         return result;
     }
     
     private static Map<String, CreationalContext<?>> getFlowScopedCreationalMapForCurrentFlow() {
+        return getFlowScopedCreationalMapForCurrentFlow(false);
+    }
+    
+    private static Map<String, CreationalContext<?>> getFlowScopedCreationalMapForCurrentFlow(boolean touchSession) {
         Map<String, CreationalContext<?>> result;
         FacesContext context = FacesContext.getCurrentInstance();
         ExternalContext extContext = context.getExternalContext();
@@ -177,6 +187,8 @@ public class FlowCDIContext implements Context, Serializable {
             result = new ConcurrentHashMap<String, CreationalContext<?>>();
             sessionMap.put(creationalForClientWindow, result);
             ensureCreationalCleanupOnSessionDestroyed(sessionMap, creationalForClientWindow);
+        } else if (touchSession) {
+            sessionMap.put(creationalForClientWindow, result);
         }
         
         return result;
@@ -272,7 +284,11 @@ public class FlowCDIContext implements Context, Serializable {
     // <editor-fold defaultstate="collapsed" desc="Called from code related to flow">  
     
     static Map<Object, Object> getCurrentFlowScope() {
-        Map<String, Object> flowScopedBeanMap = getFlowScopedBeanMapForCurrentFlow();
+        return getCurrentFlowScope(false);
+    }
+    
+    static Map<Object, Object> getCurrentFlowScope(boolean distributable) {
+        Map<String, Object> flowScopedBeanMap = getFlowScopedBeanMapForCurrentFlow(distributable);
         Map<Object, Object> result = null;
         if (null != flowScopedBeanMap) {
             result = (Map<Object, Object>) flowScopedBeanMap.get(FLOW_SCOPE_MAP_KEY);
@@ -284,9 +300,9 @@ public class FlowCDIContext implements Context, Serializable {
         return result; 
     }
         
-    static void flowExited() {
-        Map<String, Object> flowScopedBeanMap = getFlowScopedBeanMapForCurrentFlow();
-        Map<String, CreationalContext<?>> creationalMap = getFlowScopedCreationalMapForCurrentFlow();
+    static void flowExited(final boolean distributable) {
+        Map<String, Object> flowScopedBeanMap = getFlowScopedBeanMapForCurrentFlow(distributable);
+        Map<String, CreationalContext<?>> creationalMap = getFlowScopedCreationalMapForCurrentFlow(distributable);
         assert(!flowScopedBeanMap.isEmpty());
         assert(!creationalMap.isEmpty());
         List<String> flowScopedBeansToRemove = new ArrayList<String>();
@@ -336,11 +352,11 @@ public class FlowCDIContext implements Context, Serializable {
         }
     }
     
-    static void flowEntered() {
-        getFlowScopedBeanMapForCurrentFlow();
-        getFlowScopedCreationalMapForCurrentFlow();
+    static void flowEntered(boolean distributable) {
+        getFlowScopedBeanMapForCurrentFlow(distributable);
+        getFlowScopedCreationalMapForCurrentFlow(distributable);
         
-        getCurrentFlowScope();
+        getCurrentFlowScope(distributable);
         
         if (Util.isCdiOneOneOrGreater()) {
             Class flowCDIEventFireHelperImplClass = null;
@@ -406,6 +422,10 @@ public class FlowCDIContext implements Context, Serializable {
                     if (null != result) {
                         flowScopedBeanMap.put(passivationCapableId, result);
                         creationalMap.put(passivationCapableId, creational);
+                        if (facesContext.getExternalContext().getApplicationMap().containsKey(WebConfiguration.BooleanWebContextInitParameter.EnableDistributable.getQualifiedName())) {
+                            getFlowScopedBeanMapForCurrentFlow(true);
+                            getFlowScopedCreationalMapForCurrentFlow(true);
+                        }
                     }
                 }
             }
