@@ -255,6 +255,11 @@ public class ViewScopeContextManager {
                     if (!activeViewScopeContexts.containsKey(System.identityHashCode(viewMap)) && create) {
                         activeViewScopeContexts.put(System.identityHashCode(viewMap),
                                 new ConcurrentHashMap<String, ViewScopeContextObject>());
+                        // If we are distributable, this will result in a dirtying of the
+                        // session data, forcing replication.  If we are not distributable,
+                        // this is a no-op.
+                        sessionMap.put(ACTIVE_VIEW_CONTEXTS, activeViewScopeContexts);
+                        
                     }
                 }
             }

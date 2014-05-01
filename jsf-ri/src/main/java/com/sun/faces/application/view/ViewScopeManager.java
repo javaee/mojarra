@@ -296,6 +296,10 @@ public class ViewScopeManager implements HttpSessionListener, ViewMapListener {
                     viewMaps.put(viewMapId, viewMap);
                     viewRoot.getTransientStateHelper().putTransient(VIEW_MAP_ID, viewMapId);
                     viewRoot.getTransientStateHelper().putTransient(VIEW_MAP, viewMap);
+                    // If we are distributable, this will result in a dirtying of the
+                    // session data, forcing replication.  If we are not distributable,
+                    // this is a no-op.
+                    sessionMap.put(ACTIVE_VIEW_MAPS, viewMaps);
                 }
                 if (null != contextManager) {
                     contextManager.fireInitializedEvent(facesContext, viewRoot);
