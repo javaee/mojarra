@@ -40,42 +40,23 @@
     holder.
 
 --><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.sun.faces.test</groupId>
-        <artifactId>pom</artifactId>
-        <version>2.2.7-SNAPSHOT</version>
-    </parent>
-    <groupId>com.sun.faces.test.agnostic</groupId>
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
     <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Agnostic</name>
-    <dependencies>
-        <dependency>
-            <groupId>com.sun.faces.test</groupId>
-            <artifactId>util</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-    <modules>
-        <module>application</module>
-        <module>ajax-namespace</module>
-        <module>bundle22</module>
-        <module>component</module>
-        <module>config</module>
-        <module>context</module>
-        <module>converter</module>
-        <module>replace-vr-add-er</module>
-        <module>externalContext</module>
-        <module>facelets</module>
-        <module>flash</module>
-        <module>lifecycle</module>
-        <module>renderKit</module>
-        <module>resource</module>
-        <module>scope</module>
-        <module>stateSaving</module>
-        <module>vdl</module>
-        <module>factory</module>
-  </modules>
+    <groupId>com.sun.faces.test.agnostic</groupId>
+    <version>2.2.7-SNAPSHOT</version>
+  </parent>
+  
+  <groupId>com.sun.faces.test.agnostic.ajax-namespace</groupId>
+  <artifactId>ajax-namespace</artifactId>
+  <version>2.2.7-SNAPSHOT</version>
+  <packaging>war</packaging>
+  <name>Mojarra ${project.version} - Test - Agnostic - Ajax Namespace</name>
+
+  <build>
+    <finalName>test-agnostic-ajax-namespace</finalName>
+  </build>
+    <properties>
+        <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
+    </properties>
 </project>

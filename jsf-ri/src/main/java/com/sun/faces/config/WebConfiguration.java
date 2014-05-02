@@ -1409,8 +1409,10 @@ public class WebConfiguration {
             false),
         EnableTransitionTimeNoOpFlash(
                 "com.sun.faces.enableTransitionTimeNoOpFlash",
-                false)
-        ;
+                false),
+        NamespaceParameters(
+            "com.sun.faces.namespaceParameters",
+            false);
 
         private BooleanWebContextInitParameter alternate;
 

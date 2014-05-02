@@ -47,10 +47,12 @@ import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.faces.FacesException;
 import javax.faces.component.ActionSource;
 import javax.faces.component.EditableValueHolder;
+import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UINamingContainer;
+import javax.faces.component.UIViewRoot;
 import javax.faces.component.behavior.AjaxBehavior;
 import javax.faces.component.behavior.ClientBehavior;
 import javax.faces.component.behavior.ClientBehaviorContext;
@@ -59,8 +61,9 @@ import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.render.ClientBehaviorRenderer;
 
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.renderkit.RenderKitUtils;
-import javax.faces.component.UINamingContainer;
 
 /*
  *<b>AjaxBehaviorRenderer</b> renders Ajax behavior for a component.
@@ -72,7 +75,18 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
     // Log instance for this class
     protected static final Logger logger = FacesLogger.RENDERKIT.getLogger();
 
-    
+    /**
+     * Flag determining whether or not javax.faces.ViewState should be namespaced.
+     */
+    protected transient boolean namespaceParameters;
+
+    public AjaxBehaviorRenderer() {
+        WebConfiguration webConfig = WebConfiguration.getInstance();
+        namespaceParameters =
+             webConfig.isOptionEnabled(
+                  BooleanWebContextInitParameter.NamespaceParameters);
+    }
+
     // ------------------------------------------------------ Rendering Methods
 
     @Override
@@ -87,7 +101,7 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
         if (((AjaxBehavior)behavior).isDisabled()) {
             return null;
         }
-        return buildAjaxCommand(behaviorContext, (AjaxBehavior)behavior);
+        return buildAjaxCommand(behaviorContext, (AjaxBehavior)behavior, namespaceParameters);
     }
 
 
@@ -160,7 +174,8 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
     }
 
     private static String buildAjaxCommand(ClientBehaviorContext behaviorContext,
-                                           AjaxBehavior ajaxBehavior) {
+                                           AjaxBehavior ajaxBehavior,
+                                           boolean namespaceParameters) {
 
         // First things first - if AjaxBehavior is disabled, we are done.
         if (ajaxBehavior.isDisabled()) {
@@ -224,11 +239,26 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
         appendIds(component, ajaxCommand, execute);
         ajaxCommand.append(",");
         appendIds(component, ajaxCommand, render);
+        
+        String namingContainerId = null;
+        if (namespaceParameters) {
+            FacesContext context = behaviorContext.getFacesContext();
+            UIViewRoot viewRoot = context.getViewRoot();
+            if (viewRoot instanceof NamingContainer) {
+                namingContainerId = viewRoot.getContainerClientId(context);
+            }
+        }
 
-        if ((onevent != null) || (onerror != null) || (delay != null) || 
+        if ((namingContainerId != null) || (onevent != null) || (onerror != null) || (delay != null) || 
                 (resetValues != null) || !params.isEmpty())  {
 
             ajaxCommand.append(",{");
+
+            if (namingContainerId != null) {
+                // the literal string must exactly match the corresponding value 
+                // in jsf.js.
+                RenderKitUtils.appendProperty(ajaxCommand, "com.sun.faces.namingContainerId", namingContainerId, true);
+            }
 
             if (onevent != null) {
                 RenderKitUtils.appendProperty(ajaxCommand, "onevent", onevent, false);

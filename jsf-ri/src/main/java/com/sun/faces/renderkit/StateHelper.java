@@ -42,9 +42,13 @@ package com.sun.faces.renderkit;
 
 
 import javax.faces.lifecycle.ClientWindow;
+
 import com.sun.faces.RIConstants;
+
 import java.io.IOException;
 
+import javax.faces.component.NamingContainer;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.ResponseStateManager;
@@ -53,7 +57,9 @@ import javax.faces.render.RenderKitFactory;
 import com.sun.faces.spi.SerializationProviderFactory;
 import com.sun.faces.spi.SerializationProvider;
 import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.util.Util;
+
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.CompressViewState;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.AutoCompleteOffOnViewState;
 
@@ -146,6 +152,11 @@ public abstract class StateHelper {
      */
     protected char[] fieldEnd;
 
+    
+    /**
+     * Flag determining whether or not javax.faces.ViewState should be namespaced.
+     */
+    protected boolean namespaceParameters;
 
     // ------------------------------------------------------------ Constructors
 
@@ -172,6 +183,9 @@ public abstract class StateHelper {
                   .createInstance(FacesContext
                         .getCurrentInstance().getExternalContext());
         }
+        namespaceParameters =
+                webConfig.isOptionEnabled(
+                     BooleanWebContextInitParameter.NamespaceParameters);
 
     }
     
@@ -271,8 +285,16 @@ public abstract class StateHelper {
             && !defaultRkit.equals(result)) {
             writer.startElement("input", context.getViewRoot());
             writer.writeAttribute("type", "hidden", "type");
+            String renderKitIdParam = ResponseStateManager.RENDER_KIT_ID_PARAM;
+            UIViewRoot viewRoot = context.getViewRoot();
+            if ((namespaceParameters) && (viewRoot instanceof NamingContainer)) {
+                String namingContainerId = viewRoot.getContainerClientId(context);
+                if (namingContainerId != null) {
+                	renderKitIdParam = namingContainerId + renderKitIdParam;
+                }
+            }
             writer.writeAttribute("name",
-                                  ResponseStateManager.RENDER_KIT_ID_PARAM,
+                                  renderKitIdParam,
                                   "name");
             writer.writeAttribute("value",
                                   result,
@@ -294,7 +316,15 @@ public abstract class StateHelper {
         if (null != window) {       
             writer.startElement("input", null);
             writer.writeAttribute("type", "hidden", null);
-            writer.writeAttribute("name", ResponseStateManager.CLIENT_WINDOW_PARAM, null);
+            String clientWindowParam = ResponseStateManager.CLIENT_WINDOW_PARAM;
+            UIViewRoot viewRoot = context.getViewRoot();
+            if ((namespaceParameters) && (viewRoot instanceof NamingContainer)) {
+                String namingContainerId = viewRoot.getContainerClientId(context);
+                if (namingContainerId != null) {
+                	clientWindowParam = namingContainerId + clientWindowParam;
+                }
+            }
+            writer.writeAttribute("name", clientWindowParam, null);
             writer.writeAttribute("id", Util.getClientWindowId(context), null);
             writer.writeAttribute("value", window.getId(), null);
             if (webConfig.isOptionEnabled(AutoCompleteOffOnViewState)) {

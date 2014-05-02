@@ -41,38 +41,42 @@
 package com.sun.faces.renderkit;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.AutoCompleteOffOnViewState;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableViewStateIdRendering;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.NamespaceParameters;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.ClientStateTimeout;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.ClientStateWriteBufferSize;
+
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Writer;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 import javax.faces.FacesException;
+import javax.faces.component.NamingContainer;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+import javax.faces.render.ResponseStateManager;
 
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableViewStateIdRendering;
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.AutoCompleteOffOnViewState;
-import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.ClientStateTimeout;
-import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.ClientStateWriteBufferSize;
+import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.io.Base64InputStream;
 import com.sun.faces.io.Base64OutputStreamWriter;
 import com.sun.faces.util.DebugObjectOutputStream;
 import com.sun.faces.util.DebugUtil;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
-import java.io.InvalidClassException;
-import java.util.Map;
-import javax.faces.render.ResponseStateManager;
 
 /**
  * <p>
@@ -139,6 +143,12 @@ public class ClientSideStateHelper extends StateHelper {
     private boolean debugSerializedState;
 
 
+    /**
+     * Flag determining whether or not javax.faces.ViewState should be namespaced.
+     */
+    protected boolean namespaceParameters;
+
+
     // ------------------------------------------------------------ Constructors
 
 
@@ -182,7 +192,18 @@ public class ClientSideStateHelper extends StateHelper {
 
             writer.startElement("input", null);
             writer.writeAttribute("type", "hidden", null);
-            writer.writeAttribute("name", ResponseStateManager.VIEW_STATE_PARAM, null);
+            String viewStateParam = ResponseStateManager.VIEW_STATE_PARAM;
+            
+            if (namespaceParameters) {
+                UIViewRoot viewRoot = ctx.getViewRoot();
+                if (viewRoot instanceof NamingContainer) {
+                    String namingContainerId = viewRoot.getContainerClientId(ctx);
+                    if (namingContainerId != null) {
+                        viewStateParam = namingContainerId + viewStateParam;
+                    }
+                }
+            }
+            writer.writeAttribute("name", viewStateParam, null);
             if (webConfig.isOptionEnabled(EnableViewStateIdRendering)) {
                 String viewStateId = Util.getViewStateId(ctx);
                 writer.writeAttribute("id", viewStateId, null);
@@ -528,6 +549,8 @@ public class ClientSideStateHelper extends StateHelper {
         }
 
         debugSerializedState = webConfig.isOptionEnabled(BooleanWebContextInitParameter.EnableClientStateDebugging);
+
+        namespaceParameters = webConfig.isOptionEnabled(NamespaceParameters);
 
     }
 
