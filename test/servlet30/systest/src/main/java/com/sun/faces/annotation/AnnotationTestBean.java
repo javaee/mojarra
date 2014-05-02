@@ -113,6 +113,7 @@ public class AnnotationTestBean {
         injectedString = ((AnnotatedValidator)v).getWelcomeMessage();
         assertTrue(injectedString.equals("Hello World from env-entry!"));
 
+        /*****  JAVASERVERFACES-3266
         v = app.createValidator("annotatedValidatorNoValue");
         assertNotNull(v);
         assertTrue(v instanceof AnnotatedValidatorNoValue);
@@ -131,6 +132,7 @@ public class AnnotationTestBean {
             exceptionThrown = true;
         }
         assertTrue(exceptionThrown);
+         ***/
         
 
         // AnnotatedValidatorDefault has isDefault set to true.  Make sure
