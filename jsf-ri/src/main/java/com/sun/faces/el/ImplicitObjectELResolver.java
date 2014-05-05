@@ -252,6 +252,7 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
         return null;
     }
 
+    @Override
     public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base) {
         if (base != null) {
             return null;
@@ -261,10 +262,18 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
                                            "application",false, false, true, Object.class, Boolean.TRUE));
         list.add(Util.getFeatureDescriptor("applicationScope", "applicationScope",
                                            "applicationScope",false, false, true, Map.class, Boolean.TRUE));
+        list.add(Util.getFeatureDescriptor("cc", "cc",
+                                           "cc",false, false, true, UIComponent.class, Boolean.TRUE));
+        list.add(Util.getFeatureDescriptor("component", "component",
+                                           "component",false, false, true, UIComponent.class, Boolean.TRUE));
         list.add(Util.getFeatureDescriptor("cookie", "cookie",
                                            "cookie",false, false, true, Map.class, Boolean.TRUE));
         list.add(Util.getFeatureDescriptor("facesContext", "facesContext",
                                            "facesContext",false, false, true, FacesContext.class, Boolean.TRUE));
+        list.add(Util.getFeatureDescriptor("flash", "flash",
+                                           "flash",false, false, true, Map.class, Boolean.TRUE));
+        list.add(Util.getFeatureDescriptor("flowScope", "flowScope",
+                                           "flowScope",false, false, true, Map.class, Boolean.TRUE));
         list.add(Util.getFeatureDescriptor("view", "view",
                                            "root",false, false, true, UIViewRoot.class, Boolean.TRUE));
         list.add(Util.getFeatureDescriptor("header", "header",
@@ -281,10 +290,14 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
                                            "request",false, false, true, Object.class, Boolean.TRUE));
         list.add(Util.getFeatureDescriptor("requestScope", "requestScope",
                                            "requestScope",false, false, true, Map.class, Boolean.TRUE));
+        list.add(Util.getFeatureDescriptor("resource", "resource",
+                                           "resource",false, false, true, Object.class, Boolean.TRUE));
         list.add(Util.getFeatureDescriptor("session", "session",
                                            "session",false, false, true, Object.class, Boolean.TRUE));
         list.add(Util.getFeatureDescriptor("sessionScope", "sessionScope",
                                            "sessionScope",false, false, true, Map.class, Boolean.TRUE));
+        list.add(Util.getFeatureDescriptor("viewScope", "viewScope",
+                                           "viewScope",false, false, true, Map.class, Boolean.TRUE));
 
         return list.iterator();
 
