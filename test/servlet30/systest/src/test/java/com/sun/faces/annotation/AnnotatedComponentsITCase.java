@@ -78,7 +78,8 @@ public class AnnotatedComponentsITCase extends HtmlUnitFacesITCase {
 
     public void testAnnotations() throws Exception {
         HtmlPage page = getPage("/faces/annotationtest.xhtml");
-        if (!page.asXml().toUpperCase().contains("TOMCAT")) {
+        if (!page.asXml().toUpperCase().contains("TOMCAT") &&
+                !page.asXml().toUpperCase().contains("WEBLOGIC")) {
             List<HtmlSpan> output = new ArrayList<HtmlSpan>(1);
             getAllElementsOfGivenClass(page, output, HtmlSpan.class);
             assertTrue(output.size() == 1);
