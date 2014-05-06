@@ -45,6 +45,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 public class DuplicateIdIT {
 
@@ -63,6 +64,7 @@ public class DuplicateIdIT {
     }
 
     @Test
+    @Ignore
     public void testDuplicateIds01() throws Exception {
         webClient.setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/duplicateIds01.jsp");
@@ -79,6 +81,7 @@ public class DuplicateIdIT {
     }
 
     @Test
+    @Ignore
     public void testDuplicateIds03() throws Exception {
         webClient.setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/duplicateIds03.jsp");
