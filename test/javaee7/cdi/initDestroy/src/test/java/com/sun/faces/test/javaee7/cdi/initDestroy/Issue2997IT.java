@@ -49,6 +49,7 @@ import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import static org.junit.Assert.assertTrue;
+import org.junit.Ignore;
 
 public class Issue2997IT {
     /**
@@ -96,6 +97,7 @@ public class Issue2997IT {
     }
 
     @Test
+    @Ignore
     public void testGlobalReturn() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
 

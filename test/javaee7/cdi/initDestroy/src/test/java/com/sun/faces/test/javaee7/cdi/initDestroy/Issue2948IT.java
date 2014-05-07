@@ -49,6 +49,7 @@ import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import static org.junit.Assert.assertTrue;
+import org.junit.Ignore;
 
 public class Issue2948IT {
     /**
@@ -96,6 +97,7 @@ public class Issue2948IT {
     }
 
     @Test
+    @Ignore
     public void testSessionLogging() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
         HtmlElement e = (HtmlElement) page.getElementById("initMessage");
@@ -109,6 +111,7 @@ public class Issue2948IT {
     }
 
     @Test
+    @Ignore
     public void testFlowLogging() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
         HtmlSubmitInput enterFlow = (HtmlSubmitInput) page.getElementById("enterFlow");
@@ -127,6 +130,7 @@ public class Issue2948IT {
     }
 
     @Test
+    @Ignore
     public void testViewScopedLogging() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/viewScoped01.xhtml");
         HtmlElement e = (HtmlElement) page.getElementById("initMessage");
