@@ -48,6 +48,7 @@ import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import static org.junit.Assert.assertTrue;
+import org.junit.Ignore;
 
 public class Issue3014IT {
     /**
@@ -95,6 +96,7 @@ public class Issue3014IT {
     }
 
     @Test
+    @Ignore
     public void testValidatorInjection() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button");
