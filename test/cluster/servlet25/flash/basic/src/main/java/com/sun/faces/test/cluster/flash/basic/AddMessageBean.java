@@ -38,51 +38,22 @@
  * holder.
  */
 
-package com.sun.faces.el;
+package com.sun.faces.test.cluster.flash.basic;
 
-/**
- * @author jhook
- */
-public interface ELConstants {
-    public static final int APPLICATION = 0;
+import java.io.Serializable;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
 
-    public static final int APPLICATION_SCOPE = 1;
-
-    public static final int COMPOSITE_COMPONENT = 2;
-
-    public static final int COMPONENT = 3;
-
-    public static final int COOKIE = 4;
-
-    public static final int FACES_CONTEXT = 5;
-
-    public static final int FLASH = 6;
-
-    public static final int FACES_FLOW = 7;
-
-    public static final int HEADER = 8;
-
-    public static final int HEADER_VALUES = 9;
-
-    public static final int INIT_PARAM = 10;
-
-    public static final int PARAM = 11;
-
-    public static final int PARAM_VALUES = 12;
-
-    public static final int REQUEST = 13;
-
-    public static final int REQUEST_SCOPE = 14;
-
-    public static final int RESOURCE = 15;
-
-    public static final int SESSION = 16;
-
-    public static final int SESSION_SCOPE = 17;
-
-    public static final int VIEW = 18;
-
-    public static final int VIEW_SCOPE = 19;
+@ManagedBean
+public class AddMessageBean implements Serializable {
     
-    
+    private static final long serialVersionUID = -8286877842021747622L;
+
+    public String addMessage() {
+        FacesContext.getCurrentInstance()
+              .addMessage(null, new FacesMessage("This is a global message"));
+        return "messagePage?faces-redirect=true";
+    }
+
 }

@@ -1,8 +1,8 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
- *
+ * 
+ * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -11,20 +11,20 @@
  * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- *
+ * 
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at packager/legal/LICENSE.txt.
- *
+ * 
  * GPL Classpath Exception:
  * Oracle designates this particular file as subject to the "Classpath"
  * exception as provided by Oracle in the GPL Version 2 section of the License
  * file that accompanied this code.
- *
+ * 
  * Modifications:
  * If applicable, add the following below the License Header, with the fields
  * enclosed by brackets [] replaced by your own identifying information:
  * "Portions Copyright [year] [name of copyright owner]"
- *
+ * 
  * Contributor(s):
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
@@ -36,53 +36,46 @@
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
  * holder.
+
  */
+package com.sun.faces.test.cluster.flash.issue2973;
 
-package com.sun.faces.el;
+import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
 
-/**
- * @author jhook
- */
-public interface ELConstants {
-    public static final int APPLICATION = 0;
-
-    public static final int APPLICATION_SCOPE = 1;
-
-    public static final int COMPOSITE_COMPONENT = 2;
-
-    public static final int COMPONENT = 3;
-
-    public static final int COOKIE = 4;
-
-    public static final int FACES_CONTEXT = 5;
-
-    public static final int FLASH = 6;
-
-    public static final int FACES_FLOW = 7;
-
-    public static final int HEADER = 8;
-
-    public static final int HEADER_VALUES = 9;
-
-    public static final int INIT_PARAM = 10;
-
-    public static final int PARAM = 11;
-
-    public static final int PARAM_VALUES = 12;
-
-    public static final int REQUEST = 13;
-
-    public static final int REQUEST_SCOPE = 14;
-
-    public static final int RESOURCE = 15;
-
-    public static final int SESSION = 16;
-
-    public static final int SESSION_SCOPE = 17;
-
-    public static final int VIEW = 18;
-
-    public static final int VIEW_SCOPE = 19;
+@ManagedBean(name="bean")
+public class Bean implements Serializable {
     
+    private static final long serialVersionUID = -4183580262084818534L;
+    
+    private String text;
+    
+    public String getText() {
+        return text;
+    }
+    
+    public void setText(String text) {
+        this.text = text;
+    }
+    
+    public String nextpage (){
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("bean", this);
+        return "page2?faces-redirect=true";
+    }
+    
+    public String simulateServerRestart() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getApplicationMap().remove("csfcff");
+        try {
+            Thread.currentThread().sleep(3000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return null;
+    }
     
 }

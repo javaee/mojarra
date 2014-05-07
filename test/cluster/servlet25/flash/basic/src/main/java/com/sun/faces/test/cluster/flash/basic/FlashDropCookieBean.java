@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -38,51 +38,43 @@
  * holder.
  */
 
-package com.sun.faces.el;
+package com.sun.faces.test.cluster.flash.basic;
 
-/**
- * @author jhook
- */
-public interface ELConstants {
-    public static final int APPLICATION = 0;
+import java.io.Serializable;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 
-    public static final int APPLICATION_SCOPE = 1;
-
-    public static final int COMPOSITE_COMPONENT = 2;
-
-    public static final int COMPONENT = 3;
-
-    public static final int COOKIE = 4;
-
-    public static final int FACES_CONTEXT = 5;
-
-    public static final int FLASH = 6;
-
-    public static final int FACES_FLOW = 7;
-
-    public static final int HEADER = 8;
-
-    public static final int HEADER_VALUES = 9;
-
-    public static final int INIT_PARAM = 10;
-
-    public static final int PARAM = 11;
-
-    public static final int PARAM_VALUES = 12;
-
-    public static final int REQUEST = 13;
-
-    public static final int REQUEST_SCOPE = 14;
-
-    public static final int RESOURCE = 15;
-
-    public static final int SESSION = 16;
-
-    public static final int SESSION_SCOPE = 17;
-
-    public static final int VIEW = 18;
-
-    public static final int VIEW_SCOPE = 19;
+@ManagedBean
+@RequestScoped
+public class FlashDropCookieBean implements Serializable {
     
-    
+    private static final long serialVersionUID = -8825856563586964065L;
+
+    @ManagedProperty(value="#{facesContext}")
+    protected FacesContext facesContext;
+
+    public FacesContext getFacesContext() {
+        return facesContext;
+    }
+
+    public void setFacesContext(FacesContext facesContext) {
+        this.facesContext = facesContext;
+    }
+
+
+    protected String value;
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                "Message 1", "we are showing the message, but the we are not accessing the flash");
+        getFacesContext().addMessage(null, message);
+    }
 }

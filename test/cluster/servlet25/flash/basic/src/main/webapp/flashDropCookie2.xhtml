@@ -42,19 +42,14 @@
 
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.sun.faces.test.cluster.servlet25</groupId>
-        <artifactId>pom</artifactId>
-        <version>2.2.7-SNAPSHOT</version>
-    </parent>
-    <groupId>com.sun.faces.test.cluster.servlet25.flash</groupId>
-    <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Cluster - Servlet25 - Flash</name>
-    <modules>
-        <module>reaper</module>
-        <module>basic</module>
-    </modules>
-</project>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <h:head>
+        <title>Verify the cookie is set to be dropped</title>
+    </h:head>
+    <h:body>
+        <h:messages/>
+        <h:link id="link" value="Next page" outcome="flashDropCookie3"/>
+    </h:body>
+</html>

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,52 +37,51 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.cluster.flash.basic;
 
-package com.sun.faces.el;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import org.junit.Test;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+import org.junit.After;
+import org.junit.Before;
+import static org.junit.Assert.assertTrue;
 
-/**
- * @author jhook
- */
-public interface ELConstants {
-    public static final int APPLICATION = 0;
+public class Issue2862IT {
 
-    public static final int APPLICATION_SCOPE = 1;
+    private String webUrl;
+    private WebClient webClient;
 
-    public static final int COMPOSITE_COMPONENT = 2;
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
+    }
 
-    public static final int COMPONENT = 3;
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
+    }
 
-    public static final int COOKIE = 4;
+    @Test
+    public void testDropFlashCookie() throws Exception {
 
-    public static final int FACES_CONTEXT = 5;
-
-    public static final int FLASH = 6;
-
-    public static final int FACES_FLOW = 7;
-
-    public static final int HEADER = 8;
-
-    public static final int HEADER_VALUES = 9;
-
-    public static final int INIT_PARAM = 10;
-
-    public static final int PARAM = 11;
-
-    public static final int PARAM_VALUES = 12;
-
-    public static final int REQUEST = 13;
-
-    public static final int REQUEST_SCOPE = 14;
-
-    public static final int RESOURCE = 15;
-
-    public static final int SESSION = 16;
-
-    public static final int SESSION_SCOPE = 17;
-
-    public static final int VIEW = 18;
-
-    public static final int VIEW_SCOPE = 19;
-    
-    
+        HtmlPage page = webClient.getPage(webUrl + "faces/flashDropCookie.xhtml") ;
+        webClient.getOptions().setRedirectEnabled(true);
+        HtmlTextInput textInput = (HtmlTextInput) page.getHtmlElementById("input");
+        textInput.setValueAttribute("test");
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("submit");
+       
+        int currentSize = webClient.getCookieManager().getCookies().size();
+        
+        page = button.click();
+        HtmlElement element = page.getHtmlElementById("link");
+        page = element.click();
+        
+        int newSize = webClient.getCookieManager().getCookies().size();
+        
+        assertTrue( newSize < currentSize );
+    }
 }

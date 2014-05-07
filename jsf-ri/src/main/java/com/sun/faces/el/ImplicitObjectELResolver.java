@@ -69,6 +69,7 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
     {
         String[] implictNames = new String[]{
         "application", "applicationScope", "cc", "component", "cookie", "facesContext",
+        "flash",
         "flowScope",
         "header", "headerValues", "initParam", "param", "paramValues",
         "request", "requestScope", "resource", "session", "sessionScope", 
@@ -142,6 +143,9 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
                 case FACES_CONTEXT:
                     context.setPropertyResolved(true);
                     return facesContext;
+                case FLASH:
+                    context.setPropertyResolved(true);
+                    return facesContext.getExternalContext().getFlash();
                 case FACES_FLOW:
                     FlowHandler flowHandler = facesContext.getApplication().getFlowHandler();
                     if (null != flowHandler) {

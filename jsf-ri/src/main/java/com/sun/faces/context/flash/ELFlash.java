@@ -42,6 +42,7 @@ package com.sun.faces.context.flash;
 
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableDistributable;
 import com.sun.faces.facelets.tag.ui.UIDebug;
 import com.sun.faces.util.ByteArrayGuardAESCTR;
 import com.sun.faces.util.FacesLogger;
@@ -62,7 +63,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
@@ -140,14 +140,14 @@ public class ELFlash extends Flash {
     private long numberOfFlashesBetweenFlashReapings = Long.
      parseLong(WebContextInitParameter.NumberOfFlashesBetweenFlashReapings.getDefaultValue());
     
-    private Application application;
-
+    private final boolean distributable;
+    
     private ByteArrayGuardAESCTR guard;
-
+    
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="class vars">
-
+    
     private static final Logger LOGGER = FacesLogger.FLASH.getLogger();
 
     /**
@@ -161,7 +161,7 @@ public class ELFlash extends Flash {
      * stores the singleton ELFlash instance.</p>
      */
     static final String FLASH_ATTRIBUTE_NAME = PREFIX + "f";
-
+    
     /**
      * <p>This constant is used as the name of the cookie sent to the
      * client.  The cookie is used to allow the flash scope to
@@ -237,9 +237,9 @@ public class ELFlash extends Flash {
     // <editor-fold defaultstate="collapsed" desc="Constructors and instance accessors">
 
     /** Creates a new instance of ELFlash */
-    private ELFlash() {
+    private ELFlash(ExternalContext extContext) {
         flashInnerMap = new ConcurrentHashMap<String,Map<String, Object>>();
-        WebConfiguration config = WebConfiguration.getInstance();
+        WebConfiguration config = WebConfiguration.getInstance(extContext);
         String value;
         try {
             value = config.getOptionValue(WebContextInitParameter.NumberOfConcurrentFlashUsers);
@@ -261,7 +261,8 @@ public class ELFlash extends Flash {
 
         }
         
-        application = FacesContext.getCurrentInstance().getApplication();
+        distributable = config.isOptionEnabled(EnableDistributable);
+        
         guard = new ByteArrayGuardAESCTR();
 
     }
@@ -299,10 +300,24 @@ public class ELFlash extends Flash {
         if (null == flash && create) {
             synchronized (extContext.getContext()) {
                 if (null == (flash = (ELFlash)
-                    appMap.get(FLASH_ATTRIBUTE_NAME))) {
-                    flash = new ELFlash();
+                        appMap.get(FLASH_ATTRIBUTE_NAME))) {
+                    flash = new ELFlash(extContext);
                     appMap.put(FLASH_ATTRIBUTE_NAME, flash);
                 }
+            }            
+        }
+            
+        // If we are in a clustered environment, store a helper to ensure
+        // our innerMap gets successfully replicated
+        if (null != appMap.get(EnableDistributable.getQualifiedName())) {
+            synchronized (extContext.getContext()) {            
+                Map<String, Object> sessionMap = extContext.getSessionMap();
+                SessionHelper sessionHelper = 
+                        SessionHelper.getInstance(extContext);
+                if (null == sessionHelper) {
+                    sessionHelper = new SessionHelper();
+                }
+                sessionHelper.update(extContext, flash);
             }
         }
         return flash;
@@ -363,13 +378,13 @@ public class ELFlash extends Flash {
     public Object get(Object key) {
         Object result = null;
 
+        FacesContext context = FacesContext.getCurrentInstance();
         if (null != key) {
             if (key.equals("keepMessages")) {
                 result = this.isKeepMessages();
             } else if (key.equals("redirect")) {
                 result = this.isRedirect();
             } else {
-                FacesContext context = FacesContext.getCurrentInstance();
                 if (isKeepFlagSet(context)) {
                     result = getPhaseMapForReading().get(key);
                     keep(key.toString());
@@ -383,6 +398,12 @@ public class ELFlash extends Flash {
         
         if (null == result) {
             result = getPhaseMapForReading().get(key);
+        }
+        if (distributable) {
+            SessionHelper sessionHelper = 
+                    SessionHelper.getInstance(context.getExternalContext());
+            assert(null != sessionHelper);
+            sessionHelper.update(context.getExternalContext(), this);
         }
 
         if (LOGGER.isLoggable(Level.FINEST)) {
@@ -408,13 +429,21 @@ public class ELFlash extends Flash {
                 wasSpecialPut = true;
             }
         }
+        FacesContext context = FacesContext.getCurrentInstance();
         if (!wasSpecialPut) {
             result = (null == b) ? getPhaseMapForWriting().put(key, value) : b;
             if (LOGGER.isLoggable(Level.FINEST)) {
                 LOGGER.log(Level.FINEST, "put({0},{1})", new Object [] { key, value});
             }
-            application.publishEvent(FacesContext.getCurrentInstance(), PostPutFlashValueEvent.class, key);
+            context.getApplication().publishEvent(context, PostPutFlashValueEvent.class, key);
         }
+        if (distributable) {
+            SessionHelper sessionHelper = 
+                    SessionHelper.getInstance(context.getExternalContext());
+            assert(null != sessionHelper);
+            sessionHelper.update(context.getExternalContext(), this);
+        }
+        
         return result;
     }
 
@@ -422,7 +451,8 @@ public class ELFlash extends Flash {
     public Object remove(Object key) {
         Object result = null;
 
-        application.publishEvent(FacesContext.getCurrentInstance(), PreRemoveFlashValueEvent.class, key);
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getApplication().publishEvent(context, PreRemoveFlashValueEvent.class, key);
         result = getPhaseMapForWriting().remove(key);
 
         return result;
@@ -548,7 +578,7 @@ public class ELFlash extends Flash {
 
             if (null != toKeep) {
                 getPhaseMapForWriting().put(key, toKeep);
-                application.publishEvent(FacesContext.getCurrentInstance(), PostKeepFlashValueEvent.class, key);
+                context.getApplication().publishEvent(context, PostKeepFlashValueEvent.class, key);
 
             }
         }
@@ -673,8 +703,16 @@ public class ELFlash extends Flash {
     }
 
     // </editor-fold>
-
+    
     // <editor-fold defaultstate="collapsed" desc="Helpers">
+    
+    void setFlashInnerMap(Map<String,Map<String, Object>> flashInnerMap) {
+        this.flashInnerMap = flashInnerMap;
+    }
+    
+    Map<String, Map<String,Object>> getFlashInnerMap() {
+        return flashInnerMap;
+    }
     
     public String toString() {
         StringBuilder builder = new StringBuilder();

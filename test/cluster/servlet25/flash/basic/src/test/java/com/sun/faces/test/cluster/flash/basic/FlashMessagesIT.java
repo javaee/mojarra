@@ -38,51 +38,53 @@
  * holder.
  */
 
-package com.sun.faces.el;
+package com.sun.faces.test.cluster.flash.basic;
+
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 /**
- * @author jhook
+  *
  */
-public interface ELConstants {
-    public static final int APPLICATION = 0;
+public class FlashMessagesIT {
 
-    public static final int APPLICATION_SCOPE = 1;
+    private String webUrl;
+    private WebClient webClient;
 
-    public static final int COMPOSITE_COMPONENT = 2;
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
+    }
 
-    public static final int COMPONENT = 3;
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
+    }
 
-    public static final int COOKIE = 4;
 
-    public static final int FACES_CONTEXT = 5;
+    // ------------------------------------------------------------ Test Methods
 
-    public static final int FLASH = 6;
 
-    public static final int FACES_FLOW = 7;
+    /**
+     * Added for issue 1476.
+     */
+    @Test
+    public void testBooleanCheckboxSubmittedValue() throws Exception {
 
-    public static final int HEADER = 8;
+        HtmlPage page = webClient.getPage(webUrl + "/faces/flashKeepMessages01.xhtml");
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("nextButton");
+        page = button.click();
+        String pageText = page.asText();
+        assertTrue(pageText.contains("Mesage 1 survives redirect"));
+        assertTrue(pageText.contains("Mesage 2 survives redirect"));
 
-    public static final int HEADER_VALUES = 9;
 
-    public static final int INIT_PARAM = 10;
-
-    public static final int PARAM = 11;
-
-    public static final int PARAM_VALUES = 12;
-
-    public static final int REQUEST = 13;
-
-    public static final int REQUEST_SCOPE = 14;
-
-    public static final int RESOURCE = 15;
-
-    public static final int SESSION = 16;
-
-    public static final int SESSION_SCOPE = 17;
-
-    public static final int VIEW = 18;
-
-    public static final int VIEW_SCOPE = 19;
-    
-    
+    }
 }

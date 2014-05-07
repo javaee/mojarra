@@ -56,6 +56,9 @@ import java.util.logging.Logger;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.xml.bind.DatatypeConverter;
 
 /**
@@ -172,17 +175,40 @@ public final class ByteArrayGuardAESCTR {
     private void setupKeyAndCharset() {
 
         try {
-            KeyGenerator kg = KeyGenerator.getInstance(KEY_ALGORITHM);
-            kg.init(KEY_LENGTH);   // 256 if you're using the Unlimited Policy Files
-            sk = kg.generateKey(); 
+            InitialContext context = new InitialContext();
+            String encodedKeyArray = (String) context.lookup("java:comp/env/jsf/FlashSecretKey");
+            if (null != encodedKeyArray) {
+                byte[] keyArray = DatatypeConverter.parseBase64Binary(encodedKeyArray);
+                if (keyArray.length < 17) {
+                    throw new FacesException("key must be at least 16 bytes long.");
+                }
+                sk = new SecretKeySpec(keyArray, KEY_ALGORITHM);
+                byte[] iv = new byte[16];
+                System.arraycopy(keyArray, 0, iv, 0, 16);
+                ivspec = new IvParameterSpec(iv);
+            }
+        } catch(NamingException exception) {
+            if (LOGGER.isLoggable(Level.FINEST)) { 
+                LOGGER.log(Level.FINEST, "Unable to find the encoded key.", exception);
+            }
         } catch (Exception e) {
             throw new FacesException(e);
         }
         
-        SecureRandom rand = new SecureRandom();
-        byte[] iv = new byte[16];
-        rand.nextBytes(iv);
-        ivspec = new IvParameterSpec(iv);
+        if (null == sk) {
+            try {
+                KeyGenerator kg = KeyGenerator.getInstance(KEY_ALGORITHM);
+                kg.init(KEY_LENGTH);   // 256 if you're using the Unlimited Policy Files
+                sk = kg.generateKey(); 
+                SecureRandom rand = new SecureRandom();
+                byte[] iv = new byte[16];
+                rand.nextBytes(iv);
+                ivspec = new IvParameterSpec(iv);
+            } catch (Exception e) {
+                throw new FacesException(e);
+            }
+        }
+        
             
         SortedMap<String,Charset> availableCharsets = Charset.availableCharsets();
         if (availableCharsets.containsKey("UTF-8")) {
