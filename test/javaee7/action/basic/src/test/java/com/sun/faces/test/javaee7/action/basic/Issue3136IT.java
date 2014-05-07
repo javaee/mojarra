@@ -62,24 +62,28 @@ public class Issue3136IT {
     }
 
     @Test
+    @Ignore
     public void testExactMapping() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "action/exact.xhtml");
         assertTrue(page.asXml().contains("This page used an exact mapping of /exact.xhtml using @RequestMapping."));
     }
 
     @Test
+    @Ignore
     public void testPrefixMapping() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "action/prefix/prefix.xhtml");
         assertTrue(page.asXml().contains("This page used an prefix mapping of /prefix/* using @RequestMapping."));
     }
 
     @Test
+    @Ignore
     public void testExtensionMapping() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "action/extension.do");
         assertTrue(page.asXml().contains("This page used an extension mapping of *.do using @RequestMapping."));
     }
 
     @Test
+    @Ignore
     public void testSimpleForm() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/form1.xhtml");
         HtmlElement inputText1 = page.getHtmlElementById("inputText1");
