@@ -59,6 +59,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Level;
@@ -311,7 +312,6 @@ public class ELFlash extends Flash {
         // our innerMap gets successfully replicated
         if (null != appMap.get(EnableDistributable.getQualifiedName())) {
             synchronized (extContext.getContext()) {            
-                Map<String, Object> sessionMap = extContext.getSessionMap();
                 SessionHelper sessionHelper = 
                         SessionHelper.getInstance(extContext);
                 if (null == sessionHelper) {
@@ -773,11 +773,11 @@ public class ELFlash extends Flash {
         if (flashInnerMap.size() < numberOfConcurentFlashUsers) {
             return;
         }
-
+        
         Set<String> keys = flashInnerMap.keySet();
-        long
-                sequenceNumberToTest,
-                currentSequenceNumber = sequenceNumber.get();
+            long
+                    sequenceNumberToTest,
+                    currentSequenceNumber = sequenceNumber.get();
         Map<String, Object> curFlash;
         for (String cur : keys) {
             sequenceNumberToTest = Long.parseLong(cur);
@@ -788,6 +788,15 @@ public class ELFlash extends Flash {
                 flashInnerMap.remove(cur);
             }
         }
+        if (distributable) {
+            ExternalContext extContext = FacesContext.getCurrentInstance().getExternalContext();
+            SessionHelper sessionHelper = SessionHelper.getInstance(extContext);
+            if (null != sessionHelper) {
+                sessionHelper.remove(extContext);
+                sessionHelper = new SessionHelper();
+                sessionHelper.update(extContext, this);
+            }
+        }        
     }
 
     private boolean responseCompleteWasJustSetTrue(FacesContext context,

@@ -40,7 +40,6 @@
 
 package com.sun.faces.test.cluster.servlet25.flash.reaper;
 
-import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.context.flash.ELFlash;
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -55,11 +54,6 @@ public class FlashReaperBean {
     public static final int NUMBER_OF_ZOMBIES = 12;
 
     public  FlashReaperBean() {
-
-        WebConfiguration config = WebConfiguration.getInstance();
-
-        config.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.NumberOfConcurrentFlashUsers, "" + NUMBER_OF_ZOMBIES);
-        config.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.NumberOfFlashesBetweenFlashReapings, "24");
 
     }
 

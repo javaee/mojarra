@@ -40,7 +40,6 @@
     holder.
 
 -->
-
 <web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
     <context-param>
         <param-name>javax.faces.PROJECT_STAGE</param-name>
@@ -54,6 +53,14 @@
         <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
         <param-value>${webapp.stateSavingMethod}</param-value>
     </context-param>
+    <context-param>
+        <param-name>com.sun.faces.numberOfFlashesBetweenFlashReapings</param-name>
+        <param-value>24</param-value>
+    </context-param>
+    <context-param>
+        <param-name>com.sun.faces.numberOfConcerrentFlashUsers</param-name>
+        <param-value>12</param-value>
+    </context-param>
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
@@ -66,6 +73,17 @@
     <welcome-file-list>
         <welcome-file>faces/index.xhtml</welcome-file>
     </welcome-file-list>
-
     <distributable/>
+    <env-entry>
+        <env-entry-name>jsf/FlashSecretKey</env-entry-name>
+        <env-entry-type>java.lang.String</env-entry-type>
+        <!-- http://www.digitalsanctuary.com/aes-key-generator.php -->
+        <env-entry-value>YeMYsp5+BDTvzL6A5n40IusWI9E8Jqr9q/hk5GU53RE=</env-entry-value>
+    </env-entry>
+    <env-entry>
+        <env-entry-name>jsf/ClientSideSecretKey</env-entry-name>
+        <env-entry-type>java.lang.String</env-entry-type>
+        <!-- http://www.digitalsanctuary.com/aes-key-generator.php -->
+        <env-entry-value>vxI50oNETIH5iSsUPFBvzP0913W8fy8lwZ/LT6caXyI= </env-entry-value>
+    </env-entry>
 </web-app>

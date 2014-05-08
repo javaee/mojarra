@@ -56,12 +56,10 @@ import static org.junit.Assert.assertTrue;
  */
 public class FlashReaperIT {
 
-    private String webUrl;
     private WebClient webClient;
 
     @Before
     public void setUp() {
-        webUrl = System.getProperty("integration.url");
         webClient = new WebClient();
     }
 
@@ -100,7 +98,14 @@ public class FlashReaperIT {
             page = webClient.getPage(baseUrls[instanceNumber] + "faces/flashReaper.xhtml");
 
             numberEntriesInInnerMap = Integer.parseInt(page.asText().trim());
-            if (numberEntriesInInnerMap <= FlashReaperBean.NUMBER_OF_ZOMBIES) {
+            // When we move across instance numbers as done in this test, the
+            // entries from the first instance are never reaped because 
+            // we are not interleaving requests to each instance number.
+            // Instead we are making N requests to instance1 and then N
+            // requests to instance2.  Therefore, consider the reaping
+            // boundary based on the instance number
+            if (numberEntriesInInnerMap <= 
+                ((1+instanceNumber)*FlashReaperBean.NUMBER_OF_ZOMBIES)) {
                 didReap = true;
                 numberOfReaps++;
             }
