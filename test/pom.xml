@@ -799,7 +799,7 @@ startServer(
                 <weblogic.cargo.password>adminadmin1</weblogic.cargo.password>
                 <weblogic.cargo.wldomain>${weblogic.cargo.home}/user_projects/domains/mydomain</weblogic.cargo.wldomain>
                 <weblogic.cargo.wlserver>${weblogic.cargo.home}/wlserver</weblogic.cargo.wlserver>
-                <weblogic.cargo.memargs>-Xms512m, -Xmx786m, -XX:MaxPermSize=786m</weblogic.cargo.memargs>
+                <weblogic.cargo.memargs>-Xms512m, -Xmx786m, -XX:MaxPermSize=786m -Xrs</weblogic.cargo.memargs>
                 <domainHome>${weblogic.cargo.wldomain}</domainHome>
                 <middlewareHome>${weblogic.cargo.home}</middlewareHome>
                 <weblogicHome>${weblogic.cargo.wlserver}</weblogicHome>
