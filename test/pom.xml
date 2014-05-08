@@ -777,12 +777,10 @@
                                 <id>startServer</id>
                                 <phase>install</phase>
                                 <configuration>
-                                    <debug>true</debug>
-                                    <noexit>true</noexit>
                                     <script>
 startServer(
     'AdminServer', 'mydomain', 't3://localhost:7001', '${weblogic.cargo.username}',
-    '${weblogic.cargo.password}', '${weblogic.cargo.wldomain}',
+    '${weblogic.cargo.password}', '${weblogic.cargo.wldomain}', systemProperties='BUILD_ID=dontKillMe'
     jvmArgs='${weblogic.cargo.memargs}')
                                     </script>
                                 </configuration>
