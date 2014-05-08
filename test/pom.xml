@@ -777,6 +777,7 @@
                                 <id>startServer</id>
                                 <phase>install</phase>
                                 <configuration>
+                                    <debug>true</debug>
                                     <noexit>true</noexit>
                                     <script>
 startServer(
