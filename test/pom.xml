@@ -780,8 +780,7 @@
                                     <script>
 startServer(
     'AdminServer', 'mydomain', 't3://localhost:7001', '${weblogic.cargo.username}',
-    '${weblogic.cargo.password}', '${weblogic.cargo.wldomain}', systemProperties='BUILD_ID=dontKillMe',
-    jvmArgs='${weblogic.cargo.memargs}')
+    '${weblogic.cargo.password}', '${weblogic.cargo.wldomain}', jvmArgs='${weblogic.cargo.memargs}')
                                     </script>
                                 </configuration>
                                 <goals>
