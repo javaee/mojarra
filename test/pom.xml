@@ -777,6 +777,7 @@
                                 <id>startServer</id>
                                 <phase>install</phase>
                                 <configuration>
+                                    <noexit>true</noexit>
                                     <script>
 startServer(
     'AdminServer', 'mydomain', 't3://localhost:7001', '${weblogic.cargo.username}',
