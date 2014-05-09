@@ -56,10 +56,6 @@ class SessionHelper implements Serializable, HttpSessionActivationListener {
     private static final String FLASH_INNER_MAP_KEY = ELFlash.FLASH_ATTRIBUTE_NAME + "FIM";
     private boolean didPassivate;
     
-    void SessionHelper() {
-        
-    }
-    
     static SessionHelper getInstance(ExternalContext extContext) {
         return (SessionHelper) 
                 extContext.getSessionMap().get(FLASH_SESSIONACTIVATIONLISTENER_ATTRIBUTE_NAME);
