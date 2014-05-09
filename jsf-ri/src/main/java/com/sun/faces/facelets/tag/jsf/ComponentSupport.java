@@ -72,6 +72,7 @@ import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagAttributeException;
 import javax.faces.view.facelets.Tag;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -217,37 +218,144 @@ public final class ComponentSupport {
      * @param id the id
      * @return the UI component
      */
-    public static UIComponent findChildByTagId(UIComponent parent, String id) {
-        Iterator itr = parent.getFacetsAndChildren();
-        UIComponent c = null;
+    public static UIComponent findChildByTagId(FacesContext context, UIComponent parent, String id) {
+        UIComponent c = peekFoundComponent(context);
         String cid = null;
+        if (null != c) {
+            cid = (String) c.getAttributes().get(MARK_CREATED);
+            if (id.equals(cid)) {
+                log(context, "debug: edburns: peek case found id: " + id);
+                return c;
+            }
+        }
+        
+        Iterator<UIComponent> itr = parent.getFacetsAndChildren();
+        log(context, "debug: edburns: looking for id: " + id);
         while (itr.hasNext()) {
             c = (UIComponent) itr.next();
             cid = (String) c.getAttributes().get(MARK_CREATED);
             if (id.equals(cid)) {
+                log(context, "debug: edburns: non-panel case found id: " + id);
+                pushFoundComponent(context, c);
                 return c;
             }
             if (c instanceof UIPanel && c.getAttributes().containsKey(IMPLICIT_PANEL)) {
                 for (UIComponent c2 : c.getChildren()) {
                     cid = (String) c2.getAttributes().get(MARK_CREATED);
                     if (id.equals(cid)) {
+                        log(context, "debug: edburns: panel case found id: " + id);
+                        pushFoundComponent(context, c);
                         return c2;
+                    }
                 }
-            }
-        } 
+            } 
             /*
              * Make sure we look for the child recursively it might have moved
              * into a different parent in the parent hierarchy. Note currently
              * we are only looking down the tree. Maybe it would be better
              * to use the VisitTree API instead.
              */
-            UIComponent foundChild = findChildByTagId(c, id);
+            pushIndent(context);
+            UIComponent foundChild = findChildByTagId(context, c, id);
+            popIndent(context);
             if (foundChild != null) {
                 return foundChild;
             }
         }
         return null;
     }
+    
+    
+    // <editor-fold defaultstate="collapsed">
+    private static String FCBTI_ITER_NAME = RIConstants.FACES_PREFIX + "FCBTI_ITER";
+    
+    private static Iterator<UIComponent> getPreviousIterForFindChildByTagId(FacesContext context) {
+        Iterator<UIComponent> result = null;
+        Map<Object, Object> contextAttrs = context.getAttributes();
+        result = (Iterator<UIComponent>) contextAttrs.get(FCBTI_ITER_NAME);
+        
+        return result;
+    }
+    
+    private static void setFindChildByTagIdIter(FacesContext context, Iterator<UIComponent> iter) {
+        Map<Object, Object> contextAttrs = context.getAttributes();
+        contextAttrs.put(FCBTI_ITER_NAME, iter);
+    }
+    
+    public static void clearFindChildByTagIdIter(FacesContext context) {
+        Map<Object, Object> contextAttrs = context.getAttributes();
+        if (contextAttrs.containsKey(FCBTI_ITER_NAME)) {
+            contextAttrs.remove(FCBTI_ITER_NAME);
+        }
+    }
+    // </editor-fold>
+    
+    private static String FCBTI_FOUND_COMPONENT_NAME = RIConstants.FACES_PREFIX + "FCBTI_FOUND_COMPONENT";
+
+    private static void pushFoundComponent(FacesContext context, UIComponent c) {
+        context.getAttributes().put(FCBTI_FOUND_COMPONENT_NAME, c);
+    }
+    
+    private static UIComponent peekFoundComponent(FacesContext context) {
+        return (UIComponent) context.getAttributes().get(FCBTI_FOUND_COMPONENT_NAME);
+    }
+    
+    private static String FCBTI_INDENT_NAME = RIConstants.FACES_PREFIX + "FCBTI_INDENT";
+
+    private static void pushIndent(FacesContext context) {
+        Map<Object, Object> attrs = context.getAttributes();
+        Integer i = (Integer) attrs.get(FCBTI_INDENT_NAME);
+        if (null == i) {
+            i = new Integer(1);
+            attrs.put(FCBTI_INDENT_NAME, i);
+        } else {
+            attrs.put(FCBTI_INDENT_NAME, ++i);
+        }
+    }
+    
+    private static void printIndent(FacesContext context, StringBuilder sb) {
+        Map<Object, Object> attrs = context.getAttributes();
+        Integer i = (Integer) attrs.get(FCBTI_INDENT_NAME);
+        if (null != i && 0 < i) {
+            for (int j = 0; j < i; j++) {
+                sb.append("++++ ");
+            }
+        }
+        
+    }
+    
+    private static void popIndent(FacesContext context) {
+        Map<Object, Object> attrs = context.getAttributes();
+        Integer i = (Integer) attrs.get(FCBTI_INDENT_NAME);
+        if (null != i && 0 < i) {
+            attrs.put(FCBTI_INDENT_NAME, --i);
+        }
+    }
+    
+    private static String FCBTI_NAME = RIConstants.FACES_PREFIX + "FCBTI";
+    
+    private static void log(FacesContext context, String message) {
+        Integer count = (Integer) context.getAttributes().get(FCBTI_NAME);
+        if (null == count) {
+            count = new Integer(1);
+            context.getAttributes().put(FCBTI_NAME, count);
+        } else {
+            context.getAttributes().put(FCBTI_NAME, ++count);
+        }
+        StringBuilder sb = new StringBuilder();
+        printIndent(context, sb);
+        sb.append(message);
+        System.out.println(sb);
+        
+    }
+    
+    public static Integer getCallCount(FacesContext context) {
+        Integer result = (Integer) context.getAttributes().get(FCBTI_NAME);
+        
+        return result;
+    }
+    
+    
     
     /**
      * According to JSF 1.2 tag specs, this helper method will use the

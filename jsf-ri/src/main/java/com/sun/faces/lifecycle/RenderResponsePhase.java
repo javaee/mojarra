@@ -43,6 +43,7 @@
 package com.sun.faces.lifecycle;
 
 
+import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import javax.faces.FacesException;
 import javax.faces.view.ViewDeclarationLanguage;
 import javax.faces.application.ViewHandler;
@@ -131,7 +132,9 @@ public class RenderResponsePhase extends Phase {
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Exiting RenderResponsePhase");
         }
-
+        
+        System.out.println("debug: edburns: findChildByTagId call count: " + ComponentSupport.getCallCount(facesContext));
+        // ComponentSupport.clearFindChildByTagIdIter(facesContext);
     }
 
 

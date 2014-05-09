@@ -520,8 +520,14 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
     protected UIComponent findChild(FaceletContext ctx,
                                     UIComponent parent,
                                     String tagId) {
+        UIComponent c = null;
+        
+        FacesContext facesContext = ctx.getFacesContext();
+        if (facesContext.isPostback()) {
+            c = ComponentSupport.findChildByTagId(facesContext, parent, tagId);
+        }
 
-        return ComponentSupport.findChildByTagId(parent, tagId);
+        return c;
 
     }
 
@@ -533,8 +539,15 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         if (facet != null) {
             UIComponent newParent = facet.findComponent(
                (String)parent.getAttributes().get(tagId));
-            if (newParent != null)
-                return ComponentSupport.findChildByTagId(newParent, tagId);
+            if (newParent != null) {
+                UIComponent c = null;
+                FacesContext facesContext = ctx.getFacesContext();
+                if (facesContext.isPostback()) {
+                    c = ComponentSupport.findChildByTagId(facesContext, parent, tagId);
+                }
+                
+                return c;
+            }
         }
         return null;
     }
