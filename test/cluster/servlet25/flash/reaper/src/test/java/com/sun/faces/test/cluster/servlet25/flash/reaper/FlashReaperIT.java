@@ -48,6 +48,7 @@ import java.net.URLConnection;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.Ignore;
 
 import static org.junit.Assert.assertTrue;
 
@@ -72,6 +73,7 @@ public class FlashReaperIT {
     // ------------------------------------------------------------ Test Methods
 
 
+    @Ignore
     @Test
     public void testFlashesAreReaped() throws Exception {
         
