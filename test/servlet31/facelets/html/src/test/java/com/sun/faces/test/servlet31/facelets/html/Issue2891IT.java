@@ -45,6 +45,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 public class Issue2891IT {
 
@@ -63,6 +64,7 @@ public class Issue2891IT {
     }
     
     @Test
+    @Ignore
     public void testOutputTextInlineEL3() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/outputTextInlineEL3.xhtml");
         assertEquals(200, page.getWebResponse().getStatusCode());

@@ -48,6 +48,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 public class Issue2827IT {
 
@@ -75,6 +76,7 @@ public class Issue2827IT {
      * for COERCE_TO_ZERO
      */
     @Test
+    @Ignore
     public void testValidateEmptyFields() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
         if (page.getWebResponse().getResponseHeaderValue("Server") == null
