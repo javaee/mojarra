@@ -47,6 +47,7 @@ import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import static org.junit.Assert.assertTrue;
+import org.junit.Ignore;
 
 public class VerifyTemplateUIIT {
     /**
@@ -94,6 +95,7 @@ public class VerifyTemplateUIIT {
     }
 
     @Test
+    @Ignore
     public void testUL() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
         String pageXml = page.getBody().asXml();
