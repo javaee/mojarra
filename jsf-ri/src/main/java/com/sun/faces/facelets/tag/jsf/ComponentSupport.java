@@ -249,17 +249,20 @@ public final class ComponentSupport {
                     }
                 }
             } 
-            /*
-             * Make sure we look for the child recursively it might have moved
-             * into a different parent in the parent hierarchy. Note currently
-             * we are only looking down the tree. Maybe it would be better
-             * to use the VisitTree API instead.
-             */
-            pushIndent(context);
-            UIComponent foundChild = findChildByTagId(context, c, id);
-            popIndent(context);
-            if (foundChild != null) {
-                return foundChild;
+            if (context.getViewRoot().getAttributes().containsKey(RIConstants.TREE_HAS_DYNAMIC_COMPONENTS)) {
+            
+                /*
+                 * Make sure we look for the child recursively it might have moved
+                 * into a different parent in the parent hierarchy. Note currently
+                 * we are only looking down the tree. Maybe it would be better
+                 * to use the VisitTree API instead.
+                 */
+                pushIndent(context);
+                UIComponent foundChild = findChildByTagId(context, c, id);
+                popIndent(context);
+                if (foundChild != null) {
+                    return foundChild;
+                }
             }
         }
         return null;
