@@ -971,33 +971,33 @@
                                     <target>
                                         <!-- do the jsf-impl.jar -->
                                         <unzip src="${integration.container.home}/${wls.mojarraJarPath}/${wls.mojarraImplJarName}"
-                                           dest="${integration.container.home}/tmp.mojarra/wls.mojarra" />
+                                               dest="${integration.container.home}/tmp.mojarra/wls.mojarra" />
                                         <delete dir="${integration.container.home}/tmp.mojarra/wls.mojarra/com/sun" />
                                         <delete dir="${integration.container.home}/tmp.mojarra/wls.mojarra/META-INF" />
                                         <unzip src="${integration.container.home}/tmp.mojarra/jsf-impl.jar"
-                                           dest="${integration.container.home}/tmp.mojarra/wls.mojarra" />
+                                               dest="${integration.container.home}/tmp.mojarra/wls.mojarra" />
                                         <zip destfile="${integration.container.home}/tmp.mojarra/${wls.mojarraImplJarName}"
-                                         basedir="${integration.container.home}/tmp.mojarra/wls.mojarra"
-                                         update="true" />
+                                             basedir="${integration.container.home}/tmp.mojarra/wls.mojarra"
+                                             update="true" />
                                         <copy overwrite="true"
-                                          file="${integration.container.home}/tmp.mojarra/${wls.mojarraImplJarName}"
-                                          tofile="${integration.container.home}/${wls.mojarraJarPath}/${wls.mojarraImplJarName}" />
+                                              file="${integration.container.home}/tmp.mojarra/${wls.mojarraImplJarName}"
+                                              tofile="${integration.container.home}/${wls.mojarraJarPath}/${wls.mojarraImplJarName}" />
 
                                         <!-- do the jsf-api.jar -->
                                         <delete failonerror="false" dir="${integration.container.home}/tmp.mojarra/wls.mojarra" />
                                         <mkdir dir="${integration.container.home}/tmp.mojarra/wls.mojarra" />
                                         <unzip src="${integration.container.home}/${wls.mojarraJarPath}/${wls.mojarraApiJarName}"
-                                           dest="${integration.container.home}/tmp.mojarra/wls.mojarra" />
+                                               dest="${integration.container.home}/tmp.mojarra/wls.mojarra" />
                                         <delete dir="${integration.container.home}/tmp.mojarra/wls.mojarra/javax" />
                                         <delete dir="${integration.container.home}/tmp.mojarra/wls.mojarra/META-INF" />
                                         <unzip src="${integration.container.home}/tmp.mojarra/jsf-api.jar"
-                                           dest="${integration.container.home}/tmp.mojarra/wls.mojarra" />
+                                               dest="${integration.container.home}/tmp.mojarra/wls.mojarra" />
                                         <zip destfile="${integration.container.home}/tmp.mojarra/${wls.mojarraApiJarName}"
-                                         basedir="${integration.container.home}/tmp.mojarra/wls.mojarra"
-                                         update="true" />
+                                             basedir="${integration.container.home}/tmp.mojarra/wls.mojarra"
+                                             update="true" />
                                         <copy overwrite="true"
-                                          file="${integration.container.home}/tmp.mojarra/${wls.mojarraApiJarName}"
-                                          tofile="${integration.container.home}/${wls.mojarraJarPath}/${wls.mojarraApiJarName}" />
+                                              file="${integration.container.home}/tmp.mojarra/${wls.mojarraApiJarName}"
+                                              tofile="${integration.container.home}/${wls.mojarraJarPath}/${wls.mojarraApiJarName}" />
 
 
                                     </target>
@@ -1069,18 +1069,18 @@
                                 <configuration>
                                     <target>
                                         <unzip src="${integration.container.home}/${wls.mojarraJarPath}/${wls.mojarraJarName}"
-                                           dest="${integration.container.home}/tmp.mojarra/wls.mojarra" />
+                                               dest="${integration.container.home}/tmp.mojarra/wls.mojarra" />
                                         <delete dir="${integration.container.home}/tmp.mojarra/wls.mojarra/javax" />
                                         <delete dir="${integration.container.home}/tmp.mojarra/wls.mojarra/com/sun" />
                                         <delete dir="${integration.container.home}/tmp.mojarra/wls.mojarra/META-INF" />
                                         <unzip src="${integration.container.home}/tmp.mojarra/javax.faces.jar"
-                                           dest="${integration.container.home}/tmp.mojarra/wls.mojarra" />
+                                               dest="${integration.container.home}/tmp.mojarra/wls.mojarra" />
                                         <zip destfile="${integration.container.home}/tmp.mojarra/${wls.mojarraJarName}"
-                                         basedir="${integration.container.home}/tmp.mojarra/wls.mojarra"
-                                         update="true" />
+                                             basedir="${integration.container.home}/tmp.mojarra/wls.mojarra"
+                                             update="true" />
                                         <copy overwrite="true"
-                                          file="${integration.container.home}/tmp.mojarra/${wls.mojarraJarName}"
-                                          tofile="${integration.container.home}/${wls.mojarraJarPath}/${wls.mojarraJarName}" />
+                                              file="${integration.container.home}/tmp.mojarra/${wls.mojarraJarName}"
+                                              tofile="${integration.container.home}/${wls.mojarraJarPath}/${wls.mojarraJarName}" />
                                     </target>
                                 </configuration>
                             </execution>
@@ -1693,6 +1693,58 @@
             </properties>
         </profile>
         <profile>
+            <id>integration</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <inherited>true</inherited>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <integration.serverName>${integration.serverName}</integration.serverName>
+                                <integration.serverPort>${integration.serverPort}</integration.serverPort>
+                                <integration.serverProtocol>${integration.serverProtocol}</integration.serverProtocol>
+                                <integration.url>${integration.protocol}://${integration.serverName}:${integration.serverPort}/${project.build.finalName}/</integration.url>
+                                <jsf.version>${jsf.version}</jsf.version>
+                                <project.build.finalName>${project.build.finalName}</project.build.finalName>
+                                <project.build.sourceEncoding>${project.build.sourceEncoding}</project.build.sourceEncoding>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>                
+                </plugins>
+            </build>
+            <properties>
+                <integration.protocol>http</integration.protocol>
+                <integration.serverName>localhost</integration.serverName>
+                <integration.serverPort>8080</integration.serverPort>
+            </properties>
+            <reporting>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-report-plugin</artifactId>
+                        <reportSets>
+                            <reportSet>
+                                <id>integration-tests</id>
+                                <reports>
+                                    <report>failsafe-report-only</report>
+                                </reports>
+                            </reportSet>
+                        </reportSets>
+                    </plugin>
+                </plugins>
+            </reporting>
+        </profile>
+        <profile>
             <id>weblogic-cargo</id>
             <build>
                 <plugins>
@@ -1834,15 +1886,15 @@
                                 <phase>install</phase>
                                 <configuration>
                                     <script>
-startServer(
-    'AdminServer', 'mydomain', 't3://localhost:7001', '${weblogic.cargo.username}',
-    '${weblogic.cargo.password}', '${weblogic.cargo.wldomain}', jvmArgs='${weblogic.cargo.memargs}')
+                                        startServer(
+                                        'AdminServer', 'mydomain', 't3://localhost:7001', '${weblogic.cargo.username}',
+                                        '${weblogic.cargo.password}', '${weblogic.cargo.wldomain}', jvmArgs='${weblogic.cargo.memargs}')
                                     </script>
                                 </configuration>
                                 <goals>
                                     <goal>wlst</goal>
                                 </goals>
-                             </execution>
+                            </execution>
                         </executions>
                     </plugin>
                 </plugins>
