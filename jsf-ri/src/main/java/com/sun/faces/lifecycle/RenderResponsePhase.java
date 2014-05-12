@@ -133,8 +133,6 @@ public class RenderResponsePhase extends Phase {
             LOGGER.fine("Exiting RenderResponsePhase");
         }
         
-        System.out.println("debug: edburns: findChildByTagId call count: " + ComponentSupport.getCallCount(facesContext));
-        // ComponentSupport.clearFindChildByTagIdIter(facesContext);
     }
 
 
