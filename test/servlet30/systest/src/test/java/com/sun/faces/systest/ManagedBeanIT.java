@@ -46,7 +46,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 
 public class ManagedBeanIT {
 
@@ -83,20 +82,19 @@ public class ManagedBeanIT {
     }
 
     @Test
-    @Ignore
     public void testManagedBean3() throws Exception {
         webClient.setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/managed03.jsp");
-        assertEquals(500, page.getWebResponse().getStatusCode());
+        assertEquals(200, page.getWebResponse().getStatusCode());
         webClient.setThrowExceptionOnFailingStatusCode(true);
     }
 
     @Test
-    @Ignore
     public void testManagedBean7() throws Exception {
         webClient.setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/managed07.jsp");
-        assertEquals(500, page.getWebResponse().getStatusCode());
+        assertEquals(200, page.getWebResponse().getStatusCode());
+        assertTrue(page.asXml().contains("Exception seen"));
         webClient.setThrowExceptionOnFailingStatusCode(true);
     }
 
