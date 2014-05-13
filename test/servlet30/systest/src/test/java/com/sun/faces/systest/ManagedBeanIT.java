@@ -92,6 +92,7 @@ public class ManagedBeanIT {
     }
 
     @Test
+    @Ignore
     public void testManagedBean7() throws Exception {
         webClient.setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/managed07.jsp");
