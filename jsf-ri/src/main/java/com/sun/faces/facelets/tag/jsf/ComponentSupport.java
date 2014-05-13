@@ -72,6 +72,7 @@ import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagAttributeException;
 import javax.faces.view.facelets.Tag;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -221,19 +222,31 @@ public final class ComponentSupport {
         if (!context.isPostback()) {
             return null;
         }
-        Iterator itr = parent.getFacetsAndChildren();
         UIComponent c = null;
         String cid = null;
-        while (itr.hasNext()) {
-            c = (UIComponent) itr.next();
+        List<UIComponent> components;
+        if (0 < parent.getFacetCount()) {
+            components = new ArrayList<UIComponent>();
+            components.addAll(parent.getFacets().values());
+            components.addAll(parent.getChildren());
+        } else {
+            components = parent.getChildren();
+        }
+                
+        int len = components.size();
+        incrementCount(context);
+        for (int i = 0; i < len; i++) {
+            c = components.get(i);
             cid = (String) c.getAttributes().get(MARK_CREATED);
             if (id.equals(cid)) {
+                log(context, "found c with id: " + id + " i: " + i);
                 return c;
             }
             if (c instanceof UIPanel && c.getAttributes().containsKey(IMPLICIT_PANEL)) {
                 for (UIComponent c2 : c.getChildren()) {
                     cid = (String) c2.getAttributes().get(MARK_CREATED);
                     if (id.equals(cid)) {
+                        log(context, "PANEL CASE: found c with id: " + id + " i: " + i);
                         return c2;
                     }
                 }
@@ -247,7 +260,9 @@ public final class ComponentSupport {
                  * we are only looking down the tree. Maybe it would be better
                  * to use the VisitTree API instead.
                  */
+                pushIndent(context);
                 UIComponent foundChild = findChildByTagId(context, c, id);
+                popIndent(context);
                 if (foundChild != null) {
                     return foundChild;
                 }
@@ -255,6 +270,70 @@ public final class ComponentSupport {
         }
         return null;
     }
+    
+    
+    private static String FCBTI_INDENT_NAME = RIConstants.FACES_PREFIX + "FCBTI_INDENT";
+
+    private static void pushIndent(FacesContext context) {
+        Map<Object, Object> attrs = context.getAttributes();
+        Integer i = (Integer) attrs.get(FCBTI_INDENT_NAME);
+        if (null == i) {
+            i = new Integer(1);
+            attrs.put(FCBTI_INDENT_NAME, i);
+        } else {
+            attrs.put(FCBTI_INDENT_NAME, ++i);
+        }
+    }
+    
+    private static void printIndent(FacesContext context, StringBuilder sb) {
+        Map<Object, Object> attrs = context.getAttributes();
+        Integer i = (Integer) attrs.get(FCBTI_INDENT_NAME);
+        if (null != i && 0 < i) {
+            for (int j = 0; j < i; j++) {
+                sb.append("++++ ");
+            }
+        }
+        
+    }
+    
+    private static void popIndent(FacesContext context) {
+        Map<Object, Object> attrs = context.getAttributes();
+        Integer i = (Integer) attrs.get(FCBTI_INDENT_NAME);
+        if (null != i && 0 < i) {
+            attrs.put(FCBTI_INDENT_NAME, --i);
+        }
+    }
+    
+    private static String FCBTI_NAME = RIConstants.FACES_PREFIX + "FCBTI";
+    
+    private static void incrementCount(FacesContext context) {
+        Integer count = (Integer) context.getAttributes().get(FCBTI_NAME);
+        if (null == count) {
+            count = new Integer(1);
+            context.getAttributes().put(FCBTI_NAME, count);
+        } else {
+            context.getAttributes().put(FCBTI_NAME, ++count);
+        }
+    }
+    
+    private static void log(FacesContext context, String message) {
+        StringBuilder sb = new StringBuilder();
+        printIndent(context, sb);
+        sb.append(message);
+        System.out.println(sb);
+        
+    }
+    
+    public static Integer getCallCount(FacesContext context) {
+        Integer result = 0;
+        
+        if (context.getAttributes().containsKey(FCBTI_NAME)) {
+            result = (Integer) context.getAttributes().get(FCBTI_NAME);
+        }
+        
+        return result;
+    }
+    
     
     /**
      * According to JSF 1.2 tag specs, this helper method will use the
