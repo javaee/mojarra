@@ -830,8 +830,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
             FacesMessage message = null;
             try {
                 ve.setValue(context.getELContext(), getLocalValue());
-                setValue(null);
-                setLocalValueSet(false);
+                resetValue();
             } catch (ELException e) {
                 caught = e;
                 String messageStr = e.getMessage();
