@@ -47,9 +47,12 @@ import java.util.logging.Level;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
@@ -72,9 +75,14 @@ public class OutputLinkRenderer extends LinkRenderer {
           AttributeManager.getAttributes(AttributeManager.Key.OUTPUTLINK);
 
 
+    protected boolean namespaceParameters;
+
     // ---------------------------------------------------------- Public Methods
 
-
+    public OutputLinkRenderer() {
+        WebConfiguration webConfig = WebConfiguration.getInstance();
+        namespaceParameters = webConfig.isOptionEnabled(BooleanWebContextInitParameter.NamespaceParameters);
+    }
 
     @Override
     public void decode(FacesContext context, UIComponent component) {
@@ -221,10 +229,18 @@ public class OutputLinkRenderer extends LinkRenderer {
         Param paramList[] = getParamList(component);
         StringBuffer sb = new StringBuffer();
         sb.append(hrefVal);
-        boolean paramWritten = false;
+        boolean paramWritten = (hrefVal.indexOf("?") > 0);
+        String namingContainerId = null;
+        if (namespaceParameters) {
+            UIViewRoot viewRoot = context.getViewRoot();
+            namingContainerId = viewRoot.getContainerClientId(context);
+        }
         for (int i = 0, len = paramList.length; i < len; i++) {
             String pn = paramList[i].name;
             if (pn != null && pn.length() != 0) {
+            	if (namingContainerId != null) {
+            		pn = namingContainerId + pn;
+            	}
                 String pv = paramList[i].value;
                 sb.append((paramWritten) ? '&' : '?');
                 sb.append(URLEncoder.encode(pn,"UTF-8"));
