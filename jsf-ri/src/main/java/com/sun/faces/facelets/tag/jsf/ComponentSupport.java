@@ -60,6 +60,7 @@ package com.sun.faces.facelets.tag.jsf;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.context.StateContext;
+import com.sun.faces.facelets.component.UIRepeat;
 import com.sun.faces.facelets.tag.jsf.core.FacetHandler;
 import com.sun.faces.util.Util;
 import javax.faces.FacesException;
@@ -81,6 +82,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import javax.faces.component.TransientStateHelper;
+import javax.faces.component.UIData;
+import javax.faces.event.PhaseId;
 
 /**
  * 
@@ -219,9 +223,14 @@ public final class ComponentSupport {
      * @return the UI component
      */
     public static UIComponent findChildByTagId(FacesContext context, UIComponent parent, String id) {
-        if (!context.isPostback()) {
+        if (!context.isPostback() || context.getCurrentPhaseId().equals(PhaseId.RESTORE_VIEW)) {
             return null;
         }
+        final String FCBTI_LAST_INDEX = "FCBTI_LAST_INDEX";
+        UIViewRoot root = context.getViewRoot();
+        boolean hasDynamicComponents = (null != root && 
+                root.getAttributes().containsKey(RIConstants.TREE_HAS_DYNAMIC_COMPONENTS));
+
         UIComponent c = null;
         String cid = null;
         List<UIComponent> components;
@@ -232,28 +241,32 @@ public final class ComponentSupport {
         } else {
             components = parent.getChildren();
         }
+        TransientStateHelper tsh = parent.getTransientStateHelper(true);
+        int start = hasDynamicComponents ? 
+                0 : (Integer) tsh.getTransient(FCBTI_LAST_INDEX, (Integer) 0);
                 
         int len = components.size();
         incrementCount(context);
-        for (int i = 0; i < len; i++) {
+        for (int i = start; i < len; i++) {
             c = components.get(i);
             cid = (String) c.getAttributes().get(MARK_CREATED);
+            log(context, "id: " + id + " i: " + i + " parent: " + parent.getClass().getSimpleName());
             if (id.equals(cid)) {
-                log(context, "found c with id: " + id + " i: " + i);
+                log(context, "found c with id: " + id + " i: " + i + " parent: " + parent.getClass().getSimpleName());
+                tsh.putTransient(FCBTI_LAST_INDEX, i);
                 return c;
             }
             if (c instanceof UIPanel && c.getAttributes().containsKey(IMPLICIT_PANEL)) {
                 for (UIComponent c2 : c.getChildren()) {
                     cid = (String) c2.getAttributes().get(MARK_CREATED);
                     if (id.equals(cid)) {
-                        log(context, "PANEL CASE: found c with id: " + id + " i: " + i);
+                        log(context, "PANEL CASE: found c with id: " + id + " i: " + i + " parent: " + parent.getClass().getSimpleName());
+                        tsh.putTransient(FCBTI_LAST_INDEX, i);
                         return c2;
                     }
                 }
             }
-            UIViewRoot root = context.getViewRoot();
-            if (null != root && 
-                root.getAttributes().containsKey(RIConstants.TREE_HAS_DYNAMIC_COMPONENTS)) {
+            if (hasDynamicComponents) {
                 /*
                  * Make sure we look for the child recursively it might have moved
                  * into a different parent in the parent hierarchy. Note currently
@@ -266,6 +279,9 @@ public final class ComponentSupport {
                 if (foundChild != null) {
                     return foundChild;
                 }
+            }
+            if (i < len) {
+                tsh.putTransient(FCBTI_LAST_INDEX, i+1);
             }
         }
         return null;

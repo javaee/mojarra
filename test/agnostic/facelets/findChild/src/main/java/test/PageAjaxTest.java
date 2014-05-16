@@ -5,11 +5,22 @@
 package test;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import javax.faces.bean.*;
+import javax.faces.context.FacesContext;
 
 @SessionScoped
 @ManagedBean(name="pageAjaxTest2")
 public class PageAjaxTest  implements Serializable {
+    
+    private final NumberFormat format;
+
+    public PageAjaxTest() {
+        format = new DecimalFormat("#.##");
+    }
+    
+    
   
   public void setInputTextValue(String textVal){}
     
@@ -24,6 +35,13 @@ public class PageAjaxTest  implements Serializable {
     String retVal = x.toString();
     return retVal;
  }
+  
+  public String getRenderTime() {
+      FacesContext context = FacesContext.getCurrentInstance();
+      Long requestStart = (Long) context.getAttributes().get(TimerPhaseListener.REQUEST_START);
+      double elapsedSeconds = ((double)(System.currentTimeMillis() - requestStart)) / 1000;
+      return format.format(elapsedSeconds) + " seconds";
+  }
   
   public void buttonSubmit() {
   }  

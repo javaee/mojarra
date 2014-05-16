@@ -143,6 +143,7 @@ final class UIInstructionHandler extends AbstractUIHandler {
                 }
 
                 c = new UIInstructions(txt, applied);
+                System.out.println("UIInstructionsHandler txt: "+ txt);
                 // mark it owned by a facelet instance
                 String uid;
                 IdMapper mapper = IdMapper.getMapper(ctx.getFacesContext());

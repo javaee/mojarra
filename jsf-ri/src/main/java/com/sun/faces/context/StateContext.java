@@ -345,10 +345,12 @@ public class StateContext {
             if (event instanceof PreRemoveFromViewEvent) {
                 if (stateCtx.trackViewModifications()) {
                     handleRemove(ctx, ((PreRemoveFromViewEvent) event).getComponent());
+                    ctx.getViewRoot().getAttributes().put(RIConstants.TREE_HAS_DYNAMIC_COMPONENTS, Boolean.TRUE);
                 }
             } else {
                 if (stateCtx.trackViewModifications()) {
                     handleAdd(ctx, ((PostAddToViewEvent) event).getComponent());
+                    ctx.getViewRoot().getAttributes().put(RIConstants.TREE_HAS_DYNAMIC_COMPONENTS, Boolean.TRUE);
                 }
             }
         }

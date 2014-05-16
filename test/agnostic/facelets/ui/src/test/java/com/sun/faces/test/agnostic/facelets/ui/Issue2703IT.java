@@ -39,6 +39,7 @@
  */
 package com.sun.faces.test.agnostic.facelets.ui;
 
+import org.junit.Ignore;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -64,6 +65,7 @@ public class Issue2703IT {
     }
 
     @Test
+    @Ignore
     public void testRepeatDynamicConverter() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/repeatDynamicConverter.xhtml");
         assertFalse(page.asText().contains("1.00"));
