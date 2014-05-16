@@ -112,7 +112,7 @@ final class UIInstructionHandler extends AbstractUIHandler {
 
 
     public void apply(FaceletContext ctx, UIComponent parent)
-          throws IOException {
+            throws IOException {
         if (parent != null) {
             // our id
             String id = ctx.generateUniqueId(this.id);
@@ -143,7 +143,6 @@ final class UIInstructionHandler extends AbstractUIHandler {
                 }
 
                 c = new UIInstructions(txt, applied);
-                System.out.println("UIInstructionsHandler txt: "+ txt);
                 // mark it owned by a facelet instance
                 String uid;
                 IdMapper mapper = IdMapper.getMapper(ctx.getFacesContext());

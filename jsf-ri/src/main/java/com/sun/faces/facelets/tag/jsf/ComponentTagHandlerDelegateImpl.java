@@ -176,8 +176,6 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
                 c = this.createComponent(ctx);
             }
             
-            System.out.println("ComponentTagHandlerDelegateImpl c: "+ c.getClass().getSimpleName());
-            
             doNewComponentActions(ctx, id, c);
             assignUniqueId(ctx, parent, id, c);
 

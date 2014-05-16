@@ -261,7 +261,7 @@ public final class ComponentSupport {
                     cid = (String) c2.getAttributes().get(MARK_CREATED);
                     if (id.equals(cid)) {
                         log(context, "PANEL CASE: found c with id: " + id + " i: " + i + " parent: " + parent.getClass().getSimpleName());
-                        tsh.putTransient(FCBTI_LAST_INDEX, i);
+                        tsh.putTransient(FCBTI_LAST_INDEX, 0);
                         return c2;
                     }
                 }
