@@ -1261,10 +1261,17 @@ public class UIInput extends UIOutput implements EditableValueHolder {
             if (((List) value).isEmpty()) {
                 return (true);
             }
+        } else if (value instanceof Collection) {
+            if (((Collection) value).isEmpty()) {
+                return (true);
+            }
+        } else if (value instanceof Map) {
+            if (((Map) value).isEmpty()) {
+                return (true);
+            }
         }
         return (false);
     }
-
 
     /**
      * <p>The set of {@link Validator}s associated with this
