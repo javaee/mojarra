@@ -82,7 +82,7 @@ import com.sun.faces.el.VariableResolverChainWrapper;
 import com.sun.faces.facelets.PrivateApiFaceletCacheAdapter;
 import com.sun.faces.facelets.tag.jsf.PassThroughAttributeLibrary;
 import com.sun.faces.facelets.tag.jsf.PassThroughElementLibrary;
-import com.sun.faces.flow.FlowDiscoveryCDIExtension;
+import com.sun.faces.flow.FlowDiscoveryCDIContext;
 import com.sun.faces.lifecycle.ELResolverInitPhaseListener;
 
 import java.io.IOException;
@@ -112,8 +112,6 @@ import java.util.LinkedHashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.concurrent.ConcurrentHashMap;
-import javax.enterprise.context.spi.CreationalContext;
-import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.Producer;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -322,23 +320,8 @@ public class ApplicationAssociate {
         private synchronized void loadFlows(FacesContext context, FlowHandler flowHandler) throws IOException {
             javax.enterprise.inject.spi.BeanManager beanManager = (javax.enterprise.inject.spi.BeanManager) 
                     Util.getCDIBeanManager(context.getExternalContext().getApplicationMap());
-            Bean<?> extensionImpl = beanManager.resolve(beanManager.getBeans(FlowDiscoveryCDIExtension.class));
-            if (null == extensionImpl) {
-                if (LOGGER.isLoggable(Level.SEVERE)) {
-                    LOGGER.log(Level.SEVERE, "Unable to obtain {0} from CDI implementation.  Flows described with {1} are unavailable.", 
-                            new String [] {
-                                FlowDiscoveryCDIExtension.class.getName(),
-                                FlowDefinition.class.getName()
-                            });
-                }
-                return;
-            }
-            CreationalContext<?> creationalContext = beanManager.createCreationalContext(extensionImpl);
-            FlowDiscoveryCDIExtension myExtension = 
-                    (FlowDiscoveryCDIExtension) beanManager.getReference(extensionImpl, 
-                    FlowDiscoveryCDIExtension.class, creationalContext);
-            
-            List<Producer<Flow>> flowProducers = myExtension.getFlowProducers();
+            FlowDiscoveryCDIContext flowDiscoveryContext = (FlowDiscoveryCDIContext) beanManager.getContext(FlowDefinition.class);
+            List<Producer<Flow>> flowProducers = flowDiscoveryContext.getFlowProducers();
             WebConfiguration config = WebConfiguration.getInstance();
             if (!flowProducers.isEmpty()) {
                 enableClientWindowModeIfNecessary(context);
