@@ -621,6 +621,17 @@
                                 <properties>
                                     <cargo.hostname>${integration.serverName}</cargo.hostname>
                                     <cargo.servlet.port>${integration.serverPort}</cargo.servlet.port>
+<!-- 
+  Uncomment to cause Tomcat to be started with debugging enabled.  Make
+  sure to pay attention to the value of the suspend parameter.
+
+                                    <cargo.jvmargs>
+                                      -Xdebug
+                                      -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=9009
+                                      -Xnoagent
+                                      -Djava.compiler=NONE
+                                    </cargo.jvmargs>
+-->
                                 </properties>
                             </configuration>
                         </configuration>

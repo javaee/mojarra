@@ -82,7 +82,6 @@ import com.sun.faces.el.VariableResolverChainWrapper;
 import com.sun.faces.facelets.PrivateApiFaceletCacheAdapter;
 import com.sun.faces.facelets.tag.jsf.PassThroughAttributeLibrary;
 import com.sun.faces.facelets.tag.jsf.PassThroughElementLibrary;
-import com.sun.faces.flow.FlowDiscoveryCDIContext;
 import com.sun.faces.lifecycle.ELResolverInitPhaseListener;
 
 import java.io.IOException;
@@ -300,7 +299,8 @@ public class ApplicationAssociate {
             FacesContext context = FacesContext.getCurrentInstance();
             if (Util.isCDIAvailable(context.getExternalContext().getApplicationMap())) {
                 try {
-                    loadFlows(context, ApplicationAssociate.this.flowHandler);
+                    JavaFlowLoaderHelper flowLoader = new JavaFlowLoaderHelper();
+                    flowLoader.loadFlows(context, ApplicationAssociate.this.flowHandler);
                 } catch (IOException ex) {
                     LOGGER.log(Level.SEVERE, null, ex);
                 }
@@ -315,50 +315,6 @@ public class ApplicationAssociate {
             viewHandler.getViewDeclarationLanguage(context, 
                     RIConstants.FACES_PREFIX + "xhtml");
 
-        }
-        
-        private synchronized void loadFlows(FacesContext context, FlowHandler flowHandler) throws IOException {
-            javax.enterprise.inject.spi.BeanManager beanManager = (javax.enterprise.inject.spi.BeanManager) 
-                    Util.getCDIBeanManager(context.getExternalContext().getApplicationMap());
-            FlowDiscoveryCDIContext flowDiscoveryContext = (FlowDiscoveryCDIContext) beanManager.getContext(FlowDefinition.class);
-            List<Producer<Flow>> flowProducers = flowDiscoveryContext.getFlowProducers();
-            WebConfiguration config = WebConfiguration.getInstance();
-            if (!flowProducers.isEmpty()) {
-                enableClientWindowModeIfNecessary(context);
-            }
-            
-            for (Producer<Flow> cur : flowProducers) {
-                Flow toAdd = cur.produce(beanManager.<Flow>createCreationalContext(null));
-                if (null == toAdd) {
-                    LOGGER.log(Level.SEVERE, "Flow producer method {0}() returned null.  Ignoring.",
-                            new String [] { cur.toString() });
-                } else {
-                    flowHandler.addFlow(context, toAdd);
-                    config.setHasFlows(true);
-                }
-            }
-            
-        }
-    
-    
-        private void enableClientWindowModeIfNecessary(FacesContext context) {
-
-            WebConfiguration config = WebConfiguration.getInstance(context.getExternalContext());
-            
-            String optionValue = config.getOptionValue(WebConfiguration.WebContextInitParameter.ClientWindowMode);
-            boolean clientWindowNeedsEnabling = false;
-            if ("none".equals(optionValue)) {
-                clientWindowNeedsEnabling = true;
-                String featureName = 
-                        WebConfiguration.WebContextInitParameter.ClientWindowMode.getQualifiedName();
-                LOGGER.log(Level.WARNING, 
-                        "{0} was set to none, but Faces Flows requires {0} is enabled.  Setting to ''url''.", new Object[]{featureName});
-            } else if (null == optionValue) {
-                clientWindowNeedsEnabling = true;
-            }
-            if (clientWindowNeedsEnabling) {
-                config.setOptionValue(WebConfiguration.WebContextInitParameter.ClientWindowMode, "url");
-            }
         }
         
     }

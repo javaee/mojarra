@@ -48,7 +48,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.enterprise.event.Observes;
-import javax.enterprise.inject.spi.AfterBeanDiscovery;
 import javax.enterprise.inject.spi.AnnotatedType;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.BeforeBeanDiscovery;
@@ -103,11 +102,6 @@ public class FlowDiscoveryCDIExtension implements Extension {
         AnnotatedType flowDiscoveryHelper = beanManager.createAnnotatedType(FlowDiscoveryCDIHelper.class);
         event.addAnnotatedType(flowDiscoveryHelper);
         
-    }
-    
-    void afterBeanDiscovery(@Observes final AfterBeanDiscovery event) {
-        event.addContext(new FlowDiscoveryCDIContext(flowProducers));
-        flowProducers.clear();
     }
     
     <T> void findFlowDefiners(@Observes ProcessProducer<T, Flow> pp) {
