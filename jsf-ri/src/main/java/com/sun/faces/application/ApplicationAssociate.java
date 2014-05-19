@@ -83,7 +83,6 @@ import com.sun.faces.facelets.PrivateApiFaceletCacheAdapter;
 import com.sun.faces.facelets.tag.jsf.PassThroughAttributeLibrary;
 import com.sun.faces.facelets.tag.jsf.PassThroughElementLibrary;
 import com.sun.faces.lifecycle.ELResolverInitPhaseListener;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -99,7 +98,6 @@ import javax.faces.application.ProjectStage;
 import javax.faces.event.PreDestroyCustomScopeEvent;
 import javax.faces.event.ScopeContext;
 import javax.servlet.ServletContext;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -111,7 +109,6 @@ import java.util.LinkedHashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.concurrent.ConcurrentHashMap;
-import javax.enterprise.inject.spi.Producer;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
@@ -120,10 +117,8 @@ import javax.faces.application.ViewHandler;
 import javax.faces.component.FacesComponent;
 import javax.faces.event.PostConstructApplicationEvent;
 import javax.faces.event.SystemEventListener;
-import javax.faces.flow.Flow;
 import javax.faces.flow.FlowHandler;
 import javax.faces.flow.FlowHandlerFactory;
-import javax.faces.flow.builder.FlowDefinition;
 import javax.faces.view.facelets.FaceletCacheFactory;
 import javax.faces.view.facelets.FaceletsResourceResolver;
 
