@@ -88,8 +88,7 @@ class JavaFlowLoaderHelper {
         for (Producer<Flow> cur : flowProducers) {
             Flow toAdd = cur.produce(beanManager.<Flow>createCreationalContext(null));
             if (null == toAdd) {
-                LOGGER.log(Level.SEVERE, "Flow producer method {0}() returned null.  Ignoring.",
-                        new String [] { cur.toString() });
+                LOGGER.log(Level.SEVERE, "Flow producer method {0}() returned null.  Ignoring.", cur.toString());
             } else {
                 flowHandler.addFlow(context, toAdd);
                 config.setHasFlows(true);
