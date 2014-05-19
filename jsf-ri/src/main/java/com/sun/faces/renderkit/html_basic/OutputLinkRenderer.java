@@ -229,7 +229,7 @@ public class OutputLinkRenderer extends LinkRenderer {
         Param paramList[] = getParamList(component);
         StringBuffer sb = new StringBuffer();
         sb.append(hrefVal);
-        boolean paramWritten = (hrefVal.indexOf("?") > 0);
+        boolean paramWritten = (hrefVal.indexOf('?') > 0);
         String namingContainerId = null;
         if (namespaceParameters) {
             UIViewRoot viewRoot = context.getViewRoot();
