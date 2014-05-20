@@ -1306,7 +1306,11 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                                     field.name = "javax.faces.ViewState";
                                     f.appendChild(field);
                                 }
-                                field.value = state.nodeValue;
+                                if (typeof state.wholeText !== 'undefined') {
+                                    field.value = state.wholeText;
+                                } else {
+                                    field.value = state.nodeValue;
+                                }
                             }
                         }
                     }
