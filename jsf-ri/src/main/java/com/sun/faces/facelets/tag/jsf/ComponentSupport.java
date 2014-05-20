@@ -60,8 +60,8 @@ package com.sun.faces.facelets.tag.jsf;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.context.StateContext;
-import com.sun.faces.facelets.component.UIRepeat;
 import com.sun.faces.facelets.tag.jsf.core.FacetHandler;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.PartialStateSaving;
 import com.sun.faces.util.Util;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
@@ -83,7 +83,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import javax.faces.component.TransientStateHelper;
-import javax.faces.component.UIData;
 import javax.faces.event.PhaseId;
 
 /**
@@ -215,6 +214,22 @@ public final class ComponentSupport {
         return null;
     }
     
+    public static UIComponent findUIInstructionChildByTagId(FacesContext context, UIComponent parent, String id) {
+        UIComponent result = null;
+        if (!context.isPostback() || context.getCurrentPhaseId().equals(PhaseId.RESTORE_VIEW)) {
+            return null;
+        }
+        Map<Object, Object> attrs = context.getAttributes();
+        if (attrs.containsKey(PartialStateSaving)) {
+            if (!((Boolean)attrs.get(PartialStateSaving))) {
+                result = findChildByTagId(context, parent, id);
+            }
+        }
+
+        
+        return result;
+    }
+    
     /**
      * By TagId, find Child
      * 
@@ -242,8 +257,8 @@ public final class ComponentSupport {
             components = parent.getChildren();
         }
         TransientStateHelper tsh = parent.getTransientStateHelper(true);
-        int start = hasDynamicComponents ? 
-                0 : (Integer) tsh.getTransient(FCBTI_LAST_INDEX, (Integer) 0);
+        int start = 0; //hasDynamicComponents ? 
+                //0 : (Integer) tsh.getTransient(FCBTI_LAST_INDEX, (Integer) 0);
                 
         int len = components.size();
         incrementCount(context);
@@ -253,7 +268,11 @@ public final class ComponentSupport {
             log(context, "id: " + id + " i: " + i + " parent: " + parent.getClass().getSimpleName());
             if (id.equals(cid)) {
                 log(context, "found c with id: " + id + " i: " + i + " parent: " + parent.getClass().getSimpleName());
-                tsh.putTransient(FCBTI_LAST_INDEX, i);
+                if (i+1 < len) {
+                    tsh.putTransient(FCBTI_LAST_INDEX, i+1);
+                } else {
+                    tsh.putTransient(FCBTI_LAST_INDEX, 0);
+                }
                 return c;
             }
             if (c instanceof UIPanel && c.getAttributes().containsKey(IMPLICIT_PANEL)) {
@@ -280,10 +299,11 @@ public final class ComponentSupport {
                     return foundChild;
                 }
             }
-            if (i < len) {
-                tsh.putTransient(FCBTI_LAST_INDEX, i+1);
-            }
         }
+        if (0 < len) {
+            tsh.putTransient(FCBTI_LAST_INDEX, len - 1);
+        }
+        
         return null;
     }
     
@@ -333,10 +353,12 @@ public final class ComponentSupport {
     }
     
     private static void log(FacesContext context, String message) {
+        /**
         StringBuilder sb = new StringBuilder();
         printIndent(context, sb);
         sb.append(message);
         System.out.println(sb);
+         * **/
         
     }
     

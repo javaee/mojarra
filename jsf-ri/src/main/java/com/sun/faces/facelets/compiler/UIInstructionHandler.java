@@ -118,7 +118,7 @@ final class UIInstructionHandler extends AbstractUIHandler {
             String id = ctx.generateUniqueId(this.id);
 
             // grab our component
-            UIComponent c = ComponentSupport.findChildByTagId(ctx.getFacesContext(), parent, id);
+            UIComponent c = ComponentSupport.findUIInstructionChildByTagId(ctx.getFacesContext(), parent, id);
             boolean componentFound = false;
             boolean suppressEvents = false;
             if (c != null) {

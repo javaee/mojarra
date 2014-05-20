@@ -71,4 +71,16 @@
                 <test>${packageClassName}</test>
             </properties>
         </action>
+        <action>
+            <actionName>run</actionName>
+            <goals>
+                <goal>package</goal>
+            </goals>
+            <properties>
+                <webapp.partialStateSaving>false</webapp.partialStateSaving>
+                <netbeans.deploy>true</netbeans.deploy>
+                <webapp.stateSavingMethod>server</webapp.stateSavingMethod>
+                <webapp.projectStage>Development</webapp.projectStage>
+            </properties>
+        </action>
     </actions>
