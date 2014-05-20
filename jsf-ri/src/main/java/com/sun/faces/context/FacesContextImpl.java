@@ -662,7 +662,7 @@ public class FacesContextImpl extends FacesContext {
                 resourceLibraryContracts = null;
             }
         } else {
-            resourceLibraryContracts = new ArrayList<String>(contracts);
+            resourceLibraryContracts = Collections.unmodifiableList(contracts);
         }
         
     }
