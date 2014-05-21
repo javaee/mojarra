@@ -37,7 +37,6 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
 package com.sun.faces.test.webprofile.renderKit.fileUploadFailure; 
 
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -46,20 +45,13 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import java.io.File;
 import org.junit.After;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.assertTrue;
-import org.junit.Ignore;
 
 public class Issue2326IT {
 
-    /**
-     * Stores the web URL.
-     */
     private String webUrl;
-    /**
-     * Stores the web client.
-     */
     private WebClient webClient;
 
     @Before
@@ -73,13 +65,8 @@ public class Issue2326IT {
         webClient.closeAllWindows();
     }
 
-
-    // ------------------------------------------------------------ Test Methods
-
     @Test
-    @Ignore
     public void testFileException() throws Exception {
-
         webClient = new WebClient();
         HtmlPage page = webClient.getPage(webUrl+"faces/inputFile.xhtml");
         
@@ -95,5 +82,4 @@ public class Issue2326IT {
         String pageText = page.getBody().asText();
         assertTrue(pageText.contains("Negative test, intentional failure"));
     }
-
 }
