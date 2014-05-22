@@ -60,6 +60,7 @@ package com.sun.faces.facelets.tag.jsf.core;
 
 import com.sun.faces.facelets.tag.AbstractTagLibrary;
 
+import javax.faces.component.UINamingContainer;
 import javax.faces.component.UIParameter;
 import javax.faces.component.UISelectItem;
 import javax.faces.component.UISelectItems;
@@ -133,7 +134,7 @@ public final class CoreLibrary extends AbstractTagLibrary {
         
         this.addTagHandler("setPropertyActionListener", SetPropertyActionListenerHandler.class);
         
-        this.addComponent("subview", "javax.faces.NamingContainer", null);
+        this.addComponent("subview", UINamingContainer.COMPONENT_TYPE, null, SubviewHandler.class);
         
         this.addValidator("validateBean", BeanValidator.VALIDATOR_ID);
         
