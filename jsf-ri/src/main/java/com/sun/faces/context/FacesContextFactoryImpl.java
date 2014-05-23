@@ -41,12 +41,16 @@
 package com.sun.faces.context;
 
 
+import com.sun.faces.config.WebConfiguration;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.PartialStateSaving;
 import com.sun.faces.util.Util;
 
+import java.util.Map;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.ExceptionHandlerFactory;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.ExternalContextFactory;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
@@ -87,15 +91,17 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
         Util.notNull("request", request);
         Util.notNull("response", response);
         Util.notNull("lifecycle", lifecycle);
+        ExternalContext extContext;
         
         FacesContext ctx =
               new FacesContextImpl(
-                  externalContextFactory.getExternalContext(sc, request, response),
+                  extContext = externalContextFactory.getExternalContext(sc, request, response),
                   lifecycle);
 
         ctx.setExceptionHandler(exceptionHandlerFactory.getExceptionHandler());
+        WebConfiguration webConfig = WebConfiguration.getInstance(extContext);
 
-        savePerRequestInitParams(ctx);
+        savePerRequestInitParams(ctx, webConfig);
         return ctx;
         
     }
@@ -104,11 +110,14 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
      * Copy the value of any init params that must be checked during
      * this request to our FacesContext attribute map.  
      */
-    private void savePerRequestInitParams(FacesContext context) {
+    private void savePerRequestInitParams(FacesContext context, WebConfiguration webConfig) {
         String val = context.getExternalContext().getInitParameter(UIComponent.HONOR_CURRENT_COMPONENT_ATTRIBUTES_PARAM_NAME);
         boolean setCurrentComponent = Boolean.valueOf(val);
-        context.getAttributes().put(UIComponent.HONOR_CURRENT_COMPONENT_ATTRIBUTES_PARAM_NAME, 
+        Map<Object, Object> attrs = context.getAttributes();
+        attrs.put(UIComponent.HONOR_CURRENT_COMPONENT_ATTRIBUTES_PARAM_NAME, 
                 setCurrentComponent ? Boolean.TRUE : Boolean.FALSE);
+        attrs.put(PartialStateSaving, webConfig.isOptionEnabled(PartialStateSaving) ?
+                Boolean.TRUE : Boolean.FALSE);
         
     }
 

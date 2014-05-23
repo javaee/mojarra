@@ -61,6 +61,7 @@ package com.sun.faces.facelets.tag.jsf;
 import com.sun.faces.RIConstants;
 import com.sun.faces.context.StateContext;
 import com.sun.faces.facelets.tag.jsf.core.FacetHandler;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.PartialStateSaving;
 import com.sun.faces.util.Util;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
@@ -80,6 +81,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import javax.faces.event.PhaseId;
 
 /**
  * 
@@ -208,6 +210,36 @@ public final class ComponentSupport {
             }
         }
         return null;
+    }
+    
+    // Obvious performance optimization.  First, assume this method
+    // is only called from UIInstructionHandler.apply().  With that assumption
+    // in place a few optimizations can be had on the cheap.
+    
+    // If this method is called on an initial page 
+    // render it will always return null, so we can just return 
+    // null in that case without any iteration.  
+    
+    // If this method is called during RestoreView, it will always return null
+    // so we can just return null in that case without any iteration.  
+    
+    // If PartialStateSaving is false, the UIInstruction components will
+    // never be in the tree at this point, so we can return null and skip iterating.
+    
+    public static UIComponent findUIInstructionChildByTagId(FacesContext context, UIComponent parent, String id) {
+        UIComponent result = null;
+        if (!context.isPostback() || context.getCurrentPhaseId().equals(PhaseId.RESTORE_VIEW)) {
+            return null;
+        }
+        Map<Object, Object> attrs = context.getAttributes();
+        if (attrs.containsKey(PartialStateSaving)) {
+            if ((Boolean)attrs.get(PartialStateSaving)) {
+                result = findChildByTagId(parent, id);
+            }
+        }
+
+        
+        return result;
     }
     
     /**
