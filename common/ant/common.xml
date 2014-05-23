@@ -161,7 +161,8 @@
 
     <artifact:localRepository id="local.repository" path="${maven.repo.local}"/>
     
-    <artifact:remoteRepository id="j.n.repo" url="https://maven.java.net/content/repositories/snapshots/"/>
+    <artifact:remoteRepository id="j.n.repo" url="https://maven.java.net/content/repositories/releases/"/>
+    <artifact:remoteRepository id="j.n.repo.snapshot" url="https://maven.java.net/content/repositories/snapshots/"/>
     <artifact:remoteRepository id="codehaus.repo" url="http://repository.codehaus.org/"/>
     <artifact:remoteRepository id="ibiblio.repo" url="http://mirrors.ibiblio.org/pub/mirrors/maven2/"/>
 
@@ -178,6 +179,8 @@
         <dependency groupId="com.sun.el" artifactId="el-ri" version="1.0" scope="provided"/>
         <localRepository refid="local.repository"/>
         <remoteRepository refid="j.n.repo"/>
+        <remoteRepository refid="codehaus.repo"/>
+        <remoteRepository refid="j.n.repo.snapshot"/>
     </artifact:dependencies>
 
     <artifact:dependencies filesetId="cdi.filepath" pathId="cdi.path">
@@ -190,6 +193,7 @@
         <dependency groupId="com.sun.faces" artifactId="jsf-spi" version="1.0" scope="provided"/>
         <localRepository refid="local.repository"/>
         <remoteRepository refid="j.n.repo"/>
+        <remoteRepository refid="j.n.repo.snapshot"/>
     </artifact:dependencies>
     
     <artifact:dependencies filesetId="commons.filepath" pathId="commons.path">
@@ -199,6 +203,7 @@
         <dependency groupId="commons-logging" artifactId="commons-logging" version="1.0.4"/>
         <localRepository refid="local.repository"/>
         <remoteRepository refid="j.n.repo"/>
+        <remoteRepository refid="j.n.repo.snapshot"/>
     </artifact:dependencies>
 
     <artifact:dependencies filesetId="servlet25test.filepath" pathId="servlet25test.path">
@@ -209,6 +214,7 @@
         <dependency groupId="javax.annotation" artifactId="jsr250-api" version="1.0" scope="provided"/>
         <localRepository refid="local.repository"/>
         <remoteRepository refid="j.n.repo"/>
+        <remoteRepository refid="j.n.repo.snapshot"/>
     </artifact:dependencies>
 
 

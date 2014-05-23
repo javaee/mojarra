@@ -841,8 +841,14 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                     // If there is an eventClass, use it, otherwise use
                     // SystemEvent.class
                     //noinspection unchecked
-                    Class<? extends SystemEvent> eventClazz =
-                          (Class<? extends SystemEvent>) loadClass(sc, eventClass, this, null);
+                    Class<? extends SystemEvent> eventClazz;
+                    
+                    if (eventClass != null) {
+                        eventClazz = (Class<? extends SystemEvent>) loadClass(sc, eventClass, this, null);
+                    } else {
+                        eventClazz = SystemEvent.class;
+                    }
+                    
                     // If there is a sourceClass, use it, otherwise use null
                     Class sourceClazz =
                           (sourceClass != null && sourceClass.length() != 0)

@@ -120,7 +120,7 @@ public class DefaultFaceletFactory {
 
     private FaceletCache<DefaultFacelet> cache;
 
-    private ConcurrentMap<List<String>, FaceletCache<DefaultFacelet>> cachePerContract;
+    private ConcurrentMap<String, FaceletCache<DefaultFacelet>> cachePerContract;
 
     Cache<String,IdMapper> idMappers;
     
@@ -165,7 +165,7 @@ public class DefaultFaceletFactory {
         Util.notNull("compiler", compiler);
         Util.notNull("resolver", resolver);
         this.compiler = compiler;
-        this.cachePerContract = new ConcurrentHashMap<List<String>, FaceletCache<DefaultFacelet>>();
+        this.cachePerContract = new ConcurrentHashMap<String, FaceletCache<DefaultFacelet>>();
         this.resolver = resolver;
         this.baseUrl = resolver.resolveUrl("/");
         this.idMappers = new Cache<String,IdMapper>(new IdMapperFactory());
@@ -335,12 +335,20 @@ public class DefaultFaceletFactory {
     private FaceletCache<DefaultFacelet> getCache(FacesContext context) {
         List<String> contracts = context.getResourceLibraryContracts();
         if(!contracts.isEmpty()) {
-            FaceletCache<DefaultFacelet> faceletCache = cachePerContract.get(contracts);
+            StringBuilder builder = new StringBuilder();
+            for (int i=0; i<contracts.size(); i++) {
+                builder.append(contracts.get(i));
+                if (i + 1 != contracts.size()) {
+                    builder.append(",");
+                }
+            }
+            String contractsKey = builder.toString();
+            FaceletCache<DefaultFacelet> faceletCache = cachePerContract.get(contractsKey);
             if(faceletCache == null) {
                 // PENDING(FCAPUTO) we don't support com.sun.faces.config.WebConfiguration.WebContextInitParameter#FaceletCache for contracts
                 faceletCache = initCache(null);
-                cachePerContract.putIfAbsent(contracts, faceletCache);
-                faceletCache = cachePerContract.get(contracts);
+                cachePerContract.putIfAbsent(contractsKey, faceletCache);
+                faceletCache = cachePerContract.get(contractsKey);
             }
             return faceletCache;
         }

@@ -2,7 +2,7 @@
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -42,34 +42,24 @@
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
-  <head>
-    <title>Property that violates scope rules</title>
-    <%@ taglib uri="http://java.sun.com/jsf/core"  prefix="f" %>
-    <%@ taglib uri="http://java.sun.com/jsf/html"  prefix="h" %>
-  </head>
-
-  <body>
-    <h1>Property that violates scope rules</h1>
-
-<% try { %> 
-<f:view>
-
-  <h:form>
-
-    
-    <h:outputText value="#{cyclic1.bean.stringProperty}" />
-   
-  </h:form>
-
-</f:view>
-<% 
-  } catch (Exception fe) {
-       fe.printStackTrace();
-       if (!(fe instanceof javax.faces.FacesException)) {
-           throw fe;
-       }
-   }
-%>
-    <hr>
-  </body>
+    <head>
+        <title>Property that violates scope rules</title>
+        <%@ taglib uri="http://java.sun.com/jsf/core"  prefix="f" %>
+        <%@ taglib uri="http://java.sun.com/jsf/html"  prefix="h" %>
+    </head>
+    <body>
+        <h1>Property that violates scope rules</h1>
+        <% try { %> 
+        <f:view>
+            <h:form>
+                <h:outputText value="#{cyclic1.bean.stringProperty}" />
+            </h:form>
+        </f:view>
+        <% 
+            } catch (Exception fe) {
+                out.println("Exception seen");
+            }
+        %>
+        <hr>
+    </body>
 </html>

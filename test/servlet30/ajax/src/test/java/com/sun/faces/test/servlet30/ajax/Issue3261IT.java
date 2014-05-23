@@ -37,17 +37,18 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.systest;
+package com.sun.faces.test.servlet30.ajax;
 
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import java.util.regex.Pattern;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class ManagedBeanIT {
+public class Issue3261IT {
 
     private String webUrl;
     private WebClient webClient;
@@ -56,6 +57,8 @@ public class ManagedBeanIT {
     public void setUp() {
         webUrl = System.getProperty("integration.url");
         webClient = new WebClient();
+        webClient.getOptions().setJavaScriptEnabled(true);
+        webClient.setJavaScriptTimeout(60000);
     }
 
     @After
@@ -63,47 +66,17 @@ public class ManagedBeanIT {
         webClient.closeAllWindows();
     }
 
-    /*
-     * Managed Bean Create #1 (No Property Setters) 
-     */
     @Test
-    public void testManagerBean1() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/managed01.jsp");
-        assertTrue(Pattern.matches("(?s).*/managed01.jsp PASSED.*", page.asXml()));
-    }
+    public void testLegendWithoutIdOK() throws Exception {
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnScriptError(false);
 
-    /*
-     * Managed Bean Create #2 (Primitive Property Setters)
-     */
-    @Test
-    public void testManagerBean2() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/managed02.jsp");
-        assertTrue(Pattern.matches("(?s).*/managed02.jsp PASSED.*", page.asXml()));
-    }
+        HtmlPage page = webClient.getPage(webUrl + "faces/legendWithoutId.xhtml");
+        HtmlSubmitInput button = page.getHtmlElementById("form:submit");
 
-    @Test
-    public void testManagedBean3() throws Exception {
-        webClient.setThrowExceptionOnFailingStatusCode(false);
-        HtmlPage page = webClient.getPage(webUrl + "faces/managed03.jsp");
+        page = button.click();
+        webClient.waitForBackgroundJavaScript(60000);
+        
         assertEquals(200, page.getWebResponse().getStatusCode());
-        webClient.setThrowExceptionOnFailingStatusCode(true);
-    }
-
-    @Test
-    @Ignore
-    public void testManagedBean7() throws Exception {
-        webClient.setThrowExceptionOnFailingStatusCode(false);
-        HtmlPage page = webClient.getPage(webUrl + "faces/managed07.jsp");
-        assertEquals(200, page.getWebResponse().getStatusCode());
-        assertTrue(page.asXml().contains("Exception seen"));
-        webClient.setThrowExceptionOnFailingStatusCode(true);
-    }
-
-    @Test
-    public void testEagerBean() throws Exception {
-        webClient.setThrowExceptionOnFailingStatusCode(false);
-        HtmlPage page = webClient.getPage(webUrl + "faces/eagerbean.jsp");
-        assertEquals(200, page.getWebResponse().getStatusCode());
-        webClient.setThrowExceptionOnFailingStatusCode(true);
     }
 }

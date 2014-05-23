@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:my="http://jsf.java.net/subview">
+    <h:head>
+        <title>Bug18329103</title>
+    </h:head>
+    <h:body>
+        <p>Bug18329103</p>
+        
+        <h:form prependId="false">
+            <p>render subview: <h:selectBooleanCheckbox id="checkbox" value="#{subviewBean.rendered}" /></p>
+            
+            <p><h:commandButton id="button" value="submit" /></p>
+            
+        </h:form>
+        
+        <f:subview id="subview" rendered="#{subviewBean.rendered}">
+            
+            <p><my:custom id="custom1" /></p>
+            <p><my:custom id="custom2" /></p>
+            
+        </f:subview>
+        
+        <p id="subviewsRenderedMessage">#{facesContext.attributes.tagHandlerMessage}</p>
+        
+    </h:body>
+</html>
+

@@ -59,7 +59,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Level;
@@ -148,6 +147,8 @@ public class ELFlash extends Flash {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="class vars">
+    
+    private static final String ELEMENT_TYPE_MISMATCH = "element-type-mismatch";
     
     private static final Logger LOGGER = FacesLogger.FLASH.getLogger();
 
@@ -374,7 +375,7 @@ public class ELFlash extends Flash {
     // <editor-fold defaultstate="collapsed" desc="Map overrides">
 
     
-    @SuppressWarnings("element-type-mismatch")
+    @SuppressWarnings(ELEMENT_TYPE_MISMATCH)
     public Object get(Object key) {
         Object result = null;
 
@@ -447,7 +448,7 @@ public class ELFlash extends Flash {
         return result;
     }
 
-    @SuppressWarnings("element-type-mismatch")
+    @SuppressWarnings(ELEMENT_TYPE_MISMATCH)
     public Object remove(Object key) {
         Object result = null;
 
@@ -459,7 +460,7 @@ public class ELFlash extends Flash {
     }
 
     
-    @SuppressWarnings("element-type-mismatch")
+    @SuppressWarnings(ELEMENT_TYPE_MISMATCH)
     public boolean containsKey(Object key) {
         boolean result = false;
 
@@ -973,7 +974,7 @@ public class ELFlash extends Flash {
 
     }
 
-    @SuppressWarnings("element-type-mismatch")
+    @SuppressWarnings(ELEMENT_TYPE_MISMATCH)
     void restoreAllMessages(FacesContext context) {
         Map<String, List<FacesMessage>> allFacesMessages;
         Map<String, Object> phaseMap = getPhaseMapForReading();

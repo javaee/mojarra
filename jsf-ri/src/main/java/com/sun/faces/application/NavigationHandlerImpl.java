@@ -305,13 +305,12 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     
     private void createNavigationMaps() {
         if (null == navigationMaps) {
-            NavigationMap result = null;
-            NavigationInfo info = null;
-            navigationMaps = new ConcurrentHashMap<String, NavigationInfo>();
-            result = new NavigationMap();
-            info = new NavigationInfo();
+            Map<String, NavigationInfo> maps = new ConcurrentHashMap<String, NavigationInfo>();
+            NavigationMap result = new NavigationMap();
+            NavigationInfo info = new NavigationInfo();
             info.ruleSet = result;
-            navigationMaps.put(ROOT_NAVIGATION_MAP_ID, info);
+            maps.put(ROOT_NAVIGATION_MAP_ID, info);
+            navigationMaps = maps;
         }
     }
     

@@ -1,8 +1,8 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- *
+ * 
  * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
- *
+ * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -11,20 +11,20 @@
  * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- *
+ * 
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at packager/legal/LICENSE.txt.
- *
+ * 
  * GPL Classpath Exception:
  * Oracle designates this particular file as subject to the "Classpath"
  * exception as provided by Oracle in the GPL Version 2 section of the License
  * file that accompanied this code.
- *
+ * 
  * Modifications:
  * If applicable, add the following below the License Header, with the fields
  * enclosed by brackets [] replaced by your own identifying information:
  * "Portions Copyright [year] [name of copyright owner]"
- *
+ * 
  * Contributor(s):
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
@@ -36,73 +36,63 @@
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
  * holder.
+
  */
-package com.sun.faces.test.javaee7.facelets.ui;
+package com.sun.faces.test.agnostic.facelets.core;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import static org.junit.Assert.assertTrue;
-import org.junit.Ignore;
+import java.io.IOException;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
+import javax.faces.view.facelets.ComponentConfig;
+import javax.faces.view.facelets.ComponentHandler;
+import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.FaceletHandler;
+import javax.faces.view.facelets.Tag;
+import javax.faces.view.facelets.TagConfig;
 
-public class VerifyTemplateUIIT {
-    /**
-     * Stores the web URL.
-     */
-    private String webUrl;
-    /**
-     * Stores the web client.
-     */
-    private WebClient webClient;
+public class CustomComponentHandler extends ComponentHandler {
 
-    /**
-     * Setup before testing.
-     * 
-     * @throws Exception when a serious error occurs.
-     */
-    @BeforeClass
-    public static void setUpClass() throws Exception {
+    public CustomComponentHandler(final TagConfig config) {
+        super(new ComponentConfig() {
+
+            @Override
+            public String getComponentType() {
+                return UIInput.COMPONENT_TYPE;
+            }
+
+            @Override
+            public String getRendererType() {
+                return "javax.faces.Text";
+            }
+
+            @Override
+            public FaceletHandler getNextHandler() {
+                return config.getNextHandler();
+            }
+
+            @Override
+            public Tag getTag() {
+                return config.getTag();
+            }
+
+            @Override
+            public String getTagId() {
+                return config.getTagId();
+            }
+            
+        });
     }
+    
+    
 
-    /**
-     * Cleanup after testing.
-     * 
-     * @throws Exception when a serious error occurs.
-     */
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-
-    /**
-     * Setup before testing.
-     */
-    @Before
-    public void setUp() {
-        webUrl = System.getProperty("integration.url");
-        webClient = new WebClient();
-    }
-
-    /**
-     * Tear down after testing.
-     */
-    @After
-    public void tearDown() {
-        webClient.closeAllWindows();
-    }
-
-    @Test
-    @Ignore
-    public void testUL() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl);
-        String pageXml = page.getBody().asXml();
-
-        assertTrue(pageXml.matches("(?s).*<li>\\s+a\\s+</li>.*"));
-        assertTrue(pageXml.matches("(?s).*<li>\\s+b\\s+</li>.*"));
-        assertTrue(pageXml.matches("(?s).*<li>\\s+c\\s+</li>.*"));
+    @Override
+    public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
+        ctx.getFacesContext().getAttributes().put("tagHandlerMessage", CustomComponentHandler.class.getSimpleName() +
+                ".apply() called");
         
+        super.apply(ctx, parent);
     }
+    
+    
+    
 }

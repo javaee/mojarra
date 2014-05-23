@@ -36,68 +36,30 @@
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
  * holder.
- */
 
-package com.sun.faces.flow;
+ */
+package com.sun.faces.test.agnostic.facelets.core;
 
 import java.io.Serializable;
-import java.lang.annotation.Annotation;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import javax.enterprise.context.spi.Context;
-import javax.enterprise.context.spi.Contextual;
-import javax.enterprise.context.spi.CreationalContext;
-import javax.enterprise.inject.spi.Producer;
-import javax.faces.flow.Flow;
-import javax.faces.flow.builder.FlowDefinition;
+@ManagedBean
+@SessionScoped
+public class SubviewBean implements Serializable {
+    
+    private static final long serialVersionUID = -8036913177462873553L;
+    
+    private boolean rendered = false;
 
-public class FlowDiscoveryCDIContext implements Context, Serializable {
-    
-    private static final long serialVersionUID = -7144653402477623609L;
-    
-    private transient List<Producer<Flow>> flowProducers;
-        
-    // This should be vended from a factory for decoration purposes.
-    
-    public FlowDiscoveryCDIContext(List<Producer<Flow>> flowProducers) {
-        this.flowProducers = new CopyOnWriteArrayList<Producer<Flow>>(flowProducers);
+    public boolean isRendered() {
+        return rendered;
     }
-        
-    // -------------------------------------------------------- Private Methods
-    
-    
-    // <editor-fold defaultstate="collapsed" desc="Called from code related to flow">
-    
-    public List<Producer<Flow>> getFlowProducers() {
-        return flowProducers;
-    }
-    
-    // </editor-fold>
 
-
-    // <editor-fold defaultstate="collapsed" desc="spi.Context implementation">       
-    
-    @Override
-    public <T> T get(Contextual<T> contextual, CreationalContext<T> creational) {
-        return null;
+    public void setRendered(boolean rendered) {
+        this.rendered = rendered;
     }
     
-    @Override
-    public <T> T get(Contextual<T> contextual) {
-        return null;
-    }
     
-    @Override
-    public Class<? extends Annotation> getScope() {
-        return FlowDefinition.class;
-    }
-    
-    @Override
-    public boolean isActive() {
-        return true;
-    }
-    
-    // </editor-fold>
     
 }

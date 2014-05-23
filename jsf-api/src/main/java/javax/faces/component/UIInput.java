@@ -830,8 +830,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
             FacesMessage message = null;
             try {
                 ve.setValue(context.getELContext(), getLocalValue());
-                setValue(null);
-                setLocalValueSet(false);
+                resetValue();
             } catch (ELException e) {
                 caught = e;
                 String messageStr = e.getMessage();
@@ -1273,10 +1272,15 @@ public class UIInput extends UIOutput implements EditableValueHolder {
             if (((List) value).isEmpty()) {
                 return (true);
             }
+        } else if (value instanceof Collection) {
+            if (((Collection) value).isEmpty()) {
+                return (true);
+            }
+        } else if ((value instanceof Map) && (((Map) value).isEmpty())) {
+            return true;
         }
         return (false);
     }
-
 
     /**
      * <p>The set of {@link Validator}s associated with this
