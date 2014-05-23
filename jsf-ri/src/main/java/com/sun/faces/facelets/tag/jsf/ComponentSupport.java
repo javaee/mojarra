@@ -262,12 +262,13 @@ public final class ComponentSupport {
                 
         int len = components.size();
         incrementCount(context);
+        int maxI = -1;
         for (int i = start; i < len; i++) {
             c = components.get(i);
             cid = (String) c.getAttributes().get(MARK_CREATED);
-            log(context, "id: " + id + " i: " + i + " parent: " + parent.getClass().getSimpleName());
+            //log(context, "id: " + id + " i: " + i + " parent: " + parent.getClass().getSimpleName());
             if (id.equals(cid)) {
-                log(context, "found c with id: " + id + " i: " + i + " parent: " + parent.getClass().getSimpleName());
+                //log(context, "found c with id: " + id + " i: " + i + " parent: " + parent.getClass().getSimpleName());
                 if (i+1 < len) {
                     tsh.putTransient(FCBTI_LAST_INDEX, i+1);
                 } else {
@@ -299,7 +300,11 @@ public final class ComponentSupport {
                     return foundChild;
                 }
             }
+            if (maxI < i) {
+                maxI = i;
+            }
         }
+        //log(context, "max i: " + maxI);
         if (0 < len) {
             tsh.putTransient(FCBTI_LAST_INDEX, len - 1);
         }
@@ -353,12 +358,11 @@ public final class ComponentSupport {
     }
     
     private static void log(FacesContext context, String message) {
-        /**
+        
         StringBuilder sb = new StringBuilder();
         printIndent(context, sb);
         sb.append(message);
         System.out.println(sb);
-         * **/
         
     }
     

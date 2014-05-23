@@ -97,7 +97,7 @@ public class RenderResponsePhase extends Phase {
                   vh.getViewDeclarationLanguage(facesContext,
                                                     facesContext.getViewRoot().getViewId());
             if (vdl != null) {
-                //DebugUtil.printTree(facesContext.getViewRoot(), System.out);
+                DebugUtil.printTree(facesContext.getViewRoot(), System.out);
                 vdl.buildView(facesContext, facesContext.getViewRoot());
                 //DebugUtil.printTree(facesContext.getViewRoot(), System.out);
             }
