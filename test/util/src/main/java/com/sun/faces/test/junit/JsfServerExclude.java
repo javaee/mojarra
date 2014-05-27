@@ -39,8 +39,8 @@
  */
 package com.sun.faces.test.junit;
 
-public enum JsfServerExclude {    
-    
+public enum JsfServerExclude {
+
     GLASSFISH_3_1_2_2("Glassfish", "3.1.2.2"),
     GLASSFISH_4_0("Glassfish", "4.0"),
     WEBLOGIC_12_1_1("Weblogic", "12.1.1.0"),
@@ -75,10 +75,12 @@ public enum JsfServerExclude {
      * @return the JsfServerExclude
      */
     public static JsfServerExclude fromString(String serverString) {
-        JsfServerExclude[] excludes = JsfServerExclude.values();
-        for (JsfServerExclude exclude : excludes) {
-            if (serverString.contains(exclude.name) && serverString.contains(exclude.version)) {
-                return exclude;
+        if (serverString != null) {
+            JsfServerExclude[] excludes = JsfServerExclude.values();
+            for (JsfServerExclude exclude : excludes) {
+                if (serverString.contains(exclude.name) && serverString.contains(exclude.version)) {
+                    return exclude;
+                }
             }
         }
         return null;
@@ -88,7 +90,7 @@ public enum JsfServerExclude {
      * Stores the name.
      */
     private final String name;
-    
+
     /**
      * Stores the version.
      */
