@@ -521,7 +521,7 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
                                     UIComponent parent,
                                     String tagId) {
 
-        return ComponentSupport.findChildByTagId(parent, tagId);
+        return ComponentSupport.findChildByTagId(ctx.getFacesContext(), parent, tagId);
 
     }
 
@@ -534,7 +534,7 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
             UIComponent newParent = facet.findComponent(
                (String)parent.getAttributes().get(tagId));
             if (newParent != null)
-                return ComponentSupport.findChildByTagId(newParent, tagId);
+                return ComponentSupport.findChildByTagId(ctx.getFacesContext(), newParent, tagId);
         }
         return null;
     }
