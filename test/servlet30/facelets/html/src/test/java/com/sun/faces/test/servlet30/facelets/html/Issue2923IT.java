@@ -42,6 +42,7 @@ package com.sun.faces.test.servlet30.facelets.html;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.sun.faces.test.junit.JsfServerExclude;
 import com.sun.faces.test.junit.JsfTest;
 import com.sun.faces.test.junit.JsfTestRunner;
 import com.sun.faces.test.junit.JsfVersion;
@@ -68,7 +69,7 @@ public class Issue2923IT {
         webClient.closeAllWindows();
     }
     
-    @JsfTest(JsfVersion.JSF_2_2_2)
+    @JsfTest(value=JsfVersion.JSF_2_2_2, excludes={JsfServerExclude.WEBLOGIC_12_1_3})
     @Test
     public void testInputFileRequired() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/inputFileRequired.xhtml");

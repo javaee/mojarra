@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -103,8 +103,21 @@ public class JsfTestRunner extends BlockJUnit4ClassRunner {
 
                 if (method.getAnnotation(JsfTest.class) != null) {
                     JsfTest jsfTest = method.getAnnotation(JsfTest.class);
+                    boolean excludeFlag = false;
 
-                    if (System.getProperty("jsf.version") != null) {
+                    if (jsfTest.excludes().length > 0) {
+                        JsfServerExclude exclude = JsfServerExclude.fromString(System.getProperty("jsf.serverString"));
+
+                        if (exclude != null) {
+                            for (JsfServerExclude current : jsfTest.excludes()) {
+                                if (current.equals(exclude)) {
+                                    excludeFlag = true;
+                                }
+                            }
+                        }
+                    }
+
+                    if (!excludeFlag && System.getProperty("jsf.version") != null) {
                         try {
                             JsfVersion serverVersion = JsfVersion.fromString(System.getProperty("jsf.version"));
 

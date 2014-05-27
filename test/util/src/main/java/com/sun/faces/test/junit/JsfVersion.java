@@ -61,7 +61,8 @@ public enum JsfVersion {
     JSF_2_2_2("2.2.2"),
     JSF_2_2_3("2.2.3"),
     JSF_2_2_4("2.2.4"),
-    JSF_2_2_5("2.2.5");
+    JSF_2_2_5("2.2.5"),
+    JSF_2_2_6("2.2.6");
 
     /**
      * Constructor.
@@ -91,9 +92,9 @@ public enum JsfVersion {
      */
     public static JsfVersion fromString(String version) {
         JsfVersion[] versions = JsfVersion.values();
-        for (int i = 0; i < versions.length; i++) {
-            if (versions[i].toString().equals(version)) {
-                return versions[i];
+        for (JsfVersion current : versions) {
+            if (current.toString().equals(version)) {
+                return current;
             }
         }
         throw new IllegalArgumentException("Unable to determine JSF version");
@@ -101,5 +102,5 @@ public enum JsfVersion {
     /**
      * Stores the version.
      */
-    private String version;
+    private final String version;
 }
