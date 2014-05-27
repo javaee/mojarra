@@ -54,7 +54,6 @@
     <modules>
         <module>cc</module>
         <module>ccInJar</module>
-        <module>core</module>
         <module>coreEmptyAsNull</module>
         <module>ui</module>
         <module>viewAction</module>
