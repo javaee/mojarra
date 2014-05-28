@@ -37,20 +37,25 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.webprofile.renderKit.basic; 
+package com.sun.faces.test.webprofile.renderKit.basic;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlFileInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+import com.sun.faces.test.junit.JsfServerExclude;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 import java.io.File;
 import org.junit.After;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class Spec802IT {
 
     private String webUrl;
@@ -67,42 +72,42 @@ public class Spec802IT {
         webClient.closeAllWindows();
     }
 
-    @Test
+    @JsfTest(value = JsfVersion.JSF_2_2_0, excludes = {JsfServerExclude.WEBLOGIC_12_1_3})
     public void testFileUpload() throws Exception {
         webClient = new WebClient();
-        HtmlPage page = webClient.getPage(webUrl+"faces/inputFile.xhtml");
-        HtmlTextInput text = null;
-        
+        HtmlPage page = webClient.getPage(webUrl + "faces/inputFile.xhtml");
+        HtmlTextInput text;
+
         String basedir = System.getProperty("basedir");
         HtmlFileInput fileInput = (HtmlFileInput) page.getElementById("file");
         fileInput.setValueAttribute(basedir + File.separator + "inputFileSuccess.txt");
-        
+
         text = (HtmlTextInput) page.getElementById("text");
         String textValue = "" + System.currentTimeMillis();
         text.setText(textValue);
-        
+
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button");
-        
+
         page = button.click();
-        
+
         String pageText = page.getBody().asText();
         assertTrue(pageText.contains("JSR-344"));
-        
+
         pageText = page.getElementById("textOutput").getTextContent();
         assertTrue(pageText.contains(textValue));
-        
-        page = webClient.getPage(webUrl+"faces/inputFile.xhtml");
-        
+
+        page = webClient.getPage(webUrl + "faces/inputFile.xhtml");
+
         fileInput = (HtmlFileInput) page.getElementById("file");
         fileInput.setValueAttribute(basedir + File.separator + "inputFileFailure.txt");
         button = (HtmlSubmitInput) page.getElementById("button");
-        
+
         text = (HtmlTextInput) page.getElementById("text");
         textValue = "" + System.currentTimeMillis();
         text.setText(textValue);
-        
+
         page = button.click();
-        
+
         pageText = page.getBody().asText();
         assertFalse(pageText.contains("JSR-344"));
         assertTrue(pageText.contains("Invalid file"));
@@ -111,13 +116,13 @@ public class Spec802IT {
         assertTrue(!pageText.contains(textValue));
     }
 
-    @Test
+    @JsfTest(value = JsfVersion.JSF_2_2_0, excludes = {JsfServerExclude.WEBLOGIC_12_1_3})
     public void testFileUploadNoEncType() throws Exception {
         webClient = new WebClient();
-        HtmlPage page = webClient.getPage(webUrl+"faces/inputFileNoEncTyoe.xhtml");
+        HtmlPage page = webClient.getPage(webUrl + "faces/inputFileNoEncTyoe.xhtml");
         if (page.asText().contains("ProjectStage.Development")) {
             assertTrue(page.asText().contains(
-                "File upload component requires a form with an enctype of multipart/form-data"));
+                    "File upload component requires a form with an enctype of multipart/form-data"));
         }
     }
 }

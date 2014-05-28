@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,18 +37,23 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.webprofile.renderKit.fileUploadFailure; 
+package com.sun.faces.test.webprofile.renderKit.fileUploadFailure;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlFileInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.sun.faces.test.junit.JsfServerExclude;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 import java.io.File;
 import org.junit.After;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class Issue2326IT {
 
     private String webUrl;
@@ -65,20 +70,20 @@ public class Issue2326IT {
         webClient.closeAllWindows();
     }
 
-    @Test
+    @JsfTest(value = JsfVersion.JSF_2_2_0, excludes = {JsfServerExclude.WEBLOGIC_12_1_3})
     public void testFileException() throws Exception {
         webClient = new WebClient();
-        HtmlPage page = webClient.getPage(webUrl+"faces/inputFile.xhtml");
-        
+        HtmlPage page = webClient.getPage(webUrl + "faces/inputFile.xhtml");
+
         String basedir = System.getProperty("basedir");
         HtmlFileInput fileInput = (HtmlFileInput) page.getElementById("file");
         fileInput.setValueAttribute(basedir + File.separator + "inputFileSuccess.txt");
-        
+
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button");
 
         webClient.setThrowExceptionOnFailingStatusCode(false);
         page = button.click();
-        
+
         String pageText = page.getBody().asText();
         assertTrue(pageText.contains("Negative test, intentional failure"));
     }
