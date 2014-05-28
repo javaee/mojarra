@@ -68,8 +68,8 @@ public class Issue18329103IT {
     }
 
     @Test
-    public void testSubviewRendered() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/subviewRenderedFalse.xhtml");
+    public void testCifRendered() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/cifRenderedFalse.xhtml");
         String pageXml = page.asXml();
         assertTrue(!pageXml.contains("CustomComponentHandler.apply() called"));
         
