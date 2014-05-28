@@ -50,13 +50,13 @@
     <tag>
         <tag-name>input1</tag-name>
         <component>
-            <component-type>com.sun.faces.test.agnostic.ajax.Issue2179Component1</component-type>
+            <component-type>com.sun.faces.test.servlet30.ajax.Issue2179Component1</component-type>
         </component>
     </tag>
     <tag>
         <tag-name>input2</tag-name>
         <component>
-            <component-type>com.sun.faces.test.agnostic.ajax.Issue2179Component2</component-type>
+            <component-type>com.sun.faces.test.servlet30.ajax.Issue2179Component2</component-type>
         </component>
     </tag>
 
