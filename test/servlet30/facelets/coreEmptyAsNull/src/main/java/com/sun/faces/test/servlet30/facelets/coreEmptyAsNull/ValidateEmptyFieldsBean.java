@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.facelets.coreEmptyAsNull;
+package com.sun.faces.test.servlet30.facelets.coreEmptyAsNull;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
