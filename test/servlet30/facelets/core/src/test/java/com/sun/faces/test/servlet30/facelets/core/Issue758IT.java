@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.facelets.viewAction.simple;
+package com.sun.faces.test.servlet30.facelets.core;
 
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -46,15 +46,15 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.sun.faces.test.junit.JsfTest;
 import com.sun.faces.test.junit.JsfTestRunner;
 import com.sun.faces.test.junit.JsfVersion;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
 import org.junit.runner.RunWith;
 
 @RunWith(JsfTestRunner.class)
-public class Issue758SimpleIT {
+public class Issue758IT {
 
     private String webUrl;
     private WebClient webClient;
@@ -66,96 +66,96 @@ public class Issue758SimpleIT {
     }
 
     @Test
-    public void testSimple() throws Exception {
-        webClient.setRedirectEnabled(false);
+    public void testRedirect1a() throws Exception {
+        webClient.getOptions().setRedirectEnabled(false);
         HtmlPage page;
         boolean exceptionThrown = false;
 
         try {
-            webClient.getPage(webUrl);
+            webClient.getPage(webUrl + "faces/viewActionRedirect1a.xhtml");
         } catch (FailingHttpStatusCodeException ex) {
             assertEquals(302, ex.getStatusCode());
             exceptionThrown = true;
         }
         assertTrue(exceptionThrown);
 
-        webClient.setRedirectEnabled(true);
-        page = webClient.getPage(webUrl);
+        webClient.getOptions().setRedirectEnabled(true);
+        page = webClient.getPage(webUrl + "faces/viewActionRedirect1a.xhtml");
         assertTrue(page.asText().contains("Result page"));
-    }
-
-    @JsfTest(JsfVersion.JSF_2_2_5)
-    @Test
-    public void testActionListener01NewNamespace() throws Exception {
-        webClient.setRedirectEnabled(true);
-        HtmlPage page;
-
-        page = webClient.getPage(webUrl + "faces/main-actionListener01-new-namespace.xhtml");
-        DomElement e = page.getElementById("result");
-        assertTrue(e.asText().contains("01 viewAction01 02 viewAction01"));
-    }
-
-    @JsfTest(JsfVersion.JSF_2_2_5)
-    @Test
-    public void testActionListener01() throws Exception {
-        webClient.setRedirectEnabled(true);
-        HtmlPage page;
-
-        page = webClient.getPage(webUrl + "faces/main-actionListener01.xhtml");
-        DomElement e = page.getElementById("result");
-        assertTrue(e.asText().contains("01 viewAction01 02 viewAction01"));
-    }
-
-    @JsfTest(JsfVersion.JSF_2_2_5)
-    @Test
-    public void testActionListener02NewNamespace() throws Exception {
-        webClient.setRedirectEnabled(true);
-        HtmlPage page;
-
-        page = webClient.getPage(webUrl + "faces/main-actionListener02-new-namespace.xhtml");
-        DomElement e = page.getElementById("result");
-        assertTrue(e.asText().contains("method viewAction01"));
-    }
-
-    @JsfTest(JsfVersion.JSF_2_2_5)
-    @Test
-    public void testActionListener02() throws Exception {
-        webClient.setRedirectEnabled(true);
-        HtmlPage page;
-
-        page = webClient.getPage(webUrl + "faces/main-actionListener02.xhtml");
-        DomElement e = page.getElementById("result");
-        assertTrue(e.asText().contains("method viewAction01"));
     }
 
     @JsfTest(JsfVersion.JSF_2_2_1)
     @Test
-    public void testSimpleNewNamespace() throws Exception {
-        webClient.setRedirectEnabled(false);
+    public void testRedirect1b() throws Exception {
+        webClient.getOptions().setRedirectEnabled(false);
         HtmlPage page;
         boolean exceptionThrown = false;
 
         try {
-            webClient.getPage(webUrl + "faces/main-new-namespace.xhtml");
+            webClient.getPage(webUrl + "faces/viewActionRedirect1b.xhtml");
         } catch (FailingHttpStatusCodeException ex) {
             assertEquals(302, ex.getStatusCode());
             exceptionThrown = true;
         }
         assertTrue(exceptionThrown);
 
-        webClient.setRedirectEnabled(true);
-        page = webClient.getPage(webUrl + "faces/main-new-namespace.xhtml");
+        webClient.getOptions().setRedirectEnabled(true);
+        page = webClient.getPage(webUrl + "faces/viewActionRedirect1b.xhtml");
         assertTrue(page.asText().contains("Result page"));
     }
 
+    @JsfTest(JsfVersion.JSF_2_2_5)
     @Test
-    public void testViewActionPageA() throws Exception {
-        webClient.setRedirectEnabled(false);
+    public void testActionListener1a() throws Exception {
+        webClient.getOptions().setRedirectEnabled(true);
+        HtmlPage page;
+
+        page = webClient.getPage(webUrl + "faces/viewActionActionListener1a.xhtml");
+        DomElement e = page.getElementById("result");
+        assertTrue(e.asText().contains("1 viewAction1 2 viewAction1"));
+    }
+
+    @JsfTest(JsfVersion.JSF_2_2_5)
+    @Test
+    public void testActionListener1b() throws Exception {
+        webClient.getOptions().setRedirectEnabled(true);
+        HtmlPage page;
+
+        page = webClient.getPage(webUrl + "faces/viewActionActionListener1b.xhtml");
+        DomElement e = page.getElementById("result");
+        assertTrue(e.asText().contains("1 viewAction1 2 viewAction1"));
+    }
+
+    @JsfTest(JsfVersion.JSF_2_2_5)
+    @Test
+    public void testActionListener2a() throws Exception {
+        webClient.getOptions().setRedirectEnabled(true);
+        HtmlPage page;
+
+        page = webClient.getPage(webUrl + "faces/viewActionActionListener2a.xhtml");
+        DomElement e = page.getElementById("result");
+        assertTrue(e.asText().contains("method viewAction1"));
+    }
+
+    @JsfTest(JsfVersion.JSF_2_2_5)
+    @Test
+    public void testActionListener2b() throws Exception {
+        webClient.getOptions().setRedirectEnabled(true);
+        HtmlPage page;
+
+        page = webClient.getPage(webUrl + "faces/viewActionActionListener2b.xhtml");
+        DomElement e = page.getElementById("result");
+        assertTrue(e.asText().contains("method viewAction1"));
+    }
+
+    @Test
+    public void testActionPageA() throws Exception {
+        webClient.getOptions().setRedirectEnabled(false);
         HtmlPage page = null;
         boolean exceptionThrown = false;
 
         try {
-            page = webClient.getPage(webUrl + "faces/pageAviewActionPageA.xhtml");
+            page = webClient.getPage(webUrl + "faces/viewActionActionPageA.xhtml");
         } catch (FailingHttpStatusCodeException ex) {
             assertEquals(302, ex.getStatusCode());
             exceptionThrown = true;
@@ -165,13 +165,13 @@ public class Issue758SimpleIT {
     }
 
     @Test
-    public void testViewActionEmpty() throws Exception {
-        webClient.setRedirectEnabled(false);
+    public void testActionEmpty() throws Exception {
+        webClient.getOptions().setRedirectEnabled(false);
         HtmlPage page = null;
         boolean exceptionThrown = false;
 
         try {
-            page = webClient.getPage(webUrl + "faces/pageAviewActionEmpty.xhtml");
+            page = webClient.getPage(webUrl + "faces/viewActionActionEmpty.xhtml");
         } catch (FailingHttpStatusCodeException ex) {
             assertEquals(302, ex.getStatusCode());
             exceptionThrown = true;
@@ -181,13 +181,13 @@ public class Issue758SimpleIT {
     }
 
     @Test
-    public void testViewActionNull() throws Exception {
-        webClient.setRedirectEnabled(false);
+    public void testActionNull() throws Exception {
+        webClient.getOptions().setRedirectEnabled(false);
         HtmlPage page = null;
         boolean exceptionThrown = false;
 
         try {
-            page = webClient.getPage(webUrl + "faces/pageAviewActionNull.xhtml");
+            page = webClient.getPage(webUrl + "faces/viewActionActionNull.xhtml");
         } catch (FailingHttpStatusCodeException ex) {
             assertEquals(302, ex.getStatusCode());
             exceptionThrown = true;
@@ -198,22 +198,22 @@ public class Issue758SimpleIT {
 
     @Test
     public void testNegativeIntentionalInfiniteRedirect() throws Exception {
-        webClient.setRedirectEnabled(false);
-        webClient.setThrowExceptionOnFailingStatusCode(true);
+        webClient.getOptions().setRedirectEnabled(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(true);
         boolean exceptionThrown = false;
 
         try {
-            webClient.getPage(webUrl + "faces/pageAviewActionPageAExplicitRedirect.xhtml");
+            webClient.getPage(webUrl + "faces/viewActionActionExplicitRedirect.xhtml");
         } catch (FailingHttpStatusCodeException ex) {
             assertEquals(302, ex.getStatusCode());
             exceptionThrown = true;
         }
         assertTrue(exceptionThrown);
 
-        webClient.setRedirectEnabled(true);
-        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setRedirectEnabled(true);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         try {
-            webClient.getPage(webUrl + "faces/pageAviewActionPageAExplicitRedirect.xhtml");
+            webClient.getPage(webUrl + "faces/viewActionActionExplicitRedirect.xhtml");
         } catch (FailingHttpStatusCodeException ex) {
             assertEquals(302, ex.getStatusCode());
             exceptionThrown = true;

@@ -45,11 +45,11 @@
 -->
 
 <glassfish-web-app error-url="">
-    <context-root>/test-servlet30-facelets-core</context-root>
-    <class-loader delegate="true"/>
-    <jsp-config>
-        <property name="keepgenerated" value="true">
-            <description>Keep a copy of the generated servlet class' java code.</description>
-        </property>
-    </jsp-config>
+  <context-root>/test-servlet30-facelets-core</context-root>
+  <class-loader delegate="true"/>
+  <jsp-config>
+    <property name="keepgenerated" value="true">
+      <description>Keep a copy of the generated servlet class' java code.</description>
+    </property>
+  </jsp-config>
 </glassfish-web-app>
