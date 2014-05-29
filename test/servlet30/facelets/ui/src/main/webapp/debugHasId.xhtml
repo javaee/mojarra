@@ -2,7 +2,7 @@
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -46,40 +46,6 @@
     <h:head>
     </h:head>
     <h:body>
-       <h3>These examples work off an array of 10 values: str0 str1 str2 str3 str4 str5 str6 str7 str8 str9</h3>
-       <h3>Example: UIRepeat With Literal Size Attribute: 5</h3>
-       <ui:repeat value="#{test.strList}" size="5" var="item">
-           l<h:outputText value="#{item}" />
-       </ui:repeat>
-
-       <br/>
-
-       <h3>Example: UIRepeat With ValueExpression Size Attribute: 5</h3>
-       <ui:repeat value="#{test.strList}" size="#{test.size}" var="item">
-           v<h:outputText value="#{item}" />
-       </ui:repeat>
-
-       <br/>
-
-       <h3>Example: UIRepeat With Size Attribute Set From ui:param Value Of 5</h3>
-       <ui:param name="size" value="5"/>
-       <ui:repeat value="#{test.strList}" size="#{size}" var="item">
-           p<h:outputText value="#{item}" />
-       </ui:repeat>
-
-       <br/>
-
-       <h3>Example: UIRepeat With Literal Size Attribute: 10</h3>
-       <ui:repeat value="#{test.strList}" size="10" var="item">
-           m<h:outputText value="#{item}" />
-       </ui:repeat>
-
-       <br/>
-
-       <h3>Example: UIRepeat With Literal Size Attribute: 5 And offset Attribute: 2</h3>
-       <ui:repeat value="#{test.strList}" size="5" offset="2" var="item">
-           o<h:outputText value="#{item}" />
-       </ui:repeat>
+       <ui:debug id="myid"/>
     </h:body>
 </html>
-

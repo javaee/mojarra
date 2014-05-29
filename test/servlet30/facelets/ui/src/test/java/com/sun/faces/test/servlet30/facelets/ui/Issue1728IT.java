@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,15 +37,16 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.vdl.facelets.ui;
+package com.sun.faces.test.servlet30.facelets.ui;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.junit.After;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
-import org.junit.*;
-import static org.junit.Assert.*;
-
-public class Issue2453IT {
+public class Issue1728IT {
 
     private String webUrl;
     private WebClient webClient;
@@ -62,29 +63,8 @@ public class Issue2453IT {
     }
 
     @Test
-    public void testDOCTYPES() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/issue2453.xhtml");
-        String response = page.getWebResponse().getContentAsString();
-        assertTrue(response.contains("<!DOCTYPE HTML>"));
-
-        page = webClient.getPage(webUrl + "faces/issue2453_included.xhtml");
-        response = page.getWebResponse().getContentAsString();
-        assertTrue(response.contains("<!DOCTYPE HTML>"));
-
-        page = webClient.getPage(webUrl + "faces/issue2453_template.xhtml");
-        response = page.getWebResponse().getContentAsString();
-        assertTrue(response.contains("<!DOCTYPE html>"));
-    }
-    
-    @Test
-    public void testDOCTYPES_Reload() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/Issue2575_templateClient.xhtml");
-        String response = page.getWebResponse().getContentAsString();
-        assertTrue(response.contains("<!DOCTYPE html>"));
-
-        page = webClient.getPage(webUrl + "faces/Issue2575_templateClient.xhtml");
-        response = page.getWebResponse().getContentAsString();
-        assertTrue(response.contains("<!DOCTYPE html>"));
-        
+    public void testId() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/debugHasId.xhtml");
+        assertTrue(page.asXml().contains("myid"));
     }
 }
