@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,58 +37,34 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.agnostic.resource.basic;
 
-package com.sun.faces.systest;
+import javax.faces.application.ResourceHandler;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
+@ManagedBean(name = "resourceNPEBean")
+@RequestScoped
+public class ResourceNPEBean {
 
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
-import java.util.ArrayList;
-import java.util.List;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+    private String exists = "false";
 
-
-public class Issue2052TestCase extends HtmlUnitFacesTestCase {
-
-    public Issue2052TestCase(String name) {
-        super(name);
+    public ResourceNPEBean() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        ResourceHandler handler = context.getApplication().getResourceHandler();
+        if (handler.libraryExists("FooBar")) {
+            exists = "true";
+        } else {
+            exists = "false";
+        }
     }
 
-    /**
-     * Set up instance variables required by this test case.
-     */
-    public void setUp() throws Exception {
-        super.setUp();
+    public String getLibraryExists() {
+        return exists;
     }
 
-
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(Issue2052TestCase.class));
+    public void setLibraryExists(String exists) {
+        this.exists = exists;
     }
-
-
-    /**
-     * Tear down instance variables required by this test case.
-     */
-    public void tearDown() {
-        super.tearDown();
-    }
-
-
-    // ------------------------------------------------------------ Test Methods
-
-    public void testBasicAppFunctionality() throws Exception {
-
-        HtmlPage page = getPage("/");
-
-        assertTrue(page.asText().contains("Library Exists: false"));
-    }
-
-    
-
 }
