@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -36,9 +36,8 @@
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
  * holder.
-
  */
-package web.components;
+package com.sun.faces.test.servlet30.composite;
 
 import java.util.Collection;
 import java.util.Map;
@@ -46,8 +45,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import javax.faces.component.UINamingContainer;
 
-public abstract class ComponentBase extends UINamingContainer {
-    
+public abstract class PreRenderViewComponentBase extends UINamingContainer {
+
     private Map<String, Object> localAttrs;
 
     @Override
@@ -57,9 +56,9 @@ public abstract class ComponentBase extends UINamingContainer {
         }
         return localAttrs;
     }
-    
+
     public class MapWrapper implements Map<String, Object> {
-        
+
         private Map<String, Object> parent;
 
         public MapWrapper(Map<String, Object> parent) {
@@ -125,10 +124,5 @@ public abstract class ComponentBase extends UINamingContainer {
         public Collection<Object> values() {
             return parent.values();
         }
-        
-        
-        
     }
-    
-    
 }

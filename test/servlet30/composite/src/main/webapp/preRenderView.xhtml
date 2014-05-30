@@ -1,9 +1,11 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -40,45 +42,24 @@
     holder.
 
 -->
-<!-- ************ JSF build file ************************************** -->
-<project name="JAVASERVERFACES-i_jsf_2089" default="test" basedir=".">
 
-    <property file="../../build.properties"/>
-    <path id="i_jsf_2089.classpath">  
-        <path refid="html.classpath" />
-        <pathelement location="${basedir}/i_jsf_2089_htmlunit/target/classes"/>
-    </path>
 
-    <import file="${jsf.build.home}/common/ant/common.xml"/>
-
-    <target name="build">
-        <jsf.mvn dir="${basedir}/i_jsf_2089_war" goals="install" />
-    </target>    
-
-    <target name="clean">
-        <jsf.mvn dir="${basedir}/i_jsf_2089_war" goals="clean" />
-    </target>    
-
-    <target name="install">
-        <deploy.artifact
-              artifact="${basedir}/i_jsf_2089_war/target/i_jsf_2089_war.war"
-              appName="i_jsf_2089_war"/>
-    </target>    
-
-    <target name="remove">
-        <undeploy.artifact
-              artifact="${basedir}/i_jsf_2089_war/target/i_jsf_2089_war.war"
-              appName="i_jsf_2089_war"/>
-    </target>    
-
-    <target name="test" depends="define.scenario.aware.port">
-
-        <jsf.tester request="/preRenderViewTest1.jsf"
-                     context-path="/i_jsf_2089_war"
-                     classpath-refid="html.classpath"
-                     test-results-dir="${regression.test.results.dir}"
-                     regexp="(?s).*Item Attribute is null: false.*Item Attribute is null: false.*"/>
-
-    </target>    
-
-</project>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:preRenderView="http://java.sun.com/jsf/composite/preRenderView">
+    <h:head>
+        <title></title>
+        <h:outputStylesheet library="preRenderView" name="preRenderView.css" />
+    </h:head>
+    <h:body>
+        <h:form id="form1" prependId="true" >
+            <h:panelGroup id="content" layout="block" styleClass="content" >
+                <preRenderView:component1 id="component1" item="#{preRenderViewBean.data[0]}" />
+                <h:commandButton id="testCommand" value="Postback" styleClass="button" >
+                </h:commandButton>
+            </h:panelGroup>
+        </h:form>
+    </h:body>
+    <ui:debug hotkey="o" />
+</html>
