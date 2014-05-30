@@ -63,7 +63,7 @@ public class Issue2079IT {
     }
 
     @Test
-    public void testOutputTextWithEscape() throws Exception {
+    public void testProjectStage() throws Exception {
         String projectStage = System.getProperty("webapp.projectStage");
         if (projectStage != null) {
             HtmlPage page = webClient.getPage(webUrl + "faces/outputTextProjectStage.xhtml");
