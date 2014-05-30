@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -39,34 +40,20 @@
     only if the new code is made subject to such option by the copyright
     holder.
 
---><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.sun.faces.test</groupId>
-        <artifactId>pom</artifactId>
-        <version>2.2.7-SNAPSHOT</version>
-    </parent>
-    <groupId>com.sun.faces.test.servlet30</groupId>
-    <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Servlet 3.0</name>
-    <dependencies>
-        <dependency>
-            <groupId>com.sun.faces.test</groupId>
-            <artifactId>util</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-    <modules>
-        <module>mapping</module>
-        <module>navigation</module>
-        <module>systest</module>
-        <module>ajax</module>
-    <module>el</module>
-    <module>composite</module>
-    <module>dynamic</module>
-        <module>facelets</module>
-    <module>component</module>
-  </modules>
-</project>
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:resourceDependency="http://javaserverfaces.java.net/resourceDependency">
+    <h:head>
+    </h:head>
+    <h:body> 
+        <h:form id="form">
+            <resourceDependency:hello binding="#{resourceDependencyBean.hello}"/>
+            <div>
+                <h:commandButton id="submit" value="Increment" action="#{resourceDependencyBean.add}" />
+            </div>
+            <h:outputText value="#{resourceDependencyBean.counter}" />
+        </h:form>
+    </h:body>
+</html>
