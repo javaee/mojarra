@@ -1,8 +1,7 @@
-
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -38,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.i_spec_997;
+package com.sun.faces.test.servlet30.component;
 
 import java.util.Map;
 import javax.faces.component.FacesComponent;
@@ -47,23 +46,26 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.ListenerFor;
-import javax.faces.event.PreRenderComponentEvent;
+import javax.faces.event.ListenersFor;
+import javax.faces.event.PostValidateEvent;
+import javax.faces.event.PreValidateEvent;
 
-@FacesComponent(value="ListenerForComponent")
-@ListenerFor(systemEventClass=PreRenderComponentEvent.class)
-public class ListenerForComponent extends HtmlInputText {
-    
+@FacesComponent(value = "com.sun.faces.test.servlet30.component.ListenersComponent")
+@ListenersFor({
+    @ListenerFor(systemEventClass = PreValidateEvent.class),
+    @ListenerFor(systemEventClass = PostValidateEvent.class)
+})
+public class ListenersComponent extends HtmlInputText {
+
     @Override
     public void processEvent(ComponentSystemEvent event) throws AbortProcessingException {
         Map<String, Object> requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
-        if (event instanceof PreRenderComponentEvent) {
-            requestMap.put("preRenderComponentEvent", "preRenderComponentEvent");
+        if (event instanceof PreValidateEvent) {
+            requestMap.put("preValidateEvent", "preValidateEvent");
+        } else if (event instanceof PostValidateEvent) {
+            requestMap.put("postValidateEvent", "postValidateEvent");
         } else {
             super.processEvent(event);
         }
     }
-    
-    
-    
-    
 }

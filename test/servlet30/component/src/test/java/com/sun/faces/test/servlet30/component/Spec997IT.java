@@ -1,8 +1,7 @@
-
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -38,39 +37,41 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.i_spec_997;
+package com.sun.faces.test.servlet30.component;
 
-import java.util.Map;
-import javax.faces.component.FacesComponent;
-import javax.faces.component.html.HtmlInputText;
-import javax.faces.context.FacesContext;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.ComponentSystemEvent;
-import javax.faces.event.ListenerFor;
-import javax.faces.event.ListenersFor;
-import javax.faces.event.PostValidateEvent;
-import javax.faces.event.PreValidateEvent;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.assertTrue;
 
-@FacesComponent(value="ListenersForComponent")
-@ListenersFor({
-    @ListenerFor(systemEventClass=PreValidateEvent.class),
-    @ListenerFor(systemEventClass=PostValidateEvent.class)
-})
-public class ListenersForComponent extends HtmlInputText {
-    
-    @Override
-    public void processEvent(ComponentSystemEvent event) throws AbortProcessingException {
-        Map<String, Object> requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
-        if (event instanceof PreValidateEvent) {
-            requestMap.put("preValidateEvent", "preValidateEvent");
-        } else if (event instanceof PostValidateEvent) {
-            requestMap.put("postValidateEvent", "postValidateEvent");
-        } else {
-            super.processEvent(event);
-        }
+public class Spec997IT {
+
+    private String webUrl;
+    private WebClient webClient;
+
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
-    
-    
-    
-    
+
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
+    }
+
+    @Test
+    public void testEventListener() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/eventListener.xhtml");        
+        assertTrue(page.asText().contains("preRenderComponentEvent"));
+        
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button");
+        page = button.click();
+
+        assertTrue(page.asText().contains("preValidateEvent"));
+        assertTrue(page.asText().contains("postValidateEvent"));
+    }
 }

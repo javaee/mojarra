@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,47 +37,28 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.servlet30.component;
 
-package com.sun.faces.regression.i_spec_997;
+import java.util.Map;
+import javax.faces.component.FacesComponent;
+import javax.faces.component.html.HtmlInputText;
+import javax.faces.context.FacesContext;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.ComponentSystemEvent;
+import javax.faces.event.ListenerFor;
+import javax.faces.event.PreRenderComponentEvent;
 
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+@FacesComponent(value = "com.sun.faces.test.servlet30.component.ListenerComponent")
+@ListenerFor(systemEventClass = PreRenderComponentEvent.class)
+public class ListenerComponent extends HtmlInputText {
 
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
-
-public class Issue997TestCase extends HtmlUnitFacesTestCase {
-
-    public Issue997TestCase(String name) {
-        super(name);
+    @Override
+    public void processEvent(ComponentSystemEvent event) throws AbortProcessingException {
+        Map<String, Object> requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
+        if (event instanceof PreRenderComponentEvent) {
+            requestMap.put("preRenderComponentEvent", "preRenderComponentEvent");
+        } else {
+            super.processEvent(event);
+        }
     }
-
-
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(Issue997TestCase.class));
-    }
-
-
-    // ------------------------------------------------------------ Test Methods
-
-    public void testBasicAppFunctionality() throws Exception {
-
-        HtmlPage page = getPage("/faces/main.xhtml");
-
-        assertTrue(page.asText().contains("preRenderComponentEvent"));
-        
-        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button");
-        page = button.click();
-
-        assertTrue(page.asText().contains("preValidateEvent"));
-        assertTrue(page.asText().contains("postValidateEvent"));
-        
-    }
-
-
 }
