@@ -12,6 +12,7 @@
     </application>
     <lifecycle>
         <phase-listener>com.sun.faces.test.servlet30.facelets.core.MetadataShortCircuitPhaseListener</phase-listener>
+        <phase-listener>com.sun.faces.test.servlet30.facelets.core.RequestEncodingPhaseListener</phase-listener>
     </lifecycle>
     <navigation-rule>
         <from-view-id>*</from-view-id>

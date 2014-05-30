@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,51 +37,33 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.systest;
+package com.sun.faces.test.servlet30.facelets.core;
 
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import java.io.UnsupportedEncodingException;
+import javax.faces.context.FacesContext;
+import javax.faces.event.PhaseEvent;
+import javax.faces.event.PhaseId;
+import javax.faces.event.PhaseListener;
 
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
+public class RequestEncodingPhaseListener implements PhaseListener {
 
-import javax.faces.component.NamingContainer;
-
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
-public class IssueGF18007TestCase extends HtmlUnitFacesTestCase {
-
-    public IssueGF18007TestCase(String name) {
-        super(name);
-    }
-
-    /**
-     * Set up instance variables required by this test case.
-     */
     @Override
-    public void setUp() throws Exception {
-        super.setUp();
+    public void afterPhase(PhaseEvent event) {
     }
-
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(IssueGF18007TestCase.class));
-    }
-
-    /**
-     * Tear down instance variables required by this test case.
-     */
+    
     @Override
-    public void tearDown() {
-        super.tearDown();
+    public void beforePhase(PhaseEvent event) {
+        FacesContext context = event.getFacesContext();
+        if (context.getExternalContext().getRequestPathInfo().contains("phaseListenerRequestEncoding.xhtml")) {
+            try {
+                context.getExternalContext().setRequestCharacterEncoding("ISO-8859-1");
+            } catch (UnsupportedEncodingException e) {
+            }
+        }
     }
 
-    // ------------------------------------------------------------ Test Methods
-    public void testCharEncoding() throws Exception {
-        HtmlPage page = getPage("/faces/Test.xhtml");
-        assertTrue(page.asText().contains("ISO-8859-1"));
+    @Override
+    public PhaseId getPhaseId() {
+        return PhaseId.ANY_PHASE;
     }
 }

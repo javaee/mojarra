@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,37 +37,44 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.servlet30.facelets.core;
 
-// TestViewHandler.java
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.junit.After;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
-package i_glassfish_18007;
+public class Glassfish18007IT {
 
-import java.io.UnsupportedEncodingException;
-import javax.faces.FacesException;
-import javax.faces.application.ViewHandler;
-import javax.faces.application.ViewHandlerWrapper;
-import javax.faces.context.FacesContext;
+    private String webUrl;
+    private WebClient webClient;
 
-public class TestViewHandler extends ViewHandlerWrapper {
-
-    private ViewHandler wrapped;
-
-    public TestViewHandler(ViewHandler wrapped) {
-        this.wrapped = wrapped;
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-    @Override
-    public ViewHandler getWrapped() {
-        return wrapped;
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
     }
 
-    @Override
-    public void initView(FacesContext context) throws FacesException {
-        try {
-            context.getExternalContext().setRequestCharacterEncoding("ISO-8859-1");
-        } catch (UnsupportedEncodingException e) {
-        }
-        wrapped.initView(context);
+    /*
+     * This test is simulating setting the request encoding before the 
+     * ViewHandler.initView call by using a before phaselistener. We do it this 
+     * way so we don't have to create a new view handler as it comes down to 
+     * the same thing.
+     *
+     * Here we assert that the request encoding that the phaselistener 
+     * (simulating the custom view handler) has set is also what the 
+     * FacesContext comes back with when the page gets rendered.
+     */
+    @Test
+    public void testRequestEncoding() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/phaseListenerRequestEncoding.xhtml");
+        assertTrue(page.asText().contains("ISO-8859-1"));
     }
 }
-

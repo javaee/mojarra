@@ -67,5 +67,5 @@
     <module>composite</module>
     <module>dynamic</module>
         <module>facelets</module>
-    </modules>
+  </modules>
 </project>
