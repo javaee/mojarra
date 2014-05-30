@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,39 +37,37 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.servlet30.facelets.html;
 
-package com.sun.faces.systest.regression.i_jsf_2079;
-
+import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+public class Issue2079IT {
 
+    private String webUrl;
+    private WebClient webClient;
 
-public class Issue2079ProductionTestCase extends HtmlUnitFacesTestCase {
-
-    public Issue2079ProductionTestCase(String name) {
-        super(name);
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(Issue2079ProductionTestCase.class));
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
     }
 
-
-    // ------------------------------------------------------------ Test Methods
-
-    public void testBasicAppFunctionality() throws Exception {
-
-        HtmlPage page = getPage("/");
-
-        assertTrue(page.asText().matches("(?s).*ProjectStage\\s*is\\s*Production.*"));
+    @Test
+    public void testOutputTextWithEscape() throws Exception {
+        String projectStage = System.getProperty("webapp.projectStage");
+        if (projectStage != null) {
+            HtmlPage page = webClient.getPage(webUrl + "faces/outputTextProjectStage.xhtml");
+            assertTrue(page.asText().contains(projectStage));
+        }
     }
-
-
 }
