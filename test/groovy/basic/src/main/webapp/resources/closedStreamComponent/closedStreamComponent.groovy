@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -38,42 +38,22 @@
  * holder.
  */
 
-package com.sun.faces.regression.i_mojarra_2113;
+import javax.faces.component.UINamingContainer;
+import javax.faces.context.FacesContext;
 
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+public class myComponent extends UINamingContainer {
+    
+    public void processUpdates(FacesContext context) {
+        
+        context.getExternalContext().getRequestMap().put("message", 
+                                                         "groovyCalled");
 
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+        super.processUpdates(context);
 
-
-public class Issue2113TestCase extends HtmlUnitFacesTestCase {
-
-    public Issue2113TestCase(String name) {
-        super(name);
+    } 
+    
+    public String getFamily() {
+        return "javax.faces.NamingContainer";
     }
-
-
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(Issue2113TestCase.class));
-    }
-
-
-    // ------------------------------------------------------------ Test Methods
-
-    public void testBasicAppFunctionality() throws Exception {
-
-        HtmlPage page = getPage("/");
-
-        assertTrue(page.asText().contains("This is the localized text for the composite component."));
-        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button");
-        page = button.click();
-        assertTrue(page.asText().contains("groovyCalled"));
-    }
-
-
+    
 }

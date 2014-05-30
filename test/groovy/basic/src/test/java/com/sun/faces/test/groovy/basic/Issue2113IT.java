@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,23 +37,38 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.groovy.basic;
 
-import javax.faces.component.UINamingContainer;
-import javax.faces.context.FacesContext;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import org.junit.After;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
-public class myComponent extends UINamingContainer {
-    
-    public void processUpdates(FacesContext context) {
-        
-        context.getExternalContext().getRequestMap().put("message", 
-                                                         "groovyCalled");
+public class Issue2113IT {
 
-        super.processUpdates(context);
+    private String webUrl;
+    private WebClient webClient;
 
-    } 
-    
-    public String getFamily() {
-        return "javax.faces.NamingContainer";
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
-    
+
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
+    }
+
+    @Test
+    public void testClosedStreamComponent() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/closedStreamComponent.xhtml");
+        assertTrue(page.asText().contains("This is the localized text for the composite component."));
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button");
+        page = button.click();
+        assertTrue(page.asText().contains("groovyCalled"));
+    }
 }
