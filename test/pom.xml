@@ -399,9 +399,6 @@
                                 <jsf.version>${jsf.version}</jsf.version>
                                 <project.build.finalName>${project.build.finalName}</project.build.finalName>
                                 <project.build.sourceEncoding>${project.build.sourceEncoding}</project.build.sourceEncoding>
-                                <webapp.partialStateSaving>${webapp.partialStateSaving}</webapp.partialStateSaving>
-                                <webapp.projectStage>${webapp.projectStage}</webapp.projectStage>
-                                <webapp.stateSavingMethod>${webapp.stateSavingMethod}</webapp.stateSavingMethod>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>                
