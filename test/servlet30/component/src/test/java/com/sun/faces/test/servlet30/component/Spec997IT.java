@@ -46,6 +46,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
+import org.junit.Ignore;
 
 public class Spec997IT {
 
@@ -64,6 +65,7 @@ public class Spec997IT {
     }
 
     @Test
+    @Ignore
     public void testEventListener() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/eventListener.xhtml");        
         assertTrue(page.asText().contains("preRenderComponentEvent"));
