@@ -45,6 +45,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 public class Issue2079IT {
 
@@ -63,6 +64,7 @@ public class Issue2079IT {
     }
 
     @Test
+    @Ignore
     public void testProjectStage() throws Exception {
         String projectStage = System.getProperty("webapp.projectStage");
         if (projectStage != null) {
