@@ -42,9 +42,17 @@ package com.sun.faces.test.javaee7.action.basic;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import org.junit.*;
-import static org.junit.Assert.*;
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_4;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import static com.sun.faces.test.junit.JsfVersion.JSF_2_2_0;
+import org.junit.After;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class Issue3136IT {
 
     private String webUrl;
@@ -61,29 +69,29 @@ public class Issue3136IT {
         webClient.closeAllWindows();
     }
 
+    @JsfTest(value = JSF_2_2_0, excludes = {WEBLOGIC_12_1_4})
     @Test
-    @Ignore
     public void testExactMapping() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "action/exact.xhtml");
         assertTrue(page.asXml().contains("This page used an exact mapping of /exact.xhtml using @RequestMapping."));
     }
 
+    @JsfTest(value = JSF_2_2_0, excludes = {WEBLOGIC_12_1_4})
     @Test
-    @Ignore
     public void testPrefixMapping() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "action/prefix/prefix.xhtml");
         assertTrue(page.asXml().contains("This page used an prefix mapping of /prefix/* using @RequestMapping."));
     }
 
+    @JsfTest(value = JSF_2_2_0, excludes = {WEBLOGIC_12_1_4})
     @Test
-    @Ignore
     public void testExtensionMapping() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "action/extension.do");
         assertTrue(page.asXml().contains("This page used an extension mapping of *.do using @RequestMapping."));
     }
 
+    @JsfTest(value = JSF_2_2_0, excludes = {WEBLOGIC_12_1_4})
     @Test
-    @Ignore
     public void testSimpleForm() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/form1.xhtml");
         HtmlElement inputText1 = page.getHtmlElementById("inputText1");
