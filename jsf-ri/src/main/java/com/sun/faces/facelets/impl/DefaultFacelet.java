@@ -283,10 +283,13 @@ final class DefaultFacelet extends Facelet implements XMLFrontMatterSaver {
      *             if there is a problem creating the URL for the path specified
      */
     private URL getRelativePath(String path) throws IOException {
-        URL url = this.relativePaths.get(path);
-        if (url == null) {
-            url = this.factory.resolveURL(this.src, path);
-            this.relativePaths.put(path, url);
+        URL url;
+        synchronized(relativePaths) {
+            url = this.relativePaths.get(path);
+            if (url == null) {
+                url = this.factory.resolveURL(this.src, path);
+                this.relativePaths.put(path, url);
+            }
         }
         return url;
     }
