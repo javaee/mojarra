@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -39,67 +39,40 @@
  */
 package com.sun.faces.test.javaee7.beanValidator.methodValidator;
 
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import static org.junit.Assert.assertTrue;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_4;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import static com.sun.faces.test.junit.JsfVersion.JSF_2_2_0;
+import org.junit.After;
 import static org.junit.Assert.assertEquals;
-import org.junit.Ignore;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
-
+@RunWith(JsfTestRunner.class)
 public class MethodValidatorIT {
-    /**
-     * Stores the web URL.
-     */
+
     private String webUrl;
-    /**
-     * Stores the web client.
-     */
     private WebClient webClient;
 
-    /**
-     * Setup before testing.
-     * 
-     * @throws Exception when a serious error occurs.
-     */
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    /**
-     * Cleanup after testing.
-     * 
-     * @throws Exception when a serious error occurs.
-     */
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-
-    /**
-     * Setup before testing.
-     */
     @Before
     public void setUp() {
         webUrl = System.getProperty("integration.url");
         webClient = new WebClient();
     }
 
-    /**
-     * Tear down after testing.
-     */
     @After
     public void tearDown() {
         webClient.closeAllWindows();
     }
 
+    @JsfTest(value = JSF_2_2_0, excludes = {WEBLOGIC_12_1_4})
     @Test
-    @Ignore
     public void testIncorrectUsage() throws Exception {
         webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl);
@@ -115,8 +88,8 @@ public class MethodValidatorIT {
         assertEquals(500, page.getWebResponse().getStatusCode());
     }
     
+    @JsfTest(value = JSF_2_2_0, excludes = {WEBLOGIC_12_1_4})
     @Test
-    @Ignore
     public void testCorrectUsage1() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
         HtmlTextInput input = (HtmlTextInput) page.getElementById("lastName");
@@ -131,8 +104,8 @@ public class MethodValidatorIT {
         assertEquals(200, page.getWebResponse().getStatusCode());
     }
     
+    @JsfTest(value = JSF_2_2_0, excludes = {WEBLOGIC_12_1_4})
     @Test
-    @Ignore
     public void testCorrectUsage2() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
         HtmlTextInput input = (HtmlTextInput) page.getElementById("requestValue");
@@ -146,6 +119,4 @@ public class MethodValidatorIT {
         assertTrue(text.contains("my message"));
         assertEquals(200, page.getWebResponse().getStatusCode());
     }
-    
-    
 }
