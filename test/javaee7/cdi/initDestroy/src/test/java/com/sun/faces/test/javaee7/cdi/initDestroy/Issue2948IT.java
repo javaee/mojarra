@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -39,108 +39,78 @@
  */
 package com.sun.faces.test.javaee7.cdi.initDestroy;
 
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_4;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import static com.sun.faces.test.junit.JsfVersion.JSF_2_2_0;
+import org.junit.After;
 import static org.junit.Assert.assertTrue;
-import org.junit.Ignore;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class Issue2948IT {
-    /**
-     * Stores the web URL.
-     */
+
     private String webUrl;
-    /**
-     * Stores the web client.
-     */
     private WebClient webClient;
 
-    /**
-     * Setup before testing.
-     * 
-     * @throws Exception when a serious error occurs.
-     */
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    /**
-     * Cleanup after testing.
-     * 
-     * @throws Exception when a serious error occurs.
-     */
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-
-    /**
-     * Setup before testing.
-     */
     @Before
     public void setUp() {
         webUrl = System.getProperty("integration.url");
         webClient = new WebClient();
     }
 
-    /**
-     * Tear down after testing.
-     */
     @After
     public void tearDown() {
         webClient.closeAllWindows();
     }
 
+    @JsfTest(value = JSF_2_2_0, excludes = {WEBLOGIC_12_1_4})
     @Test
-    @Ignore
     public void testSessionLogging() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
         HtmlElement e = (HtmlElement) page.getElementById("initMessage");
-        long sessionInitTime = Long.valueOf(e.asText()).longValue();
+        long sessionInitTime = Long.valueOf(e.asText());
         HtmlSubmitInput invalidateButton = (HtmlSubmitInput) page.getElementById("invalidateSession");
         page = invalidateButton.click();
         e = (HtmlElement) page.getElementById("destroyMessage");
-        long sessionDestroyTime = Long.valueOf(e.asText()).longValue();
+        long sessionDestroyTime = Long.valueOf(e.asText());
         assertTrue(sessionInitTime < sessionDestroyTime);
 
     }
 
+    @JsfTest(value = JSF_2_2_0, excludes = {WEBLOGIC_12_1_4})
     @Test
-    @Ignore
     public void testFlowLogging() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
         HtmlSubmitInput enterFlow = (HtmlSubmitInput) page.getElementById("enterFlow");
         page = enterFlow.click();
         HtmlElement e = (HtmlElement) page.getElementById("initMessage");
-        long flowInitTime = Long.valueOf(e.asText()).longValue();
+        long flowInitTime = Long.valueOf(e.asText());
         HtmlSubmitInput next = (HtmlSubmitInput) page.getElementById("a");
         page = next.click();
         HtmlSubmitInput returnButton = (HtmlSubmitInput) page.getElementById("return");
         page = returnButton.click();
         e = (HtmlElement) page.getElementById("destroyMessage");
-        long flowDestroyTime = Long.valueOf(e.asText()).longValue();
+        long flowDestroyTime = Long.valueOf(e.asText());
         assertTrue(flowInitTime < flowDestroyTime);
-        
-
     }
 
+    @JsfTest(value = JSF_2_2_0, excludes = {WEBLOGIC_12_1_4})
     @Test
-    @Ignore
     public void testViewScopedLogging() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/viewScoped01.xhtml");
         HtmlElement e = (HtmlElement) page.getElementById("initMessage");
-        long flowInitTime = Long.valueOf(e.asText()).longValue();
+        long flowInitTime = Long.valueOf(e.asText());
         HtmlSubmitInput returnButton = (HtmlSubmitInput) page.getElementById("viewScoped02");
         page = returnButton.click();
         e = (HtmlElement) page.getElementById("destroyMessage");
-        long flowDestroyTime = Long.valueOf(e.asText()).longValue();
+        long flowDestroyTime = Long.valueOf(e.asText());
         assertTrue(flowInitTime < flowDestroyTime);
-        
-
     }
 }
