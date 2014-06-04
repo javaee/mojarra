@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -39,70 +39,35 @@
  */
 package com.sun.faces.test.javaee7.facelets.ui;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.junit.After;
 import static org.junit.Assert.assertTrue;
-import org.junit.Ignore;
+import org.junit.Before;
+import org.junit.Test;
 
 public class VerifyTemplateUIIT {
-    /**
-     * Stores the web URL.
-     */
+
     private String webUrl;
-    /**
-     * Stores the web client.
-     */
     private WebClient webClient;
 
-    /**
-     * Setup before testing.
-     * 
-     * @throws Exception when a serious error occurs.
-     */
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    /**
-     * Cleanup after testing.
-     * 
-     * @throws Exception when a serious error occurs.
-     */
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-
-    /**
-     * Setup before testing.
-     */
     @Before
     public void setUp() {
         webUrl = System.getProperty("integration.url");
         webClient = new WebClient();
     }
 
-    /**
-     * Tear down after testing.
-     */
     @After
     public void tearDown() {
         webClient.closeAllWindows();
     }
 
     @Test
-    @Ignore
     public void testUL() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
         String pageXml = page.getBody().asXml();
-
         assertTrue(pageXml.matches("(?s).*<li>\\s+a\\s+</li>.*"));
         assertTrue(pageXml.matches("(?s).*<li>\\s+b\\s+</li>.*"));
         assertTrue(pageXml.matches("(?s).*<li>\\s+c\\s+</li>.*"));
-        
     }
 }
