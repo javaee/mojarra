@@ -45,7 +45,7 @@ import javax.sql.DataSource;
 @FacesConverter(value = "com.sun.faces.test.javaee7.facelets.core.ConverterInjectResourceConverter")
 public class ConverterInjectResourceConverter implements Converter {
 
-    @Resource(name = "dataSource", lookup = "java:comp/DefaultDataSource")
+    @Resource(name = "dataSource")
     private DataSource dataSource;
 
     @Override
