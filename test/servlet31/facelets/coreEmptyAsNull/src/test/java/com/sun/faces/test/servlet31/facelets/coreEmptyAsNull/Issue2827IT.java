@@ -44,10 +44,11 @@ import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import org.junit.After;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
-import org.junit.Ignore;
 
 public class Issue2827IT {
 
@@ -73,6 +74,8 @@ public class Issue2827IT {
      * problems with other tests. See
      * http://tomcat.apache.org/tomcat-7.0-doc/config/systemprops.html and look
      * for COERCE_TO_ZERO
+     * 
+     * @throws Exception
      */
     @Test
     public void testValidateEmptyFields() throws Exception {
