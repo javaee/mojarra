@@ -68,7 +68,6 @@ public class Issue2984IT {
      * @throws Exception when a serious error occurs.
      */
     @Test
-    @Ignore
     public void testBundledApp() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/simple.xhtml");
         assertTrue(page.asText().contains("Press the button"));
