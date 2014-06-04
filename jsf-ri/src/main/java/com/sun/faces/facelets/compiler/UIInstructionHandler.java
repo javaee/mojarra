@@ -116,14 +116,15 @@ final class UIInstructionHandler extends AbstractUIHandler {
         if (parent != null) {
             // our id
             String id = ctx.generateUniqueId(this.id);
+            FacesContext context = ctx.getFacesContext();
 
             // grab our component
-            UIComponent c = ComponentSupport.findChildByTagId(parent, id);
+            UIComponent c = ComponentSupport.findUIInstructionChildByTagId(context, parent, id);            
             boolean componentFound = false;
             boolean suppressEvents = false;
             if (c != null) {
                 componentFound = true;
-                suppressEvents = ComponentSupport.suppressViewModificationEvents(ctx.getFacesContext());
+                suppressEvents = ComponentSupport.suppressViewModificationEvents(context);
                 // mark all children for cleaning 
                 ComponentSupport.markForDeletion(c);
             } else {
@@ -159,7 +160,6 @@ final class UIInstructionHandler extends AbstractUIHandler {
                 c.getAttributes().put(ComponentSupport.MARK_CREATED, id);
             }
             // finish cleaning up orphaned children
-            FacesContext context = ctx.getFacesContext();
             if (componentFound) {
                 ComponentSupport.finalizeForDeletion(c);
                 if (suppressEvents) {

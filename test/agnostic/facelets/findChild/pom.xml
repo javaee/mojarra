@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -40,28 +39,24 @@
     only if the new code is made subject to such option by the copyright
     holder.
 
--->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.sun.faces.test</groupId>
-        <artifactId>pom</artifactId>
-        <version>2.1.5-03-SNAPSHOT</version>
-    </parent>
-    <groupId>com.sun.faces.test.agnostic</groupId>
+--><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
     <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Agnostic</name>
-    <dependencies>
-        <dependency>
-            <groupId>com.sun.faces.test</groupId>
-            <artifactId>util</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>    
-    <modules>
-        <module>converter</module>
-        <module>facelets</module>
-    </modules>
+    <groupId>com.sun.faces.test.agnostic.facelets</groupId>
+    <version>2.1.5-03-SNAPSHOT</version>
+  </parent>
+  
+  <groupId>com.sun.faces.test.agnostic.facelets</groupId>
+  <artifactId>findChild</artifactId>
+  <version>2.1.5-03-SNAPSHOT</version>
+  <packaging>war</packaging>
+  <name>Mojarra ${project.version} - Test - Agnostic - Facelets - FindChild</name>
+  
+  <build>
+    <finalName>test-agnostic-facelets-findChild</finalName>
+  </build>
+    <properties>
+        <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
+    </properties>
 </project>
