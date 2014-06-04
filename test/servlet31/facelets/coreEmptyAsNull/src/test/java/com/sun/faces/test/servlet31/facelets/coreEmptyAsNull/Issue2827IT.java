@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -40,7 +40,6 @@
 package com.sun.faces.test.servlet31.facelets.coreEmptyAsNull;
 
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
@@ -76,7 +75,6 @@ public class Issue2827IT {
      * for COERCE_TO_ZERO
      */
     @Test
-    @Ignore
     public void testValidateEmptyFields() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
         if (page.getWebResponse().getResponseHeaderValue("Server") == null
