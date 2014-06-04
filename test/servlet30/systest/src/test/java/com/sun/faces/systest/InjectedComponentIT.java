@@ -46,7 +46,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 
 public class InjectedComponentIT {
 
@@ -69,7 +68,6 @@ public class InjectedComponentIT {
      * than Tomcat delivers. Setting it to be @Ignore for now.
      */
     @Test
-    @Ignore
     public void testInjectedComponent() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/pre31injection/injectedComponent.xhtml");
         assertTrue(Pattern.matches("(?s).*Hello World from env-entry!.*", page.asXml()));

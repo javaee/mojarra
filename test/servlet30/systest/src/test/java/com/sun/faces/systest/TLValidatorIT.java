@@ -45,7 +45,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 
 public class TLValidatorIT {
 
@@ -128,7 +127,6 @@ public class TLValidatorIT {
     }
 
     @Test
-    @Ignore
     public void testElValidatorActionRefFail() throws Exception {
         webClient.setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/TestElValidatorActionRefFail.jsp");
@@ -137,7 +135,6 @@ public class TLValidatorIT {
     }
 
     @Test
-    @Ignore
     public void testElValidatorComponentFail() throws Exception {
         webClient.setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/TestElValidatorComponentFail.jsp");
