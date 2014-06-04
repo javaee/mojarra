@@ -41,12 +41,20 @@ package com.sun.faces.systest;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_3;
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_4;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import static com.sun.faces.test.junit.JsfVersion.JSF_2_2_0;
 import java.util.regex.Pattern;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertTrue;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class ManagedBeanIT {
 
     private String webUrl;
@@ -89,11 +97,12 @@ public class ManagedBeanIT {
         webClient.setThrowExceptionOnFailingStatusCode(true);
     }
 
+    @JsfTest(value=JSF_2_2_0, excludes = {WEBLOGIC_12_1_3, WEBLOGIC_12_1_4})
     @Test
     public void testManagedBean7() throws Exception {
         webClient.setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/managed07.jsp");
-        assertEquals(200, page.getWebResponse().getStatusCode());
+        assertEquals(500, page.getWebResponse().getStatusCode());
         webClient.setThrowExceptionOnFailingStatusCode(true);
     }
 
