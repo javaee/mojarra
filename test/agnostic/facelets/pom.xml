@@ -57,6 +57,7 @@
         <module>cc</module>
         <module>ccInJar</module>
         <module>core</module>
+        <module>findChild</module>
         <module>html</module>
         <module>ui</module>
     </modules>

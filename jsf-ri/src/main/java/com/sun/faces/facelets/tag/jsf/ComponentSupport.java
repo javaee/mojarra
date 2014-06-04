@@ -62,6 +62,9 @@ import com.sun.faces.RIConstants;
 import com.sun.faces.context.StateContext;
 import com.sun.faces.facelets.tag.jsf.core.FacetHandler;
 import com.sun.faces.util.Util;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.PartialStateSaving;
+import com.sun.faces.util.MessageUtils;
+
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIPanel;
@@ -72,6 +75,7 @@ import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagAttributeException;
 import javax.faces.view.facelets.Tag;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -80,6 +84,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import javax.faces.event.PhaseId;
 
 /**
  * 
@@ -210,6 +215,36 @@ public final class ComponentSupport {
         return null;
     }
     
+    // Obvious performance optimization.  First, assume this method
+    // is only called from UIInstructionHandler.apply().  With that assumption
+    // in place a few optimizations can be had on the cheap.
+    
+    // If this method is called on an initial page 
+    // render it will always return null, so we can just return 
+    // null in that case without any iteration.  
+    
+    // If this method is called during RestoreView, it will always return null
+    // so we can just return null in that case without any iteration.  
+    
+    // If PartialStateSaving is false, the UIInstruction components will
+    // never be in the tree at this point, so we can return null and skip iterating.
+    
+    public static UIComponent findUIInstructionChildByTagId(FacesContext context, UIComponent parent, String id) {
+        UIComponent result = null;
+        if (!context.isPostback() || context.getCurrentPhaseId().equals(PhaseId.RESTORE_VIEW)) {
+            return null;
+        }
+        Map<Object, Object> attrs = context.getAttributes();
+        if (attrs.containsKey(PartialStateSaving)) {
+            if ((Boolean)attrs.get(PartialStateSaving)) {
+                result = findChildByTagId(context, parent, id);
+            }
+        }
+
+        
+        return result;
+    }
+    
     /**
      * By TagId, find Child
      * 
@@ -217,12 +252,24 @@ public final class ComponentSupport {
      * @param id the id
      * @return the UI component
      */
-    public static UIComponent findChildByTagId(UIComponent parent, String id) {
-        Iterator itr = parent.getFacetsAndChildren();
-        UIComponent c = null;
+    public static UIComponent findChildByTagId(FacesContext context, UIComponent parent, String id) {
+        if (!context.isPostback() || context.getCurrentPhaseId().equals(PhaseId.RESTORE_VIEW)) {
+            return null;
+        }
+        UIComponent c = null;        
         String cid = null;
-        while (itr.hasNext()) {
-            c = (UIComponent) itr.next();
+        List<UIComponent> components;
+        if (0 < parent.getFacetCount()) {
+            components = new ArrayList<UIComponent>();
+            components.addAll(parent.getFacets().values());
+            components.addAll(parent.getChildren());
+        } else {
+            components = parent.getChildren();
+        }
+
+        int len = components.size();
+        for (int i = 0; i < len; i++) {
+            c = components.get(i);
             cid = (String) c.getAttributes().get(MARK_CREATED);
             if (id.equals(cid)) {
                 return c;
@@ -234,14 +281,14 @@ public final class ComponentSupport {
                         return c2;
                     }
                 }
-            }
+            }        
             /*
              * Make sure we look for the child recursively it might have moved
              * into a different parent in the parent hierarchy. Note currently
              * we are only looking down the tree. Maybe it would be better
              * to use the VisitTree API instead.
              */
-            UIComponent foundChild = findChildByTagId(c, id);
+            UIComponent foundChild = findChildByTagId(context, c, id);
             if (foundChild != null) {
                 return foundChild;
             }
