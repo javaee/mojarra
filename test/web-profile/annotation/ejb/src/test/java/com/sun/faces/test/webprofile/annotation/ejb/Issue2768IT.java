@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -42,8 +42,10 @@ package com.sun.faces.test.webprofile.annotation.ejb;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import org.junit.*;
-import static org.junit.Assert.*;
+import org.junit.After;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
 public class Issue2768IT {
 
@@ -62,12 +64,11 @@ public class Issue2768IT {
     }
 
     @Test
-    @Ignore
     public void testEjbIntoConverter() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/ejbIntoConverter.xhtml");
-        assertTrue(page.asXml().indexOf("Value: 1") != -1);
+        assertTrue(page.asXml().contains("Value: 1"));
         HtmlElement submit = page.getHtmlElementById("form:submit");
         page = submit.click();
-        assertTrue(page.asXml().indexOf("Value: 3") != -1);
+        assertTrue(page.asXml().contains("Value: 3"));
     }
 }
