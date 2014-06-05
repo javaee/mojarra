@@ -89,11 +89,12 @@ public class ManagedBeanIT {
         assertTrue(Pattern.matches("(?s).*/managed02.jsp PASSED.*", page.asXml()));
     }
 
+    @JsfTest(value=JSF_2_2_0, excludes = {WEBLOGIC_12_1_3, WEBLOGIC_12_1_4})
     @Test
     public void testManagedBean3() throws Exception {
         webClient.setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/managed03.jsp");
-        assertEquals(200, page.getWebResponse().getStatusCode());
+        assertEquals(500, page.getWebResponse().getStatusCode());
         webClient.setThrowExceptionOnFailingStatusCode(true);
     }
 
