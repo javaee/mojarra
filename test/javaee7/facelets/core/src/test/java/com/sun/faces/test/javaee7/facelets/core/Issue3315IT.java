@@ -42,12 +42,19 @@ package com.sun.faces.test.javaee7.facelets.core;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import static com.sun.faces.test.junit.JsfServerExclude.GLASSFISH_4_0;
+import static com.sun.faces.test.junit.JsfServerExclude.GLASSFISH_4_0_1;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import static com.sun.faces.test.junit.JsfVersion.JSF_2_2_0;
 import org.junit.After;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
-public class Issue2777IT {
+@RunWith(JsfTestRunner.class)
+public class Issue3315IT {
 
     private String webUrl;
     private WebClient webClient;
@@ -63,8 +70,19 @@ public class Issue2777IT {
         webClient.closeAllWindows();
     }
 
+    @JsfTest(value=JSF_2_2_0, excludes = {GLASSFISH_4_0, GLASSFISH_4_0_1})
     @Test
-    public void testEjbIntoConverter() throws Exception {
+    public void testInjectEjbIntoConverter() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/converterInjectEjb.xhtml");
+        assertTrue(page.asXml().contains("Value: 1234"));
+        HtmlElement submit = page.getHtmlElementById("form:submit");
+        page = submit.click();
+        assertTrue(page.asXml().contains("Value: 4321"));
+    }
+
+    @JsfTest(value=JSF_2_2_0, excludes = {GLASSFISH_4_0, GLASSFISH_4_0_1})
+    @Test
+    public void testInjectResourceIntoConverter() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/converterInjectResource.xhtml");
         assertTrue(page.asXml().contains("Value: 1234"));
         HtmlElement submit = page.getHtmlElementById("form:submit");
