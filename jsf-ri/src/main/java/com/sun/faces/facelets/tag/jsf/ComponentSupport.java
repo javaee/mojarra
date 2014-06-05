@@ -254,7 +254,10 @@ public final class ComponentSupport {
         if (!context.isPostback() || context.getCurrentPhaseId().equals(PhaseId.RESTORE_VIEW)) {
             return null;
         }
-        UIComponent c = null;        
+        UIComponent c = null;
+        UIViewRoot root = context.getViewRoot();
+        boolean hasDynamicComponents = (null != root && 
+                root.getAttributes().containsKey(RIConstants.TREE_HAS_DYNAMIC_COMPONENTS));
         String cid = null;
         List<UIComponent> components;
         if (0 < parent.getFacetCount()) {
@@ -279,18 +282,21 @@ public final class ComponentSupport {
                         return c2;
                     }
                 }
-            }        
-            /*
-             * Make sure we look for the child recursively it might have moved
-             * into a different parent in the parent hierarchy. Note currently
-             * we are only looking down the tree. Maybe it would be better
-             * to use the VisitTree API instead.
-             */
-            UIComponent foundChild = findChildByTagId(context, c, id);
-            if (foundChild != null) {
-                return foundChild;
+            }
+            if (hasDynamicComponents) {
+                /*
+                 * Make sure we look for the child recursively it might have moved
+                 * into a different parent in the parent hierarchy. Note currently
+                 * we are only looking down the tree. Maybe it would be better
+                 * to use the VisitTree API instead.
+                 */
+                UIComponent foundChild = findChildByTagId(context, c, id);
+                if (foundChild != null) {
+                    return foundChild;
+                }
             }
         }
+
         return null;
     }
     
