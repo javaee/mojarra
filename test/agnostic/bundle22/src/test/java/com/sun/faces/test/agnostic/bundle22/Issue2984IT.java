@@ -42,11 +42,11 @@ package com.sun.faces.test.agnostic.bundle22;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import static com.sun.faces.test.junit.JsfServerExclude.TOMCAT_7_0_35;
 import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_3;
 import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_4;
 import com.sun.faces.test.junit.JsfTest;
 import com.sun.faces.test.junit.JsfTestRunner;
-import com.sun.faces.test.junit.JsfVersion;
 import static com.sun.faces.test.junit.JsfVersion.JSF_2_2_0;
 import org.junit.After;
 import static org.junit.Assert.assertTrue;
@@ -77,7 +77,7 @@ public class Issue2984IT {
      * 
      * @throws Exception when a serious error occurs.
      */
-    @JsfTest(value=JSF_2_2_0, excludes = {WEBLOGIC_12_1_3, WEBLOGIC_12_1_4})
+    @JsfTest(value=JSF_2_2_0, excludes = {TOMCAT_7_0_35, WEBLOGIC_12_1_3, WEBLOGIC_12_1_4})
     @Test
     public void testBundlingOtherJSFVersionInApp() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/simple.xhtml");
