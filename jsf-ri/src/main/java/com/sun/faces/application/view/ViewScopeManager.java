@@ -40,6 +40,8 @@
 package com.sun.faces.application.view;
 
 import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.config.WebConfiguration;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableDistributable;
 import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.util.LRUMap;
 import com.sun.faces.util.Util;
@@ -95,13 +97,15 @@ public class ViewScopeManager implements HttpSessionListener, ViewMapListener {
      * Stores the CDI context manager.
      */
     private ViewScopeContextManager contextManager;
+    
+    private boolean distributable;
 
     /**
      * Constructor.
      */
     public ViewScopeManager() {
+        FacesContext context = FacesContext.getCurrentInstance();
         try {
-            FacesContext context = FacesContext.getCurrentInstance();
             if (Util.isCDIAvailable(context.getExternalContext().getApplicationMap())) {
                 contextManager = new ViewScopeContextManager();
             } else {
@@ -112,6 +116,9 @@ public class ViewScopeManager implements HttpSessionListener, ViewMapListener {
                 LOGGER.log(Level.INFO, "CDI @ViewScoped manager unavailable", exception);
             }
         }
+        WebConfiguration config = WebConfiguration.getInstance(context.getExternalContext());
+        distributable = config.isOptionEnabled(EnableDistributable);
+        
     }
 
     /**
@@ -296,12 +303,12 @@ public class ViewScopeManager implements HttpSessionListener, ViewMapListener {
                     viewMaps.put(viewMapId, viewMap);
                     viewRoot.getTransientStateHelper().putTransient(VIEW_MAP_ID, viewMapId);
                     viewRoot.getTransientStateHelper().putTransient(VIEW_MAP, viewMap);
-                }
-                synchronized(sessionMap) {
-                    // If we are distributable, this will result in a dirtying of the
-                    // session data, forcing replication.  If we are not distributable,
-                    // this is a no-op.
-                    sessionMap.put(ACTIVE_VIEW_MAPS, viewMaps);
+                    if (distributable) {
+                        // If we are distributable, this will result in a dirtying of the
+                        // session data, forcing replication.  If we are not distributable,
+                        // this is a no-op.
+                        sessionMap.put(ACTIVE_VIEW_MAPS, viewMaps);
+                    }
                 }
                 if (null != contextManager) {
                     contextManager.fireInitializedEvent(facesContext, viewRoot);
