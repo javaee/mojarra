@@ -96,6 +96,7 @@ public class AdminGuiTestCase extends HtmlUnitFacesTestCase {
         cm.addCookie(c1);
         
         page = getPage("/common/applications/uploadFrame.jsf?bare=true");
+        System.out.println("20140605-debug-edburns: output: " + page.asXml());
         HtmlRadioButtonInput localPackagedFile = (HtmlRadioButtonInput) page.getElementById("form:sheet1:section1:prop1:fileChooseRdBtn");
         page = localPackagedFile.click();
         
