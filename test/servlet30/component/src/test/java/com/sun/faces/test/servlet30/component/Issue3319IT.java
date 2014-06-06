@@ -42,6 +42,7 @@ package com.sun.faces.test.servlet30.component;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import static com.sun.faces.test.junit.JsfServerExclude.GLASSFISH_3_1_2_2;
 import static com.sun.faces.test.junit.JsfServerExclude.GLASSFISH_4_0;
 import static com.sun.faces.test.junit.JsfServerExclude.GLASSFISH_4_0_1;
 import com.sun.faces.test.junit.JsfTest;
@@ -70,7 +71,7 @@ public class Issue3319IT {
         webClient.closeAllWindows();
     }
 
-    @JsfTest(value=JSF_2_2_0, excludes = {GLASSFISH_4_0, GLASSFISH_4_0_1})
+    @JsfTest(value=JSF_2_2_0, excludes = {GLASSFISH_3_1_2_2, GLASSFISH_4_0, GLASSFISH_4_0_1})
     @Test
     public void testEventListener() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/eventListener.xhtml");        
