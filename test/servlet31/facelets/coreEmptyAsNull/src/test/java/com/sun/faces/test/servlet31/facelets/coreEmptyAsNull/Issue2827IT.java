@@ -43,13 +43,19 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import static com.sun.faces.test.junit.JsfServerExclude.GLASSFISH_4_0;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import static com.sun.faces.test.junit.JsfVersion.JSF_2_2_0;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class Issue2827IT {
 
     private String webUrl;
@@ -77,6 +83,7 @@ public class Issue2827IT {
      * 
      * @throws Exception
      */
+    @JsfTest(value=JSF_2_2_0, excludes={GLASSFISH_4_0})
     @Test
     public void testValidateEmptyFields() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
