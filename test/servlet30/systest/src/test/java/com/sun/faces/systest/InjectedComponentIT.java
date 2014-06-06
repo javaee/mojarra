@@ -41,12 +41,18 @@ package com.sun.faces.systest;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import static com.sun.faces.test.junit.JsfServerExclude.TOMCAT_7_0_35;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import static com.sun.faces.test.junit.JsfVersion.JSF_2_2_0;
 import java.util.regex.Pattern;
+import static junit.framework.TestCase.assertTrue;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class InjectedComponentIT {
 
     private String webUrl;
@@ -67,6 +73,7 @@ public class InjectedComponentIT {
      * TODO FIXME this test should be moved to javaee6web as it requires more
      * than Tomcat delivers. Setting it to be @Ignore for now.
      */
+    @JsfTest(value = JSF_2_2_0, excludes = {TOMCAT_7_0_35})
     @Test
     public void testInjectedComponent() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/pre31injection/injectedComponent.xhtml");
