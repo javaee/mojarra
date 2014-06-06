@@ -260,6 +260,19 @@ public final class ComponentSupport {
                 root.getAttributes().containsKey(RIConstants.TREE_HAS_DYNAMIC_COMPONENTS));
         String cid = null;
         List<UIComponent> components;
+        String facetName = getFacetName(parent);
+        if (null != facetName) {
+            c = parent.getFacet(facetName);
+            // We will have a facet name, but no corresponding facet in the
+            // case of facets with composite components.  In this case,
+            // we must do the brute force search.
+            if (null != c) {
+                cid = (String) c.getAttributes().get(MARK_CREATED);
+                if (id.equals(cid)) {
+                    return c;
+                }
+            } 
+        }
         if (0 < parent.getFacetCount()) {
             components = new ArrayList<UIComponent>();
             components.addAll(parent.getFacets().values());
