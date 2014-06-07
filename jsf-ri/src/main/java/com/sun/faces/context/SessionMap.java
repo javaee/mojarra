@@ -135,7 +135,9 @@ public class SessionMap extends BaseContextMap<Object> {
         //noinspection NonSerializableObjectBoundToHttpSession
         boolean doSet = true;
         if (null != value && null != result) {
-            doSet = ! result.equals(value);
+            int valCode = System.identityHashCode(value);
+            int resultCode = System.identityHashCode(result);
+            doSet = valCode != resultCode;
         }
         if (doSet) {
             session.setAttribute(key, value);
