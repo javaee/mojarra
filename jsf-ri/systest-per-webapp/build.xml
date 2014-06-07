@@ -118,14 +118,9 @@
                    jsp-flash,
                    suppress-xml-decl,
                    process-as-jspx,
+                   request-char-encoding-no-session,
                    bogus-render-kit-id,
                    characterCombat"/>
-
-<!-- 20140606-under migration
-                   request-char-encoding-no-session,
--->
-
-
     <!--
 
        EXCLUDED APPLICATIONS:
