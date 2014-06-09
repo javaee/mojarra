@@ -76,6 +76,7 @@ import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParamet
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.NumberOfLogicalViews;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.NumberOfViews;
 import com.sun.faces.config.WebConfiguration;
+import java.util.Collections;
 import javax.faces.render.ResponseStateManager;
 
 /**
@@ -197,7 +198,7 @@ public class ServerSideStateHelper extends StateHelper {
                       (Map) sessionMap
                             .get(LOGICAL_VIEW_MAP), String.class, Map.class);
                 if (logicalMap == null) {
-                    logicalMap = new LRUMap<String, Map>(numberOfLogicalViews);
+                    logicalMap = Collections.synchronizedMap(new LRUMap<String, Map>(numberOfLogicalViews));
                     sessionMap.put(LOGICAL_VIEW_MAP, logicalMap);
                 }
 
