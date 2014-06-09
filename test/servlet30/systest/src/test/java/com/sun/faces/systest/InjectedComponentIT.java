@@ -43,6 +43,7 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import static com.sun.faces.test.junit.JsfServerExclude.TOMCAT_7_0_35;
 import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_3;
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_4;
 import com.sun.faces.test.junit.JsfTest;
 import com.sun.faces.test.junit.JsfTestRunner;
 import static com.sun.faces.test.junit.JsfVersion.JSF_2_2_0;
@@ -74,7 +75,7 @@ public class InjectedComponentIT {
      * TODO FIXME this test should be moved to javaee6web as it requires more
      * than Tomcat delivers. Setting it to be @Ignore for now.
      */
-    @JsfTest(value = JSF_2_2_0, excludes = {TOMCAT_7_0_35, WEBLOGIC_12_1_3})
+    @JsfTest(value = JSF_2_2_0, excludes = {TOMCAT_7_0_35, WEBLOGIC_12_1_3, WEBLOGIC_12_1_4})
     @Test
     public void testInjectedComponent() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/pre31injection/injectedComponent.xhtml");

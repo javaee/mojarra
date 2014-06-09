@@ -41,11 +41,17 @@ package com.sun.faces.test.javaee7.facelets.ui;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_4;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import static com.sun.faces.test.junit.JsfVersion.JSF_2_2_0;
 import org.junit.After;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class VerifyTemplateUIIT {
 
     private String webUrl;
@@ -62,6 +68,7 @@ public class VerifyTemplateUIIT {
         webClient.closeAllWindows();
     }
 
+    @JsfTest(value = JSF_2_2_0, excludes = {WEBLOGIC_12_1_4})
     @Test
     public void testUL() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
