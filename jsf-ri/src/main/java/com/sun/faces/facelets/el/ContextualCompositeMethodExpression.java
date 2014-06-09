@@ -227,8 +227,9 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
                     if (LOGGER.isLoggable(Level.WARNING)) {
                         LOGGER.log(Level.WARNING, ele.toString());
                         LOGGER.log(Level.WARNING,
-                            "jsf.facelets.el.method.expression.invoke.error:"+ex.toString(),
-                            new Object[] { source.getExpressionString() });
+                            "jsf.facelets.el.method.expression.invoke.error: {0} {1}",
+                                   new Object[] { ex.toString(),
+                                                  source.getExpressionString() });
                     }
                     
                     if (!(ex instanceof MethodNotFoundException)) {
