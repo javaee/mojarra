@@ -41,12 +41,17 @@ package com.sun.faces.systest;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_3;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import static com.sun.faces.test.junit.JsfVersion.JSF_2_2_0;
+import static junit.framework.TestCase.assertEquals;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
-import org.junit.Ignore;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class DuplicateIdIT {
 
     private String webUrl;
@@ -63,6 +68,7 @@ public class DuplicateIdIT {
         webClient.closeAllWindows();
     }
 
+    @JsfTest(value = JSF_2_2_0, excludes = {WEBLOGIC_12_1_3})
     @Test
     public void testDuplicateIds01() throws Exception {
         webClient.setThrowExceptionOnFailingStatusCode(false);
@@ -79,6 +85,7 @@ public class DuplicateIdIT {
         webClient.setThrowExceptionOnFailingStatusCode(true);
     }
 
+    @JsfTest(value = JSF_2_2_0, excludes = {WEBLOGIC_12_1_3})
     @Test
     public void testDuplicateIds03() throws Exception {
         webClient.setThrowExceptionOnFailingStatusCode(false);

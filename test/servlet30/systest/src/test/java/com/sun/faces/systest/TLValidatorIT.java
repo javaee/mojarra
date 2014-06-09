@@ -41,11 +41,17 @@ package com.sun.faces.systest;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_3;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import static com.sun.faces.test.junit.JsfVersion.JSF_2_2_0;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class TLValidatorIT {
 
     private String webUrl;
@@ -126,6 +132,7 @@ public class TLValidatorIT {
         webClient.setThrowExceptionOnFailingStatusCode(true);
     }
 
+    @JsfTest(value=JSF_2_2_0, excludes = {WEBLOGIC_12_1_3})
     @Test
     public void testElValidatorActionRefFail() throws Exception {
         webClient.setThrowExceptionOnFailingStatusCode(false);
@@ -134,6 +141,7 @@ public class TLValidatorIT {
         webClient.setThrowExceptionOnFailingStatusCode(true);
     }
 
+    @JsfTest(value=JSF_2_2_0, excludes = {WEBLOGIC_12_1_3})
     @Test
     public void testElValidatorComponentFail() throws Exception {
         webClient.setThrowExceptionOnFailingStatusCode(false);
