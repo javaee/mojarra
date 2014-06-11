@@ -50,7 +50,7 @@
         <version>2.2.8-SNAPSHOT</version>
     </parent>
     <groupId>com.sun.faces.test.glassfish</groupId>
-    <artifactId>request_char_encoding</artifactId>
+    <artifactId>bundle22</artifactId>
     <packaging>war</packaging>
     <name>Mojarra ${project.version} - Test - Glassfish - Bundle 2.2</name>
     <build>
