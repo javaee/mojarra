@@ -45,7 +45,7 @@
 -->
 
 <glassfish-web-app error-url="">
-  <context-root>/test-agnostic-bundle22</context-root>
+  <context-root>/test-glassfish-bundle22</context-root>
   <class-loader delegate="false"/>
   <property name="useBundledJsf" value="true"/>
   <jsp-config>

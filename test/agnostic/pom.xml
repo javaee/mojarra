@@ -63,7 +63,6 @@
     <modules>
         <module>application</module>
         <module>ajax-namespace</module>
-        <module>bundle22</module>
         <module>config</module>
         <module>context</module>
         <module>converter</module>

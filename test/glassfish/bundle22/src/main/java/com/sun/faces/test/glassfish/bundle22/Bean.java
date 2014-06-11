@@ -8,7 +8,7 @@
  * and Distribution License("CDDL") (collectively, the "License").  You
  * may not use this file except in compliance with the License.  You can
  * obtain a copy of the License at
- * https://glassfish.dev.java.net/public/CDDLGPL_1_1.html
+ * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
  *
@@ -37,53 +37,28 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.bundle22;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import static com.sun.faces.test.junit.JsfServerExclude.TOMCAT_7_0_35;
-import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_3;
-import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_4;
-import com.sun.faces.test.junit.JsfTest;
-import com.sun.faces.test.junit.JsfTestRunner;
-import static com.sun.faces.test.junit.JsfVersion.JSF_2_2_0;
-import org.junit.After;
-import static org.junit.Assert.assertTrue;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+package com.sun.faces.test.glassfish.bundle22;
 
-@RunWith(JsfTestRunner.class)
-public class Issue2984IT {
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 
-    private String webUrl;
-    private WebClient webClient;
+@ManagedBean
+@SessionScoped
+public class Bean {
+    String str = "";
 
-    @Before
-    public void setUp() {
-        webUrl = System.getProperty("integration.url");
-        webClient = new WebClient();
+    public String getStr() {
+        return str;
     }
 
-    @After
-    public void tearDown() {
-        webClient.closeAllWindows();
+    public void setStr(String str) {
+        this.str = str;
     }
 
-    /**
-     * This test verifies the deployment of the application (containing a
-     * bundled JSF 2.2.2) deployed and is accessible.
-     * 
-     * @throws Exception when a serious error occurs.
-     */
-    @JsfTest(value=JSF_2_2_0, excludes = {TOMCAT_7_0_35, WEBLOGIC_12_1_3, WEBLOGIC_12_1_4})
-    @Test
-    public void testBundlingOtherJSFVersionInApp() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/simple.xhtml");
-        assertTrue(page.asText().contains("Press the button"));
-        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form1:submit");
-        page = button.click();
-        assertTrue(page.asText().contains("Bundled JSF Version: 2.2.2"));
+    public void submit(ActionEvent ae) {
+        str = "Bundled JSF Version: "+FacesContext.getCurrentInstance().getClass().getPackage().getImplementationVersion(); 
     }
 }

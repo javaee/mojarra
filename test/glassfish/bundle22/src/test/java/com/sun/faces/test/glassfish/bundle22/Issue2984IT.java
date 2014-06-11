@@ -1,14 +1,14 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
  * may not use this file except in compliance with the License.  You can
  * obtain a copy of the License at
- * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+ * https://glassfish.dev.java.net/public/CDDLGPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
  *
@@ -37,28 +37,50 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.glassfish.bundle22;
 
-package com.sun.faces.test.agnostic.bundle22;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import static com.sun.faces.test.junit.JsfVersion.JSF_2_2_0;
+import org.junit.After;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
-import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
+@RunWith(JsfTestRunner.class)
+public class Issue2984IT {
 
-@ManagedBean
-@SessionScoped
-public class Bean {
-    String str = "";
+    private String webUrl;
+    private WebClient webClient;
 
-    public String getStr() {
-        return str;
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-    public void setStr(String str) {
-        this.str = str;
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
     }
 
-    public void submit(ActionEvent ae) {
-        str = "Bundled JSF Version: "+FacesContext.getCurrentInstance().getClass().getPackage().getImplementationVersion(); 
+    /**
+     * This test verifies the deployment of the application (containing a
+     * bundled JSF 2.2.2) deployed and is accessible.
+     * 
+     * @throws Exception when a serious error occurs.
+     */
+    @JsfTest(value=JSF_2_2_0)
+    @Test
+    public void testBundlingOtherJSFVersionInApp() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/simple.xhtml");
+        assertTrue(page.asText().contains("Press the button"));
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form1:submit");
+        page = button.click();
+        assertTrue(page.asText().contains("Bundled JSF Version: 2.2.2"));
     }
 }
