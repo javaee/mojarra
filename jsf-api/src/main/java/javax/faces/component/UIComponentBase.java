@@ -1373,49 +1373,51 @@ public abstract class UIComponentBase extends UIComponent {
             throw new NullPointerException();
         }
 
-        Object[] stateStruct = (Object[]) state;
-        Object[] childState = (Object[]) stateStruct[CHILD_STATE];
+        pushComponentToEL(context, null);
 
-        // Process this component itself
-        restoreState(context, stateStruct[MY_STATE]);
+        try {
+            Object[] stateStruct = (Object[]) state;
+            Object[] childState = (Object[]) stateStruct[CHILD_STATE];
 
-        int i = 0;
+            // Process this component itself
+            restoreState(context, stateStruct[MY_STATE]);
 
-        // Process all the children of this component
-        if (this.getChildCount() > 0) {
-            for (UIComponent kid : getChildren()) {
-                if (kid.isTransient()) {
-                    continue;
+            int i = 0;
+
+            // Process all the children of this component
+            if (this.getChildCount() > 0) {
+                for (UIComponent kid : getChildren()) {
+                    if (kid.isTransient()) {
+                        continue;
+                    }
+                    Object currentState = childState[i++];
+                    if (currentState == null) {
+                        continue;
+                    }
+                    kid.processRestoreState(context, currentState);
                 }
-                Object currentState = childState[i++];
-                if (currentState == null) {
-                    continue;
-                }
-                pushComponentToEL(context, null);
-                kid.processRestoreState(context, currentState);
-                popComponentFromEL(context);
             }
-        }
 
-        // process all of the facets of this component
-        if (this.getFacetCount() > 0) {
-            int facetsSize = getFacets().size();
-            int j = 0;
-            Object[] facetSaveState;
-            String facetName;
-            UIComponent facet;
-            Object facetState;
-            while (j < facetsSize) {
-                if (null != (facetSaveState = (Object[]) childState[i++])) {
-                    facetName = (String) facetSaveState[0];
-                    facetState = facetSaveState[1];
-                    facet = getFacets().get(facetName);
-                    pushComponentToEL(context, null);
-                    facet.processRestoreState(context, facetState);
-                    popComponentFromEL(context);
+            // process all of the facets of this component
+            if (this.getFacetCount() > 0) {
+                int facetsSize = getFacets().size();
+                int j = 0;
+                Object[] facetSaveState;
+                String facetName;
+                UIComponent facet;
+                Object facetState;
+                while (j < facetsSize) {
+                    if (null != (facetSaveState = (Object[]) childState[i++])) {
+                        facetName = (String) facetSaveState[0];
+                        facetState = facetSaveState[1];
+                        facet = getFacets().get(facetName);
+                        facet.processRestoreState(context, facetState);
+                    }
+                    ++j;
                 }
-                ++j;
             }
+        } finally {
+            popComponentFromEL(context);
         }
     }
 
