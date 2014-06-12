@@ -54,7 +54,6 @@
     <packaging>pom</packaging>
     <name>Mojarra ${project.version} - Test - JavaEE 7 - Facelets</name>
     <modules>
-        <module>core</module>
         <module>ui</module>
     </modules>
 </project>
