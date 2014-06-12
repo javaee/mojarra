@@ -39,20 +39,25 @@
     only if the new code is made subject to such option by the copyright
     holder.
 
---><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.sun.faces.test.agnostic</groupId>
-        <artifactId>pom</artifactId>
-        <version>2.1.29-SNAPSHOT</version>
-    </parent>
-    <groupId>com.sun.faces.test.agnostic.flash</groupId>
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
     <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Agnostic - Flash</name>
-    <modules>
-        <module>basic</module>
-        <module>chunkRedirect</module>
-    <module>wrappedExtContext</module>
-  </modules>
+    <groupId>com.sun.faces.test.agnostic.flash</groupId>
+    <version>2.1.29-SNAPSHOT</version>
+  </parent>
+  
+  <groupId>com.sun.faces.test.agnostic.flash</groupId>
+  <artifactId>wrappedExtContext</artifactId>
+  <version>2.1.29-SNAPSHOT</version>
+  <packaging>war</packaging>
+  <name>Mojarra ${project.version} - Test - Agnostic - Flash - Wrapped External Context</name>
+  
+  <build>
+    <finalName>test-agnostic-flash-wrappedExtContext</finalName>
+  </build>
+    <properties>
+        <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
+    </properties>
 </project>

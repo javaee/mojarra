@@ -70,6 +70,7 @@ import javax.faces.context.Flash;
 import javax.faces.event.PhaseId;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.ServletRequest;
 
 /**
  * <p>How this implementation works</p>
@@ -953,7 +954,24 @@ public class ELFlash extends Flash {
                 if (null != (val = toSet.getMaxAge())) {
                     properties.put("maxAge", val);
                 }
-                if (context.getExternalContext().isSecure()) {
+                // Bug 18611757: only use extContext.isSecure() if we
+                // absolutely must.  For example, if we are in a portlet
+                // environment.
+                boolean isSecure = false;
+                Object request = extContext.getRequest();
+                if (request instanceof ServletRequest) {
+                    isSecure = ((ServletRequest)request).isSecure();
+                } else {
+                    try {
+                        isSecure = extContext.isSecure();
+                    } catch (UnsupportedOperationException uoe) {
+                        if (LOGGER.isLoggable(Level.SEVERE)) {
+                            LOGGER.log(Level.SEVERE, "ExternalContext {0} does not implement isSecure().  Please implement this per the JSF 2.1 specification.",
+                                    new Object [] { extContext });
+                        }
+                    }
+                }
+                if (isSecure) {
                     properties.put("secure", Boolean.TRUE);
                 } else if (null != (val = toSet.getSecure())) {
                     properties.put("secure", val);
