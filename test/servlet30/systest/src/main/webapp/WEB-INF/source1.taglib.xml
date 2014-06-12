@@ -90,13 +90,4 @@
         </component>
     </tag>
 
-    <tag>
-        <tag-name>injectedComponent</tag-name>
-        <component>
-            <component-type>ComponentWithResourceInjection</component-type>
-        </component>
-
-    </tag>
-
-
 </facelet-taglib>
