@@ -70,7 +70,7 @@ public class Issue2984IT {
 
     /**
      * This test verifies the deployment of the application (containing a
-     * bundled JSF 2.2.2) deployed and is accessible.
+     * bundled JSF 2.2.6) deployed and is accessible.
      * 
      * @throws Exception when a serious error occurs.
      */
@@ -81,6 +81,6 @@ public class Issue2984IT {
         assertTrue(page.asText().contains("Press the button"));
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form1:submit");
         page = button.click();
-        assertTrue(page.asText().contains("Bundled JSF Version: 2.2.2"));
+        assertTrue(page.asText().contains("Bundled JSF Version: 2.2.6"));
     }
 }
