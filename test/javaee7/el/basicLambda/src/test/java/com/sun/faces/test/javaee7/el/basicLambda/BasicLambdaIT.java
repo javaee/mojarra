@@ -72,7 +72,7 @@ public class BasicLambdaIT {
         webClient.closeAllWindows();
     }
 
-    @JsfTest(value = JSF_2_2_0, excludes = {WEBLOGIC_12_1_4})
+    @JsfTest(value = JSF_2_2_0)
     @Test
     public void testIndex() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
@@ -94,7 +94,7 @@ public class BasicLambdaIT {
         assertEquals("60", out.asText());
     }
 
-    @JsfTest(value = JSF_2_2_0, excludes = {WEBLOGIC_12_1_4})
+    @JsfTest(value = JSF_2_2_0)
     @Test
     public void testBookTable() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/bookTable.xhtml");
