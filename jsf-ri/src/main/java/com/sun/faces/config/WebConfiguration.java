@@ -1507,7 +1507,6 @@ public class WebConfiguration {
     public enum WebEnvironmentEntry {
 
 
-        ClientStateSavingPassword("com.sun.faces.ClientStateSavingPassword"),
         ProjectStage(javax.faces.application.ProjectStage.PROJECT_STAGE_JNDI_NAME);
 
         private static final String JNDI_PREFIX = "java:comp/env/";

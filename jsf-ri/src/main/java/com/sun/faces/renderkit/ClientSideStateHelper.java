@@ -91,8 +91,6 @@ public class ClientSideStateHelper extends StateHelper {
      * <p>
      * Enabled encryption of view state.  Encryption is disabled by default.
      * </p>
-     *
-     * @see {@link com.sun.faces.config.WebConfiguration.WebEnvironmentEntry#ClientStateSavingPassword}
      */
     private ByteArrayGuard guard;
 
