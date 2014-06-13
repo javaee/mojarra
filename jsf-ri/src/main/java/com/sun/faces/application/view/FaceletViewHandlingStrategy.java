@@ -2056,11 +2056,11 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
      * @param context the Faces context.
      * @param clientId the client id of the component to find.
      */
-    private UIComponent locateComponentByClientId(final FacesContext context, final String clientId) {
+    private UIComponent locateComponentByClientId(final FacesContext context, final UIComponent parent, final String clientId) {
         final List<UIComponent> found = new ArrayList<UIComponent>();
         UIComponent result = null;
 
-        context.getViewRoot().invokeOnComponent(context, clientId, new ContextCallback() {
+        parent.invokeOnComponent(context, clientId, new ContextCallback() {
 
             public void invokeContextCallback(FacesContext context, UIComponent target) {
                 found.add(target);
@@ -2074,7 +2074,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
          */
         if (found.isEmpty()) {
             VisitContext visitContext = VisitContext.createVisitContext(context);
-            context.getViewRoot().visitTree(visitContext, new VisitCallback() {
+            parent.visitTree(visitContext, new VisitCallback() {
 
                 public VisitResult visit(VisitContext visitContext, UIComponent component) {
                     VisitResult result = VisitResult.ACCEPT;
@@ -2124,11 +2124,11 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
      * @param struct the component struct.
      */
     private void reapplyDynamicAdd(FacesContext context, ComponentStruct struct) {
-        UIComponent parent = locateComponentByClientId(context, struct.parentClientId);
+        UIComponent parent = locateComponentByClientId(context, context.getViewRoot(), struct.parentClientId);
 
         if (parent != null) {
             
-            UIComponent child = locateComponentByClientId(context, struct.clientId);
+            UIComponent child = locateComponentByClientId(context, parent, struct.clientId);
             StateContext stateContext = StateContext.getStateContext(context);
 
             if (child == null) {
@@ -2166,7 +2166,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
      * @param struct the component struct.
      */
     private void reapplyDynamicRemove(FacesContext context, ComponentStruct struct) {
-        UIComponent child = locateComponentByClientId(context, struct.clientId);
+        UIComponent child = locateComponentByClientId(context, context.getViewRoot(), struct.clientId);
         if (child != null) {
             StateContext stateContext = StateContext.getStateContext(context);
             stateContext.getDynamicComponents().put(struct.clientId, child);
