@@ -1213,23 +1213,24 @@ public abstract class UIComponentBase extends UIComponent {
 
         pushComponentToEL(context, null);
 
-        // Process all facets and children of this component
-        Iterator kids = getFacetsAndChildren();
-        while (kids.hasNext()) {
-            UIComponent kid = (UIComponent) kids.next();
-            kid.processDecodes(context);
-        }
-
-        // Process this component itself
         try {
-            decode(context);
-        } catch (RuntimeException e) {
-            context.renderResponse();
-            throw e;
+            // Process all facets and children of this component
+            Iterator kids = getFacetsAndChildren();
+            while (kids.hasNext()) {
+                UIComponent kid = (UIComponent) kids.next();
+                kid.processDecodes(context);
+            }
+
+            // Process this component itself
+            try {
+                decode(context);
+            } catch (RuntimeException e) {
+                context.renderResponse();
+                throw e;
+            }
         } finally {
             popComponentFromEL(context);
         }
-
     }
 
 
@@ -1249,17 +1250,19 @@ public abstract class UIComponentBase extends UIComponent {
 
         pushComponentToEL(context, null);
 
-        Application app = context.getApplication();
-        app.publishEvent(context, PreValidateEvent.class, this);
-        // Process all the facets and children of this component
-        Iterator kids = getFacetsAndChildren();
-        while (kids.hasNext()) {
-            UIComponent kid = (UIComponent) kids.next();
-            kid.processValidators(context);
+        try {
+            Application app = context.getApplication();
+            app.publishEvent(context, PreValidateEvent.class, this);
+            // Process all the facets and children of this component
+            Iterator kids = getFacetsAndChildren();
+            while (kids.hasNext()) {
+                UIComponent kid = (UIComponent) kids.next();
+                kid.processValidators(context);
+            }
+            app.publishEvent(context, PostValidateEvent.class, this);
+        } finally {
+            popComponentFromEL(context);
         }
-        app.publishEvent(context, PostValidateEvent.class, this);
-        popComponentFromEL(context);
-
     }
 
 
@@ -1279,15 +1282,17 @@ public abstract class UIComponentBase extends UIComponent {
 
         pushComponentToEL(context, null);
 
-        // Process all facets and children of this component
-        Iterator kids = getFacetsAndChildren();
-        while (kids.hasNext()) {
-            UIComponent kid = (UIComponent) kids.next();
-            kid.processUpdates(context);
+        try {
+            // Process all facets and children of this component
+            Iterator kids = getFacetsAndChildren();
+            while (kids.hasNext()) {
+                UIComponent kid = (UIComponent) kids.next();
+                kid.processUpdates(context);
 
+            }
+        } finally {
+            popComponentFromEL(context);
         }
-        popComponentFromEL(context);
-        
     }
 
     private static final int MY_STATE = 0;
