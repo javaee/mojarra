@@ -218,8 +218,8 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
                         if (form.isPrependId() && !clientId.startsWith(form.getClientId(visitContext.getFacesContext()))) {
                             result = VisitResult.REJECT;
                         }
-                    } else if (component instanceof NamingContainer && 
-                            !clientId.startsWith(component.getClientId(visitContext.getFacesContext()))) {
+                    } else if (component instanceof NamingContainer
+                            && !clientId.startsWith(component.getClientId(visitContext.getFacesContext()))) {
                         /*
                          * If the component is a naming container then assume it
                          * is prepending its id so if our client id we are
@@ -281,10 +281,11 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
      * Methods that takes care of pruning and re-adding an action to the dynamic
      * action list.
      *
-     * <p> If you remove a component, re-add it to the same parent and then
-     * remove it again, you only have to capture the FIRST remove. Similarly if
-     * you add a component, remove it, and then re-add it to the same parent you
-     * only need to capture the LAST add. </p>
+     * <p>
+     * If you remove a component, re-add it to the same parent and then remove
+     * it again, you only have to capture the FIRST remove. Similarly if you add
+     * a component, remove it, and then re-add it to the same parent you only
+     * need to capture the LAST add. </p>
      *
      * @param dynamicActionList the dynamic action list.
      * @param struct the component struct to add.
@@ -583,14 +584,14 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
                 }
             }
         }
-        
+
         /*
          * Make sure the library contracts get setup as well.
          */
         ViewHandler viewHandler = context.getApplication().getViewHandler();
         ViewDeclarationLanguage vdl = viewHandler.getViewDeclarationLanguage(context, viewId);
         context.setResourceLibraryContracts(vdl.calculateResourceLibraryContracts(context, viewId));
-        
+
         return result;
     }
 
@@ -712,7 +713,7 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
         Object[] tree = treeList.toArray();
 
         result = new Object[]{tree, state};
-        StateContext.release(context);        
+        StateContext.release(context);
         return result;
     }
 
@@ -883,6 +884,10 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
                         index++;
                     }
                 }
+            }
+            if (index == 0 && !parent.getChildren().isEmpty()
+                    && parent.getChildren().get(0).isTransient()) {
+                index = -1;
             }
             result = index;
         }

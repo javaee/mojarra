@@ -523,6 +523,10 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
                     }
                 }
             }
+            if (index == 0 && !parent.getChildren().isEmpty() &&
+                    parent.getChildren().get(0).isTransient()) {
+                index = -1;
+            }
             result = index;
         }
 
