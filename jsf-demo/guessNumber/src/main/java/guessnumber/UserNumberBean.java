@@ -48,14 +48,13 @@ import java.io.Serializable;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
-
+import javax.inject.Named;
+import javax.enterprise.context.SessionScoped;
 
 /**
  * <p>This bean is used to track the user's guesses.</p>
  */
-@ManagedBean
+@Named
 @SessionScoped
 @SuppressWarnings("unused")
 public class UserNumberBean implements Serializable {
