@@ -71,6 +71,7 @@ public class Issue18820382IT {
         HtmlElement submit1 = page.getHtmlElementById("link");
         page = submit1.click();
         String pageXML = page.asXml();
+        System.out.println(pageXML);
         assertTrue(pageXML.indexOf("XSS") == -1);
     }
 
