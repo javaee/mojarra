@@ -69,28 +69,28 @@ public class Issue3136IT {
         webClient.closeAllWindows();
     }
 
-    @JsfTest(value = JSF_2_2_0, excludes = {WEBLOGIC_12_1_4})
+    @JsfTest(value = JSF_2_2_0)
     @Test
     public void testExactMapping() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "action/exact.xhtml");
         assertTrue(page.asXml().contains("This page used an exact mapping of /exact.xhtml using @RequestMapping."));
     }
 
-    @JsfTest(value = JSF_2_2_0, excludes = {WEBLOGIC_12_1_4})
+    @JsfTest(value = JSF_2_2_0)
     @Test
     public void testPrefixMapping() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "action/prefix/prefix.xhtml");
         assertTrue(page.asXml().contains("This page used an prefix mapping of /prefix/* using @RequestMapping."));
     }
 
-    @JsfTest(value = JSF_2_2_0, excludes = {WEBLOGIC_12_1_4})
+    @JsfTest(value = JSF_2_2_0)
     @Test
     public void testExtensionMapping() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "action/extension.do");
         assertTrue(page.asXml().contains("This page used an extension mapping of *.do using @RequestMapping."));
     }
 
-    @JsfTest(value = JSF_2_2_0, excludes = {WEBLOGIC_12_1_4})
+    @JsfTest(value = JSF_2_2_0)
     @Test
     public void testSimpleForm() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/form1.xhtml");
