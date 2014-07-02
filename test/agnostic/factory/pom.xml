@@ -44,12 +44,12 @@
   <parent>
     <artifactId>pom</artifactId>
     <groupId>com.sun.faces.test.agnostic</groupId>
-    <version>2.1.29-SNAPSHOT</version>
+    <version>2.1.30-SNAPSHOT</version>
   </parent>
   
   <groupId>com.sun.faces.test.agnostic</groupId>
   <artifactId>factory</artifactId>
-  <version>2.1.29-SNAPSHOT</version>
+  <version>2.1.30-SNAPSHOT</version>
   <packaging>war</packaging>
   <name>Mojarra ${project.version} - Test - Agnostic - factory</name>
   
