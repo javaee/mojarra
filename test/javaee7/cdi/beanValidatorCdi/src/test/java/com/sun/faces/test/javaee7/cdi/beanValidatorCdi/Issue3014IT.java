@@ -69,7 +69,7 @@ public class Issue3014IT {
         webClient.closeAllWindows();
     }
 
-    @JsfTest(value = JSF_2_2_0, excludes = {WEBLOGIC_12_1_4})
+    @JsfTest(value = JSF_2_2_0)
     @Test
     public void testValidatorInjection() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
