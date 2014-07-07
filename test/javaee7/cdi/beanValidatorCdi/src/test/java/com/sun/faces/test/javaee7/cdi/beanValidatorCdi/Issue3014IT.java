@@ -69,14 +69,12 @@ public class Issue3014IT {
         webClient.closeAllWindows();
     }
 
-    @JsfTest(value = JSF_2_2_0)
+    @JsfTest(value = JSF_2_2_0, excludes = {WEBLOGIC_12_1_4})
     @Test
     public void testValidatorInjection() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button");
         page = button.click();
-
         assertTrue(!page.getBody().asText().contains("my message"));
-        
     }
 }
