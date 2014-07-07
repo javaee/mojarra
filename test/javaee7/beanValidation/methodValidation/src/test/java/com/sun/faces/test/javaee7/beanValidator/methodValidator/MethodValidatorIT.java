@@ -71,7 +71,7 @@ public class MethodValidatorIT {
         webClient.closeAllWindows();
     }
 
-    @JsfTest(value = JSF_2_2_0)
+    @JsfTest(value = JSF_2_2_0, excludes = {WEBLOGIC_12_1_4})
     @Test
     public void testIncorrectUsage() throws Exception {
         webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
@@ -88,7 +88,7 @@ public class MethodValidatorIT {
         assertEquals(500, page.getWebResponse().getStatusCode());
     }
     
-    @JsfTest(value = JSF_2_2_0)
+    @JsfTest(value = JSF_2_2_0, excludes = {WEBLOGIC_12_1_4})
     @Test
     public void testCorrectUsage1() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
@@ -104,7 +104,7 @@ public class MethodValidatorIT {
         assertEquals(200, page.getWebResponse().getStatusCode());
     }
     
-    @JsfTest(value = JSF_2_2_0)
+    @JsfTest(value = JSF_2_2_0, excludes = {WEBLOGIC_12_1_4})
     @Test
     public void testCorrectUsage2() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
