@@ -444,6 +444,16 @@ public class TestResourceImpl extends ServletFacesTestCase {
         
     }
 
+    /**
+     * Added for issue 3331
+     */
+    public void testResourceELEvalAfterPrematureClosureOfStream() throws Exception {
+
+        ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();
+        handler.createResource("simple-with-el.css").getInputStream().close();
+
+        testResourceELEval();
+    }
 
     // ---------------------------------------------------------- Helper Methods
 

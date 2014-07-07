@@ -673,6 +673,7 @@ public abstract class ResourceHelper {
         private ClientResourceInfo info;
         private FacesContext ctx;
         private boolean expressionEvaluated;
+        private boolean endOfStreamReached;
 
         // ---------------------------------------------------- Constructors
 
@@ -739,6 +740,10 @@ public abstract class ResourceHelper {
                         failedExpressionTest = true;
                     }
                 }
+            }
+
+            if (i == -1) {
+                endOfStreamReached = true;
             }
 
             return i;
@@ -845,7 +850,7 @@ public abstract class ResourceHelper {
         @Override
         public void close() throws IOException {
 
-            if (!expressionEvaluated) {
+            if (endOfStreamReached && !expressionEvaluated) {
                 info.disableEL();
             }
             inner.close();
