@@ -358,7 +358,11 @@ public class ResourceHandlerImpl extends ResourceHandler {
                     send404(context, resourceName, libraryName, ioe, true);
                 } finally {
                     if (out != null) {
-                        out.close();
+                        try {
+                            out.close();
+                        } catch (IOException ignored) {
+                            // Maybe log a warning here?
+                        }
                     }
                     if (resourceChannel != null) {
                         resourceChannel.close();
