@@ -532,21 +532,4 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
 
         return result;
     }
-
-    /**
-     * Does the give component have a transient ancestor.
-     * 
-     * @param component the UI component.
-     * @return true if it has a transient ancestor, false otherwise.
-     */
-    private boolean hasTransientAncestor(UIComponent component) {
-        UIComponent parent = component.getParent();
-        while (parent != null) {
-            if (parent.isTransient()) {
-                return true;
-            }
-            parent = parent.getParent();
-        }
-        return false;
-    }
 }
