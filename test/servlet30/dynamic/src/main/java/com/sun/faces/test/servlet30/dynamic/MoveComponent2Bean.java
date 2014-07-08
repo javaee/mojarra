@@ -36,6 +36,7 @@ package com.sun.faces.test.servlet30.dynamic;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 
 @ManagedBean(name = "moveComponent2Bean")
 @RequestScoped
@@ -45,6 +46,11 @@ public class MoveComponent2Bean {
 
     public void update() {
         text = "The text should remain bold";
+    }
+    
+    public String getStateSavingMode() {
+        return FacesContext.getCurrentInstance().
+                getViewRoot().initialStateMarked() ? "PSS" : "FSS";
     }
 
     public String getText() {

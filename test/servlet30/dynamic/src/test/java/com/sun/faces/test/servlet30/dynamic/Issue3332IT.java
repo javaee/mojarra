@@ -37,7 +37,6 @@ package com.sun.faces.test.servlet30.dynamic;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import java.util.regex.Pattern;
 import org.junit.After;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
@@ -62,11 +61,14 @@ public class Issue3332IT {
     @Test
     public void testMoveComponent2() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/moveComponent2.xhtml");
-        assertTrue(page.asXml().indexOf("<b>") < page.asXml().indexOf("This should be bold"));
-        assertTrue(page.asXml().indexOf("</b>") > page.asXml().indexOf("This should be bold"));
-        HtmlElement button = (HtmlElement) page.getHtmlElementById("updateForm:submit");
-        page = button.click();
-        assertTrue(page.asXml().indexOf("<b>") < page.asXml().indexOf("The text should remain bold"));
-        assertTrue(page.asXml().indexOf("</b>") > page.asXml().indexOf("The text should remain bold"));
+        
+        if (page.asXml().contains("State Saving Mode: PSS")) {        
+            assertTrue(page.asXml().indexOf("<b>") < page.asXml().indexOf("This should be bold"));
+            assertTrue(page.asXml().indexOf("</b>") > page.asXml().indexOf("This should be bold"));
+            HtmlElement button = (HtmlElement) page.getHtmlElementById("updateForm:submit");
+            page = button.click();
+            assertTrue(page.asXml().indexOf("<b>") < page.asXml().indexOf("The text should remain bold"));
+            assertTrue(page.asXml().indexOf("</b>") > page.asXml().indexOf("The text should remain bold"));
+        }
     }
 }
