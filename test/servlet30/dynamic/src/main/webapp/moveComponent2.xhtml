@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:test="http://www.oracle.com/mojarra/test/dynamic">
+    <h:head/>
+    <body>
+        <h:panelGroup id="target"/>
+        <test:movecomponent2 for="target">
+            <h:panelGroup id="source">
+                <b><h:outputText value="#{moveComponent2Bean.text}"/></b>
+            </h:panelGroup>
+        </test:movecomponent2>
+        <h:form id="updateForm">
+            <h:commandButton id="submit" value="Update" action="#{moveComponent2Bean.update}" />
+        </h:form>
+    </body>
+</html>

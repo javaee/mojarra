@@ -429,7 +429,7 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
                             "Unable to save dynamic action with clientId ''{0}'' because the UIComponent cannot be found",
                             action.clientId);
                 }
-                if (component != null && !component.isTransient() && !hasTransientAncestor(component)) {
+                if (component != null) {
                     savedActions.add(action.saveState(context));
                 }
             }
