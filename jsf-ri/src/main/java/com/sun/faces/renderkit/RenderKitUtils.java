@@ -1204,7 +1204,11 @@ public class RenderKitUtils {
             extContext.setResponseContentType("text/html; charset=UTF-8");
             try {
                 Writer w = extContext.getResponseOutputWriter();
-                DevTools.debugHtml(w, ctx, fe.getCause());
+                if (ctx.isProjectStage(ProjectStage.Development)) {
+                    DevTools.debugHtml(w, ctx, fe.getCause());
+                } else {
+                    w.write("Please see your server log for the actual error");
+                }
                 w.flush();
             } catch (IOException ioe) {
                 if (LOGGER.isLoggable(Level.SEVERE)) {
