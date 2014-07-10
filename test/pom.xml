@@ -26,6 +26,7 @@
         <module>unit</module>
         <module>util</module>
         <module>web-profile</module>
+        <module>weblogic</module>
         <module>weblogic12c</module>
     </modules>
     <build>
