@@ -277,27 +277,6 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
               CompositeComponentStackManager.getManager(ctx);
         UIComponent cc = manager.findCompositeComponentUsingLocation(ctx, location);
         return manager.push(cc);
-
-        if (location != null) {
-            foundCc = manager.findCompositeComponentUsingLocation(ctx, location);
-        } else {
-            // We need to obtain the Location of the source expression in order
-            // to find the composite component that needs to be available within
-            // the evaluation stack.
-            if (source instanceof TagValueExpression) {
-                ValueExpression orig = ((TagValueExpression) source).getWrapped();
-                if (orig instanceof ContextualCompositeValueExpression) {
-                    foundCc = manager.findCompositeComponentUsingLocation(ctx, ((ContextualCompositeValueExpression) orig).getLocation());
-    }
-            }
-        }
-        if (null == foundCc) {
-            foundCc = this.cc;
-        }
-
-
-        return manager.push(foundCc);
-
     }
 
 
