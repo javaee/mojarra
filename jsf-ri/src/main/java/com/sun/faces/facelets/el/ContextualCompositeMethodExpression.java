@@ -61,7 +61,6 @@ package com.sun.faces.facelets.el;
 import com.sun.faces.component.CompositeComponentStackManager;
 
 import com.sun.faces.util.FacesLogger;
-import java.lang.ref.WeakReference;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -142,7 +141,7 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
     private final MethodExpression delegate;
     private final ValueExpression source;
     private final Location location;
-    private final transient WeakReference cc;
+    private final transient UIComponent cc;
 
 
     // -------------------------------------------------------- Constructors
@@ -155,7 +154,7 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
         this.source = source;
         this.location = null;
         FacesContext ctx = FacesContext.getCurrentInstance();
-        this.cc = new WeakReference(UIComponent.getCurrentCompositeComponent(ctx));
+        this.cc = UIComponent.getCurrentCompositeComponent(ctx);
 
     }
 
@@ -168,7 +167,7 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
         this.location = location;
         this.source = null;
         FacesContext ctx = FacesContext.getCurrentInstance();
-        this.cc = new WeakReference(UIComponent.getCurrentCompositeComponent(ctx));
+        this.cc = UIComponent.getCurrentCompositeComponent(ctx);
     }
 
 
@@ -299,7 +298,7 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
             }
         }
         if (null == foundCc) {
-            foundCc = (UIComponent) this.cc.get();
+            foundCc = this.cc;
         }
 
 
