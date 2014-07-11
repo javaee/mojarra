@@ -141,7 +141,6 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
     private final MethodExpression delegate;
     private final ValueExpression source;
     private final Location location;
-    private final transient UIComponent cc;
 
 
     // -------------------------------------------------------- Constructors
@@ -149,13 +148,9 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
 
     public ContextualCompositeMethodExpression(ValueExpression source,
                                                MethodExpression delegate) {
-
         this.delegate = delegate;
-        this.source = source;
         this.location = null;
-        FacesContext ctx = FacesContext.getCurrentInstance();
-        this.cc = UIComponent.getCurrentCompositeComponent(ctx);
-
+        this.source = source;
     }
 
 
@@ -166,8 +161,6 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
         this.delegate = delegate;
         this.location = location;
         this.source = null;
-        FacesContext ctx = FacesContext.getCurrentInstance();
-        this.cc = UIComponent.getCurrentCompositeComponent(ctx);
     }
 
 
@@ -282,7 +275,8 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
 
         CompositeComponentStackManager manager =
               CompositeComponentStackManager.getManager(ctx);
-        UIComponent foundCc = null;
+        UIComponent cc = manager.findCompositeComponentUsingLocation(ctx, location);
+        return manager.push(cc);
 
         if (location != null) {
             foundCc = manager.findCompositeComponentUsingLocation(ctx, location);
@@ -294,7 +288,7 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
                 ValueExpression orig = ((TagValueExpression) source).getWrapped();
                 if (orig instanceof ContextualCompositeValueExpression) {
                     foundCc = manager.findCompositeComponentUsingLocation(ctx, ((ContextualCompositeValueExpression) orig).getLocation());
-                }
+    }
             }
         }
         if (null == foundCc) {
