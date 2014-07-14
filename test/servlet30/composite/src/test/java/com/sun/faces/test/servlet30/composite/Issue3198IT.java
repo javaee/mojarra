@@ -45,7 +45,6 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.junit.After;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class Issue3198IT {
@@ -65,7 +64,6 @@ public class Issue3198IT {
     }
 
     @Test
-    @Ignore
     public void testValidatorComponent() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/validator/validatorComponent.xhtml");
         HtmlElement button = (HtmlElement) page.getElementById("form:submit");
