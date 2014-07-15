@@ -42,11 +42,8 @@ package com.sun.faces.test.servlet30.composite;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.sun.faces.test.junit.JsfServerExclude;
-import static com.sun.faces.test.junit.JsfServerExclude.TOMCAT_7_0_35;
 import com.sun.faces.test.junit.JsfTest;
 import com.sun.faces.test.junit.JsfTestRunner;
-import com.sun.faces.test.junit.JsfVersion;
 import static com.sun.faces.test.junit.JsfVersion.JSF_2_2_0;
 import org.junit.After;
 import static org.junit.Assert.assertTrue;
@@ -71,10 +68,12 @@ public class Issue3198IT {
         webClient.closeAllWindows();
     }
 
-    @JsfTest(value = JSF_2_2_0, excludes = {TOMCAT_7_0_35})
+    @JsfTest(value = JSF_2_2_0)
     @Test
     public void testValidatorComponent() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/validator/validatorComponent.xhtml");
+        HtmlElement inputText = (HtmlElement) page.getElementById("form:validatorComponent:inputText");
+        inputText.type("1234");
         HtmlElement button = (HtmlElement) page.getElementById("form:submit");
         page = button.click();
         assertTrue(page.asXml().contains("Validator method called"));
