@@ -86,9 +86,8 @@ private static final Attribute[] ATTRIBUTES =
             if (styleClass != null) {
                 writer.writeAttribute("class", styleClass, "styleClass");
             }
-            if (style != null) {
-                writer.writeAttribute("style", style, "style");
-            }
+            // JAVASERVERFACES-3270: do not manually render "style" as it is handled
+            // in renderPassThruAttributes().
         }
         
         RenderKitUtils.renderPassThruAttributes(context,
