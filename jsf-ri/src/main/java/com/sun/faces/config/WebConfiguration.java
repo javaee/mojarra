@@ -875,7 +875,7 @@ public class WebConfiguration {
     }
 
 
-    private boolean canProcessJndiEntries() {
+    public boolean canProcessJndiEntries() {
 
         try {
             Util.getCurrentLoader(this).loadClass("javax.naming.InitialContext");
