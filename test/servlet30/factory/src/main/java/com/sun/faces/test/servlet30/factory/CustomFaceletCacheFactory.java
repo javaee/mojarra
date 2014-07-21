@@ -1,8 +1,8 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- * 
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
- * 
+ *
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
+ *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -11,20 +11,20 @@
  * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- * 
+ *
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at packager/legal/LICENSE.txt.
- * 
+ *
  * GPL Classpath Exception:
  * Oracle designates this particular file as subject to the "Classpath"
  * exception as provided by Oracle in the GPL Version 2 section of the License
  * file that accompanied this code.
- * 
+ *
  * Modifications:
  * If applicable, add the following below the License Header, with the fields
  * enclosed by brackets [] replaced by your own identifying information:
  * "Portions Copyright [year] [name of copyright owner]"
- * 
+ *
  * Contributor(s):
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
@@ -36,28 +36,45 @@
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
  * holder.
-
  */
+package com.sun.faces.test.servlet30.factory;
 
-package com.sun.faces.test.agnostic.factory;
-
-import javax.faces.FactoryFinder;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.faces.view.facelets.FaceletCache;
 import javax.faces.view.facelets.FaceletCacheFactory;
 
-@ManagedBean
-@RequestScoped
-public class FactoryTestBean {
-    
-    public String getTestMessage() {
-        String result = "FAILURE";
-        FaceletCacheFactory factory = (FaceletCacheFactory) FactoryFinder.getFactory(FactoryFinder.FACELET_CACHE_FACTORY);
-        if (factory instanceof MDSFaceletCacheFactory) {
-            result = ((MDSFaceletCacheFactory)factory).isOneArgCtorCalled() ? "SUCCESS" : "FAILURE";
-        }
-        
-        return result;
+public class CustomFaceletCacheFactory extends FaceletCacheFactory {
+
+    private boolean oneArgCtorCalled = false;
+    private FaceletCache _cache;
+    private FaceletCacheFactory _wrapped;
+
+    public boolean isOneArgCtorCalled() {
+        return oneArgCtorCalled;
     }
 
+    @Override
+    public FaceletCacheFactory getWrapped() {
+        return _wrapped;
+    }
+
+    public CustomFaceletCacheFactory() {
+        super();
+        oneArgCtorCalled = false;
+    }
+
+    public CustomFaceletCacheFactory(FaceletCacheFactory wrapped) {
+        oneArgCtorCalled = true;
+        _wrapped = wrapped;
+    }
+
+    @Override
+    public FaceletCache getFaceletCache() {
+        FaceletCacheFactory wrapped = getWrapped();
+
+        if (_cache == null) {
+            _cache = wrapped.getFaceletCache();
+        }
+
+        return _cache;
+    }
 }

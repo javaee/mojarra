@@ -76,6 +76,5 @@
         <module>scope</module>
         <module>stateSaving</module>
         <module>vdl</module>
-        <module>factory</module>
     </modules>
 </project>
