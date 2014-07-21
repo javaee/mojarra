@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,66 +37,33 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.issue3054;
+package com.sun.faces.test.agnostic.renderkit.nolinkdecoration;
 
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import static org.junit.Assert.assertTrue;
-
 import com.sun.faces.test.junit.JsfTest;
 import com.sun.faces.test.junit.JsfTestRunner;
 import com.sun.faces.test.junit.JsfVersion;
+import java.util.List;
+import org.junit.After;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
-
 
 @RunWith(JsfTestRunner.class)
 public class Issue3054IT {
-    /**
-     * Stores the web URL.
-     */
+
     private String webUrl;
-    /**
-     * Stores the web client.
-     */
     private WebClient webClient;
 
-    /**
-     * Setup before testing.
-     * 
-     * @throws Exception when a serious error occurs.
-     */
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    /**
-     * Cleanup after testing.
-     * 
-     * @throws Exception when a serious error occurs.
-     */
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-
-    /**
-     * Setup before testing.
-     */
     @Before
     public void setUp() {
         webUrl = System.getProperty("integration.url");
         webClient = new WebClient();
     }
-
-    /**
-     * Tear down after testing.
-     */
+    
     @After
     public void tearDown() {
         webClient.closeAllWindows();
@@ -106,12 +73,9 @@ public class Issue3054IT {
     @Test
     public void testNoLinkDecoration() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
-        
         List<HtmlAnchor> anchors = page.getAnchors();
         String href = anchors.get(0).getHrefAttribute();
         assertTrue(!href.contains("jftfdi"));
-        assertTrue(!href.contains("jffi"));
-
-        
+        assertTrue(!href.contains("jffi"));        
     }
 }
