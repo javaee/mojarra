@@ -37,11 +37,9 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.ajax;
+package com.sun.faces.test.agnostic.renderKit.basic;
 
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import org.junit.After;
@@ -75,4 +73,3 @@ public class Issue2613IT {
         assertTrue(page.asXml().contains("12"));
     }
 }
-
