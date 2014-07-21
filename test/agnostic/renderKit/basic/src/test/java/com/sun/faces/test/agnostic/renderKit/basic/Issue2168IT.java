@@ -37,20 +37,14 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.ajax;
+package com.sun.faces.test.agnostic.renderKit.basic;
 
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-
-//NOTE: This test is not included in JSF 2.2 as the issue does not exist there.
 
 public class Issue2168IT {
 
@@ -74,4 +68,3 @@ public class Issue2168IT {
         assertTrue(page.asXml().contains("ln=alibrary&amp;v=1"));
     }
 }
-
