@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,46 +37,40 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.vdl.facelets.replacevdl;
+package com.sun.faces.test.servlet30.factory;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import javax.faces.view.ViewDeclarationLanguage;
+import javax.faces.view.ViewDeclarationLanguageFactory;
 
-public class ReplaceVDLIT {
+public class CustomViewDeclarationLanguageFactory extends ViewDeclarationLanguageFactory {
 
-    private String webUrl;
-    private WebClient webClient;
-
-    @Before
-    public void setUp() {
-        webUrl = System.getProperty("integration.url");
-        webClient = new WebClient();
+    public CustomViewDeclarationLanguageFactory() {
     }
 
-    @After
-    public void tearDown() {
-        webClient.closeAllWindows();
+    private ViewDeclarationLanguageFactory toWrap;
+    private Map<String, CustomViewDeclarationLanguage> vdlImpls;
+
+    public CustomViewDeclarationLanguageFactory(ViewDeclarationLanguageFactory toWrap) {
+        this.toWrap = toWrap;
+        vdlImpls = new ConcurrentHashMap<String, CustomViewDeclarationLanguage>();
     }
 
-    @Test
-    public void testReplaceVDL() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/replacevdl.xhtml");
-        String text = page.asText();
-        assertTrue(text.indexOf("buildView") != -1);
+    @Override
+    public ViewDeclarationLanguageFactory getWrapped() {
+        return toWrap;
+    }
 
-        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button");
-        page = button.click();
-        text = page.asText();
-        assertTrue(text.indexOf("buildView") != -1);
+    @Override
+    public ViewDeclarationLanguage getViewDeclarationLanguage(String string) {
+        CustomViewDeclarationLanguage result = null;
 
-        button = (HtmlSubmitInput) page.getElementById("buttonSkipBuildView");
-        page = button.click();
-        text = page.asText();
-        assertTrue(text.indexOf("buildView") == -1);
+        if (null == (result = vdlImpls.get(string))) {
+            result = new CustomViewDeclarationLanguage(getWrapped().getViewDeclarationLanguage(string));
+            vdlImpls.put(string, result);
+        }
+
+        return result;
     }
 }

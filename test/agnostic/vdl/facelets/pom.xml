@@ -59,7 +59,6 @@
         <module>form-omitted-production</module>
         <module>only_faces_config_in_jar</module>
         <module>programmaticCompositeComponent</module>
-        <module>replace-vdl</module>
     </modules>
 </project>
 
