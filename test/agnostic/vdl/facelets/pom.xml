@@ -55,8 +55,6 @@
     <name>Mojarra ${project.version} - Test - Agnostic - VDL - Facelets</name>
     <modules>
         <module>contracts</module>
-        <module>form-omitted-development</module>
-        <module>form-omitted-production</module>
         <module>only_faces_config_in_jar</module>
         <module>programmaticCompositeComponent</module>
     </modules>
