@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.facelets.html;
+package com.sun.faces.test.servlet30.facelets.html;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -63,10 +63,10 @@ public class Issue3144IT {
     }
     
     @Test
-    public void testEmpty() throws Exception {
+    public void testDuplicateId() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/formDuplicateId.xhtml");
-        assertTrue(page.asXml().indexOf("j_id1:javax.faces.ViewState:0") != -1);
-        assertTrue(page.asXml().indexOf("j_id1:javax.faces.ViewState:1") != -1);
-        assertTrue(page.asXml().indexOf("j_id1:javax.faces.ViewState:2") != -1);
+        assertTrue(page.asXml().contains("j_id1:javax.faces.ViewState:0"));
+        assertTrue(page.asXml().contains("j_id1:javax.faces.ViewState:1"));
+        assertTrue(page.asXml().contains("j_id1:javax.faces.ViewState:2"));
     }
 }
