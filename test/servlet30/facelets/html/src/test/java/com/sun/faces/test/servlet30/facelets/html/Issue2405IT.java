@@ -67,11 +67,11 @@ public class Issue2405IT {
         HtmlPage page = webClient.getPage(webUrl + "faces/formOmitted.xhtml");
         String text = page.asXml();
         if (text.contains("Development")) {
-            assertTrue(text.contains("The form component needs to have a UIForm in its ancestry. Suggestion: enclose the necessary components within <h:form>"));
+            assertTrue(text.contains("The form component needs to have a UIForm in its ancestry."));
         }
         
         if (text.contains("Production")) {
-            assertFalse(text.contains("The form component needs to have a UIForm in its ancestry. Suggestion: enclose the necessary components within <h:form>"));
+            assertFalse(text.contains("The form component needs to have a UIForm in its ancestry."));
         }
     }
 }
