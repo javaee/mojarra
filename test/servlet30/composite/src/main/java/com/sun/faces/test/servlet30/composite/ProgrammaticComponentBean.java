@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -38,7 +38,7 @@
  * holder.
 
  */
-package com.sun.faces.test.agnostic.vdl.facelets.programmaticCompositeComponent;
+package com.sun.faces.test.servlet30.composite;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -52,24 +52,23 @@ import javax.faces.view.ViewDeclarationLanguage;
 
 @ManagedBean
 @RequestScoped
-public class RequestBean {
+public class ProgrammaticComponentBean {
     
-    public String getTest() {
-        
+    public String getTest() {        
         Map<String, Object> attrs=new HashMap<String, Object>();
-        attrs.put("pi", new Float(3.14));
+        attrs.put("pi", (float) 3.14);
         attrs.put("pagecontent", "" + System.currentTimeMillis());
-        FacesContext fc = FacesContext.getCurrentInstance();
         
         FacesContext context = FacesContext.getCurrentInstance();
         Application application = context.getApplication();
         ViewHandler vh = application.getViewHandler();
-        ViewDeclarationLanguage vdl = vh.getViewDeclarationLanguage(context, context.getViewRoot().getViewId());
+        ViewDeclarationLanguage vdl = vh.getViewDeclarationLanguage(context, 
+                context.getViewRoot().getViewId());
         
         UIComponent c = vdl.createComponent(FacesContext.getCurrentInstance(), 
-                "http://java.sun.com/jsf/composite/" + "ezcomp", "ezcomp", attrs);
+                "http://java.sun.com/jsf/composite/programmatic", 
+                "programmaticComponent", attrs);
         
         return null == c ? "FAILURE" : "SUCCESS";
     }
-    
 }
