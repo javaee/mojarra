@@ -161,5 +161,27 @@ Pitfalls
        in the following way 
 
         ${integration.protocol}://${integration.serverName}:$integration.serverPort}/${project.build.finalName}/
- 
+
+Function of sub-directories in top-level test directory
+=======================================================
+
+ * agnostic - Application server agnostic tests (do not put any new projects in here).
+ * cluster - Cluster specific tests.
+ * glassfish - Glassfish specific tests.
+ * groovy - Groovy specific tests.
+ * javaee6 - JavaEE 6 specific tests.
+ * javaee6web - JavaEE 6 Web-Profile specific tests.
+ * javaee7 - JavaEE 7 specific tests.
+ * performance - Performance related tests.
+ * protocolaware - Protocol-aware tests (HTTP(S) switching related).
+ * quality - Quality project that tracks source code quality.
+ * selenium - Selenium tests.
+ * servlet30 - Servlet 3.0 specific tests.
+ * servlet31 - Servlet 3.1 specific tests.
+ * unit - Unit tests.
+ * util - Utililty JAR project for use by test projects.
+ * web-profile - JavaEE 6 Web-Profile specific tests (do not put any new projects in here).
+ * weblogic - Weblogic specific tests.
+ * weblogic12c - Weblogic 12c specific tests (do not put any new projects in here).
+
 --END
