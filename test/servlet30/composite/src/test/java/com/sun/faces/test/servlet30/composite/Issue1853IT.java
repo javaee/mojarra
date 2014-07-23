@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,30 +37,44 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.facelets.composite;
+package com.sun.faces.test.servlet30.composite;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
 
-@ManagedBean(name = "actionBean")
-@RequestScoped
-public class ActionBean {
+@RunWith(JsfTestRunner.class)
+public class Issue1853IT {
 
-    public String action() {
-        FacesContext ctx = FacesContext.getCurrentInstance();
-        UIComponent c = UIComponent.getCurrentComponent(ctx);
-        ctx.addMessage(null,
-                new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                "Action invoked: " + c.getClientId(ctx),
-                "Action invoked: " + c.getClientId(ctx)));
-        return "";
+    private String webUrl;
+    private WebClient webClient;
 
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-    public String submit() {
-        throw new RuntimeException();
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
+    }
+
+    @JsfTest(JsfVersion.JSF_2_2_1)
+    @Test
+    public void testNoELEvaluation() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/outputStylesheet/outputStylesheet.xhtml");
+        assertEquals(200, page.getWebResponse().getStatusCode());
+        HtmlElement button = page.getHtmlElementById("form:submit");
+        page = button.click();
+        assertEquals(200, page.getWebResponse().getStatusCode());
     }
 }

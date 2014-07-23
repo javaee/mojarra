@@ -1,10 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -45,20 +43,23 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml"
+<html xml:lang="en" lang="en" 
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:composite="http://java.sun.com/jsf/composite">
-    <head>
-    </head>
-    <body>
-        <composite:interface>
-           <composite:attribute name="action" required="true"
-               method-signature="java.lang.String action()" />
-        </composite:interface>
-        <composite:implementation>
-            <h:form id="form1">
-               <h:commandButton id="submit" value="submit" action="#{cc.attrs.action}" />
-            </h:form> 
-        </composite:implementation>
-    </body>
+      xmlns:outputStylesheet="http://java.sun.com/jsf/composite/outputStylesheet">
+
+    <h:form id="form">
+        <outputStylesheet:outputStylesheet1 id="email" label="Email:">
+            <h:inputText id="input">
+                <f:validateLength minimum="2"/>
+            </h:inputText>
+        </outputStylesheet:outputStylesheet1>
+        <outputStylesheet:outputStylesheet1 id="password" label="New Password:">
+            <h:inputSecret id="input" required="false">
+                <f:validateLength minimum="2"/>
+            </h:inputSecret>
+        </outputStylesheet:outputStylesheet1>
+        <h:commandButton id="submit" value="Save"/>
+    </h:form>
 </html>

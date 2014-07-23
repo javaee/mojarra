@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,19 +37,19 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.facelets.composite;
+package com.sun.faces.test.servlet30.composite;
 
-import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import org.junit.*;
-import static org.junit.Assert.*;
+import java.util.regex.Pattern;
+import org.junit.After;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
-public class Issue1806IT {
+public class Issue1958IT {
 
     private String webUrl;
-
     private WebClient webClient;
 
     @Before
@@ -63,21 +63,9 @@ public class Issue1806IT {
         webClient.closeAllWindows();
     }
 
-    /**
-     * This test method ensures a RuntimeException is thrown (since that is 
-     * what is thrown in the test bean.
-     * 
-     * @throws java.lang.Exception
-     */
     @Test
-    public void testException() throws Exception {
-        try {
-            HtmlPage page = webClient.getPage(webUrl + "faces/action3.xhtml");
-            HtmlSubmitInput button = (HtmlSubmitInput)page.getElementById("form:action:form1:submit");
-            button.click();
-            fail();
-        } catch (FailingHttpStatusCodeException re) {
-            assertNotNull(re);
-        }
+    public void testNoDuplicateId() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/renderFacet/renderFacetDuplicateId.xhtml");
+        assertTrue(Pattern.matches("(?s).*col1Link.*col2Link.*col1Link.*col2Link.*col1Link.*col2Link.*col1Link.*col2Link.*col1Link.*col2Link.*col1Link.*col2Link.*col1Link.*col2Link.*col1Link.*col2Link.*", page.asXml()));
     }
 }

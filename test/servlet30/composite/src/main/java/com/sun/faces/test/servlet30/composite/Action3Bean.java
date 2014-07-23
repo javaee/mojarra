@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,35 +37,30 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.facelets.composite;
+package com.sun.faces.test.servlet30.composite;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import java.util.regex.Pattern;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 
-public class Issue1958IT {
+@ManagedBean(name = "action3Bean")
+@RequestScoped
+public class Action3Bean {
 
-    private String webUrl;
-    private WebClient webClient;
+    public String action() {
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        UIComponent c = UIComponent.getCurrentComponent(ctx);
+        ctx.addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                "Action invoked: " + c.getClientId(ctx),
+                "Action invoked: " + c.getClientId(ctx)));
+        return "";
 
-    @Before
-    public void setUp() {
-        webUrl = System.getProperty("integration.url");
-        webClient = new WebClient();
     }
 
-    @After
-    public void tearDown() {
-        webClient.closeAllWindows();
-    }
-
-    @Test
-    public void testNoDuplicateId() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/renderFacetDuplicateId.xhtml");
-        assertTrue(Pattern.matches("(?s).*col1Link.*col2Link.*col1Link.*col2Link.*col1Link.*col2Link.*col1Link.*col2Link.*col1Link.*col2Link.*col1Link.*col2Link.*col1Link.*col2Link.*col1Link.*col2Link.*", page.asXml()));
+    public String submit() {
+        throw new RuntimeException();
     }
 }
