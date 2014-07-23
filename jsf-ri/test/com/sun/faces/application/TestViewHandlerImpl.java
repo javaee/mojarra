@@ -492,7 +492,7 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
         System.out.println("Testing calculateLocale - Language Match case");
         ViewHandler handler = new ViewHandlerImpl();
         Locale locale = handler.calculateLocale(getFacesContext());
-        assertTrue(locale.equals(Locale.ENGLISH));
+        assertTrue(locale.getLanguage().equals(Locale.ENGLISH.getLanguage()));
     }
 
 

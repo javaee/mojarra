@@ -305,6 +305,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                                 addVariableResolver(associate, n);
                             } else if (DEFAULT_LOCALE.equals(n.getLocalName())) {
                                 setDefaultLocale(app, n);
+                            	addSupportedLocale(app, n);
                             } else if (SUPPORTED_LOCALE.equals(n.getLocalName())) {
                                 addSupportedLocale(app, n);
                             } else if (RESOURCE_BUNDLE.equals(n.getLocalName())) {
