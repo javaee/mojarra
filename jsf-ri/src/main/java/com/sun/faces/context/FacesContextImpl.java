@@ -252,7 +252,7 @@ public class FacesContextImpl extends FacesContext {
         if (elContext == null) {
             Application app = getApplication();
             elContext = new ELContextImpl(app.getELResolver());
-            elContext.putContext(FacesContext.class, this);
+            elContext.putContext(FacesContext.class, FacesContext.getCurrentInstance());
             UIViewRoot root = this.getViewRoot();
             if (null != root) {
                 elContext.setLocale(root.getLocale());
