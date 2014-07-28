@@ -58,10 +58,16 @@
 
 package com.sun.faces.facelets.el;
 
+import com.sun.faces.util.FacesLogger;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.sun.faces.component.CompositeComponentStackManager;
 
 import javax.el.ValueExpression;
 import javax.el.ELContext;
+import javax.el.PropertyNotFoundException;
 import javax.faces.view.Location;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -124,6 +130,9 @@ import javax.faces.context.FacesContext;
  * </p>
  */
 public final class ContextualCompositeValueExpression extends ValueExpression {
+
+    // Log instance for this class
+    private static final Logger LOGGER = FacesLogger.FACELETS_EL.getLogger();
 
     private ValueExpression originalVE;
     private Location location;
@@ -196,6 +205,14 @@ public final class ContextualCompositeValueExpression extends ValueExpression {
         boolean pushed = pushCompositeComponent(ctx);
         try {
             return originalVE.getType(elContext);
+        } catch (PropertyNotFoundException pnfe) {
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                String exprString = originalVE.getExpressionString();
+                LOGGER.log(Level.SEVERE,
+                           "jsf.facelets.expression.property.not.found",
+                           new String[] { exprString });
+            }
+            throw pnfe;
         } finally {
             if (pushed) {
                 popCompositeComponent(ctx);
