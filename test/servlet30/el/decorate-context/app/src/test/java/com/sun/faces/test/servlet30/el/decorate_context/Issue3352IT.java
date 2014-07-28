@@ -45,6 +45,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 public class Issue3352IT {
 
@@ -63,7 +64,8 @@ public class Issue3352IT {
     }
 
     @Test
-    public void testImplicitObjects() throws Exception {
+    @Ignore
+    public void testDecoratedFactories() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
         String pageXml = page.asXml();
         assertTrue(pageXml.indexOf("MyFacesContextFactory$MyFacesContext") != -1);
