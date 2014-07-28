@@ -58,8 +58,8 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
 
     
 
-    private ExceptionHandlerFactory exceptionHandlerFactory;
-    private ExternalContextFactory externalContextFactory;
+    private final ExceptionHandlerFactory exceptionHandlerFactory;
+    private final ExternalContextFactory externalContextFactory;
 
 
     // ------------------------------------------------------------ Constructors

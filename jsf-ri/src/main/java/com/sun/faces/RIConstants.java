@@ -122,6 +122,13 @@ public class RIConstants {
      */
     public static final String DYNAMIC_COMPONENT =
             FACES_PREFIX + "DynamicComponent";
+
+    /**
+     * Present in the attrs of UIViewRoot iff the tree has one or more
+     * dynamic modifications
+     */
+    public static final String TREE_HAS_DYNAMIC_COMPONENTS =
+            FACES_PREFIX + "TreeHasDynamicComponents";
     
     private RIConstants() {
 

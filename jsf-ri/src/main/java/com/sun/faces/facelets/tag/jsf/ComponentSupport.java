@@ -256,9 +256,25 @@ public final class ComponentSupport {
         if (!context.isPostback() || context.getCurrentPhaseId().equals(PhaseId.RESTORE_VIEW)) {
             return null;
         }
-        UIComponent c = null;        
+        UIComponent c = null;
+        UIViewRoot root = context.getViewRoot();
+        boolean hasDynamicComponents = (null != root && 
+                root.getAttributes().containsKey(RIConstants.TREE_HAS_DYNAMIC_COMPONENTS));
         String cid = null;
         List<UIComponent> components;
+        String facetName = getFacetName(parent);
+        if (null != facetName) {
+            c = parent.getFacet(facetName);
+            // We will have a facet name, but no corresponding facet in the
+            // case of facets with composite components.  In this case,
+            // we must do the brute force search.
+            if (null != c) {
+                cid = (String) c.getAttributes().get(MARK_CREATED);
+                if (id.equals(cid)) {
+                    return c;
+                }
+            } 
+        }
         if (0 < parent.getFacetCount()) {
             components = new ArrayList<UIComponent>();
             components.addAll(parent.getFacets().values());
@@ -281,18 +297,21 @@ public final class ComponentSupport {
                         return c2;
                     }
                 }
-            }        
-            /*
-             * Make sure we look for the child recursively it might have moved
-             * into a different parent in the parent hierarchy. Note currently
-             * we are only looking down the tree. Maybe it would be better
-             * to use the VisitTree API instead.
-             */
-            UIComponent foundChild = findChildByTagId(context, c, id);
-            if (foundChild != null) {
-                return foundChild;
+            }
+            if (hasDynamicComponents) {
+                /*
+                 * Make sure we look for the child recursively it might have moved
+                 * into a different parent in the parent hierarchy. Note currently
+                 * we are only looking down the tree. Maybe it would be better
+                 * to use the VisitTree API instead.
+                 */
+                UIComponent foundChild = findChildByTagId(context, c, id);
+                if (foundChild != null) {
+                    return foundChild;
+                }
             }
         }
+
         return null;
     }
 

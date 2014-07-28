@@ -58,6 +58,7 @@
 
 package com.sun.faces.facelets.tag.jsf;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.facelets.Facelet;
 import com.sun.faces.facelets.FaceletFactory;
 import com.sun.faces.facelets.util.ReflectionUtil;
@@ -161,6 +162,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
         } else {
             cc = context.getApplication().createComponent(context, ccResource);
         }
+        context.getViewRoot().getAttributes().put(RIConstants.TREE_HAS_DYNAMIC_COMPONENTS, Boolean.TRUE);
         setCompositeComponent(context, cc);
 
         return cc;
