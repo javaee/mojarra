@@ -42,11 +42,16 @@ package com.sun.faces.test.agnostic.facelets.c;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class Issue2892IT {
 
     private String webUrl;
@@ -63,6 +68,7 @@ public class Issue2892IT {
         webClient.closeAllWindows();
     }
 
+    @JsfTest(JsfVersion.JSF_2_1_24)
     @Test
     public void testNestedForEach() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/nestedForEach.xhtml");
