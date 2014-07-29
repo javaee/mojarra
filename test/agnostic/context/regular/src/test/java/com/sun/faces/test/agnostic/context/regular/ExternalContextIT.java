@@ -41,17 +41,16 @@ package com.sun.faces.test.agnostic.context.regular;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
 
-/**
- * The constructor tests.
- *
- * @author Manfred Riem (manfred.riem@oracle.com)
- */
+@RunWith(JsfTestRunner.class)
 public class ExternalContextIT {
 
     private String webUrl;
@@ -69,42 +68,49 @@ public class ExternalContextIT {
         webClient.closeAllWindows();
     }
 
+    @JsfTest(JsfVersion.JSF_2_1_14)
     @Test
     public void testEncodeResourceURLNPE() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/issue2541.xhtml");
         assertTrue(page.asText().contains("PASSED"));
     }
 
+    @JsfTest(JsfVersion.JSF_2_1_14)
     @Test
     public void testEncodePartialActionURLNPE() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/issue2540.xhtml");
         assertTrue(page.asText().contains("PASSED"));
     }
 
+    @JsfTest(JsfVersion.JSF_2_1_14)
     @Test
     public void testIsUserInRoleNPE() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/issue2549.xhtml");
         assertTrue(page.asText().contains("PASSED"));
     }
 
+    @JsfTest(JsfVersion.JSF_2_1_14)
     @Test
     public void testLogNPE() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/issue2550.xhtml");
         assertTrue(page.asText().contains("PASSEDPASSEDPASSED"));
     }
 
+    @JsfTest(JsfVersion.JSF_2_1_14)
     @Test
     public void testGetResourceNPE() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/issue2543.xhtml");
         assertTrue(page.asText().contains("PASSED"));
     }
 
+    @JsfTest(JsfVersion.JSF_2_1_14)
     @Test
     public void testGetResourceAsStreamNPE() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/issue2545.xhtml");
         assertTrue(page.asText().contains("PASSED"));
     }
 
+    @JsfTest(JsfVersion.JSF_2_1_14)
     @Test
     public void testGetResourcePathsNPE() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/issue2546.xhtml");
