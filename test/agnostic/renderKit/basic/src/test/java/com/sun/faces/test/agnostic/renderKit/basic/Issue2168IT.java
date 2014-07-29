@@ -37,21 +37,20 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.ajax;
+package com.sun.faces.test.agnostic.renderKit.basic;
 
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
 
-//NOTE: This test is not included in JSF 2.2 as the issue does not exist there.
-
+@RunWith(JsfTestRunner.class)
 public class Issue2168IT {
 
     private String webUrl;
@@ -68,6 +67,7 @@ public class Issue2168IT {
         webClient.closeAllWindows();
     }
 
+    @JsfTest(JsfVersion.JSF_2_1_20)
     @Test
     public void testIssue2168() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/issue2168.xhtml");
