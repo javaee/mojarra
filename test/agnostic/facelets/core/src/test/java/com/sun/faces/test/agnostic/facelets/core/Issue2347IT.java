@@ -42,11 +42,16 @@ package com.sun.faces.test.agnostic.facelets.core;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class Issue2347IT {
 
     private String webUrl;
@@ -69,6 +74,7 @@ public class Issue2347IT {
      *
      * @throws Exception
      */
+    @JsfTest(JsfVersion.JSF_2_1_8)
     @Test
     public void testActionListener1() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/actionlistener.xhtml");
@@ -84,6 +90,7 @@ public class Issue2347IT {
      *
      * @throws Exception
      */
+    @JsfTest(JsfVersion.JSF_2_1_8)
     @Test
     public void testActionListener2() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/actionlistener.xhtml");
