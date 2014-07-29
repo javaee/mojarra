@@ -39,14 +39,18 @@
  */
 package com.sun.faces.test.agnostic.facelets.ui;
 
-import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class Issue3215IT {
 
     private String webUrl;
@@ -63,6 +67,7 @@ public class Issue3215IT {
         webClient.closeAllWindows();
     }
 
+    @JsfTest(JsfVersion.JSF_2_1_29)
     @Test
     public void testRepeatUseLocalValue() throws Exception {
         webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
