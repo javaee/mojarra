@@ -48,9 +48,14 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 
 import static org.junit.Assert.assertTrue;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class VerifyExceptionThrownIT {
     /**
      * Stores the web URL.
@@ -98,6 +103,7 @@ public class VerifyExceptionThrownIT {
         webClient.closeAllWindows();
     }
 
+    @JsfTest(JsfVersion.JSF_2_1_8)
     @Test
     public void testConverterThrowsNPEViaAjax() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
