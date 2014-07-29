@@ -42,12 +42,14 @@ package com.sun.faces.test.agnostic.composite;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 import org.junit.*;
 import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
 
-/**
- * @author Manfred Riem (manfred.riem@oracle.com)
- */
+@RunWith(JsfTestRunner.class)
 public class Issue2176IT {
 
     private String webUrl;
@@ -69,6 +71,7 @@ public class Issue2176IT {
      *
      * @throws Exception when a serious error occurs.
      */
+    @JsfTest(JsfVersion.JSF_2_1_13)
     @Test
     public void testHLink() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/attribute/issue2176.xhtml");

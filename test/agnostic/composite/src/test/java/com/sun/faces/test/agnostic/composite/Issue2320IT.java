@@ -40,11 +40,13 @@
 package com.sun.faces.test.agnostic.composite;
 
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 import org.junit.*;
+import org.junit.runner.RunWith;
 
-/**
- * @author Manfred Riem (manfred.riem@oracle.com)
- */
+@RunWith(JsfTestRunner.class)
 public class Issue2320IT {
 
     private String webUrl;
@@ -66,6 +68,7 @@ public class Issue2320IT {
      *
      * @throws Exception when a serious error occurs.
      */
+    @JsfTest(JsfVersion.JSF_2_1_12)
     @Test
     public void testIds() throws Exception {
         webClient.getPage(webUrl + "faces/issue2320.xhtml");

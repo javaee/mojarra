@@ -41,14 +41,17 @@ package com.sun.faces.test.agnostic.composite;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 import org.junit.*;
 import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
 
 /**
  * Integration tests verifying the workings of cc:renderFacet.
- *
- * @author Manfred Riem (manfred.riem@oracle.com)
  */
+@RunWith(JsfTestRunner.class)
 public class RenderFacetIT {
 
     private String webUrl;
@@ -71,6 +74,7 @@ public class RenderFacetIT {
         assertTrue(page.getBody().asText().indexOf("This came from a rendered facet") != -1);
     }
 
+    @JsfTest(JsfVersion.JSF_2_1_12)
     @Test
     public void testRenderFacet2() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/renderFacet/renderFacet2.xhtml");
