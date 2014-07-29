@@ -70,6 +70,7 @@
         <module>facelets</module>
         <module>factory</module>
         <module>mapping</module>
+        <module>multi-tenant</module>
         <module>navigation</module>
         <module>systest</module>
     </modules>

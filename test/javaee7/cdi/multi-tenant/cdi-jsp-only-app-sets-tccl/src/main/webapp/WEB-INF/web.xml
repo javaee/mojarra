@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -41,22 +40,16 @@
     holder.
 
 -->
-
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.sun.faces.test.javaee7</groupId>
-        <artifactId>pom</artifactId>
-        <version>2.2.8-SNAPSHOT</version>
-    </parent>
-    <groupId>com.sun.faces.test.javaee7.cdi</groupId>
-    <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - JavaEE 7 - CDI</name>
-    <modules>
-        <module>beanValidatorCdi</module>
-        <module>initDestroy</module>
-        <module>noBeansXml</module>
-        <module>multi-tenant</module>
-    </modules>
-</project>
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+    <filter>
+        <filter-name>BeforeFilter</filter-name>
+        <filter-class>com.sun.faces.test.javaee7.multi_tenant.cdi_jsp_only_app_sets_tccl.BeforeFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>BeforeFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+</web-app>

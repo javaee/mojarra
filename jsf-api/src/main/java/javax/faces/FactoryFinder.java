@@ -258,7 +258,7 @@ public final class FactoryFinder {
 
     // ------------------------------------------------------- Static Variables
 
-    private static final FactoryManagerCache FACTORIES_CACHE;
+    private static final CurrentThreadToServletContext FACTORIES_CACHE;
 
 
     /**
@@ -278,7 +278,7 @@ public final class FactoryFinder {
     private static final Logger LOGGER;
 
     static {
-        FACTORIES_CACHE = new FactoryManagerCache();
+        FACTORIES_CACHE = new CurrentThreadToServletContext();
 
         FACTORY_NAMES = new String [] {
             APPLICATION_FACTORY,
@@ -374,7 +374,7 @@ public final class FactoryFinder {
         // Identify the web application class loader
         ClassLoader classLoader = getClassLoader();
 
-        FactoryManager manager =
+        FactoryFinderInstance manager =
               FACTORIES_CACHE.getApplicationFactoryManager(classLoader);
         return manager.getFactory(classLoader, factoryName);
 
@@ -406,7 +406,7 @@ public final class FactoryFinder {
         // Identify the web application class loader
         ClassLoader classLoader = getClassLoader();
 
-        FactoryManager manager =
+        FactoryFinderInstance manager =
               FACTORIES_CACHE.getApplicationFactoryManager(classLoader);
         manager.addFactory(factoryName, implName);
 
@@ -430,11 +430,11 @@ public final class FactoryFinder {
 
             if (!FACTORIES_CACHE.applicationMap.isEmpty()) {
 
-                FactoryManager fm = FACTORIES_CACHE.getApplicationFactoryManager(cl);
+                FactoryFinderInstance fm = FACTORIES_CACHE.getApplicationFactoryManager(cl);
                 InjectionProvider provider = fm.getInjectionProvider();
                 if (null != provider) {
                     Collection factories = null;
-                    for (Map.Entry<FactoryManagerCacheKey, FactoryManager> entry : 
+                    for (Map.Entry<FactoryManagerCacheKey, FactoryFinderInstance> entry : 
                             FACTORIES_CACHE.applicationMap.entrySet()) {
                         factories = entry.getValue().getFactories();
                         for (Object curFactory : factories) {
@@ -513,9 +513,9 @@ public final class FactoryFinder {
      * <p/>
      * <li><p>Treat each remaining element in the
      * <code>implementations</code> list as a fully qualified class name
-     * of a class implementing <code>factoryName</code>.  If the current
-     * element has a one arg constructor of the type for
-     * <code>factoryName</code>, instantiate it, passing the
+     * of a class implementing <code>factoryName</code>.  If the currentKeyrent
+ element has a one arg constructor of the type for
+ <code>factoryName</code>, instantiate it, passing the
      * instantiated factory from the previous or step iteration.  If
      * there is no one arg constructor, just instantiate the zero arg
      * constructor, replacing the instantiated factory from the previous
@@ -689,7 +689,7 @@ public final class FactoryFinder {
                 newInstanceArgs[0] = previousImpl;
                 result = ctor.newInstance(newInstanceArgs);
                 
-                FactoryManager fm = FACTORIES_CACHE.getApplicationFactoryManager(classLoader);
+                FactoryFinderInstance fm = FACTORIES_CACHE.getApplicationFactoryManager(classLoader);
                 provider = fm.getInjectionProvider();
                 if (null != provider) {
                     provider.inject(result);
@@ -765,20 +765,20 @@ public final class FactoryFinder {
      * Managed the mappings between a web application and its configured
      * injectionProvider.
      */
-    private static final class FactoryManagerCache {
+    private static final class CurrentThreadToServletContext {
 
-        private ConcurrentMap<FactoryManagerCacheKey,FactoryManager> applicationMap =
-              new ConcurrentHashMap<FactoryManagerCacheKey, FactoryManager>();
+        private ConcurrentMap<FactoryManagerCacheKey,FactoryFinderInstance> applicationMap =
+              new ConcurrentHashMap<FactoryManagerCacheKey, FactoryFinderInstance>();
         private AtomicBoolean logNullFacesContext = new AtomicBoolean(false);
         private AtomicBoolean logNonNullFacesContext = new AtomicBoolean(false);
 
 
         // ------------------------------------------------------ Public Methods
         
-        private Object getFallbackFactory(ClassLoader cl, FactoryManager brokenFactoryManager,
+        private Object getFallbackFactory(ClassLoader cl, FactoryFinderInstance brokenFactoryManager,
                 String factoryName) {
             Object result = null;
-            for (Map.Entry<FactoryManagerCacheKey,FactoryManager> cur : applicationMap.entrySet()) {
+            for (Map.Entry<FactoryManagerCacheKey,FactoryFinderInstance> cur : applicationMap.entrySet()) {
                 if (cur.getKey().getClassLoader().equals(cl) && !cur.getValue().equals(brokenFactoryManager)) {
                     result = cur.getValue().getFactory(cl, factoryName);
                     if (null != result) {
@@ -789,33 +789,33 @@ public final class FactoryFinder {
             return result;
         }
         
-        private FactoryManager getApplicationFactoryManager(ClassLoader cl) {
-            FactoryManager result = getApplicationFactoryManager(cl, true);
+        private FactoryFinderInstance getApplicationFactoryManager(ClassLoader cl) {
+            FactoryFinderInstance result = getApplicationFactoryManager(cl, true);
             return result;
         }
 
-        private FactoryManager getApplicationFactoryManager(ClassLoader cl, boolean create) {
+        private FactoryFinderInstance getApplicationFactoryManager(ClassLoader cl, boolean create) {
             FacesContext facesContext = FacesContext.getCurrentInstance();
             boolean isSpecialInitializationCase = detectSpecialInitializationCase(facesContext);
 
             FactoryManagerCacheKey key = new FactoryManagerCacheKey(facesContext,
                     cl, applicationMap);
 
-            FactoryManager result = applicationMap.get(key);
-            FactoryManager toCopy = null;
+            FactoryFinderInstance result = applicationMap.get(key);
+            FactoryFinderInstance toCopy = null;
             if (result == null && create) {
                 boolean createNewFactoryManagerInstance = false;
                 
                 if (isSpecialInitializationCase) {
                     // We need to obtain a reference to the correct
-                    // FactoryManager.  Iterate through the data structure 
-                    // containing all FactoryManager instances for this VM.
+                    // FactoryFinderInstance.  Iterate through the data structure 
+                    // containing all FactoryFinderInstance instances for this VM.
                     FactoryManagerCacheKey curKey;
                     boolean classLoadersMatchButContextsDoNotMatch = false;
                     boolean foundNoMatchInApplicationMap = true;
-                    for (Map.Entry<FactoryManagerCacheKey, FactoryManager> cur : applicationMap.entrySet()) {
+                    for (Map.Entry<FactoryManagerCacheKey, FactoryFinderInstance> cur : applicationMap.entrySet()) {
                         curKey = cur.getKey();
-                        // If the current FactoryManager is for a
+                        // If the current FactoryFinderInstance is for a
                         // the same ClassLoader as the current ClassLoader...
                         if (curKey.getClassLoader().equals(cl)) {
                             foundNoMatchInApplicationMap = false;
@@ -824,7 +824,7 @@ public final class FactoryFinder {
 
                             // If the context objects of the keys are
                             // both non-null and non-equal, then *do*
-                            // create a new FactoryManager instance.
+                            // create a new FactoryFinderInstance instance.
 
                             if ((null != key.getContext() && null != curKey.getContext()) &&
                                 (!key.getContext().equals(curKey.getContext()))) {
@@ -832,14 +832,14 @@ public final class FactoryFinder {
                                 toCopy = cur.getValue();
                             }
                             else {
-                                // Otherwise, use this FactoryManager
+                                // Otherwise, use this FactoryFinderInstance
                                 // instance.
                                 result = cur.getValue();
                             }
                             break;
                         }
                     }
-                    // We must create a new FactoryManager if there was no match
+                    // We must create a new FactoryFinderInstance if there was no match
                     // at all found in the applicationMap, or a match was found
                     // and the match is safe to use in this web app
                     createNewFactoryManagerInstance = foundNoMatchInApplicationMap ||
@@ -849,11 +849,11 @@ public final class FactoryFinder {
                 }
                 
                 if (createNewFactoryManagerInstance) {
-                    FactoryManager newResult;
+                    FactoryFinderInstance newResult;
                     if (null != toCopy) {
-                        newResult = new FactoryManager(toCopy);
+                        newResult = new FactoryFinderInstance(toCopy);
                     } else {
-                        newResult = new FactoryManager();
+                        newResult = new FactoryFinderInstance();
                     }
                     result = applicationMap.putIfAbsent(key, newResult);
                     result = (null != result) ? result : newResult;
@@ -865,12 +865,12 @@ public final class FactoryFinder {
         
         /**
          * This method is used to detect the following special initialization case.
-         * IF no FactoryManager can be found for key, 
-         * AND this call to getApplicationFactoryManager() *does* have a current FacesContext
-         * BUT a previous call to getApplicationFactoryManager *did not* have a current FacesContext
+         * IF no FactoryFinderInstance can be found for key, 
+ AND this call to getApplicationFactoryFinderInstance() *does* have a currentKeyrent FacesContext
+ BUT a previous call to getApplicationFactoryFinderInstance *did not* have a currentKeyrent FacesContext
          * 
-         * @param facesContext the current FacesContext for this request
-         * @return true if the current execution falls into the special initialization case.
+         * @param facesContext the currentKeyrent FacesContext for this request
+         * @return true if the currentKeyrent execution falls into the special initialization case.
          */
         private boolean detectSpecialInitializationCase(FacesContext facesContext) {
             boolean result = false;
@@ -886,7 +886,7 @@ public final class FactoryFinder {
 
 
         public void removeApplicationFactoryManager(ClassLoader cl) {
-            FactoryManager fm = this.getApplicationFactoryManager(cl, false);
+            FactoryFinderInstance fm = this.getApplicationFactoryManager(cl, false);
             if (null != fm) {
                 fm.clearInjectionProvider();
             }
@@ -913,59 +913,132 @@ public final class FactoryFinder {
     } // END FactoryCache
 
     private static final class FactoryManagerCacheKey {
+        // The ClassLoader that is active the first time this key
+        // is created.  At startup time, this is assumed to be the 
+        // web app ClassLoader
         private ClassLoader cl;
+        // I marker that disambiguates the case when multiple
+        // web apps have the same web app ClassLoader but different
+        // ServletContext instances.  
         private Long marker;
+        // The ServletContext corresponding to this marker/ClassLoader pair.
         private Object context;
 
-        private static final String KEY = FactoryFinder.class.getName() + "." +
+        private static final String MARKER_KEY = FactoryFinder.class.getName() + "." +
                 FactoryManagerCacheKey.class.getSimpleName();
+        private static final String INIT_TIME_CL_KEY = MARKER_KEY + ".InitTimeCLKey";
 
+        // <editor-fold defaultstate="collapsed" desc="Constructors and helpers">
         public FactoryManagerCacheKey(FacesContext facesContext, ClassLoader cl,
-                Map<FactoryManagerCacheKey,FactoryManager> factoryMap) {
-            this.cl = cl;
-            boolean resolveValueFromFactoryMap = false;
-            
-            
-            if (null == facesContext) {
-                resolveValueFromFactoryMap = true;
+                Map<FactoryManagerCacheKey,FactoryFinderInstance> factoryMap) {
+            ExternalContext extContext = (null != facesContext) ? facesContext.getExternalContext()
+                    : null;
+
+            if (null == facesContext || null == extContext) {
+                initFromFactoryMap(cl, factoryMap);
             } else {
-                ExternalContext extContext = facesContext.getExternalContext();
-                context = extContext.getContext();
-                if (null == context) {
-                    resolveValueFromFactoryMap = true;
-                } else {
-                    Map<String, Object> appMap = extContext.getApplicationMap();
-                
-                    Long val = (Long) appMap.get(KEY);
-                    if (null == val) {
-                        marker = new Long(System.currentTimeMillis());
-                        appMap.put(KEY, marker);
-                    } else {
-                        marker = val;
-                    }
-                }
+                initFromAppMap(extContext, cl, factoryMap);
             } 
-            if (resolveValueFromFactoryMap) {
-                // We don't have a FacesContext.
-                // Our only recourse is to inspect the keys of the
-                // factoryMap and see if any of them has a classloader
-                // equal to our argument cl.
-                Set<FactoryManagerCacheKey> keys = factoryMap.keySet();
-                FactoryManagerCacheKey match = null;
-                for (FactoryManagerCacheKey cur : keys) {
-                    if (this.cl.equals(cur.cl)) {
-                        if (null != cur && null != match) {
-                            LOGGER.log(Level.WARNING, "Multiple JSF Applications found on same ClassLoader.  Unable to safely determine which FactoryManager instance to use. Defaulting to first match.");
-                            break;
-                        }
-                        match = cur;
+        }
+        
+        private void initFromFactoryMap(ClassLoader cl,
+                Map<FactoryManagerCacheKey,FactoryFinderInstance> factoryMap) {
+            // We don't have a FacesContext.
+            // Our only recourse is to inspect the keys of the
+            // factoryMap and see if any of them has a classloader
+            // equal to our argument cl.
+            Set<FactoryManagerCacheKey> keys = factoryMap.keySet();
+            FactoryManagerCacheKey match = null;
+            
+            boolean found = false;
+            // For each entry in the factoryMap's keySet...
+            for (FactoryManagerCacheKey currentKey : keys) {
+                ClassLoader curCL = cl;
+                // For each ClassLoader in the hierarchy starting 
+                // with the argument ClassLoader...
+                while (!found && null != curCL) {
+                    // if the ClassLoader at this level in the hierarchy
+                    // is equal to the argument ClassLoader, consider it a match.
+                    found = curCL.equals(currentKey.cl);
+                    // If it's not a match, try the parent in the ClassLoader
+                    // hierarchy.
+                    if (!found) {
+                        curCL = curCL.getParent();
                     }
                 }
-                if (null != match) {
-                    this.marker = match.marker;
+                // Keep searching for another match to detect an unsupported
+                // deployment scenario.
+                if (found) {
+                    if (null != currentKey && null != match) {
+                        LOGGER.log(Level.WARNING, "Multiple JSF Applications found on same ClassLoader.  Unable to safely determine which FactoryManager instance to use. Defaulting to first match.");
+                        break;
+                    }
+                    match = currentKey;
+                    this.cl = curCL;
                 }
             }
+            
+            if (null != match) {
+                this.marker = match.marker;
+                this.context = match.context;
+            }
+            
         }
+        
+        private void initFromAppMap(ExternalContext extContext, ClassLoader cl,
+                Map<FactoryManagerCacheKey,FactoryFinderInstance> factoryMap) {
+            Map<String, Object> appMap = extContext.getApplicationMap();
+            
+            Long val = (Long) appMap.get(MARKER_KEY);
+            if (null == val) {
+                this.marker = new Long(System.currentTimeMillis());
+                appMap.put(MARKER_KEY, marker);
+                
+                // If we needed to create a marker, assume that the
+                // argument CL is safe to treat as the web app
+                // ClassLoader.  This assumption allows us 
+                // to bypass the ClassLoader resolution algorithm
+                // in resolveToFirstTimeUsedClassLoader() in all cases
+                // except when the TCCL has been replaced.
+                appMap.put(INIT_TIME_CL_KEY, new Integer(System.identityHashCode(cl)));
+                
+            } else {
+                this.marker = val;
+            }
+            this.cl = resolveToFirstTimeUsedClassLoader(cl, extContext);
+            this.context = extContext.getContext();
+        }
+        
+       /*
+        * Resolve the argument ClassLoader to be the ClassLoader that 
+        * was passed in to the ctor the first time a FactoryManagerCacheKey
+        * was created for this web app.  
+        */
+
+        private ClassLoader resolveToFirstTimeUsedClassLoader(ClassLoader toResolve, ExternalContext extContext) {
+            ClassLoader curCL = toResolve;
+            ClassLoader resolved = null;
+            Map<String, Object> appMap = extContext.getApplicationMap();
+            
+            // See if the argument curCL already is the web app class loader
+            Integer webAppCLHashCode = (Integer) appMap.get(INIT_TIME_CL_KEY);
+            boolean found = false;
+            if (null != webAppCLHashCode) {
+                int toResolveHashCode = System.identityHashCode(curCL);
+                while (!found && null != curCL) {
+                    found = (toResolveHashCode == webAppCLHashCode);
+                    if (!found) {
+                        curCL = curCL.getParent();
+                        toResolveHashCode = System.identityHashCode(curCL);
+                    }
+                }
+            }
+            resolved = found ? curCL : toResolve;
+            
+            return resolved;
+        }
+        
+        // </editor-fold>
         
         public ClassLoader getClassLoader() {
             return cl;
@@ -1009,10 +1082,7 @@ public final class FactoryFinder {
     }
 
 
-    /**
-     * Maintains the injectionProvider for a single web application.
-     */
-    private static final class FactoryManager {
+    private static final class FactoryFinderInstance {
 
         private final Map<String,Object> factories;
         private final Map<String, List<String>> savedFactoryNames;
@@ -1025,7 +1095,7 @@ public final class FactoryFinder {
         // -------------------------------------------------------- Consturctors
 
 
-        public FactoryManager() {
+        public FactoryFinderInstance() {
             lock = new ReentrantReadWriteLock(true);
             factories = new HashMap<String,Object>();
             savedFactoryNames = new HashMap<String, List<String>>();
@@ -1035,7 +1105,7 @@ public final class FactoryFinder {
             copyInjectionProviderFromFacesContext();
         }
 
-        public FactoryManager(FactoryManager toCopy) {
+        public FactoryFinderInstance(FactoryFinderInstance toCopy) {
             lock = new ReentrantReadWriteLock(true);
             factories = new HashMap<String,Object>();
             savedFactoryNames = new HashMap<String, List<String>>();
@@ -1144,7 +1214,7 @@ public final class FactoryFinder {
             }
         }
         
-    } // END FactoryManager
+    } // END FactoryFinderInstance
 
 
 }

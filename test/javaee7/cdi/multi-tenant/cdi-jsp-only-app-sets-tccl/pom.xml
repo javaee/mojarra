@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -40,23 +39,45 @@
     only if the new code is made subject to such option by the copyright
     holder.
 
--->
+--><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  
+  <groupId>com.sun.faces.test.javaee7.cdi.multi-tenant</groupId>
+  <artifactId>cdi-jsp-only-app-sets-tccl</artifactId>
+  <version>2.2.8-SNAPSHOT</version>
+  <packaging>war</packaging>
+  <name>Mojarra ${project.version} - Test - Java EE 7 - CDI - Multi-Tenant - CDI+JSP Only App Sets TCCL</name>
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.sun.faces.test.javaee7</groupId>
-        <artifactId>pom</artifactId>
-        <version>2.2.8-SNAPSHOT</version>
-    </parent>
-    <groupId>com.sun.faces.test.javaee7.cdi</groupId>
-    <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - JavaEE 7 - CDI</name>
-    <modules>
-        <module>beanValidatorCdi</module>
-        <module>initDestroy</module>
-        <module>noBeansXml</module>
-        <module>multi-tenant</module>
-    </modules>
+  <dependencies>
+    <dependency>
+      <groupId>com.sun.faces.test</groupId>
+      <artifactId>util</artifactId>
+      <version>2.2.8-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax</groupId>
+      <artifactId>javaee-api</artifactId>
+      <version>7.0</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+  
+  <build>
+    <finalName>test-cdi-jsp-only-app-sets-tccl</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <inherited>true</inherited>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+          <encoding>${project.build.sourceEncoding}</encoding>
+        </configuration>
+      </plugin>
+    </plugins>
+      
+  </build>
+  
 </project>
