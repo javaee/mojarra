@@ -42,11 +42,16 @@ package com.sun.faces.test.agnostic.facelets.coreEmptyAsNull;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class Issue1508IT {
 
     private String webUrl;
@@ -72,6 +77,7 @@ public class Issue1508IT {
      * http://tomcat.apache.org/tomcat-7.0-doc/config/systemprops.html and 
      * look for COERCE_TO_ZERO
      */
+    @JsfTest(JsfVersion.JSF_2_1_24)
     @Test
     public void testValidateEmptyFields() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
