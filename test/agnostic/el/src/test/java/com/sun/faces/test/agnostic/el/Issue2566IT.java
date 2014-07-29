@@ -41,11 +41,16 @@ package com.sun.faces.test.agnostic.el;
 
 import com.gargoylesoftware.htmlunit.TextPage;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class Issue2566IT {
 
     private String webUrl;
@@ -62,6 +67,7 @@ public class Issue2566IT {
         webClient.closeAllWindows();
     }
 
+    @JsfTest(JsfVersion.JSF_2_1_15)
     @Test
     public void testIssue1533() throws Exception {
         TextPage page = webClient.getPage(webUrl + "issue2566.jsp");
