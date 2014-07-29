@@ -37,11 +37,16 @@ package com.sun.faces.test.agnostic.dynamic;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class Issue2395IT {
 
     private String webUrl;
@@ -58,6 +63,7 @@ public class Issue2395IT {
         webClient.closeAllWindows();
     }
 
+    @JsfTest(JsfVersion.JSF_2_1_9)
     @Test
     public void testAdd() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/issue2395.xhtml");
@@ -66,6 +72,7 @@ public class Issue2395IT {
         assertTrue(page.asXml().indexOf("I was dynamically added") != -1);
     }
 
+    @JsfTest(JsfVersion.JSF_2_1_9)
     @Test
     public void testAddRemove() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/issue2395.xhtml");
@@ -74,6 +81,7 @@ public class Issue2395IT {
         assertTrue(page.asXml().indexOf("I was dynamically added") == -1);
     }
 
+    @JsfTest(JsfVersion.JSF_2_1_9)
     @Test
     public void testAddRemoveAdd() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/issue2395.xhtml");
@@ -82,6 +90,7 @@ public class Issue2395IT {
         assertTrue(page.asXml().indexOf("I was dynamically added") != -1);
     }
 
+    @JsfTest(JsfVersion.JSF_2_1_9)
     @Test
     public void testRemove() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/issue2395.xhtml");
@@ -90,6 +99,7 @@ public class Issue2395IT {
         assertTrue(page.asXml().indexOf("Remove Me") == -1);
     }
 
+    @JsfTest(JsfVersion.JSF_2_1_9)
     @Test
     public void testRemoveAdd() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/issue2395.xhtml");
@@ -98,6 +108,7 @@ public class Issue2395IT {
         assertTrue(page.asXml().indexOf("Remove Me") != -1);
     }
 
+    @JsfTest(JsfVersion.JSF_2_1_9)
     @Test
     public void testRemoveAddRemove() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/issue2395.xhtml");

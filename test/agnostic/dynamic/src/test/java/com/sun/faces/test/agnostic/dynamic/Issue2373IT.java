@@ -37,11 +37,16 @@ package com.sun.faces.test.agnostic.dynamic;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class Issue2373IT {
 
     private String webUrl;
@@ -58,6 +63,7 @@ public class Issue2373IT {
         webClient.closeAllWindows();
     }
 
+    @JsfTest(JsfVersion.JSF_2_1_8)
     @Test
     public void testMoveComponent() throws Exception {
 
@@ -84,6 +90,7 @@ public class Issue2373IT {
         assertTrue(page.asXml().indexOf("Moveable HELLO text") < page.asXml().indexOf("form1:commandButton11"));
     }
 
+    @JsfTest(JsfVersion.JSF_2_1_8)
     @Test
     public void testMoveComponent2() throws Exception {
 
@@ -110,6 +117,7 @@ public class Issue2373IT {
         assertTrue(page.asXml().indexOf("Moveable HELLO text") < page.asXml().indexOf("form1:commandButton11"));
     }
 
+    @JsfTest(JsfVersion.JSF_2_1_8)
     @Test
     public void testMoveComponent3() throws Exception {
         /*
@@ -153,6 +161,7 @@ public class Issue2373IT {
         }
     }
     
+    @JsfTest(JsfVersion.JSF_2_1_8)
     @Test
     public void testToggle1() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/toggle.xhtml");
