@@ -41,11 +41,16 @@ package com.sun.faces.test.agnostic.vdl.facelets.ui;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class Issue2453IT {
 
     private String webUrl;
@@ -62,6 +67,7 @@ public class Issue2453IT {
         webClient.closeAllWindows();
     }
 
+    @JsfTest(JsfVersion.JSF_2_1_14)
     @Test
     public void testDOCTYPES() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/issue2453.xhtml");
@@ -77,6 +83,7 @@ public class Issue2453IT {
         assertTrue(response.contains("<!DOCTYPE html>"));
     }
 
+    @JsfTest(JsfVersion.JSF_2_1_14)
     @Test
     public void testDOCTYPES_Reload() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/Issue2575_templateClient.xhtml");
@@ -86,6 +93,5 @@ public class Issue2453IT {
         page = webClient.getPage(webUrl + "faces/Issue2575_templateClient.xhtml");
         response = page.getWebResponse().getContentAsString();
         assertTrue(response.contains("<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">"));
-
     }
 }
