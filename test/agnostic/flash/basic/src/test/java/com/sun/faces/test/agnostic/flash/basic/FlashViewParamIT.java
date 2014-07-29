@@ -45,15 +45,17 @@ import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlButtonInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
+import org.junit.runner.RunWith;
 
-/**
-  *
- */
+@RunWith(JsfTestRunner.class)
 public class FlashViewParamIT {
 
     private String webUrl;
@@ -70,13 +72,7 @@ public class FlashViewParamIT {
         webClient.closeAllWindows();
     }
 
-
-    // ------------------------------------------------------------ Test Methods
-
-
-    /**
-     * Added for issue 904.
-     */
+    @JsfTest(JsfVersion.JSF_2_1_24)
     @Test
     public void testBooleanCheckboxSubmittedValue() throws Exception {
 
@@ -99,6 +95,5 @@ public class FlashViewParamIT {
         HtmlSubmitInput submitButton = (HtmlSubmitInput) page.getElementById("nextCommandButton");
         page = submitButton.click();
         assertTrue(page.asText().contains("foo = bar"));
-
     }
 }
