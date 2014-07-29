@@ -43,11 +43,16 @@ package com.sun.faces.test.agnostic.application.localeConfig;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class LocaleConfigIT {
     
     /**
@@ -84,6 +89,7 @@ public class LocaleConfigIT {
     }
     
 
+    @JsfTest(JsfVersion.JSF_2_1_8)
     @Test
     public void testBCP47Support() throws Exception {
 
