@@ -43,10 +43,15 @@ package com.sun.faces.test.agnostic.ajax;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 
 import org.junit.*;
 import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class Issue2381IT {
 
     /**
@@ -76,6 +81,7 @@ public class Issue2381IT {
      * This test verifies that the page contains updated information from an
      * Ajax response.  The response is updated in <code>UpdateBean</code>.
      */
+    @JsfTest(JsfVersion.JSF_2_1_8)
     @Test
     public void testBodyAttributesAfterUpdate() throws Exception {
         HtmlPage page = webClient.getPage(webUrl+"faces/updateBody.xhtml");

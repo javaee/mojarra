@@ -46,11 +46,16 @@ import com.gargoylesoftware.htmlunit.html.DomNodeList;
 import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlRadioButtonInput;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.*;
 import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class Issue2408IT {
 
     /**
@@ -80,6 +85,7 @@ public class Issue2408IT {
      * This test verifies correct function of SelectManyCheckbox in a Composite
      * Component over Ajax. 
      */
+    @JsfTest(JsfVersion.JSF_2_1_8)
     @Test
     public void testSelectManyCheckboxInComposite() throws Exception {
         HtmlPage page = webClient.getPage(webUrl+"faces/selectManyCheckboxInComposite.xhtml");
@@ -114,6 +120,7 @@ public class Issue2408IT {
      * This test verifies correct function of SelectManyCheckbox in a Composite
      * Component over Ajax. The components in the page have ids.
      */
+    @JsfTest(JsfVersion.JSF_2_1_8)
     @Test
     public void testSelectManyCheckboxIdsInComposite() throws Exception {
         HtmlPage page = webClient.getPage(webUrl+"faces/selectManyCheckboxIdsInComposite.xhtml");

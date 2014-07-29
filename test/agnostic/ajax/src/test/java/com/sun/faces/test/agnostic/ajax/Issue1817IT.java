@@ -45,9 +45,15 @@ import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.html.DomNodeList;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
+import static com.sun.faces.test.junit.JsfVersion.JSF_2_1_15;
 import org.junit.*;
 import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class Issue1817IT {
 
     private String webUrl;
@@ -64,6 +70,7 @@ public class Issue1817IT {
         webClient.closeAllWindows();
     }
 
+    @JsfTest(value = JSF_2_1_15)
     @Test
     public void testAjaxUIRepeat() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/issue1817.xhtml");

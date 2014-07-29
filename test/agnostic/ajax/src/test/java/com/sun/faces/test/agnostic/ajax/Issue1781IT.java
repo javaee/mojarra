@@ -41,11 +41,16 @@ package com.sun.faces.test.agnostic.ajax;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class Issue1781IT {
 
     private String webUrl;
@@ -69,6 +74,7 @@ public class Issue1781IT {
      * spec does not allow using f:ajax outside of a form so this will throw
      * a script error which we are going to ignore.
      */
+    @JsfTest(JsfVersion.JSF_2_1_21)
     @Test
     public void testAjaxToOnBody() throws Exception {
         webClient.setThrowExceptionOnFailingStatusCode(true);

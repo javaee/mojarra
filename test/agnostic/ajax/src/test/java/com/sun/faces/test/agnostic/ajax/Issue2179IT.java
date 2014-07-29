@@ -43,11 +43,16 @@ package com.sun.faces.test.agnostic.ajax;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 import org.junit.After;
 import org.junit.Before;
 import static org.junit.Assert.*;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class Issue2179IT {
     
     /**
@@ -91,6 +96,7 @@ public class Issue2179IT {
         assertTrue(exceptionThrown);
     }
 
+    @JsfTest(JsfVersion.JSF_2_1_16)
     @Test
     public void testDecodeException() throws Exception {
         webClient.setJavaScriptEnabled(true);

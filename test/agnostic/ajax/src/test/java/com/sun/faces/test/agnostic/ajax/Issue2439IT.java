@@ -43,10 +43,15 @@ package com.sun.faces.test.agnostic.ajax;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 
 import org.junit.*;
 import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class Issue2439IT {
 
     /**
@@ -76,6 +81,7 @@ public class Issue2439IT {
      * This test verifies that an attribute nameed 'value' can be successfully updated
      * from a partial response (over Ajax). 
      */
+    @JsfTest(JsfVersion.JSF_2_1_10)
     @Test
     public void testUpdateAttributeNamedValue() throws Exception {
         String expectedString1 = "<input id="+'"'+"form1:input1"+'"'+" type="+'"'+"text"+'"'+" name="+'"'+"form1:input1"+'"'+"/>";
