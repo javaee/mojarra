@@ -43,14 +43,14 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 import org.junit.*;
 import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
 
-/**
- * Integration tests for issue #2136
- *
- * @author Manfred Riem (manfred.riem@oracle.com)
- */
+@RunWith(JsfTestRunner.class)
 public class Issue2136IT {
 
     private String webUrl;
@@ -67,6 +67,7 @@ public class Issue2136IT {
         webClient.closeAllWindows();
     }
 
+    @JsfTest(JsfVersion.JSF_2_1_14)
     @Test
     public void testFlashChunkingLink1() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/issue2136/issue2136.xhtml");
