@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
     <context-param>
         <param-name>javax.faces.PROJECT_STAGE</param-name>
         <param-value>${webapp.projectStage}</param-value>
@@ -19,6 +16,14 @@
         <param-name>javax.faces.FACELETS_LIBRARIES</param-name>
         <param-value>/WEB-INF/behavior-taglib.xml;/WEB-INF/taglib.xml</param-value>
     </context-param>
+    <filter>
+        <filter-name>BeforeFilter</filter-name>
+        <filter-class>com.sun.faces.test.servlet30.ajax.filter.BeforeFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>BeforeFilter</filter-name>
+        <url-pattern>/BeforeFilter</url-pattern>
+    </filter-mapping>
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
