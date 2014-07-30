@@ -70,6 +70,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import static com.sun.faces.RIConstants.DYNAMIC_COMPONENT;
 import static com.sun.faces.component.CompositeComponentStackManager.StackType.TreeCreation;
+import java.util.Iterator;
 
 public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
     
@@ -139,9 +140,31 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
 
         // our id
         String id = ctx.generateUniqueId(owner.getTagId());
+        UIComponent c = null;
 
+        TagAttribute componentIdAttribute = owner.getTagAttribute("id");
+        
+        if (componentIdAttribute != null && 
+                componentIdAttribute.getValue() != null && 
+                !componentIdAttribute.getValue().contains("#")) {
+            
+            String componentId = componentIdAttribute.getValue();
+            
+            Iterator<UIComponent> children = parent.getChildren().iterator();
+            while(children.hasNext()) {
+                UIComponent child = children.next();
+                if (child.getId().equals(componentId)) {
+                    c = child;
+                    break;
+                }
+            }
+        }
+        
         // grab our component
-        UIComponent c = findChild(ctx, parent, id);
+        if (c == null) {
+            c = findChild(ctx, parent, id);
+        }
+        
         if (null == c &&
             context.isPostback() &&
             UIComponent.isCompositeComponent(parent) &&
