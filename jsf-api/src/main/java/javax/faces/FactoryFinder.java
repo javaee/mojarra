@@ -937,7 +937,7 @@ public final class FactoryFinder {
             if (null == facesContext || null == extContext) {
                 initFromFactoryMap(cl, factoryMap);
             } else {
-                initFromAppMap(extContext, cl, factoryMap);
+                initFromAppMap(extContext, cl);
             } 
         }
         
@@ -985,8 +985,7 @@ public final class FactoryFinder {
             
         }
         
-        private void initFromAppMap(ExternalContext extContext, ClassLoader cl,
-                Map<FactoryManagerCacheKey,FactoryFinderInstance> factoryMap) {
+        private void initFromAppMap(ExternalContext extContext, ClassLoader cl) {
             Map<String, Object> appMap = extContext.getApplicationMap();
             
             Long val = (Long) appMap.get(MARKER_KEY);
