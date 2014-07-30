@@ -950,37 +950,42 @@ public final class FactoryFinder {
             Set<FactoryManagerCacheKey> keys = factoryMap.keySet();
             FactoryManagerCacheKey match = null;
             
-            boolean found = false;
-            // For each entry in the factoryMap's keySet...
-            for (FactoryManagerCacheKey currentKey : keys) {
-                ClassLoader curCL = cl;
-                // For each ClassLoader in the hierarchy starting 
-                // with the argument ClassLoader...
-                while (!found && null != curCL) {
-                    // if the ClassLoader at this level in the hierarchy
-                    // is equal to the argument ClassLoader, consider it a match.
-                    found = curCL.equals(currentKey.cl);
-                    // If it's not a match, try the parent in the ClassLoader
-                    // hierarchy.
-                    if (!found) {
-                        curCL = curCL.getParent();
-                    }
-                }
-                // Keep searching for another match to detect an unsupported
-                // deployment scenario.
-                if (found) {
-                    if (null != currentKey && null != match) {
-                        LOGGER.log(Level.WARNING, "Multiple JSF Applications found on same ClassLoader.  Unable to safely determine which FactoryManager instance to use. Defaulting to first match.");
-                        break;
-                    }
-                    match = currentKey;
-                    this.cl = curCL;
-                }
-            }
+            if (keys.isEmpty()) {
+                this.cl = cl;
+                this.marker = new Long(System.currentTimeMillis());
+            } else {
             
-            if (null != match) {
-                this.marker = match.marker;
-                this.context = match.context;
+                boolean found = false;
+                // For each entry in the factoryMap's keySet...
+                for (FactoryManagerCacheKey currentKey : keys) {
+                    ClassLoader curCL = cl;
+                    // For each ClassLoader in the hierarchy starting 
+                    // with the argument ClassLoader...
+                    while (!found && null != curCL) {
+                        // if the ClassLoader at this level in the hierarchy
+                        // is equal to the argument ClassLoader, consider it a match.
+                        found = curCL.equals(currentKey.cl);
+                        // If it's not a match, try the parent in the ClassLoader
+                        // hierarchy.
+                        if (!found) {
+                            curCL = curCL.getParent();
+                        }
+                    }
+                    // Keep searching for another match to detect an unsupported
+                    // deployment scenario.
+                    if (found) {
+                        if (null != currentKey && null != match) {
+                            LOGGER.log(Level.WARNING, "Multiple JSF Applications found on same ClassLoader.  Unable to safely determine which FactoryManager instance to use. Defaulting to first match.");
+                            break;
+                        }
+                        match = currentKey;
+                        this.cl = curCL;
+                    }
+                }
+                if (null != match) {
+                    this.marker = match.marker;
+                    this.context = match.context;
+                }
             }
             
         }

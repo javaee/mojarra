@@ -119,6 +119,10 @@ More specific testing
  Running a single test
  ---------------------
 
+  If you are using NetBeans, you can usually just put the cursor in the
+  test method you want to run, set a breakpoint, and do "Debug Focused
+  Test Method".
+
   To run a single test against a previously deployed web application, go into
   the project directory of the deployed web application and issue the following:
 
@@ -141,6 +145,14 @@ More specific testing
   Note: VersionPageIT is the name of the test class, and testVerifyMojarraVersion
         the name of the test method (note you can use regular expressions to 
         match multiple test and methods).
+
+  To run a single unit test:
+
+    mvn -Dtest=FactoryFinderTestCase#testNoFacesContextInitially test
+
+    Note that when you make a change in the core code you must re-run
+    mvn.deploy.snapshot.local at the top level to cause the unit tests
+    to see the change.
 
 Testing using other servers
 ===========================
