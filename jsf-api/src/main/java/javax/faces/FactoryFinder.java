@@ -933,8 +933,9 @@ public final class FactoryFinder {
                 Map<FactoryManagerCacheKey,FactoryFinderInstance> factoryMap) {
             ExternalContext extContext = (null != facesContext) ? facesContext.getExternalContext()
                     : null;
+            Object servletContext = (null != extContext) ? extContext.getContext() : null;
 
-            if (null == facesContext || null == extContext) {
+            if (null == facesContext || null == extContext || null == servletContext) {
                 initFromFactoryMap(cl, factoryMap);
             } else {
                 initFromAppMap(extContext, cl);
