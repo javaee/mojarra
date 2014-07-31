@@ -43,17 +43,12 @@ import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.gargoylesoftware.htmlunit.xml.XmlPage;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.Ignore;
 import static org.junit.Assert.*;
 
-/* PENDING(edburns): remove @Ignore once I figure out how to get HtmlUnit
-   to test this correctly.
- */
-
-@Ignore
 public class Issue3344IT {
 
     private String webUrl;
@@ -74,21 +69,12 @@ public class Issue3344IT {
 
     @Test
     public void testXmlPreambleOnRedirect() throws Exception {
-        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
-        webClient.getOptions().setThrowExceptionOnScriptError(false);
-        webClient.getOptions().setRedirectEnabled(false);
-
         HtmlPage page = webClient.getPage(webUrl + "faces/ajaxRedirect01.xhtml");
+        
         HtmlSubmitInput button = page.getHtmlElementById("button");
-
-        webClient.setAjaxController(new NicelyResynchronizingAjaxController());
-        
         page = button.click();
+        
         webClient.waitForBackgroundJavaScript(60000);
-        String responseXML = page.getWebResponse().getContentAsString();
-        assertTrue(responseXML.contains("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"));
-        
-        
+        assertTrue(page.asXml().contains("&lt;?xml version=\"1.0\" encoding=\"UTF-8\"?&gt;"));
     }
-    
 }
