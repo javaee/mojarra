@@ -39,11 +39,9 @@
  */
 package com.sun.faces.test.servlet30.ajax;
 
-import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.xml.XmlPage;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
