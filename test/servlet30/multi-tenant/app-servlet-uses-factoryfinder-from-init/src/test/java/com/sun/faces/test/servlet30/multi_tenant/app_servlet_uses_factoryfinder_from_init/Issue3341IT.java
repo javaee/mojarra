@@ -47,6 +47,7 @@ import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import static org.junit.Assert.assertTrue;
+import org.junit.Ignore;
 
 public class Issue3341IT {
     /**
@@ -94,7 +95,8 @@ public class Issue3341IT {
     }
 
     @Test
-    public void testBuilderDefinedFlowWithMethodCall() throws Exception {
+    @Ignore
+    public void testUseFactoryFinderFromServlet() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
 
         String pageText = page.getBody().asText();
