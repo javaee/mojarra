@@ -5,9 +5,9 @@
 
   <h:form prependId="false">
       
-      <p id="facesContext"><h:outputText value="#{facesContext.class.name}" /></p>
+      <p id="facesContext"><h:outputText value="#{facesContext.getClass().getName()}" /></p>
       
-      <p id="exceptionHandler"><h:outputText value="${facesContext.exceptionHandler.class.name}" /></p>
+      <p id="exceptionHandler"><h:outputText value="${facesContext.exceptionHandler.getClass().getName()}" /></p>
       
       <h:commandButton id="button" value="submit" />
     
