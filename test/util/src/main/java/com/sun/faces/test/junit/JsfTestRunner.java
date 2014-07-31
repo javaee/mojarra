@@ -145,6 +145,7 @@ public class JsfTestRunner extends BlockJUnit4ClassRunner {
      * Allow for no (active) test methods on the test class.
      */
     @Override
+    @SuppressWarnings({"deprecation"})
     protected void validateInstanceMethods(List<Throwable> errors) {
         validatePublicVoidNoArgMethods(After.class, false, errors);
         validatePublicVoidNoArgMethods(Before.class, false, errors);
