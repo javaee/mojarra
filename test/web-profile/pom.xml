@@ -62,8 +62,7 @@
         </dependency>
     </dependencies>
     <modules>
-        <module>adf</module>
-        <module>ajax</module>	
+        <module>adf</module>	
         <module>facelets</module>
         <module>flow</module>
         <module>multi_templating</module>

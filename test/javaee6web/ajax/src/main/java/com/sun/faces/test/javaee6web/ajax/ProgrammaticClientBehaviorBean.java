@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,9 +37,8 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.javaee6web.ajax;
 
-package com.sun.faces.test.webprofile.ajax;
- 
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Model;
 import javax.faces.component.behavior.AjaxBehavior;
@@ -48,40 +47,38 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.AjaxBehaviorListener;
- 
+
 @Model
-public class Issue2674Bean implements AjaxBehaviorListener {
- 
-  private HtmlInputText text;
- 
-	public HtmlInputText getText() {
-		return text;
-	}
- 
-	public void setText(HtmlInputText text) {
-		this.text = text;
-	}
- 
-	@Override
-	public void processAjaxBehavior(AjaxBehaviorEvent event)
-			throws AbortProcessingException {
-		System.out.println("Ajax call");
- 
-	}
- 
-	@PostConstruct
-	private void setup() {
-		HtmlInputText inputText = (HtmlInputText) FacesContext
-				.getCurrentInstance().getApplication()
-				.createComponent(HtmlInputText.COMPONENT_TYPE);
-		AjaxBehavior ajaxBehavior = (AjaxBehavior) FacesContext
-				.getCurrentInstance().getApplication()
-				.createBehavior(AjaxBehavior.BEHAVIOR_ID);
-		inputText.setId("input");
-		ajaxBehavior.addAjaxBehaviorListener(this);
-		ajaxBehavior.setTransient(true);
-		ajaxBehavior.setDisabled(false);
-		inputText.addClientBehavior("focus", ajaxBehavior);
-		text = inputText;
-	}
+public class ProgrammaticClientBehaviorBean implements AjaxBehaviorListener {
+
+    private HtmlInputText text;
+
+    public HtmlInputText getText() {
+        return text;
+    }
+
+    public void setText(HtmlInputText text) {
+        this.text = text;
+    }
+
+    @Override
+    public void processAjaxBehavior(AjaxBehaviorEvent event)
+            throws AbortProcessingException {
+    }
+
+    @PostConstruct
+    public void init() {
+        HtmlInputText inputText = (HtmlInputText) FacesContext
+                .getCurrentInstance().getApplication()
+                .createComponent(HtmlInputText.COMPONENT_TYPE);
+        AjaxBehavior ajaxBehavior = (AjaxBehavior) FacesContext
+                .getCurrentInstance().getApplication()
+                .createBehavior(AjaxBehavior.BEHAVIOR_ID);
+        inputText.setId("input");
+        ajaxBehavior.addAjaxBehaviorListener(this);
+        ajaxBehavior.setTransient(true);
+        ajaxBehavior.setDisabled(false);
+        inputText.addClientBehavior("focus", ajaxBehavior);
+        text = inputText;
+    }
 }

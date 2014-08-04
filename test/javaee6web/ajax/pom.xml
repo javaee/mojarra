@@ -4,7 +4,7 @@
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -45,16 +45,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.sun.faces.test.webprofile</groupId>
+        <groupId>com.sun.faces.test.javaee6web</groupId>
         <artifactId>pom</artifactId>
         <version>2.2.8-SNAPSHOT</version>
     </parent>
-    <groupId>com.sun.faces.test.wqeb-profile</groupId>
-    <artifactId>ajax</artifactId>
+    <artifactId>ajaxc</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra ${project.version} - Test - Web-Profile - Ajax</name>
+    <name>Mojarra ${project.version} - Test - JavaEE 6 Web - Ajax</name>
     <build>
-        <finalName>test-webprofile-ajax</finalName>
+        <finalName>test-javaee6web-ajax</finalName>
     </build>
     <properties>
         <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>

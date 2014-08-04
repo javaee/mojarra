@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,24 +37,18 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
-package com.sun.faces.test.webprofile.ajax; 
+package com.sun.faces.test.javaee6web.ajax; 
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-
-import org.junit.*;
-import static org.junit.Assert.*;
+import org.junit.After;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
 public class Issue2674IT {
 
-    /**
-     * Stores the web URL.
-     */
     private String webUrl;
-    /**
-     * Stores the web client.
-     */
     private WebClient webClient;
 
     @Before
@@ -68,17 +62,16 @@ public class Issue2674IT {
         webClient.closeAllWindows();
     }
 
-
-    // ------------------------------------------------------------ Test Methods
-
     /**
-     * This test verifies ajax behavior was programmatically attached to input text component. 
+     * This test verifies AjaxBehavior was programmatically attached to input 
+     * text component. 
+     * 
+     * @throws Exception
      */
     @Test
     public void testProgrammaticAjaxBehavior() throws Exception {
         String expectedString = "<input id="+'"'+"form:input1"+'"'+" type="+'"'+"text"+'"'+" name="+'"'+"form:input1"+'"'+" value="+'"'+"hi"+'"'+" onfocus="+'"'+"mojarra.ab(this,event,'focus',0,0)"+'"';
-        HtmlPage page = webClient.getPage(webUrl+"faces/issue2674.xhtml");
+        HtmlPage page = webClient.getPage(webUrl+"faces/programmaticClientBehavior.xhtml");
         assertTrue(page.asXml().contains(expectedString));
     }
 }
-
