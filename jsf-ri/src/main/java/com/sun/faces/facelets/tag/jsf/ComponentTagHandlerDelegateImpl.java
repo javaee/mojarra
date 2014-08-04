@@ -139,26 +139,8 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         }
 
         // our id
-        String id = ctx.generateUniqueId(owner.getTagId());
+        String id = getMarkId(ctx, parent);
         UIComponent c = null;
-
-        TagAttribute componentIdAttribute = owner.getTagAttribute("id");
-        
-        if (componentIdAttribute != null && 
-                componentIdAttribute.getValue() != null && 
-                !componentIdAttribute.getValue().contains("#")) {
-            
-            String componentId = componentIdAttribute.getValue();
-            
-            Iterator<UIComponent> children = parent.getChildren().iterator();
-            while(children.hasNext()) {
-                UIComponent child = children.next();
-                if (child.getId().equals(componentId)) {
-                    c = child;
-                    break;
-                }
-            }
-        }
         
         // grab our component
         if (c == null) {
@@ -236,6 +218,22 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         popComponentFromEL(ctx, c, ccStackManager, compcompPushed);
     }
 
+    private String getMarkId(FaceletContext context, UIComponent component) {
+        String result;
+        TagAttribute componentIdAttribute = owner.getTagAttribute("id");
+        
+        if (componentIdAttribute != null && 
+                componentIdAttribute.getValue() != null) {  
+            result = component.getAttributes().get(ComponentSupport.MARK_CREATED) + "-" +
+                    componentIdAttribute.getValue(context);
+        }
+        else {
+            result = context.generateUniqueId(owner.getTagId());
+        }
+        
+        return result;
+    }
+    
     private void adjustIndexOfDynamicChildren(FacesContext context, 
             UIComponent parent) {
         StateContext stateContext = StateContext.getStateContext(context);
