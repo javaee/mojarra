@@ -282,14 +282,9 @@ public final class FactoryFinder {
     public static Object getFactory(String factoryName)
          throws FacesException {
 
-        FactoryFinderInstance.validateFactoryName(factoryName);
-
-        // Identify the web application class loader
-        ClassLoader classLoader = getClassLoader();
-
         FactoryFinderInstance manager =
-              FACTORIES_CACHE.getApplicationFactoryManager(classLoader);
-        return manager.getFactory(classLoader, factoryName);
+              FACTORIES_CACHE.getApplicationFactoryManager();
+        return manager.getFactory(factoryName);
 
     }
 
@@ -314,13 +309,8 @@ public final class FactoryFinder {
     public static void setFactory(String factoryName,
                                   String implName) {
 
-        FactoryFinderInstance.validateFactoryName(factoryName);
-
-        // Identify the web application class loader
-        ClassLoader classLoader = getClassLoader();
-
         FactoryFinderInstance manager =
-              FACTORIES_CACHE.getApplicationFactoryManager(classLoader);
+              FACTORIES_CACHE.getApplicationFactoryManager();
         manager.addFactory(factoryName, implName);
 
     }
@@ -338,12 +328,10 @@ public final class FactoryFinder {
      */
     public static void releaseFactories() throws FacesException {
         synchronized(FACTORIES_CACHE) {
-            // Identify the web application class loader
-            ClassLoader cl = getClassLoader();
 
             if (!FACTORIES_CACHE.applicationMap.isEmpty()) {
 
-                FactoryFinderInstance fm = FACTORIES_CACHE.getApplicationFactoryManager(cl);
+                FactoryFinderInstance fm = FACTORIES_CACHE.getApplicationFactoryManager();
                 InjectionProvider provider = fm.getInjectionProvider();
                 if (null != provider) {
                     Collection factories = null;
@@ -370,34 +358,14 @@ public final class FactoryFinder {
                 }
             }
 
-            FACTORIES_CACHE.removeApplicationFactoryManager(cl);
+            FACTORIES_CACHE.removeApplicationFactoryManager();
         }
     }
 
 
     // -------------------------------------------------------- Private Methods
-    
-    /**
-     * <p>Identify and return the class loader that is associated with the
-     * calling web application.</p>
-     *
-     * @throws FacesException if the web application class loader
-     *                        cannot be identified
-     */
-    private static ClassLoader getClassLoader() throws FacesException {
 
-        // J2EE 1.3 (and later) containers are required to make the
-        // web application class loader visible through the context
-        // class loader of the current thread.
-        ClassLoader cl = Thread.currentThread().getContextClassLoader();
-        if (cl == null) {
-            throw new FacesException("getContextClassLoader");
-        }
-        return (cl);
-
-    }
-
-
+    // Called via reflection from automated tests.
     private static void reInitializeFactoryManager() {
         FACTORIES_CACHE.resetSpecialInitializationCaseFlags();
     }

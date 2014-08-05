@@ -451,6 +451,8 @@ final class FactoryFinderInstance {
     }
 
     public void addFactory(String factoryName, String implementation) {
+        validateFactoryName(factoryName);
+        
         Object result = factories.get(factoryName);
         lock.writeLock().lock();
         try {
@@ -471,7 +473,10 @@ final class FactoryFinderInstance {
         factories.remove(INJECTION_PROVIDER_KEY);
     }
 
-    public Object getFactory(ClassLoader cl, String factoryName) {
+    public Object getFactory(String factoryName) {
+        validateFactoryName(factoryName);
+        
+        ClassLoader cl = getClassLoader();
         Object factoryOrList;
         lock.readLock().lock();
         try {
@@ -501,7 +506,7 @@ final class FactoryFinderInstance {
                 if (LOGGER.isLoggable(Level.SEVERE)) {
                     LOGGER.log(Level.SEVERE, message);
                 }
-                factory = FactoryFinder.FACTORIES_CACHE.getFallbackFactory(cl, this, factoryName);
+                factory = FactoryFinder.FACTORIES_CACHE.getFallbackFactory(this, factoryName);
                 if (null == factory) {
                     message = rb.getString("severe.no_factory_backup_failed");
                     message = MessageFormat.format(message, factoryName);
@@ -516,7 +521,21 @@ final class FactoryFinderInstance {
         }
     }
     
-    static void validateFactoryName(String factoryName) {
+    private ClassLoader getClassLoader() throws FacesException {
+
+        // J2EE 1.3 (and later) containers are required to make the
+        // web application class loader visible through the context
+        // class loader of the current thread.
+        ClassLoader cl = Thread.currentThread().getContextClassLoader();
+        if (cl == null) {
+            throw new FacesException("getContextClassLoader");
+        }
+        return (cl);
+
+    }
+    
+    
+    private void validateFactoryName(String factoryName) {
 
         if (factoryName == null) {
             throw new NullPointerException();
@@ -527,6 +546,4 @@ final class FactoryFinderInstance {
 
     }
     
-    
-
 } // END FactoryFinderInstance

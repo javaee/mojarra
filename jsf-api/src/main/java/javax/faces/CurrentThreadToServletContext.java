@@ -64,11 +64,12 @@ final class CurrentThreadToServletContext {
     }
 
     // ------------------------------------------------------ Public Methods
-    Object getFallbackFactory(ClassLoader cl, FactoryFinderInstance brokenFactoryManager, String factoryName) {
+    Object getFallbackFactory(FactoryFinderInstance brokenFactoryManager, String factoryName) {
         Object result = null;
+        ClassLoader cl = getClassLoader();        
         for (Map.Entry<FactoryManagerCacheKey, FactoryFinderInstance> cur : applicationMap.entrySet()) {
             if (cur.getKey().getClassLoader().equals(cl) && !cur.getValue().equals(brokenFactoryManager)) {
-                result = cur.getValue().getFactory(cl, factoryName);
+                result = cur.getValue().getFactory(factoryName);
                 if (null != result) {
                     break;
                 }
@@ -77,7 +78,8 @@ final class CurrentThreadToServletContext {
         return result;
     }
 
-    FactoryFinderInstance getApplicationFactoryManager(ClassLoader cl) {
+    FactoryFinderInstance getApplicationFactoryManager() {
+        ClassLoader cl = getClassLoader();
         FactoryFinderInstance result = getApplicationFactoryManager(cl, true);
         return result;
     }
@@ -160,7 +162,8 @@ final class CurrentThreadToServletContext {
         return result;
     }
 
-    public void removeApplicationFactoryManager(ClassLoader cl) {
+    public void removeApplicationFactoryManager() {
+        ClassLoader cl = getClassLoader();
         FactoryFinderInstance fm = this.getApplicationFactoryManager(cl, false);
         if (null != fm) {
             fm.clearInjectionProvider();
@@ -180,6 +183,25 @@ final class CurrentThreadToServletContext {
         logNonNullFacesContext.set(false);
     }
     
+    /**
+     * <p>Identify and return the class loader that is associated with the
+     * calling web application.</p>
+     *
+     * @throws FacesException if the web application class loader
+     *                        cannot be identified
+     */
+    private ClassLoader getClassLoader() throws FacesException {
+
+        // J2EE 1.3 (and later) containers are required to make the
+        // web application class loader visible through the context
+        // class loader of the current thread.
+        ClassLoader cl = Thread.currentThread().getContextClassLoader();
+        if (cl == null) {
+            throw new FacesException("getContextClassLoader");
+        }
+        return (cl);
+
+    }
 
     private static final class FactoryManagerCacheKey {
         // The ClassLoader that is active the first time this key
