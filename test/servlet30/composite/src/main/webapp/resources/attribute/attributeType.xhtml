@@ -1,9 +1,12 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:cc="http://java.sun.com/jsf/composite">
 
-    <cc:interface componentType="javaTopLevelComponent">
+    <cc:interface componentType="com.sun.faces.test.servlet30.composite.AttributeTypeComponent">
 
         <cc:attribute name="untypedXunset" />
         <cc:attribute name="untypedXliteral" />
@@ -14,31 +17,28 @@
         <cc:attribute name="untypedXsetByApi" />
 
         <cc:attribute name="typedXunset"
-            type="com.sun.faces.regression.i_spec_745_war.UserBean$Dog" />
+            type="com.sun.faces.test.servlet30.composite.AttributeTypeBean$Dog" />
 
         <cc:attribute name="typedXliteral" type="java.lang.Integer" />
 
         <cc:attribute name="typedXwideEL"
-            type="com.sun.faces.regression.i_spec_745_war.UserBean$Dog" />
+            type="com.sun.faces.test.servlet30.composite.AttributeTypeBean$Dog" />
 
         <cc:attribute name="typedXmediumEL"
-            type="com.sun.faces.regression.i_spec_745_war.UserBean$Dog" />
+            type="com.sun.faces.test.servlet30.composite.AttributeTypeBean$Dog" />
 
         <cc:attribute name="typedXnarrowEL"
-            type="com.sun.faces.regression.i_spec_745_war.UserBean$Dog" />
+            type="com.sun.faces.test.servlet30.composite.AttributeTypeBean$Dog" />
 
         <cc:attribute name="typedXnullEL"
-            type="com.sun.faces.regression.i_spec_745_war.UserBean$Dog" />
+            type="com.sun.faces.test.servlet30.composite.AttributeTypeBean$Dog" />
 
         <cc:attribute name="typedXsetByApi"
-            type="com.sun.faces.regression.i_spec_745_war.UserBean$Dog" />
+            type="com.sun.faces.test.servlet30.composite.AttributeTypeBean$Dog" />
 
     </cc:interface>
     <cc:implementation>
-
-        <p>#{getTestType.from(cc.attrs)}</p>
+        <p>#{attributeTypeBean.from(cc.attrs)}</p>
         <p>#{cc.attrs.customProperty}</p>
-
     </cc:implementation> 
-
 </html>

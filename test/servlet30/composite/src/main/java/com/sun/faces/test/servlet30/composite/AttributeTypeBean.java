@@ -1,8 +1,7 @@
-
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -38,21 +37,59 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.regression.i_spec_745_war;
+package com.sun.faces.test.servlet30.composite;
 
 import java.util.Map;
 import javax.el.ELContext;
-import javax.el.ValueExpression;
-import javax.faces.component.FacesComponent;
-import javax.faces.component.UINamingContainer;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 
-@FacesComponent(value = "javaTopLevelComponent")
-public class JavaTopLevelComponent extends UINamingContainer {
+@ManagedBean(name = "attributeTypeBean")
+@RequestScoped
+public class AttributeTypeBean {
 
-    public JavaTopLevelComponent() {
-        getAttributes().put("untypedXsetByApi", new UserBean.Wienerdoodle());
-        getAttributes().put("typedXsetByApi", new UserBean.Wienerdoodle());
+    private String test;
+
+    public String from(Map<String, Object> attrs) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        ELContext elc = context.getELContext();
+        Class<?> type = elc.getELResolver().getType(elc, attrs, test);
+        return String.format("type of @%s: %s", test, type == null ? null : type.getSimpleName());
     }
 
+    public String getTest() {
+        return test;
+    }
+
+    public void setTest(String test) {
+        this.test = test;
+    }
+
+    public static abstract class Animal {
+    }
+
+    public static abstract class Dog extends Animal {
+    }
+
+    public static class Wienerdoodle extends Dog {
+    }
+
+    private final Wienerdoodle dog = new Wienerdoodle();
+
+    public Animal getAnimal() {
+        return dog;
+    }
+
+    public Dog getDog() {
+        return dog;
+    }
+
+    public Wienerdoodle getWienerdoodle() {
+        return dog;
+    }
+
+    public Dog getLostDog() {
+        return null;
+    }
 }
