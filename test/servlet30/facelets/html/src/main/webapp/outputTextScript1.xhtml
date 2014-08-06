@@ -1,9 +1,8 @@
-<?xml version='1.0' encoding='UTF-8'?>
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -40,48 +39,34 @@
     holder.
 
 -->
-<!-- ************ JSF build file ************************************** -->
-<project name="JAVASERVERFACES-2112" default="test" basedir=".">
 
-    <property file="../../build.properties"/>
-    <path id="2112.classpath">  
-        <path refid="html.classpath" />
-        <pathelement location="${basedir}/htmlunit/target/classes"/>
-    </path>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-    <import file="${jsf.build.home}/common/ant/common.xml"/>
+<?xml-stylesheet href="#{outputTextScript1Bean.xmlparam}" type="text/css" ?>
 
-    <target name="build">
-        <jsf.mvn dir="${basedir}/i_jsf_2112" goals="install" />
-        <jsf.mvn dir="${basedir}/htmlunit" goals="install" />
-    </target>    
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+<head>
+  <meta http-equiv="Contexnt-Type" content="text/html; charset=UTF-8"/>
+  <title></title>
+</head>
 
-    <target name="clean">
-        <jsf.mvn dir="${basedir}/i_jsf_2112" goals="clean" />
-        <jsf.mvn dir="${basedir}/htmlunit" goals="clean" />
-    </target>    
-
-    <target name="install">
-        <deploy.artifact
-              artifact="${basedir}/i_jsf_2112/target/i_jsf_2112.war"
-              appName="i_jsf_2112"/>
-    </target>    
-
-    <target name="remove">
-        <undeploy.artifact
-              artifact="${basedir}/i_jsf_2052/target/i_jsf_2112.war"
-              appName="i_jsf_2112"/>
-    </target>    
-
-    <target name="test" depends="define.scenario.aware.port">
-        <jsf.junit context-path="/i_jsf_2112"
-                 classpath-refid="2112.classpath"    
-                 test-results-dir="${regression.test.results.dir}">
-            <tests>
-                <fileset dir="${basedir}/htmlunit/target/classes"
-                     includes="com/sun/faces/systest/Issue2112TestCase.class"/> 
-            </tests>
-        </jsf.junit>
-    </target>    
-
-</project>
+<body>
+  <f:view>
+    <h:form id="testForm">
+      Put the following input and JavaScript will be executed. <br/>
+      <table border="2">
+      <td>
+         &quot;?&gt;&lt;script&gt;alert('JSF Security hole!!')&lt;/script&gt;
+      </td>
+      </table>
+      <br/>
+      <h:inputTextarea id="textarea" cols="40" rows="6" value="#{outputTextScript1Bean.xmlparam}"/><br/>
+      <br/>
+      <h:commandButton id="button" type="submit" value="test"/><br/>
+      <br/>
+     </h:form>
+  </f:view>
+</body>
+</html>
