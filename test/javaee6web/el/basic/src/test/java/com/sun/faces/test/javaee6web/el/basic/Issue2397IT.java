@@ -67,7 +67,7 @@ public class Issue2397IT {
         webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("submit");
         page = button.click();
-        assertTrue(page.asText().contains("java.lang.NullPointerException"));
+        assertTrue(page.asXml().contains("java.lang.NullPointerException"));
     }
 
     @Test
@@ -76,7 +76,7 @@ public class Issue2397IT {
         webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlSubmitInput input = (HtmlSubmitInput) page.getElementById("submit");
         page = input.click();
-        assertTrue(page.asText().contains("IllegalStateException"));
+        assertTrue(page.asXml().contains("IllegalStateException"));
     }
 
     @Test
