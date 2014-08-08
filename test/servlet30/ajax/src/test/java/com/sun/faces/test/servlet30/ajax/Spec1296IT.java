@@ -66,7 +66,6 @@ public class Spec1296IT {
     }
 
     @Test
-    @Ignore
     public void testPartialResponseWriterOutsideFacesServlet() throws Exception {
         Page page = webClient.getPage(webUrl + "BeforeFilter");
         String pageXml = page.getWebResponse().getContentAsString("UTF-8");
