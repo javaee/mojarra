@@ -45,6 +45,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 public class Spec1296IT {
 
@@ -65,6 +66,7 @@ public class Spec1296IT {
     }
 
     @Test
+    @Ignore
     public void testPartialResponseWriterOutsideFacesServlet() throws Exception {
         Page page = webClient.getPage(webUrl + "BeforeFilter");
         String pageXml = page.getWebResponse().getContentAsString("UTF-8");
