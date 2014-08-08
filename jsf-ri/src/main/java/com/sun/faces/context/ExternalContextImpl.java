@@ -669,7 +669,7 @@ public class ExternalContextImpl extends ExternalContext {
             setResponseContentType("text/xml");
             setResponseCharacterEncoding("UTF-8");
             addResponseHeader("Cache-Control", "no-cache");
-            pwriter.writePreamble("<?xml version='1.0' encoding='UTF-8'?>\n");
+//            pwriter.writePreamble("<?xml version='1.0' encoding='UTF-8'?>\n");
             pwriter.startDocument();
             pwriter.redirect(requestURI);
             pwriter.endDocument();

@@ -298,11 +298,11 @@ import javax.faces.render.RenderKitFactory;
                 exContext.setResponseContentType("text/xml");
                 exContext.addResponseHeader("Cache-Control", "no-cache");
                 
-                String encoding = writer.getCharacterEncoding( );
-                if( encoding == null ) {
-                    encoding = "UTF-8";
-                }
-                writer.writePreamble("<?xml version='1.0' encoding='" + encoding + "'?>\n");
+//                String encoding = writer.getCharacterEncoding( );
+//                if( encoding == null ) {
+//                    encoding = "UTF-8";
+//                }
+//                writer.writePreamble("<?xml version='1.0' encoding='" + encoding + "'?>\n");
                 writer.startDocument();
                 
                 if (isResetValues()) {

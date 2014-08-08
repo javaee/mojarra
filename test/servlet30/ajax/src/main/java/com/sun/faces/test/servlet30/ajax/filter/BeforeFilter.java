@@ -77,7 +77,7 @@ public class BeforeFilter implements Filter {
             Constructor ctor = htmlResponseWriterClass.getConstructor(Writer.class, String.class, String.class);
             responseWriter = (ResponseWriter) ctor.newInstance(pw, "text/xml", "UTF-8");
             PartialResponseWriter partialResponseWriter = new PartialResponseWriter(responseWriter);
-            partialResponseWriter.writePreamble("<?xml version='1.0' encoding='UTF-8'?>\n");
+//            partialResponseWriter.writePreamble("<?xml version='1.0' encoding='UTF-8'?>\n");
             partialResponseWriter.startDocument();
             partialResponseWriter.startUpdate("foo");
             partialResponseWriter.endUpdate();
