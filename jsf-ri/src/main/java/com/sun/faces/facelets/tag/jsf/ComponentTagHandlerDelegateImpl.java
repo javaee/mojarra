@@ -70,7 +70,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import static com.sun.faces.RIConstants.DYNAMIC_COMPONENT;
 import static com.sun.faces.component.CompositeComponentStackManager.StackType.TreeCreation;
-import java.util.Iterator;
 
 public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
     
@@ -140,12 +139,7 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
 
         // our id
         String id = getMarkId(ctx, parent);
-        UIComponent c = null;
-        
-        // grab our component
-        if (c == null) {
-            c = findChild(ctx, parent, id);
-        }
+        UIComponent c  = findChild(ctx, parent, id);
         
         if (null == c &&
             context.isPostback() &&
@@ -218,14 +212,11 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         popComponentFromEL(ctx, c, ccStackManager, compcompPushed);
     }
 
-    private String getMarkId(FaceletContext context, UIComponent component) {
+    protected String getMarkId(FaceletContext context, UIComponent component) {
         String result;
-        TagAttribute componentIdAttribute = owner.getTagAttribute("id");
         
-        if (componentIdAttribute != null && 
-                componentIdAttribute.getValue() != null) {  
-            result = component.getAttributes().get(ComponentSupport.MARK_CREATED) + "-" +
-                    componentIdAttribute.getValue(context);
+        if (this.id.getValue(context) != null) {  
+            result = this.id.getValue(context);
         }
         else {
             result = context.generateUniqueId(owner.getTagId());
