@@ -71,7 +71,7 @@ public class NoBeansXmlIT {
         webClient.closeAllWindows();
     }
 
-    @JsfTest(value = JSF_2_2_0)
+    @JsfTest(value = JSF_2_2_0, excludes = {WEBLOGIC_12_1_4})
     @Test
     public void testFlowWithNoBeansXml() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
