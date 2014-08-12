@@ -122,7 +122,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
         if( encoding == null ) {
             encoding = "utf-8";
         }
-        writer.write("<?xml version='1.0' encoding='" + encoding + "'?>\n");
+        writer.writePreamble("<?xml version='1.0' encoding='" + encoding + "'?>\n");
         writer.startElement("partial-response", null);
         FacesContext ctx = FacesContext.getCurrentInstance();
         if (null != ctx && null != ctx.getViewRoot()) {
