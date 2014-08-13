@@ -63,20 +63,6 @@ import java.util.ResourceBundle;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static javax.faces.FactoryFinder.APPLICATION_FACTORY;
-import static javax.faces.FactoryFinder.CLIENT_WINDOW_FACTORY;
-import static javax.faces.FactoryFinder.EXCEPTION_HANDLER_FACTORY;
-import static javax.faces.FactoryFinder.EXTERNAL_CONTEXT_FACTORY;
-import static javax.faces.FactoryFinder.FACELET_CACHE_FACTORY;
-import static javax.faces.FactoryFinder.FACES_CONTEXT_FACTORY;
-import static javax.faces.FactoryFinder.FLASH_FACTORY;
-import static javax.faces.FactoryFinder.FLOW_HANDLER_FACTORY;
-import static javax.faces.FactoryFinder.LIFECYCLE_FACTORY;
-import static javax.faces.FactoryFinder.PARTIAL_VIEW_CONTEXT_FACTORY;
-import static javax.faces.FactoryFinder.RENDER_KIT_FACTORY;
-import static javax.faces.FactoryFinder.TAG_HANDLER_DELEGATE_FACTORY;
-import static javax.faces.FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY;
-import static javax.faces.FactoryFinder.VISIT_CONTEXT_FACTORY;
 import javax.faces.context.FacesContext;
 
 final class FactoryFinderInstance {
@@ -97,7 +83,7 @@ final class FactoryFinderInstance {
     /**
      * <p>Map of Class instances for the our factory names.</p>
      */
-    private final static Map<String, Class> factoryClasses;
+    private final static Map<String, Class> FACTORY_CLASSES;
     
     private static final Logger LOGGER;
 
@@ -105,51 +91,51 @@ final class FactoryFinderInstance {
         
         Map<String, Class> buildUpFactoryClasses; 
         buildUpFactoryClasses = new HashMap<String, Class>();
-        buildUpFactoryClasses.put(APPLICATION_FACTORY,
+        buildUpFactoryClasses.put(FactoryFinder.APPLICATION_FACTORY,
                  javax.faces.application.ApplicationFactory.class);
-        buildUpFactoryClasses.put(VISIT_CONTEXT_FACTORY,
+        buildUpFactoryClasses.put(FactoryFinder.VISIT_CONTEXT_FACTORY,
                  javax.faces.component.visit.VisitContextFactory.class);
-        buildUpFactoryClasses.put(EXCEPTION_HANDLER_FACTORY,
+        buildUpFactoryClasses.put(FactoryFinder.EXCEPTION_HANDLER_FACTORY,
                  javax.faces.context.ExceptionHandlerFactory.class);
-        buildUpFactoryClasses.put(EXTERNAL_CONTEXT_FACTORY,
+        buildUpFactoryClasses.put(FactoryFinder.EXTERNAL_CONTEXT_FACTORY,
                  javax.faces.context.ExternalContextFactory.class);
-        buildUpFactoryClasses.put(FACES_CONTEXT_FACTORY,
+        buildUpFactoryClasses.put(FactoryFinder.FACES_CONTEXT_FACTORY,
                  javax.faces.context.FacesContextFactory.class);
-        buildUpFactoryClasses.put(FLASH_FACTORY,
+        buildUpFactoryClasses.put(FactoryFinder.FLASH_FACTORY,
                  javax.faces.context.FlashFactory.class);
-        buildUpFactoryClasses.put(PARTIAL_VIEW_CONTEXT_FACTORY,
+        buildUpFactoryClasses.put(FactoryFinder.PARTIAL_VIEW_CONTEXT_FACTORY,
                  javax.faces.context.PartialViewContextFactory.class);
-        buildUpFactoryClasses.put(LIFECYCLE_FACTORY,
+        buildUpFactoryClasses.put(FactoryFinder.LIFECYCLE_FACTORY,
                  javax.faces.lifecycle.LifecycleFactory.class);
-        buildUpFactoryClasses.put(CLIENT_WINDOW_FACTORY,
+        buildUpFactoryClasses.put(FactoryFinder.CLIENT_WINDOW_FACTORY,
                  javax.faces.lifecycle.ClientWindowFactory.class);
-        buildUpFactoryClasses.put(RENDER_KIT_FACTORY,
+        buildUpFactoryClasses.put(FactoryFinder.RENDER_KIT_FACTORY,
                  javax.faces.render.RenderKitFactory.class);
-        buildUpFactoryClasses.put(VIEW_DECLARATION_LANGUAGE_FACTORY,
+        buildUpFactoryClasses.put(FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY,
                  javax.faces.view.ViewDeclarationLanguageFactory.class);
-        buildUpFactoryClasses.put(FACELET_CACHE_FACTORY,
+        buildUpFactoryClasses.put(FactoryFinder.FACELET_CACHE_FACTORY,
                  javax.faces.view.facelets.FaceletCacheFactory.class);
-        buildUpFactoryClasses.put(TAG_HANDLER_DELEGATE_FACTORY,
+        buildUpFactoryClasses.put(FactoryFinder.TAG_HANDLER_DELEGATE_FACTORY,
                  javax.faces.view.facelets.TagHandlerDelegateFactory.class);
-        buildUpFactoryClasses.put(FLOW_HANDLER_FACTORY,
+        buildUpFactoryClasses.put(FactoryFinder.FLOW_HANDLER_FACTORY,
                  javax.faces.flow.FlowHandlerFactory.class);
-        factoryClasses = Collections.unmodifiableMap(buildUpFactoryClasses);
+        FACTORY_CLASSES = Collections.unmodifiableMap(buildUpFactoryClasses);
 
         FACTORY_NAMES = new String [] {
-            APPLICATION_FACTORY,
-            VISIT_CONTEXT_FACTORY,
-            EXCEPTION_HANDLER_FACTORY,
-            EXTERNAL_CONTEXT_FACTORY,
-            FACES_CONTEXT_FACTORY,
-            FLASH_FACTORY,
-            FLOW_HANDLER_FACTORY,
-            PARTIAL_VIEW_CONTEXT_FACTORY,
-            CLIENT_WINDOW_FACTORY,
-            LIFECYCLE_FACTORY,
-            RENDER_KIT_FACTORY,
-            VIEW_DECLARATION_LANGUAGE_FACTORY,
-            FACELET_CACHE_FACTORY,
-            TAG_HANDLER_DELEGATE_FACTORY
+            FactoryFinder.APPLICATION_FACTORY,
+            FactoryFinder.VISIT_CONTEXT_FACTORY,
+            FactoryFinder.EXCEPTION_HANDLER_FACTORY,
+            FactoryFinder.EXTERNAL_CONTEXT_FACTORY,
+            FactoryFinder.FACES_CONTEXT_FACTORY,
+            FactoryFinder.FLASH_FACTORY,
+            FactoryFinder.FLOW_HANDLER_FACTORY,
+            FactoryFinder.PARTIAL_VIEW_CONTEXT_FACTORY,
+            FactoryFinder.CLIENT_WINDOW_FACTORY,
+            FactoryFinder.LIFECYCLE_FACTORY,
+            FactoryFinder.RENDER_KIT_FACTORY,
+            FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY,
+            FactoryFinder.FACELET_CACHE_FACTORY,
+            FactoryFinder.TAG_HANDLER_DELEGATE_FACTORY
         };
 
         // Optimize performance of validateFactoryName
@@ -441,7 +427,7 @@ final class FactoryFinderInstance {
      */
     private Class getFactoryClass(String factoryClassName) {
 
-        return factoryClasses.get(factoryClassName);
+        return FACTORY_CLASSES.get(factoryClassName);
 
     }
 
@@ -476,7 +462,6 @@ final class FactoryFinderInstance {
     public Object getFactory(String factoryName) {
         validateFactoryName(factoryName);
         
-        ClassLoader cl = getClassLoader();
         Object factoryOrList;
         lock.readLock().lock();
         try {
@@ -498,6 +483,8 @@ final class FactoryFinderInstance {
                 return factoryOrList;
             }
             savedFactoryNames.put(factoryName, new ArrayList((List) factoryOrList));
+            ClassLoader cl = getClassLoader();
+            
             Object factory = getImplementationInstance(cl, factoryName, (List) factoryOrList);
             if (factory == null) {
                 ResourceBundle rb = LOGGER.getResourceBundle();
