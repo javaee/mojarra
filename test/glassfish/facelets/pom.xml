@@ -45,16 +45,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.sun.faces.test.weblogic</groupId>
+        <groupId>com.sun.faces.test.glassfish</groupId>
         <artifactId>pom</artifactId>
         <version>2.2.8-SNAPSHOT</version>
     </parent>
-    <groupId>com.sun.faces.test.weblogic.wls1214</groupId>
+    <groupId>com.sun.faces.test.glassfish.facelets</groupId>
     <artifactId>pom</artifactId>
     <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Weblogic - WLS 12.1.4</name>
+    <name>Mojarra ${project.version} - Test - Glassfish - Facelets</name>
     <modules>
-	<module>facelets</module>
+	<module>core</module>
     </modules>
 </project>
 

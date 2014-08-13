@@ -42,19 +42,10 @@
 
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.sun.faces.test.weblogic</groupId>
-        <artifactId>pom</artifactId>
-        <version>2.2.8-SNAPSHOT</version>
-    </parent>
-    <groupId>com.sun.faces.test.weblogic.wls1214</groupId>
-    <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Weblogic - WLS 12.1.4</name>
-    <modules>
-	<module>facelets</module>
-    </modules>
-</project>
-
+<!DOCTYPE glassfish-web-app PUBLIC 
+    "-//GlassFish.org//DTD GlassFish Application Server 3.1 Servlet 3.0//EN" 
+    "http://glassfish.org/dtds/glassfish-web-app_3_0-1.dtd">
+    
+<glassfish-web-app error-url="">
+    <context-root>/test-glassfish-faceslet-core</context-root>
+</glassfish-web-app>

@@ -63,6 +63,7 @@
     </dependencies>    
     <modules>
 	<module>bundle22</module>
+        <module>facelets</module>
         <module>request_char_encoding</module>
 	<module>request_char_encoding2</module>
         <module>undeploy</module>
