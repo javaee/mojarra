@@ -226,7 +226,7 @@ public final class ByteArrayGuard {
                 KeyGenerator kg = KeyGenerator.getInstance(KEY_ALGORITHM);
                 kg.init(KEY_LENGTH);   // 256 if you're using the Unlimited Policy Files
                 sk = kg.generateKey(); 
-                System.out.print("SecretKey: " + DatatypeConverter.printBase64Binary(sk.getEncoded()));
+//                System.out.print("SecretKey: " + DatatypeConverter.printBase64Binary(sk.getEncoded()));
 
             } catch (Exception e) {
                 throw new FacesException(e);
