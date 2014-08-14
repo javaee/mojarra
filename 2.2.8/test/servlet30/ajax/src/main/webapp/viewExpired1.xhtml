@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <title>View Expiration 1</title>
+    </h:head>
+    <h:body>    
+        <h:form id="form">
+            State Saving Method: <h:outputText value="#{viewExpired1Bean.stateSavingMethod}"/>
+            <h:commandButton id="expireSessionSoon" value="Expire Session Soon" actionListener="#{viewExpired1Bean.expireSessionSoon}">
+                <f:ajax render="@all"/>
+            </h:commandButton>
+            <h:commandButton id="submit" value="Submit" actionListener="#{viewExpired1Bean.verifySession}">
+                <f:ajax render="@all"/>
+            </h:commandButton>
+        </h:form>
+        <script>
+            function errorFunc(data) {
+                document.getElementById("errorDiv").appendChild(document.createTextNode(data.errorName));
+            }
+        </script>
+        <script>jsf.ajax.addOnError(errorFunc);</script>
+        <div id="errorDiv">
+            
+        </div>        
+    </h:body>
+</html>

@@ -1,0 +1,89 @@
+#
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+#
+# Copyright (c) 2005-2010 Oracle and/or its affiliates. All rights reserved.
+#
+# The contents of this file are subject to the terms of either the GNU
+# General Public License Version 2 only ("GPL") or the Common Development
+# and Distribution License("CDDL") (collectively, the "License").  You
+# may not use this file except in compliance with the License.  You can
+# obtain a copy of the License at
+# https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+# or packager/legal/LICENSE.txt.  See the License for the specific
+# language governing permissions and limitations under the License.
+#
+# When distributing the software, include this License Header Notice in each
+# file and include the License file at packager/legal/LICENSE.txt.
+#
+# GPL Classpath Exception:
+# Oracle designates this particular file as subject to the "Classpath"
+# exception as provided by Oracle in the GPL Version 2 section of the License
+# file that accompanied this code.
+#
+# Modifications:
+# If applicable, add the following below the License Header, with the fields
+# enclosed by brackets [] replaced by your own identifying information:
+# "Portions Copyright [year] [name of copyright owner]"
+#
+# Contributor(s):
+# If you wish your version of this file to be governed by only the CDDL or
+# only the GPL Version 2, indicate your decision by adding "[Contributor]
+# elects to include this software in this distribution under the [CDDL or GPL
+# Version 2] license."  If you don't indicate a single choice of license, a
+# recipient has the option to distribute your version of this file under
+# either the CDDL, the GPL Version 2 or to extend the choice of license to
+# its licensees as provided above.  However, if you add GPL Version 2 code
+# and therefore, elected the GPL Version 2 license, then the option applies
+# only if the new code is made subject to such option by the copyright
+# holder.
+#
+
+# -----------------------------------------------------------------------------
+# build.properties.sample
+#
+# This is an example "build.properties" file, used to customize building the
+# sample app for your local environment.  It defines the location of all 
+# external modules that the sample app depends on.  
+#
+# Copy this file to "build.properties" in the top-level source directory, 
+# and customize it as needed.
+#
+# After you are done editing the file, run "ant" in the same directory as
+# the build.xml file to build the Character Demo.
+#
+# Do display current property setting run the ant command: "ant props"
+#
+# -----------------------------------------------------------------------------
+
+# ----- Default Paths for Dependent Packages -----
+
+# These path values are based on a SJSAS 8.0 PE install. 
+
+# If you are running SJSAS 8.0 PE you will only need to modify the "base.path"
+# property to point to your SJSAS 8.0 PE installation.
+
+# If you are not running SJSAS 8.0 PE you will need to customize all runtime
+# dependency jar file paths to your specific installation.
+
+base.path=<SJSAS_HOME>
+
+commons-beanutils.jar=${base.path}/lib/appserv-rt.jar
+commons-collections.jar=${base.path}/lib/appserv-rt.jar
+commons-digester.jar=${base.path}/lib/appserv-rt.jar
+commons-logging.jar=${base.path}/lib/appserv-rt.jar
+jsf-impl.jar=${base.path}/lib/jsf-impl.jar
+jstl.jar=${base.path}/lib/appserv-jstl.jar
+servlet.jar=${base.path}/lib/j2ee.jar
+standard.jar=${base.path}/lib/appserv-jstl.jar
+
+# ----- Web Application Jar Bundling -----
+
+# Uncomment the following property if you want to bundle all dependent 
+# jars into the web application. 
+
+# If you are running in the Sun Java Systems Application Server 8.0 PE
+# environment or any other environment where JSF 1.0 and dependencies are
+# is already bundled, you do not need to bundle any of the run-time jar files
+# in your web application.
+
+# build.standalone=true

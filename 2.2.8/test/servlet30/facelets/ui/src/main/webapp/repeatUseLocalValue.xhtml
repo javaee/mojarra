@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head />
+    <h:body>
+        <h:form id="form">
+            <ui:repeat var="object" value="#{repeatUseLocalValueBean.objects}">
+                <h:panelGroup rendered="#{object.name eq 'com.sun.faces.test.agnostic.facelets.ui.RepeatUseLocalValueTypeA'}">
+                    <h:inputText value="#{object.a}" />
+                </h:panelGroup>
+                <h:panelGroup rendered="#{object.name eq 'com.sun.faces.test.agnostic.facelets.ui.RepeatUseLocalValueTypeB'}">
+                    <h:inputText value="#{object.b}" />
+                </h:panelGroup>
+            </ui:repeat>
+            <br/>
+            <h:commandButton id="submit" value="submit" action="#{repeatUseLocalValueBean.action}" />
+        </h:form>
+    </h:body>
+</html>

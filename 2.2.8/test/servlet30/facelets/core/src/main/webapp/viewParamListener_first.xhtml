@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+
+<f:view>
+  <f:metadata>
+    <f:viewParam name="id" value="#{outcomeTestFirstBean.firstId}"></f:viewParam>
+  </f:metadata>
+
+	<h:head>
+	</h:head>
+	<h:form prependId="false">
+		
+		<h2>Problem description:</h2>
+		When visiting this page using the following link: <a id="myHref" href="?id=11111">/first.jsf?id=11111</a> we can show that include-view-params causes a problem.<br/>
+		Clicking the TestOutcomeLink poses no problem and will load the second page normally.<br/>
+		Any postback will however try to execute the preRenderView event of the OutcomeTestSecondBean (because the metaData is parsed at ViewMetadataImpl.createMetadataView(FacesContext) line: 115)
+		<br/><br/><br/>
+		<h:link outcome="second" value="TestOutcomeLink" includeViewParams="true">
+			<f:param name="extraParam" value="99999" />
+		</h:link>
+		<br/><br/><br/>
+		<h:commandLink value="Postback goes BOOM" action="#{outcomeTestFirstBean.justAnAction}" />&nbsp;
+		<h:commandButton id="postbackButton" value="Postback goes BOOM" action="#{outcomeTestFirstBean.justAnAction}" />
+	</h:form>
+</f:view>
+</html>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+      <groupId>com.sun.faces.test.servlet30.el.decorate-context</groupId>
+      <artifactId>pom</artifactId>
+      <version>2.2.8-SNAPSHOT</version>
+    </parent>
+    <groupId>com.sun.faces.test.servlet30.el.decorate-context</groupId>
+    <artifactId>test-servlet30-el-decorate-context</artifactId>
+    <packaging>war</packaging>
+    <name>Mojarra ${project.version} - Test - Servlet 3.0 - EL - Decorate Context - Test App</name>
+    <build>
+        <finalName>test-servlet30-el-decorate-context</finalName>
+        <plugins>
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                  <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+    <dependencies>
+      <dependency>
+        <groupId>com.sun.faces.test.servlet30.el.decorate-context</groupId>
+        <artifactId>decorate-exceptionhandlerfactory</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.sun.faces.test.servlet30.el.decorate-context</groupId>
+        <artifactId>decorate-facescontextfactory</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+    </dependencies>
+</project>

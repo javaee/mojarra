@@ -1,0 +1,63 @@
+
+To build this updatecenter2 code, you first need to download the 
+updatecenter2 tool from :
+
+http://wiki.updatecenter.java.net/Wiki.jsp?page=Download
+
+Install it in some well defined path
+
+Add the location to your build.properties file in the pkg.dir value.
+
+add the pkg/pkg/bin directory to your $PATH - you'll need the 
+pkg and pkg.depotd files for testing
+
+Next, in the Mojarra codebase edit the udpatecenter2/bin/makepkgs, and 
+add UCHOME to point to the location of the updatecenter2 codebase.
+
+
+Now, build the repository files:
+(only works on linux, you'll need to either do it manually on windows or 
+update the build.xml file - if you do, check in the changes! Also, note 
+that you need python installed.) 
+
+
+cd {mojarra-sources-home}
+ant updatecenter2   # copies latest jsf jars to updatecenter2/lib
+# or, you could just do this manually
+cd updatecenter2
+ant main  # creates the dist directory
+mkdir repo  # create repo dir
+pkg.depotd -d `pwd`/repo -p 10000 &  # start repo
+ant updatecenter2.repo  # installs into repository
+
+This will create a repository with the latest SNAPSHOT files.
+
+To test:
+
+pkg.depotd -d `pwd`/repo -p 10000 & 
+
+Now you have you own repository server running on port 10000.  To add this repository to your Glassfish image, you can either using the updatetool GUI (click on File|Image Properties, then click Add) or use the pkg CLI:
+
+bin/pkg set-authority -O http://yourhost:10000/ testrepo
+bin/pkg refresh
+
+The refresh command is need to get the catalog from your testrepo downloaded.
+
+Then, to install your package, either use updatetool (you should see your package listed in the Available Add-ons panel after clicking the Refresh button), or the pkg CLI:
+
+bin/pkg install yourpkg
+
+where "yourpkg" is the name of your package. 
+
+To test the current contents of the Glassfish repo, you need to do this:
+
+mkdir testrepo
+pkg image-create -a testrepo=http://pkg.glassfish.org/dev/linux/v3prelude/ testrepo
+cd testrepo
+pkg list -a   # lists all packages in the glassfish repo
+pkg install glassfish-jsf # installs contents of glassfish-jsf package
+ls -R # examine installed files from glassfish-jsf package
+
+
+To push this to the public repo, contact Omar.
+

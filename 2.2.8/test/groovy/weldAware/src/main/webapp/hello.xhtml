@@ -1,0 +1,27 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:hellotag="http://mojarra.dev.java.net/source1">
+    <head>
+        <title>Hello JSF 2!</title>
+    </head>
+    <body>
+        <h:form id="form">
+            Name : <h:inputText id="name"
+                                value="#{hello.fname}">
+                <f:converter  converterId="nameconverter" />
+            </h:inputText>
+            Age :   <hellotag:hello id="age"
+                                    value="#{hello.age}">
+                <f:validator validatorId="namevalidator"/>
+            </hellotag:hello>
+            <h:commandButton id="command" value="submit" action="submit?faces-redirect=true"></h:commandButton>
+        </h:form>
+        <h:messages/>
+    </body>
+</html>
+
+

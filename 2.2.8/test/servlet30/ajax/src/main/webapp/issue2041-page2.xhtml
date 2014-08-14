@@ -1,0 +1,19 @@
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:h="http://java.sun.com/jsf/html"
+             xmlns:f="http://java.sun.com/jsf/core"
+             xmlns:ui="http://java.sun.com/jsf/facelets">
+    <p>
+        PAGE 2 BEGIN
+    </p>
+    <h:form>
+        <f:ajax disabled="true" event="click">
+            <h:commandButton value="Button"/>
+        </f:ajax>
+    </h:form>
+    <h:form>
+        <h:commandLink value="Page1" action="#{issue2041Bean.changePage}"/>
+    </h:form>
+    <p>
+        PAGE 2 END
+    </p>
+</ui:fragment>

@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+
+    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+    Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+
+    The contents of this file are subject to the terms of either the GNU
+    General Public License Version 2 only ("GPL") or the Common Development
+    and Distribution License("CDDL") (collectively, the "License").  You
+    may not use this file except in compliance with the License.  You can
+    obtain a copy of the License at
+    https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+    or packager/legal/LICENSE.txt.  See the License for the specific
+    language governing permissions and limitations under the License.
+
+    When distributing the software, include this License Header Notice in each
+    file and include the License file at packager/legal/LICENSE.txt.
+
+    GPL Classpath Exception:
+    Oracle designates this particular file as subject to the "Classpath"
+    exception as provided by Oracle in the GPL Version 2 section of the License
+    file that accompanied this code.
+
+    Modifications:
+    If applicable, add the following below the License Header, with the fields
+    enclosed by brackets [] replaced by your own identifying information:
+    "Portions Copyright [year] [name of copyright owner]"
+
+    Contributor(s):
+    If you wish your version of this file to be governed by only the CDDL or
+    only the GPL Version 2, indicate your decision by adding "[Contributor]
+    elects to include this software in this distribution under the [CDDL or GPL
+    Version 2] license."  If you don't indicate a single choice of license, a
+    recipient has the option to distribute your version of this file under
+    either the CDDL, the GPL Version 2 or to extend the choice of license to
+    its licensees as provided above.  However, if you add GPL Version 2 code
+    and therefore, elected the GPL Version 2 license, then the option applies
+    only if the new code is made subject to such option by the copyright
+    holder.
+
+-->
+
+<!-- ************ JSF build file ************************************** -->
+
+<project name="JAVASERVERFACES-1338" default="test" basedir=".">
+
+    <property file="../../build.properties"/>
+
+    <import file="${jsf.build.home}/common/ant/common.xml"/>
+
+    <path id="1338.classpath">  
+        <path refid="html.classpath" />
+        <pathelement location="${basedir}/i_jsf_1338_htmlunit/target/classes"/>
+    </path>
+
+    <target name="build">
+
+      <jsf.mvn dir="${jsf.build.home}/jsf-demo/sandbox/scrumtoys2009/eclipseProject/latest" goals="install" />
+      <jsf.mvn dir="${basedir}/i_jsf_1338_htmlunit" goals="install" />
+
+    </target>    
+
+    <target name="clean">
+
+      <jsf.mvn dir="${jsf.build.home}/jsf-demo/sandbox/scrumtoys2009/eclipseProject/latest" goals="clean" />
+      <jsf.mvn dir="${basedir}/i_jsf_1338_htmlunit" goals="clean" />
+      <delete dir="${basedir}/build" />
+
+    </target>    
+
+    <target name="install">
+
+      <start.database />
+      <set.security.properties />
+      <echo message="Database started" />
+      
+      <if>
+        <os family="windows"/>
+        <then>
+          <non.ant.deploy.artifact
+              artifact="${jsf.build.home}/jsf-demo/sandbox/scrumtoys2009/eclipseProject/latest/target/scrumtoys.war"
+              appName="scrumtoys" />
+<!--          <echo message="sleeping for 2 minutes" />
+          <sleep minutes="2"/> -->
+        </then>
+        <else>
+          <deploy.artifact
+              artifact="${jsf.build.home}/jsf-demo/sandbox/scrumtoys2009/eclipseProject/latest/target/scrumtoys.war"
+              appName="scrumtoys" />
+        </else>
+      </if>
+    </target>    
+
+    <target name="remove">
+
+      <undeploy.artifact artifact="${basedir}/target/scrumtoys.war"
+                appName="scrumtoys" />
+      <stop.database />
+      <echo message="Database stopped" />
+
+    </target>    
+    
+    <target name="scrumtoys-check">
+      <var name="do.sleep" unset="true" />
+      <var name="deployment.host" unset="true" />
+      <var name="deployment.port" unset="true" />
+      <var name="path.with.leading.slash" unset="true" />
+      <var name="page.regexp" unset="true" />
+      
+      <property name="deployment.host" value="${container.host}" />
+      <property name="deployment.port" value="${container.port}" />
+      <property name="path.with.leading.slash" value="/scrumtoys/home.jsf" />
+      <property name="page.regexp" value="" />
+      <property name="deployment.retries" value="5" />
+      
+      <antcall target="deployment.check" />
+    </target>
+
+    
+
+    <target name="test" depends="scrumtoys-check,define.scenario.aware.port">
+      <retry retrycount="${deployment.retries}">
+        <sequential>
+          <echo message="TEST RETRY..." />
+          <jsf.junit context-path="/scrumtoys"
+                 classpath-refid="1338.classpath"    
+                 test-results-dir="${regression.test.results.dir}">
+            <tests>
+              <fileset dir="${basedir}/i_jsf_1338_htmlunit/target/classes"
+                   includes="com/sun/faces/regression/i_jsf_1338_htmlunit/ScrumToysTestCase.class"/> 
+            </tests>
+          </jsf.junit>
+        </sequential>
+      </retry>
+    </target>    
+
+
+        
+</project>

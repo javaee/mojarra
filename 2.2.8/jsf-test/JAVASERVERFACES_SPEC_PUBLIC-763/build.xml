@@ -1,0 +1,163 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+
+    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+    Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+
+    The contents of this file are subject to the terms of either the GNU
+    General Public License Version 2 only ("GPL") or the Common Development
+    and Distribution License("CDDL") (collectively, the "License").  You
+    may not use this file except in compliance with the License.  You can
+    obtain a copy of the License at
+    https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+    or packager/legal/LICENSE.txt.  See the License for the specific
+    language governing permissions and limitations under the License.
+
+    When distributing the software, include this License Header Notice in each
+    file and include the License file at packager/legal/LICENSE.txt.
+
+    GPL Classpath Exception:
+    Oracle designates this particular file as subject to the "Classpath"
+    exception as provided by Oracle in the GPL Version 2 section of the License
+    file that accompanied this code.
+
+    Modifications:
+    If applicable, add the following below the License Header, with the fields
+    enclosed by brackets [] replaced by your own identifying information:
+    "Portions Copyright [year] [name of copyright owner]"
+
+    Contributor(s):
+    If you wish your version of this file to be governed by only the CDDL or
+    only the GPL Version 2, indicate your decision by adding "[Contributor]
+    elects to include this software in this distribution under the [CDDL or GPL
+    Version 2] license."  If you don't indicate a single choice of license, a
+    recipient has the option to distribute your version of this file under
+    either the CDDL, the GPL Version 2 or to extend the choice of license to
+    its licensees as provided above.  However, if you add GPL Version 2 code
+    and therefore, elected the GPL Version 2 license, then the option applies
+    only if the new code is made subject to such option by the copyright
+    holder.
+
+-->
+<!-- ************ JSF build file ************************************** -->
+<project name="JAVASERVERFACES_SPEC_PUBLIC-763" default="test" basedir=".">
+
+    <property file="../../build.properties"/>
+
+    <import file="${jsf.build.home}/common/ant/common.xml"/>
+
+    <target name="build">
+        <jsf.mvn dir="${basedir}/i_spec_763_war" goals="install" />
+    </target>    
+
+    <target name="clean">
+        <jsf.mvn dir="${basedir}/i_spec_763_war" goals="clean" />
+    </target>    
+
+    <target name="install">
+        <deploy.artifact
+              artifact="${basedir}/i_spec_763_war/target/i_spec_763_war.war"
+              appName="i_spec_763_war"/>
+    </target>    
+
+    <target name="remove">
+        <undeploy.artifact
+              artifact="${basedir}/i_spec_763_war/target/i_spec_763_war.war"
+              appName="i_spec_763_war"/>
+    </target>    
+
+    <target name="test" depends="define.scenario.aware.port">
+
+        <jsf.tester request="/faces/i_spec_763_war.xhtml"
+                     context-path="/i_spec_763_war"
+                     classpath-refid="html.classpath"
+                     test-results-dir="${regression.test.results.dir}"
+                     regexp="(?s).*.p.\s+FacesConfigApplicationFactory:\s+Injected\s+from\s+value\s+specified\s+in\s+web.xml\s+@PostConstruct\s+called\s+./p.\s+.p.\s+FacesConfigActionListener:\s+Injected\s+from\s+value\s+specified\s+in\s+web.xml\s+@PostConstruct\s+called\s+./p.\s+.p.\s+FacesConfigNavigationHandler:\s+Injected\s+from\s+value\s+specified\s+in\s+web.xml\s+@PostConstruct\s+called\s+./p.\s+.p.\s+FacesConfigViewHandler:\s+Injected\s+from\s+value\s+specified\s+in\s+web.xml\s+@PostConstruct\s+called\s+./p.\s+.p.\s+FacesConfigStateManager:\s+Injected\s+from\s+value\s+specified\s+in\s+web.xml\s+@PostConstruct\s+called\s+./p.\s+.p.\s+FacesConfigELResolver:\s+Injected\s+from\s+value\s+specified\s+in\s+web.xml\s+@PostConstruct\s+called\s+./p.\s+.p.\s+FacesConfigResourceHandler:\s+Injected\s+from\s+value\s+specified\s+in\s+web.xml\s+@PostConstruct\s+called\s+./p.\s+.p.\s+FacesConfigSystemEventListener:\s+Injected\s+from\s+value\s+specified\s+in\s+web.xml\s+@PostConstruct\s+called\s+./p.\s+.p.\s+FacesConfigPhaseListener:\s+Injected\s+from\s+value\s+specified\s+in\s+web.xml\s+@PostConstruct\s+called\s+./p..*"/>
+
+     <antcall target="test.jboss.tck01" />
+
+
+    </target>    
+
+
+    <target name="test.jboss.tck01" depends="define.scenario.aware.port">
+
+      <container.stop />
+
+      <container.start />
+
+      <deploy.artifact
+              artifact="${basedir}/org.jboss.jsr299.tck.tests.context.conversation.InvalidatingSessionDestroysConversationTest.war"
+              appName="org.jboss.jsr299.tck.tests.context.conversation.InvalidatingSessionDestroysConversationTest" />
+
+      <antcall target="app-check" />
+
+      <jsf.tester request="/clouds.jsf"
+                     context-path="/org.jboss.jsr299.tck.tests.context.conversation.InvalidatingSessionDestroysConversationTest"
+                     classpath-refid="html.classpath"
+                     test-results-dir="${regression.test.results.dir}"
+                     regexp="(?s).*org.jboss.jsr299.tck.tests.context.conversation.Cloud.Petelong-running\s+conversation begun.*"/>
+
+      <undeploy.artifact
+              artifact="${basedir}/org.jboss.jsr299.tck.tests.context.conversation.InvalidatingSessionDestroysConversationTest.war"
+              appName="org.jboss.jsr299.tck.tests.context.conversation.InvalidatingSessionDestroysConversationTest" />
+
+      <deploy.artifact
+              artifact="${basedir}/org.jboss.jsr299.tck.tests.context.conversation.InvalidatingSessionDestroysConversationTest.war"
+              appName="org.jboss.jsr299.tck.tests.context.conversation.InvalidatingSessionDestroysConversationTest" />
+
+      <antcall target="app-check" />
+
+      <jsf.tester request="/clouds.jsf"
+                     context-path="/org.jboss.jsr299.tck.tests.context.conversation.InvalidatingSessionDestroysConversationTest"
+                     classpath-refid="html.classpath"
+                     test-results-dir="${regression.test.results.dir}"
+                     regexp="(?s).*org.jboss.jsr299.tck.tests.context.conversation.Cloud.Petelong-running\s+conversation begun.*"/>
+
+      <undeploy.artifact
+              artifact="${basedir}/org.jboss.jsr299.tck.tests.context.conversation.InvalidatingSessionDestroysConversationTest.war"
+              appName="org.jboss.jsr299.tck.tests.context.conversation.InvalidatingSessionDestroysConversationTest" />
+
+
+
+    </target>
+
+    <target name="app-check">
+       <!-- make sure our helper property is unoccupied: -->
+       <fail if="do.sleep" />
+
+       <!-- overridable defaults: -->
+       <property name="app.retries" value="5" />
+       <property name="sleep.seconds" value="10" />
+       <property name="apptest.retries" value="10" />
+
+       <retry retrycount="${app.retries}">
+           <sequential>
+               <local name=".sleep.seconds" />
+               <condition property=".sleep.seconds" value="${sleep.seconds}" else="0">
+                   <istrue value="${do.sleep}" />
+               </condition>
+               <sleep seconds="${.sleep.seconds}" />
+
+               <property name="do.sleep" value="true" />
+
+               <fail><condition>
+                   <resourcesmatch astext="true">
+                       <string value="" />
+                        <concat>
+                           <url url="http://${container.host}:${container.port}/org.jboss.jsr299.tck.tests.context.conversation.InvalidatingSessionDestroysConversationTest/landing.html" />
+                           <filterchain>
+                               <linecontainsregexp>
+                                   <regexp pattern="(?s).*landing page.*" />
+                               </linecontainsregexp>
+                           </filterchain>
+                       </concat>
+                   </resourcesmatch>
+               </condition></fail>
+           </sequential>
+       </retry>
+    </target>
+
+
+</project>

@@ -1,0 +1,3 @@
+Don't remove the CRLF characters from the patch files.
+
+http://www.mail-archive.com/gnuwin32-users@lists.sourceforge.net/msg01528.html

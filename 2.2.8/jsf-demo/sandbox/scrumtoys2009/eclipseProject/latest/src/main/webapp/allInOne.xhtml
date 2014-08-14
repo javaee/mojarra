@@ -1,0 +1,234 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+
+    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+    Copyright (c) 2010-2011 Oracle and/or its affiliates. All rights reserved.
+
+    The contents of this file are subject to the terms of either the GNU
+    General Public License Version 2 only ("GPL") or the Common Development
+    and Distribution License("CDDL") (collectively, the "License").  You
+    may not use this file except in compliance with the License.  You can
+    obtain a copy of the License at
+    https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+    or packager/legal/LICENSE.txt.  See the License for the specific
+    language governing permissions and limitations under the License.
+
+    When distributing the software, include this License Header Notice in each
+    file and include the License file at packager/legal/LICENSE.txt.
+
+    GPL Classpath Exception:
+    Oracle designates this particular file as subject to the "Classpath"
+    exception as provided by Oracle in the GPL Version 2 section of the License
+    file that accompanied this code.
+
+    Modifications:
+    If applicable, add the following below the License Header, with the fields
+    enclosed by brackets [] replaced by your own identifying information:
+    "Portions Copyright [year] [name of copyright owner]"
+
+    Contributor(s):
+    If you wish your version of this file to be governed by only the CDDL or
+    only the GPL Version 2, indicate your decision by adding "[Contributor]
+    elects to include this software in this distribution under the [CDDL or GPL
+    Version 2] license."  If you don't indicate a single choice of license, a
+    recipient has the option to distribute your version of this file under
+    either the CDDL, the GPL Version 2 or to extend the choice of license to
+    its licensees as provided above.  However, if you add GPL Version 2 code
+    and therefore, elected the GPL Version 2 license, then the option applies
+    only if the new code is made subject to such option by the copyright
+    holder.
+
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<ui:composition template="template.xhtml">
+<ui:define name="pageTitle">
+    <h:outputText value="HOME needs i18n"></h:outputText>
+</ui:define>
+
+<ui:define name="content">
+	<h:messages globalOnly="true" showDetail="true" tooltip="true" errorClass="errorMsgs" infoClass="infoMsgs" />	
+    <h:form id="frmNew">	    
+    	<h2>New Sprint</h2>
+		<h:panelGrid columns="3" style="width: 300px">
+				<h:outputLabel value="#{i18n['sprints.label.name']}:" for="itName"  />
+				<h:inputText id="itName" value="#{allInOneMB.sprintsMB.toSave.name}" required="true" requiredMessage="Type the short name" />
+				<h:message for="itName" />
+				
+				<h:outputLabel value="#{i18n['sprints.label.goals']}:" for="itGoals"  />
+				<h:inputText id="itGoals" value="#{allInOneMB.sprintsMB.toSave.goals}" required="true" requiredMessage="Describe the goals" />
+				<h:message for="itGoals" />
+				
+				<h:outputLabel value="#{i18n['sprints.label.iterationScope']}:" for="itIterationScope"  />
+				<h:inputText id="itIterationScope" value="#{allInOneMB.sprintsMB.toSave.iterationScope}" required="true" requiredMessage="Type the scope" />
+				<h:message for="itIterationScope" />
+				
+				<h:outputLabel value="#{i18n['sprints.label.startedAt']}:" for="itStartedAt"  />
+				<h:inputText id="itStartedAt" value="#{allInOneMB.sprintsMB.toSave.startedAt}" required="true" requiredMessage="Type when this sprint start" />
+				<h:message for="itStartedAt" />
+				
+				<h:outputLabel value="#{i18n['sprints.label.dailyMeetingTime']}:" for="itDailyMeetingTime"  />
+				<h:inputText id="itDailyMeetingTime" value="#{allInOneMB.sprintsMB.toSave.dailyMeetingTime}" required="true" requiredMessage="Type the estimation (story points)" />
+				<h:message for="itDailyMeetingTime" />
+				
+				<f:verbatim></f:verbatim>
+				<f:verbatim></f:verbatim>
+				<h:commandButton action="#{allInOneMB.sprintsMB.save}" value="save" />
+		</h:panelGrid>
+    </h:form>
+    <h:form id="frmList">
+    	<h2>Sprints</h2>
+		<h:panelGrid columns="3" style="width: 300px">
+				<h:outputLabel value="Not exist sprints" style="color: orange"  rendered="#{allInOneMB.sprintsMB.dm.rowCount eq 0}"/>
+		</h:panelGrid>
+		<h:dataTable value="#{allInOneMB.sprintsMB.dm}" var="sprint" width="100%" rendered="#{allInOneMB.sprintsMB.dm.rowCount > 0}">
+			<h:column headerClass="textColumn">
+				<f:facet name="header"><h:outputLabel value="#" /></f:facet>
+				<h:outputText value="#{allInOneMB.sprintsMB.dm.rowIndex + 1}" />
+				<f:facet name="footer">#{""}</f:facet>
+			</h:column>
+			<h:column headerClass="textColumn">
+				<f:facet name="header"><h:outputLabel value="name" /></f:facet>
+				<h:outputText value="#{sprint.name}" />
+				<f:facet name="footer">#{allInOneMB.sprintsMB.dm.rowCount}#{" sprints"}</f:facet>
+			</h:column>
+			<h:column headerClass="textColumn">
+				<f:facet name="header"><h:outputLabel value="goals" /></f:facet>
+				<h:outputText value="#{sprint.goals}" />
+				<f:facet name="footer">#{" "}</f:facet>
+			</h:column>
+			<h:column headerClass="textColumn">
+				<f:facet name="header"><h:outputLabel value="iteration scope" /></f:facet>
+				<h:outputText value="#{sprint.iterationScope}" />
+				<f:facet name="footer">#{" "}</f:facet>
+			</h:column>
+			<h:column headerClass="textColumn">
+				<f:facet name="header"><h:outputLabel value="started at" /></f:facet>
+				<h:outputText value="#{sprint.startedAt}" />
+				<f:facet name="footer">#{" "}</f:facet>
+			</h:column>
+			<h:column headerClass="textColumn">
+				<f:facet name="header"><h:outputLabel value="daily meeting time" /></f:facet>
+				<h:outputText value="#{sprint.dailyMeetingTime}" />
+				<f:facet name="footer">#{" "}</f:facet>
+			</h:column>
+			<h:column>
+				<f:facet name="header"><h:outputLabel value="actions" /></f:facet>
+				<h:commandButton action="#{allInOneMB.sprintsMB.edit}" value="edit ..."  />
+				<h:commandButton action="#{allInOneMB.sprintsMB.remove}" value="remove"  />
+				<h:commandButton action="#{allInOneMB.sprintsMB.showStories}" value="stories ..."  />
+				<h:commandButton action="#{allInOneMB.sprintsMB.showDashboard}" value="dashboard ..."  />
+				<f:facet name="footer">#{" "}</f:facet>
+			</h:column>
+		</h:dataTable>
+    </h:form>
+    <h:form id="frmNewStory">
+    	<h2>New Story</h2>
+		<h:panelGrid columns="3" style="width: 300px">
+				<h:outputLabel value="#{i18n['stories.label.sprint']}:" for="otSprint"  />
+				<h:outputText id="otSprint" value="#{storiesMB.toSave.sprint.name}"  />
+				<h:message for="otSprint" />
+				<h:outputLabel value="#{i18n['stories.label.name']}:" for="itName"  />
+				<h:inputText id="itName" value="#{storiesMB.toSave.name}" required="true" requiredMessage="Describe the story" />
+				<h:message for="itName" />
+				<h:outputLabel value="#{i18n['stories.label.acceptance']}:" for="itAcceptance"  />
+				<h:inputTextarea id="itAcceptance" value="#{storiesMB.toSave.acceptance}" required="true" cols="50" rows="4" requiredMessage="Describe the acceptance" />
+				<h:message for="itAcceptance" />
+				<h:outputLabel value="#{i18n['stories.label.priority']}:" for="selPriority"  />
+				<h:inputText id="selPriority" value="#{storiesMB.toSave.priority}" required="true" requiredMessage="Type the priority (sequence to do)" />
+				<h:message for="selPriority" />
+				<h:outputLabel value="#{i18n['stories.label.estimation']}:" for="itEstimation"  />
+				<h:inputText id="itEstimation" value="#{storiesMB.toSave.estimation}" required="true" requiredMessage="Type the estimation (story points)" />
+				<h:message for="itEstimation" />
+				<f:verbatim></f:verbatim>
+				<f:verbatim></f:verbatim>
+				<h:commandButton action="#{storiesMB.save}" value="save" />
+		</h:panelGrid>
+    </h:form>
+    <h:form id="frmStories">
+    	<h2>Stories</h2>
+		<h:panelGrid columns="3" >
+				<h:outputLabel value="No exist stories for this sprint"  rendered="#{storiesMB.dm.rowCount eq 0}"/>
+		</h:panelGrid>
+		<h:dataTable value="#{storiesMB.dm}" var="story" width="100%" rendered="#{storiesMB.dm.rowCount > 0}">
+			<h:column headerClass="textColumn">
+				<f:facet name="header"><h:outputLabel value="#" /></f:facet>
+				<h:outputText value="#{storiesMB.dm.rowIndex + 1}" />
+				<f:facet name="footer">#{""}</f:facet>
+			</h:column>
+			<h:column headerClass="textColumn">
+				<f:facet name="header"><h:outputLabel value="name" /></f:facet>
+				<h:outputText value="#{story.name}" />
+				<f:facet name="footer">#{storiesMB.dm.rowCount}#{" stories"}</f:facet>
+			</h:column>
+			<h:column headerClass="textColumn">
+				<f:facet name="header"><h:outputLabel value="priority" /></f:facet>
+				<h:outputText value="#{story.priority}" />
+				<f:facet name="footer">#{" "}</f:facet>
+			</h:column>
+			<h:column headerClass="textColumn">
+				<f:facet name="header"><h:outputLabel value="estimation (sp)" /></f:facet>
+				<h:outputText value="#{story.estimation}" />
+				<f:facet name="footer">#{" "}</f:facet>
+			</h:column>
+			<h:column headerClass="textColumn">
+				<f:facet name="header"><h:outputLabel value="acceptance" /></f:facet>
+				<h:outputText value="#{story.acceptance}" />
+				<f:facet name="footer">#{" "}</f:facet>
+			</h:column>
+			<h:column>
+				<f:facet name="header"><h:outputLabel value="actions" /></f:facet>
+				<h:commandButton action="#{storiesMB.edit}" value="edit ..." immediate="true" />
+				<h:commandButton action="#{storiesMB.remove}" value="remove" immediate="true" />
+				<h:commandButton action="#{storiesMB.showTasks}" value="tasks" immediate="true" />
+				<f:facet name="footer">#{" "}</f:facet>
+			</h:column>
+		</h:dataTable>
+    </h:form>
+    <h:form id="frmNewTask">
+	    <h:commandLink action="stories" value="#{'go back stories'}" immediate="true" />
+    	<h2>New Task</h2>
+		<h:panelGrid columns="3" style="width: 300px">
+				<h:outputLabel value="#{i18n['tasks.label.story']}:" for="otStory"  />
+				<h:outputText id="otStory" value="#{tasksMB.taskToSave.story.name}" />
+				<h:message for="otStory" />
+				<h:outputLabel value="#{i18n['tasks.label.name']}:" for="itName"  />
+				<h:inputText id="itName" value="#{tasksMB.taskToSave.name}" required="true" requiredMessage="Descreva a tarefa" />
+				<h:message for="itName" />
+				<f:verbatim></f:verbatim>
+				<f:verbatim></f:verbatim>
+				<h:commandButton action="#{tasksMB.save}" value="save" />
+		</h:panelGrid>
+    </h:form>
+    <h:form id="frmTasks">
+    	<h2>Tasks</h2>
+		<h:panelGrid columns="3" style="width: 300px">
+				<h:outputLabel value="Nao ha tarefas para esta estoria" style="color: orange"  rendered="#{tasksMB.dmTasks.rowCount eq 0}"/>
+		</h:panelGrid>
+		<h:dataTable value="#{tasksMB.dmTasks}" var="task" width="300px" rendered="#{tasksMB.dmTasks.rowCount > 0}">
+			<h:column headerClass="textColumn">
+				<f:facet name="header"><h:outputLabel value="#" /></f:facet>
+				<h:outputText value="#{tasksMB.dmTasks.rowIndex + 1}" />
+				<f:facet name="footer">#{""}</f:facet>
+			</h:column>
+			<h:column headerClass="textColumn">
+				<f:facet name="header"><h:outputLabel value="name" /></f:facet>
+				<h:outputText value="#{task.name}" />
+				<f:facet name="footer">#{tasksMB.dmTasks.rowCount}#{" tasks"}</f:facet>
+			</h:column>
+			<h:column>
+				<f:facet name="header"><h:outputLabel value="actions" /></f:facet>
+				<h:commandButton action="#{tasksMB.edit}" value="edit ..." immediate="true" />
+				<h:commandButton action="#{tasksMB.remove}" value="remove" immediate="true" />
+				<f:facet name="footer">#{" "}</f:facet>
+			</h:column>
+		</h:dataTable>
+    </h:form>
+</ui:define>
+</ui:composition>
+</html>  

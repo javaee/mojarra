@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <h:head>
+        <title>Test for problem with dynamically added components after plain HTML</title>      
+    </h:head>
+    <h:body>
+        <h1>Test for problem with dynamically added components after plain HTML</h1>
+        <h:form id="form">
+            <ol>
+                <li>
+                    <h:commandLink id="add" value="Add component after plain HTML" action="#{transientFirstChildBean.add}">
+                        <f:ajax render=":parent"/>
+                    </h:commandLink>
+                </li>
+                <li>
+                    <h:commandLink id="reload" value="reload"/>
+                </li>
+            </ol>
+        </h:form>
+        <h:panelGroup id="parent" binding="#{transientFirstChildBean.parent}">
+            <h:panelGroup>
+                <h2>transient first child</h2>            
+            </h:panelGroup>
+        </h:panelGroup>
+    </h:body>
+</html>

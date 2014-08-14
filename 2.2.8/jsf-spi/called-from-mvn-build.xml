@@ -1,0 +1,166 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+
+    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+    Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+
+    The contents of this file are subject to the terms of either the GNU
+    General Public License Version 2 only ("GPL") or the Common Development
+    and Distribution License("CDDL") (collectively, the "License").  You
+    may not use this file except in compliance with the License.  You can
+    obtain a copy of the License at
+    https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+    or packager/legal/LICENSE.txt.  See the License for the specific
+    language governing permissions and limitations under the License.
+
+    When distributing the software, include this License Header Notice in each
+    file and include the License file at packager/legal/LICENSE.txt.
+
+    GPL Classpath Exception:
+    Oracle designates this particular file as subject to the "Classpath"
+    exception as provided by Oracle in the GPL Version 2 section of the License
+    file that accompanied this code.
+
+    Modifications:
+    If applicable, add the following below the License Header, with the fields
+    enclosed by brackets [] replaced by your own identifying information:
+    "Portions Copyright [year] [name of copyright owner]"
+
+    Contributor(s):
+    If you wish your version of this file to be governed by only the CDDL or
+    only the GPL Version 2, indicate your decision by adding "[Contributor]
+    elects to include this software in this distribution under the [CDDL or GPL
+    Version 2] license."  If you don't indicate a single choice of license, a
+    recipient has the option to distribute your version of this file under
+    either the CDDL, the GPL Version 2 or to extend the choice of license to
+    its licensees as provided above.  However, if you add GPL Version 2 code
+    and therefore, elected the GPL Version 2 license, then the option applies
+    only if the new code is made subject to such option by the copyright
+    holder.
+
+-->
+
+<!--
+  =======================================================================
+    JSF-API build file
+  =======================================================================
+-->
+<project name="jsf-spi" default="main" basedir=".">
+    <property file="${user.home}/build.properties"/>
+    <property file="../build.properties"/>
+    <import file="${jsf.build.home}/common/ant/common.xml"/>
+
+    <property name="src.dir" 
+              value="${impl.dir}/src/main/java" />
+    <property name="classes.dir" 
+              value="${basedir}/target/classes" />
+    <property name="build.lib.dir" value="${basedir}/target" />
+
+    <target name="main">
+      <echo>This build file is called by mvn.  Do not invoke it manually.</echo>
+      <fail />
+    </target>
+
+    <target name="strip.spi.classes" 
+            depends="get.spi.java.packages.as.space.separated.string">
+        <property name="jsf-spi-intermediate.jar" 
+                  value="${build.lib.dir}/jsf-spi-intermediate.jar" />
+
+        <!-- path maintenance -->
+        <delete failonerror="false" file="${jsf-spi-intermediate.jar}" />
+        <delete failonerror="false" dir="${build.lib.dir}/jsf-spi-stripped" />
+        <mkdir dir="${build.lib.dir}/jsf-spi-stripped" />
+
+        <jar destfile="${jsf-spi-intermediate.jar}"
+             basedir="${classes.dir}" />
+
+        <!-- windows or unix java exec invocation -->
+        <condition property="exec.name" value="cmd.exe">
+            <os family="windows"/>
+        </condition>
+        <condition property="exec.name" value="${java.home}/bin/javac">
+            <available file="${java.home}/bin/javac"/>
+        </condition>
+        <condition property="exec.name" value="${java.home}/../bin/javac">
+            <available file="${java.home}/../bin/javac"/>
+        </condition>
+        <condition property="exec.arg.1"
+                   value="/c ${java.home}/../bin/javac">
+            <os family="windows"/>
+        </condition>
+        <property name="exec.name" value="${java.home}/bin/javac"/>
+        <property name="exec.arg.1" value=""/>
+        <condition property="exec.arg.cp"
+                 value="${jsf-spi-intermediate.jar};${jsf-tools.jar}">
+          <os family="windows"/>
+        </condition>
+        <property name="exec.arg.cp" value="${jsf-spi-intermediate.jar}:${jsf-tools.jar}"/>
+    	<echo>tools path:  ${jsf-spi-intermediate.jar}:${jsf-tools.jar}</echo>
+        <!-- invoke the javac processor to produce stripped .class files -->
+        <delete dir="${classes.dir}">
+          <include name="**/*.class" />
+        </delete>
+        <exec executable="${exec.name}" failonerror="true">
+            <arg line="${exec.arg.1}"/>
+            <arg line="-XDprocess.packages"/>
+            <arg line="-proc:only"/>
+            <arg line="-cp ${exec.arg.cp}"/>
+            <arg line="-processor com.sun.faces.tools.StripClassesForApiJar"/>
+            <arg line="-Acom.sun.tools.javac.sym.Jar=${jsf-spi-intermediate.jar}"/>
+            <arg line="-Acom.sun.tools.javac.sym.ExtraApiClassPath=${javaee-api.jar}"/>
+            <arg line="-Acom.sun.tools.javac.sym.Dest=${classes.dir}"/>
+            <arg line="${src.paths}"/>
+        </exec>
+        <unjar src="${jsf-spi-intermediate.jar}"
+               dest="${classes.dir}">
+          <patternset>
+            <include name="META-INF/MANIFEST.MF" />
+          </patternset>
+        </unjar>
+
+    </target>
+
+    <target name="get.spi.java.packages.as.space.separated.string"
+            description="Traverse ${src.dir} and extract the directory names into a property ${src.paths} as a space separated list of java packages">
+      <!-- Suck the dirs into a path-like structure. -->
+      <path id="src.dir.path">
+        <dirset dir="${src.dir}">
+                      <include name="com/sun/faces/spi/**" />
+        </dirset>
+      </path>
+      <!-- Suck the path-like structure into a property. -->
+      <property name="src.dir.paths" refid="src.dir.path" />
+
+      <!-- Massage the property value to make it be as desired. -->
+
+      <!-- Remove the leading fully qualified paths. -->
+      <!-- windows: Replace all \ with /  -->
+      <propertyregex property="src.dir.paths" input="${src.dir.paths}" override="true"
+                     regexp="\\" replace="/" global="true" />
+      <!-- windows: Replace all \ with /  -->
+      <propertyregex property="src.dir" input="${src.dir}" override="true"
+                     regexp="\\" replace="/" global="true" />
+    	
+      <!-- Remove the leading source dir path from every path entry. -->
+      <propertyregex property="src.paths" input="${src.dir.paths}" override="true"
+                     regexp="${src.dir}" replace="" global="true" />
+      <!-- Remove the leading "/" from every path entry. -->
+      <propertyregex property="src.paths" input="${src.paths}" override="true"
+                     regexp="/com" 
+                     replace="com" global="true" />
+      <!-- Remove the com entry.  It is not a java package. -->
+      <propertyregex property="src.paths" input="${src.paths}" override="true"
+                     regexp="${path.separator}com${path.separator}" 
+                     replace="" global="true" />
+      <!-- Replace ':' with ' ' (or ';' with ' ' on windows). -->
+      <propertyregex property="src.paths" input="${src.paths}" override="true"
+                     regexp="${path.separator}" 
+                     replace=" " global="true" />
+      <!-- Replace '/' with '.'. -->
+      <propertyregex property="src.paths" input="${src.paths}" override="true"
+                     regexp="/" 
+                     replace="." global="true" />
+    </target>
+
+</project>

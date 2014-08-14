@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:renderFacet="http://java.sun.com/jsf/composite/renderFacet">
+    <h:head>
+        <title>Panel test</title>
+    </h:head>
+    <h:body>
+        <renderFacet:renderFacet title="this works">
+            <f:facet name="body">
+                Just literal text
+            </f:facet>
+        </renderFacet:renderFacet>
+
+        <renderFacet:renderFacet title="this works">
+            <f:facet name="body">
+                <h:outputText value="JSF Component" />
+            </f:facet>
+        </renderFacet:renderFacet>
+
+        <renderFacet:renderFacet title="this works">
+            <f:facet name="body">
+                <h:panelGrid columns="2">
+                    <h:outputText value="just a" />
+                    <h:outputText value="panelGrid" />
+                </h:panelGrid>
+            </f:facet>
+        </renderFacet:renderFacet>
+
+        <renderFacet:renderFacet id="renderFacet" title="this doesnt render the panelGrid">
+            <f:facet name="body">
+                <h:panelGrid id="notfound" columns="2">
+                    <h:outputText value="panelGrid" />
+                    <h:outputText value="and another component" />
+                </h:panelGrid>
+                <h:outputText value="JSF Component" />
+            </f:facet>
+        </renderFacet:renderFacet>
+
+        <renderFacet:renderFacet title="why this render the panelGrid?">
+            <f:facet name="body">
+                <!-- Yeah! it's a comment! -->
+                <h:panelGrid columns="2">
+                    <h:outputText value="panelGrid" />
+                    <h:outputText value="and another component" />
+                </h:panelGrid>
+                <h:outputText value="JSF Component" />
+            </f:facet>
+        </renderFacet:renderFacet>
+    </h:body>
+</html>

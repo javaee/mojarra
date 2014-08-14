@@ -1,0 +1,110 @@
+<!--
+
+    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+    Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+
+    The contents of this file are subject to the terms of either the GNU
+    General Public License Version 2 only ("GPL") or the Common Development
+    and Distribution License("CDDL") (collectively, the "License").  You
+    may not use this file except in compliance with the License.  You can
+    obtain a copy of the License at
+    https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+    or packager/legal/LICENSE.txt.  See the License for the specific
+    language governing permissions and limitations under the License.
+
+    When distributing the software, include this License Header Notice in each
+    file and include the License file at packager/legal/LICENSE.txt.
+
+    GPL Classpath Exception:
+    Oracle designates this particular file as subject to the "Classpath"
+    exception as provided by Oracle in the GPL Version 2 section of the License
+    file that accompanied this code.
+
+    Modifications:
+    If applicable, add the following below the License Header, with the fields
+    enclosed by brackets [] replaced by your own identifying information:
+    "Portions Copyright [year] [name of copyright owner]"
+
+    Contributor(s):
+    If you wish your version of this file to be governed by only the CDDL or
+    only the GPL Version 2, indicate your decision by adding "[Contributor]
+    elects to include this software in this distribution under the [CDDL or GPL
+    Version 2] license."  If you don't indicate a single choice of license, a
+    recipient has the option to distribute your version of this file under
+    either the CDDL, the GPL Version 2 or to extend the choice of license to
+    its licensees as provided above.  However, if you add GPL Version 2 code
+    and therefore, elected the GPL Version 2 license, then the option applies
+    only if the new code is made subject to such option by the copyright
+    holder.
+
+-->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+<body>
+<ui:composition template="template.xhtml">
+    <ui:define name="metadata">
+        <f:metadata>
+            <f:viewParam id="id" name="id" value="#{newsReader.selectedStoryId}"
+                     required="true"
+                     requiredMessage="You did not specify a headline. (The id parameter is missing)"
+                     converterMessage="Invalid headline. (The id parameter is not a number)"
+                     validatorMessage="Invalid headline. (The id parameter is not a positive number)">
+                <f:validateLongRange minimum="1"/>
+            </f:viewParam>
+            <f:viewAction action="#{newsReader.goToPage01IfValidationFailed}" 
+                          phase="PROCESS_VALIDATIONS" onPostback="true" />
+            <f:viewAction action="#{newsReader.loadStory}" onPostback="true" />
+        </f:metadata>
+    </ui:define>
+    <ui:define name="content">
+        <h:messages style="color: red; list-style: none; border: 0 solid red; border-left-width: 2px; padding: 0 5px;"/>
+        <h1>#{newsReader.selectedStory.headline}</h1>
+
+        <p>#{newsReader.selectedStory.content}</p>
+        <h:form prependId="false">
+            <p>
+                <h:commandButton id="refresh" value="Refresh"/>
+                #{' '}
+                <h:commandButton id="refreshClearParam"
+                                 value="Refresh (clear param)">
+                    <f:param name="id" value="#{null}"/>
+                </h:commandButton>
+                #{' '}
+                <h:commandButton id="refreshWithRedirectParams"
+                                 action="/page02.xhtml?faces-redirect=true&amp;includeViewParams=true"
+                                 value="Refresh (Redirect After POST w/ params)"/>
+                #{' '}
+                <h:commandButton id="refreshWithRedirect"
+                                 action="/page02.xhtml?faces-redirect=true"
+                                 value="Refresh (Redirect After POST w/o params)"/>
+            </p>
+            <p>
+                <h:commandButton id="home"
+                                 action="/page01.xhtml?faces-redirect=true&amp;from=story"
+                                 value="Home"/>
+                #{' '}
+                <h:commandButton id="homeRememberSelection"
+                                 action="/page01.xhtml?faces-redirect=true&amp;includeViewParams=true&amp;from=story"
+                                 value="Home (Keep selection)"/>
+                #{' '}
+                <h:commandButton id="homeRememberSelectionNavCase"
+                                 action="homeWithParams"
+                                 value="Home (Keep selection nav case)"/>
+
+                <h:commandButton id="story2RememberSelectionNavCase"
+                                 action="story2WithParams"
+                                 value="Story2 (Keep selection nav case)"/>
+
+            </p>
+        </h:form>
+    </ui:define>
+</ui:composition>
+
+</body>
+</html>

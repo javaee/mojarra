@@ -1,0 +1,810 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module relativePaths="true" type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="web" name="templateDemo">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/templateDemo/web/WEB-INF/web.xml" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/templateDemo/web" relative="/" />
+        </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
+      </configuration>
+    </facet>
+    <facet type="web" name="j2meDemo">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/archive/j2meDemo/web/WEB-INF/web.xml" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/j2meDemo/web" relative="/" />
+        </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
+      </configuration>
+    </facet>
+    <facet type="web" name="ajax-request">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/sandbox/ajax-request/src/main/webapp/WEB-INF/web.xml" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/webapp" relative="/" />
+        </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
+      </configuration>
+    </facet>
+    <facet type="web" name="ezcomp02">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/sandbox/ezcomp02/src/main/webapp/WEB-INF/web.xml" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/webapp" relative="/" />
+        </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
+      </configuration>
+    </facet>
+    <facet type="web" name="head-body">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/sandbox/head-body/src/main/webapp/WEB-INF/web.xml" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/head-body/src/main/webapp" relative="/" />
+        </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
+      </configuration>
+    </facet>
+    <facet type="web" name="nonjsp">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/archive/nonjsp/web/WEB-INF/web.xml" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/nonjsp/web" relative="/" />
+        </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
+      </configuration>
+    </facet>
+    <facet type="web" name="guessNumber2.0">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/guessNumber/src/main/webapp/WEB-INF/web.xml" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/guessNumber2.0/web" relative="/" />
+        </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
+      </configuration>
+    </facet>
+    <facet type="web" name="guessNumber">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/archive/guessNumber/web/WEB-INF/web.xml" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/guessNumber/web" relative="/" />
+        </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
+      </configuration>
+    </facet>
+    <facet type="web" name="helloDuke">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/archive/helloDuke/web/WEB-INF/web.xml" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/helloDuke/web" relative="/" />
+        </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
+      </configuration>
+    </facet>
+    <facet type="web" name="characterCombat">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/archive/characterCombat/web/WEB-INF/web.xml" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/characterCombat/web" relative="/" />
+        </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
+      </configuration>
+    </facet>
+    <facet type="web" name="helloworld">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/helloworld/src/main/webapp/WEB-INF/web.xml" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/helloFacelet/web" relative="/" />
+        </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+        </sourceRoots>
+      </configuration>
+    </facet>
+    <facet type="web" name="carstore">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/archive/carstore/web/WEB-INF/web.xml" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/carstore/web" relative="/" />
+        </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
+      </configuration>
+    </facet>
+    <facet type="web" name="ajax-queue">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/sandbox/ajax-queue/src/main/webapp/WEB-INF/web.xml" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/webapp" relative="/" />
+        </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
+      </configuration>
+    </facet>
+    <facet type="web" name="ezcomp00">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/ezcomp00/src/main/webapp/WEB-INF/web.xml" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/webapp" relative="/" />
+        </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
+      </configuration>
+    </facet>
+    <facet type="web" name="ezcomp01">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/ezcomp01/src/main/webapp/WEB-INF/web.xml" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/webapp" relative="/" />
+        </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
+      </configuration>
+    </facet>
+    <facet type="web" name="stock">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/sandbox/stock/src/main/webapp/WEB-INF/web.xml" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/stock/src/main/webapp" relative="/" />
+        </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
+      </configuration>
+    </facet>
+    <facet type="web" name="ezcomp03">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/sandbox/ezcomp03/src/main/webapp/WEB-INF/web.xml" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/ezcomp03/src/main/webapp" relative="/" />
+        </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
+      </configuration>
+    </facet>
+    <facet type="web" name="renderkits">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/archive/renderkits/web/WEB-INF/web.xml" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/renderkits/web" relative="/" />
+        </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
+      </configuration>
+    </facet>
+    <facet type="web" name="components">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/archive/components/web/WEB-INF/web.xml" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/components/web" relative="/" />
+        </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
+      </configuration>
+    </facet>
+    <facet type="web" name="standard">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/archive/standard/web/WEB-INF/web.xml" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/standard/web" relative="/" />
+        </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
+      </configuration>
+    </facet>
+    <facet type="web" name="webtier-sample">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/archive/webtier-sample/web/WEB-INF/web.xml" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/webtier-sample/web" relative="/" />
+        </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
+      </configuration>
+    </facet>
+    <facet type="web" name="mojarra_ext">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/archive/mojarra_ext/web/WEB-INF/web.xml" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/mojarra_ext/web" relative="/" />
+        </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
+      </configuration>
+    </facet>
+  </component>
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/sandbox/OpenAjaxBridge/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sandbox/ajax-queue/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sandbox/ajax-request/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sandbox/ajax-tag/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/archive/carstore/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/archive/characterCombat/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/archive/components/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sandbox/ezcomp00/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sandbox/ezcomp02/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/archive/guessNumber/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/archive/helloDuke/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/archive/j2meDemo/midlet" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/archive/j2meDemo/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sandbox/jsf-forum/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/archive/mojarra_ext/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/archive/nonjsp/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/archive/renderkits/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sandbox/scrumtoys2009/eclipseProject/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/archive/standard/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/test/mappingDemo/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/test/tests" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/archive/webtier-sample/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/basic-ajax/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/viewExpired/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/basic-ezcomp/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ajax-component/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/helloworld/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/guessNumber/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ifnavigation/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/bean-validator/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/custom-bean-scope/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/custom-tag/src/main/java" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/test/build" />
+    </content>
+    <orderEntry type="library" name="GROOVY" level="application" />
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="mojarra-build" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module" module-name="impl" exported="" />
+  </component>
+</module>
+

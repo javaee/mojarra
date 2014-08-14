@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<!DOCTYPE html PUBLIC 
+    "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"      
+      xmlns:h="http://java.sun.com/jsf/html">
+    <h:body>
+        <h:form id="helloForm" >       
+            <h:outputText value="Press the 'add components' button, then press the submit button"/>
+            <br></br>
+            <h:commandButton actionListener="#{issue1554Bean.add}" id="cb2" value="add components"/>
+            <h:commandButton value="submit"/>
+            <br></br>
+            <h:outputText value="When you press the 'add components' button above, note that a transient and non-transient component are added between the two existing children. However after the submit button is pressed, the new non-transient component is now in the wrong position."/>
+            <h:panelGrid columns="1" id="addto"  style="border:green 1px solid">
+                <h:outputText value=" tree child 1 "/>
+                <h:outputText value=" tree child 2 "/>
+            </h:panelGrid>  
+            <br></br>
+            <br></br>          
+            <h:outputText value="The example below is just showing that when there's no transient component, things work as expected. So when you press the 'add components' button above, two components are added between the two existing children. After the submit button is pressed, these components remain in the correct positions."/>
+            <h:panelGrid columns="1" id="addto2"  style="border:red 1px solid">
+                <h:outputText value=" tree child 1 "/>
+                <h:outputText value=" tree child 2 "/>
+            </h:panelGrid>
+
+        </h:form>
+    </h:body>
+</html>
