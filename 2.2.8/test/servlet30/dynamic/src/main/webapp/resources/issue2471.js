@@ -1,3 +1,0 @@
-/*
- * Content does not matter
- */
